@@ -81,7 +81,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_characteristicreqforteammember";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10391;
+		public const int EntityTypeCode = 10420;
 
 		[DebuggerNonUserCode()]
 		public msdyn_characteristicreqforteammember()

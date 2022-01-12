@@ -250,6 +250,8 @@ declare namespace DevKit {
 		msdyn_AssignWorkItemAfterDecline: DevKit.WebApi.IntegerValue;
 		/** Set the time after which the work item will be closed if there is no activity on the work item. */
 		msdyn_AutoCloseAfterInactivity: DevKit.WebApi.IntegerValue;
+		/** Time for which the agent's capacity is blocked for wrap up state. After this amount of time the agent's capacity will be released. */
+		msdyn_blockcapacityforwrapup: DevKit.WebApi.IntegerValue;
 		/** The queue created for the bot in the workstream. */
 		msdyn_bot_queue: DevKit.WebApi.LookupValue;
 		/** The rule added to workstream for bot routing. */

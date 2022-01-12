@@ -63,7 +63,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_uniquenumber";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10547;
+		public const int EntityTypeCode = 10576;
 
 		[DebuggerNonUserCode()]
 		public msdyn_uniquenumber()

@@ -8,7 +8,7 @@ using Microsoft.Xrm.Sdk;
 using System;
 using System.Diagnostics;
 
-namespace Dev.DevKit.Shared.Entities.pluginpackageOptionSets
+namespace Dev.DevKit.Shared.Entities.PluginPackageOptionSets
 {
 	public enum ComponentState
 	{
@@ -57,27 +57,27 @@ namespace Dev.DevKit.Shared.Entities.pluginpackageOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
-	public partial class pluginpackage : EntityBase
+	public partial class PluginPackage : EntityBase
 	{
 		public struct Fields
 		{
 			public const string ComponentIdUnique = "componentidunique";
 			public const string ComponentState = "componentstate";
-			public const string Contents = "contents";
+			public const string Content = "content";
 			public const string CreatedBy = "createdby";
 			public const string CreatedOn = "createdon";
 			public const string CreatedOnBehalfBy = "createdonbehalfby";
-			public const string EncodedContents = "encodedcontents";
+			public const string FileId = "fileid";
 			public const string ImportSequenceNumber = "importsequencenumber";
 			public const string IsManaged = "ismanaged";
 			public const string ModifiedBy = "modifiedby";
 			public const string ModifiedOn = "modifiedon";
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
-			public const string name = "name";
+			public const string Name = "name";
 			public const string OrganizationId = "organizationid";
 			public const string OverriddenCreatedOn = "overriddencreatedon";
 			public const string OverwriteTime = "overwritetime";
-			public const string pluginpackageId = "pluginpackageid";
+			public const string PluginPackageId = "pluginpackageid";
 			public const string SolutionId = "solutionid";
 			public const string statecode = "statecode";
 			public const string statuscode = "statuscode";
@@ -85,6 +85,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string TimeZoneRuleVersionNumber = "timezoneruleversionnumber";
 			public const string UniqueName = "uniquename";
 			public const string UTCConversionTimeZoneCode = "utcconversiontimezonecode";
+			public const string Version = "version";
 			public const string VersionNumber = "versionnumber";
 		}
 
@@ -94,35 +95,35 @@ namespace Dev.DevKit.Shared.Entities
 		public const int EntityTypeCode = 10090;
 
 		[DebuggerNonUserCode()]
-		public pluginpackage()
+		public PluginPackage()
 		{
 			Entity = new Entity(EntityLogicalName);
 			PreEntity = CloneThisEntity(Entity);
 		}
 
 		[DebuggerNonUserCode()]
-		public pluginpackage(Guid pluginpackageId)
+		public PluginPackage(Guid PluginPackageId)
 		{
-			Entity = new Entity(EntityLogicalName, pluginpackageId);
+			Entity = new Entity(EntityLogicalName, PluginPackageId);
 			PreEntity = CloneThisEntity(Entity);
 		}
 
 		[DebuggerNonUserCode()]
-		public pluginpackage(string keyName, object keyValue)
+		public PluginPackage(string keyName, object keyValue)
 		{
 			Entity = new Entity(EntityLogicalName, keyName, keyValue);
 			PreEntity = CloneThisEntity(Entity);
 		}
 
 		[DebuggerNonUserCode()]
-		public pluginpackage(Entity entity)
+		public PluginPackage(Entity entity)
 		{
 			Entity = entity;
 			PreEntity = CloneThisEntity(Entity);
 		}
 
 		[DebuggerNonUserCode()]
-		public pluginpackage(Entity entity, Entity merge)
+		public PluginPackage(Entity entity, Entity merge)
 		{
 			Entity = entity;
 			foreach (var property in merge?.Attributes)
@@ -135,7 +136,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		[DebuggerNonUserCode()]
-		public pluginpackage(KeyAttributeCollection keys)
+		public PluginPackage(KeyAttributeCollection keys)
 		{
 			Entity = new Entity(EntityLogicalName, keys);
 			PreEntity = CloneThisEntity(Entity);
@@ -158,24 +159,25 @@ namespace Dev.DevKit.Shared.Entities
 		/// <para>Component State</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public Dev.DevKit.Shared.Entities.pluginpackageOptionSets.ComponentState? ComponentState
+		public Dev.DevKit.Shared.Entities.PluginPackageOptionSets.ComponentState? ComponentState
 		{
 			get
 			{
 				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.ComponentState);
 				if (value == null) return null;
-				return (Dev.DevKit.Shared.Entities.pluginpackageOptionSets.ComponentState)value.Value;
+				return (Dev.DevKit.Shared.Entities.PluginPackageOptionSets.ComponentState)value.Value;
 			}
 		}
 
 		/// <summary>
-		/// <para>ReadOnly - Virtual</para>
-		/// <para>Contents</para>
+		/// <para>Memo - MaxLength: 1073741823</para>
+		/// <para>Content</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public string Contents
+		public string Content
 		{
-			get { return Entity.GetAttributeValue<string>(Fields.Contents); }
+			get { return Entity.GetAttributeValue<string>(Fields.Content); }
+			set { Entity.Attributes[Fields.Content] = value; }
 		}
 
 		/// <summary>
@@ -212,14 +214,14 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Memo - MaxLength: 1073741823</para>
-		/// <para>EncodedContents</para>
+		/// <para>Lookup to FileAttachment</para>
+		/// <para>ReadOnly - Virtual</para>
+		/// <para>FileId</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public string EncodedContents
+		public string FileId
 		{
-			get { return Entity.GetAttributeValue<string>(Fields.EncodedContents); }
-			set { Entity.Attributes[Fields.EncodedContents] = value; }
+			get { return Entity.GetAttributeValue<string>(Fields.FileId); }
 		}
 
 		/// <summary>
@@ -279,15 +281,15 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>The name of the custom entity.</para>
+		/// <para>The name of the plugin package entity.</para>
 		/// <para>Required - String - MaxLength: 100</para>
 		/// <para>Name</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public string name
+		public string Name
 		{
-			get { return Entity.GetAttributeValue<string>(Fields.name); }
-			set { Entity.Attributes[Fields.name] = value; }
+			get { return Entity.GetAttributeValue<string>(Fields.Name); }
+			set { Entity.Attributes[Fields.Name] = value; }
 		}
 
 		/// <summary>
@@ -330,12 +332,12 @@ namespace Dev.DevKit.Shared.Entities
 		/// <para>Plugin Package</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public Guid pluginpackageId
+		public Guid PluginPackageId
 		{
 			get { return Id; }
 			set
 			{
-				Entity.Attributes[Fields.pluginpackageId] = value;
+				Entity.Attributes[Fields.PluginPackageId] = value;
 				Entity.Id = value;
 			}
 		}
@@ -357,13 +359,13 @@ namespace Dev.DevKit.Shared.Entities
 		/// <para>Status</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public Dev.DevKit.Shared.Entities.pluginpackageOptionSets.statecode? statecode
+		public Dev.DevKit.Shared.Entities.PluginPackageOptionSets.statecode? statecode
 		{
 			get
 			{
 				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.statecode);
 				if (value == null) return null;
-				return (Dev.DevKit.Shared.Entities.pluginpackageOptionSets.statecode)value.Value;
+				return (Dev.DevKit.Shared.Entities.PluginPackageOptionSets.statecode)value.Value;
 			}
 			set
 			{
@@ -380,13 +382,13 @@ namespace Dev.DevKit.Shared.Entities
 		/// <para>Status Reason</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public Dev.DevKit.Shared.Entities.pluginpackageOptionSets.statuscode? statuscode
+		public Dev.DevKit.Shared.Entities.PluginPackageOptionSets.statuscode? statuscode
 		{
 			get
 			{
 				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.statuscode);
 				if (value == null) return null;
-				return (Dev.DevKit.Shared.Entities.pluginpackageOptionSets.statuscode)value.Value;
+				return (Dev.DevKit.Shared.Entities.PluginPackageOptionSets.statuscode)value.Value;
 			}
 			set
 			{
@@ -421,7 +423,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Unique Name for the entity.</para>
+		/// <para>Unique name for the package</para>
 		/// <para>String - MaxLength: 128</para>
 		/// <para>Unique Name</para>
 		/// </summary>
@@ -442,6 +444,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<int?>(Fields.UTCConversionTimeZoneCode); }
 			set { Entity.Attributes[Fields.UTCConversionTimeZoneCode] = value; }
+		}
+
+		/// <summary>
+		/// <para>Version of the package</para>
+		/// <para>String - MaxLength: 100</para>
+		/// <para>Version</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string Version
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.Version); }
+			set { Entity.Attributes[Fields.Version] = value; }
 		}
 
 		/// <summary>

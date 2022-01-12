@@ -85,7 +85,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_ciprovider";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10592;
+		public const int EntityTypeCode = 10621;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ciprovider()

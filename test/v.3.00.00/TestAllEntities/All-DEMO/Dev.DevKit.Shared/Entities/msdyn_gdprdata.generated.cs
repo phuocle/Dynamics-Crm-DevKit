@@ -69,7 +69,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_gdprdata";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10236;
+		public const int EntityTypeCode = 10239;
 
 		[DebuggerNonUserCode()]
 		public msdyn_gdprdata()

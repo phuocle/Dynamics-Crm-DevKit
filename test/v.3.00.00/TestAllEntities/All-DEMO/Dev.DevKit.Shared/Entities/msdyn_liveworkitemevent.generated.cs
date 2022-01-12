@@ -93,7 +93,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_liveworkitemevent";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10635;
+		public const int EntityTypeCode = 10664;
 
 		[DebuggerNonUserCode()]
 		public msdyn_liveworkitemevent()

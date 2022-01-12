@@ -87,7 +87,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_agreementsubstatus";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10487;
+		public const int EntityTypeCode = 10516;
 
 		[DebuggerNonUserCode()]
 		public msdyn_agreementsubstatus()

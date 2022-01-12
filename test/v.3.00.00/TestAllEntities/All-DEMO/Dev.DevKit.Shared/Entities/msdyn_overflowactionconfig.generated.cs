@@ -83,7 +83,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_overflowactionconfig";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10621;
+		public const int EntityTypeCode = 10650;
 
 		[DebuggerNonUserCode()]
 		public msdyn_overflowactionconfig()

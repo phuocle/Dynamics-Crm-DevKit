@@ -71,7 +71,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_routingrequest";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10675;
+		public const int EntityTypeCode = 10704;
 
 		[DebuggerNonUserCode()]
 		public msdyn_routingrequest()

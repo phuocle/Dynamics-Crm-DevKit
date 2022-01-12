@@ -268,7 +268,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_omnichannelconfiguration";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10665;
+		public const int EntityTypeCode = 10694;
 
 		[DebuggerNonUserCode()]
 		public msdyn_omnichannelconfiguration()
@@ -468,9 +468,9 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Enable new consult experience</para>
+		/// <para>Enable consult pane</para>
 		/// <para>Boolean</para>
-		/// <para>Enable new consult experience</para>
+		/// <para>Enable consult pane</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public bool? msdyn_enable_new_consult_exp

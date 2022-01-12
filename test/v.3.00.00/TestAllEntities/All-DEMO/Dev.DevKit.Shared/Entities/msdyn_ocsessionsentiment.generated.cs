@@ -71,7 +71,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_ocsessionsentiment";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10661;
+		public const int EntityTypeCode = 10690;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocsessionsentiment()

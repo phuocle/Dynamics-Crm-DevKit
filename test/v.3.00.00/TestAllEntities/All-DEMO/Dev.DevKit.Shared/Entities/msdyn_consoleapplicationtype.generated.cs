@@ -65,7 +65,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_consoleapplicationtype";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10600;
+		public const int EntityTypeCode = 10629;
 
 		[DebuggerNonUserCode()]
 		public msdyn_consoleapplicationtype()

@@ -1,36 +1,6 @@
 ﻿//@ts-check
 ///<reference path="devkit.d.ts" />
 declare namespace DevKit {
-	namespace FormConsult {
-		interface tab_Consult_Sections {
-			Consult_section_1: DevKit.Controls.Section;
-		}
-		interface tab_Consult extends DevKit.Controls.ITab {
-			Section: tab_Consult_Sections;
-		}
-		interface Tabs {
-			Consult: tab_Consult;
-		}
-		interface Body {
-			Tab: Tabs;
-			/** Enable new consult experience */
-			msdyn_enable_new_consult_exp: DevKit.Controls.Boolean;
-		}
-	}
-	class FormConsult extends DevKit.IForm {
-		/**
-		* DynamicsCrm.DevKit form Consult Main Form
-		* @param executionContext the execution context
-		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
-		*/
-		constructor(executionContext: any, defaultWebResourceName?: string);
-		/** Utility functions/methods/objects for Dynamics 365 form */
-		Utility: DevKit.Utility;
-		/** The Body section of form Consult */
-		Body: DevKit.FormConsult.Body;
-		/** The SidePanes of form Consult */
-		SidePanes: DevKit.SidePanes;
-	}
 	namespace Formmsdyn_omnichannelconfiguration_Information {
 		interface tab_tab_skillbasedrouting_new_Sections {
 			tab_2_section_1_2: DevKit.Controls.Section;
@@ -517,7 +487,7 @@ declare namespace DevKit {
 		msdyn_enable_agent_reject_notifications: DevKit.WebApi.BooleanValue;
 		/** Setting to change agent status when a notification has been missed. */
 		msdyn_enable_missed_notifications: DevKit.WebApi.BooleanValue;
-		/** Enable new consult experience */
+		/** Enable consult pane */
 		msdyn_enable_new_consult_exp: DevKit.WebApi.BooleanValue;
 		/** Enables supervisor assign feature for the org */
 		msdyn_enable_supervisor_assign: DevKit.WebApi.BooleanValue;

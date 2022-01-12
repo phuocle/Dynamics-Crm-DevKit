@@ -113,17 +113,17 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		_Deprecated_Dynamics_Customer_Service_Analytics = 10203,
 		/// <summary>
-		/// (Deprecated)Teams Engagement Context = 10749
+		/// (Deprecated)Teams Engagement Context = 10778
 		/// </summary>
-		_DeprecatedTeams_Engagement_Context = 10749,
+		_DeprecatedTeams_Engagement_Context = 10778,
 		/// <summary>
 		/// Account = 1
 		/// </summary>
 		Account = 1,
 		/// <summary>
-		/// Account Project Price List = 10386
+		/// Account Project Price List = 10415
 		/// </summary>
-		Account_Project_Price_List = 10386,
+		Account_Project_Price_List = 10415,
 		/// <summary>
 		/// AccountLeads = 16
 		/// </summary>
@@ -133,25 +133,25 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		ACIViewMapper = 8040,
 		/// <summary>
-		/// Action Call = 10765
+		/// Action Call = 10794
 		/// </summary>
-		Action_Call = 10765,
+		Action_Call = 10794,
 		/// <summary>
-		/// Action Call Workflow = 10764
+		/// Action Call Workflow = 10793
 		/// </summary>
-		Action_Call_Workflow = 10764,
+		Action_Call_Workflow = 10793,
 		/// <summary>
 		/// Action Card = 9962
 		/// </summary>
 		Action_Card = 9962,
 		/// <summary>
-		/// Action Card Regarding = 10240
+		/// Action Card Regarding = 10243
 		/// </summary>
-		Action_Card_Regarding = 10240,
+		Action_Card_Regarding = 10243,
 		/// <summary>
-		/// Action Card Role Setting = 10241
+		/// Action Card Role Setting = 10244
 		/// </summary>
-		Action_Card_Role_Setting = 10241,
+		Action_Card_Role_Setting = 10244,
 		/// <summary>
 		/// Action Card Type = 9983
 		/// </summary>
@@ -189,13 +189,13 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Activity_Party = 135,
 		/// <summary>
-		/// Actual = 10355
+		/// Actual = 10384
 		/// </summary>
-		Actual = 10355,
+		Actual = 10384,
 		/// <summary>
-		/// Actual Data Export (Deprecated) = 10395
+		/// Actual Data Export (Deprecated) = 10424
 		/// </summary>
-		Actual_Data_Export_Deprecated = 10395,
+		Actual_Data_Export_Deprecated = 10424,
 		/// <summary>
 		/// Adaptive Card Configuration = 10186
 		/// </summary>
@@ -209,9 +209,9 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		admin_settings_entity = 10218,
 		/// <summary>
-		/// AdminAppState = 10624
+		/// AdminAppState = 10653
 		/// </summary>
-		AdminAppState = 10624,
+		AdminAppState = 10653,
 		/// <summary>
 		/// Advanced Similarity Rule = 9949
 		/// </summary>
@@ -221,73 +221,73 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Agent_script = 10174,
 		/// <summary>
-		/// Agent Script Answer = 10767
+		/// Agent Script Answer = 10796
 		/// </summary>
-		Agent_Script_Answer = 10767,
+		Agent_Script_Answer = 10796,
 		/// <summary>
 		/// Agent script step = 10175
 		/// </summary>
 		Agent_script_step = 10175,
 		/// <summary>
-		/// Agent Script Task = 10780
+		/// Agent Script Task = 10809
 		/// </summary>
-		Agent_Script_Task = 10780,
+		Agent_Script_Task = 10809,
 		/// <summary>
-		/// Agent Script Task Category = 10766
+		/// Agent Script Task Category = 10795
 		/// </summary>
-		Agent_Script_Task_Category = 10766,
+		Agent_Script_Task_Category = 10795,
 		/// <summary>
-		/// Agent Status history = 10625
+		/// Agent Status history = 10654
 		/// </summary>
-		Agent_Status_history = 10625,
+		Agent_Status_history = 10654,
 		/// <summary>
-		/// Agreement = 10477
+		/// Agreement = 10506
 		/// </summary>
-		Agreement = 10477,
+		Agreement = 10506,
 		/// <summary>
-		/// Agreement Booking Date = 10478
+		/// Agreement Booking Date = 10507
 		/// </summary>
-		Agreement_Booking_Date = 10478,
+		Agreement_Booking_Date = 10507,
 		/// <summary>
-		/// Agreement Booking Incident = 10479
+		/// Agreement Booking Incident = 10508
 		/// </summary>
-		Agreement_Booking_Incident = 10479,
+		Agreement_Booking_Incident = 10508,
 		/// <summary>
-		/// Agreement Booking Product = 10480
+		/// Agreement Booking Product = 10509
 		/// </summary>
-		Agreement_Booking_Product = 10480,
+		Agreement_Booking_Product = 10509,
 		/// <summary>
-		/// Agreement Booking Service = 10481
+		/// Agreement Booking Service = 10510
 		/// </summary>
-		Agreement_Booking_Service = 10481,
+		Agreement_Booking_Service = 10510,
 		/// <summary>
-		/// Agreement Booking Service Task = 10482
+		/// Agreement Booking Service Task = 10511
 		/// </summary>
-		Agreement_Booking_Service_Task = 10482,
+		Agreement_Booking_Service_Task = 10511,
 		/// <summary>
-		/// Agreement Booking Setup = 10483
+		/// Agreement Booking Setup = 10512
 		/// </summary>
-		Agreement_Booking_Setup = 10483,
+		Agreement_Booking_Setup = 10512,
 		/// <summary>
-		/// Agreement Business Process = 10492
+		/// Agreement Business Process = 10521
 		/// </summary>
-		Agreement_Business_Process = 10492,
+		Agreement_Business_Process = 10521,
 		/// <summary>
-		/// Agreement Invoice Date = 10484
+		/// Agreement Invoice Date = 10513
 		/// </summary>
-		Agreement_Invoice_Date = 10484,
+		Agreement_Invoice_Date = 10513,
 		/// <summary>
-		/// Agreement Invoice Product = 10485
+		/// Agreement Invoice Product = 10514
 		/// </summary>
-		Agreement_Invoice_Product = 10485,
+		Agreement_Invoice_Product = 10514,
 		/// <summary>
-		/// Agreement Invoice Setup = 10486
+		/// Agreement Invoice Setup = 10515
 		/// </summary>
-		Agreement_Invoice_Setup = 10486,
+		Agreement_Invoice_Setup = 10515,
 		/// <summary>
-		/// Agreement Substatus = 10487
+		/// Agreement Substatus = 10516
 		/// </summary>
-		Agreement_Substatus = 10487,
+		Agreement_Substatus = 10516,
 		/// <summary>
 		/// AI Builder Dataset = 10056
 		/// </summary>
@@ -393,9 +393,9 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		App_Module_Roles = 9009,
 		/// <summary>
-		/// App Parameter Definition (Deprecated) = 10595
+		/// App Parameter Definition (Deprecated) = 10624
 		/// </summary>
-		App_Parameter_Definition_Deprecated = 10595,
+		App_Parameter_Definition_Deprecated = 10624,
 		/// <summary>
 		/// App profile = 10156
 		/// </summary>
@@ -417,13 +417,13 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Application_Tab_Template = 10158,
 		/// <summary>
-		/// Application Tab Template (Deprecated) = 10597
+		/// Application Tab Template (Deprecated) = 10626
 		/// </summary>
-		Application_Tab_Template_Deprecated = 10597,
+		Application_Tab_Template_Deprecated = 10626,
 		/// <summary>
-		/// Application Type (Deprecated) = 10600
+		/// Application Type (Deprecated) = 10629
 		/// </summary>
-		Application_Type_Deprecated = 10600,
+		Application_Type_Deprecated = 10629,
 		/// <summary>
 		/// ApplicationUser = 10041
 		/// </summary>
@@ -445,9 +445,9 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Appointment = 4201,
 		/// <summary>
-		/// Approval Set = 10468
+		/// Approval Set = 10497
 		/// </summary>
-		Approval_Set = 10468,
+		Approval_Set = 10497,
 		/// <summary>
 		/// Article = 127
 		/// </summary>
@@ -465,37 +465,37 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Asset_Category_Template_Association = 10126,
 		/// <summary>
-		/// Asset Suggestion = 10570
+		/// Asset Suggestion = 10599
 		/// </summary>
-		Asset_Suggestion = 10570,
+		Asset_Suggestion = 10599,
 		/// <summary>
-		/// Asset Suggestions Setting = 10583
+		/// Asset Suggestions Setting = 10612
 		/// </summary>
-		Asset_Suggestions_Setting = 10583,
+		Asset_Suggestions_Setting = 10612,
 		/// <summary>
 		/// Asset Template Association = 10127
 		/// </summary>
 		Asset_Template_Association = 10127,
 		/// <summary>
-		/// Assignment Configuration = 10618
+		/// Assignment Configuration = 10647
 		/// </summary>
-		Assignment_Configuration = 10618,
+		Assignment_Configuration = 10647,
 		/// <summary>
-		/// Assignment Configuration Step = 10619
+		/// Assignment Configuration Step = 10648
 		/// </summary>
-		Assignment_Configuration_Step = 10619,
+		Assignment_Configuration_Step = 10648,
 		/// <summary>
-		/// Assignment Map = 10820
+		/// Assignment Map = 10266
 		/// </summary>
-		Assignment_Map = 10820,
+		Assignment_Map = 10266,
 		/// <summary>
-		/// Assignment Rule = 10817
+		/// Assignment Rule = 10263
 		/// </summary>
-		Assignment_Rule = 10817,
+		Assignment_Rule = 10263,
 		/// <summary>
-		/// Attach Skill = 10697
+		/// Attach Skill = 10726
 		/// </summary>
-		Attach_Skill = 10697,
+		Attach_Skill = 10726,
 		/// <summary>
 		/// Attachment = 1001
 		/// </summary>
@@ -505,9 +505,9 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Attachment_1002 = 1002,
 		/// <summary>
-		/// Attribute = 10818
+		/// Attribute = 10264
 		/// </summary>
-		Attribute_10818 = 10818,
+		Attribute_10264 = 10264,
 		/// <summary>
 		/// Attribute = 9808
 		/// </summary>
@@ -517,17 +517,17 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Attribute_Map = 4601,
 		/// <summary>
-		/// Attribute Value = 10819
+		/// Attribute Value = 10265
 		/// </summary>
-		Attribute_Value = 10819,
+		Attribute_Value = 10265,
 		/// <summary>
-		/// Audio File = 10680
+		/// Audio File = 10709
 		/// </summary>
-		Audio_File = 10680,
+		Audio_File = 10709,
 		/// <summary>
-		/// Audit & Diagnostics Setting = 10768
+		/// Audit & Diagnostics Setting = 10797
 		/// </summary>
-		Audit_Diagnostics_Setting = 10768,
+		Audit_Diagnostics_Setting = 10797,
 		/// <summary>
 		/// Auditing = 4567
 		/// </summary>
@@ -537,17 +537,17 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Authorization_Server = 1094,
 		/// <summary>
-		/// Auto block rule = 10638
+		/// Auto block rule = 10667
 		/// </summary>
-		Auto_block_rule = 10638,
+		Auto_block_rule = 10667,
 		/// <summary>
-		/// Auto Capture Rule = 10245
+		/// Auto Capture Rule = 10248
 		/// </summary>
-		Auto_Capture_Rule = 10245,
+		Auto_Capture_Rule = 10248,
 		/// <summary>
-		/// Auto Capture Settings = 10246
+		/// Auto Capture Settings = 10249
 		/// </summary>
-		Auto_Capture_Settings = 10246,
+		Auto_Capture_Settings = 10249,
 		/// <summary>
 		/// Available Times = 10121
 		/// </summary>
@@ -561,17 +561,17 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Azure_Service_Connection = 9936,
 		/// <summary>
-		/// Batch Job = 10388
+		/// Batch Job = 10417
 		/// </summary>
-		Batch_Job = 10388,
+		Batch_Job = 10417,
 		/// <summary>
 		/// Bookable Resource = 1150
 		/// </summary>
 		Bookable_Resource = 1150,
 		/// <summary>
-		/// Bookable Resource Association = 10356
+		/// Bookable Resource Association = 10385
 		/// </summary>
-		Bookable_Resource_Association = 10356,
+		Bookable_Resource_Association = 10385,
 		/// <summary>
 		/// Bookable Resource Booking = 1145
 		/// </summary>
@@ -581,17 +581,17 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Bookable_Resource_Booking_Header = 1146,
 		/// <summary>
-		/// Bookable Resource Booking Quick Note = 10564
+		/// Bookable Resource Booking Quick Note = 10593
 		/// </summary>
-		Bookable_Resource_Booking_Quick_Note = 10564,
+		Bookable_Resource_Booking_Quick_Note = 10593,
 		/// <summary>
 		/// Bookable Resource Booking to Exchange Id Mapping = 4421
 		/// </summary>
 		Bookable_Resource_Booking_to_Exchange_Id_Mapping = 4421,
 		/// <summary>
-		/// Bookable Resource Capacity Profile = 10691
+		/// Bookable Resource Capacity Profile = 10720
 		/// </summary>
-		Bookable_Resource_Capacity_Profile = 10691,
+		Bookable_Resource_Capacity_Profile = 10720,
 		/// <summary>
 		/// Bookable Resource Category = 1147
 		/// </summary>
@@ -609,37 +609,37 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Bookable_Resource_Group = 1151,
 		/// <summary>
-		/// Booking Alert = 10357
+		/// Booking Alert = 10386
 		/// </summary>
-		Booking_Alert = 10357,
+		Booking_Alert = 10386,
 		/// <summary>
-		/// Booking Alert Status = 10358
+		/// Booking Alert Status = 10387
 		/// </summary>
-		Booking_Alert_Status = 10358,
+		Booking_Alert_Status = 10387,
 		/// <summary>
-		/// Booking Change = 10359
+		/// Booking Change = 10388
 		/// </summary>
-		Booking_Change = 10359,
+		Booking_Change = 10388,
 		/// <summary>
-		/// Booking Journal = 10488
+		/// Booking Journal = 10517
 		/// </summary>
-		Booking_Journal = 10488,
+		Booking_Journal = 10517,
 		/// <summary>
-		/// Booking Rule = 10360
+		/// Booking Rule = 10389
 		/// </summary>
-		Booking_Rule = 10360,
+		Booking_Rule = 10389,
 		/// <summary>
-		/// Booking Setup Metadata = 10361
+		/// Booking Setup Metadata = 10390
 		/// </summary>
-		Booking_Setup_Metadata = 10361,
+		Booking_Setup_Metadata = 10390,
 		/// <summary>
 		/// Booking Status = 1152
 		/// </summary>
 		Booking_Status = 1152,
 		/// <summary>
-		/// Booking Timestamp = 10489
+		/// Booking Timestamp = 10518
 		/// </summary>
-		Booking_Timestamp = 10489,
+		Booking_Timestamp = 10518,
 		/// <summary>
 		/// BotContent = 10064
 		/// </summary>
@@ -657,9 +657,9 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Bulk_Operation_Log = 4405,
 		/// <summary>
-		/// Business Closure = 10362
+		/// Business Closure = 10391
 		/// </summary>
-		Business_Closure = 10362,
+		Business_Closure = 10391,
 		/// <summary>
 		/// Business Data Localized Label = 4232
 		/// </summary>
@@ -717,13 +717,13 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		CanvasApp_Extended_Metadata = 10038,
 		/// <summary>
-		/// Capacity Profile = 10620
+		/// Capacity Profile = 10649
 		/// </summary>
-		Capacity_Profile = 10620,
+		Capacity_Profile = 10649,
 		/// <summary>
-		/// Carrier = 10726
+		/// Carrier = 10755
 		/// </summary>
-		Carrier = 10726,
+		Carrier = 10755,
 		/// <summary>
 		/// CascadeGrantRevokeAccessRecordsTracker = 10028
 		/// </summary>
@@ -757,9 +757,9 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Case_Suggestions_Data_Souce = 10192,
 		/// <summary>
-		/// Case to Work Order Business Process = 10491
+		/// Case to Work Order Business Process = 10520
 		/// </summary>
-		Case_to_Work_Order_Business_Process = 10491,
+		Case_to_Work_Order_Business_Process = 10520,
 		/// <summary>
 		/// Case Topic = 10204
 		/// </summary>
@@ -789,13 +789,13 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Category = 9959,
 		/// <summary>
-		/// CFS - IoT Alert Process Flow = 10576
+		/// CFS - IoT Alert Process Flow = 10605
 		/// </summary>
-		CFS_IoT_Alert_Process_Flow = 10576,
+		CFS_IoT_Alert_Process_Flow = 10605,
 		/// <summary>
-		/// channel = 10609
+		/// channel = 10638
 		/// </summary>
-		channel = 10609,
+		channel = 10638,
 		/// <summary>
 		/// Channel Access Profile = 3005
 		/// </summary>
@@ -809,17 +809,17 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Channel_Access_Profile_Rule_Item = 9401,
 		/// <summary>
-		/// Channel Capability = 10629
+		/// Channel Capability = 10658
 		/// </summary>
-		Channel_Capability = 10629,
+		Channel_Capability = 10658,
 		/// <summary>
-		/// Channel Configuration = 10640
+		/// Channel Configuration = 10669
 		/// </summary>
-		Channel_Configuration = 10640,
+		Channel_Configuration = 10669,
 		/// <summary>
-		/// Channel Integration Framework v1.0 Provider = 10592
+		/// Channel Integration Framework v1.0 Provider = 10621
 		/// </summary>
-		Channel_Integration_Framework_v10_Provider = 10592,
+		Channel_Integration_Framework_v10_Provider = 10621,
 		/// <summary>
 		/// Channel Integration Framework v2.0 Provider = 10168
 		/// </summary>
@@ -833,33 +833,33 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Channel_Property_Group = 1234,
 		/// <summary>
-		/// Channel State Configuration = 10641
+		/// Channel State Configuration = 10670
 		/// </summary>
-		Channel_State_Configuration = 10641,
+		Channel_State_Configuration = 10670,
 		/// <summary>
 		/// Characteristic = 1141
 		/// </summary>
 		Characteristic = 1141,
 		/// <summary>
-		/// Characteristic mapping = 10700
+		/// Characteristic mapping = 10729
 		/// </summary>
-		Characteristic_mapping = 10700,
+		Characteristic_mapping = 10729,
 		/// <summary>
-		/// Chat Authentication Settings = 10707
+		/// Chat Authentication Settings = 10736
 		/// </summary>
-		Chat_Authentication_Settings = 10707,
+		Chat_Authentication_Settings = 10736,
 		/// <summary>
-		/// Chat Widget = 10712
+		/// Chat Widget = 10741
 		/// </summary>
-		Chat_Widget = 10712,
+		Chat_Widget = 10741,
 		/// <summary>
-		/// Chat Widget Language(deprecated) = 10711
+		/// Chat Widget Language(deprecated) = 10740
 		/// </summary>
-		Chat_Widget_Languagedeprecated = 10711,
+		Chat_Widget_Languagedeprecated = 10740,
 		/// <summary>
-		/// Chat Widget Location = 10714
+		/// Chat Widget Location = 10743
 		/// </summary>
-		Chat_Widget_Location = 10714,
+		Chat_Widget_Location = 10743,
 		/// <summary>
 		/// Chatbot = 10066
 		/// </summary>
@@ -873,9 +873,9 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Child_Incident_Count = 113,
 		/// <summary>
-		/// Client Extension = 10363
+		/// Client Extension = 10392
 		/// </summary>
-		Client_Extension = 10363,
+		Client_Extension = 10392,
 		/// <summary>
 		/// Client update = 36
 		/// </summary>
@@ -897,17 +897,17 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Commitment = 4215,
 		/// <summary>
-		/// Communication Provider Setting = 10727
+		/// Communication Provider Setting = 10756
 		/// </summary>
-		Communication_Provider_Setting = 10727,
+		Communication_Provider_Setting = 10756,
 		/// <summary>
-		/// Communication Provider Setting Entry = 10728
+		/// Communication Provider Setting Entry = 10757
 		/// </summary>
-		Communication_Provider_Setting_Entry = 10728,
+		Communication_Provider_Setting_Entry = 10757,
 		/// <summary>
-		/// Competency Requirement (Deprecated) = 10391
+		/// Competency Requirement (Deprecated) = 10420
 		/// </summary>
-		Competency_Requirement_Deprecated = 10391,
+		Competency_Requirement_Deprecated = 10420,
 		/// <summary>
 		/// Competitor = 123
 		/// </summary>
@@ -933,13 +933,13 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Component_Layer_Data_Source = 10007,
 		/// <summary>
-		/// Configuration = 10364
+		/// Configuration = 10393
 		/// </summary>
-		Configuration_10364 = 10364,
+		Configuration_10393 = 10393,
 		/// <summary>
-		/// Configuration = 10769
+		/// Configuration = 10798
 		/// </summary>
-		Configuration_10769 = 10769,
+		Configuration_10798 = 10798,
 		/// <summary>
 		/// Connection = 3234
 		/// </summary>
@@ -965,17 +965,17 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Contact = 2,
 		/// <summary>
-		/// Contact Price List = 10392
+		/// Contact Price List = 10421
 		/// </summary>
-		Contact_Price_List = 10392,
+		Contact_Price_List = 10421,
 		/// <summary>
-		/// Contact suggestion rule = 10851
+		/// Contact suggestion rule = 10230
 		/// </summary>
-		Contact_suggestion_rule = 10851,
+		Contact_suggestion_rule = 10230,
 		/// <summary>
-		/// Contact suggestion ruleset = 10852
+		/// Contact suggestion ruleset = 10231
 		/// </summary>
-		Contact_suggestion_ruleset = 10852,
+		Contact_suggestion_ruleset = 10231,
 		/// <summary>
 		/// ContactInvoices = 17
 		/// </summary>
@@ -993,13 +993,13 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		ContactQuotes = 18,
 		/// <summary>
-		/// Context item value = 10647
+		/// Context item value = 10676
 		/// </summary>
-		Context_item_value = 10647,
+		Context_item_value = 10676,
 		/// <summary>
-		/// Context variable = 10650
+		/// Context variable = 10679
 		/// </summary>
-		Context_variable = 10650,
+		Context_variable = 10679,
 		/// <summary>
 		/// Contract = 1010
 		/// </summary>
@@ -1009,77 +1009,77 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Contract_Line = 1011,
 		/// <summary>
-		/// Contract Line Detail Performance = 10469
+		/// Contract Line Detail Performance = 10498
 		/// </summary>
-		Contract_Line_Detail_Performance = 10469,
+		Contract_Line_Detail_Performance = 10498,
 		/// <summary>
-		/// Contract Performance = 10470
+		/// Contract Performance = 10499
 		/// </summary>
-		Contract_Performance = 10470,
+		Contract_Performance = 10499,
 		/// <summary>
 		/// Contract Template = 2011
 		/// </summary>
 		Contract_Template = 2011,
 		/// <summary>
-		/// Conversation = 10644
+		/// Conversation = 10673
 		/// </summary>
-		Conversation = 10644,
+		Conversation = 10673,
 		/// <summary>
-		/// Conversation Action = 10630
+		/// Conversation Action = 10659
 		/// </summary>
-		Conversation_Action = 10630,
+		Conversation_Action = 10659,
 		/// <summary>
-		/// Conversation Action Locale = 10631
+		/// Conversation Action Locale = 10660
 		/// </summary>
-		Conversation_Action_Locale = 10631,
+		Conversation_Action_Locale = 10660,
 		/// <summary>
-		/// Conversation Capacity profile = 10693
+		/// Conversation Capacity profile = 10722
 		/// </summary>
-		Conversation_Capacity_profile = 10693,
+		Conversation_Capacity_profile = 10722,
 		/// <summary>
-		/// Conversation Characteristic = 10694
+		/// Conversation Characteristic = 10723
 		/// </summary>
-		Conversation_Characteristic = 10694,
+		Conversation_Characteristic = 10723,
 		/// <summary>
 		/// Conversation Data (Deprecated) = 10219
 		/// </summary>
 		Conversation_Data_Deprecated = 10219,
 		/// <summary>
-		/// Conversation Sentiment = 10649
+		/// Conversation Sentiment = 10678
 		/// </summary>
-		Conversation_Sentiment = 10649,
+		Conversation_Sentiment = 10678,
 		/// <summary>
-		/// Conversation Topic = 10720
+		/// Conversation Topic = 10749
 		/// </summary>
-		Conversation_Topic = 10720,
+		Conversation_Topic = 10749,
 		/// <summary>
-		/// Conversation topic Conversation mapping = 10723
+		/// Conversation topic Conversation mapping = 10752
 		/// </summary>
-		Conversation_topic_Conversation_mapping = 10723,
+		Conversation_topic_Conversation_mapping = 10752,
 		/// <summary>
-		/// Conversation Topic Setting = 10721
+		/// Conversation Topic Setting = 10750
 		/// </summary>
-		Conversation_Topic_Setting = 10721,
+		Conversation_Topic_Setting = 10750,
 		/// <summary>
-		/// Conversation Topic Summary = 10722
+		/// Conversation Topic Summary = 10751
 		/// </summary>
-		Conversation_Topic_Summary = 10722,
+		Conversation_Topic_Summary = 10751,
 		/// <summary>
-		/// ConversationInsight = 10719
+		/// ConversationInsight = 10748
 		/// </summary>
-		ConversationInsight = 10719,
+		ConversationInsight = 10748,
 		/// <summary>
-		/// conversationsuggestionrequestpayload = 10718
+		/// conversationsuggestionrequestpayload = 10747
 		/// </summary>
-		conversationsuggestionrequestpayload = 10718,
+		conversationsuggestionrequestpayload = 10747,
 		/// <summary>
 		/// ConversationTranscript = 10065
 		/// </summary>
 		ConversationTranscript = 10065,
 		/// <summary>
-		/// CTI Search = 10777
+		/// CTI Search = 10806
 		/// </summary>
-		CTI_Search = 10777,
+		CTI_Search = 10806,
 		/// <summary>
 		/// Currency = 9105
 		/// </summary>
@@ -1109,17 +1109,17 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Custom_Control_Resource = 9754,
 		/// <summary>
-		/// Custom messaging account = 10639
+		/// Custom messaging account = 10668
 		/// </summary>
-		Custom_messaging_account = 10639,
+		Custom_messaging_account = 10668,
 		/// <summary>
-		/// Custom messaging channel = 10738
+		/// Custom messaging channel = 10767
 		/// </summary>
-		Custom_messaging_channel = 10738,
+		Custom_messaging_channel = 10767,
 		/// <summary>
-		/// Custom Messaging Engagement Context = 10736
+		/// Custom Messaging Engagement Context = 10765
 		/// </summary>
-		Custom_Messaging_Engagement_Context = 10736,
+		Custom_Messaging_Engagement_Context = 10765,
 		/// <summary>
 		/// Customer Asset = 10128
 		/// </summary>
@@ -1141,65 +1141,65 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Customer_Service_historical_analytics = 10208,
 		/// <summary>
-		/// Customer Voice alert = 10261
+		/// Customer Voice alert = 10283
 		/// </summary>
-		Customer_Voice_alert = 10261,
+		Customer_Voice_alert = 10283,
 		/// <summary>
-		/// Customer Voice alert rule = 10262
+		/// Customer Voice alert rule = 10284
 		/// </summary>
-		Customer_Voice_alert_rule = 10262,
+		Customer_Voice_alert_rule = 10284,
 		/// <summary>
-		/// Customer Voice file response = 10264
+		/// Customer Voice file response = 10286
 		/// </summary>
-		Customer_Voice_file_response = 10264,
+		Customer_Voice_file_response = 10286,
 		/// <summary>
-		/// Customer Voice localized survey email template = 10265
+		/// Customer Voice localized survey email template = 10287
 		/// </summary>
-		Customer_Voice_localized_survey_email_template = 10265,
+		Customer_Voice_localized_survey_email_template = 10287,
 		/// <summary>
-		/// Customer Voice project = 10266
+		/// Customer Voice project = 10288
 		/// </summary>
-		Customer_Voice_project = 10266,
+		Customer_Voice_project = 10288,
 		/// <summary>
-		/// Customer Voice satisfaction metric = 10269
+		/// Customer Voice satisfaction metric = 10291
 		/// </summary>
-		Customer_Voice_satisfaction_metric = 10269,
+		Customer_Voice_satisfaction_metric = 10291,
 		/// <summary>
-		/// Customer Voice survey = 10270
+		/// Customer Voice survey = 10292
 		/// </summary>
-		Customer_Voice_survey = 10270,
+		Customer_Voice_survey = 10292,
 		/// <summary>
-		/// Customer Voice survey email template = 10263
+		/// Customer Voice survey email template = 10285
 		/// </summary>
-		Customer_Voice_survey_email_template = 10263,
+		Customer_Voice_survey_email_template = 10285,
 		/// <summary>
-		/// Customer Voice survey invite = 10271
+		/// Customer Voice survey invite = 10293
 		/// </summary>
-		Customer_Voice_survey_invite = 10271,
+		Customer_Voice_survey_invite = 10293,
 		/// <summary>
-		/// Customer Voice survey question = 10267
+		/// Customer Voice survey question = 10289
 		/// </summary>
-		Customer_Voice_survey_question = 10267,
+		Customer_Voice_survey_question = 10289,
 		/// <summary>
-		/// Customer Voice survey question response = 10268
+		/// Customer Voice survey question response = 10290
 		/// </summary>
-		Customer_Voice_survey_question_response = 10268,
+		Customer_Voice_survey_question_response = 10290,
 		/// <summary>
-		/// Customer Voice survey reminder = 10272
+		/// Customer Voice survey reminder = 10294
 		/// </summary>
-		Customer_Voice_survey_reminder = 10272,
+		Customer_Voice_survey_reminder = 10294,
 		/// <summary>
-		/// Customer Voice survey response = 10273
+		/// Customer Voice survey response = 10295
 		/// </summary>
-		Customer_Voice_survey_response = 10273,
+		Customer_Voice_survey_response = 10295,
 		/// <summary>
-		/// Customer Voice unsubscribed recipient = 10274
+		/// Customer Voice unsubscribed recipient = 10296
 		/// </summary>
-		Customer_Voice_unsubscribed_recipient = 10274,
+		Customer_Voice_unsubscribed_recipient = 10296,
 		/// <summary>
-		/// Customization File = 10770
+		/// Customization File = 10799
 		/// </summary>
-		Customization_File = 10770,
+		Customization_File = 10799,
 		/// <summary>
 		/// Data Analytics Admin Settings (Deprecated) = 10200
 		/// </summary>
@@ -1237,9 +1237,9 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Data_Performance_Dashboard = 4450,
 		/// <summary>
-		/// Data Sync State = 10855
+		/// Data Sync State = 10854
 		/// </summary>
-		Data_Sync_State = 10855,
+		Data_Sync_State = 10854,
 		/// <summary>
 		/// Database Version = 10115
 		/// </summary>
@@ -1249,25 +1249,25 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Dataflow = 418,
 		/// <summary>
-		/// Deal manager settings = 10255
+		/// Deal manager settings = 10277
 		/// </summary>
-		Deal_manager_settings = 10255,
+		Deal_manager_settings = 10277,
 		/// <summary>
-		/// dealmanageraccess = 10254
+		/// dealmanageraccess = 10276
 		/// </summary>
-		dealmanageraccess = 10254,
+		dealmanageraccess = 10276,
 		/// <summary>
-		/// Decision contract = 10611
+		/// Decision contract = 10640
 		/// </summary>
-		Decision_contract = 10611,
+		Decision_contract = 10640,
 		/// <summary>
-		/// Decision rule set = 10612
+		/// Decision rule set = 10641
 		/// </summary>
-		Decision_rule_set = 10612,
+		Decision_rule_set = 10641,
 		/// <summary>
-		/// Delegation = 10396
+		/// Delegation = 10425
 		/// </summary>
-		Delegation = 10396,
+		Delegation = 10425,
 		/// <summary>
 		/// DelveActionHub = 9961
 		/// </summary>
@@ -1285,9 +1285,9 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Dependency_Node = 7106,
 		/// <summary>
-		/// Deprecated Workstream Entity Configuration = 10632
+		/// Deprecated Workstream Entity Configuration = 10661
 		/// </summary>
-		Deprecated_Workstream_Entity_Configuration = 10632,
+		Deprecated_Workstream_Entity_Configuration = 10661,
 		/// <summary>
 		/// Discount = 1013
 		/// </summary>
@@ -1329,17 +1329,17 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Duplicate_Rule_Condition = 4416,
 		/// <summary>
-		/// Effort estimate = 10703
+		/// Effort estimate = 10732
 		/// </summary>
-		Effort_estimate = 10703,
+		Effort_estimate = 10732,
 		/// <summary>
-		/// Effort estimation model = 10704
+		/// Effort estimation model = 10733
 		/// </summary>
-		Effort_estimation_model = 10704,
+		Effort_estimation_model = 10733,
 		/// <summary>
-		/// Effort model training details = 10705
+		/// Effort model training details = 10734
 		/// </summary>
-		Effort_model_training_details = 10705,
+		Effort_model_training_details = 10734,
 		/// <summary>
 		/// Email = 4202
 		/// </summary>
@@ -1369,9 +1369,9 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Entitlement = 9700,
 		/// <summary>
-		/// Entitlement Application = 10494
+		/// Entitlement Application = 10523
 		/// </summary>
-		Entitlement_Application = 10494,
+		Entitlement_Application = 10523,
 		/// <summary>
 		/// Entitlement Channel = 9701
 		/// </summary>
@@ -1401,9 +1401,9 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Entitlement_Template_Product = 4545,
 		/// <summary>
-		/// Entity = 10633
+		/// Entity = 10662
 		/// </summary>
-		Entity_10633 = 10633,
+		Entity_10662 = 10662,
 		/// <summary>
 		/// Entity = 9800
 		/// </summary>
@@ -1413,9 +1413,9 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Entity_Analytics_Config = 430,
 		/// <summary>
-		/// Entity Configuration = 10579
+		/// Entity Configuration = 10608
 		/// </summary>
-		Entity_Configuration = 10579,
+		Entity_Configuration = 10608,
 		/// <summary>
 		/// Entity Image Configuration = 432
 		/// </summary>
@@ -1429,9 +1429,9 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Entity_Key = 9810,
 		/// <summary>
-		/// Entity link chat configuration = 10229
+		/// Entity link chat configuration = 10232
 		/// </summary>
-		Entity_link_chat_configuration = 10229,
+		Entity_link_chat_configuration = 10232,
 		/// <summary>
 		/// Entity Map = 4600
 		/// </summary>
@@ -1441,21 +1441,21 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Entity_Relationship = 9811,
 		/// <summary>
-		/// Entity Routing Context = 10628
+		/// Entity Routing Context = 10657
 		/// </summary>
-		Entity_Routing_Context = 10628,
+		Entity_Routing_Context = 10657,
 		/// <summary>
-		/// Entity Search = 10772
+		/// Entity Search = 10801
 		/// </summary>
-		Entity_Search = 10772,
+		Entity_Search = 10801,
 		/// <summary>
-		/// Entity Type = 10771
+		/// Entity Type = 10800
 		/// </summary>
-		Entity_Type = 10771,
+		Entity_Type = 10800,
 		/// <summary>
-		/// EntityRankingRule = 10242
+		/// EntityRankingRule = 10245
 		/// </summary>
-		EntityRankingRule = 10242,
+		EntityRankingRule = 10245,
 		/// <summary>
 		/// Environment Variable Definition = 380
 		/// </summary>
@@ -1465,17 +1465,17 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Environment_Variable_Value = 381,
 		/// <summary>
-		/// Estimate = 10399
+		/// Estimate = 10428
 		/// </summary>
-		Estimate = 10399,
+		Estimate = 10428,
 		/// <summary>
-		/// Estimate Line = 10400
+		/// Estimate Line = 10429
 		/// </summary>
-		Estimate_Line = 10400,
+		Estimate_Line = 10429,
 		/// <summary>
-		/// Event = 10785
+		/// Event = 10814
 		/// </summary>
-		Event = 10785,
+		Event = 10814,
 		/// <summary>
 		/// Exchange Sync Id Mapping = 4120
 		/// </summary>
@@ -1485,17 +1485,17 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Expander_Event = 4711,
 		/// <summary>
-		/// Expense = 10401
+		/// Expense = 10430
 		/// </summary>
-		Expense = 10401,
+		Expense = 10430,
 		/// <summary>
-		/// Expense Category = 10402
+		/// Expense Category = 10431
 		/// </summary>
-		Expense_Category = 10402,
+		Expense_Category = 10431,
 		/// <summary>
-		/// Expense Receipt = 10403
+		/// Expense Receipt = 10432
 		/// </summary>
-		Expense_Receipt = 10403,
+		Expense_Receipt = 10432,
 		/// <summary>
 		/// Expired Process = 955
 		/// </summary>
@@ -1505,9 +1505,9 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		ExportSolutionUpload = 10011,
 		/// <summary>
-		/// Extended User Setting = 10823
+		/// Extended User Setting = 10270
 		/// </summary>
-		Extended_User_Setting = 10823,
+		Extended_User_Setting = 10270,
 		/// <summary>
 		/// External Party = 3008
 		/// </summary>
@@ -1517,25 +1517,25 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		External_Party_Item = 9987,
 		/// <summary>
-		/// Facebook Application = 10734
+		/// Facebook Application = 10763
 		/// </summary>
-		Facebook_Application = 10734,
+		Facebook_Application = 10763,
 		/// <summary>
-		/// Facebook Engagement Context = 10733
+		/// Facebook Engagement Context = 10762
 		/// </summary>
-		Facebook_Engagement_Context = 10733,
+		Facebook_Engagement_Context = 10762,
 		/// <summary>
-		/// Facebook Page = 10735
+		/// Facebook Page = 10764
 		/// </summary>
-		Facebook_Page = 10735,
+		Facebook_Page = 10764,
 		/// <summary>
 		/// Facility/Equipment = 4000
 		/// </summary>
 		FacilityEquipment = 4000,
 		/// <summary>
-		/// Fact = 10404
+		/// Fact = 10433
 		/// </summary>
-		Fact = 10404,
+		Fact = 10433,
 		/// <summary>
 		/// Fax = 4204
 		/// </summary>
@@ -1549,9 +1549,9 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Feedback = 9958,
 		/// <summary>
-		/// Field Computation = 10405
+		/// Field Computation = 10434
 		/// </summary>
-		Field_Computation = 10405,
+		Field_Computation = 10434,
 		/// <summary>
 		/// Field Permission = 1201
 		/// </summary>
@@ -1561,25 +1561,25 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Field_Security_Profile = 1200,
 		/// <summary>
-		/// Field service historical analytics = 10584
+		/// Field service historical analytics = 10613
 		/// </summary>
-		Field_service_historical_analytics = 10584,
+		Field_service_historical_analytics = 10613,
 		/// <summary>
-		/// Field Service Price List Item = 10495
+		/// Field Service Price List Item = 10524
 		/// </summary>
-		Field_Service_Price_List_Item = 10495,
+		Field_Service_Price_List_Item = 10524,
 		/// <summary>
-		/// Field Service Setting = 10496
+		/// Field Service Setting = 10525
 		/// </summary>
-		Field_Service_Setting = 10496,
+		Field_Service_Setting = 10525,
 		/// <summary>
-		/// Field Service SLA Configuration = 10497
+		/// Field Service SLA Configuration = 10526
 		/// </summary>
-		Field_Service_SLA_Configuration = 10497,
+		Field_Service_SLA_Configuration = 10526,
 		/// <summary>
-		/// Field Service System Job = 10498
+		/// Field Service System Job = 10527
 		/// </summary>
-		Field_Service_System_Job = 10498,
+		Field_Service_System_Job = 10527,
 		/// <summary>
 		/// Field Sharing = 44
 		/// </summary>
@@ -1589,25 +1589,25 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		FileAttachment = 55,
 		/// <summary>
-		/// Filter = 10260
+		/// Filter = 10282
 		/// </summary>
-		Filter = 10260,
+		Filter = 10282,
 		/// <summary>
 		/// Filter Template = 30
 		/// </summary>
 		Filter_Template = 30,
 		/// <summary>
-		/// Find Work Event (Deprecated in v3.0) = 10406
+		/// Find Work Event (Deprecated in v3.0) = 10435
 		/// </summary>
-		Find_Work_Event_Deprecated_in_v30 = 10406,
+		Find_Work_Event_Deprecated_in_v30 = 10435,
 		/// <summary>
 		/// Fixed Monthly Fiscal Calendar = 2004
 		/// </summary>
 		Fixed_Monthly_Fiscal_Calendar = 2004,
 		/// <summary>
-		/// Flagged spam = 10642
+		/// Flagged spam = 10671
 		/// </summary>
-		Flagged_spam = 10642,
+		Flagged_spam = 10671,
 		/// <summary>
 		/// Flow Machine = 10045
 		/// </summary>
@@ -1621,69 +1621,69 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Flow_Session = 4720,
 		/// <summary>
-		/// flowcardtype = 10243
+		/// flowcardtype = 10246
 		/// </summary>
-		flowcardtype = 10243,
+		flowcardtype = 10246,
 		/// <summary>
 		/// Follow = 8003
 		/// </summary>
 		Follow = 8003,
 		/// <summary>
-		/// Forecast = 10234
+		/// Forecast = 10237
 		/// </summary>
-		Forecast = 10234,
+		Forecast = 10237,
 		/// <summary>
-		/// Forecast Configuration = 10232
+		/// Forecast Configuration = 10235
 		/// </summary>
-		Forecast_Configuration = 10232,
+		Forecast_Configuration = 10235,
 		/// <summary>
-		/// Forecast definition = 10233
+		/// Forecast definition = 10236
 		/// </summary>
-		Forecast_definition = 10233,
+		Forecast_definition = 10236,
 		/// <summary>
-		/// Forecast recurrence = 10235
+		/// Forecast recurrence = 10238
 		/// </summary>
-		Forecast_recurrence = 10235,
+		Forecast_recurrence = 10238,
 		/// <summary>
-		/// Form = 10773
+		/// Form = 10802
 		/// </summary>
-		Form = 10773,
+		Form = 10802,
 		/// <summary>
-		/// Fulfillment Preference = 10380
+		/// Fulfillment Preference = 10409
 		/// </summary>
-		Fulfillment_Preference = 10380,
+		Fulfillment_Preference = 10409,
 		/// <summary>
 		/// Functional Location = 10131
 		/// </summary>
 		Functional_Location = 10131,
 		/// <summary>
-		/// GDPRData = 10236
+		/// GDPRData = 10239
 		/// </summary>
-		GDPRData = 10236,
+		GDPRData = 10239,
 		/// <summary>
-		/// Geo Location Provider = 10664
+		/// Geo Location Provider = 10693
 		/// </summary>
-		Geo_Location_Provider = 10664,
+		Geo_Location_Provider = 10693,
 		/// <summary>
-		/// Geofence = 10580
+		/// Geofence = 10609
 		/// </summary>
-		Geofence = 10580,
+		Geofence = 10609,
 		/// <summary>
-		/// Geofence Event = 10581
+		/// Geofence Event = 10610
 		/// </summary>
-		Geofence_Event = 10581,
+		Geofence_Event = 10610,
 		/// <summary>
-		/// Geofencing Settings = 10582
+		/// Geofencing Settings = 10611
 		/// </summary>
-		Geofencing_Settings = 10582,
+		Geofencing_Settings = 10611,
 		/// <summary>
-		/// Geolocation Settings = 10577
+		/// Geolocation Settings = 10606
 		/// </summary>
-		Geolocation_Settings = 10577,
+		Geolocation_Settings = 10606,
 		/// <summary>
-		/// Geolocation Tracking = 10578
+		/// Geolocation Tracking = 10607
 		/// </summary>
-		Geolocation_Tracking = 10578,
+		Geolocation_Tracking = 10607,
 		/// <summary>
 		/// Global Search Configuration = 54
 		/// </summary>
@@ -1713,13 +1713,13 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		HolidayWrapper = 9996,
 		/// <summary>
-		/// Hosted Control = 10756
+		/// Hosted Control = 10785
 		/// </summary>
-		Hosted_Control = 10756,
+		Hosted_Control = 10785,
 		/// <summary>
-		/// icebreakersconfig = 10253
+		/// icebreakersconfig = 10256
 		/// </summary>
-		icebreakersconfig = 10253,
+		icebreakersconfig = 10256,
 		/// <summary>
 		/// Image Attribute Configuration = 431
 		/// </summary>
@@ -1753,45 +1753,45 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Incident_KnowledgeBaseRecord = 9931,
 		/// <summary>
-		/// Incident Type = 10499
+		/// Incident Type = 10528
 		/// </summary>
-		Incident_Type = 10499,
+		Incident_Type = 10528,
 		/// <summary>
-		/// Incident Type Characteristic = 10500
+		/// Incident Type Characteristic = 10529
 		/// </summary>
-		Incident_Type_Characteristic = 10500,
+		Incident_Type_Characteristic = 10529,
 		/// <summary>
-		/// Incident Type Product = 10501
+		/// Incident Type Product = 10530
 		/// </summary>
-		Incident_Type_Product = 10501,
+		Incident_Type_Product = 10530,
 		/// <summary>
-		/// Incident Type Requirement Group = 10505
+		/// Incident Type Requirement Group = 10534
 		/// </summary>
-		Incident_Type_Requirement_Group = 10505,
+		Incident_Type_Requirement_Group = 10534,
 		/// <summary>
-		/// Incident Type Resolution = 10569
+		/// Incident Type Resolution = 10598
 		/// </summary>
-		Incident_Type_Resolution = 10569,
+		Incident_Type_Resolution = 10598,
 		/// <summary>
-		/// Incident Type Service = 10502
+		/// Incident Type Service = 10531
 		/// </summary>
-		Incident_Type_Service = 10502,
+		Incident_Type_Service = 10531,
 		/// <summary>
-		/// Incident Type Service Task = 10503
+		/// Incident Type Service Task = 10532
 		/// </summary>
-		Incident_Type_Service_Task = 10503,
+		Incident_Type_Service_Task = 10532,
 		/// <summary>
-		/// Incident Type Suggestion Result = 10567
+		/// Incident Type Suggestion Result = 10596
 		/// </summary>
-		Incident_Type_Suggestion_Result = 10567,
+		Incident_Type_Suggestion_Result = 10596,
 		/// <summary>
-		/// Incident Type Suggestion Run History = 10568
+		/// Incident Type Suggestion Run History = 10597
 		/// </summary>
-		Incident_Type_Suggestion_Run_History = 10568,
+		Incident_Type_Suggestion_Run_History = 10597,
 		/// <summary>
-		/// Incident Types Setup = 10504
+		/// Incident Types Setup = 10533
 		/// </summary>
-		Incident_Types_Setup = 10504,
+		Incident_Types_Setup = 10533,
 		/// <summary>
 		/// Index Attribute = 9816
 		/// </summary>
@@ -1805,33 +1805,33 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Insights = 10202,
 		/// <summary>
-		/// Inspection = 10475
+		/// Inspection = 10504
 		/// </summary>
-		Inspection = 10475,
+		Inspection = 10504,
 		/// <summary>
-		/// Inspection Attachment = 10473
+		/// Inspection Attachment = 10502
 		/// </summary>
-		Inspection_Attachment = 10473,
+		Inspection_Attachment = 10502,
 		/// <summary>
-		/// Inspection Response = 10476
+		/// Inspection Response = 10505
 		/// </summary>
-		Inspection_Response = 10476,
+		Inspection_Response = 10505,
 		/// <summary>
-		/// Inspection Template = 10472
+		/// Inspection Template = 10501
 		/// </summary>
-		Inspection_Template = 10472,
+		Inspection_Template = 10501,
 		/// <summary>
-		/// Inspection Template Version = 10474
+		/// Inspection Template Version = 10503
 		/// </summary>
-		Inspection_Template_Version = 10474,
+		Inspection_Template_Version = 10503,
 		/// <summary>
-		/// Integration Job = 10407
+		/// Integration Job = 10436
 		/// </summary>
-		Integration_Job = 10407,
+		Integration_Job = 10436,
 		/// <summary>
-		/// Integration Job Detail = 10408
+		/// Integration Job Detail = 10437
 		/// </summary>
-		Integration_Job_Detail = 10408,
+		Integration_Job_Detail = 10437,
 		/// <summary>
 		/// Integration Status = 3000
 		/// </summary>
@@ -1857,45 +1857,45 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Invalid_Dependency = 7107,
 		/// <summary>
-		/// Inventory Adjustment = 10506
+		/// Inventory Adjustment = 10535
 		/// </summary>
-		Inventory_Adjustment = 10506,
+		Inventory_Adjustment = 10535,
 		/// <summary>
-		/// Inventory Adjustment Product = 10507
+		/// Inventory Adjustment Product = 10536
 		/// </summary>
-		Inventory_Adjustment_Product = 10507,
+		Inventory_Adjustment_Product = 10536,
 		/// <summary>
-		/// Inventory Journal = 10508
+		/// Inventory Journal = 10537
 		/// </summary>
-		Inventory_Journal = 10508,
+		Inventory_Journal = 10537,
 		/// <summary>
-		/// Inventory Transfer = 10509
+		/// Inventory Transfer = 10538
 		/// </summary>
-		Inventory_Transfer = 10509,
+		Inventory_Transfer = 10538,
 		/// <summary>
 		/// Invoice = 1090
 		/// </summary>
 		Invoice = 1090,
 		/// <summary>
-		/// Invoice Frequency = 10409
+		/// Invoice Frequency = 10438
 		/// </summary>
-		Invoice_Frequency = 10409,
+		Invoice_Frequency = 10438,
 		/// <summary>
-		/// Invoice Frequency Detail = 10410
+		/// Invoice Frequency Detail = 10439
 		/// </summary>
-		Invoice_Frequency_Detail = 10410,
+		Invoice_Frequency_Detail = 10439,
 		/// <summary>
 		/// Invoice Line = 1091
 		/// </summary>
 		Invoice_Line = 1091,
 		/// <summary>
-		/// Invoice Line Detail = 10411
+		/// Invoice Line Detail = 10440
 		/// </summary>
-		Invoice_Line_Detail = 10411,
+		Invoice_Line_Detail = 10440,
 		/// <summary>
-		/// Invoice Process = 10390
+		/// Invoice Process = 10419
 		/// </summary>
-		Invoice_Process = 10390,
+		Invoice_Process = 10419,
 		/// <summary>
 		/// IoT Alert = 10138
 		/// </summary>
@@ -1961,13 +1961,13 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		ISV_Config = 4705,
 		/// <summary>
-		/// Journal = 10412
+		/// Journal = 10441
 		/// </summary>
-		Journal = 10412,
+		Journal = 10441,
 		/// <summary>
-		/// Journal Line = 10413
+		/// Journal Line = 10442
 		/// </summary>
-		Journal_Line = 10413,
+		Journal_Line = 10442,
 		/// <summary>
 		/// KB Enrichment = 10193
 		/// </summary>
@@ -2069,17 +2069,17 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		KPI_Event_Definition = 10221,
 		/// <summary>
-		/// Language = 10643
+		/// Language = 10672
 		/// </summary>
-		Language_10643 = 10643,
+		Language_10672 = 10672,
 		/// <summary>
 		/// Language = 9957
 		/// </summary>
 		Language_9957 = 9957,
 		/// <summary>
-		/// Language Module = 10774
+		/// Language Module = 10803
 		/// </summary>
-		Language_Module = 10774,
+		Language_Module = 10803,
 		/// <summary>
 		/// Language Provisioning State = 9875
 		/// </summary>
@@ -2117,13 +2117,13 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Like = 8006,
 		/// <summary>
-		/// LINE account = 10739
+		/// LINE account = 10768
 		/// </summary>
-		LINE_account = 10739,
+		LINE_account = 10768,
 		/// <summary>
-		/// LINE Engagement Context = 10737
+		/// LINE Engagement Context = 10766
 		/// </summary>
-		LINE_Engagement_Context = 10737,
+		LINE_Engagement_Context = 10766,
 		/// <summary>
 		/// List Operation = 10113
 		/// </summary>
@@ -2133,29 +2133,29 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		List_Value_Mapping = 4418,
 		/// <summary>
-		/// Live Chat Context = 10713
+		/// Live Chat Context = 10742
 		/// </summary>
-		Live_Chat_Context = 10713,
+		Live_Chat_Context = 10742,
 		/// <summary>
-		/// Live work item event = 10635
+		/// Live work item event = 10664
 		/// </summary>
-		Live_work_item_event = 10635,
+		Live_work_item_event = 10664,
 		/// <summary>
-		/// Live Work Item Participant (Deprecated) = 10648
+		/// Live Work Item Participant (Deprecated) = 10677
 		/// </summary>
-		Live_Work_Item_Participant_Deprecated = 10648,
+		Live_Work_Item_Participant_Deprecated = 10677,
 		/// <summary>
 		/// LocalConfigStore = 9201
 		/// </summary>
 		LocalConfigStore = 9201,
 		/// <summary>
-		/// Localization = 10651
+		/// Localization = 10680
 		/// </summary>
-		Localization = 10651,
+		Localization = 10680,
 		/// <summary>
-		/// Localized Survey Question (Deprecated) = 10715
+		/// Localized Survey Question (Deprecated) = 10744
 		/// </summary>
-		Localized_Survey_Question_Deprecated = 10715,
+		Localized_Survey_Question_Deprecated = 10744,
 		/// <summary>
 		/// Lookup Mapping = 4419
 		/// </summary>
@@ -2217,37 +2217,37 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Marketing_List_Member = 4301,
 		/// <summary>
-		/// MarketingSiteMap = 10588
+		/// MarketingSiteMap = 10617
 		/// </summary>
-		MarketingSiteMap = 10588,
+		MarketingSiteMap = 10617,
 		/// <summary>
-		/// Masking Rule = 10637
+		/// Masking Rule = 10666
 		/// </summary>
-		Masking_Rule = 10637,
+		Masking_Rule = 10666,
 		/// <summary>
-		/// Master Entity Routing Configuration = 10616
+		/// Master Entity Routing Configuration = 10645
 		/// </summary>
-		Master_Entity_Routing_Configuration = 10616,
+		Master_Entity_Routing_Configuration = 10645,
 		/// <summary>
-		/// Message = 10662
+		/// Message = 10691
 		/// </summary>
-		Message = 10662,
+		Message = 10691,
 		/// <summary>
 		/// Metadata Difference = 4231
 		/// </summary>
 		Metadata_Difference = 4231,
 		/// <summary>
-		/// Microsoft Teams account = 10748
+		/// Microsoft Teams account = 10777
 		/// </summary>
-		Microsoft_Teams_account = 10748,
+		Microsoft_Teams_account = 10777,
 		/// <summary>
-		/// Microsoft Teams chat association entity = 10230
+		/// Microsoft Teams chat association entity = 10233
 		/// </summary>
-		Microsoft_Teams_chat_association_entity = 10230,
+		Microsoft_Teams_chat_association_entity = 10233,
 		/// <summary>
-		/// Microsoft Teams chat suggestion = 10231
+		/// Microsoft Teams chat suggestion = 10234
 		/// </summary>
-		Microsoft_Teams_chat_suggestion = 10231,
+		Microsoft_Teams_chat_suggestion = 10234,
 		/// <summary>
 		/// Microsoft Teams Collaboration entity = 10227
 		/// </summary>
@@ -2297,9 +2297,9 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Model_Driven_App_User_Setting = 10035,
 		/// <summary>
-		/// Model training details = 10698
+		/// Model training details = 10727
 		/// </summary>
-		Model_training_details = 10698,
+		Model_training_details = 10727,
 		/// <summary>
 		/// Monthly Fiscal Calendar = 2003
 		/// </summary>
@@ -2313,9 +2313,9 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		msdyn_msteamssettingsv2 = 10226,
 		/// <summary>
-		/// msdyn_relationshipinsightsunifiedconfig = 10237
+		/// msdyn_relationshipinsightsunifiedconfig = 10240
 		/// </summary>
-		msdyn_relationshipinsightsunifiedconfig = 10237,
+		msdyn_relationshipinsightsunifiedconfig = 10240,
 		/// <summary>
 		/// Multi Select Option Value = 9912
 		/// </summary>
@@ -2341,9 +2341,9 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Note = 5,
 		/// <summary>
-		/// Notes analysis Config = 10252
+		/// Notes analysis Config = 10255
 		/// </summary>
-		Notes_analysis_Config = 10252,
+		Notes_analysis_Config = 10255,
 		/// <summary>
 		/// Notification = 10099
 		/// </summary>
@@ -2357,17 +2357,17 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Notification_Field = 10159,
 		/// <summary>
-		/// Notification Field (Deprecated) = 10593
+		/// Notification Field (Deprecated) = 10622
 		/// </summary>
-		Notification_Field_Deprecated = 10593,
+		Notification_Field_Deprecated = 10622,
 		/// <summary>
 		/// Notification Template = 10160
 		/// </summary>
 		Notification_Template = 10160,
 		/// <summary>
-		/// Notification Template (Deprecated) = 10594
+		/// Notification Template (Deprecated) = 10623
 		/// </summary>
-		Notification_Template_Deprecated = 10594,
+		Notification_Template_Deprecated = 10623,
 		/// <summary>
 		/// OData v4 Data Source = 10044
 		/// </summary>
@@ -2385,41 +2385,41 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Offline_Command_Definition = 9870,
 		/// <summary>
-		/// Omnichannel Configuration = 10665
+		/// Omnichannel Configuration = 10694
 		/// </summary>
-		Omnichannel_Configuration = 10665,
+		Omnichannel_Configuration = 10694,
 		/// <summary>
-		/// Omnichannel historical analytics = 10724
+		/// Omnichannel historical analytics = 10753
 		/// </summary>
-		Omnichannel_historical_analytics = 10724,
+		Omnichannel_historical_analytics = 10753,
 		/// <summary>
-		/// Omnichannel Personalization = 10666
+		/// Omnichannel Personalization = 10695
 		/// </summary>
-		Omnichannel_Personalization = 10666,
+		Omnichannel_Personalization = 10695,
 		/// <summary>
-		/// Omnichannel Queue (Deprecated) = 10667
+		/// Omnichannel Queue (Deprecated) = 10696
 		/// </summary>
-		Omnichannel_Queue_Deprecated = 10667,
+		Omnichannel_Queue_Deprecated = 10696,
 		/// <summary>
-		/// Omnichannel Request = 10654
+		/// Omnichannel Request = 10683
 		/// </summary>
-		Omnichannel_Request = 10654,
+		Omnichannel_Request = 10683,
 		/// <summary>
-		/// Omnichannel Sync Config = 10668
+		/// Omnichannel Sync Config = 10697
 		/// </summary>
-		Omnichannel_Sync_Config = 10668,
+		Omnichannel_Sync_Config = 10697,
 		/// <summary>
-		/// Omnichannel voice historical analytics (preview) (Deprecated) = 10725
+		/// Omnichannel voice historical analytics (preview) (Deprecated) = 10754
 		/// </summary>
-		Omnichannel_voice_historical_analytics_preview_Deprecated = 10725,
+		Omnichannel_voice_historical_analytics_preview_Deprecated = 10754,
 		/// <summary>
-		/// Ongoing conversation (Deprecated) = 10634
+		/// Ongoing conversation (Deprecated) = 10663
 		/// </summary>
-		Ongoing_conversation_Deprecated = 10634,
+		Ongoing_conversation_Deprecated = 10663,
 		/// <summary>
-		/// Operating Hour = 10669
+		/// Operating Hour = 10698
 		/// </summary>
-		Operating_Hour = 10669,
+		Operating_Hour = 10698,
 		/// <summary>
 		/// Opportunity = 3
 		/// </summary>
@@ -2433,25 +2433,25 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Opportunity_Line = 1083,
 		/// <summary>
-		/// Opportunity Line Detail (Deprecated) = 10416
+		/// Opportunity Line Detail (Deprecated) = 10445
 		/// </summary>
-		Opportunity_Line_Detail_Deprecated = 10416,
+		Opportunity_Line_Detail_Deprecated = 10445,
 		/// <summary>
-		/// Opportunity Line Resource Category (Deprecated) = 10415
+		/// Opportunity Line Resource Category (Deprecated) = 10444
 		/// </summary>
-		Opportunity_Line_Resource_Category_Deprecated = 10415,
+		Opportunity_Line_Resource_Category_Deprecated = 10444,
 		/// <summary>
-		/// Opportunity Line Transaction Category (Deprecated) = 10417
+		/// Opportunity Line Transaction Category (Deprecated) = 10446
 		/// </summary>
-		Opportunity_Line_Transaction_Category_Deprecated = 10417,
+		Opportunity_Line_Transaction_Category_Deprecated = 10446,
 		/// <summary>
-		/// Opportunity Line Transaction Classification (Deprecated) = 10418
+		/// Opportunity Line Transaction Classification (Deprecated) = 10447
 		/// </summary>
-		Opportunity_Line_Transaction_Classification_Deprecated = 10418,
+		Opportunity_Line_Transaction_Classification_Deprecated = 10447,
 		/// <summary>
-		/// Opportunity Project Price List = 10419
+		/// Opportunity Project Price List = 10448
 		/// </summary>
-		Opportunity_Project_Price_List = 10419,
+		Opportunity_Project_Price_List = 10448,
 		/// <summary>
 		/// Opportunity Relationship = 4503
 		/// </summary>
@@ -2465,9 +2465,9 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		OpportunityCompetitors = 25,
 		/// <summary>
-		/// Option = 10758
+		/// Option = 10787
 		/// </summary>
-		Option = 10758,
+		Option = 10787,
 		/// <summary>
 		/// OptionSet = 9809
 		/// </summary>
@@ -2481,21 +2481,21 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Order_Close = 4209,
 		/// <summary>
-		/// Order Invoicing Date = 10510
+		/// Order Invoicing Date = 10539
 		/// </summary>
-		Order_Invoicing_Date = 10510,
+		Order_Invoicing_Date = 10539,
 		/// <summary>
-		/// Order Invoicing Product = 10511
+		/// Order Invoicing Product = 10540
 		/// </summary>
-		Order_Invoicing_Product = 10511,
+		Order_Invoicing_Product = 10540,
 		/// <summary>
-		/// Order Invoicing Setup = 10512
+		/// Order Invoicing Setup = 10541
 		/// </summary>
-		Order_Invoicing_Setup = 10512,
+		Order_Invoicing_Setup = 10541,
 		/// <summary>
-		/// Order Invoicing Setup Date = 10513
+		/// Order Invoicing Setup Date = 10542
 		/// </summary>
-		Order_Invoicing_Setup_Date = 10513,
+		Order_Invoicing_Setup_Date = 10542,
 		/// <summary>
 		/// Order Line = 1089
 		/// </summary>
@@ -2525,9 +2525,9 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Organization_UI = 1021,
 		/// <summary>
-		/// Organizational Unit = 10365
+		/// Organizational Unit = 10394
 		/// </summary>
-		Organizational_Unit = 10365,
+		Organizational_Unit = 10394,
 		/// <summary>
 		/// OrganizationDataSyncSubscription = 10096
 		/// </summary>
@@ -2537,17 +2537,17 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		OrganizationDataSyncSubscriptionEntity = 10097,
 		/// <summary>
-		/// Outbound Configuration = 10751
+		/// Outbound Configuration = 10780
 		/// </summary>
-		Outbound_Configuration = 10751,
+		Outbound_Configuration = 10780,
 		/// <summary>
-		/// Outbound message = 10752
+		/// Outbound message = 10781
 		/// </summary>
-		Outbound_message = 10752,
+		Outbound_message = 10781,
 		/// <summary>
-		/// Overflow Action Config = 10621
+		/// Overflow Action Config = 10650
 		/// </summary>
-		Overflow_Action_Config = 10621,
+		Overflow_Action_Config = 10650,
 		/// <summary>
 		/// Owner = 7
 		/// </summary>
@@ -2573,57 +2573,57 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Parameter_definition = 10183,
 		/// <summary>
-		/// Parameter (Deprecated) = 10598
+		/// Parameter (Deprecated) = 10627
 		/// </summary>
-		Parameter_Deprecated = 10598,
+		Parameter_Deprecated = 10627,
 		/// <summary>
 		/// Partner Application = 1095
 		/// </summary>
 		Partner_Application = 1095,
 		/// <summary>
-		/// Payment = 10514
+		/// Payment = 10543
 		/// </summary>
-		Payment = 10514,
+		Payment = 10543,
 		/// <summary>
-		/// Payment Detail = 10515
+		/// Payment Detail = 10544
 		/// </summary>
-		Payment_Detail = 10515,
+		Payment_Detail = 10544,
 		/// <summary>
-		/// Payment Method = 10516
+		/// Payment Method = 10545
 		/// </summary>
-		Payment_Method = 10516,
+		Payment_Method = 10545,
 		/// <summary>
-		/// Payment Term = 10517
+		/// Payment Term = 10546
 		/// </summary>
-		Payment_Term = 10517,
+		Payment_Term = 10546,
 		/// <summary>
 		/// PDF Setting = 10073
 		/// </summary>
 		PDF_Setting = 10073,
 		/// <summary>
-		/// Persona Security Role Mapping = 10672
+		/// Persona Security Role Mapping = 10701
 		/// </summary>
-		Persona_Security_Role_Mapping = 10672,
+		Persona_Security_Role_Mapping = 10701,
 		/// <summary>
 		/// Personal Document Template = 9941
 		/// </summary>
 		Personal_Document_Template = 9941,
 		/// <summary>
-		/// Personal quick reply = 10670
+		/// Personal quick reply = 10699
 		/// </summary>
-		Personal_quick_reply = 10670,
+		Personal_quick_reply = 10699,
 		/// <summary>
-		/// Personal sound setting = 10671
+		/// Personal sound setting = 10700
 		/// </summary>
-		Personal_sound_setting = 10671,
+		Personal_sound_setting = 10700,
 		/// <summary>
 		/// Phone Call = 4210
 		/// </summary>
 		Phone_Call = 4210,
 		/// <summary>
-		/// Phone Number = 10729
+		/// Phone Number = 10758
 		/// </summary>
-		Phone_Number = 10729,
+		Phone_Number = 10758,
 		/// <summary>
 		/// Phone To Case Process = 952
 		/// </summary>
@@ -2689,9 +2689,9 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Post = 8000,
 		/// <summary>
-		/// Post Configuration = 10257
+		/// Post Configuration = 10279
 		/// </summary>
-		Post_Configuration = 10257,
+		Post_Configuration = 10279,
 		/// <summary>
 		/// Post Regarding = 8002
 		/// </summary>
@@ -2701,29 +2701,29 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Post_Role = 8001,
 		/// <summary>
-		/// Post Rule Configuration = 10258
+		/// Post Rule Configuration = 10280
 		/// </summary>
-		Post_Rule_Configuration = 10258,
+		Post_Rule_Configuration = 10280,
 		/// <summary>
-		/// Postal Code = 10518
+		/// Postal Code = 10547
 		/// </summary>
-		Postal_Code = 10518,
+		Postal_Code = 10547,
 		/// <summary>
-		/// Power BI Configuration = 10626
+		/// Power BI Configuration = 10655
 		/// </summary>
-		Power_BI_Configuration = 10626,
+		Power_BI_Configuration = 10655,
 		/// <summary>
-		/// Predictive duration (preview) = 10586
+		/// Predictive duration (preview) = 10615
 		/// </summary>
-		Predictive_duration_preview = 10586,
+		Predictive_duration_preview = 10615,
 		/// <summary>
-		/// Predictive Work Hour Duration Setting = 10587
+		/// Predictive Work Hour Duration Setting = 10616
 		/// </summary>
-		Predictive_Work_Hour_Duration_Setting = 10587,
+		Predictive_Work_Hour_Duration_Setting = 10616,
 		/// <summary>
-		/// Presence = 10673
+		/// Presence = 10702
 		/// </summary>
-		Presence = 10673,
+		Presence = 10702,
 		/// <summary>
 		/// Price List = 1022
 		/// </summary>
@@ -2733,13 +2733,13 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Price_List_Item = 1026,
 		/// <summary>
-		/// Pricing Dimension = 10397
+		/// Pricing Dimension = 10426
 		/// </summary>
-		Pricing_Dimension = 10397,
+		Pricing_Dimension = 10426,
 		/// <summary>
-		/// Pricing Dimension Field Name = 10398
+		/// Pricing Dimension Field Name = 10427
 		/// </summary>
-		Pricing_Dimension_Field_Name = 10398,
+		Pricing_Dimension_Field_Name = 10427,
 		/// <summary>
 		/// Principal Sync Attribute Map = 1404
 		/// </summary>
@@ -2749,9 +2749,9 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		PrincipalEntityBusinessUnitMap = 61,
 		/// <summary>
-		/// Priority = 10366
+		/// Priority = 10395
 		/// </summary>
-		Priority = 10366,
+		Priority = 10395,
 		/// <summary>
 		/// Privilege = 1023
 		/// </summary>
@@ -2761,9 +2761,9 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Privilege_Object_Type_Code = 31,
 		/// <summary>
-		/// Problematic Asset Feedback = 10571
+		/// Problematic Asset Feedback = 10600
 		/// </summary>
-		Problematic_Asset_Feedback = 10571,
+		Problematic_Asset_Feedback = 10600,
 		/// <summary>
 		/// Process = 4703
 		/// </summary>
@@ -2781,9 +2781,9 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Process_Log = 4706,
 		/// <summary>
-		/// Process Notes = 10425
+		/// Process Notes = 10454
 		/// </summary>
-		Process_Notes = 10425,
+		Process_Notes = 10454,
 		/// <summary>
 		/// Process Session = 4710
 		/// </summary>
@@ -2809,9 +2809,9 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Product_Association = 1025,
 		/// <summary>
-		/// Product Inventory = 10519
+		/// Product Inventory = 10548
 		/// </summary>
-		Product_Inventory = 10519,
+		Product_Inventory = 10548,
 		/// <summary>
 		/// Product Relationship = 1028
 		/// </summary>
@@ -2825,89 +2825,89 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		ProductSalesLiterature = 21,
 		/// <summary>
-		/// Profile Album = 10256
+		/// Profile Album = 10278
 		/// </summary>
-		Profile_Album = 10256,
+		Profile_Album = 10278,
 		/// <summary>
-		/// Project = 10426
+		/// Project = 10455
 		/// </summary>
-		Project = 10426,
+		Project = 10455,
 		/// <summary>
-		/// Project Approval = 10427
+		/// Project Approval = 10456
 		/// </summary>
-		Project_Approval = 10427,
+		Project_Approval = 10456,
 		/// <summary>
-		/// Project Contract Line Detail = 10421
+		/// Project Contract Line Detail = 10450
 		/// </summary>
-		Project_Contract_Line_Detail = 10421,
+		Project_Contract_Line_Detail = 10450,
 		/// <summary>
-		/// Project Contract Line Invoice Schedule = 10393
+		/// Project Contract Line Invoice Schedule = 10422
 		/// </summary>
-		Project_Contract_Line_Invoice_Schedule = 10393,
+		Project_Contract_Line_Invoice_Schedule = 10422,
 		/// <summary>
-		/// Project Contract Line Milestone = 10394
+		/// Project Contract Line Milestone = 10423
 		/// </summary>
-		Project_Contract_Line_Milestone = 10394,
+		Project_Contract_Line_Milestone = 10423,
 		/// <summary>
-		/// Project Contract Line Resource Category = 10420
+		/// Project Contract Line Resource Category = 10449
 		/// </summary>
-		Project_Contract_Line_Resource_Category = 10420,
+		Project_Contract_Line_Resource_Category = 10449,
 		/// <summary>
-		/// Project Contract Line Transaction Category = 10422
+		/// Project Contract Line Transaction Category = 10451
 		/// </summary>
-		Project_Contract_Line_Transaction_Category = 10422,
+		Project_Contract_Line_Transaction_Category = 10451,
 		/// <summary>
-		/// Project Contract Line Transaction Classification = 10423
+		/// Project Contract Line Transaction Classification = 10452
 		/// </summary>
-		Project_Contract_Line_Transaction_Classification = 10423,
+		Project_Contract_Line_Transaction_Classification = 10452,
 		/// <summary>
-		/// Project Contract Project Price List = 10424
+		/// Project Contract Project Price List = 10453
 		/// </summary>
-		Project_Contract_Project_Price_List = 10424,
+		Project_Contract_Project_Price_List = 10453,
 		/// <summary>
-		/// Project Parameter = 10428
+		/// Project Parameter = 10457
 		/// </summary>
-		Project_Parameter = 10428,
+		Project_Parameter = 10457,
 		/// <summary>
-		/// Project Parameter Price List = 10429
+		/// Project Parameter Price List = 10458
 		/// </summary>
-		Project_Parameter_Price_List = 10429,
+		Project_Parameter_Price_List = 10458,
 		/// <summary>
-		/// Project Price List = 10430
+		/// Project Price List = 10459
 		/// </summary>
-		Project_Price_List = 10430,
+		Project_Price_List = 10459,
 		/// <summary>
-		/// Project Service Approval = 10387
+		/// Project Service Approval = 10416
 		/// </summary>
-		Project_Service_Approval = 10387,
+		Project_Service_Approval = 10416,
 		/// <summary>
-		/// Project Stages = 10389
+		/// Project Stages = 10418
 		/// </summary>
-		Project_Stages = 10389,
+		Project_Stages = 10418,
 		/// <summary>
-		/// Project Task = 10431
+		/// Project Task = 10460
 		/// </summary>
-		Project_Task = 10431,
+		Project_Task = 10460,
 		/// <summary>
-		/// Project Task Dependency = 10432
+		/// Project Task Dependency = 10461
 		/// </summary>
-		Project_Task_Dependency = 10432,
+		Project_Task_Dependency = 10461,
 		/// <summary>
-		/// Project Task Status User = 10433
+		/// Project Task Status User = 10462
 		/// </summary>
-		Project_Task_Status_User = 10433,
+		Project_Task_Status_User = 10462,
 		/// <summary>
-		/// Project Team Member = 10434
+		/// Project Team Member = 10463
 		/// </summary>
-		Project_Team_Member = 10434,
+		Project_Team_Member = 10463,
 		/// <summary>
-		/// Project Team Member Sign-Up (Deprecated in v3.0) = 10435
+		/// Project Team Member Sign-Up (Deprecated in v3.0) = 10464
 		/// </summary>
-		Project_Team_Member_Sign_Up_Deprecated_in_v30 = 10435,
+		Project_Team_Member_Sign_Up_Deprecated_in_v30 = 10464,
 		/// <summary>
-		/// Project Transaction Category (Deprecated) = 10436
+		/// Project Transaction Category (Deprecated) = 10465
 		/// </summary>
-		Project_Transaction_Category_Deprecated = 10436,
+		Project_Transaction_Category_Deprecated = 10465,
 		/// <summary>
 		/// Property = 1048
 		/// </summary>
@@ -2941,13 +2941,13 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Property_Template_Association = 10135,
 		/// <summary>
-		/// Provider = 10674
+		/// Provider = 10703
 		/// </summary>
-		Provider = 10674,
+		Provider = 10703,
 		/// <summary>
-		/// Provisioning State = 10652
+		/// Provisioning State = 10681
 		/// </summary>
-		Provisioning_State = 10652,
+		Provisioning_State = 10681,
 		/// <summary>
 		/// ProvisionLanguageForUser = 10023
 		/// </summary>
@@ -2961,33 +2961,33 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Publisher_Address = 7102,
 		/// <summary>
-		/// Purchase Order = 10520
+		/// Purchase Order = 10549
 		/// </summary>
-		Purchase_Order = 10520,
+		Purchase_Order = 10549,
 		/// <summary>
-		/// Purchase Order Bill = 10521
+		/// Purchase Order Bill = 10550
 		/// </summary>
-		Purchase_Order_Bill = 10521,
+		Purchase_Order_Bill = 10550,
 		/// <summary>
-		/// Purchase Order Business Process = 10490
+		/// Purchase Order Business Process = 10519
 		/// </summary>
-		Purchase_Order_Business_Process = 10490,
+		Purchase_Order_Business_Process = 10519,
 		/// <summary>
-		/// Purchase Order Product = 10522
+		/// Purchase Order Product = 10551
 		/// </summary>
-		Purchase_Order_Product = 10522,
+		Purchase_Order_Product = 10551,
 		/// <summary>
-		/// Purchase Order Receipt = 10523
+		/// Purchase Order Receipt = 10552
 		/// </summary>
-		Purchase_Order_Receipt = 10523,
+		Purchase_Order_Receipt = 10552,
 		/// <summary>
-		/// Purchase Order Receipt Product = 10524
+		/// Purchase Order Receipt Product = 10553
 		/// </summary>
-		Purchase_Order_Receipt_Product = 10524,
+		Purchase_Order_Receipt_Product = 10553,
 		/// <summary>
-		/// Purchase Order SubStatus = 10525
+		/// Purchase Order SubStatus = 10554
 		/// </summary>
-		Purchase_Order_SubStatus = 10525,
+		Purchase_Order_SubStatus = 10554,
 		/// <summary>
 		/// Quarterly Fiscal Calendar = 2002
 		/// </summary>
@@ -3013,81 +3013,81 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Quick_Campaign = 4406,
 		/// <summary>
-		/// Quick reply = 10627
+		/// Quick reply = 10656
 		/// </summary>
-		Quick_reply = 10627,
+		Quick_reply = 10656,
 		/// <summary>
 		/// Quote = 1084
 		/// </summary>
 		Quote = 1084,
 		/// <summary>
-		/// Quote Booking Incident = 10526
+		/// Quote Booking Incident = 10555
 		/// </summary>
-		Quote_Booking_Incident = 10526,
+		Quote_Booking_Incident = 10555,
 		/// <summary>
-		/// Quote Booking Product = 10527
+		/// Quote Booking Product = 10556
 		/// </summary>
-		Quote_Booking_Product = 10527,
+		Quote_Booking_Product = 10556,
 		/// <summary>
-		/// Quote Booking Service = 10528
+		/// Quote Booking Service = 10557
 		/// </summary>
-		Quote_Booking_Service = 10528,
+		Quote_Booking_Service = 10557,
 		/// <summary>
-		/// Quote Booking Service Task = 10529
+		/// Quote Booking Service Task = 10558
 		/// </summary>
-		Quote_Booking_Service_Task = 10529,
+		Quote_Booking_Service_Task = 10558,
 		/// <summary>
-		/// Quote Booking Setup = 10530
+		/// Quote Booking Setup = 10559
 		/// </summary>
-		Quote_Booking_Setup = 10530,
+		Quote_Booking_Setup = 10559,
 		/// <summary>
 		/// Quote Close = 4211
 		/// </summary>
 		Quote_Close = 4211,
 		/// <summary>
-		/// Quote Invoicing Product = 10531
+		/// Quote Invoicing Product = 10560
 		/// </summary>
-		Quote_Invoicing_Product = 10531,
+		Quote_Invoicing_Product = 10560,
 		/// <summary>
-		/// Quote Invoicing Setup = 10532
+		/// Quote Invoicing Setup = 10561
 		/// </summary>
-		Quote_Invoicing_Setup = 10532,
+		Quote_Invoicing_Setup = 10561,
 		/// <summary>
 		/// Quote Line = 1085
 		/// </summary>
 		Quote_Line = 1085,
 		/// <summary>
-		/// Quote Line Analytics Breakdown = 10437
+		/// Quote Line Analytics Breakdown = 10466
 		/// </summary>
-		Quote_Line_Analytics_Breakdown = 10437,
+		Quote_Line_Analytics_Breakdown = 10466,
 		/// <summary>
-		/// Quote Line Detail = 10441
+		/// Quote Line Detail = 10470
 		/// </summary>
-		Quote_Line_Detail = 10441,
+		Quote_Line_Detail = 10470,
 		/// <summary>
-		/// Quote Line Invoice Schedule = 10438
+		/// Quote Line Invoice Schedule = 10467
 		/// </summary>
-		Quote_Line_Invoice_Schedule = 10438,
+		Quote_Line_Invoice_Schedule = 10467,
 		/// <summary>
-		/// Quote Line Milestone = 10440
+		/// Quote Line Milestone = 10469
 		/// </summary>
-		Quote_Line_Milestone = 10440,
+		Quote_Line_Milestone = 10469,
 		/// <summary>
-		/// Quote Line Resource Category = 10439
+		/// Quote Line Resource Category = 10468
 		/// </summary>
-		Quote_Line_Resource_Category = 10439,
+		Quote_Line_Resource_Category = 10468,
 		/// <summary>
-		/// Quote Line Transaction Category = 10442
+		/// Quote Line Transaction Category = 10471
 		/// </summary>
-		Quote_Line_Transaction_Category = 10442,
+		Quote_Line_Transaction_Category = 10471,
 		/// <summary>
-		/// Quote Line Transaction Classification = 10443
+		/// Quote Line Transaction Classification = 10472
 		/// </summary>
-		Quote_Line_Transaction_Classification = 10443,
+		Quote_Line_Transaction_Classification = 10472,
 		/// <summary>
-		/// Quote Project Price List = 10444
+		/// Quote Project Price List = 10473
 		/// </summary>
-		Quote_Project_Price_List = 10444,
+		Quote_Project_Price_List = 10473,
 		/// <summary>
 		/// Rating Model = 1144
 		/// </summary>
@@ -3105,9 +3105,9 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Record_Creation_and_Update_Rule_Item = 9301,
 		/// <summary>
-		/// Recording = 10653
+		/// Recording = 10682
 		/// </summary>
-		Recording = 10653,
+		Recording = 10682,
 		/// <summary>
 		/// Recurrence Rule = 4250
 		/// </summary>
@@ -3157,57 +3157,57 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Report_Visibility = 9103,
 		/// <summary>
-		/// Requirement Characteristic = 10367
+		/// Requirement Characteristic = 10396
 		/// </summary>
-		Requirement_Characteristic = 10367,
+		Requirement_Characteristic = 10396,
 		/// <summary>
-		/// Requirement Dependency = 10384
+		/// Requirement Dependency = 10413
 		/// </summary>
-		Requirement_Dependency = 10384,
+		Requirement_Dependency = 10413,
 		/// <summary>
-		/// Requirement Group = 10368
+		/// Requirement Group = 10397
 		/// </summary>
-		Requirement_Group = 10368,
+		Requirement_Group = 10397,
 		/// <summary>
-		/// Requirement Organization Unit = 10369
+		/// Requirement Organization Unit = 10398
 		/// </summary>
-		Requirement_Organization_Unit = 10369,
+		Requirement_Organization_Unit = 10398,
 		/// <summary>
-		/// Requirement Relationship = 10370
+		/// Requirement Relationship = 10399
 		/// </summary>
-		Requirement_Relationship = 10370,
+		Requirement_Relationship = 10399,
 		/// <summary>
-		/// Requirement Resource Category = 10371
+		/// Requirement Resource Category = 10400
 		/// </summary>
-		Requirement_Resource_Category = 10371,
+		Requirement_Resource_Category = 10400,
 		/// <summary>
-		/// Requirement Resource Preference = 10372
+		/// Requirement Resource Preference = 10401
 		/// </summary>
-		Requirement_Resource_Preference = 10372,
+		Requirement_Resource_Preference = 10401,
 		/// <summary>
-		/// Requirement Status = 10373
+		/// Requirement Status = 10402
 		/// </summary>
-		Requirement_Status = 10373,
+		Requirement_Status = 10402,
 		/// <summary>
-		/// Resolution = 10572
+		/// Resolution = 10601
 		/// </summary>
-		Resolution = 10572,
+		Resolution = 10601,
 		/// <summary>
 		/// Resource = 4002
 		/// </summary>
 		Resource = 4002,
 		/// <summary>
-		/// Resource Assignment = 10445
+		/// Resource Assignment = 10474
 		/// </summary>
-		Resource_Assignment = 10445,
+		Resource_Assignment = 10474,
 		/// <summary>
-		/// Resource Assignment Detail (Deprecated in v2.0) = 10446
+		/// Resource Assignment Detail (Deprecated in v2.0) = 10475
 		/// </summary>
-		Resource_Assignment_Detail_Deprecated_in_v20 = 10446,
+		Resource_Assignment_Detail_Deprecated_in_v20 = 10475,
 		/// <summary>
-		/// Resource duration (preview) = 10585
+		/// Resource duration (preview) = 10614
 		/// </summary>
-		Resource_duration_preview = 10585,
+		Resource_duration_preview = 10614,
 		/// <summary>
 		/// Resource Expansion = 4010
 		/// </summary>
@@ -3221,37 +3221,37 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		resource_group_data_source = 10123,
 		/// <summary>
-		/// Resource Pay Type = 10533
+		/// Resource Pay Type = 10562
 		/// </summary>
-		Resource_Pay_Type = 10533,
+		Resource_Pay_Type = 10562,
 		/// <summary>
-		/// Resource Request = 10449
+		/// Resource Request = 10478
 		/// </summary>
-		Resource_Request = 10449,
+		Resource_Request = 10478,
 		/// <summary>
-		/// Resource Requirement = 10374
+		/// Resource Requirement = 10403
 		/// </summary>
-		Resource_Requirement = 10374,
+		Resource_Requirement = 10403,
 		/// <summary>
-		/// Resource Requirement Detail = 10375
+		/// Resource Requirement Detail = 10404
 		/// </summary>
-		Resource_Requirement_Detail = 10375,
+		Resource_Requirement_Detail = 10404,
 		/// <summary>
-		/// Resource Restriction (Deprecated) = 10554
+		/// Resource Restriction (Deprecated) = 10583
 		/// </summary>
-		Resource_Restriction_Deprecated = 10554,
+		Resource_Restriction_Deprecated = 10583,
 		/// <summary>
 		/// Resource Specification = 4006
 		/// </summary>
 		Resource_Specification = 4006,
 		/// <summary>
-		/// Resource Territory = 10376
+		/// Resource Territory = 10405
 		/// </summary>
-		Resource_Territory = 10376,
+		Resource_Territory = 10405,
 		/// <summary>
-		/// Result Cache = 10414
+		/// Result Cache = 10443
 		/// </summary>
-		Result_Cache = 10414,
+		Result_Cache = 10443,
 		/// <summary>
 		/// RevokeInheritedAccessRecordsTracker = 10030
 		/// </summary>
@@ -3289,45 +3289,45 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Rich_Text_Attachment = 10101,
 		/// <summary>
-		/// RMA = 10534
+		/// RMA = 10563
 		/// </summary>
-		RMA = 10534,
+		RMA = 10563,
 		/// <summary>
-		/// RMA Product = 10535
+		/// RMA Product = 10564
 		/// </summary>
-		RMA_Product = 10535,
+		RMA_Product = 10564,
 		/// <summary>
-		/// RMA Receipt = 10536
+		/// RMA Receipt = 10565
 		/// </summary>
-		RMA_Receipt = 10536,
+		RMA_Receipt = 10565,
 		/// <summary>
-		/// RMA Receipt Product = 10537
+		/// RMA Receipt Product = 10566
 		/// </summary>
-		RMA_Receipt_Product = 10537,
+		RMA_Receipt_Product = 10566,
 		/// <summary>
-		/// RMA SubStatus = 10538
+		/// RMA SubStatus = 10567
 		/// </summary>
-		RMA_SubStatus = 10538,
+		RMA_SubStatus = 10567,
 		/// <summary>
-		/// Role competency requirement = 10450
+		/// Role competency requirement = 10479
 		/// </summary>
-		Role_competency_requirement = 10450,
+		Role_competency_requirement = 10479,
 		/// <summary>
-		/// Role Price = 10448
+		/// Role Price = 10477
 		/// </summary>
-		Role_Price = 10448,
+		Role_Price = 10477,
 		/// <summary>
-		/// Role Price Markup = 10447
+		/// Role Price Markup = 10476
 		/// </summary>
-		Role_Price_Markup = 10447,
+		Role_Price_Markup = 10476,
 		/// <summary>
 		/// Role Template = 1037
 		/// </summary>
 		Role_Template = 1037,
 		/// <summary>
-		/// Role Utilization = 10451
+		/// Role Utilization = 10480
 		/// </summary>
-		Role_Utilization = 10451,
+		Role_Utilization = 10480,
 		/// <summary>
 		/// Rollup Field = 9604
 		/// </summary>
@@ -3345,69 +3345,69 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Rollup_Query = 9602,
 		/// <summary>
-		/// Routing configuration = 10622
+		/// Routing configuration = 10651
 		/// </summary>
-		Routing_configuration = 10622,
+		Routing_configuration = 10651,
 		/// <summary>
-		/// Routing configuration step = 10623
+		/// Routing configuration step = 10652
 		/// </summary>
-		Routing_configuration_step = 10623,
+		Routing_configuration_step = 10652,
 		/// <summary>
-		/// Routing diagnostic = 10615
+		/// Routing diagnostic = 10644
 		/// </summary>
-		Routing_diagnostic = 10615,
+		Routing_diagnostic = 10644,
 		/// <summary>
-		/// Routing diagnostic item = 10614
+		/// Routing diagnostic item = 10643
 		/// </summary>
-		Routing_diagnostic_item = 10614,
+		Routing_diagnostic_item = 10643,
 		/// <summary>
 		/// Routing Rule Set = 8181
 		/// </summary>
 		Routing_Rule_Set = 8181,
 		/// <summary>
-		/// Routing Rule Set Setting = 10617
+		/// Routing Rule Set Setting = 10646
 		/// </summary>
-		Routing_Rule_Set_Setting = 10617,
+		Routing_Rule_Set_Setting = 10646,
 		/// <summary>
-		/// RoutingRequest = 10675
+		/// RoutingRequest = 10704
 		/// </summary>
-		RoutingRequest = 10675,
+		RoutingRequest = 10704,
 		/// <summary>
-		/// RTV = 10539
+		/// RTV = 10568
 		/// </summary>
-		RTV = 10539,
+		RTV = 10568,
 		/// <summary>
-		/// RTV Product = 10540
+		/// RTV Product = 10569
 		/// </summary>
-		RTV_Product = 10540,
+		RTV_Product = 10569,
 		/// <summary>
-		/// RTV Substatus = 10541
+		/// RTV Substatus = 10570
 		/// </summary>
-		RTV_Substatus = 10541,
+		RTV_Substatus = 10570,
 		/// <summary>
-		/// Rule Item = 10655
+		/// Rule Item = 10684
 		/// </summary>
-		Rule_Item_10655 = 10655,
+		Rule_Item_10684 = 10684,
 		/// <summary>
 		/// Rule Item = 8199
 		/// </summary>
 		Rule_Item_8199 = 8199,
 		/// <summary>
-		/// Rulesetentitymapping = 10613
+		/// Rulesetentitymapping = 10642
 		/// </summary>
-		Rulesetentitymapping = 10613,
+		Rulesetentitymapping = 10642,
 		/// <summary>
 		/// RuntimeDependency = 7200
 		/// </summary>
 		RuntimeDependency = 7200,
 		/// <summary>
-		/// Sales Acceleration settings = 10824
+		/// Sales Acceleration settings = 10271
 		/// </summary>
-		Sales_Acceleration_settings = 10824,
+		Sales_Acceleration_settings = 10271,
 		/// <summary>
-		/// Sales Assignment Setting = 10821
+		/// Sales Assignment Setting = 10267
 		/// </summary>
-		Sales_Assignment_Setting = 10821,
+		Sales_Assignment_Setting = 10267,
 		/// <summary>
 		/// Sales Attachment = 1070
 		/// </summary>
@@ -3421,17 +3421,17 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Sales_Process_Instance = 32,
 		/// <summary>
-		/// Sales routing run = 10854
+		/// Sales routing run = 10268
 		/// </summary>
-		Sales_routing_run = 10854,
+		Sales_routing_run = 10268,
 		/// <summary>
-		/// salesinsightssettings = 10244
+		/// salesinsightssettings = 10247
 		/// </summary>
-		salesinsightssettings = 10244,
+		salesinsightssettings = 10247,
 		/// <summary>
-		/// SalesSiteMap = 10589
+		/// SalesSiteMap = 10618
 		/// </summary>
-		SalesSiteMap = 10589,
+		SalesSiteMap = 10618,
 		/// <summary>
 		/// Saved Organization Insights Configuration = 1309
 		/// </summary>
@@ -3441,33 +3441,33 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Saved_View = 4230,
 		/// <summary>
-		/// Scenario = 10610
+		/// Scenario = 10639
 		/// </summary>
-		Scenario = 10610,
+		Scenario = 10639,
 		/// <summary>
-		/// Schedule Board Setting = 10377
+		/// Schedule Board Setting = 10406
 		/// </summary>
-		Schedule_Board_Setting = 10377,
+		Schedule_Board_Setting = 10406,
 		/// <summary>
-		/// Scheduling Feature Flag = 10385
+		/// Scheduling Feature Flag = 10414
 		/// </summary>
-		Scheduling_Feature_Flag = 10385,
+		Scheduling_Feature_Flag = 10414,
 		/// <summary>
 		/// Scheduling Group = 4005
 		/// </summary>
 		Scheduling_Group = 4005,
 		/// <summary>
-		/// Scheduling Parameter = 10378
+		/// Scheduling Parameter = 10407
 		/// </summary>
-		Scheduling_Parameter = 10378,
+		Scheduling_Parameter = 10407,
 		/// <summary>
-		/// Script Task Trigger = 10776
+		/// Script Task Trigger = 10805
 		/// </summary>
-		Script_Task_Trigger = 10776,
+		Script_Task_Trigger = 10805,
 		/// <summary>
-		/// Scriptlet = 10775
+		/// Scriptlet = 10804
 		/// </summary>
-		Scriptlet = 10775,
+		Scriptlet = 10804,
 		/// <summary>
 		/// Sdk Message = 4606
 		/// </summary>
@@ -3509,9 +3509,9 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Sdk_Message_Response_Field = 4611,
 		/// <summary>
-		/// Search Configuration = 10676
+		/// Search Configuration = 10705
 		/// </summary>
-		Search_Configuration = 10676,
+		Search_Configuration = 10705,
 		/// <summary>
 		/// Search provider = 10079
 		/// </summary>
@@ -3525,53 +3525,53 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Security_Role = 1036,
 		/// <summary>
-		/// Segment = 10815
+		/// Segment = 10261
 		/// </summary>
-		Segment = 10815,
+		Segment = 10261,
 		/// <summary>
-		/// SegmentsUtil = 10816
+		/// SegmentsUtil = 10262
 		/// </summary>
-		SegmentsUtil = 10816,
+		SegmentsUtil = 10262,
 		/// <summary>
-		/// Self service = 10686
+		/// Self service = 10715
 		/// </summary>
-		Self_service = 10686,
+		Self_service = 10715,
 		/// <summary>
 		/// Semiannual Fiscal Calendar = 2001
 		/// </summary>
 		Semiannual_Fiscal_Calendar = 2001,
 		/// <summary>
-		/// Sentiment analysis = 10677
+		/// Sentiment analysis = 10706
 		/// </summary>
-		Sentiment_analysis = 10677,
+		Sentiment_analysis = 10706,
 		/// <summary>
-		/// Sentiment daily topic = 10656
+		/// Sentiment daily topic = 10685
 		/// </summary>
-		Sentiment_daily_topic = 10656,
+		Sentiment_daily_topic = 10685,
 		/// <summary>
-		/// Sentiment daily topic keyword = 10657
+		/// Sentiment daily topic keyword = 10686
 		/// </summary>
-		Sentiment_daily_topic_keyword = 10657,
+		Sentiment_daily_topic_keyword = 10686,
 		/// <summary>
-		/// Sentiment daily topic trending = 10658
+		/// Sentiment daily topic trending = 10687
 		/// </summary>
-		Sentiment_daily_topic_trending = 10658,
+		Sentiment_daily_topic_trending = 10687,
 		/// <summary>
-		/// Sequence = 10812
+		/// Sequence = 10257
 		/// </summary>
-		Sequence = 10812,
+		Sequence = 10257,
 		/// <summary>
-		/// Sequence Stat = 10853
+		/// Sequence Stat = 10258
 		/// </summary>
-		Sequence_Stat = 10853,
+		Sequence_Stat = 10258,
 		/// <summary>
-		/// Sequence Target = 10813
+		/// Sequence Target = 10259
 		/// </summary>
-		Sequence_Target = 10813,
+		Sequence_Target = 10259,
 		/// <summary>
-		/// Sequence Target Step = 10814
+		/// Sequence Target Step = 10260
 		/// </summary>
-		Sequence_Target_Step = 10814,
+		Sequence_Target_Step = 10260,
 		/// <summary>
 		/// Service = 4001
 		/// </summary>
@@ -3601,69 +3601,69 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Service_Plan_Mapping = 10039,
 		/// <summary>
-		/// Service Task Type = 10542
+		/// Service Task Type = 10571
 		/// </summary>
-		Service_Task_Type = 10542,
+		Service_Task_Type = 10571,
 		/// <summary>
-		/// ServicesSiteMap = 10590
+		/// ServicesSiteMap = 10619
 		/// </summary>
-		ServicesSiteMap = 10590,
+		ServicesSiteMap = 10619,
 		/// <summary>
-		/// Session = 10659
+		/// Session = 10688
 		/// </summary>
-		Session = 10659,
+		Session = 10688,
 		/// <summary>
-		/// Session Characteristic = 10695
+		/// Session Characteristic = 10724
 		/// </summary>
-		Session_Characteristic = 10695,
+		Session_Characteristic = 10724,
 		/// <summary>
 		/// Session Data (Deprecated) = 10222
 		/// </summary>
 		Session_Data_Deprecated = 10222,
 		/// <summary>
-		/// Session event = 10678
+		/// Session event = 10707
 		/// </summary>
-		Session_event = 10678,
+		Session_event = 10707,
 		/// <summary>
-		/// Session Information = 10778
+		/// Session Information = 10807
 		/// </summary>
-		Session_Information = 10778,
+		Session_Information = 10807,
 		/// <summary>
-		/// Session participant = 10679
+		/// Session participant = 10708
 		/// </summary>
-		Session_participant = 10679,
+		Session_participant = 10708,
 		/// <summary>
 		/// Session Participant Data (Deprecated) = 10223
 		/// </summary>
 		Session_Participant_Data_Deprecated = 10223,
 		/// <summary>
-		/// Session Participant Event = 10660
+		/// Session Participant Event = 10689
 		/// </summary>
-		Session_Participant_Event = 10660,
+		Session_Participant_Event = 10689,
 		/// <summary>
-		/// Session Sentiment = 10661
+		/// Session Sentiment = 10690
 		/// </summary>
-		Session_Sentiment = 10661,
+		Session_Sentiment = 10690,
 		/// <summary>
 		/// Session Template = 10161
 		/// </summary>
 		Session_Template = 10161,
 		/// <summary>
-		/// Session Templates (Deprecated) = 10596
+		/// Session Templates (Deprecated) = 10625
 		/// </summary>
-		Session_Templates_Deprecated = 10596,
+		Session_Templates_Deprecated = 10625,
 		/// <summary>
-		/// Session Transfer = 10779
+		/// Session Transfer = 10808
 		/// </summary>
-		Session_Transfer = 10779,
+		Session_Transfer = 10808,
 		/// <summary>
 		/// Setting Definition = 10037
 		/// </summary>
 		Setting_Definition = 10037,
 		/// <summary>
-		/// SettingsSiteMap = 10591
+		/// SettingsSiteMap = 10620
 		/// </summary>
-		SettingsSiteMap = 10591,
+		SettingsSiteMap = 10620,
 		/// <summary>
 		/// SharePoint Data = 9509
 		/// </summary>
@@ -3677,17 +3677,17 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		SharePoint_Site = 9502,
 		/// <summary>
-		/// Ship Via = 10543
+		/// Ship Via = 10572
 		/// </summary>
-		Ship_Via = 10543,
+		Ship_Via = 10572,
 		/// <summary>
-		/// SI Key Value Config = 10239
+		/// SI Key Value Config = 10242
 		/// </summary>
-		SI_Key_Value_Config = 10239,
+		SI_Key_Value_Config = 10242,
 		/// <summary>
-		/// siconfig = 10238
+		/// siconfig = 10241
 		/// </summary>
-		siconfig = 10238,
+		siconfig = 10241,
 		/// <summary>
 		/// Similarity Rule = 9951
 		/// </summary>
@@ -3701,13 +3701,13 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Site_Map = 4709,
 		/// <summary>
-		/// Skill Attachment Rule = 10696
+		/// Skill Attachment Rule = 10725
 		/// </summary>
-		Skill_Attachment_Rule = 10696,
+		Skill_Attachment_Rule = 10725,
 		/// <summary>
-		/// Skill finder model = 10702
+		/// Skill finder model = 10731
 		/// </summary>
-		Skill_finder_model = 10702,
+		Skill_finder_model = 10731,
 		/// <summary>
 		/// SLA = 9750
 		/// </summary>
@@ -3729,17 +3729,17 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Smartassist_configuration = 10187,
 		/// <summary>
-		/// SMS Engagement Context = 10730
+		/// SMS Engagement Context = 10759
 		/// </summary>
-		SMS_Engagement_Context = 10730,
+		SMS_Engagement_Context = 10759,
 		/// <summary>
-		/// SMS Number = 10731
+		/// SMS Number = 10760
 		/// </summary>
-		SMS_Number = 10731,
+		SMS_Number = 10760,
 		/// <summary>
-		/// SMS Number settings = 10732
+		/// SMS Number settings = 10761
 		/// </summary>
-		SMS_Number_settings = 10732,
+		SMS_Number_settings = 10761,
 		/// <summary>
 		/// Social Activity = 4216
 		/// </summary>
@@ -3821,9 +3821,9 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		SolutionHistoryData = 9890,
 		/// <summary>
-		/// Sound notification setting = 10681
+		/// Sound notification setting = 10710
 		/// </summary>
-		Sound_notification_setting = 10681,
+		Sound_notification_setting = 10710,
 		/// <summary>
 		/// StageSolutionUpload = 10010
 		/// </summary>
@@ -3873,21 +3873,21 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Subscription_Synchronization_Information = 33,
 		/// <summary>
-		/// Suggested Activity = 10248
+		/// Suggested Activity = 10251
 		/// </summary>
-		Suggested_Activity = 10248,
+		Suggested_Activity = 10251,
 		/// <summary>
-		/// Suggested Activity Data Source = 10249
+		/// Suggested Activity Data Source = 10252
 		/// </summary>
-		Suggested_Activity_Data_Source = 10249,
+		Suggested_Activity_Data_Source = 10252,
 		/// <summary>
-		/// Suggested Contact = 10250
+		/// Suggested Contact = 10253
 		/// </summary>
-		Suggested_Contact = 10250,
+		Suggested_Contact = 10253,
 		/// <summary>
-		/// Suggested contacts data source = 10251
+		/// Suggested contacts data source = 10254
 		/// </summary>
-		Suggested_contacts_data_source = 10251,
+		Suggested_contacts_data_source = 10254,
 		/// <summary>
 		/// Suggestion Interaction = 10196
 		/// </summary>
@@ -3909,25 +3909,25 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Suggestions_Setting = 10199,
 		/// <summary>
-		/// Survey Answer Option = 10708
+		/// Survey Answer Option = 10737
 		/// </summary>
-		Survey_Answer_Option = 10708,
+		Survey_Answer_Option = 10737,
 		/// <summary>
-		/// Survey Question = 10717
+		/// Survey Question = 10746
 		/// </summary>
-		Survey_Question = 10717,
+		Survey_Question = 10746,
 		/// <summary>
-		/// Survey Question Sequence = 10716
+		/// Survey Question Sequence = 10745
 		/// </summary>
-		Survey_Question_Sequence = 10716,
+		Survey_Question_Sequence = 10745,
 		/// <summary>
-		/// Survey Response = 10709
+		/// Survey Response = 10738
 		/// </summary>
-		Survey_Response = 10709,
+		Survey_Response = 10738,
 		/// <summary>
-		/// Survey Response Value = 10710
+		/// Survey Response Value = 10739
 		/// </summary>
-		Survey_Response_Value = 10710,
+		Survey_Response_Value = 10739,
 		/// <summary>
 		/// Sync Attribute Mapping = 1401
 		/// </summary>
@@ -3965,9 +3965,9 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		System_User_Principal = 14,
 		/// <summary>
-		/// System User Scheduler Setting = 10379
+		/// System User Scheduler Setting = 10408
 		/// </summary>
-		System_User_Scheduler_Setting = 10379,
+		System_User_Scheduler_Setting = 10408,
 		/// <summary>
 		/// SystemUser BusinessUnit Entity Map = 42
 		/// </summary>
@@ -3977,21 +3977,21 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		SystemUserAuthorizationChangeTracker = 60,
 		/// <summary>
-		/// Tag = 10663
+		/// Tag = 10692
 		/// </summary>
-		Tag = 10663,
+		Tag = 10692,
 		/// <summary>
 		/// Task = 4212
 		/// </summary>
 		Task = 4212,
 		/// <summary>
-		/// Tax Code = 10544
+		/// Tax Code = 10573
 		/// </summary>
-		Tax_Code = 10544,
+		Tax_Code = 10573,
 		/// <summary>
-		/// Tax Code Detail = 10545
+		/// Tax Code Detail = 10574
 		/// </summary>
-		Tax_Code_Detail = 10545,
+		Tax_Code_Detail = 10574,
 		/// <summary>
 		/// Team = 9
 		/// </summary>
@@ -4013,17 +4013,17 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		TeamMobileOfflineProfileMembership = 10094,
 		/// <summary>
-		/// Teams Contact Suggestion by AI = 10850
+		/// Teams Contact Suggestion by AI = 10229
 		/// </summary>
-		Teams_Contact_Suggestion_by_AI = 10850,
+		Teams_Contact_Suggestion_by_AI = 10229,
 		/// <summary>
 		/// Teams Dialer Admin settings = 10228
 		/// </summary>
 		Teams_Dialer_Admin_settings = 10228,
 		/// <summary>
-		/// Teams Engagement Context = 10750
+		/// Teams Engagement Context = 10779
 		/// </summary>
-		Teams_Engagement_Context = 10750,
+		Teams_Engagement_Context = 10779,
 		/// <summary>
 		/// Template For Properties = 10136
 		/// </summary>
@@ -4033,17 +4033,13 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Template_Parameter = 10162,
 		/// <summary>
-		/// Template Tag (Deprecated) = 10599
+		/// Template Tag (Deprecated) = 10628
 		/// </summary>
-		Template_Tag_Deprecated = 10599,
+		Template_Tag_Deprecated = 10628,
 		/// <summary>
 		/// Territory = 2013
 		/// </summary>
 		Territory = 2013,
-		/// <summary>
-		/// Test = 10849
-		/// </summary>
-		Test = 10849,
 		/// <summary>
 		/// Text Analytics Entity Mapping = 9945
 		/// </summary>
@@ -4057,29 +4053,29 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Theme = 2015,
 		/// <summary>
-		/// Three-Dimensional Model = 10471
+		/// Three-Dimensional Model = 10500
 		/// </summary>
-		Three_Dimensional_Model = 10471,
+		Three_Dimensional_Model = 10500,
 		/// <summary>
-		/// Time Entry = 10452
+		/// Time Entry = 10481
 		/// </summary>
-		Time_Entry = 10452,
+		Time_Entry = 10481,
 		/// <summary>
-		/// Time Group Detail = 10381
+		/// Time Group Detail = 10410
 		/// </summary>
-		Time_Group_Detail = 10381,
+		Time_Group_Detail = 10410,
 		/// <summary>
-		/// Time Off Calendar = 10453
+		/// Time Off Calendar = 10482
 		/// </summary>
-		Time_Off_Calendar = 10453,
+		Time_Off_Calendar = 10482,
 		/// <summary>
-		/// Time Off Request = 10546
+		/// Time Off Request = 10575
 		/// </summary>
-		Time_Off_Request = 10546,
+		Time_Off_Request = 10575,
 		/// <summary>
-		/// Time Source = 10467
+		/// Time Source = 10496
 		/// </summary>
-		Time_Source = 10467,
+		Time_Source = 10496,
 		/// <summary>
 		/// Time Stamp Date Mapping = 9932
 		/// </summary>
@@ -4097,13 +4093,13 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Time_Zone_Rule = 4811,
 		/// <summary>
-		/// Toolbar = 10782
+		/// Toolbar = 10811
 		/// </summary>
-		Toolbar = 10782,
+		Toolbar = 10811,
 		/// <summary>
-		/// Toolbar Button = 10781
+		/// Toolbar Button = 10810
 		/// </summary>
-		Toolbar_Button = 10781,
+		Toolbar_Button = 10810,
 		/// <summary>
 		/// Topic History = 9946
 		/// </summary>
@@ -4137,53 +4133,53 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Trace_Regarding = 8052,
 		/// <summary>
-		/// Trace Source Setting = 10783
+		/// Trace Source Setting = 10812
 		/// </summary>
-		Trace_Source_Setting = 10783,
+		Trace_Source_Setting = 10812,
 		/// <summary>
 		/// Tracking information for deleted entities = 35
 		/// </summary>
 		Tracking_information_for_deleted_entities = 35,
 		/// <summary>
-		/// Training data import configuration = 10699
+		/// Training data import configuration = 10728
 		/// </summary>
-		Training_data_import_configuration = 10699,
+		Training_data_import_configuration = 10728,
 		/// <summary>
-		/// Training record = 10701
+		/// Training record = 10730
 		/// </summary>
-		Training_record = 10701,
+		Training_record = 10730,
 		/// <summary>
-		/// Transaction Category = 10454
+		/// Transaction Category = 10483
 		/// </summary>
-		Transaction_Category = 10454,
+		Transaction_Category = 10483,
 		/// <summary>
-		/// Transaction Category Classification = 10455
+		/// Transaction Category Classification = 10484
 		/// </summary>
-		Transaction_Category_Classification = 10455,
+		Transaction_Category_Classification = 10484,
 		/// <summary>
-		/// Transaction Category Hierarchy Element = 10456
+		/// Transaction Category Hierarchy Element = 10485
 		/// </summary>
-		Transaction_Category_Hierarchy_Element = 10456,
+		Transaction_Category_Hierarchy_Element = 10485,
 		/// <summary>
-		/// Transaction Category Price = 10457
+		/// Transaction Category Price = 10486
 		/// </summary>
-		Transaction_Category_Price = 10457,
+		Transaction_Category_Price = 10486,
 		/// <summary>
-		/// Transaction Connection = 10458
+		/// Transaction Connection = 10487
 		/// </summary>
-		Transaction_Connection = 10458,
+		Transaction_Connection = 10487,
 		/// <summary>
-		/// Transaction Origin = 10382
+		/// Transaction Origin = 10411
 		/// </summary>
-		Transaction_Origin = 10382,
+		Transaction_Origin = 10411,
 		/// <summary>
-		/// Transaction Type = 10459
+		/// Transaction Type = 10488
 		/// </summary>
-		Transaction_Type = 10459,
+		Transaction_Type = 10488,
 		/// <summary>
-		/// Transcript = 10682
+		/// Transcript = 10711
 		/// </summary>
-		Transcript = 10682,
+		Transcript = 10711,
 		/// <summary>
 		/// Transformation Mapping = 4426
 		/// </summary>
@@ -4197,65 +4193,65 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Translation_Process = 951,
 		/// <summary>
-		/// Twitter account = 10740
+		/// Twitter account = 10769
 		/// </summary>
-		Twitter_account = 10740,
+		Twitter_account = 10769,
 		/// <summary>
-		/// Twitter Engagement Context = 10745
+		/// Twitter Engagement Context = 10774
 		/// </summary>
-		Twitter_Engagement_Context = 10745,
+		Twitter_Engagement_Context = 10774,
 		/// <summary>
-		/// Twitter handle = 10741
+		/// Twitter handle = 10770
 		/// </summary>
-		Twitter_handle = 10741,
+		Twitter_handle = 10770,
 		/// <summary>
-		/// UII Action = 10753
+		/// UII Action = 10782
 		/// </summary>
-		UII_Action = 10753,
+		UII_Action = 10782,
 		/// <summary>
-		/// UII Audit = 10754
+		/// UII Audit = 10783
 		/// </summary>
-		UII_Audit = 10754,
+		UII_Audit = 10783,
 		/// <summary>
-		/// UII Context = 10755
+		/// UII Context = 10784
 		/// </summary>
-		UII_Context = 10755,
+		UII_Context = 10784,
 		/// <summary>
-		/// UII Non-Hosted Application = 10757
+		/// UII Non-Hosted Application = 10786
 		/// </summary>
-		UII_Non_Hosted_Application = 10757,
+		UII_Non_Hosted_Application = 10786,
 		/// <summary>
-		/// UII Saved Session = 10759
+		/// UII Saved Session = 10788
 		/// </summary>
-		UII_Saved_Session = 10759,
+		UII_Saved_Session = 10788,
 		/// <summary>
-		/// UII Session Transfer = 10760
+		/// UII Session Transfer = 10789
 		/// </summary>
-		UII_Session_Transfer = 10760,
+		UII_Session_Transfer = 10789,
 		/// <summary>
-		/// UII Workflow = 10761
+		/// UII Workflow = 10790
 		/// </summary>
-		UII_Workflow = 10761,
+		UII_Workflow = 10790,
 		/// <summary>
-		/// UII Workflow Step = 10762
+		/// UII Workflow Step = 10791
 		/// </summary>
-		UII_Workflow_Step = 10762,
+		UII_Workflow_Step = 10791,
 		/// <summary>
-		/// UII Workflow-Step Mapping = 10763
+		/// UII Workflow-Step Mapping = 10792
 		/// </summary>
-		UII_Workflow_Step_Mapping = 10763,
+		UII_Workflow_Step_Mapping = 10792,
 		/// <summary>
-		/// Unified Interface Settings = 10784
+		/// Unified Interface Settings = 10813
 		/// </summary>
-		Unified_Interface_Settings = 10784,
+		Unified_Interface_Settings = 10813,
 		/// <summary>
 		/// Unified Routing Setup Tracker = 10120
 		/// </summary>
 		Unified_Routing_Setup_Tracker = 10120,
 		/// <summary>
-		/// Unique Number = 10547
+		/// Unique Number = 10576
 		/// </summary>
-		Unique_Number = 10547,
+		Unique_Number = 10576,
 		/// <summary>
 		/// Unit = 1055
 		/// </summary>
@@ -4269,9 +4265,9 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Unresolved_Address = 2012,
 		/// <summary>
-		/// UntrackedAppointment = 10247
+		/// UntrackedAppointment = 10250
 		/// </summary>
-		UntrackedAppointment = 10247,
+		UntrackedAppointment = 10250,
 		/// <summary>
 		/// UntrackedEmail = 4220
 		/// </summary>
@@ -4289,13 +4285,13 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Upgrade_Version = 10118,
 		/// <summary>
-		/// UR notification template = 10683
+		/// UR notification template = 10712
 		/// </summary>
-		UR_notification_template = 10683,
+		UR_notification_template = 10712,
 		/// <summary>
-		/// UR Notification Template Mapping = 10684
+		/// UR Notification Template Mapping = 10713
 		/// </summary>
-		UR_Notification_Template_Mapping = 10684,
+		UR_Notification_Template_Mapping = 10713,
 		/// <summary>
 		/// User = 8
 		/// </summary>
@@ -4333,21 +4329,21 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		User_Search_Facet = 52,
 		/// <summary>
-		/// User Setting = 10786
+		/// User Setting = 10815
 		/// </summary>
-		User_Setting = 10786,
+		User_Setting = 10815,
 		/// <summary>
-		/// User settings = 10685
+		/// User settings = 10714
 		/// </summary>
-		User_settings = 10685,
+		User_settings = 10714,
 		/// <summary>
 		/// User Settings = 150
 		/// </summary>
 		User_Settings = 150,
 		/// <summary>
-		/// User Work History = 10460
+		/// User Work History = 10489
 		/// </summary>
-		User_Work_History = 10460,
+		User_Work_History = 10489,
 		/// <summary>
 		/// UserMobileOfflineProfileMembership = 10095
 		/// </summary>
@@ -4373,13 +4369,13 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Virtual_Resource_Group_Resource = 10124,
 		/// <summary>
-		/// Wall View = 10259
+		/// Wall View = 10281
 		/// </summary>
-		Wall_View = 10259,
+		Wall_View = 10281,
 		/// <summary>
-		/// Warehouse = 10548
+		/// Warehouse = 10577
 		/// </summary>
-		Warehouse = 10548,
+		Warehouse = 10577,
 		/// <summary>
 		/// Web Resource = 9333
 		/// </summary>
@@ -4393,101 +4389,101 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Web_Wizard_Access_Privilege = 4803,
 		/// <summary>
-		/// WeChat account = 10742
+		/// WeChat account = 10771
 		/// </summary>
-		WeChat_account = 10742,
+		WeChat_account = 10771,
 		/// <summary>
-		/// WeChat Engagement Context = 10746
+		/// WeChat Engagement Context = 10775
 		/// </summary>
-		WeChat_Engagement_Context = 10746,
+		WeChat_Engagement_Context = 10775,
 		/// <summary>
-		/// WhatsApp account = 10743
+		/// WhatsApp account = 10772
 		/// </summary>
-		WhatsApp_account = 10743,
+		WhatsApp_account = 10772,
 		/// <summary>
-		/// WhatsApp Engagement Context = 10747
+		/// WhatsApp Engagement Context = 10776
 		/// </summary>
-		WhatsApp_Engagement_Context = 10747,
+		WhatsApp_Engagement_Context = 10776,
 		/// <summary>
-		/// WhatsApp number = 10744
+		/// WhatsApp number = 10773
 		/// </summary>
-		WhatsApp_number = 10744,
+		WhatsApp_number = 10773,
 		/// <summary>
-		/// Window Navigation Rule = 10787
+		/// Window Navigation Rule = 10816
 		/// </summary>
-		Window_Navigation_Rule = 10787,
+		Window_Navigation_Rule = 10816,
 		/// <summary>
 		/// Wizard Page = 4802
 		/// </summary>
 		Wizard_Page = 4802,
 		/// <summary>
-		/// Work list user setting = 10827
+		/// Work list user setting = 10274
 		/// </summary>
-		Work_list_user_setting = 10827,
+		Work_list_user_setting = 10274,
 		/// <summary>
-		/// Work Order = 10549
+		/// Work Order = 10578
 		/// </summary>
-		Work_Order = 10549,
+		Work_Order = 10578,
 		/// <summary>
-		/// Work Order Business Process = 10493
+		/// Work Order Business Process = 10522
 		/// </summary>
-		Work_Order_Business_Process = 10493,
+		Work_Order_Business_Process = 10522,
 		/// <summary>
-		/// Work Order Characteristic (Deprecated) = 10550
+		/// Work Order Characteristic (Deprecated) = 10579
 		/// </summary>
-		Work_Order_Characteristic_Deprecated = 10550,
+		Work_Order_Characteristic_Deprecated = 10579,
 		/// <summary>
-		/// Work Order Details Generation Queue (Deprecated) = 10551
+		/// Work Order Details Generation Queue (Deprecated) = 10580
 		/// </summary>
-		Work_Order_Details_Generation_Queue_Deprecated = 10551,
+		Work_Order_Details_Generation_Queue_Deprecated = 10580,
 		/// <summary>
-		/// Work Order Incident = 10552
+		/// Work Order Incident = 10581
 		/// </summary>
-		Work_Order_Incident = 10552,
+		Work_Order_Incident = 10581,
 		/// <summary>
-		/// Work Order Product = 10553
+		/// Work Order Product = 10582
 		/// </summary>
-		Work_Order_Product = 10553,
+		Work_Order_Product = 10582,
 		/// <summary>
-		/// Work Order Resolution = 10575
+		/// Work Order Resolution = 10604
 		/// </summary>
-		Work_Order_Resolution = 10575,
+		Work_Order_Resolution = 10604,
 		/// <summary>
-		/// Work Order Service = 10555
+		/// Work Order Service = 10584
 		/// </summary>
-		Work_Order_Service = 10555,
+		Work_Order_Service = 10584,
 		/// <summary>
-		/// Work Order Service Task = 10556
+		/// Work Order Service Task = 10585
 		/// </summary>
-		Work_Order_Service_Task = 10556,
+		Work_Order_Service_Task = 10585,
 		/// <summary>
-		/// Work Order Substatus = 10557
+		/// Work Order Substatus = 10586
 		/// </summary>
-		Work_Order_Substatus = 10557,
+		Work_Order_Substatus = 10586,
 		/// <summary>
-		/// Work Order Type = 10558
+		/// Work Order Type = 10587
 		/// </summary>
-		Work_Order_Type = 10558,
+		Work_Order_Type = 10587,
 		/// <summary>
-		/// Work Queue Record = 10825
+		/// Work Queue Record = 10272
 		/// </summary>
-		Work_Queue_Record = 10825,
+		Work_Queue_Record = 10272,
 		/// <summary>
-		/// Work Queue Record State = 10826
+		/// Work Queue Record State = 10273
 		/// </summary>
-		Work_Queue_Record_State = 10826,
+		Work_Queue_Record_State = 10273,
 		/// <summary>
-		/// Work Stream = 10636
+		/// Work Stream = 10665
 		/// </summary>
-		Work_Stream = 10636,
+		Work_Stream = 10665,
 		/// <summary>
-		/// Work stream capacity profile = 10692
+		/// Work stream capacity profile = 10721
 		/// </summary>
-		Work_stream_capacity_profile = 10692,
+		Work_stream_capacity_profile = 10721,
 		/// <summary>
-		/// Work template = 10383
+		/// Work template = 10412
 		/// </summary>
-		Work_template = 10383,
+		Work_template = 10412,
 		/// <summary>
 		/// Workflow Binary = 10048
 		/// </summary>
@@ -4497,9 +4493,9 @@ namespace Dev.DevKit.Shared.Entities.ImportMapOptionSets
 		/// </summary>
 		Workflow_Wait_Subscription = 4702,
 		/// <summary>
-		/// WQDataSource = 10828
+		/// WQDataSource = 10275
 		/// </summary>
-		WQDataSource = 10828
+		WQDataSource = 10275
 	}
 }
 

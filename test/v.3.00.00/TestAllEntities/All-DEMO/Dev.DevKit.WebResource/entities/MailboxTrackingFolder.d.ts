@@ -1447,8 +1447,6 @@ declare namespace DevKit {
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msfp_unsubscribedrecipient: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_new_test: DevKit.WebApi.LookupValue;
-		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_opportunity: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_opportunityclose: DevKit.WebApi.LookupValue;

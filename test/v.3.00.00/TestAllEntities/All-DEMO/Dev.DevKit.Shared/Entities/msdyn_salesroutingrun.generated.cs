@@ -101,7 +101,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_salesroutingrun";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10854;
+		public const int EntityTypeCode = 10268;
 
 		[DebuggerNonUserCode()]
 		public msdyn_salesroutingrun()

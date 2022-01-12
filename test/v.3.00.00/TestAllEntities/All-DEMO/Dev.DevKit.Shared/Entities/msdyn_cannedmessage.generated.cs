@@ -245,7 +245,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_cannedmessage";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10627;
+		public const int EntityTypeCode = 10656;
 
 		[DebuggerNonUserCode()]
 		public msdyn_cannedmessage()

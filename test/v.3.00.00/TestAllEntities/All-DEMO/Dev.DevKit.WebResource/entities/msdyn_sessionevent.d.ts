@@ -114,6 +114,8 @@ declare namespace OptionSet {
 			Accepted,
 			/** 192350010 */
 			AgentDisconnected,
+			/** 192350032 */
+			AgentEndConsult,
 			/** 192350030 */
 			AgentEndConversation,
 			/** 192350008 */
@@ -178,16 +180,22 @@ declare namespace OptionSet {
 		enum msdyn_eventtype {
 			/** 192350003 */
 			AgentAccepted,
+			/** 192350027 */
+			AgentAddedToC2Chat,
 			/** 192350002 */
 			AgentAssigned,
 			/** 192350014 */
 			AgentDisconnected,
+			/** 192350029 */
+			AgentEndConsult,
 			/** 192350026 */
 			AgentEndConversation,
 			/** 192350004 */
 			AgentInviteRejected,
 			/** 192350007 */
 			AgentInviteTimeout,
+			/** 192350028 */
+			AgentRemovedFromC2Chat,
 			/** 192350015 */
 			AgentTimeout,
 			/** 192350023 */

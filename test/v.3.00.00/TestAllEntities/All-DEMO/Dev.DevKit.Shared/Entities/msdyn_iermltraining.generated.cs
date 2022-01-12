@@ -144,7 +144,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_iermltraining";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10705;
+		public const int EntityTypeCode = 10734;
 
 		[DebuggerNonUserCode()]
 		public msdyn_iermltraining()

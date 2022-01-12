@@ -100,7 +100,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_ocsitdimportconfig";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10699;
+		public const int EntityTypeCode = 10728;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocsitdimportconfig()

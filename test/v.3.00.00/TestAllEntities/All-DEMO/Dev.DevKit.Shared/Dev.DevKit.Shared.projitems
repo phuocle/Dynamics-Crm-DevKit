@@ -284,6 +284,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entities\datalakeworkspacepermission.generated.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\DataPerformance.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\DataPerformance.generated.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\datasyncstate.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\datasyncstate.generated.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\DelveActionHub.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\DelveActionHub.generated.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Dependency.cs" />

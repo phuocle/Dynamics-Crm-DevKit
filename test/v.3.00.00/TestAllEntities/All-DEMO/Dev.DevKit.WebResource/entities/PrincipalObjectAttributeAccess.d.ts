@@ -1446,8 +1446,6 @@ declare namespace DevKit {
 		/** Unique identifier of the entity instance with shared secured field */
 		objectid_msfp_unsubscribedrecipient: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the entity instance with shared secured field */
-		objectid_new_test: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the entity instance with shared secured field */
 		objectid_opportunity: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the entity instance with shared secured field */
 		objectid_opportunityclose: DevKit.WebApi.LookupValue;

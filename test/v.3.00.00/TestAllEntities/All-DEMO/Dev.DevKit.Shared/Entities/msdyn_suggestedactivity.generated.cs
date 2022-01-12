@@ -40,7 +40,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_suggestedactivity";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10248;
+		public const int EntityTypeCode = 10251;
 
 		[DebuggerNonUserCode()]
 		public msdyn_suggestedactivity()

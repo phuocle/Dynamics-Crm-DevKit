@@ -106,7 +106,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_operatinghour";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10669;
+		public const int EntityTypeCode = 10698;
 
 		[DebuggerNonUserCode()]
 		public msdyn_operatinghour()

@@ -270,6 +270,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_positioninqueue_enabled = "msdyn_positioninqueue_enabled";
 			public const string msdyn_postchatenabled = "msdyn_postchatenabled";
 			public const string msdyn_PostConversationSurvey = "msdyn_postconversationsurvey";
+			public const string msdyn_PostConversationSurveyBotSurvey = "msdyn_postconversationsurveybotsurvey";
 			public const string msdyn_PostConversationSurveyEnable = "msdyn_postconversationsurveyenable";
 			public const string msdyn_PostConversationSurveyMessageText = "msdyn_postconversationsurveymessagetext";
 			public const string msdyn_PostConversationSurveyMode = "msdyn_postconversationsurveymode";
@@ -307,7 +308,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_livechatconfig";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10712;
+		public const int EntityTypeCode = 10741;
 
 		[DebuggerNonUserCode()]
 		public msdyn_livechatconfig()
@@ -900,6 +901,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<EntityReference>(Fields.msdyn_PostConversationSurvey); }
 			set { Entity.Attributes[Fields.msdyn_PostConversationSurvey] = value; }
+		}
+
+		/// <summary>
+		/// <para>Enable or disable bot survey</para>
+		/// <para>Boolean</para>
+		/// <para>Bot Survey</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_PostConversationSurveyBotSurvey
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_PostConversationSurveyBotSurvey); }
+			set { Entity.Attributes[Fields.msdyn_PostConversationSurveyBotSurvey] = value; }
 		}
 
 		/// <summary>

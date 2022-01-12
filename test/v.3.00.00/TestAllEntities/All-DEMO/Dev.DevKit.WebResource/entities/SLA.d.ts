@@ -199,25 +199,25 @@ declare namespace OptionSet {
 		enum ObjectTypeCode {
 			/** 10203 */
 			_Deprecated_Dynamics_Customer_Service_Analytics,
-			/** 10749 */
+			/** 10778 */
 			_DeprecatedTeams_Engagement_Context,
 			/** 1 */
 			Account,
-			/** 10386 */
+			/** 10415 */
 			Account_Project_Price_List,
 			/** 16 */
 			AccountLeads,
 			/** 8040 */
 			ACIViewMapper,
-			/** 10765 */
+			/** 10794 */
 			Action_Call,
-			/** 10764 */
+			/** 10793 */
 			Action_Call_Workflow,
 			/** 9962 */
 			Action_Card,
-			/** 10240 */
+			/** 10243 */
 			Action_Card_Regarding,
-			/** 10241 */
+			/** 10244 */
 			Action_Card_Role_Setting,
 			/** 9983 */
 			Action_Card_Type,
@@ -237,9 +237,9 @@ declare namespace OptionSet {
 			Activity_monitor,
 			/** 135 */
 			Activity_Party,
-			/** 10355 */
+			/** 10384 */
 			Actual,
-			/** 10395 */
+			/** 10424 */
 			Actual_Data_Export_Deprecated,
 			/** 10186 */
 			Adaptive_Card_Configuration,
@@ -247,45 +247,45 @@ declare namespace OptionSet {
 			Address,
 			/** 10218 */
 			admin_settings_entity,
-			/** 10624 */
+			/** 10653 */
 			AdminAppState,
 			/** 9949 */
 			Advanced_Similarity_Rule,
 			/** 10174 */
 			Agent_script,
-			/** 10767 */
+			/** 10796 */
 			Agent_Script_Answer,
 			/** 10175 */
 			Agent_script_step,
-			/** 10780 */
+			/** 10809 */
 			Agent_Script_Task,
-			/** 10766 */
+			/** 10795 */
 			Agent_Script_Task_Category,
-			/** 10625 */
+			/** 10654 */
 			Agent_Status_history,
-			/** 10477 */
+			/** 10506 */
 			Agreement,
-			/** 10478 */
+			/** 10507 */
 			Agreement_Booking_Date,
-			/** 10479 */
+			/** 10508 */
 			Agreement_Booking_Incident,
-			/** 10480 */
+			/** 10509 */
 			Agreement_Booking_Product,
-			/** 10481 */
+			/** 10510 */
 			Agreement_Booking_Service,
-			/** 10482 */
+			/** 10511 */
 			Agreement_Booking_Service_Task,
-			/** 10483 */
+			/** 10512 */
 			Agreement_Booking_Setup,
-			/** 10492 */
+			/** 10521 */
 			Agreement_Business_Process,
-			/** 10484 */
+			/** 10513 */
 			Agreement_Invoice_Date,
-			/** 10485 */
+			/** 10514 */
 			Agreement_Invoice_Product,
-			/** 10486 */
+			/** 10515 */
 			Agreement_Invoice_Setup,
-			/** 10487 */
+			/** 10516 */
 			Agreement_Substatus,
 			/** 10056 */
 			AI_Builder_Dataset,
@@ -339,7 +339,7 @@ declare namespace OptionSet {
 			App_Module_Component,
 			/** 9009 */
 			App_Module_Roles,
-			/** 10595 */
+			/** 10624 */
 			App_Parameter_Definition_Deprecated,
 			/** 10156 */
 			App_profile,
@@ -351,9 +351,9 @@ declare namespace OptionSet {
 			Application_Ribbons,
 			/** 10158 */
 			Application_Tab_Template,
-			/** 10597 */
+			/** 10626 */
 			Application_Tab_Template_Deprecated,
-			/** 10600 */
+			/** 10629 */
 			Application_Type_Deprecated,
 			/** 10041 */
 			ApplicationUser,
@@ -365,7 +365,7 @@ declare namespace OptionSet {
 			AppModule_Metadata_Dependency,
 			/** 4201 */
 			Appointment,
-			/** 10468 */
+			/** 10497 */
 			Approval_Set,
 			/** 127 */
 			Article,
@@ -375,47 +375,47 @@ declare namespace OptionSet {
 			Article_Template,
 			/** 10126 */
 			Asset_Category_Template_Association,
-			/** 10570 */
+			/** 10599 */
 			Asset_Suggestion,
-			/** 10583 */
+			/** 10612 */
 			Asset_Suggestions_Setting,
 			/** 10127 */
 			Asset_Template_Association,
-			/** 10618 */
+			/** 10647 */
 			Assignment_Configuration,
-			/** 10619 */
+			/** 10648 */
 			Assignment_Configuration_Step,
-			/** 10820 */
+			/** 10266 */
 			Assignment_Map,
-			/** 10817 */
+			/** 10263 */
 			Assignment_Rule,
-			/** 10697 */
+			/** 10726 */
 			Attach_Skill,
 			/** 1001 */
 			Attachment_1001,
 			/** 1002 */
 			Attachment_1002,
-			/** 10818 */
-			Attribute_10818,
+			/** 10264 */
+			Attribute_10264,
 			/** 9808 */
 			Attribute_9808,
 			/** 4601 */
 			Attribute_Map,
-			/** 10819 */
+			/** 10265 */
 			Attribute_Value,
-			/** 10680 */
+			/** 10709 */
 			Audio_File,
-			/** 10768 */
+			/** 10797 */
 			Audit_Diagnostics_Setting,
 			/** 4567 */
 			Auditing,
 			/** 1094 */
 			Authorization_Server,
-			/** 10638 */
+			/** 10667 */
 			Auto_block_rule,
-			/** 10245 */
+			/** 10248 */
 			Auto_Capture_Rule,
-			/** 10246 */
+			/** 10249 */
 			Auto_Capture_Settings,
 			/** 10121 */
 			Available_Times,
@@ -423,21 +423,21 @@ declare namespace OptionSet {
 			Available_Times_Data_Source,
 			/** 9936 */
 			Azure_Service_Connection,
-			/** 10388 */
+			/** 10417 */
 			Batch_Job,
 			/** 1150 */
 			Bookable_Resource,
-			/** 10356 */
+			/** 10385 */
 			Bookable_Resource_Association,
 			/** 1145 */
 			Bookable_Resource_Booking,
 			/** 1146 */
 			Bookable_Resource_Booking_Header,
-			/** 10564 */
+			/** 10593 */
 			Bookable_Resource_Booking_Quick_Note,
 			/** 4421 */
 			Bookable_Resource_Booking_to_Exchange_Id_Mapping,
-			/** 10691 */
+			/** 10720 */
 			Bookable_Resource_Capacity_Profile,
 			/** 1147 */
 			Bookable_Resource_Category,
@@ -447,21 +447,21 @@ declare namespace OptionSet {
 			Bookable_Resource_Characteristic,
 			/** 1151 */
 			Bookable_Resource_Group,
-			/** 10357 */
+			/** 10386 */
 			Booking_Alert,
-			/** 10358 */
+			/** 10387 */
 			Booking_Alert_Status,
-			/** 10359 */
+			/** 10388 */
 			Booking_Change,
-			/** 10488 */
+			/** 10517 */
 			Booking_Journal,
-			/** 10360 */
+			/** 10389 */
 			Booking_Rule,
-			/** 10361 */
+			/** 10390 */
 			Booking_Setup_Metadata,
 			/** 1152 */
 			Booking_Status,
-			/** 10489 */
+			/** 10518 */
 			Booking_Timestamp,
 			/** 10064 */
 			BotContent,
@@ -471,7 +471,7 @@ declare namespace OptionSet {
 			Bulk_Delete_Operation,
 			/** 4405 */
 			Bulk_Operation_Log,
-			/** 10362 */
+			/** 10391 */
 			Business_Closure,
 			/** 4232 */
 			Business_Data_Localized_Label,
@@ -501,9 +501,9 @@ declare namespace OptionSet {
 			Canvas_App,
 			/** 10038 */
 			CanvasApp_Extended_Metadata,
-			/** 10620 */
+			/** 10649 */
 			Capacity_Profile,
-			/** 10726 */
+			/** 10755 */
 			Carrier,
 			/** 10028 */
 			CascadeGrantRevokeAccessRecordsTracker,
@@ -521,7 +521,7 @@ declare namespace OptionSet {
 			Case_Suggestion_Request_Payload,
 			/** 10192 */
 			Case_Suggestions_Data_Souce,
-			/** 10491 */
+			/** 10520 */
 			Case_to_Work_Order_Business_Process,
 			/** 10204 */
 			Case_Topic,
@@ -537,9 +537,9 @@ declare namespace OptionSet {
 			Catalog_Assignment,
 			/** 9959 */
 			Category,
-			/** 10576 */
+			/** 10605 */
 			CFS_IoT_Alert_Process_Flow,
-			/** 10609 */
+			/** 10638 */
 			channel,
 			/** 3005 */
 			Channel_Access_Profile,
@@ -547,11 +547,11 @@ declare namespace OptionSet {
 			Channel_Access_Profile_Rule,
 			/** 9401 */
 			Channel_Access_Profile_Rule_Item,
-			/** 10629 */
+			/** 10658 */
 			Channel_Capability,
-			/** 10640 */
+			/** 10669 */
 			Channel_Configuration,
-			/** 10592 */
+			/** 10621 */
 			Channel_Integration_Framework_v10_Provider,
 			/** 10168 */
 			Channel_Integration_Framework_v20_Provider,
@@ -559,19 +559,19 @@ declare namespace OptionSet {
 			Channel_Property,
 			/** 1234 */
 			Channel_Property_Group,
-			/** 10641 */
+			/** 10670 */
 			Channel_State_Configuration,
 			/** 1141 */
 			Characteristic,
-			/** 10700 */
+			/** 10729 */
 			Characteristic_mapping,
-			/** 10707 */
+			/** 10736 */
 			Chat_Authentication_Settings,
-			/** 10712 */
+			/** 10741 */
 			Chat_Widget,
-			/** 10711 */
+			/** 10740 */
 			Chat_Widget_Languagedeprecated,
-			/** 10714 */
+			/** 10743 */
 			Chat_Widget_Location,
 			/** 10066 */
 			Chatbot,
@@ -579,7 +579,7 @@ declare namespace OptionSet {
 			Chatbot_subcomponent,
 			/** 113 */
 			Child_Incident_Count,
-			/** 10363 */
+			/** 10392 */
 			Client_Extension,
 			/** 36 */
 			Client_update,
@@ -591,11 +591,11 @@ declare namespace OptionSet {
 			Comment_8005,
 			/** 4215 */
 			Commitment,
-			/** 10727 */
+			/** 10756 */
 			Communication_Provider_Setting,
-			/** 10728 */
+			/** 10757 */
 			Communication_Provider_Setting_Entry,
-			/** 10391 */
+			/** 10420 */
 			Competency_Requirement_Deprecated,
 			/** 123 */
 			Competitor,
@@ -609,10 +609,10 @@ declare namespace OptionSet {
 			Component_Layer,
 			/** 10007 */
 			Component_Layer_Data_Source,
-			/** 10364 */
-			Configuration_10364,
-			/** 10769 */
-			Configuration_10769,
+			/** 10393 */
+			Configuration_10393,
+			/** 10798 */
+			Configuration_10798,
 			/** 3234 */
 			Connection,
 			/** 10049 */
@@ -625,11 +625,11 @@ declare namespace OptionSet {
 			Connector,
 			/** 2 */
 			Contact,
-			/** 10392 */
+			/** 10421 */
 			Contact_Price_List,
-			/** 10851 */
+			/** 10230 */
 			Contact_suggestion_rule,
-			/** 10852 */
+			/** 10231 */
 			Contact_suggestion_ruleset,
 			/** 17 */
 			ContactInvoices,
@@ -639,49 +639,49 @@ declare namespace OptionSet {
 			ContactOrders,
 			/** 18 */
 			ContactQuotes,
-			/** 10647 */
+			/** 10676 */
 			Context_item_value,
-			/** 10650 */
+			/** 10679 */
 			Context_variable,
 			/** 1010 */
 			Contract,
 			/** 1011 */
 			Contract_Line,
-			/** 10469 */
+			/** 10498 */
 			Contract_Line_Detail_Performance,
-			/** 10470 */
+			/** 10499 */
 			Contract_Performance,
 			/** 2011 */
 			Contract_Template,
-			/** 10644 */
+			/** 10673 */
 			Conversation,
-			/** 10630 */
+			/** 10659 */
 			Conversation_Action,
-			/** 10631 */
+			/** 10660 */
 			Conversation_Action_Locale,
-			/** 10693 */
+			/** 10722 */
 			Conversation_Capacity_profile,
-			/** 10694 */
+			/** 10723 */
 			Conversation_Characteristic,
 			/** 10219 */
 			Conversation_Data_Deprecated,
-			/** 10649 */
+			/** 10678 */
 			Conversation_Sentiment,
-			/** 10720 */
+			/** 10749 */
 			Conversation_Topic,
-			/** 10723 */
+			/** 10752 */
 			Conversation_topic_Conversation_mapping,
-			/** 10721 */
+			/** 10750 */
 			Conversation_Topic_Setting,
-			/** 10722 */
+			/** 10751 */
 			Conversation_Topic_Summary,
-			/** 10719 */
+			/** 10748 */
 			ConversationInsight,
-			/** 10718 */
+			/** 10747 */
 			conversationsuggestionrequestpayload,
 			/** 10065 */
 			ConversationTranscript,
-			/** 10777 */
+			/** 10806 */
 			CTI_Search,
 			/** 9105 */
 			Currency,
@@ -697,11 +697,11 @@ declare namespace OptionSet {
 			Custom_Control_Default_Config,
 			/** 9754 */
 			Custom_Control_Resource,
-			/** 10639 */
+			/** 10668 */
 			Custom_messaging_account,
-			/** 10738 */
+			/** 10767 */
 			Custom_messaging_channel,
-			/** 10736 */
+			/** 10765 */
 			Custom_Messaging_Engagement_Context,
 			/** 10128 */
 			Customer_Asset,
@@ -713,35 +713,35 @@ declare namespace OptionSet {
 			Customer_Relationship,
 			/** 10208 */
 			Customer_Service_historical_analytics,
-			/** 10261 */
+			/** 10283 */
 			Customer_Voice_alert,
-			/** 10262 */
+			/** 10284 */
 			Customer_Voice_alert_rule,
-			/** 10264 */
+			/** 10286 */
 			Customer_Voice_file_response,
-			/** 10265 */
+			/** 10287 */
 			Customer_Voice_localized_survey_email_template,
-			/** 10266 */
+			/** 10288 */
 			Customer_Voice_project,
-			/** 10269 */
+			/** 10291 */
 			Customer_Voice_satisfaction_metric,
-			/** 10270 */
+			/** 10292 */
 			Customer_Voice_survey,
-			/** 10263 */
+			/** 10285 */
 			Customer_Voice_survey_email_template,
-			/** 10271 */
+			/** 10293 */
 			Customer_Voice_survey_invite,
-			/** 10267 */
+			/** 10289 */
 			Customer_Voice_survey_question,
-			/** 10268 */
+			/** 10290 */
 			Customer_Voice_survey_question_response,
-			/** 10272 */
+			/** 10294 */
 			Customer_Voice_survey_reminder,
-			/** 10273 */
+			/** 10295 */
 			Customer_Voice_survey_response,
-			/** 10274 */
+			/** 10296 */
 			Customer_Voice_unsubscribed_recipient,
-			/** 10770 */
+			/** 10799 */
 			Customization_File,
 			/** 10200 */
 			Data_Analytics_Admin_Settings_Deprecated,
@@ -761,21 +761,21 @@ declare namespace OptionSet {
 			Data_Map,
 			/** 4450 */
 			Data_Performance_Dashboard,
-			/** 10855 */
+			/** 10854 */
 			Data_Sync_State,
 			/** 10115 */
 			Database_Version,
 			/** 418 */
 			Dataflow,
-			/** 10255 */
+			/** 10277 */
 			Deal_manager_settings,
-			/** 10254 */
+			/** 10276 */
 			dealmanageraccess,
-			/** 10611 */
+			/** 10640 */
 			Decision_contract,
-			/** 10612 */
+			/** 10641 */
 			Decision_rule_set,
-			/** 10396 */
+			/** 10425 */
 			Delegation,
 			/** 9961 */
 			DelveActionHub,
@@ -785,7 +785,7 @@ declare namespace OptionSet {
 			Dependency_Feature,
 			/** 7106 */
 			Dependency_Node,
-			/** 10632 */
+			/** 10661 */
 			Deprecated_Workstream_Entity_Configuration,
 			/** 1013 */
 			Discount,
@@ -807,11 +807,11 @@ declare namespace OptionSet {
 			Duplicate_Record,
 			/** 4416 */
 			Duplicate_Rule_Condition,
-			/** 10703 */
+			/** 10732 */
 			Effort_estimate,
-			/** 10704 */
+			/** 10733 */
 			Effort_estimation_model,
-			/** 10705 */
+			/** 10734 */
 			Effort_model_training_details,
 			/** 4202 */
 			Email,
@@ -827,7 +827,7 @@ declare namespace OptionSet {
 			Email_Template,
 			/** 9700 */
 			Entitlement,
-			/** 10494 */
+			/** 10523 */
 			Entitlement_Application,
 			/** 9701 */
 			Entitlement_Channel,
@@ -843,13 +843,13 @@ declare namespace OptionSet {
 			Entitlement_Template_Channel,
 			/** 4545 */
 			Entitlement_Template_Product,
-			/** 10633 */
-			Entity_10633,
+			/** 10662 */
+			Entity_10662,
 			/** 9800 */
 			Entity_9800,
 			/** 430 */
 			Entity_Analytics_Config,
-			/** 10579 */
+			/** 10608 */
 			Entity_Configuration,
 			/** 432 */
 			Entity_Image_Configuration,
@@ -857,59 +857,59 @@ declare namespace OptionSet {
 			Entity_Index,
 			/** 9810 */
 			Entity_Key,
-			/** 10229 */
+			/** 10232 */
 			Entity_link_chat_configuration,
 			/** 4600 */
 			Entity_Map,
 			/** 9811 */
 			Entity_Relationship,
-			/** 10628 */
+			/** 10657 */
 			Entity_Routing_Context,
-			/** 10772 */
+			/** 10801 */
 			Entity_Search,
-			/** 10771 */
+			/** 10800 */
 			Entity_Type,
-			/** 10242 */
+			/** 10245 */
 			EntityRankingRule,
 			/** 380 */
 			Environment_Variable_Definition,
 			/** 381 */
 			Environment_Variable_Value,
-			/** 10399 */
+			/** 10428 */
 			Estimate,
-			/** 10400 */
+			/** 10429 */
 			Estimate_Line,
-			/** 10785 */
+			/** 10814 */
 			Event,
 			/** 4120 */
 			Exchange_Sync_Id_Mapping,
 			/** 4711 */
 			Expander_Event,
-			/** 10401 */
+			/** 10430 */
 			Expense,
-			/** 10402 */
+			/** 10431 */
 			Expense_Category,
-			/** 10403 */
+			/** 10432 */
 			Expense_Receipt,
 			/** 955 */
 			Expired_Process,
 			/** 10011 */
 			ExportSolutionUpload,
-			/** 10823 */
+			/** 10270 */
 			Extended_User_Setting,
 			/** 3008 */
 			External_Party,
 			/** 9987 */
 			External_Party_Item,
-			/** 10734 */
+			/** 10763 */
 			Facebook_Application,
-			/** 10733 */
+			/** 10762 */
 			Facebook_Engagement_Context,
-			/** 10735 */
+			/** 10764 */
 			Facebook_Page,
 			/** 4000 */
 			FacilityEquipment,
-			/** 10404 */
+			/** 10433 */
 			Fact,
 			/** 4204 */
 			Fax,
@@ -917,35 +917,35 @@ declare namespace OptionSet {
 			FeatureControlSetting,
 			/** 9958 */
 			Feedback,
-			/** 10405 */
+			/** 10434 */
 			Field_Computation,
 			/** 1201 */
 			Field_Permission,
 			/** 1200 */
 			Field_Security_Profile,
-			/** 10584 */
+			/** 10613 */
 			Field_service_historical_analytics,
-			/** 10495 */
+			/** 10524 */
 			Field_Service_Price_List_Item,
-			/** 10496 */
+			/** 10525 */
 			Field_Service_Setting,
-			/** 10497 */
+			/** 10526 */
 			Field_Service_SLA_Configuration,
-			/** 10498 */
+			/** 10527 */
 			Field_Service_System_Job,
 			/** 44 */
 			Field_Sharing,
 			/** 55 */
 			FileAttachment,
-			/** 10260 */
+			/** 10282 */
 			Filter,
 			/** 30 */
 			Filter_Template,
-			/** 10406 */
+			/** 10435 */
 			Find_Work_Event_Deprecated_in_v30,
 			/** 2004 */
 			Fixed_Monthly_Fiscal_Calendar,
-			/** 10642 */
+			/** 10671 */
 			Flagged_spam,
 			/** 10045 */
 			Flow_Machine,
@@ -953,37 +953,37 @@ declare namespace OptionSet {
 			Flow_Machine_Group,
 			/** 4720 */
 			Flow_Session,
-			/** 10243 */
+			/** 10246 */
 			flowcardtype,
 			/** 8003 */
 			Follow,
-			/** 10234 */
+			/** 10237 */
 			Forecast,
-			/** 10232 */
-			Forecast_Configuration,
-			/** 10233 */
-			Forecast_definition,
 			/** 10235 */
+			Forecast_Configuration,
+			/** 10236 */
+			Forecast_definition,
+			/** 10238 */
 			Forecast_recurrence,
-			/** 10773 */
+			/** 10802 */
 			Form,
-			/** 10380 */
+			/** 10409 */
 			Fulfillment_Preference,
 			/** 10131 */
 			Functional_Location,
-			/** 10236 */
+			/** 10239 */
 			GDPRData,
-			/** 10664 */
+			/** 10693 */
 			Geo_Location_Provider,
-			/** 10580 */
+			/** 10609 */
 			Geofence,
-			/** 10581 */
+			/** 10610 */
 			Geofence_Event,
-			/** 10582 */
+			/** 10611 */
 			Geofencing_Settings,
-			/** 10577 */
+			/** 10606 */
 			Geolocation_Settings,
-			/** 10578 */
+			/** 10607 */
 			Geolocation_Tracking,
 			/** 54 */
 			Global_Search_Configuration,
@@ -999,9 +999,9 @@ declare namespace OptionSet {
 			Hierarchy_Security_Configuration,
 			/** 9996 */
 			HolidayWrapper,
-			/** 10756 */
+			/** 10785 */
 			Hosted_Control,
-			/** 10253 */
+			/** 10256 */
 			icebreakersconfig,
 			/** 431 */
 			Image_Attribute_Configuration,
@@ -1019,25 +1019,25 @@ declare namespace OptionSet {
 			Import_Source_File,
 			/** 9931 */
 			Incident_KnowledgeBaseRecord,
-			/** 10499 */
+			/** 10528 */
 			Incident_Type,
-			/** 10500 */
+			/** 10529 */
 			Incident_Type_Characteristic,
-			/** 10501 */
+			/** 10530 */
 			Incident_Type_Product,
-			/** 10505 */
+			/** 10534 */
 			Incident_Type_Requirement_Group,
-			/** 10569 */
+			/** 10598 */
 			Incident_Type_Resolution,
-			/** 10502 */
+			/** 10531 */
 			Incident_Type_Service,
-			/** 10503 */
+			/** 10532 */
 			Incident_Type_Service_Task,
-			/** 10567 */
+			/** 10596 */
 			Incident_Type_Suggestion_Result,
-			/** 10568 */
+			/** 10597 */
 			Incident_Type_Suggestion_Run_History,
-			/** 10504 */
+			/** 10533 */
 			Incident_Types_Setup,
 			/** 9816 */
 			Index_Attribute,
@@ -1045,19 +1045,19 @@ declare namespace OptionSet {
 			Indexed_Article,
 			/** 10202 */
 			Insights,
-			/** 10475 */
+			/** 10504 */
 			Inspection,
-			/** 10473 */
+			/** 10502 */
 			Inspection_Attachment,
-			/** 10476 */
+			/** 10505 */
 			Inspection_Response,
-			/** 10472 */
+			/** 10501 */
 			Inspection_Template,
-			/** 10474 */
+			/** 10503 */
 			Inspection_Template_Version,
-			/** 10407 */
+			/** 10436 */
 			Integration_Job,
-			/** 10408 */
+			/** 10437 */
 			Integration_Job_Detail,
 			/** 3000 */
 			Integration_Status,
@@ -1071,25 +1071,25 @@ declare namespace OptionSet {
 			Internal_Catalog_Assignment,
 			/** 7107 */
 			Invalid_Dependency,
-			/** 10506 */
+			/** 10535 */
 			Inventory_Adjustment,
-			/** 10507 */
+			/** 10536 */
 			Inventory_Adjustment_Product,
-			/** 10508 */
+			/** 10537 */
 			Inventory_Journal,
-			/** 10509 */
+			/** 10538 */
 			Inventory_Transfer,
 			/** 1090 */
 			Invoice,
-			/** 10409 */
+			/** 10438 */
 			Invoice_Frequency,
-			/** 10410 */
+			/** 10439 */
 			Invoice_Frequency_Detail,
 			/** 1091 */
 			Invoice_Line,
-			/** 10411 */
+			/** 10440 */
 			Invoice_Line_Detail,
-			/** 10390 */
+			/** 10419 */
 			Invoice_Process,
 			/** 10138 */
 			IoT_Alert,
@@ -1123,9 +1123,9 @@ declare namespace OptionSet {
 			IoT_Settings,
 			/** 4705 */
 			ISV_Config,
-			/** 10412 */
+			/** 10441 */
 			Journal,
-			/** 10413 */
+			/** 10442 */
 			Journal_Line,
 			/** 10193 */
 			KB_Enrichment,
@@ -1177,11 +1177,11 @@ declare namespace OptionSet {
 			KPI_Event_Data,
 			/** 10221 */
 			KPI_Event_Definition,
-			/** 10643 */
-			Language_10643,
+			/** 10672 */
+			Language_10672,
 			/** 9957 */
 			Language_9957,
-			/** 10774 */
+			/** 10803 */
 			Language_Module,
 			/** 9875 */
 			Language_Provisioning_State,
@@ -1201,25 +1201,25 @@ declare namespace OptionSet {
 			License,
 			/** 8006 */
 			Like,
-			/** 10739 */
+			/** 10768 */
 			LINE_account,
-			/** 10737 */
+			/** 10766 */
 			LINE_Engagement_Context,
 			/** 10113 */
 			List_Operation,
 			/** 4418 */
 			List_Value_Mapping,
-			/** 10713 */
+			/** 10742 */
 			Live_Chat_Context,
-			/** 10635 */
+			/** 10664 */
 			Live_work_item_event,
-			/** 10648 */
+			/** 10677 */
 			Live_Work_Item_Participant_Deprecated,
 			/** 9201 */
 			LocalConfigStore,
-			/** 10651 */
+			/** 10680 */
 			Localization,
-			/** 10715 */
+			/** 10744 */
 			Localized_Survey_Question_Deprecated,
 			/** 4419 */
 			Lookup_Mapping,
@@ -1251,21 +1251,21 @@ declare namespace OptionSet {
 			Marketing_List,
 			/** 4301 */
 			Marketing_List_Member,
-			/** 10588 */
+			/** 10617 */
 			MarketingSiteMap,
-			/** 10637 */
+			/** 10666 */
 			Masking_Rule,
-			/** 10616 */
+			/** 10645 */
 			Master_Entity_Routing_Configuration,
-			/** 10662 */
+			/** 10691 */
 			Message,
 			/** 4231 */
 			Metadata_Difference,
-			/** 10748 */
+			/** 10777 */
 			Microsoft_Teams_account,
-			/** 10230 */
+			/** 10233 */
 			Microsoft_Teams_chat_association_entity,
-			/** 10231 */
+			/** 10234 */
 			Microsoft_Teams_chat_suggestion,
 			/** 10227 */
 			Microsoft_Teams_Collaboration_entity,
@@ -1291,7 +1291,7 @@ declare namespace OptionSet {
 			Model_Driven_App_Setting,
 			/** 10035 */
 			Model_Driven_App_User_Setting,
-			/** 10698 */
+			/** 10727 */
 			Model_training_details,
 			/** 2003 */
 			Monthly_Fiscal_Calendar,
@@ -1299,7 +1299,7 @@ declare namespace OptionSet {
 			msdyn_msteamssetting,
 			/** 10226 */
 			msdyn_msteamssettingsv2,
-			/** 10237 */
+			/** 10240 */
 			msdyn_relationshipinsightsunifiedconfig,
 			/** 9912 */
 			Multi_Select_Option_Value,
@@ -1313,7 +1313,7 @@ declare namespace OptionSet {
 			NonRelational_Data_Source,
 			/** 5 */
 			Note,
-			/** 10252 */
+			/** 10255 */
 			Notes_analysis_Config,
 			/** 10099 */
 			Notification_10099,
@@ -1321,11 +1321,11 @@ declare namespace OptionSet {
 			Notification_4110,
 			/** 10159 */
 			Notification_Field,
-			/** 10593 */
+			/** 10622 */
 			Notification_Field_Deprecated,
 			/** 10160 */
 			Notification_Template,
-			/** 10594 */
+			/** 10623 */
 			Notification_Template_Deprecated,
 			/** 10044 */
 			OData_v4_Data_Source,
@@ -1335,23 +1335,23 @@ declare namespace OptionSet {
 			Office_Graph_Document,
 			/** 9870 */
 			Offline_Command_Definition,
-			/** 10665 */
+			/** 10694 */
 			Omnichannel_Configuration,
-			/** 10724 */
+			/** 10753 */
 			Omnichannel_historical_analytics,
-			/** 10666 */
+			/** 10695 */
 			Omnichannel_Personalization,
-			/** 10667 */
+			/** 10696 */
 			Omnichannel_Queue_Deprecated,
-			/** 10654 */
+			/** 10683 */
 			Omnichannel_Request,
-			/** 10668 */
+			/** 10697 */
 			Omnichannel_Sync_Config,
-			/** 10725 */
+			/** 10754 */
 			Omnichannel_voice_historical_analytics_preview_Deprecated,
-			/** 10634 */
+			/** 10663 */
 			Ongoing_conversation_Deprecated,
-			/** 10669 */
+			/** 10698 */
 			Operating_Hour,
 			/** 3 */
 			Opportunity,
@@ -1359,15 +1359,15 @@ declare namespace OptionSet {
 			Opportunity_Close,
 			/** 1083 */
 			Opportunity_Line,
-			/** 10416 */
+			/** 10445 */
 			Opportunity_Line_Detail_Deprecated,
-			/** 10415 */
+			/** 10444 */
 			Opportunity_Line_Resource_Category_Deprecated,
-			/** 10417 */
+			/** 10446 */
 			Opportunity_Line_Transaction_Category_Deprecated,
-			/** 10418 */
+			/** 10447 */
 			Opportunity_Line_Transaction_Classification_Deprecated,
-			/** 10419 */
+			/** 10448 */
 			Opportunity_Project_Price_List,
 			/** 4503 */
 			Opportunity_Relationship,
@@ -1375,7 +1375,7 @@ declare namespace OptionSet {
 			Opportunity_Sales_Process,
 			/** 25 */
 			OpportunityCompetitors,
-			/** 10758 */
+			/** 10787 */
 			Option,
 			/** 9809 */
 			OptionSet,
@@ -1383,13 +1383,13 @@ declare namespace OptionSet {
 			Order,
 			/** 4209 */
 			Order_Close,
-			/** 10510 */
+			/** 10539 */
 			Order_Invoicing_Date,
-			/** 10511 */
+			/** 10540 */
 			Order_Invoicing_Product,
-			/** 10512 */
+			/** 10541 */
 			Order_Invoicing_Setup,
-			/** 10513 */
+			/** 10542 */
 			Order_Invoicing_Setup_Date,
 			/** 1089 */
 			Order_Line,
@@ -1405,17 +1405,17 @@ declare namespace OptionSet {
 			Organization_Statistic,
 			/** 1021 */
 			Organization_UI,
-			/** 10365 */
+			/** 10394 */
 			Organizational_Unit,
 			/** 10096 */
 			OrganizationDataSyncSubscription,
 			/** 10097 */
 			OrganizationDataSyncSubscriptionEntity,
-			/** 10751 */
+			/** 10780 */
 			Outbound_Configuration,
-			/** 10752 */
+			/** 10781 */
 			Outbound_message,
-			/** 10621 */
+			/** 10650 */
 			Overflow_Action_Config,
 			/** 7 */
 			Owner,
@@ -1429,31 +1429,31 @@ declare namespace OptionSet {
 			Pane_tool_configuration,
 			/** 10183 */
 			Parameter_definition,
-			/** 10598 */
+			/** 10627 */
 			Parameter_Deprecated,
 			/** 1095 */
 			Partner_Application,
-			/** 10514 */
+			/** 10543 */
 			Payment,
-			/** 10515 */
+			/** 10544 */
 			Payment_Detail,
-			/** 10516 */
+			/** 10545 */
 			Payment_Method,
-			/** 10517 */
+			/** 10546 */
 			Payment_Term,
 			/** 10073 */
 			PDF_Setting,
-			/** 10672 */
+			/** 10701 */
 			Persona_Security_Role_Mapping,
 			/** 9941 */
 			Personal_Document_Template,
-			/** 10670 */
+			/** 10699 */
 			Personal_quick_reply,
-			/** 10671 */
+			/** 10700 */
 			Personal_sound_setting,
 			/** 4210 */
 			Phone_Call,
-			/** 10729 */
+			/** 10758 */
 			Phone_Number,
 			/** 952 */
 			Phone_To_Case_Process,
@@ -1487,43 +1487,43 @@ declare namespace OptionSet {
 			Position,
 			/** 8000 */
 			Post,
-			/** 10257 */
+			/** 10279 */
 			Post_Configuration,
 			/** 8002 */
 			Post_Regarding,
 			/** 8001 */
 			Post_Role,
-			/** 10258 */
+			/** 10280 */
 			Post_Rule_Configuration,
-			/** 10518 */
+			/** 10547 */
 			Postal_Code,
-			/** 10626 */
+			/** 10655 */
 			Power_BI_Configuration,
-			/** 10586 */
+			/** 10615 */
 			Predictive_duration_preview,
-			/** 10587 */
+			/** 10616 */
 			Predictive_Work_Hour_Duration_Setting,
-			/** 10673 */
+			/** 10702 */
 			Presence,
 			/** 1022 */
 			Price_List,
 			/** 1026 */
 			Price_List_Item,
-			/** 10397 */
+			/** 10426 */
 			Pricing_Dimension,
-			/** 10398 */
+			/** 10427 */
 			Pricing_Dimension_Field_Name,
 			/** 1404 */
 			Principal_Sync_Attribute_Map,
 			/** 61 */
 			PrincipalEntityBusinessUnitMap,
-			/** 10366 */
+			/** 10395 */
 			Priority,
 			/** 1023 */
 			Privilege,
 			/** 31 */
 			Privilege_Object_Type_Code,
-			/** 10571 */
+			/** 10600 */
 			Problematic_Asset_Feedback,
 			/** 4703 */
 			Process,
@@ -1533,7 +1533,7 @@ declare namespace OptionSet {
 			Process_Dependency,
 			/** 4706 */
 			Process_Log,
-			/** 10425 */
+			/** 10454 */
 			Process_Notes,
 			/** 4710 */
 			Process_Session,
@@ -1547,7 +1547,7 @@ declare namespace OptionSet {
 			Product,
 			/** 1025 */
 			Product_Association,
-			/** 10519 */
+			/** 10548 */
 			Product_Inventory,
 			/** 1028 */
 			Product_Relationship,
@@ -1555,47 +1555,47 @@ declare namespace OptionSet {
 			Productivity_pane_configuration,
 			/** 21 */
 			ProductSalesLiterature,
-			/** 10256 */
+			/** 10278 */
 			Profile_Album,
-			/** 10426 */
+			/** 10455 */
 			Project,
-			/** 10427 */
+			/** 10456 */
 			Project_Approval,
-			/** 10421 */
+			/** 10450 */
 			Project_Contract_Line_Detail,
-			/** 10393 */
-			Project_Contract_Line_Invoice_Schedule,
-			/** 10394 */
-			Project_Contract_Line_Milestone,
-			/** 10420 */
-			Project_Contract_Line_Resource_Category,
 			/** 10422 */
-			Project_Contract_Line_Transaction_Category,
+			Project_Contract_Line_Invoice_Schedule,
 			/** 10423 */
+			Project_Contract_Line_Milestone,
+			/** 10449 */
+			Project_Contract_Line_Resource_Category,
+			/** 10451 */
+			Project_Contract_Line_Transaction_Category,
+			/** 10452 */
 			Project_Contract_Line_Transaction_Classification,
-			/** 10424 */
+			/** 10453 */
 			Project_Contract_Project_Price_List,
-			/** 10428 */
+			/** 10457 */
 			Project_Parameter,
-			/** 10429 */
+			/** 10458 */
 			Project_Parameter_Price_List,
-			/** 10430 */
+			/** 10459 */
 			Project_Price_List,
-			/** 10387 */
+			/** 10416 */
 			Project_Service_Approval,
-			/** 10389 */
+			/** 10418 */
 			Project_Stages,
-			/** 10431 */
+			/** 10460 */
 			Project_Task,
-			/** 10432 */
+			/** 10461 */
 			Project_Task_Dependency,
-			/** 10433 */
+			/** 10462 */
 			Project_Task_Status_User,
-			/** 10434 */
+			/** 10463 */
 			Project_Team_Member,
-			/** 10435 */
+			/** 10464 */
 			Project_Team_Member_Sign_Up_Deprecated_in_v30,
-			/** 10436 */
+			/** 10465 */
 			Project_Transaction_Category_Deprecated,
 			/** 1048 */
 			Property,
@@ -1613,9 +1613,9 @@ declare namespace OptionSet {
 			Property_Option_Set_Item,
 			/** 10135 */
 			Property_Template_Association,
-			/** 10674 */
+			/** 10703 */
 			Provider,
-			/** 10652 */
+			/** 10681 */
 			Provisioning_State,
 			/** 10023 */
 			ProvisionLanguageForUser,
@@ -1623,19 +1623,19 @@ declare namespace OptionSet {
 			Publisher,
 			/** 7102 */
 			Publisher_Address,
-			/** 10520 */
+			/** 10549 */
 			Purchase_Order,
-			/** 10521 */
+			/** 10550 */
 			Purchase_Order_Bill,
-			/** 10490 */
+			/** 10519 */
 			Purchase_Order_Business_Process,
-			/** 10522 */
+			/** 10551 */
 			Purchase_Order_Product,
-			/** 10523 */
+			/** 10552 */
 			Purchase_Order_Receipt,
-			/** 10524 */
+			/** 10553 */
 			Purchase_Order_Receipt_Product,
-			/** 10525 */
+			/** 10554 */
 			Purchase_Order_SubStatus,
 			/** 2002 */
 			Quarterly_Fiscal_Calendar,
@@ -1649,43 +1649,43 @@ declare namespace OptionSet {
 			QueueMemberCount,
 			/** 4406 */
 			Quick_Campaign,
-			/** 10627 */
+			/** 10656 */
 			Quick_reply,
 			/** 1084 */
 			Quote,
-			/** 10526 */
+			/** 10555 */
 			Quote_Booking_Incident,
-			/** 10527 */
+			/** 10556 */
 			Quote_Booking_Product,
-			/** 10528 */
+			/** 10557 */
 			Quote_Booking_Service,
-			/** 10529 */
+			/** 10558 */
 			Quote_Booking_Service_Task,
-			/** 10530 */
+			/** 10559 */
 			Quote_Booking_Setup,
 			/** 4211 */
 			Quote_Close,
-			/** 10531 */
+			/** 10560 */
 			Quote_Invoicing_Product,
-			/** 10532 */
+			/** 10561 */
 			Quote_Invoicing_Setup,
 			/** 1085 */
 			Quote_Line,
-			/** 10437 */
+			/** 10466 */
 			Quote_Line_Analytics_Breakdown,
-			/** 10441 */
+			/** 10470 */
 			Quote_Line_Detail,
-			/** 10438 */
+			/** 10467 */
 			Quote_Line_Invoice_Schedule,
-			/** 10440 */
+			/** 10469 */
 			Quote_Line_Milestone,
-			/** 10439 */
+			/** 10468 */
 			Quote_Line_Resource_Category,
-			/** 10442 */
+			/** 10471 */
 			Quote_Line_Transaction_Category,
-			/** 10443 */
+			/** 10472 */
 			Quote_Line_Transaction_Classification,
-			/** 10444 */
+			/** 10473 */
 			Quote_Project_Price_List,
 			/** 1144 */
 			Rating_Model,
@@ -1695,7 +1695,7 @@ declare namespace OptionSet {
 			Record_Creation_and_Update_Rule,
 			/** 9301 */
 			Record_Creation_and_Update_Rule_Item,
-			/** 10653 */
+			/** 10682 */
 			Recording,
 			/** 4250 */
 			Recurrence_Rule,
@@ -1721,31 +1721,31 @@ declare namespace OptionSet {
 			Report_Related_Entity,
 			/** 9103 */
 			Report_Visibility,
-			/** 10367 */
+			/** 10396 */
 			Requirement_Characteristic,
-			/** 10384 */
+			/** 10413 */
 			Requirement_Dependency,
-			/** 10368 */
+			/** 10397 */
 			Requirement_Group,
-			/** 10369 */
+			/** 10398 */
 			Requirement_Organization_Unit,
-			/** 10370 */
+			/** 10399 */
 			Requirement_Relationship,
-			/** 10371 */
+			/** 10400 */
 			Requirement_Resource_Category,
-			/** 10372 */
+			/** 10401 */
 			Requirement_Resource_Preference,
-			/** 10373 */
+			/** 10402 */
 			Requirement_Status,
-			/** 10572 */
+			/** 10601 */
 			Resolution,
 			/** 4002 */
 			Resource,
-			/** 10445 */
+			/** 10474 */
 			Resource_Assignment,
-			/** 10446 */
+			/** 10475 */
 			Resource_Assignment_Detail_Deprecated_in_v20,
-			/** 10585 */
+			/** 10614 */
 			Resource_duration_preview,
 			/** 4010 */
 			Resource_Expansion,
@@ -1753,21 +1753,21 @@ declare namespace OptionSet {
 			Resource_Group,
 			/** 10123 */
 			resource_group_data_source,
-			/** 10533 */
+			/** 10562 */
 			Resource_Pay_Type,
-			/** 10449 */
+			/** 10478 */
 			Resource_Request,
-			/** 10374 */
+			/** 10403 */
 			Resource_Requirement,
-			/** 10375 */
+			/** 10404 */
 			Resource_Requirement_Detail,
-			/** 10554 */
+			/** 10583 */
 			Resource_Restriction_Deprecated,
 			/** 4006 */
 			Resource_Specification,
-			/** 10376 */
+			/** 10405 */
 			Resource_Territory,
-			/** 10414 */
+			/** 10443 */
 			Result_Cache,
 			/** 10030 */
 			RevokeInheritedAccessRecordsTracker,
@@ -1787,25 +1787,25 @@ declare namespace OptionSet {
 			Ribbon_Tab_To_Command_Mapping,
 			/** 10101 */
 			Rich_Text_Attachment,
-			/** 10534 */
+			/** 10563 */
 			RMA,
-			/** 10535 */
+			/** 10564 */
 			RMA_Product,
-			/** 10536 */
+			/** 10565 */
 			RMA_Receipt,
-			/** 10537 */
+			/** 10566 */
 			RMA_Receipt_Product,
-			/** 10538 */
+			/** 10567 */
 			RMA_SubStatus,
-			/** 10450 */
+			/** 10479 */
 			Role_competency_requirement,
-			/** 10448 */
+			/** 10477 */
 			Role_Price,
-			/** 10447 */
+			/** 10476 */
 			Role_Price_Markup,
 			/** 1037 */
 			Role_Template,
-			/** 10451 */
+			/** 10480 */
 			Role_Utilization,
 			/** 9604 */
 			Rollup_Field,
@@ -1815,37 +1815,37 @@ declare namespace OptionSet {
 			Rollup_Properties,
 			/** 9602 */
 			Rollup_Query,
-			/** 10622 */
+			/** 10651 */
 			Routing_configuration,
-			/** 10623 */
+			/** 10652 */
 			Routing_configuration_step,
-			/** 10615 */
+			/** 10644 */
 			Routing_diagnostic,
-			/** 10614 */
+			/** 10643 */
 			Routing_diagnostic_item,
 			/** 8181 */
 			Routing_Rule_Set,
-			/** 10617 */
+			/** 10646 */
 			Routing_Rule_Set_Setting,
-			/** 10675 */
+			/** 10704 */
 			RoutingRequest,
-			/** 10539 */
+			/** 10568 */
 			RTV,
-			/** 10540 */
+			/** 10569 */
 			RTV_Product,
-			/** 10541 */
+			/** 10570 */
 			RTV_Substatus,
-			/** 10655 */
-			Rule_Item_10655,
+			/** 10684 */
+			Rule_Item_10684,
 			/** 8199 */
 			Rule_Item_8199,
-			/** 10613 */
+			/** 10642 */
 			Rulesetentitymapping,
 			/** 7200 */
 			RuntimeDependency,
-			/** 10824 */
+			/** 10271 */
 			Sales_Acceleration_settings,
-			/** 10821 */
+			/** 10267 */
 			Sales_Assignment_Setting,
 			/** 1070 */
 			Sales_Attachment,
@@ -1853,29 +1853,29 @@ declare namespace OptionSet {
 			Sales_Literature,
 			/** 32 */
 			Sales_Process_Instance,
-			/** 10854 */
+			/** 10268 */
 			Sales_routing_run,
-			/** 10244 */
+			/** 10247 */
 			salesinsightssettings,
-			/** 10589 */
+			/** 10618 */
 			SalesSiteMap,
 			/** 1309 */
 			Saved_Organization_Insights_Configuration,
 			/** 4230 */
 			Saved_View,
-			/** 10610 */
+			/** 10639 */
 			Scenario,
-			/** 10377 */
+			/** 10406 */
 			Schedule_Board_Setting,
-			/** 10385 */
+			/** 10414 */
 			Scheduling_Feature_Flag,
 			/** 4005 */
 			Scheduling_Group,
-			/** 10378 */
+			/** 10407 */
 			Scheduling_Parameter,
-			/** 10776 */
+			/** 10805 */
 			Script_Task_Trigger,
-			/** 10775 */
+			/** 10804 */
 			Scriptlet,
 			/** 4606 */
 			Sdk_Message,
@@ -1897,7 +1897,7 @@ declare namespace OptionSet {
 			Sdk_Message_Response,
 			/** 4611 */
 			Sdk_Message_Response_Field,
-			/** 10676 */
+			/** 10705 */
 			Search_Configuration,
 			/** 10079 */
 			Search_provider,
@@ -1905,29 +1905,29 @@ declare namespace OptionSet {
 			Search_Telemetry,
 			/** 1036 */
 			Security_Role,
-			/** 10815 */
+			/** 10261 */
 			Segment,
-			/** 10816 */
+			/** 10262 */
 			SegmentsUtil,
-			/** 10686 */
+			/** 10715 */
 			Self_service,
 			/** 2001 */
 			Semiannual_Fiscal_Calendar,
-			/** 10677 */
+			/** 10706 */
 			Sentiment_analysis,
-			/** 10656 */
+			/** 10685 */
 			Sentiment_daily_topic,
-			/** 10657 */
+			/** 10686 */
 			Sentiment_daily_topic_keyword,
-			/** 10658 */
+			/** 10687 */
 			Sentiment_daily_topic_trending,
-			/** 10812 */
+			/** 10257 */
 			Sequence,
-			/** 10853 */
+			/** 10258 */
 			Sequence_Stat,
-			/** 10813 */
+			/** 10259 */
 			Sequence_Target,
-			/** 10814 */
+			/** 10260 */
 			Sequence_Target_Step,
 			/** 4001 */
 			Service,
@@ -1943,37 +1943,37 @@ declare namespace OptionSet {
 			Service_Plan,
 			/** 10039 */
 			Service_Plan_Mapping,
-			/** 10542 */
+			/** 10571 */
 			Service_Task_Type,
-			/** 10590 */
+			/** 10619 */
 			ServicesSiteMap,
-			/** 10659 */
+			/** 10688 */
 			Session,
-			/** 10695 */
+			/** 10724 */
 			Session_Characteristic,
 			/** 10222 */
 			Session_Data_Deprecated,
-			/** 10678 */
+			/** 10707 */
 			Session_event,
-			/** 10778 */
+			/** 10807 */
 			Session_Information,
-			/** 10679 */
+			/** 10708 */
 			Session_participant,
 			/** 10223 */
 			Session_Participant_Data_Deprecated,
-			/** 10660 */
+			/** 10689 */
 			Session_Participant_Event,
-			/** 10661 */
+			/** 10690 */
 			Session_Sentiment,
 			/** 10161 */
 			Session_Template,
-			/** 10596 */
+			/** 10625 */
 			Session_Templates_Deprecated,
-			/** 10779 */
+			/** 10808 */
 			Session_Transfer,
 			/** 10037 */
 			Setting_Definition,
-			/** 10591 */
+			/** 10620 */
 			SettingsSiteMap,
 			/** 9509 */
 			SharePoint_Data,
@@ -1981,11 +1981,11 @@ declare namespace OptionSet {
 			Sharepoint_Document,
 			/** 9502 */
 			SharePoint_Site,
-			/** 10543 */
+			/** 10572 */
 			Ship_Via,
-			/** 10239 */
+			/** 10242 */
 			SI_Key_Value_Config,
-			/** 10238 */
+			/** 10241 */
 			siconfig,
 			/** 9951 */
 			Similarity_Rule,
@@ -1993,9 +1993,9 @@ declare namespace OptionSet {
 			Site,
 			/** 4709 */
 			Site_Map,
-			/** 10696 */
+			/** 10725 */
 			Skill_Attachment_Rule,
-			/** 10702 */
+			/** 10731 */
 			Skill_finder_model,
 			/** 9750 */
 			SLA,
@@ -2007,11 +2007,11 @@ declare namespace OptionSet {
 			SLA_KPI_Instance,
 			/** 10187 */
 			Smartassist_configuration,
-			/** 10730 */
+			/** 10759 */
 			SMS_Engagement_Context,
-			/** 10731 */
+			/** 10760 */
 			SMS_Number,
-			/** 10732 */
+			/** 10761 */
 			SMS_Number_settings,
 			/** 4216 */
 			Social_Activity,
@@ -2053,7 +2053,7 @@ declare namespace OptionSet {
 			Solution_History_Data_Source,
 			/** 9890 */
 			SolutionHistoryData,
-			/** 10681 */
+			/** 10710 */
 			Sound_notification_setting,
 			/** 10010 */
 			StageSolutionUpload,
@@ -2079,13 +2079,13 @@ declare namespace OptionSet {
 			Subscription_Sync_Entry_Outlook,
 			/** 33 */
 			Subscription_Synchronization_Information,
-			/** 10248 */
-			Suggested_Activity,
-			/** 10249 */
-			Suggested_Activity_Data_Source,
-			/** 10250 */
-			Suggested_Contact,
 			/** 10251 */
+			Suggested_Activity,
+			/** 10252 */
+			Suggested_Activity_Data_Source,
+			/** 10253 */
+			Suggested_Contact,
+			/** 10254 */
 			Suggested_contacts_data_source,
 			/** 10196 */
 			Suggestion_Interaction,
@@ -2097,15 +2097,15 @@ declare namespace OptionSet {
 			Suggestions_Model_Summary,
 			/** 10199 */
 			Suggestions_Setting,
-			/** 10708 */
+			/** 10737 */
 			Survey_Answer_Option,
-			/** 10717 */
+			/** 10746 */
 			Survey_Question,
-			/** 10716 */
+			/** 10745 */
 			Survey_Question_Sequence,
-			/** 10709 */
+			/** 10738 */
 			Survey_Response,
-			/** 10710 */
+			/** 10739 */
 			Survey_Response_Value,
 			/** 1401 */
 			Sync_Attribute_Mapping,
@@ -2125,19 +2125,19 @@ declare namespace OptionSet {
 			System_User_Manager_Map,
 			/** 14 */
 			System_User_Principal,
-			/** 10379 */
+			/** 10408 */
 			System_User_Scheduler_Setting,
 			/** 42 */
 			SystemUser_BusinessUnit_Entity_Map,
 			/** 60 */
 			SystemUserAuthorizationChangeTracker,
-			/** 10663 */
+			/** 10692 */
 			Tag,
 			/** 4212 */
 			Task,
-			/** 10544 */
+			/** 10573 */
 			Tax_Code,
-			/** 10545 */
+			/** 10574 */
 			Tax_Code_Detail,
 			/** 9 */
 			Team,
@@ -2149,39 +2149,37 @@ declare namespace OptionSet {
 			Team_template,
 			/** 10094 */
 			TeamMobileOfflineProfileMembership,
-			/** 10850 */
+			/** 10229 */
 			Teams_Contact_Suggestion_by_AI,
 			/** 10228 */
 			Teams_Dialer_Admin_settings,
-			/** 10750 */
+			/** 10779 */
 			Teams_Engagement_Context,
 			/** 10136 */
 			Template_For_Properties,
 			/** 10162 */
 			Template_Parameter,
-			/** 10599 */
+			/** 10628 */
 			Template_Tag_Deprecated,
 			/** 2013 */
 			Territory,
-			/** 10849 */
-			Test,
 			/** 9945 */
 			Text_Analytics_Entity_Mapping,
 			/** 9948 */
 			Text_Analytics_Topic,
 			/** 2015 */
 			Theme,
-			/** 10471 */
+			/** 10500 */
 			Three_Dimensional_Model,
-			/** 10452 */
+			/** 10481 */
 			Time_Entry,
-			/** 10381 */
+			/** 10410 */
 			Time_Group_Detail,
-			/** 10453 */
+			/** 10482 */
 			Time_Off_Calendar,
-			/** 10546 */
+			/** 10575 */
 			Time_Off_Request,
-			/** 10467 */
+			/** 10496 */
 			Time_Source,
 			/** 9932 */
 			Time_Stamp_Date_Mapping,
@@ -2191,9 +2189,9 @@ declare namespace OptionSet {
 			Time_Zone_Localized_Name,
 			/** 4811 */
 			Time_Zone_Rule,
-			/** 10782 */
+			/** 10811 */
 			Toolbar,
-			/** 10781 */
+			/** 10810 */
 			Toolbar_Button,
 			/** 9946 */
 			Topic_History,
@@ -2211,29 +2209,29 @@ declare namespace OptionSet {
 			Trace_Association,
 			/** 8052 */
 			Trace_Regarding,
-			/** 10783 */
+			/** 10812 */
 			Trace_Source_Setting,
 			/** 35 */
 			Tracking_information_for_deleted_entities,
-			/** 10699 */
+			/** 10728 */
 			Training_data_import_configuration,
-			/** 10701 */
+			/** 10730 */
 			Training_record,
-			/** 10454 */
+			/** 10483 */
 			Transaction_Category,
-			/** 10455 */
+			/** 10484 */
 			Transaction_Category_Classification,
-			/** 10456 */
+			/** 10485 */
 			Transaction_Category_Hierarchy_Element,
-			/** 10457 */
+			/** 10486 */
 			Transaction_Category_Price,
-			/** 10458 */
+			/** 10487 */
 			Transaction_Connection,
-			/** 10382 */
+			/** 10411 */
 			Transaction_Origin,
-			/** 10459 */
+			/** 10488 */
 			Transaction_Type,
-			/** 10682 */
+			/** 10711 */
 			Transcript,
 			/** 4426 */
 			Transformation_Mapping,
@@ -2241,35 +2239,35 @@ declare namespace OptionSet {
 			Transformation_Parameter_Mapping,
 			/** 951 */
 			Translation_Process,
-			/** 10740 */
+			/** 10769 */
 			Twitter_account,
-			/** 10745 */
+			/** 10774 */
 			Twitter_Engagement_Context,
-			/** 10741 */
+			/** 10770 */
 			Twitter_handle,
-			/** 10753 */
+			/** 10782 */
 			UII_Action,
-			/** 10754 */
+			/** 10783 */
 			UII_Audit,
-			/** 10755 */
-			UII_Context,
-			/** 10757 */
-			UII_Non_Hosted_Application,
-			/** 10759 */
-			UII_Saved_Session,
-			/** 10760 */
-			UII_Session_Transfer,
-			/** 10761 */
-			UII_Workflow,
-			/** 10762 */
-			UII_Workflow_Step,
-			/** 10763 */
-			UII_Workflow_Step_Mapping,
 			/** 10784 */
+			UII_Context,
+			/** 10786 */
+			UII_Non_Hosted_Application,
+			/** 10788 */
+			UII_Saved_Session,
+			/** 10789 */
+			UII_Session_Transfer,
+			/** 10790 */
+			UII_Workflow,
+			/** 10791 */
+			UII_Workflow_Step,
+			/** 10792 */
+			UII_Workflow_Step_Mapping,
+			/** 10813 */
 			Unified_Interface_Settings,
 			/** 10120 */
 			Unified_Routing_Setup_Tracker,
-			/** 10547 */
+			/** 10576 */
 			Unique_Number,
 			/** 1055 */
 			Unit,
@@ -2277,7 +2275,7 @@ declare namespace OptionSet {
 			Unit_Group,
 			/** 2012 */
 			Unresolved_Address,
-			/** 10247 */
+			/** 10250 */
 			UntrackedAppointment,
 			/** 4220 */
 			UntrackedEmail,
@@ -2287,9 +2285,9 @@ declare namespace OptionSet {
 			Upgrade_Step,
 			/** 10118 */
 			Upgrade_Version,
-			/** 10683 */
+			/** 10712 */
 			UR_notification_template,
-			/** 10684 */
+			/** 10713 */
 			UR_Notification_Template_Mapping,
 			/** 8 */
 			User,
@@ -2309,13 +2307,13 @@ declare namespace OptionSet {
 			User_Mapping,
 			/** 52 */
 			User_Search_Facet,
-			/** 10786 */
+			/** 10815 */
 			User_Setting,
-			/** 10685 */
+			/** 10714 */
 			User_settings,
 			/** 150 */
 			User_Settings,
-			/** 10460 */
+			/** 10489 */
 			User_Work_History,
 			/** 10095 */
 			UserMobileOfflineProfileMembership,
@@ -2329,9 +2327,9 @@ declare namespace OptionSet {
 			Virtual_Entity_Metadata,
 			/** 10124 */
 			Virtual_Resource_Group_Resource,
-			/** 10259 */
+			/** 10281 */
 			Wall_View,
-			/** 10548 */
+			/** 10577 */
 			Warehouse,
 			/** 9333 */
 			Web_Resource,
@@ -2339,59 +2337,59 @@ declare namespace OptionSet {
 			Web_Wizard,
 			/** 4803 */
 			Web_Wizard_Access_Privilege,
-			/** 10742 */
+			/** 10771 */
 			WeChat_account,
-			/** 10746 */
+			/** 10775 */
 			WeChat_Engagement_Context,
-			/** 10743 */
+			/** 10772 */
 			WhatsApp_account,
-			/** 10747 */
+			/** 10776 */
 			WhatsApp_Engagement_Context,
-			/** 10744 */
+			/** 10773 */
 			WhatsApp_number,
-			/** 10787 */
+			/** 10816 */
 			Window_Navigation_Rule,
 			/** 4802 */
 			Wizard_Page,
-			/** 10827 */
+			/** 10274 */
 			Work_list_user_setting,
-			/** 10549 */
+			/** 10578 */
 			Work_Order,
-			/** 10493 */
+			/** 10522 */
 			Work_Order_Business_Process,
-			/** 10550 */
+			/** 10579 */
 			Work_Order_Characteristic_Deprecated,
-			/** 10551 */
+			/** 10580 */
 			Work_Order_Details_Generation_Queue_Deprecated,
-			/** 10552 */
+			/** 10581 */
 			Work_Order_Incident,
-			/** 10553 */
+			/** 10582 */
 			Work_Order_Product,
-			/** 10575 */
+			/** 10604 */
 			Work_Order_Resolution,
-			/** 10555 */
+			/** 10584 */
 			Work_Order_Service,
-			/** 10556 */
+			/** 10585 */
 			Work_Order_Service_Task,
-			/** 10557 */
+			/** 10586 */
 			Work_Order_Substatus,
-			/** 10558 */
+			/** 10587 */
 			Work_Order_Type,
-			/** 10825 */
+			/** 10272 */
 			Work_Queue_Record,
-			/** 10826 */
+			/** 10273 */
 			Work_Queue_Record_State,
-			/** 10636 */
+			/** 10665 */
 			Work_Stream,
-			/** 10692 */
+			/** 10721 */
 			Work_stream_capacity_profile,
-			/** 10383 */
+			/** 10412 */
 			Work_template,
 			/** 10048 */
 			Workflow_Binary,
 			/** 4702 */
 			Workflow_Wait_Subscription,
-			/** 10828 */
+			/** 10275 */
 			WQDataSource
 		}
 		enum SLAType {

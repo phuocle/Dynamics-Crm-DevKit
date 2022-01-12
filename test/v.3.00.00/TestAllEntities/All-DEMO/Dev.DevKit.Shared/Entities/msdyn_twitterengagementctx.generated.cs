@@ -74,7 +74,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_twitterengagementctx";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10745;
+		public const int EntityTypeCode = 10774;
 
 		[DebuggerNonUserCode()]
 		public msdyn_twitterengagementctx()

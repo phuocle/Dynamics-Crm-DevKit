@@ -98,7 +98,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_ocflaggedspam";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10642;
+		public const int EntityTypeCode = 10671;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocflaggedspam()

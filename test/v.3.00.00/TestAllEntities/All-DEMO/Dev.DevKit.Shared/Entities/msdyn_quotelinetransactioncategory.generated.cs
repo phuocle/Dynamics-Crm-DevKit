@@ -127,7 +127,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_quotelinetransactioncategory";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10442;
+		public const int EntityTypeCode = 10471;
 
 		[DebuggerNonUserCode()]
 		public msdyn_quotelinetransactioncategory()

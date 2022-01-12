@@ -28,7 +28,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_msdyn_journal_msdyn_timeentry";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10462;
+		public const int EntityTypeCode = 10491;
 
 		[DebuggerNonUserCode()]
 		public msdyn_msdyn_journal_msdyn_timeentry()

@@ -104,7 +104,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_bookingjournal";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10488;
+		public const int EntityTypeCode = 10517;
 
 		[DebuggerNonUserCode()]
 		public msdyn_bookingjournal()

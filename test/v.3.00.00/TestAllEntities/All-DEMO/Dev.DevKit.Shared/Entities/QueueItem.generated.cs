@@ -17,29 +17,29 @@ namespace Dev.DevKit.Shared.Entities.QueueItemOptionSets
 		/// </summary>
 		Activity = 4200,
 		/// <summary>
-		/// Agreement Booking Date = 10478
+		/// Agreement Booking Date = 10507
 		/// </summary>
-		Agreement_Booking_Date = 10478,
+		Agreement_Booking_Date = 10507,
 		/// <summary>
-		/// Agreement Booking Setup = 10483
+		/// Agreement Booking Setup = 10512
 		/// </summary>
-		Agreement_Booking_Setup = 10483,
+		Agreement_Booking_Setup = 10512,
 		/// <summary>
-		/// Agreement Invoice Date = 10484
+		/// Agreement Invoice Date = 10513
 		/// </summary>
-		Agreement_Invoice_Date = 10484,
+		Agreement_Invoice_Date = 10513,
 		/// <summary>
-		/// Agreement Invoice Setup = 10486
+		/// Agreement Invoice Setup = 10515
 		/// </summary>
-		Agreement_Invoice_Setup = 10486,
+		Agreement_Invoice_Setup = 10515,
 		/// <summary>
 		/// Appointment = 4201
 		/// </summary>
 		Appointment = 4201,
 		/// <summary>
-		/// Booking Alert = 10357
+		/// Booking Alert = 10386
 		/// </summary>
-		Booking_Alert = 10357,
+		Booking_Alert = 10386,
 		/// <summary>
 		/// Campaign Activity = 4402
 		/// </summary>
@@ -53,21 +53,21 @@ namespace Dev.DevKit.Shared.Entities.QueueItemOptionSets
 		/// </summary>
 		Case = 112,
 		/// <summary>
-		/// Conversation = 10644
+		/// Conversation = 10673
 		/// </summary>
-		Conversation = 10644,
+		Conversation = 10673,
 		/// <summary>
-		/// Customer Voice alert = 10261
+		/// Customer Voice alert = 10283
 		/// </summary>
-		Customer_Voice_alert = 10261,
+		Customer_Voice_alert = 10283,
 		/// <summary>
-		/// Customer Voice survey invite = 10271
+		/// Customer Voice survey invite = 10293
 		/// </summary>
-		Customer_Voice_survey_invite = 10271,
+		Customer_Voice_survey_invite = 10293,
 		/// <summary>
-		/// Customer Voice survey response = 10273
+		/// Customer Voice survey response = 10295
 		/// </summary>
-		Customer_Voice_survey_response = 10273,
+		Customer_Voice_survey_response = 10295,
 		/// <summary>
 		/// Email = 4202
 		/// </summary>
@@ -77,17 +77,17 @@ namespace Dev.DevKit.Shared.Entities.QueueItemOptionSets
 		/// </summary>
 		Fax = 4204,
 		/// <summary>
-		/// Fulfillment Preference = 10380
+		/// Fulfillment Preference = 10409
 		/// </summary>
-		Fulfillment_Preference = 10380,
+		Fulfillment_Preference = 10409,
 		/// <summary>
-		/// Inventory Adjustment = 10506
+		/// Inventory Adjustment = 10535
 		/// </summary>
-		Inventory_Adjustment = 10506,
+		Inventory_Adjustment = 10535,
 		/// <summary>
-		/// Inventory Transfer = 10509
+		/// Inventory Transfer = 10538
 		/// </summary>
-		Inventory_Transfer = 10509,
+		Inventory_Transfer = 10538,
 		/// <summary>
 		/// IoT Alert = 10138
 		/// </summary>
@@ -105,33 +105,33 @@ namespace Dev.DevKit.Shared.Entities.QueueItemOptionSets
 		/// </summary>
 		Letter = 4207,
 		/// <summary>
-		/// Ongoing conversation (Deprecated) = 10634
+		/// Ongoing conversation (Deprecated) = 10663
 		/// </summary>
-		Ongoing_conversation_Deprecated = 10634,
+		Ongoing_conversation_Deprecated = 10663,
 		/// <summary>
-		/// Outbound message = 10752
+		/// Outbound message = 10781
 		/// </summary>
-		Outbound_message = 10752,
+		Outbound_message = 10781,
 		/// <summary>
-		/// Overflow Action Config = 10621
+		/// Overflow Action Config = 10650
 		/// </summary>
-		Overflow_Action_Config = 10621,
+		Overflow_Action_Config = 10650,
 		/// <summary>
 		/// Phone Call = 4210
 		/// </summary>
 		Phone_Call = 4210,
 		/// <summary>
-		/// Project = 10426
+		/// Project = 10455
 		/// </summary>
-		Project = 10426,
+		Project = 10455,
 		/// <summary>
-		/// Project Service Approval = 10387
+		/// Project Service Approval = 10416
 		/// </summary>
-		Project_Service_Approval = 10387,
+		Project_Service_Approval = 10416,
 		/// <summary>
-		/// Project Task = 10431
+		/// Project Task = 10460
 		/// </summary>
-		Project_Task = 10431,
+		Project_Task = 10460,
 		/// <summary>
 		/// Quick Campaign = 4406
 		/// </summary>
@@ -141,17 +141,17 @@ namespace Dev.DevKit.Shared.Entities.QueueItemOptionSets
 		/// </summary>
 		Recurring_Appointment = 4251,
 		/// <summary>
-		/// Resource Request = 10449
+		/// Resource Request = 10478
 		/// </summary>
-		Resource_Request = 10449,
+		Resource_Request = 10478,
 		/// <summary>
 		/// Service Activity = 4214
 		/// </summary>
 		Service_Activity = 4214,
 		/// <summary>
-		/// Session = 10659
+		/// Session = 10688
 		/// </summary>
-		Session = 10659,
+		Session = 10688,
 		/// <summary>
 		/// Social Activity = 4216
 		/// </summary>
@@ -161,25 +161,25 @@ namespace Dev.DevKit.Shared.Entities.QueueItemOptionSets
 		/// </summary>
 		Task = 4212,
 		/// <summary>
-		/// Time Group Detail = 10381
+		/// Time Group Detail = 10410
 		/// </summary>
-		Time_Group_Detail = 10381,
+		Time_Group_Detail = 10410,
 		/// <summary>
-		/// Work Order = 10549
+		/// Work Order = 10578
 		/// </summary>
-		Work_Order = 10549,
+		Work_Order = 10578,
 		/// <summary>
-		/// Work Order Incident = 10552
+		/// Work Order Incident = 10581
 		/// </summary>
-		Work_Order_Incident = 10552,
+		Work_Order_Incident = 10581,
 		/// <summary>
-		/// Work Order Service = 10555
+		/// Work Order Service = 10584
 		/// </summary>
-		Work_Order_Service = 10555,
+		Work_Order_Service = 10584,
 		/// <summary>
-		/// Work Order Service Task = 10556
+		/// Work Order Service Task = 10585
 		/// </summary>
-		Work_Order_Service_Task = 10556
+		Work_Order_Service_Task = 10585
 	}
 
 	public enum StateCode

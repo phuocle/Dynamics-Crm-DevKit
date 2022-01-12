@@ -70,7 +70,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_ocrecording";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10653;
+		public const int EntityTypeCode = 10682;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocrecording()

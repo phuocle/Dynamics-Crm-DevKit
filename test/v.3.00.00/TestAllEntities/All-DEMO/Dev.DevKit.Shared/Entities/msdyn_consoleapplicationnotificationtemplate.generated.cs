@@ -114,7 +114,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_consoleapplicationnotificationtemplate";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10594;
+		public const int EntityTypeCode = 10623;
 
 		[DebuggerNonUserCode()]
 		public msdyn_consoleapplicationnotificationtemplate()

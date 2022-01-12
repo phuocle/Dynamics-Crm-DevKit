@@ -85,7 +85,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msfp_project";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10266;
+		public const int EntityTypeCode = 10288;
 
 		[DebuggerNonUserCode()]
 		public msfp_project()

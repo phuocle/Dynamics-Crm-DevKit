@@ -228,17 +228,17 @@ declare namespace OptionSet {
 		enum ObjectTypeCode {
 			/** 4200 */
 			Activity,
-			/** 10478 */
+			/** 10507 */
 			Agreement_Booking_Date,
-			/** 10483 */
+			/** 10512 */
 			Agreement_Booking_Setup,
-			/** 10484 */
+			/** 10513 */
 			Agreement_Invoice_Date,
-			/** 10486 */
+			/** 10515 */
 			Agreement_Invoice_Setup,
 			/** 4201 */
 			Appointment,
-			/** 10357 */
+			/** 10386 */
 			Booking_Alert,
 			/** 4402 */
 			Campaign_Activity,
@@ -246,23 +246,23 @@ declare namespace OptionSet {
 			Campaign_Response,
 			/** 112 */
 			Case,
-			/** 10644 */
+			/** 10673 */
 			Conversation,
-			/** 10261 */
+			/** 10283 */
 			Customer_Voice_alert,
-			/** 10271 */
+			/** 10293 */
 			Customer_Voice_survey_invite,
-			/** 10273 */
+			/** 10295 */
 			Customer_Voice_survey_response,
 			/** 4202 */
 			Email,
 			/** 4204 */
 			Fax,
-			/** 10380 */
+			/** 10409 */
 			Fulfillment_Preference,
-			/** 10506 */
+			/** 10535 */
 			Inventory_Adjustment,
-			/** 10509 */
+			/** 10538 */
 			Inventory_Transfer,
 			/** 10138 */
 			IoT_Alert,
@@ -272,43 +272,43 @@ declare namespace OptionSet {
 			Knowledge_Article_Template,
 			/** 4207 */
 			Letter,
-			/** 10634 */
+			/** 10663 */
 			Ongoing_conversation_Deprecated,
-			/** 10752 */
+			/** 10781 */
 			Outbound_message,
-			/** 10621 */
+			/** 10650 */
 			Overflow_Action_Config,
 			/** 4210 */
 			Phone_Call,
-			/** 10426 */
+			/** 10455 */
 			Project,
-			/** 10387 */
+			/** 10416 */
 			Project_Service_Approval,
-			/** 10431 */
+			/** 10460 */
 			Project_Task,
 			/** 4406 */
 			Quick_Campaign,
 			/** 4251 */
 			Recurring_Appointment,
-			/** 10449 */
+			/** 10478 */
 			Resource_Request,
 			/** 4214 */
 			Service_Activity,
-			/** 10659 */
+			/** 10688 */
 			Session,
 			/** 4216 */
 			Social_Activity,
 			/** 4212 */
 			Task,
-			/** 10381 */
+			/** 10410 */
 			Time_Group_Detail,
-			/** 10549 */
+			/** 10578 */
 			Work_Order,
-			/** 10552 */
+			/** 10581 */
 			Work_Order_Incident,
-			/** 10555 */
+			/** 10584 */
 			Work_Order_Service,
-			/** 10556 */
+			/** 10585 */
 			Work_Order_Service_Task
 		}
 		enum StateCode {

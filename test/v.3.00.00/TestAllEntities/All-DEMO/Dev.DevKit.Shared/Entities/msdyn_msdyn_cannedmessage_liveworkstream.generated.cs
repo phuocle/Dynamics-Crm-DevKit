@@ -28,7 +28,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_msdyn_cannedmessage_liveworkstream";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10687;
+		public const int EntityTypeCode = 10716;
 
 		[DebuggerNonUserCode()]
 		public msdyn_msdyn_cannedmessage_liveworkstream()

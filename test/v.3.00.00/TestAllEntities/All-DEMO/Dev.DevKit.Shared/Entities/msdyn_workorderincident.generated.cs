@@ -80,7 +80,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_workorderincident";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10552;
+		public const int EntityTypeCode = 10581;
 
 		[DebuggerNonUserCode()]
 		public msdyn_workorderincident()

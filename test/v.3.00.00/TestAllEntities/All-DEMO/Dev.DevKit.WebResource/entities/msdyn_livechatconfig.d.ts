@@ -329,6 +329,8 @@ declare namespace DevKit {
 		msdyn_postchatenabled: DevKit.WebApi.BooleanValue;
 		/** Lookup to Dynamics 365 Customer Voice survey field */
 		msdyn_PostConversationSurvey: DevKit.WebApi.LookupValue;
+		/** Enable or disable bot survey */
+		msdyn_PostConversationSurveyBotSurvey: DevKit.WebApi.BooleanValue;
 		/** To enable or disable post conversation survey */
 		msdyn_PostConversationSurveyEnable: DevKit.WebApi.BooleanValue;
 		/** Prefix text for survey link message that will be sent to the user. */

@@ -63,7 +63,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_segmentcatalogue";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10816;
+		public const int EntityTypeCode = 10262;
 
 		[DebuggerNonUserCode()]
 		public msdyn_segmentcatalogue()

@@ -90,7 +90,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_ocliveworkstreamcontextvariable";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10650;
+		public const int EntityTypeCode = 10679;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocliveworkstreamcontextvariable()

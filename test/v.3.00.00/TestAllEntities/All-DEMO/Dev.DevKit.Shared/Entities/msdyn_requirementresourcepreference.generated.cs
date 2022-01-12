@@ -88,7 +88,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_requirementresourcepreference";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10372;
+		public const int EntityTypeCode = 10401;
 
 		[DebuggerNonUserCode()]
 		public msdyn_requirementresourcepreference()

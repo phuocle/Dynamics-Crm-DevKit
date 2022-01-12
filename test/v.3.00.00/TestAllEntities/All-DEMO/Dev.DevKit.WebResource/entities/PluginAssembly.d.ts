@@ -134,6 +134,8 @@ declare namespace OptionSet {
 			Database,
 			/** 1 */
 			Disk,
+			/** 4 */
+			File_Store,
 			/** 2 */
 			Normal
 		}

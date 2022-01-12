@@ -26,7 +26,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_suggestedactivitydatasource";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10249;
+		public const int EntityTypeCode = 10252;
 
 		[DebuggerNonUserCode()]
 		public msdyn_suggestedactivitydatasource()

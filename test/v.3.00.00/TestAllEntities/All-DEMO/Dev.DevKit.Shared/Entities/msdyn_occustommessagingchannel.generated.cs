@@ -103,7 +103,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_occustommessagingchannel";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10738;
+		public const int EntityTypeCode = 10767;
 
 		[DebuggerNonUserCode()]
 		public msdyn_occustommessagingchannel()

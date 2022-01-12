@@ -83,7 +83,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyusd_toolbarstrip";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10782;
+		public const int EntityTypeCode = 10811;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_toolbarstrip()

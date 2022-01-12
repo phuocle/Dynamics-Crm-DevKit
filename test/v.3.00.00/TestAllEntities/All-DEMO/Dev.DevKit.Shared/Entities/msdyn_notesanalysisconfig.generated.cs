@@ -68,7 +68,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_notesanalysisconfig";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10252;
+		public const int EntityTypeCode = 10255;
 
 		[DebuggerNonUserCode()]
 		public msdyn_notesanalysisconfig()

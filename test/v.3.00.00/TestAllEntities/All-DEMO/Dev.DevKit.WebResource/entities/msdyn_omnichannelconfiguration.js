@@ -1,21 +1,6 @@
 ﻿//@ts-check
 ///<reference path="msdyn_omnichannelconfiguration.d.ts" />
 "use strict";
-var formConsult = (function () {
-	"use strict";
-	/** @type DevKit.FormConsult */
-	var form = null;
-	async function onLoad(executionContext) {
-		form = new DevKit.FormConsult(executionContext);
-
-	}
-	async function onSave(executionContext) {
-	}
-	return {
-		OnLoad: onLoad,
-		OnSave: onSave
-	};
-})();
 var formmsdyn_omnichannelconfiguration_Information = (function () {
 	"use strict";
 	/** @type DevKit.Formmsdyn_omnichannelconfiguration_Information */

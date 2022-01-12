@@ -281,6 +281,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_apikeyversionnumber = "msdyn_apikeyversionnumber";
 			public const string msdyn_AssignWorkItemAfterDecline = "msdyn_assignworkitemafterdecline";
 			public const string msdyn_AutoCloseAfterInactivity = "msdyn_autocloseafterinactivity";
+			public const string msdyn_blockcapacityforwrapup = "msdyn_blockcapacityforwrapup";
 			public const string msdyn_bot_queue = "msdyn_bot_queue";
 			public const string msdyn_bot_rule = "msdyn_bot_rule";
 			public const string msdyn_bot_user = "msdyn_bot_user";
@@ -345,7 +346,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_liveworkstream";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10636;
+		public const int EntityTypeCode = 10665;
 
 		[DebuggerNonUserCode()]
 		public msdyn_liveworkstream()
@@ -558,6 +559,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<int?>(Fields.msdyn_AutoCloseAfterInactivity); }
 			set { Entity.Attributes[Fields.msdyn_AutoCloseAfterInactivity] = value; }
+		}
+
+		/// <summary>
+		/// <para>Time for which the agent&apos;s capacity is blocked for wrap up state. After this amount of time the agent&apos;s capacity will be released.</para>
+		/// <para>Integer - MinValue: 0 - MaxValue: 43,200</para>
+		/// <para>Block capacity for wrap up state</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public int? msdyn_blockcapacityforwrapup
+		{
+			get { return Entity.GetAttributeValue<int?>(Fields.msdyn_blockcapacityforwrapup); }
+			set { Entity.Attributes[Fields.msdyn_blockcapacityforwrapup] = value; }
 		}
 
 		/// <summary>

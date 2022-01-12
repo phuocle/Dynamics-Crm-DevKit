@@ -70,7 +70,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_resourcerequirementdetail";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10375;
+		public const int EntityTypeCode = 10404;
 
 		[DebuggerNonUserCode()]
 		public msdyn_resourcerequirementdetail()

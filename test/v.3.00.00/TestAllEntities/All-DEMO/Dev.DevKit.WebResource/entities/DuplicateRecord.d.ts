@@ -996,8 +996,6 @@ declare namespace DevKit {
 		/** Unique identifier of the base record. */
 		baserecordid_msfp_surveyreminder: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
-		baserecordid_new_test: DevKit.WebApi.LookupValueReadonly;
-		/** Unique identifier of the base record. */
 		baserecordid_opportunity: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
 		baserecordid_organizationdatasyncsubscription: DevKit.WebApi.LookupValueReadonly;
@@ -2047,8 +2045,6 @@ declare namespace DevKit {
 		duplicaterecordid_msfp_fileresponse: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_msfp_surveyreminder: DevKit.WebApi.LookupValueReadonly;
-		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_new_test: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_opportunity: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */

@@ -96,7 +96,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_ocsessionparticipantevent";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10660;
+		public const int EntityTypeCode = 10689;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocsessionparticipantevent()

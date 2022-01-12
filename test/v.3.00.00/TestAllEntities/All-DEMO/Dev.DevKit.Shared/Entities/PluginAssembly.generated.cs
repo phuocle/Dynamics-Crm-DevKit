@@ -69,6 +69,10 @@ namespace Dev.DevKit.Shared.Entities.PluginAssemblyOptionSets
 		/// </summary>
 		Disk = 1,
 		/// <summary>
+		/// File Store = 4
+		/// </summary>
+		File_Store = 4,
+		/// <summary>
 		/// Normal = 2
 		/// </summary>
 		Normal = 2

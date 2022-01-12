@@ -28,7 +28,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_msdyn_consoleapplicationsessiontemp_tag";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10608;
+		public const int EntityTypeCode = 10637;
 
 		[DebuggerNonUserCode()]
 		public msdyn_msdyn_consoleapplicationsessiontemp_tag()

@@ -78,6 +78,7 @@ var DevKit;
 			msdyn_apikeyversionnumber: { a: 'msdyn_apikeyversionnumber' },
 			msdyn_AssignWorkItemAfterDecline: { a: 'msdyn_assignworkitemafterdecline' },
 			msdyn_AutoCloseAfterInactivity: { a: 'msdyn_autocloseafterinactivity' },
+			msdyn_blockcapacityforwrapup: { a: 'msdyn_blockcapacityforwrapup' },
 			msdyn_bot_queue: { b: 'msdyn_bot_queue', a: '_msdyn_bot_queue_value', c: 'queues', d: 'queue' },
 			msdyn_bot_rule: { a: 'msdyn_bot_rule' },
 			msdyn_bot_user: { b: 'msdyn_bot_user', a: '_msdyn_bot_user_value', c: 'systemusers', d: 'systemuser' },

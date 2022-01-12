@@ -1503,8 +1503,6 @@ declare namespace DevKit {
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msfp_unsubscribedrecipient: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
-		regardingobjectid_new_test: DevKit.WebApi.LookupValueReadonly;
-		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_opportunity: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_opportunityclose: DevKit.WebApi.LookupValueReadonly;

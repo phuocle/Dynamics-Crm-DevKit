@@ -180,7 +180,7 @@ declare namespace OptionSet {
 			AccountLeads,
 			/** 10074 */
 			Activity_File_Attachment,
-			/** 10492 */
+			/** 10521 */
 			Agreement_Business_Process,
 			/** 4201 */
 			Appointment,
@@ -194,17 +194,17 @@ declare namespace OptionSet {
 			Bookable_Resource,
 			/** 1145 */
 			Bookable_Resource_Booking,
-			/** 10564 */
+			/** 10593 */
 			Bookable_Resource_Booking_Quick_Note,
 			/** 1152 */
 			Booking_Status,
-			/** 10489 */
+			/** 10518 */
 			Booking_Timestamp,
 			/** 112 */
 			Case,
-			/** 10491 */
+			/** 10520 */
 			Case_to_Work_Order_Business_Process,
-			/** 10576 */
+			/** 10605 */
 			CFS_IoT_Alert_Process_Flow,
 			/** 123 */
 			Competitor,
@@ -236,43 +236,43 @@ declare namespace OptionSet {
 			Entitlement_Product,
 			/** 4545 */
 			Entitlement_Template_Product,
-			/** 10495 */
+			/** 10524 */
 			Field_Service_Price_List_Item,
-			/** 10496 */
+			/** 10525 */
 			Field_Service_Setting,
 			/** 10131 */
 			Functional_Location,
-			/** 10577 */
+			/** 10606 */
 			Geolocation_Settings,
 			/** 1007 */
 			Image_Descriptor,
 			/** 9931 */
 			Incident_KnowledgeBaseRecord,
-			/** 10499 */
+			/** 10528 */
 			Incident_Type,
-			/** 10501 */
+			/** 10530 */
 			Incident_Type_Product,
-			/** 10569 */
+			/** 10598 */
 			Incident_Type_Resolution,
-			/** 10502 */
+			/** 10531 */
 			Incident_Type_Service,
-			/** 10503 */
+			/** 10532 */
 			Incident_Type_Service_Task,
-			/** 10504 */
+			/** 10533 */
 			Incident_Types_Setup,
-			/** 10473 */
+			/** 10502 */
 			Inspection_Attachment,
-			/** 10476 */
+			/** 10505 */
 			Inspection_Response,
-			/** 10472 */
+			/** 10501 */
 			Inspection_Template,
-			/** 10474 */
+			/** 10503 */
 			Inspection_Template_Version,
 			/** 1090 */
 			Invoice,
 			/** 1091 */
 			Invoice_Line,
-			/** 10390 */
+			/** 10419 */
 			Invoice_Process,
 			/** 10138 */
 			IoT_Alert,
@@ -338,15 +338,15 @@ declare namespace OptionSet {
 			Price_List,
 			/** 1026 */
 			Price_List_Item,
-			/** 10366 */
+			/** 10395 */
 			Priority,
 			/** 1024 */
 			Product,
-			/** 10519 */
+			/** 10548 */
 			Product_Inventory,
 			/** 1028 */
 			Product_Relationship,
-			/** 10389 */
+			/** 10418 */
 			Project_Stages,
 			/** 1048 */
 			Property,
@@ -364,7 +364,7 @@ declare namespace OptionSet {
 			Property_Option_Set_Item,
 			/** 10135 */
 			Property_Template_Association,
-			/** 10490 */
+			/** 10519 */
 			Purchase_Order_Business_Process,
 			/** 2020 */
 			Queue,
@@ -374,17 +374,17 @@ declare namespace OptionSet {
 			Quote,
 			/** 1085 */
 			Quote_Line,
-			/** 10572 */
+			/** 10601 */
 			Resolution,
-			/** 10378 */
+			/** 10407 */
 			Scheduling_Parameter,
-			/** 10542 */
+			/** 10571 */
 			Service_Task_Type,
 			/** 9752 */
 			SLA_KPI_Instance,
 			/** 4212 */
 			Task,
-			/** 10544 */
+			/** 10573 */
 			Tax_Code,
 			/** 9 */
 			Team,
@@ -392,11 +392,11 @@ declare namespace OptionSet {
 			Template_For_Properties,
 			/** 2013 */
 			Territory,
-			/** 10452 */
+			/** 10481 */
 			Time_Entry,
-			/** 10546 */
+			/** 10575 */
 			Time_Off_Request,
-			/** 10467 */
+			/** 10496 */
 			Time_Source,
 			/** 1055 */
 			Unit,
@@ -404,25 +404,25 @@ declare namespace OptionSet {
 			Unit_Group,
 			/** 8 */
 			User,
-			/** 10548 */
+			/** 10577 */
 			Warehouse,
-			/** 10549 */
+			/** 10578 */
 			Work_Order,
-			/** 10493 */
+			/** 10522 */
 			Work_Order_Business_Process,
-			/** 10552 */
+			/** 10581 */
 			Work_Order_Incident,
-			/** 10553 */
+			/** 10582 */
 			Work_Order_Product,
-			/** 10575 */
+			/** 10604 */
 			Work_Order_Resolution,
-			/** 10555 */
+			/** 10584 */
 			Work_Order_Service,
-			/** 10556 */
+			/** 10585 */
 			Work_Order_Service_Task,
-			/** 10557 */
+			/** 10586 */
 			Work_Order_Substatus,
-			/** 10558 */
+			/** 10587 */
 			Work_Order_Type
 		}
 		enum RollupState {

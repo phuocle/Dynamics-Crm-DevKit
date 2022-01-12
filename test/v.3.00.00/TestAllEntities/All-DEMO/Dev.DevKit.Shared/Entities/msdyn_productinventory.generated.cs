@@ -73,7 +73,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_productinventory";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10519;
+		public const int EntityTypeCode = 10548;
 
 		[DebuggerNonUserCode()]
 		public msdyn_productinventory()

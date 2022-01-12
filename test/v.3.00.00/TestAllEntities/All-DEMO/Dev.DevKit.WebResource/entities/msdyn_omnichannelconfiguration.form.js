@@ -3,48 +3,6 @@
 var DevKit;
 (function (DevKit) {
 	'use strict';
-	DevKit.FormConsult = function(executionContext, defaultWebResourceName) {
-		var formContext = null;
-		if (executionContext !== undefined) {
-			if (executionContext.getFormContext === undefined) {
-				formContext = executionContext;
-			}
-			else {
-				formContext = executionContext.getFormContext();
-			}
-		}
-		var form = devKit.LoadForm(formContext);
-		var body = {
-			msdyn_enable_new_consult_exp: {}
-		};
-		devKit.LoadFields(formContext, body);
-		var tab = {
-			Consult: {
-				Section: {
-					Consult_section_1: {}
-				}
-			}
-		};
-		devKit.LoadTabs(formContext, tab);
-		body.Tab = tab;
-		form.Body = body;
-		var process = devKit.LoadProcess(formContext);
-		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
-		form.Utility = devKit.LoadUtility(defaultWebResourceName);
-		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
-		devKit.LoadOthers(formContext, form, defaultWebResourceName);
-		return form;
-	};
 	DevKit.Formmsdyn_omnichannelconfiguration_Information = function(executionContext, defaultWebResourceName) {
 		var formContext = null;
 		if (executionContext !== undefined) {

@@ -65,9 +65,9 @@ namespace Dev.DevKit.Shared.Entities.MobileOfflineProfileItemOptionSets
 		/// </summary>
 		Activity_File_Attachment = 10074,
 		/// <summary>
-		/// Agreement Business Process = 10492
+		/// Agreement Business Process = 10521
 		/// </summary>
-		Agreement_Business_Process = 10492,
+		Agreement_Business_Process = 10521,
 		/// <summary>
 		/// Appointment = 4201
 		/// </summary>
@@ -93,29 +93,29 @@ namespace Dev.DevKit.Shared.Entities.MobileOfflineProfileItemOptionSets
 		/// </summary>
 		Bookable_Resource_Booking = 1145,
 		/// <summary>
-		/// Bookable Resource Booking Quick Note = 10564
+		/// Bookable Resource Booking Quick Note = 10593
 		/// </summary>
-		Bookable_Resource_Booking_Quick_Note = 10564,
+		Bookable_Resource_Booking_Quick_Note = 10593,
 		/// <summary>
 		/// Booking Status = 1152
 		/// </summary>
 		Booking_Status = 1152,
 		/// <summary>
-		/// Booking Timestamp = 10489
+		/// Booking Timestamp = 10518
 		/// </summary>
-		Booking_Timestamp = 10489,
+		Booking_Timestamp = 10518,
 		/// <summary>
 		/// Case = 112
 		/// </summary>
 		Case = 112,
 		/// <summary>
-		/// Case to Work Order Business Process = 10491
+		/// Case to Work Order Business Process = 10520
 		/// </summary>
-		Case_to_Work_Order_Business_Process = 10491,
+		Case_to_Work_Order_Business_Process = 10520,
 		/// <summary>
-		/// CFS - IoT Alert Process Flow = 10576
+		/// CFS - IoT Alert Process Flow = 10605
 		/// </summary>
-		CFS_IoT_Alert_Process_Flow = 10576,
+		CFS_IoT_Alert_Process_Flow = 10605,
 		/// <summary>
 		/// Competitor = 123
 		/// </summary>
@@ -177,21 +177,21 @@ namespace Dev.DevKit.Shared.Entities.MobileOfflineProfileItemOptionSets
 		/// </summary>
 		Entitlement_Template_Product = 4545,
 		/// <summary>
-		/// Field Service Price List Item = 10495
+		/// Field Service Price List Item = 10524
 		/// </summary>
-		Field_Service_Price_List_Item = 10495,
+		Field_Service_Price_List_Item = 10524,
 		/// <summary>
-		/// Field Service Setting = 10496
+		/// Field Service Setting = 10525
 		/// </summary>
-		Field_Service_Setting = 10496,
+		Field_Service_Setting = 10525,
 		/// <summary>
 		/// Functional Location = 10131
 		/// </summary>
 		Functional_Location = 10131,
 		/// <summary>
-		/// Geolocation Settings = 10577
+		/// Geolocation Settings = 10606
 		/// </summary>
-		Geolocation_Settings = 10577,
+		Geolocation_Settings = 10606,
 		/// <summary>
 		/// Image Descriptor = 1007
 		/// </summary>
@@ -201,45 +201,45 @@ namespace Dev.DevKit.Shared.Entities.MobileOfflineProfileItemOptionSets
 		/// </summary>
 		Incident_KnowledgeBaseRecord = 9931,
 		/// <summary>
-		/// Incident Type = 10499
+		/// Incident Type = 10528
 		/// </summary>
-		Incident_Type = 10499,
+		Incident_Type = 10528,
 		/// <summary>
-		/// Incident Type Product = 10501
+		/// Incident Type Product = 10530
 		/// </summary>
-		Incident_Type_Product = 10501,
+		Incident_Type_Product = 10530,
 		/// <summary>
-		/// Incident Type Resolution = 10569
+		/// Incident Type Resolution = 10598
 		/// </summary>
-		Incident_Type_Resolution = 10569,
+		Incident_Type_Resolution = 10598,
 		/// <summary>
-		/// Incident Type Service = 10502
+		/// Incident Type Service = 10531
 		/// </summary>
-		Incident_Type_Service = 10502,
+		Incident_Type_Service = 10531,
 		/// <summary>
-		/// Incident Type Service Task = 10503
+		/// Incident Type Service Task = 10532
 		/// </summary>
-		Incident_Type_Service_Task = 10503,
+		Incident_Type_Service_Task = 10532,
 		/// <summary>
-		/// Incident Types Setup = 10504
+		/// Incident Types Setup = 10533
 		/// </summary>
-		Incident_Types_Setup = 10504,
+		Incident_Types_Setup = 10533,
 		/// <summary>
-		/// Inspection Attachment = 10473
+		/// Inspection Attachment = 10502
 		/// </summary>
-		Inspection_Attachment = 10473,
+		Inspection_Attachment = 10502,
 		/// <summary>
-		/// Inspection Response = 10476
+		/// Inspection Response = 10505
 		/// </summary>
-		Inspection_Response = 10476,
+		Inspection_Response = 10505,
 		/// <summary>
-		/// Inspection Template = 10472
+		/// Inspection Template = 10501
 		/// </summary>
-		Inspection_Template = 10472,
+		Inspection_Template = 10501,
 		/// <summary>
-		/// Inspection Template Version = 10474
+		/// Inspection Template Version = 10503
 		/// </summary>
-		Inspection_Template_Version = 10474,
+		Inspection_Template_Version = 10503,
 		/// <summary>
 		/// Invoice = 1090
 		/// </summary>
@@ -249,9 +249,9 @@ namespace Dev.DevKit.Shared.Entities.MobileOfflineProfileItemOptionSets
 		/// </summary>
 		Invoice_Line = 1091,
 		/// <summary>
-		/// Invoice Process = 10390
+		/// Invoice Process = 10419
 		/// </summary>
-		Invoice_Process = 10390,
+		Invoice_Process = 10419,
 		/// <summary>
 		/// IoT Alert = 10138
 		/// </summary>
@@ -381,25 +381,25 @@ namespace Dev.DevKit.Shared.Entities.MobileOfflineProfileItemOptionSets
 		/// </summary>
 		Price_List_Item = 1026,
 		/// <summary>
-		/// Priority = 10366
+		/// Priority = 10395
 		/// </summary>
-		Priority = 10366,
+		Priority = 10395,
 		/// <summary>
 		/// Product = 1024
 		/// </summary>
 		Product = 1024,
 		/// <summary>
-		/// Product Inventory = 10519
+		/// Product Inventory = 10548
 		/// </summary>
-		Product_Inventory = 10519,
+		Product_Inventory = 10548,
 		/// <summary>
 		/// Product Relationship = 1028
 		/// </summary>
 		Product_Relationship = 1028,
 		/// <summary>
-		/// Project Stages = 10389
+		/// Project Stages = 10418
 		/// </summary>
-		Project_Stages = 10389,
+		Project_Stages = 10418,
 		/// <summary>
 		/// Property = 1048
 		/// </summary>
@@ -433,9 +433,9 @@ namespace Dev.DevKit.Shared.Entities.MobileOfflineProfileItemOptionSets
 		/// </summary>
 		Property_Template_Association = 10135,
 		/// <summary>
-		/// Purchase Order Business Process = 10490
+		/// Purchase Order Business Process = 10519
 		/// </summary>
-		Purchase_Order_Business_Process = 10490,
+		Purchase_Order_Business_Process = 10519,
 		/// <summary>
 		/// Queue = 2020
 		/// </summary>
@@ -453,17 +453,17 @@ namespace Dev.DevKit.Shared.Entities.MobileOfflineProfileItemOptionSets
 		/// </summary>
 		Quote_Line = 1085,
 		/// <summary>
-		/// Resolution = 10572
+		/// Resolution = 10601
 		/// </summary>
-		Resolution = 10572,
+		Resolution = 10601,
 		/// <summary>
-		/// Scheduling Parameter = 10378
+		/// Scheduling Parameter = 10407
 		/// </summary>
-		Scheduling_Parameter = 10378,
+		Scheduling_Parameter = 10407,
 		/// <summary>
-		/// Service Task Type = 10542
+		/// Service Task Type = 10571
 		/// </summary>
-		Service_Task_Type = 10542,
+		Service_Task_Type = 10571,
 		/// <summary>
 		/// SLA KPI Instance = 9752
 		/// </summary>
@@ -473,9 +473,9 @@ namespace Dev.DevKit.Shared.Entities.MobileOfflineProfileItemOptionSets
 		/// </summary>
 		Task = 4212,
 		/// <summary>
-		/// Tax Code = 10544
+		/// Tax Code = 10573
 		/// </summary>
-		Tax_Code = 10544,
+		Tax_Code = 10573,
 		/// <summary>
 		/// Team = 9
 		/// </summary>
@@ -489,17 +489,17 @@ namespace Dev.DevKit.Shared.Entities.MobileOfflineProfileItemOptionSets
 		/// </summary>
 		Territory = 2013,
 		/// <summary>
-		/// Time Entry = 10452
+		/// Time Entry = 10481
 		/// </summary>
-		Time_Entry = 10452,
+		Time_Entry = 10481,
 		/// <summary>
-		/// Time Off Request = 10546
+		/// Time Off Request = 10575
 		/// </summary>
-		Time_Off_Request = 10546,
+		Time_Off_Request = 10575,
 		/// <summary>
-		/// Time Source = 10467
+		/// Time Source = 10496
 		/// </summary>
-		Time_Source = 10467,
+		Time_Source = 10496,
 		/// <summary>
 		/// Unit = 1055
 		/// </summary>
@@ -513,45 +513,45 @@ namespace Dev.DevKit.Shared.Entities.MobileOfflineProfileItemOptionSets
 		/// </summary>
 		User = 8,
 		/// <summary>
-		/// Warehouse = 10548
+		/// Warehouse = 10577
 		/// </summary>
-		Warehouse = 10548,
+		Warehouse = 10577,
 		/// <summary>
-		/// Work Order = 10549
+		/// Work Order = 10578
 		/// </summary>
-		Work_Order = 10549,
+		Work_Order = 10578,
 		/// <summary>
-		/// Work Order Business Process = 10493
+		/// Work Order Business Process = 10522
 		/// </summary>
-		Work_Order_Business_Process = 10493,
+		Work_Order_Business_Process = 10522,
 		/// <summary>
-		/// Work Order Incident = 10552
+		/// Work Order Incident = 10581
 		/// </summary>
-		Work_Order_Incident = 10552,
+		Work_Order_Incident = 10581,
 		/// <summary>
-		/// Work Order Product = 10553
+		/// Work Order Product = 10582
 		/// </summary>
-		Work_Order_Product = 10553,
+		Work_Order_Product = 10582,
 		/// <summary>
-		/// Work Order Resolution = 10575
+		/// Work Order Resolution = 10604
 		/// </summary>
-		Work_Order_Resolution = 10575,
+		Work_Order_Resolution = 10604,
 		/// <summary>
-		/// Work Order Service = 10555
+		/// Work Order Service = 10584
 		/// </summary>
-		Work_Order_Service = 10555,
+		Work_Order_Service = 10584,
 		/// <summary>
-		/// Work Order Service Task = 10556
+		/// Work Order Service Task = 10585
 		/// </summary>
-		Work_Order_Service_Task = 10556,
+		Work_Order_Service_Task = 10585,
 		/// <summary>
-		/// Work Order Substatus = 10557
+		/// Work Order Substatus = 10586
 		/// </summary>
-		Work_Order_Substatus = 10557,
+		Work_Order_Substatus = 10586,
 		/// <summary>
-		/// Work Order Type = 10558
+		/// Work Order Type = 10587
 		/// </summary>
-		Work_Order_Type = 10558
+		Work_Order_Type = 10587
 	}
 }
 

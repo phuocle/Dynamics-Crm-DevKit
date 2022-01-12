@@ -99,7 +99,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_bookableresourcebookingquicknote";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10564;
+		public const int EntityTypeCode = 10593;
 
 		[DebuggerNonUserCode()]
 		public msdyn_bookableresourcebookingquicknote()

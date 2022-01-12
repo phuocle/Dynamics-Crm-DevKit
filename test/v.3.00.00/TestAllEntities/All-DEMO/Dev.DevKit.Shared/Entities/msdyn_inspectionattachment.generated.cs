@@ -67,7 +67,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_inspectionattachment";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10473;
+		public const int EntityTypeCode = 10502;
 
 		[DebuggerNonUserCode()]
 		public msdyn_inspectionattachment()

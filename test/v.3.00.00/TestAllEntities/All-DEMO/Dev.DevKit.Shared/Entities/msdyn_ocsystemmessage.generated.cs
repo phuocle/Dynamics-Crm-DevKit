@@ -105,6 +105,10 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocsystemmessageOptionSets
 	public enum msdyn_systemmessageeventtype
 	{
 		/// <summary>
+		/// Agent accepted consult conversation = 192350060
+		/// </summary>
+		Agent_accepted_consult_conversation = 192350060,
+		/// <summary>
 		/// Agent assigned to conversation = 192350017
 		/// </summary>
 		Agent_assigned_to_conversation = 192350017,
@@ -117,6 +121,10 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocsystemmessageOptionSets
 		/// </summary>
 		Agent_disconnected_from_conversation = 192350013,
 		/// <summary>
+		/// Agent ended consult conversation = 192350062
+		/// </summary>
+		Agent_ended_consult_conversation = 192350062,
+		/// <summary>
 		/// Agent ended conversation = 192350014
 		/// </summary>
 		Agent_ended_conversation = 192350014,
@@ -124,6 +132,22 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocsystemmessageOptionSets
 		/// Agent joined conversation = 192350000
 		/// </summary>
 		Agent_joined_conversation = 192350000,
+		/// <summary>
+		/// Agent joined customer conversation = 192350061
+		/// </summary>
+		Agent_joined_customer_conversation = 192350061,
+		/// <summary>
+		/// Agent left consult conversation = 192350058
+		/// </summary>
+		Agent_left_consult_conversation = 192350058,
+		/// <summary>
+		/// Agent left customer conversation = 192350059
+		/// </summary>
+		Agent_left_customer_conversation = 192350059,
+		/// <summary>
+		/// Agent removed from consult conversation = 192350063
+		/// </summary>
+		Agent_removed_from_consult_conversation = 192350063,
 		/// <summary>
 		/// Agent's message couldn't be sent = 192350022
 		/// </summary>
@@ -400,7 +424,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_ocsystemmessage";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10662;
+		public const int EntityTypeCode = 10691;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocsystemmessage()

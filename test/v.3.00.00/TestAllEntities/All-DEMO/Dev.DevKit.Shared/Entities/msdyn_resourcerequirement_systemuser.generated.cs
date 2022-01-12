@@ -28,7 +28,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_resourcerequirement_systemuser";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10466;
+		public const int EntityTypeCode = 10495;
 
 		[DebuggerNonUserCode()]
 		public msdyn_resourcerequirement_systemuser()

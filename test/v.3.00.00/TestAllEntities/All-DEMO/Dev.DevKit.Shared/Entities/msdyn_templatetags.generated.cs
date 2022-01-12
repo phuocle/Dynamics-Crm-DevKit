@@ -65,7 +65,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_templatetags";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10599;
+		public const int EntityTypeCode = 10628;
 
 		[DebuggerNonUserCode()]
 		public msdyn_templatetags()

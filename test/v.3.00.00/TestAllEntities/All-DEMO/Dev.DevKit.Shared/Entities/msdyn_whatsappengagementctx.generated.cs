@@ -70,7 +70,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_whatsappengagementctx";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10747;
+		public const int EntityTypeCode = 10776;
 
 		[DebuggerNonUserCode()]
 		public msdyn_whatsappengagementctx()

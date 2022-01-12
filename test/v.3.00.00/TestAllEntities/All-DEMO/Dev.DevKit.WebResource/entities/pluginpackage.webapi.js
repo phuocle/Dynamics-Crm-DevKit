@@ -3,7 +3,7 @@
 var DevKit;
 (function (DevKit) {
 	'use strict';
-	DevKit.pluginpackageApi = function (e) {
+	DevKit.PluginPackageApi = function (e) {
 		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
 		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
@@ -68,22 +68,22 @@ var DevKit;
 		var pluginpackage = {
 			ComponentIdUnique: { a: 'componentidunique', r: true },
 			ComponentState: { a: 'componentstate', r: true },
-			Contents: { a: 'contents', r: true },
+			Content: { a: 'content' },
 			CreatedBy: { b: 'createdby', a: '_createdby_value', c: 'systemusers', d: 'systemuser', r: true },
 			CreatedOn_UtcDateAndTime: { a: 'createdon', r: true },
 			CreatedOnBehalfBy: { b: 'createdonbehalfby', a: '_createdonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
-			EncodedContents: { a: 'encodedcontents' },
+			FileId: { a: 'fileid', r: true },
 			ImportSequenceNumber: { a: 'importsequencenumber' },
 			IsCustomizable: { a: 'iscustomizable' },
 			IsManaged: { a: 'ismanaged', r: true },
 			ModifiedBy: { b: 'modifiedby', a: '_modifiedby_value', c: 'systemusers', d: 'systemuser', r: true },
 			ModifiedOn_UtcDateAndTime: { a: 'modifiedon', r: true },
 			ModifiedOnBehalfBy: { b: 'modifiedonbehalfby', a: '_modifiedonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
-			name: { a: 'name' },
+			Name: { a: 'name' },
 			OrganizationId: { b: 'organizationid', a: '_organizationid_value', c: 'organizations', d: 'organization', r: true },
 			OverriddenCreatedOn_UtcDateOnly: { a: 'overriddencreatedon' },
 			OverwriteTime_UtcDateAndTime: { a: 'overwritetime', r: true },
-			pluginpackageId: { a: 'pluginpackageid' },
+			PluginPackageId: { a: 'pluginpackageid' },
 			SolutionId: { a: 'solutionid', r: true },
 			statecode: { a: 'statecode' },
 			statuscode: { a: 'statuscode' },
@@ -91,6 +91,7 @@ var DevKit;
 			TimeZoneRuleVersionNumber: { a: 'timezoneruleversionnumber' },
 			UniqueName: { a: 'uniquename' },
 			UTCConversionTimeZoneCode: { a: 'utcconversiontimezonecode' },
+			Version: { a: 'version' },
 			VersionNumber: { a: 'versionnumber', r: true }
 		};
 		if (e === undefined) e = {};
@@ -132,7 +133,7 @@ var DevKit;
 /** @namespace OptionSet */
 var OptionSet;
 (function (OptionSet) {
-	OptionSet.pluginpackage = {
+	OptionSet.PluginPackage = {
 		ComponentState : {
 			Deleted: 2,
 			Deleted_Unpublished: 3,

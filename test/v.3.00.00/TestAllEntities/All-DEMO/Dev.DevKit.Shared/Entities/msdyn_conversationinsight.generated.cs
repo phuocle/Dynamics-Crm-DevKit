@@ -74,7 +74,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_conversationinsight";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10719;
+		public const int EntityTypeCode = 10748;
 
 		[DebuggerNonUserCode()]
 		public msdyn_conversationinsight()

@@ -29,6 +29,10 @@ namespace Dev.DevKit.Shared.Entities.msdyn_sessioneventOptionSets
 		/// </summary>
 		AgentDisconnected = 192350010,
 		/// <summary>
+		/// AgentEndConsult = 192350032
+		/// </summary>
+		AgentEndConsult = 192350032,
+		/// <summary>
 		/// AgentEndConversation = 192350030
 		/// </summary>
 		AgentEndConversation = 192350030,
@@ -157,6 +161,10 @@ namespace Dev.DevKit.Shared.Entities.msdyn_sessioneventOptionSets
 		/// </summary>
 		AgentAccepted = 192350003,
 		/// <summary>
+		/// AgentAddedToC2Chat = 192350027
+		/// </summary>
+		AgentAddedToC2Chat = 192350027,
+		/// <summary>
 		/// AgentAssigned = 192350002
 		/// </summary>
 		AgentAssigned = 192350002,
@@ -164,6 +172,10 @@ namespace Dev.DevKit.Shared.Entities.msdyn_sessioneventOptionSets
 		/// AgentDisconnected = 192350014
 		/// </summary>
 		AgentDisconnected = 192350014,
+		/// <summary>
+		/// AgentEndConsult = 192350029
+		/// </summary>
+		AgentEndConsult = 192350029,
 		/// <summary>
 		/// AgentEndConversation = 192350026
 		/// </summary>
@@ -176,6 +188,10 @@ namespace Dev.DevKit.Shared.Entities.msdyn_sessioneventOptionSets
 		/// AgentInviteTimeout = 192350007
 		/// </summary>
 		AgentInviteTimeout = 192350007,
+		/// <summary>
+		/// AgentRemovedFromC2Chat = 192350028
+		/// </summary>
+		AgentRemovedFromC2Chat = 192350028,
 		/// <summary>
 		/// AgentTimeout = 192350015
 		/// </summary>
@@ -322,7 +338,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_sessionevent";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10678;
+		public const int EntityTypeCode = 10707;
 
 		[DebuggerNonUserCode()]
 		public msdyn_sessionevent()

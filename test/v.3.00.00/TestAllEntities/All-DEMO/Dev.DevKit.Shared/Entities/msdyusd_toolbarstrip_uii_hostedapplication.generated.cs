@@ -28,7 +28,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyusd_toolbarstrip_uii_hostedapplication";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10807;
+		public const int EntityTypeCode = 10836;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_toolbarstrip_uii_hostedapplication()

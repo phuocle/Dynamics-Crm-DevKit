@@ -147,11 +147,17 @@ var OptionSet;
 			WhatsApp: 192300000
 		},
 		msdyn_systemmessageeventtype : {
+			Agent_accepted_consult_conversation: 192350060,
 			Agent_assigned_to_conversation: 192350017,
 			Agent_couldnt_be_assigned_to_conversation: 192350018,
 			Agent_disconnected_from_conversation: 192350013,
+			Agent_ended_consult_conversation: 192350062,
 			Agent_ended_conversation: 192350014,
 			Agent_joined_conversation: 192350000,
+			Agent_joined_customer_conversation: 192350061,
+			Agent_left_consult_conversation: 192350058,
+			Agent_left_customer_conversation: 192350059,
+			Agent_removed_from_consult_conversation: 192350063,
 			Agents_message_couldnt_be_sent: 192350022,
 			Average_wait_time_for_customers_Hours: 192350031,
 			Average_wait_time_for_customers_Hours_and_minutes: 192350032,

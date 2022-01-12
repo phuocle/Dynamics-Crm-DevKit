@@ -1562,8 +1562,6 @@ declare namespace DevKit {
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_NewProcess_syncerror: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
-		regardingobjectid_new_test: DevKit.WebApi.LookupValue;
-		/** Choose the record that the sync error relates to. */
 		regardingobjectid_offlinecommanddefinition_syncerror: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_opportunity_syncerror: DevKit.WebApi.LookupValue;

@@ -66,7 +66,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_paymentterm";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10517;
+		public const int EntityTypeCode = 10546;
 
 		[DebuggerNonUserCode()]
 		public msdyn_paymentterm()

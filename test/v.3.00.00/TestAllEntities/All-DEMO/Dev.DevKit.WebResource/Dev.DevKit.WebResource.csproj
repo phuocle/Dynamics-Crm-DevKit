@@ -244,6 +244,7 @@
     <Content Include="entities\CampaignItem.webapi.js" />
     <Content Include="entities\CampaignResponse.form.js" />
     <Content Include="entities\CampaignResponse.js" />
+    <Content Include="entities\CampaignResponse.webapi.js" />
     <Content Include="entities\CanvasApp.js" />
     <Content Include="entities\CanvasApp.webapi.js" />
     <Content Include="entities\CanvasAppExtendedMetadata.form.js" />
@@ -2664,9 +2665,6 @@
     <Content Include="entities\NewProcess.form.js" />
     <Content Include="entities\NewProcess.js" />
     <Content Include="entities\NewProcess.webapi.js" />
-    <Content Include="entities\new_Test.form.js" />
-    <Content Include="entities\new_Test.js" />
-    <Content Include="entities\new_Test.webapi.js" />
     <Content Include="entities\Notification.js" />
     <Content Include="entities\Notification.webapi.js" />
     <Content Include="entities\OfficeDocument.js" />
@@ -4238,7 +4236,6 @@
     <TypeScriptCompile Include="entities\MultiSelectAttributeOptionValues.d.ts" />
     <TypeScriptCompile Include="entities\NavigationSetting.d.ts" />
     <TypeScriptCompile Include="entities\NewProcess.d.ts" />
-    <TypeScriptCompile Include="entities\new_Test.d.ts" />
     <TypeScriptCompile Include="entities\Notification.d.ts" />
     <TypeScriptCompile Include="entities\OfficeDocument.d.ts" />
     <TypeScriptCompile Include="entities\OfficeGraphDocument.d.ts" />

@@ -28,7 +28,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyusd_answer_agentscriptaction";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10788;
+		public const int EntityTypeCode = 10817;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_answer_agentscriptaction()

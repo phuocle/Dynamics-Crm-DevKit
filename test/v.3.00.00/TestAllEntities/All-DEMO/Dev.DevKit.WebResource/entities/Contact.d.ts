@@ -1439,14 +1439,6 @@ declare namespace DevKit {
 		msdyusd_CurrentProfile: DevKit.WebApi.StringValue;
 		msdyusd_Facebook: DevKit.WebApi.StringValue;
 		msdyusd_Twitter: DevKit.WebApi.StringValue;
-		new_NewImage: DevKit.WebApi.StringValue;
-		new_NewImage_Timestamp: DevKit.WebApi.BigIntValueReadonly;
-		new_NewImage_URL: DevKit.WebApi.StringValueReadonly;
-		new_NewImageId: DevKit.WebApi.GuidValueReadonly;
-		new_NewOtherImage: DevKit.WebApi.StringValue;
-		new_NewOtherImage_Timestamp: DevKit.WebApi.BigIntValueReadonly;
-		new_NewOtherImage_URL: DevKit.WebApi.StringValueReadonly;
-		new_NewOtherImageId: DevKit.WebApi.GuidValueReadonly;
 		/** Type the contact's nickname. */
 		NickName: DevKit.WebApi.StringValue;
 		/** Type the number of children the contact has for reference in follow-up phone calls and other communications. */

@@ -163,6 +163,7 @@ var OptionSet;
 			AzureWebApp: 3,
 			Database: 0,
 			Disk: 1,
+			File_Store: 4,
 			Normal: 2
 		},
 		RollupState : {

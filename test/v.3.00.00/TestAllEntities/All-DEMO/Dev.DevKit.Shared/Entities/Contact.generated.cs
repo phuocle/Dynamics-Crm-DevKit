@@ -520,8 +520,6 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyusd_CurrentProfile = "msdyusd_currentprofile";
 			public const string msdyusd_Facebook = "msdyusd_facebook";
 			public const string msdyusd_Twitter = "msdyusd_twitter";
-			public const string new_NewImageId = "new_newimageid";
-			public const string new_NewOtherImageId = "new_newotherimageid";
 			public const string NickName = "nickname";
 			public const string NumberOfChildren = "numberofchildren";
 			public const string OnHoldTime = "onholdtime";
@@ -2746,26 +2744,6 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>ReadOnly - Uniqueidentifier</para>
-		/// <para></para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public Guid? new_NewImageId
-		{
-			get { return Entity.GetAttributeValue<Guid?>(Fields.new_NewImageId); }
-		}
-
-		/// <summary>
-		/// <para>ReadOnly - Uniqueidentifier</para>
-		/// <para></para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public Guid? new_NewOtherImageId
-		{
-			get { return Entity.GetAttributeValue<Guid?>(Fields.new_NewOtherImageId); }
-		}
-
-		/// <summary>
 		/// <para>Type the contact&apos;s nickname.</para>
 		/// <para>String - MaxLength: 100</para>
 		/// <para>Nickname</para>
@@ -3425,44 +3403,6 @@ namespace Dev.DevKit.Shared.Entities
 		public string EntityImageUrl
 		{
 			get { return Entity.GetAttributeValue<string>("entityimage_url"); }
-		}
-
-		/// <summary>
-		/// <para>byte[]</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public byte[] new_NewImage
-		{
-			get { return Entity.GetAttributeValue<byte[]>("new_newimage"); }
-			set { Entity.Attributes["new_newimage"] = value; }
-		}
-
-		/// <summary>
-		/// <para>ReadOnly - String</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string new_NewImageUrl
-		{
-			get { return Entity.GetAttributeValue<string>("new_newimage_url"); }
-		}
-
-		/// <summary>
-		/// <para>byte[]</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public byte[] new_NewOtherImage
-		{
-			get { return Entity.GetAttributeValue<byte[]>("new_newotherimage"); }
-			set { Entity.Attributes["new_newotherimage"] = value; }
-		}
-
-		/// <summary>
-		/// <para>ReadOnly - String</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string new_NewOtherImageUrl
-		{
-			get { return Entity.GetAttributeValue<string>("new_newotherimage_url"); }
 		}
 	}
 }

@@ -1558,8 +1558,6 @@ declare namespace DevKit {
 		/** Unique identifier of the source record. */
 		objectid_msfp_unsubscribedrecipient: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
-		objectid_new_test: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the source record. */
 		objectid_notification: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_opportunity: DevKit.WebApi.LookupValue;

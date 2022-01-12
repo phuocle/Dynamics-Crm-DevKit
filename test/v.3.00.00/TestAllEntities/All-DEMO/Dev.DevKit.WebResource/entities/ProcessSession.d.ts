@@ -1554,8 +1554,6 @@ declare namespace DevKit {
 		/** Unique identifier of the object with which the dialog session is associated. */
 		regardingobjectid_newprocess: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_new_test: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the object with which the dialog session is associated. */
 		regardingobjectid_opportunity: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the dialog session is associated. */
 		regardingobjectid_opportunityproduct: DevKit.WebApi.LookupValue;

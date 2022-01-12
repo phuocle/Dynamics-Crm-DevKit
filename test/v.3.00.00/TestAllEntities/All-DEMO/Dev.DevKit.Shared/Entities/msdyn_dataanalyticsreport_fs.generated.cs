@@ -92,7 +92,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_dataanalyticsreport_fs";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10584;
+		public const int EntityTypeCode = 10613;
 
 		[DebuggerNonUserCode()]
 		public msdyn_dataanalyticsreport_fs()

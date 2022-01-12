@@ -74,7 +74,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_fieldserviceslaconfiguration";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10497;
+		public const int EntityTypeCode = 10526;
 
 		[DebuggerNonUserCode()]
 		public msdyn_fieldserviceslaconfiguration()

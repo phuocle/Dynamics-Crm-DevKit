@@ -290,27 +290,27 @@ declare namespace OptionSet {
 		enum SourceChannelTypeCode {
 			/** 4201 */
 			Appointment,
-			/** 10357 */
+			/** 10386 */
 			Booking_Alert,
-			/** 10644 */
+			/** 10673 */
 			Conversation,
-			/** 10261 */
+			/** 10283 */
 			Customer_Voice_alert,
-			/** 10271 */
+			/** 10293 */
 			Customer_Voice_survey_invite,
-			/** 10273 */
+			/** 10295 */
 			Customer_Voice_survey_response,
 			/** 4202 */
 			Email,
-			/** 10752 */
+			/** 10781 */
 			Outbound_message,
 			/** 4210 */
 			Phone_Call,
-			/** 10387 */
+			/** 10416 */
 			Project_Service_Approval,
 			/** 4214 */
 			Service_Activity,
-			/** 10659 */
+			/** 10688 */
 			Session,
 			/** 4216 */
 			Social_Activity,

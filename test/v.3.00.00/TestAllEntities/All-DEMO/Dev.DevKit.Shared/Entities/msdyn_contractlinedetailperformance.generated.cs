@@ -80,7 +80,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_contractlinedetailperformance";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10469;
+		public const int EntityTypeCode = 10498;
 
 		[DebuggerNonUserCode()]
 		public msdyn_contractlinedetailperformance()

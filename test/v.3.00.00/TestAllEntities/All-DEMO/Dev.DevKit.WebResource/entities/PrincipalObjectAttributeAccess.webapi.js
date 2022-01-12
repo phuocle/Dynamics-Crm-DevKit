@@ -775,7 +775,6 @@ var DevKit;
 			objectid_msfp_surveyreminder: { b: 'objectid_msfp_surveyreminder', a: '_objectid_value', c: 'msfp_surveyreminders', d: 'msfp_surveyreminder' },
 			objectid_msfp_surveyresponse: { b: 'objectid_msfp_surveyresponse', a: '_objectid_value', c: 'msfp_surveyresponses', d: 'msfp_surveyresponse' },
 			objectid_msfp_unsubscribedrecipient: { b: 'objectid_msfp_unsubscribedrecipient', a: '_objectid_value', c: 'msfp_unsubscribedrecipients', d: 'msfp_unsubscribedrecipient' },
-			objectid_new_test: { b: 'objectid_new_test', a: '_objectid_value', c: 'new_tests', d: 'new_test' },
 			objectid_opportunity: { b: 'objectid_opportunity', a: '_objectid_value', c: 'opportunities', d: 'opportunity' },
 			objectid_opportunityclose: { b: 'objectid_opportunityclose', a: '_objectid_value', c: 'opportunitycloses', d: 'opportunityclose' },
 			objectid_opportunitycompetitors: { b: 'objectid_opportunitycompetitors', a: '_objectid_value', c: '', d: 'opportunitycompetitors' },

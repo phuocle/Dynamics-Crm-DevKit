@@ -88,7 +88,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msfp_surveyreminder";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10272;
+		public const int EntityTypeCode = 10294;
 
 		[DebuggerNonUserCode()]
 		public msfp_surveyreminder()

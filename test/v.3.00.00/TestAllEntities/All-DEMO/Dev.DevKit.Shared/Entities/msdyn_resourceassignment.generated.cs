@@ -109,7 +109,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_resourceassignment";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10445;
+		public const int EntityTypeCode = 10474;
 
 		[DebuggerNonUserCode()]
 		public msdyn_resourceassignment()

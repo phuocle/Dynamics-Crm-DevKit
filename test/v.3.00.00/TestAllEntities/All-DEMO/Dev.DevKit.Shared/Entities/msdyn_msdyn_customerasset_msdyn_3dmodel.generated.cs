@@ -28,7 +28,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_msdyn_customerasset_msdyn_3dmodel";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10559;
+		public const int EntityTypeCode = 10588;
 
 		[DebuggerNonUserCode()]
 		public msdyn_msdyn_customerasset_msdyn_3dmodel()

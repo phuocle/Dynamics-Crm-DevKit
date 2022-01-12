@@ -62,7 +62,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_octag";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10663;
+		public const int EntityTypeCode = 10692;
 
 		[DebuggerNonUserCode()]
 		public msdyn_octag()

@@ -210,7 +210,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_project";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10426;
+		public const int EntityTypeCode = 10455;
 
 		[DebuggerNonUserCode()]
 		public msdyn_project()
@@ -954,7 +954,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Shows the aggregate of estimated labor sales on the project - For PSA use only</para>
-		/// <para>Money - MinValue: 0 - MaxValue: 922,337,203,685,477</para>
+		/// <para>Money - MinValue: -922,337,203,685,477 - MaxValue: 922,337,203,685,477</para>
 		/// <para>Estimated Labor Sales</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

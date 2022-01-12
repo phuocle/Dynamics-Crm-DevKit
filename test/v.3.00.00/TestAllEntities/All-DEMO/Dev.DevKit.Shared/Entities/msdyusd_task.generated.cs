@@ -71,7 +71,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyusd_task";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10780;
+		public const int EntityTypeCode = 10809;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_task()

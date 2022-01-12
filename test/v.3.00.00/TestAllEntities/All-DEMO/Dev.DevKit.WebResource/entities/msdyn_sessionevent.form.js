@@ -53,6 +53,7 @@ var OptionSet;
 		msdyn_eventreason : {
 			Accepted: 192350019,
 			AgentDisconnected: 192350010,
+			AgentEndConsult: 192350032,
 			AgentEndConversation: 192350030,
 			AgentInviteRejected: 192350008,
 			AgentInviteTimeout: 192350009,
@@ -86,11 +87,14 @@ var OptionSet;
 		},
 		msdyn_eventtype : {
 			AgentAccepted: 192350003,
+			AgentAddedToC2Chat: 192350027,
 			AgentAssigned: 192350002,
 			AgentDisconnected: 192350014,
+			AgentEndConsult: 192350029,
 			AgentEndConversation: 192350026,
 			AgentInviteRejected: 192350004,
 			AgentInviteTimeout: 192350007,
+			AgentRemovedFromC2Chat: 192350028,
 			AgentTimeout: 192350015,
 			AssignToAgentBySupervisor: 192350023,
 			AssignToQueueBySupervisor: 192350024,

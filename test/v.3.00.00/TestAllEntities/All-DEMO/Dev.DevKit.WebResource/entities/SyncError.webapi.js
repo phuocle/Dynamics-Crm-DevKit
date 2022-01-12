@@ -803,7 +803,6 @@ var DevKit;
 			regardingobjectid_msfp_surveyresponse: { b: 'regardingobjectid_msfp_surveyresponse', a: '_regardingobjectid_value', c: 'msfp_surveyresponses', d: 'msfp_surveyresponse' },
 			regardingobjectid_msfp_unsubscribedrecipient: { b: 'regardingobjectid_msfp_unsubscribedrecipient', a: '_regardingobjectid_value', c: 'msfp_unsubscribedrecipients', d: 'msfp_unsubscribedrecipient' },
 			regardingobjectid_NewProcess_syncerror: { b: 'regardingobjectid_NewProcess_syncerror', a: '_regardingobjectid_value', c: 'newprocesses', d: 'newprocess' },
-			regardingobjectid_new_test: { b: 'regardingobjectid_new_test', a: '_regardingobjectid_value', c: 'new_tests', d: 'new_test' },
 			regardingobjectid_offlinecommanddefinition_syncerror: { b: 'regardingobjectid_offlinecommanddefinition_syncerror', a: '_regardingobjectid_value', c: 'offlinecommanddefinitions', d: 'offlinecommanddefinition' },
 			regardingobjectid_opportunity_syncerror: { b: 'regardingobjectid_opportunity_syncerror', a: '_regardingobjectid_value', c: 'opportunities', d: 'opportunity' },
 			regardingobjectid_opportunityclose_syncerror: { b: 'regardingobjectid_opportunityclose_syncerror', a: '_regardingobjectid_value', c: 'opportunitycloses', d: 'opportunityclose' },

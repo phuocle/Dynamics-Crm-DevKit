@@ -803,7 +803,6 @@ var DevKit;
 			regardingobjectid_msfp_surveyreminder: { b: 'regardingobjectid_msfp_surveyreminder', a: '_regardingobjectid_value', c: 'msfp_surveyreminders', d: 'msfp_surveyreminder', r: true },
 			regardingobjectid_msfp_surveyresponse: { b: 'regardingobjectid_msfp_surveyresponse', a: '_regardingobjectid_value', c: 'msfp_surveyresponses', d: 'msfp_surveyresponse', r: true },
 			regardingobjectid_msfp_unsubscribedrecipient: { b: 'regardingobjectid_msfp_unsubscribedrecipient', a: '_regardingobjectid_value', c: 'msfp_unsubscribedrecipients', d: 'msfp_unsubscribedrecipient', r: true },
-			regardingobjectid_new_test: { b: 'regardingobjectid_new_test', a: '_regardingobjectid_value', c: 'new_tests', d: 'new_test', r: true },
 			regardingobjectid_opportunity: { b: 'regardingobjectid_opportunity', a: '_regardingobjectid_value', c: 'opportunities', d: 'opportunity', r: true },
 			regardingobjectid_opportunityclose: { b: 'regardingobjectid_opportunityclose', a: '_regardingobjectid_value', c: 'opportunitycloses', d: 'opportunityclose', r: true },
 			regardingobjectid_opportunitycompetitors: { b: 'regardingobjectid_opportunitycompetitors', a: '_regardingobjectid_value', c: '', d: 'opportunitycompetitors', r: true },

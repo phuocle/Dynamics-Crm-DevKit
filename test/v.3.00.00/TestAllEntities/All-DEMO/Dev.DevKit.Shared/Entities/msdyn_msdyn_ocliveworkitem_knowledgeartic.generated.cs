@@ -28,7 +28,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_msdyn_ocliveworkitem_knowledgeartic";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10646;
+		public const int EntityTypeCode = 10675;
 
 		[DebuggerNonUserCode()]
 		public msdyn_msdyn_ocliveworkitem_knowledgeartic()

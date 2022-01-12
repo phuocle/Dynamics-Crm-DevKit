@@ -118,7 +118,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_contactsuggestionrule";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10851;
+		public const int EntityTypeCode = 10230;
 
 		[DebuggerNonUserCode()]
 		public msdyn_contactsuggestionrule()

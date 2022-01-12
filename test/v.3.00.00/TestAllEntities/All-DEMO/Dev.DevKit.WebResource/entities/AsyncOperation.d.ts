@@ -1620,8 +1620,6 @@ declare namespace DevKit {
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msfp_unsubscribedrecipient: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
-		regardingobjectid_new_test: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_opportunity: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_opportunityclose: DevKit.WebApi.LookupValue;

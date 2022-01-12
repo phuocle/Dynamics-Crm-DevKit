@@ -80,7 +80,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msfp_fileresponse";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10264;
+		public const int EntityTypeCode = 10286;
 
 		[DebuggerNonUserCode()]
 		public msfp_fileresponse()

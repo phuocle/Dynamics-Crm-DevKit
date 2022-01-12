@@ -66,7 +66,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_actioncardregarding";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10240;
+		public const int EntityTypeCode = 10243;
 
 		[DebuggerNonUserCode()]
 		public msdyn_actioncardregarding()

@@ -107,6 +107,7 @@ var DevKit;
 			msdyn_positioninqueue_enabled: { a: 'msdyn_positioninqueue_enabled' },
 			msdyn_postchatenabled: { a: 'msdyn_postchatenabled' },
 			msdyn_PostConversationSurvey: { b: 'msdyn_PostConversationSurvey', a: '_msdyn_postconversationsurvey_value', c: 'msfp_surveies', d: 'msfp_survey' },
+			msdyn_PostConversationSurveyBotSurvey: { a: 'msdyn_postconversationsurveybotsurvey' },
 			msdyn_PostConversationSurveyEnable: { a: 'msdyn_postconversationsurveyenable' },
 			msdyn_PostConversationSurveyMessageText: { a: 'msdyn_postconversationsurveymessagetext' },
 			msdyn_PostConversationSurveyMode: { a: 'msdyn_postconversationsurveymode' },

@@ -54,7 +54,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_workqueuerecord";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10825;
+		public const int EntityTypeCode = 10272;
 
 		[DebuggerNonUserCode()]
 		public msdyn_workqueuerecord()

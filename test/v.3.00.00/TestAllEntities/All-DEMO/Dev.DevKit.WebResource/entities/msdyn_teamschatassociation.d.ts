@@ -23,28 +23,6 @@ declare namespace DevKit {
 		/** The SidePanes of form msdyn_teamschatassociation_Information */
 		SidePanes: DevKit.SidePanes;
 	}
-	namespace Formmsdyn_teamschatassociation_Information2 {
-		interface Tabs {
-		}
-		interface Body {
-			/** For internal use only. The name of the custom entity. */
-			msdyn_teamschatassociationname: DevKit.Controls.String;
-		}
-	}
-	class Formmsdyn_teamschatassociation_Information2 extends DevKit.IForm {
-		/**
-		* DynamicsCrm.DevKit form msdyn_teamschatassociation_Information2 Main Form
-		* @param executionContext the execution context
-		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
-		*/
-		constructor(executionContext: any, defaultWebResourceName?: string);
-		/** Utility functions/methods/objects for Dynamics 365 form */
-		Utility: DevKit.Utility;
-		/** The Body section of form msdyn_teamschatassociation_Information2 */
-		Body: DevKit.Formmsdyn_teamschatassociation_Information2.Body;
-		/** The SidePanes of form msdyn_teamschatassociation_Information2 */
-		SidePanes: DevKit.SidePanes;
-	}
 	class msdyn_teamschatassociationApi {
 		/**
 		* DynamicsCrm.DevKit msdyn_teamschatassociationApi

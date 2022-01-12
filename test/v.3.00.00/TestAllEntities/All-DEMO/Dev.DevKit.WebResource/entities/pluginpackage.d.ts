@@ -1,9 +1,9 @@
 ﻿//@ts-check
 ///<reference path="devkit.d.ts" />
 declare namespace DevKit {
-	class pluginpackageApi {
+	class PluginPackageApi {
 		/**
-		* DynamicsCrm.DevKit pluginpackageApi
+		* DynamicsCrm.DevKit PluginPackageApi
 		* @param entity The entity object
 		*/
 		constructor(entity?: any);
@@ -31,14 +31,15 @@ declare namespace DevKit {
 		ComponentIdUnique: DevKit.WebApi.GuidValueReadonly;
 		/** For internal use only. */
 		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
-		Contents: DevKit.WebApi.StringValueReadonly;
+		Content: DevKit.WebApi.StringValue;
 		/** Unique identifier of the user who created the record. */
 		CreatedBy: DevKit.WebApi.LookupValueReadonly;
 		/** Date and time when the record was created. */
 		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
 		/** Unique identifier of the delegate user who created the record. */
 		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
-		EncodedContents: DevKit.WebApi.StringValue;
+		/** Lookup to FileAttachment */
+		FileId: DevKit.WebApi.StringValueReadonly;
 		/** Sequence number of the import that created this record. */
 		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
 		/** For internal use only. */
@@ -51,8 +52,8 @@ declare namespace DevKit {
 		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
 		/** Unique identifier of the delegate user who modified the record. */
 		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
-		/** The name of the custom entity. */
-		name: DevKit.WebApi.StringValue;
+		/** The name of the plugin package entity. */
+		Name: DevKit.WebApi.StringValue;
 		/** Unique identifier for the organization */
 		OrganizationId: DevKit.WebApi.LookupValueReadonly;
 		/** Date and time that the record was migrated. */
@@ -60,7 +61,7 @@ declare namespace DevKit {
 		/** For internal use only. */
 		OverwriteTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
 		/** Unique identifier for entity instances */
-		pluginpackageId: DevKit.WebApi.GuidValue;
+		PluginPackageId: DevKit.WebApi.GuidValue;
 		/** Unique identifier of the associated solution. */
 		SolutionId: DevKit.WebApi.GuidValueReadonly;
 		/** Status of the Plugin Package */
@@ -71,16 +72,18 @@ declare namespace DevKit {
 		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
 		/** For internal use only. */
 		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
-		/** Unique Name for the entity. */
+		/** Unique name for the package */
 		UniqueName: DevKit.WebApi.StringValue;
 		/** Time zone code that was in use when the record was created. */
 		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		/** Version of the package */
+		Version: DevKit.WebApi.StringValue;
 		/** Version Number */
 		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
 	}
 }
 declare namespace OptionSet {
-	namespace pluginpackage {
+	namespace PluginPackage {
 		enum ComponentState {
 			/** 2 */
 			Deleted,

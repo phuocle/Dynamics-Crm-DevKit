@@ -89,14 +89,14 @@ declare namespace DevKit {
 		msdyn_DefaultTeamsChatTitleEnabled: DevKit.WebApi.BooleanValue;
 		/** URL for embeded collaboration MSteams service */
 		msdyn_EmbedCollabServiceUrl: DevKit.WebApi.StringValue;
-		/** Indicates whether embed-collab Teams integration is enabled */
+		/** Indicates whether embed-collab teams integration is enabled */
 		msdyn_EmbedCollabTeamsIntegrationEnabled: DevKit.WebApi.BooleanValue;
 		/** MSTeams settingsv2 name */
 		msdyn_MSTeamsSettingsName: DevKit.WebApi.StringValue;
 		/** Unique identifier for entity instances */
 		msdyn_msteamssettingsv2Id: DevKit.WebApi.GuidValue;
 		msdyn_TabServiceUrl: DevKit.WebApi.StringValue;
-		/** Indicates whether Teams meeting integration is enabled */
+		/** Indicates whether teams meeting integration is enabled */
 		msdyn_TeamsMeetingIntegrationEnabled: DevKit.WebApi.BooleanValue;
 		/** Date and time that the record was migrated. */
 		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;

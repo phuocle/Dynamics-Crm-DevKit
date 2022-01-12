@@ -326,7 +326,7 @@ declare namespace OptionSet {
 		enum ActivityTypeCode {
 			/** 4201 */
 			Appointment,
-			/** 10357 */
+			/** 10386 */
 			Booking_Alert,
 			/** 4402 */
 			Campaign_Activity,
@@ -334,13 +334,13 @@ declare namespace OptionSet {
 			Campaign_Response,
 			/** 4206 */
 			Case_Resolution,
-			/** 10644 */
+			/** 10673 */
 			Conversation,
-			/** 10261 */
+			/** 10283 */
 			Customer_Voice_alert,
-			/** 10271 */
+			/** 10293 */
 			Customer_Voice_survey_invite,
-			/** 10273 */
+			/** 10295 */
 			Customer_Voice_survey_response,
 			/** 4202 */
 			Email,
@@ -352,11 +352,11 @@ declare namespace OptionSet {
 			Opportunity_Close,
 			/** 4209 */
 			Order_Close,
-			/** 10752 */
+			/** 10781 */
 			Outbound_message,
 			/** 4210 */
 			Phone_Call,
-			/** 10387 */
+			/** 10416 */
 			Project_Service_Approval,
 			/** 4406 */
 			Quick_Campaign,
@@ -366,7 +366,7 @@ declare namespace OptionSet {
 			Recurring_Appointment,
 			/** 4214 */
 			Service_Activity,
-			/** 10659 */
+			/** 10688 */
 			Session,
 			/** 4212 */
 			Task

@@ -226,16 +226,28 @@ declare namespace OptionSet {
 			WhatsApp
 		}
 		enum msdyn_systemmessageeventtype {
+			/** 192350060 */
+			Agent_accepted_consult_conversation,
 			/** 192350017 */
 			Agent_assigned_to_conversation,
 			/** 192350018 */
 			Agent_couldnt_be_assigned_to_conversation,
 			/** 192350013 */
 			Agent_disconnected_from_conversation,
+			/** 192350062 */
+			Agent_ended_consult_conversation,
 			/** 192350014 */
 			Agent_ended_conversation,
 			/** 192350000 */
 			Agent_joined_conversation,
+			/** 192350061 */
+			Agent_joined_customer_conversation,
+			/** 192350058 */
+			Agent_left_consult_conversation,
+			/** 192350059 */
+			Agent_left_customer_conversation,
+			/** 192350063 */
+			Agent_removed_from_consult_conversation,
 			/** 192350022 */
 			Agents_message_couldnt_be_sent,
 			/** 192350031 */

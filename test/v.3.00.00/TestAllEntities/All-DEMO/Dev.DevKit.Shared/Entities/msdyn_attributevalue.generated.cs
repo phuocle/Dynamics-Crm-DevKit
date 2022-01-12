@@ -84,7 +84,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_attributevalue";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10819;
+		public const int EntityTypeCode = 10265;
 
 		[DebuggerNonUserCode()]
 		public msdyn_attributevalue()
