@@ -6,65 +6,65 @@ var DevKit;
 	DevKit.SyncErrorApi = function (e) {
 		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-        function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
-            var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-            var property = {};
-            var getFormattedValue = function () {
-                if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-                    return EMPTY_STRING;
-                }
-                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-                    if (entity[logicalName + l] === entityLogicalName) {
-                        return entity[logicalName + f];
-                    }
-                    return EMPTY_STRING;
-                }
-                if (isMultiOptionSet) {
-                    return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
-                }
-                return entity[logicalName + f];
-            };
-            var getValue = function () {
-                if (entity[logicalName] === undefined || entity[logicalName] === null) {
-                    return null;
-                }
-                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-                    if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
-                        return entity[logicalName];
-                    }
-                    return null;
-                }
-                if (isMultiOptionSet) {
-                    return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
-                }
-                return entity[logicalName];
-            };
-            var setValue = function (value) {
-                if (isMultiOptionSet) value = value.join(',');
-                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-                    value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
-                    upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
-                } else {
-                    upsertEntity[logicalName] = value;
-                }
-                entity[logicalName] = value;
-            };
-            Object.defineProperty(property, 'FormattedValue', {
-                get: getFormattedValue
-            });
-            if (readOnly) {
-                Object.defineProperty(property, 'Value', {
-                    get: getValue
-                });
-            }
-            else {
-                Object.defineProperty(property, 'Value', {
-                    get: getValue,
-                    set: setValue
-                });
-            }
-            return property;
-        }
+		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
+			var property = {};
+			var getFormattedValue = function () {
+				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
+					return EMPTY_STRING;
+				}
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					if (entity[logicalName + l] === entityLogicalName) {
+						return entity[logicalName + f];
+					}
+					return EMPTY_STRING;
+				}
+				if (isMultiOptionSet) {
+					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
+				}
+				return entity[logicalName + f];
+			};
+			var getValue = function () {
+				if (entity[logicalName] === undefined || entity[logicalName] === null) {
+					return null;
+				}
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
+						return entity[logicalName];
+					}
+					return null;
+				}
+				if (isMultiOptionSet) {
+					return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
+				}
+				return entity[logicalName];
+			};
+			var setValue = function (value) {
+				if (isMultiOptionSet) value = value.join(',');
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
+				} else {
+					upsertEntity[logicalName] = value;
+				}
+				entity[logicalName] = value;
+			};
+			Object.defineProperty(property, 'FormattedValue', {
+				get: getFormattedValue
+			});
+			if (readOnly) {
+				Object.defineProperty(property, 'Value', {
+					get: getValue
+				});
+			}
+			else {
+				Object.defineProperty(property, 'Value', {
+					get: getValue,
+					set: setValue
+				});
+			}
+			return property;
+		}
 		var syncerror = {
 			Action: { a: 'action' },
 			ActionData: { a: 'actiondata' },
@@ -93,11 +93,11 @@ var DevKit;
 			regardingobjectid_activityparty_syncerror: { b: 'regardingobjectid_activityparty_syncerror', a: '_regardingobjectid_value', c: 'activityparties', d: 'activityparty' },
 			regardingobjectid_adminsettingsentity: { b: 'regardingobjectid_adminsettingsentity', a: '_regardingobjectid_value', c: 'adminsettingsentities', d: 'adminsettingsentity' },
 			regardingobjectid_annotation_syncerror: { b: 'regardingobjectid_annotation_syncerror', a: '_regardingobjectid_value', c: 'annotations', d: 'annotation' },
+			regardingobjectid_appaction: { b: 'regardingobjectid_appaction', a: '_regardingobjectid_value', c: 'appactions', d: 'appaction' },
 			regardingobjectid_appelement: { b: 'regardingobjectid_appelement', a: '_regardingobjectid_value', c: 'appelements', d: 'appelement' },
 			regardingobjectid_applicationuser: { b: 'regardingobjectid_applicationuser', a: '_regardingobjectid_value', c: 'applicationusers', d: 'applicationuser' },
 			regardingobjectid_appmodulecomponentedge: { b: 'regardingobjectid_appmodulecomponentedge', a: '_regardingobjectid_value', c: 'appmodulecomponentedges', d: 'appmodulecomponentedge' },
 			regardingobjectid_appmodulecomponentnode: { b: 'regardingobjectid_appmodulecomponentnode', a: '_regardingobjectid_value', c: 'appmodulecomponentnodes', d: 'appmodulecomponentnode' },
-			regardingobjectid_appnotification: { b: 'regardingobjectid_appnotification', a: '_regardingobjectid_value', c: 'appnotifications', d: 'appnotification' },
 			regardingobjectid_appointment_syncerror: { b: 'regardingobjectid_appointment_syncerror', a: '_regardingobjectid_value', c: 'appointments', d: 'appointment' },
 			regardingobjectid_appsetting: { b: 'regardingobjectid_appsetting', a: '_regardingobjectid_value', c: 'appsettings', d: 'appsetting' },
 			regardingobjectid_appusersetting: { b: 'regardingobjectid_appusersetting', a: '_regardingobjectid_value', c: 'appusersettings', d: 'appusersetting' },
@@ -132,6 +132,7 @@ var DevKit;
 			regardingobjectid_channelaccessprofileruleitem_syncerror: { b: 'regardingobjectid_channelaccessprofileruleitem_syncerror', a: '_regardingobjectid_value', c: 'channelaccessprofileruleitems', d: 'channelaccessprofileruleitem' },
 			regardingobjectid_characteristic_syncerror: { b: 'regardingobjectid_characteristic_syncerror', a: '_regardingobjectid_value', c: 'characteristics', d: 'characteristic' },
 			regardingobjectid_childincidentcount: { b: 'regardingobjectid_childincidentcount', a: '_regardingobjectid_value', c: 'childincidentcounts', d: 'childincidentcount' },
+			regardingobjectid_comment: { b: 'regardingobjectid_comment', a: '_regardingobjectid_value', c: 'comments', d: 'comment' },
 			regardingobjectid_commitment: { b: 'regardingobjectid_commitment', a: '_regardingobjectid_value', c: 'commitments', d: 'commitment' },
 			regardingobjectid_competitor_syncerror: { b: 'regardingobjectid_competitor_syncerror', a: '_regardingobjectid_value', c: 'competitors', d: 'competitor' },
 			regardingobjectid_competitoraddress_syncerror: { b: 'regardingobjectid_competitoraddress_syncerror', a: '_regardingobjectid_value', c: 'competitoraddresses', d: 'competitoraddress' },
@@ -154,6 +155,7 @@ var DevKit;
 			regardingobjectid_datalakefolderpermission: { b: 'regardingobjectid_datalakefolderpermission', a: '_regardingobjectid_value', c: 'datalakefolderpermissions', d: 'datalakefolderpermission' },
 			regardingobjectid_datalakeworkspace: { b: 'regardingobjectid_datalakeworkspace', a: '_regardingobjectid_value', c: 'datalakeworkspaces', d: 'datalakeworkspace' },
 			regardingobjectid_datalakeworkspacepermission: { b: 'regardingobjectid_datalakeworkspacepermission', a: '_regardingobjectid_value', c: 'datalakeworkspacepermissions', d: 'datalakeworkspacepermission' },
+			regardingobjectid_datasyncstate: { b: 'regardingobjectid_datasyncstate', a: '_regardingobjectid_value', c: 'datasyncstates', d: 'datasyncstate' },
 			regardingobjectid_discount_syncerror: { b: 'regardingobjectid_discount_syncerror', a: '_regardingobjectid_value', c: 'discounts', d: 'discount' },
 			regardingobjectid_discounttype_syncerror: { b: 'regardingobjectid_discounttype_syncerror', a: '_regardingobjectid_value', c: 'discounttypes', d: 'discounttype' },
 			regardingobjectid_duplicaterule_syncerror: { b: 'regardingobjectid_duplicaterule_syncerror', a: '_regardingobjectid_value', c: 'duplicaterules', d: 'duplicaterule' },
@@ -171,6 +173,7 @@ var DevKit;
 			regardingobjectid_entitlementtemplatechannel: { b: 'regardingobjectid_entitlementtemplatechannel', a: '_regardingobjectid_value', c: 'entitlementtemplatechannels', d: 'entitlementtemplatechannel' },
 			regardingobjectid_entityanalyticsconfig: { b: 'regardingobjectid_entityanalyticsconfig', a: '_regardingobjectid_value', c: 'entityanalyticsconfigs', d: 'entityanalyticsconfig' },
 			regardingobjectid_entityimageconfig: { b: 'regardingobjectid_entityimageconfig', a: '_regardingobjectid_value', c: 'entityimageconfigs', d: 'entityimageconfig' },
+			regardingobjectid_entityindex: { b: 'regardingobjectid_entityindex', a: '_regardingobjectid_value', c: 'entityindexes', d: 'entityindex' },
 			regardingobjectid_environmentvariabledefinition: { b: 'regardingobjectid_environmentvariabledefinition', a: '_regardingobjectid_value', c: 'environmentvariabledefinitions', d: 'environmentvariabledefinition' },
 			regardingobjectid_environmentvariablevalue: { b: 'regardingobjectid_environmentvariablevalue', a: '_regardingobjectid_value', c: 'environmentvariablevalues', d: 'environmentvariablevalue' },
 			regardingobjectid_equipment_syncerror: { b: 'regardingobjectid_equipment_syncerror', a: '_regardingobjectid_value', c: 'equipments', d: 'equipment' },
@@ -179,6 +182,7 @@ var DevKit;
 			regardingobjectid_externalparty_syncerror: { b: 'regardingobjectid_externalparty_syncerror', a: '_regardingobjectid_value', c: 'externalparties', d: 'externalparty' },
 			regardingobjectid_externalpartyitem_syncerror: { b: 'regardingobjectid_externalpartyitem_syncerror', a: '_regardingobjectid_value', c: 'externalpartyitems', d: 'externalpartyitem' },
 			regardingobjectid_fax_syncerror: { b: 'regardingobjectid_fax_syncerror', a: '_regardingobjectid_value', c: 'faxes', d: 'fax' },
+			regardingobjectid_featurecontrolsetting: { b: 'regardingobjectid_featurecontrolsetting', a: '_regardingobjectid_value', c: 'featurecontrolsettings', d: 'featurecontrolsetting' },
 			regardingobjectid_feedback_syncerror: { b: 'regardingobjectid_feedback_syncerror', a: '_regardingobjectid_value', c: 'feedback', d: 'feedback' },
 			regardingobjectid_fieldpermission_syncerror: { b: 'regardingobjectid_fieldpermission_syncerror', a: '_regardingobjectid_value', c: 'fieldpermissions', d: 'fieldpermission' },
 			regardingobjectid_fieldsecurityprofile_syncerror: { b: 'regardingobjectid_fieldsecurityprofile_syncerror', a: '_regardingobjectid_value', c: 'fieldsecurityprofiles', d: 'fieldsecurityprofile' },
@@ -192,6 +196,7 @@ var DevKit;
 			regardingobjectid_importmap_syncerror: { b: 'regardingobjectid_importmap_syncerror', a: '_regardingobjectid_value', c: 'importmaps', d: 'importmap' },
 			regardingobjectid_incident_syncerror: { b: 'regardingobjectid_incident_syncerror', a: '_regardingobjectid_value', c: 'incidents', d: 'incident' },
 			regardingobjectid_incidentresolution_syncerror: { b: 'regardingobjectid_incidentresolution_syncerror', a: '_regardingobjectid_value', c: 'incidentresolutions', d: 'incidentresolution' },
+			regardingobjectid_indexattributes: { b: 'regardingobjectid_indexattributes', a: '_regardingobjectid_value', c: 'indexattributes', d: 'indexattributes' },
 			regardingobjectid_internaladdress_syncerror: { b: 'regardingobjectid_internaladdress_syncerror', a: '_regardingobjectid_value', c: 'internaladdresses', d: 'internaladdress' },
 			regardingobjectid_internalcatalogassignment: { b: 'regardingobjectid_internalcatalogassignment', a: '_regardingobjectid_value', c: 'internalcatalogassignments', d: 'internalcatalogassignment' },
 			regardingobjectid_invoice_syncerror: { b: 'regardingobjectid_invoice_syncerror', a: '_regardingobjectid_value', c: 'invoices', d: 'invoice' },
@@ -245,6 +250,7 @@ var DevKit;
 			regardingobjectid_msdyn_aibfile: { b: 'regardingobjectid_msdyn_aibfile', a: '_regardingobjectid_value', c: 'msdyn_aibfiles', d: 'msdyn_aibfile' },
 			regardingobjectid_msdyn_aibfileattacheddata: { b: 'regardingobjectid_msdyn_aibfileattacheddata', a: '_regardingobjectid_value', c: 'msdyn_aibfileattacheddatas', d: 'msdyn_aibfileattacheddata' },
 			regardingobjectid_msdyn_aiconfiguration: { b: 'regardingobjectid_msdyn_aiconfiguration', a: '_regardingobjectid_value', c: 'msdyn_aiconfigurations', d: 'msdyn_aiconfiguration' },
+			regardingobjectid_msdyn_aicontactsuggestion: { b: 'regardingobjectid_msdyn_aicontactsuggestion', a: '_regardingobjectid_value', c: 'msdyn_aicontactsuggestions', d: 'msdyn_aicontactsuggestion' },
 			regardingobjectid_msdyn_aifptrainingdocument: { b: 'regardingobjectid_msdyn_aifptrainingdocument', a: '_regardingobjectid_value', c: 'msdyn_aifptrainingdocuments', d: 'msdyn_aifptrainingdocument' },
 			regardingobjectid_msdyn_aimodel: { b: 'regardingobjectid_msdyn_aimodel', a: '_regardingobjectid_value', c: 'msdyn_aimodels', d: 'msdyn_aimodel' },
 			regardingobjectid_msdyn_aiodimage: { b: 'regardingobjectid_msdyn_aiodimage', a: '_regardingobjectid_value', c: 'msdyn_aiodimages', d: 'msdyn_aiodimage' },
@@ -263,10 +269,16 @@ var DevKit;
 			regardingobjectid_msdyn_applicationextension: { b: 'regardingobjectid_msdyn_applicationextension', a: '_regardingobjectid_value', c: 'msdyn_applicationextensions', d: 'msdyn_applicationextension' },
 			regardingobjectid_msdyn_applicationtabtemplate: { b: 'regardingobjectid_msdyn_applicationtabtemplate', a: '_regardingobjectid_value', c: 'msdyn_applicationtabtemplates', d: 'msdyn_applicationtabtemplate' },
 			regardingobjectid_msdyn_approval: { b: 'regardingobjectid_msdyn_approval', a: '_regardingobjectid_value', c: 'msdyn_approvals', d: 'msdyn_approval' },
+			regardingobjectid_msdyn_approvalset: { b: 'regardingobjectid_msdyn_approvalset', a: '_regardingobjectid_value', c: 'msdyn_approvalsets', d: 'msdyn_approvalset' },
 			regardingobjectid_msdyn_assetcategorytemplateassociation: { b: 'regardingobjectid_msdyn_assetcategorytemplateassociation', a: '_regardingobjectid_value', c: 'msdyn_assetcategorytemplateassociations', d: 'msdyn_assetcategorytemplateassociation' },
+			regardingobjectid_msdyn_assetsuggestionssetting: { b: 'regardingobjectid_msdyn_assetsuggestionssetting', a: '_regardingobjectid_value', c: 'msdyn_assetsuggestionssettings', d: 'msdyn_assetsuggestionssetting' },
 			regardingobjectid_msdyn_assettemplateassociation: { b: 'regardingobjectid_msdyn_assettemplateassociation', a: '_regardingobjectid_value', c: 'msdyn_assettemplateassociations', d: 'msdyn_assettemplateassociation' },
 			regardingobjectid_msdyn_assignmentconfiguration: { b: 'regardingobjectid_msdyn_assignmentconfiguration', a: '_regardingobjectid_value', c: 'msdyn_assignmentconfigurations', d: 'msdyn_assignmentconfiguration' },
 			regardingobjectid_msdyn_assignmentconfigurationstep: { b: 'regardingobjectid_msdyn_assignmentconfigurationstep', a: '_regardingobjectid_value', c: 'msdyn_assignmentconfigurationsteps', d: 'msdyn_assignmentconfigurationstep' },
+			regardingobjectid_msdyn_assignmentmap: { b: 'regardingobjectid_msdyn_assignmentmap', a: '_regardingobjectid_value', c: 'msdyn_assignmentmaps', d: 'msdyn_assignmentmap' },
+			regardingobjectid_msdyn_assignmentrule: { b: 'regardingobjectid_msdyn_assignmentrule', a: '_regardingobjectid_value', c: 'msdyn_assignmentrules', d: 'msdyn_assignmentrule' },
+			regardingobjectid_msdyn_attribute: { b: 'regardingobjectid_msdyn_attribute', a: '_regardingobjectid_value', c: 'msdyn_attributes', d: 'msdyn_attribute' },
+			regardingobjectid_msdyn_attributevalue: { b: 'regardingobjectid_msdyn_attributevalue', a: '_regardingobjectid_value', c: 'msdyn_attributevalues', d: 'msdyn_attributevalue' },
 			regardingobjectid_msdyn_authenticationsettings: { b: 'regardingobjectid_msdyn_authenticationsettings', a: '_regardingobjectid_value', c: 'msdyn_authenticationsettingses', d: 'msdyn_authenticationsettings' },
 			regardingobjectid_msdyn_autocapturerule: { b: 'regardingobjectid_msdyn_autocapturerule', a: '_regardingobjectid_value', c: 'msdyn_autocapturerules', d: 'msdyn_autocapturerule' },
 			regardingobjectid_msdyn_autocapturesettings: { b: 'regardingobjectid_msdyn_autocapturesettings', a: '_regardingobjectid_value', c: 'msdyn_autocapturesettingses', d: 'msdyn_autocapturesettings' },
@@ -319,6 +331,8 @@ var DevKit;
 			regardingobjectid_msdyn_consoleapplicationtype: { b: 'regardingobjectid_msdyn_consoleapplicationtype', a: '_regardingobjectid_value', c: 'msdyn_consoleapplicationtypes', d: 'msdyn_consoleapplicationtype' },
 			regardingobjectid_msdyn_consoleappparameterdefinition: { b: 'regardingobjectid_msdyn_consoleappparameterdefinition', a: '_regardingobjectid_value', c: 'msdyn_consoleappparameterdefinitions', d: 'msdyn_consoleappparameterdefinition' },
 			regardingobjectid_msdyn_contactpricelist: { b: 'regardingobjectid_msdyn_contactpricelist', a: '_regardingobjectid_value', c: 'msdyn_contactpricelists', d: 'msdyn_contactpricelist' },
+			regardingobjectid_msdyn_contactsuggestionrule: { b: 'regardingobjectid_msdyn_contactsuggestionrule', a: '_regardingobjectid_value', c: 'msdyn_contactsuggestionrules', d: 'msdyn_contactsuggestionrule' },
+			regardingobjectid_msdyn_contactsuggestionruleset: { b: 'regardingobjectid_msdyn_contactsuggestionruleset', a: '_regardingobjectid_value', c: 'msdyn_contactsuggestionrulesets', d: 'msdyn_contactsuggestionruleset' },
 			regardingobjectid_msdyn_contractlinedetailperformance: { b: 'regardingobjectid_msdyn_contractlinedetailperformance', a: '_regardingobjectid_value', c: 'msdyn_contractlinedetailperformances', d: 'msdyn_contractlinedetailperformance' },
 			regardingobjectid_msdyn_contractlineinvoiceschedule: { b: 'regardingobjectid_msdyn_contractlineinvoiceschedule', a: '_regardingobjectid_value', c: 'msdyn_contractlineinvoiceschedules', d: 'msdyn_contractlineinvoiceschedule' },
 			regardingobjectid_msdyn_contractlinescheduleofvalue: { b: 'regardingobjectid_msdyn_contractlinescheduleofvalue', a: '_regardingobjectid_value', c: 'msdyn_contractlinescheduleofvalues', d: 'msdyn_contractlinescheduleofvalue' },
@@ -338,6 +352,9 @@ var DevKit;
 			regardingobjectid_msdyn_customerassetcategory: { b: 'regardingobjectid_msdyn_customerassetcategory', a: '_regardingobjectid_value', c: 'msdyn_customerassetcategories', d: 'msdyn_customerassetcategory' },
 			regardingobjectid_msdyn_dataanalyticsreport: { b: 'regardingobjectid_msdyn_dataanalyticsreport', a: '_regardingobjectid_value', c: 'msdyn_dataanalyticsreports', d: 'msdyn_dataanalyticsreport' },
 			regardingobjectid_msdyn_dataanalyticsreport_csrmanager: { b: 'regardingobjectid_msdyn_dataanalyticsreport_csrmanager', a: '_regardingobjectid_value', c: 'msdyn_dataanalyticsreport_csrmanagers', d: 'msdyn_dataanalyticsreport_csrmanager' },
+			regardingobjectid_msdyn_dataanalyticsreport_fs: { b: 'regardingobjectid_msdyn_dataanalyticsreport_fs', a: '_regardingobjectid_value', c: 'msdyn_dataanalyticsreport_fses', d: 'msdyn_dataanalyticsreport_fs' },
+			regardingobjectid_msdyn_dataanalyticsreport_fspredictrs: { b: 'regardingobjectid_msdyn_dataanalyticsreport_fspredictrs', a: '_regardingobjectid_value', c: 'msdyn_dataanalyticsreport_fspredictrses', d: 'msdyn_dataanalyticsreport_fspredictrs' },
+			regardingobjectid_msdyn_dataanalyticsreport_fspredictwhd: { b: 'regardingobjectid_msdyn_dataanalyticsreport_fspredictwhd', a: '_regardingobjectid_value', c: 'msdyn_dataanalyticsreport_fspredictwhds', d: 'msdyn_dataanalyticsreport_fspredictwhd' },
 			regardingobjectid_msdyn_dataanalyticsreport_ksinsights: { b: 'regardingobjectid_msdyn_dataanalyticsreport_ksinsights', a: '_regardingobjectid_value', c: 'msdyn_dataanalyticsreport_ksinsightses', d: 'msdyn_dataanalyticsreport_ksinsights' },
 			regardingobjectid_msdyn_dataanalyticsreport_oc: { b: 'regardingobjectid_msdyn_dataanalyticsreport_oc', a: '_regardingobjectid_value', c: 'msdyn_dataanalyticsreport_ocs', d: 'msdyn_dataanalyticsreport_oc' },
 			regardingobjectid_msdyn_dataanalyticsreport_ocvoice: { b: 'regardingobjectid_msdyn_dataanalyticsreport_ocvoice', a: '_regardingobjectid_value', c: 'msdyn_dataanalyticsreport_ocvoices', d: 'msdyn_dataanalyticsreport_ocvoice' },
@@ -345,14 +362,18 @@ var DevKit;
 			regardingobjectid_msdyn_dataexport: { b: 'regardingobjectid_msdyn_dataexport', a: '_regardingobjectid_value', c: 'msdyn_dataexports', d: 'msdyn_dataexport' },
 			regardingobjectid_msdyn_dataflow: { b: 'regardingobjectid_msdyn_dataflow', a: '_regardingobjectid_value', c: 'msdyn_dataflows', d: 'msdyn_dataflow' },
 			regardingobjectid_msdyn_datainsightsandanalyticsfeature: { b: 'regardingobjectid_msdyn_datainsightsandanalyticsfeature', a: '_regardingobjectid_value', c: 'msdyn_datainsightsandanalyticsfeatures', d: 'msdyn_datainsightsandanalyticsfeature' },
+			regardingobjectid_msdyn_dealmanageraccess: { b: 'regardingobjectid_msdyn_dealmanageraccess', a: '_regardingobjectid_value', c: 'msdyn_dealmanageraccesses', d: 'msdyn_dealmanageraccess' },
+			regardingobjectid_msdyn_dealmanagersettings: { b: 'regardingobjectid_msdyn_dealmanagersettings', a: '_regardingobjectid_value', c: 'msdyn_dealmanagersettingses', d: 'msdyn_dealmanagersettings' },
 			regardingobjectid_msdyn_decisioncontract: { b: 'regardingobjectid_msdyn_decisioncontract', a: '_regardingobjectid_value', c: 'msdyn_decisioncontracts', d: 'msdyn_decisioncontract' },
 			regardingobjectid_msdyn_decisionruleset: { b: 'regardingobjectid_msdyn_decisionruleset', a: '_regardingobjectid_value', c: 'msdyn_decisionrulesets', d: 'msdyn_decisionruleset' },
 			regardingobjectid_msdyn_delegation: { b: 'regardingobjectid_msdyn_delegation', a: '_regardingobjectid_value', c: 'msdyn_delegations', d: 'msdyn_delegation' },
 			regardingobjectid_msdyn_dimension: { b: 'regardingobjectid_msdyn_dimension', a: '_regardingobjectid_value', c: 'msdyn_dimensions', d: 'msdyn_dimension' },
 			regardingobjectid_msdyn_dimensionfieldname: { b: 'regardingobjectid_msdyn_dimensionfieldname', a: '_regardingobjectid_value', c: 'msdyn_dimensionfieldnames', d: 'msdyn_dimensionfieldname' },
+			regardingobjectid_msdyn_effortpredictionresult: { b: 'regardingobjectid_msdyn_effortpredictionresult', a: '_regardingobjectid_value', c: 'msdyn_effortpredictionresults', d: 'msdyn_effortpredictionresult' },
 			regardingobjectid_msdyn_entitlementapplication: { b: 'regardingobjectid_msdyn_entitlementapplication', a: '_regardingobjectid_value', c: 'msdyn_entitlementapplications', d: 'msdyn_entitlementapplication' },
 			regardingobjectid_msdyn_entityconfig: { b: 'regardingobjectid_msdyn_entityconfig', a: '_regardingobjectid_value', c: 'msdyn_entityconfigs', d: 'msdyn_entityconfig' },
 			regardingobjectid_msdyn_entityconfiguration: { b: 'regardingobjectid_msdyn_entityconfiguration', a: '_regardingobjectid_value', c: 'msdyn_entityconfigurations', d: 'msdyn_entityconfiguration' },
+			regardingobjectid_msdyn_entitylinkchatconfiguration: { b: 'regardingobjectid_msdyn_entitylinkchatconfiguration', a: '_regardingobjectid_value', c: 'msdyn_entitylinkchatconfigurations', d: 'msdyn_entitylinkchatconfiguration' },
 			regardingobjectid_msdyn_entityrankingrule: { b: 'regardingobjectid_msdyn_entityrankingrule', a: '_regardingobjectid_value', c: 'msdyn_entityrankingrules', d: 'msdyn_entityrankingrule' },
 			regardingobjectid_msdyn_entityroutingconfiguration: { b: 'regardingobjectid_msdyn_entityroutingconfiguration', a: '_regardingobjectid_value', c: 'msdyn_entityroutingconfigurations', d: 'msdyn_entityroutingconfiguration' },
 			regardingobjectid_msdyn_estimate: { b: 'regardingobjectid_msdyn_estimate', a: '_regardingobjectid_value', c: 'msdyn_estimates', d: 'msdyn_estimate' },
@@ -360,6 +381,7 @@ var DevKit;
 			regardingobjectid_msdyn_expense: { b: 'regardingobjectid_msdyn_expense', a: '_regardingobjectid_value', c: 'msdyn_expenses', d: 'msdyn_expense' },
 			regardingobjectid_msdyn_expensecategory: { b: 'regardingobjectid_msdyn_expensecategory', a: '_regardingobjectid_value', c: 'msdyn_expensecategories', d: 'msdyn_expensecategory' },
 			regardingobjectid_msdyn_expensereceipt: { b: 'regardingobjectid_msdyn_expensereceipt', a: '_regardingobjectid_value', c: 'msdyn_expensereceipts', d: 'msdyn_expensereceipt' },
+			regardingobjectid_msdyn_extendedusersetting: { b: 'regardingobjectid_msdyn_extendedusersetting', a: '_regardingobjectid_value', c: 'msdyn_extendedusersettings', d: 'msdyn_extendedusersetting' },
 			regardingobjectid_msdyn_facebookengagementctx: { b: 'regardingobjectid_msdyn_facebookengagementctx', a: '_regardingobjectid_value', c: 'msdyn_facebookengagementctxes', d: 'msdyn_facebookengagementctx' },
 			regardingobjectid_msdyn_fact: { b: 'regardingobjectid_msdyn_fact', a: '_regardingobjectid_value', c: 'msdyn_facts', d: 'msdyn_fact' },
 			regardingobjectid_msdyn_federatedarticle: { b: 'regardingobjectid_msdyn_federatedarticle', a: '_regardingobjectid_value', c: 'msdyn_federatedarticles', d: 'msdyn_federatedarticle' },
@@ -384,6 +406,8 @@ var DevKit;
 			regardingobjectid_msdyn_geolocationtracking: { b: 'regardingobjectid_msdyn_geolocationtracking', a: '_regardingobjectid_value', c: 'msdyn_geolocationtrackings', d: 'msdyn_geolocationtracking' },
 			regardingobjectid_msdyn_helppage: { b: 'regardingobjectid_msdyn_helppage', a: '_regardingobjectid_value', c: 'msdyn_helppages', d: 'msdyn_helppage' },
 			regardingobjectid_msdyn_icebreakersconfig: { b: 'regardingobjectid_msdyn_icebreakersconfig', a: '_regardingobjectid_value', c: 'msdyn_icebreakersconfigs', d: 'msdyn_icebreakersconfig' },
+			regardingobjectid_msdyn_iermlmodel: { b: 'regardingobjectid_msdyn_iermlmodel', a: '_regardingobjectid_value', c: 'msdyn_iermlmodels', d: 'msdyn_iermlmodel' },
+			regardingobjectid_msdyn_iermltraining: { b: 'regardingobjectid_msdyn_iermltraining', a: '_regardingobjectid_value', c: 'msdyn_iermltrainings', d: 'msdyn_iermltraining' },
 			regardingobjectid_msdyn_incidenttype: { b: 'regardingobjectid_msdyn_incidenttype', a: '_regardingobjectid_value', c: 'msdyn_incidenttypes', d: 'msdyn_incidenttype' },
 			regardingobjectid_msdyn_incidenttypecharacteristic: { b: 'regardingobjectid_msdyn_incidenttypecharacteristic', a: '_regardingobjectid_value', c: 'msdyn_incidenttypecharacteristics', d: 'msdyn_incidenttypecharacteristic' },
 			regardingobjectid_msdyn_incidenttypeproduct: { b: 'regardingobjectid_msdyn_incidenttypeproduct', a: '_regardingobjectid_value', c: 'msdyn_incidenttypeproducts', d: 'msdyn_incidenttypeproduct' },
@@ -426,7 +450,9 @@ var DevKit;
 			regardingobjectid_msdyn_journal: { b: 'regardingobjectid_msdyn_journal', a: '_regardingobjectid_value', c: 'msdyn_journals', d: 'msdyn_journal' },
 			regardingobjectid_msdyn_journalline: { b: 'regardingobjectid_msdyn_journalline', a: '_regardingobjectid_value', c: 'msdyn_journallines', d: 'msdyn_journalline' },
 			regardingobjectid_msdyn_kalanguagesetting: { b: 'regardingobjectid_msdyn_kalanguagesetting', a: '_regardingobjectid_value', c: 'msdyn_kalanguagesettings', d: 'msdyn_kalanguagesetting' },
+			regardingobjectid_msdyn_kbattachment: { b: 'regardingobjectid_msdyn_kbattachment', a: '_regardingobjectid_value', c: 'msdyn_kbattachments', d: 'msdyn_kbattachment' },
 			regardingobjectid_msdyn_kbenrichment: { b: 'regardingobjectid_msdyn_kbenrichment', a: '_regardingobjectid_value', c: 'msdyn_kbenrichments', d: 'msdyn_kbenrichment' },
+			regardingobjectid_msdyn_kbkeywordsdescsuggestionsetting: { b: 'regardingobjectid_msdyn_kbkeywordsdescsuggestionsetting', a: '_regardingobjectid_value', c: 'msdyn_kbkeywordsdescsuggestionsettings', d: 'msdyn_kbkeywordsdescsuggestionsetting' },
 			regardingobjectid_msdyn_kmfederatedsearchconfig: { b: 'regardingobjectid_msdyn_kmfederatedsearchconfig', a: '_regardingobjectid_value', c: 'msdyn_kmfederatedsearchconfigs', d: 'msdyn_kmfederatedsearchconfig' },
 			regardingobjectid_msdyn_kmpersonalizationsetting: { b: 'regardingobjectid_msdyn_kmpersonalizationsetting', a: '_regardingobjectid_value', c: 'msdyn_kmpersonalizationsettings', d: 'msdyn_kmpersonalizationsetting' },
 			regardingobjectid_msdyn_knowledgearticleimage: { b: 'regardingobjectid_msdyn_knowledgearticleimage', a: '_regardingobjectid_value', c: 'msdyn_knowledgearticleimages', d: 'msdyn_knowledgearticleimage' },
@@ -456,7 +482,9 @@ var DevKit;
 			regardingobjectid_msdyn_notesanalysisconfig: { b: 'regardingobjectid_msdyn_notesanalysisconfig', a: '_regardingobjectid_value', c: 'msdyn_notesanalysisconfigs', d: 'msdyn_notesanalysisconfig' },
 			regardingobjectid_msdyn_notificationfield: { b: 'regardingobjectid_msdyn_notificationfield', a: '_regardingobjectid_value', c: 'msdyn_notificationfields', d: 'msdyn_notificationfield' },
 			regardingobjectid_msdyn_notificationtemplate: { b: 'regardingobjectid_msdyn_notificationtemplate', a: '_regardingobjectid_value', c: 'msdyn_notificationtemplates', d: 'msdyn_notificationtemplate' },
+			regardingobjectid_msdyn_ocautoblockrule: { b: 'regardingobjectid_msdyn_ocautoblockrule', a: '_regardingobjectid_value', c: 'msdyn_ocautoblockrules', d: 'msdyn_ocautoblockrule' },
 			regardingobjectid_msdyn_ocbotchannelregistration: { b: 'regardingobjectid_msdyn_ocbotchannelregistration', a: '_regardingobjectid_value', c: 'msdyn_ocbotchannelregistrations', d: 'msdyn_ocbotchannelregistration' },
+			regardingobjectid_msdyn_occarrier: { b: 'regardingobjectid_msdyn_occarrier', a: '_regardingobjectid_value', c: 'msdyn_occarriers', d: 'msdyn_occarrier' },
 			regardingobjectid_msdyn_occhannelconfiguration: { b: 'regardingobjectid_msdyn_occhannelconfiguration', a: '_regardingobjectid_value', c: 'msdyn_occhannelconfigurations', d: 'msdyn_occhannelconfiguration' },
 			regardingobjectid_msdyn_occhannelstateconfiguration: { b: 'regardingobjectid_msdyn_occhannelstateconfiguration', a: '_regardingobjectid_value', c: 'msdyn_occhannelstateconfigurations', d: 'msdyn_occhannelstateconfiguration' },
 			regardingobjectid_msdyn_occommunicationprovidersetting: { b: 'regardingobjectid_msdyn_occommunicationprovidersetting', a: '_regardingobjectid_value', c: 'msdyn_occommunicationprovidersettings', d: 'msdyn_occommunicationprovidersetting' },
@@ -464,6 +492,7 @@ var DevKit;
 			regardingobjectid_msdyn_occustommessagingchannel: { b: 'regardingobjectid_msdyn_occustommessagingchannel', a: '_regardingobjectid_value', c: 'msdyn_occustommessagingchannels', d: 'msdyn_occustommessagingchannel' },
 			regardingobjectid_msdyn_ocfbapplication: { b: 'regardingobjectid_msdyn_ocfbapplication', a: '_regardingobjectid_value', c: 'msdyn_ocfbapplications', d: 'msdyn_ocfbapplication' },
 			regardingobjectid_msdyn_ocfbpage: { b: 'regardingobjectid_msdyn_ocfbpage', a: '_regardingobjectid_value', c: 'msdyn_ocfbpages', d: 'msdyn_ocfbpage' },
+			regardingobjectid_msdyn_ocflaggedspam: { b: 'regardingobjectid_msdyn_ocflaggedspam', a: '_regardingobjectid_value', c: 'msdyn_ocflaggedspams', d: 'msdyn_ocflaggedspam' },
 			regardingobjectid_msdyn_oclanguage: { b: 'regardingobjectid_msdyn_oclanguage', a: '_regardingobjectid_value', c: 'msdyn_oclanguages', d: 'msdyn_oclanguage' },
 			regardingobjectid_msdyn_oclinechannelconfig: { b: 'regardingobjectid_msdyn_oclinechannelconfig', a: '_regardingobjectid_value', c: 'msdyn_oclinechannelconfigs', d: 'msdyn_oclinechannelconfig' },
 			regardingobjectid_msdyn_ocliveworkitem: { b: 'regardingobjectid_msdyn_ocliveworkitem', a: '_regardingobjectid_value', c: 'msdyn_ocliveworkitems', d: 'msdyn_ocliveworkitem' },
@@ -478,6 +507,7 @@ var DevKit;
 			regardingobjectid_msdyn_ocoutboundmessage: { b: 'regardingobjectid_msdyn_ocoutboundmessage', a: '_regardingobjectid_value', c: 'msdyn_ocoutboundmessages', d: 'msdyn_ocoutboundmessage' },
 			regardingobjectid_msdyn_ocphonenumber: { b: 'regardingobjectid_msdyn_ocphonenumber', a: '_regardingobjectid_value', c: 'msdyn_ocphonenumbers', d: 'msdyn_ocphonenumber' },
 			regardingobjectid_msdyn_ocprovisioningstate: { b: 'regardingobjectid_msdyn_ocprovisioningstate', a: '_regardingobjectid_value', c: 'msdyn_ocprovisioningstates', d: 'msdyn_ocprovisioningstate' },
+			regardingobjectid_msdyn_ocrecording: { b: 'regardingobjectid_msdyn_ocrecording', a: '_regardingobjectid_value', c: 'msdyn_ocrecordings', d: 'msdyn_ocrecording' },
 			regardingobjectid_msdyn_ocrequest: { b: 'regardingobjectid_msdyn_ocrequest', a: '_regardingobjectid_value', c: 'msdyn_ocrequests', d: 'msdyn_ocrequest' },
 			regardingobjectid_msdyn_ocruleitem: { b: 'regardingobjectid_msdyn_ocruleitem', a: '_regardingobjectid_value', c: 'msdyn_ocruleitems', d: 'msdyn_ocruleitem' },
 			regardingobjectid_msdyn_ocsentimentdailytopic: { b: 'regardingobjectid_msdyn_ocsentimentdailytopic', a: '_regardingobjectid_value', c: 'msdyn_ocsentimentdailytopics', d: 'msdyn_ocsentimentdailytopic' },
@@ -485,6 +515,7 @@ var DevKit;
 			regardingobjectid_msdyn_ocsentimentdailytopictrending: { b: 'regardingobjectid_msdyn_ocsentimentdailytopictrending', a: '_regardingobjectid_value', c: 'msdyn_ocsentimentdailytopictrendings', d: 'msdyn_ocsentimentdailytopictrending' },
 			regardingobjectid_msdyn_ocsession: { b: 'regardingobjectid_msdyn_ocsession', a: '_regardingobjectid_value', c: 'msdyn_ocsessions', d: 'msdyn_ocsession' },
 			regardingobjectid_msdyn_ocsessioncharacteristic: { b: 'regardingobjectid_msdyn_ocsessioncharacteristic', a: '_regardingobjectid_value', c: 'msdyn_ocsessioncharacteristics', d: 'msdyn_ocsessioncharacteristic' },
+			regardingobjectid_msdyn_ocsessionparticipantevent: { b: 'regardingobjectid_msdyn_ocsessionparticipantevent', a: '_regardingobjectid_value', c: 'msdyn_ocsessionparticipantevents', d: 'msdyn_ocsessionparticipantevent' },
 			regardingobjectid_msdyn_ocsessionsentiment: { b: 'regardingobjectid_msdyn_ocsessionsentiment', a: '_regardingobjectid_value', c: 'msdyn_ocsessionsentiments', d: 'msdyn_ocsessionsentiment' },
 			regardingobjectid_msdyn_ocsimltraining: { b: 'regardingobjectid_msdyn_ocsimltraining', a: '_regardingobjectid_value', c: 'msdyn_ocsimltrainings', d: 'msdyn_ocsimltraining' },
 			regardingobjectid_msdyn_ocsitdimportconfig: { b: 'regardingobjectid_msdyn_ocsitdimportconfig', a: '_regardingobjectid_value', c: 'msdyn_ocsitdimportconfigs', d: 'msdyn_ocsitdimportconfig' },
@@ -521,6 +552,7 @@ var DevKit;
 			regardingobjectid_msdyn_orderlinetransactionclassification: { b: 'regardingobjectid_msdyn_orderlinetransactionclassification', a: '_regardingobjectid_value', c: 'msdyn_orderlinetransactionclassifications', d: 'msdyn_orderlinetransactionclassification' },
 			regardingobjectid_msdyn_orderpricelist: { b: 'regardingobjectid_msdyn_orderpricelist', a: '_regardingobjectid_value', c: 'msdyn_orderpricelists', d: 'msdyn_orderpricelist' },
 			regardingobjectid_msdyn_organizationalunit: { b: 'regardingobjectid_msdyn_organizationalunit', a: '_regardingobjectid_value', c: 'msdyn_organizationalunits', d: 'msdyn_organizationalunit' },
+			regardingobjectid_msdyn_overflowactionconfig: { b: 'regardingobjectid_msdyn_overflowactionconfig', a: '_regardingobjectid_value', c: 'msdyn_overflowactionconfigs', d: 'msdyn_overflowactionconfig' },
 			regardingobjectid_msdyn_paneconfiguration: { b: 'regardingobjectid_msdyn_paneconfiguration', a: '_regardingobjectid_value', c: 'msdyn_paneconfigurations', d: 'msdyn_paneconfiguration' },
 			regardingobjectid_msdyn_panetabconfiguration: { b: 'regardingobjectid_msdyn_panetabconfiguration', a: '_regardingobjectid_value', c: 'msdyn_panetabconfigurations', d: 'msdyn_panetabconfiguration' },
 			regardingobjectid_msdyn_panetoolconfiguration: { b: 'regardingobjectid_msdyn_panetoolconfiguration', a: '_regardingobjectid_value', c: 'msdyn_panetoolconfigurations', d: 'msdyn_panetoolconfiguration' },
@@ -542,6 +574,7 @@ var DevKit;
 			regardingobjectid_msdyn_postalcode: { b: 'regardingobjectid_msdyn_postalcode', a: '_regardingobjectid_value', c: 'msdyn_postalcodes', d: 'msdyn_postalcode' },
 			regardingobjectid_msdyn_postconfig: { b: 'regardingobjectid_msdyn_postconfig', a: '_regardingobjectid_value', c: 'msdyn_postconfigs', d: 'msdyn_postconfig' },
 			regardingobjectid_msdyn_postruleconfig: { b: 'regardingobjectid_msdyn_postruleconfig', a: '_regardingobjectid_value', c: 'msdyn_postruleconfigs', d: 'msdyn_postruleconfig' },
+			regardingobjectid_msdyn_predictworkhourdurationsetting: { b: 'regardingobjectid_msdyn_predictworkhourdurationsetting', a: '_regardingobjectid_value', c: 'msdyn_predictworkhourdurationsettings', d: 'msdyn_predictworkhourdurationsetting' },
 			regardingobjectid_msdyn_presence: { b: 'regardingobjectid_msdyn_presence', a: '_regardingobjectid_value', c: 'msdyn_presences', d: 'msdyn_presence' },
 			regardingobjectid_msdyn_priority: { b: 'regardingobjectid_msdyn_priority', a: '_regardingobjectid_value', c: 'msdyn_priorities', d: 'msdyn_priority' },
 			regardingobjectid_msdyn_problematicasset: { b: 'regardingobjectid_msdyn_problematicasset', a: '_regardingobjectid_value', c: 'msdyn_problematicassets', d: 'msdyn_problematicasset' },
@@ -629,13 +662,22 @@ var DevKit;
 			regardingobjectid_msdyn_rtvproduct: { b: 'regardingobjectid_msdyn_rtvproduct', a: '_regardingobjectid_value', c: 'msdyn_rtvproducts', d: 'msdyn_rtvproduct' },
 			regardingobjectid_msdyn_rtvsubstatus: { b: 'regardingobjectid_msdyn_rtvsubstatus', a: '_regardingobjectid_value', c: 'msdyn_rtvsubstatuses', d: 'msdyn_rtvsubstatus' },
 			regardingobjectid_msdyn_rulesetdependencymapping: { b: 'regardingobjectid_msdyn_rulesetdependencymapping', a: '_regardingobjectid_value', c: 'msdyn_rulesetdependencymappings', d: 'msdyn_rulesetdependencymapping' },
+			regardingobjectid_msdyn_salesaccelerationsettings: { b: 'regardingobjectid_msdyn_salesaccelerationsettings', a: '_regardingobjectid_value', c: 'msdyn_salesaccelerationsettingses', d: 'msdyn_salesaccelerationsettings' },
+			regardingobjectid_msdyn_salesassignmentsetting: { b: 'regardingobjectid_msdyn_salesassignmentsetting', a: '_regardingobjectid_value', c: 'msdyn_salesassignmentsettings', d: 'msdyn_salesassignmentsetting' },
 			regardingobjectid_msdyn_salesinsightssettings: { b: 'regardingobjectid_msdyn_salesinsightssettings', a: '_regardingobjectid_value', c: 'msdyn_salesinsightssettingses', d: 'msdyn_salesinsightssettings' },
+			regardingobjectid_msdyn_salesroutingrun: { b: 'regardingobjectid_msdyn_salesroutingrun', a: '_regardingobjectid_value', c: 'msdyn_salesroutingruns', d: 'msdyn_salesroutingrun' },
 			regardingobjectid_msdyn_scenario: { b: 'regardingobjectid_msdyn_scenario', a: '_regardingobjectid_value', c: 'msdyn_scenarios', d: 'msdyn_scenario' },
 			regardingobjectid_msdyn_scheduleboardsetting: { b: 'regardingobjectid_msdyn_scheduleboardsetting', a: '_regardingobjectid_value', c: 'msdyn_scheduleboardsettings', d: 'msdyn_scheduleboardsetting' },
 			regardingobjectid_msdyn_schedulingfeatureflag: { b: 'regardingobjectid_msdyn_schedulingfeatureflag', a: '_regardingobjectid_value', c: 'msdyn_schedulingfeatureflags', d: 'msdyn_schedulingfeatureflag' },
 			regardingobjectid_msdyn_schedulingparameter: { b: 'regardingobjectid_msdyn_schedulingparameter', a: '_regardingobjectid_value', c: 'msdyn_schedulingparameters', d: 'msdyn_schedulingparameter' },
 			regardingobjectid_msdyn_searchconfiguration: { b: 'regardingobjectid_msdyn_searchconfiguration', a: '_regardingobjectid_value', c: 'msdyn_searchconfigurations', d: 'msdyn_searchconfiguration' },
+			regardingobjectid_msdyn_segment: { b: 'regardingobjectid_msdyn_segment', a: '_regardingobjectid_value', c: 'msdyn_segments', d: 'msdyn_segment' },
+			regardingobjectid_msdyn_segmentcatalogue: { b: 'regardingobjectid_msdyn_segmentcatalogue', a: '_regardingobjectid_value', c: 'msdyn_segmentcatalogues', d: 'msdyn_segmentcatalogue' },
 			regardingobjectid_msdyn_sentimentanalysis: { b: 'regardingobjectid_msdyn_sentimentanalysis', a: '_regardingobjectid_value', c: 'msdyn_sentimentanalysises', d: 'msdyn_sentimentanalysis' },
+			regardingobjectid_msdyn_sequence: { b: 'regardingobjectid_msdyn_sequence', a: '_regardingobjectid_value', c: 'msdyn_sequences', d: 'msdyn_sequence' },
+			regardingobjectid_msdyn_sequencestat: { b: 'regardingobjectid_msdyn_sequencestat', a: '_regardingobjectid_value', c: 'msdyn_sequencestats', d: 'msdyn_sequencestat' },
+			regardingobjectid_msdyn_sequencetarget: { b: 'regardingobjectid_msdyn_sequencetarget', a: '_regardingobjectid_value', c: 'msdyn_sequencetargets', d: 'msdyn_sequencetarget' },
+			regardingobjectid_msdyn_sequencetargetstep: { b: 'regardingobjectid_msdyn_sequencetargetstep', a: '_regardingobjectid_value', c: 'msdyn_sequencetargetsteps', d: 'msdyn_sequencetargetstep' },
 			regardingobjectid_msdyn_serviceconfiguration: { b: 'regardingobjectid_msdyn_serviceconfiguration', a: '_regardingobjectid_value', c: 'msdyn_serviceconfigurations', d: 'msdyn_serviceconfiguration' },
 			regardingobjectid_msdyn_servicetasktype: { b: 'regardingobjectid_msdyn_servicetasktype', a: '_regardingobjectid_value', c: 'msdyn_servicetasktypes', d: 'msdyn_servicetasktype' },
 			regardingobjectid_msdyn_sessiondata: { b: 'regardingobjectid_msdyn_sessiondata', a: '_regardingobjectid_value', c: 'msdyn_sessiondatas', d: 'msdyn_sessiondata' },
@@ -665,6 +707,9 @@ var DevKit;
 			regardingobjectid_msdyn_systemuserschedulersetting: { b: 'regardingobjectid_msdyn_systemuserschedulersetting', a: '_regardingobjectid_value', c: 'msdyn_systemuserschedulersettings', d: 'msdyn_systemuserschedulersetting' },
 			regardingobjectid_msdyn_taxcode: { b: 'regardingobjectid_msdyn_taxcode', a: '_regardingobjectid_value', c: 'msdyn_taxcodes', d: 'msdyn_taxcode' },
 			regardingobjectid_msdyn_taxcodedetail: { b: 'regardingobjectid_msdyn_taxcodedetail', a: '_regardingobjectid_value', c: 'msdyn_taxcodedetails', d: 'msdyn_taxcodedetail' },
+			regardingobjectid_msdyn_teamschannelengagementctx: { b: 'regardingobjectid_msdyn_teamschannelengagementctx', a: '_regardingobjectid_value', c: 'msdyn_teamschannelengagementctxes', d: 'msdyn_teamschannelengagementctx' },
+			regardingobjectid_msdyn_teamschatassociation: { b: 'regardingobjectid_msdyn_teamschatassociation', a: '_regardingobjectid_value', c: 'msdyn_teamschatassociations', d: 'msdyn_teamschatassociation' },
+			regardingobjectid_msdyn_teamschatsuggestion: { b: 'regardingobjectid_msdyn_teamschatsuggestion', a: '_regardingobjectid_value', c: 'msdyn_teamschatsuggestions', d: 'msdyn_teamschatsuggestion' },
 			regardingobjectid_msdyn_teamscollaboration: { b: 'regardingobjectid_msdyn_teamscollaboration', a: '_regardingobjectid_value', c: 'msdyn_teamscollaborations', d: 'msdyn_teamscollaboration' },
 			regardingobjectid_msdyn_teamsdialeradminsettings: { b: 'regardingobjectid_msdyn_teamsdialeradminsettings', a: '_regardingobjectid_value', c: 'msdyn_teamsdialeradminsettingses', d: 'msdyn_teamsdialeradminsettings' },
 			regardingobjectid_msdyn_teamsengagementctx: { b: 'regardingobjectid_msdyn_teamsengagementctx', a: '_regardingobjectid_value', c: 'msdyn_teamsengagementctxes', d: 'msdyn_teamsengagementctx' },
@@ -717,6 +762,8 @@ var DevKit;
 			regardingobjectid_msdyn_workorderservicetask: { b: 'regardingobjectid_msdyn_workorderservicetask', a: '_regardingobjectid_value', c: 'msdyn_workorderservicetasks', d: 'msdyn_workorderservicetask' },
 			regardingobjectid_msdyn_workordersubstatus: { b: 'regardingobjectid_msdyn_workordersubstatus', a: '_regardingobjectid_value', c: 'msdyn_workordersubstatuses', d: 'msdyn_workordersubstatus' },
 			regardingobjectid_msdyn_workordertype: { b: 'regardingobjectid_msdyn_workordertype', a: '_regardingobjectid_value', c: 'msdyn_workordertypes', d: 'msdyn_workordertype' },
+			regardingobjectid_msdyn_workqueuestate: { b: 'regardingobjectid_msdyn_workqueuestate', a: '_regardingobjectid_value', c: 'msdyn_workqueuestates', d: 'msdyn_workqueuestate' },
+			regardingobjectid_msdyn_workqueueusersetting: { b: 'regardingobjectid_msdyn_workqueueusersetting', a: '_regardingobjectid_value', c: 'msdyn_workqueueusersettings', d: 'msdyn_workqueueusersetting' },
 			regardingobjectid_msdyusd_actioncallworkflow: { b: 'regardingobjectid_msdyusd_actioncallworkflow', a: '_regardingobjectid_value', c: 'msdyusd_actioncallworkflows', d: 'msdyusd_actioncallworkflow' },
 			regardingobjectid_msdyusd_agentscriptaction: { b: 'regardingobjectid_msdyusd_agentscriptaction', a: '_regardingobjectid_value', c: 'msdyusd_agentscriptactions', d: 'msdyusd_agentscriptaction' },
 			regardingobjectid_msdyusd_agentscripttaskcategory: { b: 'regardingobjectid_msdyusd_agentscripttaskcategory', a: '_regardingobjectid_value', c: 'msdyusd_agentscripttaskcategories', d: 'msdyusd_agentscripttaskcategory' },
@@ -756,6 +803,7 @@ var DevKit;
 			regardingobjectid_msfp_surveyresponse: { b: 'regardingobjectid_msfp_surveyresponse', a: '_regardingobjectid_value', c: 'msfp_surveyresponses', d: 'msfp_surveyresponse' },
 			regardingobjectid_msfp_unsubscribedrecipient: { b: 'regardingobjectid_msfp_unsubscribedrecipient', a: '_regardingobjectid_value', c: 'msfp_unsubscribedrecipients', d: 'msfp_unsubscribedrecipient' },
 			regardingobjectid_NewProcess_syncerror: { b: 'regardingobjectid_NewProcess_syncerror', a: '_regardingobjectid_value', c: 'newprocesses', d: 'newprocess' },
+			regardingobjectid_new_test: { b: 'regardingobjectid_new_test', a: '_regardingobjectid_value', c: 'new_tests', d: 'new_test' },
 			regardingobjectid_offlinecommanddefinition_syncerror: { b: 'regardingobjectid_offlinecommanddefinition_syncerror', a: '_regardingobjectid_value', c: 'offlinecommanddefinitions', d: 'offlinecommanddefinition' },
 			regardingobjectid_opportunity_syncerror: { b: 'regardingobjectid_opportunity_syncerror', a: '_regardingobjectid_value', c: 'opportunities', d: 'opportunity' },
 			regardingobjectid_opportunityclose_syncerror: { b: 'regardingobjectid_opportunityclose_syncerror', a: '_regardingobjectid_value', c: 'opportunitycloses', d: 'opportunityclose' },
@@ -770,6 +818,7 @@ var DevKit;
 			regardingobjectid_pdfsetting: { b: 'regardingobjectid_pdfsetting', a: '_regardingobjectid_value', c: 'pdfsettings', d: 'pdfsetting' },
 			regardingobjectid_phonecall_syncerror: { b: 'regardingobjectid_phonecall_syncerror', a: '_regardingobjectid_value', c: 'phonecalls', d: 'phonecall' },
 			regardingobjectid_PhoneToCaseProcess_syncerror: { b: 'regardingobjectid_PhoneToCaseProcess_syncerror', a: '_regardingobjectid_value', c: 'phonetocaseprocesses', d: 'phonetocaseprocess' },
+			regardingobjectid_pluginpackage: { b: 'regardingobjectid_pluginpackage', a: '_regardingobjectid_value', c: 'pluginpackages', d: 'pluginpackage' },
 			regardingobjectid_position_syncerror: { b: 'regardingobjectid_position_syncerror', a: '_regardingobjectid_value', c: 'positions', d: 'position' },
 			regardingobjectid_postfollow_syncerror: { b: 'regardingobjectid_postfollow_syncerror', a: '_regardingobjectid_value', c: 'postfollows', d: 'postfollow' },
 			regardingobjectid_pricelevel_syncerror: { b: 'regardingobjectid_pricelevel_syncerror', a: '_regardingobjectid_value', c: 'pricelevels', d: 'pricelevel' },
@@ -811,6 +860,7 @@ var DevKit;
 			regardingobjectid_service_syncerror: { b: 'regardingobjectid_service_syncerror', a: '_regardingobjectid_value', c: 'services', d: 'service' },
 			regardingobjectid_serviceappointment_syncerror: { b: 'regardingobjectid_serviceappointment_syncerror', a: '_regardingobjectid_value', c: 'serviceappointments', d: 'serviceappointment' },
 			regardingobjectid_serviceplan: { b: 'regardingobjectid_serviceplan', a: '_regardingobjectid_value', c: 'serviceplans', d: 'serviceplan' },
+			regardingobjectid_serviceplanmapping: { b: 'regardingobjectid_serviceplanmapping', a: '_regardingobjectid_value', c: 'serviceplanmappings', d: 'serviceplanmapping' },
 			regardingobjectid_settingdefinition: { b: 'regardingobjectid_settingdefinition', a: '_regardingobjectid_value', c: 'settingdefinitions', d: 'settingdefinition' },
 			regardingobjectid_sharepointdocumentlocation_syncerror: { b: 'regardingobjectid_sharepointdocumentlocation_syncerror', a: '_regardingobjectid_value', c: 'sharePointdocumentlocations', d: 'sharepointdocumentlocation' },
 			regardingobjectid_sharepointsite_syncerror: { b: 'regardingobjectid_sharepointsite_syncerror', a: '_regardingobjectid_value', c: 'sharepointsites', d: 'sharepointsite' },
@@ -822,6 +872,7 @@ var DevKit;
 			regardingobjectid_socialprofile_syncerror: { b: 'regardingobjectid_socialprofile_syncerror', a: '_regardingobjectid_value', c: 'socialprofiles', d: 'socialprofile' },
 			regardingobjectid_solution_syncerror: { b: 'regardingobjectid_solution_syncerror', a: '_regardingobjectid_value', c: 'solutions', d: 'solution' },
 			regardingobjectid_solutioncomponentattributeconfiguration: { b: 'regardingobjectid_solutioncomponentattributeconfiguration', a: '_regardingobjectid_value', c: 'solutioncomponentattributeconfigurations', d: 'solutioncomponentattributeconfiguration' },
+			regardingobjectid_solutioncomponentbatchconfiguration: { b: 'regardingobjectid_solutioncomponentbatchconfiguration', a: '_regardingobjectid_value', c: 'solutioncomponentbatchconfigurations', d: 'solutioncomponentbatchconfiguration' },
 			regardingobjectid_solutioncomponentconfiguration: { b: 'regardingobjectid_solutioncomponentconfiguration', a: '_regardingobjectid_value', c: 'solutioncomponentconfigurations', d: 'solutioncomponentconfiguration' },
 			regardingobjectid_solutioncomponentrelationshipconfiguration: { b: 'regardingobjectid_solutioncomponentrelationshipconfiguration', a: '_regardingobjectid_value', c: 'solutioncomponentrelationshipconfigurations', d: 'solutioncomponentrelationshipconfiguration' },
 			regardingobjectid_stagesolutionupload: { b: 'regardingobjectid_stagesolutionupload', a: '_regardingobjectid_value', c: 'stagesolutionuploads', d: 'stagesolutionupload' },
@@ -921,15 +972,14 @@ var OptionSet;
 			Active: 0,
 			Fixed: 1
 		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
-
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 	};
 })(OptionSet || (OptionSet = {}));

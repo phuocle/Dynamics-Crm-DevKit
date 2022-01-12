@@ -43,7 +43,7 @@ namespace Dev.DevKit.Shared.Entities.msfp_questionOptionSets
 		/// <summary>
 		/// Drop-down = 647390011
 		/// </summary>
-		Dropdown = 647390011,
+		Drop_down = 647390011,
 		/// <summary>
 		/// File Upload = 647390008
 		/// </summary>

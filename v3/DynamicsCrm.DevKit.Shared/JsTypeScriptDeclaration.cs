@@ -19,6 +19,7 @@ namespace DynamicsCrm.DevKit.Shared
         private static EntityMetadata EntityMetadata { get; set; }
         private static string RootNamespace { get; set; }
         private static CommentTypeScriptDeclaration Comment { get; set; }
+        private static List<string> FormNames = new List<string>();
 
         public static string GetCode(CrmServiceClient crmServiceClient, EntityMetadata entityMetadata, string rootNamespace, CommentTypeScriptDeclaration comment)
         {
@@ -165,12 +166,18 @@ namespace DynamicsCrm.DevKit.Shared
                                 }
                                 else
                                 {
-                                    foreach (var entityLogicalName in lookup.Targets)
+                                    foreach (var entityLogicalName in lookup.Targets.Distinct())
                                     {
                                         var navigation = EntityMetadata.ManyToOneRelationships.FirstOrDefault(x => x.ReferencingAttribute == attribute.LogicalName && x.ReferencedEntity == entityLogicalName);
-                                        if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
                                         if (navigation?.ReferencingEntityNavigationPropertyName != null && navigation?.ReferencingEntityNavigationPropertyName.Length > 0)
-                                            _d_ts += $"{TAB}{TAB}{Utility.SafeDeclareName(navigation?.ReferencingEntityNavigationPropertyName, EntityMetadata.SchemaName, attribute)}: DevKit.WebApi.LookupValue{Readonly};{NEW_LINE}";
+                                        {
+                                            var temp = $"{TAB}{TAB}{Utility.SafeDeclareName(navigation?.ReferencingEntityNavigationPropertyName, EntityMetadata.SchemaName, attribute)}: DevKit.WebApi.LookupValue{Readonly};{NEW_LINE}";
+                                            if (!_d_ts.Contains(temp))
+                                            {
+                                                if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                                                _d_ts += temp;
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -293,7 +300,7 @@ namespace DynamicsCrm.DevKit.Shared
         {
             var _d_ts = string.Empty;
             var formName = Utility.SafeIdentifier(Utility.GetFormName(form.Name, EntityMetadata.SchemaName));
-
+            formName = GetUnquieFormName(formName);
             _d_ts += $"\tnamespace Form{formName} {{\r\n";
             var form_d_ts_Body_QuickCreate = GetForm_d_ts_Body(form.FormXml);
             if (form_d_ts_Body_QuickCreate.Length > 0)
@@ -303,7 +310,7 @@ namespace DynamicsCrm.DevKit.Shared
             _d_ts += $"\t}}\r\n";
             _d_ts += $"\tclass Form{formName} extends DevKit.IForm {{\r\n";
             _d_ts += $"\t\t/**\r\n";
-            _d_ts += $"\t\t* DynamicsCrm.DevKit form {formName}\r\n";
+            _d_ts += $"\t\t* DynamicsCrm.DevKit form {formName} Quick Create\r\n";
             _d_ts += $"\t\t* @param executionContext the execution context\r\n";
             _d_ts += $"\t\t* @param defaultWebResourceName default resource name. E.g.: \"devkit_/resources/Resource\"\r\n";
             _d_ts += $"\t\t*/\r\n";
@@ -323,6 +330,7 @@ namespace DynamicsCrm.DevKit.Shared
         {
             var _d_ts = string.Empty;
             var formName = Utility.SafeIdentifier(Utility.GetFormName(form.Name, EntityMetadata.SchemaName));
+            formName = GetUnquieFormName(formName);
             _d_ts += $"{TAB}namespace Form{formName} {{{NEW_LINE}";
             var form_d_ts_Header = GetForm_d_ts_Header(form.FormXml);
             if (form_d_ts_Header.Length > 0)
@@ -368,7 +376,7 @@ namespace DynamicsCrm.DevKit.Shared
             _d_ts += $"{TAB}}}{NEW_LINE}";
             _d_ts += $"\tclass Form{formName} extends DevKit.IForm {{\r\n";
             _d_ts += $"\t\t/**\r\n";
-            _d_ts += $"\t\t* DynamicsCrm.DevKit form {formName}\r\n";
+            _d_ts += $"\t\t* DynamicsCrm.DevKit form {formName} Main Form\r\n";
             _d_ts += $"\t\t* @param executionContext the execution context\r\n";
             _d_ts += $"\t\t* @param defaultWebResourceName default resource name. E.g.: \"devkit_/resources/Resource\"\r\n";
             _d_ts += $"\t\t*/\r\n";
@@ -414,6 +422,22 @@ namespace DynamicsCrm.DevKit.Shared
             _d_ts += $"\t\tSidePanes: DevKit.SidePanes;\r\n";
             _d_ts += $"\t}}\r\n";
             return  _d_ts;
+        }
+
+        private static string GetUnquieFormName(string formName)
+        {
+            if (!FormNames.Contains(formName))
+            {
+                FormNames.Add(formName);
+                return formName;
+            }
+            else
+            {
+                var count = FormNames.Count(x => x.StartsWith(formName)) + 1;
+                formName = $"{formName}{count}";
+                FormNames.Add(formName);
+                return formName;
+            }
         }
 
         private static string GetForm_d_ts_Grid(string formXml)

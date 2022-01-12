@@ -15,7 +15,7 @@ declare namespace DevKit {
 	}
 	class Formmsdyn_oclocalizationdata_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form msdyn_oclocalizationdata_Information
+		* DynamicsCrm.DevKit form msdyn_oclocalizationdata_Information Main Form
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -24,6 +24,83 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_oclocalizationdata_Information */
 		Body: DevKit.Formmsdyn_oclocalizationdata_Information.Body;
+		/** The SidePanes of form msdyn_oclocalizationdata_Information */
+		SidePanes: DevKit.SidePanes;
+	}
+	namespace Formmsdyn_oclocalizationdata_Information2 {
+		interface tab__67489580_D521_4EA2_8994_03C6D8F7D16B_Sections {
+			_51E7DADB_658A_4415_A6ED_3416D4B64ED6: DevKit.Controls.Section;
+		}
+		interface tab__67489580_D521_4EA2_8994_03C6D8F7D16B extends DevKit.Controls.ITab {
+			Section: tab__67489580_D521_4EA2_8994_03C6D8F7D16B_Sections;
+		}
+		interface Tabs {
+			_67489580_D521_4EA2_8994_03C6D8F7D16B: tab__67489580_D521_4EA2_8994_03C6D8F7D16B;
+		}
+		interface Body {
+			Tab: Tabs;
+			/** Unique identifier for Channel Language associated with Localization Data. */
+			msdyn_customerlanguageid: DevKit.Controls.Lookup;
+			/** Localized text of the original record. */
+			msdyn_localizedtext: DevKit.Controls.String;
+		}
+		interface quickForm_System_Message_View_Body {
+			msdyn_messagereceiver: DevKit.Controls.QuickView;
+			msdyn_name: DevKit.Controls.QuickView;
+			msdyn_streamsource: DevKit.Controls.QuickView;
+			msdyn_systemmessageeventtype: DevKit.Controls.QuickView;
+		}
+		interface quickForm_System_Message_View extends DevKit.Controls.IQuickView {
+			Body: quickForm_System_Message_View_Body;
+		}
+		interface QuickForm {
+			System_Message_View: quickForm_System_Message_View;
+		}
+	}
+	class Formmsdyn_oclocalizationdata_Information2 extends DevKit.IForm {
+		/**
+		* DynamicsCrm.DevKit form msdyn_oclocalizationdata_Information2 Main Form
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form msdyn_oclocalizationdata_Information2 */
+		Body: DevKit.Formmsdyn_oclocalizationdata_Information2.Body;
+		/** The QuickForm of form msdyn_oclocalizationdata_Information2 */
+		QuickForm: DevKit.Formmsdyn_oclocalizationdata_Information2.QuickForm;
+		/** The SidePanes of form msdyn_oclocalizationdata_Information2 */
+		SidePanes: DevKit.SidePanes;
+	}
+	namespace Formmsdyn_oclocalizationdata_New_Form {
+		interface tab_tab_1_Sections {
+			tab_1_column_1_section_1: DevKit.Controls.Section;
+			tab_1_column_2_section_1: DevKit.Controls.Section;
+			tab_1_column_3_section_1: DevKit.Controls.Section;
+		}
+		interface tab_tab_1 extends DevKit.Controls.ITab {
+			Section: tab_tab_1_Sections;
+		}
+		interface Tabs {
+			tab_1: tab_tab_1;
+		}
+		interface Body {
+			Tab: Tabs;
+
+		}
+	}
+	class Formmsdyn_oclocalizationdata_New_Form extends DevKit.IForm {
+		/**
+		* DynamicsCrm.DevKit form msdyn_oclocalizationdata_New_Form Quick Create
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form msdyn_oclocalizationdata_New_Form */
+		Body: DevKit.Formmsdyn_oclocalizationdata_New_Form.Body;
 	}
 	class msdyn_oclocalizationdataApi {
 		/**
@@ -115,22 +192,22 @@ declare namespace OptionSet {
 			/** 2 */
 			Inactive
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

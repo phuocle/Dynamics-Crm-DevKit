@@ -19,7 +19,7 @@ namespace Dev.DevKit.Shared.Entities.ProductOptionSets
 		/// <summary>
 		/// Non-Inventory = 690970001
 		/// </summary>
-		NonInventory = 690970001,
+		Non_Inventory = 690970001,
 		/// <summary>
 		/// Service = 690970002
 		/// </summary>

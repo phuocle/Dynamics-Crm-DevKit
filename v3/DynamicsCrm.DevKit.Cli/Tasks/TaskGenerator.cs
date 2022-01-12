@@ -194,7 +194,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             const string NEW_LINE = "\r\n";
             const string TAB = "\t";
             var code = string.Empty;
-            var @class = Utility.SafeDeclareName(entityMetadata.SchemaName, null);
+            var @class = Utility.SafeDeclareName(entityMetadata.SchemaName);
             code += $"namespace {@namespace}{NEW_LINE}";
             code += $"{{{NEW_LINE}";
             code += $"{TAB}public partial class {@class}{NEW_LINE}";
@@ -294,9 +294,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             code += $"//@ts-check\r\n";
             code += $"///<reference path=\"{entityMetadata.SchemaName}.d.ts\" />\r\n";
             code += "\"use strict\";\r\n";
+            var formNames = new List<string>();
             foreach (var form in forms)
             {
                 var formName = Utility.GetFormName(form.Name, entityMetadata.SchemaName);
+                formName = GetUnquieFormName(formNames, formName);
                 var type = $"{@namespace}.Form{Utility.SafeIdentifier(formName)}";
                 code += $"var form{Utility.SafeIdentifier(formName)} = (function () {{\r\n";
                 code += $"\t\"use strict\";\r\n";
@@ -313,6 +315,22 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             code = code.TrimEnd("\r\n".ToCharArray());
             return code;
+        }
+
+        private static string GetUnquieFormName(List<string> FormNames, string formName)
+        {
+            if (!FormNames.Contains(formName))
+            {
+                FormNames.Add(formName);
+                return formName;
+            }
+            else
+            {
+                var count = FormNames.Count(x => x.StartsWith(formName)) + 1;
+                formName = $"{formName}{count}";
+                FormNames.Add(formName);
+                return formName;
+            }
         }
 
         private void GeneratorLateBound(List<string> schemaNames)

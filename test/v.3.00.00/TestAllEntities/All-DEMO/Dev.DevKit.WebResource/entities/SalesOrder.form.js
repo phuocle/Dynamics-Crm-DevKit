@@ -77,14 +77,16 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		var quickForm = {
 
 		};
 		devKit.LoadQuickForms(formContext, quickForm);
 		form.QuickForm = quickForm;
 		var grid = {
-			salesorderdetailsGrid: {},
 			OrderServicesGrid: {},
+			salesorderdetailsGrid: {},
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
@@ -98,6 +100,103 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
+		return form;
+	};
+	DevKit.FormOrder = function(executionContext, defaultWebResourceName) {
+		var formContext = null;
+		if (executionContext !== undefined) {
+			if (executionContext.getFormContext === undefined) {
+				formContext = executionContext;
+			}
+			else {
+				formContext = executionContext.getFormContext();
+			}
+		}
+		var form = devKit.LoadForm(formContext);
+		var body = {
+			BillTo_Composite: {},
+			CustomerId: {},
+			DateFulfilled: {},
+			Description: {},
+			DiscountAmount: {},
+			DiscountPercentage: {},
+			DynamicPropertiesList_LinkControl: {},
+			FreightAmount: {},
+			FreightTermsCode: {},
+			IsPriceLocked: {},
+			msdyn_ordertype: {},
+			Name: {},
+			notescontrol: {},
+			OpportunityId: {},
+			OrderNumber: {},
+			PaymentTermsCode: {},
+			PriceLevelId: {},
+			ProductSuggestions_LinkControl: {},
+			QuoteId: {},
+			RequestDeliveryBy: {},
+			salesorderdetailsGrid: {},
+			ShippingMethodCode: {},
+			ShipTo_Composite: {},
+			TotalAmount: {},
+			TotalAmountLessFreight: {},
+			TotalLineItemAmount: {},
+			TotalTax: {},
+			TransactionCurrencyId: {},
+			WillCall: {}
+		};
+		devKit.LoadFields(formContext, body);
+		var tab = {
+			summary_tab: {
+				Section: {
+					addresses: {},
+					description_section: {},
+					DynamicProperties: {},
+					order_information: {},
+					products: {},
+					sales_information: {},
+					shipping_dates: {},
+					shipping_information: {},
+					Social_Pane: {},
+					suggestionsection: {},
+					totals: {}
+				}
+			}
+		};
+		devKit.LoadTabs(formContext, tab);
+		body.Tab = tab;
+		form.Body = body;
+		var header = {
+			OwnerId: {},
+			StateCode: {},
+			StatusCode: {},
+			TotalAmount: {}
+		};
+		devKit.LoadFields(formContext, header, "header_");
+		form.Header = header;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
+		var quickForm = {
+
+		};
+		devKit.LoadQuickForms(formContext, quickForm);
+		form.QuickForm = quickForm;
+		var grid = {
+			salesorderdetailsGrid: {},
+		};
+		devKit.LoadGrids(formContext, grid);
+		form.Grid = grid;
+		var navigation = {
+			nav_msdyn_salesorder_msdyn_orderinvoicingdate_Order: {},
+			nav_msdyn_salesorder_msdyn_orderinvoicingsetup_Order: {},
+			nav_msdyn_salesorder_msdyn_orderinvoicingsetupdate_Order: {},
+			navProducts: {}
+		};
+		devKit.LoadNavigations(formContext, navigation);
+		form.Navigation = navigation;
+		form.Utility = devKit.LoadUtility(defaultWebResourceName);
+		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormSalesOrder_Project_Information = function(executionContext, defaultWebResourceName) {
@@ -185,18 +284,20 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		var quickForm = {
 
 		};
 		devKit.LoadQuickForms(formContext, quickForm);
 		form.QuickForm = quickForm;
 		var grid = {
-			ProjectContractLines: {},
-			salesorderdetailsGrid: {},
-			ProjectPriceListsSubGrid: {},
-			WebResource_ContractPerformance: {},
 			ContractPerformance_ContractLines: {},
 			ContractPerformance_ProductContractLines: {},
+			ProjectContractLines: {},
+			ProjectPriceListsSubGrid: {},
+			salesorderdetailsGrid: {},
+			WebResource_ContractPerformance: {},
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
@@ -214,6 +315,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormOrder = function(executionContext, defaultWebResourceName) {
@@ -238,7 +340,7 @@ var DevKit;
 			QuoteId: {},
 			StatusCode: {},
 			TransactionCurrencyId: {}
-		}
+		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
 			newSalesOrder: {
@@ -247,13 +349,15 @@ var DevKit;
 					quickOrder_summary: {}
 				}
 			}
-		}
+		};
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
+		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
-	}
+	};
 	DevKit.FormSalesOrder_Project_Quick_Create = function(executionContext, defaultWebResourceName) {
 		var formContext = null;
 		if (executionContext !== undefined)
@@ -273,7 +377,7 @@ var DevKit;
 			Name: {},
 			OrderNumber: {},
 			TransactionCurrencyId: {}
-		}
+		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
 			tab_1: {
@@ -283,13 +387,15 @@ var DevKit;
 					tab_1_column_3_section_1: {}
 				}
 			}
-		}
+		};
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
+		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
-	}
+	};
 })(DevKit || (DevKit = {}));
 /** @namespace OptionSet */
 var OptionSet;
@@ -355,7 +461,7 @@ var OptionSet;
 			Missing_Pricing_Code: 8,
 			Missing_Product: 6,
 			Missing_Product_Default_UOM: 31,
-			Missing_Product_UOM_Schedule_: 32,
+			Missing_Product_UOM_Schedule: 32,
 			Missing_Quantity: 4,
 			Missing_Standard_Cost: 16,
 			Missing_Unit_Price: 5,
@@ -402,15 +508,14 @@ var OptionSet;
 			Partial: 100002,
 			Pending: 2
 		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
-
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 	};
 })(OptionSet || (OptionSet = {}));

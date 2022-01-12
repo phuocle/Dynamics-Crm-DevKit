@@ -1,9 +1,13 @@
 ﻿//@ts-check
 ///<reference path="msdyn_productivityparameterdefinition.d.ts" />
 "use strict";
-var formInformation = (function () {
+var formmsdyn_productivityparameterdefinition_Information = (function () {
 	"use strict";
+	/** @type DevKit.Formmsdyn_productivityparameterdefinition_Information */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.Formmsdyn_productivityparameterdefinition_Information(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}

@@ -1,9 +1,13 @@
 ﻿//@ts-check
 ///<reference path="msdyn_playbooktemplate.d.ts" />
 "use strict";
-var formInformation = (function () {
+var formmsdyn_playbooktemplate_Information = (function () {
 	"use strict";
+	/** @type DevKit.Formmsdyn_playbooktemplate_Information */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.Formmsdyn_playbooktemplate_Information(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}

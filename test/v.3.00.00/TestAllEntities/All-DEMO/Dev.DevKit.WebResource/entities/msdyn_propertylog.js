@@ -1,9 +1,13 @@
 ﻿//@ts-check
 ///<reference path="msdyn_propertylog.d.ts" />
 "use strict";
-var formInformation = (function () {
+var formmsdyn_propertylog_Information = (function () {
 	"use strict";
+	/** @type DevKit.Formmsdyn_propertylog_Information */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.Formmsdyn_propertylog_Information(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}
@@ -14,7 +18,11 @@ var formInformation = (function () {
 })();
 var formProperty_Log_Quick_Create = (function () {
 	"use strict";
+	/** @type DevKit.FormProperty_Log_Quick_Create */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.FormProperty_Log_Quick_Create(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}

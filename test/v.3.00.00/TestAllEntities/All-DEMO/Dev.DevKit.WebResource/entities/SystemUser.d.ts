@@ -38,7 +38,7 @@ declare namespace DevKit {
 	}
 	class FormApplication_User extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Application_User
+		* DynamicsCrm.DevKit form Application_User Main Form
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -49,6 +49,168 @@ declare namespace DevKit {
 		Body: DevKit.FormApplication_User.Body;
 		/** The Footer section of form Application_User */
 		Footer: DevKit.FormApplication_User.Footer;
+		/** The SidePanes of form Application_User */
+		SidePanes: DevKit.SidePanes;
+	}
+	namespace FormSystemUser_Information {
+		interface tab_addresses_Sections {
+			address_preference: DevKit.Controls.Section;
+			mailing_address: DevKit.Controls.Section;
+			other_address: DevKit.Controls.Section;
+		}
+		interface tab_general_Sections {
+			administration: DevKit.Controls.Section;
+			email_configuration: DevKit.Controls.Section;
+			online_account_information: DevKit.Controls.Section;
+			onpremise_account_information: DevKit.Controls.Section;
+			organization_information: DevKit.Controls.Section;
+			queue_selection: DevKit.Controls.Section;
+			user_information: DevKit.Controls.Section;
+		}
+		interface tab_tab_recordwall_Sections {
+			tab_recordwall_section_1: DevKit.Controls.Section;
+		}
+		interface tab_addresses extends DevKit.Controls.ITab {
+			Section: tab_addresses_Sections;
+		}
+		interface tab_general extends DevKit.Controls.ITab {
+			Section: tab_general_Sections;
+		}
+		interface tab_tab_recordwall extends DevKit.Controls.ITab {
+			Section: tab_tab_recordwall_Sections;
+		}
+		interface Tabs {
+			addresses: tab_addresses;
+			general: tab_general;
+			tab_recordwall: tab_tab_recordwall;
+		}
+		interface Body {
+			Tab: Tabs;
+			/** Type of user. */
+			AccessMode: DevKit.Controls.OptionSet;
+			/** City name for address 1. */
+			Address1_City: DevKit.Controls.String;
+			/** Country/region name in address 1. */
+			Address1_Country: DevKit.Controls.String;
+			/** Fax number for address 1. */
+			Address1_Fax: DevKit.Controls.String;
+			/** First line for entering address 1 information. */
+			Address1_Line1: DevKit.Controls.String;
+			/** Second line for entering address 1 information. */
+			Address1_Line2: DevKit.Controls.String;
+			/** Third line for entering address 1 information. */
+			Address1_Line3: DevKit.Controls.String;
+			/** ZIP Code or postal code for address 1. */
+			Address1_PostalCode: DevKit.Controls.String;
+			/** State or province for address 1. */
+			Address1_StateOrProvince: DevKit.Controls.String;
+			/** First telephone number associated with address 1. */
+			Address1_Telephone1: DevKit.Controls.String;
+			/** Second telephone number associated with address 1. */
+			Address1_Telephone2: DevKit.Controls.String;
+			/** Third telephone number associated with address 1. */
+			Address1_Telephone3: DevKit.Controls.String;
+			/** City name for address 2. */
+			Address2_City: DevKit.Controls.String;
+			/** Country/region name in address 2. */
+			Address2_Country: DevKit.Controls.String;
+			/** First line for entering address 2 information. */
+			Address2_Line1: DevKit.Controls.String;
+			/** Second line for entering address 2 information. */
+			Address2_Line2: DevKit.Controls.String;
+			/** Third line for entering address 2 information. */
+			Address2_Line3: DevKit.Controls.String;
+			/** ZIP Code or postal code for address 2. */
+			Address2_PostalCode: DevKit.Controls.String;
+			/** State or province for address 2. */
+			Address2_StateOrProvince: DevKit.Controls.String;
+			/** Unique identifier of the business unit with which the user is associated. */
+			BusinessUnitId: DevKit.Controls.Lookup;
+			/** License type of user. This is used only in the on-premises version of the product. Online licenses are managed through Microsoft 365 Office Portal */
+			CALType: DevKit.Controls.OptionSet;
+			/** Active Directory domain of which the user is a member. */
+			DomainName: DevKit.Controls.String;
+			/** First name of the user. */
+			FirstName: DevKit.Controls.String;
+			/** Home phone number for the user. */
+			HomePhone: DevKit.Controls.String;
+			/** Incoming email delivery method for the user. */
+			IncomingEmailDeliveryMethod: DevKit.Controls.OptionSet;
+			/** Internal email address for the user. */
+			InternalEMailAddress: DevKit.Controls.String;
+			/** User invitation status. */
+			InviteStatusCode: DevKit.Controls.OptionSet;
+			/** Last name of the user. */
+			LastName: DevKit.Controls.String;
+			/** Mobile alert email address for the user. */
+			MobileAlertEMail: DevKit.Controls.String;
+			/** Mobile phone number for the user. */
+			MobilePhone: DevKit.Controls.String;
+			/** Unique identifier for Configuration associated with User. */
+			msdyusd_USDConfigurationId: DevKit.Controls.Lookup;
+			/** Outgoing email delivery method for the user. */
+			OutgoingEmailDeliveryMethod: DevKit.Controls.OptionSet;
+			/** Unique identifier of the manager of the user. */
+			ParentSystemUserId: DevKit.Controls.Lookup;
+			/** Personal email address of the user. */
+			PersonalEMailAddress: DevKit.Controls.String;
+			/** User's position in hierarchical security model. */
+			PositionId: DevKit.Controls.Lookup;
+			/** Preferred address for the user. */
+			PreferredAddressCode: DevKit.Controls.OptionSet;
+			/** Preferred phone number for the user. */
+			PreferredPhoneCode: DevKit.Controls.OptionSet;
+			/** Unique identifier of the default queue for the user. */
+			QueueId: DevKit.Controls.Lookup;
+			/** Site at which the user is located. */
+			SiteId: DevKit.Controls.Lookup;
+			/** Unique identifier of the territory to which the user is assigned. */
+			TerritoryId: DevKit.Controls.Lookup;
+			/** Title of the user. */
+			Title: DevKit.Controls.String;
+			WebResource_RecordWall: DevKit.Controls.WebResource;
+			/** Windows Live ID */
+			WindowsLiveID: DevKit.Controls.String;
+		}
+		interface Footer extends DevKit.Controls.IFooter {
+			/** Information about whether the user is enabled. */
+			IsDisabled: DevKit.Controls.Boolean;
+		}
+		interface Navigation {
+			nav_msdyn_accountmanager_quote: DevKit.Controls.NavigationItem,
+			nav_msdyn_accountmanager_salesorder: DevKit.Controls.NavigationItem,
+			nav_msdyn_systemuser_msdyn_expense_manager: DevKit.Controls.NavigationItem,
+			nav_msdyn_systemuser_msdyn_project_projectmanager: DevKit.Controls.NavigationItem,
+			nav_msdyn_systemuser_msdyn_projectapproval_ApprovedBy: DevKit.Controls.NavigationItem,
+			nav_msdyn_systemuser_msdyn_projectapproval_Manager: DevKit.Controls.NavigationItem,
+			nav_msdyn_systemuser_msdyn_resourcerequest_claimedby: DevKit.Controls.NavigationItem,
+			nav_msdyn_systemuser_msdyn_resourcerequest_requestedby: DevKit.Controls.NavigationItem,
+			nav_msdyn_systemuser_msdyn_timeentry_manager: DevKit.Controls.NavigationItem,
+			nav_msdyusd_systemuser_msdyusd_usersettings_User: DevKit.Controls.NavigationItem,
+			navFieldSecurityProfiles: DevKit.Controls.NavigationItem,
+			navResourceGroups: DevKit.Controls.NavigationItem,
+			navRoles: DevKit.Controls.NavigationItem,
+			navServices: DevKit.Controls.NavigationItem,
+			navTeams: DevKit.Controls.NavigationItem
+		}
+	}
+	class FormSystemUser_Information extends DevKit.IForm {
+		/**
+		* DynamicsCrm.DevKit form SystemUser_Information Main Form
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form SystemUser_Information */
+		Body: DevKit.FormSystemUser_Information.Body;
+		/** The Footer section of form SystemUser_Information */
+		Footer: DevKit.FormSystemUser_Information.Footer;
+		/** The Navigation of form SystemUser_Information */
+		Navigation: DevKit.FormSystemUser_Information.Navigation;
+		/** The SidePanes of form SystemUser_Information */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormUser {
 		interface tab_ADMINISTRATION_TAB_Sections {
@@ -248,16 +410,16 @@ declare namespace DevKit {
 			navTeams: DevKit.Controls.NavigationItem
 		}
 		interface Grid {
-			OmnichannelQueues: DevKit.Controls.Grid;
-			TeamsSubGrid: DevKit.Controls.Grid;
-			LiveEngagementQueues: DevKit.Controls.Grid;
 			BookableResources: DevKit.Controls.Grid;
 			CapacityProfilesSubgrid: DevKit.Controls.Grid;
+			LiveEngagementQueues: DevKit.Controls.Grid;
+			OmnichannelQueues: DevKit.Controls.Grid;
+			TeamsSubGrid: DevKit.Controls.Grid;
 		}
 	}
 	class FormUser extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form User
+		* DynamicsCrm.DevKit form User Main Form
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -272,11 +434,13 @@ declare namespace DevKit {
 		Navigation: DevKit.FormUser.Navigation;
 		/** The Grid of form User */
 		Grid: DevKit.FormUser.Grid;
+		/** The SidePanes of form User */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormUser_form_Business {
 		interface tab_ADMINISTRATION_TAB_Sections {
 			administration: DevKit.Controls.Section;
-			e_mail_configuration: DevKit.Controls.Section;
+			email_configuration: DevKit.Controls.Section;
 		}
 		interface tab_SUMMARY_TAB_Sections {
 			DirectReports: DevKit.Controls.Section;
@@ -347,13 +511,13 @@ declare namespace DevKit {
 			navTeams: DevKit.Controls.NavigationItem
 		}
 		interface Grid {
-			TeamsSubGrid: DevKit.Controls.Grid;
 			DirectReports: DevKit.Controls.Grid;
+			TeamsSubGrid: DevKit.Controls.Grid;
 		}
 	}
 	class FormUser_form_Business extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form User_form_Business
+		* DynamicsCrm.DevKit form User_form_Business Main Form
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -368,6 +532,43 @@ declare namespace DevKit {
 		Navigation: DevKit.FormUser_form_Business.Navigation;
 		/** The Grid of form User_form_Business */
 		Grid: DevKit.FormUser_form_Business.Grid;
+		/** The SidePanes of form User_form_Business */
+		SidePanes: DevKit.SidePanes;
+	}
+	namespace FormUser_Information_Form {
+		interface tab_UserInfoTab_Sections {
+			user_information: DevKit.Controls.Section;
+		}
+		interface tab_UserInfoTab extends DevKit.Controls.ITab {
+			Section: tab_UserInfoTab_Sections;
+		}
+		interface Tabs {
+			UserInfoTab: tab_UserInfoTab;
+		}
+		interface Body {
+			Tab: Tabs;
+			/** Shows the complete primary address. */
+			Address1_Composite: DevKit.Controls.String;
+			/** First line for entering address 1 information. */
+			Address1_Line1: DevKit.Controls.String;
+			/** Internal email address for the user. */
+			InternalEMailAddress: DevKit.Controls.String;
+			mapcontrol: DevKit.Controls.Map;
+		}
+	}
+	class FormUser_Information_Form extends DevKit.IForm {
+		/**
+		* DynamicsCrm.DevKit form User_Information_Form Main Form
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form User_Information_Form */
+		Body: DevKit.FormUser_Information_Form.Body;
+		/** The SidePanes of form User_Information_Form */
+		SidePanes: DevKit.SidePanes;
 	}
 	class SystemUserApi {
 		/**
@@ -493,6 +694,10 @@ declare namespace DevKit {
 		ApplicationIdUri: DevKit.WebApi.StringValueReadonly;
 		/** This is the application directory object Id. */
 		AzureActiveDirectoryObjectId: DevKit.WebApi.GuidValueReadonly;
+		/** Date and time when the user was set as soft deleted in Azure. */
+		AzureDeletedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Azure state of user */
+		AzureState: DevKit.WebApi.OptionSetValue;
 		/** Unique identifier of the business unit with which the user is associated. */
 		BusinessUnitId: DevKit.WebApi.LookupValue;
 		/** Fiscal calendar associated with the user. */
@@ -511,6 +716,8 @@ declare namespace DevKit {
 		DefaultMailbox: DevKit.WebApi.LookupValueReadonly;
 		/** Type a default folder name for the user's OneDrive For Business location. */
 		DefaultOdbFolderName: DevKit.WebApi.StringValueReadonly;
+		/** User delete state */
+		DeletedState: DevKit.WebApi.OptionSetValueReadonly;
 		/** Reason for disabling the user. */
 		DisabledReason: DevKit.WebApi.StringValueReadonly;
 		/** Whether to display the user in service views. */
@@ -601,6 +808,8 @@ declare namespace DevKit {
 		msdyn_gdproptout: DevKit.WebApi.BooleanValue;
 		/** Field to bind grid wrapper control */
 		msdyn_gridwrappercontrolfield: DevKit.WebApi.StringValue;
+		/** Environment Id of the CDS environment that owns the bot user. */
+		msdyn_OwningEnvironmentId: DevKit.WebApi.StringValue;
 		msdyn_phonenumberid: DevKit.WebApi.LookupValue;
 		/** Type of user - CRM or BOT user */
 		msdyn_UserType: DevKit.WebApi.OptionSetValue;
@@ -716,6 +925,14 @@ declare namespace OptionSet {
 			/** 1 */
 			Default_Value
 		}
+		enum AzureState {
+			/** 0 */
+			Exists,
+			/** 2 */
+			Not_found_or_hard_deleted,
+			/** 1 */
+			Soft_deleted
+		}
 		enum CALType {
 			/** 1 */
 			Administrative,
@@ -743,6 +960,12 @@ declare namespace OptionSet {
 			Sales,
 			/** 10 */
 			Service
+		}
+		enum DeletedState {
+			/** 0 */
+			Not_deleted,
+			/** 1 */
+			Soft_deleted
 		}
 		enum EmailRouterAccessApproval {
 			/** 1 */
@@ -828,22 +1051,22 @@ declare namespace OptionSet {
 			/** 2 */
 			Other_Phone
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Application User','User','User form – Business'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

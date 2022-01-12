@@ -41,7 +41,7 @@ declare namespace DevKit {
 	}
 	class FormSharePointDocumentLocation_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form SharePointDocumentLocation_Information
+		* DynamicsCrm.DevKit form SharePointDocumentLocation_Information Main Form
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -54,6 +54,8 @@ declare namespace DevKit {
 		Footer: DevKit.FormSharePointDocumentLocation_Information.Footer;
 		/** The Navigation of form SharePointDocumentLocation_Information */
 		Navigation: DevKit.FormSharePointDocumentLocation_Information.Navigation;
+		/** The SidePanes of form SharePointDocumentLocation_Information */
+		SidePanes: DevKit.SidePanes;
 	}
 	class SharePointDocumentLocationApi {
 		/**
@@ -123,8 +125,6 @@ declare namespace DevKit {
 		parentsiteorlocation_sharepointsite: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the SharePoint document location record is associated. */
 		regardingobjectid_account: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the object with which the SharePoint document location record is associated. */
-		regardingobjectid_contact: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the SharePoint document location record is associated. */
 		regardingobjectid_kbarticle: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the SharePoint document location record is associated. */
@@ -197,7 +197,6 @@ declare namespace DevKit {
 		regardingobjectid_quote: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the SharePoint document location record is associated. */
 		regardingobjectid_salesliterature: DevKit.WebApi.LookupValue;
-		RegardingObjectIdYomiName: DevKit.WebApi.StringValue;
 		/** Relative URL of the SharePoint document location. */
 		RelativeUrl: DevKit.WebApi.StringValue;
 		/** Shows the service type of the SharePoint site. */
@@ -251,22 +250,22 @@ declare namespace OptionSet {
 			/** 2 */
 			Inactive
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

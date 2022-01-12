@@ -77,6 +77,8 @@ var DevKit;
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		var quickForm = {
 
 		};
@@ -89,6 +91,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormSalesOrderDetail_Information = function(executionContext, defaultWebResourceName) {
@@ -167,6 +170,8 @@ var DevKit;
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		var quickForm = {
 
 		};
@@ -179,6 +184,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormSalesOrderDetail_Project_Information = function(executionContext, defaultWebResourceName) {
@@ -330,14 +336,16 @@ var DevKit;
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		var quickForm = {
 
 		};
 		devKit.LoadQuickForms(formContext, quickForm);
 		form.QuickForm = quickForm;
 		var grid = {
-			ChargeableRolesGrid: {},
 			ChargeableCategoriesGrid: {},
+			ChargeableRolesGrid: {},
 			ContractLineDetails: {},
 			InvoiceScheduleGrid: {},
 			MilestonesGrid: {},
@@ -351,6 +359,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormSalesOrderDetail = function(executionContext, defaultWebResourceName) {
@@ -389,7 +398,7 @@ var DevKit;
 			Tax: {},
 			UoMId: {},
 			WillCall: {}
-		}
+		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
 			general: {
@@ -399,13 +408,15 @@ var DevKit;
 					sales_order_detail_information: {}
 				}
 			}
-		}
+		};
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
+		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
-	}
+	};
 })(DevKit || (DevKit = {}));
 /** @namespace OptionSet */
 var OptionSet;
@@ -457,7 +468,7 @@ var OptionSet;
 			Missing_Pricing_Code: 8,
 			Missing_Product: 6,
 			Missing_Product_Default_UOM: 31,
-			Missing_Product_UOM_Schedule_: 32,
+			Missing_Product_UOM_Schedule: 32,
 			Missing_Quantity: 4,
 			Missing_Standard_Cost: 16,
 			Missing_Unit_Price: 5,
@@ -480,8 +491,6 @@ var OptionSet;
 			Not_Configured: 2,
 			Rectify: 1
 		},
-		SalesOrderStateCode : {
-		},
 		ShipTo_FreightTermsCode : {
 			FOB: 1,
 			No_Charge: 2
@@ -492,15 +501,14 @@ var OptionSet;
 			SkipPriceCalcOnUpdate: 2,
 			SkipPriceCalcOnUpSert: 3
 		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
-
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 	};
 })(OptionSet || (OptionSet = {}));

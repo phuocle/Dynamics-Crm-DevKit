@@ -77,18 +77,18 @@ declare namespace DevKit {
 			navTargetLists: DevKit.Controls.NavigationItem
 		}
 		interface Grid {
+			excluded_accounts: DevKit.Controls.Grid;
+			excluded_contacts: DevKit.Controls.Grid;
+			excluded_leads: DevKit.Controls.Grid;
 			marketing_lists_grid: DevKit.Controls.Grid;
 			selected_accounts: DevKit.Controls.Grid;
-			excluded_accounts: DevKit.Controls.Grid;
 			selected_contacts: DevKit.Controls.Grid;
-			excluded_contacts: DevKit.Controls.Grid;
 			selected_leads: DevKit.Controls.Grid;
-			excluded_leads: DevKit.Controls.Grid;
 		}
 	}
 	class FormCampaign_Activity extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Campaign_Activity
+		* DynamicsCrm.DevKit form Campaign_Activity Main Form
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -103,6 +103,8 @@ declare namespace DevKit {
 		Navigation: DevKit.FormCampaign_Activity.Navigation;
 		/** The Grid of form Campaign_Activity */
 		Grid: DevKit.FormCampaign_Activity.Grid;
+		/** The SidePanes of form Campaign_Activity */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormCampaign_Activity_deprecated {
 		interface Header extends DevKit.Controls.IHeader {
@@ -174,13 +176,13 @@ declare namespace DevKit {
 			navTargetLists: DevKit.Controls.NavigationItem
 		}
 		interface Grid {
-			marketing_lists_grid: DevKit.Controls.Grid;
 			failuresGrid: DevKit.Controls.Grid;
+			marketing_lists_grid: DevKit.Controls.Grid;
 		}
 	}
 	class FormCampaign_Activity_deprecated extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Campaign_Activity_deprecated
+		* DynamicsCrm.DevKit form Campaign_Activity_deprecated Main Form
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -195,6 +197,8 @@ declare namespace DevKit {
 		Navigation: DevKit.FormCampaign_Activity_deprecated.Navigation;
 		/** The Grid of form Campaign_Activity_deprecated */
 		Grid: DevKit.FormCampaign_Activity_deprecated.Grid;
+		/** The SidePanes of form Campaign_Activity_deprecated */
+		SidePanes: DevKit.SidePanes;
 	}
 	class CampaignActivityApi {
 		/**
@@ -332,7 +336,6 @@ declare namespace DevKit {
 		SLAId: DevKit.WebApi.LookupValue;
 		/** Last SLA that was applied to this case. This field is for internal use only. */
 		SLAInvokedId: DevKit.WebApi.LookupValueReadonly;
-		SLAName: DevKit.WebApi.StringValueReadonly;
 		/** Shows the date and time by which the activities are sorted. */
 		SortDate_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** Unique identifier of the Stage. */
@@ -363,6 +366,54 @@ declare namespace DevKit {
 }
 declare namespace OptionSet {
 	namespace CampaignActivity {
+		enum ActivityTypeCode {
+			/** 4201 */
+			Appointment,
+			/** 10357 */
+			Booking_Alert,
+			/** 4402 */
+			Campaign_Activity,
+			/** 4401 */
+			Campaign_Response,
+			/** 4206 */
+			Case_Resolution,
+			/** 10644 */
+			Conversation,
+			/** 10261 */
+			Customer_Voice_alert,
+			/** 10271 */
+			Customer_Voice_survey_invite,
+			/** 10273 */
+			Customer_Voice_survey_response,
+			/** 4202 */
+			Email,
+			/** 4204 */
+			Fax,
+			/** 4207 */
+			Letter,
+			/** 4208 */
+			Opportunity_Close,
+			/** 4209 */
+			Order_Close,
+			/** 10752 */
+			Outbound_message,
+			/** 4210 */
+			Phone_Call,
+			/** 10387 */
+			Project_Service_Approval,
+			/** 4406 */
+			Quick_Campaign,
+			/** 4211 */
+			Quote_Close,
+			/** 4251 */
+			Recurring_Appointment,
+			/** 4214 */
+			Service_Activity,
+			/** 10659 */
+			Session,
+			/** 4212 */
+			Task
+		}
 		enum ChannelTypeCode {
 			/** 2 */
 			Appointment,
@@ -487,22 +538,22 @@ declare namespace OptionSet {
 			/** 3 */
 			Target_Marketing_List_Creation
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Campaign Activity','Campaign Activity (deprecated)'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

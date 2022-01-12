@@ -83,11 +83,11 @@ namespace Dev.DevKit.Shared.Entities.WorkflowOptionSets
 		/// <summary>
 		/// Post-operation = 40
 		/// </summary>
-		Postoperation = 40,
+		Post_operation = 40,
 		/// <summary>
 		/// Pre-operation = 20
 		/// </summary>
-		Preoperation = 20
+		Pre_operation = 20
 	}
 
 	public enum DeleteStage
@@ -95,11 +95,11 @@ namespace Dev.DevKit.Shared.Entities.WorkflowOptionSets
 		/// <summary>
 		/// Post-operation = 40
 		/// </summary>
-		Postoperation = 40,
+		Post_operation = 40,
 		/// <summary>
 		/// Pre-operation = 20
 		/// </summary>
-		Preoperation = 20
+		Pre_operation = 20
 	}
 
 	public enum Mode
@@ -111,7 +111,7 @@ namespace Dev.DevKit.Shared.Entities.WorkflowOptionSets
 		/// <summary>
 		/// Real-time = 1
 		/// </summary>
-		Realtime = 1
+		Real_time = 1
 	}
 
 	public enum ProcessTriggerScope
@@ -231,11 +231,11 @@ namespace Dev.DevKit.Shared.Entities.WorkflowOptionSets
 		/// <summary>
 		/// Post-operation = 40
 		/// </summary>
-		Postoperation = 40,
+		Post_operation = 40,
 		/// <summary>
 		/// Pre-operation = 20
 		/// </summary>
-		Preoperation = 20
+		Pre_operation = 20
 	}
 }
 

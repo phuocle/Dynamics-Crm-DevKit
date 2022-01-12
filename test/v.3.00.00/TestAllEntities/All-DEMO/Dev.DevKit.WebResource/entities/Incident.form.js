@@ -63,7 +63,7 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
-			_Enhanced_SLA_Details_Tab: {
+			Enhanced_SLA_Details_Tab: {
 				Section: {
 					Applicable_SLAENHANCED: {},
 					SLAKPIInstances: {}
@@ -135,14 +135,6 @@ var DevKit;
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
 		var process = devKit.LoadProcess(formContext);
-		var _Phone_to_Case_Process = {
-			CustomerId: {},
-			ExistingCase: {},
-			OwnerId: {},
-			PrimaryContactId: {}
-		}
-		devKit.LoadFields(formContext, _Phone_to_Case_Process, "header_process_");
-		process.Phone_to_Case_Process = _Phone_to_Case_Process;
 		var _Case_to_Work_Order_Business_Process = {
 			CustomerId: {},
 			ExistingCase: {},
@@ -158,6 +150,14 @@ var DevKit;
 		}
 		devKit.LoadFields(formContext, _Case_to_Work_Order_Business_Process, "header_process_");
 		process.Case_to_Work_Order_Business_Process = _Case_to_Work_Order_Business_Process;
+		var _Phone_to_Case_Process = {
+			CustomerId: {},
+			ExistingCase: {},
+			OwnerId: {},
+			PrimaryContactId: {}
+		}
+		devKit.LoadFields(formContext, _Phone_to_Case_Process, "header_process_");
+		process.Phone_to_Case_Process = _Phone_to_Case_Process;
 		form.Process = process;
 		var quickForm = {
 			customerpane_qfc: {
@@ -177,11 +177,11 @@ var DevKit;
 		devKit.LoadQuickForms(formContext, quickForm);
 		form.QuickForm = quickForm;
 		var grid = {
-			RelatedSolutionGrid: {},
-			MergedCasesGrid: {},
-			ChildCasesGrid: {},
 			Associated_Articles: {},
 			Associated_KnowledgeArticles: {},
+			ChildCasesGrid: {},
+			MergedCasesGrid: {},
+			RelatedSolutionGrid: {},
 			SLA_KPI_Instances_List: {},
 		};
 		devKit.LoadGrids(formContext, grid);
@@ -196,6 +196,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormCase_for_Interactive_experience = function(executionContext, defaultWebResourceName) {
@@ -258,7 +259,7 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
-			_Enhanced_SLA_Details_Tab: {
+			Enhanced_SLA_Details_Tab: {
 				Section: {
 					SLAKPIInstances: {}
 				}
@@ -310,14 +311,6 @@ var DevKit;
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
 		var process = devKit.LoadProcess(formContext);
-		var _Phone_to_Case_Process = {
-			CustomerId: {},
-			ExistingCase: {},
-			OwnerId: {},
-			PrimaryContactId: {}
-		}
-		devKit.LoadFields(formContext, _Phone_to_Case_Process, "header_process_");
-		process.Phone_to_Case_Process = _Phone_to_Case_Process;
 		var _Case_to_Work_Order_Business_Process = {
 			CustomerId: {},
 			ExistingCase: {},
@@ -333,6 +326,14 @@ var DevKit;
 		}
 		devKit.LoadFields(formContext, _Case_to_Work_Order_Business_Process, "header_process_");
 		process.Case_to_Work_Order_Business_Process = _Case_to_Work_Order_Business_Process;
+		var _Phone_to_Case_Process = {
+			CustomerId: {},
+			ExistingCase: {},
+			OwnerId: {},
+			PrimaryContactId: {}
+		}
+		devKit.LoadFields(formContext, _Phone_to_Case_Process, "header_process_");
+		process.Phone_to_Case_Process = _Phone_to_Case_Process;
 		form.Process = process;
 		var quickForm = {
 			case_qfc: {
@@ -354,11 +355,11 @@ var DevKit;
 		devKit.LoadQuickForms(formContext, quickForm);
 		form.QuickForm = quickForm;
 		var grid = {
-			MergedCasesGrid: {},
-			ChildCasesGrid: {},
 			Associated_KnowledgeArticles: {},
-			SLA_KPI_Instances_List: {},
+			ChildCasesGrid: {},
 			Devices: {},
+			MergedCasesGrid: {},
+			SLA_KPI_Instances_List: {},
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
@@ -369,6 +370,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormCase_for_Multisession_experience = function(executionContext, defaultWebResourceName) {
@@ -436,14 +438,6 @@ var DevKit;
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
 		var process = devKit.LoadProcess(formContext);
-		var _Phone_to_Case_Process = {
-			CustomerId: {},
-			ExistingCase: {},
-			OwnerId: {},
-			PrimaryContactId: {}
-		}
-		devKit.LoadFields(formContext, _Phone_to_Case_Process, "header_process_");
-		process.Phone_to_Case_Process = _Phone_to_Case_Process;
 		var _Case_to_Work_Order_Business_Process = {
 			CustomerId: {},
 			ExistingCase: {},
@@ -459,6 +453,14 @@ var DevKit;
 		}
 		devKit.LoadFields(formContext, _Case_to_Work_Order_Business_Process, "header_process_");
 		process.Case_to_Work_Order_Business_Process = _Case_to_Work_Order_Business_Process;
+		var _Phone_to_Case_Process = {
+			CustomerId: {},
+			ExistingCase: {},
+			OwnerId: {},
+			PrimaryContactId: {}
+		}
+		devKit.LoadFields(formContext, _Phone_to_Case_Process, "header_process_");
+		process.Phone_to_Case_Process = _Phone_to_Case_Process;
 		form.Process = process;
 		var quickForm = {
 
@@ -467,9 +469,9 @@ var DevKit;
 		form.QuickForm = quickForm;
 		var grid = {
 			Associated_KnowledgeArticles: {},
-			relatedCases: {},
 			ChildCasesGrid: {},
 			MergedCasesGrid: {},
+			relatedCases: {},
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
@@ -481,6 +483,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormIncident_Information = function(executionContext, defaultWebResourceName) {
@@ -540,14 +543,6 @@ var DevKit;
 		body.Tab = tab;
 		form.Body = body;
 		var process = devKit.LoadProcess(formContext);
-		var _Phone_to_Case_Process = {
-			CustomerId: {},
-			ExistingCase: {},
-			OwnerId: {},
-			PrimaryContactId: {}
-		}
-		devKit.LoadFields(formContext, _Phone_to_Case_Process, "header_process_");
-		process.Phone_to_Case_Process = _Phone_to_Case_Process;
 		var _Case_to_Work_Order_Business_Process = {
 			CustomerId: {},
 			ExistingCase: {},
@@ -563,6 +558,14 @@ var DevKit;
 		}
 		devKit.LoadFields(formContext, _Case_to_Work_Order_Business_Process, "header_process_");
 		process.Case_to_Work_Order_Business_Process = _Case_to_Work_Order_Business_Process;
+		var _Phone_to_Case_Process = {
+			CustomerId: {},
+			ExistingCase: {},
+			OwnerId: {},
+			PrimaryContactId: {}
+		}
+		devKit.LoadFields(formContext, _Phone_to_Case_Process, "header_process_");
+		process.Phone_to_Case_Process = _Phone_to_Case_Process;
 		form.Process = process;
 		var quickForm = {
 
@@ -577,6 +580,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormTimelineWallControl_Case_Main = function(executionContext, defaultWebResourceName) {
@@ -610,14 +614,6 @@ var DevKit;
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
 		var process = devKit.LoadProcess(formContext);
-		var _Phone_to_Case_Process = {
-			CustomerId: {},
-			ExistingCase: {},
-			OwnerId: {},
-			PrimaryContactId: {}
-		}
-		devKit.LoadFields(formContext, _Phone_to_Case_Process, "header_process_");
-		process.Phone_to_Case_Process = _Phone_to_Case_Process;
 		var _Case_to_Work_Order_Business_Process = {
 			CustomerId: {},
 			ExistingCase: {},
@@ -633,6 +629,14 @@ var DevKit;
 		}
 		devKit.LoadFields(formContext, _Case_to_Work_Order_Business_Process, "header_process_");
 		process.Case_to_Work_Order_Business_Process = _Case_to_Work_Order_Business_Process;
+		var _Phone_to_Case_Process = {
+			CustomerId: {},
+			ExistingCase: {},
+			OwnerId: {},
+			PrimaryContactId: {}
+		}
+		devKit.LoadFields(formContext, _Phone_to_Case_Process, "header_process_");
+		process.Phone_to_Case_Process = _Phone_to_Case_Process;
 		form.Process = process;
 		var quickForm = {
 
@@ -647,47 +651,9 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
-	DevKit.FormCase_Quick_Create_for_Multisession = function(executionContext, defaultWebResourceName) {
-		var formContext = null;
-		if (executionContext !== undefined)
-		{
-			if (executionContext.getFormContext === undefined) {
-				formContext = executionContext;
-			}
-			else {
-				formContext = executionContext.getFormContext();
-			}
-		}
-		var form = devKit.LoadForm(formContext);
-		var body = {
-			CaseTypeCode: {},
-			CustomerId: {},
-			Description: {},
-			OwnerId: {},
-			ParentCaseId: {},
-			PriorityCode: {},
-			StatusCode: {},
-			SubjectId: {},
-			Title: {}
-		}
-		devKit.LoadFields(formContext, body);
-		var tab = {
-			tab_1: {
-				Section: {
-					tab_1_column_1_section_1: {},
-					tab_1_column_2_section_1: {},
-					tab_1_column_3_section_1: {}
-				}
-			}
-		}
-		devKit.LoadTabs(formContext, tab);
-		body.Tab = tab;
-		form.Body = body;
-		form.Utility = devKit.LoadUtility(defaultWebResourceName);
-		return form;
-	}
 	DevKit.FormApp_for_Outlook_Case_Quick_Create = function(executionContext, defaultWebResourceName) {
 		var formContext = null;
 		if (executionContext !== undefined)
@@ -714,7 +680,7 @@ var DevKit;
 			ResponseBy: {},
 			SubjectId: {},
 			Title: {}
-		}
+		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
 			tab_1: {
@@ -724,13 +690,15 @@ var DevKit;
 					tab_1_column_3_section_1: {}
 				}
 			}
-		}
+		};
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
+		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
-	}
+	};
 	DevKit.FormCase_Quick_Create = function(executionContext, defaultWebResourceName) {
 		var formContext = null;
 		if (executionContext !== undefined)
@@ -759,7 +727,7 @@ var DevKit;
 			ResponseBy: {},
 			SubjectId: {},
 			Title: {}
-		}
+		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
 			tab_1: {
@@ -769,13 +737,56 @@ var DevKit;
 					tab_1_column_3_section_1: {}
 				}
 			}
-		}
+		};
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
+		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
-	}
+	};
+	DevKit.FormCase_Quick_Create_for_Multisession = function(executionContext, defaultWebResourceName) {
+		var formContext = null;
+		if (executionContext !== undefined)
+		{
+			if (executionContext.getFormContext === undefined) {
+				formContext = executionContext;
+			}
+			else {
+				formContext = executionContext.getFormContext();
+			}
+		}
+		var form = devKit.LoadForm(formContext);
+		var body = {
+			CaseTypeCode: {},
+			CustomerId: {},
+			Description: {},
+			OwnerId: {},
+			ParentCaseId: {},
+			PriorityCode: {},
+			StatusCode: {},
+			SubjectId: {},
+			Title: {}
+		};
+		devKit.LoadFields(formContext, body);
+		var tab = {
+			tab_1: {
+				Section: {
+					tab_1_column_1_section_1: {},
+					tab_1_column_2_section_1: {},
+					tab_1_column_3_section_1: {}
+				}
+			}
+		};
+		devKit.LoadTabs(formContext, tab);
+		body.Tab = tab;
+		form.Body = body;
+		form.Utility = devKit.LoadUtility(defaultWebResourceName);
+		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
+		return form;
+	};
 })(DevKit || (DevKit = {}));
 /** @namespace OptionSet */
 var OptionSet;
@@ -858,15 +869,14 @@ var OptionSet;
 			Researching: 4,
 			Waiting_for_Details: 3
 		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
-
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 	};
 })(OptionSet || (OptionSet = {}));

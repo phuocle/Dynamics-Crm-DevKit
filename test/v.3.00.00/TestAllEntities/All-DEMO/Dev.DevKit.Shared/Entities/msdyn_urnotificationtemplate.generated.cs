@@ -35,7 +35,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_urnotificationtemplateOptionSets
 		/// <summary>
 		/// Co-browse = 192390000
 		/// </summary>
-		Cobrowse = 192390000,
+		Co_browse = 192390000,
 		/// <summary>
 		/// Custom = 192350002
 		/// </summary>

@@ -63,7 +63,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_livechatconfigOptionSets
 		/// <summary>
 		/// Auto-Detect = 192350000
 		/// </summary>
-		AutoDetect = 192350000,
+		Auto_Detect = 192350000,
 		/// <summary>
 		/// English = 192360014
 		/// </summary>

@@ -199,7 +199,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_forecastdefinitionOptionSets
 		/// <summary>
 		/// Goal-based = 192350000
 		/// </summary>
-		Goalbased = 192350000,
+		Goal_based = 192350000,
 		/// <summary>
 		/// Manual = 192350001
 		/// </summary>

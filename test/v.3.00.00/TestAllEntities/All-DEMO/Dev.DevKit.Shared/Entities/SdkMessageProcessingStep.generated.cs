@@ -59,27 +59,27 @@ namespace Dev.DevKit.Shared.Entities.SdkMessageProcessingStepOptionSets
 		/// <summary>
 		/// Final Post-operation (For internal use only) = 55
 		/// </summary>
-		Final_Postoperation_For_internal_use_only = 55,
+		Final_Post_operation_For_internal_use_only = 55,
 		/// <summary>
 		/// Initial Pre-operation (For internal use only) = 5
 		/// </summary>
-		Initial_Preoperation_For_internal_use_only = 5,
+		Initial_Pre_operation_For_internal_use_only = 5,
 		/// <summary>
 		/// Internal Post-operation After External Plugins (For internal use only) = 45
 		/// </summary>
-		Internal_Postoperation_After_External_Plugins_For_internal_use_only = 45,
+		Internal_Post_operation_After_External_Plugins_For_internal_use_only = 45,
 		/// <summary>
 		/// Internal Post-operation Before External Plugins (For internal use only) = 35
 		/// </summary>
-		Internal_Postoperation_Before_External_Plugins_For_internal_use_only = 35,
+		Internal_Post_operation_Before_External_Plugins_For_internal_use_only = 35,
 		/// <summary>
 		/// Internal Pre-operation After External Plugins (For internal use only) = 25
 		/// </summary>
-		Internal_Preoperation_After_External_Plugins_For_internal_use_only = 25,
+		Internal_Pre_operation_After_External_Plugins_For_internal_use_only = 25,
 		/// <summary>
 		/// Internal Pre-operation Before External Plugins (For internal use only) = 15
 		/// </summary>
-		Internal_Preoperation_Before_External_Plugins_For_internal_use_only = 15,
+		Internal_Pre_operation_Before_External_Plugins_For_internal_use_only = 15,
 		/// <summary>
 		/// Main Operation (For internal use only) = 30
 		/// </summary>
@@ -87,27 +87,27 @@ namespace Dev.DevKit.Shared.Entities.SdkMessageProcessingStepOptionSets
 		/// <summary>
 		/// Post-Commit stage fired after transaction commit (For internal use only) = 90
 		/// </summary>
-		PostCommit_stage_fired_after_transaction_commit_For_internal_use_only = 90,
+		Post_Commit_stage_fired_after_transaction_commit_For_internal_use_only = 90,
 		/// <summary>
 		/// Post-operation = 40
 		/// </summary>
-		Postoperation = 40,
+		Post_operation = 40,
 		/// <summary>
 		/// Post-operation (Deprecated) = 50
 		/// </summary>
-		Postoperation_Deprecated = 50,
+		Post_operation_Deprecated = 50,
 		/// <summary>
 		/// Pre-Commit stage fired before transaction commit (For internal use only) = 80
 		/// </summary>
-		PreCommit_stage_fired_before_transaction_commit_For_internal_use_only = 80,
+		Pre_Commit_stage_fired_before_transaction_commit_For_internal_use_only = 80,
 		/// <summary>
 		/// Pre-operation = 20
 		/// </summary>
-		Preoperation = 20,
+		Pre_operation = 20,
 		/// <summary>
 		/// Pre-validation = 10
 		/// </summary>
-		Prevalidation = 10
+		Pre_validation = 10
 	}
 
 	public enum StateCode

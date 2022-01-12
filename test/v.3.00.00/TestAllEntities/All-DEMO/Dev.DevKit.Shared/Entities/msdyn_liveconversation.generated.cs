@@ -15,7 +15,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_liveconversationOptionSets
 		/// <summary>
 		/// Co-browse = 192390000
 		/// </summary>
-		Cobrowse = 192390000,
+		Co_browse = 192390000,
 		/// <summary>
 		/// Custom = 192350002
 		/// </summary>
@@ -127,7 +127,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_liveconversationOptionSets
 		/// <summary>
 		/// Wrap-up = 4
 		/// </summary>
-		Wrapup = 4
+		Wrap_up = 4
 	}
 
 	public enum msdyn_statuscode
@@ -151,7 +151,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_liveconversationOptionSets
 		/// <summary>
 		/// Wrap-up = 5
 		/// </summary>
-		Wrapup = 5
+		Wrap_up = 5
 	}
 
 	public enum msdyn_workstreamworkdistributionmode
@@ -187,7 +187,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_liveconversationOptionSets
 		/// <summary>
 		/// Wrap-up = 4
 		/// </summary>
-		Wrapup = 4
+		Wrap_up = 4
 	}
 
 	public enum statuscode
@@ -211,7 +211,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_liveconversationOptionSets
 		/// <summary>
 		/// Wrap-up = 5
 		/// </summary>
-		Wrapup = 5
+		Wrap_up = 5
 	}
 }
 

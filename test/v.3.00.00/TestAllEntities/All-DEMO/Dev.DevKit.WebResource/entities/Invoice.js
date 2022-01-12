@@ -1,9 +1,13 @@
 ﻿//@ts-check
 ///<reference path="Invoice.d.ts" />
 "use strict";
-var formField_Service_Information = (function () {
+var formInvoice_Field_Service_Information = (function () {
 	"use strict";
+	/** @type DevKit.FormInvoice_Field_Service_Information */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.FormInvoice_Field_Service_Information(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}
@@ -12,9 +16,13 @@ var formField_Service_Information = (function () {
 		OnSave: onSave
 	};
 })();
-var formInformation = (function () {
+var formInvoice_Information = (function () {
 	"use strict";
+	/** @type DevKit.FormInvoice_Information */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.FormInvoice_Information(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}
@@ -25,7 +33,26 @@ var formInformation = (function () {
 })();
 var formInvoice = (function () {
 	"use strict";
+	/** @type DevKit.FormInvoice */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.FormInvoice(executionContext);
+
+	}
+	async function onSave(executionContext) {
+	}
+	return {
+		OnLoad: onLoad,
+		OnSave: onSave
+	};
+})();
+var formInvoice4 = (function () {
+	"use strict";
+	/** @type DevKit.FormInvoice4 */
+	var form = null;
+	async function onLoad(executionContext) {
+		form = new DevKit.FormInvoice4(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}
@@ -36,7 +63,11 @@ var formInvoice = (function () {
 })();
 var formProject_Invoice = (function () {
 	"use strict";
+	/** @type DevKit.FormProject_Invoice */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.FormProject_Invoice(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}

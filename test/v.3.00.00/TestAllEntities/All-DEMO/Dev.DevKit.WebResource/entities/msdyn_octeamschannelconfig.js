@@ -1,9 +1,13 @@
 ﻿//@ts-check
 ///<reference path="msdyn_octeamschannelconfig.d.ts" />
 "use strict";
-var formInformation = (function () {
+var formmsdyn_octeamschannelconfig_Information = (function () {
 	"use strict";
+	/** @type DevKit.Formmsdyn_octeamschannelconfig_Information */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.Formmsdyn_octeamschannelconfig_Information(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}

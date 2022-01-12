@@ -30,7 +30,7 @@ declare namespace DevKit {
 	}
 	class FormProduct_Association extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Product_Association
+		* DynamicsCrm.DevKit form Product_Association Main Form
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -41,6 +41,8 @@ declare namespace DevKit {
 		Body: DevKit.FormProduct_Association.Body;
 		/** The Grid of form Product_Association */
 		Grid: DevKit.FormProduct_Association.Grid;
+		/** The SidePanes of form Product_Association */
+		SidePanes: DevKit.SidePanes;
 	}
 	class ProductAssociationApi {
 		/**
@@ -70,7 +72,6 @@ declare namespace DevKit {
 		"@odata.etag": string;
 		/** Select a product to add to the bundle or kit. */
 		AssociatedProduct: DevKit.WebApi.LookupValue;
-		AssociatedProductIdName: DevKit.WebApi.StringValueReadonly;
 		/** Shows who created the record. */
 		CreatedBy: DevKit.WebApi.LookupValueReadonly;
 		/** Date and time when the record was created. */
@@ -153,22 +154,22 @@ declare namespace OptionSet {
 			/** 2 */
 			Inactive
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Product Association'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

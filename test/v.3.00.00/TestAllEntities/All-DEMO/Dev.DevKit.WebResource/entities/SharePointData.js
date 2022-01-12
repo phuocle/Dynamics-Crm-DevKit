@@ -1,9 +1,13 @@
 ﻿//@ts-check
 ///<reference path="SharePointData.d.ts" />
 "use strict";
-var formInformation = (function () {
+var formSharePointData_Information = (function () {
 	"use strict";
+	/** @type DevKit.FormSharePointData_Information */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.FormSharePointData_Information(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}

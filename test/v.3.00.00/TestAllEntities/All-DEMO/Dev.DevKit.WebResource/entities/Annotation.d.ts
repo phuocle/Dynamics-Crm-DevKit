@@ -36,7 +36,7 @@ declare namespace DevKit {
 	}
 	class FormAnnotation_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Annotation_Information
+		* DynamicsCrm.DevKit form Annotation_Information Main Form
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -45,6 +45,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Annotation_Information */
 		Body: DevKit.FormAnnotation_Information.Body;
+		/** The SidePanes of form Annotation_Information */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormNote_Quick_Create_Form {
 		interface tab_general_Sections {
@@ -66,7 +68,7 @@ declare namespace DevKit {
 	}
 	class FormNote_Quick_Create_Form extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Note_Quick_Create_Form
+		* DynamicsCrm.DevKit form Note_Quick_Create_Form Quick Create
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -112,6 +114,10 @@ declare namespace DevKit {
 		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
 		/** Contents of the note's attachment. */
 		DocumentBody: DevKit.WebApi.StringValue;
+		/** Dummy attribute associated with the note attachment */
+		DummyFileName: DevKit.WebApi.StringValueReadonly;
+		/** Dummy attribute associated with the note regarding */
+		DummyRegarding: DevKit.WebApi.StringValueReadonly;
 		/** File name of the note. */
 		FileName: DevKit.WebApi.StringValue;
 		/** File pointer of the attachment. */
@@ -254,6 +260,8 @@ declare namespace DevKit {
 		/** Unique identifier of the object with which the note is associated. */
 		objectid_msdyn_approval: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the note is associated. */
+		objectid_msdyn_approvalset: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the note is associated. */
 		objectid_msdyn_bookingalert: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the note is associated. */
 		objectid_msdyn_bookingalertstatus: DevKit.WebApi.LookupValue;
@@ -328,6 +336,8 @@ declare namespace DevKit {
 		/** Unique identifier of the object with which the note is associated. */
 		objectid_msdyn_liveconversation: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the note is associated. */
+		objectid_msdyn_ocflaggedspam: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the note is associated. */
 		objectid_msdyn_ocliveworkitem: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the note is associated. */
 		objectid_msdyn_ocoutboundmessage: DevKit.WebApi.LookupValue;
@@ -355,6 +365,8 @@ declare namespace DevKit {
 		objectid_msdyn_orderpricelist: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the note is associated. */
 		objectid_msdyn_organizationalunit: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the note is associated. */
+		objectid_msdyn_overflowactionconfig: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the note is associated. */
 		objectid_msdyn_payment: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the note is associated. */
@@ -649,22 +661,94 @@ declare namespace DevKit {
 }
 declare namespace OptionSet {
 	namespace Annotation {
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum ObjectTypeCode {
+			/** 1 */
+			Account,
+			/** 4201 */
+			Appointment,
+			/** 4407 */
+			Bulk_Import,
+			/** 4003 */
+			Calendar,
+			/** 4400 */
+			Campaign,
+			/** 4402 */
+			Campaign_Activity,
+			/** 4401 */
+			Campaign_Response,
+			/** 112 */
+			Case,
+			/** 4206 */
+			Case_Resolution,
+			/** 4215 */
+			Commitment,
+			/** 123 */
+			Competitor,
+			/** 2 */
+			Contact,
+			/** 1010 */
+			Contract,
+			/** 1011 */
+			Contract_Line,
+			/** 4202 */
+			Email,
+			/** 4000 */
+			FacilityEquipment,
+			/** 4204 */
+			Fax,
+			/** 1090 */
+			Invoice,
+			/** 4 */
+			Lead,
+			/** 4207 */
+			Letter,
+			/** 4300 */
+			Marketing_List,
+			/** 3 */
+			Opportunity,
+			/** 4208 */
+			Opportunity_Close,
+			/** 1088 */
+			Order,
+			/** 4209 */
+			Order_Close,
+			/** 4210 */
+			Phone_Call,
+			/** 1024 */
+			Product,
+			/** 1084 */
+			Quote,
+			/** 4211 */
+			Quote_Close,
+			/** 4006 */
+			Resource_Specification,
+			/** 8181 */
+			Routing_Rule,
+			/** 8199 */
+			Routing_Rule_Item,
+			/** 4001 */
+			Service,
+			/** 4214 */
+			Service_Activity,
+			/** 4212 */
+			Task
+		}
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Information','Quick Create Form'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

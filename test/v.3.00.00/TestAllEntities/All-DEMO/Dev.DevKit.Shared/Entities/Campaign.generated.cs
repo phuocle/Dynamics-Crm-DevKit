@@ -63,7 +63,7 @@ namespace Dev.DevKit.Shared.Entities.CampaignOptionSets
 		/// <summary>
 		/// Co-branding = 4
 		/// </summary>
-		Cobranding = 4,
+		Co_branding = 4,
 		/// <summary>
 		/// Direct Marketing = 2
 		/// </summary>

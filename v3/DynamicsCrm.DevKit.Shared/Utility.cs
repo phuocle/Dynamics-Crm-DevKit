@@ -236,16 +236,5 @@ namespace DynamicsCrm.DevKit.Shared
                 return guid.Replace("{", string.Empty).Replace("}", string.Empty);
             return guid;
         }
-
-        //public static string GetAttributeSchemaName(AttributeMetadata attribute)
-        //{
-        //    if (attribute.SchemaName == "Entity") return "_Entity";
-        //    return attribute.SchemaName;
-        //}
-        //public static string GetEntitySchemaName(EntityMetadata entity)
-        //{
-        //    if (entity.SchemaName == "Entity") return "_Entity";
-        //    return entity.SchemaName;
-        //}
     }
 }

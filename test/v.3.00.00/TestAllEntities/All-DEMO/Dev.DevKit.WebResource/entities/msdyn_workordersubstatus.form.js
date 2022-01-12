@@ -36,6 +36,8 @@ var DevKit;
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		var quickForm = {
 
 		};
@@ -49,6 +51,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 })(DevKit || (DevKit = {}));
@@ -57,12 +60,12 @@ var OptionSet;
 (function (OptionSet) {
 	OptionSet.msdyn_workordersubstatus = {
 		msdyn_SystemStatus : {
-			Closed_Canceled: 690970005,
-			Closed_Posted: 690970004,
-			Open_Completed: 690970003,
-			Open_In_Progress: 690970002,
-			Open_Scheduled: 690970001,
-			Open_Unscheduled: 690970000
+			Canceled: 690970005,
+			Completed: 690970003,
+			In_Progress: 690970002,
+			Posted: 690970004,
+			Scheduled: 690970001,
+			Unscheduled: 690970000
 		},
 		statecode : {
 			Active: 0,
@@ -72,15 +75,14 @@ var OptionSet;
 			Active: 1,
 			Inactive: 2
 		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
-
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 	};
 })(OptionSet || (OptionSet = {}));

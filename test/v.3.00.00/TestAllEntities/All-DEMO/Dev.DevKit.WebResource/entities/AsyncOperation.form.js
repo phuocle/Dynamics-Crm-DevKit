@@ -39,6 +39,8 @@ var DevKit;
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		var quickForm = {
 
 		};
@@ -51,6 +53,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 })(DevKit || (DevKit = {}));
@@ -70,6 +73,8 @@ var OptionSet;
 			Bulk_Delete_Subprocess: 23,
 			Bulk_Duplicate_Detection: 8,
 			Bulk_Email: 2,
+			BulkArchive_Async_Operation: 260,
+			BulkArchiveBatch_Async_Operation: 261,
 			Calculate_Organization_Maximum_Storage_Size: 22,
 			Calculate_Organization_Storage_Size: 18,
 			Calculate_Rollup_Field: 57,
@@ -111,6 +116,7 @@ var OptionSet;
 			Mailbox_Test_Access: 52,
 			Mass_Calculate_Rollup_Field: 58,
 			Matchcode_Update: 12,
+			Migrate_notes_to_attachments_job: 85,
 			Organization_Full_Text_Catalog_Index: 25,
 			Outgoing_Activity: 50,
 			Post_to_Yammer: 49,
@@ -156,15 +162,14 @@ var OptionSet;
 			Waiting: 10,
 			Waiting_For_Resources: 0
 		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
-
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 	};
 })(OptionSet || (OptionSet = {}));

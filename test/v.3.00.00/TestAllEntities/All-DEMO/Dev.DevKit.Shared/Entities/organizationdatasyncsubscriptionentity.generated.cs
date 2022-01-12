@@ -10,6 +10,26 @@ using System.Diagnostics;
 
 namespace Dev.DevKit.Shared.Entities.organizationdatasyncsubscriptionentityOptionSets
 {
+	public enum BlobPartitionBy
+	{
+		/// <summary>
+		/// Day = 1
+		/// </summary>
+		Day = 1,
+		/// <summary>
+		/// Month = 2
+		/// </summary>
+		Month = 2,
+		/// <summary>
+		/// None = 0
+		/// </summary>
+		None = 0,
+		/// <summary>
+		/// Year = 3
+		/// </summary>
+		Year = 3
+	}
+
 	public enum statecode
 	{
 		/// <summary>
@@ -41,6 +61,7 @@ namespace Dev.DevKit.Shared.Entities
 	{
 		public struct Fields
 		{
+			public const string BlobPartitionBy = "blobpartitionby";
 			public const string CreatedBy = "createdby";
 			public const string CreatedOn = "createdon";
 			public const string CreatedOnBehalfBy = "createdonbehalfby";
@@ -53,6 +74,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string name = "name";
 			public const string ObjectTypeCode = "objecttypecode";
 			public const string OrganizationDataSyncSubscriptioId = "organizationdatasyncsubscriptioid";
+			public const string OrganizationDataSyncSubscription = "organizationdatasyncsubscription";
 			public const string organizationdatasyncsubscriptionentityId = "organizationdatasyncsubscriptionentityid";
 			public const string OrganizationId = "organizationid";
 			public const string OverriddenCreatedOn = "overriddencreatedon";
@@ -114,6 +136,28 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			Entity = new Entity(EntityLogicalName, keys);
 			PreEntity = CloneThisEntity(Entity);
+		}
+
+		/// <summary>
+		/// <para>Required - Picklist</para>
+		/// <para>BlobPartitionBy</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public Dev.DevKit.Shared.Entities.organizationdatasyncsubscriptionentityOptionSets.BlobPartitionBy? BlobPartitionBy
+		{
+			get
+			{
+				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.BlobPartitionBy);
+				if (value == null) return null;
+				return (Dev.DevKit.Shared.Entities.organizationdatasyncsubscriptionentityOptionSets.BlobPartitionBy)value.Value;
+			}
+			set
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.BlobPartitionBy] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.BlobPartitionBy] = null;
+			}
 		}
 
 		/// <summary>
@@ -249,6 +293,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<EntityReference>(Fields.OrganizationDataSyncSubscriptioId); }
 			set { Entity.Attributes[Fields.OrganizationDataSyncSubscriptioId] = value; }
+		}
+
+		/// <summary>
+		/// <para>Unique identifier for OrganizationDataSyncSubscription associated with OrganizationDataSyncSubscriptionEntity.</para>
+		/// <para>Required - Lookup to organizationdatasyncsubscription</para>
+		/// <para>OrganizationDataSyncSubscription</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public EntityReference OrganizationDataSyncSubscription
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.OrganizationDataSyncSubscription); }
+			set { Entity.Attributes[Fields.OrganizationDataSyncSubscription] = value; }
 		}
 
 		/// <summary>

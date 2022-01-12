@@ -334,7 +334,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier for AppModule associated with AppElement.</para>
-		/// <para>Required - Lookup to appmodule</para>
+		/// <para>Lookup to appmodule</para>
 		/// <para>Parent AppModule</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

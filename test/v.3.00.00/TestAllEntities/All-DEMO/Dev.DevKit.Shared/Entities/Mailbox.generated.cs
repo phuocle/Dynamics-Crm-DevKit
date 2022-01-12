@@ -23,7 +23,7 @@ namespace Dev.DevKit.Shared.Entities.MailboxOptionSets
 		/// <summary>
 		/// Server-Side Synchronization = 1
 		/// </summary>
-		ServerSide_Synchronization = 1
+		Server_Side_Synchronization = 1
 	}
 
 	public enum ACTStatus
@@ -95,7 +95,7 @@ namespace Dev.DevKit.Shared.Entities.MailboxOptionSets
 		/// <summary>
 		/// Server-Side Synchronization or Email Router = 2
 		/// </summary>
-		ServerSide_Synchronization_or_Email_Router = 2
+		Server_Side_Synchronization_or_Email_Router = 2
 	}
 
 	public enum IncomingEmailStatus
@@ -167,7 +167,7 @@ namespace Dev.DevKit.Shared.Entities.MailboxOptionSets
 		/// <summary>
 		/// Server-Side Synchronization or Email Router = 2
 		/// </summary>
-		ServerSide_Synchronization_or_Email_Router = 2
+		Server_Side_Synchronization_or_Email_Router = 2
 	}
 
 	public enum OutgoingEmailStatus

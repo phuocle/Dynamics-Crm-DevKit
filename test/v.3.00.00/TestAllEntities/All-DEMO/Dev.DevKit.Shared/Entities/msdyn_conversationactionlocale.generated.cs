@@ -15,183 +15,183 @@ namespace Dev.DevKit.Shared.Entities.msdyn_conversationactionlocaleOptionSets
 		/// <summary>
 		/// ar-SA = 1025
 		/// </summary>
-		arSA = 1025,
+		ar_SA = 1025,
 		/// <summary>
 		/// bg-BG = 1026
 		/// </summary>
-		bgBG = 1026,
+		bg_BG = 1026,
 		/// <summary>
 		/// ca-ES = 1027
 		/// </summary>
-		caES = 1027,
+		ca_ES = 1027,
 		/// <summary>
 		/// cs-CZ = 1029
 		/// </summary>
-		csCZ = 1029,
+		cs_CZ = 1029,
 		/// <summary>
 		/// da-DK = 1030
 		/// </summary>
-		daDK = 1030,
+		da_DK = 1030,
 		/// <summary>
 		/// de-DE = 1031
 		/// </summary>
-		deDE = 1031,
+		de_DE = 1031,
 		/// <summary>
 		/// el-GR = 1032
 		/// </summary>
-		elGR = 1032,
+		el_GR = 1032,
 		/// <summary>
 		/// en-US = 1033
 		/// </summary>
-		enUS = 1033,
+		en_US = 1033,
 		/// <summary>
 		/// es-ES = 3082
 		/// </summary>
-		esES = 3082,
+		es_ES = 3082,
 		/// <summary>
 		/// et-EE = 1061
 		/// </summary>
-		etEE = 1061,
+		et_EE = 1061,
 		/// <summary>
 		/// eu-ES = 1069
 		/// </summary>
-		euES = 1069,
+		eu_ES = 1069,
 		/// <summary>
 		/// fi-FI = 1035
 		/// </summary>
-		fiFI = 1035,
+		fi_FI = 1035,
 		/// <summary>
 		/// fr-FR = 1036
 		/// </summary>
-		frFR = 1036,
+		fr_FR = 1036,
 		/// <summary>
 		/// gl-ES = 1110
 		/// </summary>
-		glES = 1110,
+		gl_ES = 1110,
 		/// <summary>
 		/// he-IL = 1037
 		/// </summary>
-		heIL = 1037,
+		he_IL = 1037,
 		/// <summary>
 		/// hi-IN = 1081
 		/// </summary>
-		hiIN = 1081,
+		hi_IN = 1081,
 		/// <summary>
 		/// hr-HR = 1050
 		/// </summary>
-		hrHR = 1050,
+		hr_HR = 1050,
 		/// <summary>
 		/// hu-HU = 1038
 		/// </summary>
-		huHU = 1038,
+		hu_HU = 1038,
 		/// <summary>
 		/// id-ID = 1057
 		/// </summary>
-		idID = 1057,
+		id_ID = 1057,
 		/// <summary>
 		/// it-IT = 1040
 		/// </summary>
-		itIT = 1040,
+		it_IT = 1040,
 		/// <summary>
 		/// ja-JP = 1041
 		/// </summary>
-		jaJP = 1041,
+		ja_JP = 1041,
 		/// <summary>
 		/// kk-KZ = 1087
 		/// </summary>
-		kkKZ = 1087,
+		kk_KZ = 1087,
 		/// <summary>
 		/// ko-KR = 1042
 		/// </summary>
-		koKR = 1042,
+		ko_KR = 1042,
 		/// <summary>
 		/// lt-LT = 1063
 		/// </summary>
-		ltLT = 1063,
+		lt_LT = 1063,
 		/// <summary>
 		/// lv-LV = 1062
 		/// </summary>
-		lvLV = 1062,
+		lv_LV = 1062,
 		/// <summary>
 		/// ms-MY = 1086
 		/// </summary>
-		msMY = 1086,
+		ms_MY = 1086,
 		/// <summary>
 		/// nb-NO = 1044
 		/// </summary>
-		nbNO = 1044,
+		nb_NO = 1044,
 		/// <summary>
 		/// nl-NL = 1043
 		/// </summary>
-		nlNL = 1043,
+		nl_NL = 1043,
 		/// <summary>
 		/// pl-PL = 1045
 		/// </summary>
-		plPL = 1045,
+		pl_PL = 1045,
 		/// <summary>
 		/// pt-BR = 1046
 		/// </summary>
-		ptBR = 1046,
+		pt_BR = 1046,
 		/// <summary>
 		/// pt-PT = 2070
 		/// </summary>
-		ptPT = 2070,
+		pt_PT = 2070,
 		/// <summary>
 		/// ro-RO = 1048
 		/// </summary>
-		roRO = 1048,
+		ro_RO = 1048,
 		/// <summary>
 		/// ru-RU = 1049
 		/// </summary>
-		ruRU = 1049,
+		ru_RU = 1049,
 		/// <summary>
 		/// sk-SK = 1051
 		/// </summary>
-		skSK = 1051,
+		sk_SK = 1051,
 		/// <summary>
 		/// sl-SI = 1060
 		/// </summary>
-		slSI = 1060,
+		sl_SI = 1060,
 		/// <summary>
 		/// sr-Cyrl-CS = 3098
 		/// </summary>
-		srCyrlCS = 3098,
+		sr_Cyrl_CS = 3098,
 		/// <summary>
 		/// sr-Latn-CS = 2074
 		/// </summary>
-		srLatnCS = 2074,
+		sr_Latn_CS = 2074,
 		/// <summary>
 		/// sv-SE = 1053
 		/// </summary>
-		svSE = 1053,
+		sv_SE = 1053,
 		/// <summary>
 		/// th-TH = 1054
 		/// </summary>
-		thTH = 1054,
+		th_TH = 1054,
 		/// <summary>
 		/// tr-TR = 1055
 		/// </summary>
-		trTR = 1055,
+		tr_TR = 1055,
 		/// <summary>
 		/// uk-UA = 1058
 		/// </summary>
-		ukUA = 1058,
+		uk_UA = 1058,
 		/// <summary>
 		/// vi-VN = 1066
 		/// </summary>
-		viVN = 1066,
+		vi_VN = 1066,
 		/// <summary>
 		/// zh-CN = 2052
 		/// </summary>
-		zhCN = 2052,
+		zh_CN = 2052,
 		/// <summary>
 		/// zh-HK = 3076
 		/// </summary>
-		zhHK = 3076,
+		zh_HK = 3076,
 		/// <summary>
 		/// zh-TW = 1028
 		/// </summary>
-		zhTW = 1028
+		zh_TW = 1028
 	}
 
 	public enum statecode

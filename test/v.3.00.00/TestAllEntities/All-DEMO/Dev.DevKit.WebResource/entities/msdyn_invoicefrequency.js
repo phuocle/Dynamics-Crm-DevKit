@@ -1,9 +1,13 @@
 ﻿//@ts-check
 ///<reference path="msdyn_invoicefrequency.d.ts" />
 "use strict";
-var formProject_Information = (function () {
+var formmsdyn_invoicefrequency_Project_Information = (function () {
 	"use strict";
+	/** @type DevKit.Formmsdyn_invoicefrequency_Project_Information */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.Formmsdyn_invoicefrequency_Project_Information(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}

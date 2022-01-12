@@ -31,7 +31,7 @@ declare namespace DevKit {
 	}
 	class FormQueue_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Queue_Information
+		* DynamicsCrm.DevKit form Queue_Information Main Form
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -40,6 +40,65 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Queue_Information */
 		Body: DevKit.FormQueue_Information.Body;
+		/** The SidePanes of form Queue_Information */
+		SidePanes: DevKit.SidePanes;
+	}
+	namespace FormOmnichannel_queue {
+		interface Header extends DevKit.Controls.IHeader {
+			/** Convert Incoming Email To Activities */
+			IncomingEmailFilteringMethod: DevKit.Controls.OptionSet;
+			/** Select whether the queue is public or private. A public queue can be viewed by all. A private queue can be viewed only by the members added to the queue. */
+			QueueViewType: DevKit.Controls.OptionSet;
+		}
+		interface tab_general_Sections {
+			general_section_4: DevKit.Controls.Section;
+			queue_information: DevKit.Controls.Section;
+		}
+		interface tab_general extends DevKit.Controls.ITab {
+			Section: tab_general_Sections;
+		}
+		interface Tabs {
+			general: tab_general;
+		}
+		interface Body {
+			Tab: Tabs;
+			/** Shows whether the queue is used as Omnichannel queue for work distribution. */
+			msdyn_isomnichannelqueue: DevKit.Controls.Boolean;
+			/** Unique identifier for Operating hour associated with Queue */
+			msdyn_operatinghourid: DevKit.Controls.Lookup;
+			/** Priority of the queue to indicate conversation assignment order to the agent. */
+			msdyn_priority: DevKit.Controls.Integer;
+			/** Defines the type of channels handled by this queue */
+			msdyn_queuetype: DevKit.Controls.OptionSet;
+			/** Name of the queue. */
+			Name: DevKit.Controls.String;
+			/** Unique identifier of the user or team who owns the queue. */
+			OwnerId: DevKit.Controls.Lookup;
+			/** Select whether the queue is public or private. A public queue can be viewed by all. A private queue can be viewed only by the members added to the queue. */
+			QueueViewType: DevKit.Controls.OptionSet;
+			WebResource_ocpreviewterms: DevKit.Controls.WebResource;
+		}
+		interface Grid {
+			Agents: DevKit.Controls.Grid;
+		}
+	}
+	class FormOmnichannel_queue extends DevKit.IForm {
+		/**
+		* DynamicsCrm.DevKit form Omnichannel_queue Main Form
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form Omnichannel_queue */
+		Body: DevKit.FormOmnichannel_queue.Body;
+		/** The Header section of form Omnichannel_queue */
+		Header: DevKit.FormOmnichannel_queue.Header;
+		/** The Grid of form Omnichannel_queue */
+		Grid: DevKit.FormOmnichannel_queue.Grid;
+		/** The SidePanes of form Omnichannel_queue */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormQueue {
 		interface tab_conflictstab_Sections {
@@ -84,14 +143,14 @@ declare namespace DevKit {
 			QueueViewType: DevKit.Controls.OptionSet;
 		}
 		interface Grid {
-			RecordCreationAndUpdateRuleGrid: DevKit.Controls.Grid;
 			QueueItemsGrid: DevKit.Controls.Grid;
 			queuemembersgrid: DevKit.Controls.Grid;
+			RecordCreationAndUpdateRuleGrid: DevKit.Controls.Grid;
 		}
 	}
 	class FormQueue extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Queue
+		* DynamicsCrm.DevKit form Queue Main Form
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -102,6 +161,37 @@ declare namespace DevKit {
 		Body: DevKit.FormQueue.Body;
 		/** The Grid of form Queue */
 		Grid: DevKit.FormQueue.Grid;
+		/** The SidePanes of form Queue */
+		SidePanes: DevKit.SidePanes;
+	}
+	namespace FormQueue_Hub_Form {
+		interface tab_UsersTab_Sections {
+			tab_2_section_1: DevKit.Controls.Section;
+		}
+		interface tab_UsersTab extends DevKit.Controls.ITab {
+			Section: tab_UsersTab_Sections;
+		}
+		interface Tabs {
+			UsersTab: tab_UsersTab;
+		}
+		interface Body {
+			Tab: Tabs;
+			msdyn_name1: DevKit.Controls.ActionCards;
+		}
+	}
+	class FormQueue_Hub_Form extends DevKit.IForm {
+		/**
+		* DynamicsCrm.DevKit form Queue_Hub_Form Main Form
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form Queue_Hub_Form */
+		Body: DevKit.FormQueue_Hub_Form.Body;
+		/** The SidePanes of form Queue_Hub_Form */
+		SidePanes: DevKit.SidePanes;
 	}
 	class QueueApi {
 		/**
@@ -129,6 +219,10 @@ declare namespace DevKit {
 		EntityCollectionName: string;
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
+		/** This attribute is no longer used. The data is now in the Mailbox.AllowEmailConnectorToUseCredentials attribute. */
+		AllowEmailCredentials: DevKit.WebApi.BooleanValueReadonly;
+		/** Unique identifier of the business unit with which the queue is associated. */
+		BusinessUnitId: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the user who created the queue record. */
 		CreatedBy: DevKit.WebApi.LookupValueReadonly;
 		/** Date and time when the queue was created. */
@@ -141,8 +235,12 @@ declare namespace DevKit {
 		Description: DevKit.WebApi.StringValue;
 		/** Email address that is associated with the queue. */
 		EMailAddress: DevKit.WebApi.StringValue;
+		/** This attribute is no longer used. The data is now in the Mailbox.Password attribute. */
+		EmailPassword: DevKit.WebApi.StringValueReadonly;
 		/** Shows the status of the primary email address. */
 		EmailRouterAccessApproval: DevKit.WebApi.OptionSetValue;
+		/** This attribute is no longer used. The data is now in the Mailbox.UserName attribute. */
+		EmailUsername: DevKit.WebApi.StringValueReadonly;
 		/** The default image for the entity. */
 		EntityImage: DevKit.WebApi.StringValue;
 		EntityImage_Timestamp: DevKit.WebApi.BigIntValueReadonly;
@@ -161,6 +259,8 @@ declare namespace DevKit {
 		IncomingEmailFilteringMethod: DevKit.WebApi.OptionSetValue;
 		/** Shows the status of approval of the email address by O365 Admin. */
 		IsEmailAddressApprovedByO365Admin: DevKit.WebApi.BooleanValueReadonly;
+		/** Indication of whether a queue is the fax delivery queue. */
+		IsFaxQueue: DevKit.WebApi.BooleanValueReadonly;
 		/** Unique identifier of the user who last modified the queue. */
 		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
 		/** Date and time when the queue was last modified. */
@@ -174,12 +274,16 @@ declare namespace DevKit {
 		msdyn_isdefaultqueue: DevKit.WebApi.BooleanValue;
 		/** Shows whether the queue is used as Omnichannel queue for work distribution. */
 		msdyn_isomnichannelqueue: DevKit.WebApi.BooleanValue;
+		/** Maximum queue size */
+		msdyn_maxqueuesize: DevKit.WebApi.IntegerValue;
 		/** Unique identifier for Operating hour associated with Queue */
 		msdyn_operatinghourid: DevKit.WebApi.LookupValue;
 		/** Priority of the queue to indicate conversation assignment order to the agent. */
 		msdyn_priority: DevKit.WebApi.IntegerValue;
 		/** Defines the type of channels handled by this queue */
 		msdyn_queuetype: DevKit.WebApi.OptionSetValue;
+		/** Unique Name for the entity. */
+		msdyn_uniquename: DevKit.WebApi.StringValue;
 		/** Name of the queue. */
 		Name: DevKit.WebApi.StringValue;
 		/** Number of Queue items associated with the queue. */
@@ -202,6 +306,8 @@ declare namespace DevKit {
 		OwningTeam: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the user who owns the queue. */
 		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the owner of the queue. */
+		PrimaryUserId: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the queue. */
 		QueueId: DevKit.WebApi.GuidValue;
 		/** Type of queue that is automatically assigned when a user or queue is created. The type can be public, private, or work in process. */
@@ -292,22 +398,22 @@ declare namespace OptionSet {
 			/** 2 */
 			Inactive
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Information','Queue'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

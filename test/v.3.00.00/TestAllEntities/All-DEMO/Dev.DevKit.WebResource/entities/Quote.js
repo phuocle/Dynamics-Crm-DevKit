@@ -1,9 +1,13 @@
 ﻿//@ts-check
 ///<reference path="Quote.d.ts" />
 "use strict";
-var formField_Service_Information = (function () {
+var formQuote_Field_Service_Information = (function () {
 	"use strict";
+	/** @type DevKit.FormQuote_Field_Service_Information */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.FormQuote_Field_Service_Information(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}
@@ -12,9 +16,13 @@ var formField_Service_Information = (function () {
 		OnSave: onSave
 	};
 })();
-var formProject_Information = (function () {
+var formQuote_Project_Information = (function () {
 	"use strict";
+	/** @type DevKit.FormQuote_Project_Information */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.FormQuote_Project_Information(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}
@@ -25,7 +33,26 @@ var formProject_Information = (function () {
 })();
 var formQuote = (function () {
 	"use strict";
+	/** @type DevKit.FormQuote */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.FormQuote(executionContext);
+
+	}
+	async function onSave(executionContext) {
+	}
+	return {
+		OnLoad: onLoad,
+		OnSave: onSave
+	};
+})();
+var formQuote4 = (function () {
+	"use strict";
+	/** @type DevKit.FormQuote4 */
+	var form = null;
+	async function onLoad(executionContext) {
+		form = new DevKit.FormQuote4(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}

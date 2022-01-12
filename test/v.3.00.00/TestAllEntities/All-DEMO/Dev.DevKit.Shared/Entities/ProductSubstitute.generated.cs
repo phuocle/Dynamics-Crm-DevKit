@@ -15,11 +15,11 @@ namespace Dev.DevKit.Shared.Entities.ProductSubstituteOptionSets
 		/// <summary>
 		/// Bi-Directional = 1
 		/// </summary>
-		BiDirectional = 1,
+		Bi_Directional = 1,
 		/// <summary>
 		/// Uni-Directional = 0
 		/// </summary>
-		UniDirectional = 0
+		Uni_Directional = 0
 	}
 
 	public enum SalesRelationshipType
@@ -31,7 +31,7 @@ namespace Dev.DevKit.Shared.Entities.ProductSubstituteOptionSets
 		/// <summary>
 		/// Cross-sell = 1
 		/// </summary>
-		Crosssell = 1,
+		Cross_sell = 1,
 		/// <summary>
 		/// Substitute = 3
 		/// </summary>
@@ -39,7 +39,7 @@ namespace Dev.DevKit.Shared.Entities.ProductSubstituteOptionSets
 		/// <summary>
 		/// Up-sell = 0
 		/// </summary>
-		Upsell = 0
+		Up_sell = 0
 	}
 
 	public enum statecode

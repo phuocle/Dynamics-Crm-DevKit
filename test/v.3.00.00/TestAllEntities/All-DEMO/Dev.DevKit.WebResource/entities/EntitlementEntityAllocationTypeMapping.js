@@ -1,9 +1,13 @@
 ﻿//@ts-check
 ///<reference path="EntitlementEntityAllocationTypeMapping.d.ts" />
 "use strict";
-var formInformation = (function () {
+var formEntitlementEntityAllocationTypeMapping_Information = (function () {
 	"use strict";
+	/** @type DevKit.FormEntitlementEntityAllocationTypeMapping_Information */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.FormEntitlementEntityAllocationTypeMapping_Information(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}

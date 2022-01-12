@@ -19,7 +19,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_channelcapabilityOptionSets
 		/// <summary>
 		/// Co-browse = 192350002
 		/// </summary>
-		Cobrowse = 192350002,
+		Co_browse = 192350002,
 		/// <summary>
 		/// None = 192350003
 		/// </summary>

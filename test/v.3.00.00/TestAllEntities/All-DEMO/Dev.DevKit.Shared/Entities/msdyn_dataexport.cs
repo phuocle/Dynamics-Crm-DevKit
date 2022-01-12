@@ -1,16 +1,16 @@
 ﻿namespace Dev.DevKit.Shared.Entities
 {
-    public partial class msdyn_dataexport
-    {
-        #region --- PROPERTIES ---
+	public partial class msdyn_dataexport
+	{
+		#region --- PROPERTIES ---
 
-        //public DateTime? DateTime { get { return GetAliasedValue<DateTime?>("c.birthdate"); } }
+		//public DateTime? DateTime { get { return GetAliasedValue<DateTime?>("c.birthdate"); } }
 
-        #endregion
+		#endregion
 
-        #region --- STATIC METHODS ---
+		#region --- STATIC METHODS ---
 
 
-        #endregion
-    }
+		#endregion
+	}
 }

@@ -1,9 +1,13 @@
 ﻿//@ts-check
 ///<reference path="msdyn_callablecontext.d.ts" />
 "use strict";
-var formInformation = (function () {
+var formmsdyn_callablecontext_Information = (function () {
 	"use strict";
+	/** @type DevKit.Formmsdyn_callablecontext_Information */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.Formmsdyn_callablecontext_Information(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}

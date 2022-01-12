@@ -163,7 +163,7 @@ namespace DynamicsCrm.DevKit.Shared
                         }
                         else
                         {
-                            foreach (var entityLogicalName in lookup.Targets)
+                            foreach (var entityLogicalName in lookup.Targets.Distinct())
                             {
                                 var navigation = EntityMetadata.ManyToOneRelationships.FirstOrDefault(x => x.ReferencingAttribute == attribute.LogicalName && x.ReferencedEntity == entityLogicalName);
                                 var b = $"b: '{navigation?.ReferencingEntityNavigationPropertyName}'";
@@ -172,7 +172,9 @@ namespace DynamicsCrm.DevKit.Shared
                                 var d = $"d: '{entityLogicalName}'";
                                 if (navigation?.ReferencingEntityNavigationPropertyName != null && navigation?.ReferencingEntityNavigationPropertyName?.Length > 0)
                                 {
-                                    code += $"{TAB}{TAB}{TAB}{Utility.SafeDeclareName(navigation?.ReferencingEntityNavigationPropertyName, EntityMetadata.SchemaName, attribute)}: {{ {b}, {a}, {c}, {d}{r} }},{NEW_LINE}";
+                                    var temp = $"{TAB}{TAB}{TAB}{Utility.SafeDeclareName(navigation?.ReferencingEntityNavigationPropertyName, EntityMetadata.SchemaName, attribute)}: {{ {b}, {a},";
+                                    if (!code.Contains(temp))
+                                        code += $"{TAB}{TAB}{TAB}{Utility.SafeDeclareName(navigation?.ReferencingEntityNavigationPropertyName, EntityMetadata.SchemaName, attribute)}: {{ {b}, {a}, {c}, {d}{r} }},{NEW_LINE}";
                                 }
                             }
                         }

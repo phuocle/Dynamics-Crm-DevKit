@@ -35,7 +35,7 @@ declare namespace DevKit {
 	}
 	class FormMobile_Offline_Profile_Item extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Mobile_Offline_Profile_Item
+		* DynamicsCrm.DevKit form Mobile_Offline_Profile_Item Main Form
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -46,6 +46,8 @@ declare namespace DevKit {
 		Body: DevKit.FormMobile_Offline_Profile_Item.Body;
 		/** The Grid of form Mobile_Offline_Profile_Item */
 		Grid: DevKit.FormMobile_Offline_Profile_Item.Grid;
+		/** The SidePanes of form Mobile_Offline_Profile_Item */
+		SidePanes: DevKit.SidePanes;
 	}
 	class MobileOfflineProfileItemApi {
 		/**
@@ -73,6 +75,8 @@ declare namespace DevKit {
 		EntityCollectionName: string;
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
+		/** Specifies whether records of this entity can be followed. */
+		CanBeFollowed: DevKit.WebApi.BooleanValue;
 		/** For internal use only. */
 		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
 		/** Shows who created the record. */
@@ -83,6 +87,8 @@ declare namespace DevKit {
 		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
 		/** Internal Use Only */
 		EntityObjectTypeCode: DevKit.WebApi.IntegerValueReadonly;
+		/** Specify whether records related to this entity will be made available for offline access. */
+		GetRelatedEntityRecords: DevKit.WebApi.BooleanValue;
 		/** Version in which the Mobile offline Profile Item is introduced. */
 		IntroducedVersion: DevKit.WebApi.StringValue;
 		/** For internal use only. */
@@ -111,6 +117,8 @@ declare namespace DevKit {
 		ProcessId: DevKit.WebApi.GuidValue;
 		/** Profile item entity filter criteria */
 		ProfileItemEntityFilter: DevKit.WebApi.StringValue;
+		/** Saved Query associated with the Mobile offline profile item rule. */
+		ProfileItemRule: DevKit.WebApi.LookupValue;
 		/** Displays the last published date time. */
 		PublishedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
 		/** Specify data download filter for selected entity */
@@ -139,6 +147,8 @@ declare namespace DevKit {
 		TraversedPath: DevKit.WebApi.StringValue;
 		/** Version number of the Mobile Offline Profile Item. */
 		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		/** Contains converted sql of the referenced view. */
+		ViewQuery: DevKit.WebApi.StringValue;
 	}
 }
 declare namespace OptionSet {
@@ -163,22 +173,274 @@ declare namespace OptionSet {
 			/** 2 */
 			Other_data_filter
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum SelectedEntityTypeCode {
+			/** 1 */
+			Account,
+			/** 16 */
+			AccountLeads,
+			/** 10074 */
+			Activity_File_Attachment,
+			/** 10492 */
+			Agreement_Business_Process,
+			/** 4201 */
+			Appointment,
+			/** 10126 */
+			Asset_Category_Template_Association,
+			/** 10127 */
+			Asset_Template_Association,
+			/** 1001 */
+			Attachment,
+			/** 1150 */
+			Bookable_Resource,
+			/** 1145 */
+			Bookable_Resource_Booking,
+			/** 10564 */
+			Bookable_Resource_Booking_Quick_Note,
+			/** 1152 */
+			Booking_Status,
+			/** 10489 */
+			Booking_Timestamp,
+			/** 112 */
+			Case,
+			/** 10491 */
+			Case_to_Work_Order_Business_Process,
+			/** 10576 */
+			CFS_IoT_Alert_Process_Flow,
+			/** 123 */
+			Competitor,
+			/** 1004 */
+			Competitor_Address,
+			/** 1006 */
+			Competitor_Product,
+			/** 3234 */
+			Connection,
+			/** 3231 */
+			Connection_Role,
+			/** 2 */
+			Contact,
+			/** 22 */
+			ContactLeads,
+			/** 9105 */
+			Currency,
+			/** 10128 */
+			Customer_Asset,
+			/** 10130 */
+			Customer_Asset_Category,
+			/** 4202 */
+			Email,
+			/** 9700 */
+			Entitlement,
+			/** 7272 */
+			Entitlement_Contact,
+			/** 6363 */
+			Entitlement_Product,
+			/** 4545 */
+			Entitlement_Template_Product,
+			/** 10495 */
+			Field_Service_Price_List_Item,
+			/** 10496 */
+			Field_Service_Setting,
+			/** 10131 */
+			Functional_Location,
+			/** 10577 */
+			Geolocation_Settings,
+			/** 1007 */
+			Image_Descriptor,
+			/** 9931 */
+			Incident_KnowledgeBaseRecord,
+			/** 10499 */
+			Incident_Type,
+			/** 10501 */
+			Incident_Type_Product,
+			/** 10569 */
+			Incident_Type_Resolution,
+			/** 10502 */
+			Incident_Type_Service,
+			/** 10503 */
+			Incident_Type_Service_Task,
+			/** 10504 */
+			Incident_Types_Setup,
+			/** 10473 */
+			Inspection_Attachment,
+			/** 10476 */
+			Inspection_Response,
+			/** 10472 */
+			Inspection_Template,
+			/** 10474 */
+			Inspection_Template_Version,
+			/** 1090 */
+			Invoice,
+			/** 1091 */
+			Invoice_Line,
+			/** 10390 */
+			Invoice_Process,
+			/** 10138 */
+			IoT_Alert,
+			/** 10154 */
+			IoT_Alert_to_Case_Process,
+			/** 10139 */
+			IoT_Device,
+			/** 10140 */
+			IoT_Device_Category,
+			/** 10141 */
+			IoT_Device_Command,
+			/** 10142 */
+			IoT_Device_Command_Definition,
+			/** 10143 */
+			IoT_Device_Data_History,
+			/** 10144 */
+			IoT_Device_Property,
+			/** 10145 */
+			IoT_Device_Registration_History,
+			/** 10148 */
+			IoT_Property_Definition,
+			/** 10149 */
+			IoT_Provider,
+			/** 10150 */
+			IoT_Provider_Instance,
+			/** 10151 */
+			IoT_Settings,
+			/** 9953 */
+			Knowledge_Article,
+			/** 10084 */
+			Knowledge_Article_Attachment,
+			/** 10080 */
+			Knowledge_Article_Image,
+			/** 9955 */
+			Knowledge_Article_Views,
+			/** 4 */
+			Lead,
+			/** 954 */
+			Lead_To_Opportunity_Sales_Process,
+			/** 24 */
+			LeadCompetitors,
+			/** 27 */
+			LeadProduct,
+			/** 5 */
+			Note,
+			/** 3 */
+			Opportunity,
+			/** 1083 */
+			Opportunity_Line,
+			/** 953 */
+			Opportunity_Sales_Process,
+			/** 25 */
+			OpportunityCompetitors,
+			/** 1088 */
+			Order,
+			/** 1089 */
+			Order_Line,
+			/** 4210 */
+			Phone_Call,
+			/** 952 */
+			Phone_To_Case_Process,
+			/** 1022 */
+			Price_List,
+			/** 1026 */
+			Price_List_Item,
+			/** 10366 */
+			Priority,
+			/** 1024 */
+			Product,
+			/** 10519 */
+			Product_Inventory,
+			/** 1028 */
+			Product_Relationship,
+			/** 10389 */
+			Project_Stages,
+			/** 1048 */
+			Property,
+			/** 10133 */
+			Property_Asset_Association,
+			/** 1235 */
+			Property_Association,
+			/** 10132 */
+			Property_Definition,
+			/** 1333 */
+			Property_Instance,
+			/** 10134 */
+			Property_Log,
+			/** 1049 */
+			Property_Option_Set_Item,
+			/** 10135 */
+			Property_Template_Association,
+			/** 10490 */
+			Purchase_Order_Business_Process,
+			/** 2020 */
+			Queue,
+			/** 2029 */
+			Queue_Item,
+			/** 1084 */
+			Quote,
+			/** 1085 */
+			Quote_Line,
+			/** 10572 */
+			Resolution,
+			/** 10378 */
+			Scheduling_Parameter,
+			/** 10542 */
+			Service_Task_Type,
+			/** 9752 */
+			SLA_KPI_Instance,
+			/** 4212 */
+			Task,
+			/** 10544 */
+			Tax_Code,
+			/** 9 */
+			Team,
+			/** 10136 */
+			Template_For_Properties,
+			/** 2013 */
+			Territory,
+			/** 10452 */
+			Time_Entry,
+			/** 10546 */
+			Time_Off_Request,
+			/** 10467 */
+			Time_Source,
+			/** 1055 */
+			Unit,
+			/** 1056 */
+			Unit_Group,
+			/** 8 */
+			User,
+			/** 10548 */
+			Warehouse,
+			/** 10549 */
+			Work_Order,
+			/** 10493 */
+			Work_Order_Business_Process,
+			/** 10552 */
+			Work_Order_Incident,
+			/** 10553 */
+			Work_Order_Product,
+			/** 10575 */
+			Work_Order_Resolution,
+			/** 10555 */
+			Work_Order_Service,
+			/** 10556 */
+			Work_Order_Service_Task,
+			/** 10557 */
+			Work_Order_Substatus,
+			/** 10558 */
+			Work_Order_Type
+		}
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Mobile Offline Profile Item'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

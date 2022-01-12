@@ -41,6 +41,8 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, footer, "footer_");
 		form.Footer = footer;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		var quickForm = {
 
 		};
@@ -53,6 +55,128 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
+		return form;
+	};
+	DevKit.FormSystemUser_Information = function(executionContext, defaultWebResourceName) {
+		var formContext = null;
+		if (executionContext !== undefined) {
+			if (executionContext.getFormContext === undefined) {
+				formContext = executionContext;
+			}
+			else {
+				formContext = executionContext.getFormContext();
+			}
+		}
+		var form = devKit.LoadForm(formContext);
+		var body = {
+			AccessMode: {},
+			Address1_City: {},
+			Address1_Country: {},
+			Address1_Fax: {},
+			Address1_Line1: {},
+			Address1_Line2: {},
+			Address1_Line3: {},
+			Address1_PostalCode: {},
+			Address1_StateOrProvince: {},
+			Address1_Telephone1: {},
+			Address1_Telephone2: {},
+			Address1_Telephone3: {},
+			Address2_City: {},
+			Address2_Country: {},
+			Address2_Line1: {},
+			Address2_Line2: {},
+			Address2_Line3: {},
+			Address2_PostalCode: {},
+			Address2_StateOrProvince: {},
+			BusinessUnitId: {},
+			CALType: {},
+			DomainName: {},
+			FirstName: {},
+			HomePhone: {},
+			IncomingEmailDeliveryMethod: {},
+			InternalEMailAddress: {},
+			InviteStatusCode: {},
+			LastName: {},
+			MobileAlertEMail: {},
+			MobilePhone: {},
+			msdyusd_USDConfigurationId: {},
+			OutgoingEmailDeliveryMethod: {},
+			ParentSystemUserId: {},
+			PersonalEMailAddress: {},
+			PositionId: {},
+			PreferredAddressCode: {},
+			PreferredPhoneCode: {},
+			QueueId: {},
+			SiteId: {},
+			TerritoryId: {},
+			Title: {},
+			WebResource_RecordWall: {},
+			WindowsLiveID: {}
+		};
+		devKit.LoadFields(formContext, body);
+		var tab = {
+			addresses: {
+				Section: {
+					address_preference: {},
+					mailing_address: {},
+					other_address: {}
+				}
+			},
+			general: {
+				Section: {
+					administration: {},
+					email_configuration: {},
+					online_account_information: {},
+					onpremise_account_information: {},
+					organization_information: {},
+					queue_selection: {},
+					user_information: {}
+				}
+			},
+			tab_recordwall: {
+				Section: {
+					tab_recordwall_section_1: {}
+				}
+			}
+		};
+		devKit.LoadTabs(formContext, tab);
+		body.Tab = tab;
+		form.Body = body;
+		var footer = {
+			IsDisabled: {}
+		};
+		devKit.LoadFields(formContext, footer, "footer_");
+		form.Footer = footer;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
+		var quickForm = {
+
+		};
+		devKit.LoadQuickForms(formContext, quickForm);
+		form.QuickForm = quickForm;
+		var navigation = {
+			nav_msdyn_accountmanager_quote: {},
+			nav_msdyn_accountmanager_salesorder: {},
+			nav_msdyn_systemuser_msdyn_expense_manager: {},
+			nav_msdyn_systemuser_msdyn_project_projectmanager: {},
+			nav_msdyn_systemuser_msdyn_projectapproval_ApprovedBy: {},
+			nav_msdyn_systemuser_msdyn_projectapproval_Manager: {},
+			nav_msdyn_systemuser_msdyn_resourcerequest_claimedby: {},
+			nav_msdyn_systemuser_msdyn_resourcerequest_requestedby: {},
+			nav_msdyn_systemuser_msdyn_timeentry_manager: {},
+			nav_msdyusd_systemuser_msdyusd_usersettings_User: {},
+			navFieldSecurityProfiles: {},
+			navResourceGroups: {},
+			navRoles: {},
+			navServices: {},
+			navTeams: {}
+		};
+		devKit.LoadNavigations(formContext, navigation);
+		form.Navigation = navigation;
+		form.Utility = devKit.LoadUtility(defaultWebResourceName);
+		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormUser = function(executionContext, defaultWebResourceName) {
@@ -180,17 +304,19 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, footer, "footer_");
 		form.Footer = footer;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		var quickForm = {
 
 		};
 		devKit.LoadQuickForms(formContext, quickForm);
 		form.QuickForm = quickForm;
 		var grid = {
-			OmnichannelQueues: {},
-			TeamsSubGrid: {},
-			LiveEngagementQueues: {},
 			BookableResources: {},
 			CapacityProfilesSubgrid: {},
+			LiveEngagementQueues: {},
+			OmnichannelQueues: {},
+			TeamsSubGrid: {},
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
@@ -231,6 +357,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormUser_form_Business = function(executionContext, defaultWebResourceName) {
@@ -268,7 +395,7 @@ var DevKit;
 			ADMINISTRATION_TAB: {
 				Section: {
 					administration: {},
-					e_mail_configuration: {}
+					email_configuration: {}
 				}
 			},
 			SUMMARY_TAB: {
@@ -291,14 +418,16 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, footer, "footer_");
 		form.Footer = footer;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		var quickForm = {
 
 		};
 		devKit.LoadQuickForms(formContext, quickForm);
 		form.QuickForm = quickForm;
 		var grid = {
-			TeamsSubGrid: {},
 			DirectReports: {},
+			TeamsSubGrid: {},
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
@@ -318,6 +447,52 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
+		return form;
+	};
+	DevKit.FormUser_Information_Form = function(executionContext, defaultWebResourceName) {
+		var formContext = null;
+		if (executionContext !== undefined) {
+			if (executionContext.getFormContext === undefined) {
+				formContext = executionContext;
+			}
+			else {
+				formContext = executionContext.getFormContext();
+			}
+		}
+		var form = devKit.LoadForm(formContext);
+		var body = {
+			Address1_Composite: {},
+			Address1_Line1: {},
+			InternalEMailAddress: {},
+			mapcontrol: {}
+		};
+		devKit.LoadFields(formContext, body);
+		var tab = {
+			UserInfoTab: {
+				Section: {
+					user_information: {}
+				}
+			}
+		};
+		devKit.LoadTabs(formContext, tab);
+		body.Tab = tab;
+		form.Body = body;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
+		var quickForm = {
+
+		};
+		devKit.LoadQuickForms(formContext, quickForm);
+		form.QuickForm = quickForm;
+		var navigation = {
+
+		};
+		devKit.LoadNavigations(formContext, navigation);
+		form.Navigation = navigation;
+		form.Utility = devKit.LoadUtility(defaultWebResourceName);
+		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 })(DevKit || (DevKit = {}));
@@ -345,6 +520,11 @@ var OptionSet;
 		Address2_ShippingMethodCode : {
 			Default_Value: 1
 		},
+		AzureState : {
+			Exists: 0,
+			Not_found_or_hard_deleted: 2,
+			Soft_deleted: 1
+		},
 		CALType : {
 			Administrative: 1,
 			Basic: 2,
@@ -359,6 +539,10 @@ var OptionSet;
 			Project_Service: 12,
 			Sales: 9,
 			Service: 10
+		},
+		DeletedState : {
+			Not_deleted: 0,
+			Soft_deleted: 1
 		},
 		EmailRouterAccessApproval : {
 			Approved: 1,
@@ -412,15 +596,14 @@ var OptionSet;
 			Mobile_Phone: 4,
 			Other_Phone: 2
 		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
-
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 	};
 })(OptionSet || (OptionSet = {}));

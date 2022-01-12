@@ -5,7 +5,7 @@
       "rootnamespace": "Dev.DevKit.Shared.Entities",
       "rootfolder": "",
       "type": "CSharp",
-      "entities": "account,abc",
+      "entities": "*",
       "debug": "?"
     },
     {

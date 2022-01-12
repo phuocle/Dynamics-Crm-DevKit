@@ -29,7 +29,7 @@ declare namespace DevKit {
 		"@odata.etag": string;
 		/** Application Id */
 		ApplicationId: DevKit.WebApi.GuidValue;
-		/** Client Secret */
+		/** Contains a secret for the Azure Active Directory application. Once set, it cannot be read except by Dataverse. */
 		ClientSecret: DevKit.WebApi.StringValue;
 		/** For internal use only. */
 		ComponentIdUnique: DevKit.WebApi.GuidValueReadonly;
@@ -41,6 +41,7 @@ declare namespace DevKit {
 		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
 		/** Unique identifier of the delegate user who created the record. */
 		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Where the Managed Identity will get the credentials to use. */
 		CredentialSource: DevKit.WebApi.OptionSetValue;
 		/** Sequence number of the import that created this record. */
 		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
@@ -58,7 +59,7 @@ declare namespace DevKit {
 		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
 		/** Unique identifier of the delegate user who modified the record. */
 		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
-		/** Name */
+		/** The name assigned to this Managed Identity. */
 		Name: DevKit.WebApi.StringValue;
 		/** ObjectId */
 		ObjectId: DevKit.WebApi.GuidValueReadonly;
@@ -78,13 +79,13 @@ declare namespace DevKit {
 		OwningUser: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the associated solution. */
 		SolutionId: DevKit.WebApi.GuidValueReadonly;
-		/** Status of the ManagedIdentity */
+		/** Status of the Managed Identity */
 		statecode: DevKit.WebApi.OptionSetValue;
-		/** Reason for the status of the ManagedIdentity */
+		/** Reason for the status of the Managed Identity */
 		statuscode: DevKit.WebApi.OptionSetValue;
 		/** For internal use only. */
 		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
-		/** TenantId */
+		/** The Id of the Azure Active Directory Tenant that the Application is part of. */
 		TenantId: DevKit.WebApi.GuidValue;
 		/** For internal use only. */
 		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
@@ -112,7 +113,9 @@ declare namespace OptionSet {
 			/** 2 */
 			IsManaged,
 			/** 1 */
-			KeyVault
+			KeyVault,
+			/** 3 */
+			MicrosoftFirstPartyCertificate
 		}
 		enum statecode {
 			/** 0 */
@@ -126,22 +129,22 @@ declare namespace OptionSet {
 			/** 2 */
 			Inactive
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':[],'JsWebApi':true,'IsDebugForm':false,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}

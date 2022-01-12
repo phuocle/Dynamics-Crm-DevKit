@@ -28,7 +28,7 @@ declare namespace DevKit {
 	}
 	class FormEnvironmentVariableDefinition_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form EnvironmentVariableDefinition_Information
+		* DynamicsCrm.DevKit form EnvironmentVariableDefinition_Information Main Form
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -39,6 +39,8 @@ declare namespace DevKit {
 		Body: DevKit.FormEnvironmentVariableDefinition_Information.Body;
 		/** The Grid of form EnvironmentVariableDefinition_Information */
 		Grid: DevKit.FormEnvironmentVariableDefinition_Information.Grid;
+		/** The SidePanes of form EnvironmentVariableDefinition_Information */
+		SidePanes: DevKit.SidePanes;
 	}
 	class EnvironmentVariableDefinitionApi {
 		/**
@@ -69,8 +71,6 @@ declare namespace DevKit {
 		ApiId: DevKit.WebApi.StringValue;
 		/** For internal use only. */
 		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
-		/** Unique identifier for Connection Reference associated with Environment Variable Definition. */
-		ConnectionReferenceId: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the user who created the record. */
 		CreatedBy: DevKit.WebApi.LookupValueReadonly;
 		/** Date and time when the record was created. */
@@ -124,6 +124,8 @@ declare namespace DevKit {
 		ParentDefinitionId: DevKit.WebApi.LookupValue;
 		/** Unique entity name. */
 		SchemaName: DevKit.WebApi.StringValue;
+		/** Environment variable secret store. */
+		SecretStore: DevKit.WebApi.OptionSetValue;
 		/** Unique identifier of the associated solution. */
 		SolutionId: DevKit.WebApi.GuidValueReadonly;
 		/** Status of the Environment Variable Definition */
@@ -156,6 +158,12 @@ declare namespace OptionSet {
 			/** 1 */
 			Unpublished
 		}
+		enum SecretStore {
+			/** 0 */
+			Azure_Key_Vault,
+			/** 1 */
+			Microsoft_Dataverse
+		}
 		enum statecode {
 			/** 0 */
 			Active,
@@ -177,25 +185,27 @@ declare namespace OptionSet {
 			JSON,
 			/** 100000001 */
 			Number,
+			/** 100000005 */
+			Secret,
 			/** 100000000 */
 			String
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

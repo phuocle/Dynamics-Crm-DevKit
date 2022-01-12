@@ -24,7 +24,7 @@ declare namespace DevKit {
 	}
 	class FormWorkflow_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Workflow_Information
+		* DynamicsCrm.DevKit form Workflow_Information Main Form
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -33,6 +33,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Workflow_Information */
 		Body: DevKit.FormWorkflow_Information.Body;
+		/** The SidePanes of form Workflow_Information */
+		SidePanes: DevKit.SidePanes;
 	}
 	class WorkflowApi {
 		/**
@@ -154,9 +156,9 @@ declare namespace DevKit {
 		SdkMessageId: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the associated solution. */
 		SolutionId: DevKit.WebApi.GuidValueReadonly;
-		/** Status of the process. */
+		/** Status of the workflow */
 		StateCode: DevKit.WebApi.OptionSetValue;
-		/** Additional information about status of the process. */
+		/** Reason for the status of the workflow */
 		StatusCode: DevKit.WebApi.OptionSetValue;
 		/** Indicates whether the process can be included in other processes as a child process. */
 		Subprocess: DevKit.WebApi.BooleanValue;
@@ -170,6 +172,8 @@ declare namespace DevKit {
 		TriggerOnDelete: DevKit.WebApi.BooleanValue;
 		/** Attributes that trigger the process when updated. */
 		TriggerOnUpdateAttributeList: DevKit.WebApi.StringValue;
+		/** For Internal Use Only. */
+		TrustedAccess: DevKit.WebApi.BooleanValueReadonly;
 		/** Type of the process. */
 		Type: DevKit.WebApi.OptionSetValue;
 		/** For internal use only. */
@@ -210,6 +214,8 @@ declare namespace OptionSet {
 			Dialog,
 			/** 5 */
 			Modern_Flow,
+			/** 9000 */
+			Web_Client_API_Flow,
 			/** 0 */
 			Workflow
 		}
@@ -267,11 +273,15 @@ declare namespace OptionSet {
 			/** 1 */
 			Activated,
 			/** 0 */
-			Draft
+			Draft,
+			/** 2 */
+			Suspended
 		}
 		enum StatusCode {
 			/** 2 */
 			Activated,
+			/** 3 */
+			CompanyDLPViolation,
 			/** 1 */
 			Draft
 		}
@@ -299,22 +309,22 @@ declare namespace OptionSet {
 			/** 20 */
 			Pre_operation
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

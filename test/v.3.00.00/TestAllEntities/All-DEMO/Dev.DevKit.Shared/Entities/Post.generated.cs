@@ -31,7 +31,7 @@ namespace Dev.DevKit.Shared.Entities.PostOptionSets
 		/// <summary>
 		/// Check-in = 1
 		/// </summary>
-		Checkin = 1,
+		Check_in = 1,
 		/// <summary>
 		/// Idea = 2
 		/// </summary>
@@ -51,7 +51,7 @@ namespace Dev.DevKit.Shared.Entities.PostOptionSets
 		/// <summary>
 		/// Re-post = 6
 		/// </summary>
-		Repost = 6,
+		Re_post = 6,
 		/// <summary>
 		/// Status = 7
 		/// </summary>

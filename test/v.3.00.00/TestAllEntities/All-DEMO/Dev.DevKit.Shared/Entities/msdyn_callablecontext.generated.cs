@@ -1141,6 +1141,10 @@ namespace Dev.DevKit.Shared.Entities.msdyn_callablecontextOptionSets
 		/// </summary>
 		Data_Performance_Dashboard = 4450,
 		/// <summary>
+		/// Data Sync State = 10855
+		/// </summary>
+		Data_Sync_State = 10855,
+		/// <summary>
 		/// Database Version = 10115
 		/// </summary>
 		Database_Version = 10115,
@@ -1881,6 +1885,10 @@ namespace Dev.DevKit.Shared.Entities.msdyn_callablecontextOptionSets
 		/// </summary>
 		Keywords_Description_Suggestion_Setting = 10210,
 		/// <summary>
+		/// Knowledge analytics = 10209
+		/// </summary>
+		Knowledge_analytics = 10209,
+		/// <summary>
 		/// Knowledge Article = 9953
 		/// </summary>
 		Knowledge_Article = 9953,
@@ -1940,10 +1948,6 @@ namespace Dev.DevKit.Shared.Entities.msdyn_callablecontextOptionSets
 		/// Knowledge personalization = 10085
 		/// </summary>
 		Knowledge_personalization = 10085,
-		/// <summary>
-		/// Knowledge search analytics = 10209
-		/// </summary>
-		Knowledge_search_analytics = 10209,
 		/// <summary>
 		/// Knowledge search filter = 10088
 		/// </summary>
@@ -2173,33 +2177,33 @@ namespace Dev.DevKit.Shared.Entities.msdyn_callablecontextOptionSets
 		/// </summary>
 		Mobile_Offline_Profile_Item_Association = 9868,
 		/// <summary>
-		/// Model training details = 10698
-		/// </summary>
-		Model_training_details = 10698,
-		/// <summary>
 		/// Model-driven App = 9006
 		/// </summary>
-		Modeldriven_App = 9006,
+		Model_driven_App = 9006,
 		/// <summary>
 		/// Model-Driven App Component Node = 10033
 		/// </summary>
-		ModelDriven_App_Component_Node = 10033,
+		Model_Driven_App_Component_Node = 10033,
 		/// <summary>
 		/// Model-Driven App Component Node's Edge = 10032
 		/// </summary>
-		ModelDriven_App_Component_Nodes_Edge = 10032,
+		Model_Driven_App_Component_Nodes_Edge = 10032,
 		/// <summary>
 		/// Model-Driven App Element = 10031
 		/// </summary>
-		ModelDriven_App_Element = 10031,
+		Model_Driven_App_Element = 10031,
 		/// <summary>
 		/// Model-Driven App Setting = 10034
 		/// </summary>
-		ModelDriven_App_Setting = 10034,
+		Model_Driven_App_Setting = 10034,
 		/// <summary>
 		/// Model-Driven App User Setting = 10035
 		/// </summary>
-		ModelDriven_App_User_Setting = 10035,
+		Model_Driven_App_User_Setting = 10035,
+		/// <summary>
+		/// Model training details = 10698
+		/// </summary>
+		Model_training_details = 10698,
 		/// <summary>
 		/// Monthly Fiscal Calendar = 2003
 		/// </summary>
@@ -2555,23 +2559,23 @@ namespace Dev.DevKit.Shared.Entities.msdyn_callablecontextOptionSets
 		/// <summary>
 		/// Plug-in Assembly = 4605
 		/// </summary>
-		Plugin_Assembly = 4605,
+		Plug_in_Assembly = 4605,
+		/// <summary>
+		/// Plug-in Trace Log = 4619
+		/// </summary>
+		Plug_in_Trace_Log = 4619,
+		/// <summary>
+		/// Plug-in Type = 4602
+		/// </summary>
+		Plug_in_Type = 4602,
+		/// <summary>
+		/// Plug-in Type Statistic = 4603
+		/// </summary>
+		Plug_in_Type_Statistic = 4603,
 		/// <summary>
 		/// Plugin Package = 10090
 		/// </summary>
 		Plugin_Package = 10090,
-		/// <summary>
-		/// Plug-in Trace Log = 4619
-		/// </summary>
-		Plugin_Trace_Log = 4619,
-		/// <summary>
-		/// Plug-in Type = 4602
-		/// </summary>
-		Plugin_Type = 4602,
-		/// <summary>
-		/// Plug-in Type Statistic = 4603
-		/// </summary>
-		Plugin_Type_Statistic = 4603,
 		/// <summary>
 		/// PM Inferred Task = 10103
 		/// </summary>
@@ -2803,7 +2807,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_callablecontextOptionSets
 		/// <summary>
 		/// Project Team Member Sign-Up (Deprecated in v3.0) = 10435
 		/// </summary>
-		Project_Team_Member_SignUp_Deprecated_in_v30 = 10435,
+		Project_Team_Member_Sign_Up_Deprecated_in_v30 = 10435,
 		/// <summary>
 		/// Project Transaction Category (Deprecated) = 10436
 		/// </summary>
@@ -3903,7 +3907,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_callablecontextOptionSets
 		/// <summary>
 		/// Team Sync-Attribute Mapping Profiles = 1403
 		/// </summary>
-		Team_SyncAttribute_Mapping_Profiles = 1403,
+		Team_Sync_Attribute_Mapping_Profiles = 1403,
 		/// <summary>
 		/// Team template = 92
 		/// </summary>
@@ -3959,7 +3963,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_callablecontextOptionSets
 		/// <summary>
 		/// Three-Dimensional Model = 10471
 		/// </summary>
-		ThreeDimensional_Model = 10471,
+		Three_Dimensional_Model = 10471,
 		/// <summary>
 		/// Time Entry = 10452
 		/// </summary>
@@ -4123,7 +4127,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_callablecontextOptionSets
 		/// <summary>
 		/// UII Non-Hosted Application = 10757
 		/// </summary>
-		UII_NonHosted_Application = 10757,
+		UII_Non_Hosted_Application = 10757,
 		/// <summary>
 		/// UII Saved Session = 10759
 		/// </summary>
@@ -4143,7 +4147,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_callablecontextOptionSets
 		/// <summary>
 		/// UII Workflow-Step Mapping = 10763
 		/// </summary>
-		UII_WorkflowStep_Mapping = 10763,
+		UII_Workflow_Step_Mapping = 10763,
 		/// <summary>
 		/// Unified Interface Settings = 10784
 		/// </summary>

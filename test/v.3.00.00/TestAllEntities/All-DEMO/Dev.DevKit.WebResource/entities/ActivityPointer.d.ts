@@ -279,7 +279,6 @@ declare namespace DevKit {
 		regardingobjectid_uii_workflowstep: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the activity is associated. */
 		regardingobjectid_uii_workflow_workflowstep_mapping: DevKit.WebApi.LookupValue;
-		RegardingObjectIdYomiName: DevKit.WebApi.StringValue;
 		/** Scheduled duration of the activity, specified in minutes. */
 		ScheduledDurationMinutes: DevKit.WebApi.IntegerValue;
 		/** Scheduled end time of the activity. */
@@ -298,7 +297,6 @@ declare namespace DevKit {
 		SLAId: DevKit.WebApi.LookupValue;
 		/** Last SLA that was applied to this case. This field is for internal use only. */
 		SLAInvokedId: DevKit.WebApi.LookupValueReadonly;
-		SLAName: DevKit.WebApi.StringValueReadonly;
 		/** Shows the date and time by which the activities are sorted. */
 		SortDate_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** Unique identifier of the Stage. */
@@ -325,6 +323,54 @@ declare namespace DevKit {
 }
 declare namespace OptionSet {
 	namespace ActivityPointer {
+		enum ActivityTypeCode {
+			/** 4201 */
+			Appointment,
+			/** 10357 */
+			Booking_Alert,
+			/** 4402 */
+			Campaign_Activity,
+			/** 4401 */
+			Campaign_Response,
+			/** 4206 */
+			Case_Resolution,
+			/** 10644 */
+			Conversation,
+			/** 10261 */
+			Customer_Voice_alert,
+			/** 10271 */
+			Customer_Voice_survey_invite,
+			/** 10273 */
+			Customer_Voice_survey_response,
+			/** 4202 */
+			Email,
+			/** 4204 */
+			Fax,
+			/** 4207 */
+			Letter,
+			/** 4208 */
+			Opportunity_Close,
+			/** 4209 */
+			Order_Close,
+			/** 10752 */
+			Outbound_message,
+			/** 4210 */
+			Phone_Call,
+			/** 10387 */
+			Project_Service_Approval,
+			/** 4406 */
+			Quick_Campaign,
+			/** 4211 */
+			Quote_Close,
+			/** 4251 */
+			Recurring_Appointment,
+			/** 4214 */
+			Service_Activity,
+			/** 10659 */
+			Session,
+			/** 4212 */
+			Task
+		}
 		enum Community {
 			/** 5 */
 			Cortana,
@@ -407,22 +453,22 @@ declare namespace OptionSet {
 			/** 4 */
 			Scheduled
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':[],'JsWebApi':true,'IsDebugForm':false,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}

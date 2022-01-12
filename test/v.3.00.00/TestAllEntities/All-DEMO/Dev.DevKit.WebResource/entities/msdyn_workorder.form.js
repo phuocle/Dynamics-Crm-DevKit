@@ -186,12 +186,12 @@ var DevKit;
 		devKit.LoadQuickForms(formContext, quickForm);
 		form.QuickForm = quickForm;
 		var grid = {
-			Incidents_List: {},
 			bookings: {},
+			Incidents_List: {},
+			KnowledgeArticleSubGrid: {},
 			workorderproductsgrid: {},
 			workorderservicesgrid: {},
 			workorderservicetasksgrid: {},
-			KnowledgeArticleSubGrid: {},
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
@@ -225,6 +225,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormWork_Order_Customer = function(executionContext, defaultWebResourceName) {
@@ -322,6 +323,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormWork_Order_Mobile = function(executionContext, defaultWebResourceName) {
@@ -358,6 +360,7 @@ var DevKit;
 			msdyn_Longitude_1: {},
 			msdyn_mapcontrol: {},
 			msdyn_name: {},
+			msdyn_ParentWorkOrder: {},
 			msdyn_PostalCode: {},
 			msdyn_PriceList: {},
 			msdyn_PrimaryIncidentDescription: {},
@@ -438,12 +441,12 @@ var DevKit;
 		devKit.LoadQuickForms(formContext, quickForm);
 		form.QuickForm = quickForm;
 		var grid = {
+			bookings: {},
+			Incidents_List: {},
+			KnowledgeArticlesSubGrid: {},
 			workorderproductsgrid: {},
 			workorderservicesgrid: {},
 			workorderservicetasksgrid: {},
-			Incidents_List: {},
-			bookings: {},
-			KnowledgeArticlesSubGrid: {},
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
@@ -476,6 +479,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormWork_Order_Notes = function(executionContext, defaultWebResourceName) {
@@ -563,6 +567,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormWork_Order_Service = function(executionContext, defaultWebResourceName) {
@@ -639,11 +644,11 @@ var DevKit;
 		devKit.LoadQuickForms(formContext, quickForm);
 		form.QuickForm = quickForm;
 		var grid = {
-			FsWorkOrderServiceTasksGrid: {},
-			FsWorkOrderProductsGrid: {},
-			FsWorkOrderServicesGrid: {},
 			FsWorkOrderIncidentsGrid: {},
+			FsWorkOrderProductsGrid: {},
 			FsWorkOrderResolutionsGrid: {},
+			FsWorkOrderServicesGrid: {},
+			FsWorkOrderServiceTasksGrid: {},
 			workorder_KASubgrid: {},
 		};
 		devKit.LoadGrids(formContext, grid);
@@ -677,6 +682,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormWork_Order_Create = function(executionContext, defaultWebResourceName) {
@@ -772,6 +778,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormQuick_Create_Work_Order = function(executionContext, defaultWebResourceName) {
@@ -804,7 +811,7 @@ var DevKit;
 			msdyn_SystemStatus: {},
 			msdyn_WorkOrderSummary: {},
 			msdyn_WorkOrderType: {}
-		}
+		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
 			tab_1: {
@@ -814,25 +821,27 @@ var DevKit;
 					tab_1_column_3_section_1: {}
 				}
 			}
-		}
+		};
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
+		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
-	}
+	};
 })(DevKit || (DevKit = {}));
 /** @namespace OptionSet */
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.msdyn_workorder = {
 		msdyn_SystemStatus : {
-			Closed_Canceled: 690970005,
-			Closed_Posted: 690970004,
-			Open_Completed: 690970003,
-			Open_In_Progress: 690970002,
-			Open_Scheduled: 690970001,
-			Open_Unscheduled: 690970000
+			Canceled: 690970005,
+			Completed: 690970003,
+			In_Progress: 690970002,
+			Posted: 690970004,
+			Scheduled: 690970001,
+			Unscheduled: 690970000
 		},
 		msdyn_WorkLocation : {
 			Facility: 690970001,
@@ -847,15 +856,14 @@ var OptionSet;
 			Active: 1,
 			Inactive: 2
 		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
-
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 	};
 })(OptionSet || (OptionSet = {}));

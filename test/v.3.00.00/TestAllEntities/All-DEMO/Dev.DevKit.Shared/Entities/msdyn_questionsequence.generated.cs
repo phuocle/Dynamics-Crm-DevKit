@@ -23,19 +23,19 @@ namespace Dev.DevKit.Shared.Entities.msdyn_questionsequenceOptionSets
 		/// <summary>
 		/// Post-chat authenticated = 192350004
 		/// </summary>
-		Postchat_authenticated = 192350004,
+		Post_chat_authenticated = 192350004,
 		/// <summary>
 		/// Post-chat unauthenticated = 192350005
 		/// </summary>
-		Postchat_unauthenticated = 192350005,
+		Post_chat_unauthenticated = 192350005,
 		/// <summary>
 		/// Pre-chat authenticated = 192350000
 		/// </summary>
-		Prechat_authenticated = 192350000,
+		Pre_chat_authenticated = 192350000,
 		/// <summary>
 		/// Pre-chat unauthenticated = 192350001
 		/// </summary>
-		Prechat_unauthenticated = 192350001
+		Pre_chat_unauthenticated = 192350001
 	}
 
 	public enum statecode

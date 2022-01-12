@@ -133,17 +133,17 @@ declare namespace DevKit {
 			navSubs: DevKit.Controls.NavigationItem
 		}
 		interface Grid {
-			productassocaition_items: DevKit.Controls.Grid;
+			KnowledgeArticlesSubGrid: DevKit.Controls.Grid;
+			Price_List_Items: DevKit.Controls.Grid;
 			product_dynamic_properties: DevKit.Controls.Grid;
 			product_dynamic_properties_offline: DevKit.Controls.Grid;
-			Price_List_Items: DevKit.Controls.Grid;
+			productassocaition_items: DevKit.Controls.Grid;
 			productsubstitute_items: DevKit.Controls.Grid;
-			KnowledgeArticlesSubGrid: DevKit.Controls.Grid;
 		}
 	}
 	class FormProduct extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Product
+		* DynamicsCrm.DevKit form Product Main Form
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -158,6 +158,8 @@ declare namespace DevKit {
 		Navigation: DevKit.FormProduct.Navigation;
 		/** The Grid of form Product */
 		Grid: DevKit.FormProduct.Grid;
+		/** The SidePanes of form Product */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormProduct_Project_Information {
 		interface Header extends DevKit.Controls.IHeader {
@@ -250,16 +252,16 @@ declare namespace DevKit {
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
 		interface Grid {
-			productassocaition_items: DevKit.Controls.Grid;
-			product_dynamic_properties: DevKit.Controls.Grid;
 			Computed_Fields: DevKit.Controls.Grid;
 			Price_List_Items: DevKit.Controls.Grid;
+			product_dynamic_properties: DevKit.Controls.Grid;
+			productassocaition_items: DevKit.Controls.Grid;
 			productsubstitute_items: DevKit.Controls.Grid;
 		}
 	}
 	class FormProduct_Project_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Product_Project_Information
+		* DynamicsCrm.DevKit form Product_Project_Information Main Form
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -274,43 +276,8 @@ declare namespace DevKit {
 		Navigation: DevKit.FormProduct_Project_Information.Navigation;
 		/** The Grid of form Product_Project_Information */
 		Grid: DevKit.FormProduct_Project_Information.Grid;
-	}
-	namespace FormProduct_Quick_Create_FS_5x5 {
-		interface tab_tab_1_Sections {
-			tab_1_column_1_section_1: DevKit.Controls.Section;
-			tab_1_column_2_section_1: DevKit.Controls.Section;
-			tab_1_column_3_section_1: DevKit.Controls.Section;
-		}
-		interface tab_tab_1 extends DevKit.Controls.ITab {
-			Section: tab_tab_1_Sections;
-		}
-		interface Tabs {
-			tab_1: tab_tab_1;
-		}
-		interface Body {
-			Tab: Tabs;
-			/** Default unit for the product. */
-			DefaultUoMId: DevKit.Controls.Lookup;
-			/** Default unit group for the product. */
-			DefaultUoMScheduleId: DevKit.Controls.Lookup;
-			msdyn_FieldServiceProductType: DevKit.Controls.OptionSet;
-			/** Name of the product. */
-			Name: DevKit.Controls.String;
-			/** User-defined product ID. */
-			ProductNumber: DevKit.Controls.String;
-		}
-	}
-	class FormProduct_Quick_Create_FS_5x5 extends DevKit.IForm {
-		/**
-		* DynamicsCrm.DevKit form Product_Quick_Create_FS_5x5
-		* @param executionContext the execution context
-		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
-		*/
-		constructor(executionContext: any, defaultWebResourceName?: string);
-		/** Utility functions/methods/objects for Dynamics 365 form */
-		Utility: DevKit.Utility;
-		/** The Body section of form Product_Quick_Create_FS_5x5 */
-		Body: DevKit.FormProduct_Quick_Create_FS_5x5.Body;
+		/** The SidePanes of form Product_Project_Information */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormProduct_family_Quick_Create {
 		interface tab_tab_1_Sections {
@@ -345,7 +312,7 @@ declare namespace DevKit {
 	}
 	class FormProduct_family_Quick_Create extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Product_family_Quick_Create
+		* DynamicsCrm.DevKit form Product_family_Quick_Create Quick Create
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -393,7 +360,7 @@ declare namespace DevKit {
 	}
 	class FormProduct_Quick_Create extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Product_Quick_Create
+		* DynamicsCrm.DevKit form Product_Quick_Create Quick Create
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -402,6 +369,43 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Product_Quick_Create */
 		Body: DevKit.FormProduct_Quick_Create.Body;
+	}
+	namespace FormProduct_Quick_Create_FS_5x5 {
+		interface tab_tab_1_Sections {
+			tab_1_column_1_section_1: DevKit.Controls.Section;
+			tab_1_column_2_section_1: DevKit.Controls.Section;
+			tab_1_column_3_section_1: DevKit.Controls.Section;
+		}
+		interface tab_tab_1 extends DevKit.Controls.ITab {
+			Section: tab_tab_1_Sections;
+		}
+		interface Tabs {
+			tab_1: tab_tab_1;
+		}
+		interface Body {
+			Tab: Tabs;
+			/** Default unit for the product. */
+			DefaultUoMId: DevKit.Controls.Lookup;
+			/** Default unit group for the product. */
+			DefaultUoMScheduleId: DevKit.Controls.Lookup;
+			msdyn_FieldServiceProductType: DevKit.Controls.OptionSet;
+			/** Name of the product. */
+			Name: DevKit.Controls.String;
+			/** User-defined product ID. */
+			ProductNumber: DevKit.Controls.String;
+		}
+	}
+	class FormProduct_Quick_Create_FS_5x5 extends DevKit.IForm {
+		/**
+		* DynamicsCrm.DevKit form Product_Quick_Create_FS_5x5 Quick Create
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form Product_Quick_Create_FS_5x5 */
+		Body: DevKit.FormProduct_Quick_Create_FS_5x5.Body;
 	}
 	class ProductApi {
 		/**
@@ -606,22 +610,22 @@ declare namespace OptionSet {
 			/** 3 */
 			Under_Revision
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Product','Product Quick Create FS 5x5','Project Information','Quick Create','Quick Create'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

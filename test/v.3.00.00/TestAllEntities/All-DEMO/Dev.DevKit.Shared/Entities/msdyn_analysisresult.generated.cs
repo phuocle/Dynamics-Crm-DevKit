@@ -71,7 +71,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_analysisresultOptionSets
 		/// <summary>
 		/// Plug-In = 192350001
 		/// </summary>
-		PlugIn = 192350001,
+		Plug_In = 192350001,
 		/// <summary>
 		/// Web Resources = 192350000
 		/// </summary>

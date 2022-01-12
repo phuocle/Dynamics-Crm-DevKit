@@ -6,65 +6,65 @@ var DevKit;
 	DevKit.msdyn_ocliveworkitemApi = function (e) {
 		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-        function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
-            var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-            var property = {};
-            var getFormattedValue = function () {
-                if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-                    return EMPTY_STRING;
-                }
-                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-                    if (entity[logicalName + l] === entityLogicalName) {
-                        return entity[logicalName + f];
-                    }
-                    return EMPTY_STRING;
-                }
-                if (isMultiOptionSet) {
-                    return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
-                }
-                return entity[logicalName + f];
-            };
-            var getValue = function () {
-                if (entity[logicalName] === undefined || entity[logicalName] === null) {
-                    return null;
-                }
-                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-                    if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
-                        return entity[logicalName];
-                    }
-                    return null;
-                }
-                if (isMultiOptionSet) {
-                    return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
-                }
-                return entity[logicalName];
-            };
-            var setValue = function (value) {
-                if (isMultiOptionSet) value = value.join(',');
-                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-                    value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
-                    upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
-                } else {
-                    upsertEntity[logicalName] = value;
-                }
-                entity[logicalName] = value;
-            };
-            Object.defineProperty(property, 'FormattedValue', {
-                get: getFormattedValue
-            });
-            if (readOnly) {
-                Object.defineProperty(property, 'Value', {
-                    get: getValue
-                });
-            }
-            else {
-                Object.defineProperty(property, 'Value', {
-                    get: getValue,
-                    set: setValue
-                });
-            }
-            return property;
-        }
+		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
+			var property = {};
+			var getFormattedValue = function () {
+				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
+					return EMPTY_STRING;
+				}
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					if (entity[logicalName + l] === entityLogicalName) {
+						return entity[logicalName + f];
+					}
+					return EMPTY_STRING;
+				}
+				if (isMultiOptionSet) {
+					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
+				}
+				return entity[logicalName + f];
+			};
+			var getValue = function () {
+				if (entity[logicalName] === undefined || entity[logicalName] === null) {
+					return null;
+				}
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
+						return entity[logicalName];
+					}
+					return null;
+				}
+				if (isMultiOptionSet) {
+					return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
+				}
+				return entity[logicalName];
+			};
+			var setValue = function (value) {
+				if (isMultiOptionSet) value = value.join(',');
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
+				} else {
+					upsertEntity[logicalName] = value;
+				}
+				entity[logicalName] = value;
+			};
+			Object.defineProperty(property, 'FormattedValue', {
+				get: getFormattedValue
+			});
+			if (readOnly) {
+				Object.defineProperty(property, 'Value', {
+					get: getValue
+				});
+			}
+			else {
+				Object.defineProperty(property, 'Value', {
+					get: getValue,
+					set: setValue
+				});
+			}
+			return property;
+		}
 		var msdyn_ocliveworkitem = {
 			ActivityAdditionalParams: { a: 'activityadditionalparams' },
 			ActivityId: { a: 'activityid' },
@@ -94,6 +94,7 @@ var DevKit;
 			ModifiedOnBehalfBy: { b: 'modifiedonbehalfby', a: '_modifiedonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
 			msdyn_activeagentassignedon_UtcDateAndTime: { a: 'msdyn_activeagentassignedon' },
 			msdyn_activeagentid: { b: 'msdyn_activeagentid', a: '_msdyn_activeagentid_value', c: 'systemusers', d: 'systemuser' },
+			msdyn_activesessionparticipantid: { b: 'msdyn_activesessionparticipantid', a: '_msdyn_activesessionparticipantid_value', c: 'msdyn_sessionparticipants', d: 'msdyn_sessionparticipant' },
 			msdyn_cdsqueueid: { b: 'msdyn_cdsqueueid', a: '_msdyn_cdsqueueid_value', c: 'queues', d: 'queue' },
 			msdyn_channel: { a: 'msdyn_channel', g: true },
 			msdyn_channelproviderName: { a: 'msdyn_channelproviderName' },
@@ -106,6 +107,7 @@ var DevKit;
 			msdyn_customerlocale: { a: 'msdyn_customerlocale' },
 			msdyn_customersentimentlabel: { a: 'msdyn_customersentimentlabel' },
 			msdyn_dailytopicid: { b: 'msdyn_dailytopicid', a: '_msdyn_dailytopicid_value', c: 'msdyn_ocsentimentdailytopics', d: 'msdyn_ocsentimentdailytopic' },
+			msdyn_effortpredictionresult: { b: 'msdyn_effortpredictionresult', a: '_msdyn_effortpredictionresult_value', c: 'msdyn_effortpredictionresults', d: 'msdyn_effortpredictionresult' },
 			msdyn_escalationcount: { a: 'msdyn_escalationcount' },
 			msdyn_initiatedon_UtcDateAndTime: { a: 'msdyn_initiatedon' },
 			msdyn_isoutbound: { a: 'msdyn_isoutbound' },
@@ -114,7 +116,7 @@ var DevKit;
 			msdyn_liveworkstreamid: { b: 'msdyn_liveworkstreamid', a: '_msdyn_liveworkstreamid_value', c: 'msdyn_liveworkstreams', d: 'msdyn_liveworkstream' },
 			msdyn_liveworkstreamnotificationdata: { a: 'msdyn_liveworkstreamnotificationdata' },
 			msdyn_modifiedon_UtcDateAndTime: { a: 'msdyn_modifiedon' },
-			msdyn_ocliveworkitemid: { a: 'msdyn_ocliveworkitemid' },
+			msdyn_ocliveworkitemid1: { a: 'msdyn_ocliveworkitemid' },
 			msdyn_queueid: { b: 'msdyn_queueid', a: '_msdyn_queueid_value', c: 'msdyn_omnichannelqueues', d: 'msdyn_omnichannelqueue' },
 			msdyn_queueitemid: { b: 'msdyn_queueitemid', a: '_msdyn_queueitemid_value', c: 'queueitems', d: 'queueitem' },
 			msdyn_routableobjectid: { b: 'msdyn_routableobjectid', a: '_msdyn_routableobjectid_value', c: 'tasks', d: 'task' },
@@ -126,6 +128,9 @@ var DevKit;
 			msdyn_title: { a: 'msdyn_title' },
 			msdyn_TranscriptControl: { a: 'msdyn_transcriptcontrol' },
 			msdyn_transfercount: { a: 'msdyn_transfercount' },
+			msdyn_urcustomersentimentkeywords: { a: 'msdyn_urcustomersentimentkeywords' },
+			msdyn_urcustomersentimentlabel: { a: 'msdyn_urcustomersentimentlabel' },
+			msdyn_urcustomersentimentscore: { a: 'msdyn_urcustomersentimentscore' },
 			msdyn_workstreamworkdistributionmode: { a: 'msdyn_workstreamworkdistributionmode' },
 			msdyn_wrapupinitiatedon_UtcDateAndTime: { a: 'msdyn_wrapupinitiatedon' },
 			OnHoldTime: { a: 'onholdtime', r: true },
@@ -230,7 +235,6 @@ var DevKit;
 			regardingobjectid_uii_workflow_msdyn_ocliveworkitem: { b: 'regardingobjectid_uii_workflow_msdyn_ocliveworkitem', a: '_regardingobjectid_value', c: 'uii_workflows', d: 'uii_workflow' },
 			regardingobjectid_uii_workflowstep_msdyn_ocliveworkitem: { b: 'regardingobjectid_uii_workflowstep_msdyn_ocliveworkitem', a: '_regardingobjectid_value', c: 'uii_workflowsteps', d: 'uii_workflowstep' },
 			regardingobjectid_uii_workflow_workflowstep_mapping_msdyn_ocliveworkitem: { b: 'regardingobjectid_uii_workflow_workflowstep_mapping_msdyn_ocliveworkitem', a: '_regardingobjectid_value', c: 'uii_workflow_workflowstep_mappings', d: 'uii_workflow_workflowstep_mapping' },
-			RegardingObjectIdYomiName: { a: 'regardingobjectidyominame' },
 			ScheduledDurationMinutes: { a: 'scheduleddurationminutes' },
 			ScheduledEnd_UtcDateAndTime: { a: 'scheduledend' },
 			ScheduledStart_UtcDateAndTime: { a: 'scheduledstart' },
@@ -240,7 +244,6 @@ var DevKit;
 			ServiceId: { b: 'serviceid', a: '_serviceid_value', c: 'services', d: 'service' },
 			SLAId: { b: 'slaid', a: '_slaid_value', c: 'slas', d: 'sla' },
 			SLAInvokedId: { b: 'slainvokedid', a: '_slainvokedid_value', c: 'slas', d: 'sla', r: true },
-			SLAName: { a: 'slaname', r: true },
 			SortDate_UtcDateAndTime: { a: 'sortdate' },
 			StageId: { a: 'stageid' },
 			StateCode: { a: 'statecode' },
@@ -299,6 +302,31 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.msdyn_ocliveworkitem = {
+		ActivityTypeCode : {
+			Appointment: 4201,
+			Booking_Alert: 10357,
+			Campaign_Activity: 4402,
+			Campaign_Response: 4401,
+			Case_Resolution: 4206,
+			Conversation: 10644,
+			Customer_Voice_alert: 10261,
+			Customer_Voice_survey_invite: 10271,
+			Customer_Voice_survey_response: 10273,
+			Email: 4202,
+			Fax: 4204,
+			Letter: 4207,
+			Opportunity_Close: 4208,
+			Order_Close: 4209,
+			Outbound_message: 10752,
+			Phone_Call: 4210,
+			Project_Service_Approval: 10387,
+			Quick_Campaign: 4406,
+			Quote_Close: 4211,
+			Recurring_Appointment: 4251,
+			Service_Activity: 4214,
+			Session: 10659,
+			Task: 4212
+		},
 		Community : {
 			Cortana: 5,
 			Direct_Line: 6,
@@ -355,6 +383,16 @@ var OptionSet;
 			Very_negative: 7,
 			Very_positive: 13
 		},
+		msdyn_urcustomersentimentlabel : {
+			NA: 0,
+			Negative: 8,
+			Neutral: 10,
+			Positive: 12,
+			Slightly_negative: 9,
+			Slightly_positive: 11,
+			Very_negative: 7,
+			Very_positive: 13
+		},
 		msdyn_workstreamworkdistributionmode : {
 			Pick: 192350001,
 			Push: 192350000
@@ -380,15 +418,14 @@ var OptionSet;
 			Waiting: 3,
 			Wrap_up: 5
 		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
-
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 	};
 })(OptionSet || (OptionSet = {}));

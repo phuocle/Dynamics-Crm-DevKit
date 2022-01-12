@@ -31,6 +31,12 @@ declare namespace DevKit {
 		ACIWebEndpointUrl: DevKit.WebApi.StringValue;
 		/** Unique identifier of the template to be used for acknowledgement when a user unsubscribes. */
 		AcknowledgementTemplateId: DevKit.WebApi.LookupValue;
+		/** Flag to indicate if the display column options on a view in model-driven apps is enabled */
+		AdvancedColumnEditorEnabled: DevKit.WebApi.BooleanValue;
+		/** Flag to indicate if the advanced column filtering in a view in model-driven apps is enabled */
+		AdvancedColumnFilteringEnabled: DevKit.WebApi.BooleanValue;
+		/** Flag to indicate if the advanced filtering on all tables in a model-driven app is enabled */
+		AdvancedFilteringEnabled: DevKit.WebApi.BooleanValue;
 		/** Flag to indicate if the Advanced Lookup feature is enabled for lookup controls */
 		AdvancedLookupEnabled: DevKit.WebApi.BooleanValue;
 		/** Indicates whether background address book synchronization in Microsoft Office Outlook is allowed. */
@@ -55,10 +61,14 @@ declare namespace DevKit {
 		AllowOfflineScheduledSyncs: DevKit.WebApi.BooleanValue;
 		/** Indicates whether scheduled synchronizations to Outlook are allowed. */
 		AllowOutlookScheduledSyncs: DevKit.WebApi.BooleanValue;
+		/** Control whether the organization Allow Redirect Legacy Admin Settings To Modern UI */
+		AllowRedirectAdminSettingsToModernUI: DevKit.WebApi.BooleanValue;
 		/** Indicates whether users are allowed to send email to unresolved parties (parties must still have an email address). */
 		AllowUnresolvedPartiesOnEmailSend: DevKit.WebApi.BooleanValue;
 		/** Indicates whether individuals can select their form mode preference in their personal options. */
 		AllowUserFormModePreference: DevKit.WebApi.BooleanValue;
+		/** Flag to indicate if allow end users to hide system views in model-driven apps is enabled */
+		AllowUsersHidingSystemViews: DevKit.WebApi.BooleanValue;
 		/** Indicates whether the showing tablet application notification bars in a browser is allowed. */
 		AllowUsersSeeAppdownloadMessage: DevKit.WebApi.BooleanValue;
 		/** Indicates whether Web-based export of grids to Microsoft Office Excel is allowed. */
@@ -118,6 +128,8 @@ declare namespace DevKit {
 		ContentSecurityPolicyConfiguration: DevKit.WebApi.StringValue;
 		/** Prefix to use for all contracts throughout Microsoft Dynamics 365. */
 		ContractPrefix: DevKit.WebApi.StringValue;
+		/** Refresh rate for copresence data in seconds. */
+		CopresenceRefreshRate: DevKit.WebApi.IntegerValue;
 		/** Indicates whether the feature CortanaProactiveExperience Flow processes should be enabled for the organization. */
 		CortanaProactiveExperienceEnabled: DevKit.WebApi.BooleanValue;
 		/** Unique identifier of the user who created the organization. */
@@ -136,10 +148,30 @@ declare namespace DevKit {
 		CurrencyFormatCode: DevKit.WebApi.OptionSetValue;
 		/** Symbol used for currency throughout Microsoft Dynamics 365. */
 		CurrencySymbol: DevKit.WebApi.StringValue;
+		/** Current bulk operation number. Deprecated. Use SetAutoNumberSeed message. */
+		CurrentBulkOperationNumber: DevKit.WebApi.IntegerValue;
+		/** Current campaign number. Deprecated. Use SetAutoNumberSeed message. */
+		CurrentCampaignNumber: DevKit.WebApi.IntegerValue;
+		/** First case number to use. Deprecated. Use SetAutoNumberSeed message. */
+		CurrentCaseNumber: DevKit.WebApi.IntegerValue;
+		/** Enter the first number to use for Categories. Deprecated. Use SetAutoNumberSeed message. */
+		CurrentCategoryNumber: DevKit.WebApi.IntegerValue;
+		/** First contract number to use. Deprecated. Use SetAutoNumberSeed message. */
+		CurrentContractNumber: DevKit.WebApi.IntegerValue;
 		/** Import sequence to use. */
 		CurrentImportSequenceNumber: DevKit.WebApi.IntegerValueReadonly;
+		/** First invoice number to use. Deprecated. Use SetAutoNumberSeed message. */
+		CurrentInvoiceNumber: DevKit.WebApi.IntegerValue;
+		/** Enter the first number to use for knowledge articles. Deprecated. Use SetAutoNumberSeed message. */
+		CurrentKaNumber: DevKit.WebApi.IntegerValue;
+		/** First article number to use. Deprecated. Use SetAutoNumberSeed message. */
+		CurrentKbNumber: DevKit.WebApi.IntegerValue;
+		/** First order number to use. Deprecated. Use SetAutoNumberSeed message. */
+		CurrentOrderNumber: DevKit.WebApi.IntegerValue;
 		/** First parsed table number to use. */
 		CurrentParsedTableNumber: DevKit.WebApi.IntegerValueReadonly;
+		/** First quote number to use. Deprecated. Use SetAutoNumberSeed message. */
+		CurrentQuoteNumber: DevKit.WebApi.IntegerValue;
 		/** Information about how the date is displayed throughout Microsoft CRM. */
 		DateFormatCode: DevKit.WebApi.OptionSetValue;
 		/** String showing how the date is displayed throughout Microsoft CRM. */
@@ -182,6 +214,8 @@ declare namespace DevKit {
 		EmailCorrelationEnabled: DevKit.WebApi.BooleanValue;
 		/** Normal polling frequency used for sending email in Microsoft Office Outlook. */
 		EmailSendPollingPeriod: DevKit.WebApi.IntegerValue;
+		/** Determines whether records merged through the merge dialog in UCI are merged asynchronously */
+		EnableAsyncMergeAPIForUCI: DevKit.WebApi.BooleanValue;
 		/** Enable Integration with Bing Maps */
 		EnableBingMapsIntegration: DevKit.WebApi.BooleanValue;
 		/** Enable Integration with Immersive Skype */
@@ -192,6 +226,8 @@ declare namespace DevKit {
 		EnableLivePersonCardIntegrationInOffice: DevKit.WebApi.BooleanValue;
 		/** Select to enable learning path auhtoring. */
 		EnableLPAuthoring: DevKit.WebApi.BooleanValue;
+		/** Control whether the organization Switch Maker Portal to Classic */
+		EnableMakerSwitchToClassic: DevKit.WebApi.BooleanValue;
 		/** Enable Integration with Microsoft Flow */
 		EnableMicrosoftFlowIntegration: DevKit.WebApi.BooleanValue;
 		/** Enable pricing calculations on a Create call. */
@@ -204,6 +240,8 @@ declare namespace DevKit {
 		EnableUnifiedInterfaceShellRefresh: DevKit.WebApi.BooleanValue;
 		/** Organization setting to enforce read only plugins. */
 		EnforceReadOnlyPlugins: DevKit.WebApi.BooleanValue;
+		/** JSON string containing settings for enhanced add products experience in Sales */
+		EnhancedOQOIAddProductsSettings: DevKit.WebApi.StringValue;
 		/** The default image for the entity. */
 		EntityImage: DevKit.WebApi.StringValue;
 		EntityImage_Timestamp: DevKit.WebApi.BigIntValueReadonly;
@@ -230,6 +268,8 @@ declare namespace DevKit {
 		FiscalPeriodFormatPeriod: DevKit.WebApi.OptionSetValue;
 		/** Type of fiscal period used throughout Microsoft CRM. */
 		FiscalPeriodType: DevKit.WebApi.IntegerValue;
+		/** Information that specifies whether the fiscal settings have been updated. */
+		FiscalSettingsUpdated: DevKit.WebApi.BooleanValueReadonly;
 		/** Information that specifies whether the fiscal year should be displayed based on the start date or the end date of the fiscal year. */
 		FiscalYearDisplayCode: DevKit.WebApi.IntegerValue;
 		/** Information that specifies how the name of the fiscal year is displayed throughout Microsoft CRM. */
@@ -318,6 +358,7 @@ declare namespace DevKit {
 		IsAutoSaveEnabled: DevKit.WebApi.BooleanValue;
 		/** Information that specifies whether BPF Entity Customization Feature is enabled */
 		IsBPFEntityCustomizationFeatureEnabled: DevKit.WebApi.BooleanValue;
+		IsCollaborationExperienceEnabled: DevKit.WebApi.BooleanValue;
 		/** Information that specifies whether conflict detection for mobile client is enabled. */
 		IsConflictDetectionEnabledForMobileClient: DevKit.WebApi.BooleanValue;
 		/** Enable or disable mailing address sync for outlook and exchange. */
@@ -430,12 +471,15 @@ declare namespace DevKit {
 		IsSalesAssistantEnabled: DevKit.WebApi.BooleanValue;
 		/** Indicates whether Sales Mobile Preview has been enabled for the organization */
 		IsSalesMobilePreviewEnabled: DevKit.WebApi.BooleanValue;
+		IsSharingInOrgAllowed: DevKit.WebApi.BooleanValue;
 		/** Enable sales order processing integration. */
 		IsSOPIntegrationEnabled: DevKit.WebApi.BooleanValue;
 		/** Information on whether text wrap is enabled. */
 		IsTextWrapEnabled: DevKit.WebApi.BooleanValue;
 		/** Enable or disable auditing of user access. */
 		IsUserAccessAuditEnabled: DevKit.WebApi.BooleanValue;
+		/** Indicates whether loading of Microsoft Dynamics 365 in a browser window that does not have address, tool, and menu bars is enabled. */
+		ISVIntegrationCode: DevKit.WebApi.OptionSetValue;
 		/** Indicates whether Write-in Products can be added to Opportunity/Quote/Order/Invoice or not. */
 		IsWriteInProductsAllowed: DevKit.WebApi.BooleanValue;
 		/** Type the prefix to use for all knowledge articles in Microsoft Dynamics 365. */
@@ -460,6 +504,10 @@ declare namespace DevKit {
 		MailboxPermanentIssueMinRange: DevKit.WebApi.IntegerValue;
 		/** Maximum number of actionsteps allowed in a BPF */
 		MaxActionStepsInBPF: DevKit.WebApi.IntegerValue;
+		/** Maximum Allowed Pending Rollup Job Count */
+		MaxAllowedPendingRollupJobCount: DevKit.WebApi.IntegerValue;
+		/** Percentage Of Entity Table Size For Kicking Off Bootstrap Job */
+		MaxAllowedPendingRollupJobPercentage: DevKit.WebApi.IntegerValue;
 		/** Maximum number of days an appointment can last. */
 		MaxAppointmentDurationDays: DevKit.WebApi.IntegerValue;
 		/** Maximum number of conditions allowed for mobile offline filters */
@@ -484,6 +532,10 @@ declare namespace DevKit {
 		MaxRecordsForExportToExcel: DevKit.WebApi.IntegerValue;
 		/** Maximum number of lookup and picklist records that can be selected by user for filtering. */
 		MaxRecordsForLookupFilters: DevKit.WebApi.IntegerValue;
+		/** Maximum Rollup Fields Per Entity */
+		MaxRollupFieldsPerEntity: DevKit.WebApi.IntegerValue;
+		/** Maximum Rollup Fields Per Organization */
+		MaxRollupFieldsPerOrg: DevKit.WebApi.IntegerValue;
 		MaxSLAItemsPerSLA: DevKit.WebApi.IntegerValue;
 		/** The maximum version of IE to run browser emulation for in Outlook client */
 		MaxSupportedInternetExplorerVersion: DevKit.WebApi.IntegerValueReadonly;
@@ -495,6 +547,8 @@ declare namespace DevKit {
 		MaxVerboseLoggingSyncCycles: DevKit.WebApi.IntegerValueReadonly;
 		/** What is the last date/time where there are metadata tracking deleted objects that have never been outside of the expiration period. */
 		MetadataSyncLastTimeOfNeverExpiredDeletedObjects_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Contains the maximum version number for attributes used by metadata synchronization that have changed. */
+		MetadataSyncTimestamp: DevKit.WebApi.BigIntValueReadonly;
 		/** (Deprecated) Environment selected for Integration with Microsoft Flow */
 		MicrosoftFlowEnvironment: DevKit.WebApi.StringValue;
 		/** Normal polling frequency used for address book synchronization in Microsoft Office Outlook. */
@@ -559,6 +613,8 @@ declare namespace DevKit {
 		ParsedTablePrefix: DevKit.WebApi.StringValueReadonly;
 		/** Specifies the maximum number of months in past for which the recurring activities can be created. */
 		PastExpansionWindow: DevKit.WebApi.IntegerValue;
+		/** Leave empty to use default setting. Set to on/off to enable/disable replacement of default grids with modern ones in model-driven apps. */
+		PcfDatasetGridEnabled: DevKit.WebApi.StringValue;
 		/** For internal use only. */
 		Picture: DevKit.WebApi.StringValue;
 		PinpointLanguageCode: DevKit.WebApi.IntegerValue;
@@ -584,10 +640,14 @@ declare namespace DevKit {
 		ProductRecommendationsEnabled: DevKit.WebApi.BooleanValue;
 		/** Indicates whether prompt should be shown for new Qualify Lead Experience */
 		QualifyLeadAdditionalOptions: DevKit.WebApi.StringValue;
+		/** Flag to indicate if the feature to use quick action to open records in search side pane is enabled */
+		QuickActionToOpenRecordsInSidePaneEnabled: DevKit.WebApi.BooleanValue;
 		/** Indicates whether a quick find record limit should be enabled for this organization (allows for faster Quick Find queries but prevents overly broad searches). */
 		QuickFindRecordLimitEnabled: DevKit.WebApi.BooleanValue;
 		/** Prefix to use for all quotes throughout Microsoft Dynamics 365. */
 		QuotePrefix: DevKit.WebApi.StringValue;
+		/** Indicates whether SLA Recalculation has been enabled for the organization */
+		RecalculateSLA: DevKit.WebApi.BooleanValue;
 		/** Specifies the default value for number of occurrences field in the recurrence dialog. */
 		RecurrenceDefaultNumberOfOccurrences: DevKit.WebApi.IntegerValue;
 		/** Specifies the interval (in seconds) for pausing expansion job. */
@@ -596,6 +656,14 @@ declare namespace DevKit {
 		RecurrenceExpansionJobBatchSize: DevKit.WebApi.IntegerValue;
 		/** Specifies the maximum number of instances to be created synchronously after creating a recurring appointment. */
 		RecurrenceExpansionSynchCreateMax: DevKit.WebApi.IntegerValue;
+		/** XML string that defines the navigation structure for the application. This is the site map from the previously upgraded build and is used in a 3-way merge during upgrade. */
+		ReferenceSiteMapXml: DevKit.WebApi.StringValue;
+		/** Release Wave Applied to Environment. */
+		ReleaseWaveName: DevKit.WebApi.StringValue;
+		/** Indicates whether relevance search was enabled for the environment as part of Dataverse's relevance search on-by-default sweep */
+		RelevanceSearchEnabledByPlatform: DevKit.WebApi.BooleanValue;
+		/** This setting contains the last modified date for relevance search setting that appears as a toggle in PPAC. */
+		RelevanceSearchModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** Flag to render the body of email in the Web form in an IFRAME with the security='restricted' attribute set. This is additional security but can cause a credentials prompt. */
 		RenderSecureIFrameForEmail: DevKit.WebApi.BooleanValue;
 		/** For internal use only. */
@@ -624,6 +692,8 @@ declare namespace DevKit {
 		SendBulkEmailInUCI: DevKit.WebApi.BooleanValue;
 		/** Serve Static Content From CDN */
 		ServeStaticResourcesFromAzureCDN: DevKit.WebApi.BooleanValue;
+		/** Enable the session recording feature to record user sessions in UCI */
+		SessionRecordingEnabled: DevKit.WebApi.BooleanValue;
 		/** Information that specifies whether session timeout is enabled */
 		SessionTimeoutEnabled: DevKit.WebApi.BooleanValue;
 		/** Session timeout in minutes */
@@ -640,6 +710,8 @@ declare namespace DevKit {
 		ShowWeekNumber: DevKit.WebApi.BooleanValue;
 		/** CRM for Outlook Download URL */
 		SignupOutlookDownloadFWLink: DevKit.WebApi.StringValue;
+		/** XML string that defines the navigation structure for the application. */
+		SiteMapXml: DevKit.WebApi.StringValue;
 		/** Contains the on hold case status values. */
 		SlaPauseStates: DevKit.WebApi.StringValue;
 		/** Flag for whether the organization is using Social Insights. */
@@ -718,6 +790,8 @@ declare namespace DevKit {
 		UseReadForm: DevKit.WebApi.BooleanValue;
 		/** Unique identifier of the default group of users in the organization. */
 		UserGroupId: DevKit.WebApi.GuidValue;
+		/** Enable the user rating feature to show the NSAT score and comment to maker */
+		UserRatingEnabled: DevKit.WebApi.BooleanValue;
 		/** Indicates default protocol selected for organization. */
 		UseSkypeProtocol: DevKit.WebApi.BooleanValue;
 		/** Time zone code that was in use when the record was created. */
@@ -762,8 +836,6 @@ declare namespace OptionSet {
 			/** 2 */
 			_123_2
 		}
-		enum DateFormatCode {
-		}
 		enum DefaultRecurrenceEndRangeType {
 			/** 3 */
 			End_By_Date,
@@ -801,16 +873,12 @@ declare namespace OptionSet {
 			Semester_0
 		}
 		enum FiscalYearFormatPrefix {
-			/** 2 */
-			_,
 			/** 1 */
 			FY
 		}
 		enum FiscalYearFormatSuffix {
-			/** 3 */
-			_,
 			/** 2 */
-			_Fiscal_Year,
+			Fiscal_Year,
 			/** 1 */
 			FY
 		}
@@ -900,9 +968,9 @@ declare namespace OptionSet {
 		}
 		enum SchedulingEngine {
 			/** 0 */
-			Default_Scheduling_Engine,
+			_Default_Scheduling_Engine,
 			/** 192350000 */
-			Deprecated_Universal_Resource_Scheduling
+			_Deprecated_Universal_Resource_Scheduling
 		}
 		enum SharePointDeploymentType {
 			/** 1 */
@@ -918,32 +986,28 @@ declare namespace OptionSet {
 			/** 1 */
 			Processing
 		}
-		enum TimeFormatCode {
-		}
-		enum WeekStartDayCode {
-		}
 		enum YammerPostMethod {
 			/** 1 */
 			Private,
 			/** 0 */
 			Public
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':[],'JsWebApi':true,'IsDebugForm':false,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}

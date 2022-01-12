@@ -40,8 +40,6 @@ declare namespace DevKit {
 		/** Unique identifier of the base record. */
 		baserecordid_applicationuser: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
-		baserecordid_appnotification: DevKit.WebApi.LookupValueReadonly;
-		/** Unique identifier of the base record. */
 		baserecordid_appointment: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
 		baserecordid_bookableresource: DevKit.WebApi.LookupValueReadonly;
@@ -94,6 +92,8 @@ declare namespace DevKit {
 		/** Unique identifier of the base record. */
 		baserecordid_datalakeworkspacepermission: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
+		baserecordid_datasyncstate: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the base record. */
 		baserecordid_email: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
 		baserecordid_emailserverprofile: DevKit.WebApi.LookupValueReadonly;
@@ -115,6 +115,8 @@ declare namespace DevKit {
 		baserecordid_exportsolutionupload: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
 		baserecordid_fax: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the base record. */
+		baserecordid_featurecontrolsetting: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
 		baserecordid_feedback: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
@@ -212,9 +214,15 @@ declare namespace DevKit {
 		/** Unique identifier of the base record. */
 		baserecordid_msdyn_approval: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
+		baserecordid_msdyn_approvalset: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the base record. */
 		baserecordid_msdyn_assignmentconfiguration: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
 		baserecordid_msdyn_assignmentconfigurationstep: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the base record. */
+		baserecordid_msdyn_attribute: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the base record. */
+		baserecordid_msdyn_attributevalue: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
 		baserecordid_msdyn_autocapturerule: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
@@ -270,6 +278,10 @@ declare namespace DevKit {
 		/** Unique identifier of the base record. */
 		baserecordid_msdyn_contactpricelist: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
+		baserecordid_msdyn_contactsuggestionrule: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the base record. */
+		baserecordid_msdyn_contactsuggestionruleset: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the base record. */
 		baserecordid_msdyn_contractlinedetailperformance: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
 		baserecordid_msdyn_contractlineinvoiceschedule: DevKit.WebApi.LookupValueReadonly;
@@ -292,9 +304,19 @@ declare namespace DevKit {
 		/** Unique identifier of the base record. */
 		baserecordid_msdyn_customerassetcategory: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
+		baserecordid_msdyn_dataanalyticsreport_fs: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the base record. */
+		baserecordid_msdyn_dataanalyticsreport_fspredictrs: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the base record. */
+		baserecordid_msdyn_dataanalyticsreport_fspredictwhd: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the base record. */
 		baserecordid_msdyn_dataexport: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
 		baserecordid_msdyn_dataflow: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the base record. */
+		baserecordid_msdyn_dealmanageraccess: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the base record. */
+		baserecordid_msdyn_dealmanagersettings: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
 		baserecordid_msdyn_decisioncontract: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
@@ -306,9 +328,13 @@ declare namespace DevKit {
 		/** Unique identifier of the base record. */
 		baserecordid_msdyn_dimensionfieldname: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
+		baserecordid_msdyn_effortpredictionresult: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the base record. */
 		baserecordid_msdyn_entitlementapplication: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
 		baserecordid_msdyn_entityconfiguration: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the base record. */
+		baserecordid_msdyn_entitylinkchatconfiguration: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
 		baserecordid_msdyn_estimate: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
@@ -351,6 +377,10 @@ declare namespace DevKit {
 		baserecordid_msdyn_geolocationtracking: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
 		baserecordid_msdyn_icebreakersconfig: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the base record. */
+		baserecordid_msdyn_iermlmodel: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the base record. */
+		baserecordid_msdyn_iermltraining: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
 		baserecordid_msdyn_incidenttype: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
@@ -428,6 +458,8 @@ declare namespace DevKit {
 		/** Unique identifier of the base record. */
 		baserecordid_msdyn_kalanguagesetting: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
+		baserecordid_msdyn_kbattachment: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the base record. */
 		baserecordid_msdyn_kmfederatedsearchconfig: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
 		baserecordid_msdyn_knowledgearticleimage: DevKit.WebApi.LookupValueReadonly;
@@ -464,7 +496,11 @@ declare namespace DevKit {
 		/** Unique identifier of the base record. */
 		baserecordid_msdyn_notificationtemplate: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
+		baserecordid_msdyn_ocautoblockrule: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the base record. */
 		baserecordid_msdyn_ocbotchannelregistration: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the base record. */
+		baserecordid_msdyn_occarrier: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
 		baserecordid_msdyn_occhannelconfiguration: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
@@ -479,6 +515,8 @@ declare namespace DevKit {
 		baserecordid_msdyn_ocfbapplication: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
 		baserecordid_msdyn_ocfbpage: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the base record. */
+		baserecordid_msdyn_ocflaggedspam: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
 		baserecordid_msdyn_oclanguage: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
@@ -504,6 +542,8 @@ declare namespace DevKit {
 		/** Unique identifier of the base record. */
 		baserecordid_msdyn_ocprovisioningstate: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
+		baserecordid_msdyn_ocrecording: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the base record. */
 		baserecordid_msdyn_ocrequest: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
 		baserecordid_msdyn_ocsentimentdailytopic: DevKit.WebApi.LookupValueReadonly;
@@ -515,6 +555,8 @@ declare namespace DevKit {
 		baserecordid_msdyn_ocsession: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
 		baserecordid_msdyn_ocsessioncharacteristic: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the base record. */
+		baserecordid_msdyn_ocsessionparticipantevent: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
 		baserecordid_msdyn_ocsimltraining: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
@@ -577,6 +619,8 @@ declare namespace DevKit {
 		baserecordid_msdyn_orderpricelist: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
 		baserecordid_msdyn_organizationalunit: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the base record. */
+		baserecordid_msdyn_overflowactionconfig: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
 		baserecordid_msdyn_paneconfiguration: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
@@ -770,7 +814,11 @@ declare namespace DevKit {
 		/** Unique identifier of the base record. */
 		baserecordid_msdyn_rulesetdependencymapping: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
+		baserecordid_msdyn_salesaccelerationsettings: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the base record. */
 		baserecordid_msdyn_salesinsightssettings: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the base record. */
+		baserecordid_msdyn_salesroutingrun: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
 		baserecordid_msdyn_scenario: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
@@ -778,7 +826,13 @@ declare namespace DevKit {
 		/** Unique identifier of the base record. */
 		baserecordid_msdyn_schedulingfeatureflag: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
+		baserecordid_msdyn_segment: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the base record. */
 		baserecordid_msdyn_sentimentanalysis: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the base record. */
+		baserecordid_msdyn_sequence: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the base record. */
+		baserecordid_msdyn_sequencetarget: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
 		baserecordid_msdyn_serviceconfiguration: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
@@ -823,6 +877,8 @@ declare namespace DevKit {
 		baserecordid_msdyn_taxcode: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
 		baserecordid_msdyn_taxcodedetail: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the base record. */
+		baserecordid_msdyn_teamschannelengagementctx: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
 		baserecordid_msdyn_teamsdialeradminsettings: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
@@ -896,6 +952,10 @@ declare namespace DevKit {
 		/** Unique identifier of the base record. */
 		baserecordid_msdyn_workordertype: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
+		baserecordid_msdyn_workqueuestate: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the base record. */
+		baserecordid_msdyn_workqueueusersetting: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the base record. */
 		baserecordid_msdyusd_agentscriptaction: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
 		baserecordid_msdyusd_agentscripttaskcategory: DevKit.WebApi.LookupValueReadonly;
@@ -936,6 +996,8 @@ declare namespace DevKit {
 		/** Unique identifier of the base record. */
 		baserecordid_msfp_surveyreminder: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
+		baserecordid_new_test: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the base record. */
 		baserecordid_opportunity: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
 		baserecordid_organizationdatasyncsubscription: DevKit.WebApi.LookupValueReadonly;
@@ -966,6 +1028,8 @@ declare namespace DevKit {
 		/** Unique identifier of the base record. */
 		baserecordid_serviceplan: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
+		baserecordid_serviceplanmapping: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the base record. */
 		baserecordid_sharepointdocumentlocation: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
 		baserecordid_sharepointsite: DevKit.WebApi.LookupValueReadonly;
@@ -975,6 +1039,8 @@ declare namespace DevKit {
 		baserecordid_socialprofile: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
 		baserecordid_solutioncomponentattributeconfiguration: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the base record. */
+		baserecordid_solutioncomponentbatchconfiguration: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
 		baserecordid_solutioncomponentconfiguration: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
@@ -1025,8 +1091,6 @@ declare namespace DevKit {
 		duplicaterecordid_adminsettingsentity: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_applicationuser: DevKit.WebApi.LookupValueReadonly;
-		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_appnotification: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_appointment: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
@@ -1080,6 +1144,8 @@ declare namespace DevKit {
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_datalakeworkspacepermission: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
+		duplicaterecordid_datasyncstate: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_email: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_emailserverprofile: DevKit.WebApi.LookupValueReadonly;
@@ -1101,6 +1167,8 @@ declare namespace DevKit {
 		duplicaterecordid_exportsolutionupload: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_fax: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the potential duplicate record. */
+		duplicaterecordid_featurecontrolsetting: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_feedback: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
@@ -1198,9 +1266,15 @@ declare namespace DevKit {
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_msdyn_approval: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
+		duplicaterecordid_msdyn_approvalset: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_msdyn_assignmentconfiguration: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_msdyn_assignmentconfigurationstep: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the potential duplicate record. */
+		duplicaterecordid_msdyn_attribute: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the potential duplicate record. */
+		duplicaterecordid_msdyn_attributevalue: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_msdyn_autocapturerule: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
@@ -1256,6 +1330,10 @@ declare namespace DevKit {
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_msdyn_contactpricelist: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
+		duplicaterecordid_msdyn_contactsuggestionrule: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the potential duplicate record. */
+		duplicaterecordid_msdyn_contactsuggestionruleset: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_msdyn_contractlinedetailperformance: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_msdyn_contractlineinvoiceschedule: DevKit.WebApi.LookupValueReadonly;
@@ -1278,9 +1356,19 @@ declare namespace DevKit {
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_msdyn_customerassetcategory: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
+		duplicaterecordid_msdyn_dataanalyticsreport_fs: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the potential duplicate record. */
+		duplicaterecordid_msdyn_dataanalyticsreport_fspredictrs: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the potential duplicate record. */
+		duplicaterecordid_msdyn_dataanalyticsreport_fspredictwhd: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_msdyn_dataexport: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_msdyn_dataflow: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the potential duplicate record. */
+		duplicaterecordid_msdyn_dealmanageraccess: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the potential duplicate record. */
+		duplicaterecordid_msdyn_dealmanagersettings: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_msdyn_decisioncontract: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
@@ -1292,9 +1380,13 @@ declare namespace DevKit {
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_msdyn_dimensionfieldname: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
+		duplicaterecordid_msdyn_effortpredictionresult: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_msdyn_entitlementapplication: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_msdyn_entityconfiguration: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the potential duplicate record. */
+		duplicaterecordid_msdyn_entitylinkchatconfiguration: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_msdyn_estimate: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
@@ -1337,6 +1429,10 @@ declare namespace DevKit {
 		duplicaterecordid_msdyn_geolocationtracking: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_msdyn_icebreakersconfig: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the potential duplicate record. */
+		duplicaterecordid_msdyn_iermlmodel: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the potential duplicate record. */
+		duplicaterecordid_msdyn_iermltraining: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_msdyn_incidenttype: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
@@ -1414,6 +1510,8 @@ declare namespace DevKit {
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_msdyn_kalanguagesetting: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
+		duplicaterecordid_msdyn_kbattachment: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_msdyn_kmfederatedsearchconfig: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_msdyn_knowledgearticleimage: DevKit.WebApi.LookupValueReadonly;
@@ -1450,7 +1548,11 @@ declare namespace DevKit {
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_msdyn_notificationtemplate: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
+		duplicaterecordid_msdyn_ocautoblockrule: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_msdyn_ocbotchannelregistration: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the potential duplicate record. */
+		duplicaterecordid_msdyn_occarrier: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_msdyn_occhannelconfiguration: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
@@ -1465,6 +1567,8 @@ declare namespace DevKit {
 		duplicaterecordid_msdyn_ocfbapplication: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_msdyn_ocfbpage: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the potential duplicate record. */
+		duplicaterecordid_msdyn_ocflaggedspam: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_msdyn_oclanguage: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
@@ -1490,6 +1594,8 @@ declare namespace DevKit {
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_msdyn_ocprovisioningstate: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
+		duplicaterecordid_msdyn_ocrecording: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_msdyn_ocrequest: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_msdyn_ocsentimentdailytopic: DevKit.WebApi.LookupValueReadonly;
@@ -1501,6 +1607,8 @@ declare namespace DevKit {
 		duplicaterecordid_msdyn_ocsession: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_msdyn_ocsessioncharacteristic: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the potential duplicate record. */
+		duplicaterecordid_msdyn_ocsessionparticipantevent: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_msdyn_ocsimltraining: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
@@ -1563,6 +1671,8 @@ declare namespace DevKit {
 		duplicaterecordid_msdyn_orderpricelist: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_msdyn_organizationalunit: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the potential duplicate record. */
+		duplicaterecordid_msdyn_overflowactionconfig: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_msdyn_paneconfiguration: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
@@ -1756,7 +1866,11 @@ declare namespace DevKit {
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_msdyn_rulesetdependencymapping: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
+		duplicaterecordid_msdyn_salesaccelerationsettings: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_msdyn_salesinsightssettings: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the potential duplicate record. */
+		duplicaterecordid_msdyn_salesroutingrun: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_msdyn_scenario: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
@@ -1764,7 +1878,13 @@ declare namespace DevKit {
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_msdyn_schedulingfeatureflag: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
+		duplicaterecordid_msdyn_segment: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_msdyn_sentimentanalysis: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the potential duplicate record. */
+		duplicaterecordid_msdyn_sequence: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the potential duplicate record. */
+		duplicaterecordid_msdyn_sequencetarget: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_msdyn_serviceconfiguration: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
@@ -1809,6 +1929,8 @@ declare namespace DevKit {
 		duplicaterecordid_msdyn_taxcode: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_msdyn_taxcodedetail: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the potential duplicate record. */
+		duplicaterecordid_msdyn_teamschannelengagementctx: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_msdyn_teamsdialeradminsettings: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
@@ -1882,6 +2004,10 @@ declare namespace DevKit {
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_msdyn_workordertype: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
+		duplicaterecordid_msdyn_workqueuestate: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the potential duplicate record. */
+		duplicaterecordid_msdyn_workqueueusersetting: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_msdyusd_agentscriptaction: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_msdyusd_agentscripttaskcategory: DevKit.WebApi.LookupValueReadonly;
@@ -1922,6 +2048,8 @@ declare namespace DevKit {
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_msfp_surveyreminder: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
+		duplicaterecordid_new_test: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_opportunity: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_organizationdatasyncsubscription: DevKit.WebApi.LookupValueReadonly;
@@ -1952,6 +2080,8 @@ declare namespace DevKit {
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_serviceplan: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
+		duplicaterecordid_serviceplanmapping: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_sharepointdocumentlocation: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_sharepointsite: DevKit.WebApi.LookupValueReadonly;
@@ -1961,6 +2091,8 @@ declare namespace DevKit {
 		duplicaterecordid_socialprofile: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_solutioncomponentattributeconfiguration: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the potential duplicate record. */
+		duplicaterecordid_solutioncomponentbatchconfiguration: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_solutioncomponentconfiguration: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
@@ -2011,22 +2143,22 @@ declare namespace DevKit {
 }
 declare namespace OptionSet {
 	namespace DuplicateRecord {
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':[],'JsWebApi':true,'IsDebugForm':false,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}

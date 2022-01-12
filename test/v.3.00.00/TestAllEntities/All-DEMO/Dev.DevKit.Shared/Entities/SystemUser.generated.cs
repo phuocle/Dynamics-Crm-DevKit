@@ -23,7 +23,7 @@ namespace Dev.DevKit.Shared.Entities.SystemUserOptionSets
 		/// <summary>
 		/// Non-interactive = 4
 		/// </summary>
-		Noninteractive = 4,
+		Non_interactive = 4,
 		/// <summary>
 		/// Read = 2
 		/// </summary>
@@ -31,7 +31,7 @@ namespace Dev.DevKit.Shared.Entities.SystemUserOptionSets
 		/// <summary>
 		/// Read-Write = 0
 		/// </summary>
-		ReadWrite = 0,
+		Read_Write = 0,
 		/// <summary>
 		/// Support User = 3
 		/// </summary>
@@ -191,7 +191,7 @@ namespace Dev.DevKit.Shared.Entities.SystemUserOptionSets
 		/// <summary>
 		/// Server-Side Synchronization or Email Router = 2
 		/// </summary>
-		ServerSide_Synchronization_or_Email_Router = 2
+		Server_Side_Synchronization_or_Email_Router = 2
 	}
 
 	public enum InviteStatusCode
@@ -279,7 +279,7 @@ namespace Dev.DevKit.Shared.Entities.SystemUserOptionSets
 		/// <summary>
 		/// Server-Side Synchronization or Email Router = 2
 		/// </summary>
-		ServerSide_Synchronization_or_Email_Router = 2
+		Server_Side_Synchronization_or_Email_Router = 2
 	}
 
 	public enum PreferredAddressCode

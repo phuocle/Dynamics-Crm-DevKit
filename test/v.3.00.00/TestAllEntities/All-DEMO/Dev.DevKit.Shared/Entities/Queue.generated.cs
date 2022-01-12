@@ -43,7 +43,7 @@ namespace Dev.DevKit.Shared.Entities.QueueOptionSets
 		/// <summary>
 		/// Server-Side Synchronization or Email Router = 2
 		/// </summary>
-		ServerSide_Synchronization_or_Email_Router = 2
+		Server_Side_Synchronization_or_Email_Router = 2
 	}
 
 	public enum IncomingEmailFilteringMethod
@@ -107,7 +107,7 @@ namespace Dev.DevKit.Shared.Entities.QueueOptionSets
 		/// <summary>
 		/// Server-Side Synchronization or Email Router = 2
 		/// </summary>
-		ServerSide_Synchronization_or_Email_Router = 2
+		Server_Side_Synchronization_or_Email_Router = 2
 	}
 
 	public enum QueueTypeCode

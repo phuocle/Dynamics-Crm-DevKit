@@ -1,9 +1,13 @@
 ﻿//@ts-check
 ///<reference path="msdyn_flowcardtype.d.ts" />
 "use strict";
-var formInformation = (function () {
+var formmsdyn_flowcardtype_Information = (function () {
 	"use strict";
+	/** @type DevKit.Formmsdyn_flowcardtype_Information */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.Formmsdyn_flowcardtype_Information(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}

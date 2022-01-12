@@ -85,12 +85,27 @@ declare namespace DevKit {
 			SubjectId: DevKit.Controls.Lookup;
 			/** Type a title for the article. */
 			Title: DevKit.Controls.String;
+			webResource_allowed_origins_disclaimer: DevKit.Controls.WebResource;
 		}
 		interface Footer extends DevKit.Controls.IFooter {
 			/** Shows the major version number of this article's content. */
 			MajorVersionNumber: DevKit.Controls.Integer;
 			/** Shows the minor version number of this article's content. */
 			MinorVersionNumber: DevKit.Controls.Integer;
+		}
+		interface ProcessExpired_Process {
+			/** Enter an expiration date for the article. Leave this field blank for no expiration date. */
+			ExpirationDate: DevKit.Controls.DateTime;
+			/** Enter an expiration date for the article. Leave this field blank for no expiration date. */
+			ExpirationDate_1: DevKit.Controls.DateTime;
+			/** Expired Review Options */
+			ExpiredReviewOptions: DevKit.Controls.OptionSet;
+			/** Set Product Associations */
+			SetProductAssociations: DevKit.Controls.Boolean;
+			/** Set Product Associations */
+			SetProductAssociations_1: DevKit.Controls.Boolean;
+			/** Update Content */
+			UpdateContent: DevKit.Controls.Boolean;
 		}
 		interface ProcessNew_Process {
 			/** Enter an expiration date for the article. Leave this field blank for no expiration date. */
@@ -118,40 +133,26 @@ declare namespace DevKit {
 			/** Set Product Associations */
 			SetProductAssociations: DevKit.Controls.Boolean;
 		}
-		interface ProcessExpired_Process {
-			/** Enter an expiration date for the article. Leave this field blank for no expiration date. */
-			ExpirationDate: DevKit.Controls.DateTime;
-			/** Enter an expiration date for the article. Leave this field blank for no expiration date. */
-			ExpirationDate_1: DevKit.Controls.DateTime;
-			/** Expired Review Options */
-			ExpiredReviewOptions: DevKit.Controls.OptionSet;
-			/** Set Product Associations */
-			SetProductAssociations: DevKit.Controls.Boolean;
-			/** Set Product Associations */
-			SetProductAssociations_1: DevKit.Controls.Boolean;
-			/** Update Content */
-			UpdateContent: DevKit.Controls.Boolean;
-		}
 		interface Process extends DevKit.Controls.IProcess {
+			Expired_Process: ProcessExpired_Process;
 			New_Process: ProcessNew_Process;
 			Translation_Process: ProcessTranslation_Process;
-			Expired_Process: ProcessExpired_Process;
 		}
 		interface Grid {
-			RelatedTranslationsGrid: DevKit.Controls.Grid;
-			RelatedCategoriesGrid: DevKit.Controls.Grid;
-			workordersubgrid: DevKit.Controls.Grid;
 			customerassetsubgrid: DevKit.Controls.Grid;
-			productsubgrid: DevKit.Controls.Grid;
+			Feedback: DevKit.Controls.Grid;
 			incidenttypesubgrid: DevKit.Controls.Grid;
 			KnowledgearticleviewsGrid: DevKit.Controls.Grid;
-			Feedback: DevKit.Controls.Grid;
+			productsubgrid: DevKit.Controls.Grid;
 			RelatedCasesGrid: DevKit.Controls.Grid;
+			RelatedCategoriesGrid: DevKit.Controls.Grid;
+			RelatedTranslationsGrid: DevKit.Controls.Grid;
+			workordersubgrid: DevKit.Controls.Grid;
 		}
 	}
 	class FormKnowledge_Article extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Knowledge_Article
+		* DynamicsCrm.DevKit form Knowledge_Article Main Form
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -168,6 +169,8 @@ declare namespace DevKit {
 		Process: DevKit.FormKnowledge_Article.Process;
 		/** The Grid of form Knowledge_Article */
 		Grid: DevKit.FormKnowledge_Article.Grid;
+		/** The SidePanes of form Knowledge_Article */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormKnowledge_Article_for_Interactive_experience {
 		interface Header extends DevKit.Controls.IHeader {
@@ -184,6 +187,8 @@ declare namespace DevKit {
 		interface tab_general_Sections {
 			Content: DevKit.Controls.Section;
 			Knowledge_Information: DevKit.Controls.Section;
+			Knowledge_Suggestion: DevKit.Controls.Section;
+			KnowledgeArticleAttachmentSectionV2: DevKit.Controls.Section;
 		}
 		interface tab_summary_Sections {
 			Portal_Settings: DevKit.Controls.Section;
@@ -234,6 +239,7 @@ declare namespace DevKit {
 			ModifiedBy: DevKit.Controls.Lookup;
 			/** Date and time when the record was modified. */
 			ModifiedOn: DevKit.Controls.DateTime;
+			msdyn_keywordsdescsuggestioncontrol: DevKit.Controls.Boolean;
 			notescontrol: DevKit.Controls.Note;
 			/** Unique identifier of the user or team who owns the record. */
 			OwnerId: DevKit.Controls.Lookup;
@@ -253,12 +259,27 @@ declare namespace DevKit {
 			SubjectId: DevKit.Controls.Lookup;
 			/** Type a title for the article. */
 			Title: DevKit.Controls.String;
+			webResource_allowed_origins_disclaimer: DevKit.Controls.WebResource;
 		}
 		interface Footer extends DevKit.Controls.IFooter {
 			/** Shows the major version number of this article's content. */
 			MajorVersionNumber: DevKit.Controls.Integer;
 			/** Shows the minor version number of this article's content. */
 			MinorVersionNumber: DevKit.Controls.Integer;
+		}
+		interface ProcessExpired_Process {
+			/** Enter an expiration date for the article. Leave this field blank for no expiration date. */
+			ExpirationDate: DevKit.Controls.DateTime;
+			/** Enter an expiration date for the article. Leave this field blank for no expiration date. */
+			ExpirationDate_1: DevKit.Controls.DateTime;
+			/** Expired Review Options */
+			ExpiredReviewOptions: DevKit.Controls.OptionSet;
+			/** Set Product Associations */
+			SetProductAssociations: DevKit.Controls.Boolean;
+			/** Set Product Associations */
+			SetProductAssociations_1: DevKit.Controls.Boolean;
+			/** Update Content */
+			UpdateContent: DevKit.Controls.Boolean;
 		}
 		interface ProcessNew_Process {
 			/** Enter an expiration date for the article. Leave this field blank for no expiration date. */
@@ -286,37 +307,24 @@ declare namespace DevKit {
 			/** Set Product Associations */
 			SetProductAssociations: DevKit.Controls.Boolean;
 		}
-		interface ProcessExpired_Process {
-			/** Enter an expiration date for the article. Leave this field blank for no expiration date. */
-			ExpirationDate: DevKit.Controls.DateTime;
-			/** Enter an expiration date for the article. Leave this field blank for no expiration date. */
-			ExpirationDate_1: DevKit.Controls.DateTime;
-			/** Expired Review Options */
-			ExpiredReviewOptions: DevKit.Controls.OptionSet;
-			/** Set Product Associations */
-			SetProductAssociations: DevKit.Controls.Boolean;
-			/** Set Product Associations */
-			SetProductAssociations_1: DevKit.Controls.Boolean;
-			/** Update Content */
-			UpdateContent: DevKit.Controls.Boolean;
-		}
 		interface Process extends DevKit.Controls.IProcess {
+			Expired_Process: ProcessExpired_Process;
 			New_Process: ProcessNew_Process;
 			Translation_Process: ProcessTranslation_Process;
-			Expired_Process: ProcessExpired_Process;
 		}
 		interface Grid {
-			RelatedTranslationsGrid: DevKit.Controls.Grid;
-			RelatedCategoriesGrid: DevKit.Controls.Grid;
 			AssociatedProductsGrid: DevKit.Controls.Grid;
-			KnowledgearticleviewsGrid: DevKit.Controls.Grid;
 			Feedback: DevKit.Controls.Grid;
+			KnowledgeArticleAttachmentControl: DevKit.Controls.Grid;
+			KnowledgearticleviewsGrid: DevKit.Controls.Grid;
 			RelatedCasesGrid: DevKit.Controls.Grid;
+			RelatedCategoriesGrid: DevKit.Controls.Grid;
+			RelatedTranslationsGrid: DevKit.Controls.Grid;
 		}
 	}
 	class FormKnowledge_Article_for_Interactive_experience extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Knowledge_Article_for_Interactive_experience
+		* DynamicsCrm.DevKit form Knowledge_Article_for_Interactive_experience Main Form
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -333,6 +341,8 @@ declare namespace DevKit {
 		Process: DevKit.FormKnowledge_Article_for_Interactive_experience.Process;
 		/** The Grid of form Knowledge_Article_for_Interactive_experience */
 		Grid: DevKit.FormKnowledge_Article_for_Interactive_experience.Grid;
+		/** The SidePanes of form Knowledge_Article_for_Interactive_experience */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormKnowledge_Article_Quick_Create {
 		interface tab_newKnowledgeArticle_Sections {
@@ -364,7 +374,7 @@ declare namespace DevKit {
 	}
 	class FormKnowledge_Article_Quick_Create extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Knowledge_Article_Quick_Create
+		* DynamicsCrm.DevKit form Knowledge_Article_Quick_Create Quick Create
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -444,7 +454,6 @@ declare namespace DevKit {
 		KnowledgeArticleViews_State: DevKit.WebApi.IntegerValueReadonly;
 		/** Select the language that the article's content is in. */
 		LanguageLocaleId: DevKit.WebApi.LookupValue;
-		LanguageLocaleIdLocaleId: DevKit.WebApi.IntegerValueReadonly;
 		/** Shows the major version number of this article's content. */
 		MajorVersionNumber: DevKit.WebApi.IntegerValue;
 		/** Shows the minor version number of this article's content. */
@@ -459,6 +468,7 @@ declare namespace DevKit {
 		msdyn_ingestedarticleurl: DevKit.WebApi.StringValue;
 		/** Value is true for all Ingested articles */
 		msdyn_isingestedarticle: DevKit.WebApi.BooleanValue;
+		msdyn_keywordsdescsuggestioncontrol: DevKit.WebApi.BooleanValue;
 		/** Date and time that the record was migrated. */
 		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
@@ -513,7 +523,6 @@ declare namespace DevKit {
 		StatusCode: DevKit.WebApi.OptionSetValue;
 		/** Choose the subject of the article to assist with article searches. You can configure subjects under Business Management in the Settings area. */
 		SubjectId: DevKit.WebApi.LookupValue;
-		SubjectIdDsc: DevKit.WebApi.IntegerValueReadonly;
 		/** For internal use only. */
 		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
 		/** Type a title for the article. */
@@ -591,22 +600,22 @@ declare namespace OptionSet {
 			/** 9 */
 			Updating
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Knowledge Article','Knowledge Article for Interactive experience','Quick Create'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

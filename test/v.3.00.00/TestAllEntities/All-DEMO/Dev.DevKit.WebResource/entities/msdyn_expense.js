@@ -3,7 +3,11 @@
 "use strict";
 var formCreate_Expense = (function () {
 	"use strict";
+	/** @type DevKit.FormCreate_Expense */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.FormCreate_Expense(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}
@@ -12,9 +16,13 @@ var formCreate_Expense = (function () {
 		OnSave: onSave
 	};
 })();
-var formInformation = (function () {
+var formmsdyn_expense_Information = (function () {
 	"use strict";
+	/** @type DevKit.Formmsdyn_expense_Information */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.Formmsdyn_expense_Information(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}

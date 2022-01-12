@@ -203,7 +203,7 @@ namespace Dev.DevKit.Shared.Entities.AccountOptionSets
 		/// <summary>
 		/// Agriculture and Non-petrol Natural Resource Extraction = 2
 		/// </summary>
-		Agriculture_and_Nonpetrol_Natural_Resource_Extraction = 2,
+		Agriculture_and_Non_petrol_Natural_Resource_Extraction = 2,
 		/// <summary>
 		/// Broadcasting Printing and Publishing = 3
 		/// </summary>
@@ -283,7 +283,7 @@ namespace Dev.DevKit.Shared.Entities.AccountOptionSets
 		/// <summary>
 		/// Non-Durable Merchandise Retail = 22
 		/// </summary>
-		NonDurable_Merchandise_Retail = 22,
+		Non_Durable_Merchandise_Retail = 22,
 		/// <summary>
 		/// Outbound Consumer Service = 23
 		/// </summary>

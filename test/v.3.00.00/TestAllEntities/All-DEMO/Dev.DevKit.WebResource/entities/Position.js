@@ -3,7 +3,11 @@
 "use strict";
 var formPosition = (function () {
 	"use strict";
+	/** @type DevKit.FormPosition */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.FormPosition(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}

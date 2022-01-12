@@ -15,11 +15,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_odatav4dsOptionSets
 		/// <summary>
 		/// Client-side Paging = 0
 		/// </summary>
-		Clientside_Paging = 0,
+		Client_side_Paging = 0,
 		/// <summary>
 		/// Server-side Paging = 1
 		/// </summary>
-		Serverside_Paging = 1
+		Server_side_Paging = 1
 	}
 }
 

@@ -247,7 +247,7 @@ namespace Dev.DevKit.Shared.Entities.OpportunityCloseOptionSets
 		/// <summary>
 		/// Out-Sold = 5
 		/// </summary>
-		OutSold = 5,
+		Out_Sold = 5,
 		/// <summary>
 		/// Won = 3
 		/// </summary>

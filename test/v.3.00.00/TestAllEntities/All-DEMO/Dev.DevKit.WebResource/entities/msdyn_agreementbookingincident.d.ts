@@ -60,7 +60,7 @@ declare namespace DevKit {
 	}
 	class FormAgreement_Booking_Incident_Mobile extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Agreement_Booking_Incident_Mobile
+		* DynamicsCrm.DevKit form Agreement_Booking_Incident_Mobile Main Form
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -71,6 +71,8 @@ declare namespace DevKit {
 		Body: DevKit.FormAgreement_Booking_Incident_Mobile.Body;
 		/** The Navigation of form Agreement_Booking_Incident_Mobile */
 		Navigation: DevKit.FormAgreement_Booking_Incident_Mobile.Navigation;
+		/** The SidePanes of form Agreement_Booking_Incident_Mobile */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace Formmsdyn_agreementbookingincident_Information {
 		interface Tabs {
@@ -109,7 +111,7 @@ declare namespace DevKit {
 	}
 	class Formmsdyn_agreementbookingincident_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form msdyn_agreementbookingincident_Information
+		* DynamicsCrm.DevKit form msdyn_agreementbookingincident_Information Main Form
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -122,6 +124,51 @@ declare namespace DevKit {
 		Footer: DevKit.Formmsdyn_agreementbookingincident_Information.Footer;
 		/** The Navigation of form msdyn_agreementbookingincident_Information */
 		Navigation: DevKit.Formmsdyn_agreementbookingincident_Information.Navigation;
+		/** The SidePanes of form msdyn_agreementbookingincident_Information */
+		SidePanes: DevKit.SidePanes;
+	}
+	namespace FormAgreement_Booking_Incident_Quick_Create {
+		interface tab_fstab_general_Sections {
+			fstab_general_section_3: DevKit.Controls.Section;
+			fstab_general_section_general: DevKit.Controls.Section;
+			fstab_general_section_other: DevKit.Controls.Section;
+		}
+		interface tab_fstab_general extends DevKit.Controls.ITab {
+			Section: tab_fstab_general_Sections;
+		}
+		interface Tabs {
+			fstab_general: tab_fstab_general;
+		}
+		interface Body {
+			Tab: Tabs;
+			/** Shows the agreement associated with the agreement booking incident. */
+			msdyn_Agreement: DevKit.Controls.Lookup;
+			/** Shows the agreement booking setup associated with the agreement booking incident. */
+			msdyn_AgreementBookingSetup: DevKit.Controls.Lookup;
+			/** Customer Asset related to this incident reported */
+			msdyn_CustomerAsset: DevKit.Controls.Lookup;
+			/** Incident description */
+			msdyn_Description: DevKit.Controls.String;
+			/** Shows the time estimated to resolve this incident. */
+			msdyn_EstimatedDuration: DevKit.Controls.Integer;
+			/** Agreement Booking Incident's functional location. */
+			msdyn_FunctionalLocation: DevKit.Controls.Lookup;
+			/** Shows the incident type associated with the agreement booking incident. */
+			msdyn_IncidentType: DevKit.Controls.Lookup;
+			msdyn_name: DevKit.Controls.String;
+		}
+	}
+	class FormAgreement_Booking_Incident_Quick_Create extends DevKit.IForm {
+		/**
+		* DynamicsCrm.DevKit form Agreement_Booking_Incident_Quick_Create Quick Create
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form Agreement_Booking_Incident_Quick_Create */
+		Body: DevKit.FormAgreement_Booking_Incident_Quick_Create.Body;
 	}
 	class msdyn_agreementbookingincidentApi {
 		/**
@@ -220,22 +267,22 @@ declare namespace OptionSet {
 			/** 2 */
 			Inactive
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Agreement Booking Incident - Mobile','Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

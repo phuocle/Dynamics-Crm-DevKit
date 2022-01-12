@@ -144,17 +144,17 @@ declare namespace DevKit {
 			WebResource_HelpDialog: DevKit.Controls.WebResource;
 		}
 		interface Grid {
-			contextvariables: DevKit.Controls.Grid;
-			SMSNumbers: DevKit.Controls.Grid;
 			AttachmentRulesSubGrid: DevKit.Controls.Grid;
-			RuleItems: DevKit.Controls.Grid;
 			BotAssistedAgentGuidanceSubGrid: DevKit.Controls.Grid;
+			contextvariables: DevKit.Controls.Grid;
 			quickreplies: DevKit.Controls.Grid;
+			RuleItems: DevKit.Controls.Grid;
+			SMSNumbers: DevKit.Controls.Grid;
 		}
 	}
 	class Formmsdyn_liveworkstream_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form msdyn_liveworkstream_Information
+		* DynamicsCrm.DevKit form msdyn_liveworkstream_Information Main Form
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -167,6 +167,8 @@ declare namespace DevKit {
 		Header: DevKit.Formmsdyn_liveworkstream_Information.Header;
 		/** The Grid of form msdyn_liveworkstream_Information */
 		Grid: DevKit.Formmsdyn_liveworkstream_Information.Grid;
+		/** The SidePanes of form msdyn_liveworkstream_Information */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormInformation_New {
 		interface tab_tab1_summary_Sections {
@@ -186,7 +188,7 @@ declare namespace DevKit {
 	}
 	class FormInformation_New extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Information_New
+		* DynamicsCrm.DevKit form Information_New Main Form
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -195,6 +197,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Information_New */
 		Body: DevKit.FormInformation_New.Body;
+		/** The SidePanes of form Information_New */
+		SidePanes: DevKit.SidePanes;
 	}
 	class msdyn_liveworkstreamApi {
 		/**
@@ -262,6 +266,8 @@ declare namespace DevKit {
 		msdyn_conversationmode: DevKit.WebApi.OptionSetValue;
 		/** The Customer Id equivalent to username of account set up with TeleSign */
 		msdyn_CustomerID: DevKit.WebApi.StringValue;
+		/** Direction to indicate if its an inbound or outbound workstream */
+		msdyn_direction: DevKit.WebApi.OptionSetValue;
 		/** Keep same agent for entire conversation */
 		msdyn_enableagentaffinity: DevKit.WebApi.BooleanValue;
 		/** Option for allowing automated messages or not */
@@ -276,6 +282,8 @@ declare namespace DevKit {
 		msdyn_FollowUpAfterWaiting: DevKit.WebApi.IntegerValue;
 		/** Declare the expected handling time under which work items for this work stream should get resolved */
 		msdyn_handlingtimethreshold: DevKit.WebApi.IntegerValue;
+		/** Indicates whether this is the default workstream or not. */
+		msdyn_isdefault: DevKit.WebApi.BooleanValue;
 		/** The time when Validation api was last run */
 		msdyn_LastValidationOn_TimezoneDateAndTime: DevKit.WebApi.TimezoneDateAndTimeValue;
 		/** The status of the last Validation results */
@@ -306,6 +314,8 @@ declare namespace DevKit {
 		msdyn_notificationtemplate_supervisorassign: DevKit.WebApi.StringValue;
 		/** Transfer notification template scenario */
 		msdyn_notificationtemplate_transfer: DevKit.WebApi.StringValue;
+		/** Unique identifier for outbound queue associated with workstream */
+		msdyn_outboundqueueid: DevKit.WebApi.LookupValue;
 		/** Record identification rule associated to a workstream */
 		msdyn_recordidentificationrule: DevKit.WebApi.StringValue;
 		/** Record Identification Validation Rule */
@@ -387,6 +397,12 @@ declare namespace OptionSet {
 			Live_Chat,
 			/** 192350001 */
 			Persistent_Chat
+		}
+		enum msdyn_direction {
+			/** 0 */
+			Inbound,
+			/** 1 */
+			Outbound
 		}
 		enum msdyn_matchinglogic {
 			/** 192350001 */
@@ -484,22 +500,22 @@ declare namespace OptionSet {
 			/** 2 */
 			Inactive
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Information','Information (New)'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

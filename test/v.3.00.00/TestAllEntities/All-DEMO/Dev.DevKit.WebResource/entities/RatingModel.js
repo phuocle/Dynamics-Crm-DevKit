@@ -1,9 +1,13 @@
 ﻿//@ts-check
 ///<reference path="RatingModel.d.ts" />
 "use strict";
-var formInformation = (function () {
+var formRatingModel_Information = (function () {
 	"use strict";
+	/** @type DevKit.FormRatingModel_Information */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.FormRatingModel_Information(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}
@@ -12,9 +16,13 @@ var formInformation = (function () {
 		OnSave: onSave
 	};
 })();
-var formOmnichannel_Information = (function () {
+var formRatingModel_Omnichannel_Information = (function () {
 	"use strict";
+	/** @type DevKit.FormRatingModel_Omnichannel_Information */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.FormRatingModel_Omnichannel_Information(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}

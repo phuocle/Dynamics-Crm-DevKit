@@ -8,7 +8,7 @@ using Microsoft.Xrm.Sdk;
 using System;
 using System.Diagnostics;
 
-namespace Dev.DevKit.Shared.Entities.EntityOptionSets
+namespace Dev.DevKit.Shared.Entities.Entity1OptionSets
 {
 	public enum ComponentState
 	{
@@ -33,7 +33,7 @@ namespace Dev.DevKit.Shared.Entities.EntityOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
-	public partial class Entity : EntityBase
+	public partial class Entity1 : EntityBase
 	{
 		public struct Fields
 		{
@@ -65,35 +65,35 @@ namespace Dev.DevKit.Shared.Entities
 		public const int EntityTypeCode = 9800;
 
 		[DebuggerNonUserCode()]
-		public Entity()
+		public Entity1()
 		{
 			Entity = new Entity(EntityLogicalName);
 			PreEntity = CloneThisEntity(Entity);
 		}
 
 		[DebuggerNonUserCode()]
-		public Entity(Guid EntityId)
+		public Entity1(Guid Entity1Id)
 		{
-			Entity = new Entity(EntityLogicalName, EntityId);
+			Entity = new Entity(EntityLogicalName, Entity1Id);
 			PreEntity = CloneThisEntity(Entity);
 		}
 
 		[DebuggerNonUserCode()]
-		public Entity(string keyName, object keyValue)
+		public Entity1(string keyName, object keyValue)
 		{
 			Entity = new Entity(EntityLogicalName, keyName, keyValue);
 			PreEntity = CloneThisEntity(Entity);
 		}
 
 		[DebuggerNonUserCode()]
-		public Entity(Entity entity)
+		public Entity1(Entity entity)
 		{
 			Entity = entity;
 			PreEntity = CloneThisEntity(Entity);
 		}
 
 		[DebuggerNonUserCode()]
-		public Entity(Entity entity, Entity merge)
+		public Entity1(Entity entity, Entity merge)
 		{
 			Entity = entity;
 			foreach (var property in merge?.Attributes)
@@ -106,7 +106,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		[DebuggerNonUserCode()]
-		public Entity(KeyAttributeCollection keys)
+		public Entity1(KeyAttributeCollection keys)
 		{
 			Entity = new Entity(EntityLogicalName, keys);
 			PreEntity = CloneThisEntity(Entity);
@@ -154,13 +154,13 @@ namespace Dev.DevKit.Shared.Entities
 		/// <para>Component State</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public Dev.DevKit.Shared.Entities.EntityOptionSets.ComponentState? ComponentState
+		public Dev.DevKit.Shared.Entities.Entity1OptionSets.ComponentState? ComponentState
 		{
 			get
 			{
 				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.ComponentState);
 				if (value == null) return null;
-				return (Dev.DevKit.Shared.Entities.EntityOptionSets.ComponentState)value.Value;
+				return (Dev.DevKit.Shared.Entities.Entity1OptionSets.ComponentState)value.Value;
 			}
 		}
 

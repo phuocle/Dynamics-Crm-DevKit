@@ -1,9 +1,28 @@
 ﻿//@ts-check
 ///<reference path="msdyn_suggestedcontactsdatasource.d.ts" />
 "use strict";
-var formInformation = (function () {
+var formmsdyn_suggestedcontactsdatasource_Information = (function () {
 	"use strict";
+	/** @type DevKit.Formmsdyn_suggestedcontactsdatasource_Information */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.Formmsdyn_suggestedcontactsdatasource_Information(executionContext);
+
+	}
+	async function onSave(executionContext) {
+	}
+	return {
+		OnLoad: onLoad,
+		OnSave: onSave
+	};
+})();
+var formmsdyn_suggestedcontactsdatasource_Information2 = (function () {
+	"use strict";
+	/** @type DevKit.Formmsdyn_suggestedcontactsdatasource_Information2 */
+	var form = null;
+	async function onLoad(executionContext) {
+		form = new DevKit.Formmsdyn_suggestedcontactsdatasource_Information2(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}

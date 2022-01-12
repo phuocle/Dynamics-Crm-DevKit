@@ -56,7 +56,7 @@ declare namespace DevKit {
 	}
 	class FormContract_Detail extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Contract_Detail
+		* DynamicsCrm.DevKit form Contract_Detail Main Form
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -65,6 +65,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Contract_Detail */
 		Body: DevKit.FormContract_Detail.Body;
+		/** The SidePanes of form Contract_Detail */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormContractDetail_Information {
 		interface tab_administration_Sections {
@@ -134,7 +136,7 @@ declare namespace DevKit {
 	}
 	class FormContractDetail_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form ContractDetail_Information
+		* DynamicsCrm.DevKit form ContractDetail_Information Main Form
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -143,6 +145,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form ContractDetail_Information */
 		Body: DevKit.FormContractDetail_Information.Body;
+		/** The SidePanes of form ContractDetail_Information */
+		SidePanes: DevKit.SidePanes;
 	}
 	class ContractDetailApi {
 		/**
@@ -194,7 +198,9 @@ declare namespace DevKit {
 		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
 		/** Shows who created the record on behalf of another user. */
 		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Select the customer account or contact to provide a quick link to additional customer details, such as address, phone number, activities, and orders. */
 		customerid_account: DevKit.WebApi.LookupValue;
+		/** Select the customer account or contact to provide a quick link to additional customer details, such as address, phone number, activities, and orders. */
 		customerid_contact: DevKit.WebApi.LookupValue;
 		/** Type the discount amount for the contract line to deduct any negotiated or other savings from the net amount due. */
 		Discount: DevKit.WebApi.MoneyValue;
@@ -230,12 +236,8 @@ declare namespace DevKit {
 		OwnerId_systemuser: DevKit.WebApi.LookupValueReadonly;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
 		OwnerId_team: DevKit.WebApi.LookupValueReadonly;
-		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier for the team that owns the record. */
 		OwningTeam: DevKit.WebApi.LookupValueReadonly;
-		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
 		/** Type the total service charge for the contract line before any discounts are credited. */
 		Price: DevKit.WebApi.MoneyValue;
 		/** Value of the Total Price in base currency. */
@@ -276,8 +278,6 @@ declare namespace DevKit {
 }
 declare namespace OptionSet {
 	namespace ContractDetail {
-		enum ContractStateCode {
-		}
 		enum ServiceContractUnitsCode {
 			/** 1 */
 			Default_Value
@@ -302,22 +302,22 @@ declare namespace OptionSet {
 			/** 2 */
 			Renewed
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Contract Detail','Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

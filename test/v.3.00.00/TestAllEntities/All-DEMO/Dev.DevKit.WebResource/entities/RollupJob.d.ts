@@ -30,9 +30,8 @@ declare namespace DevKit {
 		DepthProcessed: DevKit.WebApi.IntegerValueReadonly;
 		PostponeUntil_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
 		RecordCreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
-		RegardingObjectId: DevKit.WebApi.LookupValueReadonly;
 		RetryCount: DevKit.WebApi.IntegerValueReadonly;
-		RollupJobId: DevKit.WebApi.BigIntValueReadonly;
+		RollupJobId1: DevKit.WebApi.BigIntValueReadonly;
 		RollupPropertiesId: DevKit.WebApi.LookupValueReadonly;
 		SourceEntityTypeCode: DevKit.WebApi.IntegerValueReadonly;
 		StateCode: DevKit.WebApi.OptionSetValueReadonly;
@@ -41,22 +40,50 @@ declare namespace DevKit {
 }
 declare namespace OptionSet {
 	namespace RollupJob {
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum StateCode {
+			/** 3 */
+			Completed,
+			/** 2 */
+			Locked,
+			/** 0 */
+			Ready,
+			/** 1 */
+			Suspended
+		}
+		enum StatusCode {
+			/** 32 */
+			Canceled,
+			/** 22 */
+			Canceling,
+			/** 31 */
+			Failed,
+			/** 20 */
+			In_Progress,
+			/** 21 */
+			Pausing,
+			/** 30 */
+			Succeeded,
+			/** 10 */
+			Waiting,
+			/** 0 */
+			Waiting_For_Resources
+		}
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':[],'JsWebApi':true,'IsDebugForm':false,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}

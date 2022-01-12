@@ -1,9 +1,13 @@
 ﻿//@ts-check
 ///<reference path="msdyn_ocoutboundmessage.d.ts" />
 "use strict";
-var formInformation = (function () {
+var formmsdyn_ocoutboundmessage_Information = (function () {
 	"use strict";
+	/** @type DevKit.Formmsdyn_ocoutboundmessage_Information */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.Formmsdyn_ocoutboundmessage_Information(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}

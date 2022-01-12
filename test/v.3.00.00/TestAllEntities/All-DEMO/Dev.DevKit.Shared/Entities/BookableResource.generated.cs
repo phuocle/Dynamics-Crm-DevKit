@@ -23,7 +23,7 @@ namespace Dev.DevKit.Shared.Entities.BookableResourceOptionSets
 		/// <summary>
 		/// Crew Member Self-Management = 192350002
 		/// </summary>
-		Crew_Member_SelfManagement = 192350002
+		Crew_Member_Self_Management = 192350002
 	}
 
 	public enum msdyn_EnableAppointments

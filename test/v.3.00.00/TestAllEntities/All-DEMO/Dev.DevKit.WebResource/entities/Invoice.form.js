@@ -99,9 +99,9 @@ var DevKit;
 		devKit.LoadQuickForms(formContext, quickForm);
 		form.QuickForm = quickForm;
 		var grid = {
+			GridInvoicingPeriod: {},
 			GridServiceLines: {},
 			invoicedetailsGrid: {},
-			GridInvoicingPeriod: {},
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
@@ -117,6 +117,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormInvoice_Information = function(executionContext, defaultWebResourceName) {
@@ -232,6 +233,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormInvoice = function(executionContext, defaultWebResourceName) {
@@ -335,6 +337,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormProject_Invoice = function(executionContext, defaultWebResourceName) {
@@ -426,8 +429,8 @@ var DevKit;
 		devKit.LoadQuickForms(formContext, quickForm);
 		form.QuickForm = quickForm;
 		var grid = {
-			ProjectInvoiceLines: {},
 			invoicedetailsGrid: {},
+			ProjectInvoiceLines: {},
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
@@ -438,6 +441,47 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
+		return form;
+	};
+	DevKit.FormInvoice = function(executionContext, defaultWebResourceName) {
+		var formContext = null;
+		if (executionContext !== undefined)
+		{
+			if (executionContext.getFormContext === undefined) {
+				formContext = executionContext;
+			}
+			else {
+				formContext = executionContext.getFormContext();
+			}
+		}
+		var form = devKit.LoadForm(formContext);
+		var body = {
+			CustomerId: {},
+			Description: {},
+			Name: {},
+			OpportunityId: {},
+			OwnerId: {},
+			PriceLevelId: {},
+			SalesOrderId: {},
+			StatusCode: {},
+			TransactionCurrencyId: {}
+		};
+		devKit.LoadFields(formContext, body);
+		var tab = {
+			newInvoice: {
+				Section: {
+					quickInvoice_salesinformation: {},
+					quickInvoice_summary: {}
+				}
+			}
+		};
+		devKit.LoadTabs(formContext, tab);
+		body.Tab = tab;
+		form.Body = body;
+		form.Utility = devKit.LoadUtility(defaultWebResourceName);
+		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 })(DevKit || (DevKit = {}));
@@ -492,7 +536,7 @@ var OptionSet;
 			Missing_Pricing_Code: 8,
 			Missing_Product: 6,
 			Missing_Product_Default_UOM: 31,
-			Missing_Product_UOM_Schedule_: 32,
+			Missing_Product_UOM_Schedule: 32,
 			Missing_Quantity: 4,
 			Missing_Standard_Cost: 16,
 			Missing_Unit_Price: 5,
@@ -540,15 +584,14 @@ var OptionSet;
 			Partial: 100002,
 			Partially_Shipped: 2
 		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
-
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 	};
 })(OptionSet || (OptionSet = {}));

@@ -27,7 +27,7 @@ declare namespace DevKit {
 	}
 	class FormChannel_Property_Group extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Channel_Property_Group
+		* DynamicsCrm.DevKit form Channel_Property_Group Main Form
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -38,6 +38,8 @@ declare namespace DevKit {
 		Body: DevKit.FormChannel_Property_Group.Body;
 		/** The Grid of form Channel_Property_Group */
 		Grid: DevKit.FormChannel_Property_Group.Grid;
+		/** The SidePanes of form Channel_Property_Group */
+		SidePanes: DevKit.SidePanes;
 	}
 	class ChannelPropertyGroupApi {
 		/**
@@ -126,27 +128,27 @@ declare namespace OptionSet {
 		enum RegardingTypeCode {
 			/** 4201 */
 			Appointment,
-			/** 10294 */
+			/** 10357 */
 			Booking_Alert,
-			/** 10564 */
+			/** 10644 */
 			Conversation,
-			/** 10238 */
+			/** 10261 */
 			Customer_Voice_alert,
-			/** 10248 */
+			/** 10271 */
 			Customer_Voice_survey_invite,
-			/** 10250 */
+			/** 10273 */
 			Customer_Voice_survey_response,
 			/** 4202 */
 			Email,
-			/** 10673 */
+			/** 10752 */
 			Outbound_message,
 			/** 4210 */
 			Phone_Call,
-			/** 10324 */
+			/** 10387 */
 			Project_Service_Approval,
 			/** 4214 */
 			Service_Activity,
-			/** 10573 */
+			/** 10659 */
 			Session,
 			/** 4216 */
 			Social_Activity,
@@ -165,22 +167,22 @@ declare namespace OptionSet {
 			/** 2 */
 			Inactive
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Channel Property Group'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

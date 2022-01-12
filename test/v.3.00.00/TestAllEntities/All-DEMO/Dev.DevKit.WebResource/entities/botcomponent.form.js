@@ -15,18 +15,22 @@ var DevKit;
 		}
 		var form = devKit.LoadForm(formContext);
 		var body = {
+			AccentColor: {},
 			ChildComponents: {},
 			ComponentType: {},
 			Content: {},
 			Data: {},
 			Description: {},
+			HelpLink: {},
+			IconUrl: {},
 			Language: {},
 			name: {},
 			OwnerId: {},
 			ParentBotComponentId: {},
 			RelatedBotComponents: {},
 			RelatedBots: {},
-			RelatedProcesses: {}
+			RelatedProcesses: {},
+			ReusePolicy: {}
 		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
@@ -35,6 +39,8 @@ var DevKit;
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		var quickForm = {
 
 		};
@@ -42,8 +48,8 @@ var DevKit;
 		form.QuickForm = quickForm;
 		var grid = {
 			ChildComponents: {},
-			RelatedBots: {},
 			RelatedBotComponents: {},
+			RelatedBots: {},
 			RelatedProcesses: {},
 		};
 		devKit.LoadGrids(formContext, grid);
@@ -55,6 +61,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 })(DevKit || (DevKit = {}));
@@ -101,6 +108,11 @@ var OptionSet;
 			Swedish: 1053,
 			Turkish: 1055
 		},
+		ReusePolicy : {
+			None: 0,
+			Private: 1,
+			Public: 2
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1
@@ -109,15 +121,14 @@ var OptionSet;
 			Active: 1,
 			Inactive: 2
 		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
-
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 	};
 })(OptionSet || (OptionSet = {}));

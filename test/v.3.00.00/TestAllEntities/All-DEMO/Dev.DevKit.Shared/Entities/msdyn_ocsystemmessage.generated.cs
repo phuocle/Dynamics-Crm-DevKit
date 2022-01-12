@@ -27,7 +27,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocsystemmessageOptionSets
 		/// <summary>
 		/// Outside 24-hour conversation window = 1
 		/// </summary>
-		Outside_24hour_conversation_window = 1
+		Outside_24_hour_conversation_window = 1
 	}
 
 	public enum msdyn_messagetype
@@ -47,7 +47,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocsystemmessageOptionSets
 		/// <summary>
 		/// Co-browse = 192390000
 		/// </summary>
-		Cobrowse = 192390000,
+		Co_browse = 192390000,
 		/// <summary>
 		/// Custom = 192350002
 		/// </summary>

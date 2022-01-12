@@ -331,7 +331,7 @@ namespace Dev.DevKit.Shared.Entities.CampaignActivityOptionSets
 		/// <summary>
 		/// Direct Follow-Up Contact = 7
 		/// </summary>
-		Direct_FollowUp_Contact = 7,
+		Direct_Follow_Up_Contact = 7,
 		/// <summary>
 		/// Direct Initial Contact = 6
 		/// </summary>

@@ -55,7 +55,7 @@ namespace Dev.DevKit.Shared.Entities.UserSettingsOptionSets
 		/// <summary>
 		/// Read-optimized = 1
 		/// </summary>
-		Readoptimized = 1
+		Read_optimized = 1
 	}
 
 	public enum IncomingEmailFilteringMethod
@@ -103,11 +103,11 @@ namespace Dev.DevKit.Shared.Entities.UserSettingsOptionSets
 		/// <summary>
 		/// Side-by-side = 1
 		/// </summary>
-		Sidebyside = 1,
+		Side_by_side = 1,
 		/// <summary>
 		/// Top-bottom = 0
 		/// </summary>
-		Topbottom = 0
+		Top_bottom = 0
 	}
 }
 

@@ -39,7 +39,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_unifiedroutingrunOptionSets
 		/// <summary>
 		/// Workstream: Route-to-queue rules - completed = 100000002
 		/// </summary>
-		Workstream_Routetoqueue_rules_completed = 100000002
+		Workstream_Route_to_queue_rules_completed = 100000002
 	}
 
 	public enum statecode

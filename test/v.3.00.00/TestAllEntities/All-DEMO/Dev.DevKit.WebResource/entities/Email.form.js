@@ -3,6 +3,85 @@
 var DevKit;
 (function (DevKit) {
 	'use strict';
+	DevKit.FormBulk_Email = function(executionContext, defaultWebResourceName) {
+		var formContext = null;
+		if (executionContext !== undefined) {
+			if (executionContext.getFormContext === undefined) {
+				formContext = executionContext;
+			}
+			else {
+				formContext = executionContext.getFormContext();
+			}
+		}
+		var form = devKit.LoadForm(formContext);
+		var body = {
+			attachmentsGrid: {},
+			Description: {},
+			Description_1: {},
+			emailengagementactionscontrol: {},
+			emailrecipientactivitycontrol: {},
+			from: {},
+			msdyn_RecipientList: {},
+			RegardingObjectId: {},
+			Subject: {},
+			Subject_1: {},
+			to: {}
+		};
+		devKit.LoadFields(formContext, body);
+		var tab = {
+			Email: {
+				Section: {
+					Email_MainSection: {},
+					Email_PreviewSection: {}
+				}
+			},
+			Email_Engagement: {
+				Section: {
+					Email_Engagement_column_3_section_1: {},
+					emailengagementactions: {},
+					Emailrecipient_section_6: {}
+				}
+			}
+		};
+		devKit.LoadTabs(formContext, tab);
+		body.Tab = tab;
+		form.Body = body;
+		var header = {
+			OwnerId: {},
+			PriorityCode: {},
+			ScheduledEnd: {},
+			StatusCode: {}
+		};
+		devKit.LoadFields(formContext, header, "header_");
+		form.Header = header;
+		var footer = {
+			IsEmailFollowed: {},
+			IsEmailReminderSet: {}
+		};
+		devKit.LoadFields(formContext, footer, "footer_");
+		form.Footer = footer;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
+		var quickForm = {
+
+		};
+		devKit.LoadQuickForms(formContext, quickForm);
+		form.QuickForm = quickForm;
+		var grid = {
+			attachmentsGrid: {},
+		};
+		devKit.LoadGrids(formContext, grid);
+		form.Grid = grid;
+		var navigation = {
+
+		};
+		devKit.LoadNavigations(formContext, navigation);
+		form.Navigation = navigation;
+		form.Utility = devKit.LoadUtility(defaultWebResourceName);
+		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
+		return form;
+	};
 	DevKit.FormEmail = function(executionContext, defaultWebResourceName) {
 		var formContext = null;
 		if (executionContext !== undefined) {
@@ -58,6 +137,8 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, footer, "footer_");
 		form.Footer = footer;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		var quickForm = {
 
 		};
@@ -75,6 +156,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormEmail_for_Interactive_experience = function(executionContext, defaultWebResourceName) {
@@ -119,6 +201,8 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		var quickForm = {
 
 		};
@@ -136,6 +220,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormEnhanced_Email = function(executionContext, defaultWebResourceName) {
@@ -193,6 +278,8 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, footer, "footer_");
 		form.Footer = footer;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		var quickForm = {
 
 		};
@@ -210,6 +297,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormEmail_Wizard = function(executionContext, defaultWebResourceName) {
@@ -257,6 +345,8 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		var quickForm = {
 
 		};
@@ -274,6 +364,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 })(DevKit || (DevKit = {}));
@@ -281,6 +372,31 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.Email = {
+		ActivityTypeCode : {
+			Appointment: 4201,
+			Booking_Alert: 10357,
+			Campaign_Activity: 4402,
+			Campaign_Response: 4401,
+			Case_Resolution: 4206,
+			Conversation: 10644,
+			Customer_Voice_alert: 10261,
+			Customer_Voice_survey_invite: 10271,
+			Customer_Voice_survey_response: 10273,
+			Email: 4202,
+			Fax: 4204,
+			Letter: 4207,
+			Opportunity_Close: 4208,
+			Order_Close: 4209,
+			Outbound_message: 10752,
+			Phone_Call: 4210,
+			Project_Service_Approval: 10387,
+			Quick_Campaign: 4406,
+			Quote_Close: 4211,
+			Recurring_Appointment: 4251,
+			Service_Activity: 4214,
+			Session: 10659,
+			Task: 4212
+		},
 		CorrelationMethod : {
 			ConversationIndex: 5,
 			CustomCorrelation: 7,
@@ -332,15 +448,14 @@ var OptionSet;
 			Sending: 7,
 			Sent: 3
 		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
-
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 	};
 })(OptionSet || (OptionSet = {}));

@@ -80,6 +80,8 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		var quickForm = {
 
 		};
@@ -104,6 +106,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormQuote_Project_Information = function(executionContext, defaultWebResourceName) {
@@ -227,18 +230,20 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		var quickForm = {
 
 		};
 		devKit.LoadQuickForms(formContext, quickForm);
 		form.QuickForm = quickForm;
 		var grid = {
+			costRevenueDistribution: {},
+			ProjectPriceListsSubGrid: {},
 			ProjectQuoteLines: {},
 			quotedetailsGrid: {},
-			ProjectPriceListsSubGrid: {},
-			costRevenueDistribution: {},
-			quoteLineDetailAnalysis: {},
 			quoteLineComparisonGrid: {},
+			quoteLineDetailAnalysis: {},
 			totalQuoteAmountComparisonGrid: {},
 		};
 		devKit.LoadGrids(formContext, grid);
@@ -258,6 +263,108 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
+		return form;
+	};
+	DevKit.FormQuote = function(executionContext, defaultWebResourceName) {
+		var formContext = null;
+		if (executionContext !== undefined) {
+			if (executionContext.getFormContext === undefined) {
+				formContext = executionContext;
+			}
+			else {
+				formContext = executionContext.getFormContext();
+			}
+		}
+		var form = devKit.LoadForm(formContext);
+		var body = {
+			BillTo_Composite: {},
+			CustomerId: {},
+			Description: {},
+			DiscountAmount: {},
+			DiscountPercentage: {},
+			DynamicPropertiesList_LinkControl: {},
+			FreightAmount: {},
+			FreightTermsCode: {},
+			msdyn_OrderType: {},
+			Name: {},
+			notescontrol: {},
+			OpportunityId: {},
+			OwnerId: {},
+			PaymentTermsCode: {},
+			PriceLevelId: {},
+			ProductSuggestions_LinkControl: {},
+			quotedetailsGrid: {},
+			QuoteNumber: {},
+			RevisionNumber: {},
+			ShippingMethodCode: {},
+			ShipTo_Composite: {},
+			TotalAmount: {},
+			TotalAmountLessFreight: {},
+			TotalLineItemAmount: {},
+			TotalTax: {},
+			TransactionCurrencyId: {},
+			WillCall: {}
+		};
+		devKit.LoadFields(formContext, body);
+		var tab = {
+			details_tab: {
+				Section: {
+					Social_Pane: {},
+					tab_2_section_2: {}
+				}
+			},
+			Summary_tab: {
+				Section: {
+					addresses: {},
+					description_section: {},
+					DynamicProperties: {},
+					products: {},
+					quote_information: {},
+					sales_information: {},
+					shipping_information: {},
+					suggestionsection: {},
+					totals: {}
+				}
+			}
+		};
+		devKit.LoadTabs(formContext, tab);
+		body.Tab = tab;
+		form.Body = body;
+		var header = {
+			EffectiveFrom: {},
+			EffectiveTo: {},
+			StatusCode: {},
+			TotalAmount: {}
+		};
+		devKit.LoadFields(formContext, header, "header_");
+		form.Header = header;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
+		var quickForm = {
+
+		};
+		devKit.LoadQuickForms(formContext, quickForm);
+		form.QuickForm = quickForm;
+		var grid = {
+			quotedetailsGrid: {},
+		};
+		devKit.LoadGrids(formContext, grid);
+		form.Grid = grid;
+		var navigation = {
+			nav_msdyn_quote_msdyn_quotebookingincident_Quote: {},
+			nav_msdyn_quote_msdyn_quotebookingproduct_Quote: {},
+			nav_msdyn_quote_msdyn_quotebookingservice_Quote: {},
+			nav_msdyn_quote_msdyn_quotebookingservicetask_Quote: {},
+			nav_msdyn_quote_msdyn_quotebookingsetup_Quote: {},
+			nav_msdyn_quote_msdyn_quoteinvoicingsetup_Quote: {},
+			navProducts: {}
+		};
+		devKit.LoadNavigations(formContext, navigation);
+		form.Navigation = navigation;
+		form.Utility = devKit.LoadUtility(defaultWebResourceName);
+		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormQuote = function(executionContext, defaultWebResourceName) {
@@ -280,7 +387,7 @@ var DevKit;
 			OwnerId: {},
 			PriceLevelId: {},
 			TransactionCurrencyId: {}
-		}
+		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
 			newQuote: {
@@ -289,13 +396,15 @@ var DevKit;
 					quickQuote_summary: {}
 				}
 			}
-		}
+		};
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
+		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
-	}
+	};
 })(DevKit || (DevKit = {}));
 /** @namespace OptionSet */
 var OptionSet;
@@ -372,7 +481,7 @@ var OptionSet;
 			Missing_Pricing_Code: 8,
 			Missing_Product: 6,
 			Missing_Product_Default_UOM: 31,
-			Missing_Product_UOM_Schedule_: 32,
+			Missing_Product_UOM_Schedule: 32,
 			Missing_Quantity: 4,
 			Missing_Standard_Cost: 16,
 			Missing_Unit_Price: 5,
@@ -414,15 +523,14 @@ var OptionSet;
 			Revised: 7,
 			Won: 4
 		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
-
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 	};
 })(OptionSet || (OptionSet = {}));

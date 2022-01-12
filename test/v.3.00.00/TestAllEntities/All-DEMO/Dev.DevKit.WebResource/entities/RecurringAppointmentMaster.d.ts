@@ -39,7 +39,7 @@ declare namespace DevKit {
 	}
 	class FormRecurring_Appointment extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Recurring_Appointment
+		* DynamicsCrm.DevKit form Recurring_Appointment Main Form
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -50,6 +50,8 @@ declare namespace DevKit {
 		Body: DevKit.FormRecurring_Appointment.Body;
 		/** The Header section of form Recurring_Appointment */
 		Header: DevKit.FormRecurring_Appointment.Header;
+		/** The SidePanes of form Recurring_Appointment */
+		SidePanes: DevKit.SidePanes;
 	}
 	class RecurringAppointmentMasterApi {
 		/**
@@ -131,6 +133,8 @@ declare namespace DevKit {
 		IsNthMonthly: DevKit.WebApi.BooleanValue;
 		/** Indicates whether the recurring appointment series should occur after every N years. Valid for yearly recurrence pattern only. */
 		IsNthYearly: DevKit.WebApi.BooleanValue;
+		/** Displays whether or not this is an online meeting. */
+		IsOnlineMeeting: DevKit.WebApi.BooleanValue;
 		/** For internal use only. */
 		IsRegenerate: DevKit.WebApi.BooleanValue;
 		/** Indicates whether the activity is a regular activity type or event type. */
@@ -157,6 +161,14 @@ declare namespace DevKit {
 		NextExpansionInstanceDate_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
 		/** Number of appointment occurrences in a recurring appointment series. */
 		Occurrences: DevKit.WebApi.IntegerValue;
+		/** Shows the online meeting chat id. */
+		OnlineMeetingChatId: DevKit.WebApi.StringValue;
+		/** Shows the online meeting id. */
+		OnlineMeetingId: DevKit.WebApi.StringValue;
+		/** Shows the online meeting join url. */
+		OnlineMeetingJoinUrl: DevKit.WebApi.StringValue;
+		/** Displays the online meeting type. */
+		OnlineMeetingType: DevKit.WebApi.OptionSetValue;
 		/** Unique identifier of the Microsoft Office Outlook recurring appointment series owner that correlates to the PR_OWNER_APPT_ID MAPI property. */
 		OutlookOwnerApptId: DevKit.WebApi.IntegerValue;
 		/** Date and time that the record was migrated. */
@@ -367,8 +379,6 @@ declare namespace DevKit {
 		regardingobjectid_uii_workflow_workflowstep_mapping_recurringappointmentmaster: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the recurrence rule that is associated with the recurring appointment series. */
 		RuleId: DevKit.WebApi.LookupValueReadonly;
-		/** Safe body text of the recurring appointment. */
-		SafeDescription: DevKit.WebApi.StringValueReadonly;
 		/** Scheduled end time of the recurring appointment series. */
 		ScheduledEnd_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
 		/** Scheduled start time of the recurring appointment series. */
@@ -408,6 +418,54 @@ declare namespace DevKit {
 }
 declare namespace OptionSet {
 	namespace RecurringAppointmentMaster {
+		enum ActivityTypeCode {
+			/** 4201 */
+			Appointment,
+			/** 10357 */
+			Booking_Alert,
+			/** 4402 */
+			Campaign_Activity,
+			/** 4401 */
+			Campaign_Response,
+			/** 4206 */
+			Case_Resolution,
+			/** 10644 */
+			Conversation,
+			/** 10261 */
+			Customer_Voice_alert,
+			/** 10271 */
+			Customer_Voice_survey_invite,
+			/** 10273 */
+			Customer_Voice_survey_response,
+			/** 4202 */
+			Email,
+			/** 4204 */
+			Fax,
+			/** 4207 */
+			Letter,
+			/** 4208 */
+			Opportunity_Close,
+			/** 4209 */
+			Order_Close,
+			/** 10752 */
+			Outbound_message,
+			/** 4210 */
+			Phone_Call,
+			/** 10387 */
+			Project_Service_Approval,
+			/** 4406 */
+			Quick_Campaign,
+			/** 4211 */
+			Quote_Close,
+			/** 4251 */
+			Recurring_Appointment,
+			/** 4214 */
+			Service_Activity,
+			/** 10659 */
+			Session,
+			/** 4212 */
+			Task
+		}
 		enum ExpansionStateCode {
 			/** 2 */
 			Full,
@@ -468,6 +526,10 @@ declare namespace OptionSet {
 			/** 9 */
 			September
 		}
+		enum OnlineMeetingType {
+			/** 1 */
+			Teams_Meeting
+		}
 		enum PatternEndType {
 			/** 1 */
 			No_End_Date,
@@ -518,22 +580,22 @@ declare namespace OptionSet {
 			/** 2 */
 			Tentative
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Recurring Appointment'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

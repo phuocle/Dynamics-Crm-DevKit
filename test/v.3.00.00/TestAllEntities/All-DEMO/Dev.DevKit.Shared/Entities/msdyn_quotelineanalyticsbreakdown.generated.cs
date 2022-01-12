@@ -79,7 +79,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_quotelineanalyticsbreakdownOptionSets
 		/// <summary>
 		/// Inter-Organizational Sales = 192350008
 		/// </summary>
-		InterOrganizational_Sales = 192350008,
+		Inter_Organizational_Sales = 192350008,
 		/// <summary>
 		/// Project Contract = 192350004
 		/// </summary>

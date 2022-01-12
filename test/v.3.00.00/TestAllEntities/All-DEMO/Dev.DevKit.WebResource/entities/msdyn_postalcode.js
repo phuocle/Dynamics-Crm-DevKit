@@ -1,9 +1,13 @@
 ﻿//@ts-check
 ///<reference path="msdyn_postalcode.d.ts" />
 "use strict";
-var formInformation = (function () {
+var formmsdyn_postalcode_Information = (function () {
 	"use strict";
+	/** @type DevKit.Formmsdyn_postalcode_Information */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.Formmsdyn_postalcode_Information(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}

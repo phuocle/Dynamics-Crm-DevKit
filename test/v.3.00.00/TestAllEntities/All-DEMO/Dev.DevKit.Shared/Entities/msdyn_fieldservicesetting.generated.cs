@@ -23,7 +23,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_fieldservicesettingOptionSets
 		/// <summary>
 		/// Crew Member Self-Management = 192350002
 		/// </summary>
-		Crew_Member_SelfManagement = 192350002
+		Crew_Member_Self_Management = 192350002
 	}
 
 	public enum msdyn_DefaultWorkOrderCompletedStatus
@@ -127,7 +127,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_fieldservicesettingOptionSets
 		/// <summary>
 		/// Auto-Generate from Booking Timestamps = 192355201
 		/// </summary>
-		AutoGenerate_from_Booking_Timestamps = 192355201,
+		Auto_Generate_from_Booking_Timestamps = 192355201,
 		/// <summary>
 		/// Manual = 192355200
 		/// </summary>

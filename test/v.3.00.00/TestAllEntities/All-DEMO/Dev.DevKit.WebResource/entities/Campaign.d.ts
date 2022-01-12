@@ -81,15 +81,15 @@ declare namespace DevKit {
 			TypeCode: DevKit.Controls.OptionSet;
 		}
 		interface Grid {
-			Lists: DevKit.Controls.Grid;
-			Leads: DevKit.Controls.Grid;
 			Activities: DevKit.Controls.Grid;
+			Leads: DevKit.Controls.Grid;
+			Lists: DevKit.Controls.Grid;
 			Responses: DevKit.Controls.Grid;
 		}
 	}
 	class FormCampaign extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Campaign
+		* DynamicsCrm.DevKit form Campaign Main Form
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -102,6 +102,8 @@ declare namespace DevKit {
 		Header: DevKit.FormCampaign.Header;
 		/** The Grid of form Campaign */
 		Grid: DevKit.FormCampaign.Grid;
+		/** The SidePanes of form Campaign */
+		SidePanes: DevKit.SidePanes;
 	}
 	class CampaignApi {
 		/**
@@ -198,7 +200,6 @@ declare namespace DevKit {
 		OwningUser: DevKit.WebApi.LookupValueReadonly;
 		/** Choose the price list associated with this item to make sure the products associated with the campaign are offered at the correct prices. */
 		PriceListId: DevKit.WebApi.LookupValue;
-		PriceListName: DevKit.WebApi.StringValueReadonly;
 		/** Contains the id of the process associated with the entity. */
 		ProcessId: DevKit.WebApi.GuidValue;
 		/** Type a promotional code to track sales related to the campaign or allow customers to redeem a discount offer. */
@@ -272,22 +273,22 @@ declare namespace OptionSet {
 			/** 5 */
 			Other
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Campaign'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

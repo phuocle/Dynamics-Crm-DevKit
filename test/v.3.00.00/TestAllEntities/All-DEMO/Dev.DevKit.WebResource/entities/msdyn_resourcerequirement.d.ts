@@ -14,7 +14,7 @@ declare namespace DevKit {
 	}
 	class Formmsdyn_resourcerequirement_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form msdyn_resourcerequirement_Information
+		* DynamicsCrm.DevKit form msdyn_resourcerequirement_Information Main Form
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -23,6 +23,148 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_resourcerequirement_Information */
 		Body: DevKit.Formmsdyn_resourcerequirement_Information.Body;
+		/** The SidePanes of form msdyn_resourcerequirement_Information */
+		SidePanes: DevKit.SidePanes;
+	}
+	namespace Formmsdyn_resourcerequirement_Information2 {
+		interface tab_Requirement_General_Sections {
+			_971E72A7_0E77_4C1E_80B9_E4EB74143E46_SECTION_3: DevKit.Controls.Section;
+			_971E72A7_0E77_4C1E_80B9_E4EB74143E46_SECTION_4: DevKit.Controls.Section;
+			_DB0712F3_6333_4878_92C9_004903985F09: DevKit.Controls.Section;
+			Requirement_Notes: DevKit.Controls.Section;
+		}
+		interface tab_tab_2_Sections {
+			tab_2_section_1: DevKit.Controls.Section;
+		}
+		interface tab_tab_FieldService_Sections {
+			tab_FieldService_section1: DevKit.Controls.Section;
+		}
+		interface tab_tab_project_Sections {
+			tab_3_section_1: DevKit.Controls.Section;
+			tab_3_section_2: DevKit.Controls.Section;
+			tab_3_section_3: DevKit.Controls.Section;
+		}
+		interface tab_tab_ResourceBookings_Sections {
+			tab_4_section_1: DevKit.Controls.Section;
+		}
+		interface tab_Requirement_General extends DevKit.Controls.ITab {
+			Section: tab_Requirement_General_Sections;
+		}
+		interface tab_tab_2 extends DevKit.Controls.ITab {
+			Section: tab_tab_2_Sections;
+		}
+		interface tab_tab_FieldService extends DevKit.Controls.ITab {
+			Section: tab_tab_FieldService_Sections;
+		}
+		interface tab_tab_project extends DevKit.Controls.ITab {
+			Section: tab_tab_project_Sections;
+		}
+		interface tab_tab_ResourceBookings extends DevKit.Controls.ITab {
+			Section: tab_tab_ResourceBookings_Sections;
+		}
+		interface Tabs {
+			Requirement_General: tab_Requirement_General;
+			tab_2: tab_tab_2;
+			tab_FieldService: tab_tab_FieldService;
+			tab_project: tab_tab_project;
+			tab_ResourceBookings: tab_tab_ResourceBookings;
+		}
+		interface Body {
+			Tab: Tabs;
+			IFRAME_AvailabilityView: DevKit.Controls.IFrame;
+			/** Select the allocation method to be used for creating requirement distribution over a time period. */
+			msdyn_allocationmethod: DevKit.Controls.OptionSet;
+			/** The calendar that will be used for a resource requirement */
+			msdyn_CalendarId: DevKit.Controls.String;
+			/** Type the city where the resource is required. */
+			msdyn_city: DevKit.Controls.String;
+			/** Enter the cost price of the resource required. */
+			msdyn_costprice: DevKit.Controls.Money;
+			/** Type the country/region where the resource is required. */
+			msdyn_country: DevKit.Controls.String;
+			/** Duration of total minutes required */
+			msdyn_duration: DevKit.Controls.Integer;
+			/** Effort that's required from resource capacity */
+			msdyn_effort: DevKit.Controls.Decimal;
+			msdyn_fromdate: DevKit.Controls.Date;
+			/** The fulfilled duration, in minutes. */
+			msdyn_FulfilledDuration: DevKit.Controls.Integer;
+			msdyn_IsPrimary: DevKit.Controls.Boolean;
+			/** The latitude to use for the location of a requirement. */
+			msdyn_Latitude: DevKit.Controls.Double;
+			/** The longitude to use for the location of a requirement. */
+			msdyn_Longitude: DevKit.Controls.Double;
+			/** The name of the custom entity. */
+			msdyn_name: DevKit.Controls.String;
+			/** Enter the percentage of the calendar capacity required. */
+			msdyn_percentage: DevKit.Controls.Decimal;
+			msdyn_PoolType: DevKit.Controls.MultiOptionSet;
+			/** Priority of the requirement. To be taken into consideration while scheduling resources */
+			msdyn_Priority: DevKit.Controls.Lookup;
+			/** Select the project for which the resource is required. */
+			msdyn_projectid: DevKit.Controls.Lookup;
+			msdyn_ProposedDuration: DevKit.Controls.Integer;
+			msdyn_RemainingDuration: DevKit.Controls.Integer;
+			/** The status of the resource request associated with this requirement. */
+			msdyn_requeststatus: DevKit.Controls.String;
+			/** Requirement Group */
+			msdyn_requirementgroupid: DevKit.Controls.Lookup;
+			msdyn_resourcetype: DevKit.Controls.MultiOptionSet;
+			/** Type the state/province where the resource is required. */
+			msdyn_stateorprovince: DevKit.Controls.String;
+			/** Requirement Status */
+			msdyn_Status: DevKit.Controls.Lookup;
+			msdyn_Territory: DevKit.Controls.Lookup;
+			/** Enter the starting range of the time promised to the account that incidents will be resolved. */
+			msdyn_TimeFromPromised: DevKit.Controls.DateTime;
+			msdyn_TimeGroup: DevKit.Controls.Lookup;
+			/** Enter the ending range of the time promised to the account that incidents will be resolved. */
+			msdyn_TimeToPromised: DevKit.Controls.DateTime;
+			msdyn_TimeWindowEnd: DevKit.Controls.DateTime;
+			msdyn_TimeWindowStart: DevKit.Controls.DateTime;
+			/** End date of requirement period */
+			msdyn_todate: DevKit.Controls.Date;
+			/** The working hours for a requirement. */
+			msdyn_workhourtemplate: DevKit.Controls.Lookup;
+			msdyn_WorkLocation: DevKit.Controls.OptionSet;
+			/** Unique identifier for Work Order associated with Resource Requirement. */
+			msdyn_WorkOrder: DevKit.Controls.Lookup;
+			notescontrol: DevKit.Controls.Note;
+			/** Owner Id */
+			OwnerId: DevKit.Controls.Lookup;
+			/** Unique identifier of the currency associated with the entity. */
+			TransactionCurrencyId: DevKit.Controls.Lookup;
+			WebResource_msdyn_timewindowend: DevKit.Controls.WebResource;
+			WebResource_msdyn_timewindowstart: DevKit.Controls.WebResource;
+		}
+		interface Navigation {
+			nav_msdyn_resourcerequirement_requirementdependency_dependentrequirement: DevKit.Controls.NavigationItem,
+			nav_msdyn_resourcerequirement_requirementdependency_resourcerequirement: DevKit.Controls.NavigationItem
+		}
+		interface Grid {
+			RequirementCharacteristics: DevKit.Controls.Grid;
+			RequirementOrganizationUnit: DevKit.Controls.Grid;
+			RequirementResourceCategory: DevKit.Controls.Grid;
+			RequirementResourcePreferences: DevKit.Controls.Grid;
+		}
+	}
+	class Formmsdyn_resourcerequirement_Information2 extends DevKit.IForm {
+		/**
+		* DynamicsCrm.DevKit form msdyn_resourcerequirement_Information2 Main Form
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form msdyn_resourcerequirement_Information2 */
+		Body: DevKit.Formmsdyn_resourcerequirement_Information2.Body;
+		/** The Navigation of form msdyn_resourcerequirement_Information2 */
+		Navigation: DevKit.Formmsdyn_resourcerequirement_Information2.Navigation;
+		/** The Grid of form msdyn_resourcerequirement_Information2 */
+		Grid: DevKit.Formmsdyn_resourcerequirement_Information2.Grid;
+		/** The SidePanes of form msdyn_resourcerequirement_Information2 */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormInfomation {
 		interface tab_tab_1_Sections {
@@ -70,7 +212,7 @@ declare namespace DevKit {
 	}
 	class FormInfomation extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Infomation
+		* DynamicsCrm.DevKit form Infomation Quick Create
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -309,22 +451,22 @@ declare namespace OptionSet {
 			/** 2 */
 			Inactive
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Infomation','Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

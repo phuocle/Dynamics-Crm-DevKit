@@ -74,6 +74,18 @@ namespace Dev.DevKit.Shared.Entities.organizationdatasyncsubscriptionOptionSets
 		Unknown = 0
 	}
 
+	public enum MigrationState
+	{
+		/// <summary>
+		/// DsfCloudService = 0
+		/// </summary>
+		DsfCloudService = 0,
+		/// <summary>
+		/// DsfSdk = 1
+		/// </summary>
+		DsfSdk = 1
+	}
+
 	public enum statecode
 	{
 		/// <summary>
@@ -119,13 +131,18 @@ namespace Dev.DevKit.Shared.Entities
 			public const string DataProcessingType = "dataprocessingtype";
 			public const string EndpointSettings = "endpointsettings";
 			public const string EntityFilters = "entityfilters";
+			public const string EntitySettings = "entitysettings";
+			public const string FullSyncOnly = "fullsynconly";
 			public const string ImportSequenceNumber = "importsequencenumber";
 			public const string IsOutOfBoxSubscription = "isoutofboxsubscription";
+			public const string MigrationState = "migrationstate";
 			public const string ModifiedBy = "modifiedby";
 			public const string ModifiedOn = "modifiedon";
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
 			public const string name = "name";
 			public const string NeedCopyAttachmentsToBlob = "needcopyattachmentstoblob";
+			public const string NeedToCopyFilesToBlob = "needtocopyfilestoblob";
+			public const string NewEntities = "newentities";
 			public const string organizationdatasyncsubscriptionId = "organizationdatasyncsubscriptionid";
 			public const string OrganizationId = "organizationid";
 			public const string OverriddenCreatedOn = "overriddencreatedon";
@@ -135,6 +152,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string SubscriptionEndpointStatus = "subscriptionendpointstatus";
 			public const string SubscriptionEntities = "subscriptionentities";
 			public const string TimeZoneRuleVersionNumber = "timezoneruleversionnumber";
+			public const string UnsubscribedEntities = "unsubscribedentities";
 			public const string UTCConversionTimeZoneCode = "utcconversiontimezonecode";
 			public const string VersionNumber = "versionnumber";
 		}
@@ -336,6 +354,28 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Memo - MaxLength: 5000</para>
+		/// <para>EntitySettings</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string EntitySettings
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.EntitySettings); }
+			set { Entity.Attributes[Fields.EntitySettings] = value; }
+		}
+
+		/// <summary>
+		/// <para>Required - Boolean</para>
+		/// <para>FullSyncOnly</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? FullSyncOnly
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.FullSyncOnly); }
+			set { Entity.Attributes[Fields.FullSyncOnly] = value; }
+		}
+
+		/// <summary>
 		/// <para>Sequence number of the import that created this record.</para>
 		/// <para>Integer - MinValue: -2,147,483,648 - MaxValue: 2,147,483,647</para>
 		/// <para>Import Sequence Number</para>
@@ -356,6 +396,28 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<bool?>(Fields.IsOutOfBoxSubscription); }
 			set { Entity.Attributes[Fields.IsOutOfBoxSubscription] = value; }
+		}
+
+		/// <summary>
+		/// <para>Required - Picklist</para>
+		/// <para>MigrationState</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public Dev.DevKit.Shared.Entities.organizationdatasyncsubscriptionOptionSets.MigrationState? MigrationState
+		{
+			get
+			{
+				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.MigrationState);
+				if (value == null) return null;
+				return (Dev.DevKit.Shared.Entities.organizationdatasyncsubscriptionOptionSets.MigrationState)value.Value;
+			}
+			set
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.MigrationState] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.MigrationState] = null;
+			}
 		}
 
 		/// <summary>
@@ -412,6 +474,28 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<bool?>(Fields.NeedCopyAttachmentsToBlob); }
 			set { Entity.Attributes[Fields.NeedCopyAttachmentsToBlob] = value; }
+		}
+
+		/// <summary>
+		/// <para>Required - Boolean</para>
+		/// <para>NeedToCopyFilesToBlob</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? NeedToCopyFilesToBlob
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.NeedToCopyFilesToBlob); }
+			set { Entity.Attributes[Fields.NeedToCopyFilesToBlob] = value; }
+		}
+
+		/// <summary>
+		/// <para>Memo - MaxLength: 5000</para>
+		/// <para>NewEntities</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string NewEntities
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.NewEntities); }
+			set { Entity.Attributes[Fields.NewEntities] = value; }
 		}
 
 		/// <summary>
@@ -542,6 +626,17 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<int?>(Fields.TimeZoneRuleVersionNumber); }
 			set { Entity.Attributes[Fields.TimeZoneRuleVersionNumber] = value; }
+		}
+
+		/// <summary>
+		/// <para>Memo - MaxLength: 5000</para>
+		/// <para>UnsubscribedEntities</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string UnsubscribedEntities
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.UnsubscribedEntities); }
+			set { Entity.Attributes[Fields.UnsubscribedEntities] = value; }
 		}
 
 		/// <summary>

@@ -24,7 +24,7 @@ declare namespace DevKit {
 	}
 	class FormRecord_Creation_and_Update_Rule_Item extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Record_Creation_and_Update_Rule_Item
+		* DynamicsCrm.DevKit form Record_Creation_and_Update_Rule_Item Main Form
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -33,6 +33,43 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Record_Creation_and_Update_Rule_Item */
 		Body: DevKit.FormRecord_Creation_and_Update_Rule_Item.Body;
+		/** The SidePanes of form Record_Creation_and_Update_Rule_Item */
+		SidePanes: DevKit.SidePanes;
+	}
+	namespace FormRecord_Creation_and_Update_Rule_Item_UCI {
+		interface tab_ConditionBuilder_Sections {
+			Actions_To_Take: DevKit.Controls.Section;
+			New_Condition: DevKit.Controls.Section;
+		}
+		interface tab_ConditionBuilder extends DevKit.Controls.ITab {
+			Section: tab_ConditionBuilder_Sections;
+		}
+		interface Tabs {
+			ConditionBuilder: tab_ConditionBuilder;
+		}
+		interface Body {
+			Tab: Tabs;
+			arc_condition_config_control: DevKit.Controls.ActionCards;
+			configure_child_flow: DevKit.Controls.ActionCards;
+			/** Type a name or title of the rule item that is used for automatic record creation and update. */
+			Name: DevKit.Controls.String;
+			arc_primary_create_control: DevKit.Controls.ActionCards;
+			WebResource_Disclaimer: DevKit.Controls.WebResource;
+		}
+	}
+	class FormRecord_Creation_and_Update_Rule_Item_UCI extends DevKit.IForm {
+		/**
+		* DynamicsCrm.DevKit form Record_Creation_and_Update_Rule_Item_UCI Main Form
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form Record_Creation_and_Update_Rule_Item_UCI */
+		Body: DevKit.FormRecord_Creation_and_Update_Rule_Item_UCI.Body;
+		/** The SidePanes of form Record_Creation_and_Update_Rule_Item_UCI */
+		SidePanes: DevKit.SidePanes;
 	}
 	class ConvertRuleItemApi {
 		/**
@@ -134,22 +171,22 @@ declare namespace OptionSet {
 			/** 1 */
 			Unpublished
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Record Creation and Update Rule Item'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

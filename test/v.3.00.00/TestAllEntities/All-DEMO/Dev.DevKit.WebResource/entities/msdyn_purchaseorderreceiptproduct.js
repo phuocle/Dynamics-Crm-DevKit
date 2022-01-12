@@ -1,9 +1,13 @@
 ﻿//@ts-check
 ///<reference path="msdyn_purchaseorderreceiptproduct.d.ts" />
 "use strict";
-var formInformation = (function () {
+var formmsdyn_purchaseorderreceiptproduct_Information = (function () {
 	"use strict";
+	/** @type DevKit.Formmsdyn_purchaseorderreceiptproduct_Information */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.Formmsdyn_purchaseorderreceiptproduct_Information(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}
@@ -14,7 +18,11 @@ var formInformation = (function () {
 })();
 var formPurchase_Order_Receipt_Product_Mobile = (function () {
 	"use strict";
+	/** @type DevKit.FormPurchase_Order_Receipt_Product_Mobile */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.FormPurchase_Order_Receipt_Product_Mobile(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}
@@ -25,7 +33,11 @@ var formPurchase_Order_Receipt_Product_Mobile = (function () {
 })();
 var formQuick_Create_Purchase_Order_Receipt_Product = (function () {
 	"use strict";
+	/** @type DevKit.FormQuick_Create_Purchase_Order_Receipt_Product */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.FormQuick_Create_Purchase_Order_Receipt_Product(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}

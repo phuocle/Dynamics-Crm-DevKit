@@ -239,7 +239,7 @@ namespace Dev.DevKit.Shared.Entities.SalesOrderDetailOptionSets
 		/// <summary>
 		/// Project-based Service = 5
 		/// </summary>
-		Projectbased_Service = 5,
+		Project_based_Service = 5,
 		/// <summary>
 		/// Required Bundle Product = 3
 		/// </summary>

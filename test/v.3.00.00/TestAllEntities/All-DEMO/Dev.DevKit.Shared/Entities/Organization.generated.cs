@@ -79,7 +79,7 @@ namespace Dev.DevKit.Shared.Entities.OrganizationOptionSets
 		/// <summary>
 		/// Server-Side Synchronization = 0
 		/// </summary>
-		ServerSide_Synchronization = 0
+		Server_Side_Synchronization = 0
 	}
 
 	public enum FiscalPeriodFormatPeriod
@@ -317,13 +317,13 @@ namespace Dev.DevKit.Shared.Entities.OrganizationOptionSets
 	public enum SharePointDeploymentType
 	{
 		/// <summary>
-		/// Online = 0
-		/// </summary>
-		Online = 0,
-		/// <summary>
 		/// On-Premises = 1
 		/// </summary>
-		OnPremises = 1
+		On_Premises = 1,
+		/// <summary>
+		/// Online = 0
+		/// </summary>
+		Online = 0
 	}
 
 	public enum SyncOptInSelectionStatus
@@ -464,6 +464,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string EmailConnectionChannel = "emailconnectionchannel";
 			public const string EmailCorrelationEnabled = "emailcorrelationenabled";
 			public const string EmailSendPollingPeriod = "emailsendpollingperiod";
+			public const string EnableAsyncMergeAPIForUCI = "enableasyncmergeapiforuci";
 			public const string EnableBingMapsIntegration = "enablebingmapsintegration";
 			public const string EnableImmersiveSkypeIntegration = "enableimmersiveskypeintegration";
 			public const string EnableLivePersonaCardUCI = "enablelivepersonacarduci";
@@ -1990,6 +1991,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<int?>(Fields.EmailSendPollingPeriod); }
 			set { Entity.Attributes[Fields.EmailSendPollingPeriod] = value; }
+		}
+
+		/// <summary>
+		/// <para>Determines whether records merged through the merge dialog in UCI are merged asynchronously</para>
+		/// <para>Boolean</para>
+		/// <para>Asynchronous merge enabled for UCI</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? EnableAsyncMergeAPIForUCI
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.EnableAsyncMergeAPIForUCI); }
+			set { Entity.Attributes[Fields.EnableAsyncMergeAPIForUCI] = value; }
 		}
 
 		/// <summary>

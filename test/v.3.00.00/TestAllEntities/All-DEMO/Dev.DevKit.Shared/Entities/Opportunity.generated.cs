@@ -79,7 +79,7 @@ namespace Dev.DevKit.Shared.Entities.OpportunityOptionSets
 		/// <summary>
 		/// Service-Maintenance Based = 690970002
 		/// </summary>
-		ServiceMaintenance_Based = 690970002,
+		Service_Maintenance_Based = 690970002,
 		/// <summary>
 		/// Work based = 192350001
 		/// </summary>
@@ -403,7 +403,7 @@ namespace Dev.DevKit.Shared.Entities.OpportunityOptionSets
 		/// <summary>
 		/// Out-Sold = 5
 		/// </summary>
-		OutSold = 5,
+		Out_Sold = 5,
 		/// <summary>
 		/// Won = 3
 		/// </summary>

@@ -15,15 +15,15 @@ namespace Dev.DevKit.Shared.Entities.ReportLinkOptionSets
 		/// <summary>
 		/// Drill-through = 1
 		/// </summary>
-		Drillthrough = 1,
+		Drill_through = 1,
 		/// <summary>
 		/// Drill-through and sub-report = 3
 		/// </summary>
-		Drillthrough_and_subreport = 3,
+		Drill_through_and_sub_report = 3,
 		/// <summary>
 		/// Sub-report = 2
 		/// </summary>
-		Subreport = 2
+		Sub_report = 2
 	}
 }
 

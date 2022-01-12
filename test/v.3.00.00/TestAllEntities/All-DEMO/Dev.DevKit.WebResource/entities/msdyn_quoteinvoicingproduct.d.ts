@@ -2,6 +2,82 @@
 ///<reference path="devkit.d.ts" />
 declare namespace DevKit {
 	namespace Formmsdyn_quoteinvoicingproduct_Information {
+		interface Tabs {
+		}
+		interface Body {
+			/** The name of the custom entity. */
+			msdyn_name: DevKit.Controls.String;
+			notescontrol: DevKit.Controls.Note;
+			/** Owner Id */
+			OwnerId: DevKit.Controls.Lookup;
+		}
+	}
+	class Formmsdyn_quoteinvoicingproduct_Information extends DevKit.IForm {
+		/**
+		* DynamicsCrm.DevKit form msdyn_quoteinvoicingproduct_Information Main Form
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form msdyn_quoteinvoicingproduct_Information */
+		Body: DevKit.Formmsdyn_quoteinvoicingproduct_Information.Body;
+		/** The SidePanes of form msdyn_quoteinvoicingproduct_Information */
+		SidePanes: DevKit.SidePanes;
+	}
+	namespace Formmsdyn_quoteinvoicingproduct_Information2 {
+		interface tab_General_Sections {
+			tab_2_section_1: DevKit.Controls.Section;
+			tab_2_section_2: DevKit.Controls.Section;
+		}
+		interface tab_General extends DevKit.Controls.ITab {
+			Section: tab_General_Sections;
+		}
+		interface Tabs {
+			General: tab_General;
+		}
+		interface Body {
+			Tab: Tabs;
+			/** Exchange rate for the currency associated with the entity with respect to the base currency. */
+			ExchangeRate: DevKit.Controls.Decimal;
+			/** Total sales amount for the product line. */
+			msdyn_Amount: DevKit.Controls.Money;
+			/** Shows the order of this product within the quote invoicing setup. */
+			msdyn_LineOrder: DevKit.Controls.Integer;
+			/** The name of the custom entity. */
+			msdyn_name: DevKit.Controls.String;
+			/** The product associated with the transaction. */
+			msdyn_Product: DevKit.Controls.Lookup;
+			/** Enter the quantity to bill. */
+			msdyn_Quantity: DevKit.Controls.Decimal;
+			/** The invoicing setup this product belongs to. */
+			msdyn_QuoteInvoicingSetup: DevKit.Controls.Lookup;
+			/** The unit that determines the pricing for this product */
+			msdyn_Unit: DevKit.Controls.Lookup;
+			/** Enter the amount you want to charge the customer per unit. */
+			msdyn_UnitPrice: DevKit.Controls.Money;
+			/** Owner Id */
+			OwnerId: DevKit.Controls.Lookup;
+			/** Unique identifier of the currency associated with the entity. */
+			TransactionCurrencyId: DevKit.Controls.Lookup;
+		}
+	}
+	class Formmsdyn_quoteinvoicingproduct_Information2 extends DevKit.IForm {
+		/**
+		* DynamicsCrm.DevKit form msdyn_quoteinvoicingproduct_Information2 Main Form
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form msdyn_quoteinvoicingproduct_Information2 */
+		Body: DevKit.Formmsdyn_quoteinvoicingproduct_Information2.Body;
+		/** The SidePanes of form msdyn_quoteinvoicingproduct_Information2 */
+		SidePanes: DevKit.SidePanes;
+	}
+	namespace Formmsdyn_quoteinvoicingproduct_Information3 {
 		interface tab_tab_1_Sections {
 			tab_1_column_1_section_1: DevKit.Controls.Section;
 			tab_1_column_2_section_1: DevKit.Controls.Section;
@@ -27,17 +103,17 @@ declare namespace DevKit {
 			msdyn_UnitPrice: DevKit.Controls.Money;
 		}
 	}
-	class Formmsdyn_quoteinvoicingproduct_Information extends DevKit.IForm {
+	class Formmsdyn_quoteinvoicingproduct_Information3 extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form msdyn_quoteinvoicingproduct_Information
+		* DynamicsCrm.DevKit form msdyn_quoteinvoicingproduct_Information3 Quick Create
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
 		constructor(executionContext: any, defaultWebResourceName?: string);
 		/** Utility functions/methods/objects for Dynamics 365 form */
 		Utility: DevKit.Utility;
-		/** The Body section of form msdyn_quoteinvoicingproduct_Information */
-		Body: DevKit.Formmsdyn_quoteinvoicingproduct_Information.Body;
+		/** The Body section of form msdyn_quoteinvoicingproduct_Information3 */
+		Body: DevKit.Formmsdyn_quoteinvoicingproduct_Information3.Body;
 	}
 	class msdyn_quoteinvoicingproductApi {
 		/**
@@ -145,22 +221,22 @@ declare namespace OptionSet {
 			/** 2 */
 			Inactive
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

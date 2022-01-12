@@ -158,15 +158,15 @@ declare namespace DevKit {
 			contactquickform: quickForm_contactquickform;
 		}
 		interface Grid {
-			contactopportunitiesgrid: DevKit.Controls.Grid;
 			contactcasessgrid: DevKit.Controls.Grid;
-			subgrid_Entitlement: DevKit.Controls.Grid;
+			contactopportunitiesgrid: DevKit.Controls.Grid;
 			DocumentsSubGrid: DevKit.Controls.Grid;
+			subgrid_Entitlement: DevKit.Controls.Grid;
 		}
 	}
 	class FormContact extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Contact
+		* DynamicsCrm.DevKit form Contact Main Form
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -183,6 +183,432 @@ declare namespace DevKit {
 		QuickForm: DevKit.FormContact.QuickForm;
 		/** The Grid of form Contact */
 		Grid: DevKit.FormContact.Grid;
+		/** The SidePanes of form Contact */
+		SidePanes: DevKit.SidePanes;
+	}
+	namespace FormContact_Mobile {
+		interface tab_fstab_address_Sections {
+			fstab_address_section_address: DevKit.Controls.Section;
+			tab_2_section_2: DevKit.Controls.Section;
+			tab_2_section_3: DevKit.Controls.Section;
+		}
+		interface tab_fstab_other_Sections {
+			tab_4_section_1: DevKit.Controls.Section;
+			tab_4_section_2: DevKit.Controls.Section;
+			tab_4_section_3: DevKit.Controls.Section;
+		}
+		interface tab_fstab_sub_grids_Sections {
+			fstab_sub_grids_section: DevKit.Controls.Section;
+			tab_3_section_2: DevKit.Controls.Section;
+			tab_3_section_3: DevKit.Controls.Section;
+		}
+		interface tab_fstab_summary_Sections {
+			fstab_summary_section_contact_information: DevKit.Controls.Section;
+		}
+		interface tab_fstab_address extends DevKit.Controls.ITab {
+			Section: tab_fstab_address_Sections;
+		}
+		interface tab_fstab_other extends DevKit.Controls.ITab {
+			Section: tab_fstab_other_Sections;
+		}
+		interface tab_fstab_sub_grids extends DevKit.Controls.ITab {
+			Section: tab_fstab_sub_grids_Sections;
+		}
+		interface tab_fstab_summary extends DevKit.Controls.ITab {
+			Section: tab_fstab_summary_Sections;
+		}
+		interface Tabs {
+			fstab_address: tab_fstab_address;
+			fstab_other: tab_fstab_other;
+			fstab_sub_grids: tab_fstab_sub_grids;
+			fstab_summary: tab_fstab_summary;
+		}
+		interface Body {
+			Tab: Tabs;
+			/** Shows the complete primary address. */
+			Address1_Composite: DevKit.Controls.String;
+			/** Type the first line of the primary address. */
+			Address1_Line1: DevKit.Controls.String;
+			/** Type the primary email address for the contact. */
+			EMailAddress1: DevKit.Controls.String;
+			/** Type the fax number for the contact. */
+			Fax: DevKit.Controls.String;
+			/** Combines and shows the contact's first and last names so that the full name can be displayed in views and reports. */
+			FullName: DevKit.Controls.String;
+			/** Type the job title of the contact to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns. */
+			JobTitle: DevKit.Controls.String;
+			/** Type the mobile phone number for the contact. */
+			MobilePhone: DevKit.Controls.String;
+			notescontrol: DevKit.Controls.Note;
+			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
+			OwnerId: DevKit.Controls.Lookup;
+			/** Select the parent account or parent contact for the contact to provide a quick link to additional details, such as financial information, activities, and opportunities. */
+			ParentCustomerId: DevKit.Controls.Lookup;
+			/** Select the preferred method of contact. */
+			PreferredContactMethodCode: DevKit.Controls.OptionSet;
+			/** Type the main phone number for this contact. */
+			Telephone1: DevKit.Controls.String;
+		}
+		interface Navigation {
+			nav_msdyn_contact_msdyn_rma_RequestedByContact: DevKit.Controls.NavigationItem,
+			nav_msdyn_contact_msdyn_rtv_VendorContact: DevKit.Controls.NavigationItem,
+			nav_msdyn_contact_msdyn_workorder_ReportedByContact: DevKit.Controls.NavigationItem,
+			navAddresses: DevKit.Controls.NavigationItem,
+			navAsyncOperations: DevKit.Controls.NavigationItem,
+			navCampaignsInSFA: DevKit.Controls.NavigationItem,
+			navContracts: DevKit.Controls.NavigationItem,
+			navEntitlement: DevKit.Controls.NavigationItem,
+			navInvoices: DevKit.Controls.NavigationItem,
+			navListsInSFA: DevKit.Controls.NavigationItem,
+			navOrders: DevKit.Controls.NavigationItem,
+			navProcessSessions: DevKit.Controls.NavigationItem,
+			navQuotes: DevKit.Controls.NavigationItem,
+			navRelationships: DevKit.Controls.NavigationItem,
+			navSubConts: DevKit.Controls.NavigationItem
+		}
+		interface Grid {
+			CONTACTS: DevKit.Controls.Grid;
+			INVOICES: DevKit.Controls.Grid;
+			ORDERS: DevKit.Controls.Grid;
+			QUOTES: DevKit.Controls.Grid;
+		}
+	}
+	class FormContact_Mobile extends DevKit.IForm {
+		/**
+		* DynamicsCrm.DevKit form Contact_Mobile Main Form
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form Contact_Mobile */
+		Body: DevKit.FormContact_Mobile.Body;
+		/** The Navigation of form Contact_Mobile */
+		Navigation: DevKit.FormContact_Mobile.Navigation;
+		/** The Grid of form Contact_Mobile */
+		Grid: DevKit.FormContact_Mobile.Grid;
+		/** The SidePanes of form Contact_Mobile */
+		SidePanes: DevKit.SidePanes;
+	}
+	namespace FormContact_for_Interactive_experience {
+		interface Header extends DevKit.Controls.IHeader {
+			/** Type the primary email address for the contact. */
+			EMailAddress1: DevKit.Controls.String;
+			/** Type the job title of the contact to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns. */
+			JobTitle: DevKit.Controls.String;
+			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
+			OwnerId: DevKit.Controls.Lookup;
+			/** Type the main phone number for this contact. */
+			Telephone1: DevKit.Controls.String;
+		}
+		interface tab_conflictstab_Sections {
+			conflictssection: DevKit.Controls.Section;
+		}
+		interface tab_DETAILS_TAB_Sections {
+			billing_information: DevKit.Controls.Section;
+			CONTACT_PREFERENCES: DevKit.Controls.Section;
+			marketing_information: DevKit.Controls.Section;
+			PERSONAL_INFORMATION: DevKit.Controls.Section;
+			PERSONAL_NOTES_SECTION: DevKit.Controls.Section;
+			shipping_information: DevKit.Controls.Section;
+		}
+		interface tab_SUMMARY_TAB_Sections {
+			CONTACT_INFORMATION: DevKit.Controls.Section;
+			ref_pan_CUSTOMER_DETAILS_TAB: DevKit.Controls.Section;
+			Timeline: DevKit.Controls.Section;
+		}
+		interface tab_conflictstab extends DevKit.Controls.ITab {
+			Section: tab_conflictstab_Sections;
+		}
+		interface tab_DETAILS_TAB extends DevKit.Controls.ITab {
+			Section: tab_DETAILS_TAB_Sections;
+		}
+		interface tab_SUMMARY_TAB extends DevKit.Controls.ITab {
+			Section: tab_SUMMARY_TAB_Sections;
+		}
+		interface Tabs {
+			conflictstab: tab_conflictstab;
+			DETAILS_TAB: tab_DETAILS_TAB;
+			SUMMARY_TAB: tab_SUMMARY_TAB;
+		}
+		interface Body {
+			Tab: Tabs;
+			/** Shows the complete primary address. */
+			Address1_Composite: DevKit.Controls.String;
+			/** Select the freight terms for the primary address to make sure shipping orders are processed correctly. */
+			Address1_FreightTermsCode: DevKit.Controls.OptionSet;
+			/** Select a shipping method for deliveries sent to this address. */
+			Address1_ShippingMethodCode: DevKit.Controls.OptionSet;
+			/** Enter the date of the contact's wedding or service anniversary for use in customer gift programs or other communications. */
+			Anniversary: DevKit.Controls.Date;
+			/** Enter the contact's birthday for use in customer gift programs or other communications. */
+			BirthDate: DevKit.Controls.Date;
+			/** Type the credit limit of the contact for reference when you address invoice and accounting issues with the customer. */
+			CreditLimit: DevKit.Controls.Money;
+			/** Select whether the contact is on a credit hold, for reference when addressing invoice and accounting issues. */
+			CreditOnHold: DevKit.Controls.Boolean;
+			/** Type additional information to describe the contact, such as an excerpt from the company's website. */
+			Description: DevKit.Controls.String;
+			/** Select whether the contact accepts bulk email sent through marketing campaigns or quick campaigns. If Do Not Allow is selected, the contact can be added to marketing lists, but will be excluded from the email. */
+			DoNotBulkEMail: DevKit.Controls.Boolean;
+			/** Select whether the contact allows direct email sent from Microsoft Dynamics 365. If Do Not Allow is selected, Microsoft Dynamics 365 will not send the email. */
+			DoNotEMail: DevKit.Controls.Boolean;
+			/** Select whether the contact allows faxes. If Do Not Allow is selected, the contact will be excluded from any fax activities distributed in marketing campaigns. */
+			DoNotFax: DevKit.Controls.Boolean;
+			/** Select whether the contact accepts phone calls. If Do Not Allow is selected, the contact will be excluded from any phone call activities distributed in marketing campaigns. */
+			DoNotPhone: DevKit.Controls.Boolean;
+			/** Select whether the contact allows direct mail. If Do Not Allow is selected, the contact will be excluded from letter activities distributed in marketing campaigns. */
+			DoNotPostalMail: DevKit.Controls.Boolean;
+			/** Select whether the contact accepts marketing materials, such as brochures or catalogs. Contacts that opt out can be excluded from marketing initiatives. */
+			DoNotSendMM: DevKit.Controls.Boolean;
+			/** Type the primary email address for the contact. */
+			EMailAddress1: DevKit.Controls.String;
+			/** Type the primary email address for the contact. */
+			EMailAddress1_1: DevKit.Controls.String;
+			/** Select the marital status of the contact for reference in follow-up phone calls and other communications. */
+			FamilyStatusCode: DevKit.Controls.OptionSet;
+			/** Type the fax number for the contact. */
+			Fax: DevKit.Controls.String;
+			/** Type the contact's first name to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns. */
+			FirstName: DevKit.Controls.String;
+			/** Information about whether to allow following email activity like opens, attachment views and link clicks for emails sent to the contact. */
+			FollowEmail: DevKit.Controls.Boolean;
+			/** Select the contact's gender to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns. */
+			GenderCode: DevKit.Controls.OptionSet;
+			/** Type the contact's last name to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns. */
+			LastName: DevKit.Controls.String;
+			/** Shows the date when the contact was last included in a marketing campaign or quick campaign. */
+			LastUsedInCampaign: DevKit.Controls.Date;
+			/** Type the mobile phone number for the contact. */
+			MobilePhone: DevKit.Controls.String;
+			notescontrol: DevKit.Controls.Note;
+			/** Shows the lead that the contact was created if the contact was created by converting a lead in Microsoft Dynamics 365. This is used to relate the contact to the data on the originating lead for use in reporting and analytics. */
+			OriginatingLeadId: DevKit.Controls.Lookup;
+			/** Select the parent account or parent contact for the contact to provide a quick link to additional details, such as financial information, activities, and opportunities. */
+			ParentCustomerId: DevKit.Controls.Lookup;
+			/** Select the payment terms to indicate when the customer needs to pay the total amount. */
+			PaymentTermsCode: DevKit.Controls.OptionSet;
+			/** Select the preferred method of contact. */
+			PreferredContactMethodCode: DevKit.Controls.OptionSet;
+			/** Select the preferred method of contact. */
+			PreferredContactMethodCode_1: DevKit.Controls.OptionSet;
+			/** Type the name of the contact's spouse or partner for reference during calls, events, or other communications with the contact. */
+			SpousesName: DevKit.Controls.String;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			TransactionCurrencyId: DevKit.Controls.Lookup;
+		}
+		interface Navigation {
+			navAddresses: DevKit.Controls.NavigationItem,
+			navAsyncOperations: DevKit.Controls.NavigationItem,
+			navCampaignsInSFA: DevKit.Controls.NavigationItem,
+			navContracts: DevKit.Controls.NavigationItem,
+			navInvoices: DevKit.Controls.NavigationItem,
+			navListsInSFA: DevKit.Controls.NavigationItem,
+			navOrders: DevKit.Controls.NavigationItem,
+			navProcessSessions: DevKit.Controls.NavigationItem,
+			navQuotes: DevKit.Controls.NavigationItem,
+			navRelationships: DevKit.Controls.NavigationItem,
+			navSubConts: DevKit.Controls.NavigationItem
+		}
+		interface quickForm_contactquickform_Body {
+			EMailAddress1: DevKit.Controls.QuickView;
+			FullName: DevKit.Controls.QuickView;
+			MobilePhone: DevKit.Controls.QuickView;
+			ParentCustomerId: DevKit.Controls.QuickView;
+			Telephone1: DevKit.Controls.QuickView;
+		}
+		interface quickForm_contactquickform extends DevKit.Controls.IQuickView {
+			Body: quickForm_contactquickform_Body;
+		}
+		interface QuickForm {
+			contactquickform: quickForm_contactquickform;
+		}
+		interface Grid {
+			contactcasessgrid: DevKit.Controls.Grid;
+			contactopportunitiesgrid: DevKit.Controls.Grid;
+			subgrid_Entitlement: DevKit.Controls.Grid;
+		}
+	}
+	class FormContact_for_Interactive_experience extends DevKit.IForm {
+		/**
+		* DynamicsCrm.DevKit form Contact_for_Interactive_experience Main Form
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form Contact_for_Interactive_experience */
+		Body: DevKit.FormContact_for_Interactive_experience.Body;
+		/** The Header section of form Contact_for_Interactive_experience */
+		Header: DevKit.FormContact_for_Interactive_experience.Header;
+		/** The Navigation of form Contact_for_Interactive_experience */
+		Navigation: DevKit.FormContact_for_Interactive_experience.Navigation;
+		/** The QuickForm of form Contact_for_Interactive_experience */
+		QuickForm: DevKit.FormContact_for_Interactive_experience.QuickForm;
+		/** The Grid of form Contact_for_Interactive_experience */
+		Grid: DevKit.FormContact_for_Interactive_experience.Grid;
+		/** The SidePanes of form Contact_for_Interactive_experience */
+		SidePanes: DevKit.SidePanes;
+	}
+	namespace FormContact_for_Multisession_experience {
+		interface Header extends DevKit.Controls.IHeader {
+			/** Type the primary email address for the contact. */
+			EMailAddress1: DevKit.Controls.String;
+			/** Type the job title of the contact to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns. */
+			JobTitle: DevKit.Controls.String;
+			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
+			OwnerId: DevKit.Controls.Lookup;
+			/** Type the main phone number for this contact. */
+			Telephone1: DevKit.Controls.String;
+		}
+		interface tab_DETAILS_TAB_Sections {
+			billing_information: DevKit.Controls.Section;
+			CONTACT_PREFERENCES: DevKit.Controls.Section;
+			marketing_information: DevKit.Controls.Section;
+			PERSONAL_INFORMATION: DevKit.Controls.Section;
+			PERSONAL_NOTES_SECTION: DevKit.Controls.Section;
+			shipping_information: DevKit.Controls.Section;
+		}
+		interface tab_SUMMARY_TAB_Sections {
+			CONTACT_INFORMATION: DevKit.Controls.Section;
+			SUMMARY_TAB_section_4: DevKit.Controls.Section;
+			Timeline: DevKit.Controls.Section;
+		}
+		interface tab_tab_recordwall_Sections {
+			tab_recordwall_section_1: DevKit.Controls.Section;
+		}
+		interface tab_DETAILS_TAB extends DevKit.Controls.ITab {
+			Section: tab_DETAILS_TAB_Sections;
+		}
+		interface tab_SUMMARY_TAB extends DevKit.Controls.ITab {
+			Section: tab_SUMMARY_TAB_Sections;
+		}
+		interface tab_tab_recordwall extends DevKit.Controls.ITab {
+			Section: tab_tab_recordwall_Sections;
+		}
+		interface Tabs {
+			DETAILS_TAB: tab_DETAILS_TAB;
+			SUMMARY_TAB: tab_SUMMARY_TAB;
+			tab_recordwall: tab_tab_recordwall;
+		}
+		interface Body {
+			Tab: Tabs;
+			/** Shows the complete primary address. */
+			Address1_Composite: DevKit.Controls.String;
+			/** Select the freight terms for the primary address to make sure shipping orders are processed correctly. */
+			Address1_FreightTermsCode: DevKit.Controls.OptionSet;
+			/** Select a shipping method for deliveries sent to this address. */
+			Address1_ShippingMethodCode: DevKit.Controls.OptionSet;
+			/** Enter the date of the contact's wedding or service anniversary for use in customer gift programs or other communications. */
+			Anniversary: DevKit.Controls.Date;
+			/** Enter the contact's birthday for use in customer gift programs or other communications. */
+			BirthDate: DevKit.Controls.Date;
+			/** Type the credit limit of the contact for reference when you address invoice and accounting issues with the customer. */
+			CreditLimit: DevKit.Controls.Money;
+			/** Select whether the contact is on a credit hold, for reference when addressing invoice and accounting issues. */
+			CreditOnHold: DevKit.Controls.Boolean;
+			/** Type additional information to describe the contact, such as an excerpt from the company's website. */
+			Description: DevKit.Controls.String;
+			/** Select whether the contact accepts bulk email sent through marketing campaigns or quick campaigns. If Do Not Allow is selected, the contact can be added to marketing lists, but will be excluded from the email. */
+			DoNotBulkEMail: DevKit.Controls.Boolean;
+			/** Select whether the contact allows direct email sent from Microsoft Dynamics 365. If Do Not Allow is selected, Microsoft Dynamics 365 will not send the email. */
+			DoNotEMail: DevKit.Controls.Boolean;
+			/** Select whether the contact allows faxes. If Do Not Allow is selected, the contact will be excluded from any fax activities distributed in marketing campaigns. */
+			DoNotFax: DevKit.Controls.Boolean;
+			/** Select whether the contact accepts phone calls. If Do Not Allow is selected, the contact will be excluded from any phone call activities distributed in marketing campaigns. */
+			DoNotPhone: DevKit.Controls.Boolean;
+			/** Select whether the contact allows direct mail. If Do Not Allow is selected, the contact will be excluded from letter activities distributed in marketing campaigns. */
+			DoNotPostalMail: DevKit.Controls.Boolean;
+			/** Select whether the contact accepts marketing materials, such as brochures or catalogs. Contacts that opt out can be excluded from marketing initiatives. */
+			DoNotSendMM: DevKit.Controls.Boolean;
+			/** Type the primary email address for the contact. */
+			EMailAddress1: DevKit.Controls.String;
+			/** Select the marital status of the contact for reference in follow-up phone calls and other communications. */
+			FamilyStatusCode: DevKit.Controls.OptionSet;
+			/** Type the fax number for the contact. */
+			Fax: DevKit.Controls.String;
+			/** Type the contact's first name to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns. */
+			FirstName: DevKit.Controls.String;
+			/** Information about whether to allow following email activity like opens, attachment views and link clicks for emails sent to the contact. */
+			FollowEmail: DevKit.Controls.Boolean;
+			/** Select the contact's gender to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns. */
+			GenderCode: DevKit.Controls.OptionSet;
+			/** Type the contact's last name to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns. */
+			LastName: DevKit.Controls.String;
+			/** Shows the date when the contact was last included in a marketing campaign or quick campaign. */
+			LastUsedInCampaign: DevKit.Controls.Date;
+			/** Type the mobile phone number for the contact. */
+			MobilePhone: DevKit.Controls.String;
+			notescontrol: DevKit.Controls.Note;
+			/** Shows the lead that the contact was created if the contact was created by converting a lead in Microsoft Dynamics 365. This is used to relate the contact to the data on the originating lead for use in reporting and analytics. */
+			OriginatingLeadId: DevKit.Controls.Lookup;
+			/** Select the parent account or parent contact for the contact to provide a quick link to additional details, such as financial information, activities, and opportunities. */
+			ParentCustomerId: DevKit.Controls.Lookup;
+			/** Select the payment terms to indicate when the customer needs to pay the total amount. */
+			PaymentTermsCode: DevKit.Controls.OptionSet;
+			/** Select the preferred method of contact. */
+			PreferredContactMethodCode: DevKit.Controls.OptionSet;
+			/** Select the preferred method of contact. */
+			PreferredContactMethodCode_1: DevKit.Controls.OptionSet;
+			/** Type the name of the contact's spouse or partner for reference during calls, events, or other communications with the contact. */
+			SpousesName: DevKit.Controls.String;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			TransactionCurrencyId: DevKit.Controls.Lookup;
+			WebResource_RecordWall: DevKit.Controls.WebResource;
+		}
+		interface Navigation {
+			navAddresses: DevKit.Controls.NavigationItem,
+			navAsyncOperations: DevKit.Controls.NavigationItem,
+			navCampaignsInSFA: DevKit.Controls.NavigationItem,
+			navContracts: DevKit.Controls.NavigationItem,
+			navInvoices: DevKit.Controls.NavigationItem,
+			navListsInSFA: DevKit.Controls.NavigationItem,
+			navOrders: DevKit.Controls.NavigationItem,
+			navProcessSessions: DevKit.Controls.NavigationItem,
+			navQuotes: DevKit.Controls.NavigationItem,
+			navRelationships: DevKit.Controls.NavigationItem,
+			navSubConts: DevKit.Controls.NavigationItem
+		}
+		interface quickForm_contactquickform_Body {
+			EMailAddress1: DevKit.Controls.QuickView;
+			FullName: DevKit.Controls.QuickView;
+			MobilePhone: DevKit.Controls.QuickView;
+			ParentCustomerId: DevKit.Controls.QuickView;
+			Telephone1: DevKit.Controls.QuickView;
+		}
+		interface quickForm_contactquickform extends DevKit.Controls.IQuickView {
+			Body: quickForm_contactquickform_Body;
+		}
+		interface QuickForm {
+			contactquickform: quickForm_contactquickform;
+		}
+		interface Grid {
+			RelatedCases: DevKit.Controls.Grid;
+		}
+	}
+	class FormContact_for_Multisession_experience extends DevKit.IForm {
+		/**
+		* DynamicsCrm.DevKit form Contact_for_Multisession_experience Main Form
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form Contact_for_Multisession_experience */
+		Body: DevKit.FormContact_for_Multisession_experience.Body;
+		/** The Header section of form Contact_for_Multisession_experience */
+		Header: DevKit.FormContact_for_Multisession_experience.Header;
+		/** The Navigation of form Contact_for_Multisession_experience */
+		Navigation: DevKit.FormContact_for_Multisession_experience.Navigation;
+		/** The QuickForm of form Contact_for_Multisession_experience */
+		QuickForm: DevKit.FormContact_for_Multisession_experience.QuickForm;
+		/** The Grid of form Contact_for_Multisession_experience */
+		Grid: DevKit.FormContact_for_Multisession_experience.Grid;
+		/** The SidePanes of form Contact_for_Multisession_experience */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormContact_Information {
 		interface Header extends DevKit.Controls.IHeader {
@@ -374,7 +800,7 @@ declare namespace DevKit {
 	}
 	class FormContact_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Contact_Information
+		* DynamicsCrm.DevKit form Contact_Information Main Form
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -389,6 +815,193 @@ declare namespace DevKit {
 		Navigation: DevKit.FormContact_Information.Navigation;
 		/** The Grid of form Contact_Information */
 		Grid: DevKit.FormContact_Information.Grid;
+		/** The SidePanes of form Contact_Information */
+		SidePanes: DevKit.SidePanes;
+	}
+	namespace FormContact_Sales_Insights {
+		interface Header extends DevKit.Controls.IHeader {
+			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
+			OwnerId: DevKit.Controls.Lookup;
+		}
+		interface tab_DETAILS_TAB_Sections {
+			billing_information: DevKit.Controls.Section;
+			CONTACT_PREFERENCES: DevKit.Controls.Section;
+			marketing_information: DevKit.Controls.Section;
+			PERSONAL_INFORMATION: DevKit.Controls.Section;
+			PERSONAL_NOTES_SECTION: DevKit.Controls.Section;
+			shipping_information: DevKit.Controls.Section;
+		}
+		interface tab_SUMMARY_TAB_Sections {
+			CONTACT_INFORMATION: DevKit.Controls.Section;
+			CUSTOMER_DETAILS_TAB: DevKit.Controls.Section;
+			MapSection: DevKit.Controls.Section;
+			SOCIAL_PANE_TAB: DevKit.Controls.Section;
+			Summary_CadenceWidget: DevKit.Controls.Section;
+			Summary_section_6: DevKit.Controls.Section;
+			TalkingPoints_section: DevKit.Controls.Section;
+		}
+		interface tab_DETAILS_TAB extends DevKit.Controls.ITab {
+			Section: tab_DETAILS_TAB_Sections;
+		}
+		interface tab_SUMMARY_TAB extends DevKit.Controls.ITab {
+			Section: tab_SUMMARY_TAB_Sections;
+		}
+		interface Tabs {
+			DETAILS_TAB: tab_DETAILS_TAB;
+			SUMMARY_TAB: tab_SUMMARY_TAB;
+		}
+		interface Body {
+			Tab: Tabs;
+			ActionCards: DevKit.Controls.ActionCards;
+			/** Shows the complete primary address. */
+			Address1_Composite: DevKit.Controls.String;
+			/** Select the freight terms for the primary address to make sure shipping orders are processed correctly. */
+			Address1_FreightTermsCode: DevKit.Controls.OptionSet;
+			/** Select a shipping method for deliveries sent to this address. */
+			Address1_ShippingMethodCode: DevKit.Controls.OptionSet;
+			/** Enter the date of the contact's wedding or service anniversary for use in customer gift programs or other communications. */
+			Anniversary: DevKit.Controls.Date;
+			/** Enter the contact's birthday for use in customer gift programs or other communications. */
+			BirthDate: DevKit.Controls.Date;
+			CadenceWidgetControl: DevKit.Controls.ActionCards;
+			/** Type the credit limit of the contact for reference when you address invoice and accounting issues with the customer. */
+			CreditLimit: DevKit.Controls.Money;
+			/** Select whether the contact is on a credit hold, for reference when addressing invoice and accounting issues. */
+			CreditOnHold: DevKit.Controls.Boolean;
+			/** Type additional information to describe the contact, such as an excerpt from the company's website. */
+			Description: DevKit.Controls.String;
+			/** Select whether the contact accepts bulk email sent through marketing campaigns or quick campaigns. If Do Not Allow is selected, the contact can be added to marketing lists, but will be excluded from the email. */
+			DoNotBulkEMail: DevKit.Controls.Boolean;
+			/** Select whether the contact allows direct email sent from Microsoft Dynamics 365. If Do Not Allow is selected, Microsoft Dynamics 365 will not send the email. */
+			DoNotEMail: DevKit.Controls.Boolean;
+			/** Select whether the contact allows faxes. If Do Not Allow is selected, the contact will be excluded from any fax activities distributed in marketing campaigns. */
+			DoNotFax: DevKit.Controls.Boolean;
+			/** Select whether the contact accepts phone calls. If Do Not Allow is selected, the contact will be excluded from any phone call activities distributed in marketing campaigns. */
+			DoNotPhone: DevKit.Controls.Boolean;
+			/** Select whether the contact allows direct mail. If Do Not Allow is selected, the contact will be excluded from letter activities distributed in marketing campaigns. */
+			DoNotPostalMail: DevKit.Controls.Boolean;
+			/** Select whether the contact accepts marketing materials, such as brochures or catalogs. Contacts that opt out can be excluded from marketing initiatives. */
+			DoNotSendMM: DevKit.Controls.Boolean;
+			/** Type the primary email address for the contact. */
+			EMailAddress1: DevKit.Controls.String;
+			/** Select the marital status of the contact for reference in follow-up phone calls and other communications. */
+			FamilyStatusCode: DevKit.Controls.OptionSet;
+			/** Type the fax number for the contact. */
+			Fax: DevKit.Controls.String;
+			/** Information about whether to allow following email activity like opens, attachment views and link clicks for emails sent to the contact. */
+			FollowEmail: DevKit.Controls.Boolean;
+			/** Combines and shows the contact's first and last names so that the full name can be displayed in views and reports. */
+			FullName: DevKit.Controls.String;
+			/** Select the contact's gender to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns. */
+			GenderCode: DevKit.Controls.OptionSet;
+			/** Type the job title of the contact to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns. */
+			JobTitle: DevKit.Controls.String;
+			/** Shows the date when the contact was last included in a marketing campaign or quick campaign. */
+			LastUsedInCampaign: DevKit.Controls.Date;
+			mapcontrol: DevKit.Controls.Map;
+			/** Type the mobile phone number for the contact. */
+			MobilePhone: DevKit.Controls.String;
+			notescontrol: DevKit.Controls.Note;
+			/** Shows the lead that the contact was created if the contact was created by converting a lead in Microsoft Dynamics 365. This is used to relate the contact to the data on the originating lead for use in reporting and analytics. */
+			OriginatingLeadId: DevKit.Controls.Lookup;
+			/** Select the parent account or parent contact for the contact to provide a quick link to additional details, such as financial information, activities, and opportunities. */
+			ParentCustomerId: DevKit.Controls.Lookup;
+			/** Select the parent account or parent contact for the contact to provide a quick link to additional details, such as financial information, activities, and opportunities. */
+			ParentCustomerId_1: DevKit.Controls.Lookup;
+			/** Select the payment terms to indicate when the customer needs to pay the total amount. */
+			PaymentTermsCode: DevKit.Controls.OptionSet;
+			/** Select the preferred method of contact. */
+			PreferredContactMethodCode: DevKit.Controls.OptionSet;
+			/** Select the preferred method of contact. */
+			PreferredContactMethodCode_1: DevKit.Controls.OptionSet;
+			/** Type the name of the contact's spouse or partner for reference during calls, events, or other communications with the contact. */
+			SpousesName: DevKit.Controls.String;
+			TalkingPoints: DevKit.Controls.ActionCards;
+			/** Type the main phone number for this contact. */
+			Telephone1: DevKit.Controls.String;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			TransactionCurrencyId: DevKit.Controls.Lookup;
+		}
+		interface Navigation {
+			navAddresses: DevKit.Controls.NavigationItem,
+			navAsyncOperations: DevKit.Controls.NavigationItem,
+			navInvoices: DevKit.Controls.NavigationItem,
+			navOrders: DevKit.Controls.NavigationItem,
+			navProcessSessions: DevKit.Controls.NavigationItem,
+			navQuotes: DevKit.Controls.NavigationItem,
+			navRelationships: DevKit.Controls.NavigationItem,
+			navSubConts: DevKit.Controls.NavigationItem
+		}
+		interface quickForm_contactquickform_Body {
+			EMailAddress1: DevKit.Controls.QuickView;
+			Telephone1: DevKit.Controls.QuickView;
+		}
+		interface quickForm_contactquickform extends DevKit.Controls.IQuickView {
+			Body: quickForm_contactquickform_Body;
+		}
+		interface QuickForm {
+			contactquickform: quickForm_contactquickform;
+		}
+		interface Grid {
+			contactopportunitiesgrid: DevKit.Controls.Grid;
+		}
+	}
+	class FormContact_Sales_Insights extends DevKit.IForm {
+		/**
+		* DynamicsCrm.DevKit form Contact_Sales_Insights Main Form
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form Contact_Sales_Insights */
+		Body: DevKit.FormContact_Sales_Insights.Body;
+		/** The Header section of form Contact_Sales_Insights */
+		Header: DevKit.FormContact_Sales_Insights.Header;
+		/** The Navigation of form Contact_Sales_Insights */
+		Navigation: DevKit.FormContact_Sales_Insights.Navigation;
+		/** The QuickForm of form Contact_Sales_Insights */
+		QuickForm: DevKit.FormContact_Sales_Insights.QuickForm;
+		/** The Grid of form Contact_Sales_Insights */
+		Grid: DevKit.FormContact_Sales_Insights.Grid;
+		/** The SidePanes of form Contact_Sales_Insights */
+		SidePanes: DevKit.SidePanes;
+	}
+	namespace FormTimelineWallControl_Contact_Main {
+		interface Header extends DevKit.Controls.IHeader {
+			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
+			OwnerId: DevKit.Controls.Lookup;
+		}
+		interface tab_SUMMARY_TAB_Sections {
+			SOCIAL_PANE_TAB: DevKit.Controls.Section;
+		}
+		interface tab_SUMMARY_TAB extends DevKit.Controls.ITab {
+			Section: tab_SUMMARY_TAB_Sections;
+		}
+		interface Tabs {
+			SUMMARY_TAB: tab_SUMMARY_TAB;
+		}
+		interface Body {
+			Tab: Tabs;
+			notescontrol: DevKit.Controls.Note;
+		}
+	}
+	class FormTimelineWallControl_Contact_Main extends DevKit.IForm {
+		/**
+		* DynamicsCrm.DevKit form TimelineWallControl_Contact_Main Main Form
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form TimelineWallControl_Contact_Main */
+		Body: DevKit.FormTimelineWallControl_Contact_Main.Body;
+		/** The Header section of form TimelineWallControl_Contact_Main */
+		Header: DevKit.FormTimelineWallControl_Contact_Main.Header;
+		/** The SidePanes of form TimelineWallControl_Contact_Main */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormContact_Quick_Create {
 		interface tab_tab_1_Sections {
@@ -434,7 +1047,7 @@ declare namespace DevKit {
 	}
 	class FormContact_Quick_Create extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Contact_Quick_Create
+		* DynamicsCrm.DevKit form Contact_Quick_Create Quick Create
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -443,6 +1056,52 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Contact_Quick_Create */
 		Body: DevKit.FormContact_Quick_Create.Body;
+	}
+	namespace FormContact_Quick_Create_Field_Service {
+		interface tab_tab_1_Sections {
+			tab_1_column_1_section_1: DevKit.Controls.Section;
+			tab_1_column_2_section_1: DevKit.Controls.Section;
+			tab_1_column_3_section_1: DevKit.Controls.Section;
+		}
+		interface tab_tab_1 extends DevKit.Controls.ITab {
+			Section: tab_tab_1_Sections;
+		}
+		interface Tabs {
+			tab_1: tab_tab_1;
+		}
+		interface Body {
+			Tab: Tabs;
+			/** Type the first line of the primary address. */
+			Address1_Line1: DevKit.Controls.String;
+			/** Type additional information to describe the contact, such as an excerpt from the company's website. */
+			Description: DevKit.Controls.String;
+			/** Type the primary email address for the contact. */
+			EMailAddress1: DevKit.Controls.String;
+			/** Type the contact's first name to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns. */
+			FirstName: DevKit.Controls.String;
+			/** Type the job title of the contact to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns. */
+			JobTitle: DevKit.Controls.String;
+			/** Type the contact's last name to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns. */
+			LastName: DevKit.Controls.String;
+			/** Type the mobile phone number for the contact. */
+			MobilePhone: DevKit.Controls.String;
+			/** Select the parent account or parent contact for the contact to provide a quick link to additional details, such as financial information, activities, and opportunities. */
+			ParentCustomerId: DevKit.Controls.Lookup;
+			/** Type the main phone number for this contact. */
+			Telephone1: DevKit.Controls.String;
+		}
+	}
+	class FormContact_Quick_Create_Field_Service extends DevKit.IForm {
+		/**
+		* DynamicsCrm.DevKit form Contact_Quick_Create_Field_Service Quick Create
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form Contact_Quick_Create_Field_Service */
+		Body: DevKit.FormContact_Quick_Create_Field_Service.Body;
 	}
 	class ContactApi {
 		/**
@@ -757,7 +1416,6 @@ declare namespace DevKit {
 		ManagerPhone: DevKit.WebApi.StringValue;
 		/** Whether is only for marketing */
 		MarketingOnly: DevKit.WebApi.BooleanValue;
-		MasterContactIdName: DevKit.WebApi.StringValueReadonly;
 		/** Unique identifier of the master contact for merge. */
 		MasterId: DevKit.WebApi.LookupValueReadonly;
 		/** Shows whether the account has been merged with a master contact. */
@@ -781,6 +1439,14 @@ declare namespace DevKit {
 		msdyusd_CurrentProfile: DevKit.WebApi.StringValue;
 		msdyusd_Facebook: DevKit.WebApi.StringValue;
 		msdyusd_Twitter: DevKit.WebApi.StringValue;
+		new_NewImage: DevKit.WebApi.StringValue;
+		new_NewImage_Timestamp: DevKit.WebApi.BigIntValueReadonly;
+		new_NewImage_URL: DevKit.WebApi.StringValueReadonly;
+		new_NewImageId: DevKit.WebApi.GuidValueReadonly;
+		new_NewOtherImage: DevKit.WebApi.StringValue;
+		new_NewOtherImage_Timestamp: DevKit.WebApi.BigIntValueReadonly;
+		new_NewOtherImage_URL: DevKit.WebApi.StringValueReadonly;
+		new_NewOtherImageId: DevKit.WebApi.GuidValueReadonly;
 		/** Type the contact's nickname. */
 		NickName: DevKit.WebApi.StringValue;
 		/** Type the number of children the contact has for reference in follow-up phone calls and other communications. */
@@ -805,7 +1471,9 @@ declare namespace DevKit {
 		Pager: DevKit.WebApi.StringValue;
 		/** Unique identifier of the parent contact. */
 		ParentContactId: DevKit.WebApi.LookupValueReadonly;
+		/** Select the parent account or parent contact for the contact to provide a quick link to additional details, such as financial information, activities, and opportunities. */
 		parentcustomerid_account: DevKit.WebApi.LookupValue;
+		/** Select the parent account or parent contact for the contact to provide a quick link to additional details, such as financial information, activities, and opportunities. */
 		parentcustomerid_contact: DevKit.WebApi.LookupValue;
 		/** Shows whether the contact participates in workflow rules. */
 		ParticipatesInWorkflow: DevKit.WebApi.BooleanValue;
@@ -833,7 +1501,6 @@ declare namespace DevKit {
 		SLAId: DevKit.WebApi.LookupValue;
 		/** Last SLA that was applied to this case. This field is for internal use only. */
 		SLAInvokedId: DevKit.WebApi.LookupValueReadonly;
-		SLAName: DevKit.WebApi.StringValueReadonly;
 		/** Type the name of the contact's spouse or partner for reference during calls, events, or other communications with the contact. */
 		SpousesName: DevKit.WebApi.StringValue;
 		/** Shows the ID of the stage. */
@@ -1056,22 +1723,22 @@ declare namespace OptionSet {
 			/** 1 */
 			Default_Value
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Contact','Information','Quick Create'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

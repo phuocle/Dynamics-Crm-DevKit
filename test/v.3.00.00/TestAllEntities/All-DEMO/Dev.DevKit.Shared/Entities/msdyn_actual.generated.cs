@@ -143,7 +143,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_actualOptionSets
 		/// <summary>
 		/// Non-Inventory = 690970001
 		/// </summary>
-		NonInventory = 690970001,
+		Non_Inventory = 690970001,
 		/// <summary>
 		/// Service = 690970002
 		/// </summary>
@@ -199,7 +199,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_actualOptionSets
 		/// <summary>
 		/// Inter-Organizational Sales = 192350008
 		/// </summary>
-		InterOrganizational_Sales = 192350008,
+		Inter_Organizational_Sales = 192350008,
 		/// <summary>
 		/// Project Contract = 192350004
 		/// </summary>

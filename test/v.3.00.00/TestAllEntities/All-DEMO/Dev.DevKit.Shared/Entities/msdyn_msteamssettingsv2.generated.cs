@@ -221,9 +221,9 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Indicates whether embed-collab teams integration is enabled</para>
+		/// <para>Indicates whether embed-collab Teams integration is enabled</para>
 		/// <para>Boolean</para>
-		/// <para>Embed-collab teams integration</para>
+		/// <para>Embed-collab Teams integration</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public bool? msdyn_EmbedCollabTeamsIntegrationEnabled
@@ -272,9 +272,9 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Indicates whether teams meeting integration is enabled</para>
+		/// <para>Indicates whether Teams meeting integration is enabled</para>
 		/// <para>Boolean</para>
-		/// <para>teams meeting integration</para>
+		/// <para>Teams meeting integration</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public bool? msdyn_TeamsMeetingIntegrationEnabled

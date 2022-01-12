@@ -219,7 +219,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocliveworkitemOptionSets
 		/// <summary>
 		/// Co-browse = 192390000
 		/// </summary>
-		Cobrowse = 192390000,
+		Co_browse = 192390000,
 		/// <summary>
 		/// Custom = 192350002
 		/// </summary>
@@ -395,7 +395,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocliveworkitemOptionSets
 		/// <summary>
 		/// Wrap-up (Deprecated) = 4
 		/// </summary>
-		Wrapup_Deprecated = 4
+		Wrap_up_Deprecated = 4
 	}
 
 	public enum StatusCode
@@ -427,7 +427,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocliveworkitemOptionSets
 		/// <summary>
 		/// Wrap-up = 5
 		/// </summary>
-		Wrapup = 5
+		Wrap_up = 5
 	}
 }
 

@@ -13,7 +13,7 @@ declare namespace DevKit {
 	}
 	class Formdatalakefolder_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form datalakefolder_Information
+		* DynamicsCrm.DevKit form datalakefolder_Information Main Form
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -22,6 +22,32 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form datalakefolder_Information */
 		Body: DevKit.Formdatalakefolder_Information.Body;
+		/** The SidePanes of form datalakefolder_Information */
+		SidePanes: DevKit.SidePanes;
+	}
+	namespace Formdatalakefolder_Information2 {
+		interface Tabs {
+		}
+		interface Body {
+			/** The name of the custom entity. */
+			name: DevKit.Controls.String;
+			/** Owner Id */
+			OwnerId: DevKit.Controls.Lookup;
+		}
+	}
+	class Formdatalakefolder_Information2 extends DevKit.IForm {
+		/**
+		* DynamicsCrm.DevKit form datalakefolder_Information2 Main Form
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form datalakefolder_Information2 */
+		Body: DevKit.Formdatalakefolder_Information2.Body;
+		/** The SidePanes of form datalakefolder_Information2 */
+		SidePanes: DevKit.SidePanes;
 	}
 	class datalakefolderApi {
 		/**
@@ -54,7 +80,9 @@ declare namespace DevKit {
 		/** For internal use only. */
 		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
 		/** Azure Data Lake container endpoint for this folder. */
-		containerendpoint: DevKit.WebApi.StringValueReadonly;
+		containerendpoint: DevKit.WebApi.StringValue;
+		/** The security group for contributor access. */
+		ContributorSecurityGroupId: DevKit.WebApi.GuidValue;
 		/** Unique identifier of the user who created the record. */
 		CreatedBy: DevKit.WebApi.LookupValueReadonly;
 		/** Date and time when the record was created. */
@@ -75,6 +103,10 @@ declare namespace DevKit {
 		IsCustomizable: DevKit.WebApi.ManagedPropertyValue;
 		/** Indicates if deep copy is enabled for folder. */
 		isdeepcopyenabled: DevKit.WebApi.BooleanValue;
+		/** Indicates whether lake is managed or external. */
+		IsExternalLake: DevKit.WebApi.BooleanValue;
+		/** Indicates whether external lake is read only. */
+		IsExternalLakeReadOnly: DevKit.WebApi.BooleanValue;
 		/** Indicates whether the solution component is part of a managed solution. */
 		IsManaged: DevKit.WebApi.BooleanValueReadonly;
 		/** Indicates if folder data and metadata are visible to all applications, or only visible to the folder owner and applications with explicit permissions to the folder. */
@@ -104,13 +136,15 @@ declare namespace DevKit {
 		/** Unique identifier for the user that owns the record. */
 		OwningUser: DevKit.WebApi.LookupValueReadonly;
 		/** Folder path in the Azure Data Lake container. */
-		path: DevKit.WebApi.StringValueReadonly;
+		path: DevKit.WebApi.StringValue;
+		/** The security group for reader access. */
+		ReaderSecurityGroupId: DevKit.WebApi.GuidValue;
 		/** Unique identifier of the associated solution. */
 		SolutionId: DevKit.WebApi.GuidValueReadonly;
 		/** Status of the Data Lake Folder */
-		statecode: DevKit.WebApi.OptionSetValueReadonly;
+		statecode: DevKit.WebApi.OptionSetValue;
 		/** Reason for the status of the Data Lake Folder */
-		statuscode: DevKit.WebApi.OptionSetValueReadonly;
+		statuscode: DevKit.WebApi.OptionSetValue;
 		/** For internal use only. */
 		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
 		/** For internal use only. */
@@ -145,22 +179,22 @@ declare namespace OptionSet {
 			/** 2 */
 			Inactive
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

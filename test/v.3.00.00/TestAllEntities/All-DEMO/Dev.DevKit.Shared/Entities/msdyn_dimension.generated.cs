@@ -15,11 +15,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_dimensionOptionSets
 		/// <summary>
 		/// Amount-based = 192350000
 		/// </summary>
-		Amountbased = 192350000,
+		Amount_based = 192350000,
 		/// <summary>
 		/// Markup-based = 192350001
 		/// </summary>
-		Markupbased = 192350001
+		Markup_based = 192350001
 	}
 
 	public enum statecode

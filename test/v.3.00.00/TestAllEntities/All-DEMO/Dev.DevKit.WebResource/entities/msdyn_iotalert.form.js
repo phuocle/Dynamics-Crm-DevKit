@@ -75,17 +75,6 @@ var DevKit;
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
 		var process = devKit.LoadProcess(formContext);
-		var _IoT_Alert_to_Case_Process = {
-			customerid: {},
-			msdyn_AlertTime: {},
-			msdyn_CustomerAsset: {},
-			msdyn_Description: {},
-			OwnerId: {},
-			primarycontactid: {},
-			title: {}
-		}
-		devKit.LoadFields(formContext, _IoT_Alert_to_Case_Process, "header_process_");
-		process.IoT_Alert_to_Case_Process = _IoT_Alert_to_Case_Process;
 		var _CFS_IoT_Alert_Process_Flow = {
 			customerid: {},
 			msdyn_AlertTime: {},
@@ -101,6 +90,17 @@ var DevKit;
 		}
 		devKit.LoadFields(formContext, _CFS_IoT_Alert_Process_Flow, "header_process_");
 		process.CFS_IoT_Alert_Process_Flow = _CFS_IoT_Alert_Process_Flow;
+		var _IoT_Alert_to_Case_Process = {
+			customerid: {},
+			msdyn_AlertTime: {},
+			msdyn_CustomerAsset: {},
+			msdyn_Description: {},
+			OwnerId: {},
+			primarycontactid: {},
+			title: {}
+		}
+		devKit.LoadFields(formContext, _IoT_Alert_to_Case_Process, "header_process_");
+		process.IoT_Alert_to_Case_Process = _IoT_Alert_to_Case_Process;
 		form.Process = process;
 		var quickForm = {
 			AssetWorkOrdersView: {
@@ -121,6 +121,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 })(DevKit || (DevKit = {}));
@@ -155,15 +156,14 @@ var OptionSet;
 			In_Progress_Work_Order_Created: 4,
 			Inactive: 2
 		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
-
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 	};
 })(OptionSet || (OptionSet = {}));

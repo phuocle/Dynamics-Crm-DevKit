@@ -14,7 +14,7 @@ declare namespace DevKit {
 	}
 	class Formmsdyn_quotebookingsetup_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form msdyn_quotebookingsetup_Information
+		* DynamicsCrm.DevKit form msdyn_quotebookingsetup_Information Main Form
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -23,6 +23,151 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_quotebookingsetup_Information */
 		Body: DevKit.Formmsdyn_quotebookingsetup_Information.Body;
+		/** The SidePanes of form msdyn_quotebookingsetup_Information */
+		SidePanes: DevKit.SidePanes;
+	}
+	namespace Formmsdyn_quotebookingsetup_Information2 {
+		interface tab__23ECC851_0E7D_4CE2_8482_97AFD671FD2F_Sections {
+			_985F1B59_B0DB_43C9_804C_EF1D9C6C6A74: DevKit.Controls.Section;
+			IncidentsSection: DevKit.Controls.Section;
+		}
+		interface tab_MarginTab_Sections {
+			_23ECC851_0E7D_4CE2_8482_97AFD671FD2F_SECTION_4: DevKit.Controls.Section;
+			EstimatedMarginSection: DevKit.Controls.Section;
+			EstimatedRevenue: DevKit.Controls.Section;
+		}
+		interface tab_ProductsAndServicesTab_Sections {
+			productsSection: DevKit.Controls.Section;
+			serviceSection: DevKit.Controls.Section;
+		}
+		interface tab_ServiceTaskTab_Sections {
+			tab_2_section_1: DevKit.Controls.Section;
+		}
+		interface tab__23ECC851_0E7D_4CE2_8482_97AFD671FD2F extends DevKit.Controls.ITab {
+			Section: tab__23ECC851_0E7D_4CE2_8482_97AFD671FD2F_Sections;
+		}
+		interface tab_MarginTab extends DevKit.Controls.ITab {
+			Section: tab_MarginTab_Sections;
+		}
+		interface tab_ProductsAndServicesTab extends DevKit.Controls.ITab {
+			Section: tab_ProductsAndServicesTab_Sections;
+		}
+		interface tab_ServiceTaskTab extends DevKit.Controls.ITab {
+			Section: tab_ServiceTaskTab_Sections;
+		}
+		interface Tabs {
+			_23ECC851_0E7D_4CE2_8482_97AFD671FD2F: tab__23ECC851_0E7D_4CE2_8482_97AFD671FD2F;
+			MarginTab: tab_MarginTab;
+			ProductsAndServicesTab: tab_ProductsAndServicesTab;
+			ServiceTaskTab: tab_ServiceTaskTab;
+		}
+		interface Body {
+			Tab: Tabs;
+			/** Enable if the system should automatically generate Work Orders for the Booking Dates of this Booking Setup */
+			msdyn_autogenerateworkorder: DevKit.Controls.Boolean;
+			/** Type a description of this booking setup. */
+			msdyn_description: DevKit.Controls.String;
+			msdyn_EstimatedCost: DevKit.Controls.Money;
+			/** The estimated margin for this Quote Booking Setup */
+			msdyn_EstimatedMargin: DevKit.Controls.Decimal;
+			msdyn_EstimatedMarginPerWO: DevKit.Controls.Decimal;
+			/** Estimated Costs of all Products that are associated to this Quote Booking Setup */
+			msdyn_EstimatedProductCost: DevKit.Controls.Money;
+			/** The sum of estimated revenue of all products that are associated to this quote booking setup */
+			msdyn_EstimatedProductRevenue: DevKit.Controls.Money;
+			msdyn_EstimatedRevenue: DevKit.Controls.Money;
+			/** The Estimated Revenue per Work Order */
+			msdyn_EstimatedRevenuePerWO: DevKit.Controls.Money;
+			/** The sum of the estimated costs of all quote booking services that are associated to this quote booking setup */
+			msdyn_EstimatedServiceCost: DevKit.Controls.Money;
+			/** The sum of estimated revenue of all services that are associated to this quote booking setup */
+			msdyn_EstimatedServiceRevenue: DevKit.Controls.Money;
+			/** Only used when Work Location is a Facility. Latitude is used when trying to locate nearby facilities. */
+			msdyn_Latitude: DevKit.Controls.Double;
+			/** Only used when Work Location is a Facility. Longitude is used when trying to locate nearby facilities. */
+			msdyn_Longitude: DevKit.Controls.Double;
+			/** The name of the custom entity. */
+			msdyn_name: DevKit.Controls.String;
+			/** Quote this Booking Setup relates to */
+			msdyn_quote: DevKit.Controls.Lookup;
+			msdyn_QuoteDetailId: DevKit.Controls.String;
+			/** Stores the booking recurrence settings. */
+			msdyn_recurrencesettings: DevKit.Controls.String;
+			msdyn_WorkLocation: DevKit.Controls.OptionSet;
+			/** Work Order Type to be used on generated Work Orders */
+			msdyn_workordertype: DevKit.Controls.Lookup;
+			/** Owner Id */
+			OwnerId: DevKit.Controls.Lookup;
+			/** Unique identifier of the currency associated with the entity. */
+			TransactionCurrencyId: DevKit.Controls.Lookup;
+		}
+		interface Navigation {
+			nav_msdyn_msdyn_quotebookingsetup_msdyn_quotebookingincident_QuoteBookingSetup: DevKit.Controls.NavigationItem,
+			nav_msdyn_msdyn_quotebookingsetup_msdyn_quotebookingproduct_QuoteBookingSetup: DevKit.Controls.NavigationItem,
+			nav_msdyn_msdyn_quotebookingsetup_msdyn_quotebookingservice_QuoteBookingSetup: DevKit.Controls.NavigationItem,
+			nav_msdyn_msdyn_quotebookingsetup_msdyn_quotebookingservicetask_QuoteBookingSetup: DevKit.Controls.NavigationItem
+		}
+		interface Grid {
+			IncidentsGrid: DevKit.Controls.Grid;
+			productsGrid: DevKit.Controls.Grid;
+			ServicesGrid: DevKit.Controls.Grid;
+			ServiceTasksGrid: DevKit.Controls.Grid;
+		}
+	}
+	class Formmsdyn_quotebookingsetup_Information2 extends DevKit.IForm {
+		/**
+		* DynamicsCrm.DevKit form msdyn_quotebookingsetup_Information2 Main Form
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form msdyn_quotebookingsetup_Information2 */
+		Body: DevKit.Formmsdyn_quotebookingsetup_Information2.Body;
+		/** The Navigation of form msdyn_quotebookingsetup_Information2 */
+		Navigation: DevKit.Formmsdyn_quotebookingsetup_Information2.Navigation;
+		/** The Grid of form msdyn_quotebookingsetup_Information2 */
+		Grid: DevKit.Formmsdyn_quotebookingsetup_Information2.Grid;
+		/** The SidePanes of form msdyn_quotebookingsetup_Information2 */
+		SidePanes: DevKit.SidePanes;
+	}
+	namespace Formmsdyn_quotebookingsetup_Information3 {
+		interface tab_tab_1_Sections {
+			tab_1_column_1_section_1: DevKit.Controls.Section;
+			tab_1_column_2_section_1: DevKit.Controls.Section;
+			tab_1_column_3_section_1: DevKit.Controls.Section;
+		}
+		interface tab_tab_1 extends DevKit.Controls.ITab {
+			Section: tab_tab_1_Sections;
+		}
+		interface Tabs {
+			tab_1: tab_tab_1;
+		}
+		interface Body {
+			Tab: Tabs;
+			/** Type a description of this booking setup. */
+			msdyn_description: DevKit.Controls.String;
+			/** The name of the custom entity. */
+			msdyn_name: DevKit.Controls.String;
+			msdyn_QuoteDetailId: DevKit.Controls.String;
+			/** Work Order Type to be used on generated Work Orders */
+			msdyn_workordertype: DevKit.Controls.Lookup;
+			/** Unique identifier of the currency associated with the entity. */
+			TransactionCurrencyId: DevKit.Controls.Lookup;
+		}
+	}
+	class Formmsdyn_quotebookingsetup_Information3 extends DevKit.IForm {
+		/**
+		* DynamicsCrm.DevKit form msdyn_quotebookingsetup_Information3 Quick Create
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form msdyn_quotebookingsetup_Information3 */
+		Body: DevKit.Formmsdyn_quotebookingsetup_Information3.Body;
 	}
 	class msdyn_quotebookingsetupApi {
 		/**
@@ -201,22 +346,22 @@ declare namespace OptionSet {
 			/** 2 */
 			Inactive
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

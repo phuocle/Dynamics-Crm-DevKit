@@ -31,7 +31,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_occhannelstateconfigurationOptionSets
 		/// <summary>
 		/// Wrap-up = 4
 		/// </summary>
-		Wrapup = 4
+		Wrap_up = 4
 	}
 
 	public enum statecode

@@ -211,14 +211,14 @@ declare namespace DevKit {
 		}
 		interface Grid {
 			Contacts: DevKit.Controls.Grid;
+			DocumentsSubGrid: DevKit.Controls.Grid;
 			PriceListsGrid: DevKit.Controls.Grid;
 			Work_Orders: DevKit.Controls.Grid;
-			DocumentsSubGrid: DevKit.Controls.Grid;
 		}
 	}
 	class FormAccount extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Account
+		* DynamicsCrm.DevKit form Account Main Form
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -235,6 +235,141 @@ declare namespace DevKit {
 		QuickForm: DevKit.FormAccount.QuickForm;
 		/** The Grid of form Account */
 		Grid: DevKit.FormAccount.Grid;
+		/** The SidePanes of form Account */
+		SidePanes: DevKit.SidePanes;
+	}
+	namespace FormAccount_Mobile {
+		interface tab_fstab_AssetsAndLocationsTab_Sections {
+			AssetsAndLocationsSection: DevKit.Controls.Section;
+		}
+		interface tab_fstab_sub_grids_Sections {
+			tab_4_section_1: DevKit.Controls.Section;
+		}
+		interface tab_fstab_summary_Sections {
+			fstab_address_section_address: DevKit.Controls.Section;
+			fstab_summary_column_2_section_1: DevKit.Controls.Section;
+			fstab_summary_column_3_section_1: DevKit.Controls.Section;
+			fstab_summary_section_account_information: DevKit.Controls.Section;
+			fstab_summary_section_description: DevKit.Controls.Section;
+		}
+		interface tab_fstab_AssetsAndLocationsTab extends DevKit.Controls.ITab {
+			Section: tab_fstab_AssetsAndLocationsTab_Sections;
+		}
+		interface tab_fstab_sub_grids extends DevKit.Controls.ITab {
+			Section: tab_fstab_sub_grids_Sections;
+		}
+		interface tab_fstab_summary extends DevKit.Controls.ITab {
+			Section: tab_fstab_summary_Sections;
+		}
+		interface Tabs {
+			fstab_AssetsAndLocationsTab: tab_fstab_AssetsAndLocationsTab;
+			fstab_sub_grids: tab_fstab_sub_grids;
+			fstab_summary: tab_fstab_summary;
+		}
+		interface Body {
+			Tab: Tabs;
+			/** Shows the complete primary address. */
+			Address1_Composite: DevKit.Controls.String;
+			/** Type the first line of the primary address. */
+			Address1_Line1: DevKit.Controls.String;
+			/** Choose the default price list associated with the account to make sure the correct product prices for this customer are applied in sales opportunities, quotes, and orders. */
+			DefaultPriceLevelId: DevKit.Controls.Lookup;
+			/** Type additional information to describe the account, such as an excerpt from the company's website. */
+			Description: DevKit.Controls.String;
+			/** Type the primary email address for the account. */
+			EMailAddress1: DevKit.Controls.String;
+			/** Type the fax number for the account. */
+			Fax: DevKit.Controls.String;
+			/** Reference to an other account to be used for billing (only to be used if billing account differs) */
+			msdyn_BillingAccount: DevKit.Controls.Lookup;
+			/** The Service Territory this account belongs to. This is used to optimize scheduling and routing */
+			msdyn_ServiceTerritory: DevKit.Controls.Lookup;
+			/** Shows the default instructions to show on new work orders. */
+			msdyn_WorkOrderInstructions: DevKit.Controls.String;
+			/** Type the company or business name. */
+			Name: DevKit.Controls.String;
+			/** Type the company or business name. */
+			Name_1: DevKit.Controls.String;
+			notescontrol: DevKit.Controls.Note;
+			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
+			OwnerId: DevKit.Controls.Lookup;
+			/** Choose the parent account associated with this account to show parent and child businesses in reporting and analytics. */
+			ParentAccountId: DevKit.Controls.Lookup;
+			/** Choose the primary contact for the account to provide quick access to contact details. */
+			PrimaryContactId: DevKit.Controls.Lookup;
+			/** Type the main phone number for this account. */
+			Telephone1: DevKit.Controls.String;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			TransactionCurrencyId: DevKit.Controls.Lookup;
+			/** Type the account's website URL to get quick details about the company profile. */
+			WebSiteURL: DevKit.Controls.String;
+		}
+		interface Navigation {
+			nav_msdyn_account_account_BillingAccount: DevKit.Controls.NavigationItem,
+			nav_msdyn_account_msdyn_actual_ServiceAccount: DevKit.Controls.NavigationItem,
+			nav_msdyn_account_msdyn_agreement_BillingAccount: DevKit.Controls.NavigationItem,
+			nav_msdyn_account_msdyn_agreement_ServiceAccount: DevKit.Controls.NavigationItem,
+			nav_msdyn_account_msdyn_customerasset_Account: DevKit.Controls.NavigationItem,
+			nav_msdyn_account_msdyn_payment_Account: DevKit.Controls.NavigationItem,
+			nav_msdyn_account_msdyn_purchaseorder_Vendor: DevKit.Controls.NavigationItem,
+			nav_msdyn_account_msdyn_requirementresourcepreference_Account: DevKit.Controls.NavigationItem,
+			nav_msdyn_account_msdyn_rma_BillingAccount: DevKit.Controls.NavigationItem,
+			nav_msdyn_account_msdyn_rma_ServiceAccount: DevKit.Controls.NavigationItem,
+			nav_msdyn_account_msdyn_rmaproduct_Changeownership: DevKit.Controls.NavigationItem,
+			nav_msdyn_account_msdyn_rmaproduct_ReturntoVendor: DevKit.Controls.NavigationItem,
+			nav_msdyn_account_msdyn_rtv_Vendor: DevKit.Controls.NavigationItem,
+			nav_msdyn_account_msdyn_workorder_BillingAccount: DevKit.Controls.NavigationItem,
+			nav_msdyn_account_msdyn_workorder_ServiceAccount: DevKit.Controls.NavigationItem,
+			nav_msdyn_account_msdyn_workorderresourcerestriction_Account: DevKit.Controls.NavigationItem,
+			nav_msdyn_account_opportunityproduct_ServiceAccount: DevKit.Controls.NavigationItem,
+			nav_msdyn_account_product_DefaultVendor: DevKit.Controls.NavigationItem,
+			nav_msdyn_account_quote_Account: DevKit.Controls.NavigationItem,
+			nav_msdyn_account_quotedetail_ServiceAccount: DevKit.Controls.NavigationItem,
+			nav_msdyn_account_salesorder_Account: DevKit.Controls.NavigationItem,
+			navActivities: DevKit.Controls.NavigationItem,
+			navAddresses: DevKit.Controls.NavigationItem,
+			navAsyncOperations: DevKit.Controls.NavigationItem,
+			navAudit: DevKit.Controls.NavigationItem,
+			navConnections: DevKit.Controls.NavigationItem,
+			navContacts: DevKit.Controls.NavigationItem,
+			navContracts: DevKit.Controls.NavigationItem,
+			navDocument: DevKit.Controls.NavigationItem,
+			navEntitlement: DevKit.Controls.NavigationItem,
+			navInvoices: DevKit.Controls.NavigationItem,
+			navListsInSFA: DevKit.Controls.NavigationItem,
+			navOpps: DevKit.Controls.NavigationItem,
+			navOrders: DevKit.Controls.NavigationItem,
+			navProcessSessions: DevKit.Controls.NavigationItem,
+			navQuotes: DevKit.Controls.NavigationItem,
+			navRelationships: DevKit.Controls.NavigationItem,
+			navService: DevKit.Controls.NavigationItem,
+			navSocialprofiles: DevKit.Controls.NavigationItem,
+			navSubAccts: DevKit.Controls.NavigationItem
+		}
+		interface Grid {
+			ChildAccounts: DevKit.Controls.Grid;
+			Contacts: DevKit.Controls.Grid;
+			customerAssets: DevKit.Controls.Grid;
+			WORKORDERS: DevKit.Controls.Grid;
+		}
+	}
+	class FormAccount_Mobile extends DevKit.IForm {
+		/**
+		* DynamicsCrm.DevKit form Account_Mobile Main Form
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form Account_Mobile */
+		Body: DevKit.FormAccount_Mobile.Body;
+		/** The Navigation of form Account_Mobile */
+		Navigation: DevKit.FormAccount_Mobile.Navigation;
+		/** The Grid of form Account_Mobile */
+		Grid: DevKit.FormAccount_Mobile.Grid;
+		/** The SidePanes of form Account_Mobile */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormAccount_for_Interactive_experience {
 		interface Header extends DevKit.Controls.IHeader {
@@ -356,16 +491,16 @@ declare namespace DevKit {
 			contactquickform: quickForm_contactquickform;
 		}
 		interface Grid {
-			Contacts: DevKit.Controls.Grid;
-			accountopportunitiesgrid: DevKit.Controls.Grid;
 			accountcasessgrid: DevKit.Controls.Grid;
-			subgrid_Entitlement: DevKit.Controls.Grid;
+			accountopportunitiesgrid: DevKit.Controls.Grid;
+			Contacts: DevKit.Controls.Grid;
 			Devices_Associated_View: DevKit.Controls.Grid;
+			subgrid_Entitlement: DevKit.Controls.Grid;
 		}
 	}
 	class FormAccount_for_Interactive_experience extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Account_for_Interactive_experience
+		* DynamicsCrm.DevKit form Account_for_Interactive_experience Main Form
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -382,6 +517,338 @@ declare namespace DevKit {
 		QuickForm: DevKit.FormAccount_for_Interactive_experience.QuickForm;
 		/** The Grid of form Account_for_Interactive_experience */
 		Grid: DevKit.FormAccount_for_Interactive_experience.Grid;
+		/** The SidePanes of form Account_for_Interactive_experience */
+		SidePanes: DevKit.SidePanes;
+	}
+	namespace FormAccount_for_Multisession_experience {
+		interface Header extends DevKit.Controls.IHeader {
+			/** Type the number of employees that work at the account for use in marketing segmentation and demographic analysis. */
+			NumberOfEmployees: DevKit.Controls.Integer;
+			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
+			OwnerId: DevKit.Controls.Lookup;
+			/** Type the annual revenue for the account, used as an indicator in financial performance analysis. */
+			Revenue: DevKit.Controls.Money;
+		}
+		interface tab_DETAILS_TAB_Sections {
+			BILLING: DevKit.Controls.Section;
+			COMPANY_PROFILE: DevKit.Controls.Section;
+			CONTACT_PREFERENCES: DevKit.Controls.Section;
+			DETAILS_TAB_section_6: DevKit.Controls.Section;
+			MARKETING: DevKit.Controls.Section;
+			SHIPPING: DevKit.Controls.Section;
+		}
+		interface tab_SUMMARY_TAB_Sections {
+			ACCOUNT_INFORMATION: DevKit.Controls.Section;
+			SUMMARY_TAB_section_4: DevKit.Controls.Section;
+			Timeline: DevKit.Controls.Section;
+		}
+		interface tab_tab_recordwall_Sections {
+			tab_recordwall_section_1: DevKit.Controls.Section;
+		}
+		interface tab_DETAILS_TAB extends DevKit.Controls.ITab {
+			Section: tab_DETAILS_TAB_Sections;
+		}
+		interface tab_SUMMARY_TAB extends DevKit.Controls.ITab {
+			Section: tab_SUMMARY_TAB_Sections;
+		}
+		interface tab_tab_recordwall extends DevKit.Controls.ITab {
+			Section: tab_tab_recordwall_Sections;
+		}
+		interface Tabs {
+			DETAILS_TAB: tab_DETAILS_TAB;
+			SUMMARY_TAB: tab_SUMMARY_TAB;
+			tab_recordwall: tab_tab_recordwall;
+		}
+		interface Body {
+			Tab: Tabs;
+			/** Shows the complete primary address. */
+			Address1_Composite: DevKit.Controls.String;
+			/** Select the freight terms for the primary address to make sure shipping orders are processed correctly. */
+			Address1_FreightTermsCode: DevKit.Controls.OptionSet;
+			/** Select a shipping method for deliveries sent to this address. */
+			Address1_ShippingMethodCode: DevKit.Controls.OptionSet;
+			/** Type the credit limit of the account. This is a useful reference when you address invoice and accounting issues with the customer. */
+			CreditLimit: DevKit.Controls.Money;
+			/** Select whether the credit for the account is on hold. This is a useful reference while addressing the invoice and accounting issues with the customer. */
+			CreditOnHold: DevKit.Controls.Boolean;
+			/** Type additional information to describe the account, such as an excerpt from the company's website. */
+			Description: DevKit.Controls.String;
+			/** Select whether the account allows bulk email sent through campaigns. If Do Not Allow is selected, the account can be added to marketing lists, but is excluded from email. */
+			DoNotBulkEMail: DevKit.Controls.Boolean;
+			/** Select whether the account allows direct email sent from Microsoft Dynamics 365. */
+			DoNotEMail: DevKit.Controls.Boolean;
+			/** Select whether the account allows faxes. If Do Not Allow is selected, the account will be excluded from fax activities distributed in marketing campaigns. */
+			DoNotFax: DevKit.Controls.Boolean;
+			/** Select whether the account allows phone calls. If Do Not Allow is selected, the account will be excluded from phone call activities distributed in marketing campaigns. */
+			DoNotPhone: DevKit.Controls.Boolean;
+			/** Select whether the account allows direct mail. If Do Not Allow is selected, the account will be excluded from letter activities distributed in marketing campaigns. */
+			DoNotPostalMail: DevKit.Controls.Boolean;
+			/** Select whether the account accepts marketing materials, such as brochures or catalogs. */
+			DoNotSendMM: DevKit.Controls.Boolean;
+			/** Type the fax number for the account. */
+			Fax: DevKit.Controls.String;
+			/** Information about whether to allow following email activity like opens, attachment views and link clicks for emails sent to the account. */
+			FollowEmail: DevKit.Controls.Boolean;
+			/** Select the account's primary industry for use in marketing segmentation and demographic analysis. */
+			IndustryCode: DevKit.Controls.OptionSet;
+			/** Shows the date when the account was last included in a marketing campaign or quick campaign. */
+			LastUsedInCampaign: DevKit.Controls.Date;
+			/** Type the company or business name. */
+			Name: DevKit.Controls.String;
+			notescontrol: DevKit.Controls.Note;
+			/** Shows the lead that the account was created from if the account was created by converting a lead in Microsoft Dynamics 365. This is used to relate the account to data on the originating lead for use in reporting and analytics. */
+			OriginatingLeadId: DevKit.Controls.Lookup;
+			/** Select the account's ownership structure, such as public or private. */
+			OwnershipCode: DevKit.Controls.OptionSet;
+			/** Choose the parent account associated with this account to show parent and child businesses in reporting and analytics. */
+			ParentAccountId: DevKit.Controls.Lookup;
+			/** Select the payment terms to indicate when the customer needs to pay the total amount. */
+			PaymentTermsCode: DevKit.Controls.OptionSet;
+			/** Select the preferred method of contact. */
+			PreferredContactMethodCode: DevKit.Controls.OptionSet;
+			/** Choose the primary contact for the account to provide quick access to contact details. */
+			PrimaryContactId: DevKit.Controls.Lookup;
+			/** Type the Standard Industrial Classification (SIC) code that indicates the account's primary industry of business, for use in marketing segmentation and demographic analysis. */
+			SIC: DevKit.Controls.String;
+			/** Type the main phone number for this account. */
+			Telephone1: DevKit.Controls.String;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			TransactionCurrencyId: DevKit.Controls.Lookup;
+			WebResource_RecordWall: DevKit.Controls.WebResource;
+			/** Type the account's website URL to get quick details about the company profile. */
+			WebSiteURL: DevKit.Controls.String;
+		}
+		interface Navigation {
+			navAddresses: DevKit.Controls.NavigationItem,
+			navAsyncOperations: DevKit.Controls.NavigationItem,
+			navCampaignsInSFA: DevKit.Controls.NavigationItem,
+			navContracts: DevKit.Controls.NavigationItem,
+			navInvoices: DevKit.Controls.NavigationItem,
+			navOrders: DevKit.Controls.NavigationItem,
+			navProcessSessions: DevKit.Controls.NavigationItem,
+			navQuotes: DevKit.Controls.NavigationItem,
+			navRelationships: DevKit.Controls.NavigationItem,
+			navSubAccts: DevKit.Controls.NavigationItem
+		}
+		interface quickForm_contactquickform_Body {
+			EMailAddress1: DevKit.Controls.QuickView;
+			Telephone1: DevKit.Controls.QuickView;
+		}
+		interface quickForm_contactquickform extends DevKit.Controls.IQuickView {
+			Body: quickForm_contactquickform_Body;
+		}
+		interface QuickForm {
+			contactquickform: quickForm_contactquickform;
+		}
+		interface Grid {
+			RelatedCases: DevKit.Controls.Grid;
+		}
+	}
+	class FormAccount_for_Multisession_experience extends DevKit.IForm {
+		/**
+		* DynamicsCrm.DevKit form Account_for_Multisession_experience Main Form
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form Account_for_Multisession_experience */
+		Body: DevKit.FormAccount_for_Multisession_experience.Body;
+		/** The Header section of form Account_for_Multisession_experience */
+		Header: DevKit.FormAccount_for_Multisession_experience.Header;
+		/** The Navigation of form Account_for_Multisession_experience */
+		Navigation: DevKit.FormAccount_for_Multisession_experience.Navigation;
+		/** The QuickForm of form Account_for_Multisession_experience */
+		QuickForm: DevKit.FormAccount_for_Multisession_experience.QuickForm;
+		/** The Grid of form Account_for_Multisession_experience */
+		Grid: DevKit.FormAccount_for_Multisession_experience.Grid;
+		/** The SidePanes of form Account_for_Multisession_experience */
+		SidePanes: DevKit.SidePanes;
+	}
+	namespace FormAccount_Sales_Insights {
+		interface Header extends DevKit.Controls.IHeader {
+			/** Type the number of employees that work at the account for use in marketing segmentation and demographic analysis. */
+			NumberOfEmployees: DevKit.Controls.Integer;
+			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
+			OwnerId: DevKit.Controls.Lookup;
+			/** Type the annual revenue for the account, used as an indicator in financial performance analysis. */
+			Revenue: DevKit.Controls.Money;
+		}
+		interface tab_DETAILS_TAB_Sections {
+			BILLING: DevKit.Controls.Section;
+			ChildAccounts: DevKit.Controls.Section;
+			COMPANY_PROFILE: DevKit.Controls.Section;
+			CONTACT_PREFERENCES: DevKit.Controls.Section;
+			DETAILS_TAB_section_6: DevKit.Controls.Section;
+			MARKETING: DevKit.Controls.Section;
+			SHIPPING: DevKit.Controls.Section;
+		}
+		interface tab_SUMMARY_TAB_Sections {
+			ACCOUNT_INFORMATION: DevKit.Controls.Section;
+			ADDRESS: DevKit.Controls.Section;
+			MapSection: DevKit.Controls.Section;
+			SOCIAL_PANE_TAB: DevKit.Controls.Section;
+			Summary_CadenceWidget: DevKit.Controls.Section;
+			Summary_section_6: DevKit.Controls.Section;
+			SUMMARY_TAB_section_6: DevKit.Controls.Section;
+		}
+		interface tab_DETAILS_TAB extends DevKit.Controls.ITab {
+			Section: tab_DETAILS_TAB_Sections;
+		}
+		interface tab_SUMMARY_TAB extends DevKit.Controls.ITab {
+			Section: tab_SUMMARY_TAB_Sections;
+		}
+		interface Tabs {
+			DETAILS_TAB: tab_DETAILS_TAB;
+			SUMMARY_TAB: tab_SUMMARY_TAB;
+		}
+		interface Body {
+			Tab: Tabs;
+			ActionCards: DevKit.Controls.ActionCards;
+			/** Shows the complete primary address. */
+			Address1_Composite: DevKit.Controls.String;
+			/** Select the freight terms for the primary address to make sure shipping orders are processed correctly. */
+			Address1_FreightTermsCode: DevKit.Controls.OptionSet;
+			/** Select a shipping method for deliveries sent to this address. */
+			Address1_ShippingMethodCode: DevKit.Controls.OptionSet;
+			CadenceWidgetControl: DevKit.Controls.ActionCards;
+			/** Type the credit limit of the account. This is a useful reference when you address invoice and accounting issues with the customer. */
+			CreditLimit: DevKit.Controls.Money;
+			/** Select whether the credit for the account is on hold. This is a useful reference while addressing the invoice and accounting issues with the customer. */
+			CreditOnHold: DevKit.Controls.Boolean;
+			/** Type additional information to describe the account, such as an excerpt from the company's website. */
+			Description: DevKit.Controls.String;
+			/** Select whether the account allows bulk email sent through campaigns. If Do Not Allow is selected, the account can be added to marketing lists, but is excluded from email. */
+			DoNotBulkEMail: DevKit.Controls.Boolean;
+			/** Select whether the account allows direct email sent from Microsoft Dynamics 365. */
+			DoNotEMail: DevKit.Controls.Boolean;
+			/** Select whether the account allows faxes. If Do Not Allow is selected, the account will be excluded from fax activities distributed in marketing campaigns. */
+			DoNotFax: DevKit.Controls.Boolean;
+			/** Select whether the account allows phone calls. If Do Not Allow is selected, the account will be excluded from phone call activities distributed in marketing campaigns. */
+			DoNotPhone: DevKit.Controls.Boolean;
+			/** Select whether the account allows direct mail. If Do Not Allow is selected, the account will be excluded from letter activities distributed in marketing campaigns. */
+			DoNotPostalMail: DevKit.Controls.Boolean;
+			/** Select whether the account accepts marketing materials, such as brochures or catalogs. */
+			DoNotSendMM: DevKit.Controls.Boolean;
+			/** Type the fax number for the account. */
+			Fax: DevKit.Controls.String;
+			/** Information about whether to allow following email activity like opens, attachment views and link clicks for emails sent to the account. */
+			FollowEmail: DevKit.Controls.Boolean;
+			/** Select the account's primary industry for use in marketing segmentation and demographic analysis. */
+			IndustryCode: DevKit.Controls.OptionSet;
+			/** Shows the date when the account was last included in a marketing campaign or quick campaign. */
+			LastUsedInCampaign: DevKit.Controls.Date;
+			mapcontrol: DevKit.Controls.Map;
+			/** Type the company or business name. */
+			Name: DevKit.Controls.String;
+			notescontrol: DevKit.Controls.Note;
+			/** Shows the lead that the account was created from if the account was created by converting a lead in Microsoft Dynamics 365. This is used to relate the account to data on the originating lead for use in reporting and analytics. */
+			OriginatingLeadId: DevKit.Controls.Lookup;
+			/** Select the account's ownership structure, such as public or private. */
+			OwnershipCode: DevKit.Controls.OptionSet;
+			/** Choose the parent account associated with this account to show parent and child businesses in reporting and analytics. */
+			ParentAccountId: DevKit.Controls.Lookup;
+			/** Select the payment terms to indicate when the customer needs to pay the total amount. */
+			PaymentTermsCode: DevKit.Controls.OptionSet;
+			/** Select the preferred method of contact. */
+			PreferredContactMethodCode: DevKit.Controls.OptionSet;
+			/** Choose the primary contact for the account to provide quick access to contact details. */
+			PrimaryContactId: DevKit.Controls.Lookup;
+			/** Type the Standard Industrial Classification (SIC) code that indicates the account's primary industry of business, for use in marketing segmentation and demographic analysis. */
+			SIC: DevKit.Controls.String;
+			/** Type the main phone number for this account. */
+			Telephone1: DevKit.Controls.String;
+			/** Type the stock exchange symbol for the account to track financial performance of the company. You can click the code entered in this field to access the latest trading information from MSN Money. */
+			TickerSymbol: DevKit.Controls.String;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			TransactionCurrencyId: DevKit.Controls.Lookup;
+			/** Type the account's website URL to get quick details about the company profile. */
+			WebSiteURL: DevKit.Controls.String;
+		}
+		interface Navigation {
+			navAddresses: DevKit.Controls.NavigationItem,
+			navAsyncOperations: DevKit.Controls.NavigationItem,
+			navContracts: DevKit.Controls.NavigationItem,
+			navInvoices: DevKit.Controls.NavigationItem,
+			navOrders: DevKit.Controls.NavigationItem,
+			navProcessSessions: DevKit.Controls.NavigationItem,
+			navQuotes: DevKit.Controls.NavigationItem,
+			navRelationships: DevKit.Controls.NavigationItem,
+			navSubAccts: DevKit.Controls.NavigationItem
+		}
+		interface quickForm_contactquickform_Body {
+			EMailAddress1: DevKit.Controls.QuickView;
+			Telephone1: DevKit.Controls.QuickView;
+		}
+		interface quickForm_contactquickform extends DevKit.Controls.IQuickView {
+			Body: quickForm_contactquickform_Body;
+		}
+		interface QuickForm {
+			contactquickform: quickForm_contactquickform;
+		}
+		interface Grid {
+			accountopportunitiesgrid: DevKit.Controls.Grid;
+			ChildAccounts: DevKit.Controls.Grid;
+			Contacts: DevKit.Controls.Grid;
+		}
+	}
+	class FormAccount_Sales_Insights extends DevKit.IForm {
+		/**
+		* DynamicsCrm.DevKit form Account_Sales_Insights Main Form
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form Account_Sales_Insights */
+		Body: DevKit.FormAccount_Sales_Insights.Body;
+		/** The Header section of form Account_Sales_Insights */
+		Header: DevKit.FormAccount_Sales_Insights.Header;
+		/** The Navigation of form Account_Sales_Insights */
+		Navigation: DevKit.FormAccount_Sales_Insights.Navigation;
+		/** The QuickForm of form Account_Sales_Insights */
+		QuickForm: DevKit.FormAccount_Sales_Insights.QuickForm;
+		/** The Grid of form Account_Sales_Insights */
+		Grid: DevKit.FormAccount_Sales_Insights.Grid;
+		/** The SidePanes of form Account_Sales_Insights */
+		SidePanes: DevKit.SidePanes;
+	}
+	namespace FormTimelineWallControl_Account_Main {
+		interface Header extends DevKit.Controls.IHeader {
+			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
+			OwnerId: DevKit.Controls.Lookup;
+		}
+		interface tab_SUMMARY_TAB_Sections {
+			SOCIAL_PANE_TAB: DevKit.Controls.Section;
+		}
+		interface tab_SUMMARY_TAB extends DevKit.Controls.ITab {
+			Section: tab_SUMMARY_TAB_Sections;
+		}
+		interface Tabs {
+			SUMMARY_TAB: tab_SUMMARY_TAB;
+		}
+		interface Body {
+			Tab: Tabs;
+			notescontrol: DevKit.Controls.Note;
+		}
+	}
+	class FormTimelineWallControl_Account_Main extends DevKit.IForm {
+		/**
+		* DynamicsCrm.DevKit form TimelineWallControl_Account_Main Main Form
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form TimelineWallControl_Account_Main */
+		Body: DevKit.FormTimelineWallControl_Account_Main.Body;
+		/** The Header section of form TimelineWallControl_Account_Main */
+		Header: DevKit.FormTimelineWallControl_Account_Main.Header;
+		/** The SidePanes of form TimelineWallControl_Account_Main */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormAccount_Quick_Create {
 		interface tab_tab_1_Sections {
@@ -421,7 +888,7 @@ declare namespace DevKit {
 	}
 	class FormAccount_Quick_Create extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Account_Quick_Create
+		* DynamicsCrm.DevKit form Account_Quick_Create Quick Create
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -430,6 +897,46 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Account_Quick_Create */
 		Body: DevKit.FormAccount_Quick_Create.Body;
+	}
+	namespace FormAccount_Quick_Create_Field_Service {
+		interface tab_tab_1_Sections {
+			tab_1_column_1_section_1: DevKit.Controls.Section;
+			tab_1_column_2_section_1: DevKit.Controls.Section;
+			tab_1_column_3_section_1: DevKit.Controls.Section;
+		}
+		interface tab_tab_1 extends DevKit.Controls.ITab {
+			Section: tab_tab_1_Sections;
+		}
+		interface Tabs {
+			tab_1: tab_tab_1;
+		}
+		interface Body {
+			Tab: Tabs;
+			/** Type the first line of the primary address. */
+			Address1_Line1: DevKit.Controls.String;
+			/** Reference to an other account to be used for billing (only to be used if billing account differs) */
+			msdyn_BillingAccount: DevKit.Controls.Lookup;
+			/** The Service Territory this account belongs to. This is used to optimize scheduling and routing */
+			msdyn_ServiceTerritory: DevKit.Controls.Lookup;
+			/** Type the company or business name. */
+			Name: DevKit.Controls.String;
+			/** Choose the primary contact for the account to provide quick access to contact details. */
+			PrimaryContactId: DevKit.Controls.Lookup;
+			/** Type the main phone number for this account. */
+			Telephone1: DevKit.Controls.String;
+		}
+	}
+	class FormAccount_Quick_Create_Field_Service extends DevKit.IForm {
+		/**
+		* DynamicsCrm.DevKit form Account_Quick_Create_Field_Service Quick Create
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form Account_Quick_Create_Field_Service */
+		Body: DevKit.FormAccount_Quick_Create_Field_Service.Body;
 	}
 	class AccountApi {
 		/**
@@ -648,7 +1155,6 @@ declare namespace DevKit {
 		MarketCap_Base: DevKit.WebApi.MoneyValueReadonly;
 		/** Whether is only for marketing */
 		MarketingOnly: DevKit.WebApi.BooleanValue;
-		MasterAccountIdName: DevKit.WebApi.StringValueReadonly;
 		/** Shows the master account that the account was merged with. */
 		MasterId: DevKit.WebApi.LookupValueReadonly;
 		/** Shows whether the account has been merged with another account. */
@@ -763,7 +1269,6 @@ declare namespace DevKit {
 		SLAId: DevKit.WebApi.LookupValue;
 		/** Last SLA that was applied to this case. This field is for internal use only. */
 		SLAInvokedId: DevKit.WebApi.LookupValueReadonly;
-		SLAName: DevKit.WebApi.StringValueReadonly;
 		/** Shows the ID of the stage. */
 		StageId: DevKit.WebApi.GuidValue;
 		/** Shows whether the account is active or inactive. Inactive accounts are read-only and can't be edited unless they are reactivated. */
@@ -1052,22 +1557,22 @@ declare namespace OptionSet {
 			/** 1 */
 			Default_Value
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Account','Account for Interactive experience','Quick Create'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

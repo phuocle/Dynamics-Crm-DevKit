@@ -15,19 +15,19 @@ namespace Dev.DevKit.Shared.Entities.msdyn_projecttaskdependencyOptionSets
 		/// <summary>
 		/// Finish-to-Finish = 192350002
 		/// </summary>
-		FinishtoFinish = 192350002,
+		Finish_to_Finish = 192350002,
 		/// <summary>
 		/// Finish-to-Start = 192350000
 		/// </summary>
-		FinishtoStart = 192350000,
+		Finish_to_Start = 192350000,
 		/// <summary>
 		/// Start-to-Finish = 192350004
 		/// </summary>
-		StarttoFinish = 192350004,
+		Start_to_Finish = 192350004,
 		/// <summary>
 		/// Start-to-Start = 192350001
 		/// </summary>
-		StarttoStart = 192350001
+		Start_to_Start = 192350001
 	}
 
 	public enum statecode

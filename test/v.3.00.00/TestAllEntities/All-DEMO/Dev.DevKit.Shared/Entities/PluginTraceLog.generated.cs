@@ -27,7 +27,7 @@ namespace Dev.DevKit.Shared.Entities.PluginTraceLogOptionSets
 		/// <summary>
 		/// Plug-in = 1
 		/// </summary>
-		Plugin = 1,
+		Plug_in = 1,
 		/// <summary>
 		/// Unknown = 0
 		/// </summary>

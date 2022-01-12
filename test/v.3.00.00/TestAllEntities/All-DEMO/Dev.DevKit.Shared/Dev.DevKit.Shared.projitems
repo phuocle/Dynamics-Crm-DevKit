@@ -14,8 +14,6 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Account.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Account.generated.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Entities\Account1.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Entities\Account1.generated.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\AccountLeads.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\AccountLeads.generated.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\ACIViewMapper.cs" />

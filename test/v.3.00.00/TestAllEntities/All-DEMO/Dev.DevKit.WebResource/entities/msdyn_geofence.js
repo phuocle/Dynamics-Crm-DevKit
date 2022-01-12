@@ -1,9 +1,13 @@
 ﻿//@ts-check
 ///<reference path="msdyn_geofence.d.ts" />
 "use strict";
-var formMain_Form = (function () {
+var formmsdyn_geofence_Main_Form = (function () {
 	"use strict";
+	/** @type DevKit.Formmsdyn_geofence_Main_Form */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.Formmsdyn_geofence_Main_Form(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}
@@ -12,9 +16,13 @@ var formMain_Form = (function () {
 		OnSave: onSave
 	};
 })();
-var formNew_Form = (function () {
+var formmsdyn_geofence_New_Form = (function () {
 	"use strict";
+	/** @type DevKit.Formmsdyn_geofence_New_Form */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.Formmsdyn_geofence_New_Form(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}

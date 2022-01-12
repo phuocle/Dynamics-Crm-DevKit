@@ -56,7 +56,7 @@ declare namespace DevKit {
 	}
 	class Formmsdyn_taxcode_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form msdyn_taxcode_Information
+		* DynamicsCrm.DevKit form msdyn_taxcode_Information Main Form
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -71,6 +71,46 @@ declare namespace DevKit {
 		Navigation: DevKit.Formmsdyn_taxcode_Information.Navigation;
 		/** The Grid of form msdyn_taxcode_Information */
 		Grid: DevKit.Formmsdyn_taxcode_Information.Grid;
+		/** The SidePanes of form msdyn_taxcode_Information */
+		SidePanes: DevKit.SidePanes;
+	}
+	namespace FormTax_Code_Quick_Create_FS_5x5 {
+		interface tab_tab_1_Sections {
+			tab_1_column_1_section_1: DevKit.Controls.Section;
+			tab_1_column_2_section_1: DevKit.Controls.Section;
+			tab_1_column_3_section_1: DevKit.Controls.Section;
+		}
+		interface tab_tab_1 extends DevKit.Controls.ITab {
+			Section: tab_tab_1_Sections;
+		}
+		interface Tabs {
+			tab_1: tab_tab_1;
+		}
+		interface Body {
+			Tab: Tabs;
+			/** Select whether this tax code applies to service agreements. */
+			msdyn_AgreementTaxable: DevKit.Controls.Boolean;
+			/** Type the sales tax code name. */
+			msdyn_name: DevKit.Controls.String;
+			/** Select whether this tax code applies to products. */
+			msdyn_ProductsTaxable: DevKit.Controls.Boolean;
+			/** Select whether this tax code applies to services. */
+			msdyn_ServicesTaxable: DevKit.Controls.Boolean;
+			/** Enter the rate of this sales tax code. */
+			msdyn_TaxRate: DevKit.Controls.Double;
+		}
+	}
+	class FormTax_Code_Quick_Create_FS_5x5 extends DevKit.IForm {
+		/**
+		* DynamicsCrm.DevKit form Tax_Code_Quick_Create_FS_5x5 Quick Create
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form Tax_Code_Quick_Create_FS_5x5 */
+		Body: DevKit.FormTax_Code_Quick_Create_FS_5x5.Body;
 	}
 	class msdyn_taxcodeApi {
 		/**
@@ -164,22 +204,22 @@ declare namespace OptionSet {
 			/** 2 */
 			Inactive
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

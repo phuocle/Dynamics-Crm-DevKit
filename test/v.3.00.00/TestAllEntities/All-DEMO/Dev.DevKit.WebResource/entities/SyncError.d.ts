@@ -47,7 +47,7 @@ declare namespace DevKit {
 	}
 	class FormSync_Error extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Sync_Error
+		* DynamicsCrm.DevKit form Sync_Error Main Form
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -58,6 +58,8 @@ declare namespace DevKit {
 		Body: DevKit.FormSync_Error.Body;
 		/** The Header section of form Sync_Error */
 		Header: DevKit.FormSync_Error.Header;
+		/** The SidePanes of form Sync_Error */
+		SidePanes: DevKit.SidePanes;
 	}
 	class SyncErrorApi {
 		/**
@@ -140,6 +142,8 @@ declare namespace DevKit {
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_annotation_syncerror: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
+		regardingobjectid_appaction: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
 		regardingobjectid_appelement: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_applicationuser: DevKit.WebApi.LookupValue;
@@ -147,8 +151,6 @@ declare namespace DevKit {
 		regardingobjectid_appmodulecomponentedge: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_appmodulecomponentnode: DevKit.WebApi.LookupValue;
-		/** Choose the record that the sync error relates to. */
-		regardingobjectid_appnotification: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_appointment_syncerror: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
@@ -218,6 +220,8 @@ declare namespace DevKit {
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_childincidentcount: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
+		regardingobjectid_comment: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
 		regardingobjectid_commitment: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_competitor_syncerror: DevKit.WebApi.LookupValue;
@@ -262,6 +266,8 @@ declare namespace DevKit {
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_datalakeworkspacepermission: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
+		regardingobjectid_datasyncstate: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
 		regardingobjectid_discount_syncerror: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_discounttype_syncerror: DevKit.WebApi.LookupValue;
@@ -296,6 +302,8 @@ declare namespace DevKit {
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_entityimageconfig: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
+		regardingobjectid_entityindex: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
 		regardingobjectid_environmentvariabledefinition: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_environmentvariablevalue: DevKit.WebApi.LookupValue;
@@ -311,6 +319,8 @@ declare namespace DevKit {
 		regardingobjectid_externalpartyitem_syncerror: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_fax_syncerror: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
+		regardingobjectid_featurecontrolsetting: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_feedback_syncerror: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
@@ -337,6 +347,8 @@ declare namespace DevKit {
 		regardingobjectid_incident_syncerror: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_incidentresolution_syncerror: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
+		regardingobjectid_indexattributes: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_internaladdress_syncerror: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
@@ -444,6 +456,8 @@ declare namespace DevKit {
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_aiconfiguration: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_aicontactsuggestion: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_aifptrainingdocument: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_aimodel: DevKit.WebApi.LookupValue;
@@ -480,13 +494,25 @@ declare namespace DevKit {
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_approval: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_approvalset: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_assetcategorytemplateassociation: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_assetsuggestionssetting: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_assettemplateassociation: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_assignmentconfiguration: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_assignmentconfigurationstep: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_assignmentmap: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_assignmentrule: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_attribute: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_attributevalue: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_authenticationsettings: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
@@ -592,6 +618,10 @@ declare namespace DevKit {
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_contactpricelist: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_contactsuggestionrule: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_contactsuggestionruleset: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_contractlinedetailperformance: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_contractlineinvoiceschedule: DevKit.WebApi.LookupValue;
@@ -630,6 +660,12 @@ declare namespace DevKit {
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_dataanalyticsreport_csrmanager: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_dataanalyticsreport_fs: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_dataanalyticsreport_fspredictrs: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_dataanalyticsreport_fspredictwhd: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_dataanalyticsreport_ksinsights: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_dataanalyticsreport_oc: DevKit.WebApi.LookupValue;
@@ -644,6 +680,10 @@ declare namespace DevKit {
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_datainsightsandanalyticsfeature: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_dealmanageraccess: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_dealmanagersettings: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_decisioncontract: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_decisionruleset: DevKit.WebApi.LookupValue;
@@ -654,11 +694,15 @@ declare namespace DevKit {
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_dimensionfieldname: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_effortpredictionresult: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_entitlementapplication: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_entityconfig: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_entityconfiguration: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_entitylinkchatconfiguration: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_entityrankingrule: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
@@ -673,6 +717,8 @@ declare namespace DevKit {
 		regardingobjectid_msdyn_expensecategory: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_expensereceipt: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_extendedusersetting: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_facebookengagementctx: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
@@ -721,6 +767,10 @@ declare namespace DevKit {
 		regardingobjectid_msdyn_helppage: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_icebreakersconfig: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_iermlmodel: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_iermltraining: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_incidenttype: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
@@ -806,7 +856,11 @@ declare namespace DevKit {
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_kalanguagesetting: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_kbattachment: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_kbenrichment: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_kbkeywordsdescsuggestionsetting: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_kmfederatedsearchconfig: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
@@ -866,7 +920,11 @@ declare namespace DevKit {
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_notificationtemplate: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_ocautoblockrule: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_ocbotchannelregistration: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_occarrier: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_occhannelconfiguration: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
@@ -881,6 +939,8 @@ declare namespace DevKit {
 		regardingobjectid_msdyn_ocfbapplication: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_ocfbpage: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_ocflaggedspam: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_oclanguage: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
@@ -910,6 +970,8 @@ declare namespace DevKit {
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_ocprovisioningstate: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_ocrecording: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_ocrequest: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_ocruleitem: DevKit.WebApi.LookupValue;
@@ -923,6 +985,8 @@ declare namespace DevKit {
 		regardingobjectid_msdyn_ocsession: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_ocsessioncharacteristic: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_ocsessionparticipantevent: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_ocsessionsentiment: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
@@ -996,6 +1060,8 @@ declare namespace DevKit {
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_organizationalunit: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_overflowactionconfig: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_paneconfiguration: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_panetabconfiguration: DevKit.WebApi.LookupValue;
@@ -1037,6 +1103,8 @@ declare namespace DevKit {
 		regardingobjectid_msdyn_postconfig: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_postruleconfig: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_predictworkhourdurationsetting: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_presence: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
@@ -1212,7 +1280,13 @@ declare namespace DevKit {
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_rulesetdependencymapping: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_salesaccelerationsettings: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_salesassignmentsetting: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_salesinsightssettings: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_salesroutingrun: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_scenario: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
@@ -1224,7 +1298,19 @@ declare namespace DevKit {
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_searchconfiguration: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_segment: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_segmentcatalogue: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_sentimentanalysis: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_sequence: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_sequencestat: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_sequencetarget: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_sequencetargetstep: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_serviceconfiguration: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
@@ -1283,6 +1369,12 @@ declare namespace DevKit {
 		regardingobjectid_msdyn_taxcode: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_taxcodedetail: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_teamschannelengagementctx: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_teamschatassociation: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_teamschatsuggestion: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_teamscollaboration: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
@@ -1388,6 +1480,10 @@ declare namespace DevKit {
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_workordertype: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_workqueuestate: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_workqueueusersetting: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyusd_actioncallworkflow: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyusd_agentscriptaction: DevKit.WebApi.LookupValue;
@@ -1466,6 +1562,8 @@ declare namespace DevKit {
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_NewProcess_syncerror: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
+		regardingobjectid_new_test: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
 		regardingobjectid_offlinecommanddefinition_syncerror: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_opportunity_syncerror: DevKit.WebApi.LookupValue;
@@ -1493,6 +1591,8 @@ declare namespace DevKit {
 		regardingobjectid_phonecall_syncerror: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_PhoneToCaseProcess_syncerror: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
+		regardingobjectid_pluginpackage: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_position_syncerror: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
@@ -1576,6 +1676,8 @@ declare namespace DevKit {
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_serviceplan: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
+		regardingobjectid_serviceplanmapping: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
 		regardingobjectid_settingdefinition: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_sharepointdocumentlocation_syncerror: DevKit.WebApi.LookupValue;
@@ -1597,6 +1699,8 @@ declare namespace DevKit {
 		regardingobjectid_solution_syncerror: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_solutioncomponentattributeconfiguration: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
+		regardingobjectid_solutioncomponentbatchconfiguration: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_solutioncomponentconfiguration: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
@@ -1711,22 +1815,22 @@ declare namespace OptionSet {
 			/** 1 */
 			Fixed
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Sync Error'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

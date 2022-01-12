@@ -37,7 +37,7 @@ declare namespace DevKit {
 	}
 	class FormEmail_signature extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Email_signature
+		* DynamicsCrm.DevKit form Email_signature Main Form
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -48,6 +48,8 @@ declare namespace DevKit {
 		Body: DevKit.FormEmail_signature.Body;
 		/** The Header section of form Email_signature */
 		Header: DevKit.FormEmail_signature.Header;
+		/** The SidePanes of form Email_signature */
+		SidePanes: DevKit.SidePanes;
 	}
 	class EmailSignatureApi {
 		/**
@@ -81,12 +83,10 @@ declare namespace DevKit {
 		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
 		/** Unique identifier of the user who created the email signature. */
 		CreatedBy: DevKit.WebApi.LookupValueReadonly;
-		CreatedByDsc: DevKit.WebApi.IntegerValueReadonly;
 		/** Date and time when the email signature was created. */
 		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
 		/** Unique identifier of the delegate user who created the email signature. */
 		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
-		CreatedOnBehalfByDsc: DevKit.WebApi.IntegerValueReadonly;
 		/** Description of the email signature. */
 		Description: DevKit.WebApi.StringValue;
 		/** Unique identifier of the email signature. */
@@ -107,12 +107,10 @@ declare namespace DevKit {
 		MimeType: DevKit.WebApi.StringValue;
 		/** Unique identifier of the user who last modified the email signature. */
 		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
-		ModifiedByDsc: DevKit.WebApi.IntegerValueReadonly;
 		/** Date and time when the email signature was last modified. */
 		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
 		/** Unique identifier of the delegate user who last modified the email signature. */
 		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
-		ModifiedOnBehalfByDsc: DevKit.WebApi.IntegerValueReadonly;
 		/** Date and time that the record was migrated. */
 		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
 		/** For internal use only. */
@@ -121,7 +119,6 @@ declare namespace DevKit {
 		OwnerId_systemuser: DevKit.WebApi.LookupValue;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
 		OwnerId_team: DevKit.WebApi.LookupValue;
-		OwnerIdDsc: DevKit.WebApi.IntegerValueReadonly;
 		/** Unique identifier of the business unit that owns the email signature. */
 		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the team who owns the email signature. */
@@ -148,22 +145,22 @@ declare namespace OptionSet {
 			/** 1 */
 			Unpublished
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Email signature'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

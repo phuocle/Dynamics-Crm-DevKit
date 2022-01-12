@@ -27,6 +27,7 @@ declare namespace DevKit {
 			MapSection: DevKit.Controls.Section;
 			RELATED_TAB: DevKit.Controls.Section;
 			SOCIAL_PANE: DevKit.Controls.Section;
+			Summary_CadenceWidget: DevKit.Controls.Section;
 		}
 		interface tab_details_tab extends DevKit.Controls.ITab {
 			Section: tab_details_tab_Sections;
@@ -48,6 +49,7 @@ declare namespace DevKit {
 			Address1_Composite: DevKit.Controls.String;
 			/** Stores Image of the Business Card */
 			BusinessCard: DevKit.Controls.String;
+			CadenceWidgetControl: DevKit.Controls.ActionCards;
 			/** Choose the campaign that the lead was generated from to track the effectiveness of marketing campaigns and identify  communications received by the lead. */
 			CampaignId: DevKit.Controls.Lookup;
 			/** Type the name of the company associated with the lead. This becomes the account name when the lead is qualified and converted to a customer account. */
@@ -129,14 +131,14 @@ declare namespace DevKit {
 			Lead_to_Opportunity_Sales_Process: ProcessLead_to_Opportunity_Sales_Process;
 		}
 		interface Grid {
-			Stakeholders: DevKit.Controls.Grid;
 			Competitors: DevKit.Controls.Grid;
 			DocumentsSubGrid: DevKit.Controls.Grid;
+			Stakeholders: DevKit.Controls.Grid;
 		}
 	}
 	class FormLead extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Lead
+		* DynamicsCrm.DevKit form Lead Main Form
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -153,6 +155,152 @@ declare namespace DevKit {
 		Process: DevKit.FormLead.Process;
 		/** The Grid of form Lead */
 		Grid: DevKit.FormLead.Grid;
+		/** The SidePanes of form Lead */
+		SidePanes: DevKit.SidePanes;
+	}
+	namespace FormLead_Sales_Insights {
+		interface Header extends DevKit.Controls.IHeader {
+			/** Select a rating value to indicate the lead's potential to become a customer. */
+			LeadQualityCode: DevKit.Controls.OptionSet;
+			/** Select the primary marketing source that prompted the lead to contact you. */
+			LeadSourceCode: DevKit.Controls.OptionSet;
+			/** Owner Id */
+			OwnerId: DevKit.Controls.Lookup;
+			/** Select the lead's status. */
+			StatusCode: DevKit.Controls.OptionSet;
+		}
+		interface tab_details_tab_Sections {
+			contact_methods: DevKit.Controls.Section;
+			lead_information: DevKit.Controls.Section;
+			marketing_information: DevKit.Controls.Section;
+		}
+		interface tab_Summary_Sections {
+			company: DevKit.Controls.Section;
+			Contact: DevKit.Controls.Section;
+			MapSection: DevKit.Controls.Section;
+			RELATED_TAB: DevKit.Controls.Section;
+			SOCIAL_PANE: DevKit.Controls.Section;
+			Summary_CadenceWidget: DevKit.Controls.Section;
+			Summary_section_6: DevKit.Controls.Section;
+		}
+		interface tab_details_tab extends DevKit.Controls.ITab {
+			Section: tab_details_tab_Sections;
+		}
+		interface tab_Summary extends DevKit.Controls.ITab {
+			Section: tab_Summary_Sections;
+		}
+		interface Tabs {
+			details_tab: tab_details_tab;
+			Summary: tab_Summary;
+		}
+		interface Body {
+			Tab: Tabs;
+			ActionCards: DevKit.Controls.ActionCards;
+			/** Shows the complete primary address. */
+			Address1_Composite: DevKit.Controls.String;
+			CadenceWidgetControl: DevKit.Controls.ActionCards;
+			/** Type the name of the company associated with the lead. This becomes the account name when the lead is qualified and converted to a customer account. */
+			CompanyName: DevKit.Controls.String;
+			/** Type additional information to describe the lead, such as an excerpt from the company's website. */
+			Description: DevKit.Controls.String;
+			/** Select whether the lead accepts bulk email sent through marketing campaigns or quick campaigns. If Do Not Allow is selected, the lead can be added to marketing lists, but will be excluded from the email. */
+			DoNotBulkEMail: DevKit.Controls.Boolean;
+			/** Select whether the lead allows direct email sent from Microsoft Dynamics 365. */
+			DoNotEMail: DevKit.Controls.Boolean;
+			/** Select whether the lead allows phone calls. */
+			DoNotPhone: DevKit.Controls.Boolean;
+			/** Select whether the lead allows direct mail. */
+			DoNotPostalMail: DevKit.Controls.Boolean;
+			/** Select whether the lead accepts marketing materials, such as brochures or catalogs. Leads that opt out can be excluded from marketing initiatives. */
+			DoNotSendMM: DevKit.Controls.Boolean;
+			/** Type the primary email address for the lead. */
+			EMailAddress1: DevKit.Controls.String;
+			/** Information about whether to allow following email activity like opens, attachment views and link clicks for emails sent to the lead. */
+			FollowEmail: DevKit.Controls.Boolean;
+			/** Combines and shows the lead's first and last names so the full name can be displayed in views and reports. */
+			FullName: DevKit.Controls.String;
+			/** Select the primary industry in which the lead's business is focused, for use in marketing segmentation and demographic analysis. */
+			IndustryCode: DevKit.Controls.OptionSet;
+			/** Type the job title of the primary contact for this lead to make sure the prospect is addressed correctly in sales calls, email, and marketing campaigns. */
+			JobTitle: DevKit.Controls.String;
+			/** Shows the date when the lead was last included in a marketing campaign or quick campaign. */
+			LastUsedInCampaign: DevKit.Controls.Date;
+			mapcontrol: DevKit.Controls.Map;
+			/** Type the mobile phone number for the primary contact for the lead. */
+			MobilePhone: DevKit.Controls.String;
+			notescontrol: DevKit.Controls.Note;
+			/** Type the number of employees that work at the company associated with the lead, for use in marketing segmentation and demographic analysis. */
+			NumberOfEmployees: DevKit.Controls.Integer;
+			/** Select the preferred method of contact. */
+			PreferredContactMethodCode: DevKit.Controls.OptionSet;
+			/** Type the annual revenue of the company associated with the lead to provide an understanding of the prospect's business. */
+			Revenue: DevKit.Controls.Money;
+			/** Type the Standard Industrial Classification (SIC) code that indicates the lead's primary industry of business for use in marketing segmentation and demographic analysis. */
+			SIC: DevKit.Controls.String;
+			/** Type a subject or descriptive name, such as the expected order, company name, or marketing source list, to identify the lead. */
+			Subject: DevKit.Controls.String;
+			/** Type the work phone number for the primary contact for the lead. */
+			Telephone1: DevKit.Controls.String;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			TransactionCurrencyId: DevKit.Controls.Lookup;
+			/** Type the website URL for the company associated with this lead. */
+			WebSiteUrl: DevKit.Controls.String;
+		}
+		interface Navigation {
+			navActivities: DevKit.Controls.NavigationItem,
+			navAsyncOperations: DevKit.Controls.NavigationItem,
+			navAudit: DevKit.Controls.NavigationItem,
+			navCampaignsInSFA: DevKit.Controls.NavigationItem,
+			navConnections: DevKit.Controls.NavigationItem,
+			navDocument: DevKit.Controls.NavigationItem,
+			navLeadCompetitor: DevKit.Controls.NavigationItem,
+			navProcessSessions: DevKit.Controls.NavigationItem
+		}
+		interface ProcessLead_to_Opportunity_Sales_Process {
+			/** Information about the budget amount of the lead's company or organization. */
+			BudgetAmount: DevKit.Controls.Money;
+			/** Select whether your notes include information about who makes the purchase decisions at the lead's company. */
+			DecisionMaker: DevKit.Controls.Boolean;
+			/** Type additional information to describe the lead, such as an excerpt from the company's website. */
+			Description: DevKit.Controls.String;
+			/** Choose an account to connect this lead to, so that the relationship is visible in reports and analytics. */
+			ParentAccountId: DevKit.Controls.Lookup;
+			/** Choose a contact to connect this lead to, so that the relationship is visible in reports and analytics. */
+			ParentContactId: DevKit.Controls.Lookup;
+			/** Choose whether an individual or a committee will be involved in the  purchase process for the lead. */
+			PurchaseProcess: DevKit.Controls.OptionSet;
+			/** Choose how long the lead will likely take to make the purchase, so the sales team will be aware. */
+			PurchaseTimeFrame: DevKit.Controls.OptionSet;
+		}
+		interface Process extends DevKit.Controls.IProcess {
+			Lead_to_Opportunity_Sales_Process: ProcessLead_to_Opportunity_Sales_Process;
+		}
+		interface Grid {
+			Competitors: DevKit.Controls.Grid;
+			Stakeholders: DevKit.Controls.Grid;
+		}
+	}
+	class FormLead_Sales_Insights extends DevKit.IForm {
+		/**
+		* DynamicsCrm.DevKit form Lead_Sales_Insights Main Form
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form Lead_Sales_Insights */
+		Body: DevKit.FormLead_Sales_Insights.Body;
+		/** The Header section of form Lead_Sales_Insights */
+		Header: DevKit.FormLead_Sales_Insights.Header;
+		/** The Navigation of form Lead_Sales_Insights */
+		Navigation: DevKit.FormLead_Sales_Insights.Navigation;
+		/** The Process of form Lead_Sales_Insights */
+		Process: DevKit.FormLead_Sales_Insights.Process;
+		/** The Grid of form Lead_Sales_Insights */
+		Grid: DevKit.FormLead_Sales_Insights.Grid;
+		/** The SidePanes of form Lead_Sales_Insights */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormLead_Quick_Create {
 		interface tab_tab_1_Sections {
@@ -196,7 +344,7 @@ declare namespace DevKit {
 	}
 	class FormLead_Quick_Create extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Lead_Quick_Create
+		* DynamicsCrm.DevKit form Lead_Quick_Create Quick Create
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -346,7 +494,9 @@ declare namespace DevKit {
 		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
 		/** Shows who created the record on behalf of another user. */
 		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
 		customerid_account: DevKit.WebApi.LookupValue;
+		/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
 		customerid_contact: DevKit.WebApi.LookupValue;
 		/** Select whether your notes include information about who makes the purchase decisions at the lead's company. */
 		DecisionMaker: DevKit.WebApi.BooleanValue;
@@ -421,7 +571,6 @@ declare namespace DevKit {
 		LeadSourceCode: DevKit.WebApi.OptionSetValue;
 		/** Unique identifier of the master lead for merge. */
 		MasterId: DevKit.WebApi.LookupValueReadonly;
-		MasterLeadIdName: DevKit.WebApi.StringValueReadonly;
 		/** Tells whether the lead has been merged with another lead. */
 		Merged: DevKit.WebApi.BooleanValueReadonly;
 		/** Type the middle name or initial of the primary contact for the lead to make sure the prospect is addressed correctly. */
@@ -438,6 +587,10 @@ declare namespace DevKit {
 		msdyn_gdproptout: DevKit.WebApi.BooleanValue;
 		/** Whether the Opportunity created when qualifying this Lead is for an Item- based or a Work-based sale */
 		msdyn_ordertype: DevKit.WebApi.OptionSetValue;
+		/** Result of the assignment rule process */
+		msdyn_salesassignmentresult: DevKit.WebApi.OptionSetValue;
+		/** Unique identifier for Segment associated with Lead. */
+		msdyn_segmentid: DevKit.WebApi.LookupValue;
 		/** Choose how high the level of need is for the lead's company. */
 		Need: DevKit.WebApi.OptionSetValue;
 		/** Type the number of employees that work at the company associated with the lead, for use in marketing segmentation and demographic analysis. */
@@ -502,7 +655,6 @@ declare namespace DevKit {
 		SLAId: DevKit.WebApi.LookupValue;
 		/** Last SLA that was applied to this case. This field is for internal use only. */
 		SLAInvokedId: DevKit.WebApi.LookupValueReadonly;
-		SLAName: DevKit.WebApi.StringValueReadonly;
 		/** Contains the id of the stage where the entity is located. */
 		StageId: DevKit.WebApi.GuidValue;
 		/** Shows whether the lead is open, qualified, or disqualified. Qualified and disqualified leads are read-only and can't be edited unless they are reactivated. */
@@ -685,6 +837,12 @@ declare namespace OptionSet {
 			/** 192350001 */
 			Work_based
 		}
+		enum msdyn_salesassignmentresult {
+			/** 1 */
+			Failed,
+			/** 0 */
+			Succeeded
+		}
 		enum Need {
 			/** 2 */
 			Good_to_have,
@@ -763,22 +921,22 @@ declare namespace OptionSet {
 			/** 3 */
 			Qualified
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Lead','Quick Create'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

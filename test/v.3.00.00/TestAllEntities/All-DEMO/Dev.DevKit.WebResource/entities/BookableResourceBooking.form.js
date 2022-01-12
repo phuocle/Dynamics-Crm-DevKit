@@ -85,6 +85,8 @@ var DevKit;
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		var quickForm = {
 
 		};
@@ -98,6 +100,8 @@ var DevKit;
 		var navigation = {
 			nav_msdyn_bookableresourcebooking_msdyn_bookingjournal_Booking: {},
 			nav_msdyn_bookableresourcebooking_msdyn_bookingtimestamp_Booking: {},
+			nav_msdyn_bookableresourcebooking_msdyn_fspp_bookingnotificationcode_BookableResourceBooking: {},
+			nav_msdyn_bookableresourcebooking_msdyn_geofence_bookableresourcebookingid: {},
 			nav_msdyn_bookableresourcebooking_msdyn_purchaseorder_Booking: {},
 			nav_msdyn_bookableresourcebooking_msdyn_purchaseorderproduct_AssociateToBooking: {},
 			nav_msdyn_bookableresourcebooking_msdyn_purchaseorderreceiptproduct_AssociateToBooking: {},
@@ -115,6 +119,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormBookableResourceBooking_Information = function(executionContext, defaultWebResourceName) {
@@ -193,6 +198,8 @@ var DevKit;
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		var quickForm = {
 
 		};
@@ -220,6 +227,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormResource_Booking_Mobile_Deprecated = function(executionContext, defaultWebResourceName) {
@@ -313,6 +321,8 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		var quickForm = {
 			WorkOrderQuickView: {
 				msdyn_Address1: {},
@@ -331,10 +341,10 @@ var DevKit;
 		devKit.LoadQuickForms(formContext, quickForm);
 		form.QuickForm = quickForm;
 		var grid = {
-			PRODUCTS: {},
-			SERVICES: {},
-			SERVICE_TASKS: {},
 			msdyn_quicknotescontrol: {},
+			PRODUCTS: {},
+			SERVICE_TASKS: {},
+			SERVICES: {},
 			ServiceTasks: {},
 		};
 		devKit.LoadGrids(formContext, grid);
@@ -356,6 +366,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 })(DevKit || (DevKit = {}));
@@ -407,15 +418,14 @@ var OptionSet;
 			Active: 1,
 			Inactive: 2
 		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
-
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 	};
 })(OptionSet || (OptionSet = {}));

@@ -17,11 +17,12 @@ var DevKit;
 		var body = {
 			Body: {},
 			Data: {},
-			ExpiresOn: {},
 			IconType: {},
 			OwnerId: {},
+			Priority: {},
 			Title: {},
-			ToastType: {}
+			ToastType: {},
+			TTLInSeconds: {}
 		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
@@ -30,6 +31,8 @@ var DevKit;
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		var quickForm = {
 
 		};
@@ -42,6 +45,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 })(DevKit || (DevKit = {}));
@@ -61,28 +65,18 @@ var OptionSet;
 			High: 200000001,
 			Normal: 200000000
 		},
-		statecode : {
-			Active: 0,
-			Inactive: 1
-		},
-		statuscode : {
-			Inactive: 3,
-			Read: 2,
-			Unread: 1
-		},
 		ToastType : {
 			Hidden: 200000001,
 			Timed: 200000000
 		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
-
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 	};
 })(OptionSet || (OptionSet = {}));

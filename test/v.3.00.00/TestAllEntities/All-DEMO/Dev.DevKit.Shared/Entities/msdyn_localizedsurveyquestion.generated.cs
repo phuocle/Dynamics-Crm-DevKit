@@ -15,11 +15,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_localizedsurveyquestionOptionSets
 		/// <summary>
 		/// English(en-US) = 100000001
 		/// </summary>
-		EnglishenUS = 100000001,
+		Englishen_US = 100000001,
 		/// <summary>
 		/// French(fr-FR) = 100000002
 		/// </summary>
-		FrenchfrFR = 100000002
+		Frenchfr_FR = 100000002
 	}
 
 	public enum statecode

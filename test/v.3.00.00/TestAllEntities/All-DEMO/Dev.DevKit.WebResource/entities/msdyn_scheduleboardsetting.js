@@ -1,9 +1,13 @@
 ﻿//@ts-check
 ///<reference path="msdyn_scheduleboardsetting.d.ts" />
 "use strict";
-var formInformation = (function () {
+var formmsdyn_scheduleboardsetting_Information = (function () {
 	"use strict";
+	/** @type DevKit.Formmsdyn_scheduleboardsetting_Information */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.Formmsdyn_scheduleboardsetting_Information(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}

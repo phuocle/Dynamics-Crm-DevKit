@@ -3,143 +3,6 @@
 var DevKit;
 (function (DevKit) {
 	'use strict';
-	DevKit.FormOpportunity_AI_for_Sales = function(executionContext, defaultWebResourceName) {
-		var formContext = null;
-		if (executionContext !== undefined) {
-			if (executionContext.getFormContext === undefined) {
-				formContext = executionContext;
-			}
-			else {
-				formContext = executionContext.getFormContext();
-			}
-		}
-		var form = devKit.LoadForm(formContext);
-		var body = {
-			ActionCards: {},
-			BudgetAmount: {},
-			Competitors: {},
-			CurrentSituation: {},
-			CustomerNeed: {},
-			Description: {},
-			DiscountAmount: {},
-			DiscountPercentage: {},
-			DynamicPropertiesList_LinkControl: {},
-			FreightAmount: {},
-			IsRevenueSystemCalculated: {},
-			msdyn_OrderType: {},
-			Name: {},
-			notescontrol: {},
-			opportunityproductsGrid: {},
-			ParentAccountId: {},
-			ParentContactId: {},
-			PriceLevelId: {},
-			ProductSuggestions_LinkControl: {},
-			ProposedSolution: {},
-			PurchaseProcess: {},
-			PurchaseTimeframe: {},
-			Pursuit_Team: {},
-			quote: {},
-			Stakeholders: {},
-			TotalAmount: {},
-			TotalAmountLessFreight: {},
-			TotalLineItemAmount: {},
-			TotalTax: {},
-			TransactionCurrencyId: {}
-		};
-		devKit.LoadFields(formContext, body);
-		var tab = {
-			Product_Line_Items: {
-				Section: {
-					DynamicProperties: {},
-					opportunityproducts: {},
-					suggestionsection: {},
-					totals: {}
-				}
-			},
-			QUOTES: {
-				Section: {
-					opportunityquotes: {}
-				}
-			},
-			Summary: {
-				Section: {
-					Notes_pane: {},
-					Opportunity_details: {},
-					opportunity_information: {},
-					Social_pane: {},
-					Summary_section_6: {}
-				}
-			}
-		};
-		devKit.LoadTabs(formContext, tab);
-		body.Tab = tab;
-		form.Body = body;
-		var header = {
-			EstimatedCloseDate: {},
-			EstimatedValue: {},
-			OwnerId: {},
-			StatusCode: {}
-		};
-		devKit.LoadFields(formContext, header, "header_");
-		form.Header = header;
-		var process = devKit.LoadProcess(formContext);
-		var _Opportunity_Sales_Process = {
-			BudgetAmount: {},
-			CompleteFinalProposal: {},
-			CompleteInternalReview: {},
-			CustomerNeed: {},
-			DecisionMaker: {},
-			Description: {},
-			DevelopProposal: {},
-			FileDebrief: {},
-			FinalDecisionDate: {},
-			IdentifyCompetitors: {},
-			IdentifyCustomerContacts: {},
-			IdentifyPursuitTeam: {},
-			ParentAccountId: {},
-			ParentContactId: {},
-			PresentFinalProposal: {},
-			PresentProposal: {},
-			ProposedSolution: {},
-			PurchaseProcess: {},
-			PurchaseTimeframe: {},
-			SendThankYouNote: {}
-		}
-		devKit.LoadFields(formContext, _Opportunity_Sales_Process, "header_process_");
-		process.Opportunity_Sales_Process = _Opportunity_Sales_Process;
-		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
-		var grid = {
-			Stakeholders: {},
-			Pursuit_Team: {},
-			Competitors: {},
-			opportunityproductsGrid: {},
-			quote: {},
-		};
-		devKit.LoadGrids(formContext, grid);
-		form.Grid = grid;
-		var navigation = {
-			navActivities: {},
-			navAsyncOperations: {},
-			navAudit: {},
-			navComp: {},
-			navConnections: {},
-			navDocument: {},
-			navInvoices: {},
-			navOrders: {},
-			navProcessSessions: {},
-			navRelationship: {}
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
-		form.Utility = devKit.LoadUtility(defaultWebResourceName);
-		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
-		return form;
-	};
 	DevKit.FormOpportunity_Field_Service_Information = function(executionContext, defaultWebResourceName) {
 		var formContext = null;
 		if (executionContext !== undefined) {
@@ -257,12 +120,12 @@ var DevKit;
 		devKit.LoadQuickForms(formContext, quickForm);
 		form.QuickForm = quickForm;
 		var grid = {
-			Stakeholders: {},
-			Pursuit_Team: {},
 			Competitors: {},
 			opportunityproductsGrid: {},
 			OpportunityServicesGrid: {},
+			Pursuit_Team: {},
 			quote: {},
+			Stakeholders: {},
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
@@ -282,6 +145,163 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
+		return form;
+	};
+	DevKit.FormOpportunity = function(executionContext, defaultWebResourceName) {
+		var formContext = null;
+		if (executionContext !== undefined) {
+			if (executionContext.getFormContext === undefined) {
+				formContext = executionContext;
+			}
+			else {
+				formContext = executionContext.getFormContext();
+			}
+		}
+		var form = devKit.LoadForm(formContext);
+		var body = {
+			ActionCards: {},
+			BudgetAmount: {},
+			CadenceWidgetControl: {},
+			Competitors: {},
+			CurrentSituation: {},
+			CustomerNeed: {},
+			Description: {},
+			DiscountAmount: {},
+			DiscountPercentage: {},
+			DocumentsSubGrid: {},
+			DynamicPropertiesList_LinkControl: {},
+			FreightAmount: {},
+			IsRevenueSystemCalculated: {},
+			msdyn_forecastcategory: {},
+			msdyn_OrderType: {},
+			msdyn_WorkOrderType: {},
+			Name: {},
+			notescontrol: {},
+			opportunityproductsGrid: {},
+			ParentAccountId: {},
+			ParentContactId: {},
+			PriceLevelId: {},
+			ProductSuggestions_LinkControl: {},
+			ProposedSolution: {},
+			PurchaseProcess: {},
+			PurchaseTimeframe: {},
+			Pursuit_Team: {},
+			quote: {},
+			Stakeholders: {},
+			TotalAmount: {},
+			TotalAmountLessFreight: {},
+			TotalLineItemAmount: {},
+			TotalTax: {},
+			TransactionCurrencyId: {}
+		};
+		devKit.LoadFields(formContext, body);
+		var tab = {
+			documents_sharepoint: {
+				Section: {
+					documents_sharepoint_section: {}
+				}
+			},
+			FieldService: {
+				Section: {
+					tab_4_section_1: {},
+					tab_4_section_2: {}
+				}
+			},
+			Product_Line_Items: {
+				Section: {
+					DynamicProperties: {},
+					opportunityproducts: {},
+					suggestionsection: {},
+					totals: {}
+				}
+			},
+			QUOTES: {
+				Section: {
+					opportunityquotes: {}
+				}
+			},
+			Summary: {
+				Section: {
+					Notes_pane: {},
+					Opportunity_details: {},
+					opportunity_information: {},
+					Social_pane: {},
+					Summary_CadenceWidget: {},
+					Summary_section_6: {}
+				}
+			}
+		};
+		devKit.LoadTabs(formContext, tab);
+		body.Tab = tab;
+		form.Body = body;
+		var header = {
+			EstimatedCloseDate: {},
+			EstimatedValue: {},
+			OwnerId: {},
+			StatusCode: {}
+		};
+		devKit.LoadFields(formContext, header, "header_");
+		form.Header = header;
+		var process = devKit.LoadProcess(formContext);
+		var _Opportunity_Sales_Process = {
+			BudgetAmount: {},
+			CompleteFinalProposal: {},
+			CompleteInternalReview: {},
+			CustomerNeed: {},
+			DecisionMaker: {},
+			Description: {},
+			DevelopProposal: {},
+			FileDebrief: {},
+			FinalDecisionDate: {},
+			IdentifyCompetitors: {},
+			IdentifyCustomerContacts: {},
+			IdentifyPursuitTeam: {},
+			ParentAccountId: {},
+			ParentContactId: {},
+			PresentFinalProposal: {},
+			PresentProposal: {},
+			ProposedSolution: {},
+			PurchaseProcess: {},
+			PurchaseTimeframe: {},
+			SendThankYouNote: {}
+		}
+		devKit.LoadFields(formContext, _Opportunity_Sales_Process, "header_process_");
+		process.Opportunity_Sales_Process = _Opportunity_Sales_Process;
+		form.Process = process;
+		var quickForm = {
+
+		};
+		devKit.LoadQuickForms(formContext, quickForm);
+		form.QuickForm = quickForm;
+		var grid = {
+			Competitors: {},
+			DocumentsSubGrid: {},
+			opportunityproductsGrid: {},
+			Pursuit_Team: {},
+			quote: {},
+			Stakeholders: {},
+		};
+		devKit.LoadGrids(formContext, grid);
+		form.Grid = grid;
+		var navigation = {
+			nav_msdyn_opportunity_msdyn_workorder: {},
+			navActivities: {},
+			navAsyncOperations: {},
+			navAudit: {},
+			navComp: {},
+			navConnections: {},
+			navDocument: {},
+			navInvoices: {},
+			navOrders: {},
+			navProcessSessions: {},
+			navRelationship: {}
+		};
+		devKit.LoadNavigations(formContext, navigation);
+		form.Navigation = navigation;
+		form.Utility = devKit.LoadUtility(defaultWebResourceName);
+		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormOpportunity_Project_Information = function(executionContext, defaultWebResourceName) {
@@ -404,12 +424,12 @@ var DevKit;
 		devKit.LoadQuickForms(formContext, quickForm);
 		form.QuickForm = quickForm;
 		var grid = {
-			Stakeholders: {},
-			Pursuit_Team: {},
 			Competitors: {},
-			ProjectLinesGrid: {},
 			opportunityproductsGrid: {},
+			ProjectLinesGrid: {},
+			Pursuit_Team: {},
 			quote: {},
+			Stakeholders: {},
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
@@ -428,6 +448,147 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
+		return form;
+	};
+	DevKit.FormOpportunity_Sales_Insights = function(executionContext, defaultWebResourceName) {
+		var formContext = null;
+		if (executionContext !== undefined) {
+			if (executionContext.getFormContext === undefined) {
+				formContext = executionContext;
+			}
+			else {
+				formContext = executionContext.getFormContext();
+			}
+		}
+		var form = devKit.LoadForm(formContext);
+		var body = {
+			ActionCards: {},
+			BudgetAmount: {},
+			CadenceWidgetControl: {},
+			Competitors: {},
+			CurrentSituation: {},
+			CustomerNeed: {},
+			Description: {},
+			DiscountAmount: {},
+			DiscountPercentage: {},
+			DynamicPropertiesList_LinkControl: {},
+			FreightAmount: {},
+			IsRevenueSystemCalculated: {},
+			msdyn_OrderType: {},
+			Name: {},
+			notescontrol: {},
+			opportunityproductsGrid: {},
+			ParentAccountId: {},
+			ParentContactId: {},
+			PriceLevelId: {},
+			ProductSuggestions_LinkControl: {},
+			ProposedSolution: {},
+			PurchaseProcess: {},
+			PurchaseTimeframe: {},
+			Pursuit_Team: {},
+			quote: {},
+			Stakeholders: {},
+			TotalAmount: {},
+			TotalAmountLessFreight: {},
+			TotalLineItemAmount: {},
+			TotalTax: {},
+			TransactionCurrencyId: {}
+		};
+		devKit.LoadFields(formContext, body);
+		var tab = {
+			Product_Line_Items: {
+				Section: {
+					DynamicProperties: {},
+					opportunityproducts: {},
+					suggestionsection: {},
+					totals: {}
+				}
+			},
+			QUOTES: {
+				Section: {
+					opportunityquotes: {}
+				}
+			},
+			Summary: {
+				Section: {
+					Notes_pane: {},
+					Opportunity_details: {},
+					opportunity_information: {},
+					Social_pane: {},
+					Summary_CadenceWidget: {},
+					Summary_section_6: {}
+				}
+			}
+		};
+		devKit.LoadTabs(formContext, tab);
+		body.Tab = tab;
+		form.Body = body;
+		var header = {
+			EstimatedCloseDate: {},
+			EstimatedValue: {},
+			OwnerId: {},
+			StatusCode: {}
+		};
+		devKit.LoadFields(formContext, header, "header_");
+		form.Header = header;
+		var process = devKit.LoadProcess(formContext);
+		var _Opportunity_Sales_Process = {
+			BudgetAmount: {},
+			CompleteFinalProposal: {},
+			CompleteInternalReview: {},
+			CustomerNeed: {},
+			DecisionMaker: {},
+			Description: {},
+			DevelopProposal: {},
+			FileDebrief: {},
+			FinalDecisionDate: {},
+			IdentifyCompetitors: {},
+			IdentifyCustomerContacts: {},
+			IdentifyPursuitTeam: {},
+			ParentAccountId: {},
+			ParentContactId: {},
+			PresentFinalProposal: {},
+			PresentProposal: {},
+			ProposedSolution: {},
+			PurchaseProcess: {},
+			PurchaseTimeframe: {},
+			SendThankYouNote: {}
+		}
+		devKit.LoadFields(formContext, _Opportunity_Sales_Process, "header_process_");
+		process.Opportunity_Sales_Process = _Opportunity_Sales_Process;
+		form.Process = process;
+		var quickForm = {
+
+		};
+		devKit.LoadQuickForms(formContext, quickForm);
+		form.QuickForm = quickForm;
+		var grid = {
+			Competitors: {},
+			opportunityproductsGrid: {},
+			Pursuit_Team: {},
+			quote: {},
+			Stakeholders: {},
+		};
+		devKit.LoadGrids(formContext, grid);
+		form.Grid = grid;
+		var navigation = {
+			navActivities: {},
+			navAsyncOperations: {},
+			navAudit: {},
+			navComp: {},
+			navConnections: {},
+			navDocument: {},
+			navInvoices: {},
+			navOrders: {},
+			navProcessSessions: {},
+			navRelationship: {}
+		};
+		devKit.LoadNavigations(formContext, navigation);
+		form.Navigation = navigation;
+		form.Utility = devKit.LoadUtility(defaultWebResourceName);
+		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormOpportunity = function(executionContext, defaultWebResourceName) {
@@ -452,7 +613,7 @@ var DevKit;
 			Name: {},
 			ParentAccountId: {},
 			ParentContactId: {}
-		}
+		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
 			newOpportunity: {
@@ -462,13 +623,15 @@ var DevKit;
 					quickOpportunity_column3: {}
 				}
 			}
-		}
+		};
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
+		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
-	}
+	};
 })(DevKit || (DevKit = {}));
 /** @namespace OptionSet */
 var OptionSet;
@@ -538,7 +701,7 @@ var OptionSet;
 			Missing_Pricing_Code: 8,
 			Missing_Product: 6,
 			Missing_Product_Default_UOM: 31,
-			Missing_Product_UOM_Schedule_: 32,
+			Missing_Product_UOM_Schedule: 32,
 			Missing_Quantity: 4,
 			Missing_Standard_Cost: 16,
 			Missing_Unit_Price: 5,
@@ -596,15 +759,14 @@ var OptionSet;
 			This_Quarter: 1,
 			This_Year: 3
 		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
-
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 	};
 })(OptionSet || (OptionSet = {}));
