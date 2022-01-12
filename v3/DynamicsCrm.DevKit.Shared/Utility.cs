@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using static DynamicsCrm.DevKit.Shared.XrmHelper;
 
 namespace DynamicsCrm.DevKit.Shared
 {
@@ -145,7 +146,7 @@ namespace DynamicsCrm.DevKit.Shared
             }
         }
 
-        public static string SafeDeclareName(string declareName, string schemaName = null, AttributeMetadata attribute = null)
+        public static string SafeDeclareName(string declareName, GeneratorType generatorType, string schemaName = null, AttributeMetadata attribute = null)
         {
             declareName = SafeIdentifier(declareName);
             if (declareName.ToLower() == schemaName?.ToLower()) return declareName + "1";
@@ -156,7 +157,10 @@ namespace DynamicsCrm.DevKit.Shared
                     return declareName + "1";
             if (declareName.ToLower() == "EntityLogicalName".ToLower()) return declareName + "1";
             if (declareName.ToLower() == "EntityTypeCode".ToLower()) return declareName + "1";
-            if (declareName.ToLower() == "EntityName".ToLower()) return declareName + "1";
+            if (generatorType != GeneratorType.csharp)
+            {
+                if (declareName.ToLower() == "EntityName".ToLower()) return declareName + "1";
+            }
             if (declareName.ToLower() == "Entity".ToLower()) return declareName + "1";
             if (declareName.ToLower() == "Id".ToLower()) return declareName + "1";
             return declareName;

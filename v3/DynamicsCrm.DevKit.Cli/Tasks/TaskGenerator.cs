@@ -194,7 +194,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             const string NEW_LINE = "\r\n";
             const string TAB = "\t";
             var code = string.Empty;
-            var @class = Utility.SafeDeclareName(entityMetadata.SchemaName);
+            var @class = Utility.SafeDeclareName(entityMetadata.SchemaName, GeneratorType.csharp);
             code += $"namespace {@namespace}{NEW_LINE}";
             code += $"{{{NEW_LINE}";
             code += $"{TAB}public partial class {@class}{NEW_LINE}";

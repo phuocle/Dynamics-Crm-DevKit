@@ -51,7 +51,7 @@ namespace DynamicsCrm.DevKit.Shared
             {
                 if (XrmHelper.IsOptionSet(attribute))
                 {
-                    var attributeSchemaName = Utility.SafeDeclareName(attribute.SchemaName, EntityMetadata.SchemaName);
+                    var attributeSchemaName = Utility.SafeDeclareName(attribute.SchemaName, GeneratorType.jsform, EntityMetadata.SchemaName);
                     var values = attribute.OptionSetValues();
                     if (values.Count == 0) continue;
                     _d_ts += $"{TAB}{TAB}enum {attributeSchemaName} {{{NEW_LINE}";
@@ -118,7 +118,7 @@ namespace DynamicsCrm.DevKit.Shared
 
             foreach (var attribute in EntityMetadata?.Attributes?.OrderBy(x => x.SchemaName))
             {
-                var attributeSchemaName = Utility.SafeDeclareName(attribute.SchemaName, EntityMetadata.SchemaName, attribute);
+                var attributeSchemaName = Utility.SafeDeclareName(attribute.SchemaName, GeneratorType.jswebapi, EntityMetadata.SchemaName, attribute);
                 if (attribute.AttributeType == AttributeTypeCode.PartyList || attribute.AttributeType == AttributeTypeCode.EntityName) continue;
                 if (attribute.AttributeOf != null && attribute.AttributeTypeName != AttributeTypeDisplayName.ImageType) continue;
 
@@ -171,7 +171,7 @@ namespace DynamicsCrm.DevKit.Shared
                                         var navigation = EntityMetadata.ManyToOneRelationships.FirstOrDefault(x => x.ReferencingAttribute == attribute.LogicalName && x.ReferencedEntity == entityLogicalName);
                                         if (navigation?.ReferencingEntityNavigationPropertyName != null && navigation?.ReferencingEntityNavigationPropertyName.Length > 0)
                                         {
-                                            var temp = $"{TAB}{TAB}{Utility.SafeDeclareName(navigation?.ReferencingEntityNavigationPropertyName, EntityMetadata.SchemaName, attribute)}: DevKit.WebApi.LookupValue{Readonly};{NEW_LINE}";
+                                            var temp = $"{TAB}{TAB}{Utility.SafeDeclareName(navigation?.ReferencingEntityNavigationPropertyName, GeneratorType.jswebapi, EntityMetadata.SchemaName, attribute)}: DevKit.WebApi.LookupValue{Readonly};{NEW_LINE}";
                                             if (!_d_ts.Contains(temp))
                                             {
                                                 if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";

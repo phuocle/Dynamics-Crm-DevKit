@@ -103,7 +103,7 @@ namespace DynamicsCrm.DevKit.Shared
 
             foreach (var attribute in EntityMetadata?.Attributes?.OrderBy(x => x.SchemaName))
             {
-                var attributeSchemaName = Utility.SafeDeclareName(attribute.SchemaName, EntityMetadata.SchemaName, attribute);
+                var attributeSchemaName = Utility.SafeDeclareName(attribute.SchemaName, GeneratorType.jswebapi, EntityMetadata.SchemaName, attribute);
                 if (attribute.AttributeType == AttributeTypeCode.PartyList || attribute.AttributeType == AttributeTypeCode.EntityName) continue;
                 if (attribute.AttributeOf != null && attribute.AttributeTypeName != AttributeTypeDisplayName.ImageType) continue;
                 var a = $"a: '{attribute.LogicalName}'";
@@ -172,9 +172,9 @@ namespace DynamicsCrm.DevKit.Shared
                                 var d = $"d: '{entityLogicalName}'";
                                 if (navigation?.ReferencingEntityNavigationPropertyName != null && navigation?.ReferencingEntityNavigationPropertyName?.Length > 0)
                                 {
-                                    var temp = $"{TAB}{TAB}{TAB}{Utility.SafeDeclareName(navigation?.ReferencingEntityNavigationPropertyName, EntityMetadata.SchemaName, attribute)}: {{ {b}, {a},";
+                                    var temp = $"{TAB}{TAB}{TAB}{Utility.SafeDeclareName(navigation?.ReferencingEntityNavigationPropertyName, GeneratorType.jswebapi, EntityMetadata.SchemaName, attribute)}: {{ {b}, {a},";
                                     if (!code.Contains(temp))
-                                        code += $"{TAB}{TAB}{TAB}{Utility.SafeDeclareName(navigation?.ReferencingEntityNavigationPropertyName, EntityMetadata.SchemaName, attribute)}: {{ {b}, {a}, {c}, {d}{r} }},{NEW_LINE}";
+                                        code += $"{TAB}{TAB}{TAB}{Utility.SafeDeclareName(navigation?.ReferencingEntityNavigationPropertyName, GeneratorType.jswebapi, EntityMetadata.SchemaName, attribute)}: {{ {b}, {a}, {c}, {d}{r} }},{NEW_LINE}";
                                 }
                             }
                         }
