@@ -24,6 +24,11 @@
       "commandName": "Project",
       "commandLineArgs": "/sdklogin:\"yes\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"JS-FORM\"",
       "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.00.00\\TestAllEntities\\All-DEMO\\Dev.DevKit.WebResource\\entities"
+    },
+    "generator-form-debug": {
+      "commandName": "Project",
+      "commandLineArgs": "/sdklogin:\"yes\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"JS-FORM\"",
+      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.00.00\\TestWebResource2\\Dev.DevKit.WebResource\\entities"
     }
   }
 }

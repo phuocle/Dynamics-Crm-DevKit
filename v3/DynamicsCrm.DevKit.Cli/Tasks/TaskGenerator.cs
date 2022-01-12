@@ -142,7 +142,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var newCode = JsWebApi.GetCode(CrmServiceClient, entityMetadata, json.rootnamespace, comment, out var newDTS);
                     if (Utility.IsTheSame(oldCode, newCode))
                     {
-                        if (!Utility.IsTheSame(oldDTS, newDTS))
+                        if (oldCode?.Length > 0 && newCode?.Length > 0 && !Utility.IsTheSame(oldDTS, newDTS))
                         {
                             Utility.ForceWriteAllText(dtsFile, newDTS);
                             CliLog.WriteLineWarning(ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Updated, ConsoleColor.White, $"{schemaName}{endsWith}");
@@ -245,9 +245,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         continue;
                     }
                     var newCode = JsForm.GetCode(CrmServiceClient, entityMetadata, json.rootnamespace, comment, out var newDTS);
-                    if (newCode == String.Empty || Utility.IsTheSame(oldCode, newCode))
+                    if (Utility.IsTheSame(oldCode, newCode))
                     {
-                        if (!Utility.IsTheSame(oldDTS, newDTS))
+                        if (oldCode?.Length > 0 && newCode?.Length > 0 && !Utility.IsTheSame(oldDTS, newDTS))
                         {
                             Utility.ForceWriteAllText(dtsFile, newDTS);
                             CliLog.WriteLineWarning(ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Updated, ConsoleColor.White, $"{schemaName}{endsWith}");
