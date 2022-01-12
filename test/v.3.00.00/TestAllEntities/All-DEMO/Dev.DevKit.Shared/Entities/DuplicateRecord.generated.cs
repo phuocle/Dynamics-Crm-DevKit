@@ -134,7 +134,7 @@ namespace Dev.DevKit.Shared.Entities
 		/// <para>Duplicate Record ID</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public EntityReference DuplicateRecordId
+		public EntityReference DuplicateRecordId1
 		{
 			get { return Entity.GetAttributeValue<EntityReference>(Fields.DuplicateRecordId); }
 		}

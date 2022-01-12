@@ -173,7 +173,7 @@ namespace Dev.DevKit.Shared.Entities
 		/// <para></para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public int? SubscriptionSyncInfoId
+		public int? SubscriptionSyncInfoId1
 		{
 			get { return Entity.GetAttributeValue<int?>(Fields.SubscriptionSyncInfoId); }
 		}

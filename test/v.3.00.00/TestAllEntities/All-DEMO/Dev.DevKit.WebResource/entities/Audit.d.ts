@@ -46,7 +46,6 @@ declare namespace DevKit {
 		/** Additional information associated to the user who caused the change. */
 		UserAdditionalInfo: DevKit.WebApi.StringValue;
 		/** Unique identifier of the user who caused a change */
-		/** Unique identifier of the user who caused a change */
 		userid: DevKit.WebApi.LookupValueReadonly;
 	}
 }

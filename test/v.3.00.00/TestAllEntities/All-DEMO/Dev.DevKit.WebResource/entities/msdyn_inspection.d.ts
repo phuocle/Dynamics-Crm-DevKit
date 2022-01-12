@@ -93,8 +93,6 @@ declare namespace DevKit {
 		msdyn_inspectionId: DevKit.WebApi.GuidValue;
 		/** The name of the Inspection Template entity. */
 		msdyn_name: DevKit.WebApi.StringValue;
-		/** Unique identifier of the user who Published the record. */
-		/** Unique identifier of the user who Published the record. */
 		/** Shows the date and time when the record was Published. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
 		msdyn_publishedon_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
 		/** Status of the inspection template form */

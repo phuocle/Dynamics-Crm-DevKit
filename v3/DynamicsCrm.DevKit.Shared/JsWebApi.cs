@@ -21,6 +21,7 @@ namespace DynamicsCrm.DevKit.Shared
             EntityMetadata = entityMetadata;
             RootNamespace = rootNamespace;
             Comment = comment;
+            dts = JsTypeScriptDeclaration.GetCode(crmServiceClient, entityMetadata, rootNamespace, comment);
 
             var code = string.Empty;
             var @namespace = Utility.GetNameSpace(RootNamespace);
@@ -76,7 +77,7 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"{TAB}}};{NEW_LINE}";
             code += $"}})({@namespace} || ({@namespace} = {{}}));{NEW_LINE}";
             code += $"{Utility.GeneratorOptionSet(EntityMetadata)}";
-            dts = JsTypeScriptDeclaration.GetCode(crmServiceClient, entityMetadata, rootNamespace, comment);
+
             return code;
         }
 

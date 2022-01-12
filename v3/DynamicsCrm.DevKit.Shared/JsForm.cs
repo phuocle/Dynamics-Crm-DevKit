@@ -30,7 +30,8 @@ namespace DynamicsCrm.DevKit.Shared
             var forms = XrmHelper.GetEntityForms(crmServiceClient, entityMetadata.LogicalName);
             if (!forms.Any())
             {
-                dts = String.Empty;
+                comment.UseForm = false;
+                dts = JsTypeScriptDeclaration.GetCode(crmServiceClient, entityMetadata, rootNamespace, comment);
                 return String.Empty;
             }
             var code = string.Empty;

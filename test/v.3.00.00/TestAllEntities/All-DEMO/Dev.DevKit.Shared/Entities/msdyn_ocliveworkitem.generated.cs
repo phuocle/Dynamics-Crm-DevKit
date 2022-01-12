@@ -1352,7 +1352,7 @@ namespace Dev.DevKit.Shared.Entities
 		/// <para>ConversationId</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public string msdyn_ocliveworkitemid
+		public string msdyn_ocliveworkitemid1
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.msdyn_ocliveworkitemid); }
 			set { Entity.Attributes[Fields.msdyn_ocliveworkitemid] = value; }

@@ -15,7 +15,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_playbookactivityattributeOptionSets
 		/// <summary>
 		/// string = 1
 		/// </summary>
-		@string = 1,
+		_string = 1,
 		/// <summary>
 		/// boolean = 4
 		/// </summary>

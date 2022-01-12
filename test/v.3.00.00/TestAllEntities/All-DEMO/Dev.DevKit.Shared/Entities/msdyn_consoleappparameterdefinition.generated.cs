@@ -15,7 +15,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_consoleappparameterdefinitionOptionSe
 		/// <summary>
 		/// string = 110000000
 		/// </summary>
-		@string = 110000000,
+		_string = 110000000,
 		/// <summary>
 		/// boolean = 110000002
 		/// </summary>

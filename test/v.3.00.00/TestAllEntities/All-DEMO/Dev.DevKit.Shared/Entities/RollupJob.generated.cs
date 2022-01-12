@@ -193,7 +193,7 @@ namespace Dev.DevKit.Shared.Entities
 		/// <para></para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public long? RollupJobId
+		public long? RollupJobId1
 		{
 			get { return Entity.GetAttributeValue<long?>(Fields.RollupJobId); }
 		}
