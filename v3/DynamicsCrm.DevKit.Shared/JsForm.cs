@@ -1,12 +1,9 @@
 ﻿using DynamicsCrm.DevKit.Shared.Models;
-using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
-using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Tooling.Connector;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 
@@ -356,8 +353,6 @@ namespace DynamicsCrm.DevKit.Shared
             if (processes.Count() == 0) return string.Empty;
             foreach (var process in processes)
             {
-                //var xaml = entity.GetAttributeValue<string>("xaml");
-                //var name = entity.GetAttributeValue<string>("name");
                 var name = Utility.SafeIdentifier(process.Name);
                 code += $"\t\tvar _{name} = {{\r\n";
 
@@ -373,7 +368,7 @@ namespace DynamicsCrm.DevKit.Shared
                 foreach (var row in rows2)
                 {
                     var arr = row.DisplayName.Split(" ".ToCharArray());
-                    if (arr.Length == 1) continue;
+                    if (arr.Length == 1 || arr[1] != EntityMetadata.LogicalName) continue;
                     const string pattern = @"DataFieldName=""\w*""";
                     foreach (Match m in Regex.Matches(row.InnerText, pattern))
                     {
@@ -384,7 +379,7 @@ namespace DynamicsCrm.DevKit.Shared
                 }
 
                 fields.Sort();
-                code += GetJsForListFields(fields);
+                code += GetJsForListFields(fields, true);
                 code += $"\t\t}}\r\n";
                 code += $"\t\tdevKit.LoadFields(formContext, _{name}, \"header_process_\");\r\n";
                 code += $"\t\tprocess.{name} = _{name};\r\n";
@@ -392,34 +387,7 @@ namespace DynamicsCrm.DevKit.Shared
             return code;
         }
 
-//        private static DataCollection<Entity> GetProcess()
-//        {
-//            var fetchData = new
-//            {
-//                category = "4",
-//                statecode = "1",
-//                primaryentity = EntityMetadata.ObjectTypeCode,
-//                businessprocesstype = "0"
-//            };
-//            var fetchXml = $@"
-//<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
-//  <entity name='workflow'>
-//    <attribute name='name' />
-//    <attribute name='uniquename' />
-//    <attribute name='xaml' />
-//    <filter type='and'>
-//      <condition attribute='category' operator='eq' value='{fetchData.category /*4*/}'/>
-//      <condition attribute='statecode' operator='eq' value='{fetchData.statecode /*1*/}'/>
-//      <condition attribute='primaryentity' operator='eq' value='{fetchData.primaryentity /*4*/}'/>
-//      <condition attribute='businessprocesstype' operator='eq' value='{fetchData.businessprocesstype /*4*/}'/>
-//    </filter>
-//  </entity>
-//</fetch>";
-//            var rows = CrmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
-//            return rows.Entities;
-//        }
-
-        private static string GetJsForListFields(IEnumerable<string> list)
+        private static string GetJsForListFields(IEnumerable<string> list, bool isBPF)
         {
             var code = string.Empty;
             var previousName = string.Empty;
@@ -440,7 +408,10 @@ namespace DynamicsCrm.DevKit.Shared
                     if (name == previousName)
                     {
                         previousCount++;
-                        name = name + "_" + previousCount.ToString();
+                        if (isBPF)
+                            name = name + "_" + previousCount.ToString();
+                        else
+                            name = name + previousCount.ToString();
                     }
                     else
                     {
@@ -461,7 +432,7 @@ namespace DynamicsCrm.DevKit.Shared
                     .Descendants("cell").Descendants("control")
                            select x.Attribute("datafieldname")?.Value).ToList();
             headers.Sort();
-            var code = GetJsForListFields(headers);
+            var code = GetJsForListFields(headers, false);
             code = $"{code.TrimEnd($",{NEW_LINE}".ToCharArray())}{NEW_LINE}";
             if (code == NEW_LINE) return string.Empty;
             return code;
@@ -474,7 +445,7 @@ namespace DynamicsCrm.DevKit.Shared
                     .Descendants("cell").Descendants("control")
                            select x.Attribute("datafieldname")?.Value).ToList();
             footers.Sort();
-            var code = GetJsForListFields(footers);
+            var code = GetJsForListFields(footers, false);
             code = $"{code.TrimEnd($",{NEW_LINE}".ToCharArray())}{NEW_LINE}";
             if (code == NEW_LINE) return string.Empty;
             return code;
@@ -539,7 +510,7 @@ namespace DynamicsCrm.DevKit.Shared
                           }).Distinct();
             var list = (from field in fields where field.FieldName != null select (string)field.FieldName).ToList<string>();
             list.Sort();
-            return GetJsForListFields(list);
+            return GetJsForListFields(list, false);
         }
 
         private static string GetJsQuickViewCodeBody(string formXml)
@@ -550,7 +521,7 @@ namespace DynamicsCrm.DevKit.Shared
                     .Descendants("row").Descendants("cell").Descendants("control")
                           select (string)x.Attribute("datafieldname")).ToList();
             fields.Sort();
-            return GetJsForListFields(fields);
+            return GetJsForListFields(fields, false);
         }
     }
 }

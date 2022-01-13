@@ -3,12 +3,14 @@
 declare namespace DevKit {
 	namespace FormAccount {
 		interface Header extends DevKit.Controls.IHeader {
-			/** Type the number of employees that work at the account for use in marketing segmentation and demographic analysis. */
-			NumberOfEmployees: DevKit.Controls.Integer;
+			/** Type the company or business name. */
+			Name: DevKit.Controls.String;
+			/** Type the company or business name. */
+			Name1: DevKit.Controls.String;
+			/** Type the company or business name. */
+			Name2: DevKit.Controls.String;
 			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
 			OwnerId: DevKit.Controls.Lookup;
-			/** Type the annual revenue for the account, used as an indicator in financial performance analysis. */
-			Revenue: DevKit.Controls.Money;
 		}
 		interface tab_DETAILS_TAB_Sections {
 			BILLING: DevKit.Controls.Section;
@@ -86,7 +88,9 @@ declare namespace DevKit {
 			/** Type the company or business name. */
 			Name: DevKit.Controls.String;
 			/** Type the company or business name. */
-			Name_1: DevKit.Controls.String;
+			Name1: DevKit.Controls.String;
+			/** Type the company or business name. */
+			Name2: DevKit.Controls.String;
 			notescontrol: DevKit.Controls.Note;
 			/** Select the account's ownership structure, such as public or private. */
 			OwnershipCode: DevKit.Controls.OptionSet;
@@ -142,6 +146,10 @@ declare namespace DevKit {
 			IndustryCode: DevKit.Controls.OptionSet;
 			/** Type the company or business name. */
 			Name: DevKit.Controls.String;
+			/** Type the company or business name. */
+			Name_1: DevKit.Controls.String;
+			/** Type the company or business name. */
+			Name_2: DevKit.Controls.String;
 			/** Type the number of employees that work at the account for use in marketing segmentation and demographic analysis. */
 			NumberOfEmployees: DevKit.Controls.Integer;
 			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
@@ -288,6 +296,10 @@ declare namespace DevKit {
 			IndustryCode: DevKit.Controls.OptionSet;
 			/** Type the company or business name. */
 			Name: DevKit.Controls.String;
+			/** Type the company or business name. */
+			Name_1: DevKit.Controls.String;
+			/** Type the company or business name. */
+			Name_2: DevKit.Controls.String;
 			/** Type the number of employees that work at the account for use in marketing segmentation and demographic analysis. */
 			NumberOfEmployees: DevKit.Controls.Integer;
 			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
@@ -483,6 +495,10 @@ declare namespace DevKit {
 			IndustryCode: DevKit.Controls.OptionSet;
 			/** Type the company or business name. */
 			Name: DevKit.Controls.String;
+			/** Type the company or business name. */
+			Name_1: DevKit.Controls.String;
+			/** Type the company or business name. */
+			Name_2: DevKit.Controls.String;
 			/** Type the number of employees that work at the account for use in marketing segmentation and demographic analysis. */
 			NumberOfEmployees: DevKit.Controls.Integer;
 			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */

@@ -2608,7 +2608,9 @@ declare namespace DevKit {
         /** Define a relationship object to display the related records on the form. */
         relationship?: DevKit.PageInputEntityRecordRelationship,
         /** ID of the selected stage in business process instance. */
-        selectedStageId?: string
+        selectedStageId?: string,
+        /** Sets the focus on the tab of the form. */
+        tabName?: string
     }
     interface PageInputDashboard {
         /** Specify "dashboard" */

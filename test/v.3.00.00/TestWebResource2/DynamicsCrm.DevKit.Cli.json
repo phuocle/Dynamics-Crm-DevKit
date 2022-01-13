@@ -115,7 +115,7 @@
       "rootnamespace": "DevKit",
       "rootfolder": "",
       "type": "JsForm",
-      "entities": "folder",
+      "entities": "account,contact",
       "debug": "yes"
     },
     {

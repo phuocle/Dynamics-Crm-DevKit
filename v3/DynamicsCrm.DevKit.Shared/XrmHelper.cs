@@ -315,14 +315,15 @@ namespace DynamicsCrm.DevKit.Shared
             }).ToList();
         }
 
-        public static List<ProcessForm> GetEntityProcessForm(CrmServiceClient crmServiceClient, int? objectTypeCode)
+        public static List<ProcessForm> GetEntityProcessForm(CrmServiceClient crmServiceClient, int? objectTypeCode, string logicalName)
         {
             var fetchData = new
             {
                 category = "4",
                 statecode = "1",
+                businessprocesstype = "0",
+                xaml = $"%: {logicalName}%",
                 primaryentity = objectTypeCode ?? -1,
-                businessprocesstype = "0"
             };
             var fetchXml = $@"
 <fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
@@ -332,17 +333,20 @@ namespace DynamicsCrm.DevKit.Shared
     <attribute name='xaml' />
     <attribute name='primaryentity' />
     <filter type='and'>
-      <condition attribute='category' operator='eq' value='{fetchData.category /*4*/}'/>
-      <condition attribute='statecode' operator='eq' value='{fetchData.statecode /*1*/}'/>
-      <condition attribute='primaryentity' operator='eq' value='{fetchData.primaryentity /*4*/}'/>
-      <condition attribute='businessprocesstype' operator='eq' value='{fetchData.businessprocesstype /*4*/}'/>
+      <condition attribute='category' operator='eq' value='{fetchData.category/*4*/}'/>
+      <condition attribute='statecode' operator='eq' value='{fetchData.statecode/*1*/}'/>
+      <condition attribute='businessprocesstype' operator='eq' value='{fetchData.businessprocesstype/*0*/}'/>
+      <filter type='or'>
+        <condition attribute='xaml' operator='like' value='{fetchData.xaml/*%: contact%*/}'/>
+        <condition attribute='primaryentity' operator='eq' value='{fetchData.primaryentity/*2*/}'/>
+      </filter>
     </filter>
   </entity>
 </fetch>";
             var rows = crmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
             return rows.Entities.Select(x => new ProcessForm
             {
-                EntityLogicalName = x.GetAttributeValue<string>("primaryentity"),
+                EntityLogicalName = logicalName,
                 Name = x.GetAttributeValue<string>("name"),
                 xaml = x.GetAttributeValue<string>("xaml")
             }).ToList();

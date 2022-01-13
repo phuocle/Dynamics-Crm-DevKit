@@ -8,11 +8,19 @@ var formAccount = (function () {
 	async function onLoad(executionContext) {
 		form = new DevKit.FormAccount(executionContext);
 		debugger;
+
 		form.Body.Name.Disabled = true;
-		form.Body.Name_1.Disabled = true;
-	}
-	async function ParentAccountIdAddOnChange(executionContext) {
-		//do the code add on change ...
+		form.Body.Name1.Label = "ABC";
+		form.Body.Name2.Disabled = true;
+
+		form.Header.Name.Disabled = true;
+		form.Header.Name1.Label = "ABC";
+		form.Header.Name2.Disabled = true;
+
+		form.Process.BPF_Account.Name.Disabled = true;
+		form.Process.BPF_Account.Name_1.Label = "ABC";
+		form.Process.BPF_Account.Name_2.Disabled = true;
+
 	}
 	async function onSave(executionContext) {
 	}

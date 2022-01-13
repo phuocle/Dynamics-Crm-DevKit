@@ -63,8 +63,13 @@
       <DependentUpon>Account.js</DependentUpon>
     </Content>
     <Content Include="entities\Account.js" />
+    <Content Include="entities\Contact.form.js">
+      <DependentUpon>Contact.js</DependentUpon>
+    </Content>
+    <Content Include="entities\Contact.js" />
     <Content Include="lib\devkit.js" />
     <Content Include="entities\devkit.d.ts" />
+    <Content Include="process.xml" />
     <Content Include="test\requirejsConfig.js" />
     <Content Include="test\XrmEnum.js" />
     <None Include="entities\generator.form.bat" />
@@ -85,6 +90,9 @@
   <ItemGroup>
     <TypeScriptCompile Include="entities\Account.d.ts">
       <DependentUpon>Account.js</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="entities\Contact.d.ts">
+      <DependentUpon>Contact.js</DependentUpon>
     </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>

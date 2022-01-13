@@ -505,7 +505,7 @@ namespace DynamicsCrm.DevKit.Shared
                 foreach (var row in rows2)
                 {
                     var arr = row.DisplayName.Split(" ".ToCharArray());
-                    if (arr.Length == 1) continue;
+                    if (arr.Length == 1 || arr[1] != EntityMetadata.LogicalName) continue;
                     const string pattern = @"DataFieldName=""\w*""";
                     foreach (Match m in Regex.Matches(row.InnerText, pattern))
                     {
@@ -522,7 +522,7 @@ namespace DynamicsCrm.DevKit.Shared
                     }
                 }
                 fields = fields.OrderBy(f => f.Name).ToList();
-                _d_ts += Get_d_ts_ForListFields(formXml, fields);
+                _d_ts += Get_d_ts_ForListFields(formXml, fields, true);
                 _d_ts += $"\t\t}}\r\n";
                 part1 += $"\t\t\t{name}: Process{name};\r\n";
             }
@@ -693,7 +693,7 @@ namespace DynamicsCrm.DevKit.Shared
                            }).ToList();
             footers = footers.OrderBy(x => x.Name).ToList();
             if (footers.Count() == 0) return string.Empty;
-            var _d_ts = Get_d_ts_ForListFields(formXml, footers);
+            var _d_ts = Get_d_ts_ForListFields(formXml, footers, false);
             if (_d_ts.EndsWith(",\r\n")) _d_ts = _d_ts.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
             return _d_ts;
         }
@@ -770,7 +770,7 @@ namespace DynamicsCrm.DevKit.Shared
                             ControlId = x?.Attribute("uniqueid")?.Value
                         }).Distinct().ToList();
             body = body.OrderBy(x => x.Name).ToList();
-            _d_ts += Get_d_ts_ForListFields(formXml, body);
+            _d_ts += Get_d_ts_ForListFields(formXml, body, false);
             if (_d_ts.EndsWith(",\r\n")) _d_ts = _d_ts.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
             _d_ts += $"\t\t}}\r\n";
             return _d_ts;
@@ -793,12 +793,12 @@ namespace DynamicsCrm.DevKit.Shared
                            }).ToList();
             headers = headers.OrderBy(x => x.Name).ToList();
             if (headers.Count() == 0) return string.Empty;
-            var _d_ts = Get_d_ts_ForListFields(formXml, headers);
+            var _d_ts = Get_d_ts_ForListFields(formXml, headers, false);
             if (_d_ts.EndsWith(",\r\n")) _d_ts = _d_ts.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
             return _d_ts;
         }
 
-        private static string Get_d_ts_ForListFields(string formXml, List<IdName> list)
+        private static string Get_d_ts_ForListFields(string formXml, List<IdName> list, bool isBPF)
         {
             var _d_ts = string.Empty;
             var previousName = string.Empty;
@@ -817,7 +817,10 @@ namespace DynamicsCrm.DevKit.Shared
                     if (name == previousName)
                     {
                         previousCount = previousCount + 1;
-                        name = name + "_" + previousCount.ToString();
+                        if (isBPF)
+                            name = name + "_" + previousCount.ToString();
+                        else
+                            name = name + previousCount.ToString();
                     }
                     else
                     {

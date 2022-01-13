@@ -141,7 +141,7 @@ namespace DynamicsCrm.DevKit.Shared
             {
                 XrmHelper.EntitiesMetadata.AddIfNotExist(crmServiceClient, entityLogicalName);
                 var entityMetadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.LogicalName == entityLogicalName);
-                var processes = XrmHelper.GetEntityProcessForm(crmServiceClient, entityMetadata.ObjectTypeCode);
+                var processes = XrmHelper.GetEntityProcessForm(crmServiceClient, entityMetadata.ObjectTypeCode, entityLogicalName);
                 if (processes.Count > 0) XrmHelper.EntitiesProcessForm.AddRange(processes);
             }
         }
