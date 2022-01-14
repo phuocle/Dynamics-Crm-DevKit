@@ -453,9 +453,10 @@ namespace DynamicsCrm.DevKit.Shared
                     var comment = SimpleJson.DeserializeObject<CommentTypeScriptDeclaration>(json.Substring("//".Length).Replace("'", "\""));
                     if (oldComment?.JsForm?.Count >= 0)
                     {
-                        comment.UseForm = true;
+                        comment.UseForm = oldComment?.JsForm?.Count > 0;
                         comment.UseWebApi = oldComment.JsWebApi;
                     }
+
                     comment.Version = Const.Version;
                     return comment;
                 }

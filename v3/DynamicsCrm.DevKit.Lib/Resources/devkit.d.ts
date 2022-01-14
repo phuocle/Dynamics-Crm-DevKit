@@ -2632,7 +2632,7 @@ declare namespace DevKit {
         /** A dictionary object that passes extra parameters to the form. */
         data?: any,
         /** ID of the form instance to be displayed. */
-        formId: DevKit.Guid,
+        formId?: DevKit.Guid,
         /** Indicates whether the form is navigated to from a different entity using cross-entity business process flow. */
         isCrossEntityNavigate?: boolean,
         /** Indicates whether there are any offline sync errors. */
@@ -2709,6 +2709,8 @@ declare namespace DevKit {
         useQuickCreateForm?: boolean;
         /**  Width of the form window to be displayed in pixels */
         width?: number;
+        /**  Indicates whether the form is navigated to from a different table using cross-table business process flow. */
+        isCrossEntityNavigate?: boolean;
     }
     interface FormRelationship {
         /** Name of the attribute used for relationship */
@@ -2744,7 +2746,7 @@ declare namespace DevKit {
         /** Specify a value indicating how the save event was initiated */
         saveMode?: OptionSet.SaveMode;
         /** Indicate whether to use the Book or Reschedule messages rather than the Create or Update messages. This option is only applicable when used with appointment, recurring appointment, or service activity records */
-        useSchedulingEngine: boolean;
+        useSchedulingEngine?: boolean;
     }
     interface FieldNotification {
         /** A collection of objects */
