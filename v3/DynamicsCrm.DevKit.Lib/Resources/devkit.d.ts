@@ -1754,7 +1754,7 @@ declare namespace DevKit {
          * Returns an object with methods to manage the events.
          * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/executioncontext/geteventargs
          */
-        readonly EventArgs: any;
+        readonly EventArgs: DevKit.ExecutionContextEventArgs;
         /**
          * Returns a reference to the object that the event occurred on.
          * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/executioncontext/geteventsource
@@ -1785,6 +1785,42 @@ declare namespace DevKit {
         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/save-event-arguments/getsaveerrorinfo
         */
         readonly SaveErrorInfo: string;
+    }
+    interface ExecutionContextEventArgs {
+        /**
+        *  When the form OnDataLoad/OnLoad event occurs. You can gets the state of the data load. It returns an enum with the following values:
+        * - InitialLoad = 1
+        * - Save = 2
+        * - Refresh = 3
+        */
+        getDataLoadState(): 1 | 2 | 3;
+        /**
+         * When the form OnLookupTagClick event occurs. Gets the selected tag value. The value returned for the getTagValue method is a LookupValue.
+         * */
+        getTagValue(): EntityReference;
+        /**
+         * When the form OnLookupTagClick/OnSave event occurs. Cancels the save operation, but all remaining handlers for the event will still be executed.
+         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/save-event-arguments/preventdefault
+         * */
+        preventDefault(): void;
+        /**
+         * When the form OnLookupTagClick/OnSave event occurs. Returns a value indicating whether the save event has been canceled because the preventDefault method was used in this event hander or a previous event handler.
+         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/save-event-arguments/isdefaultprevented
+         * */
+        isDefaultPrevented(): boolean;
+        /**
+         * When the form OnProcessStatusChange/OnStageSelected event occurs. Gets the stage object corresponding to the event triggered. Returns the selected stage in for the OnStageSelected event and next or previous stage objects for the OnStageChange event depending on direction moved.
+         * */
+        getStage(): DevKit.ProcessStage;
+        /**
+         * When the form OnProcessStatusChange/OnStageSelected event occurs. Gets the direction of the stage advance action. It returns a string value Next or Previous.
+         * */
+        getDirection(): "Next" | "Previous";
+        /**
+         * When the form OnSave event occurs,. Returns a value indicating how the save event was initiated by the user.
+         *  @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/save-event-arguments/getsavemode
+         * */
+        getSaveMode(): OptionSet.SaveMode;
     }
     interface Utility {
         /**

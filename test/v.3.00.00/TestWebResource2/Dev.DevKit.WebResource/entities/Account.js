@@ -20,7 +20,6 @@ var formAccount = (function () {
 		form.Process.BPF_Account.Name.Disabled = true;
 		form.Process.BPF_Account.Name_1.Label = "ABC";
 		form.Process.BPF_Account.Name_2.Disabled = true;
-
 	}
 	async function onSave(executionContext) {
 	}

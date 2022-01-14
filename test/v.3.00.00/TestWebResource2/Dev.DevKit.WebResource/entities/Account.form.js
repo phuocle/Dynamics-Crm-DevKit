@@ -369,11 +369,6 @@ var DevKit;
 		devKit.LoadFields(formContext, _BPF_Account, "header_process_");
 		process.BPF_Account = _BPF_Account;
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var grid = {
 			accountactivitiesgrid: {},
 			accountContactsGrid: {},
