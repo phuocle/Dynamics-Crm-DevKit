@@ -16,6 +16,8 @@ declare namespace DevKit {
 			/** Subject associated with the email template. */
 			Subject: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormTemplate_Information extends DevKit.IForm {
 		/**
@@ -28,6 +30,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Template_Information */
 		Body: DevKit.FormTemplate_Information.Body;
+		/** The Process of form Template_Information */
+		Process: DevKit.FormTemplate_Information.Process;
 		/** The SidePanes of form Template_Information */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -62,6 +66,8 @@ declare namespace DevKit {
 			/** Title of the template. */
 			Title: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			attachmentsGrid: DevKit.Controls.Grid;
 		}
@@ -79,6 +85,8 @@ declare namespace DevKit {
 		Body: DevKit.FormTemplate.Body;
 		/** The Header section of form Template */
 		Header: DevKit.FormTemplate.Header;
+		/** The Process of form Template */
+		Process: DevKit.FormTemplate.Process;
 		/** The Grid of form Template */
 		Grid: DevKit.FormTemplate.Grid;
 		/** The SidePanes of form Template */

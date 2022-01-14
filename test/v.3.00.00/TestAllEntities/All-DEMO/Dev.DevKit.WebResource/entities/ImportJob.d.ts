@@ -10,6 +10,8 @@ declare namespace DevKit {
 			/** Unique identifier of the solution. */
 			SolutionName: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormImportJob_Information extends DevKit.IForm {
 		/**
@@ -22,6 +24,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form ImportJob_Information */
 		Body: DevKit.FormImportJob_Information.Body;
+		/** The Process of form ImportJob_Information */
+		Process: DevKit.FormImportJob_Information.Process;
 		/** The SidePanes of form ImportJob_Information */
 		SidePanes: DevKit.SidePanes;
 	}

@@ -84,6 +84,8 @@ declare namespace DevKit {
 			navParentGroups: DevKit.Controls.NavigationItem,
 			navResourceCategories: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			BookableResourceCharacteristics: DevKit.Controls.Grid;
 			CATEGORYASSOCIATIONS: DevKit.Controls.Grid;
@@ -104,6 +106,8 @@ declare namespace DevKit {
 		Body: DevKit.FormBookable_Resource_Mobile.Body;
 		/** The Navigation of form Bookable_Resource_Mobile */
 		Navigation: DevKit.FormBookable_Resource_Mobile.Navigation;
+		/** The Process of form Bookable_Resource_Mobile */
+		Process: DevKit.FormBookable_Resource_Mobile.Process;
 		/** The Grid of form Bookable_Resource_Mobile */
 		Grid: DevKit.FormBookable_Resource_Mobile.Grid;
 		/** The SidePanes of form Bookable_Resource_Mobile */
@@ -216,7 +220,7 @@ declare namespace DevKit {
 			/** Select the user who represents this resource. */
 			UserId: DevKit.Controls.Lookup;
 			/** Select the user who represents this resource. */
-			UserId_1: DevKit.Controls.Lookup;
+			UserId1: DevKit.Controls.Lookup;
 		}
 		interface Navigation {
 			nav_msdyn_bookableresource_account_PreferredResource: DevKit.Controls.NavigationItem,
@@ -259,6 +263,8 @@ declare namespace DevKit {
 			navResourceOneAssociation: DevKit.Controls.NavigationItem,
 			navResourceTwoAssociation: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			BookableResourceCharacteristics: DevKit.Controls.Grid;
 			CATEGORYASSOCIATIONS: DevKit.Controls.Grid;
@@ -281,6 +287,8 @@ declare namespace DevKit {
 		Body: DevKit.FormBookableResource_Information.Body;
 		/** The Navigation of form BookableResource_Information */
 		Navigation: DevKit.FormBookableResource_Information.Navigation;
+		/** The Process of form BookableResource_Information */
+		Process: DevKit.FormBookableResource_Information.Process;
 		/** The Grid of form BookableResource_Information */
 		Grid: DevKit.FormBookableResource_Information.Grid;
 		/** The SidePanes of form BookableResource_Information */

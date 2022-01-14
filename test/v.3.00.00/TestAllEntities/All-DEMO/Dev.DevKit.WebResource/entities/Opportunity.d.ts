@@ -103,6 +103,34 @@ declare namespace DevKit {
 			navProcessSessions: DevKit.Controls.NavigationItem,
 			navRelationship: DevKit.Controls.NavigationItem
 		}
+		interface ProcessLead_to_Opportunity_Sales_Process {
+			/** Select whether a final proposal has been completed for the opportunity. */
+			CompleteFinalProposal: DevKit.Controls.Boolean;
+			/** Select whether an internal review has been completed for this opportunity. */
+			CompleteInternalReview: DevKit.Controls.Boolean;
+			/** Type some notes about the customer's requirements, to help the sales team identify products and services that could meet their requirements. */
+			CustomerNeed: DevKit.Controls.String;
+			/** Select whether a proposal has been developed for the opportunity. */
+			DevelopProposal: DevKit.Controls.Boolean;
+			/** Choose whether the sales team has recorded detailed notes on the proposals and the account's responses. */
+			FileDebrief: DevKit.Controls.Boolean;
+			/** Enter the date and time when the final decision of the opportunity was made. */
+			FinalDecisionDate: DevKit.Controls.Date;
+			/** Select whether information about competitors is included. */
+			IdentifyCompetitors: DevKit.Controls.Boolean;
+			/** Select whether the customer contacts for this opportunity have been identified. */
+			IdentifyCustomerContacts: DevKit.Controls.Boolean;
+			/** Choose whether you have recorded who will pursue the opportunity. */
+			IdentifyPursuitTeam: DevKit.Controls.Boolean;
+			/** Select whether the final proposal has been presented to the account. */
+			PresentFinalProposal: DevKit.Controls.Boolean;
+			/** Select whether a proposal for the opportunity has been presented to the account. */
+			PresentProposal: DevKit.Controls.Boolean;
+			/** Type notes about the proposed solution for the opportunity. */
+			ProposedSolution: DevKit.Controls.String;
+			/** Select whether a thank you note has been sent to the account for considering the proposal. */
+			SendThankYouNote: DevKit.Controls.Boolean;
+		}
 		interface ProcessOpportunity_Sales_Process {
 			/** Type a value between 0 and 1,000,000,000,000 to indicate the lead's potential available budget. */
 			BudgetAmount: DevKit.Controls.Money;
@@ -146,6 +174,7 @@ declare namespace DevKit {
 			SendThankYouNote: DevKit.Controls.Boolean;
 		}
 		interface Process extends DevKit.Controls.IProcess {
+			Lead_to_Opportunity_Sales_Process: ProcessLead_to_Opportunity_Sales_Process;
 			Opportunity_Sales_Process: ProcessOpportunity_Sales_Process;
 		}
 		interface Grid {
@@ -291,6 +320,34 @@ declare namespace DevKit {
 			navProcessSessions: DevKit.Controls.NavigationItem,
 			navRelationship: DevKit.Controls.NavigationItem
 		}
+		interface ProcessLead_to_Opportunity_Sales_Process {
+			/** Select whether a final proposal has been completed for the opportunity. */
+			CompleteFinalProposal: DevKit.Controls.Boolean;
+			/** Select whether an internal review has been completed for this opportunity. */
+			CompleteInternalReview: DevKit.Controls.Boolean;
+			/** Type some notes about the customer's requirements, to help the sales team identify products and services that could meet their requirements. */
+			CustomerNeed: DevKit.Controls.String;
+			/** Select whether a proposal has been developed for the opportunity. */
+			DevelopProposal: DevKit.Controls.Boolean;
+			/** Choose whether the sales team has recorded detailed notes on the proposals and the account's responses. */
+			FileDebrief: DevKit.Controls.Boolean;
+			/** Enter the date and time when the final decision of the opportunity was made. */
+			FinalDecisionDate: DevKit.Controls.Date;
+			/** Select whether information about competitors is included. */
+			IdentifyCompetitors: DevKit.Controls.Boolean;
+			/** Select whether the customer contacts for this opportunity have been identified. */
+			IdentifyCustomerContacts: DevKit.Controls.Boolean;
+			/** Choose whether you have recorded who will pursue the opportunity. */
+			IdentifyPursuitTeam: DevKit.Controls.Boolean;
+			/** Select whether the final proposal has been presented to the account. */
+			PresentFinalProposal: DevKit.Controls.Boolean;
+			/** Select whether a proposal for the opportunity has been presented to the account. */
+			PresentProposal: DevKit.Controls.Boolean;
+			/** Type notes about the proposed solution for the opportunity. */
+			ProposedSolution: DevKit.Controls.String;
+			/** Select whether a thank you note has been sent to the account for considering the proposal. */
+			SendThankYouNote: DevKit.Controls.Boolean;
+		}
 		interface ProcessOpportunity_Sales_Process {
 			/** Type a value between 0 and 1,000,000,000,000 to indicate the lead's potential available budget. */
 			BudgetAmount: DevKit.Controls.Money;
@@ -334,6 +391,7 @@ declare namespace DevKit {
 			SendThankYouNote: DevKit.Controls.Boolean;
 		}
 		interface Process extends DevKit.Controls.IProcess {
+			Lead_to_Opportunity_Sales_Process: ProcessLead_to_Opportunity_Sales_Process;
 			Opportunity_Sales_Process: ProcessOpportunity_Sales_Process;
 		}
 		interface Grid {
@@ -489,6 +547,34 @@ declare namespace DevKit {
 			navProcessSessions: DevKit.Controls.NavigationItem,
 			navRelationship: DevKit.Controls.NavigationItem
 		}
+		interface ProcessLead_to_Opportunity_Sales_Process {
+			/** Select whether a final proposal has been completed for the opportunity. */
+			CompleteFinalProposal: DevKit.Controls.Boolean;
+			/** Select whether an internal review has been completed for this opportunity. */
+			CompleteInternalReview: DevKit.Controls.Boolean;
+			/** Type some notes about the customer's requirements, to help the sales team identify products and services that could meet their requirements. */
+			CustomerNeed: DevKit.Controls.String;
+			/** Select whether a proposal has been developed for the opportunity. */
+			DevelopProposal: DevKit.Controls.Boolean;
+			/** Choose whether the sales team has recorded detailed notes on the proposals and the account's responses. */
+			FileDebrief: DevKit.Controls.Boolean;
+			/** Enter the date and time when the final decision of the opportunity was made. */
+			FinalDecisionDate: DevKit.Controls.Date;
+			/** Select whether information about competitors is included. */
+			IdentifyCompetitors: DevKit.Controls.Boolean;
+			/** Select whether the customer contacts for this opportunity have been identified. */
+			IdentifyCustomerContacts: DevKit.Controls.Boolean;
+			/** Choose whether you have recorded who will pursue the opportunity. */
+			IdentifyPursuitTeam: DevKit.Controls.Boolean;
+			/** Select whether the final proposal has been presented to the account. */
+			PresentFinalProposal: DevKit.Controls.Boolean;
+			/** Select whether a proposal for the opportunity has been presented to the account. */
+			PresentProposal: DevKit.Controls.Boolean;
+			/** Type notes about the proposed solution for the opportunity. */
+			ProposedSolution: DevKit.Controls.String;
+			/** Select whether a thank you note has been sent to the account for considering the proposal. */
+			SendThankYouNote: DevKit.Controls.Boolean;
+		}
 		interface ProcessOpportunity_Sales_Process {
 			/** Type a value between 0 and 1,000,000,000,000 to indicate the lead's potential available budget. */
 			BudgetAmount: DevKit.Controls.Money;
@@ -532,6 +618,7 @@ declare namespace DevKit {
 			SendThankYouNote: DevKit.Controls.Boolean;
 		}
 		interface Process extends DevKit.Controls.IProcess {
+			Lead_to_Opportunity_Sales_Process: ProcessLead_to_Opportunity_Sales_Process;
 			Opportunity_Sales_Process: ProcessOpportunity_Sales_Process;
 		}
 		interface Grid {
@@ -678,6 +765,34 @@ declare namespace DevKit {
 			navProducts: DevKit.Controls.NavigationItem,
 			navRelationship: DevKit.Controls.NavigationItem
 		}
+		interface ProcessLead_to_Opportunity_Sales_Process {
+			/** Select whether a final proposal has been completed for the opportunity. */
+			CompleteFinalProposal: DevKit.Controls.Boolean;
+			/** Select whether an internal review has been completed for this opportunity. */
+			CompleteInternalReview: DevKit.Controls.Boolean;
+			/** Type some notes about the customer's requirements, to help the sales team identify products and services that could meet their requirements. */
+			CustomerNeed: DevKit.Controls.String;
+			/** Select whether a proposal has been developed for the opportunity. */
+			DevelopProposal: DevKit.Controls.Boolean;
+			/** Choose whether the sales team has recorded detailed notes on the proposals and the account's responses. */
+			FileDebrief: DevKit.Controls.Boolean;
+			/** Enter the date and time when the final decision of the opportunity was made. */
+			FinalDecisionDate: DevKit.Controls.Date;
+			/** Select whether information about competitors is included. */
+			IdentifyCompetitors: DevKit.Controls.Boolean;
+			/** Select whether the customer contacts for this opportunity have been identified. */
+			IdentifyCustomerContacts: DevKit.Controls.Boolean;
+			/** Choose whether you have recorded who will pursue the opportunity. */
+			IdentifyPursuitTeam: DevKit.Controls.Boolean;
+			/** Select whether the final proposal has been presented to the account. */
+			PresentFinalProposal: DevKit.Controls.Boolean;
+			/** Select whether a proposal for the opportunity has been presented to the account. */
+			PresentProposal: DevKit.Controls.Boolean;
+			/** Type notes about the proposed solution for the opportunity. */
+			ProposedSolution: DevKit.Controls.String;
+			/** Select whether a thank you note has been sent to the account for considering the proposal. */
+			SendThankYouNote: DevKit.Controls.Boolean;
+		}
 		interface ProcessOpportunity_Sales_Process {
 			/** Type a value between 0 and 1,000,000,000,000 to indicate the lead's potential available budget. */
 			BudgetAmount: DevKit.Controls.Money;
@@ -721,6 +836,7 @@ declare namespace DevKit {
 			SendThankYouNote: DevKit.Controls.Boolean;
 		}
 		interface Process extends DevKit.Controls.IProcess {
+			Lead_to_Opportunity_Sales_Process: ProcessLead_to_Opportunity_Sales_Process;
 			Opportunity_Sales_Process: ProcessOpportunity_Sales_Process;
 		}
 		interface Grid {
@@ -754,7 +870,7 @@ declare namespace DevKit {
 		/** The SidePanes of form Opportunity_Project_Information */
 		SidePanes: DevKit.SidePanes;
 	}
-	namespace FormOpportunity5 {
+	namespace FormOpportunity2 {
 		interface tab_newOpportunity_Sections {
 			quickOpportunity_column1: DevKit.Controls.Section;
 			quickOpportunity_column2: DevKit.Controls.Section;
@@ -788,17 +904,17 @@ declare namespace DevKit {
 			ParentContactId: DevKit.Controls.Lookup;
 		}
 	}
-	class FormOpportunity5 extends DevKit.IForm {
+	class FormOpportunity2 extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Opportunity5 Quick Create
+		* DynamicsCrm.DevKit form Opportunity2 Quick Create
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
 		constructor(executionContext: any, defaultWebResourceName?: string);
 		/** Utility functions/methods/objects for Dynamics 365 form */
 		Utility: DevKit.Utility;
-		/** The Body section of form Opportunity5 */
-		Body: DevKit.FormOpportunity5.Body;
+		/** The Body section of form Opportunity2 */
+		Body: DevKit.FormOpportunity2.Body;
 	}
 	class OpportunityApi {
 		/**

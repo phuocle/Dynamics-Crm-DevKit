@@ -38,6 +38,8 @@ declare namespace DevKit {
 		interface Navigation {
 			nav_msdyn_msdyn_consoleapplicationnotificationtag: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			NotificationFields: DevKit.Controls.Grid;
 		}
@@ -55,6 +57,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyn_consoleapplicationnotificationtemplate_Information.Body;
 		/** The Navigation of form msdyn_consoleapplicationnotificationtemplate_Information */
 		Navigation: DevKit.Formmsdyn_consoleapplicationnotificationtemplate_Information.Navigation;
+		/** The Process of form msdyn_consoleapplicationnotificationtemplate_Information */
+		Process: DevKit.Formmsdyn_consoleapplicationnotificationtemplate_Information.Process;
 		/** The Grid of form msdyn_consoleapplicationnotificationtemplate_Information */
 		Grid: DevKit.Formmsdyn_consoleapplicationnotificationtemplate_Information.Grid;
 		/** The SidePanes of form msdyn_consoleapplicationnotificationtemplate_Information */

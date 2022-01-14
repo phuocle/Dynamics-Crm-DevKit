@@ -37,6 +37,8 @@ declare namespace DevKit {
 			/** Type the service URL for the Azure service. */
 			ServiceUri: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormAzureServiceConnection_Information extends DevKit.IForm {
 		/**
@@ -51,6 +53,8 @@ declare namespace DevKit {
 		Body: DevKit.FormAzureServiceConnection_Information.Body;
 		/** The Header section of form AzureServiceConnection_Information */
 		Header: DevKit.FormAzureServiceConnection_Information.Header;
+		/** The Process of form AzureServiceConnection_Information */
+		Process: DevKit.FormAzureServiceConnection_Information.Process;
 		/** The SidePanes of form AzureServiceConnection_Information */
 		SidePanes: DevKit.SidePanes;
 	}

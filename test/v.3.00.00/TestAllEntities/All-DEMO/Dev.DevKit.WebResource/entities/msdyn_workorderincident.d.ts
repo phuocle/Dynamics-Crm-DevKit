@@ -57,7 +57,7 @@ declare namespace DevKit {
 			/** Incident description */
 			msdyn_Description: DevKit.Controls.String;
 			/** Incident description */
-			msdyn_Description_1: DevKit.Controls.String;
+			msdyn_Description1: DevKit.Controls.String;
 			/** Shows the time estimated to resolve this incident. */
 			msdyn_EstimatedDuration: DevKit.Controls.Integer;
 			/** Workorder incident's functional location. */
@@ -91,6 +91,8 @@ declare namespace DevKit {
 			nav_msdyn_msdyn_workorderincident_msdyn_workorderservicetask_WorkOrderIncident: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			workorderproductsgrid: DevKit.Controls.Grid;
 			workorderresolutiongrid: DevKit.Controls.Grid;
@@ -113,6 +115,8 @@ declare namespace DevKit {
 		Footer: DevKit.Formmsdyn_workorderincident_Information.Footer;
 		/** The Navigation of form msdyn_workorderincident_Information */
 		Navigation: DevKit.Formmsdyn_workorderincident_Information.Navigation;
+		/** The Process of form msdyn_workorderincident_Information */
+		Process: DevKit.Formmsdyn_workorderincident_Information.Process;
 		/** The Grid of form msdyn_workorderincident_Information */
 		Grid: DevKit.Formmsdyn_workorderincident_Information.Grid;
 		/** The SidePanes of form msdyn_workorderincident_Information */
@@ -168,6 +172,8 @@ declare namespace DevKit {
 			navAsyncOperations: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			workorderproductsgrid: DevKit.Controls.Grid;
 			workorderservicesgrid: DevKit.Controls.Grid;
@@ -187,6 +193,8 @@ declare namespace DevKit {
 		Body: DevKit.FormWork_Order_Incident_Mobile.Body;
 		/** The Navigation of form Work_Order_Incident_Mobile */
 		Navigation: DevKit.FormWork_Order_Incident_Mobile.Navigation;
+		/** The Process of form Work_Order_Incident_Mobile */
+		Process: DevKit.FormWork_Order_Incident_Mobile.Process;
 		/** The Grid of form Work_Order_Incident_Mobile */
 		Grid: DevKit.FormWork_Order_Incident_Mobile.Grid;
 		/** The SidePanes of form Work_Order_Incident_Mobile */

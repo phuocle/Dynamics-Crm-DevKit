@@ -40,6 +40,8 @@ declare namespace DevKit {
 			/** Look for a queue or create a new queue. */
 			RoutedQueueId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormRule_Item extends DevKit.IForm {
 		/**
@@ -54,6 +56,8 @@ declare namespace DevKit {
 		Body: DevKit.FormRule_Item.Body;
 		/** The Header section of form Rule_Item */
 		Header: DevKit.FormRule_Item.Header;
+		/** The Process of form Rule_Item */
+		Process: DevKit.FormRule_Item.Process;
 		/** The SidePanes of form Rule_Item */
 		SidePanes: DevKit.SidePanes;
 	}

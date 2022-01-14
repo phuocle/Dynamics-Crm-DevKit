@@ -27,6 +27,8 @@ declare namespace DevKit {
 			/** Product dynamic property identifier. */
 			msdyn_PropertyId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_fieldcomputation_Information extends DevKit.IForm {
 		/**
@@ -41,6 +43,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyn_fieldcomputation_Information.Body;
 		/** The Header section of form msdyn_fieldcomputation_Information */
 		Header: DevKit.Formmsdyn_fieldcomputation_Information.Header;
+		/** The Process of form msdyn_fieldcomputation_Information */
+		Process: DevKit.Formmsdyn_fieldcomputation_Information.Process;
 		/** The SidePanes of form msdyn_fieldcomputation_Information */
 		SidePanes: DevKit.SidePanes;
 	}

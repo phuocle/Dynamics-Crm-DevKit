@@ -20,6 +20,8 @@ declare namespace DevKit {
 			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormImportMap_Information extends DevKit.IForm {
 		/**
@@ -32,6 +34,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form ImportMap_Information */
 		Body: DevKit.FormImportMap_Information.Body;
+		/** The Process of form ImportMap_Information */
+		Process: DevKit.FormImportMap_Information.Process;
 		/** The SidePanes of form ImportMap_Information */
 		SidePanes: DevKit.SidePanes;
 	}

@@ -10,6 +10,8 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formfeaturecontrolsetting_Information extends DevKit.IForm {
 		/**
@@ -22,6 +24,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form featurecontrolsetting_Information */
 		Body: DevKit.Formfeaturecontrolsetting_Information.Body;
+		/** The Process of form featurecontrolsetting_Information */
+		Process: DevKit.Formfeaturecontrolsetting_Information.Process;
 		/** The SidePanes of form featurecontrolsetting_Information */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -37,6 +41,8 @@ declare namespace DevKit {
 			/** Unique Name for the entity. */
 			UniqueName: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formfeaturecontrolsetting_Information2 extends DevKit.IForm {
 		/**
@@ -49,6 +55,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form featurecontrolsetting_Information2 */
 		Body: DevKit.Formfeaturecontrolsetting_Information2.Body;
+		/** The Process of form featurecontrolsetting_Information2 */
+		Process: DevKit.Formfeaturecontrolsetting_Information2.Process;
 		/** The SidePanes of form featurecontrolsetting_Information2 */
 		SidePanes: DevKit.SidePanes;
 	}

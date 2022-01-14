@@ -32,7 +32,7 @@ declare namespace DevKit {
 			/** Select how soon the success criteria must be met until the SLA item is considered failed and failure actions are initiated. The actual duration is based on the business hours as specified in the associated SLA record. */
 			FailureAfter: DevKit.Controls.Integer;
 			/** Select how soon the success criteria must be met until the SLA item is considered failed and failure actions are initiated. The actual duration is based on the business hours as specified in the associated SLA record. */
-			FailureAfter_1: DevKit.Controls.Integer;
+			FailureAfter1: DevKit.Controls.Integer;
 			msdyn_AdvancedPauseConfiguration: DevKit.Controls.Boolean;
 			msdyn_pauseconfigurationxml: DevKit.Controls.ActionCards;
 			/** Unique identifier for SLAKPI associated with SLA Item. */
@@ -40,15 +40,17 @@ declare namespace DevKit {
 			/** Type a descriptive name of the service level agreement (SLA) item. */
 			Name: DevKit.Controls.String;
 			/** Type a descriptive name of the service level agreement (SLA) item. */
-			Name_1: DevKit.Controls.String;
+			Name1: DevKit.Controls.String;
 			successconditioncontrol: DevKit.Controls.ActionCards;
 			/** Select how soon the success criteria must be met before warning actions are initiated. The actual duration is based on the business hours as specified in the associated SLA record. */
 			WarnAfter: DevKit.Controls.Integer;
 			/** Select how soon the success criteria must be met before warning actions are initiated. The actual duration is based on the business hours as specified in the associated SLA record. */
-			WarnAfter_1: DevKit.Controls.Integer;
+			WarnAfter1: DevKit.Controls.Integer;
 			WebResource_preview: DevKit.Controls.WebResource;
 			WebResource_slaitem_applicablewhen_notification: DevKit.Controls.WebResource;
 			WebResource_slaitem_success_notification: DevKit.Controls.WebResource;
+		}
+		interface Process extends DevKit.Controls.IProcess {
 		}
 	}
 	class FormSLAItem_Information extends DevKit.IForm {
@@ -64,6 +66,8 @@ declare namespace DevKit {
 		Body: DevKit.FormSLAItem_Information.Body;
 		/** The Header section of form SLAItem_Information */
 		Header: DevKit.FormSLAItem_Information.Header;
+		/** The Process of form SLAItem_Information */
+		Process: DevKit.FormSLAItem_Information.Process;
 		/** The SidePanes of form SLAItem_Information */
 		SidePanes: DevKit.SidePanes;
 	}

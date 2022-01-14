@@ -22,6 +22,8 @@ declare namespace DevKit {
 			/** Shows the value of the property option set item. */
 			DynamicPropertyOptionValue: DevKit.Controls.Integer;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormPropertyOptionSetItem extends DevKit.IForm {
 		/**
@@ -34,6 +36,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form PropertyOptionSetItem */
 		Body: DevKit.FormPropertyOptionSetItem.Body;
+		/** The Process of form PropertyOptionSetItem */
+		Process: DevKit.FormPropertyOptionSetItem.Process;
 		/** The SidePanes of form PropertyOptionSetItem */
 		SidePanes: DevKit.SidePanes;
 	}

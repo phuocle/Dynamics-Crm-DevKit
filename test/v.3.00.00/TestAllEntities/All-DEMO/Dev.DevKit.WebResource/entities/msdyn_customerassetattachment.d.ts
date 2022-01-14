@@ -17,6 +17,8 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_customerassetattachment_Information extends DevKit.IForm {
 		/**
@@ -29,6 +31,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_customerassetattachment_Information */
 		Body: DevKit.Formmsdyn_customerassetattachment_Information.Body;
+		/** The Process of form msdyn_customerassetattachment_Information */
+		Process: DevKit.Formmsdyn_customerassetattachment_Information.Process;
 		/** The SidePanes of form msdyn_customerassetattachment_Information */
 		SidePanes: DevKit.SidePanes;
 	}

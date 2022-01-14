@@ -55,11 +55,11 @@ declare namespace DevKit {
 			/** Inspection definition Json */
 			msdyn_JsonContent: DevKit.Controls.String;
 			/** Inspection definition Json */
-			msdyn_JsonContent_1: DevKit.Controls.String;
+			msdyn_JsonContent1: DevKit.Controls.String;
 			/** Inspection definition Json */
-			msdyn_JsonContent_2: DevKit.Controls.String;
+			msdyn_JsonContent2: DevKit.Controls.String;
 			/** Inspection definition Json */
-			msdyn_JsonContent_3: DevKit.Controls.String;
+			msdyn_JsonContent3: DevKit.Controls.String;
 			/** The name of the Inspection Definition entity. */
 			msdyn_name: DevKit.Controls.String;
 			/** Unique identifier for Inspection Template associated with InspectionDefinition. */
@@ -82,6 +82,8 @@ declare namespace DevKit {
 		interface QuickForm {
 			quick_view_inspectiondefinition_versions: quickForm_quick_view_inspectiondefinition_versions;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_inspectiondefinition_Information extends DevKit.IForm {
 		/**
@@ -100,6 +102,8 @@ declare namespace DevKit {
 		Navigation: DevKit.Formmsdyn_inspectiondefinition_Information.Navigation;
 		/** The QuickForm of form msdyn_inspectiondefinition_Information */
 		QuickForm: DevKit.Formmsdyn_inspectiondefinition_Information.QuickForm;
+		/** The Process of form msdyn_inspectiondefinition_Information */
+		Process: DevKit.Formmsdyn_inspectiondefinition_Information.Process;
 		/** The SidePanes of form msdyn_inspectiondefinition_Information */
 		SidePanes: DevKit.SidePanes;
 	}

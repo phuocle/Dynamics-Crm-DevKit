@@ -8,6 +8,8 @@ declare namespace DevKit {
 			/** The name of the custom entity. */
 			name: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formdatalakeworkspace_Information extends DevKit.IForm {
 		/**
@@ -20,6 +22,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form datalakeworkspace_Information */
 		Body: DevKit.Formdatalakeworkspace_Information.Body;
+		/** The Process of form datalakeworkspace_Information */
+		Process: DevKit.Formdatalakeworkspace_Information.Process;
 		/** The SidePanes of form datalakeworkspace_Information */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -29,6 +33,8 @@ declare namespace DevKit {
 		interface Body {
 			/** The name of the custom entity. */
 			name: DevKit.Controls.String;
+		}
+		interface Process extends DevKit.Controls.IProcess {
 		}
 	}
 	class Formdatalakeworkspace_Information2 extends DevKit.IForm {
@@ -42,6 +48,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form datalakeworkspace_Information2 */
 		Body: DevKit.Formdatalakeworkspace_Information2.Body;
+		/** The Process of form datalakeworkspace_Information2 */
+		Process: DevKit.Formdatalakeworkspace_Information2.Process;
 		/** The SidePanes of form datalakeworkspace_Information2 */
 		SidePanes: DevKit.SidePanes;
 	}

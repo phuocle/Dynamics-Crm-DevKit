@@ -12,6 +12,8 @@ declare namespace DevKit {
 			/** Contains the actual variable data. */
 			Value: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormEnvironmentVariableValue_Information extends DevKit.IForm {
 		/**
@@ -24,6 +26,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form EnvironmentVariableValue_Information */
 		Body: DevKit.FormEnvironmentVariableValue_Information.Body;
+		/** The Process of form EnvironmentVariableValue_Information */
+		Process: DevKit.FormEnvironmentVariableValue_Information.Process;
 		/** The SidePanes of form EnvironmentVariableValue_Information */
 		SidePanes: DevKit.SidePanes;
 	}

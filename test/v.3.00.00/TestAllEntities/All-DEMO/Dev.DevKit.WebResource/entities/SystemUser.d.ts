@@ -35,6 +35,8 @@ declare namespace DevKit {
 			/** Information about whether the user is enabled. */
 			IsDisabled: DevKit.Controls.Boolean;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormApplication_User extends DevKit.IForm {
 		/**
@@ -49,6 +51,8 @@ declare namespace DevKit {
 		Body: DevKit.FormApplication_User.Body;
 		/** The Footer section of form Application_User */
 		Footer: DevKit.FormApplication_User.Footer;
+		/** The Process of form Application_User */
+		Process: DevKit.FormApplication_User.Process;
 		/** The SidePanes of form Application_User */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -193,6 +197,8 @@ declare namespace DevKit {
 			navServices: DevKit.Controls.NavigationItem,
 			navTeams: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormSystemUser_Information extends DevKit.IForm {
 		/**
@@ -209,6 +215,8 @@ declare namespace DevKit {
 		Footer: DevKit.FormSystemUser_Information.Footer;
 		/** The Navigation of form SystemUser_Information */
 		Navigation: DevKit.FormSystemUser_Information.Navigation;
+		/** The Process of form SystemUser_Information */
+		Process: DevKit.FormSystemUser_Information.Process;
 		/** The SidePanes of form SystemUser_Information */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -290,13 +298,13 @@ declare namespace DevKit {
 			/** Latitude for address 1. */
 			Address1_Latitude: DevKit.Controls.Double;
 			/** Latitude for address 1. */
-			Address1_Latitude_1: DevKit.Controls.Double;
+			Address1_Latitude1: DevKit.Controls.Double;
 			/** First line for entering address 1 information. */
 			Address1_Line1: DevKit.Controls.String;
 			/** Longitude for address 1. */
 			Address1_Longitude: DevKit.Controls.Double;
 			/** Longitude for address 1. */
-			Address1_Longitude_1: DevKit.Controls.Double;
+			Address1_Longitude1: DevKit.Controls.Double;
 			/** First telephone number associated with address 1. */
 			Address1_Telephone1: DevKit.Controls.String;
 			/** Second telephone number associated with address 1. */
@@ -322,7 +330,7 @@ declare namespace DevKit {
 			/** Full name of the user. */
 			FullName: DevKit.Controls.String;
 			/** Full name of the user. */
-			FullName_1: DevKit.Controls.String;
+			FullName1: DevKit.Controls.String;
 			/** Home phone number for the user. */
 			HomePhone: DevKit.Controls.String;
 			/** Internal email address for the user. */
@@ -345,7 +353,7 @@ declare namespace DevKit {
 			/** Capacity associated with the User. */
 			msdyn_Capacity: DevKit.Controls.Integer;
 			/** Capacity associated with the User. */
-			msdyn_Capacity_1: DevKit.Controls.Integer;
+			msdyn_Capacity1: DevKit.Controls.Integer;
 			/** Unique identifier for Presence associated with User. */
 			msdyn_DefaultPresenceIdUser: DevKit.Controls.Lookup;
 			/** Unique identifier for Configuration associated with User. */
@@ -409,6 +417,8 @@ declare namespace DevKit {
 			navServices: DevKit.Controls.NavigationItem,
 			navTeams: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			BookableResources: DevKit.Controls.Grid;
 			CapacityProfilesSubgrid: DevKit.Controls.Grid;
@@ -432,6 +442,8 @@ declare namespace DevKit {
 		Footer: DevKit.FormUser.Footer;
 		/** The Navigation of form User */
 		Navigation: DevKit.FormUser.Navigation;
+		/** The Process of form User */
+		Process: DevKit.FormUser.Process;
 		/** The Grid of form User */
 		Grid: DevKit.FormUser.Grid;
 		/** The SidePanes of form User */
@@ -510,6 +522,8 @@ declare namespace DevKit {
 			navServices: DevKit.Controls.NavigationItem,
 			navTeams: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			DirectReports: DevKit.Controls.Grid;
 			TeamsSubGrid: DevKit.Controls.Grid;
@@ -530,6 +544,8 @@ declare namespace DevKit {
 		Footer: DevKit.FormUser_form_Business.Footer;
 		/** The Navigation of form User_form_Business */
 		Navigation: DevKit.FormUser_form_Business.Navigation;
+		/** The Process of form User_form_Business */
+		Process: DevKit.FormUser_form_Business.Process;
 		/** The Grid of form User_form_Business */
 		Grid: DevKit.FormUser_form_Business.Grid;
 		/** The SidePanes of form User_form_Business */
@@ -555,6 +571,8 @@ declare namespace DevKit {
 			InternalEMailAddress: DevKit.Controls.String;
 			mapcontrol: DevKit.Controls.Map;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormUser_Information_Form extends DevKit.IForm {
 		/**
@@ -567,6 +585,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form User_Information_Form */
 		Body: DevKit.FormUser_Information_Form.Body;
+		/** The Process of form User_Information_Form */
+		Process: DevKit.FormUser_Information_Form.Process;
 		/** The SidePanes of form User_Information_Form */
 		SidePanes: DevKit.SidePanes;
 	}

@@ -45,9 +45,9 @@ declare namespace DevKit {
 			/** Conversation Title */
 			msdyn_title: DevKit.Controls.String;
 			/** Conversation Title */
-			msdyn_title_1: DevKit.Controls.String;
+			msdyn_title1: DevKit.Controls.String;
 			/** Conversation Title */
-			msdyn_title_2: DevKit.Controls.String;
+			msdyn_title2: DevKit.Controls.String;
 			/** Placeholder for Transcript Control */
 			msdyn_TranscriptControl: DevKit.Controls.String;
 			/** Number of times the conversation was transferred */
@@ -69,6 +69,8 @@ declare namespace DevKit {
 			navAudit: DevKit.Controls.NavigationItem,
 			navConnections: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			SessionDetails: DevKit.Controls.Grid;
 		}
@@ -86,6 +88,8 @@ declare namespace DevKit {
 		Body: DevKit.FormConversation_Form.Body;
 		/** The Navigation of form Conversation_Form */
 		Navigation: DevKit.FormConversation_Form.Navigation;
+		/** The Process of form Conversation_Form */
+		Process: DevKit.FormConversation_Form.Process;
 		/** The Grid of form Conversation_Form */
 		Grid: DevKit.FormConversation_Form.Grid;
 		/** The SidePanes of form Conversation_Form */
@@ -158,6 +162,8 @@ declare namespace DevKit {
 			RecentCases: quickForm_RecentCases;
 			IssueSnapshot: quickForm_IssueSnapshot;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormCustomer_summary extends DevKit.IForm {
 		/**
@@ -172,6 +178,8 @@ declare namespace DevKit {
 		Body: DevKit.FormCustomer_summary.Body;
 		/** The QuickForm of form Customer_summary */
 		QuickForm: DevKit.FormCustomer_summary.QuickForm;
+		/** The Process of form Customer_summary */
+		Process: DevKit.FormCustomer_summary.Process;
 		/** The SidePanes of form Customer_summary */
 		SidePanes: DevKit.SidePanes;
 	}

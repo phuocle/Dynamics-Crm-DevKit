@@ -8,6 +8,8 @@ declare namespace DevKit {
 			/** The name for the tag */
 			msdyn_name: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			quickreplies: DevKit.Controls.Grid;
 		}
@@ -23,6 +25,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_octag_Information */
 		Body: DevKit.Formmsdyn_octag_Information.Body;
+		/** The Process of form msdyn_octag_Information */
+		Process: DevKit.Formmsdyn_octag_Information.Process;
 		/** The Grid of form msdyn_octag_Information */
 		Grid: DevKit.Formmsdyn_octag_Information.Grid;
 		/** The SidePanes of form msdyn_octag_Information */

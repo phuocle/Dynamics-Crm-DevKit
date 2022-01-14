@@ -50,6 +50,8 @@ declare namespace DevKit {
 			nav_msdyn_msdyn_invoicefrequency_quotedetail_invoicefrequency: DevKit.Controls.NavigationItem,
 			nav_msdyn_msdyn_invoicefrequency_salesorderdetail_invoicefrequency: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			InvoiceFrequencyDetails: DevKit.Controls.Grid;
 			InvoiceFrequencyDetails_1_Grid: DevKit.Controls.Grid;
@@ -69,6 +71,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyn_invoicefrequency_Project_Information.Body;
 		/** The Navigation of form msdyn_invoicefrequency_Project_Information */
 		Navigation: DevKit.Formmsdyn_invoicefrequency_Project_Information.Navigation;
+		/** The Process of form msdyn_invoicefrequency_Project_Information */
+		Process: DevKit.Formmsdyn_invoicefrequency_Project_Information.Process;
 		/** The Grid of form msdyn_invoicefrequency_Project_Information */
 		Grid: DevKit.Formmsdyn_invoicefrequency_Project_Information.Grid;
 		/** The SidePanes of form msdyn_invoicefrequency_Project_Information */

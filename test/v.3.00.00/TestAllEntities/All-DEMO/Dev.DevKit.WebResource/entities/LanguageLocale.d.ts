@@ -16,6 +16,8 @@ declare namespace DevKit {
 			/** Name */
 			Name: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormLanguageLocale extends DevKit.IForm {
 		/**
@@ -28,6 +30,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form LanguageLocale */
 		Body: DevKit.FormLanguageLocale.Body;
+		/** The Process of form LanguageLocale */
+		Process: DevKit.FormLanguageLocale.Process;
 		/** The SidePanes of form LanguageLocale */
 		SidePanes: DevKit.SidePanes;
 	}

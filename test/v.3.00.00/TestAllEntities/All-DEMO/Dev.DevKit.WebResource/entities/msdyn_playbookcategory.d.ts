@@ -10,6 +10,8 @@ declare namespace DevKit {
 			/** Type a name to identify the playbook category. */
 			msdyn_name: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_playbookcategory_Information extends DevKit.IForm {
 		/**
@@ -22,6 +24,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_playbookcategory_Information */
 		Body: DevKit.Formmsdyn_playbookcategory_Information.Body;
+		/** The Process of form msdyn_playbookcategory_Information */
+		Process: DevKit.Formmsdyn_playbookcategory_Information.Process;
 		/** The SidePanes of form msdyn_playbookcategory_Information */
 		SidePanes: DevKit.SidePanes;
 	}

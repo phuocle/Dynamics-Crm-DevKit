@@ -38,6 +38,8 @@ declare namespace DevKit {
 			/** Subject associated with the activity. */
 			Subject: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormSocial_Activity extends DevKit.IForm {
 		/**
@@ -52,6 +54,8 @@ declare namespace DevKit {
 		Body: DevKit.FormSocial_Activity.Body;
 		/** The Header section of form Social_Activity */
 		Header: DevKit.FormSocial_Activity.Header;
+		/** The Process of form Social_Activity */
+		Process: DevKit.FormSocial_Activity.Process;
 		/** The SidePanes of form Social_Activity */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -88,7 +92,7 @@ declare namespace DevKit {
 			/** For internal use only. */
 			PostedOn: DevKit.Controls.DateTime;
 			/** For internal use only. */
-			PostedOn_1: DevKit.Controls.DateTime;
+			PostedOn1: DevKit.Controls.DateTime;
 			/** Shows the author of the post on the corresponding social channel. */
 			PostFromProfileId: DevKit.Controls.Lookup;
 			/** Shows if the social post originated as a private or public message. */
@@ -100,9 +104,11 @@ declare namespace DevKit {
 			/** Shows the record that the social activity relates to. */
 			RegardingObjectId: DevKit.Controls.Lookup;
 			/** Shows the record that the social activity relates to. */
-			RegardingObjectId_1: DevKit.Controls.Lookup;
+			RegardingObjectId1: DevKit.Controls.Lookup;
 			/** Subject associated with the activity. */
 			Subject: DevKit.Controls.String;
+		}
+		interface Process extends DevKit.Controls.IProcess {
 		}
 	}
 	class FormSocial_Activity_for_Interactive_experience extends DevKit.IForm {
@@ -118,6 +124,8 @@ declare namespace DevKit {
 		Body: DevKit.FormSocial_Activity_for_Interactive_experience.Body;
 		/** The Header section of form Social_Activity_for_Interactive_experience */
 		Header: DevKit.FormSocial_Activity_for_Interactive_experience.Header;
+		/** The Process of form Social_Activity_for_Interactive_experience */
+		Process: DevKit.FormSocial_Activity_for_Interactive_experience.Process;
 		/** The SidePanes of form Social_Activity_for_Interactive_experience */
 		SidePanes: DevKit.SidePanes;
 	}

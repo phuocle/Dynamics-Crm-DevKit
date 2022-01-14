@@ -10,6 +10,8 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormEntity_link_chat_configuration extends DevKit.IForm {
 		/**
@@ -22,6 +24,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Entity_link_chat_configuration */
 		Body: DevKit.FormEntity_link_chat_configuration.Body;
+		/** The Process of form Entity_link_chat_configuration */
+		Process: DevKit.FormEntity_link_chat_configuration.Process;
 		/** The SidePanes of form Entity_link_chat_configuration */
 		SidePanes: DevKit.SidePanes;
 	}

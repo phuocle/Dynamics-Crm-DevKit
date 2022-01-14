@@ -193,6 +193,8 @@ declare namespace DevKit {
 		interface QuickForm {
 			msdyn_reconnecttimelimit: quickForm_msdyn_reconnecttimelimit;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			CustomOOOHMessages: DevKit.Controls.Grid;
 			includeDomain: DevKit.Controls.Grid;
@@ -216,6 +218,8 @@ declare namespace DevKit {
 		Header: DevKit.Formmsdyn_livechatconfig_Information.Header;
 		/** The QuickForm of form msdyn_livechatconfig_Information */
 		QuickForm: DevKit.Formmsdyn_livechatconfig_Information.QuickForm;
+		/** The Process of form msdyn_livechatconfig_Information */
+		Process: DevKit.Formmsdyn_livechatconfig_Information.Process;
 		/** The Grid of form msdyn_livechatconfig_Information */
 		Grid: DevKit.Formmsdyn_livechatconfig_Information.Grid;
 		/** The SidePanes of form msdyn_livechatconfig_Information */

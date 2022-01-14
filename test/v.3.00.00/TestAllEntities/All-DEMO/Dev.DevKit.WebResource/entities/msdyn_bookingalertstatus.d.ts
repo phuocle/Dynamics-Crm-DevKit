@@ -22,6 +22,8 @@ declare namespace DevKit {
 		interface Navigation {
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_bookingalertstatus_Information extends DevKit.IForm {
 		/**
@@ -38,6 +40,8 @@ declare namespace DevKit {
 		Footer: DevKit.Formmsdyn_bookingalertstatus_Information.Footer;
 		/** The Navigation of form msdyn_bookingalertstatus_Information */
 		Navigation: DevKit.Formmsdyn_bookingalertstatus_Information.Navigation;
+		/** The Process of form msdyn_bookingalertstatus_Information */
+		Process: DevKit.Formmsdyn_bookingalertstatus_Information.Process;
 		/** The SidePanes of form msdyn_bookingalertstatus_Information */
 		SidePanes: DevKit.SidePanes;
 	}

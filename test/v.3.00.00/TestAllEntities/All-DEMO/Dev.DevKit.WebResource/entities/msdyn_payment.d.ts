@@ -30,6 +30,8 @@ declare namespace DevKit {
 			nav_msdyn_msdyn_payment_msdyn_paymentdetail_Payment: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_payment_Information extends DevKit.IForm {
 		/**
@@ -46,6 +48,8 @@ declare namespace DevKit {
 		Footer: DevKit.Formmsdyn_payment_Information.Footer;
 		/** The Navigation of form msdyn_payment_Information */
 		Navigation: DevKit.Formmsdyn_payment_Information.Navigation;
+		/** The Process of form msdyn_payment_Information */
+		Process: DevKit.Formmsdyn_payment_Information.Process;
 		/** The SidePanes of form msdyn_payment_Information */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -102,6 +106,8 @@ declare namespace DevKit {
 			nav_msdyn_msdyn_payment_msdyn_paymentdetail_Payment: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormPayment_Mobile extends DevKit.IForm {
 		/**
@@ -116,6 +122,8 @@ declare namespace DevKit {
 		Body: DevKit.FormPayment_Mobile.Body;
 		/** The Navigation of form Payment_Mobile */
 		Navigation: DevKit.FormPayment_Mobile.Navigation;
+		/** The Process of form Payment_Mobile */
+		Process: DevKit.FormPayment_Mobile.Process;
 		/** The SidePanes of form Payment_Mobile */
 		SidePanes: DevKit.SidePanes;
 	}

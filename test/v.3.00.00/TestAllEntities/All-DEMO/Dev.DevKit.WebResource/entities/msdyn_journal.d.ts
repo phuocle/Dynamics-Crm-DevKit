@@ -39,7 +39,7 @@ declare namespace DevKit {
 			/** Bookable Resource */
 			msdyn_BookableResource: DevKit.Controls.Lookup;
 			/** Bookable Resource */
-			msdyn_BookableResource_1: DevKit.Controls.Lookup;
+			msdyn_BookableResource1: DevKit.Controls.Lookup;
 			/** Time Entry Date */
 			msdyn_Date: DevKit.Controls.Date;
 			/** The name of the custom entity. */
@@ -53,7 +53,7 @@ declare namespace DevKit {
 			/** Project */
 			msdyn_Project: DevKit.Controls.Lookup;
 			/** Project */
-			msdyn_Project_1: DevKit.Controls.Lookup;
+			msdyn_Project1: DevKit.Controls.Lookup;
 			/** Project Task */
 			msdyn_ProjectTask: DevKit.Controls.Lookup;
 			/** Resource Role */
@@ -64,6 +64,8 @@ declare namespace DevKit {
 			OwnerId: DevKit.Controls.Lookup;
 			/** Reason for the status of the Journal */
 			statuscode: DevKit.Controls.OptionSet;
+		}
+		interface Process extends DevKit.Controls.IProcess {
 		}
 		interface Grid {
 			Expenses: DevKit.Controls.Grid;
@@ -82,6 +84,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_journal_Information */
 		Body: DevKit.Formmsdyn_journal_Information.Body;
+		/** The Process of form msdyn_journal_Information */
+		Process: DevKit.Formmsdyn_journal_Information.Process;
 		/** The Grid of form msdyn_journal_Information */
 		Grid: DevKit.Formmsdyn_journal_Information.Grid;
 		/** The SidePanes of form msdyn_journal_Information */

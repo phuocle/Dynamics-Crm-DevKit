@@ -14,6 +14,8 @@ declare namespace DevKit {
 			/** Status of the UII Saved Session */
 			statecode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormUII_savedsession_Information extends DevKit.IForm {
 		/**
@@ -28,6 +30,8 @@ declare namespace DevKit {
 		Body: DevKit.FormUII_savedsession_Information.Body;
 		/** The Footer section of form UII_savedsession_Information */
 		Footer: DevKit.FormUII_savedsession_Information.Footer;
+		/** The Process of form UII_savedsession_Information */
+		Process: DevKit.FormUII_savedsession_Information.Process;
 		/** The SidePanes of form UII_savedsession_Information */
 		SidePanes: DevKit.SidePanes;
 	}

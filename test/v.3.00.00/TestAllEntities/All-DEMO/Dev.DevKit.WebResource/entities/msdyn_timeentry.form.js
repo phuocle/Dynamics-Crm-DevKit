@@ -39,16 +39,6 @@ var DevKit;
 		form.Body = body;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
 		devKit.LoadOthers(formContext, form, defaultWebResourceName);
@@ -95,16 +85,6 @@ var DevKit;
 		form.Body = body;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
 		devKit.LoadOthers(formContext, form, defaultWebResourceName);
@@ -147,11 +127,6 @@ var DevKit;
 		form.Body = body;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var navigation = {
 			nav_msdyn_msdyn_timeentry_msdyn_timeoffcalendar_timeEntry: {}
 		};
@@ -194,16 +169,6 @@ var DevKit;
 		form.Body = body;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
 		devKit.LoadOthers(formContext, form, defaultWebResourceName);
@@ -237,16 +202,6 @@ var DevKit;
 		form.Body = body;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
 		devKit.LoadOthers(formContext, form, defaultWebResourceName);
@@ -347,7 +302,6 @@ var DevKit;
 		}
 		var form = devKit.LoadForm(formContext);
 		var body = {
-
 		};
 		devKit.LoadFields(formContext, body);
 		var tab = {

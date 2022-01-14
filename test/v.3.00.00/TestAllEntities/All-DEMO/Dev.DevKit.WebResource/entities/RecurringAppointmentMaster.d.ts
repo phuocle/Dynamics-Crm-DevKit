@@ -36,6 +36,8 @@ declare namespace DevKit {
 			/** Type a short description about the objective or primary topic of the recurring appointment. */
 			Subject: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormRecurring_Appointment extends DevKit.IForm {
 		/**
@@ -50,6 +52,8 @@ declare namespace DevKit {
 		Body: DevKit.FormRecurring_Appointment.Body;
 		/** The Header section of form Recurring_Appointment */
 		Header: DevKit.FormRecurring_Appointment.Header;
+		/** The Process of form Recurring_Appointment */
+		Process: DevKit.FormRecurring_Appointment.Process;
 		/** The SidePanes of form Recurring_Appointment */
 		SidePanes: DevKit.SidePanes;
 	}

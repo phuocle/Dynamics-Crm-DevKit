@@ -111,8 +111,6 @@ declare namespace DevKit {
 			msdyn_PODate: DevKit.Controls.Date;
 			/** Warehouse where products of this PO will be received to */
 			msdyn_ReceivetoWarehouse: DevKit.Controls.Lookup;
-			/** Method of shipment by vendor */
-			msdyn_ShipVia: DevKit.Controls.Lookup;
 			/** Enter the current status of the purchase order. */
 			msdyn_SystemStatus: DevKit.Controls.OptionSet;
 			/** Enter the current status of the purchase order. */
@@ -269,8 +267,6 @@ declare namespace DevKit {
 			msdyn_PODate: DevKit.Controls.Date;
 			/** Warehouse where products of this PO will be received to */
 			msdyn_ReceivetoWarehouse: DevKit.Controls.Lookup;
-			/** Method of shipment by vendor */
-			msdyn_ShipVia: DevKit.Controls.Lookup;
 			/** Enter the current status of the purchase order. */
 			msdyn_SystemStatus: DevKit.Controls.OptionSet;
 			/** Enter the current status of the purchase order. */

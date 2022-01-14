@@ -19,6 +19,8 @@ declare namespace DevKit {
 			/** Shows the status of the partner application. */
 			StateCode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormPartner_Application_Main_Form extends DevKit.IForm {
 		/**
@@ -33,6 +35,8 @@ declare namespace DevKit {
 		Body: DevKit.FormPartner_Application_Main_Form.Body;
 		/** The Footer section of form Partner_Application_Main_Form */
 		Footer: DevKit.FormPartner_Application_Main_Form.Footer;
+		/** The Process of form Partner_Application_Main_Form */
+		Process: DevKit.FormPartner_Application_Main_Form.Process;
 		/** The SidePanes of form Partner_Application_Main_Form */
 		SidePanes: DevKit.SidePanes;
 	}

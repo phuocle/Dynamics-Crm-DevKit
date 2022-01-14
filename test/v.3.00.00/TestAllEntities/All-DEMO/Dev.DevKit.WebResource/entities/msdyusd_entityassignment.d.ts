@@ -15,6 +15,8 @@ declare namespace DevKit {
 			/** Status of the Entity Numeric Mapping */
 			statecode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyusd_entityassignment_Information extends DevKit.IForm {
 		/**
@@ -29,6 +31,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyusd_entityassignment_Information.Body;
 		/** The Footer section of form msdyusd_entityassignment_Information */
 		Footer: DevKit.Formmsdyusd_entityassignment_Information.Footer;
+		/** The Process of form msdyusd_entityassignment_Information */
+		Process: DevKit.Formmsdyusd_entityassignment_Information.Process;
 		/** The SidePanes of form msdyusd_entityassignment_Information */
 		SidePanes: DevKit.SidePanes;
 	}

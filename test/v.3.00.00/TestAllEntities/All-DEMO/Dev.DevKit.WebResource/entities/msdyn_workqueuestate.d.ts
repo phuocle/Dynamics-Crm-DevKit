@@ -8,6 +8,8 @@ declare namespace DevKit {
 			/** Name of the entity for the related workqueue record state. */
 			msdyn_primaryname: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_workqueuestate_Information extends DevKit.IForm {
 		/**
@@ -20,6 +22,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_workqueuestate_Information */
 		Body: DevKit.Formmsdyn_workqueuestate_Information.Body;
+		/** The Process of form msdyn_workqueuestate_Information */
+		Process: DevKit.Formmsdyn_workqueuestate_Information.Process;
 		/** The SidePanes of form msdyn_workqueuestate_Information */
 		SidePanes: DevKit.SidePanes;
 	}

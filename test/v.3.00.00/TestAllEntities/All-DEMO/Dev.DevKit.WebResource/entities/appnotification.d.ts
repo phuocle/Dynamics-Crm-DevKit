@@ -21,6 +21,8 @@ declare namespace DevKit {
 			/** After the specified number of seconds the notification will be deleted */
 			TTLInSeconds: DevKit.Controls.Integer;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formappnotification_Information extends DevKit.IForm {
 		/**
@@ -33,6 +35,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form appnotification_Information */
 		Body: DevKit.Formappnotification_Information.Body;
+		/** The Process of form appnotification_Information */
+		Process: DevKit.Formappnotification_Information.Process;
 		/** The SidePanes of form appnotification_Information */
 		SidePanes: DevKit.SidePanes;
 	}

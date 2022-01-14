@@ -40,6 +40,8 @@ declare namespace DevKit {
 			OwnerId: DevKit.Controls.Lookup;
 			WebResource_Disclaimer: DevKit.Controls.WebResource;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			AdditionalTabs: DevKit.Controls.Grid;
 			Agentscripts: DevKit.Controls.Grid;
@@ -56,6 +58,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_sessiontemplate_Information */
 		Body: DevKit.Formmsdyn_sessiontemplate_Information.Body;
+		/** The Process of form msdyn_sessiontemplate_Information */
+		Process: DevKit.Formmsdyn_sessiontemplate_Information.Process;
 		/** The Grid of form msdyn_sessiontemplate_Information */
 		Grid: DevKit.Formmsdyn_sessiontemplate_Information.Grid;
 		/** The SidePanes of form msdyn_sessiontemplate_Information */

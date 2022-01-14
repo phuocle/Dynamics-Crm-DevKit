@@ -40,6 +40,8 @@ declare namespace DevKit {
 			/** Status of the UII Option */
 			statecode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formuii_option_Information extends DevKit.IForm {
 		/**
@@ -54,6 +56,8 @@ declare namespace DevKit {
 		Body: DevKit.Formuii_option_Information.Body;
 		/** The Footer section of form uii_option_Information */
 		Footer: DevKit.Formuii_option_Information.Footer;
+		/** The Process of form uii_option_Information */
+		Process: DevKit.Formuii_option_Information.Process;
 		/** The SidePanes of form uii_option_Information */
 		SidePanes: DevKit.SidePanes;
 	}

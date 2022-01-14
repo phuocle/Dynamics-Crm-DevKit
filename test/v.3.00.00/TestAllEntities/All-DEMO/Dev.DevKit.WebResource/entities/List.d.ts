@@ -70,6 +70,8 @@ declare namespace DevKit {
 			/** Select whether you want the marketing list to be static or dynamic. The members in a static marketing list are unchanging. A dynamic marketing list is based on a dynamic query that retrieves the updated list of members */
 			Type: DevKit.Controls.Boolean;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			accounts: DevKit.Controls.Grid;
 			accountsUCI: DevKit.Controls.Grid;
@@ -98,6 +100,8 @@ declare namespace DevKit {
 		Body: DevKit.FormMarketing_List.Body;
 		/** The Header section of form Marketing_List */
 		Header: DevKit.FormMarketing_List.Header;
+		/** The Process of form Marketing_List */
+		Process: DevKit.FormMarketing_List.Process;
 		/** The Grid of form Marketing_List */
 		Grid: DevKit.FormMarketing_List.Grid;
 		/** The SidePanes of form Marketing_List */
@@ -167,6 +171,8 @@ declare namespace DevKit {
 			/** Select whether you want the marketing list to be static or dynamic. The members in a static marketing list are unchanging. A dynamic marketing list is based on a dynamic query that retrieves the updated list of members */
 			Type: DevKit.Controls.Boolean;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			accounts: DevKit.Controls.Grid;
 			accountsUCI: DevKit.Controls.Grid;
@@ -194,6 +200,8 @@ declare namespace DevKit {
 		Body: DevKit.FormMarketing_List_Light.Body;
 		/** The Header section of form Marketing_List_Light */
 		Header: DevKit.FormMarketing_List_Light.Header;
+		/** The Process of form Marketing_List_Light */
+		Process: DevKit.FormMarketing_List_Light.Process;
 		/** The Grid of form Marketing_List_Light */
 		Grid: DevKit.FormMarketing_List_Light.Grid;
 		/** The SidePanes of form Marketing_List_Light */

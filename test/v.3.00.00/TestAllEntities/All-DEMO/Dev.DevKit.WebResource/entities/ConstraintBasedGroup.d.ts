@@ -20,6 +20,8 @@ declare namespace DevKit {
 			/** Type a title or name that describes the resource group. */
 			Name: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			Resources: DevKit.Controls.Grid;
 		}
@@ -35,6 +37,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form ConstraintBasedGroup_Information */
 		Body: DevKit.FormConstraintBasedGroup_Information.Body;
+		/** The Process of form ConstraintBasedGroup_Information */
+		Process: DevKit.FormConstraintBasedGroup_Information.Process;
 		/** The Grid of form ConstraintBasedGroup_Information */
 		Grid: DevKit.FormConstraintBasedGroup_Information.Grid;
 		/** The SidePanes of form ConstraintBasedGroup_Information */

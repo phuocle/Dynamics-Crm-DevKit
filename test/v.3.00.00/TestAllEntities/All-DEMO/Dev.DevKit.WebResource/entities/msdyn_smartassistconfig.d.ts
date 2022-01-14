@@ -30,6 +30,8 @@ declare namespace DevKit {
 			/** Unique Name for the entity. */
 			msdyn_UniqueName: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_smartassistconfig_Information extends DevKit.IForm {
 		/**
@@ -42,6 +44,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_smartassistconfig_Information */
 		Body: DevKit.Formmsdyn_smartassistconfig_Information.Body;
+		/** The Process of form msdyn_smartassistconfig_Information */
+		Process: DevKit.Formmsdyn_smartassistconfig_Information.Process;
 		/** The SidePanes of form msdyn_smartassistconfig_Information */
 		SidePanes: DevKit.SidePanes;
 	}

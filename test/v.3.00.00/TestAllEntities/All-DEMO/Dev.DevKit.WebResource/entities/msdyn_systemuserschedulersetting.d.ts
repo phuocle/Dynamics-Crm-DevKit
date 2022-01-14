@@ -21,6 +21,8 @@ declare namespace DevKit {
 		interface Navigation {
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_systemuserschedulersetting_Information extends DevKit.IForm {
 		/**
@@ -37,6 +39,8 @@ declare namespace DevKit {
 		Footer: DevKit.Formmsdyn_systemuserschedulersetting_Information.Footer;
 		/** The Navigation of form msdyn_systemuserschedulersetting_Information */
 		Navigation: DevKit.Formmsdyn_systemuserschedulersetting_Information.Navigation;
+		/** The Process of form msdyn_systemuserschedulersetting_Information */
+		Process: DevKit.Formmsdyn_systemuserschedulersetting_Information.Process;
 		/** The SidePanes of form msdyn_systemuserschedulersetting_Information */
 		SidePanes: DevKit.SidePanes;
 	}

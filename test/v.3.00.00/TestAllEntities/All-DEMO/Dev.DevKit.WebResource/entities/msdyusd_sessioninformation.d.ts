@@ -22,6 +22,8 @@ declare namespace DevKit {
 			/** Status of the Session Information */
 			statecode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyusd_sessioninformation_Information extends DevKit.IForm {
 		/**
@@ -36,6 +38,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyusd_sessioninformation_Information.Body;
 		/** The Footer section of form msdyusd_sessioninformation_Information */
 		Footer: DevKit.Formmsdyusd_sessioninformation_Information.Footer;
+		/** The Process of form msdyusd_sessioninformation_Information */
+		Process: DevKit.Formmsdyusd_sessioninformation_Information.Process;
 		/** The SidePanes of form msdyusd_sessioninformation_Information */
 		SidePanes: DevKit.SidePanes;
 	}

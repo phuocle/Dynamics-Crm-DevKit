@@ -19,7 +19,7 @@ var DevKit;
 			msdyn_EstimatedDuration: {},
 			msdyn_IncidentType: {},
 			msdyn_Inspection: {},
-			msdyn_Inspection_1: {},
+			msdyn_Inspection1: {},
 			msdyn_InspectionEnabled: {},
 			msdyn_LineOrder: {},
 			msdyn_name: {},
@@ -40,11 +40,6 @@ var DevKit;
 		form.Footer = footer;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var navigation = {
 			navProcessSessions: {}
 		};

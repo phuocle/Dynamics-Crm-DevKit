@@ -85,6 +85,8 @@ declare namespace DevKit {
 			navAudit: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			receiptsgrid: DevKit.Controls.Grid;
 			rmaproductsgrid: DevKit.Controls.Grid;
@@ -103,6 +105,8 @@ declare namespace DevKit {
 		Body: DevKit.FormRMA.Body;
 		/** The Navigation of form RMA */
 		Navigation: DevKit.FormRMA.Navigation;
+		/** The Process of form RMA */
+		Process: DevKit.FormRMA.Process;
 		/** The Grid of form RMA */
 		Grid: DevKit.FormRMA.Grid;
 		/** The SidePanes of form RMA */

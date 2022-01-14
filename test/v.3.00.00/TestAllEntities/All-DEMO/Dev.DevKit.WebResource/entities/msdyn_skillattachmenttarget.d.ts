@@ -10,6 +10,8 @@ declare namespace DevKit {
 			/** Unique identifier for Rating Value associated with Skill Attachment Target. */
 			msdyn_ratingvalueid: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_skillattachmenttarget_Information extends DevKit.IForm {
 		/**
@@ -22,6 +24,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_skillattachmenttarget_Information */
 		Body: DevKit.Formmsdyn_skillattachmenttarget_Information.Body;
+		/** The Process of form msdyn_skillattachmenttarget_Information */
+		Process: DevKit.Formmsdyn_skillattachmenttarget_Information.Process;
 		/** The SidePanes of form msdyn_skillattachmenttarget_Information */
 		SidePanes: DevKit.SidePanes;
 	}

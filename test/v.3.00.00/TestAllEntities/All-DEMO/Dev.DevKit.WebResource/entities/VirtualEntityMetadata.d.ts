@@ -18,6 +18,8 @@ declare namespace DevKit {
 			/** The name of the  settings. */
 			Name: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormVirtualEntityMetadata_Information extends DevKit.IForm {
 		/**
@@ -30,6 +32,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form VirtualEntityMetadata_Information */
 		Body: DevKit.FormVirtualEntityMetadata_Information.Body;
+		/** The Process of form VirtualEntityMetadata_Information */
+		Process: DevKit.FormVirtualEntityMetadata_Information.Process;
 		/** The SidePanes of form VirtualEntityMetadata_Information */
 		SidePanes: DevKit.SidePanes;
 	}

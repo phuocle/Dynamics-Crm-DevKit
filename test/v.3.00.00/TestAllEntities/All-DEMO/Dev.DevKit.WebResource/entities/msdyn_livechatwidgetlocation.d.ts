@@ -21,6 +21,8 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_livechatwidgetlocation_Information extends DevKit.IForm {
 		/**
@@ -33,6 +35,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_livechatwidgetlocation_Information */
 		Body: DevKit.Formmsdyn_livechatwidgetlocation_Information.Body;
+		/** The Process of form msdyn_livechatwidgetlocation_Information */
+		Process: DevKit.Formmsdyn_livechatwidgetlocation_Information.Process;
 		/** The SidePanes of form msdyn_livechatwidgetlocation_Information */
 		SidePanes: DevKit.SidePanes;
 	}

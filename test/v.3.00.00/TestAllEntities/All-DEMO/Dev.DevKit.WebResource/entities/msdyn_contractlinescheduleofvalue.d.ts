@@ -37,6 +37,8 @@ declare namespace DevKit {
 			msdyn_projecttask: DevKit.Controls.Lookup;
 			msdyn_tax: DevKit.Controls.Money;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_contractlinescheduleofvalue_Project_Information extends DevKit.IForm {
 		/**
@@ -51,6 +53,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyn_contractlinescheduleofvalue_Project_Information.Body;
 		/** The Header section of form msdyn_contractlinescheduleofvalue_Project_Information */
 		Header: DevKit.Formmsdyn_contractlinescheduleofvalue_Project_Information.Header;
+		/** The Process of form msdyn_contractlinescheduleofvalue_Project_Information */
+		Process: DevKit.Formmsdyn_contractlinescheduleofvalue_Project_Information.Process;
 		/** The SidePanes of form msdyn_contractlinescheduleofvalue_Project_Information */
 		SidePanes: DevKit.SidePanes;
 	}

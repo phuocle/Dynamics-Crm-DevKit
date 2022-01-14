@@ -71,6 +71,8 @@ declare namespace DevKit {
 			Requirement_Competencies: quickForm_Requirement_Competencies;
 			Requirement_Others: quickForm_Requirement_Others;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_resourcerequest_Information extends DevKit.IForm {
 		/**
@@ -87,6 +89,8 @@ declare namespace DevKit {
 		Navigation: DevKit.Formmsdyn_resourcerequest_Information.Navigation;
 		/** The QuickForm of form msdyn_resourcerequest_Information */
 		QuickForm: DevKit.Formmsdyn_resourcerequest_Information.QuickForm;
+		/** The Process of form msdyn_resourcerequest_Information */
+		Process: DevKit.Formmsdyn_resourcerequest_Information.Process;
 		/** The SidePanes of form msdyn_resourcerequest_Information */
 		SidePanes: DevKit.SidePanes;
 	}

@@ -29,9 +29,9 @@ var DevKit;
 			msdyn_EndDateTime: {},
 			msdyn_externaldescription: {},
 			msdyn_InvoiceLineId: {},
-			msdyn_InvoiceLineId_1: {},
+			msdyn_InvoiceLineId1: {},
 			msdyn_OriginalInvoiceLineDetail: {},
-			msdyn_OriginalInvoiceLineDetail_1: {},
+			msdyn_OriginalInvoiceLineDetail1: {},
 			msdyn_Price: {},
 			msdyn_PriceList: {},
 			msdyn_Project: {},
@@ -86,11 +86,6 @@ var DevKit;
 		};
 		devKit.LoadQuickForms(formContext, quickForm);
 		form.QuickForm = quickForm;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
 		devKit.LoadOthers(formContext, form, defaultWebResourceName);

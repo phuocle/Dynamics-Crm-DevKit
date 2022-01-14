@@ -12,6 +12,8 @@ declare namespace DevKit {
 			/** Information about the Day */
 			ViewDate: DevKit.Controls.Date;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormKnowledgeArticleViews extends DevKit.IForm {
 		/**
@@ -24,6 +26,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form KnowledgeArticleViews */
 		Body: DevKit.FormKnowledgeArticleViews.Body;
+		/** The Process of form KnowledgeArticleViews */
+		Process: DevKit.FormKnowledgeArticleViews.Process;
 		/** The SidePanes of form KnowledgeArticleViews */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -38,6 +42,8 @@ declare namespace DevKit {
 			/** Information about the Day */
 			ViewDate: DevKit.Controls.Date;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormKnowledgeArticleViews_MainInteractionCentric extends DevKit.IForm {
 		/**
@@ -50,6 +56,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form KnowledgeArticleViews_MainInteractionCentric */
 		Body: DevKit.FormKnowledgeArticleViews_MainInteractionCentric.Body;
+		/** The Process of form KnowledgeArticleViews_MainInteractionCentric */
+		Process: DevKit.FormKnowledgeArticleViews_MainInteractionCentric.Process;
 		/** The SidePanes of form KnowledgeArticleViews_MainInteractionCentric */
 		SidePanes: DevKit.SidePanes;
 	}

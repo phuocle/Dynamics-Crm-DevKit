@@ -64,6 +64,8 @@ declare namespace DevKit {
 			/** Shows whether the mailbox is active or inactive. */
 			StateCode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormMailbox_Information extends DevKit.IForm {
 		/**
@@ -78,6 +80,8 @@ declare namespace DevKit {
 		Body: DevKit.FormMailbox_Information.Body;
 		/** The Footer section of form Mailbox_Information */
 		Footer: DevKit.FormMailbox_Information.Footer;
+		/** The Process of form Mailbox_Information */
+		Process: DevKit.FormMailbox_Information.Process;
 		/** The SidePanes of form Mailbox_Information */
 		SidePanes: DevKit.SidePanes;
 	}

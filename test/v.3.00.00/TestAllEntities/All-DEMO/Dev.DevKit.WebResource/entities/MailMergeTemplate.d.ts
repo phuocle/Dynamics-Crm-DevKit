@@ -29,6 +29,8 @@ declare namespace DevKit {
 			/** Type of mail merge template. */
 			TemplateTypeCode: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormMailMergeTemplate_Information extends DevKit.IForm {
 		/**
@@ -41,6 +43,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form MailMergeTemplate_Information */
 		Body: DevKit.FormMailMergeTemplate_Information.Body;
+		/** The Process of form MailMergeTemplate_Information */
+		Process: DevKit.FormMailMergeTemplate_Information.Process;
 		/** The SidePanes of form MailMergeTemplate_Information */
 		SidePanes: DevKit.SidePanes;
 	}

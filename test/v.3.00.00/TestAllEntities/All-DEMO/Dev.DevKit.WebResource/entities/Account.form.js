@@ -19,17 +19,17 @@ var DevKit;
 			Address1_Composite: {},
 			Address1_FreightTermsCode: {},
 			Address1_Latitude: {},
-			Address1_Latitude_1: {},
+			Address1_Latitude1: {},
 			Address1_Line1: {},
 			Address1_Longitude: {},
-			Address1_Longitude_1: {},
+			Address1_Longitude1: {},
 			Address1_ShippingMethodCode: {},
 			Contacts: {},
 			CreditLimit: {},
 			CreditOnHold: {},
 			CustomerTypeCode: {},
 			DefaultPriceLevelId: {},
-			DefaultPriceLevelId_1: {},
+			DefaultPriceLevelId1: {},
 			Description: {},
 			DocumentsSubGrid: {},
 			DoNotBulkEMail: {},
@@ -52,7 +52,7 @@ var DevKit;
 			msdyusd_Facebook: {},
 			msdyusd_Twitter: {},
 			Name: {},
-			Name_1: {},
+			Name1: {},
 			notescontrol: {},
 			OwnershipCode: {},
 			ParentAccountId: {},
@@ -60,7 +60,7 @@ var DevKit;
 			PreferredContactMethodCode: {},
 			PriceListsGrid: {},
 			PrimaryContactId: {},
-			PrimaryContactId_1: {},
+			PrimaryContactId1: {},
 			SIC: {},
 			Telephone1: {},
 			TickerSymbol: {},
@@ -211,7 +211,7 @@ var DevKit;
 			msdyn_ServiceTerritory: {},
 			msdyn_WorkOrderInstructions: {},
 			Name: {},
-			Name_1: {},
+			Name1: {},
 			notescontrol: {},
 			OwnerId: {},
 			ParentAccountId: {},
@@ -248,11 +248,6 @@ var DevKit;
 		form.Body = body;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var grid = {
 			ChildAccounts: {},
 			Contacts: {},
@@ -350,7 +345,7 @@ var DevKit;
 			PaymentTermsCode: {},
 			PreferredContactMethodCode: {},
 			PrimaryContactId: {},
-			PrimaryContactId_1: {},
+			PrimaryContactId1: {},
 			SIC: {},
 			subgrid_Entitlement: {},
 			Telephone1: {},
@@ -465,7 +460,7 @@ var DevKit;
 			PaymentTermsCode: {},
 			PreferredContactMethodCode: {},
 			PrimaryContactId: {},
-			PrimaryContactId_1: {},
+			PrimaryContactId1: {},
 			RelatedCases: {},
 			SIC: {},
 			Telephone1: {},
@@ -584,7 +579,7 @@ var DevKit;
 			PaymentTermsCode: {},
 			PreferredContactMethodCode: {},
 			PrimaryContactId: {},
-			PrimaryContactId_1: {},
+			PrimaryContactId1: {},
 			SIC: {},
 			Telephone1: {},
 			TickerSymbol: {},
@@ -693,16 +688,6 @@ var DevKit;
 		form.Header = header;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
 		devKit.LoadOthers(formContext, form, defaultWebResourceName);

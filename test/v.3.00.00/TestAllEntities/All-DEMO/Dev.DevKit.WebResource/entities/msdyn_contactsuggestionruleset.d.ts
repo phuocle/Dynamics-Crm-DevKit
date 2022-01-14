@@ -10,6 +10,8 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormContact_suggestion_ruleset extends DevKit.IForm {
 		/**
@@ -22,6 +24,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Contact_suggestion_ruleset */
 		Body: DevKit.FormContact_suggestion_ruleset.Body;
+		/** The Process of form Contact_suggestion_ruleset */
+		Process: DevKit.FormContact_suggestion_ruleset.Process;
 		/** The SidePanes of form Contact_suggestion_ruleset */
 		SidePanes: DevKit.SidePanes;
 	}

@@ -10,6 +10,8 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_msteamssetting_Information extends DevKit.IForm {
 		/**
@@ -22,6 +24,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_msteamssetting_Information */
 		Body: DevKit.Formmsdyn_msteamssetting_Information.Body;
+		/** The Process of form msdyn_msteamssetting_Information */
+		Process: DevKit.Formmsdyn_msteamssetting_Information.Process;
 		/** The SidePanes of form msdyn_msteamssetting_Information */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -33,6 +37,8 @@ declare namespace DevKit {
 			msdyn_MSTeamsSettingsName: DevKit.Controls.String;
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
+		}
+		interface Process extends DevKit.Controls.IProcess {
 		}
 	}
 	class Formmsdyn_msteamssetting_Information2 extends DevKit.IForm {
@@ -46,6 +52,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_msteamssetting_Information2 */
 		Body: DevKit.Formmsdyn_msteamssetting_Information2.Body;
+		/** The Process of form msdyn_msteamssetting_Information2 */
+		Process: DevKit.Formmsdyn_msteamssetting_Information2.Process;
 		/** The SidePanes of form msdyn_msteamssetting_Information2 */
 		SidePanes: DevKit.SidePanes;
 	}

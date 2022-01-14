@@ -9,6 +9,8 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_requirementorganizationunit_Information extends DevKit.IForm {
 		/**
@@ -21,6 +23,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_requirementorganizationunit_Information */
 		Body: DevKit.Formmsdyn_requirementorganizationunit_Information.Body;
+		/** The Process of form msdyn_requirementorganizationunit_Information */
+		Process: DevKit.Formmsdyn_requirementorganizationunit_Information.Process;
 		/** The SidePanes of form msdyn_requirementorganizationunit_Information */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -32,6 +36,8 @@ declare namespace DevKit {
 			msdyn_OrganizationalUnit: DevKit.Controls.Lookup;
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
+		}
+		interface Process extends DevKit.Controls.IProcess {
 		}
 	}
 	class Formmsdyn_requirementorganizationunit_Information2 extends DevKit.IForm {
@@ -45,6 +51,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_requirementorganizationunit_Information2 */
 		Body: DevKit.Formmsdyn_requirementorganizationunit_Information2.Body;
+		/** The Process of form msdyn_requirementorganizationunit_Information2 */
+		Process: DevKit.Formmsdyn_requirementorganizationunit_Information2.Process;
 		/** The SidePanes of form msdyn_requirementorganizationunit_Information2 */
 		SidePanes: DevKit.SidePanes;
 	}

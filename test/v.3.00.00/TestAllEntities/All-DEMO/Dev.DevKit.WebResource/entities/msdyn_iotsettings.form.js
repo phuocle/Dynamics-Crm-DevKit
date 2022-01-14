@@ -21,7 +21,7 @@ var DevKit;
 			msdyn_DeploymentAppURL: {},
 			msdyn_devicedatapullfrequency: {},
 			msdyn_EnableIoTSuggestions: {},
-			msdyn_EnableIoTSuggestions_1: {},
+			msdyn_EnableIoTSuggestions1: {},
 			msdyn_EnhancedBackgroundProcessing: {},
 			msdyn_IoTAlertAggregationRule: {},
 			msdyn_name: {},
@@ -74,16 +74,6 @@ var DevKit;
 		form.Header = header;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
 		devKit.LoadOthers(formContext, form, defaultWebResourceName);

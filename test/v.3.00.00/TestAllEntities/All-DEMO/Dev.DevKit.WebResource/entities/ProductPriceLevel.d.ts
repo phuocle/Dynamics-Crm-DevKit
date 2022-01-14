@@ -40,6 +40,8 @@ declare namespace DevKit {
 			/** Unique identifier of the unit for the price list. */
 			UoMId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormProductPriceLevel_Information extends DevKit.IForm {
 		/**
@@ -52,6 +54,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form ProductPriceLevel_Information */
 		Body: DevKit.FormProductPriceLevel_Information.Body;
+		/** The Process of form ProductPriceLevel_Information */
+		Process: DevKit.FormProductPriceLevel_Information.Process;
 		/** The SidePanes of form ProductPriceLevel_Information */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -101,6 +105,8 @@ declare namespace DevKit {
 			/** Unique identifier of the unit for the price list. */
 			UoMId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormProduct_Price_List extends DevKit.IForm {
 		/**
@@ -113,6 +119,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Product_Price_List */
 		Body: DevKit.FormProduct_Price_List.Body;
+		/** The Process of form Product_Price_List */
+		Process: DevKit.FormProduct_Price_List.Process;
 		/** The SidePanes of form Product_Price_List */
 		SidePanes: DevKit.SidePanes;
 	}

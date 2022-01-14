@@ -25,9 +25,9 @@ var DevKit;
 			msdyn_ProjectApprover: {},
 			msdyn_resourcecategory: {},
 			msdyn_resourcerequirementid: {},
-			msdyn_resourcerequirementid_1: {},
-			msdyn_resourcerequirementid_2: {},
-			msdyn_resourcerequirementid_3: {},
+			msdyn_resourcerequirementid1: {},
+			msdyn_resourcerequirementid2: {},
+			msdyn_resourcerequirementid3: {},
 			msdyn_RoleDescription: {},
 			msdyn_To: {},
 			OwnerId: {}

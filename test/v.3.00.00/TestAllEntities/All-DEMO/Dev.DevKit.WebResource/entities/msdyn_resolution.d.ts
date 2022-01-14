@@ -33,6 +33,8 @@ declare namespace DevKit {
 			nav_msdyn_msdyn_resolution_msdyn_workorderincident_PrimaryResolution: DevKit.Controls.NavigationItem,
 			nav_msdyn_msdyn_resolution_msdyn_workorderresolution_Resolution: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			Incident_Type_Resolutions: DevKit.Controls.Grid;
 		}
@@ -50,6 +52,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyn_resolution_Information.Body;
 		/** The Navigation of form msdyn_resolution_Information */
 		Navigation: DevKit.Formmsdyn_resolution_Information.Navigation;
+		/** The Process of form msdyn_resolution_Information */
+		Process: DevKit.Formmsdyn_resolution_Information.Process;
 		/** The Grid of form msdyn_resolution_Information */
 		Grid: DevKit.Formmsdyn_resolution_Information.Grid;
 		/** The SidePanes of form msdyn_resolution_Information */

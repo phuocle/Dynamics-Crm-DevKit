@@ -34,6 +34,8 @@ declare namespace DevKit {
 			nav_msdyn_msdyn_rmareceipt_msdyn_rmareceiptproduct_RMAReceipt: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			productgrid: DevKit.Controls.Grid;
 		}
@@ -53,6 +55,8 @@ declare namespace DevKit {
 		Footer: DevKit.FormRMA_Receipt.Footer;
 		/** The Navigation of form RMA_Receipt */
 		Navigation: DevKit.FormRMA_Receipt.Navigation;
+		/** The Process of form RMA_Receipt */
+		Process: DevKit.FormRMA_Receipt.Process;
 		/** The Grid of form RMA_Receipt */
 		Grid: DevKit.FormRMA_Receipt.Grid;
 		/** The SidePanes of form RMA_Receipt */

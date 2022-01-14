@@ -14,6 +14,8 @@ declare namespace DevKit {
 		interface Navigation {
 			nav_msdyn_msdyn_attributevalue_systemuser: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			Sellers: DevKit.Controls.Grid;
 		}
@@ -31,6 +33,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyn_attributevalue_Information.Body;
 		/** The Navigation of form msdyn_attributevalue_Information */
 		Navigation: DevKit.Formmsdyn_attributevalue_Information.Navigation;
+		/** The Process of form msdyn_attributevalue_Information */
+		Process: DevKit.Formmsdyn_attributevalue_Information.Process;
 		/** The Grid of form msdyn_attributevalue_Information */
 		Grid: DevKit.Formmsdyn_attributevalue_Information.Grid;
 		/** The SidePanes of form msdyn_attributevalue_Information */

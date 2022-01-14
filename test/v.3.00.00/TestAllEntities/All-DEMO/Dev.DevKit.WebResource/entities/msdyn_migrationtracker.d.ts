@@ -42,6 +42,8 @@ declare namespace DevKit {
 			/** Reason for the status of the Migration tracker */
 			statuscode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormMigration_Tracker extends DevKit.IForm {
 		/**
@@ -54,6 +56,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Migration_Tracker */
 		Body: DevKit.FormMigration_Tracker.Body;
+		/** The Process of form Migration_Tracker */
+		Process: DevKit.FormMigration_Tracker.Process;
 		/** The SidePanes of form Migration_Tracker */
 		SidePanes: DevKit.SidePanes;
 	}

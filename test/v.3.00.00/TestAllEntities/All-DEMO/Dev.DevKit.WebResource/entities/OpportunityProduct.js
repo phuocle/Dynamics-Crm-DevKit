@@ -46,12 +46,12 @@ var formOpportunityProduct = (function () {
 		OnSave: onSave
 	};
 })();
-var formOpportunityProduct4 = (function () {
+var formOpportunityProduct2 = (function () {
 	"use strict";
-	/** @type DevKit.FormOpportunityProduct4 */
+	/** @type DevKit.FormOpportunityProduct2 */
 	var form = null;
 	async function onLoad(executionContext) {
-		form = new DevKit.FormOpportunityProduct4(executionContext);
+		form = new DevKit.FormOpportunityProduct2(executionContext);
 
 	}
 	async function onSave(executionContext) {

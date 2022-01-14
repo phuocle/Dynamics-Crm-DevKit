@@ -65,6 +65,8 @@ declare namespace DevKit {
 			/** Shows the reason code that explains the import file's status to identify the stage of the import process, from parsing the data to completed. */
 			StatusCode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormImportfile extends DevKit.IForm {
 		/**
@@ -79,6 +81,8 @@ declare namespace DevKit {
 		Body: DevKit.FormImportfile.Body;
 		/** The Footer section of form Importfile */
 		Footer: DevKit.FormImportfile.Footer;
+		/** The Process of form Importfile */
+		Process: DevKit.FormImportfile.Process;
 		/** The SidePanes of form Importfile */
 		SidePanes: DevKit.SidePanes;
 	}

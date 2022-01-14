@@ -64,6 +64,8 @@ declare namespace DevKit {
 			/** Choose the product that the property is associated with. */
 			RegardingObjectId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			grid_DynamicPropertyOptionSetItem: DevKit.Controls.Grid;
 		}
@@ -79,6 +81,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Property */
 		Body: DevKit.FormProperty.Body;
+		/** The Process of form Property */
+		Process: DevKit.FormProperty.Process;
 		/** The Grid of form Property */
 		Grid: DevKit.FormProperty.Grid;
 		/** The SidePanes of form Property */

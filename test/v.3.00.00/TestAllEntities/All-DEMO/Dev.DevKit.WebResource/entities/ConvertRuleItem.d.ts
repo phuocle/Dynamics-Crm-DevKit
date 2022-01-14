@@ -21,6 +21,8 @@ declare namespace DevKit {
 			/** Type a name or title of the rule item that is used for automatic record creation and update. */
 			Name: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormRecord_Creation_and_Update_Rule_Item extends DevKit.IForm {
 		/**
@@ -33,6 +35,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Record_Creation_and_Update_Rule_Item */
 		Body: DevKit.FormRecord_Creation_and_Update_Rule_Item.Body;
+		/** The Process of form Record_Creation_and_Update_Rule_Item */
+		Process: DevKit.FormRecord_Creation_and_Update_Rule_Item.Process;
 		/** The SidePanes of form Record_Creation_and_Update_Rule_Item */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -56,6 +60,8 @@ declare namespace DevKit {
 			arc_primary_create_control: DevKit.Controls.ActionCards;
 			WebResource_Disclaimer: DevKit.Controls.WebResource;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormRecord_Creation_and_Update_Rule_Item_UCI extends DevKit.IForm {
 		/**
@@ -68,6 +74,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Record_Creation_and_Update_Rule_Item_UCI */
 		Body: DevKit.FormRecord_Creation_and_Update_Rule_Item_UCI.Body;
+		/** The Process of form Record_Creation_and_Update_Rule_Item_UCI */
+		Process: DevKit.FormRecord_Creation_and_Update_Rule_Item_UCI.Process;
 		/** The SidePanes of form Record_Creation_and_Update_Rule_Item_UCI */
 		SidePanes: DevKit.SidePanes;
 	}

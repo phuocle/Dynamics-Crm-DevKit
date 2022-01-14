@@ -46,6 +46,8 @@ declare namespace DevKit {
 		interface Navigation {
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormBooking_Timestamp_Mobile extends DevKit.IForm {
 		/**
@@ -60,6 +62,8 @@ declare namespace DevKit {
 		Body: DevKit.FormBooking_Timestamp_Mobile.Body;
 		/** The Navigation of form Booking_Timestamp_Mobile */
 		Navigation: DevKit.FormBooking_Timestamp_Mobile.Navigation;
+		/** The Process of form Booking_Timestamp_Mobile */
+		Process: DevKit.FormBooking_Timestamp_Mobile.Process;
 		/** The SidePanes of form Booking_Timestamp_Mobile */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -86,6 +90,8 @@ declare namespace DevKit {
 		interface Navigation {
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_bookingtimestamp_Information extends DevKit.IForm {
 		/**
@@ -102,6 +108,8 @@ declare namespace DevKit {
 		Footer: DevKit.Formmsdyn_bookingtimestamp_Information.Footer;
 		/** The Navigation of form msdyn_bookingtimestamp_Information */
 		Navigation: DevKit.Formmsdyn_bookingtimestamp_Information.Navigation;
+		/** The Process of form msdyn_bookingtimestamp_Information */
+		Process: DevKit.Formmsdyn_bookingtimestamp_Information.Process;
 		/** The SidePanes of form msdyn_bookingtimestamp_Information */
 		SidePanes: DevKit.SidePanes;
 	}

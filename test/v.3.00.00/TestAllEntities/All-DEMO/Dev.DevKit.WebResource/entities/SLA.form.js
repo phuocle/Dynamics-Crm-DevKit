@@ -19,14 +19,14 @@ var DevKit;
 			ApplicableFromPickList: {},
 			BusinessHoursId: {},
 			Description: {},
-			Description_1: {},
+			Description1: {},
 			Name: {},
-			Name_1: {},
+			Name1: {},
 			notescontrol: {},
 			ObjectTypeCode: {},
-			ObjectTypeCode_1: {},
-			ObjectTypeCode_2: {},
-			ObjectTypeCode_3: {},
+			ObjectTypeCode1: {},
+			ObjectTypeCode2: {},
+			ObjectTypeCode3: {},
 			PrimaryEntityOTC: {},
 			SLADetails: {},
 			SLAItemsUCI: {},
@@ -58,22 +58,12 @@ var DevKit;
 		form.Header = header;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var grid = {
 			SLADetails: {},
 			SLAItemsUCI: {},
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
 		devKit.LoadOthers(formContext, form, defaultWebResourceName);

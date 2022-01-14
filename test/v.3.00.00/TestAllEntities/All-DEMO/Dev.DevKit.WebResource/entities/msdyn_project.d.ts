@@ -124,7 +124,7 @@ declare namespace DevKit {
 			/** Select the project template behind the project. */
 			msdyn_ProjectTemplate: DevKit.Controls.Lookup;
 			/** Select the project template behind the project. */
-			msdyn_ProjectTemplate_1: DevKit.Controls.Lookup;
+			msdyn_ProjectTemplate1: DevKit.Controls.Lookup;
 			/** Enter the scheduled end time of the project. */
 			msdyn_scheduledend: DevKit.Controls.Date;
 			/** Enter the scheduled start time of the project. */

@@ -43,11 +43,11 @@ declare namespace DevKit {
 			/** Select whether the price per unit is fixed at the value in the specified price list or can be overridden by users who have edit rights to the quote product. */
 			IsPriceOverridden: DevKit.Controls.Boolean;
 			/** Select whether the price per unit is fixed at the value in the specified price list or can be overridden by users who have edit rights to the quote product. */
-			IsPriceOverridden_1: DevKit.Controls.Boolean;
+			IsPriceOverridden1: DevKit.Controls.Boolean;
 			/** Select whether the product exists in the Microsoft Dynamics 365 product catalog or is a write-in product specific to the quote. */
 			IsProductOverridden: DevKit.Controls.Boolean;
 			/** Select whether the product exists in the Microsoft Dynamics 365 product catalog or is a write-in product specific to the quote. */
-			IsProductOverridden_1: DevKit.Controls.Boolean;
+			IsProductOverridden1: DevKit.Controls.Boolean;
 			/** Type the manual discount amount for the quote product to deduct any negotiated or other savings from the product total on the quote. */
 			ManualDiscountAmount: DevKit.Controls.Money;
 			/** The agreement that will be connected to this quote */
@@ -86,7 +86,7 @@ declare namespace DevKit {
 			/** Type the amount or quantity of the product requested by the customer. */
 			Quantity: DevKit.Controls.Decimal;
 			/** Type the amount or quantity of the product requested by the customer. */
-			Quantity_1: DevKit.Controls.Decimal;
+			Quantity1: DevKit.Controls.Decimal;
 			/** Unique identifier of the quote for the quote product. */
 			QuoteId: DevKit.Controls.Lookup;
 			/** Type the city for the customer's shipping address. */
@@ -124,6 +124,8 @@ declare namespace DevKit {
 			/** Select whether the quote product should be shipped to the specified address or held until the customer calls with further pick up or delivery instructions. */
 			WillCall: DevKit.Controls.Boolean;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			QuoteBookingSetups: DevKit.Controls.Grid;
 		}
@@ -139,6 +141,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form QuoteDetail_Field_Service_Information */
 		Body: DevKit.FormQuoteDetail_Field_Service_Information.Body;
+		/** The Process of form QuoteDetail_Field_Service_Information */
+		Process: DevKit.FormQuoteDetail_Field_Service_Information.Process;
 		/** The Grid of form QuoteDetail_Field_Service_Information */
 		Grid: DevKit.FormQuoteDetail_Field_Service_Information.Grid;
 		/** The SidePanes of form QuoteDetail_Field_Service_Information */
@@ -202,7 +206,7 @@ declare namespace DevKit {
 			/** Unique identifier of the quote for the quote product. */
 			QuoteId: DevKit.Controls.Lookup;
 			/** Unique identifier of the quote for the quote product. */
-			QuoteId_1: DevKit.Controls.Lookup;
+			QuoteId1: DevKit.Controls.Lookup;
 			/** Enter the delivery date requested by the customer for the quote product. */
 			RequestDeliveryBy: DevKit.Controls.Date;
 			/** Choose the user responsible for the sale of the quote product. */
@@ -242,6 +246,8 @@ declare namespace DevKit {
 			/** Select whether the quote product should be shipped to the specified address or held until the customer calls with further pick up or delivery instructions. */
 			WillCall: DevKit.Controls.Boolean;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormQuoteDetail_Information extends DevKit.IForm {
 		/**
@@ -254,6 +260,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form QuoteDetail_Information */
 		Body: DevKit.FormQuoteDetail_Information.Body;
+		/** The Process of form QuoteDetail_Information */
+		Process: DevKit.FormQuoteDetail_Information.Process;
 		/** The SidePanes of form QuoteDetail_Information */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -344,15 +352,15 @@ declare namespace DevKit {
 			/** Shows the total amount due for the quote product, based on the sum of the unit price, quantity, discounts ,and tax. */
 			ExtendedAmount: DevKit.Controls.Money;
 			/** Shows the total amount due for the quote product, based on the sum of the unit price, quantity, discounts ,and tax. */
-			ExtendedAmount_1: DevKit.Controls.Money;
+			ExtendedAmount1: DevKit.Controls.Money;
 			/** Shows the total amount due for the quote product, based on the sum of the unit price, quantity, discounts ,and tax. */
-			ExtendedAmount_2: DevKit.Controls.Money;
+			ExtendedAmount2: DevKit.Controls.Money;
 			/** Select whether the price per unit is fixed at the value in the specified price list or can be overridden by users who have edit rights to the quote product. */
 			IsPriceOverridden: DevKit.Controls.Boolean;
 			/** Select whether the product exists in the Microsoft Dynamics 365 product catalog or is a write-in product specific to the quote. */
 			IsProductOverridden: DevKit.Controls.Boolean;
 			/** Select whether the product exists in the Microsoft Dynamics 365 product catalog or is a write-in product specific to the quote. */
-			IsProductOverridden_1: DevKit.Controls.Boolean;
+			IsProductOverridden1: DevKit.Controls.Boolean;
 			/** Type the manual discount amount for the quote product to deduct any negotiated or other savings from the product total on the quote. */
 			ManualDiscountAmount: DevKit.Controls.Money;
 			/** Billing method for the project quote line. Valid values are Time and Material and Fixed Price */
@@ -362,7 +370,7 @@ declare namespace DevKit {
 			/** Enter the amount the customer has set aside or is willing to pay for the quote component. */
 			msdyn_BudgetAmount: DevKit.Controls.Money;
 			/** Enter the amount the customer has set aside or is willing to pay for the quote component. */
-			msdyn_BudgetAmount_1: DevKit.Controls.Money;
+			msdyn_BudgetAmount1: DevKit.Controls.Money;
 			/** Shows the total cost price of the product based on the cost price per unit and quantity. */
 			msdyn_CostAmount: DevKit.Controls.Money;
 			/** Cost per unit of the product. The default is the cost price of the product. */
@@ -382,39 +390,39 @@ declare namespace DevKit {
 			/** Type the price per unit of the quote product. The default is to the value in the price list specified on the quote for existing products. */
 			PricePerUnit: DevKit.Controls.Money;
 			/** Type the price per unit of the quote product. The default is to the value in the price list specified on the quote for existing products. */
-			PricePerUnit_1: DevKit.Controls.Money;
+			PricePerUnit1: DevKit.Controls.Money;
 			/** Type the price per unit of the quote product. The default is to the value in the price list specified on the quote for existing products. */
-			PricePerUnit_2: DevKit.Controls.Money;
+			PricePerUnit2: DevKit.Controls.Money;
 			/** Type a name or description to identify the type of write-in product included in the quote. */
 			ProductDescription: DevKit.Controls.String;
 			/** Type a name or description to identify the type of write-in product included in the quote. */
-			ProductDescription_1: DevKit.Controls.String;
+			ProductDescription1: DevKit.Controls.String;
 			/** Type a name or description to identify the type of write-in product included in the quote. */
-			ProductDescription_2: DevKit.Controls.String;
+			ProductDescription2: DevKit.Controls.String;
 			/** Choose the product to include on the quote to link the product's pricing and other information to the quote. */
 			ProductId: DevKit.Controls.Lookup;
 			/** Choose the product to include on the quote to link the product's pricing and other information to the quote. */
-			ProductId_1: DevKit.Controls.Lookup;
+			ProductId1: DevKit.Controls.Lookup;
 			/** Product Type */
 			ProductTypeCode: DevKit.Controls.OptionSet;
 			/** Product Type */
-			ProductTypeCode_1: DevKit.Controls.OptionSet;
+			ProductTypeCode1: DevKit.Controls.OptionSet;
 			/** Type the amount or quantity of the product requested by the customer. */
 			Quantity: DevKit.Controls.Decimal;
 			/** Type the amount or quantity of the product requested by the customer. */
-			Quantity_1: DevKit.Controls.Decimal;
+			Quantity1: DevKit.Controls.Decimal;
 			/** Unique identifier of the quote for the quote product. */
 			QuoteId: DevKit.Controls.Lookup;
 			/** Unique identifier of the quote for the quote product. */
-			QuoteId_1: DevKit.Controls.Lookup;
+			QuoteId1: DevKit.Controls.Lookup;
 			/** Unique identifier of the quote for the quote product. */
-			QuoteId_2: DevKit.Controls.Lookup;
+			QuoteId2: DevKit.Controls.Lookup;
 			/** Unique identifier of the quote for the quote product. */
-			QuoteId_3: DevKit.Controls.Lookup;
+			QuoteId3: DevKit.Controls.Lookup;
 			/** Enter the delivery date requested by the customer for the quote product. */
 			RequestDeliveryBy: DevKit.Controls.Date;
 			/** Enter the delivery date requested by the customer for the quote product. */
-			RequestDeliveryBy_1: DevKit.Controls.Date;
+			RequestDeliveryBy1: DevKit.Controls.Date;
 			/** Choose the user responsible for the sale of the quote product. */
 			SalesRepId: DevKit.Controls.Lookup;
 			/** Type the city for the customer's shipping address. */
@@ -444,19 +452,21 @@ declare namespace DevKit {
 			/** Type the tax amount for the quote product. */
 			Tax: DevKit.Controls.Money;
 			/** Type the tax amount for the quote product. */
-			Tax_1: DevKit.Controls.Money;
+			Tax1: DevKit.Controls.Money;
 			/** Type the tax amount for the quote product. */
-			Tax_2: DevKit.Controls.Money;
+			Tax2: DevKit.Controls.Money;
 			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
 			TransactionCurrencyId: DevKit.Controls.Lookup;
 			/** Choose the unit of measurement for the base unit quantity for this purchase, such as each or dozen. */
 			UoMId: DevKit.Controls.Lookup;
 			/** Choose the unit of measurement for the base unit quantity for this purchase, such as each or dozen. */
-			UoMId_1: DevKit.Controls.Lookup;
+			UoMId1: DevKit.Controls.Lookup;
 			/** Shows the discount amount per unit if a specified volume is purchased. Configure volume discounts in the Product Catalog in the Settings area. */
 			VolumeDiscountAmount: DevKit.Controls.Money;
 			/** Select whether the quote product should be shipped to the specified address or held until the customer calls with further pick up or delivery instructions. */
 			WillCall: DevKit.Controls.Boolean;
+		}
+		interface Process extends DevKit.Controls.IProcess {
 		}
 		interface Grid {
 			ChargeableCategoriesGrid: DevKit.Controls.Grid;
@@ -477,6 +487,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form QuoteDetail_Project_Information */
 		Body: DevKit.FormQuoteDetail_Project_Information.Body;
+		/** The Process of form QuoteDetail_Project_Information */
+		Process: DevKit.FormQuoteDetail_Project_Information.Process;
 		/** The Grid of form QuoteDetail_Project_Information */
 		Grid: DevKit.FormQuoteDetail_Project_Information.Grid;
 		/** The SidePanes of form QuoteDetail_Project_Information */

@@ -10,6 +10,8 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormEffort_estimate_results extends DevKit.IForm {
 		/**
@@ -22,6 +24,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Effort_estimate_results */
 		Body: DevKit.FormEffort_estimate_results.Body;
+		/** The Process of form Effort_estimate_results */
+		Process: DevKit.FormEffort_estimate_results.Process;
 		/** The SidePanes of form Effort_estimate_results */
 		SidePanes: DevKit.SidePanes;
 	}

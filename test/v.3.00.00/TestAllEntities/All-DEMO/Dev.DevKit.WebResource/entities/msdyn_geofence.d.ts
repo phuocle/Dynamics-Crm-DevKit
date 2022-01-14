@@ -14,6 +14,8 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_geofence_Main_Form extends DevKit.IForm {
 		/**
@@ -26,6 +28,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_geofence_Main_Form */
 		Body: DevKit.Formmsdyn_geofence_Main_Form.Body;
+		/** The Process of form msdyn_geofence_Main_Form */
+		Process: DevKit.Formmsdyn_geofence_Main_Form.Process;
 		/** The SidePanes of form msdyn_geofence_Main_Form */
 		SidePanes: DevKit.SidePanes;
 	}

@@ -128,6 +128,8 @@ declare namespace DevKit {
 		interface Navigation {
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_workorderservice_Information extends DevKit.IForm {
 		/**
@@ -144,6 +146,8 @@ declare namespace DevKit {
 		Footer: DevKit.Formmsdyn_workorderservice_Information.Footer;
 		/** The Navigation of form msdyn_workorderservice_Information */
 		Navigation: DevKit.Formmsdyn_workorderservice_Information.Navigation;
+		/** The Process of form msdyn_workorderservice_Information */
+		Process: DevKit.Formmsdyn_workorderservice_Information.Process;
 		/** The SidePanes of form msdyn_workorderservice_Information */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -261,6 +265,8 @@ declare namespace DevKit {
 			navAsyncOperations: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormWork_Order_Service_Mobile extends DevKit.IForm {
 		/**
@@ -275,6 +281,8 @@ declare namespace DevKit {
 		Body: DevKit.FormWork_Order_Service_Mobile.Body;
 		/** The Navigation of form Work_Order_Service_Mobile */
 		Navigation: DevKit.FormWork_Order_Service_Mobile.Navigation;
+		/** The Process of form Work_Order_Service_Mobile */
+		Process: DevKit.FormWork_Order_Service_Mobile.Process;
 		/** The SidePanes of form Work_Order_Service_Mobile */
 		SidePanes: DevKit.SidePanes;
 	}

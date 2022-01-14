@@ -8,6 +8,8 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormExportSolutionUpload_Information extends DevKit.IForm {
 		/**
@@ -20,6 +22,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form ExportSolutionUpload_Information */
 		Body: DevKit.FormExportSolutionUpload_Information.Body;
+		/** The Process of form ExportSolutionUpload_Information */
+		Process: DevKit.FormExportSolutionUpload_Information.Process;
 		/** The SidePanes of form ExportSolutionUpload_Information */
 		SidePanes: DevKit.SidePanes;
 	}

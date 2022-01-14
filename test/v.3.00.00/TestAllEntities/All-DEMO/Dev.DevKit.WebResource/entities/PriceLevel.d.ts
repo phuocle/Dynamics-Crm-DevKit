@@ -91,6 +91,8 @@ declare namespace DevKit {
 			navItems: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			CategoryGrid: DevKit.Controls.Grid;
 			pricelistitemsgrid: DevKit.Controls.Grid;
@@ -114,6 +116,8 @@ declare namespace DevKit {
 		Header: DevKit.FormPrice_Level.Header;
 		/** The Navigation of form Price_Level */
 		Navigation: DevKit.FormPrice_Level.Navigation;
+		/** The Process of form Price_Level */
+		Process: DevKit.FormPrice_Level.Process;
 		/** The Grid of form Price_Level */
 		Grid: DevKit.FormPrice_Level.Grid;
 		/** The SidePanes of form Price_Level */

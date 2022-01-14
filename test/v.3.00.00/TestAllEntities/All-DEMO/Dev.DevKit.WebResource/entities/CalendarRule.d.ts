@@ -18,6 +18,8 @@ declare namespace DevKit {
 			/** Name of the calendar rule. */
 			Name: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormCalendarRule_Information extends DevKit.IForm {
 		/**
@@ -30,6 +32,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form CalendarRule_Information */
 		Body: DevKit.FormCalendarRule_Information.Body;
+		/** The Process of form CalendarRule_Information */
+		Process: DevKit.FormCalendarRule_Information.Process;
 		/** The SidePanes of form CalendarRule_Information */
 		SidePanes: DevKit.SidePanes;
 	}

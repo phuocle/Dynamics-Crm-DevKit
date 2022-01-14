@@ -22,6 +22,8 @@ declare namespace DevKit {
 			/** Parent position. */
 			ParentPositionId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			Members: DevKit.Controls.Grid;
 		}
@@ -37,6 +39,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Position */
 		Body: DevKit.FormPosition.Body;
+		/** The Process of form Position */
+		Process: DevKit.FormPosition.Process;
 		/** The Grid of form Position */
 		Grid: DevKit.FormPosition.Grid;
 		/** The SidePanes of form Position */

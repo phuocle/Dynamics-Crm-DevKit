@@ -13,6 +13,8 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			Input_Parameter: DevKit.Controls.Grid;
 		}
@@ -28,6 +30,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_productivityactioninputparameter_Information */
 		Body: DevKit.Formmsdyn_productivityactioninputparameter_Information.Body;
+		/** The Process of form msdyn_productivityactioninputparameter_Information */
+		Process: DevKit.Formmsdyn_productivityactioninputparameter_Information.Process;
 		/** The Grid of form msdyn_productivityactioninputparameter_Information */
 		Grid: DevKit.Formmsdyn_productivityactioninputparameter_Information.Grid;
 		/** The SidePanes of form msdyn_productivityactioninputparameter_Information */

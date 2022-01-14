@@ -36,7 +36,7 @@ var DevKit;
 			mapcontrol: {},
 			MobilePhone: {},
 			msdyn_ordertype: {},
-			msdyn_ordertype_1: {},
+			msdyn_ordertype1: {},
 			notescontrol: {},
 			NumberOfEmployees: {},
 			PreferredContactMethodCode: {},
@@ -88,34 +88,16 @@ var DevKit;
 		var process = devKit.LoadProcess(formContext);
 		var _Lead_to_Opportunity_Sales_Process = {
 			BudgetAmount: {},
-			completefinalproposal: {},
-			completeinternalreview: {},
-			customerneed: {},
 			DecisionMaker: {},
 			Description: {},
-			developproposal: {},
-			filedebrief: {},
-			finaldecisiondate: {},
-			identifycompetitors: {},
-			identifycustomercontacts: {},
-			identifypursuitteam: {},
 			ParentAccountId: {},
 			ParentContactId: {},
-			presentfinalproposal: {},
-			presentproposal: {},
-			proposedsolution: {},
 			PurchaseProcess: {},
-			PurchaseTimeFrame: {},
-			sendthankyounote: {}
+			PurchaseTimeFrame: {}
 		}
 		devKit.LoadFields(formContext, _Lead_to_Opportunity_Sales_Process, "header_process_");
 		process.Lead_to_Opportunity_Sales_Process = _Lead_to_Opportunity_Sales_Process;
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var grid = {
 			Competitors: {},
 			DocumentsSubGrid: {},
@@ -217,34 +199,16 @@ var DevKit;
 		var process = devKit.LoadProcess(formContext);
 		var _Lead_to_Opportunity_Sales_Process = {
 			BudgetAmount: {},
-			completefinalproposal: {},
-			completeinternalreview: {},
-			customerneed: {},
 			DecisionMaker: {},
 			Description: {},
-			developproposal: {},
-			filedebrief: {},
-			finaldecisiondate: {},
-			identifycompetitors: {},
-			identifycustomercontacts: {},
-			identifypursuitteam: {},
 			ParentAccountId: {},
 			ParentContactId: {},
-			presentfinalproposal: {},
-			presentproposal: {},
-			proposedsolution: {},
 			PurchaseProcess: {},
-			PurchaseTimeFrame: {},
-			sendthankyounote: {}
+			PurchaseTimeFrame: {}
 		}
 		devKit.LoadFields(formContext, _Lead_to_Opportunity_Sales_Process, "header_process_");
 		process.Lead_to_Opportunity_Sales_Process = _Lead_to_Opportunity_Sales_Process;
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var grid = {
 			Competitors: {},
 			Stakeholders: {},

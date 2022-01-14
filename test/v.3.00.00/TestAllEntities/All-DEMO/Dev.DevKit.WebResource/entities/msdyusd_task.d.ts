@@ -30,6 +30,8 @@ declare namespace DevKit {
 			navAsyncOperations: DevKit.Controls.NavigationItem,
 			navAudit: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			Answers: DevKit.Controls.Grid;
 		}
@@ -49,6 +51,8 @@ declare namespace DevKit {
 		Footer: DevKit.Formmsdyusd_task_Information.Footer;
 		/** The Navigation of form msdyusd_task_Information */
 		Navigation: DevKit.Formmsdyusd_task_Information.Navigation;
+		/** The Process of form msdyusd_task_Information */
+		Process: DevKit.Formmsdyusd_task_Information.Process;
 		/** The Grid of form msdyusd_task_Information */
 		Grid: DevKit.Formmsdyusd_task_Information.Grid;
 		/** The SidePanes of form msdyusd_task_Information */

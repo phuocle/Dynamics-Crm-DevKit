@@ -63,6 +63,8 @@ declare namespace DevKit {
 			nav_msdyn_msdyn_agreementinvoiceproduct_invoicedetail_AgreementInvoiceProduct: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormAgreement_Invoice_Product_Mobile extends DevKit.IForm {
 		/**
@@ -77,6 +79,8 @@ declare namespace DevKit {
 		Body: DevKit.FormAgreement_Invoice_Product_Mobile.Body;
 		/** The Navigation of form Agreement_Invoice_Product_Mobile */
 		Navigation: DevKit.FormAgreement_Invoice_Product_Mobile.Navigation;
+		/** The Process of form Agreement_Invoice_Product_Mobile */
+		Process: DevKit.FormAgreement_Invoice_Product_Mobile.Process;
 		/** The SidePanes of form Agreement_Invoice_Product_Mobile */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -138,6 +142,8 @@ declare namespace DevKit {
 			nav_msdyn_msdyn_agreementinvoiceproduct_invoicedetail_AgreementInvoiceProduct: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_agreementinvoiceproduct_Information extends DevKit.IForm {
 		/**
@@ -154,6 +160,8 @@ declare namespace DevKit {
 		Footer: DevKit.Formmsdyn_agreementinvoiceproduct_Information.Footer;
 		/** The Navigation of form msdyn_agreementinvoiceproduct_Information */
 		Navigation: DevKit.Formmsdyn_agreementinvoiceproduct_Information.Navigation;
+		/** The Process of form msdyn_agreementinvoiceproduct_Information */
+		Process: DevKit.Formmsdyn_agreementinvoiceproduct_Information.Process;
 		/** The SidePanes of form msdyn_agreementinvoiceproduct_Information */
 		SidePanes: DevKit.SidePanes;
 	}

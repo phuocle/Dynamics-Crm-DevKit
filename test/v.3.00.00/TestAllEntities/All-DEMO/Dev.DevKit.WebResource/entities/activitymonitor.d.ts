@@ -24,6 +24,8 @@ declare namespace DevKit {
 			/** Unique identifier for ARC rule associated with activity monitor. */
 			RuleId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormActivity_monitor_main_form extends DevKit.IForm {
 		/**
@@ -38,6 +40,8 @@ declare namespace DevKit {
 		Body: DevKit.FormActivity_monitor_main_form.Body;
 		/** The Header section of form Activity_monitor_main_form */
 		Header: DevKit.FormActivity_monitor_main_form.Header;
+		/** The Process of form Activity_monitor_main_form */
+		Process: DevKit.FormActivity_monitor_main_form.Process;
 		/** The SidePanes of form Activity_monitor_main_form */
 		SidePanes: DevKit.SidePanes;
 	}

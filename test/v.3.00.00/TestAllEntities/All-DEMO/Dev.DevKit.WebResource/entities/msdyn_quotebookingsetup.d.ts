@@ -11,6 +11,8 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_quotebookingsetup_Information extends DevKit.IForm {
 		/**
@@ -23,6 +25,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_quotebookingsetup_Information */
 		Body: DevKit.Formmsdyn_quotebookingsetup_Information.Body;
+		/** The Process of form msdyn_quotebookingsetup_Information */
+		Process: DevKit.Formmsdyn_quotebookingsetup_Information.Process;
 		/** The SidePanes of form msdyn_quotebookingsetup_Information */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -107,6 +111,8 @@ declare namespace DevKit {
 			nav_msdyn_msdyn_quotebookingsetup_msdyn_quotebookingservice_QuoteBookingSetup: DevKit.Controls.NavigationItem,
 			nav_msdyn_msdyn_quotebookingsetup_msdyn_quotebookingservicetask_QuoteBookingSetup: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			IncidentsGrid: DevKit.Controls.Grid;
 			productsGrid: DevKit.Controls.Grid;
@@ -127,6 +133,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyn_quotebookingsetup_Information2.Body;
 		/** The Navigation of form msdyn_quotebookingsetup_Information2 */
 		Navigation: DevKit.Formmsdyn_quotebookingsetup_Information2.Navigation;
+		/** The Process of form msdyn_quotebookingsetup_Information2 */
+		Process: DevKit.Formmsdyn_quotebookingsetup_Information2.Process;
 		/** The Grid of form msdyn_quotebookingsetup_Information2 */
 		Grid: DevKit.Formmsdyn_quotebookingsetup_Information2.Grid;
 		/** The SidePanes of form msdyn_quotebookingsetup_Information2 */

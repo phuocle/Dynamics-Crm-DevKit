@@ -143,6 +143,8 @@ declare namespace DevKit {
 			msdyn_workdistributionmode: DevKit.Controls.OptionSet;
 			WebResource_HelpDialog: DevKit.Controls.WebResource;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			AttachmentRulesSubGrid: DevKit.Controls.Grid;
 			BotAssistedAgentGuidanceSubGrid: DevKit.Controls.Grid;
@@ -165,6 +167,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyn_liveworkstream_Information.Body;
 		/** The Header section of form msdyn_liveworkstream_Information */
 		Header: DevKit.Formmsdyn_liveworkstream_Information.Header;
+		/** The Process of form msdyn_liveworkstream_Information */
+		Process: DevKit.Formmsdyn_liveworkstream_Information.Process;
 		/** The Grid of form msdyn_liveworkstream_Information */
 		Grid: DevKit.Formmsdyn_liveworkstream_Information.Grid;
 		/** The SidePanes of form msdyn_liveworkstream_Information */
@@ -185,6 +189,8 @@ declare namespace DevKit {
 			/** The channel to which this workstream is attached */
 			msdyn_streamsource: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormInformation_New extends DevKit.IForm {
 		/**
@@ -197,6 +203,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Information_New */
 		Body: DevKit.FormInformation_New.Body;
+		/** The Process of form Information_New */
+		Process: DevKit.FormInformation_New.Process;
 		/** The SidePanes of form Information_New */
 		SidePanes: DevKit.SidePanes;
 	}

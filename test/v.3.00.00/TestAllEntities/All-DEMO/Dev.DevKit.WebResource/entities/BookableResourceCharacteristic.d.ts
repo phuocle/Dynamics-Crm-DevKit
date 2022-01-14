@@ -15,6 +15,8 @@ declare namespace DevKit {
 			/** Shows the resource associated with the characteristic. */
 			Resource: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormBookableResourceCharacteristic_Information extends DevKit.IForm {
 		/**
@@ -27,6 +29,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form BookableResourceCharacteristic_Information */
 		Body: DevKit.FormBookableResourceCharacteristic_Information.Body;
+		/** The Process of form BookableResourceCharacteristic_Information */
+		Process: DevKit.FormBookableResourceCharacteristic_Information.Process;
 		/** The SidePanes of form BookableResourceCharacteristic_Information */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -43,6 +47,8 @@ declare namespace DevKit {
 			/** Shows the resource associated with the characteristic. */
 			Resource: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormOmnichannel_Bookable_Resource_Characteristic_Main_Form extends DevKit.IForm {
 		/**
@@ -55,6 +61,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Omnichannel_Bookable_Resource_Characteristic_Main_Form */
 		Body: DevKit.FormOmnichannel_Bookable_Resource_Characteristic_Main_Form.Body;
+		/** The Process of form Omnichannel_Bookable_Resource_Characteristic_Main_Form */
+		Process: DevKit.FormOmnichannel_Bookable_Resource_Characteristic_Main_Form.Process;
 		/** The SidePanes of form Omnichannel_Bookable_Resource_Characteristic_Main_Form */
 		SidePanes: DevKit.SidePanes;
 	}

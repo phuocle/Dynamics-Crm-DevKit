@@ -18,7 +18,7 @@ var DevKit;
 			Blocked: {},
 			Community: {},
 			CustomerId: {},
-			CustomerId_1: {},
+			CustomerId1: {},
 			msdyn_ocfollowercount: {},
 			msdyn_ocfollowingcount: {},
 			msdyn_ocfriendcount: {},
@@ -51,11 +51,6 @@ var DevKit;
 		};
 		devKit.LoadQuickForms(formContext, quickForm);
 		form.QuickForm = quickForm;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
 		devKit.LoadOthers(formContext, form, defaultWebResourceName);
@@ -76,8 +71,8 @@ var DevKit;
 			Blocked: {},
 			Community: {},
 			CustomerId: {},
-			CustomerId_1: {},
-			CustomerId_2: {},
+			CustomerId1: {},
+			CustomerId2: {},
 			msdyn_ocfollowercount: {},
 			msdyn_ocfollowingcount: {},
 			msdyn_ocfriendcount: {},
@@ -122,11 +117,6 @@ var DevKit;
 		};
 		devKit.LoadQuickForms(formContext, quickForm);
 		form.QuickForm = quickForm;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
 		devKit.LoadOthers(formContext, form, defaultWebResourceName);

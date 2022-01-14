@@ -38,6 +38,8 @@ declare namespace DevKit {
 			/** Number of records deleted by the bulk deletion job. */
 			SuccessCount: DevKit.Controls.Integer;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormBulkDeleteOperation_Information extends DevKit.IForm {
 		/**
@@ -50,6 +52,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form BulkDeleteOperation_Information */
 		Body: DevKit.FormBulkDeleteOperation_Information.Body;
+		/** The Process of form BulkDeleteOperation_Information */
+		Process: DevKit.FormBulkDeleteOperation_Information.Process;
 		/** The SidePanes of form BulkDeleteOperation_Information */
 		SidePanes: DevKit.SidePanes;
 	}

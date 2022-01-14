@@ -14,6 +14,8 @@ declare namespace DevKit {
 			/** Status of the Action Call Workflow */
 			statecode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyusd_actioncallworkflow_Information extends DevKit.IForm {
 		/**
@@ -28,6 +30,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyusd_actioncallworkflow_Information.Body;
 		/** The Footer section of form msdyusd_actioncallworkflow_Information */
 		Footer: DevKit.Formmsdyusd_actioncallworkflow_Information.Footer;
+		/** The Process of form msdyusd_actioncallworkflow_Information */
+		Process: DevKit.Formmsdyusd_actioncallworkflow_Information.Process;
 		/** The SidePanes of form msdyusd_actioncallworkflow_Information */
 		SidePanes: DevKit.SidePanes;
 	}

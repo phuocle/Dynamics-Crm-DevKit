@@ -19,7 +19,7 @@ var DevKit;
 			msdyn_ConnectionStateUpdatedTime: {},
 			msdyn_Device: {},
 			msdyn_DeviceReportedProperties: {},
-			msdyn_DeviceReportedProperties_1: {},
+			msdyn_DeviceReportedProperties1: {},
 			msdyn_LastActivityTime: {},
 			msdyn_name: {},
 			msdyn_Status: {},
@@ -35,16 +35,6 @@ var DevKit;
 		form.Body = body;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
 		devKit.LoadOthers(formContext, form, defaultWebResourceName);

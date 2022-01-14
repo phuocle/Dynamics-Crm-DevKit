@@ -34,6 +34,8 @@ declare namespace DevKit {
 			/** Status of the UII Workflow */
 			statecode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormUII_workflow_Information extends DevKit.IForm {
 		/**
@@ -48,6 +50,8 @@ declare namespace DevKit {
 		Body: DevKit.FormUII_workflow_Information.Body;
 		/** The Footer section of form UII_workflow_Information */
 		Footer: DevKit.FormUII_workflow_Information.Footer;
+		/** The Process of form UII_workflow_Information */
+		Process: DevKit.FormUII_workflow_Information.Process;
 		/** The SidePanes of form UII_workflow_Information */
 		SidePanes: DevKit.SidePanes;
 	}

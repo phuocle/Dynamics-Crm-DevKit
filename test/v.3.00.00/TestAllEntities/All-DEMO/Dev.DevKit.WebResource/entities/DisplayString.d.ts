@@ -18,6 +18,8 @@ declare namespace DevKit {
 			/** Customized display string. */
 			CustomDisplayString: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormDisplayString_Information extends DevKit.IForm {
 		/**
@@ -30,6 +32,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form DisplayString_Information */
 		Body: DevKit.FormDisplayString_Information.Body;
+		/** The Process of form DisplayString_Information */
+		Process: DevKit.FormDisplayString_Information.Process;
 		/** The SidePanes of form DisplayString_Information */
 		SidePanes: DevKit.SidePanes;
 	}

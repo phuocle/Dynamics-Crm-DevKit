@@ -53,6 +53,8 @@ declare namespace DevKit {
 			/** Choose the unit of measurement for the base unit quantity for this purchase, such as each or dozen. */
 			UoMId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormContract_Detail extends DevKit.IForm {
 		/**
@@ -65,6 +67,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Contract_Detail */
 		Body: DevKit.FormContract_Detail.Body;
+		/** The Process of form Contract_Detail */
+		Process: DevKit.FormContract_Detail.Process;
 		/** The SidePanes of form Contract_Detail */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -133,6 +137,8 @@ declare namespace DevKit {
 			/** Choose the unit of measurement for the base unit quantity for this purchase, such as each or dozen. */
 			UoMId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormContractDetail_Information extends DevKit.IForm {
 		/**
@@ -145,6 +151,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form ContractDetail_Information */
 		Body: DevKit.FormContractDetail_Information.Body;
+		/** The Process of form ContractDetail_Information */
+		Process: DevKit.FormContractDetail_Information.Process;
 		/** The SidePanes of form ContractDetail_Information */
 		SidePanes: DevKit.SidePanes;
 	}

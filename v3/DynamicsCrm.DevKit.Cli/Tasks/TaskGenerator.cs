@@ -326,10 +326,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             else
             {
-                var count = FormNames.Count(x => x.StartsWith(formName)) + 1;
-                formName = $"{formName}{count}";
+                var count = FormNames.Count(x => x == formName) + 1;
                 FormNames.Add(formName);
-                return formName;
+                return $"{formName}{count}";
             }
         }
 
@@ -401,11 +400,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     CliLog.WriteLine("");
                     wait.Abort();
 
-                    wait = new Thread(() => CliLog.Waiting("Reading entities Process "));
-                    wait.Start();
-                    XrmHelper.ReadEntitiesProcessForm(crmServiceClient);
-                    CliLog.WriteLine("");
-                    wait.Abort();
+                    //wait = new Thread(() => CliLog.Waiting("Reading entities Process "));
+                    //wait.Start();
+                    //XrmHelper.ReadEntitiesProcessForm(crmServiceClient);
+                    //CliLog.WriteLine("");
+                    //wait.Abort();
                 }
                 CliLog.WriteLine(ConsoleColor.White, "|");
             }

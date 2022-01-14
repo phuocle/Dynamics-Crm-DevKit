@@ -12,6 +12,8 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_solutionhealthruleargument_Information extends DevKit.IForm {
 		/**
@@ -24,6 +26,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_solutionhealthruleargument_Information */
 		Body: DevKit.Formmsdyn_solutionhealthruleargument_Information.Body;
+		/** The Process of form msdyn_solutionhealthruleargument_Information */
+		Process: DevKit.Formmsdyn_solutionhealthruleargument_Information.Process;
 		/** The SidePanes of form msdyn_solutionhealthruleargument_Information */
 		SidePanes: DevKit.SidePanes;
 	}

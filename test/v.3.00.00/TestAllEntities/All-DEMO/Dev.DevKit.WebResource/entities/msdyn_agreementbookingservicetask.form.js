@@ -22,7 +22,7 @@ var DevKit;
 			msdyn_Description: {},
 			msdyn_EstimatedDuration: {},
 			msdyn_Inspection: {},
-			msdyn_Inspection_1: {},
+			msdyn_Inspection1: {},
 			msdyn_InspectionEnabled: {},
 			msdyn_LineOrder: {},
 			msdyn_name: {},
@@ -61,11 +61,6 @@ var DevKit;
 		form.Body = body;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var navigation = {
 			nav_msdyn_msdyn_agreementbookingservicetask_msdyn_workorderservicetask_AgreementBookingServiceTask: {},
 			navProcessSessions: {}
@@ -96,7 +91,7 @@ var DevKit;
 			msdyn_Description: {},
 			msdyn_EstimatedDuration: {},
 			msdyn_Inspection: {},
-			msdyn_Inspection_1: {},
+			msdyn_Inspection1: {},
 			msdyn_InspectionEnabled: {},
 			msdyn_LineOrder: {},
 			msdyn_name: {},
@@ -122,11 +117,6 @@ var DevKit;
 		form.Footer = footer;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var navigation = {
 			nav_msdyn_msdyn_agreementbookingservicetask_msdyn_workorderservicetask_AgreementBookingServiceTask: {},
 			navProcessSessions: {}

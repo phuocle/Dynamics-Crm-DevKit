@@ -31,6 +31,8 @@ declare namespace DevKit {
 			/** For internal use only. */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			RuleItems: DevKit.Controls.Grid;
 		}
@@ -46,6 +48,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Routing_Rule_Set */
 		Body: DevKit.FormRouting_Rule_Set.Body;
+		/** The Process of form Routing_Rule_Set */
+		Process: DevKit.FormRouting_Rule_Set.Process;
 		/** The Grid of form Routing_Rule_Set */
 		Grid: DevKit.FormRouting_Rule_Set.Grid;
 		/** The SidePanes of form Routing_Rule_Set */

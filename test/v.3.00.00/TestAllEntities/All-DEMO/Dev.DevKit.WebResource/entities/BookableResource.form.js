@@ -65,11 +65,6 @@ var DevKit;
 		form.Body = body;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var grid = {
 			BookableResourceCharacteristics: {},
 			CATEGORYASSOCIATIONS: {},
@@ -150,7 +145,7 @@ var DevKit;
 			ResourceType: {},
 			TimeZone: {},
 			UserId: {},
-			UserId_1: {}
+			UserId1: {}
 		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
@@ -199,11 +194,6 @@ var DevKit;
 		form.Body = body;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var grid = {
 			BookableResourceCharacteristics: {},
 			BookableResourceCharacteristics: {},

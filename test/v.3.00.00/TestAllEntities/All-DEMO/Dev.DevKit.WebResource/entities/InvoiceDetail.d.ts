@@ -117,6 +117,8 @@ declare namespace DevKit {
 			/** Select whether the invoice product should be shipped to the specified address or held until the customer calls with further pick up or delivery instructions. */
 			WillCall: DevKit.Controls.Boolean;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormInvoiceDetail_Information extends DevKit.IForm {
 		/**
@@ -129,6 +131,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form InvoiceDetail_Information */
 		Body: DevKit.FormInvoiceDetail_Information.Body;
+		/** The Process of form InvoiceDetail_Information */
+		Process: DevKit.FormInvoiceDetail_Information.Process;
 		/** The SidePanes of form InvoiceDetail_Information */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -214,7 +218,7 @@ declare namespace DevKit {
 			/** Shows the total price of the invoice product, based on the price per unit, volume discount, and quantity. */
 			BaseAmount: DevKit.Controls.Money;
 			/** Shows the total price of the invoice product, based on the price per unit, volume discount, and quantity. */
-			BaseAmount_1: DevKit.Controls.Money;
+			BaseAmount1: DevKit.Controls.Money;
 			/** Shows the total amount due for the invoice product, based on the sum of the unit price, quantity, discounts, and tax. */
 			ExtendedAmount: DevKit.Controls.Money;
 			/** Unique identifier of the invoice associated with the invoice product line item. */
@@ -244,7 +248,7 @@ declare namespace DevKit {
 			/** Type a name or description to identify the type of write-in product included in the invoice. */
 			ProductDescription: DevKit.Controls.String;
 			/** Type a name or description to identify the type of write-in product included in the invoice. */
-			ProductDescription_1: DevKit.Controls.String;
+			ProductDescription1: DevKit.Controls.String;
 			/** Choose the product to include on the invoice. */
 			ProductId: DevKit.Controls.Lookup;
 			/** Product Type */
@@ -294,6 +298,8 @@ declare namespace DevKit {
 			/** Select whether the invoice product should be shipped to the specified address or held until the customer calls with further pick up or delivery instructions. */
 			WillCall: DevKit.Controls.Boolean;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			ChargeableTransactionsGrid: DevKit.Controls.Grid;
 			ComplimentaryTransactionsGrid: DevKit.Controls.Grid;
@@ -312,6 +318,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Project */
 		Body: DevKit.FormProject.Body;
+		/** The Process of form Project */
+		Process: DevKit.FormProject.Process;
 		/** The Grid of form Project */
 		Grid: DevKit.FormProject.Grid;
 		/** The SidePanes of form Project */

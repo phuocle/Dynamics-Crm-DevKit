@@ -10,6 +10,8 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormSession_event_Form extends DevKit.IForm {
 		/**
@@ -22,6 +24,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Session_event_Form */
 		Body: DevKit.FormSession_event_Form.Body;
+		/** The Process of form Session_event_Form */
+		Process: DevKit.FormSession_event_Form.Process;
 		/** The SidePanes of form Session_event_Form */
 		SidePanes: DevKit.SidePanes;
 	}

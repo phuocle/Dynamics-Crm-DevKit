@@ -23,6 +23,8 @@ declare namespace DevKit {
 			/** Total time spent on the case resolution activity. */
 			TotalTimeSpent: DevKit.Controls.Integer;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormIncidentResolution_Information extends DevKit.IForm {
 		/**
@@ -35,6 +37,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form IncidentResolution_Information */
 		Body: DevKit.FormIncidentResolution_Information.Body;
+		/** The Process of form IncidentResolution_Information */
+		Process: DevKit.FormIncidentResolution_Information.Process;
 		/** The SidePanes of form IncidentResolution_Information */
 		SidePanes: DevKit.SidePanes;
 	}

@@ -51,11 +51,6 @@ var DevKit;
 		form.Body = body;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var navigation = {
 			nav_msdyn_msdyn_agreementbookingservice_msdyn_workorderservice_AgreementBookingService: {},
 			navProcessSessions: {}
@@ -123,11 +118,6 @@ var DevKit;
 		form.Footer = footer;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var navigation = {
 			navProcessSessions: {}
 		};

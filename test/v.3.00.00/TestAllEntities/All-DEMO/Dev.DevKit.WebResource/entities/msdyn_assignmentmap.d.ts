@@ -11,6 +11,8 @@ declare namespace DevKit {
 			msdyn_name: DevKit.Controls.String;
 			msdyn_systemuserid: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_assignmentmap_Information extends DevKit.IForm {
 		/**
@@ -23,6 +25,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_assignmentmap_Information */
 		Body: DevKit.Formmsdyn_assignmentmap_Information.Body;
+		/** The Process of form msdyn_assignmentmap_Information */
+		Process: DevKit.Formmsdyn_assignmentmap_Information.Process;
 		/** The SidePanes of form msdyn_assignmentmap_Information */
 		SidePanes: DevKit.SidePanes;
 	}

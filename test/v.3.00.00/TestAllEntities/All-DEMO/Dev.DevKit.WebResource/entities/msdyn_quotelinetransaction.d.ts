@@ -35,7 +35,7 @@ declare namespace DevKit {
 			/** Enter the amount on the quote line estimate. */
 			msdyn_Amount: DevKit.Controls.Money;
 			/** Enter the amount on the quote line estimate. */
-			msdyn_Amount_1: DevKit.Controls.Money;
+			msdyn_Amount1: DevKit.Controls.Money;
 			msdyn_amount_after_tax: DevKit.Controls.Money;
 			/** Select the calculation method used for the amount on the estimate line. Valid methods are: Multiply Quantity By Price, Fixed Price, Multiply Basis Quantity By Price, Multiply Basis Amount By Percent */
 			msdyn_AmountMethod: DevKit.Controls.OptionSet;
@@ -44,7 +44,7 @@ declare namespace DevKit {
 			/** Select whether this quote line estimate will be charged to the customer or not. Only chargeable transactions will add to the invoice total */
 			msdyn_BillingType: DevKit.Controls.OptionSet;
 			/** Select whether this quote line estimate will be charged to the customer or not. Only chargeable transactions will add to the invoice total */
-			msdyn_BillingType_1: DevKit.Controls.OptionSet;
+			msdyn_BillingType1: DevKit.Controls.OptionSet;
 			/** Shows the resource. */
 			msdyn_bookableresource: DevKit.Controls.Lookup;
 			/** Select the contact customer on the quote. */
@@ -55,13 +55,13 @@ declare namespace DevKit {
 			/** Type the name of the custom entity. */
 			msdyn_description: DevKit.Controls.String;
 			/** Type the name of the custom entity. */
-			msdyn_description_1: DevKit.Controls.String;
+			msdyn_description1: DevKit.Controls.String;
 			/** Enter the date that the invoice is sent to the customer. Only relevant on invoice and invoice line transactions */
 			msdyn_DocumentDate: DevKit.Controls.Date;
 			/** Enter the end date of the work being estimated on the quote line estimate. */
 			msdyn_EndDateTime: DevKit.Controls.Date;
 			/** Enter the end date of the work being estimated on the quote line estimate. */
-			msdyn_EndDateTime_1: DevKit.Controls.Date;
+			msdyn_EndDateTime1: DevKit.Controls.Date;
 			/** Points to the quote line detail that originated an entry. For example, a revenue entry points to its related cost entry. */
 			msdyn_Origin: DevKit.Controls.Lookup;
 			/** Enter the amount, in percent, to multiply the basis by. This field is relevant when the amount calculation method is "Multiply basis amount by percent." */
@@ -69,11 +69,11 @@ declare namespace DevKit {
 			/** Enter the price on the quote line estimate. */
 			msdyn_Price: DevKit.Controls.Money;
 			/** Enter the price on the quote line estimate. */
-			msdyn_Price_1: DevKit.Controls.Money;
+			msdyn_Price1: DevKit.Controls.Money;
 			/** Select the price List used to default price on the estimate line. */
 			msdyn_PriceList: DevKit.Controls.Lookup;
 			/** Select the price List used to default price on the estimate line. */
-			msdyn_PriceList_1: DevKit.Controls.Lookup;
+			msdyn_PriceList1: DevKit.Controls.Lookup;
 			/** Select the product on the quote line estimate. */
 			msdyn_Product: DevKit.Controls.Lookup;
 			/** Select the project being referenced by the quote line estimate. */
@@ -81,42 +81,42 @@ declare namespace DevKit {
 			/** Enter the quantity on the quote line estimate. */
 			msdyn_Quantity: DevKit.Controls.Decimal;
 			/** Enter the quantity on the quote line estimate. */
-			msdyn_Quantity_1: DevKit.Controls.Decimal;
+			msdyn_Quantity1: DevKit.Controls.Decimal;
 			/** Select the denormalized reference to the quote. This is used for performance improvements and to allow the use of Power BI on a quote. */
 			msdyn_QuoteId: DevKit.Controls.Lookup;
 			/** Select the denormalized reference to the quote. This is used for performance improvements and to allow the use of Power BI on a quote. */
-			msdyn_QuoteId_1: DevKit.Controls.Lookup;
+			msdyn_QuoteId1: DevKit.Controls.Lookup;
 			/** Unique identifier for Quote Line to which this estimate line belongs to. */
 			msdyn_quotelineid: DevKit.Controls.Lookup;
 			/** Select the role on the quote line estimate. */
 			msdyn_ResourceCategory: DevKit.Controls.Lookup;
 			/** Select the role on the quote line estimate. */
-			msdyn_ResourceCategory_1: DevKit.Controls.Lookup;
+			msdyn_ResourceCategory1: DevKit.Controls.Lookup;
 			/** Select the organizational unit of the resource who should perform the work. */
 			msdyn_ResourceOrganizationalUnitId: DevKit.Controls.Lookup;
 			/** Enter the estimated start of the work being estimated on the quote line estimate. */
 			msdyn_StartDateTime: DevKit.Controls.Date;
 			/** Enter the estimated start of the work being estimated on the quote line estimate. */
-			msdyn_StartDateTime_1: DevKit.Controls.Date;
+			msdyn_StartDateTime1: DevKit.Controls.Date;
 			/** Select the project work breakdown structure (WBS) task referenced by the quote line estimate. */
 			msdyn_Task: DevKit.Controls.Lookup;
 			msdyn_tax: DevKit.Controls.Money;
 			/** Select the category on the quote line estimate. */
 			msdyn_TransactionCategory: DevKit.Controls.Lookup;
 			/** Select the category on the quote line estimate. */
-			msdyn_TransactionCategory_1: DevKit.Controls.Lookup;
+			msdyn_TransactionCategory1: DevKit.Controls.Lookup;
 			/** Transaction classification for the quote line */
 			msdyn_TransactionClassification: DevKit.Controls.OptionSet;
 			/** Transaction classification for the quote line */
-			msdyn_TransactionClassification_1: DevKit.Controls.OptionSet;
+			msdyn_TransactionClassification1: DevKit.Controls.OptionSet;
 			/** Shows the transaction type for this quote line. */
 			msdyn_TransactionTypeCode: DevKit.Controls.OptionSet;
 			/** Shows the transaction type for this quote line. */
-			msdyn_TransactionTypeCode_1: DevKit.Controls.OptionSet;
+			msdyn_TransactionTypeCode1: DevKit.Controls.OptionSet;
 			/** Select the unit that the quantity is estimated in on this quote line estimate. */
 			msdyn_Unit: DevKit.Controls.Lookup;
 			/** Select the unit that the quantity is estimated in on this quote line estimate. */
-			msdyn_Unit_1: DevKit.Controls.Lookup;
+			msdyn_Unit1: DevKit.Controls.Lookup;
 			/** Select the unit schedule associated with the estimate line. */
 			msdyn_UnitSchedule: DevKit.Controls.Lookup;
 			msdyn_VendorType: DevKit.Controls.OptionSet;
@@ -124,6 +124,8 @@ declare namespace DevKit {
 			OwnerId: DevKit.Controls.Lookup;
 			/** Shows the currency associated with the entity. */
 			TransactionCurrencyId: DevKit.Controls.Lookup;
+		}
+		interface Process extends DevKit.Controls.IProcess {
 		}
 	}
 	class Formmsdyn_quotelinetransaction_Project_Information extends DevKit.IForm {
@@ -137,6 +139,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_quotelinetransaction_Project_Information */
 		Body: DevKit.Formmsdyn_quotelinetransaction_Project_Information.Body;
+		/** The Process of form msdyn_quotelinetransaction_Project_Information */
+		Process: DevKit.Formmsdyn_quotelinetransaction_Project_Information.Process;
 		/** The SidePanes of form msdyn_quotelinetransaction_Project_Information */
 		SidePanes: DevKit.SidePanes;
 	}

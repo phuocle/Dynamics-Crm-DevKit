@@ -38,6 +38,8 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			RolesGrid: DevKit.Controls.Grid;
 			TransactionCategoriesGrid: DevKit.Controls.Grid;
@@ -54,6 +56,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_opportunitylinetransactionclassificatio_Information */
 		Body: DevKit.Formmsdyn_opportunitylinetransactionclassificatio_Information.Body;
+		/** The Process of form msdyn_opportunitylinetransactionclassificatio_Information */
+		Process: DevKit.Formmsdyn_opportunitylinetransactionclassificatio_Information.Process;
 		/** The Grid of form msdyn_opportunitylinetransactionclassificatio_Information */
 		Grid: DevKit.Formmsdyn_opportunitylinetransactionclassificatio_Information.Grid;
 		/** The SidePanes of form msdyn_opportunitylinetransactionclassificatio_Information */

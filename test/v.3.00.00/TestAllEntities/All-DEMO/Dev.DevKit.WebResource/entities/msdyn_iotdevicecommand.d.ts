@@ -28,7 +28,7 @@ declare namespace DevKit {
 			/** This optional field denotes the command definition that is used to construct the command string. */
 			msdyn_Command: DevKit.Controls.Lookup;
 			/** This optional field denotes the command definition that is used to construct the command string. */
-			msdyn_Command_1: DevKit.Controls.Lookup;
+			msdyn_Command1: DevKit.Controls.Lookup;
 			/** Describes the status of the command. If this stays at "In Progress" for a long time, verify the IoT endpoint configuration. */
 			msdyn_CommandStatus: DevKit.Controls.OptionSet;
 			/** A reason field that explains the command status. */
@@ -36,29 +36,31 @@ declare namespace DevKit {
 			/** The command will be sent to a device connected to this asset. */
 			msdyn_CustomerAsset: DevKit.Controls.Lookup;
 			/** The command will be sent to a device connected to this asset. */
-			msdyn_CustomerAsset_1: DevKit.Controls.Lookup;
+			msdyn_CustomerAsset1: DevKit.Controls.Lookup;
 			/** IoT device to send the message to. */
 			msdyn_Device: DevKit.Controls.Lookup;
 			/** IoT device to send the message to. */
-			msdyn_Device_1: DevKit.Controls.Lookup;
+			msdyn_Device1: DevKit.Controls.Lookup;
 			/** The ID of the IoT device to send the message to. */
 			msdyn_DeviceID: DevKit.Controls.String;
 			/** Message to send to the IoT device. E.g.: A Json string. */
 			msdyn_Message: DevKit.Controls.String;
 			/** Message to send to the IoT device. E.g.: A Json string. */
-			msdyn_Message_1: DevKit.Controls.String;
+			msdyn_Message1: DevKit.Controls.String;
 			/** Message to send to the IoT device. E.g.: A Json string. */
-			msdyn_Message_2: DevKit.Controls.String;
+			msdyn_Message2: DevKit.Controls.String;
 			/** The name of the custom entity. */
 			msdyn_name: DevKit.Controls.String;
 			/** The name of the custom entity. */
-			msdyn_name_1: DevKit.Controls.String;
+			msdyn_name1: DevKit.Controls.String;
 			/** Reference to a primary alert in response to which the message is being sent. */
 			msdyn_ParentAlert: DevKit.Controls.Lookup;
 			/** Yes, if a copy of the command should be sent to all registered devices connected under the parent entity of the selected device. No, if this command needs to be sent only to the selected device. */
 			msdyn_SendToAllConnectedDevices: DevKit.Controls.Boolean;
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
+		}
+		interface Process extends DevKit.Controls.IProcess {
 		}
 	}
 	class Formmsdyn_iotdevicecommand_Information extends DevKit.IForm {
@@ -72,6 +74,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_iotdevicecommand_Information */
 		Body: DevKit.Formmsdyn_iotdevicecommand_Information.Body;
+		/** The Process of form msdyn_iotdevicecommand_Information */
+		Process: DevKit.Formmsdyn_iotdevicecommand_Information.Process;
 		/** The SidePanes of form msdyn_iotdevicecommand_Information */
 		SidePanes: DevKit.SidePanes;
 	}

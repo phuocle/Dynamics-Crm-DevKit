@@ -20,6 +20,8 @@ declare namespace DevKit {
 			/** Status of the Wall View User Setting */
 			statecode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_wallsavedqueryusersettings_Information extends DevKit.IForm {
 		/**
@@ -34,6 +36,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyn_wallsavedqueryusersettings_Information.Body;
 		/** The Footer section of form msdyn_wallsavedqueryusersettings_Information */
 		Footer: DevKit.Formmsdyn_wallsavedqueryusersettings_Information.Footer;
+		/** The Process of form msdyn_wallsavedqueryusersettings_Information */
+		Process: DevKit.Formmsdyn_wallsavedqueryusersettings_Information.Process;
 		/** The SidePanes of form msdyn_wallsavedqueryusersettings_Information */
 		SidePanes: DevKit.SidePanes;
 	}

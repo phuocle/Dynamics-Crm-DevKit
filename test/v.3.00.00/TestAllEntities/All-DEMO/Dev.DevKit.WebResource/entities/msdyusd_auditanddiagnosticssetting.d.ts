@@ -81,6 +81,8 @@ declare namespace DevKit {
 		interface Navigation {
 			nav_msdyusd_auditdiag_tracesourcesetting: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			TraceSourceSettings: DevKit.Controls.Grid;
 		}
@@ -98,6 +100,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyusd_auditanddiagnosticssetting_Information.Body;
 		/** The Navigation of form msdyusd_auditanddiagnosticssetting_Information */
 		Navigation: DevKit.Formmsdyusd_auditanddiagnosticssetting_Information.Navigation;
+		/** The Process of form msdyusd_auditanddiagnosticssetting_Information */
+		Process: DevKit.Formmsdyusd_auditanddiagnosticssetting_Information.Process;
 		/** The Grid of form msdyusd_auditanddiagnosticssetting_Information */
 		Grid: DevKit.Formmsdyusd_auditanddiagnosticssetting_Information.Grid;
 		/** The SidePanes of form msdyusd_auditanddiagnosticssetting_Information */

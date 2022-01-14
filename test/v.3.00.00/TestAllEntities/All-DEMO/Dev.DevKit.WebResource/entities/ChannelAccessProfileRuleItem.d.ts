@@ -29,6 +29,8 @@ declare namespace DevKit {
 			Name: DevKit.Controls.String;
 			notescontrol: DevKit.Controls.Note;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormChannelAccessProfileRuleItem_Information extends DevKit.IForm {
 		/**
@@ -41,6 +43,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form ChannelAccessProfileRuleItem_Information */
 		Body: DevKit.FormChannelAccessProfileRuleItem_Information.Body;
+		/** The Process of form ChannelAccessProfileRuleItem_Information */
+		Process: DevKit.FormChannelAccessProfileRuleItem_Information.Process;
 		/** The SidePanes of form ChannelAccessProfileRuleItem_Information */
 		SidePanes: DevKit.SidePanes;
 	}

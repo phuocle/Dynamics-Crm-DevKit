@@ -18,6 +18,8 @@ declare namespace DevKit {
 			/** Name of the profile. */
 			Name: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormFieldSecurityProfile_Information extends DevKit.IForm {
 		/**
@@ -30,6 +32,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form FieldSecurityProfile_Information */
 		Body: DevKit.FormFieldSecurityProfile_Information.Body;
+		/** The Process of form FieldSecurityProfile_Information */
+		Process: DevKit.FormFieldSecurityProfile_Information.Process;
 		/** The SidePanes of form FieldSecurityProfile_Information */
 		SidePanes: DevKit.SidePanes;
 	}

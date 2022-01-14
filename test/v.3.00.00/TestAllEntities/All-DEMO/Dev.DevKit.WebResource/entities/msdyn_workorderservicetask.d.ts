@@ -24,17 +24,17 @@ declare namespace DevKit {
 			/** Agreement Booking Service Task linked to this Work Order Service Task */
 			msdyn_AgreementBookingServiceTask: DevKit.Controls.Lookup;
 			/** Agreement Booking Service Task linked to this Work Order Service Task */
-			msdyn_AgreementBookingServiceTask_1: DevKit.Controls.Lookup;
+			msdyn_AgreementBookingServiceTask1: DevKit.Controls.Lookup;
 			/** Unique identifier for Resource Booking associated with Work Order Service Task. */
 			msdyn_Booking: DevKit.Controls.Lookup;
 			/** Unique identifier for Resource Booking associated with Work Order Service Task. */
-			msdyn_Booking_1: DevKit.Controls.Lookup;
+			msdyn_Booking1: DevKit.Controls.Lookup;
 			/** Unique identifier for Customer Asset associated with Work Order Service Task. */
 			msdyn_CustomerAsset: DevKit.Controls.Lookup;
 			/** Unique identifier for Customer Asset associated with Work Order Service Task. */
-			msdyn_CustomerAsset_1: DevKit.Controls.Lookup;
+			msdyn_CustomerAsset1: DevKit.Controls.Lookup;
 			msdyn_Description: DevKit.Controls.String;
-			msdyn_Description_1: DevKit.Controls.String;
+			msdyn_Description1: DevKit.Controls.String;
 			msdyn_EstimatedDuration: DevKit.Controls.Integer;
 			/** Unique identifier for Inspection Template associated with Work Order Service Task. */
 			msdyn_Inspection: DevKit.Controls.Lookup;
@@ -58,7 +58,7 @@ declare namespace DevKit {
 			/** Unique identifier for Work Order Incident associated with Work Order Service Task. */
 			msdyn_WorkOrderIncident: DevKit.Controls.Lookup;
 			/** Unique identifier for Work Order Incident associated with Work Order Service Task. */
-			msdyn_WorkOrderIncident_1: DevKit.Controls.Lookup;
+			msdyn_WorkOrderIncident1: DevKit.Controls.Lookup;
 			notescontrol: DevKit.Controls.Note;
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
@@ -69,6 +69,8 @@ declare namespace DevKit {
 		}
 		interface Navigation {
 			navProcessSessions: DevKit.Controls.NavigationItem
+		}
+		interface Process extends DevKit.Controls.IProcess {
 		}
 	}
 	class Formmsdyn_workorderservicetask_Information extends DevKit.IForm {
@@ -86,6 +88,8 @@ declare namespace DevKit {
 		Footer: DevKit.Formmsdyn_workorderservicetask_Information.Footer;
 		/** The Navigation of form msdyn_workorderservicetask_Information */
 		Navigation: DevKit.Formmsdyn_workorderservicetask_Information.Navigation;
+		/** The Process of form msdyn_workorderservicetask_Information */
+		Process: DevKit.Formmsdyn_workorderservicetask_Information.Process;
 		/** The SidePanes of form msdyn_workorderservicetask_Information */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -140,6 +144,8 @@ declare namespace DevKit {
 			navAsyncOperations: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormWork_Order_Service_Task_Mobile extends DevKit.IForm {
 		/**
@@ -154,6 +160,8 @@ declare namespace DevKit {
 		Body: DevKit.FormWork_Order_Service_Task_Mobile.Body;
 		/** The Navigation of form Work_Order_Service_Task_Mobile */
 		Navigation: DevKit.FormWork_Order_Service_Task_Mobile.Navigation;
+		/** The Process of form Work_Order_Service_Task_Mobile */
+		Process: DevKit.FormWork_Order_Service_Task_Mobile.Process;
 		/** The SidePanes of form Work_Order_Service_Task_Mobile */
 		SidePanes: DevKit.SidePanes;
 	}

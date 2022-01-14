@@ -43,6 +43,8 @@ declare namespace DevKit {
 			/** Enter the account, contact, lead, queue, or user recipients for the fax. */
 			to: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormFax extends DevKit.IForm {
 		/**
@@ -57,6 +59,8 @@ declare namespace DevKit {
 		Body: DevKit.FormFax.Body;
 		/** The Header section of form Fax */
 		Header: DevKit.FormFax.Header;
+		/** The Process of form Fax */
+		Process: DevKit.FormFax.Process;
 		/** The SidePanes of form Fax */
 		SidePanes: DevKit.SidePanes;
 	}

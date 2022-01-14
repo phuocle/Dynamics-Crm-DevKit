@@ -18,9 +18,9 @@ var DevKit;
 			BaseAmount: {},
 			CreatedOn: {},
 			IsPriceOverridden: {},
-			IsPriceOverridden_1: {},
+			IsPriceOverridden1: {},
 			IsProductOverridden: {},
-			IsProductOverridden_1: {},
+			IsProductOverridden1: {},
 			ManualDiscountAmount: {},
 			msdyn_Agreement: {},
 			msdyn_Duration: {},
@@ -40,7 +40,7 @@ var DevKit;
 			ProductId: {},
 			ProductTypeCode: {},
 			Quantity: {},
-			Quantity_1: {},
+			Quantity1: {},
 			QuoteBookingSetups: {},
 			QuoteId: {},
 			ShipTo_City: {},
@@ -91,21 +91,11 @@ var DevKit;
 		form.Body = body;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var grid = {
 			QuoteBookingSetups: {},
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
 		devKit.LoadOthers(formContext, form, defaultWebResourceName);
@@ -135,7 +125,7 @@ var DevKit;
 			PropertyConfigurationStatus: {},
 			Quantity: {},
 			QuoteId: {},
-			QuoteId_1: {},
+			QuoteId1: {},
 			RequestDeliveryBy: {},
 			SalesRepId: {},
 			ShipTo_City: {},
@@ -185,16 +175,6 @@ var DevKit;
 		form.Body = body;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
 		devKit.LoadOthers(formContext, form, defaultWebResourceName);
@@ -217,18 +197,18 @@ var DevKit;
 			ChargeableRolesGrid: {},
 			EstimationLines: {},
 			ExtendedAmount: {},
-			ExtendedAmount_1: {},
-			ExtendedAmount_2: {},
+			ExtendedAmount1: {},
+			ExtendedAmount2: {},
 			InvoiceScheduleGrid: {},
 			IsPriceOverridden: {},
 			IsProductOverridden: {},
-			IsProductOverridden_1: {},
+			IsProductOverridden1: {},
 			ManualDiscountAmount: {},
 			MilestonesGrid: {},
 			msdyn_BillingMethod: {},
 			msdyn_BillingStartDate: {},
 			msdyn_BudgetAmount: {},
-			msdyn_BudgetAmount_1: {},
+			msdyn_BudgetAmount1: {},
 			msdyn_CostAmount: {},
 			msdyn_CostPricePerUnit: {},
 			msdyn_IncludeExpense: {},
@@ -238,23 +218,23 @@ var DevKit;
 			msdyn_LineType: {},
 			msdyn_Project: {},
 			PricePerUnit: {},
-			PricePerUnit_1: {},
-			PricePerUnit_2: {},
+			PricePerUnit1: {},
+			PricePerUnit2: {},
 			ProductDescription: {},
-			ProductDescription_1: {},
-			ProductDescription_2: {},
+			ProductDescription1: {},
+			ProductDescription2: {},
 			ProductId: {},
-			ProductId_1: {},
+			ProductId1: {},
 			ProductTypeCode: {},
-			ProductTypeCode_1: {},
+			ProductTypeCode1: {},
 			Quantity: {},
-			Quantity_1: {},
+			Quantity1: {},
 			QuoteId: {},
-			QuoteId_1: {},
-			QuoteId_2: {},
-			QuoteId_3: {},
+			QuoteId1: {},
+			QuoteId2: {},
+			QuoteId3: {},
 			RequestDeliveryBy: {},
-			RequestDeliveryBy_1: {},
+			RequestDeliveryBy1: {},
 			SalesRepId: {},
 			ShipTo_City: {},
 			ShipTo_ContactName: {},
@@ -269,11 +249,11 @@ var DevKit;
 			ShipTo_StateOrProvince: {},
 			ShipTo_Telephone: {},
 			Tax: {},
-			Tax_1: {},
-			Tax_2: {},
+			Tax1: {},
+			Tax2: {},
 			TransactionCurrencyId: {},
 			UoMId: {},
-			UoMId_1: {},
+			UoMId1: {},
 			VolumeDiscountAmount: {},
 			WillCall: {}
 		};
@@ -342,11 +322,6 @@ var DevKit;
 		form.Body = body;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var grid = {
 			ChargeableCategoriesGrid: {},
 			ChargeableRolesGrid: {},
@@ -356,11 +331,6 @@ var DevKit;
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
 		devKit.LoadOthers(formContext, form, defaultWebResourceName);

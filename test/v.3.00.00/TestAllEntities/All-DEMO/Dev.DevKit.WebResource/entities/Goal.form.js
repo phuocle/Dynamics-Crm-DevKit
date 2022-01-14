@@ -34,13 +34,13 @@ var DevKit;
 			IsFiscalPeriodGoal: {},
 			LastRolledupDate: {},
 			MetricId: {},
-			MetricId_1: {},
+			MetricId1: {},
 			notescontrol: {},
 			OwnerId: {},
 			ParentGoalId: {},
 			Percentage: {},
-			Percentage_1: {},
-			Percentage_2: {},
+			Percentage1: {},
+			Percentage2: {},
 			RollupOnlyFromChildGoals: {},
 			RollUpQueryActualDecimalId: {},
 			RollupQueryActualIntegerId: {},
@@ -92,21 +92,11 @@ var DevKit;
 		form.Footer = footer;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var grid = {
 			child_goals: {},
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
 		devKit.LoadOthers(formContext, form, defaultWebResourceName);

@@ -14,6 +14,8 @@ declare namespace DevKit {
 			/** Tooltip for Conversation Action */
 			msdyn_Tooltip: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_conversationactionlocale_Information extends DevKit.IForm {
 		/**
@@ -26,6 +28,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_conversationactionlocale_Information */
 		Body: DevKit.Formmsdyn_conversationactionlocale_Information.Body;
+		/** The Process of form msdyn_conversationactionlocale_Information */
+		Process: DevKit.Formmsdyn_conversationactionlocale_Information.Process;
 		/** The SidePanes of form msdyn_conversationactionlocale_Information */
 		SidePanes: DevKit.SidePanes;
 	}

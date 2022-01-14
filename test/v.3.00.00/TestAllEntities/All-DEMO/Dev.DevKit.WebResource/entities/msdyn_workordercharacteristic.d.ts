@@ -25,6 +25,8 @@ declare namespace DevKit {
 		interface Navigation {
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_workordercharacteristic_Information extends DevKit.IForm {
 		/**
@@ -41,6 +43,8 @@ declare namespace DevKit {
 		Footer: DevKit.Formmsdyn_workordercharacteristic_Information.Footer;
 		/** The Navigation of form msdyn_workordercharacteristic_Information */
 		Navigation: DevKit.Formmsdyn_workordercharacteristic_Information.Navigation;
+		/** The Process of form msdyn_workordercharacteristic_Information */
+		Process: DevKit.Formmsdyn_workordercharacteristic_Information.Process;
 		/** The SidePanes of form msdyn_workordercharacteristic_Information */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -92,6 +96,8 @@ declare namespace DevKit {
 		interface Navigation {
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormWork_Order_Characteristic_Mobile extends DevKit.IForm {
 		/**
@@ -106,6 +112,8 @@ declare namespace DevKit {
 		Body: DevKit.FormWork_Order_Characteristic_Mobile.Body;
 		/** The Navigation of form Work_Order_Characteristic_Mobile */
 		Navigation: DevKit.FormWork_Order_Characteristic_Mobile.Navigation;
+		/** The Process of form Work_Order_Characteristic_Mobile */
+		Process: DevKit.FormWork_Order_Characteristic_Mobile.Process;
 		/** The SidePanes of form Work_Order_Characteristic_Mobile */
 		SidePanes: DevKit.SidePanes;
 	}

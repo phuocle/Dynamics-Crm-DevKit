@@ -33,6 +33,8 @@ declare namespace DevKit {
 			nav_msdyn_msdyn_workordersubstatus_msdyn_workorder_Status: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_workordersubstatus_Information extends DevKit.IForm {
 		/**
@@ -47,6 +49,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyn_workordersubstatus_Information.Body;
 		/** The Navigation of form msdyn_workordersubstatus_Information */
 		Navigation: DevKit.Formmsdyn_workordersubstatus_Information.Navigation;
+		/** The Process of form msdyn_workordersubstatus_Information */
+		Process: DevKit.Formmsdyn_workordersubstatus_Information.Process;
 		/** The SidePanes of form msdyn_workordersubstatus_Information */
 		SidePanes: DevKit.SidePanes;
 	}

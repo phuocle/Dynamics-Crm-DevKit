@@ -12,7 +12,7 @@ declare namespace DevKit {
 			/** Unique identifier for Inspection Template associated with Incident Type Service Task. */
 			msdyn_Inspection: DevKit.Controls.Lookup;
 			/** Unique identifier for Inspection Template associated with Incident Type Service Task. */
-			msdyn_Inspection_1: DevKit.Controls.Lookup;
+			msdyn_Inspection1: DevKit.Controls.Lookup;
 			/** Depicts whether inspection template is enabled for Incident Type Service Task */
 			msdyn_InspectionEnabled: DevKit.Controls.Boolean;
 			/** Shows the order of this task within the incident tasks. */
@@ -31,6 +31,8 @@ declare namespace DevKit {
 		interface Navigation {
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_incidenttypeservicetask_Information extends DevKit.IForm {
 		/**
@@ -47,6 +49,8 @@ declare namespace DevKit {
 		Footer: DevKit.Formmsdyn_incidenttypeservicetask_Information.Footer;
 		/** The Navigation of form msdyn_incidenttypeservicetask_Information */
 		Navigation: DevKit.Formmsdyn_incidenttypeservicetask_Information.Navigation;
+		/** The Process of form msdyn_incidenttypeservicetask_Information */
+		Process: DevKit.Formmsdyn_incidenttypeservicetask_Information.Process;
 		/** The SidePanes of form msdyn_incidenttypeservicetask_Information */
 		SidePanes: DevKit.SidePanes;
 	}

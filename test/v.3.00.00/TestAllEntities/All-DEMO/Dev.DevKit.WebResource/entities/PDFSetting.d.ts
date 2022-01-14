@@ -10,6 +10,8 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormPDFSetting_Information extends DevKit.IForm {
 		/**
@@ -22,6 +24,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form PDFSetting_Information */
 		Body: DevKit.FormPDFSetting_Information.Body;
+		/** The Process of form PDFSetting_Information */
+		Process: DevKit.FormPDFSetting_Information.Process;
 		/** The SidePanes of form PDFSetting_Information */
 		SidePanes: DevKit.SidePanes;
 	}

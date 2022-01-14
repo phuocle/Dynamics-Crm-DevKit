@@ -18,7 +18,7 @@ var DevKit;
 			msdyn_AgreementBookingIncident: {},
 			msdyn_CustomerAsset: {},
 			msdyn_Description: {},
-			msdyn_Description_1: {},
+			msdyn_Description1: {},
 			msdyn_EstimatedDuration: {},
 			msdyn_FunctionalLocation: {},
 			msdyn_IncidentResolved: {},
@@ -81,11 +81,6 @@ var DevKit;
 		form.Footer = footer;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var grid = {
 			workorderproductsgrid: {},
 			workorderresolutiongrid: {},
@@ -156,11 +151,6 @@ var DevKit;
 		form.Body = body;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var grid = {
 			workorderproductsgrid: {},
 			workorderservicesgrid: {},

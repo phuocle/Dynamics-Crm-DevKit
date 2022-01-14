@@ -21,16 +21,16 @@ var DevKit;
 			applicablewhencontrol: {},
 			BusinessHoursId: {},
 			FailureAfter: {},
-			FailureAfter_1: {},
+			FailureAfter1: {},
 			msdyn_AdvancedPauseConfiguration: {},
 			msdyn_PauseConfigurationXml: {},
 			msdyn_slakpiid: {},
 			Name: {},
-			Name_1: {},
+			Name1: {},
 			relatedcasefield: {},
 			successconditioncontrol: {},
 			WarnAfter: {},
-			WarnAfter_1: {},
+			WarnAfter1: {},
 			WebResource_preview: {},
 			WebResource_slaitem_applicablewhen_notification: {},
 			WebResource_slaitem_success_notification: {}
@@ -57,16 +57,6 @@ var DevKit;
 		form.Header = header;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
 		devKit.LoadOthers(formContext, form, defaultWebResourceName);

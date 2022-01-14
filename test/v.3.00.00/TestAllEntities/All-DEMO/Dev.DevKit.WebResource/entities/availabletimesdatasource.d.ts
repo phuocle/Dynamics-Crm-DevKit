@@ -7,6 +7,8 @@ declare namespace DevKit {
 		interface Body {
 			Name: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formavailabletimesdatasource_Information extends DevKit.IForm {
 		/**
@@ -19,6 +21,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form availabletimesdatasource_Information */
 		Body: DevKit.Formavailabletimesdatasource_Information.Body;
+		/** The Process of form availabletimesdatasource_Information */
+		Process: DevKit.Formavailabletimesdatasource_Information.Process;
 		/** The SidePanes of form availabletimesdatasource_Information */
 		SidePanes: DevKit.SidePanes;
 	}

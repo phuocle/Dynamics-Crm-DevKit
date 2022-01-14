@@ -37,6 +37,8 @@ declare namespace DevKit {
 			/** Subject associated with the activity. */
 			Subject: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_ocoutboundmessage_Information extends DevKit.IForm {
 		/**
@@ -51,6 +53,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyn_ocoutboundmessage_Information.Body;
 		/** The Header section of form msdyn_ocoutboundmessage_Information */
 		Header: DevKit.Formmsdyn_ocoutboundmessage_Information.Header;
+		/** The Process of form msdyn_ocoutboundmessage_Information */
+		Process: DevKit.Formmsdyn_ocoutboundmessage_Information.Process;
 		/** The SidePanes of form msdyn_ocoutboundmessage_Information */
 		SidePanes: DevKit.SidePanes;
 	}

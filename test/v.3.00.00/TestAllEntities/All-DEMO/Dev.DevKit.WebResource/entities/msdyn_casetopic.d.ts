@@ -8,6 +8,8 @@ declare namespace DevKit {
 			/** The name of the custom entity. */
 			msdyn_name: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_casetopic_Information extends DevKit.IForm {
 		/**
@@ -20,6 +22,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_casetopic_Information */
 		Body: DevKit.Formmsdyn_casetopic_Information.Body;
+		/** The Process of form msdyn_casetopic_Information */
+		Process: DevKit.Formmsdyn_casetopic_Information.Process;
 		/** The SidePanes of form msdyn_casetopic_Information */
 		SidePanes: DevKit.SidePanes;
 	}

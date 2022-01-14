@@ -24,6 +24,8 @@ declare namespace DevKit {
 			/** Type a title for the Category. */
 			Title: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			AssociatedCategoriesGrid: DevKit.Controls.Grid;
 		}
@@ -39,6 +41,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Category */
 		Body: DevKit.FormCategory.Body;
+		/** The Process of form Category */
+		Process: DevKit.FormCategory.Process;
 		/** The Grid of form Category */
 		Grid: DevKit.FormCategory.Grid;
 		/** The SidePanes of form Category */
@@ -57,6 +61,8 @@ declare namespace DevKit {
 			/** Type a title for the Category. */
 			Title: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormCategory_Main_Interactive extends DevKit.IForm {
 		/**
@@ -69,6 +75,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Category_Main_Interactive */
 		Body: DevKit.FormCategory_Main_Interactive.Body;
+		/** The Process of form Category_Main_Interactive */
+		Process: DevKit.FormCategory_Main_Interactive.Process;
 		/** The SidePanes of form Category_Main_Interactive */
 		SidePanes: DevKit.SidePanes;
 	}

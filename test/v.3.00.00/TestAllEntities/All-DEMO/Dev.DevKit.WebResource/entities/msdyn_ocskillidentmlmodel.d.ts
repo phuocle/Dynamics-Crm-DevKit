@@ -46,6 +46,8 @@ declare namespace DevKit {
 			statecode: DevKit.Controls.OptionSet;
 			WebResource_inputmodel: DevKit.Controls.WebResource;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			Data_loading_status: DevKit.Controls.Grid;
 			training_history: DevKit.Controls.Grid;
@@ -65,6 +67,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyn_ocskillidentmlmodel_Information.Body;
 		/** The Header section of form msdyn_ocskillidentmlmodel_Information */
 		Header: DevKit.Formmsdyn_ocskillidentmlmodel_Information.Header;
+		/** The Process of form msdyn_ocskillidentmlmodel_Information */
+		Process: DevKit.Formmsdyn_ocskillidentmlmodel_Information.Process;
 		/** The Grid of form msdyn_ocskillidentmlmodel_Information */
 		Grid: DevKit.Formmsdyn_ocskillidentmlmodel_Information.Grid;
 		/** The SidePanes of form msdyn_ocskillidentmlmodel_Information */

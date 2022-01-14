@@ -10,6 +10,8 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_lineengagementctx_Information extends DevKit.IForm {
 		/**
@@ -22,6 +24,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_lineengagementctx_Information */
 		Body: DevKit.Formmsdyn_lineengagementctx_Information.Body;
+		/** The Process of form msdyn_lineengagementctx_Information */
+		Process: DevKit.Formmsdyn_lineengagementctx_Information.Process;
 		/** The SidePanes of form msdyn_lineengagementctx_Information */
 		SidePanes: DevKit.SidePanes;
 	}

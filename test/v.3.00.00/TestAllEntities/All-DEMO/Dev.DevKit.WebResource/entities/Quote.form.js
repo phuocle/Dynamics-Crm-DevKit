@@ -81,12 +81,12 @@ var DevKit;
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
 		var process = devKit.LoadProcess(formContext);
-		form.Process = process;
-		var quickForm = {
+		var _Project_Service_Project_Stages = {
 
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
+		}
+		devKit.LoadFields(formContext, _Project_Service_Project_Stages, "header_process_");
+		process.Project_Service_Project_Stages = _Project_Service_Project_Stages;
+		form.Process = process;
 		var grid = {
 			quotedetailsGrid: {},
 			servicesGrid: {},
@@ -134,21 +134,21 @@ var DevKit;
 			FreightTermsCode: {},
 			msdyn_AccountManagerId: {},
 			msdyn_AdjustedGrossMargin: {},
-			msdyn_AdjustedGrossMargin_1: {},
+			msdyn_AdjustedGrossMargin1: {},
 			msdyn_Competitive: {},
-			msdyn_Competitive_1: {},
+			msdyn_Competitive1: {},
 			msdyn_ContractOrganizationalUnitId: {},
 			msdyn_CustomerBudgetRollUp: {},
 			msdyn_EstimatedBudget: {},
-			msdyn_EstimatedBudget_1: {},
+			msdyn_EstimatedBudget1: {},
 			msdyn_EstimatedCompletionRollUp: {},
 			msdyn_EstimatedSchedule: {},
-			msdyn_EstimatedSchedule_1: {},
+			msdyn_EstimatedSchedule1: {},
 			msdyn_GrossMargin: {},
-			msdyn_GrossMargin_1: {},
+			msdyn_GrossMargin1: {},
 			msdyn_OrderType: {},
 			msdyn_Profitability: {},
-			msdyn_Profitability_1: {},
+			msdyn_Profitability1: {},
 			msdyn_TotalChargeableCostRollup: {},
 			msdyn_TotalNonchargeableCostRollup: {},
 			Name: {},
@@ -163,13 +163,13 @@ var DevKit;
 			quoteLineDetailAnalysis: {},
 			QuoteNumber: {},
 			RequestDeliveryBy: {},
-			RequestDeliveryBy_1: {},
+			RequestDeliveryBy1: {},
 			RevisionNumber: {},
 			ShippingMethodCode: {},
 			ShipTo_Composite: {},
 			StatusCode: {},
 			TotalAmount: {},
-			TotalAmount_1: {},
+			TotalAmount1: {},
 			TotalAmount_Base: {},
 			totalQuoteAmountComparisonGrid: {},
 			TransactionCurrencyId: {},
@@ -231,12 +231,12 @@ var DevKit;
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
 		var process = devKit.LoadProcess(formContext);
-		form.Process = process;
-		var quickForm = {
+		var _Project_Service_Project_Stages = {
 
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
+		}
+		devKit.LoadFields(formContext, _Project_Service_Project_Stages, "header_process_");
+		process.Project_Service_Project_Stages = _Project_Service_Project_Stages;
+		form.Process = process;
 		var grid = {
 			costRevenueDistribution: {},
 			ProjectPriceListsSubGrid: {},
@@ -340,12 +340,12 @@ var DevKit;
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
 		var process = devKit.LoadProcess(formContext);
-		form.Process = process;
-		var quickForm = {
+		var _Project_Service_Project_Stages = {
 
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
+		}
+		devKit.LoadFields(formContext, _Project_Service_Project_Stages, "header_process_");
+		process.Project_Service_Project_Stages = _Project_Service_Project_Stages;
+		form.Process = process;
 		var grid = {
 			quotedetailsGrid: {},
 		};
@@ -367,7 +367,7 @@ var DevKit;
 		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
-	DevKit.FormQuote = function(executionContext, defaultWebResourceName) {
+	DevKit.FormQuote2 = function(executionContext, defaultWebResourceName) {
 		var formContext = null;
 		if (executionContext !== undefined)
 		{

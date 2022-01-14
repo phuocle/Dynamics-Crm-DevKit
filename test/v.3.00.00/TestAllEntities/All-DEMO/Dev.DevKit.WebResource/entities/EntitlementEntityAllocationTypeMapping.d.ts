@@ -12,6 +12,8 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormEntitlementEntityAllocationTypeMapping_Information extends DevKit.IForm {
 		/**
@@ -24,6 +26,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form EntitlementEntityAllocationTypeMapping_Information */
 		Body: DevKit.FormEntitlementEntityAllocationTypeMapping_Information.Body;
+		/** The Process of form EntitlementEntityAllocationTypeMapping_Information */
+		Process: DevKit.FormEntitlementEntityAllocationTypeMapping_Information.Process;
 		/** The SidePanes of form EntitlementEntityAllocationTypeMapping_Information */
 		SidePanes: DevKit.SidePanes;
 	}

@@ -38,6 +38,8 @@ declare namespace DevKit {
 		interface Navigation {
 			navSubDocumentLocations: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormSharePointDocumentLocation_Information extends DevKit.IForm {
 		/**
@@ -54,6 +56,8 @@ declare namespace DevKit {
 		Footer: DevKit.FormSharePointDocumentLocation_Information.Footer;
 		/** The Navigation of form SharePointDocumentLocation_Information */
 		Navigation: DevKit.FormSharePointDocumentLocation_Information.Navigation;
+		/** The Process of form SharePointDocumentLocation_Information */
+		Process: DevKit.FormSharePointDocumentLocation_Information.Process;
 		/** The SidePanes of form SharePointDocumentLocation_Information */
 		SidePanes: DevKit.SidePanes;
 	}

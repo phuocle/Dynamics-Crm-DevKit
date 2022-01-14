@@ -12,6 +12,8 @@ declare namespace DevKit {
 			/** The name of the Marketing form attributes settings. */
 			Name: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmarketingformdisplayattributes_Information extends DevKit.IForm {
 		/**
@@ -24,6 +26,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form marketingformdisplayattributes_Information */
 		Body: DevKit.Formmarketingformdisplayattributes_Information.Body;
+		/** The Process of form marketingformdisplayattributes_Information */
+		Process: DevKit.Formmarketingformdisplayattributes_Information.Process;
 		/** The SidePanes of form marketingformdisplayattributes_Information */
 		SidePanes: DevKit.SidePanes;
 	}

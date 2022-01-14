@@ -16,6 +16,8 @@ declare namespace DevKit {
 			/** Unique name for the catalog */
 			UniqueName: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormCatalog_Information extends DevKit.IForm {
 		/**
@@ -28,6 +30,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Catalog_Information */
 		Body: DevKit.FormCatalog_Information.Body;
+		/** The Process of form Catalog_Information */
+		Process: DevKit.FormCatalog_Information.Process;
 		/** The SidePanes of form Catalog_Information */
 		SidePanes: DevKit.SidePanes;
 	}

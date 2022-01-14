@@ -16,6 +16,8 @@ declare namespace DevKit {
 			/** Unique identifier of the business unit with which the resource specification is associated. */
 			BusinessUnitId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormResourceSpec_Information extends DevKit.IForm {
 		/**
@@ -28,6 +30,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form ResourceSpec_Information */
 		Body: DevKit.FormResourceSpec_Information.Body;
+		/** The Process of form ResourceSpec_Information */
+		Process: DevKit.FormResourceSpec_Information.Process;
 		/** The SidePanes of form ResourceSpec_Information */
 		SidePanes: DevKit.SidePanes;
 	}

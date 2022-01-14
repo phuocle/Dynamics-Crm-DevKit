@@ -66,6 +66,8 @@ declare namespace DevKit {
 			/** Website URL for the business unit. */
 			WebSiteUrl: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormBusinessUnit_Information extends DevKit.IForm {
 		/**
@@ -78,6 +80,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form BusinessUnit_Information */
 		Body: DevKit.FormBusinessUnit_Information.Body;
+		/** The Process of form BusinessUnit_Information */
+		Process: DevKit.FormBusinessUnit_Information.Process;
 		/** The SidePanes of form BusinessUnit_Information */
 		SidePanes: DevKit.SidePanes;
 	}

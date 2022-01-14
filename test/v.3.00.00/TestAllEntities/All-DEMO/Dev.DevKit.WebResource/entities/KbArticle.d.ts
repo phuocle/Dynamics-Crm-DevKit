@@ -45,6 +45,8 @@ declare namespace DevKit {
 			/** Shows whether the knowledge base article is in draft, unapproved, or published status. Published articles are read-only and can't be edited unless they are unpublished. */
 			StateCode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			ArticleComments: DevKit.Controls.Grid;
 		}
@@ -62,6 +64,8 @@ declare namespace DevKit {
 		Body: DevKit.FormKbArticle_Information.Body;
 		/** The Footer section of form KbArticle_Information */
 		Footer: DevKit.FormKbArticle_Information.Footer;
+		/** The Process of form KbArticle_Information */
+		Process: DevKit.FormKbArticle_Information.Process;
 		/** The Grid of form KbArticle_Information */
 		Grid: DevKit.FormKbArticle_Information.Grid;
 		/** The SidePanes of form KbArticle_Information */

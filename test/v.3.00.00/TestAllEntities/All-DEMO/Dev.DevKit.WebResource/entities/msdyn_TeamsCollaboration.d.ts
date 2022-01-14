@@ -8,6 +8,8 @@ declare namespace DevKit {
 			/** Collaboration team name */
 			msdyn_TeamName: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_TeamsCollaboration_Information extends DevKit.IForm {
 		/**
@@ -20,6 +22,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_TeamsCollaboration_Information */
 		Body: DevKit.Formmsdyn_TeamsCollaboration_Information.Body;
+		/** The Process of form msdyn_TeamsCollaboration_Information */
+		Process: DevKit.Formmsdyn_TeamsCollaboration_Information.Process;
 		/** The SidePanes of form msdyn_TeamsCollaboration_Information */
 		SidePanes: DevKit.SidePanes;
 	}

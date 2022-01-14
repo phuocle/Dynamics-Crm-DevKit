@@ -38,6 +38,8 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			NotificationFields: DevKit.Controls.Grid;
 		}
@@ -53,6 +55,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_notificationtemplate_Information */
 		Body: DevKit.Formmsdyn_notificationtemplate_Information.Body;
+		/** The Process of form msdyn_notificationtemplate_Information */
+		Process: DevKit.Formmsdyn_notificationtemplate_Information.Process;
 		/** The Grid of form msdyn_notificationtemplate_Information */
 		Grid: DevKit.Formmsdyn_notificationtemplate_Information.Grid;
 		/** The SidePanes of form msdyn_notificationtemplate_Information */

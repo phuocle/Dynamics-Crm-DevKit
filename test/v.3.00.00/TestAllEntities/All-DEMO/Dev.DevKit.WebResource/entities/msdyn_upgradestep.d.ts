@@ -19,6 +19,8 @@ declare namespace DevKit {
 			msdyn_Status: DevKit.Controls.OptionSet;
 			msdyn_StepID: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_upgradestep_Information extends DevKit.IForm {
 		/**
@@ -31,6 +33,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_upgradestep_Information */
 		Body: DevKit.Formmsdyn_upgradestep_Information.Body;
+		/** The Process of form msdyn_upgradestep_Information */
+		Process: DevKit.Formmsdyn_upgradestep_Information.Process;
 		/** The SidePanes of form msdyn_upgradestep_Information */
 		SidePanes: DevKit.SidePanes;
 	}

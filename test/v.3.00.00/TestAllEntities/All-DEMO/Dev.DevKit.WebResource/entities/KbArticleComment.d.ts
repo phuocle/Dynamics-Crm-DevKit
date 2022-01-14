@@ -24,6 +24,8 @@ declare namespace DevKit {
 			/** Title of the knowledge base article comment. */
 			Title: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormKbArticleComment_Information extends DevKit.IForm {
 		/**
@@ -36,6 +38,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form KbArticleComment_Information */
 		Body: DevKit.FormKbArticleComment_Information.Body;
+		/** The Process of form KbArticleComment_Information */
+		Process: DevKit.FormKbArticleComment_Information.Process;
 		/** The SidePanes of form KbArticleComment_Information */
 		SidePanes: DevKit.SidePanes;
 	}

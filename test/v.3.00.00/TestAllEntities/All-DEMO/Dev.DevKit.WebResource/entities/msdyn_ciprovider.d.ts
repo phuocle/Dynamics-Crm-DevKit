@@ -36,6 +36,8 @@ declare namespace DevKit {
 			msdyn_trusteddomain: DevKit.Controls.String;
 			WebResource_msdyn_cifmessage: DevKit.Controls.WebResource;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_ciprovider_Information extends DevKit.IForm {
 		/**
@@ -48,6 +50,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_ciprovider_Information */
 		Body: DevKit.Formmsdyn_ciprovider_Information.Body;
+		/** The Process of form msdyn_ciprovider_Information */
+		Process: DevKit.Formmsdyn_ciprovider_Information.Process;
 		/** The SidePanes of form msdyn_ciprovider_Information */
 		SidePanes: DevKit.SidePanes;
 	}

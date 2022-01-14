@@ -76,6 +76,8 @@ declare namespace DevKit {
 			navRelationshipCABulkOperationLogs: DevKit.Controls.NavigationItem,
 			navTargetLists: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			excluded_accounts: DevKit.Controls.Grid;
 			excluded_contacts: DevKit.Controls.Grid;
@@ -101,6 +103,8 @@ declare namespace DevKit {
 		Header: DevKit.FormCampaign_Activity.Header;
 		/** The Navigation of form Campaign_Activity */
 		Navigation: DevKit.FormCampaign_Activity.Navigation;
+		/** The Process of form Campaign_Activity */
+		Process: DevKit.FormCampaign_Activity.Process;
 		/** The Grid of form Campaign_Activity */
 		Grid: DevKit.FormCampaign_Activity.Grid;
 		/** The SidePanes of form Campaign_Activity */
@@ -175,6 +179,8 @@ declare namespace DevKit {
 			navProcessSessions: DevKit.Controls.NavigationItem,
 			navTargetLists: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			failuresGrid: DevKit.Controls.Grid;
 			marketing_lists_grid: DevKit.Controls.Grid;
@@ -195,6 +201,8 @@ declare namespace DevKit {
 		Header: DevKit.FormCampaign_Activity_deprecated.Header;
 		/** The Navigation of form Campaign_Activity_deprecated */
 		Navigation: DevKit.FormCampaign_Activity_deprecated.Navigation;
+		/** The Process of form Campaign_Activity_deprecated */
+		Process: DevKit.FormCampaign_Activity_deprecated.Process;
 		/** The Grid of form Campaign_Activity_deprecated */
 		Grid: DevKit.FormCampaign_Activity_deprecated.Grid;
 		/** The SidePanes of form Campaign_Activity_deprecated */

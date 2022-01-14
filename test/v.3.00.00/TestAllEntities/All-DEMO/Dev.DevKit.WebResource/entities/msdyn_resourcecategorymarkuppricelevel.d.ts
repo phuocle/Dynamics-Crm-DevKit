@@ -12,6 +12,8 @@ declare namespace DevKit {
 			/** Select the price list to which this price list item is being added. */
 			msdyn_pricelist: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_resourcecategorymarkuppricelevel_Information extends DevKit.IForm {
 		/**
@@ -24,6 +26,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_resourcecategorymarkuppricelevel_Information */
 		Body: DevKit.Formmsdyn_resourcecategorymarkuppricelevel_Information.Body;
+		/** The Process of form msdyn_resourcecategorymarkuppricelevel_Information */
+		Process: DevKit.Formmsdyn_resourcecategorymarkuppricelevel_Information.Process;
 		/** The SidePanes of form msdyn_resourcecategorymarkuppricelevel_Information */
 		SidePanes: DevKit.SidePanes;
 	}

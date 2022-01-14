@@ -24,7 +24,7 @@ var DevKit;
 			msdyn_Latitude: {},
 			msdyn_Longitude: {},
 			msdyn_Name: {},
-			msdyn_Name_1: {},
+			msdyn_Name1: {},
 			msdyn_ParentFunctionalLocation: {},
 			msdyn_PostalCode: {},
 			msdyn_StateOrProvince: {}
@@ -50,16 +50,6 @@ var DevKit;
 		form.Body = body;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
 		devKit.LoadOthers(formContext, form, defaultWebResourceName);

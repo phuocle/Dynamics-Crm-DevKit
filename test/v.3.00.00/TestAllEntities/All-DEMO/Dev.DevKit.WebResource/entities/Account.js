@@ -7,7 +7,6 @@ var formAccount = (function () {
 	var form = null;
 	async function onLoad(executionContext) {
 		form = new DevKit.FormAccount(executionContext);
-
 	}
 	async function onSave(executionContext) {
 	}

@@ -10,6 +10,8 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formconnectionreference_Information extends DevKit.IForm {
 		/**
@@ -22,6 +24,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form connectionreference_Information */
 		Body: DevKit.Formconnectionreference_Information.Body;
+		/** The Process of form connectionreference_Information */
+		Process: DevKit.Formconnectionreference_Information.Process;
 		/** The SidePanes of form connectionreference_Information */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -33,6 +37,8 @@ declare namespace DevKit {
 			connectionreferencedisplayname: DevKit.Controls.String;
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
+		}
+		interface Process extends DevKit.Controls.IProcess {
 		}
 	}
 	class Formconnectionreference_Information2 extends DevKit.IForm {
@@ -46,6 +52,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form connectionreference_Information2 */
 		Body: DevKit.Formconnectionreference_Information2.Body;
+		/** The Process of form connectionreference_Information2 */
+		Process: DevKit.Formconnectionreference_Information2.Process;
 		/** The SidePanes of form connectionreference_Information2 */
 		SidePanes: DevKit.SidePanes;
 	}

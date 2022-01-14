@@ -8,6 +8,8 @@ declare namespace DevKit {
 			/** Description */
 			bpf_name: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_bpf_989e9b1857e24af18787d5143b67523b_Information extends DevKit.IForm {
 		/**
@@ -20,6 +22,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_bpf_989e9b1857e24af18787d5143b67523b_Information */
 		Body: DevKit.Formmsdyn_bpf_989e9b1857e24af18787d5143b67523b_Information.Body;
+		/** The Process of form msdyn_bpf_989e9b1857e24af18787d5143b67523b_Information */
+		Process: DevKit.Formmsdyn_bpf_989e9b1857e24af18787d5143b67523b_Information.Process;
 		/** The SidePanes of form msdyn_bpf_989e9b1857e24af18787d5143b67523b_Information */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -30,6 +34,8 @@ declare namespace DevKit {
 			/** Description */
 			bpf_name: DevKit.Controls.String;
 			notescontrol: DevKit.Controls.Note;
+		}
+		interface Process extends DevKit.Controls.IProcess {
 		}
 	}
 	class Formmsdyn_bpf_989e9b1857e24af18787d5143b67523b_Information2 extends DevKit.IForm {
@@ -43,6 +49,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_bpf_989e9b1857e24af18787d5143b67523b_Information2 */
 		Body: DevKit.Formmsdyn_bpf_989e9b1857e24af18787d5143b67523b_Information2.Body;
+		/** The Process of form msdyn_bpf_989e9b1857e24af18787d5143b67523b_Information2 */
+		Process: DevKit.Formmsdyn_bpf_989e9b1857e24af18787d5143b67523b_Information2.Process;
 		/** The SidePanes of form msdyn_bpf_989e9b1857e24af18787d5143b67523b_Information2 */
 		SidePanes: DevKit.SidePanes;
 	}

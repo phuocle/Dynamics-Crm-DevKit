@@ -48,6 +48,8 @@ declare namespace DevKit {
 			navProcessSessions: DevKit.Controls.NavigationItem,
 			navResourceCategories: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			ResourceCategoryAssociations: DevKit.Controls.Grid;
 			RoleCompetencyRequirement: DevKit.Controls.Grid;
@@ -66,6 +68,8 @@ declare namespace DevKit {
 		Body: DevKit.FormBookableResourceCategory_Information.Body;
 		/** The Navigation of form BookableResourceCategory_Information */
 		Navigation: DevKit.FormBookableResourceCategory_Information.Navigation;
+		/** The Process of form BookableResourceCategory_Information */
+		Process: DevKit.FormBookableResourceCategory_Information.Process;
 		/** The Grid of form BookableResourceCategory_Information */
 		Grid: DevKit.FormBookableResourceCategory_Information.Grid;
 		/** The SidePanes of form BookableResourceCategory_Information */

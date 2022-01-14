@@ -18,7 +18,7 @@ var DevKit;
 			ChildParameters: {},
 			IoTDeviceCommandDefinitions: {},
 			msdyn_AdditionalProperties: {},
-			msdyn_AdditionalProperties_1: {},
+			msdyn_AdditionalProperties1: {},
 			msdyn_Editable: {},
 			msdyn_name: {},
 			msdyn_ParentProperty: {},
@@ -46,22 +46,12 @@ var DevKit;
 		form.Header = header;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var grid = {
 			ChildParameters: {},
 			IoTDeviceCommandDefinitions: {},
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
 		devKit.LoadOthers(formContext, form, defaultWebResourceName);

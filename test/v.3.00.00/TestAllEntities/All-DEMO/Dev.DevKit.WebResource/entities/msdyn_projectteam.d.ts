@@ -93,6 +93,8 @@ declare namespace DevKit {
 			ProjectTeam_Requirement_Competencies: quickForm_ProjectTeam_Requirement_Competencies;
 			ProjectTeam_Requirement_Others: quickForm_ProjectTeam_Requirement_Others;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_projectteam_Information extends DevKit.IForm {
 		/**
@@ -109,6 +111,8 @@ declare namespace DevKit {
 		Navigation: DevKit.Formmsdyn_projectteam_Information.Navigation;
 		/** The QuickForm of form msdyn_projectteam_Information */
 		QuickForm: DevKit.Formmsdyn_projectteam_Information.QuickForm;
+		/** The Process of form msdyn_projectteam_Information */
+		Process: DevKit.Formmsdyn_projectteam_Information.Process;
 		/** The SidePanes of form msdyn_projectteam_Information */
 		SidePanes: DevKit.SidePanes;
 	}

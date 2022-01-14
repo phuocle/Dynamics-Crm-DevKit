@@ -20,7 +20,7 @@ declare namespace DevKit {
 		interface Body {
 			Tab: Tabs;
 			msdyn_AdditionalProperties: DevKit.Controls.String;
-			msdyn_AdditionalProperties_1: DevKit.Controls.String;
+			msdyn_AdditionalProperties1: DevKit.Controls.String;
 			msdyn_Editable: DevKit.Controls.Boolean;
 			/** The name of the custom entity. */
 			msdyn_name: DevKit.Controls.String;
@@ -31,6 +31,8 @@ declare namespace DevKit {
 			/** Unit String for property definition */
 			msdyn_unit: DevKit.Controls.String;
 			msdyn_Visible: DevKit.Controls.Boolean;
+		}
+		interface Process extends DevKit.Controls.IProcess {
 		}
 		interface Grid {
 			ChildParameters: DevKit.Controls.Grid;
@@ -50,6 +52,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyn_iotpropertydefinition_Information.Body;
 		/** The Header section of form msdyn_iotpropertydefinition_Information */
 		Header: DevKit.Formmsdyn_iotpropertydefinition_Information.Header;
+		/** The Process of form msdyn_iotpropertydefinition_Information */
+		Process: DevKit.Formmsdyn_iotpropertydefinition_Information.Process;
 		/** The Grid of form msdyn_iotpropertydefinition_Information */
 		Grid: DevKit.Formmsdyn_iotpropertydefinition_Information.Grid;
 		/** The SidePanes of form msdyn_iotpropertydefinition_Information */

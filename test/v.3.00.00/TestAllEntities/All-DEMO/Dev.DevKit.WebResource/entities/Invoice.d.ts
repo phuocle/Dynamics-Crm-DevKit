@@ -563,7 +563,7 @@ declare namespace DevKit {
 		/** The SidePanes of form Project_Invoice */
 		SidePanes: DevKit.SidePanes;
 	}
-	namespace FormInvoice4 {
+	namespace FormInvoice2 {
 		interface tab_newInvoice_Sections {
 			quickInvoice_salesinformation: DevKit.Controls.Section;
 			quickInvoice_summary: DevKit.Controls.Section;
@@ -596,17 +596,17 @@ declare namespace DevKit {
 			TransactionCurrencyId: DevKit.Controls.Lookup;
 		}
 	}
-	class FormInvoice4 extends DevKit.IForm {
+	class FormInvoice2 extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Invoice4 Quick Create
+		* DynamicsCrm.DevKit form Invoice2 Quick Create
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
 		constructor(executionContext: any, defaultWebResourceName?: string);
 		/** Utility functions/methods/objects for Dynamics 365 form */
 		Utility: DevKit.Utility;
-		/** The Body section of form Invoice4 */
-		Body: DevKit.FormInvoice4.Body;
+		/** The Body section of form Invoice2 */
+		Body: DevKit.FormInvoice2.Body;
 	}
 	class InvoiceApi {
 		/**

@@ -18,50 +18,50 @@ var DevKit;
 			msdyn_AccountCustomer: {},
 			msdyn_AccountVendor: {},
 			msdyn_Amount: {},
-			msdyn_Amount_1: {},
+			msdyn_Amount1: {},
 			msdyn_amount_after_tax: {},
 			msdyn_AmountMethod: {},
 			msdyn_BasisAmount: {},
 			msdyn_BasisQuantity: {},
 			msdyn_BillingType: {},
-			msdyn_BillingType_1: {},
+			msdyn_BillingType1: {},
 			msdyn_bookableresource: {},
 			msdyn_ContactCustomer: {},
 			msdyn_ContactVendor: {},
 			msdyn_CustomerType: {},
 			msdyn_description: {},
-			msdyn_description_1: {},
+			msdyn_description1: {},
 			msdyn_DocumentDate: {},
 			msdyn_EndDateTime: {},
-			msdyn_EndDateTime_1: {},
+			msdyn_EndDateTime1: {},
 			msdyn_Origin: {},
 			msdyn_Percent: {},
 			msdyn_Price: {},
-			msdyn_Price_1: {},
+			msdyn_Price1: {},
 			msdyn_PriceList: {},
-			msdyn_PriceList_1: {},
+			msdyn_PriceList1: {},
 			msdyn_Product: {},
 			msdyn_Project: {},
 			msdyn_Quantity: {},
-			msdyn_Quantity_1: {},
+			msdyn_Quantity1: {},
 			msdyn_QuoteId: {},
-			msdyn_QuoteId_1: {},
+			msdyn_QuoteId1: {},
 			msdyn_quotelineid: {},
 			msdyn_ResourceCategory: {},
-			msdyn_ResourceCategory_1: {},
+			msdyn_ResourceCategory1: {},
 			msdyn_ResourceOrganizationalUnitId: {},
 			msdyn_StartDateTime: {},
-			msdyn_StartDateTime_1: {},
+			msdyn_StartDateTime1: {},
 			msdyn_Task: {},
 			msdyn_tax: {},
 			msdyn_TransactionCategory: {},
-			msdyn_TransactionCategory_1: {},
+			msdyn_TransactionCategory1: {},
 			msdyn_TransactionClassification: {},
-			msdyn_TransactionClassification_1: {},
+			msdyn_TransactionClassification1: {},
 			msdyn_TransactionTypeCode: {},
-			msdyn_TransactionTypeCode_1: {},
+			msdyn_TransactionTypeCode1: {},
 			msdyn_Unit: {},
-			msdyn_Unit_1: {},
+			msdyn_Unit1: {},
 			msdyn_UnitSchedule: {},
 			msdyn_VendorType: {},
 			OwnerId: {},
@@ -94,16 +94,6 @@ var DevKit;
 		form.Body = body;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
 		devKit.LoadOthers(formContext, form, defaultWebResourceName);

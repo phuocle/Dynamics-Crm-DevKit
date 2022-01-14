@@ -25,6 +25,8 @@ declare namespace DevKit {
 			nav_msdyn_msdyn_transactiontype_msdyn_quotelineanalyticsbreakdown_TransactionType: DevKit.Controls.NavigationItem,
 			nav_msdyn_msdyn_transactiontype_msdyn_transactiontype_ParentTransactionType: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_transactiontype_Information extends DevKit.IForm {
 		/**
@@ -39,6 +41,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyn_transactiontype_Information.Body;
 		/** The Navigation of form msdyn_transactiontype_Information */
 		Navigation: DevKit.Formmsdyn_transactiontype_Information.Navigation;
+		/** The Process of form msdyn_transactiontype_Information */
+		Process: DevKit.Formmsdyn_transactiontype_Information.Process;
 		/** The SidePanes of form msdyn_transactiontype_Information */
 		SidePanes: DevKit.SidePanes;
 	}

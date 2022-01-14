@@ -79,11 +79,6 @@ var DevKit;
 		form.Header = header;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var grid = {
 			OrderServicesGrid: {},
 			salesorderdetailsGrid: {},
@@ -176,11 +171,6 @@ var DevKit;
 		form.Header = header;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var grid = {
 			salesorderdetailsGrid: {},
 		};
@@ -286,11 +276,6 @@ var DevKit;
 		form.Header = header;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var grid = {
 			ContractPerformance_ContractLines: {},
 			ContractPerformance_ProductContractLines: {},
@@ -318,7 +303,7 @@ var DevKit;
 		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
-	DevKit.FormOrder = function(executionContext, defaultWebResourceName) {
+	DevKit.FormOrder2 = function(executionContext, defaultWebResourceName) {
 		var formContext = null;
 		if (executionContext !== undefined)
 		{

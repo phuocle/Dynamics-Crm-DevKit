@@ -117,13 +117,13 @@ declare namespace DevKit {
 			/** Select the parent account or parent contact for the contact to provide a quick link to additional details, such as financial information, activities, and opportunities. */
 			ParentCustomerId: DevKit.Controls.Lookup;
 			/** Select the parent account or parent contact for the contact to provide a quick link to additional details, such as financial information, activities, and opportunities. */
-			ParentCustomerId_1: DevKit.Controls.Lookup;
+			ParentCustomerId1: DevKit.Controls.Lookup;
 			/** Select the payment terms to indicate when the customer needs to pay the total amount. */
 			PaymentTermsCode: DevKit.Controls.OptionSet;
 			/** Select the preferred method of contact. */
 			PreferredContactMethodCode: DevKit.Controls.OptionSet;
 			/** Select the preferred method of contact. */
-			PreferredContactMethodCode_1: DevKit.Controls.OptionSet;
+			PreferredContactMethodCode1: DevKit.Controls.OptionSet;
 			/** Type the name of the contact's spouse or partner for reference during calls, events, or other communications with the contact. */
 			SpousesName: DevKit.Controls.String;
 			TalkingPoints: DevKit.Controls.ActionCards;
@@ -157,6 +157,16 @@ declare namespace DevKit {
 		interface QuickForm {
 			contactquickform: quickForm_contactquickform;
 		}
+		interface ProcessCase_to_Work_Order_Business_Process {
+
+		}
+		interface ProcessPhone_to_Case_Process {
+
+		}
+		interface Process extends DevKit.Controls.IProcess {
+			Case_to_Work_Order_Business_Process: ProcessCase_to_Work_Order_Business_Process;
+			Phone_to_Case_Process: ProcessPhone_to_Case_Process;
+		}
 		interface Grid {
 			contactcasessgrid: DevKit.Controls.Grid;
 			contactopportunitiesgrid: DevKit.Controls.Grid;
@@ -181,6 +191,8 @@ declare namespace DevKit {
 		Navigation: DevKit.FormContact.Navigation;
 		/** The QuickForm of form Contact */
 		QuickForm: DevKit.FormContact.QuickForm;
+		/** The Process of form Contact */
+		Process: DevKit.FormContact.Process;
 		/** The Grid of form Contact */
 		Grid: DevKit.FormContact.Grid;
 		/** The SidePanes of form Contact */
@@ -266,6 +278,16 @@ declare namespace DevKit {
 			navRelationships: DevKit.Controls.NavigationItem,
 			navSubConts: DevKit.Controls.NavigationItem
 		}
+		interface ProcessCase_to_Work_Order_Business_Process {
+
+		}
+		interface ProcessPhone_to_Case_Process {
+
+		}
+		interface Process extends DevKit.Controls.IProcess {
+			Case_to_Work_Order_Business_Process: ProcessCase_to_Work_Order_Business_Process;
+			Phone_to_Case_Process: ProcessPhone_to_Case_Process;
+		}
 		interface Grid {
 			CONTACTS: DevKit.Controls.Grid;
 			INVOICES: DevKit.Controls.Grid;
@@ -286,6 +308,8 @@ declare namespace DevKit {
 		Body: DevKit.FormContact_Mobile.Body;
 		/** The Navigation of form Contact_Mobile */
 		Navigation: DevKit.FormContact_Mobile.Navigation;
+		/** The Process of form Contact_Mobile */
+		Process: DevKit.FormContact_Mobile.Process;
 		/** The Grid of form Contact_Mobile */
 		Grid: DevKit.FormContact_Mobile.Grid;
 		/** The SidePanes of form Contact_Mobile */
@@ -365,7 +389,7 @@ declare namespace DevKit {
 			/** Type the primary email address for the contact. */
 			EMailAddress1: DevKit.Controls.String;
 			/** Type the primary email address for the contact. */
-			EMailAddress1_1: DevKit.Controls.String;
+			EMailAddress11: DevKit.Controls.String;
 			/** Select the marital status of the contact for reference in follow-up phone calls and other communications. */
 			FamilyStatusCode: DevKit.Controls.OptionSet;
 			/** Type the fax number for the contact. */
@@ -392,7 +416,7 @@ declare namespace DevKit {
 			/** Select the preferred method of contact. */
 			PreferredContactMethodCode: DevKit.Controls.OptionSet;
 			/** Select the preferred method of contact. */
-			PreferredContactMethodCode_1: DevKit.Controls.OptionSet;
+			PreferredContactMethodCode1: DevKit.Controls.OptionSet;
 			/** Type the name of the contact's spouse or partner for reference during calls, events, or other communications with the contact. */
 			SpousesName: DevKit.Controls.String;
 			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
@@ -424,6 +448,16 @@ declare namespace DevKit {
 		interface QuickForm {
 			contactquickform: quickForm_contactquickform;
 		}
+		interface ProcessCase_to_Work_Order_Business_Process {
+
+		}
+		interface ProcessPhone_to_Case_Process {
+
+		}
+		interface Process extends DevKit.Controls.IProcess {
+			Case_to_Work_Order_Business_Process: ProcessCase_to_Work_Order_Business_Process;
+			Phone_to_Case_Process: ProcessPhone_to_Case_Process;
+		}
 		interface Grid {
 			contactcasessgrid: DevKit.Controls.Grid;
 			contactopportunitiesgrid: DevKit.Controls.Grid;
@@ -447,6 +481,8 @@ declare namespace DevKit {
 		Navigation: DevKit.FormContact_for_Interactive_experience.Navigation;
 		/** The QuickForm of form Contact_for_Interactive_experience */
 		QuickForm: DevKit.FormContact_for_Interactive_experience.QuickForm;
+		/** The Process of form Contact_for_Interactive_experience */
+		Process: DevKit.FormContact_for_Interactive_experience.Process;
 		/** The Grid of form Contact_for_Interactive_experience */
 		Grid: DevKit.FormContact_for_Interactive_experience.Grid;
 		/** The SidePanes of form Contact_for_Interactive_experience */
@@ -551,7 +587,7 @@ declare namespace DevKit {
 			/** Select the preferred method of contact. */
 			PreferredContactMethodCode: DevKit.Controls.OptionSet;
 			/** Select the preferred method of contact. */
-			PreferredContactMethodCode_1: DevKit.Controls.OptionSet;
+			PreferredContactMethodCode1: DevKit.Controls.OptionSet;
 			/** Type the name of the contact's spouse or partner for reference during calls, events, or other communications with the contact. */
 			SpousesName: DevKit.Controls.String;
 			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
@@ -584,6 +620,16 @@ declare namespace DevKit {
 		interface QuickForm {
 			contactquickform: quickForm_contactquickform;
 		}
+		interface ProcessCase_to_Work_Order_Business_Process {
+
+		}
+		interface ProcessPhone_to_Case_Process {
+
+		}
+		interface Process extends DevKit.Controls.IProcess {
+			Case_to_Work_Order_Business_Process: ProcessCase_to_Work_Order_Business_Process;
+			Phone_to_Case_Process: ProcessPhone_to_Case_Process;
+		}
 		interface Grid {
 			RelatedCases: DevKit.Controls.Grid;
 		}
@@ -605,6 +651,8 @@ declare namespace DevKit {
 		Navigation: DevKit.FormContact_for_Multisession_experience.Navigation;
 		/** The QuickForm of form Contact_for_Multisession_experience */
 		QuickForm: DevKit.FormContact_for_Multisession_experience.QuickForm;
+		/** The Process of form Contact_for_Multisession_experience */
+		Process: DevKit.FormContact_for_Multisession_experience.Process;
 		/** The Grid of form Contact_for_Multisession_experience */
 		Grid: DevKit.FormContact_for_Multisession_experience.Grid;
 		/** The SidePanes of form Contact_for_Multisession_experience */
@@ -794,6 +842,16 @@ declare namespace DevKit {
 			navRelationships: DevKit.Controls.NavigationItem,
 			navSubConts: DevKit.Controls.NavigationItem
 		}
+		interface ProcessCase_to_Work_Order_Business_Process {
+
+		}
+		interface ProcessPhone_to_Case_Process {
+
+		}
+		interface Process extends DevKit.Controls.IProcess {
+			Case_to_Work_Order_Business_Process: ProcessCase_to_Work_Order_Business_Process;
+			Phone_to_Case_Process: ProcessPhone_to_Case_Process;
+		}
 		interface Grid {
 			contactactivitiesgrid: DevKit.Controls.Grid;
 		}
@@ -813,6 +871,8 @@ declare namespace DevKit {
 		Header: DevKit.FormContact_Information.Header;
 		/** The Navigation of form Contact_Information */
 		Navigation: DevKit.FormContact_Information.Navigation;
+		/** The Process of form Contact_Information */
+		Process: DevKit.FormContact_Information.Process;
 		/** The Grid of form Contact_Information */
 		Grid: DevKit.FormContact_Information.Grid;
 		/** The SidePanes of form Contact_Information */
@@ -907,13 +967,13 @@ declare namespace DevKit {
 			/** Select the parent account or parent contact for the contact to provide a quick link to additional details, such as financial information, activities, and opportunities. */
 			ParentCustomerId: DevKit.Controls.Lookup;
 			/** Select the parent account or parent contact for the contact to provide a quick link to additional details, such as financial information, activities, and opportunities. */
-			ParentCustomerId_1: DevKit.Controls.Lookup;
+			ParentCustomerId1: DevKit.Controls.Lookup;
 			/** Select the payment terms to indicate when the customer needs to pay the total amount. */
 			PaymentTermsCode: DevKit.Controls.OptionSet;
 			/** Select the preferred method of contact. */
 			PreferredContactMethodCode: DevKit.Controls.OptionSet;
 			/** Select the preferred method of contact. */
-			PreferredContactMethodCode_1: DevKit.Controls.OptionSet;
+			PreferredContactMethodCode1: DevKit.Controls.OptionSet;
 			/** Type the name of the contact's spouse or partner for reference during calls, events, or other communications with the contact. */
 			SpousesName: DevKit.Controls.String;
 			TalkingPoints: DevKit.Controls.ActionCards;
@@ -942,6 +1002,16 @@ declare namespace DevKit {
 		interface QuickForm {
 			contactquickform: quickForm_contactquickform;
 		}
+		interface ProcessCase_to_Work_Order_Business_Process {
+
+		}
+		interface ProcessPhone_to_Case_Process {
+
+		}
+		interface Process extends DevKit.Controls.IProcess {
+			Case_to_Work_Order_Business_Process: ProcessCase_to_Work_Order_Business_Process;
+			Phone_to_Case_Process: ProcessPhone_to_Case_Process;
+		}
 		interface Grid {
 			contactopportunitiesgrid: DevKit.Controls.Grid;
 		}
@@ -963,6 +1033,8 @@ declare namespace DevKit {
 		Navigation: DevKit.FormContact_Sales_Insights.Navigation;
 		/** The QuickForm of form Contact_Sales_Insights */
 		QuickForm: DevKit.FormContact_Sales_Insights.QuickForm;
+		/** The Process of form Contact_Sales_Insights */
+		Process: DevKit.FormContact_Sales_Insights.Process;
 		/** The Grid of form Contact_Sales_Insights */
 		Grid: DevKit.FormContact_Sales_Insights.Grid;
 		/** The SidePanes of form Contact_Sales_Insights */
@@ -986,6 +1058,16 @@ declare namespace DevKit {
 			Tab: Tabs;
 			notescontrol: DevKit.Controls.Note;
 		}
+		interface ProcessCase_to_Work_Order_Business_Process {
+
+		}
+		interface ProcessPhone_to_Case_Process {
+
+		}
+		interface Process extends DevKit.Controls.IProcess {
+			Case_to_Work_Order_Business_Process: ProcessCase_to_Work_Order_Business_Process;
+			Phone_to_Case_Process: ProcessPhone_to_Case_Process;
+		}
 	}
 	class FormTimelineWallControl_Contact_Main extends DevKit.IForm {
 		/**
@@ -1000,6 +1082,8 @@ declare namespace DevKit {
 		Body: DevKit.FormTimelineWallControl_Contact_Main.Body;
 		/** The Header section of form TimelineWallControl_Contact_Main */
 		Header: DevKit.FormTimelineWallControl_Contact_Main.Header;
+		/** The Process of form TimelineWallControl_Contact_Main */
+		Process: DevKit.FormTimelineWallControl_Contact_Main.Process;
 		/** The SidePanes of form TimelineWallControl_Contact_Main */
 		SidePanes: DevKit.SidePanes;
 	}

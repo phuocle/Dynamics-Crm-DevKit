@@ -65,7 +65,7 @@ declare namespace DevKit {
 			/** IoT suggestions provide you insights on priority level and incident type associated with an alert. */
 			msdyn_EnableIoTSuggestions: DevKit.Controls.Boolean;
 			/** IoT suggestions provide you insights on priority level and incident type associated with an alert. */
-			msdyn_EnableIoTSuggestions_1: DevKit.Controls.Boolean;
+			msdyn_EnableIoTSuggestions1: DevKit.Controls.Boolean;
 			/** When this option is enabled, all Connected Field Service background processes will be processed through flows instead of the historic Connected Field Service workflows. */
 			msdyn_EnhancedBackgroundProcessing: DevKit.Controls.Boolean;
 			/** Select the columns that will be used to determine the aggregation of similar IoT alerts. */
@@ -76,6 +76,8 @@ declare namespace DevKit {
 			msdyn_NextDeviceDataPullTime: DevKit.Controls.DateTime;
 			/** To turn on/off scheduled device data pulls, default is off */
 			msdyn_ScheduledDeviceDataPull: DevKit.Controls.Boolean;
+		}
+		interface Process extends DevKit.Controls.IProcess {
 		}
 	}
 	class Formmsdyn_iotsettings_Information extends DevKit.IForm {
@@ -91,6 +93,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyn_iotsettings_Information.Body;
 		/** The Header section of form msdyn_iotsettings_Information */
 		Header: DevKit.Formmsdyn_iotsettings_Information.Header;
+		/** The Process of form msdyn_iotsettings_Information */
+		Process: DevKit.Formmsdyn_iotsettings_Information.Process;
 		/** The SidePanes of form msdyn_iotsettings_Information */
 		SidePanes: DevKit.SidePanes;
 	}

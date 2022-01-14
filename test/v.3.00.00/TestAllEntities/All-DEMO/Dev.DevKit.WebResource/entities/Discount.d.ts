@@ -24,6 +24,8 @@ declare namespace DevKit {
 			/** Percentage discount value. */
 			Percentage: DevKit.Controls.Decimal;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormDiscount_Information extends DevKit.IForm {
 		/**
@@ -36,6 +38,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Discount_Information */
 		Body: DevKit.FormDiscount_Information.Body;
+		/** The Process of form Discount_Information */
+		Process: DevKit.FormDiscount_Information.Process;
 		/** The SidePanes of form Discount_Information */
 		SidePanes: DevKit.SidePanes;
 	}

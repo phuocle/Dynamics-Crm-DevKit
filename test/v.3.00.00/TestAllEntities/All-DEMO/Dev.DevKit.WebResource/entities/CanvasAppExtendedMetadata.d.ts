@@ -10,6 +10,8 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormCanvasAppExtendedMetadata_Information extends DevKit.IForm {
 		/**
@@ -22,6 +24,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form CanvasAppExtendedMetadata_Information */
 		Body: DevKit.FormCanvasAppExtendedMetadata_Information.Body;
+		/** The Process of form CanvasAppExtendedMetadata_Information */
+		Process: DevKit.FormCanvasAppExtendedMetadata_Information.Process;
 		/** The SidePanes of form CanvasAppExtendedMetadata_Information */
 		SidePanes: DevKit.SidePanes;
 	}

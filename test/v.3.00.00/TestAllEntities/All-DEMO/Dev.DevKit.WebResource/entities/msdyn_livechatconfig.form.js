@@ -41,7 +41,7 @@ var DevKit;
 			msdyn_infolabel: {},
 			msdyn_livechattext: {},
 			msdyn_liveworkstreamid: {},
-			msdyn_liveworkstreamid_1: {},
+			msdyn_liveworkstreamid1: {},
 			msdyn_Mailbox: {},
 			msdyn_name: {},
 			msdyn_oc_geolocationprovider: {},
@@ -159,11 +159,6 @@ var DevKit;
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
 		devKit.LoadOthers(formContext, form, defaultWebResourceName);

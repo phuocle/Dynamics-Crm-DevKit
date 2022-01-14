@@ -39,6 +39,8 @@ declare namespace DevKit {
 			nav_msdyusd_agentscriptaction_windowroute_NoMatchesAction: DevKit.Controls.NavigationItem,
 			nav_msdyusd_agentscriptaction_windowroute_SingleMatchAction: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyusd_agentscriptaction_Information extends DevKit.IForm {
 		/**
@@ -55,6 +57,8 @@ declare namespace DevKit {
 		Footer: DevKit.Formmsdyusd_agentscriptaction_Information.Footer;
 		/** The Navigation of form msdyusd_agentscriptaction_Information */
 		Navigation: DevKit.Formmsdyusd_agentscriptaction_Information.Navigation;
+		/** The Process of form msdyusd_agentscriptaction_Information */
+		Process: DevKit.Formmsdyusd_agentscriptaction_Information.Process;
 		/** The SidePanes of form msdyusd_agentscriptaction_Information */
 		SidePanes: DevKit.SidePanes;
 	}

@@ -34,6 +34,8 @@ declare namespace DevKit {
 			nav_msdyn_msdyn_problematicasset_msdyn_customerasset_ProblematicAsset: DevKit.Controls.NavigationItem,
 			navAudit: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_problematicasset_Information extends DevKit.IForm {
 		/**
@@ -48,6 +50,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyn_problematicasset_Information.Body;
 		/** The Navigation of form msdyn_problematicasset_Information */
 		Navigation: DevKit.Formmsdyn_problematicasset_Information.Navigation;
+		/** The Process of form msdyn_problematicasset_Information */
+		Process: DevKit.Formmsdyn_problematicasset_Information.Process;
 		/** The SidePanes of form msdyn_problematicasset_Information */
 		SidePanes: DevKit.SidePanes;
 	}

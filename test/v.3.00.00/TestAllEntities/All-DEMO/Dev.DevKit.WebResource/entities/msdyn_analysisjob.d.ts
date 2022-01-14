@@ -36,25 +36,27 @@ declare namespace DevKit {
 			Tab: Tabs;
 			msdyn_EndTime: DevKit.Controls.DateTime;
 			msdyn_ErrorCount: DevKit.Controls.Integer;
-			msdyn_ErrorCount_1: DevKit.Controls.Integer;
+			msdyn_ErrorCount1: DevKit.Controls.Integer;
 			msdyn_Exception: DevKit.Controls.String;
 			/** The name of the custom entity. */
 			msdyn_name: DevKit.Controls.String;
 			msdyn_RuleFailCount: DevKit.Controls.Integer;
-			msdyn_RuleFailCount_1: DevKit.Controls.Integer;
+			msdyn_RuleFailCount1: DevKit.Controls.Integer;
 			msdyn_RulePassCount: DevKit.Controls.Integer;
-			msdyn_RulePassCount_1: DevKit.Controls.Integer;
+			msdyn_RulePassCount1: DevKit.Controls.Integer;
 			msdyn_RuleRunCount: DevKit.Controls.Integer;
-			msdyn_RuleRunCount_1: DevKit.Controls.Integer;
+			msdyn_RuleRunCount1: DevKit.Controls.Integer;
 			msdyn_StartTime: DevKit.Controls.DateTime;
 			msdyn_SuggestionCount: DevKit.Controls.Integer;
-			msdyn_SuggestionCount_1: DevKit.Controls.Integer;
+			msdyn_SuggestionCount1: DevKit.Controls.Integer;
 			msdyn_WarningCount: DevKit.Controls.Integer;
-			msdyn_WarningCount_1: DevKit.Controls.Integer;
+			msdyn_WarningCount1: DevKit.Controls.Integer;
 			/** Status of the Analysis Job */
 			statecode: DevKit.Controls.OptionSet;
 			/** Reason for the status of the Analysis Job */
 			statuscode: DevKit.Controls.OptionSet;
+		}
+		interface Process extends DevKit.Controls.IProcess {
 		}
 		interface Grid {
 			AssociatedAnalysisResults: DevKit.Controls.Grid;
@@ -73,6 +75,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyn_analysisjob_Information.Body;
 		/** The Header section of form msdyn_analysisjob_Information */
 		Header: DevKit.Formmsdyn_analysisjob_Information.Header;
+		/** The Process of form msdyn_analysisjob_Information */
+		Process: DevKit.Formmsdyn_analysisjob_Information.Process;
 		/** The Grid of form msdyn_analysisjob_Information */
 		Grid: DevKit.Formmsdyn_analysisjob_Information.Grid;
 		/** The SidePanes of form msdyn_analysisjob_Information */

@@ -31,6 +31,8 @@ declare namespace DevKit {
 			nav_msdyn_msdyn_rmareceiptproduct_msdyn_inventoryjournal_RMAReceiptProduct: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_rmareceiptproduct_Information extends DevKit.IForm {
 		/**
@@ -47,6 +49,8 @@ declare namespace DevKit {
 		Footer: DevKit.Formmsdyn_rmareceiptproduct_Information.Footer;
 		/** The Navigation of form msdyn_rmareceiptproduct_Information */
 		Navigation: DevKit.Formmsdyn_rmareceiptproduct_Information.Navigation;
+		/** The Process of form msdyn_rmareceiptproduct_Information */
+		Process: DevKit.Formmsdyn_rmareceiptproduct_Information.Process;
 		/** The SidePanes of form msdyn_rmareceiptproduct_Information */
 		SidePanes: DevKit.SidePanes;
 	}

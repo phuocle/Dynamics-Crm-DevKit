@@ -22,6 +22,8 @@ declare namespace DevKit {
 			/** Environment variable value type. */
 			Type: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			Values: DevKit.Controls.Grid;
 		}
@@ -37,6 +39,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form EnvironmentVariableDefinition_Information */
 		Body: DevKit.FormEnvironmentVariableDefinition_Information.Body;
+		/** The Process of form EnvironmentVariableDefinition_Information */
+		Process: DevKit.FormEnvironmentVariableDefinition_Information.Process;
 		/** The Grid of form EnvironmentVariableDefinition_Information */
 		Grid: DevKit.FormEnvironmentVariableDefinition_Information.Grid;
 		/** The SidePanes of form EnvironmentVariableDefinition_Information */

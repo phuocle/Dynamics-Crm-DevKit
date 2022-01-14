@@ -10,6 +10,8 @@ declare namespace DevKit {
 			/** The Locale ID of the language this record represents. */
 			msdyn_localeid: DevKit.Controls.Integer;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_chatwidgetlanguage_Information extends DevKit.IForm {
 		/**
@@ -22,6 +24,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_chatwidgetlanguage_Information */
 		Body: DevKit.Formmsdyn_chatwidgetlanguage_Information.Body;
+		/** The Process of form msdyn_chatwidgetlanguage_Information */
+		Process: DevKit.Formmsdyn_chatwidgetlanguage_Information.Process;
 		/** The SidePanes of form msdyn_chatwidgetlanguage_Information */
 		SidePanes: DevKit.SidePanes;
 	}

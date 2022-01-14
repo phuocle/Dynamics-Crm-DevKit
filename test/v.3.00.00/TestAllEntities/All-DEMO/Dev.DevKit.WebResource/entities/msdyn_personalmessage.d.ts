@@ -11,6 +11,8 @@ declare namespace DevKit {
 			msdyn_message: DevKit.Controls.String;
 			msdyn_tagscontrolfield: DevKit.Controls.ActionCards;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_personalmessage_Information extends DevKit.IForm {
 		/**
@@ -23,6 +25,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_personalmessage_Information */
 		Body: DevKit.Formmsdyn_personalmessage_Information.Body;
+		/** The Process of form msdyn_personalmessage_Information */
+		Process: DevKit.Formmsdyn_personalmessage_Information.Process;
 		/** The SidePanes of form msdyn_personalmessage_Information */
 		SidePanes: DevKit.SidePanes;
 	}

@@ -32,6 +32,8 @@ declare namespace DevKit {
 			/** Status of the UII Non-Hosted Application */
 			statecode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormUII_nonhostedapplication_Information extends DevKit.IForm {
 		/**
@@ -46,6 +48,8 @@ declare namespace DevKit {
 		Body: DevKit.FormUII_nonhostedapplication_Information.Body;
 		/** The Footer section of form UII_nonhostedapplication_Information */
 		Footer: DevKit.FormUII_nonhostedapplication_Information.Footer;
+		/** The Process of form UII_nonhostedapplication_Information */
+		Process: DevKit.FormUII_nonhostedapplication_Information.Process;
 		/** The SidePanes of form UII_nonhostedapplication_Information */
 		SidePanes: DevKit.SidePanes;
 	}

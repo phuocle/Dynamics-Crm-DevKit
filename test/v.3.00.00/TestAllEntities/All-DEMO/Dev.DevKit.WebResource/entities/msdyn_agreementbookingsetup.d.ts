@@ -96,6 +96,25 @@ declare namespace DevKit {
 			nav_msdyn_msdyn_agreementbookingsetup_msdyn_agreementbookingservicetask_AgreementBookingSetup: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface ProcessAgreement_Business_Process {
+			/** Enable if the system should automatically generate Work Orders for the Booking Dates of this Booking Setup */
+			msdyn_AutoGenerateWO: DevKit.Controls.Boolean;
+			/** Type a description of this booking setup. */
+			msdyn_Description: DevKit.Controls.String;
+			/** Shows the duration of the booking. */
+			msdyn_EstimatedDuration: DevKit.Controls.Integer;
+			/** Enter the name of the custom entity. */
+			msdyn_name: DevKit.Controls.String;
+			/** Shows the flexibility of days after the booking date. */
+			msdyn_PostBookingFlexibility: DevKit.Controls.Integer;
+			/** Shows the flexibility of days prior to the booking date. */
+			msdyn_PreBookingFlexibility: DevKit.Controls.Integer;
+			/** Work Order Type to be used on generated Work Orders */
+			msdyn_WorkOrderType: DevKit.Controls.Lookup;
+		}
+		interface Process extends DevKit.Controls.IProcess {
+			Agreement_Business_Process: ProcessAgreement_Business_Process;
+		}
 		interface Grid {
 			AgreementBookingProductsGrid: DevKit.Controls.Grid;
 			AgreementBookingServicesGrid: DevKit.Controls.Grid;
@@ -119,6 +138,8 @@ declare namespace DevKit {
 		Footer: DevKit.FormAgreement_Booking_Setup.Footer;
 		/** The Navigation of form Agreement_Booking_Setup */
 		Navigation: DevKit.FormAgreement_Booking_Setup.Navigation;
+		/** The Process of form Agreement_Booking_Setup */
+		Process: DevKit.FormAgreement_Booking_Setup.Process;
 		/** The Grid of form Agreement_Booking_Setup */
 		Grid: DevKit.FormAgreement_Booking_Setup.Grid;
 		/** The SidePanes of form Agreement_Booking_Setup */
@@ -207,6 +228,25 @@ declare namespace DevKit {
 			nav_msdyn_msdyn_agreementbookingsetup_msdyn_agreementbookingservicetask_AgreementBookingSetup: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface ProcessAgreement_Business_Process {
+			/** Enable if the system should automatically generate Work Orders for the Booking Dates of this Booking Setup */
+			msdyn_AutoGenerateWO: DevKit.Controls.Boolean;
+			/** Type a description of this booking setup. */
+			msdyn_Description: DevKit.Controls.String;
+			/** Shows the duration of the booking. */
+			msdyn_EstimatedDuration: DevKit.Controls.Integer;
+			/** Enter the name of the custom entity. */
+			msdyn_name: DevKit.Controls.String;
+			/** Shows the flexibility of days after the booking date. */
+			msdyn_PostBookingFlexibility: DevKit.Controls.Integer;
+			/** Shows the flexibility of days prior to the booking date. */
+			msdyn_PreBookingFlexibility: DevKit.Controls.Integer;
+			/** Work Order Type to be used on generated Work Orders */
+			msdyn_WorkOrderType: DevKit.Controls.Lookup;
+		}
+		interface Process extends DevKit.Controls.IProcess {
+			Agreement_Business_Process: ProcessAgreement_Business_Process;
+		}
 		interface Grid {
 			AgreementBookingProductsGrid: DevKit.Controls.Grid;
 			AgreementBookingServicesGrid: DevKit.Controls.Grid;
@@ -228,6 +268,8 @@ declare namespace DevKit {
 		Body: DevKit.FormAgreement_Booking_Setup_Mobile.Body;
 		/** The Navigation of form Agreement_Booking_Setup_Mobile */
 		Navigation: DevKit.FormAgreement_Booking_Setup_Mobile.Navigation;
+		/** The Process of form Agreement_Booking_Setup_Mobile */
+		Process: DevKit.FormAgreement_Booking_Setup_Mobile.Process;
 		/** The Grid of form Agreement_Booking_Setup_Mobile */
 		Grid: DevKit.FormAgreement_Booking_Setup_Mobile.Grid;
 		/** The SidePanes of form Agreement_Booking_Setup_Mobile */

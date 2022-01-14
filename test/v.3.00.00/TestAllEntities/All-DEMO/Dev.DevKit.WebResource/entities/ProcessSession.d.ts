@@ -78,6 +78,8 @@ declare namespace DevKit {
 			/** Status of the dialog session. */
 			StateCode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormProcessSession_Information extends DevKit.IForm {
 		/**
@@ -92,6 +94,8 @@ declare namespace DevKit {
 		Body: DevKit.FormProcessSession_Information.Body;
 		/** The Footer section of form ProcessSession_Information */
 		Footer: DevKit.FormProcessSession_Information.Footer;
+		/** The Process of form ProcessSession_Information */
+		Process: DevKit.FormProcessSession_Information.Process;
 		/** The SidePanes of form ProcessSession_Information */
 		SidePanes: DevKit.SidePanes;
 	}

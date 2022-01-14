@@ -8,6 +8,8 @@ declare namespace DevKit {
 			/** The name of the custom entity. */
 			name: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formorganizationdatasyncsubscriptionentity_Information extends DevKit.IForm {
 		/**
@@ -20,6 +22,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form organizationdatasyncsubscriptionentity_Information */
 		Body: DevKit.Formorganizationdatasyncsubscriptionentity_Information.Body;
+		/** The Process of form organizationdatasyncsubscriptionentity_Information */
+		Process: DevKit.Formorganizationdatasyncsubscriptionentity_Information.Process;
 		/** The SidePanes of form organizationdatasyncsubscriptionentity_Information */
 		SidePanes: DevKit.SidePanes;
 	}

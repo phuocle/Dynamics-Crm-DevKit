@@ -35,6 +35,16 @@ declare namespace DevKit {
 			nav_msdyn_msdyn_purchaseorderreceipt_msdyn_purchaseorderreceiptproduct_PurchaseOrderReceipt: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface ProcessPurchase_Order_Business_Process {
+			msdyn_DateReceived: DevKit.Controls.Date;
+			/** Unique identifier for User associated with Purchase Order Receipt. */
+			msdyn_ReceivedBy: DevKit.Controls.Lookup;
+			/** Unique identifier for Ship Via associated with Purchase Order Receipt. */
+			msdyn_ShipVia: DevKit.Controls.Lookup;
+		}
+		interface Process extends DevKit.Controls.IProcess {
+			Purchase_Order_Business_Process: ProcessPurchase_Order_Business_Process;
+		}
 		interface Grid {
 			RECEIPT_PRODUCTS: DevKit.Controls.Grid;
 		}
@@ -54,6 +64,8 @@ declare namespace DevKit {
 		Footer: DevKit.FormPurchase_Order_Receipt.Footer;
 		/** The Navigation of form Purchase_Order_Receipt */
 		Navigation: DevKit.FormPurchase_Order_Receipt.Navigation;
+		/** The Process of form Purchase_Order_Receipt */
+		Process: DevKit.FormPurchase_Order_Receipt.Process;
 		/** The Grid of form Purchase_Order_Receipt */
 		Grid: DevKit.FormPurchase_Order_Receipt.Grid;
 		/** The SidePanes of form Purchase_Order_Receipt */
@@ -107,6 +119,16 @@ declare namespace DevKit {
 			nav_msdyn_msdyn_purchaseorderreceipt_msdyn_purchaseorderreceiptproduct_PurchaseOrderReceipt: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface ProcessPurchase_Order_Business_Process {
+			msdyn_DateReceived: DevKit.Controls.Date;
+			/** Unique identifier for User associated with Purchase Order Receipt. */
+			msdyn_ReceivedBy: DevKit.Controls.Lookup;
+			/** Unique identifier for Ship Via associated with Purchase Order Receipt. */
+			msdyn_ShipVia: DevKit.Controls.Lookup;
+		}
+		interface Process extends DevKit.Controls.IProcess {
+			Purchase_Order_Business_Process: ProcessPurchase_Order_Business_Process;
+		}
 		interface Grid {
 			RECEIPT_PRODUCTS: DevKit.Controls.Grid;
 		}
@@ -124,6 +146,8 @@ declare namespace DevKit {
 		Body: DevKit.FormPurchase_Order_Receipt_Mobile.Body;
 		/** The Navigation of form Purchase_Order_Receipt_Mobile */
 		Navigation: DevKit.FormPurchase_Order_Receipt_Mobile.Navigation;
+		/** The Process of form Purchase_Order_Receipt_Mobile */
+		Process: DevKit.FormPurchase_Order_Receipt_Mobile.Process;
 		/** The Grid of form Purchase_Order_Receipt_Mobile */
 		Grid: DevKit.FormPurchase_Order_Receipt_Mobile.Grid;
 		/** The SidePanes of form Purchase_Order_Receipt_Mobile */

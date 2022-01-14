@@ -36,6 +36,8 @@ declare namespace DevKit {
 			/** Query Weight of the component. Factored with the Optimization Impact to determine the overall importance of applying an optimization. (P2) */
 			Weight: DevKit.Controls.Decimal;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormDataPerformance_Information extends DevKit.IForm {
 		/**
@@ -48,6 +50,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form DataPerformance_Information */
 		Body: DevKit.FormDataPerformance_Information.Body;
+		/** The Process of form DataPerformance_Information */
+		Process: DevKit.FormDataPerformance_Information.Process;
 		/** The SidePanes of form DataPerformance_Information */
 		SidePanes: DevKit.SidePanes;
 	}

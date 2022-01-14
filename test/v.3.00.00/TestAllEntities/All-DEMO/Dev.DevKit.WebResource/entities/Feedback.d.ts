@@ -47,6 +47,8 @@ declare namespace DevKit {
 			/** Type a title for the feedback. */
 			Title: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormFeedback extends DevKit.IForm {
 		/**
@@ -61,6 +63,8 @@ declare namespace DevKit {
 		Body: DevKit.FormFeedback.Body;
 		/** The Header section of form Feedback */
 		Header: DevKit.FormFeedback.Header;
+		/** The Process of form Feedback */
+		Process: DevKit.FormFeedback.Process;
 		/** The SidePanes of form Feedback */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -113,6 +117,8 @@ declare namespace DevKit {
 			/** Type a title for the feedback. */
 			Title: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormFeedback_MainIC extends DevKit.IForm {
 		/**
@@ -127,6 +133,8 @@ declare namespace DevKit {
 		Body: DevKit.FormFeedback_MainIC.Body;
 		/** The Header section of form Feedback_MainIC */
 		Header: DevKit.FormFeedback_MainIC.Header;
+		/** The Process of form Feedback_MainIC */
+		Process: DevKit.FormFeedback_MainIC.Process;
 		/** The SidePanes of form Feedback_MainIC */
 		SidePanes: DevKit.SidePanes;
 	}

@@ -48,7 +48,7 @@ declare namespace DevKit {
 			/** Unique identifier for Inspection Template associated with Agreement Booking Service Task. */
 			msdyn_Inspection: DevKit.Controls.Lookup;
 			/** Unique identifier for Inspection Template associated with Agreement Booking Service Task. */
-			msdyn_Inspection_1: DevKit.Controls.Lookup;
+			msdyn_Inspection1: DevKit.Controls.Lookup;
 			/** Depicts whether inspection template is enabled for Agreement Booking Service Task */
 			msdyn_InspectionEnabled: DevKit.Controls.Boolean;
 			msdyn_LineOrder: DevKit.Controls.Integer;
@@ -64,6 +64,8 @@ declare namespace DevKit {
 			nav_msdyn_msdyn_agreementbookingservicetask_msdyn_workorderservicetask_AgreementBookingServiceTask: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormAgreement_Booking_Service_Task_Mobile extends DevKit.IForm {
 		/**
@@ -78,6 +80,8 @@ declare namespace DevKit {
 		Body: DevKit.FormAgreement_Booking_Service_Task_Mobile.Body;
 		/** The Navigation of form Agreement_Booking_Service_Task_Mobile */
 		Navigation: DevKit.FormAgreement_Booking_Service_Task_Mobile.Navigation;
+		/** The Process of form Agreement_Booking_Service_Task_Mobile */
+		Process: DevKit.FormAgreement_Booking_Service_Task_Mobile.Process;
 		/** The SidePanes of form Agreement_Booking_Service_Task_Mobile */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -106,7 +110,7 @@ declare namespace DevKit {
 			/** Unique identifier for Inspection Template associated with Agreement Booking Service Task. */
 			msdyn_Inspection: DevKit.Controls.Lookup;
 			/** Unique identifier for Inspection Template associated with Agreement Booking Service Task. */
-			msdyn_Inspection_1: DevKit.Controls.Lookup;
+			msdyn_Inspection1: DevKit.Controls.Lookup;
 			/** Depicts whether inspection template is enabled for Agreement Booking Service Task */
 			msdyn_InspectionEnabled: DevKit.Controls.Boolean;
 			msdyn_LineOrder: DevKit.Controls.Integer;
@@ -126,6 +130,8 @@ declare namespace DevKit {
 			nav_msdyn_msdyn_agreementbookingservicetask_msdyn_workorderservicetask_AgreementBookingServiceTask: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_agreementbookingservicetask_Information extends DevKit.IForm {
 		/**
@@ -142,6 +148,8 @@ declare namespace DevKit {
 		Footer: DevKit.Formmsdyn_agreementbookingservicetask_Information.Footer;
 		/** The Navigation of form msdyn_agreementbookingservicetask_Information */
 		Navigation: DevKit.Formmsdyn_agreementbookingservicetask_Information.Navigation;
+		/** The Process of form msdyn_agreementbookingservicetask_Information */
+		Process: DevKit.Formmsdyn_agreementbookingservicetask_Information.Process;
 		/** The SidePanes of form msdyn_agreementbookingservicetask_Information */
 		SidePanes: DevKit.SidePanes;
 	}

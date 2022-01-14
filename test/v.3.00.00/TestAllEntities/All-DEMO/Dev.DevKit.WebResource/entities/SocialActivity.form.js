@@ -44,16 +44,6 @@ var DevKit;
 		form.Header = header;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
 		devKit.LoadOthers(formContext, form, defaultWebResourceName);
@@ -75,13 +65,13 @@ var DevKit;
 			ModifiedOn: {},
 			OwnerId: {},
 			PostedOn: {},
-			PostedOn_1: {},
+			PostedOn1: {},
 			PostFromProfileId: {},
 			PostMessageType: {},
 			PostToProfileId: {},
 			PostURL: {},
 			RegardingObjectId: {},
-			RegardingObjectId_1: {},
+			RegardingObjectId1: {},
 			Subject: {}
 		};
 		devKit.LoadFields(formContext, body);
@@ -107,16 +97,6 @@ var DevKit;
 		form.Header = header;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
 		devKit.LoadOthers(formContext, form, defaultWebResourceName);

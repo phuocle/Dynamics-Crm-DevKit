@@ -104,11 +104,6 @@ var DevKit;
 		form.Footer = footer;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var navigation = {
 			nav_msdyn_msdyn_workorderproduct_msdyn_customerasset_WorkOrderProduct: {},
 			nav_msdyn_msdyn_workorderproduct_msdyn_inventoryjournal_WorkOrderProduct: {},
@@ -206,11 +201,6 @@ var DevKit;
 		form.Body = body;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var navigation = {
 			nav_msdyn_msdyn_workorderproduct_invoicedetail: {},
 			nav_msdyn_msdyn_workorderproduct_msdyn_customerasset_WorkOrderProduct: {},

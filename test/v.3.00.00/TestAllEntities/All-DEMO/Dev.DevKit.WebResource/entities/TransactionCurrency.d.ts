@@ -27,6 +27,8 @@ declare namespace DevKit {
 			ISOCurrencyCode: DevKit.Controls.String;
 			systemcurrency: DevKit.Controls.ActionCards;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormTransactionCurrency_Information extends DevKit.IForm {
 		/**
@@ -39,6 +41,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form TransactionCurrency_Information */
 		Body: DevKit.FormTransactionCurrency_Information.Body;
+		/** The Process of form TransactionCurrency_Information */
+		Process: DevKit.FormTransactionCurrency_Information.Process;
 		/** The SidePanes of form TransactionCurrency_Information */
 		SidePanes: DevKit.SidePanes;
 	}

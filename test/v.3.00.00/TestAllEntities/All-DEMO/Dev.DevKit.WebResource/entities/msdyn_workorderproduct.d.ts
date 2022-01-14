@@ -143,6 +143,8 @@ declare namespace DevKit {
 			nav_msdyn_msdyn_workorderproduct_msdyn_rtvproduct_WorkOrderProduct: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_workorderproduct_Information extends DevKit.IForm {
 		/**
@@ -159,6 +161,8 @@ declare namespace DevKit {
 		Footer: DevKit.Formmsdyn_workorderproduct_Information.Footer;
 		/** The Navigation of form msdyn_workorderproduct_Information */
 		Navigation: DevKit.Formmsdyn_workorderproduct_Information.Navigation;
+		/** The Process of form msdyn_workorderproduct_Information */
+		Process: DevKit.Formmsdyn_workorderproduct_Information.Process;
 		/** The SidePanes of form msdyn_workorderproduct_Information */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -282,6 +286,8 @@ declare namespace DevKit {
 			navAsyncOperations: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormWork_Order_Product_Mobile extends DevKit.IForm {
 		/**
@@ -296,6 +302,8 @@ declare namespace DevKit {
 		Body: DevKit.FormWork_Order_Product_Mobile.Body;
 		/** The Navigation of form Work_Order_Product_Mobile */
 		Navigation: DevKit.FormWork_Order_Product_Mobile.Navigation;
+		/** The Process of form Work_Order_Product_Mobile */
+		Process: DevKit.FormWork_Order_Product_Mobile.Process;
 		/** The SidePanes of form Work_Order_Product_Mobile */
 		SidePanes: DevKit.SidePanes;
 	}

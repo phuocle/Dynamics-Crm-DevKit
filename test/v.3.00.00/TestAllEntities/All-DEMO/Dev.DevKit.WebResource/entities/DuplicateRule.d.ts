@@ -57,6 +57,8 @@ declare namespace DevKit {
 			/** Reason for the status of the duplicate detection rule. */
 			StatusCode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormDuplicateRule_Information extends DevKit.IForm {
 		/**
@@ -69,6 +71,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form DuplicateRule_Information */
 		Body: DevKit.FormDuplicateRule_Information.Body;
+		/** The Process of form DuplicateRule_Information */
+		Process: DevKit.FormDuplicateRule_Information.Process;
 		/** The SidePanes of form DuplicateRule_Information */
 		SidePanes: DevKit.SidePanes;
 	}

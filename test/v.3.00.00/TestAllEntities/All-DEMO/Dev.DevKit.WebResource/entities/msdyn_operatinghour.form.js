@@ -17,17 +17,17 @@ var DevKit;
 		var body = {
 			msdyn_calendarid: {},
 			msdyn_Description: {},
-			msdyn_Description_1: {},
+			msdyn_Description1: {},
 			msdyn_EnableAllDays: {},
 			msdyn_Endtimestring: {},
 			msdyn_name: {},
-			msdyn_name_1: {},
+			msdyn_name1: {},
 			msdyn_oc_daysofweek: {},
 			msdyn_starttimestring: {},
 			msdyn_Timezone: {},
 			msdyn_Totalworkhours: {},
 			OwnerId: {},
-			OwnerId_1: {}
+			OwnerId1: {}
 		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
@@ -42,16 +42,6 @@ var DevKit;
 		form.Body = body;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
 		devKit.LoadOthers(formContext, form, defaultWebResourceName);
@@ -71,17 +61,17 @@ var DevKit;
 		var form = devKit.LoadForm(formContext);
 		var body = {
 			msdyn_Description: {},
-			msdyn_Description_1: {},
+			msdyn_Description1: {},
 			msdyn_EnableAllDays: {},
 			msdyn_Endtimestring: {},
 			msdyn_name: {},
-			msdyn_name_1: {},
+			msdyn_name1: {},
 			msdyn_oc_daysofweek: {},
 			msdyn_starttimestring: {},
 			msdyn_Timezone: {},
 			msdyn_Totalworkhours: {},
 			OwnerId: {},
-			OwnerId_1: {}
+			OwnerId1: {}
 		};
 		devKit.LoadFields(formContext, body);
 		var tab = {

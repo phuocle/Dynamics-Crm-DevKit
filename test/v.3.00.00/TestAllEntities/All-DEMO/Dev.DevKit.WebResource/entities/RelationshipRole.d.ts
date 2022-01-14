@@ -16,6 +16,8 @@ declare namespace DevKit {
 			/** Name of the relationship role. */
 			Name: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormRelationshipRole_Information extends DevKit.IForm {
 		/**
@@ -28,6 +30,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form RelationshipRole_Information */
 		Body: DevKit.FormRelationshipRole_Information.Body;
+		/** The Process of form RelationshipRole_Information */
+		Process: DevKit.FormRelationshipRole_Information.Process;
 		/** The SidePanes of form RelationshipRole_Information */
 		SidePanes: DevKit.SidePanes;
 	}

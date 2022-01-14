@@ -33,6 +33,8 @@ declare namespace DevKit {
 			navProcessSessions: DevKit.Controls.NavigationItem,
 			navResourceCharacteristics: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormCharacteristic_Information extends DevKit.IForm {
 		/**
@@ -47,6 +49,8 @@ declare namespace DevKit {
 		Body: DevKit.FormCharacteristic_Information.Body;
 		/** The Navigation of form Characteristic_Information */
 		Navigation: DevKit.FormCharacteristic_Information.Navigation;
+		/** The Process of form Characteristic_Information */
+		Process: DevKit.FormCharacteristic_Information.Process;
 		/** The SidePanes of form Characteristic_Information */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -61,6 +65,8 @@ declare namespace DevKit {
 			/** Type a name for the characteristic. */
 			Name: DevKit.Controls.String;
 			WebResource_help: DevKit.Controls.WebResource;
+		}
+		interface Process extends DevKit.Controls.IProcess {
 		}
 		interface Grid {
 			SkilledUsers: DevKit.Controls.Grid;
@@ -77,6 +83,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Skill_Main_Form */
 		Body: DevKit.FormSkill_Main_Form.Body;
+		/** The Process of form Skill_Main_Form */
+		Process: DevKit.FormSkill_Main_Form.Process;
 		/** The Grid of form Skill_Main_Form */
 		Grid: DevKit.FormSkill_Main_Form.Grid;
 		/** The SidePanes of form Skill_Main_Form */

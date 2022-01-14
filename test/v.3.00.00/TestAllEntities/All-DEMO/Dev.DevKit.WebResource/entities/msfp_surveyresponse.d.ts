@@ -70,6 +70,8 @@ declare namespace DevKit {
 			/** Subject associated with the activity. */
 			Subject: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			QuestionResponses: DevKit.Controls.Grid;
 		}
@@ -87,6 +89,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsfp_surveyresponse_Information.Body;
 		/** The Header section of form msfp_surveyresponse_Information */
 		Header: DevKit.Formmsfp_surveyresponse_Information.Header;
+		/** The Process of form msfp_surveyresponse_Information */
+		Process: DevKit.Formmsfp_surveyresponse_Information.Process;
 		/** The Grid of form msfp_surveyresponse_Information */
 		Grid: DevKit.Formmsfp_surveyresponse_Information.Grid;
 		/** The SidePanes of form msfp_surveyresponse_Information */

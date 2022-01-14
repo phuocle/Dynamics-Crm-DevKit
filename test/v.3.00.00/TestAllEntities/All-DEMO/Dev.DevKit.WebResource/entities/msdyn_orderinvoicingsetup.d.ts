@@ -35,6 +35,8 @@ declare namespace DevKit {
 			nav_msdyn_msdyn_orderinvoicingsetup_msdyn_orderinvoicingproduct_OrderInvoicingSetup: DevKit.Controls.NavigationItem,
 			nav_msdyn_msdyn_orderinvoicingsetup_msdyn_orderinvoicingsetupdate_InvoiceSetup: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			GridProducts: DevKit.Controls.Grid;
 		}
@@ -52,6 +54,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyn_orderinvoicingsetup_Information.Body;
 		/** The Navigation of form msdyn_orderinvoicingsetup_Information */
 		Navigation: DevKit.Formmsdyn_orderinvoicingsetup_Information.Navigation;
+		/** The Process of form msdyn_orderinvoicingsetup_Information */
+		Process: DevKit.Formmsdyn_orderinvoicingsetup_Information.Process;
 		/** The Grid of form msdyn_orderinvoicingsetup_Information */
 		Grid: DevKit.Formmsdyn_orderinvoicingsetup_Information.Grid;
 		/** The SidePanes of form msdyn_orderinvoicingsetup_Information */
@@ -67,6 +71,8 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_orderinvoicingsetup_Information2 extends DevKit.IForm {
 		/**
@@ -79,6 +85,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_orderinvoicingsetup_Information2 */
 		Body: DevKit.Formmsdyn_orderinvoicingsetup_Information2.Body;
+		/** The Process of form msdyn_orderinvoicingsetup_Information2 */
+		Process: DevKit.Formmsdyn_orderinvoicingsetup_Information2.Process;
 		/** The SidePanes of form msdyn_orderinvoicingsetup_Information2 */
 		SidePanes: DevKit.SidePanes;
 	}

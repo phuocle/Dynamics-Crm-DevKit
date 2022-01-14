@@ -27,6 +27,8 @@ declare namespace DevKit {
 			/** Choose the subject for the sales literature to relate the item to a product or business group. Administrators can configure subjects under Business Management in the Settings area. */
 			SubjectId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormSalesLiterature_Information extends DevKit.IForm {
 		/**
@@ -39,6 +41,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form SalesLiterature_Information */
 		Body: DevKit.FormSalesLiterature_Information.Body;
+		/** The Process of form SalesLiterature_Information */
+		Process: DevKit.FormSalesLiterature_Information.Process;
 		/** The SidePanes of form SalesLiterature_Information */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -77,6 +81,8 @@ declare namespace DevKit {
 			navDocument: DevKit.Controls.NavigationItem,
 			navProducts: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			Competitors: DevKit.Controls.Grid;
 			Products: DevKit.Controls.Grid;
@@ -98,6 +104,8 @@ declare namespace DevKit {
 		Header: DevKit.FormSales_Literature.Header;
 		/** The Navigation of form Sales_Literature */
 		Navigation: DevKit.FormSales_Literature.Navigation;
+		/** The Process of form Sales_Literature */
+		Process: DevKit.FormSales_Literature.Process;
 		/** The Grid of form Sales_Literature */
 		Grid: DevKit.FormSales_Literature.Grid;
 		/** The SidePanes of form Sales_Literature */

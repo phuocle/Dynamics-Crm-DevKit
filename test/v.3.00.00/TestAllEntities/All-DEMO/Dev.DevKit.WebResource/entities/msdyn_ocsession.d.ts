@@ -42,6 +42,8 @@ declare namespace DevKit {
 			navAudit: DevKit.Controls.NavigationItem,
 			navConnections: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			session_participants: DevKit.Controls.Grid;
 		}
@@ -61,6 +63,8 @@ declare namespace DevKit {
 		Header: DevKit.FormOmnichannel_session_form.Header;
 		/** The Navigation of form Omnichannel_session_form */
 		Navigation: DevKit.FormOmnichannel_session_form.Navigation;
+		/** The Process of form Omnichannel_session_form */
+		Process: DevKit.FormOmnichannel_session_form.Process;
 		/** The Grid of form Omnichannel_session_form */
 		Grid: DevKit.FormOmnichannel_session_form.Grid;
 		/** The SidePanes of form Omnichannel_session_form */

@@ -16,6 +16,8 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_notificationfield_Information extends DevKit.IForm {
 		/**
@@ -28,6 +30,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_notificationfield_Information */
 		Body: DevKit.Formmsdyn_notificationfield_Information.Body;
+		/** The Process of form msdyn_notificationfield_Information */
+		Process: DevKit.Formmsdyn_notificationfield_Information.Process;
 		/** The SidePanes of form msdyn_notificationfield_Information */
 		SidePanes: DevKit.SidePanes;
 	}

@@ -12,6 +12,8 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_oc_geolocationprovider_Information extends DevKit.IForm {
 		/**
@@ -24,6 +26,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_oc_geolocationprovider_Information */
 		Body: DevKit.Formmsdyn_oc_geolocationprovider_Information.Body;
+		/** The Process of form msdyn_oc_geolocationprovider_Information */
+		Process: DevKit.Formmsdyn_oc_geolocationprovider_Information.Process;
 		/** The SidePanes of form msdyn_oc_geolocationprovider_Information */
 		SidePanes: DevKit.SidePanes;
 	}

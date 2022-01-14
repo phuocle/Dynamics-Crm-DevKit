@@ -71,6 +71,8 @@ declare namespace DevKit {
 			WebResource_Disclaimer: DevKit.Controls.WebResource;
 			WebResource_postconversationsurveydisclaimer: DevKit.Controls.WebResource;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			instance_CustomSystemMessage: DevKit.Controls.Grid;
 			instance_MessageTemplate: DevKit.Controls.Grid;
@@ -87,6 +89,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_ocwhatsappchannelnumber_Information */
 		Body: DevKit.Formmsdyn_ocwhatsappchannelnumber_Information.Body;
+		/** The Process of form msdyn_ocwhatsappchannelnumber_Information */
+		Process: DevKit.Formmsdyn_ocwhatsappchannelnumber_Information.Process;
 		/** The Grid of form msdyn_ocwhatsappchannelnumber_Information */
 		Grid: DevKit.Formmsdyn_ocwhatsappchannelnumber_Information.Grid;
 		/** The SidePanes of form msdyn_ocwhatsappchannelnumber_Information */

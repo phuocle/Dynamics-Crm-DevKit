@@ -16,6 +16,8 @@ declare namespace DevKit {
 			/** Status of the ScriptLet */
 			statecode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyusd_scriptlet_Information extends DevKit.IForm {
 		/**
@@ -30,6 +32,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyusd_scriptlet_Information.Body;
 		/** The Footer section of form msdyusd_scriptlet_Information */
 		Footer: DevKit.Formmsdyusd_scriptlet_Information.Footer;
+		/** The Process of form msdyusd_scriptlet_Information */
+		Process: DevKit.Formmsdyusd_scriptlet_Information.Process;
 		/** The SidePanes of form msdyusd_scriptlet_Information */
 		SidePanes: DevKit.SidePanes;
 	}

@@ -72,6 +72,8 @@ declare namespace DevKit {
 		interface Navigation {
 			navCases: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			editableEntitlementChannelGridControl: DevKit.Controls.Grid;
 			grid_EntitlementApplications: DevKit.Controls.Grid;
@@ -95,6 +97,8 @@ declare namespace DevKit {
 		Header: DevKit.FormEntitlement.Header;
 		/** The Navigation of form Entitlement */
 		Navigation: DevKit.FormEntitlement.Navigation;
+		/** The Process of form Entitlement */
+		Process: DevKit.FormEntitlement.Process;
 		/** The Grid of form Entitlement */
 		Grid: DevKit.FormEntitlement.Grid;
 		/** The SidePanes of form Entitlement */

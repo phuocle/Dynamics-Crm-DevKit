@@ -7,6 +7,8 @@ declare namespace DevKit {
 		interface Body {
 
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormRecommendedDocument_Information extends DevKit.IForm {
 		/**
@@ -19,6 +21,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form RecommendedDocument_Information */
 		Body: DevKit.FormRecommendedDocument_Information.Body;
+		/** The Process of form RecommendedDocument_Information */
+		Process: DevKit.FormRecommendedDocument_Information.Process;
 		/** The SidePanes of form RecommendedDocument_Information */
 		SidePanes: DevKit.SidePanes;
 	}

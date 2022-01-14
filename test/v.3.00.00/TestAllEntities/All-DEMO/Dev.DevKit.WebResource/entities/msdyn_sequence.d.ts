@@ -37,6 +37,8 @@ declare namespace DevKit {
 			navAudit: DevKit.Controls.NavigationItem,
 			navConnections: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			related_records: DevKit.Controls.Grid;
 		}
@@ -54,6 +56,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyn_sequence_Information.Body;
 		/** The Navigation of form msdyn_sequence_Information */
 		Navigation: DevKit.Formmsdyn_sequence_Information.Navigation;
+		/** The Process of form msdyn_sequence_Information */
+		Process: DevKit.Formmsdyn_sequence_Information.Process;
 		/** The Grid of form msdyn_sequence_Information */
 		Grid: DevKit.Formmsdyn_sequence_Information.Grid;
 		/** The SidePanes of form msdyn_sequence_Information */

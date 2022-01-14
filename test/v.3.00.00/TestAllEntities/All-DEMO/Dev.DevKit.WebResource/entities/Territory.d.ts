@@ -35,6 +35,8 @@ declare namespace DevKit {
 			nav_msdyn_territory_msdyn_resourceterritory_Territory: DevKit.Controls.NavigationItem,
 			nav_msdyn_territory_msdyn_workorder_ServiceTerritory: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			territories_subgrid: DevKit.Controls.Grid;
 		}
@@ -52,6 +54,8 @@ declare namespace DevKit {
 		Body: DevKit.FormTerritory_Information.Body;
 		/** The Navigation of form Territory_Information */
 		Navigation: DevKit.FormTerritory_Information.Navigation;
+		/** The Process of form Territory_Information */
+		Process: DevKit.FormTerritory_Information.Process;
 		/** The Grid of form Territory_Information */
 		Grid: DevKit.FormTerritory_Information.Grid;
 		/** The SidePanes of form Territory_Information */

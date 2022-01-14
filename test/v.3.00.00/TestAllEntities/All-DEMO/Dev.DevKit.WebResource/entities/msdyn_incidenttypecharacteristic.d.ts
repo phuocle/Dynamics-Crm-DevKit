@@ -24,6 +24,8 @@ declare namespace DevKit {
 		interface Navigation {
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_incidenttypecharacteristic_Information extends DevKit.IForm {
 		/**
@@ -40,6 +42,8 @@ declare namespace DevKit {
 		Footer: DevKit.Formmsdyn_incidenttypecharacteristic_Information.Footer;
 		/** The Navigation of form msdyn_incidenttypecharacteristic_Information */
 		Navigation: DevKit.Formmsdyn_incidenttypecharacteristic_Information.Navigation;
+		/** The Process of form msdyn_incidenttypecharacteristic_Information */
+		Process: DevKit.Formmsdyn_incidenttypecharacteristic_Information.Process;
 		/** The SidePanes of form msdyn_incidenttypecharacteristic_Information */
 		SidePanes: DevKit.SidePanes;
 	}

@@ -26,6 +26,8 @@ declare namespace DevKit {
 			/** Choose the secondary party's role or nature of the relationship the customer has with the primary party. The field is read-only until both parties have been selected. Administrators can configure role values under Business Management in the Settings area. */
 			PartnerRoleId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormCustomerRelationship_Information extends DevKit.IForm {
 		/**
@@ -38,6 +40,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form CustomerRelationship_Information */
 		Body: DevKit.FormCustomerRelationship_Information.Body;
+		/** The Process of form CustomerRelationship_Information */
+		Process: DevKit.FormCustomerRelationship_Information.Process;
 		/** The SidePanes of form CustomerRelationship_Information */
 		SidePanes: DevKit.SidePanes;
 	}

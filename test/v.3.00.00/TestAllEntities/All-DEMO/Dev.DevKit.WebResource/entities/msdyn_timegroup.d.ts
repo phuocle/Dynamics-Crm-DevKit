@@ -46,6 +46,8 @@ declare namespace DevKit {
 		interface Navigation {
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			detailsgrid: DevKit.Controls.Grid;
 		}
@@ -63,6 +65,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyn_timegroup_Information.Body;
 		/** The Navigation of form msdyn_timegroup_Information */
 		Navigation: DevKit.Formmsdyn_timegroup_Information.Navigation;
+		/** The Process of form msdyn_timegroup_Information */
+		Process: DevKit.Formmsdyn_timegroup_Information.Process;
 		/** The Grid of form msdyn_timegroup_Information */
 		Grid: DevKit.Formmsdyn_timegroup_Information.Grid;
 		/** The SidePanes of form msdyn_timegroup_Information */

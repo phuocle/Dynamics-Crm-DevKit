@@ -64,11 +64,11 @@ declare namespace DevKit {
 			/** Shows the time that work started. */
 			msdyn_ActualArrivalTime: DevKit.Controls.DateTime;
 			/** Shows the time that work started. */
-			msdyn_ActualArrivalTime_1: DevKit.Controls.DateTime;
+			msdyn_ActualArrivalTime1: DevKit.Controls.DateTime;
 			/** Shows the total travel duration. Calculated based on the difference between the Bookable Resource Booking's start time and actual arrival time. */
 			msdyn_ActualTravelDuration: DevKit.Controls.Integer;
 			/** Shows the total travel duration. Calculated based on the difference between the Bookable Resource Booking's start time and actual arrival time. */
-			msdyn_ActualTravelDuration_1: DevKit.Controls.Integer;
+			msdyn_ActualTravelDuration1: DevKit.Controls.Integer;
 			/** Agreement Booking Date from where this Booking was generated */
 			msdyn_AgreementBookingDate: DevKit.Controls.Lookup;
 			/** Allow the time of this booking to be displayed on the schedule assistant as available. */
@@ -93,11 +93,11 @@ declare namespace DevKit {
 			/** Unique identifier for Work Order associated with Resource Booking. */
 			msdyn_WorkOrder: DevKit.Controls.Lookup;
 			/** Unique identifier for Work Order associated with Resource Booking. */
-			msdyn_WorkOrder_1: DevKit.Controls.Lookup;
+			msdyn_WorkOrder1: DevKit.Controls.Lookup;
 			/** Unique identifier for Work Order associated with Resource Booking. */
-			msdyn_WorkOrder_2: DevKit.Controls.Lookup;
+			msdyn_WorkOrder2: DevKit.Controls.Lookup;
 			/** Unique identifier for Work Order associated with Resource Booking. */
-			msdyn_WorkOrder_3: DevKit.Controls.Lookup;
+			msdyn_WorkOrder3: DevKit.Controls.Lookup;
 			/** Type a name for the booking. */
 			Name: DevKit.Controls.String;
 			notescontrol: DevKit.Controls.Note;
@@ -124,6 +124,8 @@ declare namespace DevKit {
 			navAudit: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			msdyn_quicknotescontrol: DevKit.Controls.Grid;
 		}
@@ -141,6 +143,8 @@ declare namespace DevKit {
 		Body: DevKit.FormBooking_and_Work_Order.Body;
 		/** The Navigation of form Booking_and_Work_Order */
 		Navigation: DevKit.FormBooking_and_Work_Order.Navigation;
+		/** The Process of form Booking_and_Work_Order */
+		Process: DevKit.FormBooking_and_Work_Order.Process;
 		/** The Grid of form Booking_and_Work_Order */
 		Grid: DevKit.FormBooking_and_Work_Order.Grid;
 		/** The SidePanes of form Booking_and_Work_Order */
@@ -254,6 +258,8 @@ declare namespace DevKit {
 			nav_msdyn_bookableresourcebooking_msdyn_workorderservice_Booking: DevKit.Controls.NavigationItem,
 			nav_msdyn_bookableresourcebooking_msdyn_workorderservicetask_Booking: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			msdyn_quicknotescontrol: DevKit.Controls.Grid;
 			TIMESTAMPS: DevKit.Controls.Grid;
@@ -272,6 +278,8 @@ declare namespace DevKit {
 		Body: DevKit.FormBookableResourceBooking_Information.Body;
 		/** The Navigation of form BookableResourceBooking_Information */
 		Navigation: DevKit.FormBookableResourceBooking_Information.Navigation;
+		/** The Process of form BookableResourceBooking_Information */
+		Process: DevKit.FormBookableResourceBooking_Information.Process;
 		/** The Grid of form BookableResourceBooking_Information */
 		Grid: DevKit.FormBookableResourceBooking_Information.Grid;
 		/** The SidePanes of form BookableResourceBooking_Information */
@@ -414,6 +422,8 @@ declare namespace DevKit {
 		interface QuickForm {
 			WorkOrderQuickView: quickForm_WorkOrderQuickView;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			msdyn_quicknotescontrol: DevKit.Controls.Grid;
 			PRODUCTS: DevKit.Controls.Grid;
@@ -439,6 +449,8 @@ declare namespace DevKit {
 		Navigation: DevKit.FormResource_Booking_Mobile_Deprecated.Navigation;
 		/** The QuickForm of form Resource_Booking_Mobile_Deprecated */
 		QuickForm: DevKit.FormResource_Booking_Mobile_Deprecated.QuickForm;
+		/** The Process of form Resource_Booking_Mobile_Deprecated */
+		Process: DevKit.FormResource_Booking_Mobile_Deprecated.Process;
 		/** The Grid of form Resource_Booking_Mobile_Deprecated */
 		Grid: DevKit.FormResource_Booking_Mobile_Deprecated.Grid;
 		/** The SidePanes of form Resource_Booking_Mobile_Deprecated */

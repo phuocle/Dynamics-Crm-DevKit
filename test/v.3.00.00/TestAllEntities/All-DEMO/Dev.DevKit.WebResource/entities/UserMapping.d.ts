@@ -7,6 +7,8 @@ declare namespace DevKit {
 		interface Body {
 
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormUserMapping_Information extends DevKit.IForm {
 		/**
@@ -19,6 +21,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form UserMapping_Information */
 		Body: DevKit.FormUserMapping_Information.Body;
+		/** The Process of form UserMapping_Information */
+		Process: DevKit.FormUserMapping_Information.Process;
 		/** The SidePanes of form UserMapping_Information */
 		SidePanes: DevKit.SidePanes;
 	}

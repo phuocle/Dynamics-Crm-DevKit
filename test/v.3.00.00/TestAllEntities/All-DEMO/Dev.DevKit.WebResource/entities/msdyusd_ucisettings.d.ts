@@ -10,6 +10,8 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyusd_ucisettings_Information extends DevKit.IForm {
 		/**
@@ -22,6 +24,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyusd_ucisettings_Information */
 		Body: DevKit.Formmsdyusd_ucisettings_Information.Body;
+		/** The Process of form msdyusd_ucisettings_Information */
+		Process: DevKit.Formmsdyusd_ucisettings_Information.Process;
 		/** The SidePanes of form msdyusd_ucisettings_Information */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -38,6 +42,8 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyusd_ucisettings_Information2 extends DevKit.IForm {
 		/**
@@ -50,6 +56,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyusd_ucisettings_Information2 */
 		Body: DevKit.Formmsdyusd_ucisettings_Information2.Body;
+		/** The Process of form msdyusd_ucisettings_Information2 */
+		Process: DevKit.Formmsdyusd_ucisettings_Information2.Process;
 		/** The SidePanes of form msdyusd_ucisettings_Information2 */
 		SidePanes: DevKit.SidePanes;
 	}

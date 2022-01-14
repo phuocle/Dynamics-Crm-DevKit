@@ -14,6 +14,8 @@ declare namespace DevKit {
 			/** Shows whether the expense entry requires a receipt. */
 			msdyn_ReceiptRequired: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_expensecategory_Information extends DevKit.IForm {
 		/**
@@ -26,6 +28,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_expensecategory_Information */
 		Body: DevKit.Formmsdyn_expensecategory_Information.Body;
+		/** The Process of form msdyn_expensecategory_Information */
+		Process: DevKit.Formmsdyn_expensecategory_Information.Process;
 		/** The SidePanes of form msdyn_expensecategory_Information */
 		SidePanes: DevKit.SidePanes;
 	}

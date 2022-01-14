@@ -16,6 +16,8 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_masterentityroutingconfiguration_Information extends DevKit.IForm {
 		/**
@@ -28,6 +30,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_masterentityroutingconfiguration_Information */
 		Body: DevKit.Formmsdyn_masterentityroutingconfiguration_Information.Body;
+		/** The Process of form msdyn_masterentityroutingconfiguration_Information */
+		Process: DevKit.Formmsdyn_masterentityroutingconfiguration_Information.Process;
 		/** The SidePanes of form msdyn_masterentityroutingconfiguration_Information */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -46,6 +50,8 @@ declare namespace DevKit {
 			/** Unique identifier for entity instances */
 			msdyn_masterentityroutingconfigurationId: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormInformation_New2 extends DevKit.IForm {
 		/**
@@ -58,6 +64,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Information_New2 */
 		Body: DevKit.FormInformation_New2.Body;
+		/** The Process of form Information_New2 */
+		Process: DevKit.FormInformation_New2.Process;
 		/** The SidePanes of form Information_New2 */
 		SidePanes: DevKit.SidePanes;
 	}

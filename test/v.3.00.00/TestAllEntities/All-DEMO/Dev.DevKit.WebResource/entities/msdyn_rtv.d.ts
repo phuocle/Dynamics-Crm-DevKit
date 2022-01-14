@@ -50,6 +50,8 @@ declare namespace DevKit {
 			nav_msdyn_msdyn_rtv_msdyn_rtvproduct_RTV: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			rtvproductsgrid: DevKit.Controls.Grid;
 		}
@@ -69,6 +71,8 @@ declare namespace DevKit {
 		Footer: DevKit.FormRTV.Footer;
 		/** The Navigation of form RTV */
 		Navigation: DevKit.FormRTV.Navigation;
+		/** The Process of form RTV */
+		Process: DevKit.FormRTV.Process;
 		/** The Grid of form RTV */
 		Grid: DevKit.FormRTV.Grid;
 		/** The SidePanes of form RTV */

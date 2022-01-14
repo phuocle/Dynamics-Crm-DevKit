@@ -50,6 +50,13 @@ declare namespace DevKit {
 			nav_msdyn_msdyn_agreementinvoicesetup_msdyn_agreementinvoiceproduct_AgreementInvoiceSetup: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface ProcessAgreement_Business_Process {
+			/** Type a description of this invoice setup. */
+			msdyn_Description: DevKit.Controls.String;
+		}
+		interface Process extends DevKit.Controls.IProcess {
+			Agreement_Business_Process: ProcessAgreement_Business_Process;
+		}
 		interface Grid {
 			AgreementInvoiceProductsGrid: DevKit.Controls.Grid;
 		}
@@ -67,6 +74,8 @@ declare namespace DevKit {
 		Body: DevKit.FormAgreement_Invoice_Setup_Mobile.Body;
 		/** The Navigation of form Agreement_Invoice_Setup_Mobile */
 		Navigation: DevKit.FormAgreement_Invoice_Setup_Mobile.Navigation;
+		/** The Process of form Agreement_Invoice_Setup_Mobile */
+		Process: DevKit.FormAgreement_Invoice_Setup_Mobile.Process;
 		/** The Grid of form Agreement_Invoice_Setup_Mobile */
 		Grid: DevKit.FormAgreement_Invoice_Setup_Mobile.Grid;
 		/** The SidePanes of form Agreement_Invoice_Setup_Mobile */
@@ -105,6 +114,13 @@ declare namespace DevKit {
 			nav_msdyn_msdyn_agreementinvoicesetup_msdyn_agreementinvoiceproduct_AgreementInvoiceSetup: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface ProcessAgreement_Business_Process {
+			/** Type a description of this invoice setup. */
+			msdyn_Description: DevKit.Controls.String;
+		}
+		interface Process extends DevKit.Controls.IProcess {
+			Agreement_Business_Process: ProcessAgreement_Business_Process;
+		}
 		interface Grid {
 			AgreementInvoiceProductsGrid: DevKit.Controls.Grid;
 		}
@@ -124,6 +140,8 @@ declare namespace DevKit {
 		Footer: DevKit.Formmsdyn_agreementinvoicesetup_Information.Footer;
 		/** The Navigation of form msdyn_agreementinvoicesetup_Information */
 		Navigation: DevKit.Formmsdyn_agreementinvoicesetup_Information.Navigation;
+		/** The Process of form msdyn_agreementinvoicesetup_Information */
+		Process: DevKit.Formmsdyn_agreementinvoicesetup_Information.Process;
 		/** The Grid of form msdyn_agreementinvoicesetup_Information */
 		Grid: DevKit.Formmsdyn_agreementinvoicesetup_Information.Grid;
 		/** The SidePanes of form msdyn_agreementinvoicesetup_Information */

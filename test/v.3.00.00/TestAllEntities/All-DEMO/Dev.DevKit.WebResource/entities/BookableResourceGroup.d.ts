@@ -19,6 +19,8 @@ declare namespace DevKit {
 			/** Enter the group membership end date. */
 			ToDate: DevKit.Controls.DateTime;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormBookableResourceGroup_Information extends DevKit.IForm {
 		/**
@@ -31,6 +33,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form BookableResourceGroup_Information */
 		Body: DevKit.FormBookableResourceGroup_Information.Body;
+		/** The Process of form BookableResourceGroup_Information */
+		Process: DevKit.FormBookableResourceGroup_Information.Process;
 		/** The SidePanes of form BookableResourceGroup_Information */
 		SidePanes: DevKit.SidePanes;
 	}

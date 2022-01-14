@@ -15,6 +15,8 @@ declare namespace DevKit {
 		interface Navigation {
 			nav_msdyusd_tracesourcesetting_hostedcontrol: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			ListenerHostedControls: DevKit.Controls.Grid;
 		}
@@ -32,6 +34,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyusd_tracesourcesetting_Information.Body;
 		/** The Navigation of form msdyusd_tracesourcesetting_Information */
 		Navigation: DevKit.Formmsdyusd_tracesourcesetting_Information.Navigation;
+		/** The Process of form msdyusd_tracesourcesetting_Information */
+		Process: DevKit.Formmsdyusd_tracesourcesetting_Information.Process;
 		/** The Grid of form msdyusd_tracesourcesetting_Information */
 		Grid: DevKit.Formmsdyusd_tracesourcesetting_Information.Grid;
 		/** The SidePanes of form msdyusd_tracesourcesetting_Information */

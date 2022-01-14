@@ -22,6 +22,8 @@ declare namespace DevKit {
 			/** Shows the date when the external party was last enabled on. */
 			LastEnabledOn: DevKit.Controls.Date;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			externalPartyItemsGrid: DevKit.Controls.Grid;
 		}
@@ -39,6 +41,8 @@ declare namespace DevKit {
 		Body: DevKit.FormExternalParty_Information.Body;
 		/** The Header section of form ExternalParty_Information */
 		Header: DevKit.FormExternalParty_Information.Header;
+		/** The Process of form ExternalParty_Information */
+		Process: DevKit.FormExternalParty_Information.Process;
 		/** The Grid of form ExternalParty_Information */
 		Grid: DevKit.FormExternalParty_Information.Grid;
 		/** The SidePanes of form ExternalParty_Information */

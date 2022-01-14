@@ -25,8 +25,8 @@ var DevKit;
 			msdyn_modifiedon: {},
 			msdyn_statusupdatedon: {},
 			msdyn_title: {},
-			msdyn_title_1: {},
-			msdyn_title_2: {},
+			msdyn_title1: {},
+			msdyn_title2: {},
 			msdyn_TranscriptControl: {},
 			msdyn_transfercount: {},
 			RegardingObjectId: {},
@@ -56,11 +56,6 @@ var DevKit;
 		form.Body = body;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var grid = {
 			SessionDetails: {},
 		};
@@ -98,10 +93,10 @@ var DevKit;
 			KBSearchcontrol: {},
 			msdyn_ConversationSummaryField: {},
 			msdyn_customer: {},
-			msdyn_customer_1: {},
-			msdyn_customer_2: {},
+			msdyn_customer1: {},
+			msdyn_customer2: {},
 			msdyn_IssueId: {},
-			msdyn_IssueId_1: {},
+			msdyn_IssueId1: {},
 			msdyn_TimelineControlField: {},
 			notescontrol: {},
 			OCSearchRuntimeControl: {}
@@ -149,11 +144,6 @@ var DevKit;
 		};
 		devKit.LoadQuickForms(formContext, quickForm);
 		form.QuickForm = quickForm;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
 		devKit.LoadOthers(formContext, form, defaultWebResourceName);

@@ -16,6 +16,8 @@ declare namespace DevKit {
 			/** Type a rating value which is unique to the rating model it is associated with and lies within the range specified on the model. */
 			Value: DevKit.Controls.Integer;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormRatingValue_Information extends DevKit.IForm {
 		/**
@@ -28,6 +30,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form RatingValue_Information */
 		Body: DevKit.FormRatingValue_Information.Body;
+		/** The Process of form RatingValue_Information */
+		Process: DevKit.FormRatingValue_Information.Process;
 		/** The SidePanes of form RatingValue_Information */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -51,6 +55,8 @@ declare namespace DevKit {
 			/** Type a rating value which is unique to the rating model it is associated with and lies within the range specified on the model. */
 			Value: DevKit.Controls.Integer;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormRatingValue_Omnichannel_Information extends DevKit.IForm {
 		/**
@@ -63,6 +69,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form RatingValue_Omnichannel_Information */
 		Body: DevKit.FormRatingValue_Omnichannel_Information.Body;
+		/** The Process of form RatingValue_Omnichannel_Information */
+		Process: DevKit.FormRatingValue_Omnichannel_Information.Process;
 		/** The SidePanes of form RatingValue_Omnichannel_Information */
 		SidePanes: DevKit.SidePanes;
 	}

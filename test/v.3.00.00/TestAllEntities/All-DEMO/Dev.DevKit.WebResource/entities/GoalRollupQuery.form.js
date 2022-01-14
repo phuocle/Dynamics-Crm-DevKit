@@ -16,11 +16,11 @@ var DevKit;
 		var form = devKit.LoadForm(formContext);
 		var body = {
 			Name: {},
-			Name_1: {},
+			Name1: {},
 			OwnerId: {},
 			queryeditor_uc: {},
 			QueryEntityType: {},
-			QueryEntityType_1: {},
+			QueryEntityType1: {},
 			ruleconditioncontrol: {}
 		};
 		devKit.LoadFields(formContext, body);
@@ -38,16 +38,6 @@ var DevKit;
 		form.Body = body;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
 		devKit.LoadOthers(formContext, form, defaultWebResourceName);

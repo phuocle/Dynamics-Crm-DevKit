@@ -8,6 +8,8 @@ declare namespace DevKit {
 			/** The name of the custom entity. */
 			name: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formteammobileofflineprofilemembership_Information extends DevKit.IForm {
 		/**
@@ -20,6 +22,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form teammobileofflineprofilemembership_Information */
 		Body: DevKit.Formteammobileofflineprofilemembership_Information.Body;
+		/** The Process of form teammobileofflineprofilemembership_Information */
+		Process: DevKit.Formteammobileofflineprofilemembership_Information.Process;
 		/** The SidePanes of form teammobileofflineprofilemembership_Information */
 		SidePanes: DevKit.SidePanes;
 	}

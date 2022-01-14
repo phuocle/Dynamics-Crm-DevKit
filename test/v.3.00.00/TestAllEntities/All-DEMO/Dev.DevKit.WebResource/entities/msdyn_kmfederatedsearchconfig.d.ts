@@ -27,6 +27,8 @@ declare namespace DevKit {
 			SharepointURL: DevKit.Controls.String;
 			WebResource_Disclaimer: DevKit.Controls.WebResource;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormSearch_provider_Main_form extends DevKit.IForm {
 		/**
@@ -39,6 +41,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Search_provider_Main_form */
 		Body: DevKit.FormSearch_provider_Main_form.Body;
+		/** The Process of form Search_provider_Main_form */
+		Process: DevKit.FormSearch_provider_Main_form.Process;
 		/** The SidePanes of form Search_provider_Main_form */
 		SidePanes: DevKit.SidePanes;
 	}

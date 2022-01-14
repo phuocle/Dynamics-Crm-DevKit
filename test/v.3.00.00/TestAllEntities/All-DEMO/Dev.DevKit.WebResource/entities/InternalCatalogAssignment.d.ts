@@ -8,6 +8,8 @@ declare namespace DevKit {
 			/** The name of the custom entity. */
 			Name: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormInternalCatalogAssignment_Information extends DevKit.IForm {
 		/**
@@ -20,6 +22,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form InternalCatalogAssignment_Information */
 		Body: DevKit.FormInternalCatalogAssignment_Information.Body;
+		/** The Process of form InternalCatalogAssignment_Information */
+		Process: DevKit.FormInternalCatalogAssignment_Information.Process;
 		/** The SidePanes of form InternalCatalogAssignment_Information */
 		SidePanes: DevKit.SidePanes;
 	}

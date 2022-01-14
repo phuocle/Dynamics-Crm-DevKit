@@ -24,6 +24,8 @@ declare namespace DevKit {
 			msdyn_name: DevKit.Controls.String;
 			msdyn_Property: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_iotdeviceproperty_Information extends DevKit.IForm {
 		/**
@@ -38,6 +40,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyn_iotdeviceproperty_Information.Body;
 		/** The Header section of form msdyn_iotdeviceproperty_Information */
 		Header: DevKit.Formmsdyn_iotdeviceproperty_Information.Header;
+		/** The Process of form msdyn_iotdeviceproperty_Information */
+		Process: DevKit.Formmsdyn_iotdeviceproperty_Information.Process;
 		/** The SidePanes of form msdyn_iotdeviceproperty_Information */
 		SidePanes: DevKit.SidePanes;
 	}

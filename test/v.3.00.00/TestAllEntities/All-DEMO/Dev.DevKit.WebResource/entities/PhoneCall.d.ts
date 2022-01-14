@@ -43,6 +43,8 @@ declare namespace DevKit {
 			/** Enter the account, contact, lead, or user recipients of the phone call. */
 			to: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormPhone_Call extends DevKit.IForm {
 		/**
@@ -57,6 +59,8 @@ declare namespace DevKit {
 		Body: DevKit.FormPhone_Call.Body;
 		/** The Header section of form Phone_Call */
 		Header: DevKit.FormPhone_Call.Header;
+		/** The Process of form Phone_Call */
+		Process: DevKit.FormPhone_Call.Process;
 		/** The SidePanes of form Phone_Call */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -97,11 +101,13 @@ declare namespace DevKit {
 			/** Unique identifier of the object with which the phone call activity is associated. */
 			RegardingObjectId: DevKit.Controls.Lookup;
 			/** Unique identifier of the object with which the phone call activity is associated. */
-			RegardingObjectId_1: DevKit.Controls.Lookup;
+			RegardingObjectId1: DevKit.Controls.Lookup;
 			/** Type a short description about the objective or primary topic of the phone call. */
 			Subject: DevKit.Controls.String;
 			/** Enter the account, contact, lead, or user recipients of the phone call. */
 			to: DevKit.Controls.Lookup;
+		}
+		interface Process extends DevKit.Controls.IProcess {
 		}
 	}
 	class FormPhone_Call_for_Interactive_experience extends DevKit.IForm {
@@ -117,6 +123,8 @@ declare namespace DevKit {
 		Body: DevKit.FormPhone_Call_for_Interactive_experience.Body;
 		/** The Header section of form Phone_Call_for_Interactive_experience */
 		Header: DevKit.FormPhone_Call_for_Interactive_experience.Header;
+		/** The Process of form Phone_Call_for_Interactive_experience */
+		Process: DevKit.FormPhone_Call_for_Interactive_experience.Process;
 		/** The SidePanes of form Phone_Call_for_Interactive_experience */
 		SidePanes: DevKit.SidePanes;
 	}

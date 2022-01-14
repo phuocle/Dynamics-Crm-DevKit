@@ -16,6 +16,8 @@ declare namespace DevKit {
 			/** Select the weekday of the invoicing job run. */
 			msdyn_weekday: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_invoicefrequencydetail_Project_Information extends DevKit.IForm {
 		/**
@@ -28,6 +30,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_invoicefrequencydetail_Project_Information */
 		Body: DevKit.Formmsdyn_invoicefrequencydetail_Project_Information.Body;
+		/** The Process of form msdyn_invoicefrequencydetail_Project_Information */
+		Process: DevKit.Formmsdyn_invoicefrequencydetail_Project_Information.Process;
 		/** The SidePanes of form msdyn_invoicefrequencydetail_Project_Information */
 		SidePanes: DevKit.SidePanes;
 	}

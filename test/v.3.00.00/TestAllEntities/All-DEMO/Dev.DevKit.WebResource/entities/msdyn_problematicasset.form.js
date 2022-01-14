@@ -37,11 +37,6 @@ var DevKit;
 		form.Body = body;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var navigation = {
 			nav_msdyn_msdyn_problematicasset_msdyn_customerasset_ProblematicAsset: {},
 			navAudit: {}

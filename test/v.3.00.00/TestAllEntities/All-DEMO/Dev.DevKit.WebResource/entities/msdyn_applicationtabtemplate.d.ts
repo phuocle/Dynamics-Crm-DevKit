@@ -28,6 +28,8 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			Parameters: DevKit.Controls.Grid;
 		}
@@ -43,6 +45,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_applicationtabtemplate_Information */
 		Body: DevKit.Formmsdyn_applicationtabtemplate_Information.Body;
+		/** The Process of form msdyn_applicationtabtemplate_Information */
+		Process: DevKit.Formmsdyn_applicationtabtemplate_Information.Process;
 		/** The Grid of form msdyn_applicationtabtemplate_Information */
 		Grid: DevKit.Formmsdyn_applicationtabtemplate_Information.Grid;
 		/** The SidePanes of form msdyn_applicationtabtemplate_Information */

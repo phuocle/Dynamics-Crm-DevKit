@@ -30,6 +30,8 @@ declare namespace DevKit {
 			WebResource_WhatsAppAccountValidation: DevKit.Controls.WebResource;
 			WebResource_WhatsAppCallbackUrl: DevKit.Controls.WebResource;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			Subgrid_ValidationResult: DevKit.Controls.Grid;
 			Subgrid_WhatsAppNumbers: DevKit.Controls.Grid;
@@ -46,6 +48,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_ocwhatsappchannelaccount_Information */
 		Body: DevKit.Formmsdyn_ocwhatsappchannelaccount_Information.Body;
+		/** The Process of form msdyn_ocwhatsappchannelaccount_Information */
+		Process: DevKit.Formmsdyn_ocwhatsappchannelaccount_Information.Process;
 		/** The Grid of form msdyn_ocwhatsappchannelaccount_Information */
 		Grid: DevKit.Formmsdyn_ocwhatsappchannelaccount_Information.Grid;
 		/** The SidePanes of form msdyn_ocwhatsappchannelaccount_Information */

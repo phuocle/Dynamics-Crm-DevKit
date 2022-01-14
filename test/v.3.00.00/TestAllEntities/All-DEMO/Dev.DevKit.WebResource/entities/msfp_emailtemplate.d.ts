@@ -14,6 +14,8 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsfp_emailtemplate_New_Form extends DevKit.IForm {
 		/**
@@ -26,6 +28,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msfp_emailtemplate_New_Form */
 		Body: DevKit.Formmsfp_emailtemplate_New_Form.Body;
+		/** The Process of form msfp_emailtemplate_New_Form */
+		Process: DevKit.Formmsfp_emailtemplate_New_Form.Process;
 		/** The SidePanes of form msfp_emailtemplate_New_Form */
 		SidePanes: DevKit.SidePanes;
 	}

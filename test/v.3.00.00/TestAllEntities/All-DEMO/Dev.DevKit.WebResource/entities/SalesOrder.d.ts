@@ -101,6 +101,8 @@ declare namespace DevKit {
 			nav_msdyn_salesorder_msdyn_orderinvoicingsetupdate_Order: DevKit.Controls.NavigationItem,
 			navProducts: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			OrderServicesGrid: DevKit.Controls.Grid;
 			salesorderdetailsGrid: DevKit.Controls.Grid;
@@ -121,6 +123,8 @@ declare namespace DevKit {
 		Header: DevKit.FormSalesOrder_Field_Service_Information.Header;
 		/** The Navigation of form SalesOrder_Field_Service_Information */
 		Navigation: DevKit.FormSalesOrder_Field_Service_Information.Navigation;
+		/** The Process of form SalesOrder_Field_Service_Information */
+		Process: DevKit.FormSalesOrder_Field_Service_Information.Process;
 		/** The Grid of form SalesOrder_Field_Service_Information */
 		Grid: DevKit.FormSalesOrder_Field_Service_Information.Grid;
 		/** The SidePanes of form SalesOrder_Field_Service_Information */
@@ -216,6 +220,8 @@ declare namespace DevKit {
 			nav_msdyn_salesorder_msdyn_orderinvoicingsetupdate_Order: DevKit.Controls.NavigationItem,
 			navProducts: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			salesorderdetailsGrid: DevKit.Controls.Grid;
 		}
@@ -235,6 +241,8 @@ declare namespace DevKit {
 		Header: DevKit.FormOrder.Header;
 		/** The Navigation of form Order */
 		Navigation: DevKit.FormOrder.Navigation;
+		/** The Process of form Order */
+		Process: DevKit.FormOrder.Process;
 		/** The Grid of form Order */
 		Grid: DevKit.FormOrder.Grid;
 		/** The SidePanes of form Order */
@@ -346,6 +354,8 @@ declare namespace DevKit {
 			navInvoices: DevKit.Controls.NavigationItem,
 			navProducts: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			ContractPerformance_ContractLines: DevKit.Controls.Grid;
 			ContractPerformance_ProductContractLines: DevKit.Controls.Grid;
@@ -370,12 +380,14 @@ declare namespace DevKit {
 		Header: DevKit.FormSalesOrder_Project_Information.Header;
 		/** The Navigation of form SalesOrder_Project_Information */
 		Navigation: DevKit.FormSalesOrder_Project_Information.Navigation;
+		/** The Process of form SalesOrder_Project_Information */
+		Process: DevKit.FormSalesOrder_Project_Information.Process;
 		/** The Grid of form SalesOrder_Project_Information */
 		Grid: DevKit.FormSalesOrder_Project_Information.Grid;
 		/** The SidePanes of form SalesOrder_Project_Information */
 		SidePanes: DevKit.SidePanes;
 	}
-	namespace FormOrder3 {
+	namespace FormOrder2 {
 		interface tab_newSalesOrder_Sections {
 			quickOrder_salesinformation: DevKit.Controls.Section;
 			quickOrder_summary: DevKit.Controls.Section;
@@ -408,17 +420,17 @@ declare namespace DevKit {
 			TransactionCurrencyId: DevKit.Controls.Lookup;
 		}
 	}
-	class FormOrder3 extends DevKit.IForm {
+	class FormOrder2 extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Order3 Quick Create
+		* DynamicsCrm.DevKit form Order2 Quick Create
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
 		constructor(executionContext: any, defaultWebResourceName?: string);
 		/** Utility functions/methods/objects for Dynamics 365 form */
 		Utility: DevKit.Utility;
-		/** The Body section of form Order3 */
-		Body: DevKit.FormOrder3.Body;
+		/** The Body section of form Order2 */
+		Body: DevKit.FormOrder2.Body;
 	}
 	namespace FormSalesOrder_Project_Quick_Create {
 		interface tab_tab_1_Sections {

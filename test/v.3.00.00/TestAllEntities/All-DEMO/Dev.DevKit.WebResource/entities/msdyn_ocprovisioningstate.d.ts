@@ -12,6 +12,8 @@ declare namespace DevKit {
 			/** Reason for the status of the Provisioning State */
 			statuscode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_ocprovisioningstate_Information extends DevKit.IForm {
 		/**
@@ -24,6 +26,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_ocprovisioningstate_Information */
 		Body: DevKit.Formmsdyn_ocprovisioningstate_Information.Body;
+		/** The Process of form msdyn_ocprovisioningstate_Information */
+		Process: DevKit.Formmsdyn_ocprovisioningstate_Information.Process;
 		/** The SidePanes of form msdyn_ocprovisioningstate_Information */
 		SidePanes: DevKit.SidePanes;
 	}

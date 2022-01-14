@@ -71,6 +71,8 @@ declare namespace DevKit {
 			/** Shows whether the service activity is open, completed, or canceled. Completed and canceled service activities are read-only and can't be edited. */
 			StateCode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			bookableresourcebookings: DevKit.Controls.Grid;
 		}
@@ -88,6 +90,8 @@ declare namespace DevKit {
 		Body: DevKit.FormServiceAppointment_Information.Body;
 		/** The Footer section of form ServiceAppointment_Information */
 		Footer: DevKit.FormServiceAppointment_Information.Footer;
+		/** The Process of form ServiceAppointment_Information */
+		Process: DevKit.FormServiceAppointment_Information.Process;
 		/** The Grid of form ServiceAppointment_Information */
 		Grid: DevKit.FormServiceAppointment_Information.Grid;
 		/** The SidePanes of form ServiceAppointment_Information */

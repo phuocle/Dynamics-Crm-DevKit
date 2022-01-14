@@ -18,6 +18,8 @@ declare namespace DevKit {
 			msdyn_ResultEntityId: DevKit.Controls.String;
 			msdyn_ResultEntityLogicalName: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_analysisresultdetail_Information extends DevKit.IForm {
 		/**
@@ -32,6 +34,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyn_analysisresultdetail_Information.Body;
 		/** The Header section of form msdyn_analysisresultdetail_Information */
 		Header: DevKit.Formmsdyn_analysisresultdetail_Information.Header;
+		/** The Process of form msdyn_analysisresultdetail_Information */
+		Process: DevKit.Formmsdyn_analysisresultdetail_Information.Process;
 		/** The SidePanes of form msdyn_analysisresultdetail_Information */
 		SidePanes: DevKit.SidePanes;
 	}

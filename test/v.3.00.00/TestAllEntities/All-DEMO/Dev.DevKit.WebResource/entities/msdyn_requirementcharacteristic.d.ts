@@ -27,6 +27,8 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_requirementcharacteristic_Information extends DevKit.IForm {
 		/**
@@ -39,6 +41,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_requirementcharacteristic_Information */
 		Body: DevKit.Formmsdyn_requirementcharacteristic_Information.Body;
+		/** The Process of form msdyn_requirementcharacteristic_Information */
+		Process: DevKit.Formmsdyn_requirementcharacteristic_Information.Process;
 		/** The SidePanes of form msdyn_requirementcharacteristic_Information */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -49,6 +53,8 @@ declare namespace DevKit {
 			notescontrol: DevKit.Controls.Note;
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
+		}
+		interface Process extends DevKit.Controls.IProcess {
 		}
 	}
 	class Formmsdyn_requirementcharacteristic_Information2 extends DevKit.IForm {
@@ -62,6 +68,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_requirementcharacteristic_Information2 */
 		Body: DevKit.Formmsdyn_requirementcharacteristic_Information2.Body;
+		/** The Process of form msdyn_requirementcharacteristic_Information2 */
+		Process: DevKit.Formmsdyn_requirementcharacteristic_Information2.Process;
 		/** The SidePanes of form msdyn_requirementcharacteristic_Information2 */
 		SidePanes: DevKit.SidePanes;
 	}

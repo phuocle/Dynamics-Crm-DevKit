@@ -41,12 +41,14 @@ declare namespace DevKit {
 			/** Required name field */
 			msdyn_Name: DevKit.Controls.String;
 			/** Required name field */
-			msdyn_Name_1: DevKit.Controls.String;
+			msdyn_Name1: DevKit.Controls.String;
 			msdyn_ParentFunctionalLocation: DevKit.Controls.Lookup;
 			/** Postal Code */
 			msdyn_PostalCode: DevKit.Controls.String;
 			/** State Or Province */
 			msdyn_StateOrProvince: DevKit.Controls.String;
+		}
+		interface Process extends DevKit.Controls.IProcess {
 		}
 	}
 	class Formmsdyn_FunctionalLocation_Information extends DevKit.IForm {
@@ -60,6 +62,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_FunctionalLocation_Information */
 		Body: DevKit.Formmsdyn_FunctionalLocation_Information.Body;
+		/** The Process of form msdyn_FunctionalLocation_Information */
+		Process: DevKit.Formmsdyn_FunctionalLocation_Information.Process;
 		/** The SidePanes of form msdyn_FunctionalLocation_Information */
 		SidePanes: DevKit.SidePanes;
 	}

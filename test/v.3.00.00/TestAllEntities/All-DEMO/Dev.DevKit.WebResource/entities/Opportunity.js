@@ -46,12 +46,12 @@ var formOpportunity = (function () {
 		OnSave: onSave
 	};
 })();
-var formOpportunity4 = (function () {
+var formOpportunity2 = (function () {
 	"use strict";
-	/** @type DevKit.FormOpportunity4 */
+	/** @type DevKit.FormOpportunity2 */
 	var form = null;
 	async function onLoad(executionContext) {
-		form = new DevKit.FormOpportunity4(executionContext);
+		form = new DevKit.FormOpportunity2(executionContext);
 
 	}
 	async function onSave(executionContext) {

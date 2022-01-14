@@ -50,6 +50,8 @@ declare namespace DevKit {
 			nav_msdyn_msdyn_taxcode_msdyn_workorder_TaxCode: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			taxcodedetailsgrid: DevKit.Controls.Grid;
 		}
@@ -69,6 +71,8 @@ declare namespace DevKit {
 		Footer: DevKit.Formmsdyn_taxcode_Information.Footer;
 		/** The Navigation of form msdyn_taxcode_Information */
 		Navigation: DevKit.Formmsdyn_taxcode_Information.Navigation;
+		/** The Process of form msdyn_taxcode_Information */
+		Process: DevKit.Formmsdyn_taxcode_Information.Process;
 		/** The Grid of form msdyn_taxcode_Information */
 		Grid: DevKit.Formmsdyn_taxcode_Information.Grid;
 		/** The SidePanes of form msdyn_taxcode_Information */

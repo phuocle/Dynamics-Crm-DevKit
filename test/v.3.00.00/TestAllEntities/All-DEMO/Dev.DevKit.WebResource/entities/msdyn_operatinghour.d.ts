@@ -18,7 +18,7 @@ declare namespace DevKit {
 			/** Provide description about presence */
 			msdyn_Description: DevKit.Controls.String;
 			/** Provide description about presence */
-			msdyn_Description_1: DevKit.Controls.String;
+			msdyn_Description1: DevKit.Controls.String;
 			/** (Deprecated) Enable work hours for all days of the week */
 			msdyn_EnableAllDays: DevKit.Controls.Boolean;
 			/** (Deprecated) Enter time in 24-hour format (HH:mm). */
@@ -26,7 +26,7 @@ declare namespace DevKit {
 			/** The name of the custom entity. */
 			msdyn_name: DevKit.Controls.String;
 			/** The name of the custom entity. */
-			msdyn_name_1: DevKit.Controls.String;
+			msdyn_name1: DevKit.Controls.String;
 			/** (Deprecated) Work days */
 			msdyn_oc_daysofweek: DevKit.Controls.MultiOptionSet;
 			/** (Deprecated) Enter time in 24-hour format (HH:mm). */
@@ -38,7 +38,9 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 			/** Owner Id */
-			OwnerId_1: DevKit.Controls.Lookup;
+			OwnerId1: DevKit.Controls.Lookup;
+		}
+		interface Process extends DevKit.Controls.IProcess {
 		}
 	}
 	class Formmsdyn_operatinghour_Information extends DevKit.IForm {
@@ -52,6 +54,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_operatinghour_Information */
 		Body: DevKit.Formmsdyn_operatinghour_Information.Body;
+		/** The Process of form msdyn_operatinghour_Information */
+		Process: DevKit.Formmsdyn_operatinghour_Information.Process;
 		/** The SidePanes of form msdyn_operatinghour_Information */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -73,7 +77,7 @@ declare namespace DevKit {
 			/** Provide description about presence */
 			msdyn_Description: DevKit.Controls.String;
 			/** Provide description about presence */
-			msdyn_Description_1: DevKit.Controls.String;
+			msdyn_Description1: DevKit.Controls.String;
 			/** (Deprecated) Enable work hours for all days of the week */
 			msdyn_EnableAllDays: DevKit.Controls.Boolean;
 			/** (Deprecated) Enter time in 24-hour format (HH:mm). */
@@ -81,7 +85,7 @@ declare namespace DevKit {
 			/** The name of the custom entity. */
 			msdyn_name: DevKit.Controls.String;
 			/** The name of the custom entity. */
-			msdyn_name_1: DevKit.Controls.String;
+			msdyn_name1: DevKit.Controls.String;
 			/** (Deprecated) Work days */
 			msdyn_oc_daysofweek: DevKit.Controls.MultiOptionSet;
 			/** (Deprecated) Enter time in 24-hour format (HH:mm). */
@@ -93,7 +97,7 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 			/** Owner Id */
-			OwnerId_1: DevKit.Controls.Lookup;
+			OwnerId1: DevKit.Controls.Lookup;
 		}
 	}
 	class FormOperating_hours extends DevKit.IForm {

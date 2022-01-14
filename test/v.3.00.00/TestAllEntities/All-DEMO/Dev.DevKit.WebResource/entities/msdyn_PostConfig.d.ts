@@ -31,6 +31,8 @@ declare namespace DevKit {
 			navAudit: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			ActivityFeedsRules: DevKit.Controls.Grid;
 			Views: DevKit.Controls.Grid;
@@ -51,6 +53,8 @@ declare namespace DevKit {
 		Footer: DevKit.Formmsdyn_PostConfig_Information.Footer;
 		/** The Navigation of form msdyn_PostConfig_Information */
 		Navigation: DevKit.Formmsdyn_PostConfig_Information.Navigation;
+		/** The Process of form msdyn_PostConfig_Information */
+		Process: DevKit.Formmsdyn_PostConfig_Information.Process;
 		/** The Grid of form msdyn_PostConfig_Information */
 		Grid: DevKit.Formmsdyn_PostConfig_Information.Grid;
 		/** The SidePanes of form msdyn_PostConfig_Information */

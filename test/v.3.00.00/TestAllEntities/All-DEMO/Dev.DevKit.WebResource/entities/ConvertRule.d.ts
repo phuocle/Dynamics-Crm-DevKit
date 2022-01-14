@@ -72,6 +72,8 @@ declare namespace DevKit {
 			SenderResolutionOption: DevKit.Controls.OptionSet;
 			sourcechanneltypecode: DevKit.Controls.ActionCards;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			ActivityMonitorsGrid: DevKit.Controls.Grid;
 			ConvertRuleItemsGrid: DevKit.Controls.Grid;
@@ -90,6 +92,8 @@ declare namespace DevKit {
 		Body: DevKit.FormRecord_Creation_and_Update_Rule_UCI.Body;
 		/** The Header section of form Record_Creation_and_Update_Rule_UCI */
 		Header: DevKit.FormRecord_Creation_and_Update_Rule_UCI.Header;
+		/** The Process of form Record_Creation_and_Update_Rule_UCI */
+		Process: DevKit.FormRecord_Creation_and_Update_Rule_UCI.Process;
 		/** The Grid of form Record_Creation_and_Update_Rule_UCI */
 		Grid: DevKit.FormRecord_Creation_and_Update_Rule_UCI.Grid;
 		/** The SidePanes of form Record_Creation_and_Update_Rule_UCI */
@@ -141,6 +145,8 @@ declare namespace DevKit {
 			/** Source of the record. */
 			SourceTypeCode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			ConvertRuleItemsGrid: DevKit.Controls.Grid;
 		}
@@ -156,6 +162,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Record_Creation_and_Update_Rule_Web_Client */
 		Body: DevKit.FormRecord_Creation_and_Update_Rule_Web_Client.Body;
+		/** The Process of form Record_Creation_and_Update_Rule_Web_Client */
+		Process: DevKit.FormRecord_Creation_and_Update_Rule_Web_Client.Process;
 		/** The Grid of form Record_Creation_and_Update_Rule_Web_Client */
 		Grid: DevKit.FormRecord_Creation_and_Update_Rule_Web_Client.Grid;
 		/** The SidePanes of form Record_Creation_and_Update_Rule_Web_Client */

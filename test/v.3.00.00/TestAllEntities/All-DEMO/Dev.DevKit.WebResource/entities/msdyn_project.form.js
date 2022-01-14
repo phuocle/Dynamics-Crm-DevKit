@@ -35,7 +35,7 @@ var DevKit;
 			msdyn_plannedlaborcost: {},
 			msdyn_projectmanager: {},
 			msdyn_ProjectTemplate: {},
-			msdyn_ProjectTemplate_1: {},
+			msdyn_ProjectTemplate1: {},
 			msdyn_scheduledend: {},
 			msdyn_scheduledstart: {},
 			msdyn_scheduleperformance: {},
@@ -136,11 +136,6 @@ var DevKit;
 		devKit.LoadFields(formContext, _Project_Service_Project_Stages, "header_process_");
 		process.Project_Service_Project_Stages = _Project_Service_Project_Stages;
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var grid = {
 			Assignments: {},
 			Estimates: {},

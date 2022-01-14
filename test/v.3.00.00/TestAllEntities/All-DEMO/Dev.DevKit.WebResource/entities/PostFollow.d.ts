@@ -18,6 +18,8 @@ declare namespace DevKit {
 			/** Choose the parent record for the followed post to identify the customer, opportunity, case, or other record type that the post most closely relates to. */
 			RegardingObjectId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormPostFollow_Information extends DevKit.IForm {
 		/**
@@ -30,6 +32,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form PostFollow_Information */
 		Body: DevKit.FormPostFollow_Information.Body;
+		/** The Process of form PostFollow_Information */
+		Process: DevKit.FormPostFollow_Information.Process;
 		/** The SidePanes of form PostFollow_Information */
 		SidePanes: DevKit.SidePanes;
 	}

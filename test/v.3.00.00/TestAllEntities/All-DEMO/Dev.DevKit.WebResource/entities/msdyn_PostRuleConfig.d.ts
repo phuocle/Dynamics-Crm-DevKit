@@ -27,6 +27,8 @@ declare namespace DevKit {
 			navAudit: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormAutopost_rule extends DevKit.IForm {
 		/**
@@ -43,6 +45,8 @@ declare namespace DevKit {
 		Footer: DevKit.FormAutopost_rule.Footer;
 		/** The Navigation of form Autopost_rule */
 		Navigation: DevKit.FormAutopost_rule.Navigation;
+		/** The Process of form Autopost_rule */
+		Process: DevKit.FormAutopost_rule.Process;
 		/** The SidePanes of form Autopost_rule */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -74,6 +78,8 @@ declare namespace DevKit {
 			navAudit: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_PostRuleConfig_Information extends DevKit.IForm {
 		/**
@@ -90,6 +96,8 @@ declare namespace DevKit {
 		Footer: DevKit.Formmsdyn_PostRuleConfig_Information.Footer;
 		/** The Navigation of form msdyn_PostRuleConfig_Information */
 		Navigation: DevKit.Formmsdyn_PostRuleConfig_Information.Navigation;
+		/** The Process of form msdyn_PostRuleConfig_Information */
+		Process: DevKit.Formmsdyn_PostRuleConfig_Information.Process;
 		/** The SidePanes of form msdyn_PostRuleConfig_Information */
 		SidePanes: DevKit.SidePanes;
 	}

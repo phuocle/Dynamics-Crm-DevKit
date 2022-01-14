@@ -10,6 +10,8 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_unifiedroutingrun_Information extends DevKit.IForm {
 		/**
@@ -22,6 +24,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_unifiedroutingrun_Information */
 		Body: DevKit.Formmsdyn_unifiedroutingrun_Information.Body;
+		/** The Process of form msdyn_unifiedroutingrun_Information */
+		Process: DevKit.Formmsdyn_unifiedroutingrun_Information.Process;
 		/** The SidePanes of form msdyn_unifiedroutingrun_Information */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -30,6 +34,8 @@ declare namespace DevKit {
 		}
 		interface Body {
 			msdyn_name: DevKit.Controls.ActionCards;
+		}
+		interface Process extends DevKit.Controls.IProcess {
 		}
 	}
 	class FormUnified_routing_run_diagnostics extends DevKit.IForm {
@@ -43,6 +49,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Unified_routing_run_diagnostics */
 		Body: DevKit.FormUnified_routing_run_diagnostics.Body;
+		/** The Process of form Unified_routing_run_diagnostics */
+		Process: DevKit.FormUnified_routing_run_diagnostics.Process;
 		/** The SidePanes of form Unified_routing_run_diagnostics */
 		SidePanes: DevKit.SidePanes;
 	}

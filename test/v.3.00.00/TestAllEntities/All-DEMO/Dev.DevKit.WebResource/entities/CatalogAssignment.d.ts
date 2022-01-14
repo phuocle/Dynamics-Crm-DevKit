@@ -12,6 +12,8 @@ declare namespace DevKit {
 			/** Unique identifier for the object associated with the catalog assignment */
 			Object: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormCatalogAssignment_Information extends DevKit.IForm {
 		/**
@@ -24,6 +26,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form CatalogAssignment_Information */
 		Body: DevKit.FormCatalogAssignment_Information.Body;
+		/** The Process of form CatalogAssignment_Information */
+		Process: DevKit.FormCatalogAssignment_Information.Process;
 		/** The SidePanes of form CatalogAssignment_Information */
 		SidePanes: DevKit.SidePanes;
 	}

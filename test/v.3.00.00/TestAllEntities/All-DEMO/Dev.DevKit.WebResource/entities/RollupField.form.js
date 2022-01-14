@@ -16,19 +16,19 @@ var DevKit;
 		var form = devKit.LoadForm(formContext);
 		var body = {
 			DateAttribute: {},
-			DateAttribute_1: {},
+			DateAttribute1: {},
 			EntityForDateAttribute: {},
-			EntityForDateAttribute_1: {},
+			EntityForDateAttribute1: {},
 			GoalAttribute: {},
-			GoalAttribute_1: {},
+			GoalAttribute1: {},
 			SourceAttribute: {},
-			SourceAttribute_1: {},
+			SourceAttribute1: {},
 			SourceEntity: {},
-			SourceEntity_1: {},
+			SourceEntity1: {},
 			SourceState: {},
-			SourceState_1: {},
+			SourceState1: {},
 			SourceStatus: {},
-			SourceStatus_1: {}
+			SourceStatus1: {}
 		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
@@ -46,16 +46,6 @@ var DevKit;
 		form.Body = body;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
 		devKit.LoadOthers(formContext, form, defaultWebResourceName);

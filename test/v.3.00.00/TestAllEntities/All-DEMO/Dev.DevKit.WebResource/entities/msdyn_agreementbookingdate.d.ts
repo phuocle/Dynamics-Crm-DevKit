@@ -36,6 +36,8 @@ declare namespace DevKit {
 			nav_msdyn_msdyn_agreementbookingdate_msdyn_workorderdetailsgenerationqueue_AgreementBookingDate: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_agreementbookingdate_Information extends DevKit.IForm {
 		/**
@@ -52,6 +54,8 @@ declare namespace DevKit {
 		Footer: DevKit.Formmsdyn_agreementbookingdate_Information.Footer;
 		/** The Navigation of form msdyn_agreementbookingdate_Information */
 		Navigation: DevKit.Formmsdyn_agreementbookingdate_Information.Navigation;
+		/** The Process of form msdyn_agreementbookingdate_Information */
+		Process: DevKit.Formmsdyn_agreementbookingdate_Information.Process;
 		/** The SidePanes of form msdyn_agreementbookingdate_Information */
 		SidePanes: DevKit.SidePanes;
 	}

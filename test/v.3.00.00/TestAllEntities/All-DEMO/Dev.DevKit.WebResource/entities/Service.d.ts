@@ -38,17 +38,17 @@ declare namespace DevKit {
 			/** Used in conjunction with granularity to describes when services can be performed in relation to midnight on a given day. */
 			AnchorOffset: DevKit.Controls.Integer;
 			/** Used in conjunction with granularity to describes when services can be performed in relation to midnight on a given day. */
-			AnchorOffset_1: DevKit.Controls.Integer;
+			AnchorOffset1: DevKit.Controls.Integer;
 			/** Description of activity that represents work done to satisfy a customer's need. */
 			Description: DevKit.Controls.String;
 			/** Duration of the service. */
 			Duration: DevKit.Controls.Integer;
 			/** Duration of the service. */
-			Duration_1: DevKit.Controls.Integer;
+			Duration1: DevKit.Controls.Integer;
 			/** Describes how often the service is performed. */
 			Granularity: DevKit.Controls.String;
 			/** Describes how often the service is performed. */
-			Granularity_1: DevKit.Controls.String;
+			Granularity1: DevKit.Controls.String;
 			IFRAME_RuleTree: DevKit.Controls.IFrame;
 			IFRAME_Scheduling: DevKit.Controls.IFrame;
 			/** Initial status reason for the service activity. */
@@ -61,7 +61,9 @@ declare namespace DevKit {
 			/** Unique identifier of the resource specification with which the service is associated. */
 			ResourceSpecId: DevKit.Controls.Lookup;
 			/** Unique identifier of the resource specification with which the service is associated. */
-			ResourceSpecId_1: DevKit.Controls.Lookup;
+			ResourceSpecId1: DevKit.Controls.Lookup;
+		}
+		interface Process extends DevKit.Controls.IProcess {
 		}
 		interface Grid {
 			ResourceRequirements: DevKit.Controls.Grid;
@@ -78,6 +80,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Service_Information */
 		Body: DevKit.FormService_Information.Body;
+		/** The Process of form Service_Information */
+		Process: DevKit.FormService_Information.Process;
 		/** The Grid of form Service_Information */
 		Grid: DevKit.FormService_Information.Grid;
 		/** The SidePanes of form Service_Information */

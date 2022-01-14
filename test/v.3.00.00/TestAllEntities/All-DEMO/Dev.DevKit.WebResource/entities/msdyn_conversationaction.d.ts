@@ -34,6 +34,8 @@ declare namespace DevKit {
 			/** Web resources to load for the conversation action */
 			msdyn_WebResource: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			Local_fields: DevKit.Controls.Grid;
 		}
@@ -49,6 +51,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_conversationaction_Information */
 		Body: DevKit.Formmsdyn_conversationaction_Information.Body;
+		/** The Process of form msdyn_conversationaction_Information */
+		Process: DevKit.Formmsdyn_conversationaction_Information.Process;
 		/** The Grid of form msdyn_conversationaction_Information */
 		Grid: DevKit.Formmsdyn_conversationaction_Information.Grid;
 		/** The SidePanes of form msdyn_conversationaction_Information */

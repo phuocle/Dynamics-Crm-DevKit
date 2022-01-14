@@ -96,6 +96,8 @@ declare namespace DevKit {
 			/** Shows whether the email server profile is active or inactive. */
 			StateCode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormEmailServerProfile_Information extends DevKit.IForm {
 		/**
@@ -110,6 +112,8 @@ declare namespace DevKit {
 		Body: DevKit.FormEmailServerProfile_Information.Body;
 		/** The Footer section of form EmailServerProfile_Information */
 		Footer: DevKit.FormEmailServerProfile_Information.Footer;
+		/** The Process of form EmailServerProfile_Information */
+		Process: DevKit.FormEmailServerProfile_Information.Process;
 		/** The SidePanes of form EmailServerProfile_Information */
 		SidePanes: DevKit.SidePanes;
 	}

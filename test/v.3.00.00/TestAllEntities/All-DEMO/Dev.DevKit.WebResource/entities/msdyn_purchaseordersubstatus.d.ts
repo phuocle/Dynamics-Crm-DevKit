@@ -23,6 +23,8 @@ declare namespace DevKit {
 			nav_msdyn_msdyn_purchaseordersubstatus_msdyn_purchaseorder_SubStatus: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_purchaseordersubstatus_Information extends DevKit.IForm {
 		/**
@@ -39,6 +41,8 @@ declare namespace DevKit {
 		Footer: DevKit.Formmsdyn_purchaseordersubstatus_Information.Footer;
 		/** The Navigation of form msdyn_purchaseordersubstatus_Information */
 		Navigation: DevKit.Formmsdyn_purchaseordersubstatus_Information.Navigation;
+		/** The Process of form msdyn_purchaseordersubstatus_Information */
+		Process: DevKit.Formmsdyn_purchaseordersubstatus_Information.Process;
 		/** The SidePanes of form msdyn_purchaseordersubstatus_Information */
 		SidePanes: DevKit.SidePanes;
 	}

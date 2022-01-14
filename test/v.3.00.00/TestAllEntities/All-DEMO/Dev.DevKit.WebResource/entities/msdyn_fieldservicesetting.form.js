@@ -20,7 +20,7 @@ var DevKit;
 			msdyn_AdvancedSettings: {},
 			msdyn_AgreementPrefix: {},
 			msdyn_AgreementRecordGeneration: {},
-			msdyn_AgreementRecordGeneration_1: {},
+			msdyn_AgreementRecordGeneration1: {},
 			msdyn_AgreementStartingNumber: {},
 			msdyn_AnalyticsIngestDataInXDays: {},
 			msdyn_AutoAllocateEstimatedProducts: {},
@@ -170,11 +170,6 @@ var DevKit;
 		form.Footer = footer;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var grid = {
 			fieldserviceslaconfigurationgrid: {},
 			IncidentTypeSuggestionResultGrid: {},

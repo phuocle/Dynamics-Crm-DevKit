@@ -24,8 +24,8 @@ var DevKit;
 			msdyn_Account: {},
 			msdyn_CustomerAssetCategory: {},
 			msdyn_DeviceId: {},
-			msdyn_DeviceId_1: {},
-			msdyn_DeviceId_2: {},
+			msdyn_DeviceId1: {},
+			msdyn_DeviceId2: {},
 			msdyn_Latitude: {},
 			msdyn_Longitude: {},
 			msdyn_MasterAsset: {},
@@ -75,11 +75,6 @@ var DevKit;
 		form.Body = body;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var grid = {
 			AlertsGrid: {},
 			Asset_SubAsset: {},
@@ -136,14 +131,14 @@ var DevKit;
 			msdyn_Account: {},
 			msdyn_CustomerAssetCategory: {},
 			msdyn_DeviceId: {},
-			msdyn_DeviceId_1: {},
-			msdyn_DeviceId_2: {},
+			msdyn_DeviceId1: {},
+			msdyn_DeviceId2: {},
 			msdyn_FunctionalLocation: {},
 			msdyn_Latitude: {},
 			msdyn_Longitude: {},
 			msdyn_MasterAsset: {},
 			msdyn_name: {},
-			msdyn_name_1: {},
+			msdyn_name1: {},
 			msdyn_ParentAsset: {},
 			msdyn_Product: {},
 			msdyn_RegistrationStatus: {},
@@ -197,11 +192,6 @@ var DevKit;
 		form.Body = body;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var grid = {
 			Asset_SubAsset: {},
 			CommandsGrid: {},

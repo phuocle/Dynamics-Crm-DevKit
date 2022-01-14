@@ -23,7 +23,7 @@ var DevKit;
 			ModifiedBy: {},
 			ModifiedOn: {},
 			msdyn_Address1: {},
-			msdyn_Address1_1: {},
+			msdyn_Address11: {},
 			msdyn_Address2: {},
 			msdyn_Address3: {},
 			msdyn_AddressName: {},
@@ -41,11 +41,11 @@ var DevKit;
 			msdyn_FunctionalLocation: {},
 			msdyn_Instructions: {},
 			msdyn_IoTAlert: {},
-			msdyn_IoTAlert_1: {},
+			msdyn_IoTAlert1: {},
 			msdyn_Latitude: {},
-			msdyn_Latitude_1: {},
+			msdyn_Latitude1: {},
 			msdyn_Longitude: {},
-			msdyn_Longitude_1: {},
+			msdyn_Longitude1: {},
 			msdyn_mapcontrol: {},
 			msdyn_name: {},
 			msdyn_OpportunityId: {},
@@ -59,7 +59,7 @@ var DevKit;
 			msdyn_Priority: {},
 			msdyn_ReportedByContact: {},
 			msdyn_ServiceAccount: {},
-			msdyn_ServiceAccount_1: {},
+			msdyn_ServiceAccount1: {},
 			msdyn_ServiceRequest: {},
 			msdyn_ServiceTerritory: {},
 			msdyn_StateOrProvince: {},
@@ -163,6 +163,28 @@ var DevKit;
 		devKit.LoadFields(formContext, footer, "footer_");
 		form.Footer = footer;
 		var process = devKit.LoadProcess(formContext);
+		var _Case_to_Work_Order_Business_Process = {
+			msdyn_BillingAccount: {},
+			msdyn_PrimaryIncidentType: {},
+			msdyn_Priority: {},
+			msdyn_ServiceAccount: {},
+			msdyn_SubStatus: {},
+			msdyn_SystemStatus: {},
+			msdyn_SystemStatus_1: {},
+			msdyn_WorkOrderType: {}
+		}
+		devKit.LoadFields(formContext, _Case_to_Work_Order_Business_Process, "header_process_");
+		process.Case_to_Work_Order_Business_Process = _Case_to_Work_Order_Business_Process;
+		var _CFS_IoT_Alert_Process_Flow = {
+			msdyn_Priority: {},
+			msdyn_ServiceAccount: {},
+			msdyn_SubStatus: {},
+			msdyn_SystemStatus: {},
+			msdyn_SystemStatus_1: {},
+			msdyn_WorkOrderType: {}
+		}
+		devKit.LoadFields(formContext, _CFS_IoT_Alert_Process_Flow, "header_process_");
+		process.CFS_IoT_Alert_Process_Flow = _CFS_IoT_Alert_Process_Flow;
 		var _Work_Order_Business_Process = {
 			msdyn_BillingAccount: {},
 			msdyn_PrimaryIncidentType: {},
@@ -276,6 +298,28 @@ var DevKit;
 		body.Tab = tab;
 		form.Body = body;
 		var process = devKit.LoadProcess(formContext);
+		var _Case_to_Work_Order_Business_Process = {
+			msdyn_BillingAccount: {},
+			msdyn_PrimaryIncidentType: {},
+			msdyn_Priority: {},
+			msdyn_ServiceAccount: {},
+			msdyn_SubStatus: {},
+			msdyn_SystemStatus: {},
+			msdyn_SystemStatus_1: {},
+			msdyn_WorkOrderType: {}
+		}
+		devKit.LoadFields(formContext, _Case_to_Work_Order_Business_Process, "header_process_");
+		process.Case_to_Work_Order_Business_Process = _Case_to_Work_Order_Business_Process;
+		var _CFS_IoT_Alert_Process_Flow = {
+			msdyn_Priority: {},
+			msdyn_ServiceAccount: {},
+			msdyn_SubStatus: {},
+			msdyn_SystemStatus: {},
+			msdyn_SystemStatus_1: {},
+			msdyn_WorkOrderType: {}
+		}
+		devKit.LoadFields(formContext, _CFS_IoT_Alert_Process_Flow, "header_process_");
+		process.CFS_IoT_Alert_Process_Flow = _CFS_IoT_Alert_Process_Flow;
 		var _Work_Order_Business_Process = {
 			msdyn_BillingAccount: {},
 			msdyn_PrimaryIncidentType: {},
@@ -289,11 +333,6 @@ var DevKit;
 		devKit.LoadFields(formContext, _Work_Order_Business_Process, "header_process_");
 		process.Work_Order_Business_Process = _Work_Order_Business_Process;
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var navigation = {
 			nav_msdyn_msdyn_workorder_bookableresourcebooking_WorkOrder: {},
 			nav_msdyn_msdyn_workorder_invoicedetail: {},
@@ -342,7 +381,7 @@ var DevKit;
 			Incidents_List: {},
 			KnowledgeArticlesSubGrid: {},
 			msdyn_Address1: {},
-			msdyn_Address1_1: {},
+			msdyn_Address11: {},
 			msdyn_Address2: {},
 			msdyn_Address3: {},
 			msdyn_BillingAccount: {},
@@ -355,9 +394,9 @@ var DevKit;
 			msdyn_InternalFlags: {},
 			msdyn_IoTAlert: {},
 			msdyn_Latitude: {},
-			msdyn_Latitude_1: {},
+			msdyn_Latitude1: {},
 			msdyn_Longitude: {},
-			msdyn_Longitude_1: {},
+			msdyn_Longitude1: {},
 			msdyn_mapcontrol: {},
 			msdyn_name: {},
 			msdyn_ParentWorkOrder: {},
@@ -422,6 +461,28 @@ var DevKit;
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
 		var process = devKit.LoadProcess(formContext);
+		var _Case_to_Work_Order_Business_Process = {
+			msdyn_BillingAccount: {},
+			msdyn_PrimaryIncidentType: {},
+			msdyn_Priority: {},
+			msdyn_ServiceAccount: {},
+			msdyn_SubStatus: {},
+			msdyn_SystemStatus: {},
+			msdyn_SystemStatus_1: {},
+			msdyn_WorkOrderType: {}
+		}
+		devKit.LoadFields(formContext, _Case_to_Work_Order_Business_Process, "header_process_");
+		process.Case_to_Work_Order_Business_Process = _Case_to_Work_Order_Business_Process;
+		var _CFS_IoT_Alert_Process_Flow = {
+			msdyn_Priority: {},
+			msdyn_ServiceAccount: {},
+			msdyn_SubStatus: {},
+			msdyn_SystemStatus: {},
+			msdyn_SystemStatus_1: {},
+			msdyn_WorkOrderType: {}
+		}
+		devKit.LoadFields(formContext, _CFS_IoT_Alert_Process_Flow, "header_process_");
+		process.CFS_IoT_Alert_Process_Flow = _CFS_IoT_Alert_Process_Flow;
 		var _Work_Order_Business_Process = {
 			msdyn_BillingAccount: {},
 			msdyn_PrimaryIncidentType: {},
@@ -435,11 +496,6 @@ var DevKit;
 		devKit.LoadFields(formContext, _Work_Order_Business_Process, "header_process_");
 		process.Work_Order_Business_Process = _Work_Order_Business_Process;
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var grid = {
 			bookings: {},
 			Incidents_List: {},
@@ -520,6 +576,28 @@ var DevKit;
 		body.Tab = tab;
 		form.Body = body;
 		var process = devKit.LoadProcess(formContext);
+		var _Case_to_Work_Order_Business_Process = {
+			msdyn_BillingAccount: {},
+			msdyn_PrimaryIncidentType: {},
+			msdyn_Priority: {},
+			msdyn_ServiceAccount: {},
+			msdyn_SubStatus: {},
+			msdyn_SystemStatus: {},
+			msdyn_SystemStatus_1: {},
+			msdyn_WorkOrderType: {}
+		}
+		devKit.LoadFields(formContext, _Case_to_Work_Order_Business_Process, "header_process_");
+		process.Case_to_Work_Order_Business_Process = _Case_to_Work_Order_Business_Process;
+		var _CFS_IoT_Alert_Process_Flow = {
+			msdyn_Priority: {},
+			msdyn_ServiceAccount: {},
+			msdyn_SubStatus: {},
+			msdyn_SystemStatus: {},
+			msdyn_SystemStatus_1: {},
+			msdyn_WorkOrderType: {}
+		}
+		devKit.LoadFields(formContext, _CFS_IoT_Alert_Process_Flow, "header_process_");
+		process.CFS_IoT_Alert_Process_Flow = _CFS_IoT_Alert_Process_Flow;
 		var _Work_Order_Business_Process = {
 			msdyn_BillingAccount: {},
 			msdyn_PrimaryIncidentType: {},
@@ -533,11 +611,6 @@ var DevKit;
 		devKit.LoadFields(formContext, _Work_Order_Business_Process, "header_process_");
 		process.Work_Order_Business_Process = _Work_Order_Business_Process;
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var navigation = {
 			nav_msdyn_msdyn_workorder_bookableresourcebooking_WorkOrder: {},
 			nav_msdyn_msdyn_workorder_invoicedetail: {},
@@ -625,6 +698,28 @@ var DevKit;
 		body.Tab = tab;
 		form.Body = body;
 		var process = devKit.LoadProcess(formContext);
+		var _Case_to_Work_Order_Business_Process = {
+			msdyn_BillingAccount: {},
+			msdyn_PrimaryIncidentType: {},
+			msdyn_Priority: {},
+			msdyn_ServiceAccount: {},
+			msdyn_SubStatus: {},
+			msdyn_SystemStatus: {},
+			msdyn_SystemStatus_1: {},
+			msdyn_WorkOrderType: {}
+		}
+		devKit.LoadFields(formContext, _Case_to_Work_Order_Business_Process, "header_process_");
+		process.Case_to_Work_Order_Business_Process = _Case_to_Work_Order_Business_Process;
+		var _CFS_IoT_Alert_Process_Flow = {
+			msdyn_Priority: {},
+			msdyn_ServiceAccount: {},
+			msdyn_SubStatus: {},
+			msdyn_SystemStatus: {},
+			msdyn_SystemStatus_1: {},
+			msdyn_WorkOrderType: {}
+		}
+		devKit.LoadFields(formContext, _CFS_IoT_Alert_Process_Flow, "header_process_");
+		process.CFS_IoT_Alert_Process_Flow = _CFS_IoT_Alert_Process_Flow;
 		var _Work_Order_Business_Process = {
 			msdyn_BillingAccount: {},
 			msdyn_PrimaryIncidentType: {},
@@ -638,11 +733,6 @@ var DevKit;
 		devKit.LoadFields(formContext, _Work_Order_Business_Process, "header_process_");
 		process.Work_Order_Business_Process = _Work_Order_Business_Process;
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var grid = {
 			FsWorkOrderIncidentsGrid: {},
 			FsWorkOrderProductsGrid: {},
@@ -723,6 +813,28 @@ var DevKit;
 		body.Tab = tab;
 		form.Body = body;
 		var process = devKit.LoadProcess(formContext);
+		var _Case_to_Work_Order_Business_Process = {
+			msdyn_BillingAccount: {},
+			msdyn_PrimaryIncidentType: {},
+			msdyn_Priority: {},
+			msdyn_ServiceAccount: {},
+			msdyn_SubStatus: {},
+			msdyn_SystemStatus: {},
+			msdyn_SystemStatus_1: {},
+			msdyn_WorkOrderType: {}
+		}
+		devKit.LoadFields(formContext, _Case_to_Work_Order_Business_Process, "header_process_");
+		process.Case_to_Work_Order_Business_Process = _Case_to_Work_Order_Business_Process;
+		var _CFS_IoT_Alert_Process_Flow = {
+			msdyn_Priority: {},
+			msdyn_ServiceAccount: {},
+			msdyn_SubStatus: {},
+			msdyn_SystemStatus: {},
+			msdyn_SystemStatus_1: {},
+			msdyn_WorkOrderType: {}
+		}
+		devKit.LoadFields(formContext, _CFS_IoT_Alert_Process_Flow, "header_process_");
+		process.CFS_IoT_Alert_Process_Flow = _CFS_IoT_Alert_Process_Flow;
 		var _Work_Order_Business_Process = {
 			msdyn_BillingAccount: {},
 			msdyn_PrimaryIncidentType: {},
@@ -736,11 +848,6 @@ var DevKit;
 		devKit.LoadFields(formContext, _Work_Order_Business_Process, "header_process_");
 		process.Work_Order_Business_Process = _Work_Order_Business_Process;
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var navigation = {
 			nav_bpf_msdyn_workorder_msdyn_bpf_989e9b1857e24af18787d5143b67523b: {},
 			nav_bpf_msdyn_workorder_msdyn_bpf_d3d97bac8c294105840e99e37a9d1c39: {},

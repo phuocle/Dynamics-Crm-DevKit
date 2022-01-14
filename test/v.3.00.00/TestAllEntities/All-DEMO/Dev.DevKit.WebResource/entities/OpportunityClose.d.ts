@@ -22,6 +22,8 @@ declare namespace DevKit {
 			/** Activity that is created automatically when an opportunity is closed, containing information such as the description of the closing and actual revenue. */
 			Description: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormOpportunityClose_Information extends DevKit.IForm {
 		/**
@@ -34,6 +36,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form OpportunityClose_Information */
 		Body: DevKit.FormOpportunityClose_Information.Body;
+		/** The Process of form OpportunityClose_Information */
+		Process: DevKit.FormOpportunityClose_Information.Process;
 		/** The SidePanes of form OpportunityClose_Information */
 		SidePanes: DevKit.SidePanes;
 	}

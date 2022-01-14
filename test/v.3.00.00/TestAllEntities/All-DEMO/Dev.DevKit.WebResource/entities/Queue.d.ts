@@ -28,6 +28,8 @@ declare namespace DevKit {
 			/** Unique identifier of the user or team who owns the queue. */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormQueue_Information extends DevKit.IForm {
 		/**
@@ -40,6 +42,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Queue_Information */
 		Body: DevKit.FormQueue_Information.Body;
+		/** The Process of form Queue_Information */
+		Process: DevKit.FormQueue_Information.Process;
 		/** The SidePanes of form Queue_Information */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -78,6 +82,8 @@ declare namespace DevKit {
 			QueueViewType: DevKit.Controls.OptionSet;
 			WebResource_ocpreviewterms: DevKit.Controls.WebResource;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			Agents: DevKit.Controls.Grid;
 		}
@@ -95,6 +101,8 @@ declare namespace DevKit {
 		Body: DevKit.FormOmnichannel_queue.Body;
 		/** The Header section of form Omnichannel_queue */
 		Header: DevKit.FormOmnichannel_queue.Header;
+		/** The Process of form Omnichannel_queue */
+		Process: DevKit.FormOmnichannel_queue.Process;
 		/** The Grid of form Omnichannel_queue */
 		Grid: DevKit.FormOmnichannel_queue.Grid;
 		/** The SidePanes of form Omnichannel_queue */
@@ -142,6 +150,8 @@ declare namespace DevKit {
 			/** Select whether the queue is public or private. A public queue can be viewed by all. A private queue can be viewed only by the members added to the queue. */
 			QueueViewType: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			QueueItemsGrid: DevKit.Controls.Grid;
 			queuemembersgrid: DevKit.Controls.Grid;
@@ -159,6 +169,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Queue */
 		Body: DevKit.FormQueue.Body;
+		/** The Process of form Queue */
+		Process: DevKit.FormQueue.Process;
 		/** The Grid of form Queue */
 		Grid: DevKit.FormQueue.Grid;
 		/** The SidePanes of form Queue */
@@ -178,6 +190,8 @@ declare namespace DevKit {
 			Tab: Tabs;
 			msdyn_name1: DevKit.Controls.ActionCards;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormQueue_Hub_Form extends DevKit.IForm {
 		/**
@@ -190,6 +204,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Queue_Hub_Form */
 		Body: DevKit.FormQueue_Hub_Form.Body;
+		/** The Process of form Queue_Hub_Form */
+		Process: DevKit.FormQueue_Hub_Form.Process;
 		/** The SidePanes of form Queue_Hub_Form */
 		SidePanes: DevKit.SidePanes;
 	}

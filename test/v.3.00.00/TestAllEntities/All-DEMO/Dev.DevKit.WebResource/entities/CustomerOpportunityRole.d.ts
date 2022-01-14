@@ -23,6 +23,8 @@ declare namespace DevKit {
 			/** Choose the role or nature of the relationship that the customer has with the opportunity. The field is read-only until a customer has been selected. Administrators can configure role values under Business Management in the Settings area. */
 			OpportunityRoleId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormCustomerOpportunityRole_Information extends DevKit.IForm {
 		/**
@@ -35,6 +37,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form CustomerOpportunityRole_Information */
 		Body: DevKit.FormCustomerOpportunityRole_Information.Body;
+		/** The Process of form CustomerOpportunityRole_Information */
+		Process: DevKit.FormCustomerOpportunityRole_Information.Process;
 		/** The SidePanes of form CustomerOpportunityRole_Information */
 		SidePanes: DevKit.SidePanes;
 	}

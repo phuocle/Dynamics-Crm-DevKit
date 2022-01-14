@@ -26,6 +26,8 @@ declare namespace DevKit {
 			/** Unique identifier of the parent role. */
 			ParentRoleId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormRole_Information extends DevKit.IForm {
 		/**
@@ -38,6 +40,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Role_Information */
 		Body: DevKit.FormRole_Information.Body;
+		/** The Process of form Role_Information */
+		Process: DevKit.FormRole_Information.Process;
 		/** The SidePanes of form Role_Information */
 		SidePanes: DevKit.SidePanes;
 	}

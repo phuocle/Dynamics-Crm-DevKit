@@ -33,6 +33,8 @@ declare namespace DevKit {
 			/** The name of the action for updating device data for a device using this IoT Provider. */
 			msdyn_UpdateDeviceDataAction: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_iotprovider_Information extends DevKit.IForm {
 		/**
@@ -47,6 +49,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyn_iotprovider_Information.Body;
 		/** The Header section of form msdyn_iotprovider_Information */
 		Header: DevKit.Formmsdyn_iotprovider_Information.Header;
+		/** The Process of form msdyn_iotprovider_Information */
+		Process: DevKit.Formmsdyn_iotprovider_Information.Process;
 		/** The SidePanes of form msdyn_iotprovider_Information */
 		SidePanes: DevKit.SidePanes;
 	}

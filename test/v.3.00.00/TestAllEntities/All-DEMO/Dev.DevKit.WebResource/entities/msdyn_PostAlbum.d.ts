@@ -15,6 +15,8 @@ declare namespace DevKit {
 			/** Status of the Profile Album */
 			statecode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_PostAlbum_Information extends DevKit.IForm {
 		/**
@@ -29,6 +31,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyn_PostAlbum_Information.Body;
 		/** The Footer section of form msdyn_PostAlbum_Information */
 		Footer: DevKit.Formmsdyn_PostAlbum_Information.Footer;
+		/** The Process of form msdyn_PostAlbum_Information */
+		Process: DevKit.Formmsdyn_PostAlbum_Information.Process;
 		/** The SidePanes of form msdyn_PostAlbum_Information */
 		SidePanes: DevKit.SidePanes;
 	}

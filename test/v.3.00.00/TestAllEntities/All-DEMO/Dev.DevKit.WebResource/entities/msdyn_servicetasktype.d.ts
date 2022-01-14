@@ -10,7 +10,7 @@ declare namespace DevKit {
 			/** Unique identifier for Inspection Template associated with Service Task Type. */
 			msdyn_Inspection: DevKit.Controls.Lookup;
 			/** Unique identifier for Inspection Template associated with Service Task Type. */
-			msdyn_Inspection_1: DevKit.Controls.Lookup;
+			msdyn_Inspection1: DevKit.Controls.Lookup;
 			/** Depicts whether inspection is enabled for ServiceTaskType. */
 			msdyn_InspectionEnabled: DevKit.Controls.Boolean;
 			/** Enter the name of the custom entity. */
@@ -30,6 +30,8 @@ declare namespace DevKit {
 			nav_msdyn_msdyn_servicetasktype_msdyn_workorderservicetask_TaskType: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_servicetasktype_Information extends DevKit.IForm {
 		/**
@@ -46,6 +48,8 @@ declare namespace DevKit {
 		Footer: DevKit.Formmsdyn_servicetasktype_Information.Footer;
 		/** The Navigation of form msdyn_servicetasktype_Information */
 		Navigation: DevKit.Formmsdyn_servicetasktype_Information.Navigation;
+		/** The Process of form msdyn_servicetasktype_Information */
+		Process: DevKit.Formmsdyn_servicetasktype_Information.Process;
 		/** The SidePanes of form msdyn_servicetasktype_Information */
 		SidePanes: DevKit.SidePanes;
 	}

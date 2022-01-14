@@ -34,6 +34,8 @@ declare namespace DevKit {
 			/** Status of the UII Workflow-Step Mapping */
 			statecode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormUII_workflow_workflowstep_mapping_Information extends DevKit.IForm {
 		/**
@@ -48,6 +50,8 @@ declare namespace DevKit {
 		Body: DevKit.FormUII_workflow_workflowstep_mapping_Information.Body;
 		/** The Footer section of form UII_workflow_workflowstep_mapping_Information */
 		Footer: DevKit.FormUII_workflow_workflowstep_mapping_Information.Footer;
+		/** The Process of form UII_workflow_workflowstep_mapping_Information */
+		Process: DevKit.FormUII_workflow_workflowstep_mapping_Information.Process;
 		/** The SidePanes of form UII_workflow_workflowstep_mapping_Information */
 		SidePanes: DevKit.SidePanes;
 	}

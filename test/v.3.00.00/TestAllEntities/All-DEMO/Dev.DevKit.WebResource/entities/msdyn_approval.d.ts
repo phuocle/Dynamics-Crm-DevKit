@@ -23,6 +23,8 @@ declare namespace DevKit {
 			/** Subject associated with the activity. */
 			Subject: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_approval_Information extends DevKit.IForm {
 		/**
@@ -37,6 +39,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyn_approval_Information.Body;
 		/** The Header section of form msdyn_approval_Information */
 		Header: DevKit.Formmsdyn_approval_Information.Header;
+		/** The Process of form msdyn_approval_Information */
+		Process: DevKit.Formmsdyn_approval_Information.Process;
 		/** The SidePanes of form msdyn_approval_Information */
 		SidePanes: DevKit.SidePanes;
 	}

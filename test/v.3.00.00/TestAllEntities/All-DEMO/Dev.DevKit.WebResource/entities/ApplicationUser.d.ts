@@ -8,6 +8,8 @@ declare namespace DevKit {
 			/** Application Name of the application user */
 			ApplicationName: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormApplicationUser_Information extends DevKit.IForm {
 		/**
@@ -20,6 +22,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form ApplicationUser_Information */
 		Body: DevKit.FormApplicationUser_Information.Body;
+		/** The Process of form ApplicationUser_Information */
+		Process: DevKit.FormApplicationUser_Information.Process;
 		/** The SidePanes of form ApplicationUser_Information */
 		SidePanes: DevKit.SidePanes;
 	}

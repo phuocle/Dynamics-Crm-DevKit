@@ -19,6 +19,8 @@ declare namespace DevKit {
 			/** Shows the unique ID of the linked knowledge base (KB) article. */
 			UniqueId: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormKnowledge_Base_Articles extends DevKit.IForm {
 		/**
@@ -33,6 +35,8 @@ declare namespace DevKit {
 		Body: DevKit.FormKnowledge_Base_Articles.Body;
 		/** The Header section of form Knowledge_Base_Articles */
 		Header: DevKit.FormKnowledge_Base_Articles.Header;
+		/** The Process of form Knowledge_Base_Articles */
+		Process: DevKit.FormKnowledge_Base_Articles.Process;
 		/** The SidePanes of form Knowledge_Base_Articles */
 		SidePanes: DevKit.SidePanes;
 	}

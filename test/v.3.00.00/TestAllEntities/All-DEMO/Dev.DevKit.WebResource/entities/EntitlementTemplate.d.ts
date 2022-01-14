@@ -36,6 +36,8 @@ declare namespace DevKit {
 			/** Type the total number of entitlement terms. */
 			TotalTerms: DevKit.Controls.Decimal;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			editableEntitlementChannelGridControl: DevKit.Controls.Grid;
 			grid_EntitlementChannel: DevKit.Controls.Grid;
@@ -53,6 +55,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Entitlement_Template */
 		Body: DevKit.FormEntitlement_Template.Body;
+		/** The Process of form Entitlement_Template */
+		Process: DevKit.FormEntitlement_Template.Process;
 		/** The Grid of form Entitlement_Template */
 		Grid: DevKit.FormEntitlement_Template.Grid;
 		/** The SidePanes of form Entitlement_Template */

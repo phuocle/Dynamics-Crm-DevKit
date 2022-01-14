@@ -22,6 +22,8 @@ declare namespace DevKit {
 			/** Select the unit schedule that is associated with the transaction category. */
 			msdyn_UnitGroup: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_transactioncategory_Information extends DevKit.IForm {
 		/**
@@ -34,6 +36,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_transactioncategory_Information */
 		Body: DevKit.Formmsdyn_transactioncategory_Information.Body;
+		/** The Process of form msdyn_transactioncategory_Information */
+		Process: DevKit.Formmsdyn_transactioncategory_Information.Process;
 		/** The SidePanes of form msdyn_transactioncategory_Information */
 		SidePanes: DevKit.SidePanes;
 	}

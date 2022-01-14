@@ -43,12 +43,13 @@ var DevKit;
 		devKit.LoadFields(formContext, footer, "footer_");
 		form.Footer = footer;
 		var process = devKit.LoadProcess(formContext);
+		var _Purchase_Order_Business_Process = {
+			msdyn_BillDate: {},
+			msdyn_VendorInvoiceNumber: {}
+		}
+		devKit.LoadFields(formContext, _Purchase_Order_Business_Process, "header_process_");
+		process.Purchase_Order_Business_Process = _Purchase_Order_Business_Process;
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var navigation = {
 			nav_msdyn_msdyn_purchaseorderbill_msdyn_purchaseorderreceiptproduct_PurchaseOrderBill: {},
 			navProcessSessions: {}
@@ -108,12 +109,13 @@ var DevKit;
 		body.Tab = tab;
 		form.Body = body;
 		var process = devKit.LoadProcess(formContext);
+		var _Purchase_Order_Business_Process = {
+			msdyn_BillDate: {},
+			msdyn_VendorInvoiceNumber: {}
+		}
+		devKit.LoadFields(formContext, _Purchase_Order_Business_Process, "header_process_");
+		process.Purchase_Order_Business_Process = _Purchase_Order_Business_Process;
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var navigation = {
 			nav_msdyn_msdyn_purchaseorderbill_msdyn_purchaseorderreceiptproduct_PurchaseOrderBill: {},
 			navProcessSessions: {}

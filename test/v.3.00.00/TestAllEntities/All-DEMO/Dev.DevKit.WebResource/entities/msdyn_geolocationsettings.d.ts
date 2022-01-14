@@ -40,6 +40,8 @@ declare namespace DevKit {
 			/** The Wednesday tracking start time */
 			msdyn_wednesdaystarttime: DevKit.Controls.DateTime;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_geolocationsettings_Information extends DevKit.IForm {
 		/**
@@ -52,6 +54,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_geolocationsettings_Information */
 		Body: DevKit.Formmsdyn_geolocationsettings_Information.Body;
+		/** The Process of form msdyn_geolocationsettings_Information */
+		Process: DevKit.Formmsdyn_geolocationsettings_Information.Process;
 		/** The SidePanes of form msdyn_geolocationsettings_Information */
 		SidePanes: DevKit.SidePanes;
 	}

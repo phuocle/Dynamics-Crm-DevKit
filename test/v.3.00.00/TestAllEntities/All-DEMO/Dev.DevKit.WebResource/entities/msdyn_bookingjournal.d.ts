@@ -72,6 +72,8 @@ declare namespace DevKit {
 		interface Navigation {
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormBooking_Journal_Mobile extends DevKit.IForm {
 		/**
@@ -86,6 +88,8 @@ declare namespace DevKit {
 		Body: DevKit.FormBooking_Journal_Mobile.Body;
 		/** The Navigation of form Booking_Journal_Mobile */
 		Navigation: DevKit.FormBooking_Journal_Mobile.Navigation;
+		/** The Process of form Booking_Journal_Mobile */
+		Process: DevKit.FormBooking_Journal_Mobile.Process;
 		/** The SidePanes of form Booking_Journal_Mobile */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -135,6 +139,8 @@ declare namespace DevKit {
 		interface Navigation {
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_bookingjournal_Information extends DevKit.IForm {
 		/**
@@ -151,6 +157,8 @@ declare namespace DevKit {
 		Footer: DevKit.Formmsdyn_bookingjournal_Information.Footer;
 		/** The Navigation of form msdyn_bookingjournal_Information */
 		Navigation: DevKit.Formmsdyn_bookingjournal_Information.Navigation;
+		/** The Process of form msdyn_bookingjournal_Information */
+		Process: DevKit.Formmsdyn_bookingjournal_Information.Process;
 		/** The SidePanes of form msdyn_bookingjournal_Information */
 		SidePanes: DevKit.SidePanes;
 	}

@@ -30,6 +30,8 @@ declare namespace DevKit {
 			/** Time Filter Duration */
 			TimeFilterDuration: DevKit.Controls.Integer;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			textanalyticsentitymappings: DevKit.Controls.Grid;
 		}
@@ -45,6 +47,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form TopicModelConfiguration_Information */
 		Body: DevKit.FormTopicModelConfiguration_Information.Body;
+		/** The Process of form TopicModelConfiguration_Information */
+		Process: DevKit.FormTopicModelConfiguration_Information.Process;
 		/** The Grid of form TopicModelConfiguration_Information */
 		Grid: DevKit.FormTopicModelConfiguration_Information.Grid;
 		/** The SidePanes of form TopicModelConfiguration_Information */

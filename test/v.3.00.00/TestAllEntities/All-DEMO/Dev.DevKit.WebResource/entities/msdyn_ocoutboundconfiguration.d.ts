@@ -21,6 +21,8 @@ declare namespace DevKit {
 			OwnerId: DevKit.Controls.Lookup;
 			WebResource_CopyConfigurationID: DevKit.Controls.WebResource;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_ocoutboundconfiguration_Information extends DevKit.IForm {
 		/**
@@ -33,6 +35,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_ocoutboundconfiguration_Information */
 		Body: DevKit.Formmsdyn_ocoutboundconfiguration_Information.Body;
+		/** The Process of form msdyn_ocoutboundconfiguration_Information */
+		Process: DevKit.Formmsdyn_ocoutboundconfiguration_Information.Process;
 		/** The SidePanes of form msdyn_ocoutboundconfiguration_Information */
 		SidePanes: DevKit.SidePanes;
 	}

@@ -57,6 +57,8 @@ declare namespace DevKit {
 			nav_msdyn_msdyn_agreementbookingincident_msdyn_workorderincident_AgreementBookingIncident: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormAgreement_Booking_Incident_Mobile extends DevKit.IForm {
 		/**
@@ -71,6 +73,8 @@ declare namespace DevKit {
 		Body: DevKit.FormAgreement_Booking_Incident_Mobile.Body;
 		/** The Navigation of form Agreement_Booking_Incident_Mobile */
 		Navigation: DevKit.FormAgreement_Booking_Incident_Mobile.Navigation;
+		/** The Process of form Agreement_Booking_Incident_Mobile */
+		Process: DevKit.FormAgreement_Booking_Incident_Mobile.Process;
 		/** The SidePanes of form Agreement_Booking_Incident_Mobile */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -108,6 +112,8 @@ declare namespace DevKit {
 			nav_msdyn_msdyn_agreementbookingincident_msdyn_workorderincident_AgreementBookingIncident: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_agreementbookingincident_Information extends DevKit.IForm {
 		/**
@@ -124,6 +130,8 @@ declare namespace DevKit {
 		Footer: DevKit.Formmsdyn_agreementbookingincident_Information.Footer;
 		/** The Navigation of form msdyn_agreementbookingincident_Information */
 		Navigation: DevKit.Formmsdyn_agreementbookingincident_Information.Navigation;
+		/** The Process of form msdyn_agreementbookingincident_Information */
+		Process: DevKit.Formmsdyn_agreementbookingincident_Information.Process;
 		/** The SidePanes of form msdyn_agreementbookingincident_Information */
 		SidePanes: DevKit.SidePanes;
 	}

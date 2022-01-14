@@ -35,6 +35,8 @@ declare namespace DevKit {
 			RetryCount: DevKit.Controls.Integer;
 			WebResource_systemjob: DevKit.Controls.WebResource;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormAsyncOperation_Information extends DevKit.IForm {
 		/**
@@ -47,6 +49,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form AsyncOperation_Information */
 		Body: DevKit.FormAsyncOperation_Information.Body;
+		/** The Process of form AsyncOperation_Information */
+		Process: DevKit.FormAsyncOperation_Information.Process;
 		/** The SidePanes of form AsyncOperation_Information */
 		SidePanes: DevKit.SidePanes;
 	}

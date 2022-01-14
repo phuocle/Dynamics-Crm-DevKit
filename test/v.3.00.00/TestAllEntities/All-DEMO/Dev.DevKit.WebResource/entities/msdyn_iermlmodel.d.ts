@@ -30,7 +30,7 @@ declare namespace DevKit {
 			/** Training configuration */
 			msdyn_trainingconfiguration: DevKit.Controls.String;
 			/** Training configuration */
-			msdyn_trainingconfiguration_1: DevKit.Controls.String;
+			msdyn_trainingconfiguration1: DevKit.Controls.String;
 			/** Unique Name for the entity. */
 			msdyn_UniqueName: DevKit.Controls.String;
 			/** Owner Id */
@@ -38,6 +38,8 @@ declare namespace DevKit {
 			/** Status of the iermlmodel */
 			statecode: DevKit.Controls.OptionSet;
 			WebResource_inputmodel: DevKit.Controls.WebResource;
+		}
+		interface Process extends DevKit.Controls.IProcess {
 		}
 	}
 	class Formmsdyn_iermlmodel_Information extends DevKit.IForm {
@@ -53,6 +55,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyn_iermlmodel_Information.Body;
 		/** The Header section of form msdyn_iermlmodel_Information */
 		Header: DevKit.Formmsdyn_iermlmodel_Information.Header;
+		/** The Process of form msdyn_iermlmodel_Information */
+		Process: DevKit.Formmsdyn_iermlmodel_Information.Process;
 		/** The SidePanes of form msdyn_iermlmodel_Information */
 		SidePanes: DevKit.SidePanes;
 	}

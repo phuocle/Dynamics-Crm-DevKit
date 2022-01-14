@@ -93,11 +93,6 @@ var DevKit;
 		devKit.LoadFields(formContext, _Project_Service_Invoice_Process, "header_process_");
 		process.Project_Service_Invoice_Process = _Project_Service_Invoice_Process;
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var grid = {
 			GridInvoicingPeriod: {},
 			GridServiceLines: {},
@@ -221,16 +216,6 @@ var DevKit;
 		devKit.LoadFields(formContext, _Project_Service_Invoice_Process, "header_process_");
 		process.Project_Service_Invoice_Process = _Project_Service_Invoice_Process;
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
 		devKit.LoadOthers(formContext, form, defaultWebResourceName);
@@ -320,11 +305,6 @@ var DevKit;
 		devKit.LoadFields(formContext, _Project_Service_Invoice_Process, "header_process_");
 		process.Project_Service_Invoice_Process = _Project_Service_Invoice_Process;
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var grid = {
 			invoicedetailsGrid: {},
 		};
@@ -423,11 +403,6 @@ var DevKit;
 		devKit.LoadFields(formContext, _Project_Service_Invoice_Process, "header_process_");
 		process.Project_Service_Invoice_Process = _Project_Service_Invoice_Process;
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var grid = {
 			invoicedetailsGrid: {},
 			ProjectInvoiceLines: {},
@@ -444,7 +419,7 @@ var DevKit;
 		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
-	DevKit.FormInvoice = function(executionContext, defaultWebResourceName) {
+	DevKit.FormInvoice2 = function(executionContext, defaultWebResourceName) {
 		var formContext = null;
 		if (executionContext !== undefined)
 		{

@@ -27,6 +27,8 @@ declare namespace DevKit {
 			/** The supervisor threshold for sentiment threshold alerts */
 			msdyn_supervisorthreshold: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_sentimentanalysis_Information extends DevKit.IForm {
 		/**
@@ -39,6 +41,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_sentimentanalysis_Information */
 		Body: DevKit.Formmsdyn_sentimentanalysis_Information.Body;
+		/** The Process of form msdyn_sentimentanalysis_Information */
+		Process: DevKit.Formmsdyn_sentimentanalysis_Information.Process;
 		/** The SidePanes of form msdyn_sentimentanalysis_Information */
 		SidePanes: DevKit.SidePanes;
 	}

@@ -60,6 +60,8 @@ declare namespace DevKit {
 			/** The unique name of this publisher. */
 			UniqueName: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormPublisher_Information extends DevKit.IForm {
 		/**
@@ -72,6 +74,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Publisher_Information */
 		Body: DevKit.FormPublisher_Information.Body;
+		/** The Process of form Publisher_Information */
+		Process: DevKit.FormPublisher_Information.Process;
 		/** The SidePanes of form Publisher_Information */
 		SidePanes: DevKit.SidePanes;
 	}

@@ -44,6 +44,8 @@ declare namespace DevKit {
 		interface QuickForm {
 			related_sp: quickForm_related_sp;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormSocial_Profile extends DevKit.IForm {
 		/**
@@ -60,6 +62,8 @@ declare namespace DevKit {
 		Header: DevKit.FormSocial_Profile.Header;
 		/** The QuickForm of form Social_Profile */
 		QuickForm: DevKit.FormSocial_Profile.QuickForm;
+		/** The Process of form Social_Profile */
+		Process: DevKit.FormSocial_Profile.Process;
 		/** The SidePanes of form Social_Profile */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -126,6 +130,8 @@ declare namespace DevKit {
 			customer_qfc: quickForm_customer_qfc;
 			related_sp: quickForm_related_sp;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormSocial_Profile_for_Interactive_experience extends DevKit.IForm {
 		/**
@@ -142,6 +148,8 @@ declare namespace DevKit {
 		Header: DevKit.FormSocial_Profile_for_Interactive_experience.Header;
 		/** The QuickForm of form Social_Profile_for_Interactive_experience */
 		QuickForm: DevKit.FormSocial_Profile_for_Interactive_experience.QuickForm;
+		/** The Process of form Social_Profile_for_Interactive_experience */
+		Process: DevKit.FormSocial_Profile_for_Interactive_experience.Process;
 		/** The SidePanes of form Social_Profile_for_Interactive_experience */
 		SidePanes: DevKit.SidePanes;
 	}

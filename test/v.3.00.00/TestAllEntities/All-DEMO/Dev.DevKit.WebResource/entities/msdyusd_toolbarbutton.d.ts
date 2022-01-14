@@ -36,6 +36,8 @@ declare namespace DevKit {
 		interface Navigation {
 			nav_msdyusd_toolbarbutton_agentscriptaction: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			Actions: DevKit.Controls.Grid;
 		}
@@ -55,6 +57,8 @@ declare namespace DevKit {
 		Footer: DevKit.Formmsdyusd_toolbarbutton_Information.Footer;
 		/** The Navigation of form msdyusd_toolbarbutton_Information */
 		Navigation: DevKit.Formmsdyusd_toolbarbutton_Information.Navigation;
+		/** The Process of form msdyusd_toolbarbutton_Information */
+		Process: DevKit.Formmsdyusd_toolbarbutton_Information.Process;
 		/** The Grid of form msdyusd_toolbarbutton_Information */
 		Grid: DevKit.Formmsdyusd_toolbarbutton_Information.Grid;
 		/** The SidePanes of form msdyusd_toolbarbutton_Information */

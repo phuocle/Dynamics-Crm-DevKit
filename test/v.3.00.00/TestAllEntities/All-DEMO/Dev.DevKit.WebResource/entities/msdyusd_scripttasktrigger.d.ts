@@ -17,6 +17,8 @@ declare namespace DevKit {
 			/** Status of the Script Task Trigger */
 			statecode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyusd_scripttasktrigger_Information extends DevKit.IForm {
 		/**
@@ -31,6 +33,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyusd_scripttasktrigger_Information.Body;
 		/** The Footer section of form msdyusd_scripttasktrigger_Information */
 		Footer: DevKit.Formmsdyusd_scripttasktrigger_Information.Footer;
+		/** The Process of form msdyusd_scripttasktrigger_Information */
+		Process: DevKit.Formmsdyusd_scripttasktrigger_Information.Process;
 		/** The SidePanes of form msdyusd_scripttasktrigger_Information */
 		SidePanes: DevKit.SidePanes;
 	}

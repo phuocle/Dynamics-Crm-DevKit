@@ -7,6 +7,8 @@ declare namespace DevKit {
 		interface Body {
 
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormSharePointData_Information extends DevKit.IForm {
 		/**
@@ -19,6 +21,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form SharePointData_Information */
 		Body: DevKit.FormSharePointData_Information.Body;
+		/** The Process of form SharePointData_Information */
+		Process: DevKit.FormSharePointData_Information.Process;
 		/** The SidePanes of form SharePointData_Information */
 		SidePanes: DevKit.SidePanes;
 	}

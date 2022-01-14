@@ -34,6 +34,8 @@ declare namespace DevKit {
 			/** Information about whether the personal document template is active. */
 			Status: DevKit.Controls.Boolean;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormPersonalDocumentTemplate_Information extends DevKit.IForm {
 		/**
@@ -46,6 +48,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form PersonalDocumentTemplate_Information */
 		Body: DevKit.FormPersonalDocumentTemplate_Information.Body;
+		/** The Process of form PersonalDocumentTemplate_Information */
+		Process: DevKit.FormPersonalDocumentTemplate_Information.Process;
 		/** The SidePanes of form PersonalDocumentTemplate_Information */
 		SidePanes: DevKit.SidePanes;
 	}

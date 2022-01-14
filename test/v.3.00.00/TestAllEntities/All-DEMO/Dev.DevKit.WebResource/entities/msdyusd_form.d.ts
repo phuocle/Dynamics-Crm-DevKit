@@ -17,6 +17,8 @@ declare namespace DevKit {
 			/** Status of the Form */
 			statecode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			HostedConrolsDisplay: DevKit.Controls.Grid;
 		}
@@ -34,6 +36,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyusd_form_Information.Body;
 		/** The Footer section of form msdyusd_form_Information */
 		Footer: DevKit.Formmsdyusd_form_Information.Footer;
+		/** The Process of form msdyusd_form_Information */
+		Process: DevKit.Formmsdyusd_form_Information.Process;
 		/** The Grid of form msdyusd_form_Information */
 		Grid: DevKit.Formmsdyusd_form_Information.Grid;
 		/** The SidePanes of form msdyusd_form_Information */

@@ -57,6 +57,8 @@ declare namespace DevKit {
 			/** Shows the default role to be used when a team member is added to the project team. */
 			msdyn_teammemberrole: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			AmountBasedPricingDimensionGrid: DevKit.Controls.Grid;
 			MarkupBasedPricingDimensionGrid: DevKit.Controls.Grid;
@@ -74,6 +76,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_projectparameter_Information */
 		Body: DevKit.Formmsdyn_projectparameter_Information.Body;
+		/** The Process of form msdyn_projectparameter_Information */
+		Process: DevKit.Formmsdyn_projectparameter_Information.Process;
 		/** The Grid of form msdyn_projectparameter_Information */
 		Grid: DevKit.Formmsdyn_projectparameter_Information.Grid;
 		/** The SidePanes of form msdyn_projectparameter_Information */

@@ -57,6 +57,8 @@ declare namespace DevKit {
 			/** Person who is the receiver of the activity. */
 			To: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsfp_alert_Information extends DevKit.IForm {
 		/**
@@ -71,6 +73,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsfp_alert_Information.Body;
 		/** The Header section of form msfp_alert_Information */
 		Header: DevKit.Formmsfp_alert_Information.Header;
+		/** The Process of form msfp_alert_Information */
+		Process: DevKit.Formmsfp_alert_Information.Process;
 		/** The SidePanes of form msfp_alert_Information */
 		SidePanes: DevKit.SidePanes;
 	}

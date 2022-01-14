@@ -43,6 +43,8 @@ declare namespace DevKit {
 			/** Enter the account, contact, lead, or user recipients for the letter. */
 			to: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormLetter extends DevKit.IForm {
 		/**
@@ -57,6 +59,8 @@ declare namespace DevKit {
 		Body: DevKit.FormLetter.Body;
 		/** The Header section of form Letter */
 		Header: DevKit.FormLetter.Header;
+		/** The Process of form Letter */
+		Process: DevKit.FormLetter.Process;
 		/** The SidePanes of form Letter */
 		SidePanes: DevKit.SidePanes;
 	}

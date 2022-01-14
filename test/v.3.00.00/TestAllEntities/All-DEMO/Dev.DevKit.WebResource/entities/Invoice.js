@@ -46,12 +46,12 @@ var formInvoice = (function () {
 		OnSave: onSave
 	};
 })();
-var formInvoice4 = (function () {
+var formInvoice2 = (function () {
 	"use strict";
-	/** @type DevKit.FormInvoice4 */
+	/** @type DevKit.FormInvoice2 */
 	var form = null;
 	async function onLoad(executionContext) {
-		form = new DevKit.FormInvoice4(executionContext);
+		form = new DevKit.FormInvoice2(executionContext);
 
 	}
 	async function onSave(executionContext) {

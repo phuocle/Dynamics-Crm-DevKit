@@ -16,6 +16,8 @@ declare namespace DevKit {
 			/** Shows the owner of the customization file. */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyusd_customizationfiles_Information extends DevKit.IForm {
 		/**
@@ -28,6 +30,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyusd_customizationfiles_Information */
 		Body: DevKit.Formmsdyusd_customizationfiles_Information.Body;
+		/** The Process of form msdyusd_customizationfiles_Information */
+		Process: DevKit.Formmsdyusd_customizationfiles_Information.Process;
 		/** The SidePanes of form msdyusd_customizationfiles_Information */
 		SidePanes: DevKit.SidePanes;
 	}

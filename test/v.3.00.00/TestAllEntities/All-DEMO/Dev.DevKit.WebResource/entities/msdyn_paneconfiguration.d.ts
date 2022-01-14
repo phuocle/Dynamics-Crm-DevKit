@@ -12,6 +12,8 @@ declare namespace DevKit {
 			/** Unique Name for the entity. */
 			msdyn_UniqueName: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_paneconfiguration_Information extends DevKit.IForm {
 		/**
@@ -24,6 +26,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_paneconfiguration_Information */
 		Body: DevKit.Formmsdyn_paneconfiguration_Information.Body;
+		/** The Process of form msdyn_paneconfiguration_Information */
+		Process: DevKit.Formmsdyn_paneconfiguration_Information.Process;
 		/** The SidePanes of form msdyn_paneconfiguration_Information */
 		SidePanes: DevKit.SidePanes;
 	}

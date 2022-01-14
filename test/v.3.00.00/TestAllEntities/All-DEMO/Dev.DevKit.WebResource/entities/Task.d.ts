@@ -35,6 +35,8 @@ declare namespace DevKit {
 			/** Type a short description about the objective or primary topic of the task. */
 			Subject: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormTask extends DevKit.IForm {
 		/**
@@ -49,6 +51,8 @@ declare namespace DevKit {
 		Body: DevKit.FormTask.Body;
 		/** The Header section of form Task */
 		Header: DevKit.FormTask.Header;
+		/** The Process of form Task */
+		Process: DevKit.FormTask.Process;
 		/** The SidePanes of form Task */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -83,9 +87,11 @@ declare namespace DevKit {
 			/** Unique identifier of the object with which the task is associated. */
 			RegardingObjectId: DevKit.Controls.Lookup;
 			/** Unique identifier of the object with which the task is associated. */
-			RegardingObjectId_1: DevKit.Controls.Lookup;
+			RegardingObjectId1: DevKit.Controls.Lookup;
 			/** Type a short description about the objective or primary topic of the task. */
 			Subject: DevKit.Controls.String;
+		}
+		interface Process extends DevKit.Controls.IProcess {
 		}
 	}
 	class FormTask_for_Interactive_experience extends DevKit.IForm {
@@ -101,6 +107,8 @@ declare namespace DevKit {
 		Body: DevKit.FormTask_for_Interactive_experience.Body;
 		/** The Header section of form Task_for_Interactive_experience */
 		Header: DevKit.FormTask_for_Interactive_experience.Header;
+		/** The Process of form Task_for_Interactive_experience */
+		Process: DevKit.FormTask_for_Interactive_experience.Process;
 		/** The SidePanes of form Task_for_Interactive_experience */
 		SidePanes: DevKit.SidePanes;
 	}

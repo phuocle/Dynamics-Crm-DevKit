@@ -18,6 +18,8 @@ declare namespace DevKit {
 			/** File size of the attachment. */
 			FileSize: DevKit.Controls.Integer;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormActivityMimeAttachment_Information extends DevKit.IForm {
 		/**
@@ -30,6 +32,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form ActivityMimeAttachment_Information */
 		Body: DevKit.FormActivityMimeAttachment_Information.Body;
+		/** The Process of form ActivityMimeAttachment_Information */
+		Process: DevKit.FormActivityMimeAttachment_Information.Process;
 		/** The SidePanes of form ActivityMimeAttachment_Information */
 		SidePanes: DevKit.SidePanes;
 	}

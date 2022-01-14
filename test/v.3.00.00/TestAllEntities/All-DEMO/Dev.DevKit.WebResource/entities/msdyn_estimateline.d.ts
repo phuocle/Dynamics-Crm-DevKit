@@ -75,6 +75,8 @@ declare namespace DevKit {
 			/** Shows the currency associated with the entity. */
 			TransactionCurrencyId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_estimateline_Information extends DevKit.IForm {
 		/**
@@ -87,6 +89,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_estimateline_Information */
 		Body: DevKit.Formmsdyn_estimateline_Information.Body;
+		/** The Process of form msdyn_estimateline_Information */
+		Process: DevKit.Formmsdyn_estimateline_Information.Process;
 		/** The SidePanes of form msdyn_estimateline_Information */
 		SidePanes: DevKit.SidePanes;
 	}

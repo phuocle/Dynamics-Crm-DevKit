@@ -21,6 +21,8 @@ declare namespace DevKit {
 			/** Specify if the mapping is for text match or exact match */
 			IsTextMatchMapping: DevKit.Controls.Boolean;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormTextAnalyticsEntityMapping_Information extends DevKit.IForm {
 		/**
@@ -33,6 +35,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form TextAnalyticsEntityMapping_Information */
 		Body: DevKit.FormTextAnalyticsEntityMapping_Information.Body;
+		/** The Process of form TextAnalyticsEntityMapping_Information */
+		Process: DevKit.FormTextAnalyticsEntityMapping_Information.Process;
 		/** The SidePanes of form TextAnalyticsEntityMapping_Information */
 		SidePanes: DevKit.SidePanes;
 	}

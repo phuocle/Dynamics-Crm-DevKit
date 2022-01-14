@@ -50,6 +50,8 @@ declare namespace DevKit {
 			navAsyncOperations: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_scheduleboardsetting_Information extends DevKit.IForm {
 		/**
@@ -66,6 +68,8 @@ declare namespace DevKit {
 		Footer: DevKit.Formmsdyn_scheduleboardsetting_Information.Footer;
 		/** The Navigation of form msdyn_scheduleboardsetting_Information */
 		Navigation: DevKit.Formmsdyn_scheduleboardsetting_Information.Navigation;
+		/** The Process of form msdyn_scheduleboardsetting_Information */
+		Process: DevKit.Formmsdyn_scheduleboardsetting_Information.Process;
 		/** The SidePanes of form msdyn_scheduleboardsetting_Information */
 		SidePanes: DevKit.SidePanes;
 	}

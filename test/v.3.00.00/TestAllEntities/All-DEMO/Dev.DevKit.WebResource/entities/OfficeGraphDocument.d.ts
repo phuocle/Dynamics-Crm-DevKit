@@ -7,6 +7,8 @@ declare namespace DevKit {
 		interface Body {
 
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormOfficeGraphDocument_Information extends DevKit.IForm {
 		/**
@@ -19,6 +21,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form OfficeGraphDocument_Information */
 		Body: DevKit.FormOfficeGraphDocument_Information.Body;
+		/** The Process of form OfficeGraphDocument_Information */
+		Process: DevKit.FormOfficeGraphDocument_Information.Process;
 		/** The SidePanes of form OfficeGraphDocument_Information */
 		SidePanes: DevKit.SidePanes;
 	}

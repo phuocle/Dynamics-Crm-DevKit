@@ -18,6 +18,8 @@ declare namespace DevKit {
 			/** Type the title of the parent knowledge base article. This is updated in the search index every time the article is published. */
 			Title: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormDocumentIndex_Information extends DevKit.IForm {
 		/**
@@ -30,6 +32,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form DocumentIndex_Information */
 		Body: DevKit.FormDocumentIndex_Information.Body;
+		/** The Process of form DocumentIndex_Information */
+		Process: DevKit.FormDocumentIndex_Information.Process;
 		/** The SidePanes of form DocumentIndex_Information */
 		SidePanes: DevKit.SidePanes;
 	}

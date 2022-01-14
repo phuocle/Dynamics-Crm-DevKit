@@ -16,6 +16,8 @@ declare namespace DevKit {
 			/** Unique identifier of the user. */
 			msdyn_UserId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_geolocationtracking_Information extends DevKit.IForm {
 		/**
@@ -28,6 +30,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_geolocationtracking_Information */
 		Body: DevKit.Formmsdyn_geolocationtracking_Information.Body;
+		/** The Process of form msdyn_geolocationtracking_Information */
+		Process: DevKit.Formmsdyn_geolocationtracking_Information.Process;
 		/** The SidePanes of form msdyn_geolocationtracking_Information */
 		SidePanes: DevKit.SidePanes;
 	}

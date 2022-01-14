@@ -17,6 +17,8 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormAnalytics_Report_Record extends DevKit.IForm {
 		/**
@@ -29,6 +31,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Analytics_Report_Record */
 		Body: DevKit.FormAnalytics_Report_Record.Body;
+		/** The Process of form Analytics_Report_Record */
+		Process: DevKit.FormAnalytics_Report_Record.Process;
 		/** The SidePanes of form Analytics_Report_Record */
 		SidePanes: DevKit.SidePanes;
 	}

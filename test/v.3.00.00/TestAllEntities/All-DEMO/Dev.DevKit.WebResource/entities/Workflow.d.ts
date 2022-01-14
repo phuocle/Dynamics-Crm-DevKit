@@ -21,6 +21,8 @@ declare namespace DevKit {
 			/** Unique identifier of the user or team who owns the process. */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormWorkflow_Information extends DevKit.IForm {
 		/**
@@ -33,6 +35,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Workflow_Information */
 		Body: DevKit.FormWorkflow_Information.Body;
+		/** The Process of form Workflow_Information */
+		Process: DevKit.FormWorkflow_Information.Process;
 		/** The SidePanes of form Workflow_Information */
 		SidePanes: DevKit.SidePanes;
 	}

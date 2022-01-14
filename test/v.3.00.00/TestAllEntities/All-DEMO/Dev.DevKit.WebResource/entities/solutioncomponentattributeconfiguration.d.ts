@@ -14,6 +14,8 @@ declare namespace DevKit {
 			/** Unique identifier for the Solution Component Configuration associated with Solution Component Attribute Configuration. */
 			SolutionComponentConfigurationId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formsolutioncomponentattributeconfiguration_Information extends DevKit.IForm {
 		/**
@@ -26,6 +28,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form solutioncomponentattributeconfiguration_Information */
 		Body: DevKit.Formsolutioncomponentattributeconfiguration_Information.Body;
+		/** The Process of form solutioncomponentattributeconfiguration_Information */
+		Process: DevKit.Formsolutioncomponentattributeconfiguration_Information.Process;
 		/** The SidePanes of form solutioncomponentattributeconfiguration_Information */
 		SidePanes: DevKit.SidePanes;
 	}

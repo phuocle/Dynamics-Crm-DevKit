@@ -26,6 +26,8 @@ declare namespace DevKit {
 			/** Shows whether the queue record is active or inactive. Inactive queue records are read-only and can't be edited unless they are reactivated. */
 			StateCode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormQueueItem_Information extends DevKit.IForm {
 		/**
@@ -40,6 +42,8 @@ declare namespace DevKit {
 		Body: DevKit.FormQueueItem_Information.Body;
 		/** The Footer section of form QueueItem_Information */
 		Footer: DevKit.FormQueueItem_Information.Footer;
+		/** The Process of form QueueItem_Information */
+		Process: DevKit.FormQueueItem_Information.Process;
 		/** The SidePanes of form QueueItem_Information */
 		SidePanes: DevKit.SidePanes;
 	}

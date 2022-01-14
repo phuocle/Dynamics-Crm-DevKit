@@ -85,13 +85,13 @@ declare namespace DevKit {
 			/** Type the latitude value for the primary address for use in mapping and other applications. */
 			Address1_Latitude: DevKit.Controls.Double;
 			/** Type the latitude value for the primary address for use in mapping and other applications. */
-			Address1_Latitude_1: DevKit.Controls.Double;
+			Address1_Latitude1: DevKit.Controls.Double;
 			/** Type the first line of the primary address. */
 			Address1_Line1: DevKit.Controls.String;
 			/** Type the longitude value for the primary address for use in mapping and other applications. */
 			Address1_Longitude: DevKit.Controls.Double;
 			/** Type the longitude value for the primary address for use in mapping and other applications. */
-			Address1_Longitude_1: DevKit.Controls.Double;
+			Address1_Longitude1: DevKit.Controls.Double;
 			/** Select a shipping method for deliveries sent to this address. */
 			Address1_ShippingMethodCode: DevKit.Controls.OptionSet;
 			/** Type the credit limit of the account. This is a useful reference when you address invoice and accounting issues with the customer. */
@@ -103,7 +103,7 @@ declare namespace DevKit {
 			/** Choose the default price list associated with the account to make sure the correct product prices for this customer are applied in sales opportunities, quotes, and orders. */
 			DefaultPriceLevelId: DevKit.Controls.Lookup;
 			/** Choose the default price list associated with the account to make sure the correct product prices for this customer are applied in sales opportunities, quotes, and orders. */
-			DefaultPriceLevelId_1: DevKit.Controls.Lookup;
+			DefaultPriceLevelId1: DevKit.Controls.Lookup;
 			/** Type additional information to describe the account, such as an excerpt from the company's website. */
 			Description: DevKit.Controls.String;
 			/** Select whether the account allows bulk email sent through campaigns. If Do Not Allow is selected, the account can be added to marketing lists, but is excluded from email. */
@@ -145,7 +145,7 @@ declare namespace DevKit {
 			/** Type the company or business name. */
 			Name: DevKit.Controls.String;
 			/** Type the company or business name. */
-			Name_1: DevKit.Controls.String;
+			Name1: DevKit.Controls.String;
 			notescontrol: DevKit.Controls.Note;
 			/** Select the account's ownership structure, such as public or private. */
 			OwnershipCode: DevKit.Controls.OptionSet;
@@ -209,6 +209,8 @@ declare namespace DevKit {
 		interface QuickForm {
 			contactquickform: quickForm_contactquickform;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			Contacts: DevKit.Controls.Grid;
 			DocumentsSubGrid: DevKit.Controls.Grid;
@@ -233,6 +235,8 @@ declare namespace DevKit {
 		Navigation: DevKit.FormAccount.Navigation;
 		/** The QuickForm of form Account */
 		QuickForm: DevKit.FormAccount.QuickForm;
+		/** The Process of form Account */
+		Process: DevKit.FormAccount.Process;
 		/** The Grid of form Account */
 		Grid: DevKit.FormAccount.Grid;
 		/** The SidePanes of form Account */
@@ -289,7 +293,7 @@ declare namespace DevKit {
 			/** Type the company or business name. */
 			Name: DevKit.Controls.String;
 			/** Type the company or business name. */
-			Name_1: DevKit.Controls.String;
+			Name1: DevKit.Controls.String;
 			notescontrol: DevKit.Controls.Note;
 			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
 			OwnerId: DevKit.Controls.Lookup;
@@ -346,6 +350,8 @@ declare namespace DevKit {
 			navSocialprofiles: DevKit.Controls.NavigationItem,
 			navSubAccts: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			ChildAccounts: DevKit.Controls.Grid;
 			Contacts: DevKit.Controls.Grid;
@@ -366,6 +372,8 @@ declare namespace DevKit {
 		Body: DevKit.FormAccount_Mobile.Body;
 		/** The Navigation of form Account_Mobile */
 		Navigation: DevKit.FormAccount_Mobile.Navigation;
+		/** The Process of form Account_Mobile */
+		Process: DevKit.FormAccount_Mobile.Process;
 		/** The Grid of form Account_Mobile */
 		Grid: DevKit.FormAccount_Mobile.Grid;
 		/** The SidePanes of form Account_Mobile */
@@ -490,6 +498,8 @@ declare namespace DevKit {
 		interface QuickForm {
 			contactquickform: quickForm_contactquickform;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			accountcasessgrid: DevKit.Controls.Grid;
 			accountopportunitiesgrid: DevKit.Controls.Grid;
@@ -515,6 +525,8 @@ declare namespace DevKit {
 		Navigation: DevKit.FormAccount_for_Interactive_experience.Navigation;
 		/** The QuickForm of form Account_for_Interactive_experience */
 		QuickForm: DevKit.FormAccount_for_Interactive_experience.QuickForm;
+		/** The Process of form Account_for_Interactive_experience */
+		Process: DevKit.FormAccount_for_Interactive_experience.Process;
 		/** The Grid of form Account_for_Interactive_experience */
 		Grid: DevKit.FormAccount_for_Interactive_experience.Grid;
 		/** The SidePanes of form Account_for_Interactive_experience */
@@ -640,6 +652,8 @@ declare namespace DevKit {
 		interface QuickForm {
 			contactquickform: quickForm_contactquickform;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			RelatedCases: DevKit.Controls.Grid;
 		}
@@ -661,6 +675,8 @@ declare namespace DevKit {
 		Navigation: DevKit.FormAccount_for_Multisession_experience.Navigation;
 		/** The QuickForm of form Account_for_Multisession_experience */
 		QuickForm: DevKit.FormAccount_for_Multisession_experience.QuickForm;
+		/** The Process of form Account_for_Multisession_experience */
+		Process: DevKit.FormAccount_for_Multisession_experience.Process;
 		/** The Grid of form Account_for_Multisession_experience */
 		Grid: DevKit.FormAccount_for_Multisession_experience.Grid;
 		/** The SidePanes of form Account_for_Multisession_experience */
@@ -787,6 +803,8 @@ declare namespace DevKit {
 		interface QuickForm {
 			contactquickform: quickForm_contactquickform;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			accountopportunitiesgrid: DevKit.Controls.Grid;
 			ChildAccounts: DevKit.Controls.Grid;
@@ -810,6 +828,8 @@ declare namespace DevKit {
 		Navigation: DevKit.FormAccount_Sales_Insights.Navigation;
 		/** The QuickForm of form Account_Sales_Insights */
 		QuickForm: DevKit.FormAccount_Sales_Insights.QuickForm;
+		/** The Process of form Account_Sales_Insights */
+		Process: DevKit.FormAccount_Sales_Insights.Process;
 		/** The Grid of form Account_Sales_Insights */
 		Grid: DevKit.FormAccount_Sales_Insights.Grid;
 		/** The SidePanes of form Account_Sales_Insights */
@@ -833,6 +853,8 @@ declare namespace DevKit {
 			Tab: Tabs;
 			notescontrol: DevKit.Controls.Note;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormTimelineWallControl_Account_Main extends DevKit.IForm {
 		/**
@@ -847,6 +869,8 @@ declare namespace DevKit {
 		Body: DevKit.FormTimelineWallControl_Account_Main.Body;
 		/** The Header section of form TimelineWallControl_Account_Main */
 		Header: DevKit.FormTimelineWallControl_Account_Main.Header;
+		/** The Process of form TimelineWallControl_Account_Main */
+		Process: DevKit.FormTimelineWallControl_Account_Main.Process;
 		/** The SidePanes of form TimelineWallControl_Account_Main */
 		SidePanes: DevKit.SidePanes;
 	}

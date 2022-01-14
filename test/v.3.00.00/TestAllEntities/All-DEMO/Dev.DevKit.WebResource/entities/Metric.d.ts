@@ -42,6 +42,8 @@ declare namespace DevKit {
 			/** Status of the goal metric. */
 			StateCode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			MetricLineItemSubGrid: DevKit.Controls.Grid;
 		}
@@ -59,6 +61,8 @@ declare namespace DevKit {
 		Body: DevKit.FormMetric_Information.Body;
 		/** The Footer section of form Metric_Information */
 		Footer: DevKit.FormMetric_Information.Footer;
+		/** The Process of form Metric_Information */
+		Process: DevKit.FormMetric_Information.Process;
 		/** The Grid of form Metric_Information */
 		Grid: DevKit.FormMetric_Information.Grid;
 		/** The SidePanes of form Metric_Information */

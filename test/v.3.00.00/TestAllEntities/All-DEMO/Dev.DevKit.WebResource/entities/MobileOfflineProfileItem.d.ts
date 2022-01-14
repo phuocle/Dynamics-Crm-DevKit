@@ -29,6 +29,8 @@ declare namespace DevKit {
 			/** Mobile offline enabled entity */
 			SelectedEntityTypeCode: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			profileassociationgrid: DevKit.Controls.Grid;
 		}
@@ -44,6 +46,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Mobile_Offline_Profile_Item */
 		Body: DevKit.FormMobile_Offline_Profile_Item.Body;
+		/** The Process of form Mobile_Offline_Profile_Item */
+		Process: DevKit.FormMobile_Offline_Profile_Item.Process;
 		/** The Grid of form Mobile_Offline_Profile_Item */
 		Grid: DevKit.FormMobile_Offline_Profile_Item.Grid;
 		/** The SidePanes of form Mobile_Offline_Profile_Item */

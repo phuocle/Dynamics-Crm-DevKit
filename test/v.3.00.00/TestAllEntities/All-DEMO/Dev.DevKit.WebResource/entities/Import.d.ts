@@ -18,6 +18,8 @@ declare namespace DevKit {
 			/** Shows the reason code that explains the import job's status to identify the job's stage of the import processes, from transforming the data to completed. */
 			StatusCode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormImport_Information extends DevKit.IForm {
 		/**
@@ -30,6 +32,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Import_Information */
 		Body: DevKit.FormImport_Information.Body;
+		/** The Process of form Import_Information */
+		Process: DevKit.FormImport_Information.Process;
 		/** The SidePanes of form Import_Information */
 		SidePanes: DevKit.SidePanes;
 	}

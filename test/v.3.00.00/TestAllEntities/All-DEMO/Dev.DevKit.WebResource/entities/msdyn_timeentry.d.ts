@@ -31,6 +31,8 @@ declare namespace DevKit {
 			msdyn_timeentrysettingId: DevKit.Controls.Lookup;
 			notescontrol: DevKit.Controls.Note;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormEntry_Edit_Form extends DevKit.IForm {
 		/**
@@ -43,6 +45,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Entry_Edit_Form */
 		Body: DevKit.FormEntry_Edit_Form.Body;
+		/** The Process of form Entry_Edit_Form */
+		Process: DevKit.FormEntry_Edit_Form.Process;
 		/** The SidePanes of form Entry_Edit_Form */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -87,6 +91,8 @@ declare namespace DevKit {
 			/** Unique identifier for Work Orders associated with Time Entry. */
 			msdyn_WorkOrder: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_timeentry_Field_Service_Information extends DevKit.IForm {
 		/**
@@ -99,6 +105,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_timeentry_Field_Service_Information */
 		Body: DevKit.Formmsdyn_timeentry_Field_Service_Information.Body;
+		/** The Process of form msdyn_timeentry_Field_Service_Information */
+		Process: DevKit.Formmsdyn_timeentry_Field_Service_Information.Process;
 		/** The SidePanes of form msdyn_timeentry_Field_Service_Information */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -139,6 +147,8 @@ declare namespace DevKit {
 		interface Navigation {
 			nav_msdyn_msdyn_timeentry_msdyn_timeoffcalendar_timeEntry: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_timeentry_Information extends DevKit.IForm {
 		/**
@@ -153,6 +163,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyn_timeentry_Information.Body;
 		/** The Navigation of form msdyn_timeentry_Information */
 		Navigation: DevKit.Formmsdyn_timeentry_Information.Navigation;
+		/** The Process of form msdyn_timeentry_Information */
+		Process: DevKit.Formmsdyn_timeentry_Information.Process;
 		/** The SidePanes of form msdyn_timeentry_Information */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -182,6 +194,8 @@ declare namespace DevKit {
 			/** Select the time entry type. */
 			msdyn_type: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormRow_Edit_Form extends DevKit.IForm {
 		/**
@@ -194,6 +208,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Row_Edit_Form */
 		Body: DevKit.FormRow_Edit_Form.Body;
+		/** The Process of form Row_Edit_Form */
+		Process: DevKit.FormRow_Edit_Form.Process;
 		/** The SidePanes of form Row_Edit_Form */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -213,6 +229,8 @@ declare namespace DevKit {
 			msdyn_description: DevKit.Controls.String;
 			notescontrol: DevKit.Controls.Note;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormTESA_Time_Entry_Main_Form extends DevKit.IForm {
 		/**
@@ -225,6 +243,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form TESA_Time_Entry_Main_Form */
 		Body: DevKit.FormTESA_Time_Entry_Main_Form.Body;
+		/** The Process of form TESA_Time_Entry_Main_Form */
+		Process: DevKit.FormTESA_Time_Entry_Main_Form.Process;
 		/** The SidePanes of form TESA_Time_Entry_Main_Form */
 		SidePanes: DevKit.SidePanes;
 	}

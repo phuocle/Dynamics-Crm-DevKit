@@ -20,6 +20,8 @@ declare namespace DevKit {
 			nav_msdyn_msdyn_paymentterm_msdyn_purchaseorderbill_PaymentTerm: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_paymentterm_Information extends DevKit.IForm {
 		/**
@@ -36,6 +38,8 @@ declare namespace DevKit {
 		Footer: DevKit.Formmsdyn_paymentterm_Information.Footer;
 		/** The Navigation of form msdyn_paymentterm_Information */
 		Navigation: DevKit.Formmsdyn_paymentterm_Information.Navigation;
+		/** The Process of form msdyn_paymentterm_Information */
+		Process: DevKit.Formmsdyn_paymentterm_Information.Process;
 		/** The SidePanes of form msdyn_paymentterm_Information */
 		SidePanes: DevKit.SidePanes;
 	}

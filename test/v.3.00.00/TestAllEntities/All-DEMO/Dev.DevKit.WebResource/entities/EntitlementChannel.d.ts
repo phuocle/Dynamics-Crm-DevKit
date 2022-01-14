@@ -18,6 +18,8 @@ declare namespace DevKit {
 			/** Type the total number of entitlement terms. */
 			TotalTerms: DevKit.Controls.Decimal;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormEntitlement_Channel extends DevKit.IForm {
 		/**
@@ -30,6 +32,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Entitlement_Channel */
 		Body: DevKit.FormEntitlement_Channel.Body;
+		/** The Process of form Entitlement_Channel */
+		Process: DevKit.FormEntitlement_Channel.Process;
 		/** The SidePanes of form Entitlement_Channel */
 		SidePanes: DevKit.SidePanes;
 	}

@@ -46,6 +46,8 @@ declare namespace DevKit {
 			navSharePointSubSites: DevKit.Controls.NavigationItem,
 			navSubDocumentLocations: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormSharePointSite_Information extends DevKit.IForm {
 		/**
@@ -62,6 +64,8 @@ declare namespace DevKit {
 		Footer: DevKit.FormSharePointSite_Information.Footer;
 		/** The Navigation of form SharePointSite_Information */
 		Navigation: DevKit.FormSharePointSite_Information.Navigation;
+		/** The Process of form SharePointSite_Information */
+		Process: DevKit.FormSharePointSite_Information.Process;
 		/** The SidePanes of form SharePointSite_Information */
 		SidePanes: DevKit.SidePanes;
 	}

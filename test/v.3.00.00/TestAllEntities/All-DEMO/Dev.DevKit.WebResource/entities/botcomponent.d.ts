@@ -30,6 +30,8 @@ declare namespace DevKit {
 			/** Reuse Policy for the chatbot subcomponent */
 			ReusePolicy: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			ChildComponents: DevKit.Controls.Grid;
 			RelatedBotComponents: DevKit.Controls.Grid;
@@ -48,6 +50,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form botcomponent_Information */
 		Body: DevKit.Formbotcomponent_Information.Body;
+		/** The Process of form botcomponent_Information */
+		Process: DevKit.Formbotcomponent_Information.Process;
 		/** The Grid of form botcomponent_Information */
 		Grid: DevKit.Formbotcomponent_Information.Grid;
 		/** The SidePanes of form botcomponent_Information */

@@ -61,6 +61,8 @@ declare namespace DevKit {
 			nav_msdyn_msdyn_rmaproduct_msdyn_rtvproduct_RMAProduct: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_rmaproduct_Information extends DevKit.IForm {
 		/**
@@ -77,6 +79,8 @@ declare namespace DevKit {
 		Footer: DevKit.Formmsdyn_rmaproduct_Information.Footer;
 		/** The Navigation of form msdyn_rmaproduct_Information */
 		Navigation: DevKit.Formmsdyn_rmaproduct_Information.Navigation;
+		/** The Process of form msdyn_rmaproduct_Information */
+		Process: DevKit.Formmsdyn_rmaproduct_Information.Process;
 		/** The SidePanes of form msdyn_rmaproduct_Information */
 		SidePanes: DevKit.SidePanes;
 	}

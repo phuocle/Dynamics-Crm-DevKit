@@ -49,6 +49,8 @@ declare namespace DevKit {
 			msdyn_SAAutoFilterServiceTerritory: DevKit.Controls.Boolean;
 			msdyn_ScheduleBoardRefreshIntervalSeconds: DevKit.Controls.Integer;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_schedulingparameter_Information extends DevKit.IForm {
 		/**
@@ -61,6 +63,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_schedulingparameter_Information */
 		Body: DevKit.Formmsdyn_schedulingparameter_Information.Body;
+		/** The Process of form msdyn_schedulingparameter_Information */
+		Process: DevKit.Formmsdyn_schedulingparameter_Information.Process;
 		/** The SidePanes of form msdyn_schedulingparameter_Information */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -71,6 +75,8 @@ declare namespace DevKit {
 			/** The name of the custom entity. */
 			msdyn_name: DevKit.Controls.String;
 			notescontrol: DevKit.Controls.Note;
+		}
+		interface Process extends DevKit.Controls.IProcess {
 		}
 	}
 	class Formmsdyn_schedulingparameter_Information2 extends DevKit.IForm {
@@ -84,6 +90,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_schedulingparameter_Information2 */
 		Body: DevKit.Formmsdyn_schedulingparameter_Information2.Body;
+		/** The Process of form msdyn_schedulingparameter_Information2 */
+		Process: DevKit.Formmsdyn_schedulingparameter_Information2.Process;
 		/** The SidePanes of form msdyn_schedulingparameter_Information2 */
 		SidePanes: DevKit.SidePanes;
 	}

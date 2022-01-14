@@ -25,6 +25,8 @@ declare namespace DevKit {
 			nav_msdyn_msdyn_priority_msdyn_quotebookingsetup_Priority: DevKit.Controls.NavigationItem,
 			nav_msdyn_msdyn_priority_msdyn_workorder_Priority: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_priority_Information extends DevKit.IForm {
 		/**
@@ -41,6 +43,8 @@ declare namespace DevKit {
 		Footer: DevKit.Formmsdyn_priority_Information.Footer;
 		/** The Navigation of form msdyn_priority_Information */
 		Navigation: DevKit.Formmsdyn_priority_Information.Navigation;
+		/** The Process of form msdyn_priority_Information */
+		Process: DevKit.Formmsdyn_priority_Information.Process;
 		/** The SidePanes of form msdyn_priority_Information */
 		SidePanes: DevKit.SidePanes;
 	}

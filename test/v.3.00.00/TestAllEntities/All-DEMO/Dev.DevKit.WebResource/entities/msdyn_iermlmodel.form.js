@@ -18,7 +18,7 @@ var DevKit;
 			msdyn_name: {},
 			msdyn_retrainingconfiguration: {},
 			msdyn_trainingconfiguration: {},
-			msdyn_trainingconfiguration_1: {},
+			msdyn_trainingconfiguration1: {},
 			msdyn_UniqueName: {},
 			OwnerId: {},
 			statecode: {},
@@ -48,16 +48,6 @@ var DevKit;
 		form.Header = header;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
 		devKit.LoadOthers(formContext, form, defaultWebResourceName);

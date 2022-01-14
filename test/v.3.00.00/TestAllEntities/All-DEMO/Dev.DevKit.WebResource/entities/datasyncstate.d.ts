@@ -10,6 +10,8 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formdatasyncstate_Information extends DevKit.IForm {
 		/**
@@ -22,6 +24,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form datasyncstate_Information */
 		Body: DevKit.Formdatasyncstate_Information.Body;
+		/** The Process of form datasyncstate_Information */
+		Process: DevKit.Formdatasyncstate_Information.Process;
 		/** The SidePanes of form datasyncstate_Information */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -33,6 +37,8 @@ declare namespace DevKit {
 			name: DevKit.Controls.String;
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
+		}
+		interface Process extends DevKit.Controls.IProcess {
 		}
 	}
 	class Formdatasyncstate_Information2 extends DevKit.IForm {
@@ -46,6 +52,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form datasyncstate_Information2 */
 		Body: DevKit.Formdatasyncstate_Information2.Body;
+		/** The Process of form datasyncstate_Information2 */
+		Process: DevKit.Formdatasyncstate_Information2.Process;
 		/** The SidePanes of form datasyncstate_Information2 */
 		SidePanes: DevKit.SidePanes;
 	}

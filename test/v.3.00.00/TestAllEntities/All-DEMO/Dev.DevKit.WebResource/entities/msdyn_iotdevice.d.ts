@@ -65,17 +65,17 @@ declare namespace DevKit {
 			/** Device ID used to register with the IoT provider. */
 			msdyn_DeviceId: DevKit.Controls.String;
 			/** Device ID used to register with the IoT provider. */
-			msdyn_DeviceId_1: DevKit.Controls.String;
+			msdyn_DeviceId1: DevKit.Controls.String;
 			/** Device ID used to register with the IoT provider. */
-			msdyn_DeviceId_2: DevKit.Controls.String;
+			msdyn_DeviceId2: DevKit.Controls.String;
 			/** Reported Properties data for Device */
 			msdyn_DeviceReportedProperties: DevKit.Controls.String;
 			/** Reported Properties data for Device */
-			msdyn_DeviceReportedProperties_1: DevKit.Controls.String;
+			msdyn_DeviceReportedProperties1: DevKit.Controls.String;
 			/** The editable properties for a device. */
 			msdyn_DeviceSettings: DevKit.Controls.String;
 			/** The editable properties for a device. */
-			msdyn_DeviceSettings_1: DevKit.Controls.String;
+			msdyn_DeviceSettings1: DevKit.Controls.String;
 			/** The IoT Provider Instance to which this device belongs. */
 			msdyn_IoTProviderInstance: DevKit.Controls.Lookup;
 			/** Select “Yes” if this device is simulated for testing and development purposes. Select “No” if this is a real device.​ */
@@ -91,10 +91,12 @@ declare namespace DevKit {
 			/** Identifying Tags for the Device */
 			msdyn_Tags: DevKit.Controls.String;
 			/** Identifying Tags for the Device */
-			msdyn_Tags_1: DevKit.Controls.String;
+			msdyn_Tags1: DevKit.Controls.String;
 			/** The device's time zone. */
 			msdyn_Timezone: DevKit.Controls.Integer;
 			WebResource_PowerBIDevice: DevKit.Controls.WebResource;
+		}
+		interface Process extends DevKit.Controls.IProcess {
 		}
 		interface Grid {
 			AlertsGrid: DevKit.Controls.Grid;
@@ -116,6 +118,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyn_iotdevice_Information.Body;
 		/** The Header section of form msdyn_iotdevice_Information */
 		Header: DevKit.Formmsdyn_iotdevice_Information.Header;
+		/** The Process of form msdyn_iotdevice_Information */
+		Process: DevKit.Formmsdyn_iotdevice_Information.Process;
 		/** The Grid of form msdyn_iotdevice_Information */
 		Grid: DevKit.Formmsdyn_iotdevice_Information.Grid;
 		/** The SidePanes of form msdyn_iotdevice_Information */
@@ -151,6 +155,8 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			DeviceDataHistory: DevKit.Controls.Grid;
 		}
@@ -166,6 +172,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form IoT_Device_MFD */
 		Body: DevKit.FormIoT_Device_MFD.Body;
+		/** The Process of form IoT_Device_MFD */
+		Process: DevKit.FormIoT_Device_MFD.Process;
 		/** The Grid of form IoT_Device_MFD */
 		Grid: DevKit.FormIoT_Device_MFD.Grid;
 		/** The SidePanes of form IoT_Device_MFD */

@@ -38,6 +38,8 @@ declare namespace DevKit {
 			SourceStatus: DevKit.Controls.Integer;
 			sourcestatus_UC: DevKit.Controls.ActionCards;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormRollupField_Information extends DevKit.IForm {
 		/**
@@ -50,6 +52,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form RollupField_Information */
 		Body: DevKit.FormRollupField_Information.Body;
+		/** The Process of form RollupField_Information */
+		Process: DevKit.FormRollupField_Information.Process;
 		/** The SidePanes of form RollupField_Information */
 		SidePanes: DevKit.SidePanes;
 	}

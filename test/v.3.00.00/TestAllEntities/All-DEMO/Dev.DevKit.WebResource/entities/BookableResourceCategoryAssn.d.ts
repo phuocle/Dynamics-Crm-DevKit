@@ -17,6 +17,8 @@ declare namespace DevKit {
 			/** Choose a category to associate with the resource. */
 			ResourceCategory: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormBookableResourceCategoryAssn_Information extends DevKit.IForm {
 		/**
@@ -29,6 +31,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form BookableResourceCategoryAssn_Information */
 		Body: DevKit.FormBookableResourceCategoryAssn_Information.Body;
+		/** The Process of form BookableResourceCategoryAssn_Information */
+		Process: DevKit.FormBookableResourceCategoryAssn_Information.Process;
 		/** The SidePanes of form BookableResourceCategoryAssn_Information */
 		SidePanes: DevKit.SidePanes;
 	}

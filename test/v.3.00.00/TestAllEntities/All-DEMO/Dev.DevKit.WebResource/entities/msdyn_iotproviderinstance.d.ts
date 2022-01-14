@@ -34,6 +34,8 @@ declare namespace DevKit {
 			/** The URL of the provider instance. */
 			msdyn_URL: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			IoTProviderInstanceDevices: DevKit.Controls.Grid;
 		}
@@ -51,6 +53,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyn_iotproviderinstance_Information.Body;
 		/** The Header section of form msdyn_iotproviderinstance_Information */
 		Header: DevKit.Formmsdyn_iotproviderinstance_Information.Header;
+		/** The Process of form msdyn_iotproviderinstance_Information */
+		Process: DevKit.Formmsdyn_iotproviderinstance_Information.Process;
 		/** The Grid of form msdyn_iotproviderinstance_Information */
 		Grid: DevKit.Formmsdyn_iotproviderinstance_Information.Grid;
 		/** The SidePanes of form msdyn_iotproviderinstance_Information */

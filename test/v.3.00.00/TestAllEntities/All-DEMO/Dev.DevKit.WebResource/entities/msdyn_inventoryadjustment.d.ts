@@ -27,6 +27,8 @@ declare namespace DevKit {
 			nav_msdyn_msdyn_inventoryadjustment_msdyn_inventoryadjustmentproduct_InventoryAdjustment: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			inventoryadjustmentproductssubgrid: DevKit.Controls.Grid;
 		}
@@ -46,6 +48,8 @@ declare namespace DevKit {
 		Footer: DevKit.Formmsdyn_inventoryadjustment_Information.Footer;
 		/** The Navigation of form msdyn_inventoryadjustment_Information */
 		Navigation: DevKit.Formmsdyn_inventoryadjustment_Information.Navigation;
+		/** The Process of form msdyn_inventoryadjustment_Information */
+		Process: DevKit.Formmsdyn_inventoryadjustment_Information.Process;
 		/** The Grid of form msdyn_inventoryadjustment_Information */
 		Grid: DevKit.Formmsdyn_inventoryadjustment_Information.Grid;
 		/** The SidePanes of form msdyn_inventoryadjustment_Information */

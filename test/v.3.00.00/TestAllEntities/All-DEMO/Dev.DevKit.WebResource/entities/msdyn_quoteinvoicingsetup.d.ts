@@ -11,6 +11,8 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_quoteinvoicingsetup_Information extends DevKit.IForm {
 		/**
@@ -23,6 +25,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_quoteinvoicingsetup_Information */
 		Body: DevKit.Formmsdyn_quoteinvoicingsetup_Information.Body;
+		/** The Process of form msdyn_quoteinvoicingsetup_Information */
+		Process: DevKit.Formmsdyn_quoteinvoicingsetup_Information.Process;
 		/** The SidePanes of form msdyn_quoteinvoicingsetup_Information */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -59,6 +63,8 @@ declare namespace DevKit {
 		interface Navigation {
 			nav_msdyn_msdyn_quoteinvoicingsetup_msdyn_quoteinvoicingproduct_QuoteInvoicingSetup: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			GridProducts: DevKit.Controls.Grid;
 		}
@@ -76,6 +82,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyn_quoteinvoicingsetup_Information2.Body;
 		/** The Navigation of form msdyn_quoteinvoicingsetup_Information2 */
 		Navigation: DevKit.Formmsdyn_quoteinvoicingsetup_Information2.Navigation;
+		/** The Process of form msdyn_quoteinvoicingsetup_Information2 */
+		Process: DevKit.Formmsdyn_quoteinvoicingsetup_Information2.Process;
 		/** The Grid of form msdyn_quoteinvoicingsetup_Information2 */
 		Grid: DevKit.Formmsdyn_quoteinvoicingsetup_Information2.Grid;
 		/** The SidePanes of form msdyn_quoteinvoicingsetup_Information2 */

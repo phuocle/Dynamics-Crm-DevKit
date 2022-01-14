@@ -22,6 +22,8 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			ApplicationExtensions: DevKit.Controls.Grid;
 			SessionTemplates: DevKit.Controls.Grid;
@@ -38,6 +40,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_appconfiguration_Information */
 		Body: DevKit.Formmsdyn_appconfiguration_Information.Body;
+		/** The Process of form msdyn_appconfiguration_Information */
+		Process: DevKit.Formmsdyn_appconfiguration_Information.Process;
 		/** The Grid of form msdyn_appconfiguration_Information */
 		Grid: DevKit.Formmsdyn_appconfiguration_Information.Grid;
 		/** The SidePanes of form msdyn_appconfiguration_Information */
@@ -63,6 +67,8 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			Users: DevKit.Controls.Grid;
 		}
@@ -78,6 +84,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Users */
 		Body: DevKit.FormUsers.Body;
+		/** The Process of form Users */
+		Process: DevKit.FormUsers.Process;
 		/** The Grid of form Users */
 		Grid: DevKit.FormUsers.Grid;
 		/** The SidePanes of form Users */

@@ -10,6 +10,8 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formdatalakefolderpermission_Information extends DevKit.IForm {
 		/**
@@ -22,6 +24,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form datalakefolderpermission_Information */
 		Body: DevKit.Formdatalakefolderpermission_Information.Body;
+		/** The Process of form datalakefolderpermission_Information */
+		Process: DevKit.Formdatalakefolderpermission_Information.Process;
 		/** The SidePanes of form datalakefolderpermission_Information */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -33,6 +37,8 @@ declare namespace DevKit {
 			name: DevKit.Controls.String;
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
+		}
+		interface Process extends DevKit.Controls.IProcess {
 		}
 	}
 	class Formdatalakefolderpermission_Information2 extends DevKit.IForm {
@@ -46,6 +52,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form datalakefolderpermission_Information2 */
 		Body: DevKit.Formdatalakefolderpermission_Information2.Body;
+		/** The Process of form datalakefolderpermission_Information2 */
+		Process: DevKit.Formdatalakefolderpermission_Information2.Process;
 		/** The SidePanes of form datalakefolderpermission_Information2 */
 		SidePanes: DevKit.SidePanes;
 	}

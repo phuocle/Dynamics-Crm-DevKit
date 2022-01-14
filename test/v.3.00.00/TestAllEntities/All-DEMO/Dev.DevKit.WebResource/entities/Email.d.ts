@@ -36,7 +36,7 @@ declare namespace DevKit {
 			/** Type the greeting and message text of the email. */
 			Description: DevKit.Controls.String;
 			/** Type the greeting and message text of the email. */
-			Description_1: DevKit.Controls.String;
+			Description1: DevKit.Controls.String;
 			emailengagementactionscontrol: DevKit.Controls.EmailEngagement;
 			emailrecipientactivitycontrol: DevKit.Controls.EmailRecipient;
 			/** Enter the sender of the email. */
@@ -48,7 +48,7 @@ declare namespace DevKit {
 			/** Type a short description about the objective or primary topic of the email. */
 			Subject: DevKit.Controls.String;
 			/** Type a short description about the objective or primary topic of the email. */
-			Subject_1: DevKit.Controls.String;
+			Subject1: DevKit.Controls.String;
 			/** Enter the account, contact, lead, queue, or user recipients for the email. */
 			to: DevKit.Controls.Lookup;
 		}
@@ -57,6 +57,8 @@ declare namespace DevKit {
 			IsEmailFollowed: DevKit.Controls.Boolean;
 			/** For internal use only. Shows whether this email Reminder is Set. */
 			IsEmailReminderSet: DevKit.Controls.Boolean;
+		}
+		interface Process extends DevKit.Controls.IProcess {
 		}
 		interface Grid {
 			attachmentsGrid: DevKit.Controls.Grid;
@@ -77,6 +79,8 @@ declare namespace DevKit {
 		Footer: DevKit.FormBulk_Email.Footer;
 		/** The Header section of form Bulk_Email */
 		Header: DevKit.FormBulk_Email.Header;
+		/** The Process of form Bulk_Email */
+		Process: DevKit.FormBulk_Email.Process;
 		/** The Grid of form Bulk_Email */
 		Grid: DevKit.FormBulk_Email.Grid;
 		/** The SidePanes of form Bulk_Email */
@@ -135,6 +139,8 @@ declare namespace DevKit {
 			/** For internal use only. Shows whether this email Reminder is Set. */
 			IsEmailReminderSet: DevKit.Controls.Boolean;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			attachmentsGrid: DevKit.Controls.Grid;
 		}
@@ -154,6 +160,8 @@ declare namespace DevKit {
 		Footer: DevKit.FormEmail.Footer;
 		/** The Header section of form Email */
 		Header: DevKit.FormEmail.Header;
+		/** The Process of form Email */
+		Process: DevKit.FormEmail.Process;
 		/** The Grid of form Email */
 		Grid: DevKit.FormEmail.Grid;
 		/** The SidePanes of form Email */
@@ -198,6 +206,8 @@ declare namespace DevKit {
 			/** Enter the account, contact, lead, queue, or user recipients for the email. */
 			to: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			attachmentsGrid: DevKit.Controls.Grid;
 		}
@@ -215,6 +225,8 @@ declare namespace DevKit {
 		Body: DevKit.FormEmail_for_Interactive_experience.Body;
 		/** The Header section of form Email_for_Interactive_experience */
 		Header: DevKit.FormEmail_for_Interactive_experience.Header;
+		/** The Process of form Email_for_Interactive_experience */
+		Process: DevKit.FormEmail_for_Interactive_experience.Process;
 		/** The Grid of form Email_for_Interactive_experience */
 		Grid: DevKit.FormEmail_for_Interactive_experience.Grid;
 		/** The SidePanes of form Email_for_Interactive_experience */
@@ -274,6 +286,8 @@ declare namespace DevKit {
 			/** For internal use only. Shows whether this email Reminder is Set. */
 			IsEmailReminderSet: DevKit.Controls.Boolean;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			attachmentsGrid: DevKit.Controls.Grid;
 		}
@@ -293,6 +307,8 @@ declare namespace DevKit {
 		Footer: DevKit.FormEnhanced_Email.Footer;
 		/** The Header section of form Enhanced_Email */
 		Header: DevKit.FormEnhanced_Email.Header;
+		/** The Process of form Enhanced_Email */
+		Process: DevKit.FormEnhanced_Email.Process;
 		/** The Grid of form Enhanced_Email */
 		Grid: DevKit.FormEnhanced_Email.Grid;
 		/** The SidePanes of form Enhanced_Email */
@@ -341,6 +357,8 @@ declare namespace DevKit {
 			/** Enter the account, contact, lead, queue, or user recipients for the email. */
 			to: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			attachmentsGrid: DevKit.Controls.Grid;
 		}
@@ -358,6 +376,8 @@ declare namespace DevKit {
 		Body: DevKit.FormEmail_Wizard.Body;
 		/** The Header section of form Email_Wizard */
 		Header: DevKit.FormEmail_Wizard.Header;
+		/** The Process of form Email_Wizard */
+		Process: DevKit.FormEmail_Wizard.Process;
 		/** The Grid of form Email_Wizard */
 		Grid: DevKit.FormEmail_Wizard.Grid;
 		/** The SidePanes of form Email_Wizard */

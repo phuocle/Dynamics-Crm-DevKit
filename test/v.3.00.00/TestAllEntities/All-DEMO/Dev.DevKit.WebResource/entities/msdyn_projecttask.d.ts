@@ -61,6 +61,8 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_projecttask_Information extends DevKit.IForm {
 		/**
@@ -75,6 +77,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyn_projecttask_Information.Body;
 		/** The Header section of form msdyn_projecttask_Information */
 		Header: DevKit.Formmsdyn_projecttask_Information.Header;
+		/** The Process of form msdyn_projecttask_Information */
+		Process: DevKit.Formmsdyn_projecttask_Information.Process;
 		/** The SidePanes of form msdyn_projecttask_Information */
 		SidePanes: DevKit.SidePanes;
 	}

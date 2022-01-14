@@ -42,6 +42,8 @@ declare namespace DevKit {
 			msdyn_trackprogress: DevKit.Controls.Boolean;
 			notescontrol: DevKit.Controls.Note;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			AssociatedPlaybooks: DevKit.Controls.Grid;
 			PlaybookActivities: DevKit.Controls.Grid;
@@ -60,6 +62,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyn_playbooktemplate_Information.Body;
 		/** The Header section of form msdyn_playbooktemplate_Information */
 		Header: DevKit.Formmsdyn_playbooktemplate_Information.Header;
+		/** The Process of form msdyn_playbooktemplate_Information */
+		Process: DevKit.Formmsdyn_playbooktemplate_Information.Process;
 		/** The Grid of form msdyn_playbooktemplate_Information */
 		Grid: DevKit.Formmsdyn_playbooktemplate_Information.Grid;
 		/** The SidePanes of form msdyn_playbooktemplate_Information */

@@ -76,6 +76,8 @@ declare namespace DevKit {
 			/** Select whether the discounts entered on contract lines for this contract should be entered as a percentage or a fixed dollar value. */
 			UseDiscountAsPercentage: DevKit.Controls.Boolean;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			Contract_lines: DevKit.Controls.Grid;
 		}
@@ -93,6 +95,8 @@ declare namespace DevKit {
 		Body: DevKit.FormContract.Body;
 		/** The Header section of form Contract */
 		Header: DevKit.FormContract.Header;
+		/** The Process of form Contract */
+		Process: DevKit.FormContract.Process;
 		/** The Grid of form Contract */
 		Grid: DevKit.FormContract.Grid;
 		/** The SidePanes of form Contract */
@@ -176,6 +180,8 @@ declare namespace DevKit {
 			/** Select whether the discounts entered on contract lines for this contract should be entered as a percentage or a fixed dollar value. */
 			UseDiscountAsPercentage: DevKit.Controls.Boolean;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormContract_Information extends DevKit.IForm {
 		/**
@@ -188,6 +194,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Contract_Information */
 		Body: DevKit.FormContract_Information.Body;
+		/** The Process of form Contract_Information */
+		Process: DevKit.FormContract_Information.Process;
 		/** The SidePanes of form Contract_Information */
 		SidePanes: DevKit.SidePanes;
 	}

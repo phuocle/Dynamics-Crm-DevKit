@@ -84,26 +84,16 @@ var DevKit;
 		var _Purchase_Order_Business_Process = {
 			msdyn_ApprovalStatus: {},
 			msdyn_ApprovedRejectedBy: {},
-			msdyn_billdate: {},
-			msdyn_datereceived: {},
 			msdyn_PODate: {},
-			msdyn_receivedby: {},
 			msdyn_ReceivetoWarehouse: {},
-			msdyn_ShipVia: {},
 			msdyn_SystemStatus: {},
 			msdyn_SystemStatus_1: {},
 			msdyn_Vendor: {},
-			msdyn_vendorinvoicenumber: {},
 			msdyn_WorkOrder: {}
 		}
 		devKit.LoadFields(formContext, _Purchase_Order_Business_Process, "header_process_");
 		process.Purchase_Order_Business_Process = _Purchase_Order_Business_Process;
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var grid = {
 			PurchaseOrderProductsGrid: {},
 		};
@@ -218,26 +208,16 @@ var DevKit;
 		var _Purchase_Order_Business_Process = {
 			msdyn_ApprovalStatus: {},
 			msdyn_ApprovedRejectedBy: {},
-			msdyn_billdate: {},
-			msdyn_datereceived: {},
 			msdyn_PODate: {},
-			msdyn_receivedby: {},
 			msdyn_ReceivetoWarehouse: {},
-			msdyn_ShipVia: {},
 			msdyn_SystemStatus: {},
 			msdyn_SystemStatus_1: {},
 			msdyn_Vendor: {},
-			msdyn_vendorinvoicenumber: {},
 			msdyn_WorkOrder: {}
 		}
 		devKit.LoadFields(formContext, _Purchase_Order_Business_Process, "header_process_");
 		process.Purchase_Order_Business_Process = _Purchase_Order_Business_Process;
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var grid = {
 			BILLS: {},
 			PurchaseOrderProductsGrid: {},

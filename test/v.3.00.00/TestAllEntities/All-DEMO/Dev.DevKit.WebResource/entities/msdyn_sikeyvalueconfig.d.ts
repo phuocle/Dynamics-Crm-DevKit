@@ -8,6 +8,8 @@ declare namespace DevKit {
 			/** Key of the config record */
 			msdyn_ConfigKey: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_sikeyvalueconfig_Information extends DevKit.IForm {
 		/**
@@ -20,6 +22,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_sikeyvalueconfig_Information */
 		Body: DevKit.Formmsdyn_sikeyvalueconfig_Information.Body;
+		/** The Process of form msdyn_sikeyvalueconfig_Information */
+		Process: DevKit.Formmsdyn_sikeyvalueconfig_Information.Process;
 		/** The SidePanes of form msdyn_sikeyvalueconfig_Information */
 		SidePanes: DevKit.SidePanes;
 	}

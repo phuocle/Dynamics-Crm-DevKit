@@ -10,6 +10,8 @@ declare namespace DevKit {
 			msdyn_soundfileuploadusageterms: DevKit.Controls.ActionCards;
 			msdyn_uploadsoundfile: DevKit.Controls.File;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_soundfile_Information extends DevKit.IForm {
 		/**
@@ -22,6 +24,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_soundfile_Information */
 		Body: DevKit.Formmsdyn_soundfile_Information.Body;
+		/** The Process of form msdyn_soundfile_Information */
+		Process: DevKit.Formmsdyn_soundfile_Information.Process;
 		/** The SidePanes of form msdyn_soundfile_Information */
 		SidePanes: DevKit.SidePanes;
 	}

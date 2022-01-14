@@ -26,6 +26,8 @@ declare namespace DevKit {
 			/** Status message shown to the user viewing the current presence */
 			msdyn_presencestatustext: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_presence_Information extends DevKit.IForm {
 		/**
@@ -38,6 +40,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_presence_Information */
 		Body: DevKit.Formmsdyn_presence_Information.Body;
+		/** The Process of form msdyn_presence_Information */
+		Process: DevKit.Formmsdyn_presence_Information.Process;
 		/** The SidePanes of form msdyn_presence_Information */
 		SidePanes: DevKit.SidePanes;
 	}

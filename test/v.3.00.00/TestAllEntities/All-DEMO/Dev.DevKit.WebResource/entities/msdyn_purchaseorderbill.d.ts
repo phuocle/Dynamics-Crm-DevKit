@@ -34,6 +34,13 @@ declare namespace DevKit {
 			nav_msdyn_msdyn_purchaseorderbill_msdyn_purchaseorderreceiptproduct_PurchaseOrderBill: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface ProcessPurchase_Order_Business_Process {
+			msdyn_BillDate: DevKit.Controls.Date;
+			msdyn_VendorInvoiceNumber: DevKit.Controls.String;
+		}
+		interface Process extends DevKit.Controls.IProcess {
+			Purchase_Order_Business_Process: ProcessPurchase_Order_Business_Process;
+		}
 	}
 	class Formmsdyn_purchaseorderbill_Information extends DevKit.IForm {
 		/**
@@ -50,6 +57,8 @@ declare namespace DevKit {
 		Footer: DevKit.Formmsdyn_purchaseorderbill_Information.Footer;
 		/** The Navigation of form msdyn_purchaseorderbill_Information */
 		Navigation: DevKit.Formmsdyn_purchaseorderbill_Information.Navigation;
+		/** The Process of form msdyn_purchaseorderbill_Information */
+		Process: DevKit.Formmsdyn_purchaseorderbill_Information.Process;
 		/** The SidePanes of form msdyn_purchaseorderbill_Information */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -101,6 +110,13 @@ declare namespace DevKit {
 			nav_msdyn_msdyn_purchaseorderbill_msdyn_purchaseorderreceiptproduct_PurchaseOrderBill: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface ProcessPurchase_Order_Business_Process {
+			msdyn_BillDate: DevKit.Controls.Date;
+			msdyn_VendorInvoiceNumber: DevKit.Controls.String;
+		}
+		interface Process extends DevKit.Controls.IProcess {
+			Purchase_Order_Business_Process: ProcessPurchase_Order_Business_Process;
+		}
 	}
 	class FormPurchase_Order_Bill_Mobile extends DevKit.IForm {
 		/**
@@ -115,6 +131,8 @@ declare namespace DevKit {
 		Body: DevKit.FormPurchase_Order_Bill_Mobile.Body;
 		/** The Navigation of form Purchase_Order_Bill_Mobile */
 		Navigation: DevKit.FormPurchase_Order_Bill_Mobile.Navigation;
+		/** The Process of form Purchase_Order_Bill_Mobile */
+		Process: DevKit.FormPurchase_Order_Bill_Mobile.Process;
 		/** The SidePanes of form Purchase_Order_Bill_Mobile */
 		SidePanes: DevKit.SidePanes;
 	}

@@ -44,6 +44,8 @@ declare namespace DevKit {
 			/** Choose the record that the sync error relates to. */
 			RegardingObjectId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormSync_Error extends DevKit.IForm {
 		/**
@@ -58,6 +60,8 @@ declare namespace DevKit {
 		Body: DevKit.FormSync_Error.Body;
 		/** The Header section of form Sync_Error */
 		Header: DevKit.FormSync_Error.Header;
+		/** The Process of form Sync_Error */
+		Process: DevKit.FormSync_Error.Process;
 		/** The SidePanes of form Sync_Error */
 		SidePanes: DevKit.SidePanes;
 	}

@@ -20,6 +20,8 @@ declare namespace DevKit {
 			/** Shows the text of a post. If this is a manual post, it appears in plain text. If this is an auto post, it appears in XML. */
 			Text: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormPost_Information extends DevKit.IForm {
 		/**
@@ -32,6 +34,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Post_Information */
 		Body: DevKit.FormPost_Information.Body;
+		/** The Process of form Post_Information */
+		Process: DevKit.FormPost_Information.Process;
 		/** The SidePanes of form Post_Information */
 		SidePanes: DevKit.SidePanes;
 	}

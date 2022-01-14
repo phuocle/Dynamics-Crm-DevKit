@@ -33,6 +33,8 @@ declare namespace DevKit {
 			nav_msdyn_msdyn_quotebookingincident_msdyn_quotebookingservice_QuoteBookingIncident: DevKit.Controls.NavigationItem,
 			nav_msdyn_msdyn_quotebookingincident_msdyn_quotebookingservicetask_QuoteBookingIncident: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_quotebookingincident_Information extends DevKit.IForm {
 		/**
@@ -47,6 +49,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyn_quotebookingincident_Information.Body;
 		/** The Navigation of form msdyn_quotebookingincident_Information */
 		Navigation: DevKit.Formmsdyn_quotebookingincident_Information.Navigation;
+		/** The Process of form msdyn_quotebookingincident_Information */
+		Process: DevKit.Formmsdyn_quotebookingincident_Information.Process;
 		/** The SidePanes of form msdyn_quotebookingincident_Information */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -60,6 +64,8 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_quotebookingincident_Information2 extends DevKit.IForm {
 		/**
@@ -72,6 +78,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_quotebookingincident_Information2 */
 		Body: DevKit.Formmsdyn_quotebookingincident_Information2.Body;
+		/** The Process of form msdyn_quotebookingincident_Information2 */
+		Process: DevKit.Formmsdyn_quotebookingincident_Information2.Process;
 		/** The SidePanes of form msdyn_quotebookingincident_Information2 */
 		SidePanes: DevKit.SidePanes;
 	}

@@ -18,7 +18,7 @@ var DevKit;
 			msdyn_Description: {},
 			msdyn_EstimatedDuration: {},
 			msdyn_Inspection: {},
-			msdyn_Inspection_1: {},
+			msdyn_Inspection1: {},
 			msdyn_InspectionEnabled: {},
 			msdyn_name: {},
 			notescontrol: {},
@@ -38,11 +38,6 @@ var DevKit;
 		form.Footer = footer;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var navigation = {
 			nav_msdyn_msdyn_servicetasktype_msdyn_agreementbookingservicetask_TaskType: {},
 			nav_msdyn_msdyn_servicetasktype_msdyn_incidenttypeservicetask_TaskType: {},

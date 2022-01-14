@@ -67,6 +67,8 @@ declare namespace DevKit {
 			/** Shows the discount amount per unit if a specified volume is purchased. Configure volume discounts in the Product Catalog in the Settings area. */
 			VolumeDiscountAmount: DevKit.Controls.Money;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormOpportunityProduct_Field_Service_Information extends DevKit.IForm {
 		/**
@@ -79,6 +81,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form OpportunityProduct_Field_Service_Information */
 		Body: DevKit.FormOpportunityProduct_Field_Service_Information.Body;
+		/** The Process of form OpportunityProduct_Field_Service_Information */
+		Process: DevKit.FormOpportunityProduct_Field_Service_Information.Process;
 		/** The SidePanes of form OpportunityProduct_Field_Service_Information */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -120,6 +124,8 @@ declare namespace DevKit {
 			/** Shows the discount amount per unit if a specified volume is purchased. Configure volume discounts in the Product Catalog in the Settings area. */
 			VolumeDiscountAmount: DevKit.Controls.Money;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormOpportunityProduct_Information extends DevKit.IForm {
 		/**
@@ -132,6 +138,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form OpportunityProduct_Information */
 		Body: DevKit.FormOpportunityProduct_Information.Body;
+		/** The Process of form OpportunityProduct_Information */
+		Process: DevKit.FormOpportunityProduct_Information.Process;
 		/** The SidePanes of form OpportunityProduct_Information */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -182,6 +190,8 @@ declare namespace DevKit {
 			/** Shows the discount amount per unit if a specified volume is purchased. Configure volume discounts in the Product Catalog in the Settings area. */
 			VolumeDiscountAmount: DevKit.Controls.Money;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormOpportunityProduct extends DevKit.IForm {
 		/**
@@ -194,6 +204,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form OpportunityProduct */
 		Body: DevKit.FormOpportunityProduct.Body;
+		/** The Process of form OpportunityProduct */
+		Process: DevKit.FormOpportunityProduct.Process;
 		/** The SidePanes of form OpportunityProduct */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -232,27 +244,27 @@ declare namespace DevKit {
 			/** Enter the customer budget amount for this opportunity line. */
 			msdyn_BudgetAmount: DevKit.Controls.Money;
 			/** Enter the customer budget amount for this opportunity line. */
-			msdyn_BudgetAmount_1: DevKit.Controls.Money;
+			msdyn_BudgetAmount1: DevKit.Controls.Money;
 			/** The field to distinguish the order lines to be of project service or field service */
 			msdyn_LineType: DevKit.Controls.OptionSet;
 			/** Unique identifier of the opportunity with which the opportunity product is associated. */
 			OpportunityId: DevKit.Controls.Lookup;
 			/** Unique identifier of the opportunity with which the opportunity product is associated. */
-			OpportunityId_1: DevKit.Controls.Lookup;
+			OpportunityId1: DevKit.Controls.Lookup;
 			/** Shows the price per unit of the opportunity product, based on the price list specified on the parent opportunity. */
 			PricePerUnit: DevKit.Controls.Money;
 			/** Type a detailed product description or additional notes about the opportunity product, such as talking points or product updates, that will assist the sales team when they discuss the product with the customer. */
 			ProductDescription: DevKit.Controls.String;
 			/** Type a detailed product description or additional notes about the opportunity product, such as talking points or product updates, that will assist the sales team when they discuss the product with the customer. */
-			ProductDescription_1: DevKit.Controls.String;
+			ProductDescription1: DevKit.Controls.String;
 			/** Choose the product to include on the opportunity to link the product's pricing and other information to the opportunity. */
 			ProductId: DevKit.Controls.Lookup;
 			/** Product Type */
 			ProductTypeCode: DevKit.Controls.OptionSet;
 			/** Product Type */
-			ProductTypeCode_1: DevKit.Controls.OptionSet;
+			ProductTypeCode1: DevKit.Controls.OptionSet;
 			/** Product Type */
-			ProductTypeCode_2: DevKit.Controls.OptionSet;
+			ProductTypeCode2: DevKit.Controls.OptionSet;
 			/** Type the amount or quantity of the product the customer would like to purchase. */
 			Quantity: DevKit.Controls.Decimal;
 			/** Type the tax amount to be applied on the opportunity product. */
@@ -261,6 +273,8 @@ declare namespace DevKit {
 			UoMId: DevKit.Controls.Lookup;
 			/** Shows the discount amount per unit if a specified volume is purchased. Configure volume discounts in the Product Catalog in the Settings area. */
 			VolumeDiscountAmount: DevKit.Controls.Money;
+		}
+		interface Process extends DevKit.Controls.IProcess {
 		}
 	}
 	class FormOpportunityProduct_Project_Information extends DevKit.IForm {
@@ -274,10 +288,12 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form OpportunityProduct_Project_Information */
 		Body: DevKit.FormOpportunityProduct_Project_Information.Body;
+		/** The Process of form OpportunityProduct_Project_Information */
+		Process: DevKit.FormOpportunityProduct_Project_Information.Process;
 		/** The SidePanes of form OpportunityProduct_Project_Information */
 		SidePanes: DevKit.SidePanes;
 	}
-	namespace FormOpportunityProduct5 {
+	namespace FormOpportunityProduct2 {
 		interface tab_newOpportunityProduct_Sections {
 			opportunity_product_information: DevKit.Controls.Section;
 			pricing: DevKit.Controls.Section;
@@ -312,17 +328,17 @@ declare namespace DevKit {
 			UoMId: DevKit.Controls.Lookup;
 		}
 	}
-	class FormOpportunityProduct5 extends DevKit.IForm {
+	class FormOpportunityProduct2 extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form OpportunityProduct5 Quick Create
+		* DynamicsCrm.DevKit form OpportunityProduct2 Quick Create
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
 		constructor(executionContext: any, defaultWebResourceName?: string);
 		/** Utility functions/methods/objects for Dynamics 365 form */
 		Utility: DevKit.Utility;
-		/** The Body section of form OpportunityProduct5 */
-		Body: DevKit.FormOpportunityProduct5.Body;
+		/** The Body section of form OpportunityProduct2 */
+		Body: DevKit.FormOpportunityProduct2.Body;
 	}
 	class OpportunityProductApi {
 		/**

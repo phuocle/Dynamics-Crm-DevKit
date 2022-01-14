@@ -32,6 +32,8 @@ declare namespace DevKit {
 			navProcessSessions: DevKit.Controls.NavigationItem,
 			navRatings: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			RatingValues: DevKit.Controls.Grid;
 		}
@@ -49,6 +51,8 @@ declare namespace DevKit {
 		Body: DevKit.FormRatingModel_Information.Body;
 		/** The Navigation of form RatingModel_Information */
 		Navigation: DevKit.FormRatingModel_Information.Navigation;
+		/** The Process of form RatingModel_Information */
+		Process: DevKit.FormRatingModel_Information.Process;
 		/** The Grid of form RatingModel_Information */
 		Grid: DevKit.FormRatingModel_Information.Grid;
 		/** The SidePanes of form RatingModel_Information */
@@ -82,6 +86,8 @@ declare namespace DevKit {
 			navProcessSessions: DevKit.Controls.NavigationItem,
 			navRatings: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			RatingValues: DevKit.Controls.Grid;
 		}
@@ -99,6 +105,8 @@ declare namespace DevKit {
 		Body: DevKit.FormRatingModel_Omnichannel_Information.Body;
 		/** The Navigation of form RatingModel_Omnichannel_Information */
 		Navigation: DevKit.FormRatingModel_Omnichannel_Information.Navigation;
+		/** The Process of form RatingModel_Omnichannel_Information */
+		Process: DevKit.FormRatingModel_Omnichannel_Information.Process;
 		/** The Grid of form RatingModel_Omnichannel_Information */
 		Grid: DevKit.FormRatingModel_Omnichannel_Information.Grid;
 		/** The SidePanes of form RatingModel_Omnichannel_Information */

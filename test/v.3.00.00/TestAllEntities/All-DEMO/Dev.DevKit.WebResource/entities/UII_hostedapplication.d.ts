@@ -181,6 +181,8 @@ declare namespace DevKit {
 		interface Navigation {
 			nav_msdyusd_toolbarstrip_uii_hostedapplication: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			Languages: DevKit.Controls.Grid;
 		}
@@ -200,6 +202,8 @@ declare namespace DevKit {
 		Footer: DevKit.FormUII_hostedapplication_Information.Footer;
 		/** The Navigation of form UII_hostedapplication_Information */
 		Navigation: DevKit.FormUII_hostedapplication_Information.Navigation;
+		/** The Process of form UII_hostedapplication_Information */
+		Process: DevKit.FormUII_hostedapplication_Information.Process;
 		/** The Grid of form UII_hostedapplication_Information */
 		Grid: DevKit.FormUII_hostedapplication_Information.Grid;
 		/** The SidePanes of form UII_hostedapplication_Information */

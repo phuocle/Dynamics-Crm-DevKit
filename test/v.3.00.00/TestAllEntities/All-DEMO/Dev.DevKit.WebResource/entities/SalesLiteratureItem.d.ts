@@ -37,6 +37,8 @@ declare namespace DevKit {
 			/** Type the title or name that describes the document. */
 			Title: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormSalesLiteratureItem_Information extends DevKit.IForm {
 		/**
@@ -49,6 +51,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form SalesLiteratureItem_Information */
 		Body: DevKit.FormSalesLiteratureItem_Information.Body;
+		/** The Process of form SalesLiteratureItem_Information */
+		Process: DevKit.FormSalesLiteratureItem_Information.Process;
 		/** The SidePanes of form SalesLiteratureItem_Information */
 		SidePanes: DevKit.SidePanes;
 	}

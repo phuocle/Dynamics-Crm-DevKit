@@ -20,6 +20,8 @@ declare namespace DevKit {
 			/** Subject associated with the quote close activity. */
 			Subject: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormQuoteClose_Information extends DevKit.IForm {
 		/**
@@ -32,6 +34,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form QuoteClose_Information */
 		Body: DevKit.FormQuoteClose_Information.Body;
+		/** The Process of form QuoteClose_Information */
+		Process: DevKit.FormQuoteClose_Information.Process;
 		/** The SidePanes of form QuoteClose_Information */
 		SidePanes: DevKit.SidePanes;
 	}

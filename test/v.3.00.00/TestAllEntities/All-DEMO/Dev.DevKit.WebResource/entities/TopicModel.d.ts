@@ -41,6 +41,8 @@ declare namespace DevKit {
 			/** Shows the entity whose records are used for topic analysis. */
 			SourceEntity: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			modelconfigurations: DevKit.Controls.Grid;
 			topicmodelexecutionhistory: DevKit.Controls.Grid;
@@ -59,6 +61,8 @@ declare namespace DevKit {
 		Body: DevKit.FormTopicModel_Information.Body;
 		/** The Header section of form TopicModel_Information */
 		Header: DevKit.FormTopicModel_Information.Header;
+		/** The Process of form TopicModel_Information */
+		Process: DevKit.FormTopicModel_Information.Process;
 		/** The Grid of form TopicModel_Information */
 		Grid: DevKit.FormTopicModel_Information.Grid;
 		/** The SidePanes of form TopicModel_Information */

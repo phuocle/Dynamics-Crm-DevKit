@@ -18,6 +18,8 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_roleutilization_Information extends DevKit.IForm {
 		/**
@@ -30,6 +32,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_roleutilization_Information */
 		Body: DevKit.Formmsdyn_roleutilization_Information.Body;
+		/** The Process of form msdyn_roleutilization_Information */
+		Process: DevKit.Formmsdyn_roleutilization_Information.Process;
 		/** The SidePanes of form msdyn_roleutilization_Information */
 		SidePanes: DevKit.SidePanes;
 	}

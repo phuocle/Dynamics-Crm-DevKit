@@ -79,9 +79,9 @@ declare namespace DevKit {
 			/** Shows the percentage achieved against the target goal. */
 			Percentage: DevKit.Controls.Decimal;
 			/** Shows the percentage achieved against the target goal. */
-			Percentage_1: DevKit.Controls.Decimal;
+			Percentage1: DevKit.Controls.Decimal;
 			/** Shows the percentage achieved against the target goal. */
-			Percentage_2: DevKit.Controls.Decimal;
+			Percentage2: DevKit.Controls.Decimal;
 			/** Select whether the data should be rolled up only from the child goals. */
 			RollupOnlyFromChildGoals: DevKit.Controls.Boolean;
 			/** Choose the query that will be used to calculate the actual data for the goal (decimal). */
@@ -121,6 +121,8 @@ declare namespace DevKit {
 			/** Shows whether the goal is open, completed, or canceled. Completed and canceled goals are read-only and can't be edited. */
 			StateCode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			child_goals: DevKit.Controls.Grid;
 		}
@@ -138,6 +140,8 @@ declare namespace DevKit {
 		Body: DevKit.FormGoal_Information.Body;
 		/** The Footer section of form Goal_Information */
 		Footer: DevKit.FormGoal_Information.Footer;
+		/** The Process of form Goal_Information */
+		Process: DevKit.FormGoal_Information.Process;
 		/** The Grid of form Goal_Information */
 		Grid: DevKit.FormGoal_Information.Grid;
 		/** The SidePanes of form Goal_Information */

@@ -24,6 +24,8 @@ declare namespace DevKit {
 			/** Type the name of the team template. */
 			TeamTemplateName: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormTeamTemplate extends DevKit.IForm {
 		/**
@@ -36,6 +38,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form TeamTemplate */
 		Body: DevKit.FormTeamTemplate.Body;
+		/** The Process of form TeamTemplate */
+		Process: DevKit.FormTeamTemplate.Process;
 		/** The SidePanes of form TeamTemplate */
 		SidePanes: DevKit.SidePanes;
 	}

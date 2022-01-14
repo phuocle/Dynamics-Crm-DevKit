@@ -62,7 +62,7 @@ declare namespace DevKit {
 			/** Current cost for the product item. Used in price calculations. */
 			CurrentCost: DevKit.Controls.Money;
 			/** Current cost for the product item. Used in price calculations. */
-			CurrentCost_1: DevKit.Controls.Money;
+			CurrentCost1: DevKit.Controls.Money;
 			/** Default unit for the product. */
 			DefaultUoMId: DevKit.Controls.Lookup;
 			/** Default unit group for the product. */
@@ -86,7 +86,7 @@ declare namespace DevKit {
 			/** Specifies the parent product family hierarchy. */
 			ParentProductId: DevKit.Controls.Lookup;
 			/** Specifies the parent product family hierarchy. */
-			ParentProductId_1: DevKit.Controls.Lookup;
+			ParentProductId1: DevKit.Controls.Lookup;
 			/** List price for the product item. Used in price calculations. */
 			Price: DevKit.Controls.Money;
 			/** Select the default price list for the product. */
@@ -98,7 +98,7 @@ declare namespace DevKit {
 			/** Standard cost for the product item. Used in price calculations. */
 			StandardCost: DevKit.Controls.Money;
 			/** Standard cost for the product item. Used in price calculations. */
-			StandardCost_1: DevKit.Controls.Money;
+			StandardCost1: DevKit.Controls.Money;
 			/** Select a category for the product. */
 			SubjectId: DevKit.Controls.Lookup;
 			/** Date from which this product is valid. */
@@ -132,6 +132,8 @@ declare namespace DevKit {
 			navSalesLit: DevKit.Controls.NavigationItem,
 			navSubs: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			KnowledgeArticlesSubGrid: DevKit.Controls.Grid;
 			Price_List_Items: DevKit.Controls.Grid;
@@ -156,6 +158,8 @@ declare namespace DevKit {
 		Header: DevKit.FormProduct.Header;
 		/** The Navigation of form Product */
 		Navigation: DevKit.FormProduct.Navigation;
+		/** The Process of form Product */
+		Process: DevKit.FormProduct.Process;
 		/** The Grid of form Product */
 		Grid: DevKit.FormProduct.Grid;
 		/** The SidePanes of form Product */
@@ -251,6 +255,8 @@ declare namespace DevKit {
 			navPrices: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			Computed_Fields: DevKit.Controls.Grid;
 			Price_List_Items: DevKit.Controls.Grid;
@@ -274,6 +280,8 @@ declare namespace DevKit {
 		Header: DevKit.FormProduct_Project_Information.Header;
 		/** The Navigation of form Product_Project_Information */
 		Navigation: DevKit.FormProduct_Project_Information.Navigation;
+		/** The Process of form Product_Project_Information */
+		Process: DevKit.FormProduct_Project_Information.Process;
 		/** The Grid of form Product_Project_Information */
 		Grid: DevKit.FormProduct_Project_Information.Grid;
 		/** The SidePanes of form Product_Project_Information */

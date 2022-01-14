@@ -53,11 +53,11 @@ var DevKit;
 			notescontrol: {},
 			OriginatingLeadId: {},
 			ParentCustomerId: {},
-			ParentCustomerId_1: {},
-			ParentCustomerId_2: {},
+			ParentCustomerId1: {},
+			ParentCustomerId2: {},
 			PaymentTermsCode: {},
 			PreferredContactMethodCode: {},
-			PreferredContactMethodCode_1: {},
+			PreferredContactMethodCode1: {},
 			SpousesName: {},
 			subgrid_Entitlement: {},
 			TalkingPoints: {},
@@ -110,6 +110,16 @@ var DevKit;
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
 		var process = devKit.LoadProcess(formContext);
+		var _Case_to_Work_Order_Business_Process = {
+
+		}
+		devKit.LoadFields(formContext, _Case_to_Work_Order_Business_Process, "header_process_");
+		process.Case_to_Work_Order_Business_Process = _Case_to_Work_Order_Business_Process;
+		var _Phone_to_Case_Process = {
+
+		}
+		devKit.LoadFields(formContext, _Phone_to_Case_Process, "header_process_");
+		process.Phone_to_Case_Process = _Phone_to_Case_Process;
 		form.Process = process;
 		var quickForm = {
 			contactquickform: {
@@ -211,12 +221,17 @@ var DevKit;
 		body.Tab = tab;
 		form.Body = body;
 		var process = devKit.LoadProcess(formContext);
-		form.Process = process;
-		var quickForm = {
+		var _Case_to_Work_Order_Business_Process = {
 
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
+		}
+		devKit.LoadFields(formContext, _Case_to_Work_Order_Business_Process, "header_process_");
+		process.Case_to_Work_Order_Business_Process = _Case_to_Work_Order_Business_Process;
+		var _Phone_to_Case_Process = {
+
+		}
+		devKit.LoadFields(formContext, _Phone_to_Case_Process, "header_process_");
+		process.Phone_to_Case_Process = _Phone_to_Case_Process;
+		form.Process = process;
 		var grid = {
 			CONTACTS: {},
 			INVOICES: {},
@@ -278,7 +293,7 @@ var DevKit;
 			DoNotPostalMail: {},
 			DoNotSendMM: {},
 			EMailAddress1: {},
-			EMailAddress1_1: {},
+			EMailAddress11: {},
 			FamilyStatusCode: {},
 			Fax: {},
 			FirstName: {},
@@ -290,10 +305,10 @@ var DevKit;
 			notescontrol: {},
 			OriginatingLeadId: {},
 			ParentCustomerId: {},
-			ParentCustomerId_1: {},
+			ParentCustomerId1: {},
 			PaymentTermsCode: {},
 			PreferredContactMethodCode: {},
-			PreferredContactMethodCode_1: {},
+			PreferredContactMethodCode1: {},
 			SpousesName: {},
 			subgrid_Entitlement: {},
 			TransactionCurrencyId: {}
@@ -334,6 +349,16 @@ var DevKit;
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
 		var process = devKit.LoadProcess(formContext);
+		var _Case_to_Work_Order_Business_Process = {
+
+		}
+		devKit.LoadFields(formContext, _Case_to_Work_Order_Business_Process, "header_process_");
+		process.Case_to_Work_Order_Business_Process = _Case_to_Work_Order_Business_Process;
+		var _Phone_to_Case_Process = {
+
+		}
+		devKit.LoadFields(formContext, _Phone_to_Case_Process, "header_process_");
+		process.Phone_to_Case_Process = _Phone_to_Case_Process;
 		form.Process = process;
 		var quickForm = {
 			contactquickform: {
@@ -411,10 +436,10 @@ var DevKit;
 			notescontrol: {},
 			OriginatingLeadId: {},
 			ParentCustomerId: {},
-			ParentCustomerId_1: {},
+			ParentCustomerId1: {},
 			PaymentTermsCode: {},
 			PreferredContactMethodCode: {},
-			PreferredContactMethodCode_1: {},
+			PreferredContactMethodCode1: {},
 			RelatedCases: {},
 			SpousesName: {},
 			TransactionCurrencyId: {},
@@ -457,6 +482,16 @@ var DevKit;
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
 		var process = devKit.LoadProcess(formContext);
+		var _Case_to_Work_Order_Business_Process = {
+
+		}
+		devKit.LoadFields(formContext, _Case_to_Work_Order_Business_Process, "header_process_");
+		process.Case_to_Work_Order_Business_Process = _Case_to_Work_Order_Business_Process;
+		var _Phone_to_Case_Process = {
+
+		}
+		devKit.LoadFields(formContext, _Phone_to_Case_Process, "header_process_");
+		process.Phone_to_Case_Process = _Phone_to_Case_Process;
 		form.Process = process;
 		var quickForm = {
 			contactquickform: {
@@ -618,12 +653,17 @@ var DevKit;
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
 		var process = devKit.LoadProcess(formContext);
-		form.Process = process;
-		var quickForm = {
+		var _Case_to_Work_Order_Business_Process = {
 
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
+		}
+		devKit.LoadFields(formContext, _Case_to_Work_Order_Business_Process, "header_process_");
+		process.Case_to_Work_Order_Business_Process = _Case_to_Work_Order_Business_Process;
+		var _Phone_to_Case_Process = {
+
+		}
+		devKit.LoadFields(formContext, _Phone_to_Case_Process, "header_process_");
+		process.Phone_to_Case_Process = _Phone_to_Case_Process;
+		form.Process = process;
 		var grid = {
 			contactactivitiesgrid: {},
 		};
@@ -685,11 +725,11 @@ var DevKit;
 			notescontrol: {},
 			OriginatingLeadId: {},
 			ParentCustomerId: {},
-			ParentCustomerId_1: {},
-			ParentCustomerId_2: {},
+			ParentCustomerId1: {},
+			ParentCustomerId2: {},
 			PaymentTermsCode: {},
 			PreferredContactMethodCode: {},
-			PreferredContactMethodCode_1: {},
+			PreferredContactMethodCode1: {},
 			SpousesName: {},
 			TalkingPoints: {},
 			Telephone1: {},
@@ -728,6 +768,16 @@ var DevKit;
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
 		var process = devKit.LoadProcess(formContext);
+		var _Case_to_Work_Order_Business_Process = {
+
+		}
+		devKit.LoadFields(formContext, _Case_to_Work_Order_Business_Process, "header_process_");
+		process.Case_to_Work_Order_Business_Process = _Case_to_Work_Order_Business_Process;
+		var _Phone_to_Case_Process = {
+
+		}
+		devKit.LoadFields(formContext, _Phone_to_Case_Process, "header_process_");
+		process.Phone_to_Case_Process = _Phone_to_Case_Process;
 		form.Process = process;
 		var quickForm = {
 			contactquickform: {
@@ -790,17 +840,17 @@ var DevKit;
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
 		var process = devKit.LoadProcess(formContext);
+		var _Case_to_Work_Order_Business_Process = {
+
+		}
+		devKit.LoadFields(formContext, _Case_to_Work_Order_Business_Process, "header_process_");
+		process.Case_to_Work_Order_Business_Process = _Case_to_Work_Order_Business_Process;
+		var _Phone_to_Case_Process = {
+
+		}
+		devKit.LoadFields(formContext, _Phone_to_Case_Process, "header_process_");
+		process.Phone_to_Case_Process = _Phone_to_Case_Process;
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
 		devKit.LoadOthers(formContext, form, defaultWebResourceName);

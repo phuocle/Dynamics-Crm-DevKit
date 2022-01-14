@@ -26,6 +26,8 @@ declare namespace DevKit {
 		interface Navigation {
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_timeoffrequest_Information extends DevKit.IForm {
 		/**
@@ -42,6 +44,8 @@ declare namespace DevKit {
 		Footer: DevKit.Formmsdyn_timeoffrequest_Information.Footer;
 		/** The Navigation of form msdyn_timeoffrequest_Information */
 		Navigation: DevKit.Formmsdyn_timeoffrequest_Information.Navigation;
+		/** The Process of form msdyn_timeoffrequest_Information */
+		Process: DevKit.Formmsdyn_timeoffrequest_Information.Process;
 		/** The SidePanes of form msdyn_timeoffrequest_Information */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -96,6 +100,8 @@ declare namespace DevKit {
 		interface Navigation {
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormTime_Off_Request_Mobile extends DevKit.IForm {
 		/**
@@ -110,6 +116,8 @@ declare namespace DevKit {
 		Body: DevKit.FormTime_Off_Request_Mobile.Body;
 		/** The Navigation of form Time_Off_Request_Mobile */
 		Navigation: DevKit.FormTime_Off_Request_Mobile.Navigation;
+		/** The Process of form Time_Off_Request_Mobile */
+		Process: DevKit.FormTime_Off_Request_Mobile.Process;
 		/** The SidePanes of form Time_Off_Request_Mobile */
 		SidePanes: DevKit.SidePanes;
 	}

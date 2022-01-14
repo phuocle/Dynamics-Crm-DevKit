@@ -10,6 +10,8 @@ declare namespace DevKit {
 			/** Unique identifier of the user or team who owns the conversation record. */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_liveconversation_Information extends DevKit.IForm {
 		/**
@@ -22,6 +24,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_liveconversation_Information */
 		Body: DevKit.Formmsdyn_liveconversation_Information.Body;
+		/** The Process of form msdyn_liveconversation_Information */
+		Process: DevKit.Formmsdyn_liveconversation_Information.Process;
 		/** The SidePanes of form msdyn_liveconversation_Information */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -33,6 +37,8 @@ declare namespace DevKit {
 			msdyn_subject: DevKit.Controls.String;
 			/** Unique identifier of the user or team who owns the conversation record. */
 			OwnerId: DevKit.Controls.Lookup;
+		}
+		interface Process extends DevKit.Controls.IProcess {
 		}
 	}
 	class FormOngoing_Conversation_Main_Form extends DevKit.IForm {
@@ -46,6 +52,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Ongoing_Conversation_Main_Form */
 		Body: DevKit.FormOngoing_Conversation_Main_Form.Body;
+		/** The Process of form Ongoing_Conversation_Main_Form */
+		Process: DevKit.FormOngoing_Conversation_Main_Form.Process;
 		/** The SidePanes of form Ongoing_Conversation_Main_Form */
 		SidePanes: DevKit.SidePanes;
 	}

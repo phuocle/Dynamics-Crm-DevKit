@@ -35,6 +35,8 @@ declare namespace DevKit {
 			/** Reason for the status of the Analysis Component */
 			statuscode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_analysiscomponent_Information extends DevKit.IForm {
 		/**
@@ -47,6 +49,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_analysiscomponent_Information */
 		Body: DevKit.Formmsdyn_analysiscomponent_Information.Body;
+		/** The Process of form msdyn_analysiscomponent_Information */
+		Process: DevKit.Formmsdyn_analysiscomponent_Information.Process;
 		/** The SidePanes of form msdyn_analysiscomponent_Information */
 		SidePanes: DevKit.SidePanes;
 	}

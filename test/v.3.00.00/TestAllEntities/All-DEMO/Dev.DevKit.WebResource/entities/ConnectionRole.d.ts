@@ -29,6 +29,8 @@ declare namespace DevKit {
 			/** Name of the connection role. */
 			Name: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			reciprocalRoleGrid: DevKit.Controls.Grid;
 		}
@@ -44,6 +46,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form ConnectionRole_Information */
 		Body: DevKit.FormConnectionRole_Information.Body;
+		/** The Process of form ConnectionRole_Information */
+		Process: DevKit.FormConnectionRole_Information.Process;
 		/** The Grid of form ConnectionRole_Information */
 		Grid: DevKit.FormConnectionRole_Information.Grid;
 		/** The SidePanes of form ConnectionRole_Information */

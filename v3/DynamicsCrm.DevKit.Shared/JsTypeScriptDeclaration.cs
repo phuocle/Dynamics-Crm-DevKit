@@ -364,10 +364,10 @@ namespace DynamicsCrm.DevKit.Shared
                 _d_ts += form_d_ts_QuickForm;
             }
             var form_d_ts_Process = GetForm_d_ts_Process(form.FormXml);
-            if (form_d_ts_Process.Length > 0)
-            {
+            //if (form_d_ts_Process.Length > 0)
+            //{
                 _d_ts += form_d_ts_Process;
-            }
+            //}
             var form_d_ts_Grid = GetForm_d_ts_Grid(form.FormXml);
             if (form_d_ts_Grid.Length > 0)
             {
@@ -408,11 +408,11 @@ namespace DynamicsCrm.DevKit.Shared
                 _d_ts += $"\t\t/** The QuickForm of form {formName} */\r\n";
                 _d_ts += $"\t\tQuickForm: {@namespace}.Form{formName}.QuickForm;\r\n";
             }
-            if (form_d_ts_Process.Length > 0)
-            {
+            //if (form_d_ts_Process.Length > 0)
+            //{
                 _d_ts += $"\t\t/** The Process of form {formName} */\r\n";
                 _d_ts += $"\t\tProcess: {@namespace}.Form{formName}.Process;\r\n";
-            }
+            //}
             if (form_d_ts_Grid.Length > 0)
             {
                 _d_ts += $"\t\t/** The Grid of form {formName} */\r\n";
@@ -433,10 +433,9 @@ namespace DynamicsCrm.DevKit.Shared
             }
             else
             {
-                var count = FormNames.Count(x => x.StartsWith(formName)) + 1;
-                formName = $"{formName}{count}";
+                var count = FormNames.Count(x => x == formName) + 1;
                 FormNames.Add(formName);
-                return formName;
+                return $"{formName}{count}";
             }
         }
 
@@ -486,7 +485,6 @@ namespace DynamicsCrm.DevKit.Shared
             var code = string.Empty;
             XrmHelper.EntitiesProcessForm.AddIfNotExist(CrmServiceClient, EntityMetadata.LogicalName);
             var processes = XrmHelper.EntitiesProcessForm.Where(x => x.EntityLogicalName == EntityMetadata.LogicalName).OrderBy(x => x.Name);
-            if (processes.Count() == 0) return string.Empty;
             var _d_ts = string.Empty;
             var part1 = string.Empty;
             foreach (var process in processes)

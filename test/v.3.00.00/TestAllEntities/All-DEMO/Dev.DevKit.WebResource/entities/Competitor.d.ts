@@ -49,6 +49,8 @@ declare namespace DevKit {
 			navOpportunities: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			ChartTest: DevKit.Controls.Grid;
 			OpportunityCurrentFiscalYear: DevKit.Controls.Grid;
@@ -69,6 +71,8 @@ declare namespace DevKit {
 		Header: DevKit.FormCompetitor.Header;
 		/** The Navigation of form Competitor */
 		Navigation: DevKit.FormCompetitor.Navigation;
+		/** The Process of form Competitor */
+		Process: DevKit.FormCompetitor.Process;
 		/** The Grid of form Competitor */
 		Grid: DevKit.FormCompetitor.Grid;
 		/** The SidePanes of form Competitor */
@@ -139,6 +143,8 @@ declare namespace DevKit {
 			/** Type the website URL for the competitor. */
 			WebSiteUrl: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormCompetitor_Information extends DevKit.IForm {
 		/**
@@ -151,10 +157,12 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Competitor_Information */
 		Body: DevKit.FormCompetitor_Information.Body;
+		/** The Process of form Competitor_Information */
+		Process: DevKit.FormCompetitor_Information.Process;
 		/** The SidePanes of form Competitor_Information */
 		SidePanes: DevKit.SidePanes;
 	}
-	namespace FormCompetitor3 {
+	namespace FormCompetitor2 {
 		interface tab_newCompetitor_Sections {
 			quickCompetitor_column1: DevKit.Controls.Section;
 			quickCompetitor_column2: DevKit.Controls.Section;
@@ -182,17 +190,17 @@ declare namespace DevKit {
 			WebSiteUrl: DevKit.Controls.String;
 		}
 	}
-	class FormCompetitor3 extends DevKit.IForm {
+	class FormCompetitor2 extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Competitor3 Quick Create
+		* DynamicsCrm.DevKit form Competitor2 Quick Create
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
 		constructor(executionContext: any, defaultWebResourceName?: string);
 		/** Utility functions/methods/objects for Dynamics 365 form */
 		Utility: DevKit.Utility;
-		/** The Body section of form Competitor3 */
-		Body: DevKit.FormCompetitor3.Body;
+		/** The Body section of form Competitor2 */
+		Body: DevKit.FormCompetitor2.Body;
 	}
 	class CompetitorApi {
 		/**

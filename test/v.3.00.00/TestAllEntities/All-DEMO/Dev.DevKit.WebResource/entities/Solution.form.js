@@ -43,17 +43,17 @@ var DevKit;
 		body.Tab = tab;
 		form.Body = body;
 		var process = devKit.LoadProcess(formContext);
+		var _Case_to_Work_Order_Business_Process = {
+
+		}
+		devKit.LoadFields(formContext, _Case_to_Work_Order_Business_Process, "header_process_");
+		process.Case_to_Work_Order_Business_Process = _Case_to_Work_Order_Business_Process;
+		var _Phone_to_Case_Process = {
+
+		}
+		devKit.LoadFields(formContext, _Phone_to_Case_Process, "header_process_");
+		process.Phone_to_Case_Process = _Phone_to_Case_Process;
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
 		devKit.LoadOthers(formContext, form, defaultWebResourceName);

@@ -88,16 +88,6 @@ var DevKit;
 		form.Body = body;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
 		devKit.LoadOthers(formContext, form, defaultWebResourceName);
@@ -117,7 +107,7 @@ var DevKit;
 		var body = {
 			ActualDeliveryOn: {},
 			BaseAmount: {},
-			BaseAmount_1: {},
+			BaseAmount1: {},
 			ChargeableTransactionsGrid: {},
 			ComplimentaryTransactionsGrid: {},
 			ExtendedAmount: {},
@@ -136,7 +126,7 @@ var DevKit;
 			NonChargeableTransactionsGrid: {},
 			PricePerUnit: {},
 			ProductDescription: {},
-			ProductDescription_1: {},
+			ProductDescription1: {},
 			ProductId: {},
 			ProductTypeCode: {},
 			Quantity: {},
@@ -222,11 +212,6 @@ var DevKit;
 		form.Body = body;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var grid = {
 			ChargeableTransactionsGrid: {},
 			ComplimentaryTransactionsGrid: {},
@@ -235,11 +220,6 @@ var DevKit;
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
 		devKit.LoadOthers(formContext, form, defaultWebResourceName);

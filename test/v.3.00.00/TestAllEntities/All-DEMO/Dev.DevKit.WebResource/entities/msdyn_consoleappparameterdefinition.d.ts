@@ -15,6 +15,8 @@ No - value must be supplied when creating a template that uses this parameter */
 			/** The runtime type of the parameter value */
 			msdyn_RuntimeType: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_consoleappparameterdefinition_Information extends DevKit.IForm {
 		/**
@@ -27,6 +29,8 @@ No - value must be supplied when creating a template that uses this parameter */
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_consoleappparameterdefinition_Information */
 		Body: DevKit.Formmsdyn_consoleappparameterdefinition_Information.Body;
+		/** The Process of form msdyn_consoleappparameterdefinition_Information */
+		Process: DevKit.Formmsdyn_consoleappparameterdefinition_Information.Process;
 		/** The SidePanes of form msdyn_consoleappparameterdefinition_Information */
 		SidePanes: DevKit.SidePanes;
 	}

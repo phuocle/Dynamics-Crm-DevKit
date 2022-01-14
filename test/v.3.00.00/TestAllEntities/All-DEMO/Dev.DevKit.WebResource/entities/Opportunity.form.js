@@ -85,6 +85,23 @@ var DevKit;
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
 		var process = devKit.LoadProcess(formContext);
+		var _Lead_to_Opportunity_Sales_Process = {
+			CompleteFinalProposal: {},
+			CompleteInternalReview: {},
+			CustomerNeed: {},
+			DevelopProposal: {},
+			FileDebrief: {},
+			FinalDecisionDate: {},
+			IdentifyCompetitors: {},
+			IdentifyCustomerContacts: {},
+			IdentifyPursuitTeam: {},
+			PresentFinalProposal: {},
+			PresentProposal: {},
+			ProposedSolution: {},
+			SendThankYouNote: {}
+		}
+		devKit.LoadFields(formContext, _Lead_to_Opportunity_Sales_Process, "header_process_");
+		process.Lead_to_Opportunity_Sales_Process = _Lead_to_Opportunity_Sales_Process;
 		var _Opportunity_Sales_Process = {
 			BudgetAmount: {},
 			CompleteFinalProposal: {},
@@ -110,11 +127,6 @@ var DevKit;
 		devKit.LoadFields(formContext, _Opportunity_Sales_Process, "header_process_");
 		process.Opportunity_Sales_Process = _Opportunity_Sales_Process;
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var grid = {
 			Competitors: {},
 			opportunityproductsGrid: {},
@@ -229,6 +241,23 @@ var DevKit;
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
 		var process = devKit.LoadProcess(formContext);
+		var _Lead_to_Opportunity_Sales_Process = {
+			CompleteFinalProposal: {},
+			CompleteInternalReview: {},
+			CustomerNeed: {},
+			DevelopProposal: {},
+			FileDebrief: {},
+			FinalDecisionDate: {},
+			IdentifyCompetitors: {},
+			IdentifyCustomerContacts: {},
+			IdentifyPursuitTeam: {},
+			PresentFinalProposal: {},
+			PresentProposal: {},
+			ProposedSolution: {},
+			SendThankYouNote: {}
+		}
+		devKit.LoadFields(formContext, _Lead_to_Opportunity_Sales_Process, "header_process_");
+		process.Lead_to_Opportunity_Sales_Process = _Lead_to_Opportunity_Sales_Process;
 		var _Opportunity_Sales_Process = {
 			BudgetAmount: {},
 			CompleteFinalProposal: {},
@@ -254,11 +283,6 @@ var DevKit;
 		devKit.LoadFields(formContext, _Opportunity_Sales_Process, "header_process_");
 		process.Opportunity_Sales_Process = _Opportunity_Sales_Process;
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var grid = {
 			Competitors: {},
 			opportunityproductsGrid: {},
@@ -384,6 +408,23 @@ var DevKit;
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
 		var process = devKit.LoadProcess(formContext);
+		var _Lead_to_Opportunity_Sales_Process = {
+			CompleteFinalProposal: {},
+			CompleteInternalReview: {},
+			CustomerNeed: {},
+			DevelopProposal: {},
+			FileDebrief: {},
+			FinalDecisionDate: {},
+			IdentifyCompetitors: {},
+			IdentifyCustomerContacts: {},
+			IdentifyPursuitTeam: {},
+			PresentFinalProposal: {},
+			PresentProposal: {},
+			ProposedSolution: {},
+			SendThankYouNote: {}
+		}
+		devKit.LoadFields(formContext, _Lead_to_Opportunity_Sales_Process, "header_process_");
+		process.Lead_to_Opportunity_Sales_Process = _Lead_to_Opportunity_Sales_Process;
 		var _Opportunity_Sales_Process = {
 			BudgetAmount: {},
 			CompleteFinalProposal: {},
@@ -409,11 +450,6 @@ var DevKit;
 		devKit.LoadFields(formContext, _Opportunity_Sales_Process, "header_process_");
 		process.Opportunity_Sales_Process = _Opportunity_Sales_Process;
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var grid = {
 			Competitors: {},
 			DocumentsSubGrid: {},
@@ -533,6 +569,23 @@ var DevKit;
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
 		var process = devKit.LoadProcess(formContext);
+		var _Lead_to_Opportunity_Sales_Process = {
+			CompleteFinalProposal: {},
+			CompleteInternalReview: {},
+			CustomerNeed: {},
+			DevelopProposal: {},
+			FileDebrief: {},
+			FinalDecisionDate: {},
+			IdentifyCompetitors: {},
+			IdentifyCustomerContacts: {},
+			IdentifyPursuitTeam: {},
+			PresentFinalProposal: {},
+			PresentProposal: {},
+			ProposedSolution: {},
+			SendThankYouNote: {}
+		}
+		devKit.LoadFields(formContext, _Lead_to_Opportunity_Sales_Process, "header_process_");
+		process.Lead_to_Opportunity_Sales_Process = _Lead_to_Opportunity_Sales_Process;
 		var _Opportunity_Sales_Process = {
 			BudgetAmount: {},
 			CompleteFinalProposal: {},
@@ -558,11 +611,6 @@ var DevKit;
 		devKit.LoadFields(formContext, _Opportunity_Sales_Process, "header_process_");
 		process.Opportunity_Sales_Process = _Opportunity_Sales_Process;
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var grid = {
 			Competitors: {},
 			opportunityproductsGrid: {},
@@ -591,7 +639,7 @@ var DevKit;
 		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
-	DevKit.FormOpportunity = function(executionContext, defaultWebResourceName) {
+	DevKit.FormOpportunity2 = function(executionContext, defaultWebResourceName) {
 		var formContext = null;
 		if (executionContext !== undefined)
 		{

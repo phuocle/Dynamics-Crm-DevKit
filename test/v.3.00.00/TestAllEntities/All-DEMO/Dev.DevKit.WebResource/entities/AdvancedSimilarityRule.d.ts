@@ -32,6 +32,8 @@ declare namespace DevKit {
 			SourceEntity: DevKit.Controls.String;
 			sourceentity_UC: DevKit.Controls.ActionCards;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			textanalyticsentitymappings: DevKit.Controls.Grid;
 		}
@@ -47,6 +49,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form AdvancedSimilarityRule_Information */
 		Body: DevKit.FormAdvancedSimilarityRule_Information.Body;
+		/** The Process of form AdvancedSimilarityRule_Information */
+		Process: DevKit.FormAdvancedSimilarityRule_Information.Process;
 		/** The Grid of form AdvancedSimilarityRule_Information */
 		Grid: DevKit.FormAdvancedSimilarityRule_Information.Grid;
 		/** The SidePanes of form AdvancedSimilarityRule_Information */

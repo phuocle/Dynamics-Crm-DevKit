@@ -21,6 +21,8 @@ declare namespace DevKit {
 			navConnections: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_sequencetarget_Information extends DevKit.IForm {
 		/**
@@ -37,6 +39,8 @@ declare namespace DevKit {
 		Header: DevKit.Formmsdyn_sequencetarget_Information.Header;
 		/** The Navigation of form msdyn_sequencetarget_Information */
 		Navigation: DevKit.Formmsdyn_sequencetarget_Information.Navigation;
+		/** The Process of form msdyn_sequencetarget_Information */
+		Process: DevKit.Formmsdyn_sequencetarget_Information.Process;
 		/** The SidePanes of form msdyn_sequencetarget_Information */
 		SidePanes: DevKit.SidePanes;
 	}

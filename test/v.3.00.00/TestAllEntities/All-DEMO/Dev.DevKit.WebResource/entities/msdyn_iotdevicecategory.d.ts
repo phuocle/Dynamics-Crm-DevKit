@@ -37,6 +37,8 @@ declare namespace DevKit {
 			/** The name of the custom entity. */
 			msdyn_name: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			Commands: DevKit.Controls.Grid;
 			DevicePropertiesGrid: DevKit.Controls.Grid;
@@ -57,6 +59,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyn_iotdevicecategory_Information.Body;
 		/** The Header section of form msdyn_iotdevicecategory_Information */
 		Header: DevKit.Formmsdyn_iotdevicecategory_Information.Header;
+		/** The Process of form msdyn_iotdevicecategory_Information */
+		Process: DevKit.Formmsdyn_iotdevicecategory_Information.Process;
 		/** The Grid of form msdyn_iotdevicecategory_Information */
 		Grid: DevKit.Formmsdyn_iotdevicecategory_Information.Grid;
 		/** The SidePanes of form msdyn_iotdevicecategory_Information */

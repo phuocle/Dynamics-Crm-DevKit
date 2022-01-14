@@ -82,7 +82,7 @@ declare namespace DevKit {
 			/** Whether the Opportunity created when qualifying this Lead is for an Item- based or a Work-based sale */
 			msdyn_ordertype: DevKit.Controls.OptionSet;
 			/** Whether the Opportunity created when qualifying this Lead is for an Item- based or a Work-based sale */
-			msdyn_ordertype_1: DevKit.Controls.OptionSet;
+			msdyn_ordertype1: DevKit.Controls.OptionSet;
 			notescontrol: DevKit.Controls.Note;
 			/** Type the number of employees that work at the company associated with the lead, for use in marketing segmentation and demographic analysis. */
 			NumberOfEmployees: DevKit.Controls.Integer;

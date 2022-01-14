@@ -46,12 +46,12 @@ var formQuote = (function () {
 		OnSave: onSave
 	};
 })();
-var formQuote4 = (function () {
+var formQuote2 = (function () {
 	"use strict";
-	/** @type DevKit.FormQuote4 */
+	/** @type DevKit.FormQuote2 */
 	var form = null;
 	async function onLoad(executionContext) {
-		form = new DevKit.FormQuote4(executionContext);
+		form = new DevKit.FormQuote2(executionContext);
 
 	}
 	async function onSave(executionContext) {

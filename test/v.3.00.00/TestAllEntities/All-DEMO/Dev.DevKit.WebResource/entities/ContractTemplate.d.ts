@@ -22,6 +22,8 @@ declare namespace DevKit {
 			/** Specifies whether the discount is a percentage or a monetary amount in contracts based on the template. */
 			UseDiscountAsPercentage: DevKit.Controls.Boolean;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormContractTemplate_Information extends DevKit.IForm {
 		/**
@@ -34,6 +36,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form ContractTemplate_Information */
 		Body: DevKit.FormContractTemplate_Information.Body;
+		/** The Process of form ContractTemplate_Information */
+		Process: DevKit.FormContractTemplate_Information.Process;
 		/** The SidePanes of form ContractTemplate_Information */
 		SidePanes: DevKit.SidePanes;
 	}

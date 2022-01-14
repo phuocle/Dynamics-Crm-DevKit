@@ -33,6 +33,8 @@ declare namespace DevKit {
 			OwnerId: DevKit.Controls.Lookup;
 			regardingobject: DevKit.Controls.ActionCards;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormAnnotation_Information extends DevKit.IForm {
 		/**
@@ -45,6 +47,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Annotation_Information */
 		Body: DevKit.FormAnnotation_Information.Body;
+		/** The Process of form Annotation_Information */
+		Process: DevKit.FormAnnotation_Information.Process;
 		/** The SidePanes of form Annotation_Information */
 		SidePanes: DevKit.SidePanes;
 	}

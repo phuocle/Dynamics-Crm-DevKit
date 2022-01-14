@@ -46,6 +46,8 @@ declare namespace DevKit {
 			/** Type a short description about the objective or primary topic of the appointment. */
 			Subject: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			attachmentsGrid: DevKit.Controls.Grid;
 		}
@@ -63,6 +65,8 @@ declare namespace DevKit {
 		Body: DevKit.FormAppointment.Body;
 		/** The Header section of form Appointment */
 		Header: DevKit.FormAppointment.Header;
+		/** The Process of form Appointment */
+		Process: DevKit.FormAppointment.Process;
 		/** The Grid of form Appointment */
 		Grid: DevKit.FormAppointment.Grid;
 		/** The SidePanes of form Appointment */
@@ -104,7 +108,7 @@ declare namespace DevKit {
 			/** Unique identifier of the object with which the appointment is associated. */
 			RegardingObjectId: DevKit.Controls.Lookup;
 			/** Unique identifier of the object with which the appointment is associated. */
-			RegardingObjectId_1: DevKit.Controls.Lookup;
+			RegardingObjectId1: DevKit.Controls.Lookup;
 			/** Enter the account, contact, lead, user, or other equipment resources that are required to attend the appointment. */
 			requiredattendees: DevKit.Controls.Lookup;
 			/** Shows the expected duration of the appointment, in minutes. */
@@ -115,6 +119,8 @@ declare namespace DevKit {
 			ScheduledStart: DevKit.Controls.DateTime;
 			/** Type a short description about the objective or primary topic of the appointment. */
 			Subject: DevKit.Controls.String;
+		}
+		interface Process extends DevKit.Controls.IProcess {
 		}
 		interface Grid {
 			attachmentsGrid: DevKit.Controls.Grid;
@@ -133,6 +139,8 @@ declare namespace DevKit {
 		Body: DevKit.FormAppointment_for_Interactive_experience.Body;
 		/** The Header section of form Appointment_for_Interactive_experience */
 		Header: DevKit.FormAppointment_for_Interactive_experience.Header;
+		/** The Process of form Appointment_for_Interactive_experience */
+		Process: DevKit.FormAppointment_for_Interactive_experience.Process;
 		/** The Grid of form Appointment_for_Interactive_experience */
 		Grid: DevKit.FormAppointment_for_Interactive_experience.Grid;
 		/** The SidePanes of form Appointment_for_Interactive_experience */
@@ -183,6 +191,8 @@ declare namespace DevKit {
 			/** Type a short description about the objective or primary topic of the appointment. */
 			Subject: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			attachmentsGrid: DevKit.Controls.Grid;
 		}
@@ -200,6 +210,8 @@ declare namespace DevKit {
 		Body: DevKit.FormAppointment_Wizard.Body;
 		/** The Header section of form Appointment_Wizard */
 		Header: DevKit.FormAppointment_Wizard.Header;
+		/** The Process of form Appointment_Wizard */
+		Process: DevKit.FormAppointment_Wizard.Process;
 		/** The Grid of form Appointment_Wizard */
 		Grid: DevKit.FormAppointment_Wizard.Grid;
 		/** The SidePanes of form Appointment_Wizard */

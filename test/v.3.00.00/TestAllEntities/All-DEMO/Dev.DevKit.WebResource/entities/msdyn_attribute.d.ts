@@ -11,6 +11,8 @@ declare namespace DevKit {
 			/** Whether or not an automatically - generated attribute has been approved by your organanization's admin. */
 			msdyn_ReviewStatus: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			Attributevalues: DevKit.Controls.Grid;
 		}
@@ -26,6 +28,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_attribute_Information */
 		Body: DevKit.Formmsdyn_attribute_Information.Body;
+		/** The Process of form msdyn_attribute_Information */
+		Process: DevKit.Formmsdyn_attribute_Information.Process;
 		/** The Grid of form msdyn_attribute_Information */
 		Grid: DevKit.Formmsdyn_attribute_Information.Grid;
 		/** The SidePanes of form msdyn_attribute_Information */

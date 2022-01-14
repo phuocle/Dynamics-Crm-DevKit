@@ -106,6 +106,12 @@ declare namespace DevKit {
 			nav_msdyn_quote_msdyn_quoteinvoicingsetup_Quote: DevKit.Controls.NavigationItem,
 			navProducts: DevKit.Controls.NavigationItem
 		}
+		interface ProcessProject_Service_Project_Stages {
+
+		}
+		interface Process extends DevKit.Controls.IProcess {
+			Project_Service_Project_Stages: ProcessProject_Service_Project_Stages;
+		}
 		interface Grid {
 			quotedetailsGrid: DevKit.Controls.Grid;
 			servicesGrid: DevKit.Controls.Grid;
@@ -126,6 +132,8 @@ declare namespace DevKit {
 		Header: DevKit.FormQuote_Field_Service_Information.Header;
 		/** The Navigation of form Quote_Field_Service_Information */
 		Navigation: DevKit.FormQuote_Field_Service_Information.Navigation;
+		/** The Process of form Quote_Field_Service_Information */
+		Process: DevKit.FormQuote_Field_Service_Information.Process;
 		/** The Grid of form Quote_Field_Service_Information */
 		Grid: DevKit.FormQuote_Field_Service_Information.Grid;
 		/** The SidePanes of form Quote_Field_Service_Information */
@@ -222,11 +230,11 @@ declare namespace DevKit {
 			/** Shows the estimated gross margin after accounting for non-chargeable components. */
 			msdyn_AdjustedGrossMargin: DevKit.Controls.Decimal;
 			/** Shows the estimated gross margin after accounting for non-chargeable components. */
-			msdyn_AdjustedGrossMargin_1: DevKit.Controls.Decimal;
+			msdyn_AdjustedGrossMargin1: DevKit.Controls.Decimal;
 			/** Shows how the quote estimation of sales value and schedule compare to customer expectations on those parameters. Possible values are 1: Within Customer expectations, 2: Not Within Customer expectations, and 0: Customer expectations Not Available. */
 			msdyn_Competitive: DevKit.Controls.OptionSet;
 			/** Shows how the quote estimation of sales value and schedule compare to customer expectations on those parameters. Possible values are 1: Within Customer expectations, 2: Not Within Customer expectations, and 0: Customer expectations Not Available. */
-			msdyn_Competitive_1: DevKit.Controls.OptionSet;
+			msdyn_Competitive1: DevKit.Controls.OptionSet;
 			/** The organizational unit in charge of the contract. */
 			msdyn_ContractOrganizationalUnitId: DevKit.Controls.Lookup;
 			/** Shows the total customer budget for the quote, computed from all the quote lines. */
@@ -234,23 +242,23 @@ declare namespace DevKit {
 			/** Shows how the estimated sales value on the quote compares to customer budgets. Possible values are 1: Within Customer Budget, 2: Exceeds Customer Budget, 0: Budget Estimate Not Available */
 			msdyn_EstimatedBudget: DevKit.Controls.OptionSet;
 			/** Shows how the estimated sales value on the quote compares to customer budgets. Possible values are 1: Within Customer Budget, 2: Exceeds Customer Budget, 0: Budget Estimate Not Available */
-			msdyn_EstimatedBudget_1: DevKit.Controls.OptionSet;
+			msdyn_EstimatedBudget1: DevKit.Controls.OptionSet;
 			/** Estimated completion date, computed from the details of each quote line. */
 			msdyn_EstimatedCompletionRollUp: DevKit.Controls.Date;
 			/** Shows how the estimated schedule on the quote compares to customer expectations. Possible values are 1: Estimated To Finish Early, 2: Estimated To Finish Late, 3: Estimated To Finish On Schedule, and 0: Schedule Not Available. */
 			msdyn_EstimatedSchedule: DevKit.Controls.OptionSet;
 			/** Shows how the estimated schedule on the quote compares to customer expectations. Possible values are 1: Estimated To Finish Early, 2: Estimated To Finish Late, 3: Estimated To Finish On Schedule, and 0: Schedule Not Available. */
-			msdyn_EstimatedSchedule_1: DevKit.Controls.OptionSet;
+			msdyn_EstimatedSchedule1: DevKit.Controls.OptionSet;
 			/** Shows the estimated gross margin without accounting for non-chargeable components. */
 			msdyn_GrossMargin: DevKit.Controls.Decimal;
 			/** Shows the estimated gross margin without accounting for non-chargeable components. */
-			msdyn_GrossMargin_1: DevKit.Controls.Decimal;
+			msdyn_GrossMargin1: DevKit.Controls.Decimal;
 			/** Internal use only. */
 			msdyn_OrderType: DevKit.Controls.OptionSet;
 			/** Shows the estimated profitability of the quote. Possible values are Profitable, Not Profitable, and Profitability not available. */
 			msdyn_Profitability: DevKit.Controls.OptionSet;
 			/** Shows the estimated profitability of the quote. Possible values are Profitable, Not Profitable, and Profitability not available. */
-			msdyn_Profitability_1: DevKit.Controls.OptionSet;
+			msdyn_Profitability1: DevKit.Controls.OptionSet;
 			msdyn_TotalChargeableCostRollup: DevKit.Controls.Money;
 			msdyn_TotalNonchargeableCostRollup: DevKit.Controls.Money;
 			/** Type a descriptive name for the quote. */
@@ -267,7 +275,7 @@ declare namespace DevKit {
 			/** Enter the delivery date requested by the customer for all products in the quote. */
 			RequestDeliveryBy: DevKit.Controls.Date;
 			/** Enter the delivery date requested by the customer for all products in the quote. */
-			RequestDeliveryBy_1: DevKit.Controls.Date;
+			RequestDeliveryBy1: DevKit.Controls.Date;
 			/** Shows the version number of the quote for revision history tracking. */
 			RevisionNumber: DevKit.Controls.Integer;
 			/** Select a shipping method for deliveries sent to this address. */
@@ -279,7 +287,7 @@ declare namespace DevKit {
 			/** Shows the total amount due, calculated as the sum of the products, discounts, freight, and taxes for the quote. */
 			TotalAmount: DevKit.Controls.Money;
 			/** Shows the total amount due, calculated as the sum of the products, discounts, freight, and taxes for the quote. */
-			TotalAmount_1: DevKit.Controls.Money;
+			TotalAmount1: DevKit.Controls.Money;
 			/** Value of the Total Amount in base currency. */
 			TotalAmount_Base: DevKit.Controls.Money;
 			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
@@ -297,6 +305,12 @@ declare namespace DevKit {
 			navOrders: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem,
 			navProducts: DevKit.Controls.NavigationItem
+		}
+		interface ProcessProject_Service_Project_Stages {
+
+		}
+		interface Process extends DevKit.Controls.IProcess {
+			Project_Service_Project_Stages: ProcessProject_Service_Project_Stages;
 		}
 		interface Grid {
 			costRevenueDistribution: DevKit.Controls.Grid;
@@ -323,6 +337,8 @@ declare namespace DevKit {
 		Header: DevKit.FormQuote_Project_Information.Header;
 		/** The Navigation of form Quote_Project_Information */
 		Navigation: DevKit.FormQuote_Project_Information.Navigation;
+		/** The Process of form Quote_Project_Information */
+		Process: DevKit.FormQuote_Project_Information.Process;
 		/** The Grid of form Quote_Project_Information */
 		Grid: DevKit.FormQuote_Project_Information.Grid;
 		/** The SidePanes of form Quote_Project_Information */
@@ -423,6 +439,12 @@ declare namespace DevKit {
 			nav_msdyn_quote_msdyn_quoteinvoicingsetup_Quote: DevKit.Controls.NavigationItem,
 			navProducts: DevKit.Controls.NavigationItem
 		}
+		interface ProcessProject_Service_Project_Stages {
+
+		}
+		interface Process extends DevKit.Controls.IProcess {
+			Project_Service_Project_Stages: ProcessProject_Service_Project_Stages;
+		}
 		interface Grid {
 			quotedetailsGrid: DevKit.Controls.Grid;
 		}
@@ -442,12 +464,14 @@ declare namespace DevKit {
 		Header: DevKit.FormQuote.Header;
 		/** The Navigation of form Quote */
 		Navigation: DevKit.FormQuote.Navigation;
+		/** The Process of form Quote */
+		Process: DevKit.FormQuote.Process;
 		/** The Grid of form Quote */
 		Grid: DevKit.FormQuote.Grid;
 		/** The SidePanes of form Quote */
 		SidePanes: DevKit.SidePanes;
 	}
-	namespace FormQuote4 {
+	namespace FormQuote2 {
 		interface tab_newQuote_Sections {
 			quickQuote_salesinformation: DevKit.Controls.Section;
 			quickQuote_summary: DevKit.Controls.Section;
@@ -476,17 +500,17 @@ declare namespace DevKit {
 			TransactionCurrencyId: DevKit.Controls.Lookup;
 		}
 	}
-	class FormQuote4 extends DevKit.IForm {
+	class FormQuote2 extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Quote4 Quick Create
+		* DynamicsCrm.DevKit form Quote2 Quick Create
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
 		constructor(executionContext: any, defaultWebResourceName?: string);
 		/** Utility functions/methods/objects for Dynamics 365 form */
 		Utility: DevKit.Utility;
-		/** The Body section of form Quote4 */
-		Body: DevKit.FormQuote4.Body;
+		/** The Body section of form Quote2 */
+		Body: DevKit.FormQuote2.Body;
 	}
 	class QuoteApi {
 		/**

@@ -22,12 +22,12 @@ var DevKit;
 			msdyn_Category: {},
 			msdyn_ConnectionState: {},
 			msdyn_DeviceId: {},
-			msdyn_DeviceId_1: {},
-			msdyn_DeviceId_2: {},
+			msdyn_DeviceId1: {},
+			msdyn_DeviceId2: {},
 			msdyn_DeviceReportedProperties: {},
-			msdyn_DeviceReportedProperties_1: {},
+			msdyn_DeviceReportedProperties1: {},
 			msdyn_DeviceSettings: {},
-			msdyn_DeviceSettings_1: {},
+			msdyn_DeviceSettings1: {},
 			msdyn_IoTProviderInstance: {},
 			msdyn_IsSimulated: {},
 			msdyn_LastActivityTime: {},
@@ -35,7 +35,7 @@ var DevKit;
 			msdyn_RegistrationMessage: {},
 			msdyn_RegistrationStatus: {},
 			msdyn_Tags: {},
-			msdyn_Tags_1: {},
+			msdyn_Tags1: {},
 			msdyn_Timezone: {},
 			RegistrationHistory: {},
 			WebResource_PowerBIDevice: {}
@@ -87,11 +87,6 @@ var DevKit;
 		form.Header = header;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var grid = {
 			AlertsGrid: {},
 			CommandsGrid: {},
@@ -100,11 +95,6 @@ var DevKit;
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
 		devKit.LoadOthers(formContext, form, defaultWebResourceName);
@@ -147,21 +137,11 @@ var DevKit;
 		form.Body = body;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var grid = {
 			DeviceDataHistory: {},
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
 		devKit.LoadOthers(formContext, form, defaultWebResourceName);

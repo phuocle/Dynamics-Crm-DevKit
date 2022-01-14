@@ -21,6 +21,8 @@ declare namespace DevKit {
 			/** Select the activity that the property group is associated with. */
 			RegardingTypeCode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			propertiesGrid: DevKit.Controls.Grid;
 		}
@@ -36,6 +38,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Channel_Property_Group */
 		Body: DevKit.FormChannel_Property_Group.Body;
+		/** The Process of form Channel_Property_Group */
+		Process: DevKit.FormChannel_Property_Group.Process;
 		/** The Grid of form Channel_Property_Group */
 		Grid: DevKit.FormChannel_Property_Group.Grid;
 		/** The SidePanes of form Channel_Property_Group */

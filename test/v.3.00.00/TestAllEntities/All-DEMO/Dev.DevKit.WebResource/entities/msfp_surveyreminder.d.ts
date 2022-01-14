@@ -10,6 +10,8 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsfp_surveyreminder_Information extends DevKit.IForm {
 		/**
@@ -22,6 +24,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msfp_surveyreminder_Information */
 		Body: DevKit.Formmsfp_surveyreminder_Information.Body;
+		/** The Process of form msfp_surveyreminder_Information */
+		Process: DevKit.Formmsfp_surveyreminder_Information.Process;
 		/** The SidePanes of form msfp_surveyreminder_Information */
 		SidePanes: DevKit.SidePanes;
 	}

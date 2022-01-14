@@ -23,6 +23,8 @@ declare namespace DevKit {
 			nav_msdyn_msdyn_shipvia_msdyn_rtv_ShipVia: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_shipvia_Information extends DevKit.IForm {
 		/**
@@ -39,6 +41,8 @@ declare namespace DevKit {
 		Footer: DevKit.Formmsdyn_shipvia_Information.Footer;
 		/** The Navigation of form msdyn_shipvia_Information */
 		Navigation: DevKit.Formmsdyn_shipvia_Information.Navigation;
+		/** The Process of form msdyn_shipvia_Information */
+		Process: DevKit.Formmsdyn_shipvia_Information.Process;
 		/** The SidePanes of form msdyn_shipvia_Information */
 		SidePanes: DevKit.SidePanes;
 	}

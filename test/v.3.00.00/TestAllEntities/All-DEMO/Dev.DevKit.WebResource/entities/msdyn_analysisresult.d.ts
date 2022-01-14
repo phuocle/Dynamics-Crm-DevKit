@@ -32,6 +32,8 @@ declare namespace DevKit {
 			msdyn_SolutionHealthMessage: DevKit.Controls.String;
 			msdyn_Type: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			AnalysisResultDetails: DevKit.Controls.Grid;
 		}
@@ -49,6 +51,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyn_analysisresult_Information.Body;
 		/** The Header section of form msdyn_analysisresult_Information */
 		Header: DevKit.Formmsdyn_analysisresult_Information.Header;
+		/** The Process of form msdyn_analysisresult_Information */
+		Process: DevKit.Formmsdyn_analysisresult_Information.Process;
 		/** The Grid of form msdyn_analysisresult_Information */
 		Grid: DevKit.Formmsdyn_analysisresult_Information.Grid;
 		/** The SidePanes of form msdyn_analysisresult_Information */

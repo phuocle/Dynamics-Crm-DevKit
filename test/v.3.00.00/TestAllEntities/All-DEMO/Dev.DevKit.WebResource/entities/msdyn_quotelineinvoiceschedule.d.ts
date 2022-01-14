@@ -23,6 +23,8 @@ declare namespace DevKit {
 			/** Status of the Quote Line Invoice Schedule */
 			statecode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_quotelineinvoiceschedule_Project_Information extends DevKit.IForm {
 		/**
@@ -35,6 +37,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_quotelineinvoiceschedule_Project_Information */
 		Body: DevKit.Formmsdyn_quotelineinvoiceschedule_Project_Information.Body;
+		/** The Process of form msdyn_quotelineinvoiceschedule_Project_Information */
+		Process: DevKit.Formmsdyn_quotelineinvoiceschedule_Project_Information.Process;
 		/** The SidePanes of form msdyn_quotelineinvoiceschedule_Project_Information */
 		SidePanes: DevKit.SidePanes;
 	}

@@ -46,6 +46,8 @@ declare namespace DevKit {
 		interface Navigation {
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_inventoryjournal_Information extends DevKit.IForm {
 		/**
@@ -62,6 +64,8 @@ declare namespace DevKit {
 		Footer: DevKit.Formmsdyn_inventoryjournal_Information.Footer;
 		/** The Navigation of form msdyn_inventoryjournal_Information */
 		Navigation: DevKit.Formmsdyn_inventoryjournal_Information.Navigation;
+		/** The Process of form msdyn_inventoryjournal_Information */
+		Process: DevKit.Formmsdyn_inventoryjournal_Information.Process;
 		/** The SidePanes of form msdyn_inventoryjournal_Information */
 		SidePanes: DevKit.SidePanes;
 	}

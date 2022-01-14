@@ -46,7 +46,7 @@ declare namespace DevKit {
 			/** Data sent from the device about the alert. */
 			msdyn_AlertData: DevKit.Controls.String;
 			/** Data sent from the device about the alert. */
-			msdyn_AlertData_1: DevKit.Controls.String;
+			msdyn_AlertData1: DevKit.Controls.String;
 			/** The suggested priority score for this alert. */
 			msdyn_alertpriorityscore: DevKit.Controls.Integer;
 			/** The time the alert was issued. */
@@ -63,9 +63,9 @@ declare namespace DevKit {
 			/** The IoT device for which this alert was raised. */
 			msdyn_Device: DevKit.Controls.Lookup;
 			/** The IoT device for which this alert was raised. */
-			msdyn_Device_1: DevKit.Controls.Lookup;
+			msdyn_Device1: DevKit.Controls.Lookup;
 			/** The IoT device for which this alert was raised. */
-			msdyn_Device_2: DevKit.Controls.Lookup;
+			msdyn_Device2: DevKit.Controls.Lookup;
 			/** The ID of the IoT device that sent the alert. */
 			msdyn_DeviceID: DevKit.Controls.String;
 			/** Reference to a primary alert. This field is inferred if Primary Alert Token is set. */
@@ -104,8 +104,6 @@ declare namespace DevKit {
 			msdyn_CustomerAsset: DevKit.Controls.Lookup;
 			/** A description for the alert. */
 			msdyn_Description: DevKit.Controls.String;
-			/** Owner Id */
-			OwnerId: DevKit.Controls.Lookup;
 		}
 		interface Process extends DevKit.Controls.IProcess {
 			CFS_IoT_Alert_Process_Flow: ProcessCFS_IoT_Alert_Process_Flow;

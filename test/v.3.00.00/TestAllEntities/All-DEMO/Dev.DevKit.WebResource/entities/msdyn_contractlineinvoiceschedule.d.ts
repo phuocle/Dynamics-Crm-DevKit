@@ -25,6 +25,8 @@ declare namespace DevKit {
 			/** Enter the date before or on which the transaction will be picked for invoicing by the invoice creation job. */
 			msdyn_transactioncutoffdate: DevKit.Controls.Date;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_contractlineinvoiceschedule_Project_Information extends DevKit.IForm {
 		/**
@@ -37,6 +39,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_contractlineinvoiceschedule_Project_Information */
 		Body: DevKit.Formmsdyn_contractlineinvoiceschedule_Project_Information.Body;
+		/** The Process of form msdyn_contractlineinvoiceschedule_Project_Information */
+		Process: DevKit.Formmsdyn_contractlineinvoiceschedule_Project_Information.Process;
 		/** The SidePanes of form msdyn_contractlineinvoiceschedule_Project_Information */
 		SidePanes: DevKit.SidePanes;
 	}

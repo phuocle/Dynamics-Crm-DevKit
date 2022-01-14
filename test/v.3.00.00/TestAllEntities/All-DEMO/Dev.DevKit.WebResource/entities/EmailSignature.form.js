@@ -17,11 +17,11 @@ var DevKit;
 		var body = {
 			IsDefault: {},
 			LanguageCode: {},
-			LanguageCode_1: {},
+			LanguageCode1: {},
 			OwnerId: {},
 			SafeHtml: {},
 			Title: {},
-			Title_1: {}
+			Title1: {}
 		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
@@ -43,16 +43,6 @@ var DevKit;
 		form.Header = header;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
 		devKit.LoadOthers(formContext, form, defaultWebResourceName);

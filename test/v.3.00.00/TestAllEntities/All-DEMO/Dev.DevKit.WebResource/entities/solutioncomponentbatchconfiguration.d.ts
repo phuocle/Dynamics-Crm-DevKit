@@ -12,6 +12,8 @@ declare namespace DevKit {
 			PrimaryEntity: DevKit.Controls.Lookup;
 			RelatedEntity: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formsolutioncomponentbatchconfiguration_Information extends DevKit.IForm {
 		/**
@@ -24,6 +26,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form solutioncomponentbatchconfiguration_Information */
 		Body: DevKit.Formsolutioncomponentbatchconfiguration_Information.Body;
+		/** The Process of form solutioncomponentbatchconfiguration_Information */
+		Process: DevKit.Formsolutioncomponentbatchconfiguration_Information.Process;
 		/** The SidePanes of form solutioncomponentbatchconfiguration_Information */
 		SidePanes: DevKit.SidePanes;
 	}

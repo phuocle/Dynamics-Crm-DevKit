@@ -14,7 +14,7 @@ declare namespace DevKit {
 			/** Reported Properties from the Device */
 			msdyn_DeviceReportedProperties: DevKit.Controls.String;
 			/** Reported Properties from the Device */
-			msdyn_DeviceReportedProperties_1: DevKit.Controls.String;
+			msdyn_DeviceReportedProperties1: DevKit.Controls.String;
 			/** The time of last device data pull */
 			msdyn_LastActivityTime: DevKit.Controls.DateTime;
 			/** The name of the custom entity. */
@@ -25,6 +25,8 @@ declare namespace DevKit {
 			msdyn_StatusReason: DevKit.Controls.String;
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
+		}
+		interface Process extends DevKit.Controls.IProcess {
 		}
 	}
 	class Formmsdyn_iotdevicedatahistory_Information extends DevKit.IForm {
@@ -38,6 +40,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_iotdevicedatahistory_Information */
 		Body: DevKit.Formmsdyn_iotdevicedatahistory_Information.Body;
+		/** The Process of form msdyn_iotdevicedatahistory_Information */
+		Process: DevKit.Formmsdyn_iotdevicedatahistory_Information.Process;
 		/** The SidePanes of form msdyn_iotdevicedatahistory_Information */
 		SidePanes: DevKit.SidePanes;
 	}

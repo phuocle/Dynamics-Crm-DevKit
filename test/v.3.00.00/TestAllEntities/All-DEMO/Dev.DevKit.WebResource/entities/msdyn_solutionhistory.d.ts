@@ -26,6 +26,8 @@ declare namespace DevKit {
 		interface Footer extends DevKit.Controls.IFooter {
 			msdyn_activityid: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_solutionhistory_Information extends DevKit.IForm {
 		/**
@@ -42,6 +44,8 @@ declare namespace DevKit {
 		Footer: DevKit.Formmsdyn_solutionhistory_Information.Footer;
 		/** The Header section of form msdyn_solutionhistory_Information */
 		Header: DevKit.Formmsdyn_solutionhistory_Information.Header;
+		/** The Process of form msdyn_solutionhistory_Information */
+		Process: DevKit.Formmsdyn_solutionhistory_Information.Process;
 		/** The SidePanes of form msdyn_solutionhistory_Information */
 		SidePanes: DevKit.SidePanes;
 	}

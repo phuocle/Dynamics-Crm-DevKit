@@ -20,9 +20,9 @@ var DevKit;
 			Duration: {},
 			EndTime: {},
 			msdyn_ActualArrivalTime: {},
-			msdyn_ActualArrivalTime_1: {},
+			msdyn_ActualArrivalTime1: {},
 			msdyn_ActualTravelDuration: {},
-			msdyn_ActualTravelDuration_1: {},
+			msdyn_ActualTravelDuration1: {},
 			msdyn_AgreementBookingDate: {},
 			msdyn_AllowOverlapping: {},
 			msdyn_BookingMethod: {},
@@ -36,9 +36,9 @@ var DevKit;
 			msdyn_Signature: {},
 			msdyn_TimeGroupDetailSelected: {},
 			msdyn_WorkOrder: {},
-			msdyn_WorkOrder_1: {},
-			msdyn_WorkOrder_2: {},
-			msdyn_WorkOrder_3: {},
+			msdyn_WorkOrder1: {},
+			msdyn_WorkOrder2: {},
+			msdyn_WorkOrder3: {},
 			Name: {},
 			notescontrol: {},
 			Resource: {},
@@ -87,11 +87,6 @@ var DevKit;
 		form.Body = body;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var grid = {
 			msdyn_quicknotescontrol: {},
 		};
@@ -200,11 +195,6 @@ var DevKit;
 		form.Body = body;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var grid = {
 			msdyn_quicknotescontrol: {},
 			TIMESTAMPS: {},

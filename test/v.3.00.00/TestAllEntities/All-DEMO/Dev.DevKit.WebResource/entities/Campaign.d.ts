@@ -80,6 +80,8 @@ declare namespace DevKit {
 			/** Select the type of the campaign. */
 			TypeCode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			Activities: DevKit.Controls.Grid;
 			Leads: DevKit.Controls.Grid;
@@ -100,6 +102,8 @@ declare namespace DevKit {
 		Body: DevKit.FormCampaign.Body;
 		/** The Header section of form Campaign */
 		Header: DevKit.FormCampaign.Header;
+		/** The Process of form Campaign */
+		Process: DevKit.FormCampaign.Process;
 		/** The Grid of form Campaign */
 		Grid: DevKit.FormCampaign.Grid;
 		/** The SidePanes of form Campaign */

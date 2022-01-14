@@ -51,6 +51,8 @@ declare namespace DevKit {
 			/** Person who is the receiver of the activity. */
 			To: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsfp_surveyinvite_Information extends DevKit.IForm {
 		/**
@@ -65,6 +67,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsfp_surveyinvite_Information.Body;
 		/** The Header section of form msfp_surveyinvite_Information */
 		Header: DevKit.Formmsfp_surveyinvite_Information.Header;
+		/** The Process of form msfp_surveyinvite_Information */
+		Process: DevKit.Formmsfp_surveyinvite_Information.Process;
 		/** The SidePanes of form msfp_surveyinvite_Information */
 		SidePanes: DevKit.SidePanes;
 	}

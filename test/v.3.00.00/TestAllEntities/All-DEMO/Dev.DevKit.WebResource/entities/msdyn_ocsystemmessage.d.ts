@@ -31,6 +31,8 @@ declare namespace DevKit {
 			/** List of all available channels. */
 			msdyn_streamsource: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			MessageTemplate_LocalizationDataGrid: DevKit.Controls.Grid;
 		}
@@ -46,6 +48,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_ocsystemmessage_Information */
 		Body: DevKit.Formmsdyn_ocsystemmessage_Information.Body;
+		/** The Process of form msdyn_ocsystemmessage_Information */
+		Process: DevKit.Formmsdyn_ocsystemmessage_Information.Process;
 		/** The Grid of form msdyn_ocsystemmessage_Information */
 		Grid: DevKit.Formmsdyn_ocsystemmessage_Information.Grid;
 		/** The SidePanes of form msdyn_ocsystemmessage_Information */
@@ -77,6 +81,8 @@ declare namespace DevKit {
 			/** Stores the list of event types for system messages. */
 			msdyn_systemmessageeventtype: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			MessageTemplate_LocalizationDataGrid: DevKit.Controls.Grid;
 		}
@@ -92,6 +98,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_ocsystemmessage_Information2 */
 		Body: DevKit.Formmsdyn_ocsystemmessage_Information2.Body;
+		/** The Process of form msdyn_ocsystemmessage_Information2 */
+		Process: DevKit.Formmsdyn_ocsystemmessage_Information2.Process;
 		/** The Grid of form msdyn_ocsystemmessage_Information2 */
 		Grid: DevKit.Formmsdyn_ocsystemmessage_Information2.Grid;
 		/** The SidePanes of form msdyn_ocsystemmessage_Information2 */

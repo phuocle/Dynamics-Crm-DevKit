@@ -23,6 +23,8 @@ declare namespace DevKit {
 			/** Text for the announcement. */
 			NewsArticle: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormBusinessUnitNewsArticle_Information extends DevKit.IForm {
 		/**
@@ -35,6 +37,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form BusinessUnitNewsArticle_Information */
 		Body: DevKit.FormBusinessUnitNewsArticle_Information.Body;
+		/** The Process of form BusinessUnitNewsArticle_Information */
+		Process: DevKit.FormBusinessUnitNewsArticle_Information.Process;
 		/** The SidePanes of form BusinessUnitNewsArticle_Information */
 		SidePanes: DevKit.SidePanes;
 	}

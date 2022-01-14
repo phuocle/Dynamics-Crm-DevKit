@@ -34,6 +34,8 @@ declare namespace DevKit {
 			/** Information about whether the document template is active. */
 			Status: DevKit.Controls.Boolean;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormDocumentTemplate_Information extends DevKit.IForm {
 		/**
@@ -46,6 +48,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form DocumentTemplate_Information */
 		Body: DevKit.FormDocumentTemplate_Information.Body;
+		/** The Process of form DocumentTemplate_Information */
+		Process: DevKit.FormDocumentTemplate_Information.Process;
 		/** The SidePanes of form DocumentTemplate_Information */
 		SidePanes: DevKit.SidePanes;
 	}

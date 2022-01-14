@@ -35,6 +35,8 @@ declare namespace DevKit {
 			nav_msdyn_msdyn_timegroupdetail_bookableresourcebooking_TimeGroupDetailSelected: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_timegroupdetail_Information extends DevKit.IForm {
 		/**
@@ -49,6 +51,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyn_timegroupdetail_Information.Body;
 		/** The Navigation of form msdyn_timegroupdetail_Information */
 		Navigation: DevKit.Formmsdyn_timegroupdetail_Information.Navigation;
+		/** The Process of form msdyn_timegroupdetail_Information */
+		Process: DevKit.Formmsdyn_timegroupdetail_Information.Process;
 		/** The SidePanes of form msdyn_timegroupdetail_Information */
 		SidePanes: DevKit.SidePanes;
 	}

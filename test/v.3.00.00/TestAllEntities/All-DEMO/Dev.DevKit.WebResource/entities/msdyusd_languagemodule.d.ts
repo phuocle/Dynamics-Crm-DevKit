@@ -24,6 +24,8 @@ declare namespace DevKit {
 			/** Status of the Language Module */
 			statecode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyusd_languagemodule_Information extends DevKit.IForm {
 		/**
@@ -38,6 +40,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyusd_languagemodule_Information.Body;
 		/** The Footer section of form msdyusd_languagemodule_Information */
 		Footer: DevKit.Formmsdyusd_languagemodule_Information.Footer;
+		/** The Process of form msdyusd_languagemodule_Information */
+		Process: DevKit.Formmsdyusd_languagemodule_Information.Process;
 		/** The SidePanes of form msdyusd_languagemodule_Information */
 		SidePanes: DevKit.SidePanes;
 	}

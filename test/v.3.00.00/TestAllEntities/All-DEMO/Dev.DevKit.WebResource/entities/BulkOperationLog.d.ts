@@ -18,6 +18,8 @@ declare namespace DevKit {
 			/** Choose the account, contact, lead, or list that the bulk operation log item applies to. */
 			RegardingObjectId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormBulkOperationLog_Information extends DevKit.IForm {
 		/**
@@ -30,6 +32,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form BulkOperationLog_Information */
 		Body: DevKit.FormBulkOperationLog_Information.Body;
+		/** The Process of form BulkOperationLog_Information */
+		Process: DevKit.FormBulkOperationLog_Information.Process;
 		/** The SidePanes of form BulkOperationLog_Information */
 		SidePanes: DevKit.SidePanes;
 	}

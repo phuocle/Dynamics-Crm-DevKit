@@ -31,6 +31,8 @@ declare namespace DevKit {
 			/** Indicates if the custom API is enabled as a workflow action */
 			WorkflowSdkStepEnabled: DevKit.Controls.Boolean;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormCustomAPI_Information extends DevKit.IForm {
 		/**
@@ -43,6 +45,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form CustomAPI_Information */
 		Body: DevKit.FormCustomAPI_Information.Body;
+		/** The Process of form CustomAPI_Information */
+		Process: DevKit.FormCustomAPI_Information.Process;
 		/** The SidePanes of form CustomAPI_Information */
 		SidePanes: DevKit.SidePanes;
 	}

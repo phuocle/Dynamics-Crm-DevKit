@@ -16,6 +16,8 @@ declare namespace DevKit {
 			/** Process Name. */
 			Name: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormOpportunitySalesProcesses extends DevKit.IForm {
 		/**
@@ -28,6 +30,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form OpportunitySalesProcesses */
 		Body: DevKit.FormOpportunitySalesProcesses.Body;
+		/** The Process of form OpportunitySalesProcesses */
+		Process: DevKit.FormOpportunitySalesProcesses.Process;
 		/** The SidePanes of form OpportunitySalesProcesses */
 		SidePanes: DevKit.SidePanes;
 	}

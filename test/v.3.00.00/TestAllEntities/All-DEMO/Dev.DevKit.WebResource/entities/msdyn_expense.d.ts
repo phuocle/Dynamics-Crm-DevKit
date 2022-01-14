@@ -38,6 +38,8 @@ declare namespace DevKit {
 		interface Navigation {
 			nav_msdyn_msdyn_expense_msdyn_expensereceipt_ExpenseId: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_expense_Information extends DevKit.IForm {
 		/**
@@ -52,6 +54,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyn_expense_Information.Body;
 		/** The Navigation of form msdyn_expense_Information */
 		Navigation: DevKit.Formmsdyn_expense_Information.Navigation;
+		/** The Process of form msdyn_expense_Information */
+		Process: DevKit.Formmsdyn_expense_Information.Process;
 		/** The SidePanes of form msdyn_expense_Information */
 		SidePanes: DevKit.SidePanes;
 	}

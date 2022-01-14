@@ -36,6 +36,8 @@ declare namespace DevKit {
 			/** Reason for the status of the Approval Set */
 			statuscode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			ProjectApprovalsSubGrid: DevKit.Controls.Grid;
 		}
@@ -51,6 +53,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_approvalset_Information */
 		Body: DevKit.Formmsdyn_approvalset_Information.Body;
+		/** The Process of form msdyn_approvalset_Information */
+		Process: DevKit.Formmsdyn_approvalset_Information.Process;
 		/** The Grid of form msdyn_approvalset_Information */
 		Grid: DevKit.Formmsdyn_approvalset_Information.Grid;
 		/** The SidePanes of form msdyn_approvalset_Information */

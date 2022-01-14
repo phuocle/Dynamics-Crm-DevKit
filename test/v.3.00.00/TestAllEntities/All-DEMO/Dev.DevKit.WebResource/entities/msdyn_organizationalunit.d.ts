@@ -9,6 +9,8 @@ declare namespace DevKit {
 			msdyn_name: DevKit.Controls.String;
 			notescontrol: DevKit.Controls.Note;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_organizationalunit_Information extends DevKit.IForm {
 		/**
@@ -21,6 +23,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_organizationalunit_Information */
 		Body: DevKit.Formmsdyn_organizationalunit_Information.Body;
+		/** The Process of form msdyn_organizationalunit_Information */
+		Process: DevKit.Formmsdyn_organizationalunit_Information.Process;
 		/** The SidePanes of form msdyn_organizationalunit_Information */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -58,6 +62,8 @@ declare namespace DevKit {
 		interface Navigation {
 			nav_msdyn_organizationalunit_requirementorganizationunit_OrganizationalUnit: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			PriceList: DevKit.Controls.Grid;
 		}
@@ -75,6 +81,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyn_organizationalunit_Information2.Body;
 		/** The Navigation of form msdyn_organizationalunit_Information2 */
 		Navigation: DevKit.Formmsdyn_organizationalunit_Information2.Navigation;
+		/** The Process of form msdyn_organizationalunit_Information2 */
+		Process: DevKit.Formmsdyn_organizationalunit_Information2.Process;
 		/** The Grid of form msdyn_organizationalunit_Information2 */
 		Grid: DevKit.Formmsdyn_organizationalunit_Information2.Grid;
 		/** The SidePanes of form msdyn_organizationalunit_Information2 */

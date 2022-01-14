@@ -20,6 +20,8 @@ declare namespace DevKit {
 			/** Subject associated with the order close activity. */
 			Subject: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormOrderClose_Information extends DevKit.IForm {
 		/**
@@ -32,6 +34,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form OrderClose_Information */
 		Body: DevKit.FormOrderClose_Information.Body;
+		/** The Process of form OrderClose_Information */
+		Process: DevKit.FormOrderClose_Information.Process;
 		/** The SidePanes of form OrderClose_Information */
 		SidePanes: DevKit.SidePanes;
 	}

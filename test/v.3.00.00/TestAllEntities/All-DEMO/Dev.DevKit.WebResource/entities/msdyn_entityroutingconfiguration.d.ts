@@ -32,6 +32,8 @@ declare namespace DevKit {
 			/** Field to bind Routing Rule Subgrid wrapper control */
 			msdyn_routingrulesubgrid: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			workstreamgrid: DevKit.Controls.Grid;
 		}
@@ -49,6 +51,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyn_entityroutingconfiguration_Information.Body;
 		/** The Header section of form msdyn_entityroutingconfiguration_Information */
 		Header: DevKit.Formmsdyn_entityroutingconfiguration_Information.Header;
+		/** The Process of form msdyn_entityroutingconfiguration_Information */
+		Process: DevKit.Formmsdyn_entityroutingconfiguration_Information.Process;
 		/** The Grid of form msdyn_entityroutingconfiguration_Information */
 		Grid: DevKit.Formmsdyn_entityroutingconfiguration_Information.Grid;
 		/** The SidePanes of form msdyn_entityroutingconfiguration_Information */

@@ -20,6 +20,8 @@ declare namespace DevKit {
 			/** Enter the name of the mobile offline profile. */
 			Name: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			profileitemgrid: DevKit.Controls.Grid;
 			SystemUserGrid: DevKit.Controls.Grid;
@@ -36,6 +38,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Mobile_Offline_Profile */
 		Body: DevKit.FormMobile_Offline_Profile.Body;
+		/** The Process of form Mobile_Offline_Profile */
+		Process: DevKit.FormMobile_Offline_Profile.Process;
 		/** The Grid of form Mobile_Offline_Profile */
 		Grid: DevKit.FormMobile_Offline_Profile.Grid;
 		/** The SidePanes of form Mobile_Offline_Profile */

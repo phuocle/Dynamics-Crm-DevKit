@@ -37,6 +37,8 @@ declare namespace DevKit {
 			/** Local time zone where the facility/equipment is located. */
 			TimeZoneCode: DevKit.Controls.Integer;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormEquipment_Information extends DevKit.IForm {
 		/**
@@ -49,6 +51,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Equipment_Information */
 		Body: DevKit.FormEquipment_Information.Body;
+		/** The Process of form Equipment_Information */
+		Process: DevKit.FormEquipment_Information.Process;
 		/** The SidePanes of form Equipment_Information */
 		SidePanes: DevKit.SidePanes;
 	}

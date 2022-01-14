@@ -54,6 +54,8 @@ declare namespace DevKit {
 			/** Choose the color that commands or lists will use to indicate selected items */
 			SelectedLinkEffect: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormTheme extends DevKit.IForm {
 		/**
@@ -66,6 +68,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Theme */
 		Body: DevKit.FormTheme.Body;
+		/** The Process of form Theme */
+		Process: DevKit.FormTheme.Process;
 		/** The SidePanes of form Theme */
 		SidePanes: DevKit.SidePanes;
 	}

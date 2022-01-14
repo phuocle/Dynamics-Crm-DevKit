@@ -61,6 +61,8 @@ declare namespace DevKit {
 			/** Status of the UII Action */
 			statecode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormUII_action_Information extends DevKit.IForm {
 		/**
@@ -75,6 +77,8 @@ declare namespace DevKit {
 		Body: DevKit.FormUII_action_Information.Body;
 		/** The Footer section of form UII_action_Information */
 		Footer: DevKit.FormUII_action_Information.Footer;
+		/** The Process of form UII_action_Information */
+		Process: DevKit.FormUII_action_Information.Process;
 		/** The SidePanes of form UII_action_Information */
 		SidePanes: DevKit.SidePanes;
 	}

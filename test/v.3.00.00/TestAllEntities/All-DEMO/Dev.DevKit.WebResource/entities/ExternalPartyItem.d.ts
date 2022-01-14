@@ -26,6 +26,8 @@ declare namespace DevKit {
 			/** Choose the external party enabled record that is associated with this external party item. */
 			RegardingObjectId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormExternalPartyItem_Information extends DevKit.IForm {
 		/**
@@ -40,6 +42,8 @@ declare namespace DevKit {
 		Body: DevKit.FormExternalPartyItem_Information.Body;
 		/** The Header section of form ExternalPartyItem_Information */
 		Header: DevKit.FormExternalPartyItem_Information.Header;
+		/** The Process of form ExternalPartyItem_Information */
+		Process: DevKit.FormExternalPartyItem_Information.Process;
 		/** The SidePanes of form ExternalPartyItem_Information */
 		SidePanes: DevKit.SidePanes;
 	}

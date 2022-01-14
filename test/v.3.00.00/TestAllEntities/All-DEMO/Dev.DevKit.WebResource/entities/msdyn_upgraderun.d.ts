@@ -29,6 +29,8 @@ declare namespace DevKit {
 			/** Version that will be achieved by the upgrade run */
 			msdyn_TargetVersion: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			UpgradeVersions: DevKit.Controls.Grid;
 		}
@@ -44,6 +46,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_upgraderun_Information */
 		Body: DevKit.Formmsdyn_upgraderun_Information.Body;
+		/** The Process of form msdyn_upgraderun_Information */
+		Process: DevKit.Formmsdyn_upgraderun_Information.Process;
 		/** The Grid of form msdyn_upgraderun_Information */
 		Grid: DevKit.Formmsdyn_upgraderun_Information.Grid;
 		/** The SidePanes of form msdyn_upgraderun_Information */

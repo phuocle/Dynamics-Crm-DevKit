@@ -24,6 +24,8 @@ declare namespace DevKit {
 			/** Shows the unit of the product association. */
 			UoMId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			product_association_dynamic_properties: DevKit.Controls.Grid;
 		}
@@ -39,6 +41,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Product_Association */
 		Body: DevKit.FormProduct_Association.Body;
+		/** The Process of form Product_Association */
+		Process: DevKit.FormProduct_Association.Process;
 		/** The Grid of form Product_Association */
 		Grid: DevKit.FormProduct_Association.Grid;
 		/** The SidePanes of form Product_Association */

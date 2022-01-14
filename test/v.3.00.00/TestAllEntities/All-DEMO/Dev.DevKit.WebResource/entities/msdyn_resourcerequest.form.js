@@ -19,8 +19,8 @@ var DevKit;
 			msdyn_positiondescription: {},
 			msdyn_requestedby: {},
 			msdyn_resourcerequirementid: {},
-			msdyn_resourcerequirementid_1: {},
-			msdyn_resourcerequirementid_2: {},
+			msdyn_resourcerequirementid1: {},
+			msdyn_resourcerequirementid2: {},
 			notescontrol: {},
 			OwnerId: {},
 			statuscode: {}

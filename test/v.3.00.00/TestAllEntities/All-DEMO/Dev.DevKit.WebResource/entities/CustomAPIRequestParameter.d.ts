@@ -24,6 +24,8 @@ declare namespace DevKit {
 			/** Unique name for the custom API request parameter */
 			UniqueName: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormCustomAPIRequestParameter_Information extends DevKit.IForm {
 		/**
@@ -36,6 +38,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form CustomAPIRequestParameter_Information */
 		Body: DevKit.FormCustomAPIRequestParameter_Information.Body;
+		/** The Process of form CustomAPIRequestParameter_Information */
+		Process: DevKit.FormCustomAPIRequestParameter_Information.Process;
 		/** The SidePanes of form CustomAPIRequestParameter_Information */
 		SidePanes: DevKit.SidePanes;
 	}

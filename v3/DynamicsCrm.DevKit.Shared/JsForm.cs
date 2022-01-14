@@ -18,6 +18,8 @@ namespace DynamicsCrm.DevKit.Shared
         private static string RootNamespace { get; set; }
         private static CommentTypeScriptDeclaration Comment { get; set; }
 
+        private static List<string> FormNames = new List<string>();
+
         public static string GetCode(CrmServiceClient crmServiceClient, EntityMetadata entityMetadata, string rootNamespace, CommentTypeScriptDeclaration comment, out string dts)
         {
             CrmServiceClient = crmServiceClient;
@@ -54,6 +56,7 @@ namespace DynamicsCrm.DevKit.Shared
         {
             var code = string.Empty;
             var formName = Utility.GetFormName(form.Name, EntityMetadata.SchemaName);
+            formName = GetUnquieFormName(formName);
             code += $"\t{@namespace}.Form{Utility.SafeIdentifier(formName)} = function(executionContext, defaultWebResourceName) {{\r\n";
             code += $"\t\tvar formContext = null;\r\n";
             code += $"\t\tif (executionContext !== undefined)\r\n";
@@ -88,6 +91,7 @@ namespace DynamicsCrm.DevKit.Shared
         {
             var code = string.Empty;
             var formName = Utility.GetFormName(form.Name, EntityMetadata.SchemaName);
+            formName = GetUnquieFormName(formName);
             code += $"{TAB}{@namespace}.Form{Utility.SafeIdentifier(formName)} = function(executionContext, defaultWebResourceName) {{{NEW_LINE}";
             code += $"{TAB}{TAB}var formContext = null;{NEW_LINE}";
             code += $"{TAB}{TAB}if (executionContext !== undefined) {{{NEW_LINE}";
@@ -127,10 +131,12 @@ namespace DynamicsCrm.DevKit.Shared
                 code += $"\t\tdevKit.LoadFields(formContext, footer, \"footer_\");\r\n";
                 code += $"\t\tform.Footer = footer;\r\n";
             }
-            code += $"\t\tvar process = devKit.LoadProcess(formContext);\r\n";
             var codeProcess = GetJsProcessCode();
+            code += $"\t\tvar process = devKit.LoadProcess(formContext);\r\n";
             if (codeProcess.Length > 0)
+            {
                 code += codeProcess;
+            }
             code += $"\t\tform.Process = process;\r\n";
             var codeQuickForm = GetJsQuickFormCode(form.FormXml);
             if (codeQuickForm.Length > 0)
@@ -184,6 +190,7 @@ namespace DynamicsCrm.DevKit.Shared
                               select f.id).ToList();
 
             quickForms.Sort();
+            if (quickForms.Count == 0) return string.Empty;
             foreach (var quickForm in quickForms)
             {
                 code += $"\t\t\t{quickForm}: {{\r\n";
@@ -321,7 +328,7 @@ namespace DynamicsCrm.DevKit.Shared
                               ControlId = x?.Attribute("uniqueid")?.Value
                           }).Distinct().ToList();
             fields = fields.OrderBy(x => x.Id).ToList();
-            var temp = string.Empty;
+            if (fields.Count == 0) return string.Empty;
             foreach (var field in fields)
             {
                 var classId = GetARealClassId(formXml, field.ClassId, field.ControlId);
@@ -339,6 +346,7 @@ namespace DynamicsCrm.DevKit.Shared
                     .Descendants("NavBarByRelationshipItem")
                                select (string)x?.Attribute("Id")).ToList();
             navigations.Sort();
+            if (navigations.Count == 0) return string.Empty;
             foreach (var navigation in navigations)
                 code += $"\t\t\t{navigation}: {{}},\r\n";
             code = code.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
@@ -432,6 +440,7 @@ namespace DynamicsCrm.DevKit.Shared
                     .Descendants("cell").Descendants("control")
                            select x.Attribute("datafieldname")?.Value).ToList();
             headers.Sort();
+            if (headers.Count == 0) return string.Empty;
             var code = GetJsForListFields(headers, false);
             code = $"{code.TrimEnd($",{NEW_LINE}".ToCharArray())}{NEW_LINE}";
             if (code == NEW_LINE) return string.Empty;
@@ -445,6 +454,7 @@ namespace DynamicsCrm.DevKit.Shared
                     .Descendants("cell").Descendants("control")
                            select x.Attribute("datafieldname")?.Value).ToList();
             footers.Sort();
+            if (footers.Count == 0) return string.Empty;
             var code = GetJsForListFields(footers, false);
             code = $"{code.TrimEnd($",{NEW_LINE}".ToCharArray())}{NEW_LINE}";
             if (code == NEW_LINE) return string.Empty;
@@ -462,6 +472,7 @@ namespace DynamicsCrm.DevKit.Shared
                            InnerText = x?.ToString()
                        };
             tabs = tabs.OrderBy(x => x.Name).ToList();
+            if (tabs.Count() == 0) return string.Empty;
             var existTabs = new List<string>();
             foreach (var tab in tabs)
             {
@@ -521,7 +532,23 @@ namespace DynamicsCrm.DevKit.Shared
                     .Descendants("row").Descendants("cell").Descendants("control")
                           select (string)x.Attribute("datafieldname")).ToList();
             fields.Sort();
+            if (fields.Count == 0) return string.Empty;
             return GetJsForListFields(fields, false);
+        }
+
+        private static string GetUnquieFormName(string formName)
+        {
+            if (!FormNames.Contains(formName))
+            {
+                FormNames.Add(formName);
+                return formName;
+            }
+            else
+            {
+                var count = FormNames.Count(x => x == formName) + 1;
+                FormNames.Add(formName);
+                return $"{formName}{count}";
+            }
         }
     }
 }

@@ -37,6 +37,8 @@ declare namespace DevKit {
 			/** Status of the Toolbar */
 			statecode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			Buttons: DevKit.Controls.Grid;
 		}
@@ -54,6 +56,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyusd_toolbarstrip_Information.Body;
 		/** The Footer section of form msdyusd_toolbarstrip_Information */
 		Footer: DevKit.Formmsdyusd_toolbarstrip_Information.Footer;
+		/** The Process of form msdyusd_toolbarstrip_Information */
+		Process: DevKit.Formmsdyusd_toolbarstrip_Information.Process;
 		/** The Grid of form msdyusd_toolbarstrip_Information */
 		Grid: DevKit.Formmsdyusd_toolbarstrip_Information.Grid;
 		/** The SidePanes of form msdyusd_toolbarstrip_Information */

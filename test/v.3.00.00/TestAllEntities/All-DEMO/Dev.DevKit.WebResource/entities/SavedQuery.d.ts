@@ -34,6 +34,8 @@ declare namespace DevKit {
 			/** Type a name for the view to describe what results the view will contain. This name is visible to users in the View list. */
 			Name: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormSavedQuery_Information extends DevKit.IForm {
 		/**
@@ -46,6 +48,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form SavedQuery_Information */
 		Body: DevKit.FormSavedQuery_Information.Body;
+		/** The Process of form SavedQuery_Information */
+		Process: DevKit.FormSavedQuery_Information.Process;
 		/** The SidePanes of form SavedQuery_Information */
 		SidePanes: DevKit.SidePanes;
 	}

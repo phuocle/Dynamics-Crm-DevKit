@@ -23,6 +23,8 @@ declare namespace DevKit {
 			nav_msdyn_msdyn_templateforproperties_msdyn_assettemplateassociation_propertytemplate: DevKit.Controls.NavigationItem,
 			nav_msdyn_msdyn_templateforproperties_msdyn_propertytemplateassociation_propertytemplate: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			AssetCategoriesSubgrid: DevKit.Controls.Grid;
 			AssetsSubgrid: DevKit.Controls.Grid;
@@ -42,6 +44,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyn_templateforproperties_Information.Body;
 		/** The Navigation of form msdyn_templateforproperties_Information */
 		Navigation: DevKit.Formmsdyn_templateforproperties_Information.Navigation;
+		/** The Process of form msdyn_templateforproperties_Information */
+		Process: DevKit.Formmsdyn_templateforproperties_Information.Process;
 		/** The Grid of form msdyn_templateforproperties_Information */
 		Grid: DevKit.Formmsdyn_templateforproperties_Information.Grid;
 		/** The SidePanes of form msdyn_templateforproperties_Information */

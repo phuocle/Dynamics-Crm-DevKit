@@ -8,6 +8,8 @@ declare namespace DevKit {
 			/** MSTeams settingsv2 name */
 			msdyn_MSTeamsSettingsName: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_msteamssettingsv2_Information extends DevKit.IForm {
 		/**
@@ -20,6 +22,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_msteamssettingsv2_Information */
 		Body: DevKit.Formmsdyn_msteamssettingsv2_Information.Body;
+		/** The Process of form msdyn_msteamssettingsv2_Information */
+		Process: DevKit.Formmsdyn_msteamssettingsv2_Information.Process;
 		/** The SidePanes of form msdyn_msteamssettingsv2_Information */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -29,6 +33,8 @@ declare namespace DevKit {
 		interface Body {
 			/** MSTeams settingsv2 name */
 			msdyn_MSTeamsSettingsName: DevKit.Controls.String;
+		}
+		interface Process extends DevKit.Controls.IProcess {
 		}
 	}
 	class Formmsdyn_msteamssettingsv2_Information2 extends DevKit.IForm {
@@ -42,6 +48,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_msteamssettingsv2_Information2 */
 		Body: DevKit.Formmsdyn_msteamssettingsv2_Information2.Body;
+		/** The Process of form msdyn_msteamssettingsv2_Information2 */
+		Process: DevKit.Formmsdyn_msteamssettingsv2_Information2.Process;
 		/** The SidePanes of form msdyn_msteamssettingsv2_Information2 */
 		SidePanes: DevKit.SidePanes;
 	}

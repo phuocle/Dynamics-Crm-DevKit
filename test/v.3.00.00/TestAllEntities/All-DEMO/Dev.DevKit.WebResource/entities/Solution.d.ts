@@ -39,6 +39,16 @@ declare namespace DevKit {
 			/** Solution version, used to identify a solution for upgrades and hotfixes. */
 			Version: DevKit.Controls.String;
 		}
+		interface ProcessCase_to_Work_Order_Business_Process {
+
+		}
+		interface ProcessPhone_to_Case_Process {
+
+		}
+		interface Process extends DevKit.Controls.IProcess {
+			Case_to_Work_Order_Business_Process: ProcessCase_to_Work_Order_Business_Process;
+			Phone_to_Case_Process: ProcessPhone_to_Case_Process;
+		}
 	}
 	class FormSolution_Information extends DevKit.IForm {
 		/**
@@ -51,6 +61,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Solution_Information */
 		Body: DevKit.FormSolution_Information.Body;
+		/** The Process of form Solution_Information */
+		Process: DevKit.FormSolution_Information.Process;
 		/** The SidePanes of form Solution_Information */
 		SidePanes: DevKit.SidePanes;
 	}

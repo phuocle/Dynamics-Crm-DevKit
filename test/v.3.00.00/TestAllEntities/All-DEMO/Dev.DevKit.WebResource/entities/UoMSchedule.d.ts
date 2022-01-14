@@ -20,6 +20,8 @@ declare namespace DevKit {
 			/** Name of the unit group. */
 			Name: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormUoMSchedule_Information extends DevKit.IForm {
 		/**
@@ -32,6 +34,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form UoMSchedule_Information */
 		Body: DevKit.FormUoMSchedule_Information.Body;
+		/** The Process of form UoMSchedule_Information */
+		Process: DevKit.FormUoMSchedule_Information.Process;
 		/** The SidePanes of form UoMSchedule_Information */
 		SidePanes: DevKit.SidePanes;
 	}

@@ -21,6 +21,8 @@ declare namespace DevKit {
 			/** The name of the custom entity. */
 			msdyn_name: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			RatingModelDetails: DevKit.Controls.Grid;
 		}
@@ -36,6 +38,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_omnichannelconfiguration_Information */
 		Body: DevKit.Formmsdyn_omnichannelconfiguration_Information.Body;
+		/** The Process of form msdyn_omnichannelconfiguration_Information */
+		Process: DevKit.Formmsdyn_omnichannelconfiguration_Information.Process;
 		/** The Grid of form msdyn_omnichannelconfiguration_Information */
 		Grid: DevKit.Formmsdyn_omnichannelconfiguration_Information.Grid;
 		/** The SidePanes of form msdyn_omnichannelconfiguration_Information */
@@ -57,6 +61,8 @@ declare namespace DevKit {
 			msdyn_enablemarkdown: DevKit.Controls.Boolean;
 			WebResource_ocpreviewterms: DevKit.Controls.WebResource;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormMarkdown_Settings extends DevKit.IForm {
 		/**
@@ -69,6 +75,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Markdown_Settings */
 		Body: DevKit.FormMarkdown_Settings.Body;
+		/** The Process of form Markdown_Settings */
+		Process: DevKit.FormMarkdown_Settings.Process;
 		/** The SidePanes of form Markdown_Settings */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -107,6 +115,8 @@ declare namespace DevKit {
 			/** The name of the custom entity. */
 			msdyn_name: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			MaskingRulesInSettings: DevKit.Controls.Grid;
 		}
@@ -122,6 +132,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Masking_settings */
 		Body: DevKit.FormMasking_settings.Body;
+		/** The Process of form Masking_settings */
+		Process: DevKit.FormMasking_settings.Process;
 		/** The Grid of form Masking_settings */
 		Grid: DevKit.FormMasking_settings.Grid;
 		/** The SidePanes of form Masking_settings */
@@ -194,6 +206,8 @@ declare namespace DevKit {
 			agent_reject_notification_presence_update_quick_view_form: quickForm_agent_reject_notification_presence_update_quick_view_form;
 			missed_notification_presence_update_quick_view_form: quickForm_missed_notification_presence_update_quick_view_form;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			templates_grid: DevKit.Controls.Grid;
 		}
@@ -211,6 +225,8 @@ declare namespace DevKit {
 		Body: DevKit.FormNotifications.Body;
 		/** The QuickForm of form Notifications */
 		QuickForm: DevKit.FormNotifications.QuickForm;
+		/** The Process of form Notifications */
+		Process: DevKit.FormNotifications.Process;
 		/** The Grid of form Notifications */
 		Grid: DevKit.FormNotifications.Grid;
 		/** The SidePanes of form Notifications */
@@ -231,6 +247,8 @@ declare namespace DevKit {
 			/** Enable personal messages feature for the org */
 			msdyn_isPersonalMessagesEnabled: DevKit.Controls.Boolean;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormPersonal_quick_replies extends DevKit.IForm {
 		/**
@@ -243,6 +261,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Personal_quick_replies */
 		Body: DevKit.FormPersonal_quick_replies.Body;
+		/** The Process of form Personal_quick_replies */
+		Process: DevKit.FormPersonal_quick_replies.Process;
 		/** The SidePanes of form Personal_quick_replies */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -268,6 +288,8 @@ declare namespace DevKit {
 			WebResource_featureEnableTerms: DevKit.Controls.WebResource;
 			WebResource_ocpreviewterms: DevKit.Controls.WebResource;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormReal_Time_Translation_Settings extends DevKit.IForm {
 		/**
@@ -280,6 +302,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Real_Time_Translation_Settings */
 		Body: DevKit.FormReal_Time_Translation_Settings.Body;
+		/** The Process of form Real_Time_Translation_Settings */
+		Process: DevKit.FormReal_Time_Translation_Settings.Process;
 		/** The SidePanes of form Real_Time_Translation_Settings */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -313,6 +337,8 @@ declare namespace DevKit {
 			/** The name of the custom entity. */
 			msdyn_name: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormSelf_service_settings extends DevKit.IForm {
 		/**
@@ -325,6 +351,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Self_service_settings */
 		Body: DevKit.FormSelf_service_settings.Body;
+		/** The Process of form Self_service_settings */
+		Process: DevKit.FormSelf_service_settings.Process;
 		/** The SidePanes of form Self_service_settings */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -344,6 +372,8 @@ declare namespace DevKit {
 			/** This will enable agents to view and update skills for a conversation. */
 			msdyn_IsUpdateSkillsEnabled: DevKit.Controls.Boolean;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			RatingModelDetails: DevKit.Controls.Grid;
 		}
@@ -359,6 +389,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Skill_based_routing_settings */
 		Body: DevKit.FormSkill_based_routing_settings.Body;
+		/** The Process of form Skill_based_routing_settings */
+		Process: DevKit.FormSkill_based_routing_settings.Process;
 		/** The Grid of form Skill_based_routing_settings */
 		Grid: DevKit.FormSkill_based_routing_settings.Grid;
 		/** The SidePanes of form Skill_based_routing_settings */
@@ -392,6 +424,8 @@ declare namespace DevKit {
 			/** The name of the custom entity. */
 			msdyn_name: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormSupervisor_settings extends DevKit.IForm {
 		/**
@@ -404,6 +438,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Supervisor_settings */
 		Body: DevKit.FormSupervisor_settings.Body;
+		/** The Process of form Supervisor_settings */
+		Process: DevKit.FormSupervisor_settings.Process;
 		/** The SidePanes of form Supervisor_settings */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -422,6 +458,8 @@ declare namespace DevKit {
 			/** Enable new conversation form feature */
 			msdyn_enablenewconversationform: DevKit.Controls.Boolean;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormTranscript_settings extends DevKit.IForm {
 		/**
@@ -434,6 +472,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Transcript_settings */
 		Body: DevKit.FormTranscript_settings.Body;
+		/** The Process of form Transcript_settings */
+		Process: DevKit.FormTranscript_settings.Process;
 		/** The SidePanes of form Transcript_settings */
 		SidePanes: DevKit.SidePanes;
 	}

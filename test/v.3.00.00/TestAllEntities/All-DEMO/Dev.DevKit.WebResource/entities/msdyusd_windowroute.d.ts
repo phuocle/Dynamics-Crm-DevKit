@@ -89,6 +89,8 @@ declare namespace DevKit {
 			nav_msdyusd_windowroute_agentscriptaction: DevKit.Controls.NavigationItem,
 			nav_msdyusd_windowroute_ctisearch: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			CTISearches: DevKit.Controls.Grid;
 		}
@@ -108,6 +110,8 @@ declare namespace DevKit {
 		Footer: DevKit.Formmsdyusd_windowroute_Information.Footer;
 		/** The Navigation of form msdyusd_windowroute_Information */
 		Navigation: DevKit.Formmsdyusd_windowroute_Information.Navigation;
+		/** The Process of form msdyusd_windowroute_Information */
+		Process: DevKit.Formmsdyusd_windowroute_Information.Process;
 		/** The Grid of form msdyusd_windowroute_Information */
 		Grid: DevKit.Formmsdyusd_windowroute_Information.Grid;
 		/** The SidePanes of form msdyusd_windowroute_Information */

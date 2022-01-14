@@ -20,6 +20,8 @@ declare namespace DevKit {
 			/** Title of the knowledge base article template. */
 			Title: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormKbArticleTemplate_Information extends DevKit.IForm {
 		/**
@@ -32,6 +34,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form KbArticleTemplate_Information */
 		Body: DevKit.FormKbArticleTemplate_Information.Body;
+		/** The Process of form KbArticleTemplate_Information */
+		Process: DevKit.FormKbArticleTemplate_Information.Process;
 		/** The SidePanes of form KbArticleTemplate_Information */
 		SidePanes: DevKit.SidePanes;
 	}

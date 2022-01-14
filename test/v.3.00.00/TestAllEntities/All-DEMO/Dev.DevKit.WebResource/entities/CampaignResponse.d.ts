@@ -65,6 +65,8 @@ declare namespace DevKit {
 			navAsyncOperations: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormCampaign_Response extends DevKit.IForm {
 		/**
@@ -81,6 +83,8 @@ declare namespace DevKit {
 		Header: DevKit.FormCampaign_Response.Header;
 		/** The Navigation of form Campaign_Response */
 		Navigation: DevKit.FormCampaign_Response.Navigation;
+		/** The Process of form Campaign_Response */
+		Process: DevKit.FormCampaign_Response.Process;
 		/** The SidePanes of form Campaign_Response */
 		SidePanes: DevKit.SidePanes;
 	}

@@ -18,7 +18,7 @@ declare namespace DevKit {
 			/** Type a descriptive name for the goal rollup query. */
 			Name: DevKit.Controls.String;
 			/** Type a descriptive name for the goal rollup query. */
-			Name_1: DevKit.Controls.String;
+			Name1: DevKit.Controls.String;
 			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
 			OwnerId: DevKit.Controls.Lookup;
 			queryeditor_uc: DevKit.Controls.ActionCards;
@@ -26,6 +26,8 @@ declare namespace DevKit {
 			QueryEntityType: DevKit.Controls.String;
 			queryentitytype_uc: DevKit.Controls.ActionCards;
 			ruleconditioncontrol: DevKit.Controls.IFrame;
+		}
+		interface Process extends DevKit.Controls.IProcess {
 		}
 	}
 	class FormGoalRollupQuery_Information extends DevKit.IForm {
@@ -39,6 +41,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form GoalRollupQuery_Information */
 		Body: DevKit.FormGoalRollupQuery_Information.Body;
+		/** The Process of form GoalRollupQuery_Information */
+		Process: DevKit.FormGoalRollupQuery_Information.Process;
 		/** The SidePanes of form GoalRollupQuery_Information */
 		SidePanes: DevKit.SidePanes;
 	}

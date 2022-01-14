@@ -33,6 +33,8 @@ declare namespace DevKit {
 			/** Status of the Quote Line Schedule Of Value */
 			statecode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_quotelinescheduleofvalue_Project_Information extends DevKit.IForm {
 		/**
@@ -47,6 +49,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyn_quotelinescheduleofvalue_Project_Information.Body;
 		/** The Header section of form msdyn_quotelinescheduleofvalue_Project_Information */
 		Header: DevKit.Formmsdyn_quotelinescheduleofvalue_Project_Information.Header;
+		/** The Process of form msdyn_quotelinescheduleofvalue_Project_Information */
+		Process: DevKit.Formmsdyn_quotelinescheduleofvalue_Project_Information.Process;
 		/** The SidePanes of form msdyn_quotelinescheduleofvalue_Project_Information */
 		SidePanes: DevKit.SidePanes;
 	}

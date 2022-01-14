@@ -51,12 +51,12 @@ var DevKit;
 		body.Tab = tab;
 		form.Body = body;
 		var process = devKit.LoadProcess(formContext);
+		var _Agreement_Business_Process = {
+			msdyn_Description: {}
+		}
+		devKit.LoadFields(formContext, _Agreement_Business_Process, "header_process_");
+		process.Agreement_Business_Process = _Agreement_Business_Process;
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var grid = {
 			AgreementInvoiceProductsGrid: {},
 		};
@@ -111,12 +111,12 @@ var DevKit;
 		devKit.LoadFields(formContext, footer, "footer_");
 		form.Footer = footer;
 		var process = devKit.LoadProcess(formContext);
+		var _Agreement_Business_Process = {
+			msdyn_Description: {}
+		}
+		devKit.LoadFields(formContext, _Agreement_Business_Process, "header_process_");
+		process.Agreement_Business_Process = _Agreement_Business_Process;
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var grid = {
 			AgreementInvoiceProductsGrid: {},
 		};

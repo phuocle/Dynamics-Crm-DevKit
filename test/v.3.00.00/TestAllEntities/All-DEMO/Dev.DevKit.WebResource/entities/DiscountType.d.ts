@@ -27,6 +27,8 @@ declare namespace DevKit {
 			/** Status of the discount list. */
 			StateCode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormDiscountType_Information extends DevKit.IForm {
 		/**
@@ -41,6 +43,8 @@ declare namespace DevKit {
 		Body: DevKit.FormDiscountType_Information.Body;
 		/** The Footer section of form DiscountType_Information */
 		Footer: DevKit.FormDiscountType_Information.Footer;
+		/** The Process of form DiscountType_Information */
+		Process: DevKit.FormDiscountType_Information.Process;
 		/** The SidePanes of form DiscountType_Information */
 		SidePanes: DevKit.SidePanes;
 	}

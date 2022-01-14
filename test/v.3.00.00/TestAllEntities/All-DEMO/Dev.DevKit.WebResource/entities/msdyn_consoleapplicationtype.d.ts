@@ -12,6 +12,8 @@ declare namespace DevKit {
 			/** The order between various page-types rendered in a session template */
 			msdyn_RenderingOrder: DevKit.Controls.Integer;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_consoleapplicationtype_Information extends DevKit.IForm {
 		/**
@@ -24,6 +26,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_consoleapplicationtype_Information */
 		Body: DevKit.Formmsdyn_consoleapplicationtype_Information.Body;
+		/** The Process of form msdyn_consoleapplicationtype_Information */
+		Process: DevKit.Formmsdyn_consoleapplicationtype_Information.Process;
 		/** The SidePanes of form msdyn_consoleapplicationtype_Information */
 		SidePanes: DevKit.SidePanes;
 	}

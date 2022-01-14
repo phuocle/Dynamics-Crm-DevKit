@@ -18,6 +18,8 @@ declare namespace DevKit {
 			msdyn_name: DevKit.Controls.String;
 			msdyn_ParentCategory: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_transactioncategoryhierarchyelement_Information extends DevKit.IForm {
 		/**
@@ -30,6 +32,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_transactioncategoryhierarchyelement_Information */
 		Body: DevKit.Formmsdyn_transactioncategoryhierarchyelement_Information.Body;
+		/** The Process of form msdyn_transactioncategoryhierarchyelement_Information */
+		Process: DevKit.Formmsdyn_transactioncategoryhierarchyelement_Information.Process;
 		/** The SidePanes of form msdyn_transactioncategoryhierarchyelement_Information */
 		SidePanes: DevKit.SidePanes;
 	}

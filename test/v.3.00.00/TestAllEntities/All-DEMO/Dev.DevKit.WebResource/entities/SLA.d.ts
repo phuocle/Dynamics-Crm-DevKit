@@ -36,25 +36,27 @@ declare namespace DevKit {
 			/** Type additional information to describe the SLA */
 			Description: DevKit.Controls.String;
 			/** Type additional information to describe the SLA */
-			Description_1: DevKit.Controls.String;
+			Description1: DevKit.Controls.String;
 			/** Type a descriptive name of the service level agreement (SLA). */
 			Name: DevKit.Controls.String;
 			/** Type a descriptive name of the service level agreement (SLA). */
-			Name_1: DevKit.Controls.String;
+			Name1: DevKit.Controls.String;
 			notescontrol: DevKit.Controls.Note;
 			/** Choose the entity type that the SLA is defined. */
 			ObjectTypeCode: DevKit.Controls.OptionSet;
 			/** Choose the entity type that the SLA is defined. */
-			ObjectTypeCode_1: DevKit.Controls.OptionSet;
+			ObjectTypeCode1: DevKit.Controls.OptionSet;
 			/** Choose the entity type that the SLA is defined. */
-			ObjectTypeCode_2: DevKit.Controls.OptionSet;
+			ObjectTypeCode2: DevKit.Controls.OptionSet;
 			/** Choose the entity type that the SLA is defined. */
-			ObjectTypeCode_3: DevKit.Controls.OptionSet;
+			ObjectTypeCode3: DevKit.Controls.OptionSet;
 			/** Shows the primary entity that the SLA has been created for. */
 			PrimaryEntityOTC: DevKit.Controls.Integer;
 			/** Select the type of service level agreement (SLA). */
 			SLAType: DevKit.Controls.OptionSet;
 			slaversion: DevKit.Controls.OptionSet;
+		}
+		interface Process extends DevKit.Controls.IProcess {
 		}
 		interface Grid {
 			SLADetails: DevKit.Controls.Grid;
@@ -74,6 +76,8 @@ declare namespace DevKit {
 		Body: DevKit.FormSLA.Body;
 		/** The Header section of form SLA */
 		Header: DevKit.FormSLA.Header;
+		/** The Process of form SLA */
+		Process: DevKit.FormSLA.Process;
 		/** The Grid of form SLA */
 		Grid: DevKit.FormSLA.Grid;
 		/** The SidePanes of form SLA */

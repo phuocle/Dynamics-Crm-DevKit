@@ -22,6 +22,8 @@ declare namespace DevKit {
 			/** Unique name for the custom API response property */
 			UniqueName: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormCustomAPIResponseProperty_Information extends DevKit.IForm {
 		/**
@@ -34,6 +36,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form CustomAPIResponseProperty_Information */
 		Body: DevKit.FormCustomAPIResponseProperty_Information.Body;
+		/** The Process of form CustomAPIResponseProperty_Information */
+		Process: DevKit.FormCustomAPIResponseProperty_Information.Process;
 		/** The SidePanes of form CustomAPIResponseProperty_Information */
 		SidePanes: DevKit.SidePanes;
 	}

@@ -65,6 +65,8 @@ declare namespace DevKit {
 			/** Select whether access to the web channel is allowed. */
 			WebAccess: DevKit.Controls.Boolean;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormChannelAccessProfile_Information extends DevKit.IForm {
 		/**
@@ -79,6 +81,8 @@ declare namespace DevKit {
 		Body: DevKit.FormChannelAccessProfile_Information.Body;
 		/** The Header section of form ChannelAccessProfile_Information */
 		Header: DevKit.FormChannelAccessProfile_Information.Header;
+		/** The Process of form ChannelAccessProfile_Information */
+		Process: DevKit.FormChannelAccessProfile_Information.Process;
 		/** The SidePanes of form ChannelAccessProfile_Information */
 		SidePanes: DevKit.SidePanes;
 	}

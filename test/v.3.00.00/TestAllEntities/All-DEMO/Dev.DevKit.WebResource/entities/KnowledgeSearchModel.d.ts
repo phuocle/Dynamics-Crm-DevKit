@@ -28,6 +28,8 @@ declare namespace DevKit {
 			/** Enter an entity that articles are suggested for. */
 			SourceEntity: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			textanalyticsentitymappings: DevKit.Controls.Grid;
 		}
@@ -43,6 +45,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form KnowledgeSearchModel_Information */
 		Body: DevKit.FormKnowledgeSearchModel_Information.Body;
+		/** The Process of form KnowledgeSearchModel_Information */
+		Process: DevKit.FormKnowledgeSearchModel_Information.Process;
 		/** The Grid of form KnowledgeSearchModel_Information */
 		Grid: DevKit.FormKnowledgeSearchModel_Information.Grid;
 		/** The SidePanes of form KnowledgeSearchModel_Information */

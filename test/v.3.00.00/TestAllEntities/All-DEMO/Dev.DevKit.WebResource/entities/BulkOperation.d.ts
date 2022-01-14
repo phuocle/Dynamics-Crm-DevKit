@@ -49,6 +49,8 @@ declare namespace DevKit {
 			navRelationshipActivities: DevKit.Controls.NavigationItem,
 			navRelationshipBulkOperationLogs: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			excluded_accounts: DevKit.Controls.Grid;
 			excluded_contacts: DevKit.Controls.Grid;
@@ -74,6 +76,8 @@ declare namespace DevKit {
 		Header: DevKit.FormQuick_Campaign.Header;
 		/** The Navigation of form Quick_Campaign */
 		Navigation: DevKit.FormQuick_Campaign.Navigation;
+		/** The Process of form Quick_Campaign */
+		Process: DevKit.FormQuick_Campaign.Process;
 		/** The Grid of form Quick_Campaign */
 		Grid: DevKit.FormQuick_Campaign.Grid;
 		/** The SidePanes of form Quick_Campaign */
@@ -127,6 +131,8 @@ declare namespace DevKit {
 			navRelationshipActivities: DevKit.Controls.NavigationItem,
 			navRelationshipBulkOperationLogs: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			accounts: DevKit.Controls.Grid;
 			accounts_uci: DevKit.Controls.Grid;
@@ -155,6 +161,8 @@ declare namespace DevKit {
 		Header: DevKit.FormQuick_Campaign_deprecated.Header;
 		/** The Navigation of form Quick_Campaign_deprecated */
 		Navigation: DevKit.FormQuick_Campaign_deprecated.Navigation;
+		/** The Process of form Quick_Campaign_deprecated */
+		Process: DevKit.FormQuick_Campaign_deprecated.Process;
 		/** The Grid of form Quick_Campaign_deprecated */
 		Grid: DevKit.FormQuick_Campaign_deprecated.Grid;
 		/** The SidePanes of form Quick_Campaign_deprecated */

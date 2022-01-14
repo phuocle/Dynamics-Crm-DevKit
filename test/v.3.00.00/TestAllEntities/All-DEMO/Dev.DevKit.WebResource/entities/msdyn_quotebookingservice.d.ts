@@ -40,6 +40,8 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_quotebookingservice_Information extends DevKit.IForm {
 		/**
@@ -52,6 +54,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_quotebookingservice_Information */
 		Body: DevKit.Formmsdyn_quotebookingservice_Information.Body;
+		/** The Process of form msdyn_quotebookingservice_Information */
+		Process: DevKit.Formmsdyn_quotebookingservice_Information.Process;
 		/** The SidePanes of form msdyn_quotebookingservice_Information */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -65,6 +69,8 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_quotebookingservice_Information2 extends DevKit.IForm {
 		/**
@@ -77,6 +83,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_quotebookingservice_Information2 */
 		Body: DevKit.Formmsdyn_quotebookingservice_Information2.Body;
+		/** The Process of form msdyn_quotebookingservice_Information2 */
+		Process: DevKit.Formmsdyn_quotebookingservice_Information2.Process;
 		/** The SidePanes of form msdyn_quotebookingservice_Information2 */
 		SidePanes: DevKit.SidePanes;
 	}

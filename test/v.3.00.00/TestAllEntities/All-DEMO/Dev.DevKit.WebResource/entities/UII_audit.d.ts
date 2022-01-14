@@ -54,6 +54,8 @@ declare namespace DevKit {
 			/** Status of the UII Audit */
 			statecode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormUII_audit_Information extends DevKit.IForm {
 		/**
@@ -68,6 +70,8 @@ declare namespace DevKit {
 		Body: DevKit.FormUII_audit_Information.Body;
 		/** The Footer section of form UII_audit_Information */
 		Footer: DevKit.FormUII_audit_Information.Footer;
+		/** The Process of form UII_audit_Information */
+		Process: DevKit.FormUII_audit_Information.Process;
 		/** The SidePanes of form UII_audit_Information */
 		SidePanes: DevKit.SidePanes;
 	}

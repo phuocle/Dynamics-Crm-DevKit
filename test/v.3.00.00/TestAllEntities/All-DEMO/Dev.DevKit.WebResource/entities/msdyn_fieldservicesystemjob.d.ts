@@ -25,6 +25,8 @@ declare namespace DevKit {
 		interface Navigation {
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_fieldservicesystemjob_Information extends DevKit.IForm {
 		/**
@@ -41,6 +43,8 @@ declare namespace DevKit {
 		Footer: DevKit.Formmsdyn_fieldservicesystemjob_Information.Footer;
 		/** The Navigation of form msdyn_fieldservicesystemjob_Information */
 		Navigation: DevKit.Formmsdyn_fieldservicesystemjob_Information.Navigation;
+		/** The Process of form msdyn_fieldservicesystemjob_Information */
+		Process: DevKit.Formmsdyn_fieldservicesystemjob_Information.Process;
 		/** The SidePanes of form msdyn_fieldservicesystemjob_Information */
 		SidePanes: DevKit.SidePanes;
 	}

@@ -33,11 +33,6 @@ var DevKit;
 		form.Body = body;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var navigation = {
 			nav_msdyn_msdyn_transactiontype_msdyn_contractlinescheduleofvalue_transactiontype: {},
 			nav_msdyn_msdyn_transactiontype_msdyn_expense_TransactionType: {},

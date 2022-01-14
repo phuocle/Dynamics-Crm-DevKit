@@ -15,6 +15,8 @@ declare namespace DevKit {
 			msdyn_name: DevKit.Controls.String;
 			notescontrol: DevKit.Controls.Note;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_projectteammembersignup_Information extends DevKit.IForm {
 		/**
@@ -29,6 +31,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyn_projectteammembersignup_Information.Body;
 		/** The Header section of form msdyn_projectteammembersignup_Information */
 		Header: DevKit.Formmsdyn_projectteammembersignup_Information.Header;
+		/** The Process of form msdyn_projectteammembersignup_Information */
+		Process: DevKit.Formmsdyn_projectteammembersignup_Information.Process;
 		/** The SidePanes of form msdyn_projectteammembersignup_Information */
 		SidePanes: DevKit.SidePanes;
 	}

@@ -47,6 +47,8 @@ declare namespace DevKit {
 			/** Shows whether the connection is active or inactive. Inactive connections are read-only and can't be edited unless they are reactivated. */
 			StateCode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormConnection_Information extends DevKit.IForm {
 		/**
@@ -63,6 +65,8 @@ declare namespace DevKit {
 		Footer: DevKit.FormConnection_Information.Footer;
 		/** The Header section of form Connection_Information */
 		Header: DevKit.FormConnection_Information.Header;
+		/** The Process of form Connection_Information */
+		Process: DevKit.FormConnection_Information.Process;
 		/** The SidePanes of form Connection_Information */
 		SidePanes: DevKit.SidePanes;
 	}

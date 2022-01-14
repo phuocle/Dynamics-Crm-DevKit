@@ -14,6 +14,8 @@ declare namespace DevKit {
 			/** Select the related product that the relationship needs to be defined for. */
 			SubstitutedProductId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormProductSubstitute extends DevKit.IForm {
 		/**
@@ -26,6 +28,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form ProductSubstitute */
 		Body: DevKit.FormProductSubstitute.Body;
+		/** The Process of form ProductSubstitute */
+		Process: DevKit.FormProductSubstitute.Process;
 		/** The SidePanes of form ProductSubstitute */
 		SidePanes: DevKit.SidePanes;
 	}

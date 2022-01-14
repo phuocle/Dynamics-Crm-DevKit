@@ -20,6 +20,8 @@ declare namespace DevKit {
 			Name: DevKit.Controls.String;
 			holidayListcontrol_id: DevKit.Controls.ActionCards;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormCalendar_Information extends DevKit.IForm {
 		/**
@@ -32,6 +34,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Calendar_Information */
 		Body: DevKit.FormCalendar_Information.Body;
+		/** The Process of form Calendar_Information */
+		Process: DevKit.FormCalendar_Information.Process;
 		/** The SidePanes of form Calendar_Information */
 		SidePanes: DevKit.SidePanes;
 	}

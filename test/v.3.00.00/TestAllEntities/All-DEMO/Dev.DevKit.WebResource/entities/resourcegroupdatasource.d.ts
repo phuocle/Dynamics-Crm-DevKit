@@ -7,6 +7,8 @@ declare namespace DevKit {
 		interface Body {
 			name: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formresourcegroupdatasource_Information extends DevKit.IForm {
 		/**
@@ -19,6 +21,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form resourcegroupdatasource_Information */
 		Body: DevKit.Formresourcegroupdatasource_Information.Body;
+		/** The Process of form resourcegroupdatasource_Information */
+		Process: DevKit.Formresourcegroupdatasource_Information.Process;
 		/** The SidePanes of form resourcegroupdatasource_Information */
 		SidePanes: DevKit.SidePanes;
 	}

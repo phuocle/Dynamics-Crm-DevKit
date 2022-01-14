@@ -12,6 +12,8 @@ declare namespace DevKit {
 			/** Knowledge Usage. */
 			KnowledgeUsage: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormKnowledge_Article_Incident extends DevKit.IForm {
 		/**
@@ -24,6 +26,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Knowledge_Article_Incident */
 		Body: DevKit.FormKnowledge_Article_Incident.Body;
+		/** The Process of form Knowledge_Article_Incident */
+		Process: DevKit.FormKnowledge_Article_Incident.Process;
 		/** The SidePanes of form Knowledge_Article_Incident */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -38,6 +42,8 @@ declare namespace DevKit {
 			/** Knowledge Usage. */
 			KnowledgeUsage: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormKnowledge_Article_Incident_for_Interactive_experience extends DevKit.IForm {
 		/**
@@ -50,6 +56,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Knowledge_Article_Incident_for_Interactive_experience */
 		Body: DevKit.FormKnowledge_Article_Incident_for_Interactive_experience.Body;
+		/** The Process of form Knowledge_Article_Incident_for_Interactive_experience */
+		Process: DevKit.FormKnowledge_Article_Incident_for_Interactive_experience.Process;
 		/** The SidePanes of form Knowledge_Article_Incident_for_Interactive_experience */
 		SidePanes: DevKit.SidePanes;
 	}

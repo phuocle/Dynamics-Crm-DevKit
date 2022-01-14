@@ -26,6 +26,8 @@ declare namespace DevKit {
 			WebResource_TwitterApplicationSaved: DevKit.Controls.WebResource;
 			WebResource_TwitterCallbackUrlDisclaimer: DevKit.Controls.WebResource;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			TwitterHandles: DevKit.Controls.Grid;
 		}
@@ -41,6 +43,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_octwitterapplication_Information */
 		Body: DevKit.Formmsdyn_octwitterapplication_Information.Body;
+		/** The Process of form msdyn_octwitterapplication_Information */
+		Process: DevKit.Formmsdyn_octwitterapplication_Information.Process;
 		/** The Grid of form msdyn_octwitterapplication_Information */
 		Grid: DevKit.Formmsdyn_octwitterapplication_Information.Grid;
 		/** The SidePanes of form msdyn_octwitterapplication_Information */

@@ -22,6 +22,8 @@ declare namespace DevKit {
 			/** Enter the date and time when the service level agreement (SLA) key performance indicator (KPI)will go to a warning state. */
 			WarningTime: DevKit.Controls.DateTime;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormSLA_KPI_Instance extends DevKit.IForm {
 		/**
@@ -36,6 +38,8 @@ declare namespace DevKit {
 		Body: DevKit.FormSLA_KPI_Instance.Body;
 		/** The Header section of form SLA_KPI_Instance */
 		Header: DevKit.FormSLA_KPI_Instance.Header;
+		/** The Process of form SLA_KPI_Instance */
+		Process: DevKit.FormSLA_KPI_Instance.Process;
 		/** The SidePanes of form SLA_KPI_Instance */
 		SidePanes: DevKit.SidePanes;
 	}

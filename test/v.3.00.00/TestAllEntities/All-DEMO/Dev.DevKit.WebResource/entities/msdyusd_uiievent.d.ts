@@ -18,6 +18,8 @@ declare namespace DevKit {
 			/** Status of the UII Event */
 			statecode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			Action_Calls: DevKit.Controls.Grid;
 		}
@@ -35,6 +37,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyusd_uiievent_Information.Body;
 		/** The Footer section of form msdyusd_uiievent_Information */
 		Footer: DevKit.Formmsdyusd_uiievent_Information.Footer;
+		/** The Process of form msdyusd_uiievent_Information */
+		Process: DevKit.Formmsdyusd_uiievent_Information.Process;
 		/** The Grid of form msdyusd_uiievent_Information */
 		Grid: DevKit.Formmsdyusd_uiievent_Information.Grid;
 		/** The SidePanes of form msdyusd_uiievent_Information */

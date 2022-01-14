@@ -8,6 +8,8 @@ declare namespace DevKit {
 			/** The name of the Sales Acceleration settings instance. */
 			msdyn_name: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_salesaccelerationsettings_Information extends DevKit.IForm {
 		/**
@@ -20,6 +22,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_salesaccelerationsettings_Information */
 		Body: DevKit.Formmsdyn_salesaccelerationsettings_Information.Body;
+		/** The Process of form msdyn_salesaccelerationsettings_Information */
+		Process: DevKit.Formmsdyn_salesaccelerationsettings_Information.Process;
 		/** The SidePanes of form msdyn_salesaccelerationsettings_Information */
 		SidePanes: DevKit.SidePanes;
 	}

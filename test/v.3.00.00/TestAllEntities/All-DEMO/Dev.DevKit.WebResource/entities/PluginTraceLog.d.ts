@@ -64,6 +64,8 @@ declare namespace DevKit {
 			/** Class name of the plug-in. */
 			TypeName: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormPluginTraceLog_Information extends DevKit.IForm {
 		/**
@@ -78,6 +80,8 @@ declare namespace DevKit {
 		Body: DevKit.FormPluginTraceLog_Information.Body;
 		/** The Header section of form PluginTraceLog_Information */
 		Header: DevKit.FormPluginTraceLog_Information.Header;
+		/** The Process of form PluginTraceLog_Information */
+		Process: DevKit.FormPluginTraceLog_Information.Process;
 		/** The SidePanes of form PluginTraceLog_Information */
 		SidePanes: DevKit.SidePanes;
 	}

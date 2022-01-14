@@ -22,6 +22,8 @@ declare namespace DevKit {
 			/** Type the name of the property as received in the information provided by the external application. */
 			Name: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormChannel_Property extends DevKit.IForm {
 		/**
@@ -34,6 +36,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Channel_Property */
 		Body: DevKit.FormChannel_Property.Body;
+		/** The Process of form Channel_Property */
+		Process: DevKit.FormChannel_Property.Process;
 		/** The SidePanes of form Channel_Property */
 		SidePanes: DevKit.SidePanes;
 	}

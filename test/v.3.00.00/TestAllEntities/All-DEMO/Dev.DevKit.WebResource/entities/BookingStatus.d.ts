@@ -47,6 +47,8 @@ declare namespace DevKit {
 			nav_msdyn_bookingstatus_msdyn_fieldservicesetting_DefaultCanceledBookingStatus: DevKit.Controls.NavigationItem,
 			nav_msdyn_bookingstatus_msdyn_fieldservicesetting_DefaultScheduledBookingStatus: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormBookingStatus_Information extends DevKit.IForm {
 		/**
@@ -61,6 +63,8 @@ declare namespace DevKit {
 		Body: DevKit.FormBookingStatus_Information.Body;
 		/** The Navigation of form BookingStatus_Information */
 		Navigation: DevKit.FormBookingStatus_Information.Navigation;
+		/** The Process of form BookingStatus_Information */
+		Process: DevKit.FormBookingStatus_Information.Process;
 		/** The SidePanes of form BookingStatus_Information */
 		SidePanes: DevKit.SidePanes;
 	}

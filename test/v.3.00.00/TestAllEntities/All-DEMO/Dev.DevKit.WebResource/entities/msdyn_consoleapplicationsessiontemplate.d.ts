@@ -34,6 +34,8 @@ declare namespace DevKit {
 		interface Navigation {
 			nav_msdyn_msdyn_consoleapplicationsessiontemp_tag: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			AdditionalTabs: DevKit.Controls.Grid;
 		}
@@ -51,6 +53,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyn_consoleapplicationsessiontemplate_Information.Body;
 		/** The Navigation of form msdyn_consoleapplicationsessiontemplate_Information */
 		Navigation: DevKit.Formmsdyn_consoleapplicationsessiontemplate_Information.Navigation;
+		/** The Process of form msdyn_consoleapplicationsessiontemplate_Information */
+		Process: DevKit.Formmsdyn_consoleapplicationsessiontemplate_Information.Process;
 		/** The Grid of form msdyn_consoleapplicationsessiontemplate_Information */
 		Grid: DevKit.Formmsdyn_consoleapplicationsessiontemplate_Information.Grid;
 		/** The SidePanes of form msdyn_consoleapplicationsessiontemplate_Information */

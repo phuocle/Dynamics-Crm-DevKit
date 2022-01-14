@@ -18,6 +18,8 @@ declare namespace DevKit {
 			/** Status of the Search */
 			statecode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyusd_search_Information extends DevKit.IForm {
 		/**
@@ -32,6 +34,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyusd_search_Information.Body;
 		/** The Footer section of form msdyusd_search_Information */
 		Footer: DevKit.Formmsdyusd_search_Information.Footer;
+		/** The Process of form msdyusd_search_Information */
+		Process: DevKit.Formmsdyusd_search_Information.Process;
 		/** The SidePanes of form msdyusd_search_Information */
 		SidePanes: DevKit.SidePanes;
 	}

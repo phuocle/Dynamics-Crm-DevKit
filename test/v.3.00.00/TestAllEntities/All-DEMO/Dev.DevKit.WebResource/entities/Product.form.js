@@ -16,7 +16,7 @@ var DevKit;
 		var form = devKit.LoadForm(formContext);
 		var body = {
 			CurrentCost: {},
-			CurrentCost_1: {},
+			CurrentCost1: {},
 			DefaultUoMId: {},
 			DefaultUoMScheduleId: {},
 			Description: {},
@@ -31,7 +31,7 @@ var DevKit;
 			Name: {},
 			notescontrol: {},
 			ParentProductId: {},
-			ParentProductId_1: {},
+			ParentProductId1: {},
 			Price: {},
 			Price_List_Items: {},
 			PriceLevelId: {},
@@ -42,7 +42,7 @@ var DevKit;
 			productsubstitute_items: {},
 			QuantityDecimal: {},
 			StandardCost: {},
-			StandardCost_1: {},
+			StandardCost1: {},
 			SubjectId: {},
 			ValidFromDate: {},
 			ValidToDate: {}
@@ -97,11 +97,6 @@ var DevKit;
 		form.Header = header;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var grid = {
 			KnowledgeArticlesSubGrid: {},
 			Price_List_Items: {},
@@ -226,11 +221,6 @@ var DevKit;
 		form.Header = header;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var grid = {
 			Computed_Fields: {},
 			Price_List_Items: {},

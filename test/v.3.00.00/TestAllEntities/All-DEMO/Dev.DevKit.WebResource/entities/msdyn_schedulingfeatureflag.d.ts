@@ -18,6 +18,8 @@ declare namespace DevKit {
 			/** Status of the SchedulingFeatureFlag */
 			statecode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_schedulingfeatureflag_Information extends DevKit.IForm {
 		/**
@@ -30,6 +32,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_schedulingfeatureflag_Information */
 		Body: DevKit.Formmsdyn_schedulingfeatureflag_Information.Body;
+		/** The Process of form msdyn_schedulingfeatureflag_Information */
+		Process: DevKit.Formmsdyn_schedulingfeatureflag_Information.Process;
 		/** The SidePanes of form msdyn_schedulingfeatureflag_Information */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -52,6 +56,8 @@ declare namespace DevKit {
 			/** Status of the SchedulingFeatureFlag */
 			statecode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormTroubleshooting extends DevKit.IForm {
 		/**
@@ -64,6 +70,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Troubleshooting */
 		Body: DevKit.FormTroubleshooting.Body;
+		/** The Process of form Troubleshooting */
+		Process: DevKit.FormTroubleshooting.Process;
 		/** The SidePanes of form Troubleshooting */
 		SidePanes: DevKit.SidePanes;
 	}

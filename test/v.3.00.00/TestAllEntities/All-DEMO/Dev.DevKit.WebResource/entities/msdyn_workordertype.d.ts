@@ -33,6 +33,8 @@ declare namespace DevKit {
 			nav_msdyn_msdyn_workordertype_msdyn_workorder_WorkOrderType: DevKit.Controls.NavigationItem,
 			nav_msdyn_msdyn_workordertype_opportunity_WorkOrderType: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_workordertype_Information extends DevKit.IForm {
 		/**
@@ -49,6 +51,8 @@ declare namespace DevKit {
 		Footer: DevKit.Formmsdyn_workordertype_Information.Footer;
 		/** The Navigation of form msdyn_workordertype_Information */
 		Navigation: DevKit.Formmsdyn_workordertype_Information.Navigation;
+		/** The Process of form msdyn_workordertype_Information */
+		Process: DevKit.Formmsdyn_workordertype_Information.Process;
 		/** The SidePanes of form msdyn_workordertype_Information */
 		SidePanes: DevKit.SidePanes;
 	}

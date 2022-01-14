@@ -24,6 +24,8 @@ declare namespace DevKit {
 			/** Field to host the sound form custom control */
 			msdyn_SoundFormControl: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			personalquickreplies: DevKit.Controls.Grid;
 		}
@@ -39,6 +41,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Personalization_settings */
 		Body: DevKit.FormPersonalization_settings.Body;
+		/** The Process of form Personalization_settings */
+		Process: DevKit.FormPersonalization_settings.Process;
 		/** The Grid of form Personalization_settings */
 		Grid: DevKit.FormPersonalization_settings.Grid;
 		/** The SidePanes of form Personalization_settings */

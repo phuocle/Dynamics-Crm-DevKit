@@ -18,6 +18,8 @@ declare namespace DevKit {
 			nav_msdyn_requirementgroup_requirementrelationship_requirementgroupid: DevKit.Controls.NavigationItem,
 			nav_msdyn_requirementgroup_resourcerequirement_requirementgroupid: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			ResourceRequirements: DevKit.Controls.Grid;
 		}
@@ -35,6 +37,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyn_requirementgroup_Information.Body;
 		/** The Navigation of form msdyn_requirementgroup_Information */
 		Navigation: DevKit.Formmsdyn_requirementgroup_Information.Navigation;
+		/** The Process of form msdyn_requirementgroup_Information */
+		Process: DevKit.Formmsdyn_requirementgroup_Information.Process;
 		/** The Grid of form msdyn_requirementgroup_Information */
 		Grid: DevKit.Formmsdyn_requirementgroup_Information.Grid;
 		/** The SidePanes of form msdyn_requirementgroup_Information */

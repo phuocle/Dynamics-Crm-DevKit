@@ -8,6 +8,8 @@ declare namespace DevKit {
 			/** The name of the custom entity. */
 			msdynsm_name: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdynsm_settingssitemap_Information extends DevKit.IForm {
 		/**
@@ -20,6 +22,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdynsm_settingssitemap_Information */
 		Body: DevKit.Formmsdynsm_settingssitemap_Information.Body;
+		/** The Process of form msdynsm_settingssitemap_Information */
+		Process: DevKit.Formmsdynsm_settingssitemap_Information.Process;
 		/** The SidePanes of form msdynsm_settingssitemap_Information */
 		SidePanes: DevKit.SidePanes;
 	}

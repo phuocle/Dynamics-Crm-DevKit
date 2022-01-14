@@ -30,6 +30,8 @@ declare namespace DevKit {
 			/** Select the team type. */
 			TeamType: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			Members: DevKit.Controls.Grid;
 		}
@@ -47,6 +49,8 @@ declare namespace DevKit {
 		Body: DevKit.FormTeam_New_Form.Body;
 		/** The Header section of form Team_New_Form */
 		Header: DevKit.FormTeam_New_Form.Header;
+		/** The Process of form Team_New_Form */
+		Process: DevKit.FormTeam_New_Form.Process;
 		/** The Grid of form Team_New_Form */
 		Grid: DevKit.FormTeam_New_Form.Grid;
 		/** The SidePanes of form Team_New_Form */
@@ -84,6 +88,8 @@ declare namespace DevKit {
 			/** Select the team type. */
 			TeamType: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			Members: DevKit.Controls.Grid;
 		}
@@ -101,6 +107,8 @@ declare namespace DevKit {
 		Body: DevKit.FormTeam.Body;
 		/** The Header section of form Team */
 		Header: DevKit.FormTeam.Header;
+		/** The Process of form Team */
+		Process: DevKit.FormTeam.Process;
 		/** The Grid of form Team */
 		Grid: DevKit.FormTeam.Grid;
 		/** The SidePanes of form Team */
@@ -140,6 +148,8 @@ declare namespace DevKit {
 			navProcessSessions: DevKit.Controls.NavigationItem,
 			navRoles: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			Members: DevKit.Controls.Grid;
 		}
@@ -157,6 +167,8 @@ declare namespace DevKit {
 		Body: DevKit.FormTeam_form_Business.Body;
 		/** The Navigation of form Team_form_Business */
 		Navigation: DevKit.FormTeam_form_Business.Navigation;
+		/** The Process of form Team_form_Business */
+		Process: DevKit.FormTeam_form_Business.Process;
 		/** The Grid of form Team_form_Business */
 		Grid: DevKit.FormTeam_form_Business.Grid;
 		/** The SidePanes of form Team_form_Business */

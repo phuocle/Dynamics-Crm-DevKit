@@ -58,7 +58,7 @@ declare namespace DevKit {
 			/** Unique identifier for Invoice Line associated with Invoice Line Detail. */
 			msdyn_InvoiceLineId: DevKit.Controls.Lookup;
 			/** Unique identifier for Invoice Line associated with Invoice Line Detail. */
-			msdyn_InvoiceLineId_1: DevKit.Controls.Lookup;
+			msdyn_InvoiceLineId1: DevKit.Controls.Lookup;
 			/** The original transaction that is being corrected if this is a correction transaction. */
 			msdyn_OriginalInvoiceLineDetail: DevKit.Controls.Lookup;
 			/** Enter the price of the transaction. */
@@ -107,6 +107,8 @@ declare namespace DevKit {
 		interface QuickForm {
 			CorrectionQuickView: quickForm_CorrectionQuickView;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_invoicelinetransaction_Information extends DevKit.IForm {
 		/**
@@ -121,6 +123,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyn_invoicelinetransaction_Information.Body;
 		/** The QuickForm of form msdyn_invoicelinetransaction_Information */
 		QuickForm: DevKit.Formmsdyn_invoicelinetransaction_Information.QuickForm;
+		/** The Process of form msdyn_invoicelinetransaction_Information */
+		Process: DevKit.Formmsdyn_invoicelinetransaction_Information.Process;
 		/** The SidePanes of form msdyn_invoicelinetransaction_Information */
 		SidePanes: DevKit.SidePanes;
 	}

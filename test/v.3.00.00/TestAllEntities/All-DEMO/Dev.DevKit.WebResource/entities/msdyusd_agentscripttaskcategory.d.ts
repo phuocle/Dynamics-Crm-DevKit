@@ -14,6 +14,8 @@ declare namespace DevKit {
 			/** Status of the Agent Script Task Category */
 			statecode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyusd_agentscripttaskcategory_Information extends DevKit.IForm {
 		/**
@@ -28,6 +30,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyusd_agentscripttaskcategory_Information.Body;
 		/** The Footer section of form msdyusd_agentscripttaskcategory_Information */
 		Footer: DevKit.Formmsdyusd_agentscripttaskcategory_Information.Footer;
+		/** The Process of form msdyusd_agentscripttaskcategory_Information */
+		Process: DevKit.Formmsdyusd_agentscripttaskcategory_Information.Process;
 		/** The SidePanes of form msdyusd_agentscripttaskcategory_Information */
 		SidePanes: DevKit.SidePanes;
 	}

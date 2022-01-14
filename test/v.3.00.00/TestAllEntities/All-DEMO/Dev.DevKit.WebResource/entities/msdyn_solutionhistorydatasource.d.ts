@@ -7,6 +7,8 @@ declare namespace DevKit {
 		interface Body {
 			msdyn_name: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_solutionhistorydatasource_Information extends DevKit.IForm {
 		/**
@@ -19,6 +21,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_solutionhistorydatasource_Information */
 		Body: DevKit.Formmsdyn_solutionhistorydatasource_Information.Body;
+		/** The Process of form msdyn_solutionhistorydatasource_Information */
+		Process: DevKit.Formmsdyn_solutionhistorydatasource_Information.Process;
 		/** The SidePanes of form msdyn_solutionhistorydatasource_Information */
 		SidePanes: DevKit.SidePanes;
 	}

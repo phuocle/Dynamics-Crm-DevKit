@@ -24,7 +24,7 @@ declare namespace DevKit {
 			/** Language of the email signature. */
 			LanguageCode: DevKit.Controls.Integer;
 			/** Language of the email signature. */
-			LanguageCode_1: DevKit.Controls.Integer;
+			LanguageCode1: DevKit.Controls.Integer;
 			/** Unique identifier of the user or team who owns the email signature for the email activity. */
 			OwnerId: DevKit.Controls.Lookup;
 			/** Safe html of email signature. */
@@ -32,7 +32,9 @@ declare namespace DevKit {
 			/** Title of the email signature. */
 			Title: DevKit.Controls.String;
 			/** Title of the email signature. */
-			Title_1: DevKit.Controls.String;
+			Title1: DevKit.Controls.String;
+		}
+		interface Process extends DevKit.Controls.IProcess {
 		}
 	}
 	class FormEmail_signature extends DevKit.IForm {
@@ -48,6 +50,8 @@ declare namespace DevKit {
 		Body: DevKit.FormEmail_signature.Body;
 		/** The Header section of form Email_signature */
 		Header: DevKit.FormEmail_signature.Header;
+		/** The Process of form Email_signature */
+		Process: DevKit.FormEmail_signature.Process;
 		/** The SidePanes of form Email_signature */
 		SidePanes: DevKit.SidePanes;
 	}

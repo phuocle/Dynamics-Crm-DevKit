@@ -17,13 +17,13 @@ var DevKit;
 		var body = {
 			msdyn_ActualDuration: {},
 			msdyn_AgreementBookingServiceTask: {},
-			msdyn_AgreementBookingServiceTask_1: {},
+			msdyn_AgreementBookingServiceTask1: {},
 			msdyn_Booking: {},
-			msdyn_Booking_1: {},
+			msdyn_Booking1: {},
 			msdyn_CustomerAsset: {},
-			msdyn_CustomerAsset_1: {},
+			msdyn_CustomerAsset1: {},
 			msdyn_Description: {},
-			msdyn_Description_1: {},
+			msdyn_Description1: {},
 			msdyn_EstimatedDuration: {},
 			msdyn_Inspection: {},
 			msdyn_inspectiondefinitionid: {},
@@ -36,7 +36,7 @@ var DevKit;
 			msdyn_TaskType: {},
 			msdyn_WorkOrder: {},
 			msdyn_WorkOrderIncident: {},
-			msdyn_WorkOrderIncident_1: {},
+			msdyn_WorkOrderIncident1: {},
 			notescontrol: {},
 			OwnerId: {}
 		};
@@ -63,11 +63,6 @@ var DevKit;
 		form.Footer = footer;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var navigation = {
 			navProcessSessions: {}
 		};
@@ -126,11 +121,6 @@ var DevKit;
 		form.Body = body;
 		var process = devKit.LoadProcess(formContext);
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var navigation = {
 			navAsyncOperations: {},
 			navProcessSessions: {}

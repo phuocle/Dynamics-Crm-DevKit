@@ -14,6 +14,8 @@ declare namespace DevKit {
 			/** Status of the Chatbot */
 			statecode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			BotComponents: DevKit.Controls.Grid;
 			ConversationTranscripts: DevKit.Controls.Grid;
@@ -30,6 +32,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form bot_Information */
 		Body: DevKit.Formbot_Information.Body;
+		/** The Process of form bot_Information */
+		Process: DevKit.Formbot_Information.Process;
 		/** The Grid of form bot_Information */
 		Grid: DevKit.Formbot_Information.Grid;
 		/** The SidePanes of form bot_Information */

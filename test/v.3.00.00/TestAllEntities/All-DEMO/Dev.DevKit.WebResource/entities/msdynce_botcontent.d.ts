@@ -11,6 +11,8 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdynce_botcontent_Information extends DevKit.IForm {
 		/**
@@ -23,6 +25,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdynce_botcontent_Information */
 		Body: DevKit.Formmsdynce_botcontent_Information.Body;
+		/** The Process of form msdynce_botcontent_Information */
+		Process: DevKit.Formmsdynce_botcontent_Information.Process;
 		/** The SidePanes of form msdynce_botcontent_Information */
 		SidePanes: DevKit.SidePanes;
 	}

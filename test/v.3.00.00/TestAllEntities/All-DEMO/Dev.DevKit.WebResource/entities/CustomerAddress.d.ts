@@ -46,6 +46,8 @@ declare namespace DevKit {
 			/** Type a second phone number for the customer's address. */
 			Telephone2: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormCustomerAddress_Information extends DevKit.IForm {
 		/**
@@ -58,6 +60,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form CustomerAddress_Information */
 		Body: DevKit.FormCustomerAddress_Information.Body;
+		/** The Process of form CustomerAddress_Information */
+		Process: DevKit.FormCustomerAddress_Information.Process;
 		/** The SidePanes of form CustomerAddress_Information */
 		SidePanes: DevKit.SidePanes;
 	}

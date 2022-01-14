@@ -42,6 +42,8 @@ declare namespace DevKit {
 			/** Shows the entity the playbook is launched for. */
 			Regarding: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			PlaybookActivities: DevKit.Controls.Grid;
 		}
@@ -59,6 +61,8 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyn_playbookinstance_Information.Body;
 		/** The Header section of form msdyn_playbookinstance_Information */
 		Header: DevKit.Formmsdyn_playbookinstance_Information.Header;
+		/** The Process of form msdyn_playbookinstance_Information */
+		Process: DevKit.Formmsdyn_playbookinstance_Information.Process;
 		/** The Grid of form msdyn_playbookinstance_Information */
 		Grid: DevKit.Formmsdyn_playbookinstance_Information.Grid;
 		/** The SidePanes of form msdyn_playbookinstance_Information */
