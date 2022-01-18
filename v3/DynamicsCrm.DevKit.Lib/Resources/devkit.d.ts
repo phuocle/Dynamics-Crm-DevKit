@@ -1276,17 +1276,6 @@ declare namespace DevKit {
              */
             message: string;
         }
-
-        /**
-         * Object passed to QuickCreateSuccessCallbackDelegate.
-         */
-        interface OpenQuickCreateSuccessCallbackObject {
-            /**
-             * A lookup value which identifies the record which has been created.
-             */
-            savedEntityReference: LookupValue;
-        }
-
         /**
          * Object passed to OfflineOperationSuccessCallbackDelegate;
          */
@@ -1998,7 +1987,7 @@ declare namespace DevKit {
          * @param errorCallback A function to execute when the operation fails.
          * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openform
          */
-        OpenForm(formOption: DevKit.FormOption, formParameters?: any, successCallback?: (result: DevKit.EntityReference) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        OpenForm(formOption: DevKit.FormOption, formParameters?: any, successCallback?: (result: DevKit.OpenQuickCreateSuccessCallbackObject) => void, errorCallback?: (error: DevKit.Error) => void): void;
         /**
          * Opens a URL, including file URLs.
          * @param url URL to open.
@@ -2534,6 +2523,12 @@ declare namespace DevKit {
         id: DevKit.Guid;
         /** Name of the record */
         name?: string;
+    }
+    interface OpenQuickCreateSuccessCallbackObject {
+        /**
+         * A lookup value which identifies the record which has been created.
+         */
+        savedEntityReference: Array<DevKit.EntityReference>;
     }
     interface Window {
         /** Height of the window to display the resultant page in pixels */
