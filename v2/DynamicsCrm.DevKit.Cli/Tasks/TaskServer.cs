@@ -136,13 +136,18 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                             if (attribute.PluginType == PluginType.Plugin ||
                                 attribute.PluginType == PluginType.CustomAction)
                             {
+                                var entityAttributes = GetAttributesFromEntityMetadata(attribute);
+                                if (attribute.FilteringAllAttributes)
+                                {
+                                    attribute.FilteringAttributes = entityAttributes;
+                                }
                                 var pluginStepId = RegisterPluginStep(pluginTypeId, type, attribute);
                                 if (pluginStepId == Guid.Empty) continue;
                                 if (attribute.PluginType == PluginType.Plugin && HasPluginImage(attribute))
                                 {
                                     if (IsSupportPluginImage(attribute))
                                     {
-                                        RegisterPluginImage(pluginStepId, type, attribute);
+                                        RegisterPluginImage(pluginStepId, type, attribute, entityAttributes);
                                     }
                                     else
                                     {
@@ -187,6 +192,43 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
             CliLog.WriteLine(CliLog.ColorWhite, "|");
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, LOG);
+        }
+        private string GetAttributesFromEntityMetadata(CrmPluginRegistrationAttribute attribute)
+        {
+            if (!attribute.FilteringAllAttributes &&
+                !attribute.Image1AllAttributes &&
+                !attribute.Image2AllAttributes &&
+                !attribute.Image3AllAttributes &&
+                !attribute.Image4AllAttributes)
+            {
+                return String.Empty;
+            }
+            var retrieveEntityRequest = new RetrieveEntityRequest();
+            retrieveEntityRequest.LogicalName = attribute.EntityLogicalName;
+            retrieveEntityRequest.EntityFilters = EntityFilters.Attributes;
+
+            var response = (RetrieveEntityResponse)crmServiceClient.Execute(retrieveEntityRequest);
+
+            if (response == null) return string.Empty;
+
+            var attributes = string.Empty;
+            foreach (var attributeMetadata in response.EntityMetadata.Attributes)
+            {
+                if (attributeMetadata.AttributeOf != null) continue;
+                if (attributeMetadata.IsPrimaryId != null && attributeMetadata.IsPrimaryId.Value) continue;
+                if (attributeMetadata.IsRenameable == null) continue;
+
+                if (attributes.Length == 0)
+                {
+                    attributes = attributeMetadata.LogicalName;
+                }
+                else
+                {
+                    attributes += $",{attributeMetadata.LogicalName}";
+                }
+            }
+
+            return attributes;
         }
 
         private bool IsValidDataProvider(List<DataProviderEvent> dataProviderEvents, string dataSource)
@@ -247,14 +289,15 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         private bool HasPluginImage(CrmPluginRegistrationAttribute attribute)
         {
-            if (attribute?.Image1Name?.Length > 0 && attribute?.Image1Attributes?.Length > 0)
+            if (attribute?.Image1Name?.Length > 0 && (attribute?.Image1Attributes?.Length > 0 || attribute?.Image1AllAttributes == true))
                 return true;
-            if (attribute?.Image2Name?.Length > 0 && attribute?.Image2Attributes?.Length > 0)
+            if (attribute?.Image2Name?.Length > 0 && (attribute?.Image2Attributes?.Length > 0 || attribute?.Image2AllAttributes == true))
                 return true;
-            if (attribute?.Image3Name?.Length > 0 && attribute?.Image3Attributes?.Length > 0)
+            if (attribute?.Image3Name?.Length > 0 && (attribute?.Image3Attributes?.Length > 0 || attribute?.Image3AllAttributes == true))
                 return true;
-            if (attribute?.Image4Name?.Length > 0 && attribute?.Image4Attributes?.Length > 0)
+            if (attribute?.Image4Name?.Length > 0 && (attribute?.Image4Attributes?.Length > 0 || attribute?.Image4AllAttributes == true))
                 return true;
+
             return false;
         }
 
@@ -504,8 +547,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             return rows.Entities[0].Id;
         }
 
-        private void RegisterPluginImage(Guid pluginStepId, TypeInfo type, CrmPluginRegistrationAttribute attribute)
+        private void RegisterPluginImage(Guid pluginStepId, TypeInfo type, CrmPluginRegistrationAttribute attribute, string entityAttributes)
         {
+            SetAllImageAttributes(attribute, entityAttributes);
+
             if (attribute?.Image1Name?.Length > 0 && attribute?.Image1Attributes?.Length > 0)
                 RegisterPluginImage(attribute.Message, attribute.Image1Name, attribute.Image1Alias, attribute.Image1Type, attribute.Image1Attributes, pluginStepId, attribute.Name);
             if (attribute?.Image2Name?.Length > 0 && attribute?.Image2Attributes?.Length > 0)
@@ -514,6 +559,29 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 RegisterPluginImage(attribute.Message, attribute.Image3Name, attribute.Image3Alias, attribute.Image3Type, attribute.Image3Attributes, pluginStepId, attribute.Name);
             if (attribute?.Image4Name?.Length > 0 && attribute?.Image4Attributes?.Length > 0)
                 RegisterPluginImage(attribute.Message, attribute.Image4Name, attribute.Image4Alias, attribute.Image4Type, attribute.Image4Attributes, pluginStepId, attribute.Name);
+        }
+
+        private void SetAllImageAttributes(CrmPluginRegistrationAttribute attribute, string entityAttributes)
+        {
+            if (attribute.Image1AllAttributes)
+            {
+                attribute.Image1Attributes = entityAttributes;
+            }
+
+            if (attribute.Image2AllAttributes)
+            {
+                attribute.Image2Attributes = entityAttributes;
+            }
+
+            if (attribute.Image3AllAttributes)
+            {
+                attribute.Image3Attributes = entityAttributes;
+            }
+
+            if (attribute.Image4AllAttributes)
+            {
+                attribute.Image4Attributes = entityAttributes;
+            }
         }
 
         private Entity GetSecureEntity(Guid pluginStepId)

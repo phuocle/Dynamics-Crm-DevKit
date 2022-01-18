@@ -82,6 +82,9 @@ namespace DynamicsCrm.DevKit.Shared.Extensions
                     case "FilteringAttributes":
                         attribute.FilteringAttributes = (string)namedArgument.TypedValue.Value;
                         break;
+                    case "FilteringAllAttributes":
+                        attribute.FilteringAllAttributes = (bool)namedArgument.TypedValue.Value;
+                        break;
                     case "Name":
                         attribute.Name = (string)namedArgument.TypedValue.Value;
                         break;
@@ -112,6 +115,9 @@ namespace DynamicsCrm.DevKit.Shared.Extensions
                     case "Image1Attributes":
                         attribute.Image1Attributes = (string)namedArgument.TypedValue.Value;
                         break;
+                    case "Image1AllAttributes":
+                        attribute.Image1AllAttributes = (bool)namedArgument.TypedValue.Value;
+                        break;
                     case "Image2Name":
                         attribute.Image2Name = (string)namedArgument.TypedValue.Value;
                         break;
@@ -123,6 +129,9 @@ namespace DynamicsCrm.DevKit.Shared.Extensions
                         break;
                     case "Image2Attributes":
                         attribute.Image2Attributes = (string)namedArgument.TypedValue.Value;
+                        break;
+                    case "Image2AllAttributes":
+                        attribute.Image2AllAttributes = (bool)namedArgument.TypedValue.Value;
                         break;
                     case "Image3Name":
                         attribute.Image3Name = (string)namedArgument.TypedValue.Value;
@@ -136,6 +145,9 @@ namespace DynamicsCrm.DevKit.Shared.Extensions
                     case "Image3Attributes":
                         attribute.Image3Attributes = (string)namedArgument.TypedValue.Value;
                         break;
+                    case "Image3AllAttributes":
+                        attribute.Image3AllAttributes = (bool)namedArgument.TypedValue.Value;
+                        break;
                     case "Image4Name":
                         attribute.Image4Name = (string)namedArgument.TypedValue.Value;
                         break;
@@ -147,6 +159,9 @@ namespace DynamicsCrm.DevKit.Shared.Extensions
                         break;
                     case "Image4Attributes":
                         attribute.Image4Attributes = (string)namedArgument.TypedValue.Value;
+                        break;
+                    case "Image4AllAttributes":
+                        attribute.Image4AllAttributes = (bool)namedArgument.TypedValue.Value;
                         break;
                     case "PluginType":
                         hasNamedArgumentPluginType = true;

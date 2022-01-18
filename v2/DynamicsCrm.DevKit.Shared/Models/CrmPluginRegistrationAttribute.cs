@@ -67,6 +67,7 @@ namespace DynamicsCrm.DevKit.Shared.Models
         public string Message { get; set; } = string.Empty;
         public string EntityLogicalName { get; set; } = string.Empty;
         public string FilteringAttributes { get; set; } = string.Empty;
+        public bool FilteringAllAttributes { get; set; } = false;
         public string Name { get; set; } = string.Empty;
         public int ExecutionOrder { get; set; } = 1;
         public StageEnum Stage { get; set; } = StageEnum.PostOperation;
@@ -77,18 +78,22 @@ namespace DynamicsCrm.DevKit.Shared.Models
         public string Image1Alias { get; set; } = string.Empty;
         public ImageTypeEnum Image1Type { get; set; } = ImageTypeEnum.PreImage;
         public string Image1Attributes { get; set; } = string.Empty;
+        public bool Image1AllAttributes { get; set; } = false;
         public string Image2Name { get; set; } = string.Empty;
         public string Image2Alias { get; set; } = string.Empty;
         public ImageTypeEnum Image2Type { get; set; } = ImageTypeEnum.PostImage;
         public string Image2Attributes { get; set; } = string.Empty;
+        public bool Image2AllAttributes { get; set; } = false;
         public string Image3Name { get; set; } = string.Empty;
         public string Image3Alias { get; set; } = string.Empty;
         public ImageTypeEnum Image3Type { get; set; } = ImageTypeEnum.PostImage;
         public string Image3Attributes { get; set; } = string.Empty;
+        public bool Image3AllAttributes { get; set; } = false;
         public string Image4Name { get; set; } = string.Empty;
         public string Image4Alias { get; set; } = string.Empty;
         public ImageTypeEnum Image4Type { get; set; } = ImageTypeEnum.PostImage;
         public string Image4Attributes { get; set; } = string.Empty;
+        public bool Image4AllAttributes { get; set; } = false;
         public PluginType PluginType { get; set; }
         public string DataSource { get; set; }
     }
