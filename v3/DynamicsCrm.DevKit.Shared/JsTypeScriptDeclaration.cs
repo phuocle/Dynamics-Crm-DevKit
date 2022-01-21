@@ -310,7 +310,7 @@ namespace DynamicsCrm.DevKit.Shared
             _d_ts += $"\t}}\r\n";
             _d_ts += $"\tclass Form{formName} extends DevKit.IForm {{\r\n";
             _d_ts += $"\t\t/**\r\n";
-            _d_ts += $"\t\t* DynamicsCrm.DevKit form {formName} Quick Create\r\n";
+            _d_ts += $"\t\t* {form.Name} [Quick Create]\r\n";
             _d_ts += $"\t\t* @param executionContext the execution context\r\n";
             _d_ts += $"\t\t* @param defaultWebResourceName default resource name. E.g.: \"devkit_/resources/Resource\"\r\n";
             _d_ts += $"\t\t*/\r\n";
@@ -376,7 +376,7 @@ namespace DynamicsCrm.DevKit.Shared
             _d_ts += $"{TAB}}}{NEW_LINE}";
             _d_ts += $"\tclass Form{formName} extends DevKit.IForm {{\r\n";
             _d_ts += $"\t\t/**\r\n";
-            _d_ts += $"\t\t* DynamicsCrm.DevKit form {formName} Main Form\r\n";
+            _d_ts += $"\t\t* {form.Name} [Main Form]\r\n";
             _d_ts += $"\t\t* @param executionContext the execution context\r\n";
             _d_ts += $"\t\t* @param defaultWebResourceName default resource name. E.g.: \"devkit_/resources/Resource\"\r\n";
             _d_ts += $"\t\t*/\r\n";

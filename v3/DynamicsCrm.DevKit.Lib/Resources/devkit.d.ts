@@ -1733,7 +1733,7 @@ declare namespace DevKit {
          * Cancels the save operation if the event handler has a script error, returns a rejected promise for an async event handler or the operation times out.
          * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/save-event-arguments/preventdefaultonerror
          */
-        SetPreventDefaultOnError
+        SetPreventDefaultOnError(): void;
         /**
          * Returns a value that indicates the order in which this handler is executed.
          * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/executioncontext/getdepth
