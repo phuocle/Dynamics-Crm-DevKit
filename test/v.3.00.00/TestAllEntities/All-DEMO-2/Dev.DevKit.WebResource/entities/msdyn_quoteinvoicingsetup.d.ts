@@ -11,10 +11,12 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_quoteinvoicingsetup_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form msdyn_quoteinvoicingsetup_Information
+		* Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -23,6 +25,69 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_quoteinvoicingsetup_Information */
 		Body: DevKit.Formmsdyn_quoteinvoicingsetup_Information.Body;
+		/** The Process of form msdyn_quoteinvoicingsetup_Information */
+		Process: DevKit.Formmsdyn_quoteinvoicingsetup_Information.Process;
+		/** The SidePanes of form msdyn_quoteinvoicingsetup_Information */
+		SidePanes: DevKit.SidePanes;
+	}
+	namespace Formmsdyn_quoteinvoicingsetup_Information2 {
+		interface tab__39DB6AD7_0591_436C_8508_3F53A96FBA9C_Sections {
+			_39DB6AD7_0591_436C_8508_3F53A96FBA9C_SECTION_2: DevKit.Controls.Section;
+		}
+		interface tab_TabProducts_Sections {
+			tab_2_section_1: DevKit.Controls.Section;
+		}
+		interface tab__39DB6AD7_0591_436C_8508_3F53A96FBA9C extends DevKit.Controls.ITab {
+			Section: tab__39DB6AD7_0591_436C_8508_3F53A96FBA9C_Sections;
+		}
+		interface tab_TabProducts extends DevKit.Controls.ITab {
+			Section: tab_TabProducts_Sections;
+		}
+		interface Tabs {
+			_39DB6AD7_0591_436C_8508_3F53A96FBA9C: tab__39DB6AD7_0591_436C_8508_3F53A96FBA9C;
+			TabProducts: tab_TabProducts;
+		}
+		interface Body {
+			Tab: Tabs;
+			/** Type a description of this invoice setup. */
+			msdyn_Description: DevKit.Controls.String;
+			/** The name of the custom entity. */
+			msdyn_name: DevKit.Controls.String;
+			/** Quote this invoice setup relates to */
+			msdyn_Quote: DevKit.Controls.Lookup;
+			/** Stores the invoice recurrence settings. */
+			msdyn_RecurrenceSettings: DevKit.Controls.String;
+			/** Owner Id */
+			OwnerId: DevKit.Controls.Lookup;
+		}
+		interface Navigation {
+			nav_msdyn_msdyn_quoteinvoicingsetup_msdyn_quoteinvoicingproduct_QuoteInvoicingSetup: DevKit.Controls.NavigationItem
+		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
+		interface Grid {
+			GridProducts: DevKit.Controls.Grid;
+		}
+	}
+	class Formmsdyn_quoteinvoicingsetup_Information2 extends DevKit.IForm {
+		/**
+		* Information [Main Form]
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form msdyn_quoteinvoicingsetup_Information2 */
+		Body: DevKit.Formmsdyn_quoteinvoicingsetup_Information2.Body;
+		/** The Navigation of form msdyn_quoteinvoicingsetup_Information2 */
+		Navigation: DevKit.Formmsdyn_quoteinvoicingsetup_Information2.Navigation;
+		/** The Process of form msdyn_quoteinvoicingsetup_Information2 */
+		Process: DevKit.Formmsdyn_quoteinvoicingsetup_Information2.Process;
+		/** The Grid of form msdyn_quoteinvoicingsetup_Information2 */
+		Grid: DevKit.Formmsdyn_quoteinvoicingsetup_Information2.Grid;
+		/** The SidePanes of form msdyn_quoteinvoicingsetup_Information2 */
+		SidePanes: DevKit.SidePanes;
 	}
 	class msdyn_quoteinvoicingsetupApi {
 		/**
@@ -124,22 +189,22 @@ declare namespace OptionSet {
 			/** 2 */
 			Inactive
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

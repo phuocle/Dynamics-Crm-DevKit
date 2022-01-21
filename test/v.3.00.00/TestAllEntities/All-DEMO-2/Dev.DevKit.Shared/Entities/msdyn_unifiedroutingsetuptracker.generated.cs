@@ -17,11 +17,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_unifiedroutingsetuptrackerOptionSets
 		/// </summary>
 		Completed = 1,
 		/// <summary>
-		/// Deprovisioning_Completed = 5
+		/// Deprovisioning Completed = 5
 		/// </summary>
 		Deprovisioning_Completed = 5,
 		/// <summary>
-		/// Deprovisioning_Started = 4
+		/// Deprovisioning Started = 4
 		/// </summary>
 		Deprovisioning_Started = 4,
 		/// <summary>
@@ -29,15 +29,15 @@ namespace Dev.DevKit.Shared.Entities.msdyn_unifiedroutingsetuptrackerOptionSets
 		/// </summary>
 		Failed = 8,
 		/// <summary>
-		/// Provisioning_Completed = 3
+		/// Provisioning Completed = 3
 		/// </summary>
 		Provisioning_Completed = 3,
 		/// <summary>
-		/// Provisioning_Started = 2
+		/// Provisioning Started = 2
 		/// </summary>
 		Provisioning_Started = 2,
 		/// <summary>
-		/// Record_Created = 7
+		/// Record Created = 7
 		/// </summary>
 		Record_Created = 7,
 		/// <summary>
@@ -93,6 +93,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_errormessage = "msdyn_errormessage";
 			public const string msdyn_executionstatus = "msdyn_executionstatus";
 			public const string msdyn_issuccessnotificationdisplayed = "msdyn_issuccessnotificationdisplayed";
+			public const string msdyn_isTeachingBubbleDisplayed = "msdyn_isteachingbubbledisplayed";
 			public const string msdyn_name = "msdyn_name";
 			public const string msdyn_servicerequestid = "msdyn_servicerequestid";
 			public const string msdyn_token = "msdyn_token";
@@ -109,7 +110,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_unifiedroutingsetuptracker";
 
-		public const int EntityTypeCode = 10108;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10120;
 
 		[DebuggerNonUserCode()]
 		public msdyn_unifiedroutingsetuptracker()
@@ -302,6 +304,17 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_issuccessnotificationdisplayed); }
 			set { Entity.Attributes[Fields.msdyn_issuccessnotificationdisplayed] = value; }
+		}
+
+		/// <summary>
+		/// <para>Boolean</para>
+		/// <para>Is Unified Routing teaching bubble displayed</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_isTeachingBubbleDisplayed
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_isTeachingBubbleDisplayed); }
+			set { Entity.Attributes[Fields.msdyn_isTeachingBubbleDisplayed] = value; }
 		}
 
 		/// <summary>

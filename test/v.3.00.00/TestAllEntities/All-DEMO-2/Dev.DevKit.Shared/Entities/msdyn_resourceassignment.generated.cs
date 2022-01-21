@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_resourceassignmentOptionSets
 		/// </summary>
 		Canceled = 192350004,
 		/// <summary>
-		/// Hard_Book = 192350001
+		/// Hard Book = 192350001
 		/// </summary>
 		Hard_Book = 192350001,
 		/// <summary>
@@ -29,7 +29,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_resourceassignmentOptionSets
 		/// </summary>
 		Proposed = 192350003,
 		/// <summary>
-		/// Soft_Book = 192350002
+		/// Soft Book = 192350002
 		/// </summary>
 		Soft_Book = 192350002
 	}
@@ -108,7 +108,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_resourceassignment";
 
-		public const int EntityTypeCode = 10382;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10488;
 
 		[DebuggerNonUserCode()]
 		public msdyn_resourceassignment()
@@ -522,7 +523,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Select the user whose capacity is assigned.</para>
-		/// <para>Lookup to </para>
+		/// <para>Lookup to systemuser</para>
 		/// <para>Resource (Deprecated in v3.0)</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -546,7 +547,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

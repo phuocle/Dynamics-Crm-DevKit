@@ -13,15 +13,15 @@ namespace Dev.DevKit.Shared.Entities.msdyn_fieldservicesettingOptionSets
 	public enum msdyn_DefaultCrewStrategy
 	{
 		/// <summary>
-		/// Cascade_and_Accept_Cascade_Completely = 192350000
+		/// Cascade and Accept Cascade Completely (Not Recommended) = 192350000
 		/// </summary>
-		Cascade_and_Accept_Cascade_Completely = 192350000,
+		Cascade_and_Accept_Cascade_Completely_Not_Recommended = 192350000,
 		/// <summary>
-		/// Crew_Leader_Management = 192350001
+		/// Crew Leader Management = 192350001
 		/// </summary>
 		Crew_Leader_Management = 192350001,
 		/// <summary>
-		/// Crew_Member_Self_Management = 192350002
+		/// Crew Member Self-Management = 192350002
 		/// </summary>
 		Crew_Member_Self_Management = 192350002
 	}
@@ -29,29 +29,29 @@ namespace Dev.DevKit.Shared.Entities.msdyn_fieldservicesettingOptionSets
 	public enum msdyn_DefaultWorkOrderCompletedStatus
 	{
 		/// <summary>
-		/// Closed_Canceled = 690970005
+		/// Canceled = 690970005
 		/// </summary>
-		Closed_Canceled = 690970005,
+		Canceled = 690970005,
 		/// <summary>
-		/// Closed_Posted = 690970004
+		/// Completed = 690970003
 		/// </summary>
-		Closed_Posted = 690970004,
+		Completed = 690970003,
 		/// <summary>
-		/// Open_Completed = 690970003
+		/// In Progress = 690970002
 		/// </summary>
-		Open_Completed = 690970003,
+		In_Progress = 690970002,
 		/// <summary>
-		/// Open_In_Progress = 690970002
+		/// Posted = 690970004
 		/// </summary>
-		Open_In_Progress = 690970002,
+		Posted = 690970004,
 		/// <summary>
-		/// Open_Scheduled = 690970001
+		/// Scheduled = 690970001
 		/// </summary>
-		Open_Scheduled = 690970001,
+		Scheduled = 690970001,
 		/// <summary>
-		/// Open_Unscheduled = 690970000
+		/// Unscheduled = 690970000
 		/// </summary>
-		Open_Unscheduled = 690970000
+		Unscheduled = 690970000
 	}
 
 	public enum msdyn_HistoricalDataFilter
@@ -61,15 +61,15 @@ namespace Dev.DevKit.Shared.Entities.msdyn_fieldservicesettingOptionSets
 		/// </summary>
 		All = 100000003,
 		/// <summary>
-		/// Last_12_Months = 100000002
+		/// Last 12 Months = 100000002
 		/// </summary>
 		Last_12_Months = 100000002,
 		/// <summary>
-		/// Last_3_Months = 100000000
+		/// Last 3 Months = 100000000
 		/// </summary>
 		Last_3_Months = 100000000,
 		/// <summary>
-		/// Last_6_Months = 100000001
+		/// Last 6 Months = 100000001
 		/// </summary>
 		Last_6_Months = 100000001
 	}
@@ -93,11 +93,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_fieldservicesettingOptionSets
 	public enum msdyn_ProductCostOrder
 	{
 		/// <summary>
-		/// CurrentStandard = 690970001
+		/// Current/Standard = 690970001
 		/// </summary>
 		CurrentStandard = 690970001,
 		/// <summary>
-		/// StandardCurrent = 690970000
+		/// Standard/Current = 690970000
 		/// </summary>
 		StandardCurrent = 690970000
 	}
@@ -105,7 +105,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_fieldservicesettingOptionSets
 	public enum msdyn_RunFrequencyOfIncidentTypeRecommendation
 	{
 		/// <summary>
-		/// Once_a_Week = 192350000
+		/// Once a Week = 192350000
 		/// </summary>
 		Once_a_Week = 192350000
 	}
@@ -113,11 +113,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_fieldservicesettingOptionSets
 	public enum msdyn_TimeCostActualsSource
 	{
 		/// <summary>
-		/// Booking_Journals_on_Post_of_Work_Order = 192354000
+		/// Booking Journals on Post of Work Order = 192354000
 		/// </summary>
 		Booking_Journals_on_Post_of_Work_Order = 192354000,
 		/// <summary>
-		/// Work_Order_Time_Entry_Approval = 192354001
+		/// Work Order Time Entry Approval = 192354001
 		/// </summary>
 		Work_Order_Time_Entry_Approval = 192354001
 	}
@@ -125,7 +125,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_fieldservicesettingOptionSets
 	public enum msdyn_TimeEntryGenerationStrategy
 	{
 		/// <summary>
-		/// Auto_Generate_from_Booking_Timestamps = 192355201
+		/// Auto-Generate from Booking Timestamps = 192355201
 		/// </summary>
 		Auto_Generate_from_Booking_Timestamps = 192355201,
 		/// <summary>
@@ -137,11 +137,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_fieldservicesettingOptionSets
 	public enum msdyn_TimestampFrequency
 	{
 		/// <summary>
-		/// Per_Booking_Status_Change = 192350000
+		/// Per Booking Status Change = 192350000
 		/// </summary>
 		Per_Booking_Status_Change = 192350000,
 		/// <summary>
-		/// Per_Field_Service_Status_Change = 192350001
+		/// Per Field Service Status Change = 192350001
 		/// </summary>
 		Per_Field_Service_Status_Change = 192350001
 	}
@@ -149,11 +149,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_fieldservicesettingOptionSets
 	public enum msdyn_UndefinedBookingLocation
 	{
 		/// <summary>
-		/// Ignore_Location = 690970001
+		/// Ignore Location = 690970001
 		/// </summary>
 		Ignore_Location = 690970001,
 		/// <summary>
-		/// Previous_Known_Location = 690970000
+		/// Previous Known Location = 690970000
 		/// </summary>
 		Previous_Known_Location = 690970000
 	}
@@ -177,7 +177,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_fieldservicesettingOptionSets
 		/// </summary>
 		Never = 690970000,
 		/// <summary>
-		/// On_Work_Order_Posted = 690970001
+		/// On Work Order Posted = 690970001
 		/// </summary>
 		On_Work_Order_Posted = 690970001
 	}
@@ -234,6 +234,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_BookingAlertTemplate = "msdyn_bookingalerttemplate";
 			public const string msdyn_BreakPayType = "msdyn_breakpaytype";
 			public const string msdyn_BusinessClosurePayType = "msdyn_businessclosurepaytype";
+			public const string msdyn_CalculatePrice = "msdyn_calculateprice";
 			public const string msdyn_CalculateTax = "msdyn_calculatetax";
 			public const string msdyn_CancelCurrentSlotsWhenMoving = "msdyn_cancelcurrentslotswhenmoving";
 			public const string msdyn_CustomGPSData = "msdyn_customgpsdata";
@@ -243,6 +244,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_CustomGPSResourcefield = "msdyn_customgpsresourcefield";
 			public const string msdyn_CustomGPSTimestampfield = "msdyn_customgpstimestampfield";
 			public const string msdyn_DatabaseVersion = "msdyn_databaseversion";
+			public const string msdyn_datepopulationtype = "msdyn_datepopulationtype";
 			public const string msdyn_DeactivateBookingWhenCanceled = "msdyn_deactivatebookingwhencanceled";
 			public const string msdyn_DeactivateBookingWhenCompleted = "msdyn_deactivatebookingwhencompleted";
 			public const string msdyn_DeactivateWorkOrderWhenCanceled = "msdyn_deactivateworkorderwhencanceled";
@@ -265,6 +267,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_EnhancedBackgroundProcessing = "msdyn_enhancedbackgroundprocessing";
 			public const string msdyn_EntityNumberLength = "msdyn_entitynumberlength";
 			public const string msdyn_fieldservicesettingId = "msdyn_fieldservicesettingid";
+			public const string msdyn_GenerateActuals = "msdyn_generateactuals";
 			public const string msdyn_GenerateAgreementInvoicesXDaysInAdvance = "msdyn_generateagreementinvoicesxdaysinadvance";
 			public const string msdyn_GenerateAgreementWOXDaysInAdvance = "msdyn_generateagreementwoxdaysinadvance";
 			public const string msdyn_GenerateBookingDatesXMonthsInAdvance = "msdyn_generatebookingdatesxmonthsinadvance";
@@ -275,6 +278,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_InspectionAnalyticsEnabledOn = "msdyn_inspectionanalyticsenabledon";
 			public const string msdyn_InspectionAnalyticsFrequency = "msdyn_inspectionanalyticsfrequency";
 			public const string msdyn_InspectionAnalyticsRecommendedTime = "msdyn_inspectionanalyticsrecommendedtime";
+			public const string msdyn_InternalFlags = "msdyn_internalflags";
 			public const string msdyn_InventoryAdjustmentPrefix = "msdyn_inventoryadjustmentprefix";
 			public const string msdyn_InventoryAdjustmentStartingNumber = "msdyn_inventoryadjustmentstartingnumber";
 			public const string msdyn_InventoryTransferPrefix = "msdyn_inventorytransferprefix";
@@ -308,6 +312,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_SchedulerResourceTooltipView = "msdyn_schedulerresourcetooltipview";
 			public const string msdyn_SchedulerUnscheduledView = "msdyn_schedulerunscheduledview";
 			public const string msdyn_sdkapimapkey = "msdyn_sdkapimapkey";
+			public const string msdyn_ShowSimplifiedWorkOrderCommands = "msdyn_showsimplifiedworkordercommands";
 			public const string msdyn_suggestreparentingcustomerassets = "msdyn_suggestreparentingcustomerassets";
 			public const string msdyn_TimeCostActualsSource = "msdyn_timecostactualssource";
 			public const string msdyn_TimeEntryGenerationStrategy = "msdyn_timeentrygenerationstrategy";
@@ -336,7 +341,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_fieldservicesetting";
 
-		public const int EntityTypeCode = 10432;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10542;
 
 		[DebuggerNonUserCode()]
 		public msdyn_fieldservicesetting()
@@ -626,6 +632,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>When disabled, all price calculation logic on work orders, work order products, and work order services will be disabled and relevant pricing fields will be hidden.</para>
+		/// <para>Boolean</para>
+		/// <para>Calculate Price</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_CalculatePrice
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_CalculatePrice); }
+			set { Entity.Attributes[Fields.msdyn_CalculatePrice] = value; }
+		}
+
+		/// <summary>
 		/// <para>On disabling, all tax related fields will be removed and no tax calculations will be performed.</para>
 		/// <para>Boolean</para>
 		/// <para>Calculate Tax</para>
@@ -638,7 +656,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select whether, when moving open slots to the next day, to leave the old slots and change their status to "Cancel."</para>
+		/// <para>Select whether, when moving open slots to the next day, to leave the old slots and change their status to &quot;Cancel.&quot;</para>
 		/// <para>Boolean</para>
 		/// <para>Cancel Current Slots When Moving (Deprecated)</para>
 		/// </summary>
@@ -734,7 +752,19 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select whether the system should deactivate the resource booking when the system status is changed to "Canceled."</para>
+		/// <para>Pre/Post Booking Flexibility Date Field Population.</para>
+		/// <para>Boolean</para>
+		/// <para>Pre/Post Booking Flexibility Date Field Population</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_datepopulationtype
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_datepopulationtype); }
+			set { Entity.Attributes[Fields.msdyn_datepopulationtype] = value; }
+		}
+
+		/// <summary>
+		/// <para>Select whether the system should deactivate the resource booking when the system status is changed to &quot;Canceled.&quot;</para>
 		/// <para>Boolean</para>
 		/// <para>Deactivate Booking When Canceled (Deprecated)</para>
 		/// </summary>
@@ -746,7 +776,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select whether the system should deactivate the resource booking when the system status is changed to "Completed."</para>
+		/// <para>Select whether the system should deactivate the resource booking when the system status is changed to &quot;Completed.&quot;</para>
 		/// <para>Boolean</para>
 		/// <para>Deactivate Booking When Completed (Deprecated)</para>
 		/// </summary>
@@ -758,7 +788,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select whether the system should deactivate the work order when the system status is changed to "Closed - Canceled."</para>
+		/// <para>Select whether the system should deactivate the work order when the system status is changed to &quot;Closed - Canceled.&quot;</para>
 		/// <para>Boolean</para>
 		/// <para>Deactivate Work Order When Canceled (Deprecated)</para>
 		/// </summary>
@@ -770,7 +800,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select whether the system should deactivate the work order when the system status is changed to "Closed - Posted."</para>
+		/// <para>Select whether the system should deactivate the work order when the system status is changed to &quot;Closed - Posted.&quot;</para>
 		/// <para>Boolean</para>
 		/// <para>Deactivate Work Order When Posted (Deprecated)</para>
 		/// </summary>
@@ -872,7 +902,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select whether the default work order completed status is either "Completed" or "Posted."</para>
+		/// <para>Select whether the default work order completed status is either &quot;Completed&quot; or &quot;Posted.&quot;</para>
 		/// <para>Picklist</para>
 		/// <para>Default Work Order Completed Status</para>
 		/// </summary>
@@ -980,7 +1010,7 @@ namespace Dev.DevKit.Shared.Entities
 		/// <summary>
 		/// <para>When this option is enabled, all asynchronous Field Service background processes will be processed through Flow or asynchronous plugins instead of the historic Field Service workflows. See documentation for more details.</para>
 		/// <para>Boolean</para>
-		/// <para>Use Enhanced Background Processing</para>
+		/// <para>Use Enhanced Background Processing (Preview)</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public bool? msdyn_EnhancedBackgroundProcessing
@@ -1014,6 +1044,18 @@ namespace Dev.DevKit.Shared.Entities
 				Entity.Attributes[Fields.msdyn_fieldservicesettingId] = value;
 				Entity.Id = value;
 			}
+		}
+
+		/// <summary>
+		/// <para>On disabling, actuals will not be generated.</para>
+		/// <para>Boolean</para>
+		/// <para>Generate Actuals</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_GenerateActuals
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_GenerateActuals); }
+			set { Entity.Attributes[Fields.msdyn_GenerateActuals] = value; }
 		}
 
 		/// <summary>
@@ -1087,9 +1129,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_fieldservicesettingOptionSets.msdyn_HistoricalDataFilter)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_HistoricalDataFilter] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_HistoricalDataFilter] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_HistoricalDataFilter] = null;
+			}
 		}
 
 		/// <summary>
@@ -1145,6 +1190,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<DateTime?>(Fields.msdyn_InspectionAnalyticsRecommendedTime); }
 			set { Entity.Attributes[Fields.msdyn_InspectionAnalyticsRecommendedTime] = value; }
+		}
+
+		/// <summary>
+		/// <para>For Field Service internal use only.</para>
+		/// <para>Memo - MaxLength: 1048576</para>
+		/// <para>Internal Flags</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_InternalFlags
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_InternalFlags); }
+			set { Entity.Attributes[Fields.msdyn_InternalFlags] = value; }
 		}
 
 		/// <summary>
@@ -1550,6 +1607,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Enable/disable out of the box logic to show or hide commands on the Work Order form and list view. If yes, only the most relevant buttons will be displayed.</para>
+		/// <para>Boolean</para>
+		/// <para>Show Simplified Work Order Commands</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_ShowSimplifiedWorkOrderCommands
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_ShowSimplifiedWorkOrderCommands); }
+			set { Entity.Attributes[Fields.msdyn_ShowSimplifiedWorkOrderCommands] = value; }
+		}
+
+		/// <summary>
 		/// <para>On enabling provides a dialog on change on customer asset/service account of workorder to make the account of customer asset same as service account of work order</para>
 		/// <para>Boolean</para>
 		/// <para>Suggest Reparenting Customer Assets</para>
@@ -1562,7 +1631,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>The Field Service solution automatically generates Actuals records. Actuals with a Transaction Type of "Cost" and a Transaction Class of "Time" can be generated when the Work Order is set to Closed-Posted from the related Booking's Booking Journals (Booking Journals on Post of Work Order) or when a Work Order related Time Entry is marked as Approved (Work Order Time Entry Approval).</para>
+		/// <para>The Field Service solution automatically generates Actuals records. Actuals with a Transaction Type of &quot;Cost&quot; and a Transaction Class of &quot;Time&quot; can be generated when the Work Order is set to Closed-Posted from the related Booking&apos;s Booking Journals (Booking Journals on Post of Work Order) or when a Work Order related Time Entry is marked as Approved (Work Order Time Entry Approval).</para>
 		/// <para>Picklist</para>
 		/// <para>Time Cost Actuals Source</para>
 		/// </summary>
@@ -1585,7 +1654,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Field Service organizations that do not intend to use Time Entry or that wish to generate them via a custom or manual process should set to 'Manual.' Otherwise, setting to "Auto-Generate from Booking Timestamps" will ensure that Time Entries are automatically created when a Booking is complete for each span of time between Booking Timestamps.</para>
+		/// <para>Field Service organizations that do not intend to use Time Entry or that wish to generate them via a custom or manual process should set to &apos;Manual.&apos; Otherwise, setting to &quot;Auto-Generate from Booking Timestamps&quot; will ensure that Time Entries are automatically created when a Booking is complete for each span of time between Booking Timestamps.</para>
 		/// <para>Picklist</para>
 		/// <para>Time Entry Generation Strategy</para>
 		/// </summary>
@@ -1737,9 +1806,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_fieldservicesettingOptionSets.msdyn_WorkOrderInvoiceCreation)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_WorkOrderInvoiceCreation] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_WorkOrderInvoiceCreation] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_WorkOrderInvoiceCreation] = null;
+			}
 		}
 
 		/// <summary>
@@ -1790,7 +1862,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

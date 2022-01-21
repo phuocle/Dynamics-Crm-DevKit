@@ -48,6 +48,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ModifiedBy = "modifiedby";
 			public const string ModifiedOn = "modifiedon";
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
+			public const string msdyn_caseid = "msdyn_caseid";
 			public const string msdyn_Completed = "msdyn_completed";
 			public const string msdyn_CustomerAssetId = "msdyn_customerassetid";
 			public const string msdyn_inspectioninstanceId = "msdyn_inspectioninstanceid";
@@ -70,7 +71,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_inspectioninstance";
 
-		public const int EntityTypeCode = 10411;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10521;
 
 		[DebuggerNonUserCode()]
 		public msdyn_inspectioninstance()
@@ -199,6 +201,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Unique identifier for Case associated with Inspection.</para>
+		/// <para>Lookup to incident</para>
+		/// <para>Case</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public EntityReference msdyn_caseid
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.msdyn_caseid); }
+			set { Entity.Attributes[Fields.msdyn_caseid] = value; }
+		}
+
+		/// <summary>
 		/// <para>String - MaxLength: 100</para>
 		/// <para>Completed</para>
 		/// </summary>
@@ -287,7 +301,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Memo - MaxLength: 2000</para>
-		/// <para>surveybounded</para>
+		/// <para>Survey Bounded</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public string msdyn_surveybounded
@@ -310,7 +324,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

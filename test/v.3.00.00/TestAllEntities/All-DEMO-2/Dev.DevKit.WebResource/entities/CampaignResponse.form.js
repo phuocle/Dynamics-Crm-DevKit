@@ -5,6 +5,71 @@ var DevKit;
 	'use strict';
 	DevKit.FormCampaign_Response = function(executionContext, defaultWebResourceName) {
 		var formContext = null;
+		if (executionContext !== undefined) {
+			if (executionContext.getFormContext === undefined) {
+				formContext = executionContext;
+			}
+			else {
+				formContext = executionContext.getFormContext();
+			}
+		}
+		var form = devKit.LoadForm(formContext);
+		var body = {
+			ChannelTypeCode: {},
+			CompanyName: {},
+			Customer: {},
+			Description: {},
+			EMailAddress: {},
+			FirstName: {},
+			LastName: {},
+			OwnerId: {},
+			Partner: {},
+			PriorityCode: {},
+			PromotionCodeName: {},
+			ReceivedOn: {},
+			RegardingObjectId: {},
+			ResponseCode: {},
+			ScheduledEnd: {},
+			Subject: {},
+			Telephone: {}
+		};
+		devKit.LoadFields(formContext, body);
+		var tab = {
+			campaign_response: {
+				Section: {
+					description: {},
+					details: {},
+					received_from: {},
+					summary: {}
+				}
+			}
+		};
+		devKit.LoadTabs(formContext, tab);
+		body.Tab = tab;
+		form.Body = body;
+		var header = {
+			OwnerId: {},
+			RegardingObjectId: {},
+			ResponseCode: {},
+			StateCode: {}
+		};
+		devKit.LoadFields(formContext, header, "header_");
+		form.Header = header;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
+		var navigation = {
+			navAsyncOperations: {},
+			navProcessSessions: {}
+		};
+		devKit.LoadNavigations(formContext, navigation);
+		form.Navigation = navigation;
+		form.Utility = devKit.LoadUtility(defaultWebResourceName);
+		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
+		return form;
+	};
+	DevKit.FormCampaign_Response2 = function(executionContext, defaultWebResourceName) {
+		var formContext = null;
 		if (executionContext !== undefined)
 		{
 			if (executionContext.getFormContext === undefined) {
@@ -21,7 +86,7 @@ var DevKit;
 			RegardingObjectId: {},
 			ResponseCode: {},
 			Subject: {}
-		}
+		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
 			new_campaign_response: {
@@ -31,18 +96,45 @@ var DevKit;
 					summary: {}
 				}
 			}
-		}
+		};
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
+		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
-	}
+	};
 })(DevKit || (DevKit = {}));
 /** @namespace OptionSet */
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.CampaignResponse = {
+		ActivityTypeCode : {
+			Appointment: 4201,
+			Booking_Alert: 10400,
+			Campaign_Activity: 4402,
+			Campaign_Response: 4401,
+			Case_Resolution: 4206,
+			Conversation: 10702,
+			Customer_Voice_alert: 10294,
+			Customer_Voice_survey_invite: 10304,
+			Customer_Voice_survey_response: 10306,
+			Email: 4202,
+			Fax: 4204,
+			Letter: 4207,
+			Opportunity_Close: 4208,
+			Order_Close: 4209,
+			Outbound_message: 10813,
+			Phone_Call: 4210,
+			Project_Service_Approval: 10430,
+			Quick_Campaign: 4406,
+			Quote_Close: 4211,
+			Recurring_Appointment: 4251,
+			Service_Activity: 4214,
+			Session: 10717,
+			Task: 4212
+		},
 		ChannelTypeCode : {
 			Appointment: 5,
 			Email: 1,
@@ -102,15 +194,14 @@ var OptionSet;
 			Closed: 2,
 			Open: 1
 		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
-
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 	};
 })(OptionSet || (OptionSet = {}));

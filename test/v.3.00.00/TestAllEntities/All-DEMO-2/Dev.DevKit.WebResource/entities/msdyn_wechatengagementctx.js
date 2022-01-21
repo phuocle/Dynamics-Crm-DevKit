@@ -1,9 +1,13 @@
 ﻿//@ts-check
 ///<reference path="msdyn_wechatengagementctx.d.ts" />
 "use strict";
-var formInformation = (function () {
+var formmsdyn_wechatengagementctx_Information = (function () {
 	"use strict";
+	/** @type DevKit.Formmsdyn_wechatengagementctx_Information */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.Formmsdyn_wechatengagementctx_Information(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}

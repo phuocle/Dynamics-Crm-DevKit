@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.BookableResourceCharacteristicOptionSets
 		/// </summary>
 		Approved = 192350003,
 		/// <summary>
-		/// Pending_Approval = 192350001
+		/// Pending Approval = 192350001
 		/// </summary>
 		Pending_Approval = 192350001,
 		/// <summary>
@@ -98,6 +98,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "bookableresourcecharacteristic";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 1148;
 
 		[DebuggerNonUserCode()]
@@ -324,7 +325,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

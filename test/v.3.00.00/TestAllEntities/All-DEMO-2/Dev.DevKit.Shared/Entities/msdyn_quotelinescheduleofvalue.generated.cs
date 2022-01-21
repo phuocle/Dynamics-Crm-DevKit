@@ -13,19 +13,19 @@ namespace Dev.DevKit.Shared.Entities.msdyn_quotelinescheduleofvalueOptionSets
 	public enum msdyn_invoicestatus
 	{
 		/// <summary>
-		/// Customer_invoice_created = 192350002
+		/// Customer invoice created = 192350002
 		/// </summary>
 		Customer_invoice_created = 192350002,
 		/// <summary>
-		/// Customer_invoice_posted = 192350003
+		/// Customer invoice posted = 192350003
 		/// </summary>
 		Customer_invoice_posted = 192350003,
 		/// <summary>
-		/// Not_Ready_for_invoicing = 192350000
+		/// Not Ready for invoicing = 192350000
 		/// </summary>
 		Not_Ready_for_invoicing = 192350000,
 		/// <summary>
-		/// Ready_for_invoicing = 192350001
+		/// Ready for invoicing = 192350001
 		/// </summary>
 		Ready_for_invoicing = 192350001
 	}
@@ -98,7 +98,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_quotelinescheduleofvalue";
 
-		public const int EntityTypeCode = 10377;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10483;
 
 		[DebuggerNonUserCode()]
 		public msdyn_quotelinescheduleofvalue()
@@ -343,7 +344,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Indicates if this record was created via import. It's purpose is to support data import.</para>
+		/// <para>Indicates if this record was created via import. It&apos;s purpose is to support data import.</para>
 		/// <para>Boolean</para>
 		/// <para>isdataimport</para>
 		/// </summary>
@@ -470,7 +471,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

@@ -13,19 +13,19 @@ namespace Dev.DevKit.Shared.Entities.msdyn_estimateOptionSets
 	public enum msdyn_estimateheadertype
 	{
 		/// <summary>
-		/// Activity_based_estimate = 192350001
+		/// Activity based estimate = 192350001
 		/// </summary>
 		Activity_based_estimate = 192350001,
 		/// <summary>
-		/// Assignment_based_estimate = 192350002
+		/// Assignment based estimate = 192350002
 		/// </summary>
 		Assignment_based_estimate = 192350002,
 		/// <summary>
-		/// Custom_estimate = 192350003
+		/// Custom estimate = 192350003
 		/// </summary>
 		Custom_estimate = 192350003,
 		/// <summary>
-		/// Resource_based_estimate = 192350000
+		/// Resource based estimate = 192350000
 		/// </summary>
 		Resource_based_estimate = 192350000
 	}
@@ -86,7 +86,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_estimate";
 
-		public const int EntityTypeCode = 10336;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10442;
 
 		[DebuggerNonUserCode()]
 		public msdyn_estimate()
@@ -241,9 +242,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_estimateOptionSets.msdyn_estimateheadertype)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_estimateheadertype] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_estimateheadertype] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_estimateheadertype] = null;
+			}
 		}
 
 		/// <summary>
@@ -288,7 +292,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

@@ -17,6 +17,7 @@ var DevKit;
 		var body = {
 			Address1_Composite: {},
 			BusinessCard: {},
+			CadenceWidgetControl: {},
 			CampaignId: {},
 			CompanyName: {},
 			Competitors: {},
@@ -35,7 +36,7 @@ var DevKit;
 			mapcontrol: {},
 			MobilePhone: {},
 			msdyn_ordertype: {},
-			msdyn_ordertype_1: {},
+			msdyn_ordertype1: {},
 			notescontrol: {},
 			NumberOfEmployees: {},
 			PreferredContactMethodCode: {},
@@ -68,7 +69,8 @@ var DevKit;
 					Contact: {},
 					MapSection: {},
 					RELATED_TAB: {},
-					SOCIAL_PANE: {}
+					SOCIAL_PANE: {},
+					Summary_CadenceWidget: {}
 				}
 			}
 		};
@@ -86,38 +88,20 @@ var DevKit;
 		var process = devKit.LoadProcess(formContext);
 		var _Lead_to_Opportunity_Sales_Process = {
 			BudgetAmount: {},
-			completefinalproposal: {},
-			completeinternalreview: {},
-			customerneed: {},
 			DecisionMaker: {},
 			Description: {},
-			developproposal: {},
-			filedebrief: {},
-			finaldecisiondate: {},
-			identifycompetitors: {},
-			identifycustomercontacts: {},
-			identifypursuitteam: {},
 			ParentAccountId: {},
 			ParentContactId: {},
-			presentfinalproposal: {},
-			presentproposal: {},
-			proposedsolution: {},
 			PurchaseProcess: {},
-			PurchaseTimeFrame: {},
-			sendthankyounote: {}
+			PurchaseTimeFrame: {}
 		}
 		devKit.LoadFields(formContext, _Lead_to_Opportunity_Sales_Process, "header_process_");
 		process.Lead_to_Opportunity_Sales_Process = _Lead_to_Opportunity_Sales_Process;
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var grid = {
-			Stakeholders: {},
 			Competitors: {},
 			DocumentsSubGrid: {},
+			Stakeholders: {},
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
@@ -135,6 +119,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormLead_Sales_Insights = function(executionContext, defaultWebResourceName) {
@@ -151,6 +136,8 @@ var DevKit;
 		var body = {
 			ActionCards: {},
 			Address1_Composite: {},
+			CadenceWidgetControl: {},
+			cc_1626168480122: {},
 			CompanyName: {},
 			Competitors: {},
 			Description: {},
@@ -192,8 +179,10 @@ var DevKit;
 					company: {},
 					Contact: {},
 					MapSection: {},
+					PredictiveScoreSection: {},
 					RELATED_TAB: {},
 					SOCIAL_PANE: {},
+					Summary_CadenceWidget: {},
 					Summary_section_6: {}
 				}
 			}
@@ -212,37 +201,19 @@ var DevKit;
 		var process = devKit.LoadProcess(formContext);
 		var _Lead_to_Opportunity_Sales_Process = {
 			BudgetAmount: {},
-			completefinalproposal: {},
-			completeinternalreview: {},
-			customerneed: {},
 			DecisionMaker: {},
 			Description: {},
-			developproposal: {},
-			filedebrief: {},
-			finaldecisiondate: {},
-			identifycompetitors: {},
-			identifycustomercontacts: {},
-			identifypursuitteam: {},
 			ParentAccountId: {},
 			ParentContactId: {},
-			presentfinalproposal: {},
-			presentproposal: {},
-			proposedsolution: {},
 			PurchaseProcess: {},
-			PurchaseTimeFrame: {},
-			sendthankyounote: {}
+			PurchaseTimeFrame: {}
 		}
 		devKit.LoadFields(formContext, _Lead_to_Opportunity_Sales_Process, "header_process_");
 		process.Lead_to_Opportunity_Sales_Process = _Lead_to_Opportunity_Sales_Process;
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var grid = {
-			Stakeholders: {},
 			Competitors: {},
+			Stakeholders: {},
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
@@ -260,6 +231,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormLead_Quick_Create = function(executionContext, defaultWebResourceName) {
@@ -287,7 +259,7 @@ var DevKit;
 			MobilePhone: {},
 			PurchaseTimeFrame: {},
 			Subject: {}
-		}
+		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
 			tab_1: {
@@ -297,13 +269,15 @@ var DevKit;
 					tab_1_column_3_section_1: {}
 				}
 			}
-		}
+		};
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
+		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
-	}
+	};
 })(DevKit || (DevKit = {}));
 /** @namespace OptionSet */
 var OptionSet;
@@ -383,10 +357,26 @@ var OptionSet;
 			Web: 8,
 			Word_of_Mouth: 9
 		},
+		msdyn_LeadGrade : {
+			Grade_A: 0,
+			Grade_B: 1,
+			Grade_C: 2,
+			Grade_D: 3
+		},
+		msdyn_LeadScoreTrend : {
+			Declining: 2,
+			Improving: 0,
+			Not_enough_info: 3,
+			Steady: 1
+		},
 		msdyn_ordertype : {
 			Item_based: 192350000,
 			Service_Maintenance_Based: 690970002,
 			Work_based: 192350001
+		},
+		msdyn_salesassignmentresult : {
+			Failed: 1,
+			Succeeded: 0
 		},
 		Need : {
 			Good_to_have: 2,
@@ -436,15 +426,14 @@ var OptionSet;
 			No_Longer_Interested: 6,
 			Qualified: 3
 		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
-
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 	};
 })(OptionSet || (OptionSet = {}));

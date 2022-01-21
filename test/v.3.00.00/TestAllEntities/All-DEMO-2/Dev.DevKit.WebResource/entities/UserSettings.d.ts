@@ -31,6 +31,8 @@ declare namespace DevKit {
 		AddressBookSyncInterval: DevKit.WebApi.IntegerValue;
 		/** Default mode, such as simple or detailed, for advanced find. */
 		AdvancedFindStartupMode: DevKit.WebApi.IntegerValue;
+		/** This attribute is no longer used. The data is now in the Mailbox.AllowEmailConnectorToUseCredentials attribute. */
+		AllowEmailCredentials: DevKit.WebApi.BooleanValueReadonly;
 		/** AM designator to use in Microsoft Dynamics 365. */
 		AMDesignator: DevKit.WebApi.StringValue;
 		/** Set user status for ADC Suggestions */
@@ -47,6 +49,8 @@ declare namespace DevKit {
 		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
 		/** Unique identifier of the delegate user who created the usersettings. */
 		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Number of decimal places that can be used for currency. */
+		CurrencyDecimalPrecision: DevKit.WebApi.IntegerValue;
 		/** Information about how currency symbols are placed in Microsoft Dynamics 365. */
 		CurrencyFormatCode: DevKit.WebApi.IntegerValue;
 		/** Symbol used for currency in Microsoft Dynamics 365. */
@@ -69,6 +73,10 @@ declare namespace DevKit {
 		DefaultDashboardId: DevKit.WebApi.GuidValue;
 		/** Default search experience for the user. */
 		DefaultSearchExperience: DevKit.WebApi.OptionSetValue;
+		/** This attribute is no longer used. The data is now in the Mailbox.Password attribute. */
+		EmailPassword: DevKit.WebApi.StringValueReadonly;
+		/** This attribute is no longer used. The data is now in the Mailbox.UserName attribute. */
+		EmailUsername: DevKit.WebApi.StringValueReadonly;
 		/** Indicates the form mode to be used. */
 		EntityFormMode: DevKit.WebApi.OptionSetValue;
 		/** Order in which names are to be displayed in Microsoft Dynamics 365. */
@@ -135,6 +143,8 @@ declare namespace DevKit {
 		PersonalizationSettings: DevKit.WebApi.StringValue;
 		/** PM designator to use in Microsoft Dynamics 365. */
 		PMDesignator: DevKit.WebApi.StringValue;
+		/** Number of decimal places that can be used for prices. */
+		PricingDecimalPrecision: DevKit.WebApi.IntegerValue;
 		/** Picklist for selecting the user preference for reporting scripting errors. */
 		ReportScriptErrors: DevKit.WebApi.OptionSetValue;
 		/** The version number for resource booking synchronization with Exchange. */
@@ -270,22 +280,22 @@ declare namespace OptionSet {
 			/** 0 */
 			Top_bottom
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':[],'JsWebApi':true,'IsDebugForm':false,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}

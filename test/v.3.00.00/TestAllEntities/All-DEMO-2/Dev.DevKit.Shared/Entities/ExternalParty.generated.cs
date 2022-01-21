@@ -79,6 +79,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "externalparty";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 3008;
 
 		[DebuggerNonUserCode()]
@@ -175,7 +176,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows the email address derived from the equivalent record that's enabled as the external party and shows the external user's email address.</para>
+		/// <para>Shows the email address derived from the equivalent record that&apos;s enabled as the external party and shows the external user&apos;s email address.</para>
 		/// <para>String - MaxLength: 100</para>
 		/// <para>Email Address</para>
 		/// </summary>
@@ -225,7 +226,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the external party's first name.</para>
+		/// <para>Type the external party&apos;s first name.</para>
 		/// <para>String - MaxLength: 64</para>
 		/// <para>First Name</para>
 		/// </summary>
@@ -285,7 +286,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the external party's last name.</para>
+		/// <para>Type the external party&apos;s last name.</para>
 		/// <para>Required - String - MaxLength: 64</para>
 		/// <para>Last Name</para>
 		/// </summary>
@@ -297,7 +298,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the external party's middle name.</para>
+		/// <para>Type the external party&apos;s middle name.</para>
 		/// <para>String - MaxLength: 50</para>
 		/// <para>Middle Name</para>
 		/// </summary>
@@ -355,7 +356,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the user or team who owns the record.</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -503,7 +504,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the phonetic spelling of the external party's first name, if the name is specified in Japanese, to make sure the name is pronounced correctly in phone calls with the external party..</para>
+		/// <para>Type the phonetic spelling of the external party&apos;s first name, if the name is specified in Japanese, to make sure the name is pronounced correctly in phone calls with the external party..</para>
 		/// <para>String - MaxLength: 150</para>
 		/// <para>Yomi First Name</para>
 		/// </summary>
@@ -526,7 +527,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the phonetic spelling of the external party's last name, if the name is specified in Japanese, to make sure the name is pronounced correctly in phone calls with the external party.</para>
+		/// <para>Type the phonetic spelling of the external party&apos;s last name, if the name is specified in Japanese, to make sure the name is pronounced correctly in phone calls with the external party.</para>
 		/// <para>String - MaxLength: 150</para>
 		/// <para>Yomi Last Name</para>
 		/// </summary>
@@ -538,7 +539,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the phonetic spelling of the external party's middle name, if the name is specified in Japanese, to make sure the name is pronounced correctly in phone calls with the contact.</para>
+		/// <para>Type the phonetic spelling of the external party&apos;s middle name, if the name is specified in Japanese, to make sure the name is pronounced correctly in phone calls with the contact.</para>
 		/// <para>String - MaxLength: 150</para>
 		/// <para>Yomi Middle Name</para>
 		/// </summary>

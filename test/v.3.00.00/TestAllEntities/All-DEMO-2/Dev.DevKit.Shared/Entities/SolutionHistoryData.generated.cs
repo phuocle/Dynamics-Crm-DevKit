@@ -95,6 +95,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "solutionhistorydata";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 9890;
 
 		[DebuggerNonUserCode()]
@@ -313,7 +314,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Name of the solution's publisher.</para>
+		/// <para>Name of the solution&apos;s publisher.</para>
 		/// <para>String - MaxLength: 512</para>
 		/// <para>PublisherName</para>
 		/// </summary>

@@ -29,7 +29,7 @@ namespace Dev.DevKit.Shared.Entities.ConnectionRoleOptionSets
 		/// </summary>
 		Sales = 4,
 		/// <summary>
-		/// Sales_Team = 1001
+		/// Sales Team = 1001
 		/// </summary>
 		Sales_Team = 1001,
 		/// <summary>
@@ -53,7 +53,7 @@ namespace Dev.DevKit.Shared.Entities.ConnectionRoleOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -123,6 +123,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "connectionrole";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 3231;
 
 		[DebuggerNonUserCode()]

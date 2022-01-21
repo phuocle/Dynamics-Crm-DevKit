@@ -13,15 +13,15 @@ namespace Dev.DevKit.Shared.Entities.EntitlementEntityAllocationTypeMappingOptio
 	public enum allocationtype
 	{
 		/// <summary>
-		/// Discount_and_Price_List = 192350000
+		/// Discount % and Price List = 192350000
 		/// </summary>
 		Discount_and_Price_List = 192350000,
 		/// <summary>
-		/// Number_of_cases = 0
+		/// Number of cases = 0
 		/// </summary>
 		Number_of_cases = 0,
 		/// <summary>
-		/// Number_of_hours = 1
+		/// Number of hours = 1
 		/// </summary>
 		Number_of_hours = 1
 	}
@@ -33,7 +33,7 @@ namespace Dev.DevKit.Shared.Entities.EntitlementEntityAllocationTypeMappingOptio
 		/// </summary>
 		Case = 0,
 		/// <summary>
-		/// Work_Order = 192350000
+		/// Work Order = 192350000
 		/// </summary>
 		Work_Order = 192350000
 	}
@@ -94,6 +94,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "entitlemententityallocationtypemapping";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 9704;
 
 		[DebuggerNonUserCode()]
@@ -158,9 +159,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.EntitlementEntityAllocationTypeMappingOptionSets.allocationtype)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.allocationtype] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.allocationtype] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.allocationtype] = null;
+			}
 		}
 
 		/// <summary>
@@ -226,9 +230,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.EntitlementEntityAllocationTypeMappingOptionSets.entitytype)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.entitytype] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.entitytype] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.entitytype] = null;
+			}
 		}
 
 		/// <summary>
@@ -302,7 +309,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

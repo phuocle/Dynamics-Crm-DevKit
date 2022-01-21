@@ -43,12 +43,14 @@ declare namespace DevKit {
 		AppOpenUri: DevKit.WebApi.StringValue;
 		/** The application version. */
 		AppVersion: DevKit.WebApi.StringValue;
-		Assets_Name: DevKit.WebApi.StringValueReadonly;
+		/** Assets for Canvas Apps. */
+		Assets: DevKit.WebApi.StringValueReadonly;
 		/** The authorization references of the application. */
 		AuthorizationReferences: DevKit.WebApi.StringValue;
 		/** The background image color. */
 		BackgroundColor: DevKit.WebApi.StringValue;
-		BackgroundImage_Name: DevKit.WebApi.StringValueReadonly;
+		/** Background image for Canvas Apps. */
+		BackgroundImage: DevKit.WebApi.StringValueReadonly;
 		/** Indicates whether the canvas app should bypass consent from consumers. */
 		BypassConsent: DevKit.WebApi.BooleanValue;
 		/** The type of the canvas app. */
@@ -77,7 +79,8 @@ declare namespace DevKit {
 		Description: DevKit.WebApi.StringValue;
 		/** The display name of the app. */
 		DisplayName: DevKit.WebApi.StringValue;
-		Document_Name: DevKit.WebApi.StringValueReadonly;
+		/** Document for Canvas Apps. */
+		Document: DevKit.WebApi.StringValueReadonly;
 		/** Internal use. The embedded app information. */
 		EmbeddedApp: DevKit.WebApi.StringValue;
 		/** The gallery item identifier. */
@@ -96,12 +99,14 @@ declare namespace DevKit {
 		IsHidden: DevKit.WebApi.BooleanValue;
 		/** Indicates whether the solution component is part of a managed solution. */
 		IsManaged: DevKit.WebApi.BooleanValueReadonly;
-		LargeIcon_Name: DevKit.WebApi.StringValueReadonly;
+		/** Large icon for Canvas Apps. */
+		LargeIcon: DevKit.WebApi.StringValueReadonly;
 		/** Date and time when the application was last modified. */
 		LastModifiedTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** Date and time when the application was last published. */
 		LastPublishTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
-		MediumIcon_Name: DevKit.WebApi.StringValueReadonly;
+		/** Medium icon for Canvas Apps. */
+		MediumIcon: DevKit.WebApi.StringValueReadonly;
 		/** The version of the client that was used to author the application. */
 		MinClientVersion: DevKit.WebApi.StringValue;
 		/** Name of the CanvasApp */
@@ -120,7 +125,8 @@ declare namespace DevKit {
 		OwningUser: DevKit.WebApi.LookupValueReadonly;
 		/** The publisher of the app. */
 		Publisher: DevKit.WebApi.StringValue;
-		SmallIcon_Name: DevKit.WebApi.StringValueReadonly;
+		/** Small icon for Canvas Apps. */
+		SmallIcon: DevKit.WebApi.StringValueReadonly;
 		/** Unique identifier of the associated solution. */
 		SolutionId: DevKit.WebApi.GuidValueReadonly;
 		/** A value indicating whether the application is ready for consumption. */
@@ -129,9 +135,13 @@ declare namespace DevKit {
 		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
 		/** The metadata tags of the application. */
 		Tags: DevKit.WebApi.StringValue;
-		TeamsIcon_Name: DevKit.WebApi.StringValueReadonly;
+		/** Teams icon for Canvas Apps. */
+		TeamsIcon: DevKit.WebApi.StringValueReadonly;
+		/** The globally unique canvas app id */
+		UniqueCanvasAppId: DevKit.WebApi.StringValue;
 		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
-		WideIcon_Name: DevKit.WebApi.StringValueReadonly;
+		/** Wide icon for Canvas Apps. */
+		WideIcon: DevKit.WebApi.StringValueReadonly;
 	}
 }
 declare namespace OptionSet {
@@ -156,22 +166,22 @@ declare namespace OptionSet {
 			/** 1 */
 			Unpublished
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':[],'JsWebApi':true,'IsDebugForm':false,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}

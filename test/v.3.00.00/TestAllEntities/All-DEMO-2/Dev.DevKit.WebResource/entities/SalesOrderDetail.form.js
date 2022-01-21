@@ -77,18 +77,11 @@ var DevKit;
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormSalesOrderDetail_Information = function(executionContext, defaultWebResourceName) {
@@ -119,7 +112,7 @@ var DevKit;
 			QuantityShipped: {},
 			RequestDeliveryBy: {},
 			SalesOrderId: {},
-			SalesOrderId_1: {},
+			SalesOrderId1: {},
 			SalesRepId: {},
 			ShipTo_City: {},
 			ShipTo_ContactName: {},
@@ -167,18 +160,11 @@ var DevKit;
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormSalesOrderDetail_Project_Information = function(executionContext, defaultWebResourceName) {
@@ -198,19 +184,19 @@ var DevKit;
 			ChargeableRolesGrid: {},
 			ContractLineDetails: {},
 			ExtendedAmount: {},
-			ExtendedAmount_1: {},
-			ExtendedAmount_2: {},
+			ExtendedAmount1: {},
+			ExtendedAmount2: {},
 			InvoiceScheduleGrid: {},
 			IsPriceOverridden: {},
 			IsProductOverridden: {},
-			IsProductOverridden_1: {},
+			IsProductOverridden1: {},
 			ManualDiscountAmount: {},
 			MilestonesGrid: {},
 			msdyn_BillingMethod: {},
 			msdyn_BillingStartDate: {},
 			msdyn_BillingStatus: {},
 			msdyn_BudgetAmount: {},
-			msdyn_BudgetAmount_1: {},
+			msdyn_BudgetAmount1: {},
 			msdyn_CostAmount: {},
 			msdyn_CostPricePerUnit: {},
 			msdyn_IncludeExpense: {},
@@ -220,28 +206,28 @@ var DevKit;
 			msdyn_LineType: {},
 			msdyn_Project: {},
 			PricePerUnit: {},
-			PricePerUnit_1: {},
-			PricePerUnit_2: {},
+			PricePerUnit1: {},
+			PricePerUnit2: {},
 			ProductDescription: {},
-			ProductDescription_1: {},
-			ProductDescription_2: {},
+			ProductDescription1: {},
+			ProductDescription2: {},
 			ProductId: {},
-			ProductId_1: {},
+			ProductId1: {},
 			ProductTypeCode: {},
-			ProductTypeCode_1: {},
-			ProductTypeCode_2: {},
-			ProductTypeCode_3: {},
+			ProductTypeCode1: {},
+			ProductTypeCode2: {},
+			ProductTypeCode3: {},
 			Quantity: {},
-			Quantity_1: {},
+			Quantity1: {},
 			QuantityBackordered: {},
 			QuantityCancelled: {},
 			QuantityShipped: {},
 			RequestDeliveryBy: {},
-			RequestDeliveryBy_1: {},
+			RequestDeliveryBy1: {},
 			SalesOrderId: {},
-			SalesOrderId_1: {},
-			SalesOrderId_2: {},
-			SalesOrderId_3: {},
+			SalesOrderId1: {},
+			SalesOrderId2: {},
+			SalesOrderId3: {},
 			SalesRepId: {},
 			ShipTo_City: {},
 			ShipTo_ContactName: {},
@@ -256,11 +242,11 @@ var DevKit;
 			ShipTo_StateOrProvince: {},
 			ShipTo_Telephone: {},
 			Tax: {},
-			Tax_1: {},
-			Tax_2: {},
+			Tax1: {},
+			Tax2: {},
 			TransactionCurrencyId: {},
 			UoMId: {},
-			UoMId_1: {},
+			UoMId1: {},
 			VolumeDiscountAmount: {},
 			WillCall: {}
 		};
@@ -330,27 +316,20 @@ var DevKit;
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		var grid = {
-			ChargeableRolesGrid: {},
 			ChargeableCategoriesGrid: {},
+			ChargeableRolesGrid: {},
 			ContractLineDetails: {},
 			InvoiceScheduleGrid: {},
 			MilestonesGrid: {},
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormSalesOrderDetail = function(executionContext, defaultWebResourceName) {
@@ -389,7 +368,7 @@ var DevKit;
 			Tax: {},
 			UoMId: {},
 			WillCall: {}
-		}
+		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
 			general: {
@@ -399,13 +378,15 @@ var DevKit;
 					sales_order_detail_information: {}
 				}
 			}
-		}
+		};
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
+		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
-	}
+	};
 })(DevKit || (DevKit = {}));
 /** @namespace OptionSet */
 var OptionSet;
@@ -457,7 +438,7 @@ var OptionSet;
 			Missing_Pricing_Code: 8,
 			Missing_Product: 6,
 			Missing_Product_Default_UOM: 31,
-			Missing_Product_UOM_Schedule_: 32,
+			Missing_Product_UOM_Schedule: 32,
 			Missing_Quantity: 4,
 			Missing_Standard_Cost: 16,
 			Missing_Unit_Price: 5,
@@ -480,8 +461,6 @@ var OptionSet;
 			Not_Configured: 2,
 			Rectify: 1
 		},
-		SalesOrderStateCode : {
-		},
 		ShipTo_FreightTermsCode : {
 			FOB: 1,
 			No_Charge: 2
@@ -492,15 +471,14 @@ var OptionSet;
 			SkipPriceCalcOnUpdate: 2,
 			SkipPriceCalcOnUpSert: 3
 		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
-
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 	};
 })(OptionSet || (OptionSet = {}));

@@ -2,6 +2,93 @@
 ///<reference path="devkit.d.ts" />
 declare namespace DevKit {
 	namespace FormCampaign_Response {
+		interface Header extends DevKit.Controls.IHeader {
+			/** Unique identifier of the user or team who owns the activity. */
+			OwnerId: DevKit.Controls.Lookup;
+			/** Choose the parent campaign so that the campaign's response rate is tracked correctly. */
+			RegardingObjectId: DevKit.Controls.Lookup;
+			/** Select the type of response from the prospect or customer to indicate their interest in the campaign. */
+			ResponseCode: DevKit.Controls.OptionSet;
+			/** Shows whether the campaign response is open, closed, or canceled. Closed and canceled campaign responses are read-only and can't be edited. */
+			StateCode: DevKit.Controls.OptionSet;
+		}
+		interface tab_campaign_response_Sections {
+			description: DevKit.Controls.Section;
+			details: DevKit.Controls.Section;
+			received_from: DevKit.Controls.Section;
+			summary: DevKit.Controls.Section;
+		}
+		interface tab_campaign_response extends DevKit.Controls.ITab {
+			Section: tab_campaign_response_Sections;
+		}
+		interface Tabs {
+			campaign_response: tab_campaign_response;
+		}
+		interface Body {
+			Tab: Tabs;
+			/** Select how the response was received, such as phone, letter, fax, or email. */
+			ChannelTypeCode: DevKit.Controls.OptionSet;
+			/** Type the name of the company if the campaign response was received from a new prospect or customer. */
+			CompanyName: DevKit.Controls.String;
+			/** Enter the account, contact, or lead that submitted the campaign response, if it was received from an existing prospect or customer. */
+			Customer: DevKit.Controls.Lookup;
+			/** Type additional information to describe the campaign response, such as key discussion points or objectives. */
+			Description: DevKit.Controls.String;
+			/** Type the responder's email address. */
+			EMailAddress: DevKit.Controls.String;
+			/** Type the responder's first name if the campaign response was received from a new prospect or customer. */
+			FirstName: DevKit.Controls.String;
+			/** Type the responder's last name if the campaign response was received from a new prospect or customer. */
+			LastName: DevKit.Controls.String;
+			/** Unique identifier of the user or team who owns the activity. */
+			OwnerId: DevKit.Controls.Lookup;
+			/** Enter the vendor account or contact to capture any third-party used to obtain the campaign response. */
+			Partner: DevKit.Controls.Lookup;
+			/** Select the priority so that preferred customers or critical issues are handled quickly. */
+			PriorityCode: DevKit.Controls.OptionSet;
+			/** Type a promotional code to track sales related to the campaign response or to allow the responder to redeem a discount offer. */
+			PromotionCodeName: DevKit.Controls.String;
+			/** Enter the date when the campaign response was received. */
+			ReceivedOn: DevKit.Controls.Date;
+			/** Choose the parent campaign so that the campaign's response rate is tracked correctly. */
+			RegardingObjectId: DevKit.Controls.Lookup;
+			/** Select the type of response from the prospect or customer to indicate their interest in the campaign. */
+			ResponseCode: DevKit.Controls.OptionSet;
+			/** Enter the expected due date and time for the activity to be completed to provide details about the timing of the campaign response. */
+			ScheduledEnd: DevKit.Controls.Date;
+			/** Type a short description about the objective or primary topic of the campaign response. */
+			Subject: DevKit.Controls.String;
+			/** Type the responder's primary phone number. */
+			Telephone: DevKit.Controls.String;
+		}
+		interface Navigation {
+			navAsyncOperations: DevKit.Controls.NavigationItem,
+			navProcessSessions: DevKit.Controls.NavigationItem
+		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
+	}
+	class FormCampaign_Response extends DevKit.IForm {
+		/**
+		* Campaign Response [Main Form]
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form Campaign_Response */
+		Body: DevKit.FormCampaign_Response.Body;
+		/** The Header section of form Campaign_Response */
+		Header: DevKit.FormCampaign_Response.Header;
+		/** The Navigation of form Campaign_Response */
+		Navigation: DevKit.FormCampaign_Response.Navigation;
+		/** The Process of form Campaign_Response */
+		Process: DevKit.FormCampaign_Response.Process;
+		/** The SidePanes of form Campaign_Response */
+		SidePanes: DevKit.SidePanes;
+	}
+	namespace FormCampaign_Response2 {
 		interface tab_new_campaign_response_Sections {
 			description: DevKit.Controls.Section;
 			details: DevKit.Controls.Section;
@@ -27,17 +114,17 @@ declare namespace DevKit {
 			Subject: DevKit.Controls.String;
 		}
 	}
-	class FormCampaign_Response extends DevKit.IForm {
+	class FormCampaign_Response2 extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Campaign_Response
+		* Campaign Response [Quick Create]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
 		constructor(executionContext: any, defaultWebResourceName?: string);
 		/** Utility functions/methods/objects for Dynamics 365 form */
 		Utility: DevKit.Utility;
-		/** The Body section of form Campaign_Response */
-		Body: DevKit.FormCampaign_Response.Body;
+		/** The Body section of form Campaign_Response2 */
+		Body: DevKit.FormCampaign_Response2.Body;
 	}
 	class CampaignResponseApi {
 		/**
@@ -143,7 +230,6 @@ declare namespace DevKit {
 		originatingactivityid_letter: DevKit.WebApi.LookupValue;
 		/** Choose the phone call, email, fax, letter, or appointment activity that led the prospect or customer to respond to the campaign. */
 		originatingactivityid_phonecall: DevKit.WebApi.LookupValue;
-		OriginatingActivityName: DevKit.WebApi.StringValueReadonly;
 		/** Date and time that the record was migrated. */
 		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
@@ -190,7 +276,6 @@ declare namespace DevKit {
 		SLAId: DevKit.WebApi.LookupValue;
 		/** Last SLA that was applied to this case. This field is for internal use only. */
 		SLAInvokedId: DevKit.WebApi.LookupValueReadonly;
-		SLAName: DevKit.WebApi.StringValueReadonly;
 		/** Shows the date and time by which the activities are sorted. */
 		SortDate_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** Unique identifier of the Stage. */
@@ -227,6 +312,54 @@ declare namespace DevKit {
 }
 declare namespace OptionSet {
 	namespace CampaignResponse {
+		enum ActivityTypeCode {
+			/** 4201 */
+			Appointment,
+			/** 10400 */
+			Booking_Alert,
+			/** 4402 */
+			Campaign_Activity,
+			/** 4401 */
+			Campaign_Response,
+			/** 4206 */
+			Case_Resolution,
+			/** 10702 */
+			Conversation,
+			/** 10294 */
+			Customer_Voice_alert,
+			/** 10304 */
+			Customer_Voice_survey_invite,
+			/** 10306 */
+			Customer_Voice_survey_response,
+			/** 4202 */
+			Email,
+			/** 4204 */
+			Fax,
+			/** 4207 */
+			Letter,
+			/** 4208 */
+			Opportunity_Close,
+			/** 4209 */
+			Order_Close,
+			/** 10813 */
+			Outbound_message,
+			/** 4210 */
+			Phone_Call,
+			/** 10430 */
+			Project_Service_Approval,
+			/** 4406 */
+			Quick_Campaign,
+			/** 4211 */
+			Quote_Close,
+			/** 4251 */
+			Recurring_Appointment,
+			/** 4214 */
+			Service_Activity,
+			/** 10717 */
+			Session,
+			/** 4212 */
+			Task
+		}
 		enum ChannelTypeCode {
 			/** 5 */
 			Appointment,
@@ -329,22 +462,22 @@ declare namespace OptionSet {
 			/** 1 */
 			Open
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Campaign Response'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

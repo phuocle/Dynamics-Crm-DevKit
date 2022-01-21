@@ -31,6 +31,7 @@ var DevKit;
 			ScheduledStart: {},
 			ServiceId: {},
 			SiteId: {},
+			StateCode: {},
 			StatusCode: {},
 			Subcategory: {},
 			Subject: {}
@@ -63,23 +64,16 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, footer, "footer_");
 		form.Footer = footer;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		var grid = {
 			bookableresourcebookings: {},
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 })(DevKit || (DevKit = {}));
@@ -87,6 +81,31 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.ServiceAppointment = {
+		ActivityTypeCode : {
+			Appointment: 4201,
+			Booking_Alert: 10400,
+			Campaign_Activity: 4402,
+			Campaign_Response: 4401,
+			Case_Resolution: 4206,
+			Conversation: 10702,
+			Customer_Voice_alert: 10294,
+			Customer_Voice_survey_invite: 10304,
+			Customer_Voice_survey_response: 10306,
+			Email: 4202,
+			Fax: 4204,
+			Letter: 4207,
+			Opportunity_Close: 4208,
+			Order_Close: 4209,
+			Outbound_message: 10813,
+			Phone_Call: 4210,
+			Project_Service_Approval: 10430,
+			Quick_Campaign: 4406,
+			Quote_Close: 4211,
+			Recurring_Appointment: 4251,
+			Service_Activity: 4214,
+			Session: 10717,
+			Task: 4212
+		},
 		Community : {
 			Cortana: 5,
 			Direct_Line: 6,
@@ -139,15 +158,14 @@ var OptionSet;
 			Reserved: 4,
 			Tentative: 2
 		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
-
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 	};
 })(OptionSet || (OptionSet = {}));

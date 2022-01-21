@@ -13,11 +13,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_requirementrelationshipOptionSets
 	public enum msdyn_operator
 	{
 		/// <summary>
-		/// __192350000 = 192350000
+		/// && = 192350000
 		/// </summary>
 		__192350000 = 192350000,
 		/// <summary>
-		/// __192350001 = 192350001
+		/// || = 192350001
 		/// </summary>
 		__192350001 = 192350001
 	}
@@ -29,11 +29,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_requirementrelationshipOptionSets
 		/// </summary>
 		Location = 192350002,
 		/// <summary>
-		/// Organizational_Unit = 192350000
+		/// Organizational Unit = 192350000
 		/// </summary>
 		Organizational_Unit = 192350000,
 		/// <summary>
-		/// Related_Resource_Pools = 192350001
+		/// Related Resource Pools = 192350001
 		/// </summary>
 		Related_Resource_Pools = 192350001
 	}
@@ -98,7 +98,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_requirementrelationship";
 
-		public const int EntityTypeCode = 10307;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10413;
 
 		[DebuggerNonUserCode()]
 		public msdyn_requirementrelationship()
@@ -264,9 +265,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_requirementrelationshipOptionSets.msdyn_operator)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_operator] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_operator] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_operator] = null;
+			}
 		}
 
 		/// <summary>
@@ -373,7 +377,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

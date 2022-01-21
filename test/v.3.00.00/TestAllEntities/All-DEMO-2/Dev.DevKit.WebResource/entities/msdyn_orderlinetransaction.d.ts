@@ -35,7 +35,7 @@ declare namespace DevKit {
 			/** Enter the amount on the project contract line estimate. */
 			msdyn_Amount: DevKit.Controls.Money;
 			/** Enter the amount on the project contract line estimate. */
-			msdyn_Amount_1: DevKit.Controls.Money;
+			msdyn_Amount1: DevKit.Controls.Money;
 			msdyn_amount_after_tax: DevKit.Controls.Money;
 			/** Select the amount calculation method used for this project contract estimate line. Valid values are: 
 0: Multiply Quantity By Price
@@ -48,7 +48,7 @@ declare namespace DevKit {
 			/** Select whether this project contract line estimate will be charged to the customer or not. Only chargeable project contract line estimates will add to the invoice total */
 			msdyn_BillingType: DevKit.Controls.OptionSet;
 			/** Select whether this project contract line estimate will be charged to the customer or not. Only chargeable project contract line estimates will add to the invoice total */
-			msdyn_BillingType_1: DevKit.Controls.OptionSet;
+			msdyn_BillingType1: DevKit.Controls.OptionSet;
 			/** Shows the resource. */
 			msdyn_bookableresource: DevKit.Controls.Lookup;
 			/** Select the customer contact of this Project Contract. */
@@ -59,13 +59,13 @@ declare namespace DevKit {
 			/** Type a description of the project contract line estimate */
 			msdyn_description: DevKit.Controls.String;
 			/** Type a description of the project contract line estimate */
-			msdyn_description_1: DevKit.Controls.String;
+			msdyn_description1: DevKit.Controls.String;
 			/** Enter the document date. */
 			msdyn_DocumentDate: DevKit.Controls.Date;
 			/** Enter the end date on the project contract line estimate. */
 			msdyn_EndDateTime: DevKit.Controls.Date;
 			/** Enter the end date on the project contract line estimate. */
-			msdyn_EndDateTime_1: DevKit.Controls.Date;
+			msdyn_EndDateTime1: DevKit.Controls.Date;
 			/** Foreign key to the detail line that originated this entry. For example, revenue line points to it's related cost line. */
 			msdyn_Origin: DevKit.Controls.Lookup;
 			/** Relevant when amount calculation method on the Project Contract line transactions is "Multiply basis amount by percent" */
@@ -73,11 +73,11 @@ declare namespace DevKit {
 			/** Enter the price on the project contract line estimate. */
 			msdyn_Price: DevKit.Controls.Money;
 			/** Enter the price on the project contract line estimate. */
-			msdyn_Price_1: DevKit.Controls.Money;
+			msdyn_Price1: DevKit.Controls.Money;
 			/** Select the price list used for defaulting price on this project contract line estimate. */
 			msdyn_PriceList: DevKit.Controls.Lookup;
 			/** Select the price list used for defaulting price on this project contract line estimate. */
-			msdyn_PriceList_1: DevKit.Controls.Lookup;
+			msdyn_PriceList1: DevKit.Controls.Lookup;
 			/** Select the product on this project contract line estimate. */
 			msdyn_Product: DevKit.Controls.Lookup;
 			/** Select the name of the project on the project contract estimate line. */
@@ -85,42 +85,42 @@ declare namespace DevKit {
 			/** Enter the quantity of the project contract line estimate. */
 			msdyn_Quantity: DevKit.Controls.Decimal;
 			/** Enter the quantity of the project contract line estimate. */
-			msdyn_Quantity_1: DevKit.Controls.Decimal;
+			msdyn_Quantity1: DevKit.Controls.Decimal;
 			/** Select the name of the role that is estimated to perform this work. */
 			msdyn_ResourceCategory: DevKit.Controls.Lookup;
 			/** Select the name of the role that is estimated to perform this work. */
-			msdyn_ResourceCategory_1: DevKit.Controls.Lookup;
+			msdyn_ResourceCategory1: DevKit.Controls.Lookup;
 			/** Select the organizational unit of the resource who is estimated to perform the work. */
 			msdyn_ResourceOrganizationalUnitId: DevKit.Controls.Lookup;
 			/** Select the project contract that this estimate line is for. */
 			msdyn_SalesContract: DevKit.Controls.Lookup;
 			/** Select the project contract that this estimate line is for. */
-			msdyn_SalesContract_1: DevKit.Controls.Lookup;
+			msdyn_SalesContract1: DevKit.Controls.Lookup;
 			/** Unique identifier for Project Contract Line associated with Project Contract Line Detail. */
 			msdyn_SalesContractLineId: DevKit.Controls.Lookup;
 			/** Enter the estimate start date of the portion of work that is being estimated on the project contract estimate line. */
 			msdyn_StartDateTime: DevKit.Controls.Date;
 			/** Enter the estimate start date of the portion of work that is being estimated on the project contract estimate line. */
-			msdyn_StartDateTime_1: DevKit.Controls.Date;
+			msdyn_StartDateTime1: DevKit.Controls.Date;
 			/** Select the name of the work breakdown structure (WBS) task on the project contract line estimate. */
 			msdyn_Task: DevKit.Controls.Lookup;
 			msdyn_tax: DevKit.Controls.Money;
 			/** Select the transaction category on the project contract line estimate. */
 			msdyn_TransactionCategory: DevKit.Controls.Lookup;
 			/** Select the transaction category on the project contract line estimate. */
-			msdyn_TransactionCategory_1: DevKit.Controls.Lookup;
+			msdyn_TransactionCategory1: DevKit.Controls.Lookup;
 			/** Transaction classification of the Project Contract line transaction */
 			msdyn_TransactionClassification: DevKit.Controls.OptionSet;
 			/** Transaction classification of the Project Contract line transaction */
-			msdyn_TransactionClassification_1: DevKit.Controls.OptionSet;
+			msdyn_TransactionClassification1: DevKit.Controls.OptionSet;
 			/** Transaction type of the Project Contract line transaction */
 			msdyn_TransactionTypeCode: DevKit.Controls.OptionSet;
 			/** Transaction type of the Project Contract line transaction */
-			msdyn_TransactionTypeCode_1: DevKit.Controls.OptionSet;
+			msdyn_TransactionTypeCode1: DevKit.Controls.OptionSet;
 			/** Select the unit on the project contract line estimate. */
 			msdyn_Unit: DevKit.Controls.Lookup;
 			/** Select the unit on the project contract line estimate. */
-			msdyn_Unit_1: DevKit.Controls.Lookup;
+			msdyn_Unit1: DevKit.Controls.Lookup;
 			/** Select the unit schedule of the project contract line estimate. */
 			msdyn_UnitSchedule: DevKit.Controls.Lookup;
 			msdyn_VendorType: DevKit.Controls.OptionSet;
@@ -129,10 +129,12 @@ declare namespace DevKit {
 			/** Shows the currency associated with the entity. */
 			TransactionCurrencyId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_orderlinetransaction_Project_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form msdyn_orderlinetransaction_Project_Information
+		* Project Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -141,6 +143,10 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_orderlinetransaction_Project_Information */
 		Body: DevKit.Formmsdyn_orderlinetransaction_Project_Information.Body;
+		/** The Process of form msdyn_orderlinetransaction_Project_Information */
+		Process: DevKit.Formmsdyn_orderlinetransaction_Project_Information.Process;
+		/** The SidePanes of form msdyn_orderlinetransaction_Project_Information */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace Formmsdyn_orderlinetransaction_Project_Quick_Create {
 		interface tab_tab_1_Sections {
@@ -189,7 +195,7 @@ declare namespace DevKit {
 	}
 	class Formmsdyn_orderlinetransaction_Project_Quick_Create extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form msdyn_orderlinetransaction_Project_Quick_Create
+		* Project Quick Create [Quick Create]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -435,22 +441,22 @@ declare namespace OptionSet {
 			/** 2 */
 			Inactive
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Project Information','Quick Create'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

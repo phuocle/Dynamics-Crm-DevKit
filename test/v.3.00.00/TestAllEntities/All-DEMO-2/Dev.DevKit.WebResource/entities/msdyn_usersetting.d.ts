@@ -24,13 +24,15 @@ declare namespace DevKit {
 			/** Field to host the sound form custom control */
 			msdyn_SoundFormControl: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			personalquickreplies: DevKit.Controls.Grid;
 		}
 	}
 	class FormPersonalization_settings extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Personalization_settings
+		* Personalization settings [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -39,8 +41,12 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Personalization_settings */
 		Body: DevKit.FormPersonalization_settings.Body;
+		/** The Process of form Personalization_settings */
+		Process: DevKit.FormPersonalization_settings.Process;
 		/** The Grid of form Personalization_settings */
 		Grid: DevKit.FormPersonalization_settings.Grid;
+		/** The SidePanes of form Personalization_settings */
+		SidePanes: DevKit.SidePanes;
 	}
 	class msdyn_usersettingApi {
 		/**
@@ -119,22 +125,22 @@ declare namespace OptionSet {
 			/** 2 */
 			Inactive
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Personalization settings'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

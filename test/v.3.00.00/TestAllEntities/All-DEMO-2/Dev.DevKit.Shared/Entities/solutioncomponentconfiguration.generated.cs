@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.solutioncomponentconfigurationOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -121,7 +121,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "solutioncomponentconfiguration";
 
-		public const int EntityTypeCode = 10001;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10002;
 
 		[DebuggerNonUserCode()]
 		public solutioncomponentconfiguration()

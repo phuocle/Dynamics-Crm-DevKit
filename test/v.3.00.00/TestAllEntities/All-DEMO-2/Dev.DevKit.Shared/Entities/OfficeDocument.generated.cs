@@ -13,11 +13,11 @@ namespace Dev.DevKit.Shared.Entities.OfficeDocumentOptionSets
 	public enum DocumentType
 	{
 		/// <summary>
-		/// Microsoft_Excel = 1
+		/// Microsoft Excel = 1
 		/// </summary>
 		Microsoft_Excel = 1,
 		/// <summary>
-		/// Microsoft_Word = 2
+		/// Microsoft Word = 2
 		/// </summary>
 		Microsoft_Word = 2
 	}
@@ -50,6 +50,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "officedocument";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 4490;
 
 		[DebuggerNonUserCode()]
@@ -279,7 +280,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the user or team who owns the office document.</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

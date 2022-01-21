@@ -17,11 +17,11 @@ namespace Dev.DevKit.Shared.Entities.SystemUserOptionSets
 		/// </summary>
 		Administrative = 1,
 		/// <summary>
-		/// Delegated_Admin = 5
+		/// Delegated Admin = 5
 		/// </summary>
 		Delegated_Admin = 5,
 		/// <summary>
-		/// Non_interactive = 4
+		/// Non-interactive = 4
 		/// </summary>
 		Non_interactive = 4,
 		/// <summary>
@@ -29,11 +29,11 @@ namespace Dev.DevKit.Shared.Entities.SystemUserOptionSets
 		/// </summary>
 		Read = 2,
 		/// <summary>
-		/// Read_Write = 0
+		/// Read-Write = 0
 		/// </summary>
 		Read_Write = 0,
 		/// <summary>
-		/// Support_User = 3
+		/// Support User = 3
 		/// </summary>
 		Support_User = 3
 	}
@@ -41,7 +41,7 @@ namespace Dev.DevKit.Shared.Entities.SystemUserOptionSets
 	public enum Address1_AddressTypeCode
 	{
 		/// <summary>
-		/// Default_Value = 1
+		/// Default Value = 1
 		/// </summary>
 		Default_Value = 1
 	}
@@ -49,7 +49,7 @@ namespace Dev.DevKit.Shared.Entities.SystemUserOptionSets
 	public enum Address1_ShippingMethodCode
 	{
 		/// <summary>
-		/// Default_Value = 1
+		/// Default Value = 1
 		/// </summary>
 		Default_Value = 1
 	}
@@ -57,7 +57,7 @@ namespace Dev.DevKit.Shared.Entities.SystemUserOptionSets
 	public enum Address2_AddressTypeCode
 	{
 		/// <summary>
-		/// Default_Value = 1
+		/// Default Value = 1
 		/// </summary>
 		Default_Value = 1
 	}
@@ -65,9 +65,25 @@ namespace Dev.DevKit.Shared.Entities.SystemUserOptionSets
 	public enum Address2_ShippingMethodCode
 	{
 		/// <summary>
-		/// Default_Value = 1
+		/// Default Value = 1
 		/// </summary>
 		Default_Value = 1
+	}
+
+	public enum AzureState
+	{
+		/// <summary>
+		/// Exists = 0
+		/// </summary>
+		Exists = 0,
+		/// <summary>
+		/// Not found or hard deleted = 2
+		/// </summary>
+		Not_found_or_hard_deleted = 2,
+		/// <summary>
+		/// Soft deleted = 1
+		/// </summary>
+		Soft_deleted = 1
 	}
 
 	public enum CALType
@@ -81,19 +97,19 @@ namespace Dev.DevKit.Shared.Entities.SystemUserOptionSets
 		/// </summary>
 		Basic = 2,
 		/// <summary>
-		/// Device_Basic = 4
+		/// Device Basic = 4
 		/// </summary>
 		Device_Basic = 4,
 		/// <summary>
-		/// Device_Enterprise = 8
+		/// Device Enterprise = 8
 		/// </summary>
 		Device_Enterprise = 8,
 		/// <summary>
-		/// Device_Essential = 6
+		/// Device Essential = 6
 		/// </summary>
 		Device_Essential = 6,
 		/// <summary>
-		/// Device_Professional = 3
+		/// Device Professional = 3
 		/// </summary>
 		Device_Professional = 3,
 		/// <summary>
@@ -105,7 +121,7 @@ namespace Dev.DevKit.Shared.Entities.SystemUserOptionSets
 		/// </summary>
 		Essential = 5,
 		/// <summary>
-		/// Field_Service = 11
+		/// Field Service = 11
 		/// </summary>
 		Field_Service = 11,
 		/// <summary>
@@ -113,7 +129,7 @@ namespace Dev.DevKit.Shared.Entities.SystemUserOptionSets
 		/// </summary>
 		Professional = 0,
 		/// <summary>
-		/// Project_Service = 12
+		/// Project Service = 12
 		/// </summary>
 		Project_Service = 12,
 		/// <summary>
@@ -124,6 +140,18 @@ namespace Dev.DevKit.Shared.Entities.SystemUserOptionSets
 		/// Service = 10
 		/// </summary>
 		Service = 10
+	}
+
+	public enum DeletedState
+	{
+		/// <summary>
+		/// Not deleted = 0
+		/// </summary>
+		Not_deleted = 0,
+		/// <summary>
+		/// Soft deleted = 1
+		/// </summary>
+		Soft_deleted = 1
 	}
 
 	public enum EmailRouterAccessApproval
@@ -137,7 +165,7 @@ namespace Dev.DevKit.Shared.Entities.SystemUserOptionSets
 		/// </summary>
 		Empty = 0,
 		/// <summary>
-		/// Pending_Approval = 2
+		/// Pending Approval = 2
 		/// </summary>
 		Pending_Approval = 2,
 		/// <summary>
@@ -149,11 +177,11 @@ namespace Dev.DevKit.Shared.Entities.SystemUserOptionSets
 	public enum IncomingEmailDeliveryMethod
 	{
 		/// <summary>
-		/// Forward_Mailbox = 3
+		/// Forward Mailbox = 3
 		/// </summary>
 		Forward_Mailbox = 3,
 		/// <summary>
-		/// Microsoft_Dynamics_365_for_Outlook = 1
+		/// Microsoft Dynamics 365 for Outlook = 1
 		/// </summary>
 		Microsoft_Dynamics_365_for_Outlook = 1,
 		/// <summary>
@@ -161,7 +189,7 @@ namespace Dev.DevKit.Shared.Entities.SystemUserOptionSets
 		/// </summary>
 		None = 0,
 		/// <summary>
-		/// Server_Side_Synchronization_or_Email_Router = 2
+		/// Server-Side Synchronization or Email Router = 2
 		/// </summary>
 		Server_Side_Synchronization_or_Email_Router = 2
 	}
@@ -169,27 +197,27 @@ namespace Dev.DevKit.Shared.Entities.SystemUserOptionSets
 	public enum InviteStatusCode
 	{
 		/// <summary>
-		/// Invitation_Accepted = 4
+		/// Invitation Accepted = 4
 		/// </summary>
 		Invitation_Accepted = 4,
 		/// <summary>
-		/// Invitation_Expired = 3
+		/// Invitation Expired = 3
 		/// </summary>
 		Invitation_Expired = 3,
 		/// <summary>
-		/// Invitation_Near_Expired = 2
+		/// Invitation Near Expired = 2
 		/// </summary>
 		Invitation_Near_Expired = 2,
 		/// <summary>
-		/// Invitation_Not_Sent = 0
+		/// Invitation Not Sent = 0
 		/// </summary>
 		Invitation_Not_Sent = 0,
 		/// <summary>
-		/// Invitation_Rejected = 5
+		/// Invitation Rejected = 5
 		/// </summary>
 		Invitation_Rejected = 5,
 		/// <summary>
-		/// Invitation_Revoked = 6
+		/// Invitation Revoked = 6
 		/// </summary>
 		Invitation_Revoked = 6,
 		/// <summary>
@@ -201,11 +229,11 @@ namespace Dev.DevKit.Shared.Entities.SystemUserOptionSets
 	public enum msdyn_AgentType
 	{
 		/// <summary>
-		/// Application_user = 192350000
+		/// Application user = 192350000
 		/// </summary>
 		Application_user = 192350000,
 		/// <summary>
-		/// Bot_application_user = 192350001
+		/// Bot application user = 192350001
 		/// </summary>
 		Bot_application_user = 192350001
 	}
@@ -221,7 +249,7 @@ namespace Dev.DevKit.Shared.Entities.SystemUserOptionSets
 		/// </summary>
 		Other = 192350001,
 		/// <summary>
-		/// Virtual_Agent = 192350000
+		/// Virtual Agent = 192350000
 		/// </summary>
 		Virtual_Agent = 192350000
 	}
@@ -229,11 +257,11 @@ namespace Dev.DevKit.Shared.Entities.SystemUserOptionSets
 	public enum msdyn_UserType
 	{
 		/// <summary>
-		/// BOT_User = 192350001
+		/// BOT User = 192350001
 		/// </summary>
 		BOT_User = 192350001,
 		/// <summary>
-		/// CRM_User = 192350000
+		/// CRM User = 192350000
 		/// </summary>
 		CRM_User = 192350000
 	}
@@ -241,7 +269,7 @@ namespace Dev.DevKit.Shared.Entities.SystemUserOptionSets
 	public enum OutgoingEmailDeliveryMethod
 	{
 		/// <summary>
-		/// Microsoft_Dynamics_365_for_Outlook = 1
+		/// Microsoft Dynamics 365 for Outlook = 1
 		/// </summary>
 		Microsoft_Dynamics_365_for_Outlook = 1,
 		/// <summary>
@@ -249,7 +277,7 @@ namespace Dev.DevKit.Shared.Entities.SystemUserOptionSets
 		/// </summary>
 		None = 0,
 		/// <summary>
-		/// Server_Side_Synchronization_or_Email_Router = 2
+		/// Server-Side Synchronization or Email Router = 2
 		/// </summary>
 		Server_Side_Synchronization_or_Email_Router = 2
 	}
@@ -257,11 +285,11 @@ namespace Dev.DevKit.Shared.Entities.SystemUserOptionSets
 	public enum PreferredAddressCode
 	{
 		/// <summary>
-		/// Mailing_Address = 1
+		/// Mailing Address = 1
 		/// </summary>
 		Mailing_Address = 1,
 		/// <summary>
-		/// Other_Address = 2
+		/// Other Address = 2
 		/// </summary>
 		Other_Address = 2
 	}
@@ -269,7 +297,7 @@ namespace Dev.DevKit.Shared.Entities.SystemUserOptionSets
 	public enum PreferredEmailCode
 	{
 		/// <summary>
-		/// Default_Value = 1
+		/// Default Value = 1
 		/// </summary>
 		Default_Value = 1
 	}
@@ -277,19 +305,19 @@ namespace Dev.DevKit.Shared.Entities.SystemUserOptionSets
 	public enum PreferredPhoneCode
 	{
 		/// <summary>
-		/// Home_Phone = 3
+		/// Home Phone = 3
 		/// </summary>
 		Home_Phone = 3,
 		/// <summary>
-		/// Main_Phone = 1
+		/// Main Phone = 1
 		/// </summary>
 		Main_Phone = 1,
 		/// <summary>
-		/// Mobile_Phone = 4
+		/// Mobile Phone = 4
 		/// </summary>
 		Mobile_Phone = 4,
 		/// <summary>
-		/// Other_Phone = 2
+		/// Other Phone = 2
 		/// </summary>
 		Other_Phone = 2
 	}
@@ -350,6 +378,8 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ApplicationId = "applicationid";
 			public const string ApplicationIdUri = "applicationiduri";
 			public const string AzureActiveDirectoryObjectId = "azureactivedirectoryobjectid";
+			public const string AzureDeletedOn = "azuredeletedon";
+			public const string AzureState = "azurestate";
 			public const string BusinessUnitId = "businessunitid";
 			public const string CalendarId = "calendarid";
 			public const string CALType = "caltype";
@@ -359,6 +389,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string DefaultFiltersPopulated = "defaultfilterspopulated";
 			public const string DefaultMailbox = "defaultmailbox";
 			public const string DefaultOdbFolderName = "defaultodbfoldername";
+			public const string DeletedState = "deletedstate";
 			public const string DisabledReason = "disabledreason";
 			public const string DisplayInServiceViews = "displayinserviceviews";
 			public const string DomainName = "domainname";
@@ -402,6 +433,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_DefaultPresenceIdUser = "msdyn_defaultpresenceiduser";
 			public const string msdyn_gdproptout = "msdyn_gdproptout";
 			public const string msdyn_gridwrappercontrolfield = "msdyn_gridwrappercontrolfield";
+			public const string msdyn_OwningEnvironmentId = "msdyn_owningenvironmentid";
 			public const string msdyn_phonenumberid = "msdyn_phonenumberid";
 			public const string msdyn_UserType = "msdyn_usertype";
 			public const string msdyusd_USDConfigurationId = "msdyusd_usdconfigurationid";
@@ -447,6 +479,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "systemuser";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 8;
 
 		[DebuggerNonUserCode()]
@@ -1136,6 +1169,40 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Date and time when the user was set as soft deleted in Azure.</para>
+		/// <para>ReadOnly - DateTimeBehavior: UserLocal - DateTimeFormat: DateAndTime</para>
+		/// <para>Azure Deleted On</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public DateTime? AzureDeletedOnUtc
+		{
+			get { return Entity.GetAttributeValue<DateTime?>(Fields.AzureDeletedOn); }
+		}
+
+		/// <summary>
+		/// <para>Azure state of user</para>
+		/// <para>Picklist</para>
+		/// <para>Azure State</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public Dev.DevKit.Shared.Entities.SystemUserOptionSets.AzureState? AzureState
+		{
+			get
+			{
+				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.AzureState);
+				if (value == null) return null;
+				return (Dev.DevKit.Shared.Entities.SystemUserOptionSets.AzureState)value.Value;
+			}
+			set
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.AzureState] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.AzureState] = null;
+			}
+		}
+
+		/// <summary>
 		/// <para>Unique identifier of the business unit with which the user is associated.</para>
 		/// <para>Lookup to businessunit</para>
 		/// <para>Business Unit</para>
@@ -1238,7 +1305,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type a default folder name for the user's OneDrive For Business location.</para>
+		/// <para>Type a default folder name for the user&apos;s OneDrive For Business location.</para>
 		/// <para>ReadOnly - String - MaxLength: 200</para>
 		/// <para>Default OneDrive for Business Folder Name</para>
 		/// </summary>
@@ -1246,6 +1313,22 @@ namespace Dev.DevKit.Shared.Entities
 		public string DefaultOdbFolderName
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.DefaultOdbFolderName); }
+		}
+
+		/// <summary>
+		/// <para>User delete state</para>
+		/// <para>ReadOnly - Picklist</para>
+		/// <para>Deleted State</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public Dev.DevKit.Shared.Entities.SystemUserOptionSets.DeletedState? DeletedState
+		{
+			get
+			{
+				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.DeletedState);
+				if (value == null) return null;
+				return (Dev.DevKit.Shared.Entities.SystemUserOptionSets.DeletedState)value.Value;
+			}
 		}
 
 		/// <summary>
@@ -1460,9 +1543,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.SystemUserOptionSets.InviteStatusCode)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.InviteStatusCode] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.InviteStatusCode] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.InviteStatusCode] = null;
+			}
 		}
 
 		/// <summary>
@@ -1737,9 +1823,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.SystemUserOptionSets.msdyn_BotProvider)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_BotProvider] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_BotProvider] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_BotProvider] = null;
+			}
 		}
 
 		/// <summary>
@@ -1803,6 +1892,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Environment Id of the CDS environment that owns the bot user.</para>
+		/// <para>String - MaxLength: 500</para>
+		/// <para>Owning Environment Id</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_OwningEnvironmentId
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_OwningEnvironmentId); }
+			set { Entity.Attributes[Fields.msdyn_OwningEnvironmentId] = value; }
+		}
+
+		/// <summary>
 		/// <para>Lookup to msdyn_ocphonenumber</para>
 		/// <para>Phone Number</para>
 		/// </summary>
@@ -1863,7 +1964,7 @@ namespace Dev.DevKit.Shared.Entities
 		/// <summary>
 		/// <para>Unique identifier of the organization associated with the user.</para>
 		/// <para>ReadOnly - Uniqueidentifier</para>
-		/// <para>Organization </para>
+		/// <para>Organization</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public Guid? OrganizationId
@@ -1967,7 +2068,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>User's position in hierarchical security model.</para>
+		/// <para>User&apos;s position in hierarchical security model.</para>
 		/// <para>Lookup to position</para>
 		/// <para>Position</para>
 		/// </summary>
@@ -2278,7 +2379,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>User's Yammer login email address</para>
+		/// <para>User&apos;s Yammer login email address</para>
 		/// <para>String - MaxLength: 200</para>
 		/// <para>Yammer Email</para>
 		/// </summary>
@@ -2290,7 +2391,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>User's Yammer ID</para>
+		/// <para>User&apos;s Yammer ID</para>
 		/// <para>String - MaxLength: 128</para>
 		/// <para>Yammer User ID</para>
 		/// </summary>

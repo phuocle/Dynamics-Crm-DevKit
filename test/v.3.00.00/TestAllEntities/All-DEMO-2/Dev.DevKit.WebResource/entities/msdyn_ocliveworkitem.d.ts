@@ -2,6 +2,9 @@
 ///<reference path="devkit.d.ts" />
 declare namespace DevKit {
 	namespace FormConversation_Form {
+		interface tab_AlternativeDetails_Sections {
+			General: DevKit.Controls.Section;
+		}
 		interface tab_Details_Sections {
 			Details: DevKit.Controls.Section;
 			Details_section_4: DevKit.Controls.Section;
@@ -9,15 +12,19 @@ declare namespace DevKit {
 			tab_2_section_3: DevKit.Controls.Section;
 			tab_2_section_4: DevKit.Controls.Section;
 		}
+		interface tab_AlternativeDetails extends DevKit.Controls.ITab {
+			Section: tab_AlternativeDetails_Sections;
+		}
 		interface tab_Details extends DevKit.Controls.ITab {
 			Section: tab_Details_Sections;
 		}
 		interface Tabs {
+			AlternativeDetails: tab_AlternativeDetails;
 			Details: tab_Details;
 		}
 		interface Body {
 			Tab: Tabs;
-			/** Last agent assigned to the conversation */
+			/** Agent currently assigned to the conversation and last agent assigned for closed conversations */
 			msdyn_activeagentid: DevKit.Controls.Lookup;
 			/** Unique identifier for Queue associated with Conversation. */
 			msdyn_cdsqueueid: DevKit.Controls.Lookup;
@@ -38,7 +45,9 @@ declare namespace DevKit {
 			/** Conversation Title */
 			msdyn_title: DevKit.Controls.String;
 			/** Conversation Title */
-			msdyn_title_1: DevKit.Controls.String;
+			msdyn_title1: DevKit.Controls.String;
+			/** Conversation Title */
+			msdyn_title2: DevKit.Controls.String;
 			/** Placeholder for Transcript Control */
 			msdyn_TranscriptControl: DevKit.Controls.String;
 			/** Number of times the conversation was transferred */
@@ -60,13 +69,15 @@ declare namespace DevKit {
 			navAudit: DevKit.Controls.NavigationItem,
 			navConnections: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			SessionDetails: DevKit.Controls.Grid;
 		}
 	}
 	class FormConversation_Form extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Conversation_Form
+		* Conversation Form [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -77,8 +88,12 @@ declare namespace DevKit {
 		Body: DevKit.FormConversation_Form.Body;
 		/** The Navigation of form Conversation_Form */
 		Navigation: DevKit.FormConversation_Form.Navigation;
+		/** The Process of form Conversation_Form */
+		Process: DevKit.FormConversation_Form.Process;
 		/** The Grid of form Conversation_Form */
 		Grid: DevKit.FormConversation_Form.Grid;
+		/** The SidePanes of form Conversation_Form */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormCustomer_summary {
 		interface tab_Details_Sections {
@@ -147,10 +162,12 @@ declare namespace DevKit {
 			RecentCases: quickForm_RecentCases;
 			IssueSnapshot: quickForm_IssueSnapshot;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormCustomer_summary extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Customer_summary
+		* Customer summary [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -161,6 +178,10 @@ declare namespace DevKit {
 		Body: DevKit.FormCustomer_summary.Body;
 		/** The QuickForm of form Customer_summary */
 		QuickForm: DevKit.FormCustomer_summary.QuickForm;
+		/** The Process of form Customer_summary */
+		Process: DevKit.FormCustomer_summary.Process;
+		/** The SidePanes of form Customer_summary */
+		SidePanes: DevKit.SidePanes;
 	}
 	class msdyn_ocliveworkitemApi {
 		/**
@@ -242,8 +263,9 @@ declare namespace DevKit {
 		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
 		/** Date and time when last agent was assigned to the conversation */
 		msdyn_activeagentassignedon_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
-		/** Last agent assigned to the conversation */
+		/** Agent currently assigned to the conversation and last agent assigned for closed conversations */
 		msdyn_activeagentid: DevKit.WebApi.LookupValue;
+		msdyn_activesessionparticipantid: DevKit.WebApi.LookupValue;
 		/** Unique identifier for Queue associated with Conversation. */
 		msdyn_cdsqueueid: DevKit.WebApi.LookupValue;
 		/** The channel(s) in the conversation. */
@@ -256,7 +278,9 @@ declare namespace DevKit {
 		msdyn_ConversationSummaryField: DevKit.WebApi.StringValue;
 		/** Date and time when the activity was created. */
 		msdyn_createdon_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		/** Customer with which the activity is associated. */
 		msdyn_customer_msdyn_ocliveworkitem_account: DevKit.WebApi.LookupValue;
+		/** Customer with which the activity is associated. */
 		msdyn_customer_msdyn_ocliveworkitem_contact: DevKit.WebApi.LookupValue;
 		/** The language of the customer in this conversation. */
 		msdyn_customerlanguageid: DevKit.WebApi.LookupValue;
@@ -266,6 +290,7 @@ declare namespace DevKit {
 		msdyn_customersentimentlabel: DevKit.WebApi.OptionSetValue;
 		/** Look up to daily topic entity. */
 		msdyn_dailytopicid: DevKit.WebApi.LookupValue;
+		msdyn_effortpredictionresult: DevKit.WebApi.LookupValue;
 		/** Number of times conversation was escalated to Supervisor i.e. transferred to Supervisor */
 		msdyn_escalationcount: DevKit.WebApi.IntegerValue;
 		/** Time when conversation was initiated */
@@ -283,12 +308,12 @@ declare namespace DevKit {
 		/** Date and time when conversation was last modified */
 		msdyn_modifiedon_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** Unique Id of conversation */
-		msdyn_ocliveworkitemid: DevKit.WebApi.StringValue;
+		msdyn_ocliveworkitemid1: DevKit.WebApi.StringValue;
 		/** Unique identifier for msdyn_omnichannelqueue associated with Conversation */
 		msdyn_queueid: DevKit.WebApi.LookupValue;
 		/** Queue item associated with the conversation */
 		msdyn_queueitemid: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the routed record. */
+		/** Unique identifier of the routed record. Records are of those entities enabled for Unified Routing and have at least one Workstream created. For internal use only. */
 		msdyn_routableobjectid: DevKit.WebApi.LookupValue;
 		/** Lookup for the Social Profile Entity Record. */
 		msdyn_socialprofileid: DevKit.WebApi.LookupValue;
@@ -306,6 +331,11 @@ declare namespace DevKit {
 		msdyn_TranscriptControl: DevKit.WebApi.StringValue;
 		/** Number of times the conversation was transferred */
 		msdyn_transfercount: DevKit.WebApi.IntegerValue;
+		/** UR Customer Sentiment Keywords */
+		msdyn_urcustomersentimentkeywords: DevKit.WebApi.StringValue;
+		msdyn_urcustomersentimentlabel: DevKit.WebApi.OptionSetValue;
+		/** UR Customer Sentiment Score */
+		msdyn_urcustomersentimentscore: DevKit.WebApi.IntegerValue;
 		/** Work distribution mode of the associated work stream */
 		msdyn_workstreamworkdistributionmode: DevKit.WebApi.OptionSetValue;
 		/** Date and time when conversation end */
@@ -514,7 +544,6 @@ declare namespace DevKit {
 		regardingobjectid_uii_workflowstep_msdyn_ocliveworkitem: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the activity is associated. */
 		regardingobjectid_uii_workflow_workflowstep_mapping_msdyn_ocliveworkitem: DevKit.WebApi.LookupValue;
-		RegardingObjectIdYomiName: DevKit.WebApi.StringValue;
 		/** Scheduled duration of the activity, specified in minutes. */
 		ScheduledDurationMinutes: DevKit.WebApi.IntegerValue;
 		/** Scheduled end time of the activity. */
@@ -533,7 +562,6 @@ declare namespace DevKit {
 		SLAId: DevKit.WebApi.LookupValue;
 		/** Last SLA that was applied to this case. This field is for internal use only. */
 		SLAInvokedId: DevKit.WebApi.LookupValueReadonly;
-		SLAName: DevKit.WebApi.StringValueReadonly;
 		/** Shows the date and time by which the activities are sorted. */
 		SortDate_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** Unique identifier of the Stage. */
@@ -560,6 +588,54 @@ declare namespace DevKit {
 }
 declare namespace OptionSet {
 	namespace msdyn_ocliveworkitem {
+		enum ActivityTypeCode {
+			/** 4201 */
+			Appointment,
+			/** 10400 */
+			Booking_Alert,
+			/** 4402 */
+			Campaign_Activity,
+			/** 4401 */
+			Campaign_Response,
+			/** 4206 */
+			Case_Resolution,
+			/** 10702 */
+			Conversation,
+			/** 10294 */
+			Customer_Voice_alert,
+			/** 10304 */
+			Customer_Voice_survey_invite,
+			/** 10306 */
+			Customer_Voice_survey_response,
+			/** 4202 */
+			Email,
+			/** 4204 */
+			Fax,
+			/** 4207 */
+			Letter,
+			/** 4208 */
+			Opportunity_Close,
+			/** 4209 */
+			Order_Close,
+			/** 10813 */
+			Outbound_message,
+			/** 4210 */
+			Phone_Call,
+			/** 10430 */
+			Project_Service_Approval,
+			/** 4406 */
+			Quick_Campaign,
+			/** 4211 */
+			Quote_Close,
+			/** 4251 */
+			Recurring_Appointment,
+			/** 4214 */
+			Service_Activity,
+			/** 10717 */
+			Session,
+			/** 4212 */
+			Task
+		}
 		enum Community {
 			/** 5 */
 			Cortana,
@@ -662,6 +738,24 @@ declare namespace OptionSet {
 			/** 13 */
 			Very_positive
 		}
+		enum msdyn_urcustomersentimentlabel {
+			/** 0 */
+			NA,
+			/** 8 */
+			Negative,
+			/** 10 */
+			Neutral,
+			/** 12 */
+			Positive,
+			/** 9 */
+			Slightly_negative,
+			/** 11 */
+			Slightly_positive,
+			/** 7 */
+			Very_negative,
+			/** 13 */
+			Very_positive
+		}
 		enum msdyn_workstreamworkdistributionmode {
 			/** 192350001 */
 			Pick,
@@ -704,22 +798,22 @@ declare namespace OptionSet {
 			/** 5 */
 			Wrap_up
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Conversation Form','Customer summary'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

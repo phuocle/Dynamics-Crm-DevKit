@@ -25,18 +25,11 @@ var DevKit;
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 })(DevKit || (DevKit = {}));
@@ -50,18 +43,19 @@ var OptionSet;
 		msdyn_eventreason : {
 			Accepted: 192350019,
 			AgentDisconnected: 192350010,
+			AgentEndConsult: 192350032,
 			AgentEndConversation: 192350030,
 			AgentInviteRejected: 192350008,
 			AgentInviteTimeout: 192350009,
 			AgentTimeout: 192350011,
 			AgentTransfer: 192350001,
 			AgentTransferred: 192350012,
-			AssignToAgentBySupervisor_: 192350026,
-			AssignToQueueBySupervisor_: 192350027,
+			AssignToAgentBySupervisor: 192350026,
+			AssignToQueueBySupervisor: 192350027,
 			AutoAccept: 192350006,
 			AutoAccepted: 192350020,
-			BotEndConversation_: 192350025,
-			BotTransferSession_: 192350024,
+			BotEndConversation: 192350025,
+			BotTransferSession: 192350024,
 			Closed: 192350007,
 			CustomerDisconnect: 192350014,
 			CustomerEndConversation: 192350029,
@@ -76,17 +70,21 @@ var OptionSet;
 			QueueTransfer: 192350002,
 			Rejected: 192350017,
 			SessionTimeout: 192350015,
+			SupervisorTransferToAgent: 192350031,
 			TimedOut: 192350018,
 			Timeout: 192350022,
 			UserAccept: 192350005
 		},
 		msdyn_eventtype : {
 			AgentAccepted: 192350003,
+			AgentAddedToC2Chat: 192350027,
 			AgentAssigned: 192350002,
 			AgentDisconnected: 192350014,
+			AgentEndConsult: 192350029,
 			AgentEndConversation: 192350026,
 			AgentInviteRejected: 192350004,
 			AgentInviteTimeout: 192350007,
+			AgentRemovedFromC2Chat: 192350028,
 			AgentTimeout: 192350015,
 			AssignToAgentBySupervisor: 192350023,
 			AssignToQueueBySupervisor: 192350024,
@@ -117,15 +115,14 @@ var OptionSet;
 			Active: 1,
 			Inactive: 2
 		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
-
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 	};
 })(OptionSet || (OptionSet = {}));

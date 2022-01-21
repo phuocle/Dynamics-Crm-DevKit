@@ -64,11 +64,11 @@ declare namespace DevKit {
 			/** Shows the time that work started. */
 			msdyn_ActualArrivalTime: DevKit.Controls.DateTime;
 			/** Shows the time that work started. */
-			msdyn_ActualArrivalTime_1: DevKit.Controls.DateTime;
+			msdyn_ActualArrivalTime1: DevKit.Controls.DateTime;
 			/** Shows the total travel duration. Calculated based on the difference between the Bookable Resource Booking's start time and actual arrival time. */
 			msdyn_ActualTravelDuration: DevKit.Controls.Integer;
 			/** Shows the total travel duration. Calculated based on the difference between the Bookable Resource Booking's start time and actual arrival time. */
-			msdyn_ActualTravelDuration_1: DevKit.Controls.Integer;
+			msdyn_ActualTravelDuration1: DevKit.Controls.Integer;
 			/** Agreement Booking Date from where this Booking was generated */
 			msdyn_AgreementBookingDate: DevKit.Controls.Lookup;
 			/** Allow the time of this booking to be displayed on the schedule assistant as available. */
@@ -93,11 +93,11 @@ declare namespace DevKit {
 			/** Unique identifier for Work Order associated with Resource Booking. */
 			msdyn_WorkOrder: DevKit.Controls.Lookup;
 			/** Unique identifier for Work Order associated with Resource Booking. */
-			msdyn_WorkOrder_1: DevKit.Controls.Lookup;
+			msdyn_WorkOrder1: DevKit.Controls.Lookup;
 			/** Unique identifier for Work Order associated with Resource Booking. */
-			msdyn_WorkOrder_2: DevKit.Controls.Lookup;
+			msdyn_WorkOrder2: DevKit.Controls.Lookup;
 			/** Unique identifier for Work Order associated with Resource Booking. */
-			msdyn_WorkOrder_3: DevKit.Controls.Lookup;
+			msdyn_WorkOrder3: DevKit.Controls.Lookup;
 			/** Type a name for the booking. */
 			Name: DevKit.Controls.String;
 			notescontrol: DevKit.Controls.Note;
@@ -109,6 +109,8 @@ declare namespace DevKit {
 		interface Navigation {
 			nav_msdyn_bookableresourcebooking_msdyn_bookingjournal_Booking: DevKit.Controls.NavigationItem,
 			nav_msdyn_bookableresourcebooking_msdyn_bookingtimestamp_Booking: DevKit.Controls.NavigationItem,
+			nav_msdyn_bookableresourcebooking_msdyn_fspp_bookingnotificationcode_BookableResourceBooking: DevKit.Controls.NavigationItem,
+			nav_msdyn_bookableresourcebooking_msdyn_geofence_bookableresourcebookingid: DevKit.Controls.NavigationItem,
 			nav_msdyn_bookableresourcebooking_msdyn_purchaseorder_Booking: DevKit.Controls.NavigationItem,
 			nav_msdyn_bookableresourcebooking_msdyn_purchaseorderproduct_AssociateToBooking: DevKit.Controls.NavigationItem,
 			nav_msdyn_bookableresourcebooking_msdyn_purchaseorderreceiptproduct_AssociateToBooking: DevKit.Controls.NavigationItem,
@@ -122,13 +124,15 @@ declare namespace DevKit {
 			navAudit: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			msdyn_quicknotescontrol: DevKit.Controls.Grid;
 		}
 	}
 	class FormBooking_and_Work_Order extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Booking_and_Work_Order
+		* Booking and Work Order [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -139,8 +143,12 @@ declare namespace DevKit {
 		Body: DevKit.FormBooking_and_Work_Order.Body;
 		/** The Navigation of form Booking_and_Work_Order */
 		Navigation: DevKit.FormBooking_and_Work_Order.Navigation;
+		/** The Process of form Booking_and_Work_Order */
+		Process: DevKit.FormBooking_and_Work_Order.Process;
 		/** The Grid of form Booking_and_Work_Order */
 		Grid: DevKit.FormBooking_and_Work_Order.Grid;
+		/** The SidePanes of form Booking_and_Work_Order */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormBookableResourceBooking_Information {
 		interface tab_FieldService_Sections {
@@ -250,6 +258,8 @@ declare namespace DevKit {
 			nav_msdyn_bookableresourcebooking_msdyn_workorderservice_Booking: DevKit.Controls.NavigationItem,
 			nav_msdyn_bookableresourcebooking_msdyn_workorderservicetask_Booking: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			msdyn_quicknotescontrol: DevKit.Controls.Grid;
 			TIMESTAMPS: DevKit.Controls.Grid;
@@ -257,7 +267,7 @@ declare namespace DevKit {
 	}
 	class FormBookableResourceBooking_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form BookableResourceBooking_Information
+		* Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -268,8 +278,12 @@ declare namespace DevKit {
 		Body: DevKit.FormBookableResourceBooking_Information.Body;
 		/** The Navigation of form BookableResourceBooking_Information */
 		Navigation: DevKit.FormBookableResourceBooking_Information.Navigation;
+		/** The Process of form BookableResourceBooking_Information */
+		Process: DevKit.FormBookableResourceBooking_Information.Process;
 		/** The Grid of form BookableResourceBooking_Information */
 		Grid: DevKit.FormBookableResourceBooking_Information.Grid;
+		/** The SidePanes of form BookableResourceBooking_Information */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormResource_Booking_Mobile_Deprecated {
 		interface Header extends DevKit.Controls.IHeader {
@@ -408,17 +422,19 @@ declare namespace DevKit {
 		interface QuickForm {
 			WorkOrderQuickView: quickForm_WorkOrderQuickView;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
-			PRODUCTS: DevKit.Controls.Grid;
-			SERVICES: DevKit.Controls.Grid;
-			SERVICE_TASKS: DevKit.Controls.Grid;
 			msdyn_quicknotescontrol: DevKit.Controls.Grid;
+			PRODUCTS: DevKit.Controls.Grid;
+			SERVICE_TASKS: DevKit.Controls.Grid;
+			SERVICES: DevKit.Controls.Grid;
 			ServiceTasks: DevKit.Controls.Grid;
 		}
 	}
 	class FormResource_Booking_Mobile_Deprecated extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Resource_Booking_Mobile_Deprecated
+		* Resource Booking - Mobile (Deprecated) [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -433,8 +449,12 @@ declare namespace DevKit {
 		Navigation: DevKit.FormResource_Booking_Mobile_Deprecated.Navigation;
 		/** The QuickForm of form Resource_Booking_Mobile_Deprecated */
 		QuickForm: DevKit.FormResource_Booking_Mobile_Deprecated.QuickForm;
+		/** The Process of form Resource_Booking_Mobile_Deprecated */
+		Process: DevKit.FormResource_Booking_Mobile_Deprecated.Process;
 		/** The Grid of form Resource_Booking_Mobile_Deprecated */
 		Grid: DevKit.FormResource_Booking_Mobile_Deprecated.Grid;
+		/** The SidePanes of form Resource_Booking_Mobile_Deprecated */
+		SidePanes: DevKit.SidePanes;
 	}
 	class BookableResourceBookingApi {
 		/**
@@ -538,6 +558,8 @@ declare namespace DevKit {
 		msdyn_quickNoteAction: DevKit.WebApi.OptionSetValue;
 		/** Requirement Group */
 		msdyn_requirementgroupid: DevKit.WebApi.LookupValue;
+		/** Requirement Group Set */
+		msdyn_requirementgroupset: DevKit.WebApi.StringValue;
 		/** Resource Category */
 		msdyn_resourcecategoryid: DevKit.WebApi.LookupValue;
 		/** Unique identifier for Resource associated with Resource Booking */
@@ -681,22 +703,22 @@ declare namespace OptionSet {
 			/** 2 */
 			Inactive
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Booking and Work Order','Information','Resource Booking - Mobile (Deprecated)'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

@@ -26,10 +26,12 @@ declare namespace DevKit {
 			/** Shows whether the queue record is active or inactive. Inactive queue records are read-only and can't be edited unless they are reactivated. */
 			StateCode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormQueueItem_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form QueueItem_Information
+		* Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -40,6 +42,10 @@ declare namespace DevKit {
 		Body: DevKit.FormQueueItem_Information.Body;
 		/** The Footer section of form QueueItem_Information */
 		Footer: DevKit.FormQueueItem_Information.Footer;
+		/** The Process of form QueueItem_Information */
+		Process: DevKit.FormQueueItem_Information.Process;
+		/** The SidePanes of form QueueItem_Information */
+		SidePanes: DevKit.SidePanes;
 	}
 	class QueueItemApi {
 		/**
@@ -136,6 +142,8 @@ declare namespace DevKit {
 		/** Choose the activity, case, or article assigned to the queue. */
 		objectid_msdyn_ocsession: DevKit.WebApi.LookupValue;
 		/** Choose the activity, case, or article assigned to the queue. */
+		objectid_msdyn_overflowactionconfig: DevKit.WebApi.LookupValue;
+		/** Choose the activity, case, or article assigned to the queue. */
 		objectid_msdyn_project: DevKit.WebApi.LookupValue;
 		/** Choose the activity, case, or article assigned to the queue. */
 		objectid_msdyn_projecttask: DevKit.WebApi.LookupValue;
@@ -183,18 +191,28 @@ declare namespace DevKit {
 		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the user who owns the queue item. */
 		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		/** Priority of the queue item. */
+		Priority: DevKit.WebApi.IntegerValue;
 		/** Choose the queue that the item is assigned to. */
 		QueueId: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the queue item. */
 		QueueItemId: DevKit.WebApi.GuidValue;
+		/** Sender who created the queue item. */
+		Sender: DevKit.WebApi.StringValue;
+		/** Status of the queue item. */
+		State: DevKit.WebApi.IntegerValue;
 		/** Shows whether the queue record is active or inactive. Inactive queue records are read-only and can't be edited unless they are reactivated. */
 		StateCode: DevKit.WebApi.OptionSetValue;
+		/** Reason for the status of the queue item. */
+		Status: DevKit.WebApi.IntegerValue;
 		/** Select the item's status. */
 		StatusCode: DevKit.WebApi.OptionSetValue;
 		/** For internal use only. */
 		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
 		/** Shows the title or name that describes the queue record. This value is copied from the record that was assigned to the queue. */
 		Title: DevKit.WebApi.StringValueReadonly;
+		/** Recipients listed on the To line of the message for email queue items. */
+		ToRecipients: DevKit.WebApi.StringValue;
 		/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
 		TransactionCurrencyId: DevKit.WebApi.LookupValue;
 		/** Time zone code that was in use when the record was created. */
@@ -214,17 +232,17 @@ declare namespace OptionSet {
 		enum ObjectTypeCode {
 			/** 4200 */
 			Activity,
-			/** 10414 */
+			/** 10524 */
 			Agreement_Booking_Date,
-			/** 10419 */
+			/** 10529 */
 			Agreement_Booking_Setup,
-			/** 10420 */
+			/** 10530 */
 			Agreement_Invoice_Date,
-			/** 10422 */
+			/** 10532 */
 			Agreement_Invoice_Setup,
 			/** 4201 */
 			Appointment,
-			/** 10294 */
+			/** 10400 */
 			Booking_Alert,
 			/** 4402 */
 			Campaign_Activity,
@@ -232,67 +250,69 @@ declare namespace OptionSet {
 			Campaign_Response,
 			/** 112 */
 			Case,
-			/** 10564 */
+			/** 10702 */
 			Conversation,
-			/** 10238 */
+			/** 10294 */
 			Customer_Voice_alert,
-			/** 10248 */
+			/** 10304 */
 			Customer_Voice_survey_invite,
-			/** 10250 */
+			/** 10306 */
 			Customer_Voice_survey_response,
 			/** 4202 */
 			Email,
 			/** 4204 */
 			Fax,
-			/** 10317 */
+			/** 10423 */
 			Fulfillment_Preference,
-			/** 10442 */
+			/** 10552 */
 			Inventory_Adjustment,
-			/** 10445 */
+			/** 10555 */
 			Inventory_Transfer,
-			/** 10126 */
+			/** 10138 */
 			IoT_Alert,
 			/** 9953 */
 			Knowledge_Article,
-			/** 10061 */
+			/** 10086 */
 			Knowledge_Article_Template,
 			/** 4207 */
 			Letter,
-			/** 10558 */
+			/** 10692 */
 			Ongoing_conversation_Deprecated,
-			/** 10673 */
+			/** 10813 */
 			Outbound_message,
+			/** 10679 */
+			Overflow_Action_Config,
 			/** 4210 */
 			Phone_Call,
-			/** 10363 */
+			/** 10469 */
 			Project,
-			/** 10324 */
+			/** 10430 */
 			Project_Service_Approval,
-			/** 10368 */
+			/** 10474 */
 			Project_Task,
 			/** 4406 */
 			Quick_Campaign,
 			/** 4251 */
 			Recurring_Appointment,
-			/** 10386 */
+			/** 10492 */
 			Resource_Request,
 			/** 4214 */
 			Service_Activity,
-			/** 10573 */
+			/** 10717 */
 			Session,
 			/** 4216 */
 			Social_Activity,
 			/** 4212 */
 			Task,
-			/** 10318 */
+			/** 10424 */
 			Time_Group_Detail,
-			/** 10485 */
+			/** 10595 */
 			Work_Order,
-			/** 10488 */
+			/** 10598 */
 			Work_Order_Incident,
-			/** 10491 */
+			/** 10601 */
 			Work_Order_Service,
-			/** 10492 */
+			/** 10602 */
 			Work_Order_Service_Task
 		}
 		enum StateCode {
@@ -307,22 +327,22 @@ declare namespace OptionSet {
 			/** 2 */
 			Inactive
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

@@ -93,7 +93,7 @@ declare namespace DevKit {
 			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
 			ModifiedOn: DevKit.Controls.DateTime;
 			msdyn_Address1: DevKit.Controls.String;
-			msdyn_Address1_1: DevKit.Controls.String;
+			msdyn_Address11: DevKit.Controls.String;
 			msdyn_Address2: DevKit.Controls.String;
 			msdyn_Address3: DevKit.Controls.String;
 			msdyn_AddressName: DevKit.Controls.String;
@@ -122,11 +122,11 @@ declare namespace DevKit {
 			/** The iot alert which initiated this work order. */
 			msdyn_IoTAlert: DevKit.Controls.Lookup;
 			/** The iot alert which initiated this work order. */
-			msdyn_IoTAlert_1: DevKit.Controls.Lookup;
+			msdyn_IoTAlert1: DevKit.Controls.Lookup;
 			msdyn_Latitude: DevKit.Controls.Double;
-			msdyn_Latitude_1: DevKit.Controls.Double;
+			msdyn_Latitude1: DevKit.Controls.Double;
 			msdyn_Longitude: DevKit.Controls.Double;
-			msdyn_Longitude_1: DevKit.Controls.Double;
+			msdyn_Longitude1: DevKit.Controls.Double;
 			msdyn_mapcontrol: DevKit.Controls.String;
 			/** Enter the name of the custom entity. */
 			msdyn_name: DevKit.Controls.String;
@@ -242,6 +242,38 @@ declare namespace DevKit {
 		interface QuickForm {
 			service_account_details: quickForm_service_account_details;
 		}
+		interface ProcessCase_to_Work_Order_Business_Process {
+			/** Account to be billed. If a billing account has been set on service account it will be populated by default. Otherwise, the billing account will be the same as the service account. */
+			msdyn_BillingAccount: DevKit.Controls.Lookup;
+			/** Primary incident type reported */
+			msdyn_PrimaryIncidentType: DevKit.Controls.Lookup;
+			/** Priority of the Work Order. To be taken into consideration while scheduling resources */
+			msdyn_Priority: DevKit.Controls.Lookup;
+			/** Account to be serviced */
+			msdyn_ServiceAccount: DevKit.Controls.Lookup;
+			/** Work Order subsstatus */
+			msdyn_SubStatus: DevKit.Controls.Lookup;
+			/** Tracks the current system status. */
+			msdyn_SystemStatus: DevKit.Controls.OptionSet;
+			/** Tracks the current system status. */
+			msdyn_SystemStatus_1: DevKit.Controls.OptionSet;
+			/** Work Order Type */
+			msdyn_WorkOrderType: DevKit.Controls.Lookup;
+		}
+		interface ProcessCFS_IoT_Alert_Process_Flow {
+			/** Priority of the Work Order. To be taken into consideration while scheduling resources */
+			msdyn_Priority: DevKit.Controls.Lookup;
+			/** Account to be serviced */
+			msdyn_ServiceAccount: DevKit.Controls.Lookup;
+			/** Work Order subsstatus */
+			msdyn_SubStatus: DevKit.Controls.Lookup;
+			/** Tracks the current system status. */
+			msdyn_SystemStatus: DevKit.Controls.OptionSet;
+			/** Tracks the current system status. */
+			msdyn_SystemStatus_1: DevKit.Controls.OptionSet;
+			/** Work Order Type */
+			msdyn_WorkOrderType: DevKit.Controls.Lookup;
+		}
 		interface ProcessWork_Order_Business_Process {
 			/** Account to be billed. If a billing account has been set on service account it will be populated by default. Otherwise, the billing account will be the same as the service account. */
 			msdyn_BillingAccount: DevKit.Controls.Lookup;
@@ -261,20 +293,22 @@ declare namespace DevKit {
 			msdyn_WorkOrderType: DevKit.Controls.Lookup;
 		}
 		interface Process extends DevKit.Controls.IProcess {
+			Case_to_Work_Order_Business_Process: ProcessCase_to_Work_Order_Business_Process;
+			CFS_IoT_Alert_Process_Flow: ProcessCFS_IoT_Alert_Process_Flow;
 			Work_Order_Business_Process: ProcessWork_Order_Business_Process;
 		}
 		interface Grid {
-			Incidents_List: DevKit.Controls.Grid;
 			bookings: DevKit.Controls.Grid;
+			Incidents_List: DevKit.Controls.Grid;
+			KnowledgeArticleSubGrid: DevKit.Controls.Grid;
 			workorderproductsgrid: DevKit.Controls.Grid;
 			workorderservicesgrid: DevKit.Controls.Grid;
 			workorderservicetasksgrid: DevKit.Controls.Grid;
-			KnowledgeArticleSubGrid: DevKit.Controls.Grid;
 		}
 	}
 	class FormWork_Order extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Work_Order
+		* Work Order [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -293,6 +327,8 @@ declare namespace DevKit {
 		Process: DevKit.FormWork_Order.Process;
 		/** The Grid of form Work_Order */
 		Grid: DevKit.FormWork_Order.Grid;
+		/** The SidePanes of form Work_Order */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormWork_Order_Customer {
 		interface tab_fstab_customer_Sections {
@@ -364,6 +400,38 @@ declare namespace DevKit {
 			navDocument: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface ProcessCase_to_Work_Order_Business_Process {
+			/** Account to be billed. If a billing account has been set on service account it will be populated by default. Otherwise, the billing account will be the same as the service account. */
+			msdyn_BillingAccount: DevKit.Controls.Lookup;
+			/** Primary incident type reported */
+			msdyn_PrimaryIncidentType: DevKit.Controls.Lookup;
+			/** Priority of the Work Order. To be taken into consideration while scheduling resources */
+			msdyn_Priority: DevKit.Controls.Lookup;
+			/** Account to be serviced */
+			msdyn_ServiceAccount: DevKit.Controls.Lookup;
+			/** Work Order subsstatus */
+			msdyn_SubStatus: DevKit.Controls.Lookup;
+			/** Tracks the current system status. */
+			msdyn_SystemStatus: DevKit.Controls.OptionSet;
+			/** Tracks the current system status. */
+			msdyn_SystemStatus_1: DevKit.Controls.OptionSet;
+			/** Work Order Type */
+			msdyn_WorkOrderType: DevKit.Controls.Lookup;
+		}
+		interface ProcessCFS_IoT_Alert_Process_Flow {
+			/** Priority of the Work Order. To be taken into consideration while scheduling resources */
+			msdyn_Priority: DevKit.Controls.Lookup;
+			/** Account to be serviced */
+			msdyn_ServiceAccount: DevKit.Controls.Lookup;
+			/** Work Order subsstatus */
+			msdyn_SubStatus: DevKit.Controls.Lookup;
+			/** Tracks the current system status. */
+			msdyn_SystemStatus: DevKit.Controls.OptionSet;
+			/** Tracks the current system status. */
+			msdyn_SystemStatus_1: DevKit.Controls.OptionSet;
+			/** Work Order Type */
+			msdyn_WorkOrderType: DevKit.Controls.Lookup;
+		}
 		interface ProcessWork_Order_Business_Process {
 			/** Account to be billed. If a billing account has been set on service account it will be populated by default. Otherwise, the billing account will be the same as the service account. */
 			msdyn_BillingAccount: DevKit.Controls.Lookup;
@@ -383,12 +451,14 @@ declare namespace DevKit {
 			msdyn_WorkOrderType: DevKit.Controls.Lookup;
 		}
 		interface Process extends DevKit.Controls.IProcess {
+			Case_to_Work_Order_Business_Process: ProcessCase_to_Work_Order_Business_Process;
+			CFS_IoT_Alert_Process_Flow: ProcessCFS_IoT_Alert_Process_Flow;
 			Work_Order_Business_Process: ProcessWork_Order_Business_Process;
 		}
 	}
 	class FormWork_Order_Customer extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Work_Order_Customer
+		* Work Order - Customer [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -401,6 +471,8 @@ declare namespace DevKit {
 		Navigation: DevKit.FormWork_Order_Customer.Navigation;
 		/** The Process of form Work_Order_Customer */
 		Process: DevKit.FormWork_Order_Customer.Process;
+		/** The SidePanes of form Work_Order_Customer */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormWork_Order_Mobile {
 		interface Header extends DevKit.Controls.IHeader {
@@ -438,7 +510,7 @@ declare namespace DevKit {
 		interface Body {
 			Tab: Tabs;
 			msdyn_Address1: DevKit.Controls.String;
-			msdyn_Address1_1: DevKit.Controls.String;
+			msdyn_Address11: DevKit.Controls.String;
 			msdyn_Address2: DevKit.Controls.String;
 			msdyn_Address3: DevKit.Controls.String;
 			/** Account to be billed. If a billing account has been set on service account it will be populated by default. Otherwise, the billing account will be the same as the service account. */
@@ -458,12 +530,14 @@ declare namespace DevKit {
 			/** The iot alert which initiated this work order. */
 			msdyn_IoTAlert: DevKit.Controls.Lookup;
 			msdyn_Latitude: DevKit.Controls.Double;
-			msdyn_Latitude_1: DevKit.Controls.Double;
+			msdyn_Latitude1: DevKit.Controls.Double;
 			msdyn_Longitude: DevKit.Controls.Double;
-			msdyn_Longitude_1: DevKit.Controls.Double;
+			msdyn_Longitude1: DevKit.Controls.Double;
 			msdyn_mapcontrol: DevKit.Controls.String;
 			/** Enter the name of the custom entity. */
 			msdyn_name: DevKit.Controls.String;
+			/** Unique identifier for Work Order associated with Work Order. */
+			msdyn_ParentWorkOrder: DevKit.Controls.Lookup;
 			msdyn_PostalCode: DevKit.Controls.String;
 			/** Price List that controls pricing for products / services added to this work order. By default the system will use the Price List specified on the account */
 			msdyn_PriceList: DevKit.Controls.Lookup;
@@ -536,6 +610,38 @@ declare namespace DevKit {
 			navDocument: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface ProcessCase_to_Work_Order_Business_Process {
+			/** Account to be billed. If a billing account has been set on service account it will be populated by default. Otherwise, the billing account will be the same as the service account. */
+			msdyn_BillingAccount: DevKit.Controls.Lookup;
+			/** Primary incident type reported */
+			msdyn_PrimaryIncidentType: DevKit.Controls.Lookup;
+			/** Priority of the Work Order. To be taken into consideration while scheduling resources */
+			msdyn_Priority: DevKit.Controls.Lookup;
+			/** Account to be serviced */
+			msdyn_ServiceAccount: DevKit.Controls.Lookup;
+			/** Work Order subsstatus */
+			msdyn_SubStatus: DevKit.Controls.Lookup;
+			/** Tracks the current system status. */
+			msdyn_SystemStatus: DevKit.Controls.OptionSet;
+			/** Tracks the current system status. */
+			msdyn_SystemStatus_1: DevKit.Controls.OptionSet;
+			/** Work Order Type */
+			msdyn_WorkOrderType: DevKit.Controls.Lookup;
+		}
+		interface ProcessCFS_IoT_Alert_Process_Flow {
+			/** Priority of the Work Order. To be taken into consideration while scheduling resources */
+			msdyn_Priority: DevKit.Controls.Lookup;
+			/** Account to be serviced */
+			msdyn_ServiceAccount: DevKit.Controls.Lookup;
+			/** Work Order subsstatus */
+			msdyn_SubStatus: DevKit.Controls.Lookup;
+			/** Tracks the current system status. */
+			msdyn_SystemStatus: DevKit.Controls.OptionSet;
+			/** Tracks the current system status. */
+			msdyn_SystemStatus_1: DevKit.Controls.OptionSet;
+			/** Work Order Type */
+			msdyn_WorkOrderType: DevKit.Controls.Lookup;
+		}
 		interface ProcessWork_Order_Business_Process {
 			/** Account to be billed. If a billing account has been set on service account it will be populated by default. Otherwise, the billing account will be the same as the service account. */
 			msdyn_BillingAccount: DevKit.Controls.Lookup;
@@ -555,20 +661,22 @@ declare namespace DevKit {
 			msdyn_WorkOrderType: DevKit.Controls.Lookup;
 		}
 		interface Process extends DevKit.Controls.IProcess {
+			Case_to_Work_Order_Business_Process: ProcessCase_to_Work_Order_Business_Process;
+			CFS_IoT_Alert_Process_Flow: ProcessCFS_IoT_Alert_Process_Flow;
 			Work_Order_Business_Process: ProcessWork_Order_Business_Process;
 		}
 		interface Grid {
+			bookings: DevKit.Controls.Grid;
+			Incidents_List: DevKit.Controls.Grid;
+			KnowledgeArticlesSubGrid: DevKit.Controls.Grid;
 			workorderproductsgrid: DevKit.Controls.Grid;
 			workorderservicesgrid: DevKit.Controls.Grid;
 			workorderservicetasksgrid: DevKit.Controls.Grid;
-			Incidents_List: DevKit.Controls.Grid;
-			bookings: DevKit.Controls.Grid;
-			KnowledgeArticlesSubGrid: DevKit.Controls.Grid;
 		}
 	}
 	class FormWork_Order_Mobile extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Work_Order_Mobile
+		* Work Order - Mobile [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -585,6 +693,8 @@ declare namespace DevKit {
 		Process: DevKit.FormWork_Order_Mobile.Process;
 		/** The Grid of form Work_Order_Mobile */
 		Grid: DevKit.FormWork_Order_Mobile.Grid;
+		/** The SidePanes of form Work_Order_Mobile */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormWork_Order_Notes {
 		interface tab_fstab_fieldservice_Sections {
@@ -645,6 +755,38 @@ declare namespace DevKit {
 			navDocument: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface ProcessCase_to_Work_Order_Business_Process {
+			/** Account to be billed. If a billing account has been set on service account it will be populated by default. Otherwise, the billing account will be the same as the service account. */
+			msdyn_BillingAccount: DevKit.Controls.Lookup;
+			/** Primary incident type reported */
+			msdyn_PrimaryIncidentType: DevKit.Controls.Lookup;
+			/** Priority of the Work Order. To be taken into consideration while scheduling resources */
+			msdyn_Priority: DevKit.Controls.Lookup;
+			/** Account to be serviced */
+			msdyn_ServiceAccount: DevKit.Controls.Lookup;
+			/** Work Order subsstatus */
+			msdyn_SubStatus: DevKit.Controls.Lookup;
+			/** Tracks the current system status. */
+			msdyn_SystemStatus: DevKit.Controls.OptionSet;
+			/** Tracks the current system status. */
+			msdyn_SystemStatus_1: DevKit.Controls.OptionSet;
+			/** Work Order Type */
+			msdyn_WorkOrderType: DevKit.Controls.Lookup;
+		}
+		interface ProcessCFS_IoT_Alert_Process_Flow {
+			/** Priority of the Work Order. To be taken into consideration while scheduling resources */
+			msdyn_Priority: DevKit.Controls.Lookup;
+			/** Account to be serviced */
+			msdyn_ServiceAccount: DevKit.Controls.Lookup;
+			/** Work Order subsstatus */
+			msdyn_SubStatus: DevKit.Controls.Lookup;
+			/** Tracks the current system status. */
+			msdyn_SystemStatus: DevKit.Controls.OptionSet;
+			/** Tracks the current system status. */
+			msdyn_SystemStatus_1: DevKit.Controls.OptionSet;
+			/** Work Order Type */
+			msdyn_WorkOrderType: DevKit.Controls.Lookup;
+		}
 		interface ProcessWork_Order_Business_Process {
 			/** Account to be billed. If a billing account has been set on service account it will be populated by default. Otherwise, the billing account will be the same as the service account. */
 			msdyn_BillingAccount: DevKit.Controls.Lookup;
@@ -664,12 +806,14 @@ declare namespace DevKit {
 			msdyn_WorkOrderType: DevKit.Controls.Lookup;
 		}
 		interface Process extends DevKit.Controls.IProcess {
+			Case_to_Work_Order_Business_Process: ProcessCase_to_Work_Order_Business_Process;
+			CFS_IoT_Alert_Process_Flow: ProcessCFS_IoT_Alert_Process_Flow;
 			Work_Order_Business_Process: ProcessWork_Order_Business_Process;
 		}
 	}
 	class FormWork_Order_Notes extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Work_Order_Notes
+		* Work Order - Notes [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -682,6 +826,8 @@ declare namespace DevKit {
 		Navigation: DevKit.FormWork_Order_Notes.Navigation;
 		/** The Process of form Work_Order_Notes */
 		Process: DevKit.FormWork_Order_Notes.Process;
+		/** The SidePanes of form Work_Order_Notes */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormWork_Order_Service {
 		interface tab_fstab_fieldservice_Sections {
@@ -763,6 +909,38 @@ declare namespace DevKit {
 			navDocument: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface ProcessCase_to_Work_Order_Business_Process {
+			/** Account to be billed. If a billing account has been set on service account it will be populated by default. Otherwise, the billing account will be the same as the service account. */
+			msdyn_BillingAccount: DevKit.Controls.Lookup;
+			/** Primary incident type reported */
+			msdyn_PrimaryIncidentType: DevKit.Controls.Lookup;
+			/** Priority of the Work Order. To be taken into consideration while scheduling resources */
+			msdyn_Priority: DevKit.Controls.Lookup;
+			/** Account to be serviced */
+			msdyn_ServiceAccount: DevKit.Controls.Lookup;
+			/** Work Order subsstatus */
+			msdyn_SubStatus: DevKit.Controls.Lookup;
+			/** Tracks the current system status. */
+			msdyn_SystemStatus: DevKit.Controls.OptionSet;
+			/** Tracks the current system status. */
+			msdyn_SystemStatus_1: DevKit.Controls.OptionSet;
+			/** Work Order Type */
+			msdyn_WorkOrderType: DevKit.Controls.Lookup;
+		}
+		interface ProcessCFS_IoT_Alert_Process_Flow {
+			/** Priority of the Work Order. To be taken into consideration while scheduling resources */
+			msdyn_Priority: DevKit.Controls.Lookup;
+			/** Account to be serviced */
+			msdyn_ServiceAccount: DevKit.Controls.Lookup;
+			/** Work Order subsstatus */
+			msdyn_SubStatus: DevKit.Controls.Lookup;
+			/** Tracks the current system status. */
+			msdyn_SystemStatus: DevKit.Controls.OptionSet;
+			/** Tracks the current system status. */
+			msdyn_SystemStatus_1: DevKit.Controls.OptionSet;
+			/** Work Order Type */
+			msdyn_WorkOrderType: DevKit.Controls.Lookup;
+		}
 		interface ProcessWork_Order_Business_Process {
 			/** Account to be billed. If a billing account has been set on service account it will be populated by default. Otherwise, the billing account will be the same as the service account. */
 			msdyn_BillingAccount: DevKit.Controls.Lookup;
@@ -782,20 +960,22 @@ declare namespace DevKit {
 			msdyn_WorkOrderType: DevKit.Controls.Lookup;
 		}
 		interface Process extends DevKit.Controls.IProcess {
+			Case_to_Work_Order_Business_Process: ProcessCase_to_Work_Order_Business_Process;
+			CFS_IoT_Alert_Process_Flow: ProcessCFS_IoT_Alert_Process_Flow;
 			Work_Order_Business_Process: ProcessWork_Order_Business_Process;
 		}
 		interface Grid {
-			FsWorkOrderServiceTasksGrid: DevKit.Controls.Grid;
-			FsWorkOrderProductsGrid: DevKit.Controls.Grid;
-			FsWorkOrderServicesGrid: DevKit.Controls.Grid;
 			FsWorkOrderIncidentsGrid: DevKit.Controls.Grid;
+			FsWorkOrderProductsGrid: DevKit.Controls.Grid;
 			FsWorkOrderResolutionsGrid: DevKit.Controls.Grid;
+			FsWorkOrderServicesGrid: DevKit.Controls.Grid;
+			FsWorkOrderServiceTasksGrid: DevKit.Controls.Grid;
 			workorder_KASubgrid: DevKit.Controls.Grid;
 		}
 	}
 	class FormWork_Order_Service extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Work_Order_Service
+		* Work Order - Service [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -810,6 +990,8 @@ declare namespace DevKit {
 		Process: DevKit.FormWork_Order_Service.Process;
 		/** The Grid of form Work_Order_Service */
 		Grid: DevKit.FormWork_Order_Service.Grid;
+		/** The SidePanes of form Work_Order_Service */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormWork_Order_Create {
 		interface tab_maintab_Sections {
@@ -880,6 +1062,38 @@ declare namespace DevKit {
 			navProcessSessions: DevKit.Controls.NavigationItem,
 			navSPDocuments: DevKit.Controls.NavigationItem
 		}
+		interface ProcessCase_to_Work_Order_Business_Process {
+			/** Account to be billed. If a billing account has been set on service account it will be populated by default. Otherwise, the billing account will be the same as the service account. */
+			msdyn_BillingAccount: DevKit.Controls.Lookup;
+			/** Primary incident type reported */
+			msdyn_PrimaryIncidentType: DevKit.Controls.Lookup;
+			/** Priority of the Work Order. To be taken into consideration while scheduling resources */
+			msdyn_Priority: DevKit.Controls.Lookup;
+			/** Account to be serviced */
+			msdyn_ServiceAccount: DevKit.Controls.Lookup;
+			/** Work Order subsstatus */
+			msdyn_SubStatus: DevKit.Controls.Lookup;
+			/** Tracks the current system status. */
+			msdyn_SystemStatus: DevKit.Controls.OptionSet;
+			/** Tracks the current system status. */
+			msdyn_SystemStatus_1: DevKit.Controls.OptionSet;
+			/** Work Order Type */
+			msdyn_WorkOrderType: DevKit.Controls.Lookup;
+		}
+		interface ProcessCFS_IoT_Alert_Process_Flow {
+			/** Priority of the Work Order. To be taken into consideration while scheduling resources */
+			msdyn_Priority: DevKit.Controls.Lookup;
+			/** Account to be serviced */
+			msdyn_ServiceAccount: DevKit.Controls.Lookup;
+			/** Work Order subsstatus */
+			msdyn_SubStatus: DevKit.Controls.Lookup;
+			/** Tracks the current system status. */
+			msdyn_SystemStatus: DevKit.Controls.OptionSet;
+			/** Tracks the current system status. */
+			msdyn_SystemStatus_1: DevKit.Controls.OptionSet;
+			/** Work Order Type */
+			msdyn_WorkOrderType: DevKit.Controls.Lookup;
+		}
 		interface ProcessWork_Order_Business_Process {
 			/** Account to be billed. If a billing account has been set on service account it will be populated by default. Otherwise, the billing account will be the same as the service account. */
 			msdyn_BillingAccount: DevKit.Controls.Lookup;
@@ -899,12 +1113,14 @@ declare namespace DevKit {
 			msdyn_WorkOrderType: DevKit.Controls.Lookup;
 		}
 		interface Process extends DevKit.Controls.IProcess {
+			Case_to_Work_Order_Business_Process: ProcessCase_to_Work_Order_Business_Process;
+			CFS_IoT_Alert_Process_Flow: ProcessCFS_IoT_Alert_Process_Flow;
 			Work_Order_Business_Process: ProcessWork_Order_Business_Process;
 		}
 	}
 	class FormWork_Order_Create extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Work_Order_Create
+		* Work Order Create [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -917,6 +1133,8 @@ declare namespace DevKit {
 		Navigation: DevKit.FormWork_Order_Create.Navigation;
 		/** The Process of form Work_Order_Create */
 		Process: DevKit.FormWork_Order_Create.Process;
+		/** The SidePanes of form Work_Order_Create */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormQuick_Create_Work_Order {
 		interface tab_tab_1_Sections {
@@ -970,7 +1188,7 @@ declare namespace DevKit {
 	}
 	class FormQuick_Create_Work_Order extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Quick_Create_Work_Order
+		* Quick Create Work Order [Quick Create]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -1180,17 +1398,17 @@ declare namespace OptionSet {
 	namespace msdyn_workorder {
 		enum msdyn_SystemStatus {
 			/** 690970005 */
-			Closed_Canceled,
-			/** 690970004 */
-			Closed_Posted,
+			Canceled,
 			/** 690970003 */
-			Open_Completed,
+			Completed,
 			/** 690970002 */
-			Open_In_Progress,
+			In_Progress,
+			/** 690970004 */
+			Posted,
 			/** 690970001 */
-			Open_Scheduled,
+			Scheduled,
 			/** 690970000 */
-			Open_Unscheduled
+			Unscheduled
 		}
 		enum msdyn_WorkLocation {
 			/** 690970001 */
@@ -1212,22 +1430,22 @@ declare namespace OptionSet {
 			/** 2 */
 			Inactive
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Quick Create Work Order','Work Order','Work Order - Customer','Work Order - Mobile','Work Order - Notes','Work Order - Service','Work Order Create'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

@@ -89,7 +89,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msfp_satisfactionmetric";
 
-		public const int EntityTypeCode = 10246;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10302;
 
 		[DebuggerNonUserCode()]
 		public msfp_satisfactionmetric()
@@ -426,7 +427,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>User who owns the satisfaction metric.</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

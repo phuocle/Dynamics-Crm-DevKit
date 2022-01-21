@@ -47,10 +47,12 @@ declare namespace DevKit {
 			/** Shows whether the connection is active or inactive. Inactive connections are read-only and can't be edited unless they are reactivated. */
 			StateCode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormConnection_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Connection_Information
+		* Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -63,6 +65,10 @@ declare namespace DevKit {
 		Footer: DevKit.FormConnection_Information.Footer;
 		/** The Header section of form Connection_Information */
 		Header: DevKit.FormConnection_Information.Header;
+		/** The Process of form Connection_Information */
+		Process: DevKit.FormConnection_Information.Process;
+		/** The SidePanes of form Connection_Information */
+		SidePanes: DevKit.SidePanes;
 	}
 	class ConnectionApi {
 		/**
@@ -207,6 +213,10 @@ declare namespace DevKit {
 		/** Unique identifier of the source record. */
 		record1id_msdyn_approval: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
+		record1id_msdyn_assignmentmap: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
+		record1id_msdyn_assignmentrule: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
 		record1id_msdyn_bookingalert: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		record1id_msdyn_bookingalertstatus: DevKit.WebApi.LookupValue;
@@ -306,6 +316,10 @@ declare namespace DevKit {
 		record1id_msdyn_rtvproduct: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		record1id_msdyn_rtvsubstatus: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
+		record1id_msdyn_sequence: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
+		record1id_msdyn_sequencetarget: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		record1id_msdyn_shipvia: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
@@ -453,6 +467,10 @@ declare namespace DevKit {
 		/** Unique identifier of the target record. */
 		record2id_msdyn_approval: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the target record. */
+		record2id_msdyn_assignmentmap: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the target record. */
+		record2id_msdyn_assignmentrule: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the target record. */
 		record2id_msdyn_bookingalert: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the target record. */
 		record2id_msdyn_bookingalertstatus: DevKit.WebApi.LookupValue;
@@ -553,6 +571,10 @@ declare namespace DevKit {
 		/** Unique identifier of the target record. */
 		record2id_msdyn_rtvsubstatus: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the target record. */
+		record2id_msdyn_sequence: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the target record. */
+		record2id_msdyn_sequencetarget: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the target record. */
 		record2id_msdyn_shipvia: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the target record. */
 		record2id_msdyn_systemuserschedulersetting: DevKit.WebApi.LookupValue;
@@ -647,35 +669,39 @@ declare namespace OptionSet {
 			Account,
 			/** 4200 */
 			Activity,
-			/** 10413 */
+			/** 10523 */
 			Agreement,
-			/** 10414 */
+			/** 10524 */
 			Agreement_Booking_Date,
-			/** 10415 */
+			/** 10525 */
 			Agreement_Booking_Incident,
-			/** 10416 */
+			/** 10526 */
 			Agreement_Booking_Product,
-			/** 10417 */
+			/** 10527 */
 			Agreement_Booking_Service,
-			/** 10418 */
+			/** 10528 */
 			Agreement_Booking_Service_Task,
-			/** 10419 */
+			/** 10529 */
 			Agreement_Booking_Setup,
-			/** 10420 */
+			/** 10530 */
 			Agreement_Invoice_Date,
-			/** 10421 */
+			/** 10531 */
 			Agreement_Invoice_Product,
-			/** 10422 */
+			/** 10532 */
 			Agreement_Invoice_Setup,
 			/** 4201 */
 			Appointment,
-			/** 10294 */
+			/** 10277 */
+			Assignment_Map,
+			/** 10274 */
+			Assignment_Rule,
+			/** 10400 */
 			Booking_Alert,
-			/** 10295 */
+			/** 10401 */
 			Booking_Alert_Status,
-			/** 10297 */
+			/** 10403 */
 			Booking_Rule,
-			/** 10425 */
+			/** 10535 */
 			Booking_Timestamp,
 			/** 4400 */
 			Campaign,
@@ -691,15 +717,15 @@ declare namespace OptionSet {
 			Contact,
 			/** 1010 */
 			Contract,
-			/** 10564 */
+			/** 10702 */
 			Conversation,
-			/** 10116 */
+			/** 10128 */
 			Customer_Asset,
-			/** 10238 */
+			/** 10294 */
 			Customer_Voice_alert,
-			/** 10248 */
+			/** 10304 */
 			Customer_Voice_survey_invite,
-			/** 10250 */
+			/** 10306 */
 			Customer_Voice_survey_response,
 			/** 4202 */
 			Email,
@@ -713,35 +739,35 @@ declare namespace OptionSet {
 			FacilityEquipment,
 			/** 4204 */
 			Fax,
-			/** 10317 */
+			/** 10423 */
 			Fulfillment_Preference,
 			/** 9600 */
 			Goal,
-			/** 10436 */
+			/** 10546 */
 			Incident_Type_Characteristic,
-			/** 10437 */
+			/** 10547 */
 			Incident_Type_Product,
-			/** 10438 */
+			/** 10548 */
 			Incident_Type_Service,
-			/** 10442 */
+			/** 10552 */
 			Inventory_Adjustment,
-			/** 10443 */
+			/** 10553 */
 			Inventory_Adjustment_Product,
-			/** 10444 */
+			/** 10554 */
 			Inventory_Journal,
-			/** 10445 */
+			/** 10555 */
 			Inventory_Transfer,
 			/** 1090 */
 			Invoice,
-			/** 10126 */
+			/** 10138 */
 			IoT_Alert,
-			/** 10127 */
+			/** 10139 */
 			IoT_Device,
-			/** 10128 */
+			/** 10140 */
 			IoT_Device_Category,
-			/** 10129 */
+			/** 10141 */
 			IoT_Device_Command,
-			/** 10133 */
+			/** 10145 */
 			IoT_Device_Registration_History,
 			/** 9953 */
 			Knowledge_Article,
@@ -753,137 +779,141 @@ declare namespace OptionSet {
 			Letter,
 			/** 4300 */
 			Marketing_List,
-			/** 10558 */
+			/** 10692 */
 			Ongoing_conversation_Deprecated,
 			/** 3 */
 			Opportunity,
-			/** 10679 */
+			/** 10819 */
 			Option,
 			/** 1088 */
 			Order,
-			/** 10673 */
+			/** 10813 */
 			Outbound_message,
-			/** 10450 */
+			/** 10560 */
 			Payment,
-			/** 10451 */
+			/** 10561 */
 			Payment_Detail,
-			/** 10452 */
+			/** 10562 */
 			Payment_Method,
-			/** 10453 */
+			/** 10563 */
 			Payment_Term,
 			/** 4210 */
 			Phone_Call,
 			/** 50 */
 			Position,
-			/** 10454 */
+			/** 10564 */
 			Postal_Code,
 			/** 1022 */
 			Price_List,
-			/** 10362 */
+			/** 10468 */
 			Process_Notes,
 			/** 4710 */
 			Process_Session,
 			/** 1024 */
 			Product,
-			/** 10455 */
+			/** 10565 */
 			Product_Inventory,
-			/** 10233 */
+			/** 10289 */
 			Profile_Album,
-			/** 10363 */
+			/** 10469 */
 			Project,
-			/** 10324 */
+			/** 10430 */
 			Project_Service_Approval,
-			/** 10371 */
+			/** 10477 */
 			Project_Team_Member,
-			/** 10456 */
+			/** 10566 */
 			Purchase_Order,
-			/** 10457 */
+			/** 10567 */
 			Purchase_Order_Bill,
-			/** 10458 */
+			/** 10568 */
 			Purchase_Order_Product,
-			/** 10459 */
+			/** 10569 */
 			Purchase_Order_Receipt,
-			/** 10460 */
+			/** 10570 */
 			Purchase_Order_Receipt_Product,
-			/** 10461 */
+			/** 10571 */
 			Purchase_Order_SubStatus,
 			/** 1084 */
 			Quote,
-			/** 10462 */
+			/** 10572 */
 			Quote_Booking_Incident,
-			/** 10463 */
+			/** 10573 */
 			Quote_Booking_Product,
-			/** 10464 */
+			/** 10574 */
 			Quote_Booking_Service,
-			/** 10465 */
+			/** 10575 */
 			Quote_Booking_Service_Task,
 			/** 4251 */
 			Recurring_Appointment,
 			/** 4007 */
 			Resource_Group,
-			/** 10490 */
+			/** 10600 */
 			Resource_Restriction_Deprecated,
-			/** 10313 */
+			/** 10419 */
 			Resource_Territory,
-			/** 10470 */
+			/** 10580 */
 			RMA,
-			/** 10471 */
+			/** 10581 */
 			RMA_Product,
-			/** 10472 */
+			/** 10582 */
 			RMA_Receipt,
-			/** 10473 */
+			/** 10583 */
 			RMA_Receipt_Product,
-			/** 10474 */
+			/** 10584 */
 			RMA_SubStatus,
-			/** 10475 */
+			/** 10585 */
 			RTV,
-			/** 10476 */
+			/** 10586 */
 			RTV_Product,
-			/** 10477 */
+			/** 10587 */
 			RTV_Substatus,
 			/** 4005 */
 			Scheduling_Group,
+			/** 10268 */
+			Sequence,
+			/** 10270 */
+			Sequence_Target,
 			/** 4214 */
 			Service_Activity,
-			/** 10573 */
+			/** 10717 */
 			Session,
-			/** 10479 */
+			/** 10589 */
 			Ship_Via,
 			/** 4216 */
 			Social_Activity,
 			/** 99 */
 			Social_Profile,
-			/** 10316 */
+			/** 10422 */
 			System_User_Scheduler_Setting,
 			/** 4212 */
 			Task,
-			/** 10480 */
+			/** 10590 */
 			Tax_Code,
 			/** 9 */
 			Team,
 			/** 2013 */
 			Territory,
-			/** 10318 */
+			/** 10424 */
 			Time_Group_Detail,
-			/** 10482 */
+			/** 10592 */
 			Time_Off_Request,
-			/** 10702 */
+			/** 10842 */
 			Toolbar_Button,
 			/** 8 */
 			User,
-			/** 10484 */
+			/** 10594 */
 			Warehouse,
-			/** 10485 */
+			/** 10595 */
 			Work_Order,
-			/** 10486 */
+			/** 10596 */
 			Work_Order_Characteristic_Deprecated,
-			/** 10488 */
+			/** 10598 */
 			Work_Order_Incident,
-			/** 10489 */
+			/** 10599 */
 			Work_Order_Product,
-			/** 10491 */
+			/** 10601 */
 			Work_Order_Service,
-			/** 10492 */
+			/** 10602 */
 			Work_Order_Service_Task
 		}
 		enum Record2ObjectTypeCode {
@@ -891,35 +921,39 @@ declare namespace OptionSet {
 			Account,
 			/** 4200 */
 			Activity,
-			/** 10413 */
+			/** 10523 */
 			Agreement,
-			/** 10414 */
+			/** 10524 */
 			Agreement_Booking_Date,
-			/** 10415 */
+			/** 10525 */
 			Agreement_Booking_Incident,
-			/** 10416 */
+			/** 10526 */
 			Agreement_Booking_Product,
-			/** 10417 */
+			/** 10527 */
 			Agreement_Booking_Service,
-			/** 10418 */
+			/** 10528 */
 			Agreement_Booking_Service_Task,
-			/** 10419 */
+			/** 10529 */
 			Agreement_Booking_Setup,
-			/** 10420 */
+			/** 10530 */
 			Agreement_Invoice_Date,
-			/** 10421 */
+			/** 10531 */
 			Agreement_Invoice_Product,
-			/** 10422 */
+			/** 10532 */
 			Agreement_Invoice_Setup,
 			/** 4201 */
 			Appointment,
-			/** 10294 */
+			/** 10277 */
+			Assignment_Map,
+			/** 10274 */
+			Assignment_Rule,
+			/** 10400 */
 			Booking_Alert,
-			/** 10295 */
+			/** 10401 */
 			Booking_Alert_Status,
-			/** 10297 */
+			/** 10403 */
 			Booking_Rule,
-			/** 10425 */
+			/** 10535 */
 			Booking_Timestamp,
 			/** 4400 */
 			Campaign,
@@ -935,15 +969,15 @@ declare namespace OptionSet {
 			Contact,
 			/** 1010 */
 			Contract,
-			/** 10564 */
+			/** 10702 */
 			Conversation,
-			/** 10116 */
+			/** 10128 */
 			Customer_Asset,
-			/** 10238 */
+			/** 10294 */
 			Customer_Voice_alert,
-			/** 10248 */
+			/** 10304 */
 			Customer_Voice_survey_invite,
-			/** 10250 */
+			/** 10306 */
 			Customer_Voice_survey_response,
 			/** 4202 */
 			Email,
@@ -957,35 +991,35 @@ declare namespace OptionSet {
 			FacilityEquipment,
 			/** 4204 */
 			Fax,
-			/** 10317 */
+			/** 10423 */
 			Fulfillment_Preference,
 			/** 9600 */
 			Goal,
-			/** 10436 */
+			/** 10546 */
 			Incident_Type_Characteristic,
-			/** 10437 */
+			/** 10547 */
 			Incident_Type_Product,
-			/** 10438 */
+			/** 10548 */
 			Incident_Type_Service,
-			/** 10442 */
+			/** 10552 */
 			Inventory_Adjustment,
-			/** 10443 */
+			/** 10553 */
 			Inventory_Adjustment_Product,
-			/** 10444 */
+			/** 10554 */
 			Inventory_Journal,
-			/** 10445 */
+			/** 10555 */
 			Inventory_Transfer,
 			/** 1090 */
 			Invoice,
-			/** 10126 */
+			/** 10138 */
 			IoT_Alert,
-			/** 10127 */
+			/** 10139 */
 			IoT_Device,
-			/** 10128 */
+			/** 10140 */
 			IoT_Device_Category,
-			/** 10129 */
+			/** 10141 */
 			IoT_Device_Command,
-			/** 10133 */
+			/** 10145 */
 			IoT_Device_Registration_History,
 			/** 9953 */
 			Knowledge_Article,
@@ -997,137 +1031,141 @@ declare namespace OptionSet {
 			Letter,
 			/** 4300 */
 			Marketing_List,
-			/** 10558 */
+			/** 10692 */
 			Ongoing_conversation_Deprecated,
 			/** 3 */
 			Opportunity,
-			/** 10679 */
+			/** 10819 */
 			Option,
 			/** 1088 */
 			Order,
-			/** 10673 */
+			/** 10813 */
 			Outbound_message,
-			/** 10450 */
+			/** 10560 */
 			Payment,
-			/** 10451 */
+			/** 10561 */
 			Payment_Detail,
-			/** 10452 */
+			/** 10562 */
 			Payment_Method,
-			/** 10453 */
+			/** 10563 */
 			Payment_Term,
 			/** 4210 */
 			Phone_Call,
 			/** 50 */
 			Position,
-			/** 10454 */
+			/** 10564 */
 			Postal_Code,
 			/** 1022 */
 			Price_List,
-			/** 10362 */
+			/** 10468 */
 			Process_Notes,
 			/** 4710 */
 			Process_Session,
 			/** 1024 */
 			Product,
-			/** 10455 */
+			/** 10565 */
 			Product_Inventory,
-			/** 10233 */
+			/** 10289 */
 			Profile_Album,
-			/** 10363 */
+			/** 10469 */
 			Project,
-			/** 10324 */
+			/** 10430 */
 			Project_Service_Approval,
-			/** 10371 */
+			/** 10477 */
 			Project_Team_Member,
-			/** 10456 */
+			/** 10566 */
 			Purchase_Order,
-			/** 10457 */
+			/** 10567 */
 			Purchase_Order_Bill,
-			/** 10458 */
+			/** 10568 */
 			Purchase_Order_Product,
-			/** 10459 */
+			/** 10569 */
 			Purchase_Order_Receipt,
-			/** 10460 */
+			/** 10570 */
 			Purchase_Order_Receipt_Product,
-			/** 10461 */
+			/** 10571 */
 			Purchase_Order_SubStatus,
 			/** 1084 */
 			Quote,
-			/** 10462 */
+			/** 10572 */
 			Quote_Booking_Incident,
-			/** 10463 */
+			/** 10573 */
 			Quote_Booking_Product,
-			/** 10464 */
+			/** 10574 */
 			Quote_Booking_Service,
-			/** 10465 */
+			/** 10575 */
 			Quote_Booking_Service_Task,
 			/** 4251 */
 			Recurring_Appointment,
 			/** 4007 */
 			Resource_Group,
-			/** 10490 */
+			/** 10600 */
 			Resource_Restriction_Deprecated,
-			/** 10313 */
+			/** 10419 */
 			Resource_Territory,
-			/** 10470 */
+			/** 10580 */
 			RMA,
-			/** 10471 */
+			/** 10581 */
 			RMA_Product,
-			/** 10472 */
+			/** 10582 */
 			RMA_Receipt,
-			/** 10473 */
+			/** 10583 */
 			RMA_Receipt_Product,
-			/** 10474 */
+			/** 10584 */
 			RMA_SubStatus,
-			/** 10475 */
+			/** 10585 */
 			RTV,
-			/** 10476 */
+			/** 10586 */
 			RTV_Product,
-			/** 10477 */
+			/** 10587 */
 			RTV_Substatus,
 			/** 4005 */
 			Scheduling_Group,
+			/** 10268 */
+			Sequence,
+			/** 10270 */
+			Sequence_Target,
 			/** 4214 */
 			Service_Activity,
-			/** 10573 */
+			/** 10717 */
 			Session,
-			/** 10479 */
+			/** 10589 */
 			Ship_Via,
 			/** 4216 */
 			Social_Activity,
 			/** 99 */
 			Social_Profile,
-			/** 10316 */
+			/** 10422 */
 			System_User_Scheduler_Setting,
 			/** 4212 */
 			Task,
-			/** 10480 */
+			/** 10590 */
 			Tax_Code,
 			/** 9 */
 			Team,
 			/** 2013 */
 			Territory,
-			/** 10318 */
+			/** 10424 */
 			Time_Group_Detail,
-			/** 10482 */
+			/** 10592 */
 			Time_Off_Request,
-			/** 10702 */
+			/** 10842 */
 			Toolbar_Button,
 			/** 8 */
 			User,
-			/** 10484 */
+			/** 10594 */
 			Warehouse,
-			/** 10485 */
+			/** 10595 */
 			Work_Order,
-			/** 10486 */
+			/** 10596 */
 			Work_Order_Characteristic_Deprecated,
-			/** 10488 */
+			/** 10598 */
 			Work_Order_Incident,
-			/** 10489 */
+			/** 10599 */
 			Work_Order_Product,
-			/** 10491 */
+			/** 10601 */
 			Work_Order_Service,
-			/** 10492 */
+			/** 10602 */
 			Work_Order_Service_Task
 		}
 		enum StateCode {
@@ -1142,22 +1180,22 @@ declare namespace OptionSet {
 			/** 2 */
 			Inactive
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

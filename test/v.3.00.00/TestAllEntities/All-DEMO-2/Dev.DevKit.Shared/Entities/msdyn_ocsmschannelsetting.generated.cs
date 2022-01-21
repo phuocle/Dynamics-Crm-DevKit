@@ -13,11 +13,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocsmschannelsettingOptionSets
 	public enum msdyn_postconversationsurveymode
 	{
 		/// <summary>
-		/// Insert_survey_in_conversation = 192350000
+		/// Insert survey in conversation = 192350000
 		/// </summary>
 		Insert_survey_in_conversation = 192350000,
 		/// <summary>
-		/// Send_survey_link_to_conversation = 192350001
+		/// Send survey link to conversation = 192350001
 		/// </summary>
 		Send_survey_link_to_conversation = 192350001
 	}
@@ -84,7 +84,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_ocsmschannelsetting";
 
-		public const int EntityTypeCode = 10654;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10793;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocsmschannelsetting()

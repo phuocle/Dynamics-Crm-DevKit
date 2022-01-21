@@ -65,7 +65,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_suggestioninteraction";
 
-		public const int EntityTypeCode = 10184;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10207;
 
 		[DebuggerNonUserCode()]
 		public msdyn_suggestioninteraction()
@@ -217,7 +218,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Suggested Entity lookup attribute</para>
-		/// <para>Required - Lookup to incident;knowledgearticle</para>
+		/// <para>Required - Lookup to incident, knowledgearticle</para>
 		/// <para>Suggested Entity</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -229,7 +230,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Suggestion for lookup attribute</para>
-		/// <para>Required - Lookup to incident;msdyn_ocliveworkitem</para>
+		/// <para>Required - Lookup to incident, msdyn_ocliveworkitem</para>
 		/// <para>Suggestion For</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

@@ -15,17 +15,18 @@ var DevKit;
 		}
 		var form = devKit.LoadForm(formContext);
 		var body = {
+			msdyn_ApprovalSet: {},
 			msdyn_BillingType: {},
 			msdyn_CostQuantity: {},
 			msdyn_ExpenseEntry: {},
-			msdyn_ExpenseEntry_1: {},
+			msdyn_ExpenseEntry1: {},
 			msdyn_ExternalComments: {},
 			msdyn_hasreceipt: {},
 			msdyn_SalesPrice: {},
 			msdyn_SalesQuantity: {},
 			msdyn_SubmittedBy: {},
 			msdyn_TimeEntry: {},
-			msdyn_TimeEntry_1: {},
+			msdyn_TimeEntry1: {},
 			OwnerId: {}
 		};
 		devKit.LoadFields(formContext, body);
@@ -47,6 +48,8 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		var quickForm = {
 			ExpenseEntryDetail: {
 				msdyn_Amount: {},
@@ -74,13 +77,9 @@ var DevKit;
 		};
 		devKit.LoadQuickForms(formContext, quickForm);
 		form.QuickForm = quickForm;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 })(DevKit || (DevKit = {}));
@@ -115,15 +114,14 @@ var OptionSet;
 			Active: 1,
 			Inactive: 2
 		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
-
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 	};
 })(OptionSet || (OptionSet = {}));

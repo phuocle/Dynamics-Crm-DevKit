@@ -63,7 +63,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "teammobileofflineprofilemembership";
 
-		public const int EntityTypeCode = 10073;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10094;
 
 		[DebuggerNonUserCode()]
 		public teammobileofflineprofilemembership()

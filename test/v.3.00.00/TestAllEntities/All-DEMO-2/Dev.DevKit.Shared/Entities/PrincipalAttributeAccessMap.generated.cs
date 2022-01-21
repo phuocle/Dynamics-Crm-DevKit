@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.PrincipalAttributeAccessMapOptionSets
 		/// </summary>
 		Allowed = 4,
 		/// <summary>
-		/// Not_Allowed = 0
+		/// Not Allowed = 0
 		/// </summary>
 		Not_Allowed = 0
 	}
@@ -29,7 +29,7 @@ namespace Dev.DevKit.Shared.Entities.PrincipalAttributeAccessMapOptionSets
 		/// </summary>
 		Allowed = 4,
 		/// <summary>
-		/// Not_Allowed = 0
+		/// Not Allowed = 0
 		/// </summary>
 		Not_Allowed = 0
 	}
@@ -41,7 +41,7 @@ namespace Dev.DevKit.Shared.Entities.PrincipalAttributeAccessMapOptionSets
 		/// </summary>
 		Allowed = 4,
 		/// <summary>
-		/// Not_Allowed = 0
+		/// Not Allowed = 0
 		/// </summary>
 		Not_Allowed = 0
 	}
@@ -64,6 +64,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "principalattributeaccessmap";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 43;
 
 		[DebuggerNonUserCode()]

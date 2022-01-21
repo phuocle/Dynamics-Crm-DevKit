@@ -35,10 +35,12 @@ declare namespace DevKit {
 			RetryCount: DevKit.Controls.Integer;
 			WebResource_systemjob: DevKit.Controls.WebResource;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormAsyncOperation_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form AsyncOperation_Information
+		* Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -47,6 +49,10 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form AsyncOperation_Information */
 		Body: DevKit.FormAsyncOperation_Information.Body;
+		/** The Process of form AsyncOperation_Information */
+		Process: DevKit.FormAsyncOperation_Information.Process;
+		/** The SidePanes of form AsyncOperation_Information */
+		SidePanes: DevKit.SidePanes;
 	}
 	class AsyncOperationApi {
 		/**
@@ -94,7 +100,8 @@ declare namespace DevKit {
 		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
 		/** Unstructured data associated with the system job. */
 		Data: DevKit.WebApi.StringValue;
-		DataBlobId_Name: DevKit.WebApi.StringValueReadonly;
+		/** File Id for the blob url used for file storage. */
+		DataBlobId: DevKit.WebApi.StringValueReadonly;
 		/** Execution of all operations with the same dependency token is serialized. */
 		DependencyToken: DevKit.WebApi.StringValue;
 		/** Number of SDK calls made since the first call. */
@@ -163,6 +170,8 @@ declare namespace DevKit {
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_annualfiscalcalendar: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_appaction: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_appelement: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_applicationuser: DevKit.WebApi.LookupValue;
@@ -170,8 +179,6 @@ declare namespace DevKit {
 		regardingobjectid_appmodulecomponentedge: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_appmodulecomponentnode: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the object with which the system job is associated. */
-		regardingobjectid_appnotification: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_appointment: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
@@ -243,6 +250,8 @@ declare namespace DevKit {
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_childincidentcount: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_comment: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_commitment: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_competitor: DevKit.WebApi.LookupValue;
@@ -303,6 +312,8 @@ declare namespace DevKit {
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_datalakeworkspacepermission: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_datasyncstate: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_discount: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_discounttype: DevKit.WebApi.LookupValue;
@@ -341,6 +352,8 @@ declare namespace DevKit {
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_entityimageconfig: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_entityindex: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_entitymap: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_environmentvariabledefinition: DevKit.WebApi.LookupValue;
@@ -356,6 +369,8 @@ declare namespace DevKit {
 		externalpartyitem_asyncoperations: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_fax: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_featurecontrolsetting: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_fixedmonthlyfiscalcalendar: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
@@ -386,6 +401,8 @@ declare namespace DevKit {
 		regardingobjectid_incidentknowledgebaserecord: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_incidentresolution: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_indexattributes: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_new_interactionforemail: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
@@ -503,6 +520,8 @@ declare namespace DevKit {
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_aiconfiguration: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_aicontactsuggestion: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_aifptrainingdocument: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_aimodel: DevKit.WebApi.LookupValue;
@@ -539,13 +558,25 @@ declare namespace DevKit {
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_approval: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_approvalset: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_assetcategorytemplateassociation: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_assetsuggestionssetting: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_assettemplateassociation: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_assignmentconfiguration: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_assignmentconfigurationstep: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_assignmentmap: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_assignmentrule: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_attribute: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_attributevalue: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_authenticationsettings: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
@@ -651,6 +682,10 @@ declare namespace DevKit {
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_contactpricelist: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_contactsuggestionrule: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_contactsuggestionruleset: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_contractlinedetailperformance: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_contractlineinvoiceschedule: DevKit.WebApi.LookupValue;
@@ -689,6 +724,12 @@ declare namespace DevKit {
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_dataanalyticsreport_csrmanager: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_dataanalyticsreport_fs: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_dataanalyticsreport_fspredictrs: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_dataanalyticsreport_fspredictwhd: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_dataanalyticsreport_ksinsights: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_dataanalyticsreport_oc: DevKit.WebApi.LookupValue;
@@ -703,6 +744,10 @@ declare namespace DevKit {
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_datainsightsandanalyticsfeature: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_dealmanageraccess: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_dealmanagersettings: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_decisioncontract: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_decisionruleset: DevKit.WebApi.LookupValue;
@@ -713,11 +758,15 @@ declare namespace DevKit {
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_dimensionfieldname: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_effortpredictionresult: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_entitlementapplication: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_entityconfig: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_entityconfiguration: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_entitylinkchatconfiguration: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_entityrankingrule: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
@@ -732,6 +781,8 @@ declare namespace DevKit {
 		regardingobjectid_msdyn_expensecategory: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_expensereceipt: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_extendedusersetting: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_facebookengagementctx: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
@@ -780,6 +831,10 @@ declare namespace DevKit {
 		regardingobjectid_msdyn_helppage: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_icebreakersconfig: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_iermlmodel: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_iermltraining: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_incidenttype: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
@@ -865,7 +920,11 @@ declare namespace DevKit {
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_kalanguagesetting: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_kbattachment: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_kbenrichment: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_kbkeywordsdescsuggestionsetting: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_kmfederatedsearchconfig: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
@@ -886,6 +945,8 @@ declare namespace DevKit {
 		regardingobjectid_msdyn_kpieventdata: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_kpieventdefinition: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_leadmodelconfig: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_lineengagementctx: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
@@ -915,6 +976,8 @@ declare namespace DevKit {
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_mlresultcache: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_modelpreviewstatus: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_msteamssetting: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_msteamssettingsv2: DevKit.WebApi.LookupValue;
@@ -925,7 +988,11 @@ declare namespace DevKit {
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_notificationtemplate: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_ocautoblockrule: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_ocbotchannelregistration: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_occarrier: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_occhannelconfiguration: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
@@ -940,6 +1007,8 @@ declare namespace DevKit {
 		regardingobjectid_msdyn_ocfbapplication: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_ocfbpage: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_ocflaggedspam: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_oclanguage: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
@@ -969,6 +1038,8 @@ declare namespace DevKit {
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_ocprovisioningstate: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_ocrecording: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_ocrequest: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_ocruleitem: DevKit.WebApi.LookupValue;
@@ -982,6 +1053,8 @@ declare namespace DevKit {
 		regardingobjectid_msdyn_ocsession: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_ocsessioncharacteristic: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_ocsessionparticipantevent: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_ocsessionsentiment: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
@@ -1033,6 +1106,8 @@ declare namespace DevKit {
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_opportunitylinetransactionclassificatio: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_opportunitymodelconfig: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_opportunitypricelist: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_orderinvoicingdate: DevKit.WebApi.LookupValue;
@@ -1054,6 +1129,8 @@ declare namespace DevKit {
 		regardingobjectid_msdyn_orderpricelist: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_organizationalunit: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_overflowactionconfig: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_paneconfiguration: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
@@ -1096,6 +1173,12 @@ declare namespace DevKit {
 		regardingobjectid_msdyn_postconfig: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_postruleconfig: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_predictivemodelscore: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_predictivescore: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_predictworkhourdurationsetting: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_presence: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
@@ -1201,6 +1284,8 @@ declare namespace DevKit {
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_quotepricelist: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_recording: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_relationshipinsightsunifiedconfig: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_requirementcharacteristic: DevKit.WebApi.LookupValue;
@@ -1271,7 +1356,15 @@ declare namespace DevKit {
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_rulesetdependencymapping: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_salesaccelerationsettings: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_salesassignmentsetting: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_salesinsightssettings: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_salesroutingrun: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_salestag: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_scenario: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
@@ -1283,7 +1376,19 @@ declare namespace DevKit {
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_searchconfiguration: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_segment: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_segmentcatalogue: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_sentimentanalysis: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_sequence: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_sequencestat: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_sequencetarget: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_sequencetargetstep: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_serviceconfiguration: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
@@ -1342,6 +1447,12 @@ declare namespace DevKit {
 		regardingobjectid_msdyn_taxcode: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_taxcodedetail: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_teamschannelengagementctx: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_teamschatassociation: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_teamschatsuggestion: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_teamscollaboration: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
@@ -1447,6 +1558,10 @@ declare namespace DevKit {
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_workordertype: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_workqueuestate: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_workqueueusersetting: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyusd_actioncallworkflow: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyusd_agentscriptaction: DevKit.WebApi.LookupValue;
@@ -1551,6 +1666,8 @@ declare namespace DevKit {
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_phonetocaseprocess: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_pluginpackage: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_position: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_post: DevKit.WebApi.LookupValue;
@@ -1560,6 +1677,8 @@ declare namespace DevKit {
 		regardingobjectid_pricelevel: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_privilege: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_privilegesremovalsetting: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_processstageparameter: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
@@ -1641,6 +1760,8 @@ declare namespace DevKit {
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_serviceplan: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_serviceplanmapping: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_settingdefinition: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_sharepointdocumentlocation: DevKit.WebApi.LookupValue;
@@ -1658,6 +1779,8 @@ declare namespace DevKit {
 		regardingobjectid_socialprofile: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_solutioncomponentattributeconfiguration: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_solutioncomponentbatchconfiguration: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_solutioncomponentconfiguration: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
@@ -1734,7 +1857,6 @@ declare namespace DevKit {
 		regardingobjectid_virtualentitymetadata: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_workflowbinary: DevKit.WebApi.LookupValue;
-		RegardingObjectIdYomiName: DevKit.WebApi.StringValue;
 		/** Unique identifier of the request that generated the system job. */
 		RequestId: DevKit.WebApi.GuidValue;
 		/** Retain job history. */
@@ -1794,6 +1916,10 @@ declare namespace OptionSet {
 			Bulk_Duplicate_Detection,
 			/** 2 */
 			Bulk_Email,
+			/** 260 */
+			BulkArchive_Async_Operation,
+			/** 261 */
+			BulkArchiveBatch_Async_Operation,
 			/** 22 */
 			Calculate_Organization_Maximum_Storage_Size,
 			/** 18 */
@@ -1876,6 +2002,8 @@ declare namespace OptionSet {
 			Mass_Calculate_Rollup_Field,
 			/** 12 */
 			Matchcode_Update,
+			/** 85 */
+			Migrate_notes_to_attachments_job,
 			/** 25 */
 			Organization_Full_Text_Catalog_Index,
 			/** 50 */
@@ -1961,22 +2089,22 @@ declare namespace OptionSet {
 			/** 0 */
 			Waiting_For_Resources
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

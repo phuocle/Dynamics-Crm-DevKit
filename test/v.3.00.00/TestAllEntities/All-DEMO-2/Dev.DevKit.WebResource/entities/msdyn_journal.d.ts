@@ -39,7 +39,7 @@ declare namespace DevKit {
 			/** Bookable Resource */
 			msdyn_BookableResource: DevKit.Controls.Lookup;
 			/** Bookable Resource */
-			msdyn_BookableResource_1: DevKit.Controls.Lookup;
+			msdyn_BookableResource1: DevKit.Controls.Lookup;
 			/** Time Entry Date */
 			msdyn_Date: DevKit.Controls.Date;
 			/** The name of the custom entity. */
@@ -53,7 +53,7 @@ declare namespace DevKit {
 			/** Project */
 			msdyn_Project: DevKit.Controls.Lookup;
 			/** Project */
-			msdyn_Project_1: DevKit.Controls.Lookup;
+			msdyn_Project1: DevKit.Controls.Lookup;
 			/** Project Task */
 			msdyn_ProjectTask: DevKit.Controls.Lookup;
 			/** Resource Role */
@@ -65,15 +65,17 @@ declare namespace DevKit {
 			/** Reason for the status of the Journal */
 			statuscode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
-			TimeEntries: DevKit.Controls.Grid;
 			Expenses: DevKit.Controls.Grid;
 			JournalLinesGrid: DevKit.Controls.Grid;
+			TimeEntries: DevKit.Controls.Grid;
 		}
 	}
 	class Formmsdyn_journal_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form msdyn_journal_Information
+		* Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -82,8 +84,12 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_journal_Information */
 		Body: DevKit.Formmsdyn_journal_Information.Body;
+		/** The Process of form msdyn_journal_Information */
+		Process: DevKit.Formmsdyn_journal_Information.Process;
 		/** The Grid of form msdyn_journal_Information */
 		Grid: DevKit.Formmsdyn_journal_Information.Grid;
+		/** The SidePanes of form msdyn_journal_Information */
+		SidePanes: DevKit.SidePanes;
 	}
 	class msdyn_journalApi {
 		/**
@@ -202,22 +208,22 @@ declare namespace OptionSet {
 			/** 2 */
 			Inactive
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

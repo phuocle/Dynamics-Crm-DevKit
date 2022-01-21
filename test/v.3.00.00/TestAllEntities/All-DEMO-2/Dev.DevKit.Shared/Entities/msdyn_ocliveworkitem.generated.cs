@@ -10,6 +10,102 @@ using System.Diagnostics;
 
 namespace Dev.DevKit.Shared.Entities.msdyn_ocliveworkitemOptionSets
 {
+	public enum ActivityTypeCode
+	{
+		/// <summary>
+		/// Appointment = 4201
+		/// </summary>
+		Appointment = 4201,
+		/// <summary>
+		/// Booking Alert = 10400
+		/// </summary>
+		Booking_Alert = 10400,
+		/// <summary>
+		/// Campaign Activity = 4402
+		/// </summary>
+		Campaign_Activity = 4402,
+		/// <summary>
+		/// Campaign Response = 4401
+		/// </summary>
+		Campaign_Response = 4401,
+		/// <summary>
+		/// Case Resolution = 4206
+		/// </summary>
+		Case_Resolution = 4206,
+		/// <summary>
+		/// Conversation = 10702
+		/// </summary>
+		Conversation = 10702,
+		/// <summary>
+		/// Customer Voice alert = 10294
+		/// </summary>
+		Customer_Voice_alert = 10294,
+		/// <summary>
+		/// Customer Voice survey invite = 10304
+		/// </summary>
+		Customer_Voice_survey_invite = 10304,
+		/// <summary>
+		/// Customer Voice survey response = 10306
+		/// </summary>
+		Customer_Voice_survey_response = 10306,
+		/// <summary>
+		/// Email = 4202
+		/// </summary>
+		Email = 4202,
+		/// <summary>
+		/// Fax = 4204
+		/// </summary>
+		Fax = 4204,
+		/// <summary>
+		/// Letter = 4207
+		/// </summary>
+		Letter = 4207,
+		/// <summary>
+		/// Opportunity Close = 4208
+		/// </summary>
+		Opportunity_Close = 4208,
+		/// <summary>
+		/// Order Close = 4209
+		/// </summary>
+		Order_Close = 4209,
+		/// <summary>
+		/// Outbound message = 10813
+		/// </summary>
+		Outbound_message = 10813,
+		/// <summary>
+		/// Phone Call = 4210
+		/// </summary>
+		Phone_Call = 4210,
+		/// <summary>
+		/// Project Service Approval = 10430
+		/// </summary>
+		Project_Service_Approval = 10430,
+		/// <summary>
+		/// Quick Campaign = 4406
+		/// </summary>
+		Quick_Campaign = 4406,
+		/// <summary>
+		/// Quote Close = 4211
+		/// </summary>
+		Quote_Close = 4211,
+		/// <summary>
+		/// Recurring Appointment = 4251
+		/// </summary>
+		Recurring_Appointment = 4251,
+		/// <summary>
+		/// Service Activity = 4214
+		/// </summary>
+		Service_Activity = 4214,
+		/// <summary>
+		/// Session = 10717
+		/// </summary>
+		Session = 10717,
+		/// <summary>
+		/// Task = 4212
+		/// </summary>
+		Task = 4212
+	}
+
 	public enum Community
 	{
 		/// <summary>
@@ -17,11 +113,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocliveworkitemOptionSets
 		/// </summary>
 		Cortana = 5,
 		/// <summary>
-		/// Direct_Line = 6
+		/// Direct Line = 6
 		/// </summary>
 		Direct_Line = 6,
 		/// <summary>
-		/// Direct_Line_Speech = 8
+		/// Direct Line Speech = 8
 		/// </summary>
 		Direct_Line_Speech = 8,
 		/// <summary>
@@ -45,7 +141,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocliveworkitemOptionSets
 		/// </summary>
 		Line = 3,
 		/// <summary>
-		/// Microsoft_Teams = 7
+		/// Microsoft Teams = 7
 		/// </summary>
 		Microsoft_Teams = 7,
 		/// <summary>
@@ -97,23 +193,23 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocliveworkitemOptionSets
 	public enum InstanceTypeCode
 	{
 		/// <summary>
-		/// Not_Recurring = 0
+		/// Not Recurring = 0
 		/// </summary>
 		Not_Recurring = 0,
 		/// <summary>
-		/// Recurring_Exception = 3
+		/// Recurring Exception = 3
 		/// </summary>
 		Recurring_Exception = 3,
 		/// <summary>
-		/// Recurring_Future_Exception = 4
+		/// Recurring Future Exception = 4
 		/// </summary>
 		Recurring_Future_Exception = 4,
 		/// <summary>
-		/// Recurring_Instance = 2
+		/// Recurring Instance = 2
 		/// </summary>
 		Recurring_Instance = 2,
 		/// <summary>
-		/// Recurring_Master = 1
+		/// Recurring Master = 1
 		/// </summary>
 		Recurring_Master = 1
 	}
@@ -121,7 +217,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocliveworkitemOptionSets
 	public enum msdyn_channel
 	{
 		/// <summary>
-		/// Co_browse = 192390000
+		/// Co-browse = 192390000
 		/// </summary>
 		Co_browse = 192390000,
 		/// <summary>
@@ -129,7 +225,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocliveworkitemOptionSets
 		/// </summary>
 		Custom = 192350002,
 		/// <summary>
-		/// Entity_Records = 192350000
+		/// Entity Records = 192350000
 		/// </summary>
 		Entity_Records = 192350000,
 		/// <summary>
@@ -141,15 +237,15 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocliveworkitemOptionSets
 		/// </summary>
 		LINE = 192310000,
 		/// <summary>
-		/// Live_chat = 192360000
+		/// Live chat = 192360000
 		/// </summary>
 		Live_chat = 192360000,
 		/// <summary>
-		/// Microsoft_Teams = 19241000
+		/// Microsoft Teams = 19241000
 		/// </summary>
 		Microsoft_Teams = 19241000,
 		/// <summary>
-		/// Screen_sharing = 192400000
+		/// Screen sharing = 192400000
 		/// </summary>
 		Screen_sharing = 192400000,
 		/// <summary>
@@ -181,7 +277,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocliveworkitemOptionSets
 	public enum msdyn_customersentimentlabel
 	{
 		/// <summary>
-		/// NA = 0
+		/// N/A = 0
 		/// </summary>
 		NA = 0,
 		/// <summary>
@@ -197,19 +293,55 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocliveworkitemOptionSets
 		/// </summary>
 		Positive = 12,
 		/// <summary>
-		/// Slightly_negative = 9
+		/// Slightly negative = 9
 		/// </summary>
 		Slightly_negative = 9,
 		/// <summary>
-		/// Slightly_positive = 11
+		/// Slightly positive = 11
 		/// </summary>
 		Slightly_positive = 11,
 		/// <summary>
-		/// Very_negative = 7
+		/// Very negative = 7
 		/// </summary>
 		Very_negative = 7,
 		/// <summary>
-		/// Very_positive = 13
+		/// Very positive = 13
+		/// </summary>
+		Very_positive = 13
+	}
+
+	public enum msdyn_urcustomersentimentlabel
+	{
+		/// <summary>
+		/// N/A = 0
+		/// </summary>
+		NA = 0,
+		/// <summary>
+		/// Negative = 8
+		/// </summary>
+		Negative = 8,
+		/// <summary>
+		/// Neutral = 10
+		/// </summary>
+		Neutral = 10,
+		/// <summary>
+		/// Positive = 12
+		/// </summary>
+		Positive = 12,
+		/// <summary>
+		/// Slightly negative = 9
+		/// </summary>
+		Slightly_negative = 9,
+		/// <summary>
+		/// Slightly positive = 11
+		/// </summary>
+		Slightly_positive = 11,
+		/// <summary>
+		/// Very negative = 7
+		/// </summary>
+		Very_negative = 7,
+		/// <summary>
+		/// Very positive = 13
 		/// </summary>
 		Very_positive = 13
 	}
@@ -261,7 +393,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocliveworkitemOptionSets
 		/// </summary>
 		Scheduled = 3,
 		/// <summary>
-		/// Wrap_up_Deprecated = 4
+		/// Wrap-up (Deprecated) = 4
 		/// </summary>
 		Wrap_up_Deprecated = 4
 	}
@@ -293,7 +425,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocliveworkitemOptionSets
 		/// </summary>
 		Waiting = 3,
 		/// <summary>
-		/// Wrap_up = 5
+		/// Wrap-up = 5
 		/// </summary>
 		Wrap_up = 5
 	}
@@ -338,6 +470,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
 			public const string msdyn_activeagentassignedon = "msdyn_activeagentassignedon";
 			public const string msdyn_activeagentid = "msdyn_activeagentid";
+			public const string msdyn_activesessionparticipantid = "msdyn_activesessionparticipantid";
 			public const string msdyn_cdsqueueid = "msdyn_cdsqueueid";
 			public const string msdyn_channel = "msdyn_channel";
 			public const string msdyn_channelproviderName = "msdyn_channelproviderName";
@@ -349,6 +482,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_customerlocale = "msdyn_customerlocale";
 			public const string msdyn_customersentimentlabel = "msdyn_customersentimentlabel";
 			public const string msdyn_dailytopicid = "msdyn_dailytopicid";
+			public const string msdyn_effortpredictionresult = "msdyn_effortpredictionresult";
 			public const string msdyn_escalationcount = "msdyn_escalationcount";
 			public const string msdyn_initiatedon = "msdyn_initiatedon";
 			public const string msdyn_isoutbound = "msdyn_isoutbound";
@@ -369,6 +503,9 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_title = "msdyn_title";
 			public const string msdyn_TranscriptControl = "msdyn_transcriptcontrol";
 			public const string msdyn_transfercount = "msdyn_transfercount";
+			public const string msdyn_urcustomersentimentkeywords = "msdyn_urcustomersentimentkeywords";
+			public const string msdyn_urcustomersentimentlabel = "msdyn_urcustomersentimentlabel";
+			public const string msdyn_urcustomersentimentscore = "msdyn_urcustomersentimentscore";
 			public const string msdyn_workstreamworkdistributionmode = "msdyn_workstreamworkdistributionmode";
 			public const string msdyn_wrapupinitiatedon = "msdyn_wrapupinitiatedon";
 			public const string OnHoldTime = "onholdtime";
@@ -410,7 +547,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_ocliveworkitem";
 
-		public const int EntityTypeCode = 10564;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10702;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocliveworkitem()
@@ -533,7 +671,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Blind Carbon-copy (bcc) recipients of the activity.</para>
-		/// <para>PartyList</para>
+		/// <para>Lookup to account, contact, lead, systemuser</para>
 		/// <para>BCC</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -557,7 +695,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Carbon-copy (cc) recipients of the activity.</para>
-		/// <para>PartyList</para>
+		/// <para>Lookup to account, contact, lead, systemuser</para>
 		/// <para>CC</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -637,7 +775,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Customer with which the activity is associated.</para>
-		/// <para>PartyList</para>
+		/// <para>Lookup to account, contact</para>
 		/// <para>Customers</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -742,7 +880,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Person who the activity is from.</para>
-		/// <para>PartyList</para>
+		/// <para>Lookup to account, contact, lead, systemuser</para>
 		/// <para>From</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -909,7 +1047,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Last agent assigned to the conversation</para>
+		/// <para>Agent currently assigned to the conversation and last agent assigned for closed conversations</para>
 		/// <para>Lookup to systemuser</para>
 		/// <para>Active Agent</para>
 		/// </summary>
@@ -918,6 +1056,17 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<EntityReference>(Fields.msdyn_activeagentid); }
 			set { Entity.Attributes[Fields.msdyn_activeagentid] = value; }
+		}
+
+		/// <summary>
+		/// <para>Lookup to msdyn_sessionparticipant</para>
+		/// <para>Active session participant</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public EntityReference msdyn_activesessionparticipantid
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.msdyn_activesessionparticipantid); }
+			set { Entity.Attributes[Fields.msdyn_activesessionparticipantid] = value; }
 		}
 
 		/// <summary>
@@ -1021,7 +1170,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Customer with which the activity is associated.</para>
-		/// <para>Customer</para>
+		/// <para>Lookup to account, contact</para>
 		/// <para>Customer</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -1088,6 +1237,17 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<EntityReference>(Fields.msdyn_dailytopicid); }
 			set { Entity.Attributes[Fields.msdyn_dailytopicid] = value; }
+		}
+
+		/// <summary>
+		/// <para>Lookup to msdyn_effortpredictionresult</para>
+		/// <para>Effort prediction result</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public EntityReference msdyn_effortpredictionresult
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.msdyn_effortpredictionresult); }
+			set { Entity.Attributes[Fields.msdyn_effortpredictionresult] = value; }
 		}
 
 		/// <summary>
@@ -1192,7 +1352,7 @@ namespace Dev.DevKit.Shared.Entities
 		/// <para>ConversationId</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public string msdyn_ocliveworkitemid
+		public string msdyn_ocliveworkitemid1
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.msdyn_ocliveworkitemid); }
 			set { Entity.Attributes[Fields.msdyn_ocliveworkitemid] = value; }
@@ -1223,7 +1383,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Unique identifier of the routed record.</para>
+		/// <para>Unique identifier of the routed record. Records are of those entities enabled for Unified Routing and have at least one Workstream created. For internal use only.</para>
 		/// <para>Lookup to task</para>
 		/// <para>Routed record</para>
 		/// </summary>
@@ -1331,6 +1491,52 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>UR Customer Sentiment Keywords</para>
+		/// <para>String - MaxLength: 4000</para>
+		/// <para>UR Customer Sentiment Keywords</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_urcustomersentimentkeywords
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_urcustomersentimentkeywords); }
+			set { Entity.Attributes[Fields.msdyn_urcustomersentimentkeywords] = value; }
+		}
+
+		/// <summary>
+		/// <para>Picklist</para>
+		/// <para>Sentiment Category</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public Dev.DevKit.Shared.Entities.msdyn_ocliveworkitemOptionSets.msdyn_urcustomersentimentlabel? msdyn_urcustomersentimentlabel
+		{
+			get
+			{
+				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.msdyn_urcustomersentimentlabel);
+				if (value == null) return null;
+				return (Dev.DevKit.Shared.Entities.msdyn_ocliveworkitemOptionSets.msdyn_urcustomersentimentlabel)value.Value;
+			}
+			set
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_urcustomersentimentlabel] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_urcustomersentimentlabel] = null;
+			}
+		}
+
+		/// <summary>
+		/// <para>UR Customer Sentiment Score</para>
+		/// <para>Integer - MinValue: 0 - MaxValue: 100</para>
+		/// <para>UR Customer Sentiment Score</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public int? msdyn_urcustomersentimentscore
+		{
+			get { return Entity.GetAttributeValue<int?>(Fields.msdyn_urcustomersentimentscore); }
+			set { Entity.Attributes[Fields.msdyn_urcustomersentimentscore] = value; }
+		}
+
+		/// <summary>
 		/// <para>Work distribution mode of the associated work stream</para>
 		/// <para>Picklist</para>
 		/// <para>Work distribution mode</para>
@@ -1378,7 +1584,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>List of optional attendees for the activity.</para>
-		/// <para>PartyList</para>
+		/// <para>Lookup to account, contact, entitlement, equipment, knowledgearticle, lead, queue, systemuser, unresolvedaddress</para>
 		/// <para>Optional Attendees</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -1402,7 +1608,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Person who organized the activity.</para>
-		/// <para>PartyList</para>
+		/// <para>Lookup to systemuser</para>
 		/// <para>Organizer</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -1438,7 +1644,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the user or team who owns the activity.</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -1483,7 +1689,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Outsource vendor with which activity is associated.</para>
-		/// <para>PartyList</para>
+		/// <para>Lookup to account, contact</para>
 		/// <para>Outsource Vendors</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -1553,7 +1759,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the object with which the activity is associated.</para>
-		/// <para>Lookup to account;bookableresourcebooking;bookableresourcebookingheader;bulkoperation;campaign;campaignactivity;contact;contract;entitlement;entitlementtemplate;incident;interactionforemail;invoice;knowledgearticle;knowledgebaserecord;lead;msdyn_agreement;msdyn_agreementbookingdate;msdyn_agreementbookingincident;msdyn_agreementbookingproduct;msdyn_agreementbookingservice;msdyn_agreementbookingservicetask;msdyn_agreementbookingsetup;msdyn_agreementinvoicedate;msdyn_agreementinvoiceproduct;msdyn_agreementinvoicesetup;msdyn_bookingalertstatus;msdyn_bookingrule;msdyn_bookingtimestamp;msdyn_customerasset;msdyn_fieldservicesetting;msdyn_incidenttypecharacteristic;msdyn_incidenttypeproduct;msdyn_incidenttypeservice;msdyn_inventoryadjustment;msdyn_inventoryadjustmentproduct;msdyn_inventoryjournal;msdyn_inventorytransfer;msdyn_payment;msdyn_paymentdetail;msdyn_paymentmethod;msdyn_paymentterm;msdyn_playbookinstance;msdyn_postalbum;msdyn_postalcode;msdyn_processnotes;msdyn_productinventory;msdyn_projectteam;msdyn_purchaseorder;msdyn_purchaseorderbill;msdyn_purchaseorderproduct;msdyn_purchaseorderreceipt;msdyn_purchaseorderreceiptproduct;msdyn_purchaseordersubstatus;msdyn_quotebookingincident;msdyn_quotebookingproduct;msdyn_quotebookingservice;msdyn_quotebookingservicetask;msdyn_resourceterritory;msdyn_rma;msdyn_rmaproduct;msdyn_rmareceipt;msdyn_rmareceiptproduct;msdyn_rmasubstatus;msdyn_rtv;msdyn_rtvproduct;msdyn_rtvsubstatus;msdyn_shipvia;msdyn_systemuserschedulersetting;msdyn_timegroup;msdyn_timegroupdetail;msdyn_timeoffrequest;msdyn_warehouse;msdyn_workorder;msdyn_workordercharacteristic;msdyn_workorderincident;msdyn_workorderproduct;msdyn_workorderresourcerestriction;msdyn_workorderservice;msdyn_workorderservicetask;opportunity;quote;salesorder;site;uii_action;uii_hostedapplication;uii_nonhostedapplication;uii_option;uii_savedsession;uii_workflow;uii_workflowstep;uii_workflow_workflowstep_mapping</para>
+		/// <para>Lookup to account, bookableresourcebooking, bookableresourcebookingheader, bulkoperation, campaign, campaignactivity, contact, contract, entitlement, entitlementtemplate, incident, interactionforemail, invoice, knowledgearticle, knowledgebaserecord, lead, msdyn_agreement, msdyn_agreementbookingdate, msdyn_agreementbookingincident, msdyn_agreementbookingproduct, msdyn_agreementbookingservice, msdyn_agreementbookingservicetask, msdyn_agreementbookingsetup, msdyn_agreementinvoicedate, msdyn_agreementinvoiceproduct, msdyn_agreementinvoicesetup, msdyn_bookingalertstatus, msdyn_bookingrule, msdyn_bookingtimestamp, msdyn_customerasset, msdyn_fieldservicesetting, msdyn_incidenttypecharacteristic, msdyn_incidenttypeproduct, msdyn_incidenttypeservice, msdyn_inventoryadjustment, msdyn_inventoryadjustmentproduct, msdyn_inventoryjournal, msdyn_inventorytransfer, msdyn_payment, msdyn_paymentdetail, msdyn_paymentmethod, msdyn_paymentterm, msdyn_playbookinstance, msdyn_postalbum, msdyn_postalcode, msdyn_processnotes, msdyn_productinventory, msdyn_projectteam, msdyn_purchaseorder, msdyn_purchaseorderbill, msdyn_purchaseorderproduct, msdyn_purchaseorderreceipt, msdyn_purchaseorderreceiptproduct, msdyn_purchaseordersubstatus, msdyn_quotebookingincident, msdyn_quotebookingproduct, msdyn_quotebookingservice, msdyn_quotebookingservicetask, msdyn_resourceterritory, msdyn_rma, msdyn_rmaproduct, msdyn_rmareceipt, msdyn_rmareceiptproduct, msdyn_rmasubstatus, msdyn_rtv, msdyn_rtvproduct, msdyn_rtvsubstatus, msdyn_shipvia, msdyn_systemuserschedulersetting, msdyn_timegroup, msdyn_timegroupdetail, msdyn_timeoffrequest, msdyn_warehouse, msdyn_workorder, msdyn_workordercharacteristic, msdyn_workorderincident, msdyn_workorderproduct, msdyn_workorderresourcerestriction, msdyn_workorderservice, msdyn_workorderservicetask, opportunity, quote, salesorder, site, uii_action, uii_hostedapplication, uii_nonhostedapplication, uii_option, uii_savedsession, uii_workflow, uii_workflowstep, uii_workflow_workflowstep_mapping</para>
 		/// <para>Regarding</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -1565,7 +1771,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>List of required attendees for the activity.</para>
-		/// <para>PartyList</para>
+		/// <para>Lookup to account, contact, entitlement, equipment, knowledgearticle, lead, queue, systemuser, unresolvedaddress</para>
 		/// <para>Required Attendees</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -1589,7 +1795,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Users or facility/equipment that are required for the activity.</para>
-		/// <para>PartyList</para>
+		/// <para>Lookup to equipment, systemuser</para>
 		/// <para>Resources</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -1811,7 +2017,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Person who is the receiver of the activity.</para>
-		/// <para>PartyList</para>
+		/// <para>Lookup to account, contact, lead, systemuser</para>
 		/// <para>To</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

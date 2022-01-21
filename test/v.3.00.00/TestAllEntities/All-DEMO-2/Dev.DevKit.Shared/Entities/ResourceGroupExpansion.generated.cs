@@ -13,11 +13,11 @@ namespace Dev.DevKit.Shared.Entities.ResourceGroupExpansionOptionSets
 	public enum MethodCode
 	{
 		/// <summary>
-		/// All_Resources = 5
+		/// All Resources = 5
 		/// </summary>
 		All_Resources = 5,
 		/// <summary>
-		/// All_Subgroups = 8
+		/// All Subgroups = 8
 		/// </summary>
 		All_Subgroups = 8,
 		/// <summary>
@@ -25,11 +25,11 @@ namespace Dev.DevKit.Shared.Entities.ResourceGroupExpansionOptionSets
 		/// </summary>
 		None = 0,
 		/// <summary>
-		/// Parent_Groups = 7
+		/// Parent Groups = 7
 		/// </summary>
 		Parent_Groups = 7,
 		/// <summary>
-		/// Participating_Resources = 1
+		/// Participating Resources = 1
 		/// </summary>
 		Participating_Resources = 1,
 		/// <summary>
@@ -37,7 +37,7 @@ namespace Dev.DevKit.Shared.Entities.ResourceGroupExpansionOptionSets
 		/// </summary>
 		Resources = 4,
 		/// <summary>
-		/// Schedulable_Resources = 2
+		/// Schedulable Resources = 2
 		/// </summary>
 		Schedulable_Resources = 2,
 		/// <summary>
@@ -45,7 +45,7 @@ namespace Dev.DevKit.Shared.Entities.ResourceGroupExpansionOptionSets
 		/// </summary>
 		Subgroups = 6,
 		/// <summary>
-		/// Supported_Services = 3
+		/// Supported Services = 3
 		/// </summary>
 		Supported_Services = 3
 	}
@@ -72,6 +72,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "resourcegroupexpansion";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 4010;
 
 		[DebuggerNonUserCode()]

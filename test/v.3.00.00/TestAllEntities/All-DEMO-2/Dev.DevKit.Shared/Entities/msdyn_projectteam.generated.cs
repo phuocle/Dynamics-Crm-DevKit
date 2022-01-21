@@ -13,15 +13,15 @@ namespace Dev.DevKit.Shared.Entities.msdyn_projectteamOptionSets
 	public enum msdyn_allocationmethod
 	{
 		/// <summary>
-		/// By_Hours_Distribute_evenly = 192350003
+		/// By Hours - Distribute evenly = 192350003
 		/// </summary>
 		By_Hours_Distribute_evenly = 192350003,
 		/// <summary>
-		/// By_Hours_Front_load = 192350005
+		/// By Hours - Front load = 192350005
 		/// </summary>
 		By_Hours_Front_load = 192350005,
 		/// <summary>
-		/// Full_Capacity = 192350001
+		/// Full Capacity = 192350001
 		/// </summary>
 		Full_Capacity = 192350001,
 		/// <summary>
@@ -29,7 +29,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_projectteamOptionSets
 		/// </summary>
 		None = 192350000,
 		/// <summary>
-		/// Percentage_Capacity = 192350004
+		/// Percentage Capacity = 192350004
 		/// </summary>
 		Percentage_Capacity = 192350004
 	}
@@ -45,11 +45,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_projectteamOptionSets
 		/// </summary>
 		Complimentary = 192350002,
 		/// <summary>
-		/// Non_Chargeable = 192350000
+		/// Non Chargeable = 192350000
 		/// </summary>
 		Non_Chargeable = 192350000,
 		/// <summary>
-		/// Not_Available = 192350003
+		/// Not Available = 192350003
 		/// </summary>
 		Not_Available = 192350003
 	}
@@ -152,7 +152,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_projectteam";
 
-		public const int EntityTypeCode = 10371;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10477;
 
 		[DebuggerNonUserCode()]
 		public msdyn_projectteam()
@@ -662,7 +663,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Template to use for generic resource's schedule. Will be ignored if its a user or facility resource</para>
+		/// <para>Template to use for generic resource&apos;s schedule. Will be ignored if its a user or facility resource</para>
 		/// <para>Lookup to msdyn_workhourtemplate</para>
 		/// <para>Work Template</para>
 		/// </summary>
@@ -687,7 +688,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

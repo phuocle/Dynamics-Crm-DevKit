@@ -25,7 +25,9 @@ declare namespace DevKit {
 			Notes_pane: DevKit.Controls.Section;
 			Opportunity_details: DevKit.Controls.Section;
 			opportunity_information: DevKit.Controls.Section;
+			PredictiveScoreSection: DevKit.Controls.Section;
 			Social_pane: DevKit.Controls.Section;
+			Summary_CadenceWidget: DevKit.Controls.Section;
 			Summary_section_6: DevKit.Controls.Section;
 		}
 		interface tab_Product_Line_Items extends DevKit.Controls.ITab {
@@ -47,6 +49,8 @@ declare namespace DevKit {
 			ActionCards: DevKit.Controls.ActionCards;
 			/** Type a value between 0 and 1,000,000,000,000 to indicate the lead's potential available budget. */
 			BudgetAmount: DevKit.Controls.Money;
+			CadenceWidgetControl: DevKit.Controls.ActionCards;
+			cc_1626253475424: DevKit.Controls.ActionCards;
 			/** Type notes about the company or organization associated with the opportunity. */
 			CurrentSituation: DevKit.Controls.String;
 			/** Type some notes about the customer's requirements, to help the sales team identify products and services that could meet their requirements. */
@@ -101,6 +105,34 @@ declare namespace DevKit {
 			navProcessSessions: DevKit.Controls.NavigationItem,
 			navRelationship: DevKit.Controls.NavigationItem
 		}
+		interface ProcessLead_to_Opportunity_Sales_Process {
+			/** Select whether a final proposal has been completed for the opportunity. */
+			CompleteFinalProposal: DevKit.Controls.Boolean;
+			/** Select whether an internal review has been completed for this opportunity. */
+			CompleteInternalReview: DevKit.Controls.Boolean;
+			/** Type some notes about the customer's requirements, to help the sales team identify products and services that could meet their requirements. */
+			CustomerNeed: DevKit.Controls.String;
+			/** Select whether a proposal has been developed for the opportunity. */
+			DevelopProposal: DevKit.Controls.Boolean;
+			/** Choose whether the sales team has recorded detailed notes on the proposals and the account's responses. */
+			FileDebrief: DevKit.Controls.Boolean;
+			/** Enter the date and time when the final decision of the opportunity was made. */
+			FinalDecisionDate: DevKit.Controls.Date;
+			/** Select whether information about competitors is included. */
+			IdentifyCompetitors: DevKit.Controls.Boolean;
+			/** Select whether the customer contacts for this opportunity have been identified. */
+			IdentifyCustomerContacts: DevKit.Controls.Boolean;
+			/** Choose whether you have recorded who will pursue the opportunity. */
+			IdentifyPursuitTeam: DevKit.Controls.Boolean;
+			/** Select whether the final proposal has been presented to the account. */
+			PresentFinalProposal: DevKit.Controls.Boolean;
+			/** Select whether a proposal for the opportunity has been presented to the account. */
+			PresentProposal: DevKit.Controls.Boolean;
+			/** Type notes about the proposed solution for the opportunity. */
+			ProposedSolution: DevKit.Controls.String;
+			/** Select whether a thank you note has been sent to the account for considering the proposal. */
+			SendThankYouNote: DevKit.Controls.Boolean;
+		}
 		interface ProcessOpportunity_Sales_Process {
 			/** Type a value between 0 and 1,000,000,000,000 to indicate the lead's potential available budget. */
 			BudgetAmount: DevKit.Controls.Money;
@@ -144,19 +176,20 @@ declare namespace DevKit {
 			SendThankYouNote: DevKit.Controls.Boolean;
 		}
 		interface Process extends DevKit.Controls.IProcess {
+			Lead_to_Opportunity_Sales_Process: ProcessLead_to_Opportunity_Sales_Process;
 			Opportunity_Sales_Process: ProcessOpportunity_Sales_Process;
 		}
 		interface Grid {
-			Stakeholders: DevKit.Controls.Grid;
-			Pursuit_Team: DevKit.Controls.Grid;
 			Competitors: DevKit.Controls.Grid;
 			opportunityproductsGrid: DevKit.Controls.Grid;
+			Pursuit_Team: DevKit.Controls.Grid;
 			quote: DevKit.Controls.Grid;
+			Stakeholders: DevKit.Controls.Grid;
 		}
 	}
 	class FormOpportunity_AI_for_Sales extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Opportunity_AI_for_Sales
+		* AI for Sales [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -173,6 +206,8 @@ declare namespace DevKit {
 		Process: DevKit.FormOpportunity_AI_for_Sales.Process;
 		/** The Grid of form Opportunity_AI_for_Sales */
 		Grid: DevKit.FormOpportunity_AI_for_Sales.Grid;
+		/** The SidePanes of form Opportunity_AI_for_Sales */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormOpportunity_Field_Service_Information {
 		interface Header extends DevKit.Controls.IHeader {
@@ -287,6 +322,34 @@ declare namespace DevKit {
 			navProcessSessions: DevKit.Controls.NavigationItem,
 			navRelationship: DevKit.Controls.NavigationItem
 		}
+		interface ProcessLead_to_Opportunity_Sales_Process {
+			/** Select whether a final proposal has been completed for the opportunity. */
+			CompleteFinalProposal: DevKit.Controls.Boolean;
+			/** Select whether an internal review has been completed for this opportunity. */
+			CompleteInternalReview: DevKit.Controls.Boolean;
+			/** Type some notes about the customer's requirements, to help the sales team identify products and services that could meet their requirements. */
+			CustomerNeed: DevKit.Controls.String;
+			/** Select whether a proposal has been developed for the opportunity. */
+			DevelopProposal: DevKit.Controls.Boolean;
+			/** Choose whether the sales team has recorded detailed notes on the proposals and the account's responses. */
+			FileDebrief: DevKit.Controls.Boolean;
+			/** Enter the date and time when the final decision of the opportunity was made. */
+			FinalDecisionDate: DevKit.Controls.Date;
+			/** Select whether information about competitors is included. */
+			IdentifyCompetitors: DevKit.Controls.Boolean;
+			/** Select whether the customer contacts for this opportunity have been identified. */
+			IdentifyCustomerContacts: DevKit.Controls.Boolean;
+			/** Choose whether you have recorded who will pursue the opportunity. */
+			IdentifyPursuitTeam: DevKit.Controls.Boolean;
+			/** Select whether the final proposal has been presented to the account. */
+			PresentFinalProposal: DevKit.Controls.Boolean;
+			/** Select whether a proposal for the opportunity has been presented to the account. */
+			PresentProposal: DevKit.Controls.Boolean;
+			/** Type notes about the proposed solution for the opportunity. */
+			ProposedSolution: DevKit.Controls.String;
+			/** Select whether a thank you note has been sent to the account for considering the proposal. */
+			SendThankYouNote: DevKit.Controls.Boolean;
+		}
 		interface ProcessOpportunity_Sales_Process {
 			/** Type a value between 0 and 1,000,000,000,000 to indicate the lead's potential available budget. */
 			BudgetAmount: DevKit.Controls.Money;
@@ -330,20 +393,21 @@ declare namespace DevKit {
 			SendThankYouNote: DevKit.Controls.Boolean;
 		}
 		interface Process extends DevKit.Controls.IProcess {
+			Lead_to_Opportunity_Sales_Process: ProcessLead_to_Opportunity_Sales_Process;
 			Opportunity_Sales_Process: ProcessOpportunity_Sales_Process;
 		}
 		interface Grid {
-			Stakeholders: DevKit.Controls.Grid;
-			Pursuit_Team: DevKit.Controls.Grid;
 			Competitors: DevKit.Controls.Grid;
 			opportunityproductsGrid: DevKit.Controls.Grid;
 			OpportunityServicesGrid: DevKit.Controls.Grid;
+			Pursuit_Team: DevKit.Controls.Grid;
 			quote: DevKit.Controls.Grid;
+			Stakeholders: DevKit.Controls.Grid;
 		}
 	}
 	class FormOpportunity_Field_Service_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Opportunity_Field_Service_Information
+		* Field Service Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -360,6 +424,235 @@ declare namespace DevKit {
 		Process: DevKit.FormOpportunity_Field_Service_Information.Process;
 		/** The Grid of form Opportunity_Field_Service_Information */
 		Grid: DevKit.FormOpportunity_Field_Service_Information.Grid;
+		/** The SidePanes of form Opportunity_Field_Service_Information */
+		SidePanes: DevKit.SidePanes;
+	}
+	namespace FormOpportunity {
+		interface Header extends DevKit.Controls.IHeader {
+			/** Enter the expected closing date of the opportunity to help make accurate revenue forecasts. */
+			EstimatedCloseDate: DevKit.Controls.Date;
+			/** Type the estimated revenue amount to indicate the potential sale or value of the opportunity for revenue forecasting. This field can be either system-populated or editable based on the selection in the Revenue field. */
+			EstimatedValue: DevKit.Controls.Money;
+			/** Owner Id */
+			OwnerId: DevKit.Controls.Lookup;
+			/** Select the opportunity's status. */
+			StatusCode: DevKit.Controls.OptionSet;
+		}
+		interface tab_documents_sharepoint_Sections {
+			documents_sharepoint_section: DevKit.Controls.Section;
+		}
+		interface tab_FieldService_Sections {
+			tab_4_section_1: DevKit.Controls.Section;
+			tab_4_section_2: DevKit.Controls.Section;
+		}
+		interface tab_Product_Line_Items_Sections {
+			DynamicProperties: DevKit.Controls.Section;
+			opportunityproducts: DevKit.Controls.Section;
+			suggestionsection: DevKit.Controls.Section;
+			totals: DevKit.Controls.Section;
+		}
+		interface tab_QUOTES_Sections {
+			opportunityquotes: DevKit.Controls.Section;
+		}
+		interface tab_Summary_Sections {
+			Notes_pane: DevKit.Controls.Section;
+			Opportunity_details: DevKit.Controls.Section;
+			opportunity_information: DevKit.Controls.Section;
+			Social_pane: DevKit.Controls.Section;
+			Summary_CadenceWidget: DevKit.Controls.Section;
+			Summary_section_6: DevKit.Controls.Section;
+		}
+		interface tab_documents_sharepoint extends DevKit.Controls.ITab {
+			Section: tab_documents_sharepoint_Sections;
+		}
+		interface tab_FieldService extends DevKit.Controls.ITab {
+			Section: tab_FieldService_Sections;
+		}
+		interface tab_Product_Line_Items extends DevKit.Controls.ITab {
+			Section: tab_Product_Line_Items_Sections;
+		}
+		interface tab_QUOTES extends DevKit.Controls.ITab {
+			Section: tab_QUOTES_Sections;
+		}
+		interface tab_Summary extends DevKit.Controls.ITab {
+			Section: tab_Summary_Sections;
+		}
+		interface Tabs {
+			documents_sharepoint: tab_documents_sharepoint;
+			FieldService: tab_FieldService;
+			Product_Line_Items: tab_Product_Line_Items;
+			QUOTES: tab_QUOTES;
+			Summary: tab_Summary;
+		}
+		interface Body {
+			Tab: Tabs;
+			ActionCards: DevKit.Controls.ActionCards;
+			/** Type a value between 0 and 1,000,000,000,000 to indicate the lead's potential available budget. */
+			BudgetAmount: DevKit.Controls.Money;
+			CadenceWidgetControl: DevKit.Controls.ActionCards;
+			/** Type notes about the company or organization associated with the opportunity. */
+			CurrentSituation: DevKit.Controls.String;
+			/** Type some notes about the customer's requirements, to help the sales team identify products and services that could meet their requirements. */
+			CustomerNeed: DevKit.Controls.String;
+			/** Type additional information to describe the opportunity, such as possible products to sell or past purchases from the customer. */
+			Description: DevKit.Controls.String;
+			/** Type the discount amount for the opportunity if the customer is eligible for special savings. */
+			DiscountAmount: DevKit.Controls.Money;
+			/** Type the discount rate that should be applied to the Product Totals field to include additional savings for the customer in the opportunity. */
+			DiscountPercentage: DevKit.Controls.Decimal;
+			/** Type the cost of freight or shipping for the products included in the opportunity for use in calculating the Total Amount field. */
+			FreightAmount: DevKit.Controls.Money;
+			/** Select whether the estimated revenue for the opportunity is calculated automatically based on the products entered or entered manually by a user. */
+			IsRevenueSystemCalculated: DevKit.Controls.Boolean;
+			/** Categories used for forecasting. */
+			msdyn_forecastcategory: DevKit.Controls.OptionSet;
+			/** Internal use only. */
+			msdyn_OrderType: DevKit.Controls.OptionSet;
+			/** Unique identifier for Work Order Type associated with Opportunity. */
+			msdyn_WorkOrderType: DevKit.Controls.Lookup;
+			/** Type a subject or descriptive name, such as the expected order or company name, for the opportunity. */
+			Name: DevKit.Controls.String;
+			notescontrol: DevKit.Controls.Note;
+			/** Choose an account to connect this opportunity to, so that the relationship is visible in reports and analytics, and to provide a quick link to additional details, such as financial information and activities. */
+			ParentAccountId: DevKit.Controls.Lookup;
+			/** Choose a contact to connect this opportunity to, so that the relationship is visible in reports and analytics. */
+			ParentContactId: DevKit.Controls.Lookup;
+			/** Choose the price list associated with this record to make sure the products associated with the campaign are offered at the correct prices. */
+			PriceLevelId: DevKit.Controls.Lookup;
+			/** Type notes about the proposed solution for the opportunity. */
+			ProposedSolution: DevKit.Controls.String;
+			/** Choose whether an individual or a committee will be involved in the  purchase process for the lead. */
+			PurchaseProcess: DevKit.Controls.OptionSet;
+			/** Choose how long the lead will likely take to make the purchase. */
+			PurchaseTimeframe: DevKit.Controls.OptionSet;
+			/** Shows the total amount due, calculated as the sum of the products, discounts, freight, and taxes for the opportunity. */
+			TotalAmount: DevKit.Controls.Money;
+			/** Shows the total product amount for the opportunity, minus any discounts. This value is added to freight and tax amounts in the calculation for the total amount of the opportunity. */
+			TotalAmountLessFreight: DevKit.Controls.Money;
+			/** Shows the sum of all existing and write-in products included on the opportunity, based on the specified price list and quantities. */
+			TotalLineItemAmount: DevKit.Controls.Money;
+			/** Shows the total of the Tax amounts specified on all products included in the opportunity, included in the Total Amount field calculation for the opportunity. */
+			TotalTax: DevKit.Controls.Money;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			TransactionCurrencyId: DevKit.Controls.Lookup;
+		}
+		interface Navigation {
+			nav_msdyn_opportunity_msdyn_workorder: DevKit.Controls.NavigationItem,
+			navActivities: DevKit.Controls.NavigationItem,
+			navAsyncOperations: DevKit.Controls.NavigationItem,
+			navAudit: DevKit.Controls.NavigationItem,
+			navComp: DevKit.Controls.NavigationItem,
+			navConnections: DevKit.Controls.NavigationItem,
+			navDocument: DevKit.Controls.NavigationItem,
+			navInvoices: DevKit.Controls.NavigationItem,
+			navOrders: DevKit.Controls.NavigationItem,
+			navProcessSessions: DevKit.Controls.NavigationItem,
+			navRelationship: DevKit.Controls.NavigationItem
+		}
+		interface ProcessLead_to_Opportunity_Sales_Process {
+			/** Select whether a final proposal has been completed for the opportunity. */
+			CompleteFinalProposal: DevKit.Controls.Boolean;
+			/** Select whether an internal review has been completed for this opportunity. */
+			CompleteInternalReview: DevKit.Controls.Boolean;
+			/** Type some notes about the customer's requirements, to help the sales team identify products and services that could meet their requirements. */
+			CustomerNeed: DevKit.Controls.String;
+			/** Select whether a proposal has been developed for the opportunity. */
+			DevelopProposal: DevKit.Controls.Boolean;
+			/** Choose whether the sales team has recorded detailed notes on the proposals and the account's responses. */
+			FileDebrief: DevKit.Controls.Boolean;
+			/** Enter the date and time when the final decision of the opportunity was made. */
+			FinalDecisionDate: DevKit.Controls.Date;
+			/** Select whether information about competitors is included. */
+			IdentifyCompetitors: DevKit.Controls.Boolean;
+			/** Select whether the customer contacts for this opportunity have been identified. */
+			IdentifyCustomerContacts: DevKit.Controls.Boolean;
+			/** Choose whether you have recorded who will pursue the opportunity. */
+			IdentifyPursuitTeam: DevKit.Controls.Boolean;
+			/** Select whether the final proposal has been presented to the account. */
+			PresentFinalProposal: DevKit.Controls.Boolean;
+			/** Select whether a proposal for the opportunity has been presented to the account. */
+			PresentProposal: DevKit.Controls.Boolean;
+			/** Type notes about the proposed solution for the opportunity. */
+			ProposedSolution: DevKit.Controls.String;
+			/** Select whether a thank you note has been sent to the account for considering the proposal. */
+			SendThankYouNote: DevKit.Controls.Boolean;
+		}
+		interface ProcessOpportunity_Sales_Process {
+			/** Type a value between 0 and 1,000,000,000,000 to indicate the lead's potential available budget. */
+			BudgetAmount: DevKit.Controls.Money;
+			/** Select whether a final proposal has been completed for the opportunity. */
+			CompleteFinalProposal: DevKit.Controls.Boolean;
+			/** Select whether an internal review has been completed for this opportunity. */
+			CompleteInternalReview: DevKit.Controls.Boolean;
+			/** Type some notes about the customer's requirements, to help the sales team identify products and services that could meet their requirements. */
+			CustomerNeed: DevKit.Controls.String;
+			/** Select whether your notes include information about who makes the purchase decisions at the lead's company. */
+			DecisionMaker: DevKit.Controls.Boolean;
+			/** Type additional information to describe the opportunity, such as possible products to sell or past purchases from the customer. */
+			Description: DevKit.Controls.String;
+			/** Select whether a proposal has been developed for the opportunity. */
+			DevelopProposal: DevKit.Controls.Boolean;
+			/** Choose whether the sales team has recorded detailed notes on the proposals and the account's responses. */
+			FileDebrief: DevKit.Controls.Boolean;
+			/** Enter the date and time when the final decision of the opportunity was made. */
+			FinalDecisionDate: DevKit.Controls.Date;
+			/** Select whether information about competitors is included. */
+			IdentifyCompetitors: DevKit.Controls.Boolean;
+			/** Select whether the customer contacts for this opportunity have been identified. */
+			IdentifyCustomerContacts: DevKit.Controls.Boolean;
+			/** Choose whether you have recorded who will pursue the opportunity. */
+			IdentifyPursuitTeam: DevKit.Controls.Boolean;
+			/** Choose an account to connect this opportunity to, so that the relationship is visible in reports and analytics, and to provide a quick link to additional details, such as financial information and activities. */
+			ParentAccountId: DevKit.Controls.Lookup;
+			/** Choose a contact to connect this opportunity to, so that the relationship is visible in reports and analytics. */
+			ParentContactId: DevKit.Controls.Lookup;
+			/** Select whether the final proposal has been presented to the account. */
+			PresentFinalProposal: DevKit.Controls.Boolean;
+			/** Select whether a proposal for the opportunity has been presented to the account. */
+			PresentProposal: DevKit.Controls.Boolean;
+			/** Type notes about the proposed solution for the opportunity. */
+			ProposedSolution: DevKit.Controls.String;
+			/** Choose whether an individual or a committee will be involved in the  purchase process for the lead. */
+			PurchaseProcess: DevKit.Controls.OptionSet;
+			/** Choose how long the lead will likely take to make the purchase. */
+			PurchaseTimeframe: DevKit.Controls.OptionSet;
+			/** Select whether a thank you note has been sent to the account for considering the proposal. */
+			SendThankYouNote: DevKit.Controls.Boolean;
+		}
+		interface Process extends DevKit.Controls.IProcess {
+			Lead_to_Opportunity_Sales_Process: ProcessLead_to_Opportunity_Sales_Process;
+			Opportunity_Sales_Process: ProcessOpportunity_Sales_Process;
+		}
+		interface Grid {
+			Competitors: DevKit.Controls.Grid;
+			DocumentsSubGrid: DevKit.Controls.Grid;
+			opportunityproductsGrid: DevKit.Controls.Grid;
+			Pursuit_Team: DevKit.Controls.Grid;
+			quote: DevKit.Controls.Grid;
+			Stakeholders: DevKit.Controls.Grid;
+		}
+	}
+	class FormOpportunity extends DevKit.IForm {
+		/**
+		* Opportunity [Main Form]
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form Opportunity */
+		Body: DevKit.FormOpportunity.Body;
+		/** The Header section of form Opportunity */
+		Header: DevKit.FormOpportunity.Header;
+		/** The Navigation of form Opportunity */
+		Navigation: DevKit.FormOpportunity.Navigation;
+		/** The Process of form Opportunity */
+		Process: DevKit.FormOpportunity.Process;
+		/** The Grid of form Opportunity */
+		Grid: DevKit.FormOpportunity.Grid;
+		/** The SidePanes of form Opportunity */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormOpportunity_Project_Information {
 		interface Header extends DevKit.Controls.IHeader {
@@ -474,6 +767,34 @@ declare namespace DevKit {
 			navProducts: DevKit.Controls.NavigationItem,
 			navRelationship: DevKit.Controls.NavigationItem
 		}
+		interface ProcessLead_to_Opportunity_Sales_Process {
+			/** Select whether a final proposal has been completed for the opportunity. */
+			CompleteFinalProposal: DevKit.Controls.Boolean;
+			/** Select whether an internal review has been completed for this opportunity. */
+			CompleteInternalReview: DevKit.Controls.Boolean;
+			/** Type some notes about the customer's requirements, to help the sales team identify products and services that could meet their requirements. */
+			CustomerNeed: DevKit.Controls.String;
+			/** Select whether a proposal has been developed for the opportunity. */
+			DevelopProposal: DevKit.Controls.Boolean;
+			/** Choose whether the sales team has recorded detailed notes on the proposals and the account's responses. */
+			FileDebrief: DevKit.Controls.Boolean;
+			/** Enter the date and time when the final decision of the opportunity was made. */
+			FinalDecisionDate: DevKit.Controls.Date;
+			/** Select whether information about competitors is included. */
+			IdentifyCompetitors: DevKit.Controls.Boolean;
+			/** Select whether the customer contacts for this opportunity have been identified. */
+			IdentifyCustomerContacts: DevKit.Controls.Boolean;
+			/** Choose whether you have recorded who will pursue the opportunity. */
+			IdentifyPursuitTeam: DevKit.Controls.Boolean;
+			/** Select whether the final proposal has been presented to the account. */
+			PresentFinalProposal: DevKit.Controls.Boolean;
+			/** Select whether a proposal for the opportunity has been presented to the account. */
+			PresentProposal: DevKit.Controls.Boolean;
+			/** Type notes about the proposed solution for the opportunity. */
+			ProposedSolution: DevKit.Controls.String;
+			/** Select whether a thank you note has been sent to the account for considering the proposal. */
+			SendThankYouNote: DevKit.Controls.Boolean;
+		}
 		interface ProcessOpportunity_Sales_Process {
 			/** Type a value between 0 and 1,000,000,000,000 to indicate the lead's potential available budget. */
 			BudgetAmount: DevKit.Controls.Money;
@@ -517,20 +838,21 @@ declare namespace DevKit {
 			SendThankYouNote: DevKit.Controls.Boolean;
 		}
 		interface Process extends DevKit.Controls.IProcess {
+			Lead_to_Opportunity_Sales_Process: ProcessLead_to_Opportunity_Sales_Process;
 			Opportunity_Sales_Process: ProcessOpportunity_Sales_Process;
 		}
 		interface Grid {
-			Stakeholders: DevKit.Controls.Grid;
-			Pursuit_Team: DevKit.Controls.Grid;
 			Competitors: DevKit.Controls.Grid;
-			ProjectLinesGrid: DevKit.Controls.Grid;
 			opportunityproductsGrid: DevKit.Controls.Grid;
+			ProjectLinesGrid: DevKit.Controls.Grid;
+			Pursuit_Team: DevKit.Controls.Grid;
 			quote: DevKit.Controls.Grid;
+			Stakeholders: DevKit.Controls.Grid;
 		}
 	}
 	class FormOpportunity_Project_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Opportunity_Project_Information
+		* Project Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -547,8 +869,10 @@ declare namespace DevKit {
 		Process: DevKit.FormOpportunity_Project_Information.Process;
 		/** The Grid of form Opportunity_Project_Information */
 		Grid: DevKit.FormOpportunity_Project_Information.Grid;
+		/** The SidePanes of form Opportunity_Project_Information */
+		SidePanes: DevKit.SidePanes;
 	}
-	namespace FormOpportunity {
+	namespace FormOpportunity2 {
 		interface tab_newOpportunity_Sections {
 			quickOpportunity_column1: DevKit.Controls.Section;
 			quickOpportunity_column2: DevKit.Controls.Section;
@@ -582,17 +906,17 @@ declare namespace DevKit {
 			ParentContactId: DevKit.Controls.Lookup;
 		}
 	}
-	class FormOpportunity extends DevKit.IForm {
+	class FormOpportunity2 extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Opportunity
+		* Opportunity [Quick Create]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
 		constructor(executionContext: any, defaultWebResourceName?: string);
 		/** Utility functions/methods/objects for Dynamics 365 form */
 		Utility: DevKit.Utility;
-		/** The Body section of form Opportunity */
-		Body: DevKit.FormOpportunity.Body;
+		/** The Body section of form Opportunity2 */
+		Body: DevKit.FormOpportunity2.Body;
 	}
 	class OpportunityApi {
 		/**
@@ -656,7 +980,9 @@ declare namespace DevKit {
 		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
 		/** Type notes about the company or organization associated with the opportunity. */
 		CurrentSituation: DevKit.WebApi.StringValue;
+		/** Select the customer account or contact to provide a quick link to additional customer details, such as address, phone number, activities, and orders. */
 		customerid_account: DevKit.WebApi.LookupValue;
+		/** Select the customer account or contact to provide a quick link to additional customer details, such as address, phone number, activities, and orders. */
 		customerid_contact: DevKit.WebApi.LookupValue;
 		/** Type some notes about the customer's requirements, to help the sales team identify products and services that could meet their requirements. */
 		CustomerNeed: DevKit.WebApi.StringValue;
@@ -726,8 +1052,19 @@ declare namespace DevKit {
 		msdyn_ContractOrganizationalUnitId: DevKit.WebApi.LookupValue;
 		/** Categories used for forecasting. */
 		msdyn_forecastcategory: DevKit.WebApi.OptionSetValue;
+		/** Describes whether opportunity is opted out or not */
+		msdyn_gdproptout: DevKit.WebApi.BooleanValue;
+		msdyn_OpportunityGrade: DevKit.WebApi.OptionSetValue;
+		msdyn_OpportunityScore: DevKit.WebApi.IntegerValue;
+		msdyn_OpportunityScoreTrend: DevKit.WebApi.OptionSetValue;
 		/** Internal use only. */
 		msdyn_OrderType: DevKit.WebApi.OptionSetValue;
+		/** Predictive score */
+		msdyn_PredictiveScoreId: DevKit.WebApi.LookupValue;
+		msdyn_ScoreHistory: DevKit.WebApi.StringValue;
+		msdyn_ScoreReasons: DevKit.WebApi.StringValue;
+		/** Unique identifier for Segment associated with Opportunity. */
+		msdyn_segmentid: DevKit.WebApi.LookupValue;
 		/** Unique identifier for Work Order Type associated with Opportunity. */
 		msdyn_WorkOrderType: DevKit.WebApi.LookupValue;
 		/** Type a subject or descriptive name, such as the expected order or company name, for the opportunity. */
@@ -804,7 +1141,6 @@ declare namespace DevKit {
 		SLAId: DevKit.WebApi.LookupValue;
 		/** Last SLA that was applied to this opportunity. This field is for internal use only. */
 		SLAInvokedId: DevKit.WebApi.LookupValueReadonly;
-		SLAName: DevKit.WebApi.StringValueReadonly;
 		/** Contains the id of the stage where the entity is located. */
 		StageId: DevKit.WebApi.GuidValue;
 		/** Shows whether the opportunity is open, won, or lost. Won and lost opportunities are read-only and can't be edited until they are reactivated. */
@@ -888,6 +1224,26 @@ declare namespace OptionSet {
 			Pipeline,
 			/** 100000005 */
 			Won
+		}
+		enum msdyn_OpportunityGrade {
+			/** 0 */
+			Grade_A,
+			/** 1 */
+			Grade_B,
+			/** 2 */
+			Grade_C,
+			/** 3 */
+			Grade_D
+		}
+		enum msdyn_OpportunityScoreTrend {
+			/** 2 */
+			Declining,
+			/** 0 */
+			Improving,
+			/** 3 */
+			Not_enough_info,
+			/** 1 */
+			Steady
 		}
 		enum msdyn_OrderType {
 			/** 192350000 */
@@ -975,7 +1331,7 @@ declare namespace OptionSet {
 			/** 31 */
 			Missing_Product_Default_UOM,
 			/** 32 */
-			Missing_Product_UOM_Schedule_,
+			Missing_Product_UOM_Schedule,
 			/** 4 */
 			Missing_Quantity,
 			/** 16 */
@@ -1071,22 +1427,22 @@ declare namespace OptionSet {
 			/** 3 */
 			This_Year
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['AI for Sales','Field Service Information','Opportunity','Project Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

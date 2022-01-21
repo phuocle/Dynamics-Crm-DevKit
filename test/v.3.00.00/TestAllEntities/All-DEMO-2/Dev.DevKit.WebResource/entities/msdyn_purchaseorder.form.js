@@ -84,26 +84,16 @@ var DevKit;
 		var _Purchase_Order_Business_Process = {
 			msdyn_ApprovalStatus: {},
 			msdyn_ApprovedRejectedBy: {},
-			msdyn_billdate: {},
-			msdyn_datereceived: {},
 			msdyn_PODate: {},
-			msdyn_receivedby: {},
 			msdyn_ReceivetoWarehouse: {},
-			msdyn_ShipVia: {},
 			msdyn_SystemStatus: {},
 			msdyn_SystemStatus_1: {},
 			msdyn_Vendor: {},
-			msdyn_vendorinvoicenumber: {},
 			msdyn_WorkOrder: {}
 		}
 		devKit.LoadFields(formContext, _Purchase_Order_Business_Process, "header_process_");
 		process.Purchase_Order_Business_Process = _Purchase_Order_Business_Process;
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var grid = {
 			PurchaseOrderProductsGrid: {},
 		};
@@ -122,6 +112,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormPurchase_Order_Mobile = function(executionContext, defaultWebResourceName) {
@@ -217,31 +208,21 @@ var DevKit;
 		var _Purchase_Order_Business_Process = {
 			msdyn_ApprovalStatus: {},
 			msdyn_ApprovedRejectedBy: {},
-			msdyn_billdate: {},
-			msdyn_datereceived: {},
 			msdyn_PODate: {},
-			msdyn_receivedby: {},
 			msdyn_ReceivetoWarehouse: {},
-			msdyn_ShipVia: {},
 			msdyn_SystemStatus: {},
 			msdyn_SystemStatus_1: {},
 			msdyn_Vendor: {},
-			msdyn_vendorinvoicenumber: {},
 			msdyn_WorkOrder: {}
 		}
 		devKit.LoadFields(formContext, _Purchase_Order_Business_Process, "header_process_");
 		process.Purchase_Order_Business_Process = _Purchase_Order_Business_Process;
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var grid = {
-			PurchaseOrderProductsGrid: {},
-			RECEIPTS: {},
-			RECEIPT_PRODUCTS: {},
 			BILLS: {},
+			PurchaseOrderProductsGrid: {},
+			RECEIPT_PRODUCTS: {},
+			RECEIPTS: {},
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
@@ -258,6 +239,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 })(DevKit || (DevKit = {}));
@@ -290,15 +272,14 @@ var OptionSet;
 			Active: 1,
 			Inactive: 2
 		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
-
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 	};
 })(OptionSet || (OptionSet = {}));

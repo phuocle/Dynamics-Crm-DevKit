@@ -48,8 +48,10 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ModifiedBy = "modifiedby";
 			public const string ModifiedOn = "modifiedon";
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
+			public const string msdyn_BlobFile = "msdyn_blobfile";
 			public const string msdyn_FileName = "msdyn_filename";
 			public const string msdyn_knowledgearticleimageId = "msdyn_knowledgearticleimageid";
+			public const string msdyn_ParentEntityRecordID = "msdyn_parententityrecordid";
 			public const string msdyn_ParentKnowledgeArticleID = "msdyn_parentknowledgearticleid";
 			public const string OverriddenCreatedOn = "overriddencreatedon";
 			public const string OwnerId = "ownerid";
@@ -65,7 +67,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_knowledgearticleimage";
 
-		public const int EntityTypeCode = 10056;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10080;
 
 		[DebuggerNonUserCode()]
 		public msdyn_knowledgearticleimage()
@@ -194,6 +197,17 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Blob Image Attribute</para>
+		/// <para>ReadOnly - Virtual</para>
+		/// <para>BlobFile</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_BlobFile
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_BlobFile); }
+		}
+
+		/// <summary>
 		/// <para>The name of the custom entity.</para>
 		/// <para>Required - String - MaxLength: 100</para>
 		/// <para>FileName</para>
@@ -222,8 +236,20 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Parent Knowledge Article ID</para>
+		/// <para>Parent entity record ID</para>
 		/// <para>Lookup to </para>
+		/// <para>msdyn_ParentEntityRecordID</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public EntityReference msdyn_ParentEntityRecordID
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.msdyn_ParentEntityRecordID); }
+			set { Entity.Attributes[Fields.msdyn_ParentEntityRecordID] = value; }
+		}
+
+		/// <summary>
+		/// <para>Parent Knowledge Article ID</para>
+		/// <para>Lookup to knowledgearticle</para>
 		/// <para>ParentKnowledgeArticleID</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -247,7 +273,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

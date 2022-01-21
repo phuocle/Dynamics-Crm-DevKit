@@ -13,15 +13,15 @@ namespace Dev.DevKit.Shared.Entities.msdyn_resourcecategorypricelevelOptionSets
 	public enum msdyn_pricecalculation
 	{
 		/// <summary>
-		/// At_cost = 192350001
+		/// At cost = 192350001
 		/// </summary>
 		At_cost = 192350001,
 		/// <summary>
-		/// Markup_percentage = 192350002
+		/// Markup percentage = 192350002
 		/// </summary>
 		Markup_percentage = 192350002,
 		/// <summary>
-		/// Price_per_unit = 192350000
+		/// Price per unit = 192350000
 		/// </summary>
 		Price_per_unit = 192350000
 	}
@@ -93,7 +93,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_resourcecategorypricelevel";
 
-		public const int EntityTypeCode = 10385;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10491;
 
 		[DebuggerNonUserCode()]
 		public msdyn_resourcecategorypricelevel()
@@ -269,7 +270,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Enter the markup percent over cost. This field is relevant only when the price calculation method selected is "Markup over cost."</para>
+		/// <para>Enter the markup percent over cost. This field is relevant only when the price calculation method selected is &quot;Markup over cost.&quot;</para>
 		/// <para>Decimal - MinValue: -100 - MaxValue: 100,000,000,000</para>
 		/// <para>Percent</para>
 		/// </summary>

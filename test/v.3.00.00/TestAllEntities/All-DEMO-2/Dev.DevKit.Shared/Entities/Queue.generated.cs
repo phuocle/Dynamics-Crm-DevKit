@@ -21,7 +21,7 @@ namespace Dev.DevKit.Shared.Entities.QueueOptionSets
 		/// </summary>
 		Empty = 0,
 		/// <summary>
-		/// Pending_Approval = 2
+		/// Pending Approval = 2
 		/// </summary>
 		Pending_Approval = 2,
 		/// <summary>
@@ -33,7 +33,7 @@ namespace Dev.DevKit.Shared.Entities.QueueOptionSets
 	public enum IncomingEmailDeliveryMethod
 	{
 		/// <summary>
-		/// Forward_Mailbox = 3
+		/// Forward Mailbox = 3
 		/// </summary>
 		Forward_Mailbox = 3,
 		/// <summary>
@@ -41,7 +41,7 @@ namespace Dev.DevKit.Shared.Entities.QueueOptionSets
 		/// </summary>
 		None = 0,
 		/// <summary>
-		/// Server_Side_Synchronization_or_Email_Router = 2
+		/// Server-Side Synchronization or Email Router = 2
 		/// </summary>
 		Server_Side_Synchronization_or_Email_Router = 2
 	}
@@ -49,23 +49,23 @@ namespace Dev.DevKit.Shared.Entities.QueueOptionSets
 	public enum IncomingEmailFilteringMethod
 	{
 		/// <summary>
-		/// All_email_messages = 0
+		/// All email messages = 0
 		/// </summary>
 		All_email_messages = 0,
 		/// <summary>
-		/// Email_messages_from_Dynamics_365_Leads_Contacts_and_Accounts = 2
+		/// Email messages from Dynamics 365 Leads, Contacts and Accounts = 2
 		/// </summary>
 		Email_messages_from_Dynamics_365_Leads_Contacts_and_Accounts = 2,
 		/// <summary>
-		/// Email_messages_from_Dynamics_365_records_that_are_email_enabled = 3
+		/// Email messages from Dynamics 365 records that are email enabled = 3
 		/// </summary>
 		Email_messages_from_Dynamics_365_records_that_are_email_enabled = 3,
 		/// <summary>
-		/// Email_messages_in_response_to_Dynamics_365_email = 1
+		/// Email messages in response to Dynamics 365 email = 1
 		/// </summary>
 		Email_messages_in_response_to_Dynamics_365_email = 1,
 		/// <summary>
-		/// No_email_messages = 4
+		/// No email messages = 4
 		/// </summary>
 		No_email_messages = 4
 	}
@@ -73,15 +73,15 @@ namespace Dev.DevKit.Shared.Entities.QueueOptionSets
 	public enum msdyn_assignmentstrategy
 	{
 		/// <summary>
-		/// Custom_Assignment_Configuration = 192350002
+		/// Custom Assignment Configuration = 192350002
 		/// </summary>
 		Custom_Assignment_Configuration = 192350002,
 		/// <summary>
-		/// Omnichannel_Assignment = 192350000
+		/// Omnichannel Assignment = 192350000
 		/// </summary>
 		Omnichannel_Assignment = 192350000,
 		/// <summary>
-		/// Round_Robin = 192350001
+		/// Round Robin = 192350001
 		/// </summary>
 		Round_Robin = 192350001
 	}
@@ -105,7 +105,7 @@ namespace Dev.DevKit.Shared.Entities.QueueOptionSets
 		/// </summary>
 		None = 0,
 		/// <summary>
-		/// Server_Side_Synchronization_or_Email_Router = 2
+		/// Server-Side Synchronization or Email Router = 2
 		/// </summary>
 		Server_Side_Synchronization_or_Email_Router = 2
 	}
@@ -113,7 +113,7 @@ namespace Dev.DevKit.Shared.Entities.QueueOptionSets
 	public enum QueueTypeCode
 	{
 		/// <summary>
-		/// Default_Value = 1
+		/// Default Value = 1
 		/// </summary>
 		Default_Value = 1
 	}
@@ -161,13 +161,21 @@ namespace Dev.DevKit.Shared.Entities
 	{
 		public struct Fields
 		{
+			[System.Obsolete("Deprecated from version: 6.0.0.0")]
+			public const string AllowEmailCredentials = "allowemailcredentials";
+			[System.Obsolete("Deprecated from version: 5.0.0.0")]
+			public const string BusinessUnitId = "businessunitid";
 			public const string CreatedBy = "createdby";
 			public const string CreatedOn = "createdon";
 			public const string CreatedOnBehalfBy = "createdonbehalfby";
 			public const string DefaultMailbox = "defaultmailbox";
 			public const string Description = "description";
 			public const string EMailAddress = "emailaddress";
+			[System.Obsolete("Deprecated from version: 6.0.0.0")]
+			public const string EmailPassword = "emailpassword";
 			public const string EmailRouterAccessApproval = "emailrouteraccessapproval";
+			[System.Obsolete("Deprecated from version: 6.0.0.0")]
+			public const string EmailUsername = "emailusername";
 			public const string EntityImageId = "entityimageid";
 			public const string ExchangeRate = "exchangerate";
 			public const string IgnoreUnsolicitedEmail = "ignoreunsolicitedemail";
@@ -175,6 +183,8 @@ namespace Dev.DevKit.Shared.Entities
 			public const string IncomingEmailDeliveryMethod = "incomingemaildeliverymethod";
 			public const string IncomingEmailFilteringMethod = "incomingemailfilteringmethod";
 			public const string IsEmailAddressApprovedByO365Admin = "isemailaddressapprovedbyo365admin";
+			[System.Obsolete("Deprecated from version: 5.0.0.0")]
+			public const string IsFaxQueue = "isfaxqueue";
 			public const string ModifiedBy = "modifiedby";
 			public const string ModifiedOn = "modifiedon";
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
@@ -182,9 +192,11 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_assignmentstrategy = "msdyn_assignmentstrategy";
 			public const string msdyn_isdefaultqueue = "msdyn_isdefaultqueue";
 			public const string msdyn_isomnichannelqueue = "msdyn_isomnichannelqueue";
+			public const string msdyn_maxqueuesize = "msdyn_maxqueuesize";
 			public const string msdyn_operatinghourid = "msdyn_operatinghourid";
 			public const string msdyn_priority = "msdyn_priority";
 			public const string msdyn_queuetype = "msdyn_queuetype";
+			public const string msdyn_uniquename = "msdyn_uniquename";
 			public const string Name = "name";
 			public const string NumberOfItems = "numberofitems";
 			public const string NumberOfMembers = "numberofmembers";
@@ -195,6 +207,8 @@ namespace Dev.DevKit.Shared.Entities
 			public const string OwningBusinessUnit = "owningbusinessunit";
 			public const string OwningTeam = "owningteam";
 			public const string OwningUser = "owninguser";
+			[System.Obsolete("Deprecated from version: 5.0.0.0")]
+			public const string PrimaryUserId = "primaryuserid";
 			public const string QueueId = "queueid";
 			public const string QueueTypeCode = "queuetypecode";
 			public const string QueueViewType = "queueviewtype";
@@ -206,6 +220,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "queue";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 2020;
 
 		[DebuggerNonUserCode()]
@@ -254,6 +269,31 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			Entity = new Entity(EntityLogicalName, keys);
 			PreEntity = CloneThisEntity(Entity);
+		}
+
+		/// <summary>
+		/// <para>This attribute is no longer used. The data is now in the Mailbox.AllowEmailConnectorToUseCredentials attribute.</para>
+		/// <para>ReadOnly - Boolean</para>
+		/// <para>Allow to Use Credentials for Email Processing (Obsolete)</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		[System.Obsolete("Deprecated from version: 6.0.0.0")]
+		public bool? AllowEmailCredentials
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.AllowEmailCredentials); }
+		}
+
+		/// <summary>
+		/// <para>Unique identifier of the business unit with which the queue is associated.</para>
+		/// <para>Lookup to businessunit</para>
+		/// <para>Business Unit</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		[System.Obsolete("Deprecated from version: 5.0.0.0")]
+		public EntityReference BusinessUnitId
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.BusinessUnitId); }
+			set { Entity.Attributes[Fields.BusinessUnitId] = value; }
 		}
 
 		/// <summary>
@@ -325,6 +365,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>This attribute is no longer used. The data is now in the Mailbox.Password attribute.</para>
+		/// <para>ReadOnly - String - MaxLength: 200</para>
+		/// <para>Password (Obsolete)</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		[System.Obsolete("Deprecated from version: 6.0.0.0")]
+		public string EmailPassword
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.EmailPassword); }
+		}
+
+		/// <summary>
 		/// <para>Shows the status of the primary email address.</para>
 		/// <para>Picklist</para>
 		/// <para>Primary Email Status</para>
@@ -345,6 +397,18 @@ namespace Dev.DevKit.Shared.Entities
 				else
 					Entity.Attributes[Fields.EmailRouterAccessApproval] = null;
 			}
+		}
+
+		/// <summary>
+		/// <para>This attribute is no longer used. The data is now in the Mailbox.UserName attribute.</para>
+		/// <para>ReadOnly - String - MaxLength: 200</para>
+		/// <para>User Name (Obsolete)</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		[System.Obsolete("Deprecated from version: 6.0.0.0")]
+		public string EmailUsername
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.EmailUsername); }
 		}
 
 		/// <summary>
@@ -451,6 +515,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Indication of whether a queue is the fax delivery queue.</para>
+		/// <para>ReadOnly - Boolean</para>
+		/// <para>Fax Queue</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		[System.Obsolete("Deprecated from version: 5.0.0.0")]
+		public bool? IsFaxQueue
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.IsFaxQueue); }
+		}
+
+		/// <summary>
 		/// <para>Unique identifier of the user who last modified the queue.</para>
 		/// <para>ReadOnly - Lookup to systemuser</para>
 		/// <para>Modified By</para>
@@ -542,6 +618,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Maximum queue size</para>
+		/// <para>Integer - MinValue: 0 - MaxValue: 2,147,483,647</para>
+		/// <para>Maximum queue size</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public int? msdyn_maxqueuesize
+		{
+			get { return Entity.GetAttributeValue<int?>(Fields.msdyn_maxqueuesize); }
+			set { Entity.Attributes[Fields.msdyn_maxqueuesize] = value; }
+		}
+
+		/// <summary>
 		/// <para>Unique identifier for Operating hour associated with Queue</para>
 		/// <para>Lookup to msdyn_operatinghour</para>
 		/// <para>Operating Hours</para>
@@ -580,9 +668,24 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.QueueOptionSets.msdyn_queuetype)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_queuetype] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_queuetype] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_queuetype] = null;
+			}
+		}
+
+		/// <summary>
+		/// <para>Unique Name for the entity.</para>
+		/// <para>String - MaxLength: 128</para>
+		/// <para>Unique Name</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_uniquename
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_uniquename); }
+			set { Entity.Attributes[Fields.msdyn_uniquename] = value; }
 		}
 
 		/// <summary>
@@ -667,7 +770,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the user or team who owns the queue.</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -708,6 +811,19 @@ namespace Dev.DevKit.Shared.Entities
 		public EntityReference OwningUser
 		{
 			get { return Entity.GetAttributeValue<EntityReference>(Fields.OwningUser); }
+		}
+
+		/// <summary>
+		/// <para>Unique identifier of the owner of the queue.</para>
+		/// <para>Lookup to systemuser</para>
+		/// <para>Owner (deprecated)</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		[System.Obsolete("Deprecated from version: 5.0.0.0")]
+		public EntityReference PrimaryUserId
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.PrimaryUserId); }
+			set { Entity.Attributes[Fields.PrimaryUserId] = value; }
 		}
 
 		/// <summary>

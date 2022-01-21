@@ -13,11 +13,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_localizedsurveyquestionOptionSets
 	public enum msdyn_languagecode
 	{
 		/// <summary>
-		/// Englishen_US = 100000001
+		/// English(en-US) = 100000001
 		/// </summary>
 		Englishen_US = 100000001,
 		/// <summary>
-		/// Frenchfr_FR = 100000002
+		/// French(fr-FR) = 100000002
 		/// </summary>
 		Frenchfr_FR = 100000002
 	}
@@ -77,7 +77,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_localizedsurveyquestion";
 
-		public const int EntityTypeCode = 10636;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10776;
 
 		[DebuggerNonUserCode()]
 		public msdyn_localizedsurveyquestion()
@@ -230,9 +231,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_localizedsurveyquestionOptionSets.msdyn_languagecode)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_languagecode] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_languagecode] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_languagecode] = null;
+			}
 		}
 
 		/// <summary>

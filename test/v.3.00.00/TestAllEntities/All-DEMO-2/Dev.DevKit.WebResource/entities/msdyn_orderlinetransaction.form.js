@@ -18,50 +18,50 @@ var DevKit;
 			msdyn_AccountCustomer: {},
 			msdyn_AccountVendor: {},
 			msdyn_Amount: {},
-			msdyn_Amount_1: {},
+			msdyn_Amount1: {},
 			msdyn_amount_after_tax: {},
 			msdyn_AmountMethod: {},
 			msdyn_BasisAmount: {},
 			msdyn_BasisQuantity: {},
 			msdyn_BillingType: {},
-			msdyn_BillingType_1: {},
+			msdyn_BillingType1: {},
 			msdyn_bookableresource: {},
 			msdyn_ContactCustomer: {},
 			msdyn_ContactVendor: {},
 			msdyn_CustomerType: {},
 			msdyn_description: {},
-			msdyn_description_1: {},
+			msdyn_description1: {},
 			msdyn_DocumentDate: {},
 			msdyn_EndDateTime: {},
-			msdyn_EndDateTime_1: {},
+			msdyn_EndDateTime1: {},
 			msdyn_Origin: {},
 			msdyn_Percent: {},
 			msdyn_Price: {},
-			msdyn_Price_1: {},
+			msdyn_Price1: {},
 			msdyn_PriceList: {},
-			msdyn_PriceList_1: {},
+			msdyn_PriceList1: {},
 			msdyn_Product: {},
 			msdyn_Project: {},
 			msdyn_Quantity: {},
-			msdyn_Quantity_1: {},
+			msdyn_Quantity1: {},
 			msdyn_ResourceCategory: {},
-			msdyn_ResourceCategory_1: {},
+			msdyn_ResourceCategory1: {},
 			msdyn_ResourceOrganizationalUnitId: {},
 			msdyn_SalesContract: {},
-			msdyn_SalesContract_1: {},
+			msdyn_SalesContract1: {},
 			msdyn_SalesContractLineId: {},
 			msdyn_StartDateTime: {},
-			msdyn_StartDateTime_1: {},
+			msdyn_StartDateTime1: {},
 			msdyn_Task: {},
 			msdyn_tax: {},
 			msdyn_TransactionCategory: {},
-			msdyn_TransactionCategory_1: {},
+			msdyn_TransactionCategory1: {},
 			msdyn_TransactionClassification: {},
-			msdyn_TransactionClassification_1: {},
+			msdyn_TransactionClassification1: {},
 			msdyn_TransactionTypeCode: {},
-			msdyn_TransactionTypeCode_1: {},
+			msdyn_TransactionTypeCode1: {},
 			msdyn_Unit: {},
-			msdyn_Unit_1: {},
+			msdyn_Unit1: {},
 			msdyn_UnitSchedule: {},
 			msdyn_VendorType: {},
 			OwnerId: {},
@@ -92,18 +92,11 @@ var DevKit;
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.Formmsdyn_orderlinetransaction_Project_Quick_Create = function(executionContext, defaultWebResourceName) {
@@ -134,7 +127,7 @@ var DevKit;
 			msdyn_TransactionTypeCode: {},
 			msdyn_Unit: {},
 			msdyn_UnitSchedule: {}
-		}
+		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
 			tab_1: {
@@ -144,13 +137,15 @@ var DevKit;
 					tab_1_column_3_section_1: {}
 				}
 			}
-		}
+		};
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
+		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
-	}
+	};
 })(DevKit || (DevKit = {}));
 /** @namespace OptionSet */
 var OptionSet;
@@ -203,15 +198,14 @@ var OptionSet;
 			Active: 1,
 			Inactive: 2
 		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
-
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 	};
 })(OptionSet || (OptionSet = {}));

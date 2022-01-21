@@ -1,9 +1,13 @@
 ﻿//@ts-check
 ///<reference path="msdyn_rtvproduct.d.ts" />
 "use strict";
-var formInformation = (function () {
+var formmsdyn_rtvproduct_Information = (function () {
 	"use strict";
+	/** @type DevKit.Formmsdyn_rtvproduct_Information */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.Formmsdyn_rtvproduct_Information(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}

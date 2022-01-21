@@ -25,7 +25,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_presenceOptionSets
 		/// </summary>
 		Busy = 192360001,
 		/// <summary>
-		/// Busy_DND = 192360002
+		/// Busy - DND = 192360002
 		/// </summary>
 		Busy_DND = 192360002,
 		/// <summary>
@@ -89,7 +89,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_presence";
 
-		public const int EntityTypeCode = 10579;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10731;
 
 		[DebuggerNonUserCode()]
 		public msdyn_presence()
@@ -232,9 +233,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_presenceOptionSets.msdyn_basepresencestatus)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_basepresencestatus] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_basepresencestatus] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_basepresencestatus] = null;
+			}
 		}
 
 		/// <summary>

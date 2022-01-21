@@ -1,9 +1,13 @@
 ﻿//@ts-check
 ///<reference path="msdyn_opportunitylinetransactionclassificatio.d.ts" />
 "use strict";
-var formInformation = (function () {
+var formmsdyn_opportunitylinetransactionclassificatio_Information = (function () {
 	"use strict";
+	/** @type DevKit.Formmsdyn_opportunitylinetransactionclassificatio_Information */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.Formmsdyn_opportunitylinetransactionclassificatio_Information(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}

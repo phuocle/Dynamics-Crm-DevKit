@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.SLAItemOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -79,6 +79,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "slaitem";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 9751;
 
 		[DebuggerNonUserCode()]
@@ -397,7 +398,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Enter the user or team who owns the SLA. This field is updated every time the item is assigned to a different user.</para>
-		/// <para>Required - Owner</para>
+		/// <para>Required - Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

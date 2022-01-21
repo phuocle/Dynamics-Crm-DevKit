@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.TemplateOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -28,6 +28,66 @@ namespace Dev.DevKit.Shared.Entities.TemplateOptionSets
 		/// Unpublished = 1
 		/// </summary>
 		Unpublished = 1
+	}
+
+	public enum TemplateTypeCode
+	{
+		/// <summary>
+		/// Account = 1
+		/// </summary>
+		Account = 1,
+		/// <summary>
+		/// Campaign Activity = 4402
+		/// </summary>
+		Campaign_Activity = 4402,
+		/// <summary>
+		/// Case = 112
+		/// </summary>
+		Case = 112,
+		/// <summary>
+		/// Contact = 2
+		/// </summary>
+		Contact = 2,
+		/// <summary>
+		/// Contract = 1010
+		/// </summary>
+		Contract = 1010,
+		/// <summary>
+		/// Entitlement = 9700
+		/// </summary>
+		Entitlement = 9700,
+		/// <summary>
+		/// Invoice = 1090
+		/// </summary>
+		Invoice = 1090,
+		/// <summary>
+		/// Lead = 4
+		/// </summary>
+		Lead = 4,
+		/// <summary>
+		/// Opportunity = 3
+		/// </summary>
+		Opportunity = 3,
+		/// <summary>
+		/// Order = 1088
+		/// </summary>
+		Order = 1088,
+		/// <summary>
+		/// Quote = 1084
+		/// </summary>
+		Quote = 1084,
+		/// <summary>
+		/// Service Activity = 4214
+		/// </summary>
+		Service_Activity = 4214,
+		/// <summary>
+		/// System Job = 4700
+		/// </summary>
+		System_Job = 4700,
+		/// <summary>
+		/// User = 8
+		/// </summary>
+		User = 8
 	}
 }
 
@@ -81,6 +141,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "template";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 2010;
 
 		[DebuggerNonUserCode()]
@@ -376,7 +437,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the user or team who owns the template for the email activity.</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.ConvertRuleOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -33,13 +33,73 @@ namespace Dev.DevKit.Shared.Entities.ConvertRuleOptionSets
 	public enum SenderResolutionOption
 	{
 		/// <summary>
-		/// Creating_a_new_contact_automatically = 0
+		/// Creating a new contact automatically = 0
 		/// </summary>
 		Creating_a_new_contact_automatically = 0,
 		/// <summary>
-		/// Mapping_in_Power_Automate_manually = 1
+		/// Mapping in Power Automate manually = 1
 		/// </summary>
 		Mapping_in_Power_Automate_manually = 1
+	}
+
+	public enum SourceChannelTypeCode
+	{
+		/// <summary>
+		/// Appointment = 4201
+		/// </summary>
+		Appointment = 4201,
+		/// <summary>
+		/// Booking Alert = 10400
+		/// </summary>
+		Booking_Alert = 10400,
+		/// <summary>
+		/// Conversation = 10702
+		/// </summary>
+		Conversation = 10702,
+		/// <summary>
+		/// Customer Voice alert = 10294
+		/// </summary>
+		Customer_Voice_alert = 10294,
+		/// <summary>
+		/// Customer Voice survey invite = 10304
+		/// </summary>
+		Customer_Voice_survey_invite = 10304,
+		/// <summary>
+		/// Customer Voice survey response = 10306
+		/// </summary>
+		Customer_Voice_survey_response = 10306,
+		/// <summary>
+		/// Email = 4202
+		/// </summary>
+		Email = 4202,
+		/// <summary>
+		/// Outbound message = 10813
+		/// </summary>
+		Outbound_message = 10813,
+		/// <summary>
+		/// Phone Call = 4210
+		/// </summary>
+		Phone_Call = 4210,
+		/// <summary>
+		/// Project Service Approval = 10430
+		/// </summary>
+		Project_Service_Approval = 10430,
+		/// <summary>
+		/// Service Activity = 4214
+		/// </summary>
+		Service_Activity = 4214,
+		/// <summary>
+		/// Session = 10717
+		/// </summary>
+		Session = 10717,
+		/// <summary>
+		/// Social Activity = 4216
+		/// </summary>
+		Social_Activity = 4216,
+		/// <summary>
+		/// Task = 4212
+		/// </summary>
+		Task = 4212
 	}
 
 	public enum SourceTypeCode
@@ -49,7 +109,7 @@ namespace Dev.DevKit.Shared.Entities.ConvertRuleOptionSets
 		/// </summary>
 		Email = 2,
 		/// <summary>
-		/// Social_Monitoring = 1
+		/// Social Monitoring = 1
 		/// </summary>
 		Social_Monitoring = 1
 	}
@@ -129,6 +189,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "convertrule";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 9300;
 
 		[DebuggerNonUserCode()]
@@ -431,7 +492,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -570,7 +631,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Identifies the Dynamics 365 activity that's the source of the record.</para>
+		/// <para>Identifies the Dynamics 365 activity that&apos;s the source of the record.</para>
 		/// <para>EntityName</para>
 		/// <para>Monitored activity type</para>
 		/// </summary>

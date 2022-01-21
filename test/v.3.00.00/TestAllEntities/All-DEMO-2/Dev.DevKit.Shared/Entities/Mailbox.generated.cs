@@ -13,7 +13,7 @@ namespace Dev.DevKit.Shared.Entities.MailboxOptionSets
 	public enum ACTDeliveryMethod
 	{
 		/// <summary>
-		/// Microsoft_Dynamics_365_for_Outlook = 0
+		/// Microsoft Dynamics 365 for Outlook = 0
 		/// </summary>
 		Microsoft_Dynamics_365_for_Outlook = 0,
 		/// <summary>
@@ -21,7 +21,7 @@ namespace Dev.DevKit.Shared.Entities.MailboxOptionSets
 		/// </summary>
 		None = 2,
 		/// <summary>
-		/// Server_Side_Synchronization = 1
+		/// Server-Side Synchronization = 1
 		/// </summary>
 		Server_Side_Synchronization = 1
 	}
@@ -33,7 +33,7 @@ namespace Dev.DevKit.Shared.Entities.MailboxOptionSets
 		/// </summary>
 		Failure = 2,
 		/// <summary>
-		/// Not_Run = 0
+		/// Not Run = 0
 		/// </summary>
 		Not_Run = 0,
 		/// <summary>
@@ -53,7 +53,7 @@ namespace Dev.DevKit.Shared.Entities.MailboxOptionSets
 		/// </summary>
 		Empty = 0,
 		/// <summary>
-		/// Pending_Approval = 2
+		/// Pending Approval = 2
 		/// </summary>
 		Pending_Approval = 2,
 		/// <summary>
@@ -81,11 +81,11 @@ namespace Dev.DevKit.Shared.Entities.MailboxOptionSets
 	public enum IncomingEmailDeliveryMethod
 	{
 		/// <summary>
-		/// Forward_Mailbox = 3
+		/// Forward Mailbox = 3
 		/// </summary>
 		Forward_Mailbox = 3,
 		/// <summary>
-		/// Microsoft_Dynamics_365_for_Outlook = 1
+		/// Microsoft Dynamics 365 for Outlook = 1
 		/// </summary>
 		Microsoft_Dynamics_365_for_Outlook = 1,
 		/// <summary>
@@ -93,7 +93,7 @@ namespace Dev.DevKit.Shared.Entities.MailboxOptionSets
 		/// </summary>
 		None = 0,
 		/// <summary>
-		/// Server_Side_Synchronization_or_Email_Router = 2
+		/// Server-Side Synchronization or Email Router = 2
 		/// </summary>
 		Server_Side_Synchronization_or_Email_Router = 2
 	}
@@ -105,7 +105,7 @@ namespace Dev.DevKit.Shared.Entities.MailboxOptionSets
 		/// </summary>
 		Failure = 2,
 		/// <summary>
-		/// Not_Run = 0
+		/// Not Run = 0
 		/// </summary>
 		Not_Run = 0,
 		/// <summary>
@@ -121,7 +121,7 @@ namespace Dev.DevKit.Shared.Entities.MailboxOptionSets
 		/// </summary>
 		Failure = 2,
 		/// <summary>
-		/// Not_Run = 0
+		/// Not Run = 0
 		/// </summary>
 		Not_Run = 0,
 		/// <summary>
@@ -157,7 +157,7 @@ namespace Dev.DevKit.Shared.Entities.MailboxOptionSets
 	public enum OutgoingEmailDeliveryMethod
 	{
 		/// <summary>
-		/// Microsoft_Dynamics_365_for_Outlook = 1
+		/// Microsoft Dynamics 365 for Outlook = 1
 		/// </summary>
 		Microsoft_Dynamics_365_for_Outlook = 1,
 		/// <summary>
@@ -165,7 +165,7 @@ namespace Dev.DevKit.Shared.Entities.MailboxOptionSets
 		/// </summary>
 		None = 0,
 		/// <summary>
-		/// Server_Side_Synchronization_or_Email_Router = 2
+		/// Server-Side Synchronization or Email Router = 2
 		/// </summary>
 		Server_Side_Synchronization_or_Email_Router = 2
 	}
@@ -177,7 +177,7 @@ namespace Dev.DevKit.Shared.Entities.MailboxOptionSets
 		/// </summary>
 		Failure = 2,
 		/// <summary>
-		/// Not_Run = 0
+		/// Not Run = 0
 		/// </summary>
 		Not_Run = 0,
 		/// <summary>
@@ -235,6 +235,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ExchangeContactsImportCompletedOn = "exchangecontactsimportcompletedon";
 			public const string ExchangeContactsImportStatus = "exchangecontactsimportstatus";
 			public const string ExchangeSyncStateXml = "exchangesyncstatexml";
+			public const string ExchangeSyncStateXmlFileRef = "exchangesyncstatexmlfileref";
 			public const string FolderHierarchy = "folderhierarchy";
 			public const string ForcedUnlockCount = "forcedunlockcount";
 			public const string HostId = "hostid";
@@ -318,6 +319,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "mailbox";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 9606;
 
 		[DebuggerNonUserCode()]
@@ -620,6 +622,17 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.ExchangeSyncStateXml); }
 			set { Entity.Attributes[Fields.ExchangeSyncStateXml] = value; }
+		}
+
+		/// <summary>
+		/// <para>Reference to the ExchangeSyncStateXml file on Azure.</para>
+		/// <para>ReadOnly - Virtual</para>
+		/// <para>ExchangeSyncStateXml File Ref</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string ExchangeSyncStateXmlFileRef
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.ExchangeSyncStateXmlFileRef); }
 		}
 
 		/// <summary>
@@ -1250,7 +1263,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user.</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -1434,7 +1447,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Choose the user associated to the mailbox.</para>
-		/// <para>ReadOnly - Lookup to queue;systemuser</para>
+		/// <para>ReadOnly - Lookup to queue, systemuser</para>
 		/// <para>Regarding</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -1467,7 +1480,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select the mailbox's status.</para>
+		/// <para>Select the mailbox&apos;s status.</para>
 		/// <para>Status</para>
 		/// <para>Status Reason</para>
 		/// </summary>

@@ -21,11 +21,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_opportunitylineresourcecategoryOption
 		/// </summary>
 		Complimentary = 192350002,
 		/// <summary>
-		/// Non_Chargeable = 192350000
+		/// Non Chargeable = 192350000
 		/// </summary>
 		Non_Chargeable = 192350000,
 		/// <summary>
-		/// Not_Available = 192350003
+		/// Not Available = 192350003
 		/// </summary>
 		Not_Available = 192350003
 	}
@@ -87,7 +87,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_opportunitylineresourcecategory";
 
-		public const int EntityTypeCode = 10352;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10458;
 
 		[DebuggerNonUserCode()]
 		public msdyn_opportunitylineresourcecategory()
@@ -304,7 +305,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

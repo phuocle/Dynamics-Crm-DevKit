@@ -37,23 +37,61 @@ var DevKit;
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		var grid = {
 			MessageTemplate_LocalizationDataGrid: {},
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
+		return form;
+	};
+	DevKit.Formmsdyn_ocsystemmessage_Information2 = function(executionContext, defaultWebResourceName) {
+		var formContext = null;
+		if (executionContext !== undefined) {
+			if (executionContext.getFormContext === undefined) {
+				formContext = executionContext;
+			}
+			else {
+				formContext = executionContext.getFormContext();
+			}
+		}
+		var form = devKit.LoadForm(formContext);
+		var body = {
+			MessageTemplate_LocalizationDataGrid: {},
+			msdyn_messagedescription: {},
+			msdyn_messagereceiver: {},
+			msdyn_messagetype: {},
+			msdyn_msdyn_instanceid: {},
+			msdyn_name: {},
+			msdyn_streamsource: {},
+			msdyn_systemmessageeventtype: {}
+		};
+		devKit.LoadFields(formContext, body);
+		var tab = {
+			MessageTemplate_GeneralTab: {
+				Section: {
+					_F86C374B_46E7_4B2F_9BC6_2D41E13AAFE2: {},
+					MessageTemplate_LocalizationDataGridSection: {}
+				}
+			}
+		};
+		devKit.LoadTabs(formContext, tab);
+		body.Tab = tab;
+		form.Body = body;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
+		var grid = {
+			MessageTemplate_LocalizationDataGrid: {},
+		};
+		devKit.LoadGrids(formContext, grid);
+		form.Grid = grid;
+		form.Utility = devKit.LoadUtility(defaultWebResourceName);
+		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 })(DevKit || (DevKit = {}));
@@ -89,11 +127,17 @@ var OptionSet;
 			WhatsApp: 192300000
 		},
 		msdyn_systemmessageeventtype : {
+			Agent_accepted_consult_conversation: 192350060,
 			Agent_assigned_to_conversation: 192350017,
 			Agent_couldnt_be_assigned_to_conversation: 192350018,
 			Agent_disconnected_from_conversation: 192350013,
+			Agent_ended_consult_conversation: 192350062,
 			Agent_ended_conversation: 192350014,
 			Agent_joined_conversation: 192350000,
+			Agent_joined_customer_conversation: 192350061,
+			Agent_left_consult_conversation: 192350058,
+			Agent_left_customer_conversation: 192350059,
+			Agent_removed_from_consult_conversation: 192350063,
 			Agents_message_couldnt_be_sent: 192350022,
 			Average_wait_time_for_customers_Hours: 192350031,
 			Average_wait_time_for_customers_Hours_and_minutes: 192350032,
@@ -107,12 +151,15 @@ var OptionSet;
 			Couldnt_find_the_channel_account_in_Omnichannel: 192350037,
 			Customer_disconnected: 192350020,
 			Customer_ended_conversation: 192350019,
+			Customer_has_opted_out_from_Async_Conversation: 192350057,
 			Customer_is_next_in_line: 192350024,
 			Customer_no_longer_on_hold: 192350043,
 			Customer_put_on_hold: 192350042,
 			Customers_file_couldnt_be_attached_because_its_too_big: 192350038,
 			Customers_message_couldnt_be_sent_Outside_of_operation_hours: 192350023,
 			Customers_position_in_queue: 192350021,
+			End_conversation_due_to_overflow: 192350055,
+			Greeting_Message_for_Async_Channels: 192350056,
 			Holiday_message_to_customer: 192350035,
 			Leave_as_many_messages_as_youd_like_and_well_get_back_to_you_as_soon_as_possible_Well_save_your_chat_history_so_you_can_leave_and_come_back_anytime: 192350041,
 			Message_couldnt_be_delivered_Unsupported_message_type: 192350025,
@@ -138,6 +185,8 @@ var OptionSet;
 			Transfer_to_out_of_operating_hour_queue: 192350039,
 			Transfer_to_queue_failed: 192350012,
 			Transfer_to_queue_started: 192350011,
+			Trial_conversation_time_limit_exceeded: 192350054,
+			Trial_usage_limit_exceeded: 192350053,
 			Voice_call_accepted: 192350027,
 			Voice_call_declined: 192350028,
 			Voice_call_ended: 192350033,
@@ -151,15 +200,14 @@ var OptionSet;
 			Active: 1,
 			Inactive: 2
 		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
-
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 	};
 })(OptionSet || (OptionSet = {}));

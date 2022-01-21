@@ -111,8 +111,6 @@ declare namespace DevKit {
 			msdyn_PODate: DevKit.Controls.Date;
 			/** Warehouse where products of this PO will be received to */
 			msdyn_ReceivetoWarehouse: DevKit.Controls.Lookup;
-			/** Method of shipment by vendor */
-			msdyn_ShipVia: DevKit.Controls.Lookup;
 			/** Enter the current status of the purchase order. */
 			msdyn_SystemStatus: DevKit.Controls.OptionSet;
 			/** Enter the current status of the purchase order. */
@@ -131,7 +129,7 @@ declare namespace DevKit {
 	}
 	class FormPurchase_Order extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Purchase_Order
+		* Purchase Order [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -146,6 +144,8 @@ declare namespace DevKit {
 		Process: DevKit.FormPurchase_Order.Process;
 		/** The Grid of form Purchase_Order */
 		Grid: DevKit.FormPurchase_Order.Grid;
+		/** The SidePanes of form Purchase_Order */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormPurchase_Order_Mobile {
 		interface tab_Address_Sections {
@@ -267,8 +267,6 @@ declare namespace DevKit {
 			msdyn_PODate: DevKit.Controls.Date;
 			/** Warehouse where products of this PO will be received to */
 			msdyn_ReceivetoWarehouse: DevKit.Controls.Lookup;
-			/** Method of shipment by vendor */
-			msdyn_ShipVia: DevKit.Controls.Lookup;
 			/** Enter the current status of the purchase order. */
 			msdyn_SystemStatus: DevKit.Controls.OptionSet;
 			/** Enter the current status of the purchase order. */
@@ -282,15 +280,15 @@ declare namespace DevKit {
 			Purchase_Order_Business_Process: ProcessPurchase_Order_Business_Process;
 		}
 		interface Grid {
-			PurchaseOrderProductsGrid: DevKit.Controls.Grid;
-			RECEIPTS: DevKit.Controls.Grid;
-			RECEIPT_PRODUCTS: DevKit.Controls.Grid;
 			BILLS: DevKit.Controls.Grid;
+			PurchaseOrderProductsGrid: DevKit.Controls.Grid;
+			RECEIPT_PRODUCTS: DevKit.Controls.Grid;
+			RECEIPTS: DevKit.Controls.Grid;
 		}
 	}
 	class FormPurchase_Order_Mobile extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Purchase_Order_Mobile
+		* Purchase Order - Mobile [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -305,6 +303,8 @@ declare namespace DevKit {
 		Process: DevKit.FormPurchase_Order_Mobile.Process;
 		/** The Grid of form Purchase_Order_Mobile */
 		Grid: DevKit.FormPurchase_Order_Mobile.Grid;
+		/** The SidePanes of form Purchase_Order_Mobile */
+		SidePanes: DevKit.SidePanes;
 	}
 	class msdyn_purchaseorderApi {
 		/**
@@ -480,22 +480,22 @@ declare namespace OptionSet {
 			/** 2 */
 			Inactive
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Purchase Order','Purchase Order - Mobile'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

@@ -25,7 +25,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocsystemmessageOptionSets
 	public enum msdyn_messagetemplatetrigger
 	{
 		/// <summary>
-		/// Outside_24_hour_conversation_window = 1
+		/// Outside 24-hour conversation window = 1
 		/// </summary>
 		Outside_24_hour_conversation_window = 1
 	}
@@ -33,11 +33,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocsystemmessageOptionSets
 	public enum msdyn_messagetype
 	{
 		/// <summary>
-		/// Automated_Message = 2
+		/// Automated Message = 2
 		/// </summary>
 		Automated_Message = 2,
 		/// <summary>
-		/// Message_Template = 3
+		/// Message Template = 3
 		/// </summary>
 		Message_Template = 3
 	}
@@ -45,7 +45,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocsystemmessageOptionSets
 	public enum msdyn_streamsource
 	{
 		/// <summary>
-		/// Co_browse = 192390000
+		/// Co-browse = 192390000
 		/// </summary>
 		Co_browse = 192390000,
 		/// <summary>
@@ -53,7 +53,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocsystemmessageOptionSets
 		/// </summary>
 		Custom = 192350002,
 		/// <summary>
-		/// Entity_Records = 192350000
+		/// Entity Records = 192350000
 		/// </summary>
 		Entity_Records = 192350000,
 		/// <summary>
@@ -65,15 +65,15 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocsystemmessageOptionSets
 		/// </summary>
 		LINE = 192310000,
 		/// <summary>
-		/// Live_chat = 192360000
+		/// Live chat = 192360000
 		/// </summary>
 		Live_chat = 192360000,
 		/// <summary>
-		/// Microsoft_Teams = 19241000
+		/// Microsoft Teams = 19241000
 		/// </summary>
 		Microsoft_Teams = 19241000,
 		/// <summary>
-		/// Screen_sharing = 192400000
+		/// Screen sharing = 192400000
 		/// </summary>
 		Screen_sharing = 192400000,
 		/// <summary>
@@ -105,215 +105,259 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocsystemmessageOptionSets
 	public enum msdyn_systemmessageeventtype
 	{
 		/// <summary>
-		/// Agent_assigned_to_conversation = 192350017
+		/// Agent accepted consult conversation = 192350060
+		/// </summary>
+		Agent_accepted_consult_conversation = 192350060,
+		/// <summary>
+		/// Agent assigned to conversation = 192350017
 		/// </summary>
 		Agent_assigned_to_conversation = 192350017,
 		/// <summary>
-		/// Agent_couldnt_be_assigned_to_conversation = 192350018
+		/// Agent couldn't be assigned to conversation = 192350018
 		/// </summary>
 		Agent_couldnt_be_assigned_to_conversation = 192350018,
 		/// <summary>
-		/// Agent_disconnected_from_conversation = 192350013
+		/// Agent disconnected from conversation = 192350013
 		/// </summary>
 		Agent_disconnected_from_conversation = 192350013,
 		/// <summary>
-		/// Agent_ended_conversation = 192350014
+		/// Agent ended consult conversation = 192350062
+		/// </summary>
+		Agent_ended_consult_conversation = 192350062,
+		/// <summary>
+		/// Agent ended conversation = 192350014
 		/// </summary>
 		Agent_ended_conversation = 192350014,
 		/// <summary>
-		/// Agent_joined_conversation = 192350000
+		/// Agent joined conversation = 192350000
 		/// </summary>
 		Agent_joined_conversation = 192350000,
 		/// <summary>
-		/// Agents_message_couldnt_be_sent = 192350022
+		/// Agent joined customer conversation = 192350061
+		/// </summary>
+		Agent_joined_customer_conversation = 192350061,
+		/// <summary>
+		/// Agent left consult conversation = 192350058
+		/// </summary>
+		Agent_left_consult_conversation = 192350058,
+		/// <summary>
+		/// Agent left customer conversation = 192350059
+		/// </summary>
+		Agent_left_customer_conversation = 192350059,
+		/// <summary>
+		/// Agent removed from consult conversation = 192350063
+		/// </summary>
+		Agent_removed_from_consult_conversation = 192350063,
+		/// <summary>
+		/// Agent's message couldn't be sent = 192350022
 		/// </summary>
 		Agents_message_couldnt_be_sent = 192350022,
 		/// <summary>
-		/// Average_wait_time_for_customers_Hours = 192350031
+		/// Average wait time for customers: Hours = 192350031
 		/// </summary>
 		Average_wait_time_for_customers_Hours = 192350031,
 		/// <summary>
-		/// Average_wait_time_for_customers_Hours_and_minutes = 192350032
+		/// Average wait time for customers: Hours and minutes = 192350032
 		/// </summary>
 		Average_wait_time_for_customers_Hours_and_minutes = 192350032,
 		/// <summary>
-		/// Average_wait_time_for_customers_Minutes = 192350030
+		/// Average wait time for customers: Minutes = 192350030
 		/// </summary>
 		Average_wait_time_for_customers_Minutes = 192350030,
 		/// <summary>
-		/// Consult_accepted = 192350001
+		/// Consult accepted = 192350001
 		/// </summary>
 		Consult_accepted = 192350001,
 		/// <summary>
-		/// Consult_rejected = 192350007
+		/// Consult rejected = 192350007
 		/// </summary>
 		Consult_rejected = 192350007,
 		/// <summary>
-		/// Consult_request_failed = 192350004
+		/// Consult request failed = 192350004
 		/// </summary>
 		Consult_request_failed = 192350004,
 		/// <summary>
-		/// Consult_request_timed_out = 192350009
+		/// Consult request timed out = 192350009
 		/// </summary>
 		Consult_request_timed_out = 192350009,
 		/// <summary>
-		/// Consult_session_ended = 192350016
+		/// Consult session ended = 192350016
 		/// </summary>
 		Consult_session_ended = 192350016,
 		/// <summary>
-		/// Consult_started = 192350003
+		/// Consult started = 192350003
 		/// </summary>
 		Consult_started = 192350003,
 		/// <summary>
-		/// Couldnt_find_the_channel_account_in_Omnichannel = 192350037
+		/// Couldn’t find the channel account in Omnichannel = 192350037
 		/// </summary>
 		Couldnt_find_the_channel_account_in_Omnichannel = 192350037,
 		/// <summary>
-		/// Customer_disconnected = 192350020
+		/// Customer disconnected = 192350020
 		/// </summary>
 		Customer_disconnected = 192350020,
 		/// <summary>
-		/// Customer_ended_conversation = 192350019
+		/// Customer ended conversation = 192350019
 		/// </summary>
 		Customer_ended_conversation = 192350019,
 		/// <summary>
-		/// Customer_is_next_in_line = 192350024
+		/// Customer has opted out from Async Conversation = 192350057
+		/// </summary>
+		Customer_has_opted_out_from_Async_Conversation = 192350057,
+		/// <summary>
+		/// Customer is next in line = 192350024
 		/// </summary>
 		Customer_is_next_in_line = 192350024,
 		/// <summary>
-		/// Customer_no_longer_on_hold = 192350043
+		/// Customer no longer on hold. = 192350043
 		/// </summary>
 		Customer_no_longer_on_hold = 192350043,
 		/// <summary>
-		/// Customer_put_on_hold = 192350042
+		/// Customer put on hold. = 192350042
 		/// </summary>
 		Customer_put_on_hold = 192350042,
 		/// <summary>
-		/// Customers_file_couldnt_be_attached_because_its_too_big = 192350038
+		/// Customer's file couldn't be attached because it's too big = 192350038
 		/// </summary>
 		Customers_file_couldnt_be_attached_because_its_too_big = 192350038,
 		/// <summary>
-		/// Customers_message_couldnt_be_sent_Outside_of_operation_hours = 192350023
+		/// Customer's message couldn't be sent: Outside of operation hours = 192350023
 		/// </summary>
 		Customers_message_couldnt_be_sent_Outside_of_operation_hours = 192350023,
 		/// <summary>
-		/// Customers_position_in_queue = 192350021
+		/// Customer's position in queue = 192350021
 		/// </summary>
 		Customers_position_in_queue = 192350021,
 		/// <summary>
-		/// Holiday_message_to_customer = 192350035
+		/// End conversation due to overflow = 192350055
+		/// </summary>
+		End_conversation_due_to_overflow = 192350055,
+		/// <summary>
+		/// Greeting Message for Async Channels = 192350056
+		/// </summary>
+		Greeting_Message_for_Async_Channels = 192350056,
+		/// <summary>
+		/// Holiday message to customer = 192350035
 		/// </summary>
 		Holiday_message_to_customer = 192350035,
 		/// <summary>
-		/// Leave_as_many_messages_as_youd_like_and_well_get_back_to_you_as_soon_as_possible_Well_save_your_chat_history_so_you_can_leave_and_come_back_anytime = 192350041
+		/// Leave as many messages as you’d like and we’ll get back to you as soon as possible. We’ll save your chat history, so you can leave and come back anytime. = 192350041
 		/// </summary>
 		Leave_as_many_messages_as_youd_like_and_well_get_back_to_you_as_soon_as_possible_Well_save_your_chat_history_so_you_can_leave_and_come_back_anytime = 192350041,
 		/// <summary>
-		/// Message_couldnt_be_delivered_Unsupported_message_type = 192350025
+		/// Message couldn't be delivered: Unsupported message type = 192350025
 		/// </summary>
 		Message_couldnt_be_delivered_Unsupported_message_type = 192350025,
 		/// <summary>
-		/// Message_couldnt_be_sent_A_channel_account_cant_message_another_account_within_Omnichannel = 192350034
+		/// Message couldn’t be sent: A channel account can’t message another account within Omnichannel = 192350034
 		/// </summary>
 		Message_couldnt_be_sent_A_channel_account_cant_message_another_account_within_Omnichannel = 192350034,
 		/// <summary>
-		/// Message_couldnt_be_sent_File_couldnt_be_attached = 192350040
+		/// Message couldn’t be sent: File couldn’t be attached = 192350040
 		/// </summary>
 		Message_couldnt_be_sent_File_couldnt_be_attached = 192350040,
 		/// <summary>
-		/// Message_couldnt_be_sent_Outside_allowed_timeframe = 192350029
+		/// Message couldn't be sent: Outside allowed timeframe = 192350029
 		/// </summary>
 		Message_couldnt_be_sent_Outside_allowed_timeframe = 192350029,
 		/// <summary>
-		/// Message_or_attachment_failed_to_send_Providing_error_details_including_error_code_reason_for_failure_message_id_timestamp_and_transaction_id = 192350044
+		/// Message or attachment failed to send. Providing error details including error code, reason for failure, message id, timestamp, and transaction id = 192350044
 		/// </summary>
 		Message_or_attachment_failed_to_send_Providing_error_details_including_error_code_reason_for_failure_message_id_timestamp_and_transaction_id = 192350044,
 		/// <summary>
-		/// Out_of_operating_hour_message_to_customer = 192350036
+		/// Out of operating hour message to customer = 192350036
 		/// </summary>
 		Out_of_operating_hour_message_to_customer = 192350036,
 		/// <summary>
-		/// Recording_and_transcription_paused = 192350050
+		/// Recording and transcription paused. = 192350050
 		/// </summary>
 		Recording_and_transcription_paused = 192350050,
 		/// <summary>
-		/// Recording_and_transcription_resumed = 192350051
+		/// Recording and transcription resumed. = 192350051
 		/// </summary>
 		Recording_and_transcription_resumed = 192350051,
 		/// <summary>
-		/// Recording_and_transcription_started = 192350049
+		/// Recording and transcription started. = 192350049
 		/// </summary>
 		Recording_and_transcription_started = 192350049,
 		/// <summary>
-		/// Recording_and_transcription_stopped = 192350052
+		/// Recording and transcription stopped. = 192350052
 		/// </summary>
 		Recording_and_transcription_stopped = 192350052,
 		/// <summary>
-		/// Session_ended = 192350015
+		/// Session ended = 192350015
 		/// </summary>
 		Session_ended = 192350015,
 		/// <summary>
-		/// Transcription_paused = 192350046
+		/// Transcription paused. = 192350046
 		/// </summary>
 		Transcription_paused = 192350046,
 		/// <summary>
-		/// Transcription_resumed = 192350047
+		/// Transcription resumed. = 192350047
 		/// </summary>
 		Transcription_resumed = 192350047,
 		/// <summary>
-		/// Transcription_started = 192350045
+		/// Transcription started. = 192350045
 		/// </summary>
 		Transcription_started = 192350045,
 		/// <summary>
-		/// Transcription_stopped = 192350048
+		/// Transcription stopped. = 192350048
 		/// </summary>
 		Transcription_stopped = 192350048,
 		/// <summary>
-		/// Transfer_to_agent_accepted = 192350002
+		/// Transfer to agent accepted = 192350002
 		/// </summary>
 		Transfer_to_agent_accepted = 192350002,
 		/// <summary>
-		/// Transfer_to_agent_failed = 192350006
+		/// Transfer to agent failed = 192350006
 		/// </summary>
 		Transfer_to_agent_failed = 192350006,
 		/// <summary>
-		/// Transfer_to_agent_rejected = 192350008
+		/// Transfer to agent rejected = 192350008
 		/// </summary>
 		Transfer_to_agent_rejected = 192350008,
 		/// <summary>
-		/// Transfer_to_agent_requested = 192350005
+		/// Transfer to agent requested = 192350005
 		/// </summary>
 		Transfer_to_agent_requested = 192350005,
 		/// <summary>
-		/// Transfer_to_agent_timed_out = 192350010
+		/// Transfer to agent timed out = 192350010
 		/// </summary>
 		Transfer_to_agent_timed_out = 192350010,
 		/// <summary>
-		/// Transfer_to_out_of_operating_hour_queue = 192350039
+		/// Transfer to out of operating hour queue = 192350039
 		/// </summary>
 		Transfer_to_out_of_operating_hour_queue = 192350039,
 		/// <summary>
-		/// Transfer_to_queue_failed = 192350012
+		/// Transfer to queue failed = 192350012
 		/// </summary>
 		Transfer_to_queue_failed = 192350012,
 		/// <summary>
-		/// Transfer_to_queue_started = 192350011
+		/// Transfer to queue started = 192350011
 		/// </summary>
 		Transfer_to_queue_started = 192350011,
 		/// <summary>
-		/// Voice_call_accepted = 192350027
+		/// Trial conversation time limit exceeded = 192350054
+		/// </summary>
+		Trial_conversation_time_limit_exceeded = 192350054,
+		/// <summary>
+		/// Trial usage limit exceeded = 192350053
+		/// </summary>
+		Trial_usage_limit_exceeded = 192350053,
+		/// <summary>
+		/// Voice call accepted = 192350027
 		/// </summary>
 		Voice_call_accepted = 192350027,
 		/// <summary>
-		/// Voice_call_declined = 192350028
+		/// Voice call declined = 192350028
 		/// </summary>
 		Voice_call_declined = 192350028,
 		/// <summary>
-		/// Voice_call_ended = 192350033
+		/// Voice call ended = 192350033
 		/// </summary>
 		Voice_call_ended = 192350033,
 		/// <summary>
-		/// Voice_call_requested = 192350026
+		/// Voice call requested = 192350026
 		/// </summary>
 		Voice_call_requested = 192350026
 	}
@@ -379,7 +423,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_ocsystemmessage";
 
-		public const int EntityTypeCode = 10574;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10720;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocsystemmessage()
@@ -558,9 +603,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_ocsystemmessageOptionSets.msdyn_messagereceiver)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_messagereceiver] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_messagereceiver] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_messagereceiver] = null;
+			}
 		}
 
 		/// <summary>
@@ -578,9 +626,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_ocsystemmessageOptionSets.msdyn_messagetemplatetrigger)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_messagetemplatetrigger] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_messagetemplatetrigger] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_messagetemplatetrigger] = null;
+			}
 		}
 
 		/// <summary>
@@ -661,9 +712,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_ocsystemmessageOptionSets.msdyn_streamsource)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_streamsource] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_streamsource] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_streamsource] = null;
+			}
 		}
 
 		/// <summary>
@@ -681,9 +735,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_ocsystemmessageOptionSets.msdyn_systemmessageeventtype)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_systemmessageeventtype] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_systemmessageeventtype] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_systemmessageeventtype] = null;
+			}
 		}
 
 		/// <summary>

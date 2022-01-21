@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_expensecategoryOptionSets
 		/// </summary>
 		Airline = 192350003,
 		/// <summary>
-		/// Car_Rental = 192350001
+		/// Car Rental = 192350001
 		/// </summary>
 		Car_Rental = 192350001,
 		/// <summary>
@@ -49,7 +49,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_expensecategoryOptionSets
 		/// </summary>
 		Miscellaneous = 192350007,
 		/// <summary>
-		/// Per_diem = 192350009
+		/// Per diem = 192350009
 		/// </summary>
 		Per_diem = 192350009
 	}
@@ -120,7 +120,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_expensecategory";
 
-		public const int EntityTypeCode = 10339;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10445;
 
 		[DebuggerNonUserCode()]
 		public msdyn_expensecategory()

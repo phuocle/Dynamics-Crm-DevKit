@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_AIConfigurationOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -146,6 +146,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_AIConfigurationId = "msdyn_aiconfigurationid";
 			public const string msdyn_AIConfigurationIdUnique = "msdyn_aiconfigurationidunique";
 			public const string msdyn_AIModelId = "msdyn_aimodelid";
+			public const string msdyn_ConnectionReferenceId = "msdyn_connectionreferenceid";
 			public const string msdyn_CreatedFromConfigurationId = "msdyn_createdfromconfigurationid";
 			public const string msdyn_CustomConfiguration = "msdyn_customconfiguration";
 			public const string msdyn_DataBinding = "msdyn_databinding";
@@ -153,6 +154,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_lasttrainorrundate = "msdyn_lasttrainorrundate";
 			public const string msdyn_MajorIterationNumber = "msdyn_majoriterationnumber";
 			public const string msdyn_MinorIterationNumber = "msdyn_minoriterationnumber";
+			public const string msdyn_Model = "msdyn_model";
 			public const string msdyn_ModelData = "msdyn_modeldata";
 			public const string msdyn_modelglobalexplainability = "msdyn_modelglobalexplainability";
 			public const string msdyn_ModelPerformance = "msdyn_modelperformance";
@@ -183,6 +185,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_aiconfiguration";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 402;
 
 		[DebuggerNonUserCode()]
@@ -390,6 +393,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Unique identifier for Connection Reference associated with AIConfiguration.</para>
+		/// <para>Lookup to connectionreference</para>
+		/// <para>Connection Reference Id</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public EntityReference msdyn_ConnectionReferenceId
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.msdyn_ConnectionReferenceId); }
+			set { Entity.Attributes[Fields.msdyn_ConnectionReferenceId] = value; }
+		}
+
+		/// <summary>
 		/// <para>Lookup to msdyn_aiconfiguration</para>
 		/// <para>CreatedFromConfigurationId</para>
 		/// </summary>
@@ -464,6 +479,17 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<int?>(Fields.msdyn_MinorIterationNumber); }
 			set { Entity.Attributes[Fields.msdyn_MinorIterationNumber] = value; }
+		}
+
+		/// <summary>
+		/// <para>This is a file type attribute to store Ai builder Model.</para>
+		/// <para>ReadOnly - Virtual</para>
+		/// <para>msdyn_Model</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_Model
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_Model); }
 		}
 
 		/// <summary>
@@ -651,7 +677,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

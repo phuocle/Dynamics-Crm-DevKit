@@ -103,10 +103,12 @@ declare namespace DevKit {
 			/** Select whether the order product should be shipped to the specified address or held until the customer calls with further pick up or delivery instructions. */
 			WillCall: DevKit.Controls.Boolean;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormSalesOrderDetail_Field_Service_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form SalesOrderDetail_Field_Service_Information
+		* Field Service Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -115,6 +117,10 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form SalesOrderDetail_Field_Service_Information */
 		Body: DevKit.FormSalesOrderDetail_Field_Service_Information.Body;
+		/** The Process of form SalesOrderDetail_Field_Service_Information */
+		Process: DevKit.FormSalesOrderDetail_Field_Service_Information.Process;
+		/** The SidePanes of form SalesOrderDetail_Field_Service_Information */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormSalesOrderDetail_Information {
 		interface tab_address_Sections {
@@ -183,7 +189,7 @@ declare namespace DevKit {
 			/** Shows the order for the product. The ID is used to link product pricing and other details to the total amounts and other information on the order. */
 			SalesOrderId: DevKit.Controls.Lookup;
 			/** Shows the order for the product. The ID is used to link product pricing and other details to the total amounts and other information on the order. */
-			SalesOrderId_1: DevKit.Controls.Lookup;
+			SalesOrderId1: DevKit.Controls.Lookup;
 			/** Choose the user responsible for the sale of the order product. */
 			SalesRepId: DevKit.Controls.Lookup;
 			/** Type the city for the customer's shipping address. */
@@ -221,10 +227,12 @@ declare namespace DevKit {
 			/** Select whether the order product should be shipped to the specified address or held until the customer calls with further pick up or delivery instructions. */
 			WillCall: DevKit.Controls.Boolean;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormSalesOrderDetail_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form SalesOrderDetail_Information
+		* Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -233,6 +241,10 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form SalesOrderDetail_Information */
 		Body: DevKit.FormSalesOrderDetail_Information.Body;
+		/** The Process of form SalesOrderDetail_Information */
+		Process: DevKit.FormSalesOrderDetail_Information.Process;
+		/** The SidePanes of form SalesOrderDetail_Information */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormSalesOrderDetail_Project_Information {
 		interface tab_address_Sections {
@@ -324,15 +336,15 @@ declare namespace DevKit {
 			/** Shows the total amount due for the order product, based on the sum of the unit price, quantity, discounts, and tax. */
 			ExtendedAmount: DevKit.Controls.Money;
 			/** Shows the total amount due for the order product, based on the sum of the unit price, quantity, discounts, and tax. */
-			ExtendedAmount_1: DevKit.Controls.Money;
+			ExtendedAmount1: DevKit.Controls.Money;
 			/** Shows the total amount due for the order product, based on the sum of the unit price, quantity, discounts, and tax. */
-			ExtendedAmount_2: DevKit.Controls.Money;
+			ExtendedAmount2: DevKit.Controls.Money;
 			/** Select whether the price per unit is fixed at the value in the specified price list or can be overridden by users who have edit rights to the order product. */
 			IsPriceOverridden: DevKit.Controls.Boolean;
 			/** Select whether the product exists in the Microsoft Dynamics 365 product catalog or is a write-in product specific to the order. */
 			IsProductOverridden: DevKit.Controls.Boolean;
 			/** Select whether the product exists in the Microsoft Dynamics 365 product catalog or is a write-in product specific to the order. */
-			IsProductOverridden_1: DevKit.Controls.Boolean;
+			IsProductOverridden1: DevKit.Controls.Boolean;
 			/** Type the manual discount amount for the order product to deduct any negotiated or other savings from the product total on the order. */
 			ManualDiscountAmount: DevKit.Controls.Money;
 			/** Billing method for the project contract line. Valid values are Time and Material and Fixed Price */
@@ -344,7 +356,7 @@ declare namespace DevKit {
 			/** Enter the amount the customer has set aside or is willing to pay for the project contract component. */
 			msdyn_BudgetAmount: DevKit.Controls.Money;
 			/** Enter the amount the customer has set aside or is willing to pay for the project contract component. */
-			msdyn_BudgetAmount_1: DevKit.Controls.Money;
+			msdyn_BudgetAmount1: DevKit.Controls.Money;
 			/** Shows the total cost price of the product based on the cost price per unit and quantity. */
 			msdyn_CostAmount: DevKit.Controls.Money;
 			/** Cost per unit of the product. The default is the cost price of the product. */
@@ -364,31 +376,31 @@ declare namespace DevKit {
 			/** Type the price per unit of the order product. The default is the value in the price list specified on the order for existing products. */
 			PricePerUnit: DevKit.Controls.Money;
 			/** Type the price per unit of the order product. The default is the value in the price list specified on the order for existing products. */
-			PricePerUnit_1: DevKit.Controls.Money;
+			PricePerUnit1: DevKit.Controls.Money;
 			/** Type the price per unit of the order product. The default is the value in the price list specified on the order for existing products. */
-			PricePerUnit_2: DevKit.Controls.Money;
+			PricePerUnit2: DevKit.Controls.Money;
 			/** Type a name or description to identify the type of write-in product included in the order. */
 			ProductDescription: DevKit.Controls.String;
 			/** Type a name or description to identify the type of write-in product included in the order. */
-			ProductDescription_1: DevKit.Controls.String;
+			ProductDescription1: DevKit.Controls.String;
 			/** Type a name or description to identify the type of write-in product included in the order. */
-			ProductDescription_2: DevKit.Controls.String;
+			ProductDescription2: DevKit.Controls.String;
 			/** Choose the product to include on the order to link the product's pricing and other information to the parent order. */
 			ProductId: DevKit.Controls.Lookup;
 			/** Choose the product to include on the order to link the product's pricing and other information to the parent order. */
-			ProductId_1: DevKit.Controls.Lookup;
+			ProductId1: DevKit.Controls.Lookup;
 			/** Product Type */
 			ProductTypeCode: DevKit.Controls.OptionSet;
 			/** Product Type */
-			ProductTypeCode_1: DevKit.Controls.OptionSet;
+			ProductTypeCode1: DevKit.Controls.OptionSet;
 			/** Product Type */
-			ProductTypeCode_2: DevKit.Controls.OptionSet;
+			ProductTypeCode2: DevKit.Controls.OptionSet;
 			/** Product Type */
-			ProductTypeCode_3: DevKit.Controls.OptionSet;
+			ProductTypeCode3: DevKit.Controls.OptionSet;
 			/** Type the amount or quantity of the product ordered by the customer. */
 			Quantity: DevKit.Controls.Decimal;
 			/** Type the amount or quantity of the product ordered by the customer. */
-			Quantity_1: DevKit.Controls.Decimal;
+			Quantity1: DevKit.Controls.Decimal;
 			/** Type the amount or quantity of the product that is back ordered for the order. */
 			QuantityBackordered: DevKit.Controls.Decimal;
 			/** Type the amount or quantity of the product that was canceled. */
@@ -398,15 +410,15 @@ declare namespace DevKit {
 			/** Enter the delivery date requested by the customer for the order product. */
 			RequestDeliveryBy: DevKit.Controls.Date;
 			/** Enter the delivery date requested by the customer for the order product. */
-			RequestDeliveryBy_1: DevKit.Controls.Date;
+			RequestDeliveryBy1: DevKit.Controls.Date;
 			/** Shows the order for the product. The ID is used to link product pricing and other details to the total amounts and other information on the order. */
 			SalesOrderId: DevKit.Controls.Lookup;
 			/** Shows the order for the product. The ID is used to link product pricing and other details to the total amounts and other information on the order. */
-			SalesOrderId_1: DevKit.Controls.Lookup;
+			SalesOrderId1: DevKit.Controls.Lookup;
 			/** Shows the order for the product. The ID is used to link product pricing and other details to the total amounts and other information on the order. */
-			SalesOrderId_2: DevKit.Controls.Lookup;
+			SalesOrderId2: DevKit.Controls.Lookup;
 			/** Shows the order for the product. The ID is used to link product pricing and other details to the total amounts and other information on the order. */
-			SalesOrderId_3: DevKit.Controls.Lookup;
+			SalesOrderId3: DevKit.Controls.Lookup;
 			/** Choose the user responsible for the sale of the order product. */
 			SalesRepId: DevKit.Controls.Lookup;
 			/** Type the city for the customer's shipping address. */
@@ -436,23 +448,25 @@ declare namespace DevKit {
 			/** Type the tax amount for the order product. */
 			Tax: DevKit.Controls.Money;
 			/** Type the tax amount for the order product. */
-			Tax_1: DevKit.Controls.Money;
+			Tax1: DevKit.Controls.Money;
 			/** Type the tax amount for the order product. */
-			Tax_2: DevKit.Controls.Money;
+			Tax2: DevKit.Controls.Money;
 			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
 			TransactionCurrencyId: DevKit.Controls.Lookup;
 			/** Choose the unit of measurement for the base unit quantity for this purchase, such as each or dozen. */
 			UoMId: DevKit.Controls.Lookup;
 			/** Choose the unit of measurement for the base unit quantity for this purchase, such as each or dozen. */
-			UoMId_1: DevKit.Controls.Lookup;
+			UoMId1: DevKit.Controls.Lookup;
 			/** Shows the discount amount per unit if a specified volume is purchased. Configure volume discounts in the Product Catalog in the Settings area. */
 			VolumeDiscountAmount: DevKit.Controls.Money;
 			/** Select whether the order product should be shipped to the specified address or held until the customer calls with further pick up or delivery instructions. */
 			WillCall: DevKit.Controls.Boolean;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
-			ChargeableRolesGrid: DevKit.Controls.Grid;
 			ChargeableCategoriesGrid: DevKit.Controls.Grid;
+			ChargeableRolesGrid: DevKit.Controls.Grid;
 			ContractLineDetails: DevKit.Controls.Grid;
 			InvoiceScheduleGrid: DevKit.Controls.Grid;
 			MilestonesGrid: DevKit.Controls.Grid;
@@ -460,7 +474,7 @@ declare namespace DevKit {
 	}
 	class FormSalesOrderDetail_Project_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form SalesOrderDetail_Project_Information
+		* Project Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -469,8 +483,12 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form SalesOrderDetail_Project_Information */
 		Body: DevKit.FormSalesOrderDetail_Project_Information.Body;
+		/** The Process of form SalesOrderDetail_Project_Information */
+		Process: DevKit.FormSalesOrderDetail_Project_Information.Process;
 		/** The Grid of form SalesOrderDetail_Project_Information */
 		Grid: DevKit.FormSalesOrderDetail_Project_Information.Grid;
+		/** The SidePanes of form SalesOrderDetail_Project_Information */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormSalesOrderDetail {
 		interface tab_general_Sections {
@@ -536,7 +554,7 @@ declare namespace DevKit {
 	}
 	class FormSalesOrderDetail extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form SalesOrderDetail
+		* SalesOrderDetail [Quick Create]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -652,12 +670,8 @@ declare namespace DevKit {
 		OwnerId_systemuser: DevKit.WebApi.LookupValueReadonly;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
 		OwnerId_team: DevKit.WebApi.LookupValueReadonly;
-		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier for the team that owns the record. */
 		OwningTeam: DevKit.WebApi.LookupValueReadonly;
-		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
 		/** Choose the parent bundle associated with this product */
 		ParentBundleId: DevKit.WebApi.GuidValue;
 		/** Choose the parent bundle associated with this product */
@@ -846,7 +860,7 @@ declare namespace OptionSet {
 			/** 31 */
 			Missing_Product_Default_UOM,
 			/** 32 */
-			Missing_Product_UOM_Schedule_,
+			Missing_Product_UOM_Schedule,
 			/** 4 */
 			Missing_Quantity,
 			/** 16 */
@@ -886,8 +900,6 @@ declare namespace OptionSet {
 			/** 1 */
 			Rectify
 		}
-		enum SalesOrderStateCode {
-		}
 		enum ShipTo_FreightTermsCode {
 			/** 1 */
 			FOB,
@@ -904,22 +916,22 @@ declare namespace OptionSet {
 			/** 3 */
 			SkipPriceCalcOnUpSert
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Field Service Information','Information','Project Information','SalesOrderDetail'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

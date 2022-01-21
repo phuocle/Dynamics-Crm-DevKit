@@ -43,6 +43,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "semiannualfiscalcalendar";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 2001;
 
 		[DebuggerNonUserCode()]

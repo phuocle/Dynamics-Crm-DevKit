@@ -10,15 +10,7 @@ using System.Diagnostics;
 
 namespace Dev.DevKit.Shared.Entities.InternalAddressOptionSets
 {
-	public enum AddressTypeCode
-	{
 
-	}
-
-	public enum ShippingMethodCode
-	{
-
-	}
 }
 
 namespace Dev.DevKit.Shared.Entities
@@ -28,7 +20,6 @@ namespace Dev.DevKit.Shared.Entities
 		public struct Fields
 		{
 			public const string AddressNumber = "addressnumber";
-			public const string AddressTypeCode = "addresstypecode";
 			public const string BusinessUnitId = "businessunitid";
 			public const string City = "city";
 			public const string Composite = "composite";
@@ -48,12 +39,10 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ModifiedOn = "modifiedon";
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
 			public const string Name = "name";
-			public const string ObjectTypeCode = "objecttypecode";
 			public const string OrganizationId = "organizationid";
 			public const string ParentId = "parentid";
 			public const string PostalCode = "postalcode";
 			public const string PostOfficeBox = "postofficebox";
-			public const string ShippingMethodCode = "shippingmethodcode";
 			public const string StateOrProvince = "stateorprovince";
 			public const string Telephone1 = "telephone1";
 			public const string Telephone2 = "telephone2";
@@ -65,6 +54,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "internaladdress";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 1003;
 
 		[DebuggerNonUserCode()]
@@ -125,29 +115,6 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<int?>(Fields.AddressNumber); }
 			set { Entity.Attributes[Fields.AddressNumber] = value; }
-		}
-
-		/// <summary>
-		/// <para>Type of address for the internal address.</para>
-		/// <para>Picklist</para>
-		/// <para>Address Type</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public Dev.DevKit.Shared.Entities.InternalAddressOptionSets.AddressTypeCode? AddressTypeCode
-		{
-			get
-			{
-				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.AddressTypeCode);
-				if (value == null) return null;
-				return (Dev.DevKit.Shared.Entities.InternalAddressOptionSets.AddressTypeCode)value.Value;
-			}
-			set
-			{
-				if (value.HasValue)
-					Entity.Attributes[Fields.AddressTypeCode] = new OptionSetValue((int)value.Value);
-				else
-					Entity.Attributes[Fields.AddressTypeCode] = null;
-			}
 		}
 
 		/// <summary>
@@ -374,18 +341,6 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type of entity with which the internal address is associated.</para>
-		/// <para>EntityName</para>
-		/// <para>Object Type</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string ObjectTypeCode
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.ObjectTypeCode); }
-			set { Entity.Attributes[Fields.ObjectTypeCode] = value; }
-		}
-
-		/// <summary>
 		/// <para>ReadOnly - Uniqueidentifier</para>
 		/// <para></para>
 		/// </summary>
@@ -429,29 +384,6 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.PostOfficeBox); }
 			set { Entity.Attributes[Fields.PostOfficeBox] = value; }
-		}
-
-		/// <summary>
-		/// <para>Method of shipment for the internal address.</para>
-		/// <para>Picklist</para>
-		/// <para>Shipping Method</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public Dev.DevKit.Shared.Entities.InternalAddressOptionSets.ShippingMethodCode? ShippingMethodCode
-		{
-			get
-			{
-				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.ShippingMethodCode);
-				if (value == null) return null;
-				return (Dev.DevKit.Shared.Entities.InternalAddressOptionSets.ShippingMethodCode)value.Value;
-			}
-			set
-			{
-				if (value.HasValue)
-					Entity.Attributes[Fields.ShippingMethodCode] = new OptionSetValue((int)value.Value);
-				else
-					Entity.Attributes[Fields.ShippingMethodCode] = null;
-			}
 		}
 
 		/// <summary>

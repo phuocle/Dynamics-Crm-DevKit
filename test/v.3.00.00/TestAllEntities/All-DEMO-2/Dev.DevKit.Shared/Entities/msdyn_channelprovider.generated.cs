@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_channelproviderOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -33,7 +33,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_channelproviderOptionSets
 	public enum msdyn_apiversion
 	{
 		/// <summary>
-		/// _2 = 162450000
+		/// 2 = 162450000
 		/// </summary>
 		_2 = 162450000
 	}
@@ -107,7 +107,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_channelprovider";
 
-		public const int EntityTypeCode = 10156;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10168;
 
 		[DebuggerNonUserCode()]
 		public msdyn_channelprovider()
@@ -288,9 +289,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_channelproviderOptionSets.msdyn_apiversion)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_apiversion] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_apiversion] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_apiversion] = null;
+			}
 		}
 
 		/// <summary>
@@ -442,7 +446,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

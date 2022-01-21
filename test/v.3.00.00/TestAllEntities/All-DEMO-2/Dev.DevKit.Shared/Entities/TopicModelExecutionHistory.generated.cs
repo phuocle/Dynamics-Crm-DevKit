@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.TopicModelExecutionHistoryOptionSets
 		/// </summary>
 		Failed = 4,
 		/// <summary>
-		/// In_progress = 2
+		/// In progress = 2
 		/// </summary>
 		In_progress = 2,
 		/// <summary>
@@ -33,31 +33,31 @@ namespace Dev.DevKit.Shared.Entities.TopicModelExecutionHistoryOptionSets
 	public enum StatusReason
 	{
 		/// <summary>
-		/// Analysis_failed = 6
+		/// Analysis failed = 6
 		/// </summary>
 		Analysis_failed = 6,
 		/// <summary>
-		/// Analyzing_topic_analysis_execution = 3
+		/// Analyzing topic analysis execution = 3
 		/// </summary>
 		Analyzing_topic_analysis_execution = 3,
 		/// <summary>
-		/// Connection_failed = 7
+		/// Connection failed = 7
 		/// </summary>
 		Connection_failed = 7,
 		/// <summary>
-		/// Synchronization_failed = 5
+		/// Synchronization failed = 5
 		/// </summary>
 		Synchronization_failed = 5,
 		/// <summary>
-		/// Topic_analysis_execution_is_queued = 1
+		/// Topic analysis execution is queued = 1
 		/// </summary>
 		Topic_analysis_execution_is_queued = 1,
 		/// <summary>
-		/// Topic_analysis_execution_is_synchronizing = 2
+		/// Topic analysis execution is synchronizing = 2
 		/// </summary>
 		Topic_analysis_execution_is_synchronizing = 2,
 		/// <summary>
-		/// Topic_analysis_has_built = 4
+		/// Topic analysis has built = 4
 		/// </summary>
 		Topic_analysis_has_built = 4
 	}
@@ -100,6 +100,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "topicmodelexecutionhistory";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 9943;
 
 		[DebuggerNonUserCode()]

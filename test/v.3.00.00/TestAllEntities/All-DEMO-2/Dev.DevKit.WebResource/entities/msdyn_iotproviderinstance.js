@@ -1,9 +1,13 @@
 ﻿//@ts-check
 ///<reference path="msdyn_iotproviderinstance.d.ts" />
 "use strict";
-var formInformation = (function () {
+var formmsdyn_iotproviderinstance_Information = (function () {
 	"use strict";
+	/** @type DevKit.Formmsdyn_iotproviderinstance_Information */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.Formmsdyn_iotproviderinstance_Information(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}

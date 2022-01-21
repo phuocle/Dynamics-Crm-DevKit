@@ -10,6 +10,102 @@ using System.Diagnostics;
 
 namespace Dev.DevKit.Shared.Entities.EmailOptionSets
 {
+	public enum ActivityTypeCode
+	{
+		/// <summary>
+		/// Appointment = 4201
+		/// </summary>
+		Appointment = 4201,
+		/// <summary>
+		/// Booking Alert = 10400
+		/// </summary>
+		Booking_Alert = 10400,
+		/// <summary>
+		/// Campaign Activity = 4402
+		/// </summary>
+		Campaign_Activity = 4402,
+		/// <summary>
+		/// Campaign Response = 4401
+		/// </summary>
+		Campaign_Response = 4401,
+		/// <summary>
+		/// Case Resolution = 4206
+		/// </summary>
+		Case_Resolution = 4206,
+		/// <summary>
+		/// Conversation = 10702
+		/// </summary>
+		Conversation = 10702,
+		/// <summary>
+		/// Customer Voice alert = 10294
+		/// </summary>
+		Customer_Voice_alert = 10294,
+		/// <summary>
+		/// Customer Voice survey invite = 10304
+		/// </summary>
+		Customer_Voice_survey_invite = 10304,
+		/// <summary>
+		/// Customer Voice survey response = 10306
+		/// </summary>
+		Customer_Voice_survey_response = 10306,
+		/// <summary>
+		/// Email = 4202
+		/// </summary>
+		Email = 4202,
+		/// <summary>
+		/// Fax = 4204
+		/// </summary>
+		Fax = 4204,
+		/// <summary>
+		/// Letter = 4207
+		/// </summary>
+		Letter = 4207,
+		/// <summary>
+		/// Opportunity Close = 4208
+		/// </summary>
+		Opportunity_Close = 4208,
+		/// <summary>
+		/// Order Close = 4209
+		/// </summary>
+		Order_Close = 4209,
+		/// <summary>
+		/// Outbound message = 10813
+		/// </summary>
+		Outbound_message = 10813,
+		/// <summary>
+		/// Phone Call = 4210
+		/// </summary>
+		Phone_Call = 4210,
+		/// <summary>
+		/// Project Service Approval = 10430
+		/// </summary>
+		Project_Service_Approval = 10430,
+		/// <summary>
+		/// Quick Campaign = 4406
+		/// </summary>
+		Quick_Campaign = 4406,
+		/// <summary>
+		/// Quote Close = 4211
+		/// </summary>
+		Quote_Close = 4211,
+		/// <summary>
+		/// Recurring Appointment = 4251
+		/// </summary>
+		Recurring_Appointment = 4251,
+		/// <summary>
+		/// Service Activity = 4214
+		/// </summary>
+		Service_Activity = 4214,
+		/// <summary>
+		/// Session = 10717
+		/// </summary>
+		Session = 10717,
+		/// <summary>
+		/// Task = 4212
+		/// </summary>
+		Task = 4212
+	}
+
 	public enum CorrelationMethod
 	{
 		/// <summary>
@@ -85,15 +181,15 @@ namespace Dev.DevKit.Shared.Entities.EmailOptionSets
 	public enum EmailReminderType
 	{
 		/// <summary>
-		/// If_I_do_not_receive_a_reply_by = 0
+		/// If I do not receive a reply by = 0
 		/// </summary>
 		If_I_do_not_receive_a_reply_by = 0,
 		/// <summary>
-		/// If_the_email_is_not_opened_by = 1
+		/// If the email is not opened by = 1
 		/// </summary>
 		If_the_email_is_not_opened_by = 1,
 		/// <summary>
-		/// Remind_me_anyways_at = 2
+		/// Remind me anyways at = 2
 		/// </summary>
 		Remind_me_anyways_at = 2
 	}
@@ -105,11 +201,11 @@ namespace Dev.DevKit.Shared.Entities.EmailOptionSets
 		/// </summary>
 		None = 0,
 		/// <summary>
-		/// The_message_was_saved_as_a_Microsoft_Dynamics_365_email_record_but_not_all_the_attachments_could_be_saved_with_it_An_attachment_cannot_be_saved_if_it_is_blocked_or_if_its_file_type_is_invalid = 1
+		/// The message was saved as a Microsoft Dynamics 365 email record, but not all the attachments could be saved with it. An attachment cannot be saved if it is blocked or if its file type is invalid. = 1
 		/// </summary>
 		The_message_was_saved_as_a_Microsoft_Dynamics_365_email_record_but_not_all_the_attachments_could_be_saved_with_it_An_attachment_cannot_be_saved_if_it_is_blocked_or_if_its_file_type_is_invalid = 1,
 		/// <summary>
-		/// Truncated_body = 2
+		/// Truncated body. = 2
 		/// </summary>
 		Truncated_body = 2
 	}
@@ -165,7 +261,7 @@ namespace Dev.DevKit.Shared.Entities.EmailOptionSets
 		/// </summary>
 		Failed = 8,
 		/// <summary>
-		/// Pending_Send = 6
+		/// Pending Send = 6
 		/// </summary>
 		Pending_Send = 6,
 		/// <summary>
@@ -237,10 +333,13 @@ namespace Dev.DevKit.Shared.Entities
 			public const string LastOpenedTime = "lastopenedtime";
 			public const string LinksClickedCount = "linksclickedcount";
 			public const string MessageId = "messageid";
+			[System.Obsolete("Deprecated from version: 5.0.0.0")]
+			public const string MessageIdDupCheck = "messageiddupcheck";
 			public const string MimeType = "mimetype";
 			public const string ModifiedBy = "modifiedby";
 			public const string ModifiedOn = "modifiedon";
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
+			public const string msdyn_RecipientList = "msdyn_recipientlist";
 			public const string Notifications = "notifications";
 			public const string OnHoldTime = "onholdtime";
 			public const string OpenCount = "opencount";
@@ -289,6 +388,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "email";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 4202;
 
 		[DebuggerNonUserCode()]
@@ -341,7 +441,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>The Entity that Accepted the Email</para>
-		/// <para>Lookup to queue;systemuser</para>
+		/// <para>Lookup to queue, systemuser</para>
 		/// <para>Accepting Entity</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -459,7 +559,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Enter the recipients that are included on the email distribution, but are not displayed to other recipients.</para>
-		/// <para>PartyList</para>
+		/// <para>Lookup to account, contact, entitlement, equipment, knowledgearticle, lead, queue, systemuser, unresolvedaddress</para>
 		/// <para>Bcc</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -495,7 +595,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Enter the recipients that should be copied on the email.</para>
-		/// <para>PartyList</para>
+		/// <para>Lookup to account, contact, entitlement, equipment, knowledgearticle, lead, queue, systemuser, unresolvedaddress</para>
 		/// <para>Cc</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -760,7 +860,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Shows the sender of the email.</para>
-		/// <para>ReadOnly - Lookup to account;contact;equipment;lead;queue;systemuser</para>
+		/// <para>ReadOnly - Lookup to account, contact, equipment, lead, queue, systemuser</para>
 		/// <para>Sender</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -782,7 +882,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency.</para>
+		/// <para>Shows the conversion rate of the record&apos;s currency. The exchange rate is used to convert all money fields in the record from the local currency to the system&apos;s default currency.</para>
 		/// <para>ReadOnly - Decimal - MinValue: 0 - MaxValue: 100,000,000,000</para>
 		/// <para>Exchange Rate</para>
 		/// </summary>
@@ -806,7 +906,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Enter the sender of the email.</para>
-		/// <para>PartyList</para>
+		/// <para>Lookup to queue, systemuser</para>
 		/// <para>From</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -968,6 +1068,19 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>For internal use only.</para>
+		/// <para>Uniqueidentifier</para>
+		/// <para>Message ID Dup Check</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		[System.Obsolete("Deprecated from version: 5.0.0.0")]
+		public Guid? MessageIdDupCheck
+		{
+			get { return Entity.GetAttributeValue<Guid?>(Fields.MessageIdDupCheck); }
+			set { Entity.Attributes[Fields.MessageIdDupCheck] = value; }
+		}
+
+		/// <summary>
 		/// <para>MIME type of the email message data.</para>
 		/// <para>String - MaxLength: 256</para>
 		/// <para>Mime Type</para>
@@ -1010,6 +1123,18 @@ namespace Dev.DevKit.Shared.Entities
 		public EntityReference ModifiedOnBehalfBy
 		{
 			get { return Entity.GetAttributeValue<EntityReference>(Fields.ModifiedOnBehalfBy); }
+		}
+
+		/// <summary>
+		/// <para>Individual email will be sent to each recipient.</para>
+		/// <para>String - MaxLength: 8000</para>
+		/// <para>Recipient List</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_RecipientList
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_RecipientList); }
+			set { Entity.Attributes[Fields.msdyn_RecipientList] = value; }
 		}
 
 		/// <summary>
@@ -1072,7 +1197,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user.</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -1199,7 +1324,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the object with which the e-mail is associated.</para>
-		/// <para>Lookup to account;asyncoperation;bookableresourcebooking;bookableresourcebookingheader;bulkoperation;campaign;campaignactivity;contact;contract;entitlement;entitlementtemplate;incident;invoice;knowledgearticle;knowledgebaserecord;lead;msdyn_agreement;msdyn_agreementbookingdate;msdyn_agreementbookingincident;msdyn_agreementbookingproduct;msdyn_agreementbookingservice;msdyn_agreementbookingservicetask;msdyn_agreementbookingsetup;msdyn_agreementinvoicedate;msdyn_agreementinvoiceproduct;msdyn_agreementinvoicesetup;msdyn_bookingalertstatus;msdyn_bookingrule;msdyn_bookingtimestamp;msdyn_customerasset;msdyn_fieldservicesetting;msdyn_incidenttypecharacteristic;msdyn_incidenttypeproduct;msdyn_incidenttypeservice;msdyn_inventoryadjustment;msdyn_inventoryadjustmentproduct;msdyn_inventoryjournal;msdyn_inventorytransfer;msdyn_payment;msdyn_paymentdetail;msdyn_paymentmethod;msdyn_paymentterm;msdyn_playbookinstance;msdyn_postalbum;msdyn_postalcode;msdyn_processnotes;msdyn_productinventory;msdyn_projectteam;msdyn_purchaseorder;msdyn_purchaseorderbill;msdyn_purchaseorderproduct;msdyn_purchaseorderreceipt;msdyn_purchaseorderreceiptproduct;msdyn_purchaseordersubstatus;msdyn_quotebookingincident;msdyn_quotebookingproduct;msdyn_quotebookingservice;msdyn_quotebookingservicetask;msdyn_resourceterritory;msdyn_rma;msdyn_rmaproduct;msdyn_rmareceipt;msdyn_rmareceiptproduct;msdyn_rmasubstatus;msdyn_rtv;msdyn_rtvproduct;msdyn_rtvsubstatus;msdyn_shipvia;msdyn_systemuserschedulersetting;msdyn_timegroup;msdyn_timegroupdetail;msdyn_timeoffrequest;msdyn_warehouse;msdyn_workorder;msdyn_workordercharacteristic;msdyn_workorderincident;msdyn_workorderproduct;msdyn_workorderresourcerestriction;msdyn_workorderservice;msdyn_workorderservicetask;opportunity;quote;salesorder;site;uii_action;uii_hostedapplication;uii_nonhostedapplication;uii_option;uii_savedsession;uii_workflow;uii_workflowstep;uii_workflow_workflowstep_mapping</para>
+		/// <para>Lookup to account, asyncoperation, bookableresourcebooking, bookableresourcebookingheader, bulkoperation, campaign, campaignactivity, contact, contract, entitlement, entitlementtemplate, incident, invoice, knowledgearticle, knowledgebaserecord, lead, msdyn_agreement, msdyn_agreementbookingdate, msdyn_agreementbookingincident, msdyn_agreementbookingproduct, msdyn_agreementbookingservice, msdyn_agreementbookingservicetask, msdyn_agreementbookingsetup, msdyn_agreementinvoicedate, msdyn_agreementinvoiceproduct, msdyn_agreementinvoicesetup, msdyn_bookingalertstatus, msdyn_bookingrule, msdyn_bookingtimestamp, msdyn_customerasset, msdyn_fieldservicesetting, msdyn_incidenttypecharacteristic, msdyn_incidenttypeproduct, msdyn_incidenttypeservice, msdyn_inventoryadjustment, msdyn_inventoryadjustmentproduct, msdyn_inventoryjournal, msdyn_inventorytransfer, msdyn_payment, msdyn_paymentdetail, msdyn_paymentmethod, msdyn_paymentterm, msdyn_playbookinstance, msdyn_postalbum, msdyn_postalcode, msdyn_processnotes, msdyn_productinventory, msdyn_projectteam, msdyn_purchaseorder, msdyn_purchaseorderbill, msdyn_purchaseorderproduct, msdyn_purchaseorderreceipt, msdyn_purchaseorderreceiptproduct, msdyn_purchaseordersubstatus, msdyn_quotebookingincident, msdyn_quotebookingproduct, msdyn_quotebookingservice, msdyn_quotebookingservicetask, msdyn_resourceterritory, msdyn_rma, msdyn_rmaproduct, msdyn_rmareceipt, msdyn_rmareceiptproduct, msdyn_rmasubstatus, msdyn_rtv, msdyn_rtvproduct, msdyn_rtvsubstatus, msdyn_shipvia, msdyn_systemuserschedulersetting, msdyn_timegroup, msdyn_timegroupdetail, msdyn_timeoffrequest, msdyn_warehouse, msdyn_workorder, msdyn_workordercharacteristic, msdyn_workorderincident, msdyn_workorderproduct, msdyn_workorderresourcerestriction, msdyn_workorderservice, msdyn_workorderservicetask, opportunity, quote, salesorder, site, uii_action, uii_hostedapplication, uii_nonhostedapplication, uii_option, uii_savedsession, uii_workflow, uii_workflowstep, uii_workflow_workflowstep_mapping</para>
 		/// <para>Regarding</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -1384,7 +1509,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows whether the email is open, completed, or canceled. Completed and canceled email is read-only and can't be edited.</para>
+		/// <para>Shows whether the email is open, completed, or canceled. Completed and canceled email is read-only and can&apos;t be edited.</para>
 		/// <para>State</para>
 		/// <para>Activity Status</para>
 		/// </summary>
@@ -1407,7 +1532,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select the email's status.</para>
+		/// <para>Select the email&apos;s status.</para>
 		/// <para>Status</para>
 		/// <para>Status Reason</para>
 		/// </summary>
@@ -1491,7 +1616,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Enter the account, contact, lead, queue, or user recipients for the email.</para>
-		/// <para>PartyList</para>
+		/// <para>Lookup to account, contact, entitlement, equipment, knowledgearticle, lead, queue, systemuser, unresolvedaddress</para>
 		/// <para>To</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

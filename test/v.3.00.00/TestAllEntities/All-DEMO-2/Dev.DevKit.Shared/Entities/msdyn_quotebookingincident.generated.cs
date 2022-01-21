@@ -72,7 +72,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_quotebookingincident";
 
-		public const int EntityTypeCode = 10462;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10572;
 
 		[DebuggerNonUserCode()]
 		public msdyn_quotebookingincident()
@@ -237,7 +238,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>If "yes", copied  service task, products, and services that are associated with the incident to quote booking setup</para>
+		/// <para>If &quot;yes&quot;, copied  service task, products, and services that are associated with the incident to quote booking setup</para>
 		/// <para>Boolean</para>
 		/// <para>Incident Items Copied</para>
 		/// </summary>
@@ -338,7 +339,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

@@ -18,10 +18,12 @@ declare namespace DevKit {
 			/** Status of the SchedulingFeatureFlag */
 			statecode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_schedulingfeatureflag_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form msdyn_schedulingfeatureflag_Information
+		* Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -30,6 +32,10 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_schedulingfeatureflag_Information */
 		Body: DevKit.Formmsdyn_schedulingfeatureflag_Information.Body;
+		/** The Process of form msdyn_schedulingfeatureflag_Information */
+		Process: DevKit.Formmsdyn_schedulingfeatureflag_Information.Process;
+		/** The SidePanes of form msdyn_schedulingfeatureflag_Information */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormTroubleshooting {
 		interface Tabs {
@@ -50,10 +56,12 @@ declare namespace DevKit {
 			/** Status of the SchedulingFeatureFlag */
 			statecode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormTroubleshooting extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Troubleshooting
+		* Troubleshooting [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -62,6 +70,10 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Troubleshooting */
 		Body: DevKit.FormTroubleshooting.Body;
+		/** The Process of form Troubleshooting */
+		Process: DevKit.FormTroubleshooting.Process;
+		/** The SidePanes of form Troubleshooting */
+		SidePanes: DevKit.SidePanes;
 	}
 	class msdyn_schedulingfeatureflagApi {
 		/**
@@ -181,22 +193,22 @@ declare namespace OptionSet {
 			/** 2 */
 			Inactive
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Information','Troubleshooting'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

@@ -1,9 +1,13 @@
 ﻿//@ts-check
 ///<reference path="msdyn_entityrankingrule.d.ts" />
 "use strict";
-var formInformation = (function () {
+var formmsdyn_entityrankingrule_Information = (function () {
 	"use strict";
+	/** @type DevKit.Formmsdyn_entityrankingrule_Information */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.Formmsdyn_entityrankingrule_Information(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}

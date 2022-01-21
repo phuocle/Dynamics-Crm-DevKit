@@ -1,9 +1,13 @@
 ﻿//@ts-check
 ///<reference path="msdyn_presence.d.ts" />
 "use strict";
-var formInformation = (function () {
+var formmsdyn_presence_Information = (function () {
 	"use strict";
+	/** @type DevKit.Formmsdyn_presence_Information */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.Formmsdyn_presence_Information(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}

@@ -34,10 +34,17 @@ declare namespace DevKit {
 			nav_msdyn_msdyn_purchaseorderbill_msdyn_purchaseorderreceiptproduct_PurchaseOrderBill: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface ProcessPurchase_Order_Business_Process {
+			msdyn_BillDate: DevKit.Controls.Date;
+			msdyn_VendorInvoiceNumber: DevKit.Controls.String;
+		}
+		interface Process extends DevKit.Controls.IProcess {
+			Purchase_Order_Business_Process: ProcessPurchase_Order_Business_Process;
+		}
 	}
 	class Formmsdyn_purchaseorderbill_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form msdyn_purchaseorderbill_Information
+		* Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -50,6 +57,10 @@ declare namespace DevKit {
 		Footer: DevKit.Formmsdyn_purchaseorderbill_Information.Footer;
 		/** The Navigation of form msdyn_purchaseorderbill_Information */
 		Navigation: DevKit.Formmsdyn_purchaseorderbill_Information.Navigation;
+		/** The Process of form msdyn_purchaseorderbill_Information */
+		Process: DevKit.Formmsdyn_purchaseorderbill_Information.Process;
+		/** The SidePanes of form msdyn_purchaseorderbill_Information */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormPurchase_Order_Bill_Mobile {
 		interface tab_fstab_other_Sections {
@@ -99,10 +110,17 @@ declare namespace DevKit {
 			nav_msdyn_msdyn_purchaseorderbill_msdyn_purchaseorderreceiptproduct_PurchaseOrderBill: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface ProcessPurchase_Order_Business_Process {
+			msdyn_BillDate: DevKit.Controls.Date;
+			msdyn_VendorInvoiceNumber: DevKit.Controls.String;
+		}
+		interface Process extends DevKit.Controls.IProcess {
+			Purchase_Order_Business_Process: ProcessPurchase_Order_Business_Process;
+		}
 	}
 	class FormPurchase_Order_Bill_Mobile extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Purchase_Order_Bill_Mobile
+		* Purchase Order Bill - Mobile [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -113,6 +131,10 @@ declare namespace DevKit {
 		Body: DevKit.FormPurchase_Order_Bill_Mobile.Body;
 		/** The Navigation of form Purchase_Order_Bill_Mobile */
 		Navigation: DevKit.FormPurchase_Order_Bill_Mobile.Navigation;
+		/** The Process of form Purchase_Order_Bill_Mobile */
+		Process: DevKit.FormPurchase_Order_Bill_Mobile.Process;
+		/** The SidePanes of form Purchase_Order_Bill_Mobile */
+		SidePanes: DevKit.SidePanes;
 	}
 	class msdyn_purchaseorderbillApi {
 		/**
@@ -227,22 +249,22 @@ declare namespace OptionSet {
 			/** 2 */
 			Inactive
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Information','Purchase Order Bill - Mobile'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

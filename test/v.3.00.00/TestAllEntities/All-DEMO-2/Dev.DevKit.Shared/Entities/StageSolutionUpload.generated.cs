@@ -54,6 +54,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string OwningBusinessUnit = "owningbusinessunit";
 			public const string OwningTeam = "owningteam";
 			public const string OwningUser = "owninguser";
+			public const string SolutionFile = "solutionfile";
 			public const string SolutionFileName = "solutionfilename";
 			public const string SolutionUniqueName = "solutionuniquename";
 			public const string StageSolutionUploadId = "stagesolutionuploadid";
@@ -66,7 +67,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "stagesolutionupload";
 
-		public const int EntityTypeCode = 10009;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10010;
 
 		[DebuggerNonUserCode()]
 		public StageSolutionUpload()
@@ -220,7 +222,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -261,6 +263,16 @@ namespace Dev.DevKit.Shared.Entities
 		public EntityReference OwningUser
 		{
 			get { return Entity.GetAttributeValue<EntityReference>(Fields.OwningUser); }
+		}
+
+		/// <summary>
+		/// <para>ReadOnly - Virtual</para>
+		/// <para>SolutionFile</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string SolutionFile
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.SolutionFile); }
 		}
 
 		/// <summary>

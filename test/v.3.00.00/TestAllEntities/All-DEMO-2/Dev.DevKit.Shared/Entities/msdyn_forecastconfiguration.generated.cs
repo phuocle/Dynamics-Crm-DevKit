@@ -13,35 +13,35 @@ namespace Dev.DevKit.Shared.Entities.msdyn_forecastconfigurationOptionSets
 	public enum msdyn_CalendarTemplate
 	{
 		/// <summary>
-		/// _3_3_3_4 = 100000005
+		/// 3-3-3-4 = 100000005
 		/// </summary>
 		_3_3_3_4 = 100000005,
 		/// <summary>
-		/// _3_3_4_3 = 100000006
+		/// 3-3-4-3 = 100000006
 		/// </summary>
 		_3_3_4_3 = 100000006,
 		/// <summary>
-		/// _3_4_3_3 = 100000007
+		/// 3-4-3-3 = 100000007
 		/// </summary>
 		_3_4_3_3 = 100000007,
 		/// <summary>
-		/// _4_3_3_3 = 100000008
+		/// 4-3-3-3 = 100000008
 		/// </summary>
 		_4_3_3_3 = 100000008,
 		/// <summary>
-		/// _4_4_5 = 100000000
+		/// 4-4-5 = 100000000
 		/// </summary>
 		_4_4_5 = 100000000,
 		/// <summary>
-		/// _4_5_4 = 100000001
+		/// 4-5-4 = 100000001
 		/// </summary>
 		_4_5_4 = 100000001,
 		/// <summary>
-		/// _5_4_4 = 100000002
+		/// 5-4-4 = 100000002
 		/// </summary>
 		_5_4_4 = 100000002,
 		/// <summary>
-		/// Broadcast_Calendar = 100000004
+		/// Broadcast Calendar = 100000004
 		/// </summary>
 		Broadcast_Calendar = 100000004,
 		/// <summary>
@@ -201,6 +201,10 @@ namespace Dev.DevKit.Shared.Entities.msdyn_forecastconfigurationOptionSets
 		/// </summary>
 		Active = 3,
 		/// <summary>
+		/// Archived = 6
+		/// </summary>
+		Archived = 6,
+		/// <summary>
 		/// Draft = 1
 		/// </summary>
 		Draft = 1,
@@ -209,13 +213,17 @@ namespace Dev.DevKit.Shared.Entities.msdyn_forecastconfigurationOptionSets
 		/// </summary>
 		Failed = 4,
 		/// <summary>
-		/// In_progress = 2
+		/// In progress = 2
 		/// </summary>
 		In_progress = 2,
 		/// <summary>
 		/// Inactive = 5
 		/// </summary>
-		Inactive = 5
+		Inactive = 5,
+		/// <summary>
+		/// Invalidated = 7
+		/// </summary>
+		Invalidated = 7
 	}
 }
 
@@ -276,7 +284,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_forecastconfiguration";
 
-		public const int EntityTypeCode = 10211;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10246;
 
 		[DebuggerNonUserCode()]
 		public msdyn_forecastconfiguration()
@@ -604,9 +613,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_forecastconfigurationOptionSets.msdyn_periodtype)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_periodtype] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_periodtype] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_periodtype] = null;
+			}
 		}
 
 		/// <summary>
@@ -815,7 +827,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

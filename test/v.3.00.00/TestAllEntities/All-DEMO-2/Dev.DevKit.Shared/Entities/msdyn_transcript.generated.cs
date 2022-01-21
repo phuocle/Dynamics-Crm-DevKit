@@ -51,6 +51,8 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_LiveWorkItemIdId = "msdyn_liveworkitemidid";
 			public const string msdyn_name = "msdyn_name";
 			public const string msdyn_transcriptId = "msdyn_transcriptid";
+			public const string msdyn_voicetranscript = "msdyn_voicetranscript";
+			public const string msdyn_voicetranscript_formatted = "msdyn_voicetranscript_formatted";
 			public const string OverriddenCreatedOn = "overriddencreatedon";
 			public const string OwnerId = "ownerid";
 			public const string OwningBusinessUnit = "owningbusinessunit";
@@ -65,7 +67,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_transcript";
 
-		public const int EntityTypeCode = 10585;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10740;
 
 		[DebuggerNonUserCode()]
 		public msdyn_transcript()
@@ -234,6 +237,28 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Use this field to store voice transcript files to the system</para>
+		/// <para>ReadOnly - Virtual</para>
+		/// <para>Voice Transcript file</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_voicetranscript
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_voicetranscript); }
+		}
+
+		/// <summary>
+		/// <para>Use this field to store formatted voice transcript files to the system</para>
+		/// <para>ReadOnly - Virtual</para>
+		/// <para>Formatted Voice Transcript file</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_voicetranscript_formatted
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_voicetranscript_formatted); }
+		}
+
+		/// <summary>
 		/// <para>Date and time that the record was migrated.</para>
 		/// <para>DateTimeBehavior: UserLocal - DateTimeFormat: DateOnly</para>
 		/// <para>Record Created On</para>
@@ -247,7 +272,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

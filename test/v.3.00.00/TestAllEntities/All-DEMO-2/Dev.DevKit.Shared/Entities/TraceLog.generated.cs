@@ -66,6 +66,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "tracelog";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 8050;
 
 		[DebuggerNonUserCode()]
@@ -222,9 +223,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.TraceLogOptionSets.Level)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.Level] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.Level] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.Level] = null;
+			}
 		}
 
 		/// <summary>
@@ -296,7 +300,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Regarding mailbox or email server profile.</para>
-		/// <para>Lookup to emailserverprofile;mailbox</para>
+		/// <para>Lookup to emailserverprofile, mailbox</para>
 		/// <para>Regarding</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -308,7 +312,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the user or team who owns the regarding object.</para>
-		/// <para>ReadOnly - Owner</para>
+		/// <para>ReadOnly - Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

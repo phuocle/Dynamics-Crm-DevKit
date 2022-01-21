@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocsitrainingdataOptionSets
 		/// </summary>
 		Approved = 326340000,
 		/// <summary>
-		/// Needs_further_investigation = 326340002
+		/// Needs further investigation = 326340002
 		/// </summary>
 		Needs_further_investigation = 326340002,
 		/// <summary>
@@ -88,7 +88,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_ocsitrainingdata";
 
-		public const int EntityTypeCode = 10625;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10762;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocsitrainingdata()
@@ -365,7 +366,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

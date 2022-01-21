@@ -20,13 +20,12 @@ namespace Dev.DevKit.Shared.Entities
 		public struct Fields
 		{
 			public const string ColorDepthBits = "colordepthbits";
+			public const string FileId = "fileid";
 			public const string FileLocation = "filelocation";
 			public const string FileName = "filename";
 			public const string FileSizeBytes = "filesizebytes";
 			public const string FileType = "filetype";
-			public const string FullImageData = "fullimagedata";
 			public const string FullImageURL = "fullimageurl";
-			public const string ImageData = "imagedata";
 			public const string ImageDescription = "imagedescription";
 			public const string ImageDescriptorId = "imagedescriptorid";
 			public const string ImagePixelHeight = "imagepixelheight";
@@ -36,7 +35,6 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ImageURL = "imageurl";
 			public const string MimeType = "mimetype";
 			public const string ObjectId = "objectid";
-			public const string ObjectTypeCode = "objecttypecode";
 			public const string Size = "size";
 			public const string Title = "title";
 			public const string versionnumber = "versionnumber";
@@ -44,6 +42,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "imagedescriptor";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 1007;
 
 		[DebuggerNonUserCode()]
@@ -106,6 +105,17 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Lookup to FileAttachment</para>
+		/// <para>ReadOnly - Virtual</para>
+		/// <para>FileId</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string FileId
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.FileId); }
+		}
+
+		/// <summary>
 		/// <para>String - MaxLength: 256</para>
 		/// <para></para>
 		/// </summary>
@@ -150,17 +160,6 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Virtual</para>
-		/// <para></para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string FullImageData
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.FullImageData); }
-			set { Entity.Attributes[Fields.FullImageData] = value; }
-		}
-
-		/// <summary>
 		/// <para>String - MaxLength: 256</para>
 		/// <para></para>
 		/// </summary>
@@ -169,17 +168,6 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.FullImageURL); }
 			set { Entity.Attributes[Fields.FullImageURL] = value; }
-		}
-
-		/// <summary>
-		/// <para>Virtual</para>
-		/// <para></para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string ImageData
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.ImageData); }
-			set { Entity.Attributes[Fields.ImageData] = value; }
 		}
 
 		/// <summary>
@@ -283,16 +271,6 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>ReadOnly - EntityName</para>
-		/// <para></para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string ObjectTypeCode
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.ObjectTypeCode); }
-		}
-
-		/// <summary>
 		/// <para>ReadOnly - Integer - MinValue: 0 - MaxValue: 1,000,000,000</para>
 		/// <para></para>
 		/// </summary>
@@ -330,8 +308,8 @@ namespace Dev.DevKit.Shared.Entities
 		[DebuggerNonUserCode()]
 		public byte[] EntityImage
 		{
-			get { return Entity.GetAttributeValue<byte[]>("entityimage"); }
-			set { Entity.Attributes["entityimage"] = value; }
+			get { return Entity.GetAttributeValue<byte[]>("fullimagedata"); }
+			set { Entity.Attributes["fullimagedata"] = value; }
 		}
 
 		/// <summary>
@@ -340,7 +318,45 @@ namespace Dev.DevKit.Shared.Entities
 		[DebuggerNonUserCode()]
 		public string EntityImageUrl
 		{
-			get { return Entity.GetAttributeValue<string>("entityimage_url"); }
+			get { return Entity.GetAttributeValue<string>("fullimagedata_url"); }
+		}
+
+		/// <summary>
+		/// <para>byte[]</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public byte[] FullImageData
+		{
+			get { return Entity.GetAttributeValue<byte[]>("fullimagedata"); }
+			set { Entity.Attributes["fullimagedata"] = value; }
+		}
+
+		/// <summary>
+		/// <para>ReadOnly - String</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string FullImageDataUrl
+		{
+			get { return Entity.GetAttributeValue<string>("fullimagedata_url"); }
+		}
+
+		/// <summary>
+		/// <para>byte[]</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public byte[] ImageData
+		{
+			get { return Entity.GetAttributeValue<byte[]>("imagedata"); }
+			set { Entity.Attributes["imagedata"] = value; }
+		}
+
+		/// <summary>
+		/// <para>ReadOnly - String</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string ImageDataUrl
+		{
+			get { return Entity.GetAttributeValue<string>("imagedata_url"); }
 		}
 	}
 }

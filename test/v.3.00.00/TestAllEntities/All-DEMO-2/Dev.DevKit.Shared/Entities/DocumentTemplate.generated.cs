@@ -13,11 +13,11 @@ namespace Dev.DevKit.Shared.Entities.DocumentTemplateOptionSets
 	public enum DocumentType
 	{
 		/// <summary>
-		/// Microsoft_Excel = 1
+		/// Microsoft Excel = 1
 		/// </summary>
 		Microsoft_Excel = 1,
 		/// <summary>
-		/// Microsoft_Word = 2
+		/// Microsoft Word = 2
 		/// </summary>
 		Microsoft_Word = 2
 	}
@@ -29,7 +29,6 @@ namespace Dev.DevKit.Shared.Entities
 	{
 		public struct Fields
 		{
-			public const string AssociatedEntityTypeCode = "associatedentitytypecode";
 			public const string ClientData = "clientdata";
 			public const string Content = "content";
 			public const string CreatedBy = "createdby";
@@ -50,6 +49,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "documenttemplate";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 9940;
 
 		[DebuggerNonUserCode()]
@@ -98,18 +98,6 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			Entity = new Entity(EntityLogicalName, keys);
 			PreEntity = CloneThisEntity(Entity);
-		}
-
-		/// <summary>
-		/// <para>Associated Entity Type Code.</para>
-		/// <para>EntityName</para>
-		/// <para>Associated Entity Type Code</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string AssociatedEntityTypeCode
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.AssociatedEntityTypeCode); }
-			set { Entity.Attributes[Fields.AssociatedEntityTypeCode] = value; }
 		}
 
 		/// <summary>

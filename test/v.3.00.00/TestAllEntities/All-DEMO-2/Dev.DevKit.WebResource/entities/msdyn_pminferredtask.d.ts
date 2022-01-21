@@ -10,10 +10,12 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_pminferredtask_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form msdyn_pminferredtask_Information
+		* Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -22,6 +24,10 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_pminferredtask_Information */
 		Body: DevKit.Formmsdyn_pminferredtask_Information.Body;
+		/** The Process of form msdyn_pminferredtask_Information */
+		Process: DevKit.Formmsdyn_pminferredtask_Information.Process;
+		/** The SidePanes of form msdyn_pminferredtask_Information */
+		SidePanes: DevKit.SidePanes;
 	}
 	class msdyn_pminferredtaskApi {
 		/**
@@ -76,15 +82,28 @@ declare namespace DevKit {
 		/** The status of automation for this task. */
 		msdyn_automationstatus: DevKit.WebApi.OptionSetValue;
 		msdyn_description: DevKit.WebApi.StringValue;
+		/** Location of the data used as input for Task Analysis. */
+		msdyn_inputdatabinding: DevKit.WebApi.StringValue;
+		/** Surfaces whether the analysis report is currently available. */
+		msdyn_isreportavailable: DevKit.WebApi.BooleanValue;
 		/** Identifies uniquely the last successful processing of the task. */
 		msdyn_iterationid: DevKit.WebApi.StringValue;
 		msdyn_lasterrors: DevKit.WebApi.StringValue;
+		msdyn_lasterrorsreport: DevKit.WebApi.StringValueReadonly;
+		/** Date and time when the corresponding report was last refreshed. */
+		msdyn_lastreportrefreshdate_TimezoneDateAndTime: DevKit.WebApi.TimezoneDateAndTimeValue;
 		/** The name of the custom entity. */
 		msdyn_name: DevKit.WebApi.StringValue;
 		msdyn_outputdata: DevKit.WebApi.StringValue;
 		/** Unique identifier for entity instances */
 		msdyn_pminferredtaskId: DevKit.WebApi.GuidValue;
+		/** Data related to the report for this task. */
+		msdyn_reportdata: DevKit.WebApi.StringValue;
+		/** The current status of the provisioning operation for the report associated to this task. */
+		msdyn_reportprovisioningstatus: DevKit.WebApi.OptionSetValue;
 		msdyn_sharedrecordingmetadata: DevKit.WebApi.StringValue;
+		/** The data source of this Pm Inferred Task. */
+		msdyn_source: DevKit.WebApi.OptionSetValue;
 		/** Date and time that the record was migrated. */
 		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
 		/** For internal use only. */
@@ -137,6 +156,22 @@ declare namespace OptionSet {
 			/** 200000000 */
 			NotStarted
 		}
+		enum msdyn_reportprovisioningstatus {
+			/** 193350003 */
+			Failed,
+			/** 193350000 */
+			NotStarted,
+			/** 193350002 */
+			Provisioned,
+			/** 193350001 */
+			Provisioning
+		}
+		enum msdyn_source {
+			/** 1 */
+			DataLake,
+			/** 0 */
+			Recording
+		}
 		enum statecode {
 			/** 2 */
 			Done,
@@ -163,22 +198,22 @@ declare namespace OptionSet {
 			/** 1 */
 			Queued
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

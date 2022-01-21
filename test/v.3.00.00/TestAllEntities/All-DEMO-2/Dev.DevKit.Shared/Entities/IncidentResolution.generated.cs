@@ -10,6 +10,102 @@ using System.Diagnostics;
 
 namespace Dev.DevKit.Shared.Entities.IncidentResolutionOptionSets
 {
+	public enum ActivityTypeCode
+	{
+		/// <summary>
+		/// Appointment = 4201
+		/// </summary>
+		Appointment = 4201,
+		/// <summary>
+		/// Booking Alert = 10400
+		/// </summary>
+		Booking_Alert = 10400,
+		/// <summary>
+		/// Campaign Activity = 4402
+		/// </summary>
+		Campaign_Activity = 4402,
+		/// <summary>
+		/// Campaign Response = 4401
+		/// </summary>
+		Campaign_Response = 4401,
+		/// <summary>
+		/// Case Resolution = 4206
+		/// </summary>
+		Case_Resolution = 4206,
+		/// <summary>
+		/// Conversation = 10702
+		/// </summary>
+		Conversation = 10702,
+		/// <summary>
+		/// Customer Voice alert = 10294
+		/// </summary>
+		Customer_Voice_alert = 10294,
+		/// <summary>
+		/// Customer Voice survey invite = 10304
+		/// </summary>
+		Customer_Voice_survey_invite = 10304,
+		/// <summary>
+		/// Customer Voice survey response = 10306
+		/// </summary>
+		Customer_Voice_survey_response = 10306,
+		/// <summary>
+		/// Email = 4202
+		/// </summary>
+		Email = 4202,
+		/// <summary>
+		/// Fax = 4204
+		/// </summary>
+		Fax = 4204,
+		/// <summary>
+		/// Letter = 4207
+		/// </summary>
+		Letter = 4207,
+		/// <summary>
+		/// Opportunity Close = 4208
+		/// </summary>
+		Opportunity_Close = 4208,
+		/// <summary>
+		/// Order Close = 4209
+		/// </summary>
+		Order_Close = 4209,
+		/// <summary>
+		/// Outbound message = 10813
+		/// </summary>
+		Outbound_message = 10813,
+		/// <summary>
+		/// Phone Call = 4210
+		/// </summary>
+		Phone_Call = 4210,
+		/// <summary>
+		/// Project Service Approval = 10430
+		/// </summary>
+		Project_Service_Approval = 10430,
+		/// <summary>
+		/// Quick Campaign = 4406
+		/// </summary>
+		Quick_Campaign = 4406,
+		/// <summary>
+		/// Quote Close = 4211
+		/// </summary>
+		Quote_Close = 4211,
+		/// <summary>
+		/// Recurring Appointment = 4251
+		/// </summary>
+		Recurring_Appointment = 4251,
+		/// <summary>
+		/// Service Activity = 4214
+		/// </summary>
+		Service_Activity = 4214,
+		/// <summary>
+		/// Session = 10717
+		/// </summary>
+		Session = 10717,
+		/// <summary>
+		/// Task = 4212
+		/// </summary>
+		Task = 4212
+	}
+
 	public enum Community
 	{
 		/// <summary>
@@ -17,11 +113,11 @@ namespace Dev.DevKit.Shared.Entities.IncidentResolutionOptionSets
 		/// </summary>
 		Cortana = 5,
 		/// <summary>
-		/// Direct_Line = 6
+		/// Direct Line = 6
 		/// </summary>
 		Direct_Line = 6,
 		/// <summary>
-		/// Direct_Line_Speech = 8
+		/// Direct Line Speech = 8
 		/// </summary>
 		Direct_Line_Speech = 8,
 		/// <summary>
@@ -45,7 +141,7 @@ namespace Dev.DevKit.Shared.Entities.IncidentResolutionOptionSets
 		/// </summary>
 		Line = 3,
 		/// <summary>
-		/// Microsoft_Teams = 7
+		/// Microsoft Teams = 7
 		/// </summary>
 		Microsoft_Teams = 7,
 		/// <summary>
@@ -97,23 +193,23 @@ namespace Dev.DevKit.Shared.Entities.IncidentResolutionOptionSets
 	public enum InstanceTypeCode
 	{
 		/// <summary>
-		/// Not_Recurring = 0
+		/// Not Recurring = 0
 		/// </summary>
 		Not_Recurring = 0,
 		/// <summary>
-		/// Recurring_Exception = 3
+		/// Recurring Exception = 3
 		/// </summary>
 		Recurring_Exception = 3,
 		/// <summary>
-		/// Recurring_Future_Exception = 4
+		/// Recurring Future Exception = 4
 		/// </summary>
 		Recurring_Future_Exception = 4,
 		/// <summary>
-		/// Recurring_Instance = 2
+		/// Recurring Instance = 2
 		/// </summary>
 		Recurring_Instance = 2,
 		/// <summary>
-		/// Recurring_Master = 1
+		/// Recurring Master = 1
 		/// </summary>
 		Recurring_Master = 1
 	}
@@ -137,11 +233,11 @@ namespace Dev.DevKit.Shared.Entities.IncidentResolutionOptionSets
 	public enum ResolutionTypeCode
 	{
 		/// <summary>
-		/// Information_Provided = 1000
+		/// Information Provided = 1000
 		/// </summary>
 		Information_Provided = 1000,
 		/// <summary>
-		/// Problem_Solved = 5
+		/// Problem Solved = 5
 		/// </summary>
 		Problem_Solved = 5
 	}
@@ -263,6 +359,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "incidentresolution";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 4206;
 
 		[DebuggerNonUserCode()]
@@ -386,7 +483,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Blind Carbon-copy (bcc) recipients of the activity.</para>
-		/// <para>PartyList</para>
+		/// <para>Lookup to account, contact, lead, systemuser</para>
 		/// <para>BCC</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -422,7 +519,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Carbon-copy (cc) recipients of the activity.</para>
-		/// <para>PartyList</para>
+		/// <para>Lookup to account, contact, lead, systemuser</para>
 		/// <para>CC</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -513,7 +610,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Customer with which the activity is associated.</para>
-		/// <para>PartyList</para>
+		/// <para>Lookup to account, contact</para>
 		/// <para>Customers</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -618,7 +715,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Person who the activity is from.</para>
-		/// <para>PartyList</para>
+		/// <para>Lookup to account, contact, lead, systemuser</para>
 		/// <para>From</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -808,7 +905,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>List of optional attendees for the activity.</para>
-		/// <para>PartyList</para>
+		/// <para>Lookup to account, contact, lead, systemuser</para>
 		/// <para>Optional Attendees</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -832,7 +929,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Person who organized the activity.</para>
-		/// <para>PartyList</para>
+		/// <para>Lookup to systemuser</para>
 		/// <para>Organizer</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -868,7 +965,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the user or team who owns the activity.</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -913,7 +1010,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Outsource vendor with which activity is associated.</para>
-		/// <para>PartyList</para>
+		/// <para>Lookup to account, contact</para>
 		/// <para>Outsource Vendors</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -983,7 +1080,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the object with which the activity is associated.</para>
-		/// <para>Lookup to account;bookableresourcebooking;bookableresourcebookingheader;bulkoperation;campaign;campaignactivity;entitlement;entitlementtemplate;interactionforemail;knowledgearticle;knowledgebaserecord;lead</para>
+		/// <para>Lookup to account, bookableresourcebooking, bookableresourcebookingheader, bulkoperation, campaign, campaignactivity, entitlement, entitlementtemplate, interactionforemail, knowledgearticle, knowledgebaserecord, lead</para>
 		/// <para>Regarding</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -995,7 +1092,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>List of required attendees for the activity.</para>
-		/// <para>PartyList</para>
+		/// <para>Lookup to account, contact, lead, systemuser</para>
 		/// <para>Required Attendees</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -1041,7 +1138,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Users or facility/equipment that are required for the activity.</para>
-		/// <para>PartyList</para>
+		/// <para>Lookup to equipment, systemuser</para>
 		/// <para>Resources</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -1191,7 +1288,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows whether the case resolution is open, completed, or canceled. By default, all case resolutions are completed and the status value can't be changed.</para>
+		/// <para>Shows whether the case resolution is open, completed, or canceled. By default, all case resolutions are completed and the status value can&apos;t be changed.</para>
 		/// <para>State</para>
 		/// <para>Status</para>
 		/// </summary>
@@ -1286,7 +1383,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Person who is the receiver of the activity.</para>
-		/// <para>PartyList</para>
+		/// <para>Lookup to account, contact, lead, systemuser</para>
 		/// <para>To</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

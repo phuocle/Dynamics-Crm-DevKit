@@ -17,11 +17,11 @@ namespace Dev.DevKit.Shared.Entities.MailboxStatisticsOptionSets
 		/// </summary>
 		ACT = 2,
 		/// <summary>
-		/// Incoming_Email = 0
+		/// Incoming Email = 0
 		/// </summary>
 		Incoming_Email = 0,
 		/// <summary>
-		/// Outgoing_Email = 1
+		/// Outgoing Email = 1
 		/// </summary>
 		Outgoing_Email = 1
 	}
@@ -53,6 +53,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "mailboxstatistics";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 9607;
 
 		[DebuggerNonUserCode()]

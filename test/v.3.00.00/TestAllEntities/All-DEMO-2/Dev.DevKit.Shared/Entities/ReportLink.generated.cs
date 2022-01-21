@@ -13,15 +13,15 @@ namespace Dev.DevKit.Shared.Entities.ReportLinkOptionSets
 	public enum LinkTypeCode
 	{
 		/// <summary>
-		/// Drill_through = 1
+		/// Drill-through = 1
 		/// </summary>
 		Drill_through = 1,
 		/// <summary>
-		/// Drill_through_and_sub_report = 3
+		/// Drill-through and sub-report = 3
 		/// </summary>
 		Drill_through_and_sub_report = 3,
 		/// <summary>
-		/// Sub_report = 2
+		/// Sub-report = 2
 		/// </summary>
 		Sub_report = 2
 	}
@@ -54,6 +54,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "reportlink";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 9104;
 
 		[DebuggerNonUserCode()]
@@ -231,7 +232,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the user or team who owns the report link.</para>
-		/// <para>ReadOnly - Required - Owner</para>
+		/// <para>ReadOnly - Required - Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

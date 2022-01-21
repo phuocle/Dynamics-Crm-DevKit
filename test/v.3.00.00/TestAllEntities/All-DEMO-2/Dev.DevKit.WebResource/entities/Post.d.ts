@@ -20,10 +20,12 @@ declare namespace DevKit {
 			/** Shows the text of a post. If this is a manual post, it appears in plain text. If this is an auto post, it appears in XML. */
 			Text: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormPost_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Post_Information
+		* Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -32,6 +34,10 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Post_Information */
 		Body: DevKit.FormPost_Information.Body;
+		/** The Process of form Post_Information */
+		Process: DevKit.FormPost_Information.Process;
+		/** The SidePanes of form Post_Information */
+		SidePanes: DevKit.SidePanes;
 	}
 	class PostApi {
 		/**
@@ -81,8 +87,6 @@ declare namespace DevKit {
 		PostRegardingId: DevKit.WebApi.LookupValueReadonly;
 		/** Internal use only. */
 		PostToYammer: DevKit.WebApi.BooleanValueReadonly;
-		/** Choose the parent record for the post to identify the customer, opportunity, case, or other record that the post most closely relates to. */
-		RegardingObjectId: DevKit.WebApi.LookupValue;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
 		OwnerId_systemuser: DevKit.WebApi.LookupValueReadonly;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
@@ -131,22 +135,22 @@ declare namespace OptionSet {
 			/** 7 */
 			Status
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

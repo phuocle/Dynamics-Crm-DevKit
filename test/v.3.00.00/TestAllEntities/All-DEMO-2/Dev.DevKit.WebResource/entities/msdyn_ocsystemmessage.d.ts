@@ -31,13 +31,15 @@ declare namespace DevKit {
 			/** List of all available channels. */
 			msdyn_streamsource: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			MessageTemplate_LocalizationDataGrid: DevKit.Controls.Grid;
 		}
 	}
 	class Formmsdyn_ocsystemmessage_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form msdyn_ocsystemmessage_Information
+		* Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -46,8 +48,62 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_ocsystemmessage_Information */
 		Body: DevKit.Formmsdyn_ocsystemmessage_Information.Body;
+		/** The Process of form msdyn_ocsystemmessage_Information */
+		Process: DevKit.Formmsdyn_ocsystemmessage_Information.Process;
 		/** The Grid of form msdyn_ocsystemmessage_Information */
 		Grid: DevKit.Formmsdyn_ocsystemmessage_Information.Grid;
+		/** The SidePanes of form msdyn_ocsystemmessage_Information */
+		SidePanes: DevKit.SidePanes;
+	}
+	namespace Formmsdyn_ocsystemmessage_Information2 {
+		interface tab_MessageTemplate_GeneralTab_Sections {
+			_F86C374B_46E7_4B2F_9BC6_2D41E13AAFE2: DevKit.Controls.Section;
+			MessageTemplate_LocalizationDataGridSection: DevKit.Controls.Section;
+		}
+		interface tab_MessageTemplate_GeneralTab extends DevKit.Controls.ITab {
+			Section: tab_MessageTemplate_GeneralTab_Sections;
+		}
+		interface Tabs {
+			MessageTemplate_GeneralTab: tab_MessageTemplate_GeneralTab;
+		}
+		interface Body {
+			Tab: Tabs;
+			/** Description of the message. */
+			msdyn_messagedescription: DevKit.Controls.String;
+			/** Stores the list of message receivers. */
+			msdyn_messagereceiver: DevKit.Controls.OptionSet;
+			/** Stores the list of event types for system messages. */
+			msdyn_messagetype: DevKit.Controls.OptionSet;
+			/** The name of the custom entity. */
+			msdyn_name: DevKit.Controls.String;
+			/** List of all available channels. */
+			msdyn_streamsource: DevKit.Controls.OptionSet;
+			/** Stores the list of event types for system messages. */
+			msdyn_systemmessageeventtype: DevKit.Controls.OptionSet;
+		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
+		interface Grid {
+			MessageTemplate_LocalizationDataGrid: DevKit.Controls.Grid;
+		}
+	}
+	class Formmsdyn_ocsystemmessage_Information2 extends DevKit.IForm {
+		/**
+		* Information [Main Form]
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form msdyn_ocsystemmessage_Information2 */
+		Body: DevKit.Formmsdyn_ocsystemmessage_Information2.Body;
+		/** The Process of form msdyn_ocsystemmessage_Information2 */
+		Process: DevKit.Formmsdyn_ocsystemmessage_Information2.Process;
+		/** The Grid of form msdyn_ocsystemmessage_Information2 */
+		Grid: DevKit.Formmsdyn_ocsystemmessage_Information2.Grid;
+		/** The SidePanes of form msdyn_ocsystemmessage_Information2 */
+		SidePanes: DevKit.SidePanes;
 	}
 	class msdyn_ocsystemmessageApi {
 		/**
@@ -178,16 +234,28 @@ declare namespace OptionSet {
 			WhatsApp
 		}
 		enum msdyn_systemmessageeventtype {
+			/** 192350060 */
+			Agent_accepted_consult_conversation,
 			/** 192350017 */
 			Agent_assigned_to_conversation,
 			/** 192350018 */
 			Agent_couldnt_be_assigned_to_conversation,
 			/** 192350013 */
 			Agent_disconnected_from_conversation,
+			/** 192350062 */
+			Agent_ended_consult_conversation,
 			/** 192350014 */
 			Agent_ended_conversation,
 			/** 192350000 */
 			Agent_joined_conversation,
+			/** 192350061 */
+			Agent_joined_customer_conversation,
+			/** 192350058 */
+			Agent_left_consult_conversation,
+			/** 192350059 */
+			Agent_left_customer_conversation,
+			/** 192350063 */
+			Agent_removed_from_consult_conversation,
 			/** 192350022 */
 			Agents_message_couldnt_be_sent,
 			/** 192350031 */
@@ -214,6 +282,8 @@ declare namespace OptionSet {
 			Customer_disconnected,
 			/** 192350019 */
 			Customer_ended_conversation,
+			/** 192350057 */
+			Customer_has_opted_out_from_Async_Conversation,
 			/** 192350024 */
 			Customer_is_next_in_line,
 			/** 192350043 */
@@ -226,6 +296,10 @@ declare namespace OptionSet {
 			Customers_message_couldnt_be_sent_Outside_of_operation_hours,
 			/** 192350021 */
 			Customers_position_in_queue,
+			/** 192350055 */
+			End_conversation_due_to_overflow,
+			/** 192350056 */
+			Greeting_Message_for_Async_Channels,
 			/** 192350035 */
 			Holiday_message_to_customer,
 			/** 192350041 */
@@ -276,6 +350,10 @@ declare namespace OptionSet {
 			Transfer_to_queue_failed,
 			/** 192350011 */
 			Transfer_to_queue_started,
+			/** 192350054 */
+			Trial_conversation_time_limit_exceeded,
+			/** 192350053 */
+			Trial_usage_limit_exceeded,
 			/** 192350027 */
 			Voice_call_accepted,
 			/** 192350028 */
@@ -297,22 +375,22 @@ declare namespace OptionSet {
 			/** 2 */
 			Inactive
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

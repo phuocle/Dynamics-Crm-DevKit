@@ -5,6 +5,8 @@ declare namespace DevKit {
 		interface Tabs {
 		}
 		interface Body {
+			/** Accent Color for this re-usable subcomponent */
+			AccentColor: DevKit.Controls.String;
 			/** The sub type of Chatbot subcomponent. */
 			ComponentType: DevKit.Controls.OptionSet;
 			/** The content or metadata of the Bot Component that defines its structure and properties. */
@@ -13,6 +15,10 @@ declare namespace DevKit {
 			Data: DevKit.Controls.String;
 			/** Contains searchable text for the bot component */
 			Description: DevKit.Controls.String;
+			/** Link to learn More about this subcomponent */
+			HelpLink: DevKit.Controls.String;
+			/** Icon Url for this subcomponent */
+			IconUrl: DevKit.Controls.String;
 			/** Language of the chatbot subcomponent */
 			Language: DevKit.Controls.OptionSet;
 			/** The name of the custom entity. */
@@ -21,17 +27,21 @@ declare namespace DevKit {
 			OwnerId: DevKit.Controls.Lookup;
 			/** Unique identifier for Chatbot subcomponent associated with Chatbot subcomponent. */
 			ParentBotComponentId: DevKit.Controls.Lookup;
+			/** Reuse Policy for the chatbot subcomponent */
+			ReusePolicy: DevKit.Controls.OptionSet;
+		}
+		interface Process extends DevKit.Controls.IProcess {
 		}
 		interface Grid {
 			ChildComponents: DevKit.Controls.Grid;
-			RelatedBots: DevKit.Controls.Grid;
 			RelatedBotComponents: DevKit.Controls.Grid;
+			RelatedBots: DevKit.Controls.Grid;
 			RelatedProcesses: DevKit.Controls.Grid;
 		}
 	}
 	class Formbotcomponent_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form botcomponent_Information
+		* Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -40,8 +50,12 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form botcomponent_Information */
 		Body: DevKit.Formbotcomponent_Information.Body;
+		/** The Process of form botcomponent_Information */
+		Process: DevKit.Formbotcomponent_Information.Process;
 		/** The Grid of form botcomponent_Information */
 		Grid: DevKit.Formbotcomponent_Information.Grid;
+		/** The SidePanes of form botcomponent_Information */
+		SidePanes: DevKit.SidePanes;
 	}
 	class botcomponentApi {
 		/**
@@ -69,6 +83,8 @@ declare namespace DevKit {
 		EntityCollectionName: string;
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
+		/** Accent Color for this re-usable subcomponent */
+		AccentColor: DevKit.WebApi.StringValue;
 		/** Unique identifier for entity instances */
 		botcomponentId: DevKit.WebApi.GuidValue;
 		/** The category of Chatbot subcomponent. */
@@ -91,6 +107,10 @@ declare namespace DevKit {
 		Data: DevKit.WebApi.StringValue;
 		/** Contains searchable text for the bot component */
 		Description: DevKit.WebApi.StringValue;
+		/** Link to learn More about this subcomponent */
+		HelpLink: DevKit.WebApi.StringValue;
+		/** Icon Url for this subcomponent */
+		IconUrl: DevKit.WebApi.StringValue;
 		/** Sequence number of the import that created this record. */
 		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
 		/** For internal use only. */
@@ -123,6 +143,8 @@ declare namespace DevKit {
 		OwningUser: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier for Chatbot subcomponent associated with Chatbot subcomponent. */
 		ParentBotComponentId: DevKit.WebApi.LookupValue;
+		/** Reuse Policy for the chatbot subcomponent */
+		ReusePolicy: DevKit.WebApi.OptionSetValue;
 		SchemaName: DevKit.WebApi.StringValue;
 		/** Unique identifier of the associated solution. */
 		SolutionId: DevKit.WebApi.GuidValueReadonly;
@@ -214,6 +236,14 @@ declare namespace OptionSet {
 			/** 1055 */
 			Turkish
 		}
+		enum ReusePolicy {
+			/** 0 */
+			None,
+			/** 1 */
+			Private,
+			/** 2 */
+			Public
+		}
 		enum statecode {
 			/** 0 */
 			Active,
@@ -226,22 +256,22 @@ declare namespace OptionSet {
 			/** 2 */
 			Inactive
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

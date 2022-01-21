@@ -13,7 +13,7 @@ namespace Dev.DevKit.Shared.Entities.SharePointDocumentOptionSets
 	public enum DocumentLocationType
 	{
 		/// <summary>
-		/// Dedicated_for_OneNote_Integration = 1
+		/// Dedicated for OneNote Integration = 1
 		/// </summary>
 		Dedicated_for_OneNote_Integration = 1,
 		/// <summary>
@@ -25,7 +25,7 @@ namespace Dev.DevKit.Shared.Entities.SharePointDocumentOptionSets
 	public enum ServiceType
 	{
 		/// <summary>
-		/// MS_Teams = 3
+		/// MS Teams = 3
 		/// </summary>
 		MS_Teams = 3,
 		/// <summary>
@@ -33,7 +33,7 @@ namespace Dev.DevKit.Shared.Entities.SharePointDocumentOptionSets
 		/// </summary>
 		OneDrive = 1,
 		/// <summary>
-		/// Shared_with_me = 2
+		/// Shared with me = 2
 		/// </summary>
 		Shared_with_me = 2,
 		/// <summary>
@@ -101,6 +101,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "sharepointdocument";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 9507;
 
 		[DebuggerNonUserCode()]
@@ -534,7 +535,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user.</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -590,7 +591,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Choose the parent record that the SharePoint document record is associated with.</para>
-		/// <para>Lookup to account;contact;kbarticle;knowledgearticle;lead;msdyn_agreement;msdyn_agreementbookingdate;msdyn_agreementbookingsetup;msdyn_agreementinvoicedate;msdyn_agreementinvoicesetup;msdyn_bookingtimestamp;msdyn_expense;msdyn_incidenttypeproduct;msdyn_inventoryadjustment;msdyn_inventoryadjustmentproduct;msdyn_inventorytransfer;msdyn_knowledgearticletemplate;msdyn_playbookactivity;msdyn_project;msdyn_purchaseorder;msdyn_purchaseorderproduct;msdyn_purchaseorderreceipt;msdyn_resourceterritory;msdyn_rma;msdyn_rmareceipt;msdyn_rtv;msdyn_timegroup;msdyn_timegroupdetail;msdyn_warehouse;msdyn_workorder;msdyn_workorderincident;msdyn_workorderproduct;msdyn_workorderservice;msdyn_workorderservicetask;opportunity;product;quote;salesliterature</para>
+		/// <para>Lookup to account, contact, kbarticle, knowledgearticle, lead, msdyn_agreement, msdyn_agreementbookingdate, msdyn_agreementbookingsetup, msdyn_agreementinvoicedate, msdyn_agreementinvoicesetup, msdyn_bookingtimestamp, msdyn_expense, msdyn_incidenttypeproduct, msdyn_inventoryadjustment, msdyn_inventoryadjustmentproduct, msdyn_inventorytransfer, msdyn_knowledgearticletemplate, msdyn_playbookactivity, msdyn_project, msdyn_purchaseorder, msdyn_purchaseorderproduct, msdyn_purchaseorderreceipt, msdyn_resourceterritory, msdyn_rma, msdyn_rmareceipt, msdyn_rtv, msdyn_timegroup, msdyn_timegroupdetail, msdyn_warehouse, msdyn_workorder, msdyn_workorderincident, msdyn_workorderproduct, msdyn_workorderservice, msdyn_workorderservicetask, opportunity, product, quote, salesliterature</para>
 		/// <para>Regarding</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

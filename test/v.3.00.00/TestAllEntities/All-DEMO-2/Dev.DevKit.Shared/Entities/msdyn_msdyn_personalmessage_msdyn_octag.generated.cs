@@ -27,7 +27,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_msdyn_personalmessage_msdyn_octag";
 
-		public const int EntityTypeCode = 10614;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10747;
 
 		[DebuggerNonUserCode()]
 		public msdyn_msdyn_personalmessage_msdyn_octag()

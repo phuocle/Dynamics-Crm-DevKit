@@ -1,9 +1,13 @@
 ﻿//@ts-check
 ///<reference path="msdyn_geofencingsettings.d.ts" />
 "use strict";
-var formMain_Form = (function () {
+var formmsdyn_geofencingsettings_Main_Form = (function () {
 	"use strict";
+	/** @type DevKit.Formmsdyn_geofencingsettings_Main_Form */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.Formmsdyn_geofencingsettings_Main_Form(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}

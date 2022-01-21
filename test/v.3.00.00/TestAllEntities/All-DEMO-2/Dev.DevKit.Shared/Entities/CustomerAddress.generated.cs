@@ -13,7 +13,7 @@ namespace Dev.DevKit.Shared.Entities.CustomerAddressOptionSets
 	public enum AddressTypeCode
 	{
 		/// <summary>
-		/// Bill_To = 1
+		/// Bill To = 1
 		/// </summary>
 		Bill_To = 1,
 		/// <summary>
@@ -25,7 +25,7 @@ namespace Dev.DevKit.Shared.Entities.CustomerAddressOptionSets
 		/// </summary>
 		Primary = 3,
 		/// <summary>
-		/// Ship_To = 2
+		/// Ship To = 2
 		/// </summary>
 		Ship_To = 2
 	}
@@ -37,9 +37,21 @@ namespace Dev.DevKit.Shared.Entities.CustomerAddressOptionSets
 		/// </summary>
 		FOB = 1,
 		/// <summary>
-		/// No_Charge = 2
+		/// No Charge = 2
 		/// </summary>
 		No_Charge = 2
+	}
+
+	public enum ObjectTypeCode
+	{
+		/// <summary>
+		/// Account = 1
+		/// </summary>
+		Account = 1,
+		/// <summary>
+		/// Contact = 2
+		/// </summary>
+		Contact = 2
 	}
 
 	public enum ShippingMethodCode
@@ -57,11 +69,11 @@ namespace Dev.DevKit.Shared.Entities.CustomerAddressOptionSets
 		/// </summary>
 		FedEx = 3,
 		/// <summary>
-		/// Full_Load = 6
+		/// Full Load = 6
 		/// </summary>
 		Full_Load = 6,
 		/// <summary>
-		/// Postal_Mail = 5
+		/// Postal Mail = 5
 		/// </summary>
 		Postal_Mail = 5,
 		/// <summary>
@@ -69,7 +81,7 @@ namespace Dev.DevKit.Shared.Entities.CustomerAddressOptionSets
 		/// </summary>
 		UPS = 4,
 		/// <summary>
-		/// Will_Call = 7
+		/// Will Call = 7
 		/// </summary>
 		Will_Call = 7
 	}
@@ -128,6 +140,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "customeraddress";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 1071;
 
 		[DebuggerNonUserCode()]
@@ -214,7 +227,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the city for the customer's address to help identify the location.</para>
+		/// <para>Type the city for the customer&apos;s address to help identify the location.</para>
 		/// <para>String - MaxLength: 80</para>
 		/// <para>City</para>
 		/// </summary>
@@ -237,7 +250,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the country or region for the customer's address.</para>
+		/// <para>Type the country or region for the customer&apos;s address.</para>
 		/// <para>String - MaxLength: 80</para>
 		/// <para>Country/Region</para>
 		/// </summary>
@@ -249,7 +262,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the county for the customer's address.</para>
+		/// <para>Type the county for the customer&apos;s address.</para>
 		/// <para>String - MaxLength: 50</para>
 		/// <para>County</para>
 		/// </summary>
@@ -310,7 +323,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency.</para>
+		/// <para>Shows the conversion rate of the record&apos;s currency. The exchange rate is used to convert all money fields in the record from the local currency to the system&apos;s default currency.</para>
 		/// <para>ReadOnly - Decimal - MinValue: 0 - MaxValue: 100,000,000,000</para>
 		/// <para>Exchange Rate</para>
 		/// </summary>
@@ -321,7 +334,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the fax number associated with the customer's address.</para>
+		/// <para>Type the fax number associated with the customer&apos;s address.</para>
 		/// <para>String - MaxLength: 50</para>
 		/// <para>Fax</para>
 		/// </summary>
@@ -368,7 +381,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the latitude value for the customer's address, for use in mapping and other applications.</para>
+		/// <para>Type the latitude value for the customer&apos;s address, for use in mapping and other applications.</para>
 		/// <para>Double - MinValue: -90 - MaxValue: 90</para>
 		/// <para>Latitude</para>
 		/// </summary>
@@ -380,7 +393,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the first line of the customer's address to help identify the location.</para>
+		/// <para>Type the first line of the customer&apos;s address to help identify the location.</para>
 		/// <para>Required - String - MaxLength: 250</para>
 		/// <para>Street 1</para>
 		/// </summary>
@@ -392,7 +405,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the second line of the customer's address.</para>
+		/// <para>Type the second line of the customer&apos;s address.</para>
 		/// <para>String - MaxLength: 250</para>
 		/// <para>Street 2</para>
 		/// </summary>
@@ -404,7 +417,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the third line of the customer's address.</para>
+		/// <para>Type the third line of the customer&apos;s address.</para>
 		/// <para>String - MaxLength: 250</para>
 		/// <para>Street 3</para>
 		/// </summary>
@@ -416,7 +429,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the longitude value for the customer's address, for use in mapping and other applications.</para>
+		/// <para>Type the longitude value for the customer&apos;s address, for use in mapping and other applications.</para>
 		/// <para>Double - MinValue: -180 - MaxValue: 180</para>
 		/// <para>Longitude</para>
 		/// </summary>
@@ -461,7 +474,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type a descriptive name for the customer's address, such as Corporate Headquarters.</para>
+		/// <para>Type a descriptive name for the customer&apos;s address, such as Corporate Headquarters.</para>
 		/// <para>Required - String - MaxLength: 200</para>
 		/// <para>Address Name</para>
 		/// </summary>
@@ -475,7 +488,7 @@ namespace Dev.DevKit.Shared.Entities
 		/// <summary>
 		/// <para>Shows the type code of the customer record to indicate whether the address belongs to a customer account or contact.</para>
 		/// <para>EntityName</para>
-		/// <para>Object Type </para>
+		/// <para>Object Type</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public string ObjectTypeCode
@@ -498,7 +511,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user.</para>
-		/// <para>ReadOnly - Required - Owner</para>
+		/// <para>ReadOnly - Required - Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -530,8 +543,8 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Choose the customer's address.</para>
-		/// <para>Lookup to account;contact</para>
+		/// <para>Choose the customer&apos;s address.</para>
+		/// <para>Lookup to account, contact</para>
 		/// <para>Parent</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -554,7 +567,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the post office box number of the customer's address.</para>
+		/// <para>Type the post office box number of the customer&apos;s address.</para>
 		/// <para>String - MaxLength: 20</para>
 		/// <para>Post Office Box</para>
 		/// </summary>
@@ -566,7 +579,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the name of the primary contact person for the customer's address.</para>
+		/// <para>Type the name of the primary contact person for the customer&apos;s address.</para>
 		/// <para>String - MaxLength: 150</para>
 		/// <para>Address Contact</para>
 		/// </summary>
@@ -601,7 +614,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the state or province of the customer's address.</para>
+		/// <para>Type the state or province of the customer&apos;s address.</para>
 		/// <para>String - MaxLength: 50</para>
 		/// <para>State/Province</para>
 		/// </summary>
@@ -613,7 +626,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the primary phone number for the customer's address.</para>
+		/// <para>Type the primary phone number for the customer&apos;s address.</para>
 		/// <para>String - MaxLength: 50</para>
 		/// <para>Main Phone</para>
 		/// </summary>
@@ -625,7 +638,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type a second phone number for the customer's address.</para>
+		/// <para>Type a second phone number for the customer&apos;s address.</para>
 		/// <para>String - MaxLength: 50</para>
 		/// <para>Phone 2</para>
 		/// </summary>
@@ -637,7 +650,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type a third phone number for the customer's address.</para>
+		/// <para>Type a third phone number for the customer&apos;s address.</para>
 		/// <para>String - MaxLength: 50</para>
 		/// <para>Telephone 3</para>
 		/// </summary>
@@ -673,7 +686,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the UPS zone of the customer's address to make sure shipping charges are calculated correctly and deliveries are made promptly, if shipped by UPS.</para>
+		/// <para>Type the UPS zone of the customer&apos;s address to make sure shipping charges are calculated correctly and deliveries are made promptly, if shipped by UPS.</para>
 		/// <para>String - MaxLength: 4</para>
 		/// <para>UPS Zone</para>
 		/// </summary>

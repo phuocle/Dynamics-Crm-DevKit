@@ -75,7 +75,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_ocsentimentdailytopic";
 
-		public const int EntityTypeCode = 10595;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10714;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocsentimentdailytopic()
@@ -304,7 +305,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>The topic cluster id from clustering algorithm -1 represent outlier cluster Positive number like 5 represent topic cluster</para>
+		/// <para>The topic cluster id from clustering algorithm-1 represent outlier clusterPositive number like 5 represent topic cluster</para>
 		/// <para>Integer - MinValue: -100 - MaxValue: 2,147,483,647</para>
 		/// <para>Topic index</para>
 		/// </summary>
@@ -377,7 +378,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

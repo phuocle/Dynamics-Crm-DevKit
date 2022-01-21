@@ -70,7 +70,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_ocsentimentdailytopickeyword";
 
-		public const int EntityTypeCode = 10596;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10715;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocsentimentdailytopickeyword()
@@ -312,7 +313,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

@@ -23,7 +23,7 @@ var DevKit;
 			ModifiedBy: {},
 			ModifiedOn: {},
 			msdyn_Address1: {},
-			msdyn_Address1_1: {},
+			msdyn_Address11: {},
 			msdyn_Address2: {},
 			msdyn_Address3: {},
 			msdyn_AddressName: {},
@@ -41,11 +41,11 @@ var DevKit;
 			msdyn_FunctionalLocation: {},
 			msdyn_Instructions: {},
 			msdyn_IoTAlert: {},
-			msdyn_IoTAlert_1: {},
+			msdyn_IoTAlert1: {},
 			msdyn_Latitude: {},
-			msdyn_Latitude_1: {},
+			msdyn_Latitude1: {},
 			msdyn_Longitude: {},
-			msdyn_Longitude_1: {},
+			msdyn_Longitude1: {},
 			msdyn_mapcontrol: {},
 			msdyn_name: {},
 			msdyn_OpportunityId: {},
@@ -59,7 +59,7 @@ var DevKit;
 			msdyn_Priority: {},
 			msdyn_ReportedByContact: {},
 			msdyn_ServiceAccount: {},
-			msdyn_ServiceAccount_1: {},
+			msdyn_ServiceAccount1: {},
 			msdyn_ServiceRequest: {},
 			msdyn_ServiceTerritory: {},
 			msdyn_StateOrProvince: {},
@@ -163,6 +163,28 @@ var DevKit;
 		devKit.LoadFields(formContext, footer, "footer_");
 		form.Footer = footer;
 		var process = devKit.LoadProcess(formContext);
+		var _Case_to_Work_Order_Business_Process = {
+			msdyn_BillingAccount: {},
+			msdyn_PrimaryIncidentType: {},
+			msdyn_Priority: {},
+			msdyn_ServiceAccount: {},
+			msdyn_SubStatus: {},
+			msdyn_SystemStatus: {},
+			msdyn_SystemStatus_1: {},
+			msdyn_WorkOrderType: {}
+		}
+		devKit.LoadFields(formContext, _Case_to_Work_Order_Business_Process, "header_process_");
+		process.Case_to_Work_Order_Business_Process = _Case_to_Work_Order_Business_Process;
+		var _CFS_IoT_Alert_Process_Flow = {
+			msdyn_Priority: {},
+			msdyn_ServiceAccount: {},
+			msdyn_SubStatus: {},
+			msdyn_SystemStatus: {},
+			msdyn_SystemStatus_1: {},
+			msdyn_WorkOrderType: {}
+		}
+		devKit.LoadFields(formContext, _CFS_IoT_Alert_Process_Flow, "header_process_");
+		process.CFS_IoT_Alert_Process_Flow = _CFS_IoT_Alert_Process_Flow;
 		var _Work_Order_Business_Process = {
 			msdyn_BillingAccount: {},
 			msdyn_PrimaryIncidentType: {},
@@ -186,12 +208,12 @@ var DevKit;
 		devKit.LoadQuickForms(formContext, quickForm);
 		form.QuickForm = quickForm;
 		var grid = {
-			Incidents_List: {},
 			bookings: {},
+			Incidents_List: {},
+			KnowledgeArticleSubGrid: {},
 			workorderproductsgrid: {},
 			workorderservicesgrid: {},
 			workorderservicetasksgrid: {},
-			KnowledgeArticleSubGrid: {},
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
@@ -225,6 +247,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormWork_Order_Customer = function(executionContext, defaultWebResourceName) {
@@ -275,6 +298,28 @@ var DevKit;
 		body.Tab = tab;
 		form.Body = body;
 		var process = devKit.LoadProcess(formContext);
+		var _Case_to_Work_Order_Business_Process = {
+			msdyn_BillingAccount: {},
+			msdyn_PrimaryIncidentType: {},
+			msdyn_Priority: {},
+			msdyn_ServiceAccount: {},
+			msdyn_SubStatus: {},
+			msdyn_SystemStatus: {},
+			msdyn_SystemStatus_1: {},
+			msdyn_WorkOrderType: {}
+		}
+		devKit.LoadFields(formContext, _Case_to_Work_Order_Business_Process, "header_process_");
+		process.Case_to_Work_Order_Business_Process = _Case_to_Work_Order_Business_Process;
+		var _CFS_IoT_Alert_Process_Flow = {
+			msdyn_Priority: {},
+			msdyn_ServiceAccount: {},
+			msdyn_SubStatus: {},
+			msdyn_SystemStatus: {},
+			msdyn_SystemStatus_1: {},
+			msdyn_WorkOrderType: {}
+		}
+		devKit.LoadFields(formContext, _CFS_IoT_Alert_Process_Flow, "header_process_");
+		process.CFS_IoT_Alert_Process_Flow = _CFS_IoT_Alert_Process_Flow;
 		var _Work_Order_Business_Process = {
 			msdyn_BillingAccount: {},
 			msdyn_PrimaryIncidentType: {},
@@ -288,11 +333,6 @@ var DevKit;
 		devKit.LoadFields(formContext, _Work_Order_Business_Process, "header_process_");
 		process.Work_Order_Business_Process = _Work_Order_Business_Process;
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var navigation = {
 			nav_msdyn_msdyn_workorder_bookableresourcebooking_WorkOrder: {},
 			nav_msdyn_msdyn_workorder_invoicedetail: {},
@@ -322,6 +362,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormWork_Order_Mobile = function(executionContext, defaultWebResourceName) {
@@ -340,7 +381,7 @@ var DevKit;
 			Incidents_List: {},
 			KnowledgeArticlesSubGrid: {},
 			msdyn_Address1: {},
-			msdyn_Address1_1: {},
+			msdyn_Address11: {},
 			msdyn_Address2: {},
 			msdyn_Address3: {},
 			msdyn_BillingAccount: {},
@@ -353,11 +394,12 @@ var DevKit;
 			msdyn_InternalFlags: {},
 			msdyn_IoTAlert: {},
 			msdyn_Latitude: {},
-			msdyn_Latitude_1: {},
+			msdyn_Latitude1: {},
 			msdyn_Longitude: {},
-			msdyn_Longitude_1: {},
+			msdyn_Longitude1: {},
 			msdyn_mapcontrol: {},
 			msdyn_name: {},
+			msdyn_ParentWorkOrder: {},
 			msdyn_PostalCode: {},
 			msdyn_PriceList: {},
 			msdyn_PrimaryIncidentDescription: {},
@@ -419,6 +461,28 @@ var DevKit;
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
 		var process = devKit.LoadProcess(formContext);
+		var _Case_to_Work_Order_Business_Process = {
+			msdyn_BillingAccount: {},
+			msdyn_PrimaryIncidentType: {},
+			msdyn_Priority: {},
+			msdyn_ServiceAccount: {},
+			msdyn_SubStatus: {},
+			msdyn_SystemStatus: {},
+			msdyn_SystemStatus_1: {},
+			msdyn_WorkOrderType: {}
+		}
+		devKit.LoadFields(formContext, _Case_to_Work_Order_Business_Process, "header_process_");
+		process.Case_to_Work_Order_Business_Process = _Case_to_Work_Order_Business_Process;
+		var _CFS_IoT_Alert_Process_Flow = {
+			msdyn_Priority: {},
+			msdyn_ServiceAccount: {},
+			msdyn_SubStatus: {},
+			msdyn_SystemStatus: {},
+			msdyn_SystemStatus_1: {},
+			msdyn_WorkOrderType: {}
+		}
+		devKit.LoadFields(formContext, _CFS_IoT_Alert_Process_Flow, "header_process_");
+		process.CFS_IoT_Alert_Process_Flow = _CFS_IoT_Alert_Process_Flow;
 		var _Work_Order_Business_Process = {
 			msdyn_BillingAccount: {},
 			msdyn_PrimaryIncidentType: {},
@@ -432,18 +496,13 @@ var DevKit;
 		devKit.LoadFields(formContext, _Work_Order_Business_Process, "header_process_");
 		process.Work_Order_Business_Process = _Work_Order_Business_Process;
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var grid = {
+			bookings: {},
+			Incidents_List: {},
+			KnowledgeArticlesSubGrid: {},
 			workorderproductsgrid: {},
 			workorderservicesgrid: {},
 			workorderservicetasksgrid: {},
-			Incidents_List: {},
-			bookings: {},
-			KnowledgeArticlesSubGrid: {},
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
@@ -476,6 +535,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormWork_Order_Notes = function(executionContext, defaultWebResourceName) {
@@ -516,6 +576,28 @@ var DevKit;
 		body.Tab = tab;
 		form.Body = body;
 		var process = devKit.LoadProcess(formContext);
+		var _Case_to_Work_Order_Business_Process = {
+			msdyn_BillingAccount: {},
+			msdyn_PrimaryIncidentType: {},
+			msdyn_Priority: {},
+			msdyn_ServiceAccount: {},
+			msdyn_SubStatus: {},
+			msdyn_SystemStatus: {},
+			msdyn_SystemStatus_1: {},
+			msdyn_WorkOrderType: {}
+		}
+		devKit.LoadFields(formContext, _Case_to_Work_Order_Business_Process, "header_process_");
+		process.Case_to_Work_Order_Business_Process = _Case_to_Work_Order_Business_Process;
+		var _CFS_IoT_Alert_Process_Flow = {
+			msdyn_Priority: {},
+			msdyn_ServiceAccount: {},
+			msdyn_SubStatus: {},
+			msdyn_SystemStatus: {},
+			msdyn_SystemStatus_1: {},
+			msdyn_WorkOrderType: {}
+		}
+		devKit.LoadFields(formContext, _CFS_IoT_Alert_Process_Flow, "header_process_");
+		process.CFS_IoT_Alert_Process_Flow = _CFS_IoT_Alert_Process_Flow;
 		var _Work_Order_Business_Process = {
 			msdyn_BillingAccount: {},
 			msdyn_PrimaryIncidentType: {},
@@ -529,11 +611,6 @@ var DevKit;
 		devKit.LoadFields(formContext, _Work_Order_Business_Process, "header_process_");
 		process.Work_Order_Business_Process = _Work_Order_Business_Process;
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var navigation = {
 			nav_msdyn_msdyn_workorder_bookableresourcebooking_WorkOrder: {},
 			nav_msdyn_msdyn_workorder_invoicedetail: {},
@@ -563,6 +640,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormWork_Order_Service = function(executionContext, defaultWebResourceName) {
@@ -620,6 +698,28 @@ var DevKit;
 		body.Tab = tab;
 		form.Body = body;
 		var process = devKit.LoadProcess(formContext);
+		var _Case_to_Work_Order_Business_Process = {
+			msdyn_BillingAccount: {},
+			msdyn_PrimaryIncidentType: {},
+			msdyn_Priority: {},
+			msdyn_ServiceAccount: {},
+			msdyn_SubStatus: {},
+			msdyn_SystemStatus: {},
+			msdyn_SystemStatus_1: {},
+			msdyn_WorkOrderType: {}
+		}
+		devKit.LoadFields(formContext, _Case_to_Work_Order_Business_Process, "header_process_");
+		process.Case_to_Work_Order_Business_Process = _Case_to_Work_Order_Business_Process;
+		var _CFS_IoT_Alert_Process_Flow = {
+			msdyn_Priority: {},
+			msdyn_ServiceAccount: {},
+			msdyn_SubStatus: {},
+			msdyn_SystemStatus: {},
+			msdyn_SystemStatus_1: {},
+			msdyn_WorkOrderType: {}
+		}
+		devKit.LoadFields(formContext, _CFS_IoT_Alert_Process_Flow, "header_process_");
+		process.CFS_IoT_Alert_Process_Flow = _CFS_IoT_Alert_Process_Flow;
 		var _Work_Order_Business_Process = {
 			msdyn_BillingAccount: {},
 			msdyn_PrimaryIncidentType: {},
@@ -633,17 +733,12 @@ var DevKit;
 		devKit.LoadFields(formContext, _Work_Order_Business_Process, "header_process_");
 		process.Work_Order_Business_Process = _Work_Order_Business_Process;
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var grid = {
-			FsWorkOrderServiceTasksGrid: {},
-			FsWorkOrderProductsGrid: {},
-			FsWorkOrderServicesGrid: {},
 			FsWorkOrderIncidentsGrid: {},
+			FsWorkOrderProductsGrid: {},
 			FsWorkOrderResolutionsGrid: {},
+			FsWorkOrderServicesGrid: {},
+			FsWorkOrderServiceTasksGrid: {},
 			workorder_KASubgrid: {},
 		};
 		devKit.LoadGrids(formContext, grid);
@@ -677,6 +772,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormWork_Order_Create = function(executionContext, defaultWebResourceName) {
@@ -717,6 +813,28 @@ var DevKit;
 		body.Tab = tab;
 		form.Body = body;
 		var process = devKit.LoadProcess(formContext);
+		var _Case_to_Work_Order_Business_Process = {
+			msdyn_BillingAccount: {},
+			msdyn_PrimaryIncidentType: {},
+			msdyn_Priority: {},
+			msdyn_ServiceAccount: {},
+			msdyn_SubStatus: {},
+			msdyn_SystemStatus: {},
+			msdyn_SystemStatus_1: {},
+			msdyn_WorkOrderType: {}
+		}
+		devKit.LoadFields(formContext, _Case_to_Work_Order_Business_Process, "header_process_");
+		process.Case_to_Work_Order_Business_Process = _Case_to_Work_Order_Business_Process;
+		var _CFS_IoT_Alert_Process_Flow = {
+			msdyn_Priority: {},
+			msdyn_ServiceAccount: {},
+			msdyn_SubStatus: {},
+			msdyn_SystemStatus: {},
+			msdyn_SystemStatus_1: {},
+			msdyn_WorkOrderType: {}
+		}
+		devKit.LoadFields(formContext, _CFS_IoT_Alert_Process_Flow, "header_process_");
+		process.CFS_IoT_Alert_Process_Flow = _CFS_IoT_Alert_Process_Flow;
 		var _Work_Order_Business_Process = {
 			msdyn_BillingAccount: {},
 			msdyn_PrimaryIncidentType: {},
@@ -730,11 +848,6 @@ var DevKit;
 		devKit.LoadFields(formContext, _Work_Order_Business_Process, "header_process_");
 		process.Work_Order_Business_Process = _Work_Order_Business_Process;
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var navigation = {
 			nav_bpf_msdyn_workorder_msdyn_bpf_989e9b1857e24af18787d5143b67523b: {},
 			nav_bpf_msdyn_workorder_msdyn_bpf_d3d97bac8c294105840e99e37a9d1c39: {},
@@ -772,6 +885,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormQuick_Create_Work_Order = function(executionContext, defaultWebResourceName) {
@@ -804,7 +918,7 @@ var DevKit;
 			msdyn_SystemStatus: {},
 			msdyn_WorkOrderSummary: {},
 			msdyn_WorkOrderType: {}
-		}
+		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
 			tab_1: {
@@ -814,25 +928,27 @@ var DevKit;
 					tab_1_column_3_section_1: {}
 				}
 			}
-		}
+		};
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
+		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
-	}
+	};
 })(DevKit || (DevKit = {}));
 /** @namespace OptionSet */
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.msdyn_workorder = {
 		msdyn_SystemStatus : {
-			Closed_Canceled: 690970005,
-			Closed_Posted: 690970004,
-			Open_Completed: 690970003,
-			Open_In_Progress: 690970002,
-			Open_Scheduled: 690970001,
-			Open_Unscheduled: 690970000
+			Canceled: 690970005,
+			Completed: 690970003,
+			In_Progress: 690970002,
+			Posted: 690970004,
+			Scheduled: 690970001,
+			Unscheduled: 690970000
 		},
 		msdyn_WorkLocation : {
 			Facility: 690970001,
@@ -847,15 +963,14 @@ var OptionSet;
 			Active: 1,
 			Inactive: 2
 		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
-
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 	};
 })(OptionSet || (OptionSet = {}));

@@ -10,6 +10,102 @@ using System.Diagnostics;
 
 namespace Dev.DevKit.Shared.Entities.PhoneCallOptionSets
 {
+	public enum ActivityTypeCode
+	{
+		/// <summary>
+		/// Appointment = 4201
+		/// </summary>
+		Appointment = 4201,
+		/// <summary>
+		/// Booking Alert = 10400
+		/// </summary>
+		Booking_Alert = 10400,
+		/// <summary>
+		/// Campaign Activity = 4402
+		/// </summary>
+		Campaign_Activity = 4402,
+		/// <summary>
+		/// Campaign Response = 4401
+		/// </summary>
+		Campaign_Response = 4401,
+		/// <summary>
+		/// Case Resolution = 4206
+		/// </summary>
+		Case_Resolution = 4206,
+		/// <summary>
+		/// Conversation = 10702
+		/// </summary>
+		Conversation = 10702,
+		/// <summary>
+		/// Customer Voice alert = 10294
+		/// </summary>
+		Customer_Voice_alert = 10294,
+		/// <summary>
+		/// Customer Voice survey invite = 10304
+		/// </summary>
+		Customer_Voice_survey_invite = 10304,
+		/// <summary>
+		/// Customer Voice survey response = 10306
+		/// </summary>
+		Customer_Voice_survey_response = 10306,
+		/// <summary>
+		/// Email = 4202
+		/// </summary>
+		Email = 4202,
+		/// <summary>
+		/// Fax = 4204
+		/// </summary>
+		Fax = 4204,
+		/// <summary>
+		/// Letter = 4207
+		/// </summary>
+		Letter = 4207,
+		/// <summary>
+		/// Opportunity Close = 4208
+		/// </summary>
+		Opportunity_Close = 4208,
+		/// <summary>
+		/// Order Close = 4209
+		/// </summary>
+		Order_Close = 4209,
+		/// <summary>
+		/// Outbound message = 10813
+		/// </summary>
+		Outbound_message = 10813,
+		/// <summary>
+		/// Phone Call = 4210
+		/// </summary>
+		Phone_Call = 4210,
+		/// <summary>
+		/// Project Service Approval = 10430
+		/// </summary>
+		Project_Service_Approval = 10430,
+		/// <summary>
+		/// Quick Campaign = 4406
+		/// </summary>
+		Quick_Campaign = 4406,
+		/// <summary>
+		/// Quote Close = 4211
+		/// </summary>
+		Quote_Close = 4211,
+		/// <summary>
+		/// Recurring Appointment = 4251
+		/// </summary>
+		Recurring_Appointment = 4251,
+		/// <summary>
+		/// Service Activity = 4214
+		/// </summary>
+		Service_Activity = 4214,
+		/// <summary>
+		/// Session = 10717
+		/// </summary>
+		Session = 10717,
+		/// <summary>
+		/// Task = 4212
+		/// </summary>
+		Task = 4212
+	}
+
 	public enum PriorityCode
 	{
 		/// <summary>
@@ -92,6 +188,16 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ModifiedBy = "modifiedby";
 			public const string ModifiedOn = "modifiedon";
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
+			public const string msdyn_ci_call_summary_control_field = "msdyn_ci_call_summary_control_field";
+			public const string msdyn_ci_id = "msdyn_ci_id";
+			public const string msdyn_ci_insights_json = "msdyn_ci_insights_json";
+			public const string msdyn_ci_keywords = "msdyn_ci_keywords";
+			public const string msdyn_ci_media_reference_id = "msdyn_ci_media_reference_id";
+			public const string msdyn_ci_transcript = "msdyn_ci_transcript";
+			public const string msdyn_ci_transcript_json = "msdyn_ci_transcript_json";
+			public const string msdyn_ci_translated_transcript = "msdyn_ci_translated_transcript";
+			public const string msdyn_ci_translated_transcript_json = "msdyn_ci_translated_transcript_json";
+			public const string msdyn_ci_url = "msdyn_ci_url";
 			public const string OnHoldTime = "onholdtime";
 			public const string OverriddenCreatedOn = "overriddencreatedon";
 			public const string OwnerId = "ownerid";
@@ -125,6 +231,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "phonecall";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 4210;
 
 		[DebuggerNonUserCode()]
@@ -316,7 +423,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency.</para>
+		/// <para>Shows the conversion rate of the record&apos;s currency. The exchange rate is used to convert all money fields in the record from the local currency to the system&apos;s default currency.</para>
 		/// <para>ReadOnly - Decimal - MinValue: 0 - MaxValue: 100,000,000,000</para>
 		/// <para>Exchange Rate</para>
 		/// </summary>
@@ -328,7 +435,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Enter the account, contact, lead, or user who made the phone call.</para>
-		/// <para>Required - PartyList</para>
+		/// <para>Required - Lookup to account, contact, lead, systemuser</para>
 		/// <para>Call From</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -455,6 +562,116 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Integer - MinValue: -2,147,483,648 - MaxValue: 2,147,483,647</para>
+		/// <para>ci_call_summary_control_field</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public int? msdyn_ci_call_summary_control_field
+		{
+			get { return Entity.GetAttributeValue<int?>(Fields.msdyn_ci_call_summary_control_field); }
+			set { Entity.Attributes[Fields.msdyn_ci_call_summary_control_field] = value; }
+		}
+
+		/// <summary>
+		/// <para>String - MaxLength: 100</para>
+		/// <para>Conversation Id</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_ci_id
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_ci_id); }
+			set { Entity.Attributes[Fields.msdyn_ci_id] = value; }
+		}
+
+		/// <summary>
+		/// <para>Memo - MaxLength: 1048576</para>
+		/// <para>Insights Json</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_ci_insights_json
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_ci_insights_json); }
+			set { Entity.Attributes[Fields.msdyn_ci_insights_json] = value; }
+		}
+
+		/// <summary>
+		/// <para>String - MaxLength: 4000</para>
+		/// <para>Conversation Keywords</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_ci_keywords
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_ci_keywords); }
+			set { Entity.Attributes[Fields.msdyn_ci_keywords] = value; }
+		}
+
+		/// <summary>
+		/// <para>String - MaxLength: 1024</para>
+		/// <para>Media Reference Id</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_ci_media_reference_id
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_ci_media_reference_id); }
+			set { Entity.Attributes[Fields.msdyn_ci_media_reference_id] = value; }
+		}
+
+		/// <summary>
+		/// <para>Memo - MaxLength: 1048576</para>
+		/// <para>CI Transcript</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_ci_transcript
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_ci_transcript); }
+			set { Entity.Attributes[Fields.msdyn_ci_transcript] = value; }
+		}
+
+		/// <summary>
+		/// <para>Memo - MaxLength: 1048576</para>
+		/// <para>Transcript Json</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_ci_transcript_json
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_ci_transcript_json); }
+			set { Entity.Attributes[Fields.msdyn_ci_transcript_json] = value; }
+		}
+
+		/// <summary>
+		/// <para>Memo - MaxLength: 1048576</para>
+		/// <para>CI Translated Transcript</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_ci_translated_transcript
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_ci_translated_transcript); }
+			set { Entity.Attributes[Fields.msdyn_ci_translated_transcript] = value; }
+		}
+
+		/// <summary>
+		/// <para>Memo - MaxLength: 1048576</para>
+		/// <para>Translated Transcript Json</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_ci_translated_transcript_json
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_ci_translated_transcript_json); }
+			set { Entity.Attributes[Fields.msdyn_ci_translated_transcript_json] = value; }
+		}
+
+		/// <summary>
+		/// <para>String - MaxLength: 1024</para>
+		/// <para>Conversation Url</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_ci_url
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_ci_url); }
+			set { Entity.Attributes[Fields.msdyn_ci_url] = value; }
+		}
+
+		/// <summary>
 		/// <para>Shows how long, in minutes, that the record was on hold.</para>
 		/// <para>ReadOnly - Integer - MinValue: -2,147,483,648 - MaxValue: 2,147,483,647</para>
 		/// <para>On Hold Time (Minutes)</para>
@@ -479,7 +696,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user.</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -571,7 +788,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the object with which the phone call activity is associated.</para>
-		/// <para>Lookup to account;bookableresourcebooking;bookableresourcebookingheader;bulkoperation;campaign;campaignactivity;contact;contract;entitlement;entitlementtemplate;incident;invoice;knowledgearticle;knowledgebaserecord;lead;msdyn_agreement;msdyn_agreementbookingdate;msdyn_agreementbookingincident;msdyn_agreementbookingproduct;msdyn_agreementbookingservice;msdyn_agreementbookingservicetask;msdyn_agreementbookingsetup;msdyn_agreementinvoicedate;msdyn_agreementinvoiceproduct;msdyn_agreementinvoicesetup;msdyn_bookingalertstatus;msdyn_bookingrule;msdyn_bookingtimestamp;msdyn_customerasset;msdyn_fieldservicesetting;msdyn_incidenttypecharacteristic;msdyn_incidenttypeproduct;msdyn_incidenttypeservice;msdyn_inventoryadjustment;msdyn_inventoryadjustmentproduct;msdyn_inventoryjournal;msdyn_inventorytransfer;msdyn_payment;msdyn_paymentdetail;msdyn_paymentmethod;msdyn_paymentterm;msdyn_playbookinstance;msdyn_postalbum;msdyn_postalcode;msdyn_processnotes;msdyn_productinventory;msdyn_projectteam;msdyn_purchaseorder;msdyn_purchaseorderbill;msdyn_purchaseorderproduct;msdyn_purchaseorderreceipt;msdyn_purchaseorderreceiptproduct;msdyn_purchaseordersubstatus;msdyn_quotebookingincident;msdyn_quotebookingproduct;msdyn_quotebookingservice;msdyn_quotebookingservicetask;msdyn_resourceterritory;msdyn_rma;msdyn_rmaproduct;msdyn_rmareceipt;msdyn_rmareceiptproduct;msdyn_rmasubstatus;msdyn_rtv;msdyn_rtvproduct;msdyn_rtvsubstatus;msdyn_shipvia;msdyn_systemuserschedulersetting;msdyn_timegroup;msdyn_timegroupdetail;msdyn_timeoffrequest;msdyn_warehouse;msdyn_workorder;msdyn_workordercharacteristic;msdyn_workorderincident;msdyn_workorderproduct;msdyn_workorderresourcerestriction;msdyn_workorderservice;msdyn_workorderservicetask;opportunity;quote;salesorder;site;uii_action;uii_hostedapplication;uii_nonhostedapplication;uii_option;uii_savedsession;uii_workflow;uii_workflowstep;uii_workflow_workflowstep_mapping</para>
+		/// <para>Lookup to account, bookableresourcebooking, bookableresourcebookingheader, bulkoperation, campaign, campaignactivity, contact, contract, entitlement, entitlementtemplate, incident, invoice, knowledgearticle, knowledgebaserecord, lead, msdyn_agreement, msdyn_agreementbookingdate, msdyn_agreementbookingincident, msdyn_agreementbookingproduct, msdyn_agreementbookingservice, msdyn_agreementbookingservicetask, msdyn_agreementbookingsetup, msdyn_agreementinvoicedate, msdyn_agreementinvoiceproduct, msdyn_agreementinvoicesetup, msdyn_bookingalertstatus, msdyn_bookingrule, msdyn_bookingtimestamp, msdyn_customerasset, msdyn_fieldservicesetting, msdyn_incidenttypecharacteristic, msdyn_incidenttypeproduct, msdyn_incidenttypeservice, msdyn_inventoryadjustment, msdyn_inventoryadjustmentproduct, msdyn_inventoryjournal, msdyn_inventorytransfer, msdyn_payment, msdyn_paymentdetail, msdyn_paymentmethod, msdyn_paymentterm, msdyn_playbookinstance, msdyn_postalbum, msdyn_postalcode, msdyn_processnotes, msdyn_productinventory, msdyn_projectteam, msdyn_purchaseorder, msdyn_purchaseorderbill, msdyn_purchaseorderproduct, msdyn_purchaseorderreceipt, msdyn_purchaseorderreceiptproduct, msdyn_purchaseordersubstatus, msdyn_quotebookingincident, msdyn_quotebookingproduct, msdyn_quotebookingservice, msdyn_quotebookingservicetask, msdyn_resourceterritory, msdyn_rma, msdyn_rmaproduct, msdyn_rmareceipt, msdyn_rmareceiptproduct, msdyn_rmasubstatus, msdyn_rtv, msdyn_rtvproduct, msdyn_rtvsubstatus, msdyn_shipvia, msdyn_systemuserschedulersetting, msdyn_timegroup, msdyn_timegroupdetail, msdyn_timeoffrequest, msdyn_warehouse, msdyn_workorder, msdyn_workordercharacteristic, msdyn_workorderincident, msdyn_workorderproduct, msdyn_workorderresourcerestriction, msdyn_workorderservice, msdyn_workorderservicetask, opportunity, quote, salesorder, site, uii_action, uii_hostedapplication, uii_nonhostedapplication, uii_option, uii_savedsession, uii_workflow, uii_workflowstep, uii_workflow_workflowstep_mapping</para>
 		/// <para>Regarding</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -676,7 +893,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows whether the phone call is open, completed, or canceled. Completed and canceled phone calls are read-only and can't be edited.</para>
+		/// <para>Shows whether the phone call is open, completed, or canceled. Completed and canceled phone calls are read-only and can&apos;t be edited.</para>
 		/// <para>State</para>
 		/// <para>Activity Status</para>
 		/// </summary>
@@ -699,7 +916,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select the phone call's status.</para>
+		/// <para>Select the phone call&apos;s status.</para>
 		/// <para>Status</para>
 		/// <para>Status Reason</para>
 		/// </summary>
@@ -771,7 +988,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Enter the account, contact, lead, or user recipients of the phone call.</para>
-		/// <para>Required - PartyList</para>
+		/// <para>Required - Lookup to account, contact, lead, systemuser</para>
 		/// <para>Call To</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

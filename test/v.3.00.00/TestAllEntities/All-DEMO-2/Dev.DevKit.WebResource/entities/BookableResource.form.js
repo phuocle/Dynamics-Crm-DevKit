@@ -63,16 +63,13 @@ var DevKit;
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		var grid = {
-			ResourceCategory: {},
-			ResourceCharacteristics: {},
 			BookableResourceCharacteristics: {},
 			CATEGORYASSOCIATIONS: {},
+			ResourceCategory: {},
+			ResourceCharacteristics: {},
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
@@ -100,6 +97,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormBookableResource_Information = function(executionContext, defaultWebResourceName) {
@@ -127,6 +125,7 @@ var DevKit;
 			msdyn_EnableAppointments: {},
 			msdyn_EnabledForFieldServiceMobile: {},
 			msdyn_EnableDripScheduling: {},
+			msdyn_EnableOutlookSchedules: {},
 			msdyn_EndLocation: {},
 			msdyn_facilityequipmentid: {},
 			msdyn_GenericType: {},
@@ -146,7 +145,7 @@ var DevKit;
 			ResourceType: {},
 			TimeZone: {},
 			UserId: {},
-			UserId_1: {}
+			UserId1: {}
 		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
@@ -193,19 +192,16 @@ var DevKit;
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		var grid = {
-			ResourceCharacteristics: {},
-			ResourceCategory: {},
-			Resourceskills: {},
-			ResourceRole: {},
+			BookableResourceCharacteristics: {},
 			BookableResourceCharacteristics: {},
 			CATEGORYASSOCIATIONS: {},
-			BookableResourceCharacteristics: {},
+			ResourceCategory: {},
+			ResourceCharacteristics: {},
+			ResourceRole: {},
+			Resourceskills: {},
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
@@ -235,7 +231,6 @@ var DevKit;
 			nav_msdyn_bookableresource_msdyn_quotelinetransaction_bookableresource: {},
 			nav_msdyn_bookableresource_msdyn_resourceassignment_bookableresourceid: {},
 			nav_msdyn_bookableresource_msdyn_resourceterritory_Resource: {},
-			nav_msdyn_bookableresource_msdyn_timeentry_bookableresource: {},
 			nav_msdyn_bookableresource_msdyn_timeoffrequest_Resource: {},
 			nav_msdyn_bookableresource_msdyn_userworkhistory_Bookableresource: {},
 			nav_msdyn_bookableresource_msdyn_workorder_PreferredResource: {},
@@ -255,6 +250,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 })(DevKit || (DevKit = {}));
@@ -263,11 +259,15 @@ var OptionSet;
 (function (OptionSet) {
 	OptionSet.BookableResource = {
 		msdyn_CrewStrategy : {
-			Cascade_and_Accept_Cascade_Completely: 192350000,
+			Cascade_and_Accept_Cascade_Completely_Not_Recommended: 192350000,
 			Crew_Leader_Management: 192350001,
 			Crew_Member_Self_Management: 192350002
 		},
 		msdyn_EnableAppointments : {
+			No: 192350000,
+			Yes: 192350001
+		},
+		msdyn_EnableOutlookSchedules : {
 			No: 192350000,
 			Yes: 192350001
 		},
@@ -309,15 +309,14 @@ var OptionSet;
 			Active: 1,
 			Inactive: 2
 		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
-
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 	};
 })(OptionSet || (OptionSet = {}));

@@ -69,7 +69,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_skillattachmentruleitem";
 
-		public const int EntityTypeCode = 10620;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10757;
 
 		[DebuggerNonUserCode()]
 		public msdyn_skillattachmentruleitem()
@@ -198,7 +199,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>The Skill Attachment Rule's Condition</para>
+		/// <para>The Skill Attachment Rule&apos;s Condition</para>
 		/// <para>Memo - MaxLength: 10000</para>
 		/// <para>Condition</para>
 		/// </summary>
@@ -210,7 +211,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>The Skill Attachment Rule's Description</para>
+		/// <para>The Skill Attachment Rule&apos;s Description</para>
 		/// <para>String - MaxLength: 100</para>
 		/// <para>Description</para>
 		/// </summary>
@@ -222,7 +223,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>The Skill Attachment Rule's Expression</para>
+		/// <para>The Skill Attachment Rule&apos;s Expression</para>
 		/// <para>Memo - MaxLength: 10000</para>
 		/// <para>Expression</para>
 		/// </summary>
@@ -258,7 +259,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>The Skill Attachment Rule's output</para>
+		/// <para>The Skill Attachment Rule&apos;s output</para>
 		/// <para>Memo - MaxLength: 10000</para>
 		/// <para>Rule Json</para>
 		/// </summary>
@@ -299,7 +300,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

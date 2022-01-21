@@ -45,7 +45,7 @@ namespace Dev.DevKit.Shared.Entities.CampaignOptionSets
 		/// </summary>
 		Proposed = 0,
 		/// <summary>
-		/// Ready_To_Launch = 1
+		/// Ready To Launch = 1
 		/// </summary>
 		Ready_To_Launch = 1,
 		/// <summary>
@@ -61,11 +61,11 @@ namespace Dev.DevKit.Shared.Entities.CampaignOptionSets
 		/// </summary>
 		Advertisement = 1,
 		/// <summary>
-		/// Co_branding = 4
+		/// Co-branding = 4
 		/// </summary>
 		Co_branding = 4,
 		/// <summary>
-		/// Direct_Marketing = 2
+		/// Direct Marketing = 2
 		/// </summary>
 		Direct_Marketing = 2,
 		/// <summary>
@@ -107,6 +107,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ModifiedBy = "modifiedby";
 			public const string ModifiedOn = "modifiedon";
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
+			public const string msdyn_gdproptout = "msdyn_gdproptout";
 			public const string Name = "name";
 			public const string Objective = "objective";
 			public const string OtherCost = "othercost";
@@ -139,6 +140,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "campaign";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 4400;
 
 		[DebuggerNonUserCode()]
@@ -348,7 +350,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency.</para>
+		/// <para>Shows the conversion rate of the record&apos;s currency. The exchange rate is used to convert all money fields in the record from the local currency to the system&apos;s default currency.</para>
 		/// <para>ReadOnly - Decimal - MinValue: 0 - MaxValue: 100,000,000,000</para>
 		/// <para>Exchange Rate</para>
 		/// </summary>
@@ -479,6 +481,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Describes whether campaign is opted out or not</para>
+		/// <para>Boolean</para>
+		/// <para>GDPR Optout</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_gdproptout
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_gdproptout); }
+			set { Entity.Attributes[Fields.msdyn_gdproptout] = value; }
+		}
+
+		/// <summary>
 		/// <para>Type a name for the campaign so that it is identified correctly in lists.</para>
 		/// <para>String - MaxLength: 128</para>
 		/// <para>Name</para>
@@ -555,7 +569,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -671,7 +685,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows the status of the campaign. By default, campaigns are active and can't be deactivated.</para>
+		/// <para>Shows the status of the campaign. By default, campaigns are active and can&apos;t be deactivated.</para>
 		/// <para>State</para>
 		/// <para>Status</para>
 		/// </summary>
@@ -694,7 +708,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select the campaign's status.</para>
+		/// <para>Select the campaign&apos;s status.</para>
 		/// <para>Status</para>
 		/// <para>Status Reason</para>
 		/// </summary>

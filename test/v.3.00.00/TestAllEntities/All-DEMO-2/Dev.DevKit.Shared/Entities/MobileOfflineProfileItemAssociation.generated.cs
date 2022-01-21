@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.MobileOfflineProfileItemAssociationOptionSe
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -28,11 +28,6 @@ namespace Dev.DevKit.Shared.Entities.MobileOfflineProfileItemAssociationOptionSe
 		/// Unpublished = 1
 		/// </summary>
 		Unpublished = 1
-	}
-
-	public enum SelectedRelationShipsSchema
-	{
-
 	}
 }
 
@@ -65,7 +60,6 @@ namespace Dev.DevKit.Shared.Entities
 			public const string RelationshipDisplayName = "relationshipdisplayname";
 			public const string RelationshipId = "relationshipid";
 			public const string RelationshipName = "relationshipname";
-			public const string SelectedRelationShipsSchema = "selectedrelationshipsschema";
 			public const string SolutionId = "solutionid";
 			public const string StageId = "stageid";
 			public const string SupportingSolutionId = "supportingsolutionid";
@@ -75,6 +69,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "mobileofflineprofileitemassociation";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 9868;
 
 		[DebuggerNonUserCode()]
@@ -394,29 +389,6 @@ namespace Dev.DevKit.Shared.Entities
 		public string RelationshipName
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.RelationshipName); }
-		}
-
-		/// <summary>
-		/// <para>List of relationships of entity selected in parent profile item</para>
-		/// <para>Picklist</para>
-		/// <para>Entity Relationship</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public Dev.DevKit.Shared.Entities.MobileOfflineProfileItemAssociationOptionSets.SelectedRelationShipsSchema? SelectedRelationShipsSchema
-		{
-			get
-			{
-				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.SelectedRelationShipsSchema);
-				if (value == null) return null;
-				return (Dev.DevKit.Shared.Entities.MobileOfflineProfileItemAssociationOptionSets.SelectedRelationShipsSchema)value.Value;
-			}
-			set
-			{
-				if (value.HasValue)
-					Entity.Attributes[Fields.SelectedRelationShipsSchema] = new OptionSetValue((int)value.Value);
-				else
-					Entity.Attributes[Fields.SelectedRelationShipsSchema] = null;
-			}
 		}
 
 		/// <summary>

@@ -22,7 +22,6 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ChildIncidentCountId = "childincidentcountid";
 			public const string ImportSequenceNumber = "importsequencenumber";
 			public const string Name = "name";
-			public const string NumberOfChildIncidents = "numberofchildincidents";
 			public const string OverriddenCreatedOn = "overriddencreatedon";
 			public const string ParentCaseId = "parentcaseid";
 			public const string TimeZoneRuleVersionNumber = "timezoneruleversionnumber";
@@ -32,6 +31,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "childincidentcount";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 113;
 
 		[DebuggerNonUserCode()]
@@ -114,16 +114,6 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.Name); }
 			set { Entity.Attributes[Fields.Name] = value; }
-		}
-
-		/// <summary>
-		/// <para>ReadOnly - EntityName</para>
-		/// <para></para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string NumberOfChildIncidents
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.NumberOfChildIncidents); }
 		}
 
 		/// <summary>

@@ -25,7 +25,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_liveworkstreamOptionSets
 		/// </summary>
 		Busy = 192360001,
 		/// <summary>
-		/// Busy_DND = 192360002
+		/// Busy - DND = 192360002
 		/// </summary>
 		Busy_DND = 192360002,
 		/// <summary>
@@ -37,11 +37,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_liveworkstreamOptionSets
 	public enum msdyn_capacityformat
 	{
 		/// <summary>
-		/// Profile_based = 192360000
+		/// Profile based = 192360000
 		/// </summary>
 		Profile_based = 192360000,
 		/// <summary>
-		/// Unit_based = 192350000
+		/// Unit based = 192350000
 		/// </summary>
 		Unit_based = 192350000
 	}
@@ -49,23 +49,35 @@ namespace Dev.DevKit.Shared.Entities.msdyn_liveworkstreamOptionSets
 	public enum msdyn_conversationmode
 	{
 		/// <summary>
-		/// Live_Chat = 192350000
+		/// Live Chat = 192350000
 		/// </summary>
 		Live_Chat = 192350000,
 		/// <summary>
-		/// Persistent_Chat = 192350001
+		/// Persistent Chat = 192350001
 		/// </summary>
 		Persistent_Chat = 192350001
+	}
+
+	public enum msdyn_direction
+	{
+		/// <summary>
+		/// Inbound = 0
+		/// </summary>
+		Inbound = 0,
+		/// <summary>
+		/// Outbound = 1
+		/// </summary>
+		Outbound = 1
 	}
 
 	public enum msdyn_matchinglogic
 	{
 		/// <summary>
-		/// Closest_Match = 192350001
+		/// Closest Match = 192350001
 		/// </summary>
 		Closest_Match = 192350001,
 		/// <summary>
-		/// Exact_Match = 192350000
+		/// Exact Match = 192350000
 		/// </summary>
 		Exact_Match = 192350000
 	}
@@ -85,15 +97,15 @@ namespace Dev.DevKit.Shared.Entities.msdyn_liveworkstreamOptionSets
 	public enum msdyn_Notification
 	{
 		/// <summary>
-		/// Directly_open_session = 100000000
+		/// Directly open session = 100000000
 		/// </summary>
 		Directly_open_session = 100000000,
 		/// <summary>
-		/// Screen_pop_with_decline = 100000002
+		/// Screen pop with decline = 100000002
 		/// </summary>
 		Screen_pop_with_decline = 100000002,
 		/// <summary>
-		/// Screen_pop_with_timeout = 100000001
+		/// Screen pop with timeout = 100000001
 		/// </summary>
 		Screen_pop_with_timeout = 100000001
 	}
@@ -101,43 +113,43 @@ namespace Dev.DevKit.Shared.Entities.msdyn_liveworkstreamOptionSets
 	public enum msdyn_Screenpoptimeout_optionSet
 	{
 		/// <summary>
-		/// _120 = 120
+		/// 120 = 120
 		/// </summary>
 		_120 = 120,
 		/// <summary>
-		/// _150 = 150
+		/// 150 = 150
 		/// </summary>
 		_150 = 150,
 		/// <summary>
-		/// _180 = 180
+		/// 180 = 180
 		/// </summary>
 		_180 = 180,
 		/// <summary>
-		/// _210 = 210
+		/// 210 = 210
 		/// </summary>
 		_210 = 210,
 		/// <summary>
-		/// _240 = 240
+		/// 240 = 240
 		/// </summary>
 		_240 = 240,
 		/// <summary>
-		/// _270 = 270
+		/// 270 = 270
 		/// </summary>
 		_270 = 270,
 		/// <summary>
-		/// _30 = 30
+		/// 30 = 30
 		/// </summary>
 		_30 = 30,
 		/// <summary>
-		/// _300 = 300
+		/// 300 = 300
 		/// </summary>
 		_300 = 300,
 		/// <summary>
-		/// _60 = 60
+		/// 60 = 60
 		/// </summary>
 		_60 = 60,
 		/// <summary>
-		/// _90 = 90
+		/// 90 = 90
 		/// </summary>
 		_90 = 90
 	}
@@ -157,7 +169,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_liveworkstreamOptionSets
 	public enum msdyn_streamsource
 	{
 		/// <summary>
-		/// Co_browse = 192390000
+		/// Co-browse = 192390000
 		/// </summary>
 		Co_browse = 192390000,
 		/// <summary>
@@ -165,7 +177,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_liveworkstreamOptionSets
 		/// </summary>
 		Custom = 192350002,
 		/// <summary>
-		/// Entity_Records = 192350000
+		/// Entity Records = 192350000
 		/// </summary>
 		Entity_Records = 192350000,
 		/// <summary>
@@ -177,15 +189,15 @@ namespace Dev.DevKit.Shared.Entities.msdyn_liveworkstreamOptionSets
 		/// </summary>
 		LINE = 192310000,
 		/// <summary>
-		/// Live_chat = 192360000
+		/// Live chat = 192360000
 		/// </summary>
 		Live_chat = 192360000,
 		/// <summary>
-		/// Microsoft_Teams = 19241000
+		/// Microsoft Teams = 19241000
 		/// </summary>
 		Microsoft_Teams = 19241000,
 		/// <summary>
-		/// Screen_sharing = 192400000
+		/// Screen sharing = 192400000
 		/// </summary>
 		Screen_sharing = 192400000,
 		/// <summary>
@@ -269,6 +281,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_apikeyversionnumber = "msdyn_apikeyversionnumber";
 			public const string msdyn_AssignWorkItemAfterDecline = "msdyn_assignworkitemafterdecline";
 			public const string msdyn_AutoCloseAfterInactivity = "msdyn_autocloseafterinactivity";
+			public const string msdyn_blockcapacityforwrapup = "msdyn_blockcapacityforwrapup";
 			public const string msdyn_bot_queue = "msdyn_bot_queue";
 			public const string msdyn_bot_rule = "msdyn_bot_rule";
 			public const string msdyn_bot_user = "msdyn_bot_user";
@@ -277,6 +290,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_ConnectorsURL = "msdyn_connectorsurl";
 			public const string msdyn_conversationmode = "msdyn_conversationmode";
 			public const string msdyn_CustomerID = "msdyn_customerid";
+			public const string msdyn_direction = "msdyn_direction";
 			public const string msdyn_enableagentaffinity = "msdyn_enableagentaffinity";
 			public const string msdyn_enableautomatedmessages = "msdyn_enableautomatedmessages";
 			public const string msdyn_enableselectingfrompushbasedworkstreams = "msdyn_enableselectingfrompushbasedworkstreams";
@@ -284,6 +298,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_FallBackLanguage = "msdyn_fallbacklanguage";
 			public const string msdyn_FollowUpAfterWaiting = "msdyn_followupafterwaiting";
 			public const string msdyn_handlingtimethreshold = "msdyn_handlingtimethreshold";
+			public const string msdyn_isdefault = "msdyn_isdefault";
 			public const string msdyn_LastValidationOn = "msdyn_lastvalidationon";
 			public const string msdyn_LastValidationStatus = "msdyn_lastvalidationstatus";
 			public const string msdyn_liveworkstreamId = "msdyn_liveworkstreamid";
@@ -299,6 +314,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_notificationtemplate_incoming_unauth = "msdyn_notificationtemplate_incoming_unauth";
 			public const string msdyn_notificationtemplate_supervisorassign = "msdyn_notificationtemplate_supervisorassign";
 			public const string msdyn_notificationtemplate_transfer = "msdyn_notificationtemplate_transfer";
+			public const string msdyn_outboundqueueid = "msdyn_outboundqueueid";
 			public const string msdyn_recordidentificationrule = "msdyn_recordidentificationrule";
 			public const string msdyn_RecordIdentificationValidationRule = "msdyn_recordidentificationvalidationrule";
 			public const string msdyn_routingcontractid = "msdyn_routingcontractid";
@@ -329,7 +345,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_liveworkstream";
 
-		public const int EntityTypeCode = 10559;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10694;
 
 		[DebuggerNonUserCode()]
 		public msdyn_liveworkstream()
@@ -545,6 +562,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Time for which the agent&apos;s capacity is blocked for wrap up state. After this amount of time the agent&apos;s capacity will be released.</para>
+		/// <para>Integer - MinValue: 0 - MaxValue: 43,200</para>
+		/// <para>Block capacity for wrap up state</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public int? msdyn_blockcapacityforwrapup
+		{
+			get { return Entity.GetAttributeValue<int?>(Fields.msdyn_blockcapacityforwrapup); }
+			set { Entity.Attributes[Fields.msdyn_blockcapacityforwrapup] = value; }
+		}
+
+		/// <summary>
 		/// <para>The queue created for the bot in the workstream.</para>
 		/// <para>Lookup to queue</para>
 		/// <para>Bot queue</para>
@@ -663,6 +692,29 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Direction to indicate if its an inbound or outbound workstream</para>
+		/// <para>Required - Picklist</para>
+		/// <para>Direction</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public Dev.DevKit.Shared.Entities.msdyn_liveworkstreamOptionSets.msdyn_direction? msdyn_direction
+		{
+			get
+			{
+				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.msdyn_direction);
+				if (value == null) return null;
+				return (Dev.DevKit.Shared.Entities.msdyn_liveworkstreamOptionSets.msdyn_direction)value.Value;
+			}
+			set
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_direction] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_direction] = null;
+			}
+		}
+
+		/// <summary>
 		/// <para>Keep same agent for entire conversation</para>
 		/// <para>Boolean</para>
 		/// <para>Keep same agent for entire conversation</para>
@@ -744,6 +796,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<int?>(Fields.msdyn_handlingtimethreshold); }
 			set { Entity.Attributes[Fields.msdyn_handlingtimethreshold] = value; }
+		}
+
+		/// <summary>
+		/// <para>Indicates whether this is the default workstream or not.</para>
+		/// <para>Boolean</para>
+		/// <para>Is Default</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_isdefault
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_isdefault); }
+			set { Entity.Attributes[Fields.msdyn_isdefault] = value; }
 		}
 
 		/// <summary>
@@ -964,6 +1028,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Unique identifier for outbound queue associated with workstream</para>
+		/// <para>Lookup to queue</para>
+		/// <para>Outbound queue</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public EntityReference msdyn_outboundqueueid
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.msdyn_outboundqueueid); }
+			set { Entity.Attributes[Fields.msdyn_outboundqueueid] = value; }
+		}
+
+		/// <summary>
 		/// <para>Record identification rule associated to a workstream</para>
 		/// <para>Memo - MaxLength: 1048576</para>
 		/// <para>Record Identification Rule</para>
@@ -1129,9 +1205,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_liveworkstreamOptionSets.msdyn_streamsource)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_streamsource] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_streamsource] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_streamsource] = null;
+			}
 		}
 
 		/// <summary>
@@ -1185,9 +1264,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_liveworkstreamOptionSets.msdyn_workdistributionmode)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_workdistributionmode] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_workdistributionmode] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_workdistributionmode] = null;
+			}
 		}
 
 		/// <summary>
@@ -1204,7 +1286,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

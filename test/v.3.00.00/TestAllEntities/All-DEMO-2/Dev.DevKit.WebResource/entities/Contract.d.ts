@@ -76,13 +76,15 @@ declare namespace DevKit {
 			/** Select whether the discounts entered on contract lines for this contract should be entered as a percentage or a fixed dollar value. */
 			UseDiscountAsPercentage: DevKit.Controls.Boolean;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			Contract_lines: DevKit.Controls.Grid;
 		}
 	}
 	class FormContract extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Contract
+		* Contract [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -93,8 +95,12 @@ declare namespace DevKit {
 		Body: DevKit.FormContract.Body;
 		/** The Header section of form Contract */
 		Header: DevKit.FormContract.Header;
+		/** The Process of form Contract */
+		Process: DevKit.FormContract.Process;
 		/** The Grid of form Contract */
 		Grid: DevKit.FormContract.Grid;
+		/** The SidePanes of form Contract */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormContract_Information {
 		interface tab_details_Sections {
@@ -174,10 +180,12 @@ declare namespace DevKit {
 			/** Select whether the discounts entered on contract lines for this contract should be entered as a percentage or a fixed dollar value. */
 			UseDiscountAsPercentage: DevKit.Controls.Boolean;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormContract_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Contract_Information
+		* Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -186,6 +194,10 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Contract_Information */
 		Body: DevKit.FormContract_Information.Body;
+		/** The Process of form Contract_Information */
+		Process: DevKit.FormContract_Information.Process;
+		/** The SidePanes of form Contract_Information */
+		SidePanes: DevKit.SidePanes;
 	}
 	class ContractApi {
 		/**
@@ -223,7 +235,9 @@ declare namespace DevKit {
 		BillingAccountId: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the contact to whom the contract is to be billed. */
 		BillingContactId: DevKit.WebApi.LookupValueReadonly;
+		/** Select the customer account or contact to which the contract should be billed to provide a quick link to address and other customer details. */
 		billingcustomerid_account: DevKit.WebApi.LookupValue;
+		/** Select the customer account or contact to which the contract should be billed to provide a quick link to address and other customer details. */
 		billingcustomerid_contact: DevKit.WebApi.LookupValue;
 		/** Enter the end date for the contract's billing period to indicate the period for which the customer must pay for a service. */
 		BillingEndOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
@@ -255,7 +269,9 @@ declare namespace DevKit {
 		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
 		/** Shows who created the record on behalf of another user. */
 		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Select the customer account or contact to provide a quick link to additional customer details, such as address, phone number, activities, and orders. */
 		customerid_account: DevKit.WebApi.LookupValue;
+		/** Select the customer account or contact to provide a quick link to additional customer details, such as address, phone number, activities, and orders. */
 		customerid_contact: DevKit.WebApi.LookupValue;
 		/** Shows for the duration of the contract, in days, based on the contract start and end dates. */
 		Duration: DevKit.WebApi.IntegerValueReadonly;
@@ -384,22 +400,22 @@ declare namespace OptionSet {
 			/** 4 */
 			On_Hold
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Contract','Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

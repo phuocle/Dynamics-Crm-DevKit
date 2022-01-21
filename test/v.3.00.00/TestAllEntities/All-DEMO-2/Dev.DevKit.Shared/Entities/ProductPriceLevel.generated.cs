@@ -13,27 +13,27 @@ namespace Dev.DevKit.Shared.Entities.ProductPriceLevelOptionSets
 	public enum PricingMethodCode
 	{
 		/// <summary>
-		/// Currency_Amount = 1
+		/// Currency Amount = 1
 		/// </summary>
 		Currency_Amount = 1,
 		/// <summary>
-		/// Percent_Margin_Current_Cost = 4
+		/// Percent Margin - Current Cost = 4
 		/// </summary>
 		Percent_Margin_Current_Cost = 4,
 		/// <summary>
-		/// Percent_Margin_Standard_Cost = 6
+		/// Percent Margin - Standard Cost = 6
 		/// </summary>
 		Percent_Margin_Standard_Cost = 6,
 		/// <summary>
-		/// Percent_Markup_Current_Cost = 3
+		/// Percent Markup - Current Cost = 3
 		/// </summary>
 		Percent_Markup_Current_Cost = 3,
 		/// <summary>
-		/// Percent_Markup_Standard_Cost = 5
+		/// Percent Markup - Standard Cost = 5
 		/// </summary>
 		Percent_Markup_Standard_Cost = 5,
 		/// <summary>
-		/// Percent_of_List = 2
+		/// Percent of List = 2
 		/// </summary>
 		Percent_of_List = 2
 	}
@@ -41,7 +41,7 @@ namespace Dev.DevKit.Shared.Entities.ProductPriceLevelOptionSets
 	public enum QuantitySellingCode
 	{
 		/// <summary>
-		/// No_Control = 1
+		/// No Control = 1
 		/// </summary>
 		No_Control = 1,
 		/// <summary>
@@ -49,7 +49,7 @@ namespace Dev.DevKit.Shared.Entities.ProductPriceLevelOptionSets
 		/// </summary>
 		Whole = 2,
 		/// <summary>
-		/// Whole_and_Fractional = 3
+		/// Whole and Fractional = 3
 		/// </summary>
 		Whole_and_Fractional = 3
 	}
@@ -57,11 +57,11 @@ namespace Dev.DevKit.Shared.Entities.ProductPriceLevelOptionSets
 	public enum RoundingOptionCode
 	{
 		/// <summary>
-		/// Ends_in = 1
+		/// Ends in = 1
 		/// </summary>
 		Ends_in = 1,
 		/// <summary>
-		/// Multiple_of = 2
+		/// Multiple of = 2
 		/// </summary>
 		Multiple_of = 2
 	}
@@ -77,7 +77,7 @@ namespace Dev.DevKit.Shared.Entities.ProductPriceLevelOptionSets
 		/// </summary>
 		None = 1,
 		/// <summary>
-		/// To_Nearest = 4
+		/// To Nearest = 4
 		/// </summary>
 		To_Nearest = 4,
 		/// <summary>
@@ -130,6 +130,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "productpricelevel";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 1026;
 
 		[DebuggerNonUserCode()]
@@ -265,7 +266,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency.</para>
+		/// <para>Shows the conversion rate of the record&apos;s currency. The exchange rate is used to convert all money fields in the record from the local currency to the system&apos;s default currency.</para>
 		/// <para>ReadOnly - Decimal - MinValue: 0 - MaxValue: 100,000,000,000</para>
 		/// <para>Exchange Rate</para>
 		/// </summary>
@@ -382,9 +383,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.ProductPriceLevelOptionSets.PricingMethodCode)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.PricingMethodCode] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.PricingMethodCode] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.PricingMethodCode] = null;
+			}
 		}
 
 		/// <summary>
@@ -453,9 +457,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.ProductPriceLevelOptionSets.QuantitySellingCode)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.QuantitySellingCode] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.QuantitySellingCode] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.QuantitySellingCode] = null;
+			}
 		}
 
 		/// <summary>
@@ -512,9 +519,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.ProductPriceLevelOptionSets.RoundingOptionCode)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.RoundingOptionCode] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.RoundingOptionCode] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.RoundingOptionCode] = null;
+			}
 		}
 
 		/// <summary>
@@ -532,9 +542,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.ProductPriceLevelOptionSets.RoundingPolicyCode)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.RoundingPolicyCode] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.RoundingPolicyCode] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.RoundingPolicyCode] = null;
+			}
 		}
 
 		/// <summary>

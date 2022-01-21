@@ -13,11 +13,11 @@ namespace Dev.DevKit.Shared.Entities.ContractOptionSets
 	public enum AllotmentTypeCode
 	{
 		/// <summary>
-		/// Coverage_Dates = 3
+		/// Coverage Dates = 3
 		/// </summary>
 		Coverage_Dates = 3,
 		/// <summary>
-		/// Number_of_Cases = 1
+		/// Number of Cases = 1
 		/// </summary>
 		Number_of_Cases = 1,
 		/// <summary>
@@ -89,7 +89,7 @@ namespace Dev.DevKit.Shared.Entities.ContractOptionSets
 		/// </summary>
 		Invoiced = 1,
 		/// <summary>
-		/// On_Hold = 3
+		/// On Hold = 3
 		/// </summary>
 		On_Hold = 3
 	}
@@ -117,7 +117,7 @@ namespace Dev.DevKit.Shared.Entities.ContractOptionSets
 		/// </summary>
 		Invoiced = 2,
 		/// <summary>
-		/// On_Hold = 4
+		/// On Hold = 4
 		/// </summary>
 		On_Hold = 4
 	}
@@ -186,6 +186,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "contract";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 1010;
 
 		[DebuggerNonUserCode()]
@@ -306,7 +307,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Select the customer account or contact to which the contract should be billed to provide a quick link to address and other customer details.</para>
-		/// <para>Customer</para>
+		/// <para>Lookup to account, contact</para>
 		/// <para>Bill To Customer</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -317,7 +318,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Enter the end date for the contract's billing period to indicate the period for which the customer must pay for a service.</para>
+		/// <para>Enter the end date for the contract&apos;s billing period to indicate the period for which the customer must pay for a service.</para>
 		/// <para>DateTimeBehavior: UserLocal - DateTimeFormat: DateOnly</para>
 		/// <para>Billing End Date</para>
 		/// </summary>
@@ -352,7 +353,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Enter the start date for the contract's billing period to indicate the period for which the customer must pay for a service. This defaults to the same date that is selected in the Contract Start Date field.</para>
+		/// <para>Enter the start date for the contract&apos;s billing period to indicate the period for which the customer must pay for a service. This defaults to the same date that is selected in the Contract Start Date field.</para>
 		/// <para>DateTimeBehavior: UserLocal - DateTimeFormat: DateOnly</para>
 		/// <para>Billing Start Date</para>
 		/// </summary>
@@ -438,7 +439,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select the level of service that should be provided for the contract based on your company's definition of bronze, silver, or gold.</para>
+		/// <para>Select the level of service that should be provided for the contract based on your company&apos;s definition of bronze, silver, or gold.</para>
 		/// <para>Picklist</para>
 		/// <para>Service Level</para>
 		/// </summary>
@@ -518,7 +519,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Select the customer account or contact to provide a quick link to additional customer details, such as address, phone number, activities, and orders.</para>
-		/// <para>Customer</para>
+		/// <para>Lookup to account, contact</para>
 		/// <para>Customer</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -574,7 +575,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency.</para>
+		/// <para>Shows the conversion rate of the record&apos;s currency. The exchange rate is used to convert all money fields in the record from the local currency to the system&apos;s default currency.</para>
 		/// <para>ReadOnly - Decimal - MinValue: 0 - MaxValue: 100,000,000,000</para>
 		/// <para>Exchange Rate</para>
 		/// </summary>
@@ -699,7 +700,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -778,7 +779,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select the contract's status.</para>
+		/// <para>Select the contract&apos;s status.</para>
 		/// <para>Status</para>
 		/// <para>Status Reason</para>
 		/// </summary>
@@ -825,7 +826,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows the total discount applied to the contract's service charges, calculated as the sum of values in the Discount fields for each existing contract line related to the contract.</para>
+		/// <para>Shows the total discount applied to the contract&apos;s service charges, calculated as the sum of values in the Discount fields for each existing contract line related to the contract.</para>
 		/// <para>ReadOnly - Money - MinValue: 0 - MaxValue: 100,000,000,000,000</para>
 		/// <para>Total Discount</para>
 		/// </summary>

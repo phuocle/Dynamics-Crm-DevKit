@@ -21,11 +21,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_quotelineanalyticsbreakdownOptionSets
 		/// </summary>
 		Complimentary = 192350002,
 		/// <summary>
-		/// Non_Chargeable = 192350000
+		/// Non Chargeable = 192350000
 		/// </summary>
 		Non_Chargeable = 192350000,
 		/// <summary>
-		/// Not_Available = 192350003
+		/// Not Available = 192350003
 		/// </summary>
 		Not_Available = 192350003
 	}
@@ -69,7 +69,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_quotelineanalyticsbreakdownOptionSets
 	public enum msdyn_TransactionTypeCode
 	{
 		/// <summary>
-		/// Billed_Sales = 192350006
+		/// Billed Sales = 192350006
 		/// </summary>
 		Billed_Sales = 192350006,
 		/// <summary>
@@ -77,19 +77,19 @@ namespace Dev.DevKit.Shared.Entities.msdyn_quotelineanalyticsbreakdownOptionSets
 		/// </summary>
 		Cost = 192350000,
 		/// <summary>
-		/// Inter_Organizational_Sales = 192350008
+		/// Inter-Organizational Sales = 192350008
 		/// </summary>
 		Inter_Organizational_Sales = 192350008,
 		/// <summary>
-		/// Project_Contract = 192350004
+		/// Project Contract = 192350004
 		/// </summary>
 		Project_Contract = 192350004,
 		/// <summary>
-		/// Resourcing_Unit_Cost = 192350007
+		/// Resourcing Unit Cost = 192350007
 		/// </summary>
 		Resourcing_Unit_Cost = 192350007,
 		/// <summary>
-		/// Unbilled_Sales = 192350005
+		/// Unbilled Sales = 192350005
 		/// </summary>
 		Unbilled_Sales = 192350005
 	}
@@ -164,7 +164,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_quotelineanalyticsbreakdown";
 
-		public const int EntityTypeCode = 10374;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10480;
 
 		[DebuggerNonUserCode()]
 		public msdyn_quotelineanalyticsbreakdown()
@@ -357,9 +358,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_quotelineanalyticsbreakdownOptionSets.msdyn_BillingType)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_BillingType] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_BillingType] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_BillingType] = null;
+			}
 		}
 
 		/// <summary>
@@ -528,9 +532,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_quotelineanalyticsbreakdownOptionSets.msdyn_TransactionClassification)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_TransactionClassification] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_TransactionClassification] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_TransactionClassification] = null;
+			}
 		}
 
 		/// <summary>
@@ -548,9 +555,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_quotelineanalyticsbreakdownOptionSets.msdyn_TransactionTypeCode)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_TransactionTypeCode] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_TransactionTypeCode] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_TransactionTypeCode] = null;
+			}
 		}
 
 		/// <summary>
@@ -567,7 +577,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

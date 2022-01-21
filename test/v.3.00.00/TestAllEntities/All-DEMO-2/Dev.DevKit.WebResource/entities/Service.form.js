@@ -16,12 +16,12 @@ var DevKit;
 		var form = devKit.LoadForm(formContext);
 		var body = {
 			AnchorOffset: {},
-			AnchorOffset_1: {},
+			AnchorOffset1: {},
 			Description: {},
 			Duration: {},
-			Duration_1: {},
+			Duration1: {},
 			Granularity: {},
-			Granularity_1: {},
+			Granularity1: {},
 			IFRAME_RuleTree: {},
 			IFRAME_Scheduling: {},
 			InitialStatusCode: {},
@@ -30,7 +30,7 @@ var DevKit;
 			msdyn_SchedulingEngine: {},
 			Name: {},
 			ResourceSpecId: {},
-			ResourceSpecId_1: {}
+			ResourceSpecId1: {}
 		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
@@ -59,23 +59,16 @@ var DevKit;
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		var grid = {
 			ResourceRequirements: {},
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 })(DevKit || (DevKit = {}));
@@ -98,15 +91,14 @@ var OptionSet;
 			Legacy_Scheduling: 0,
 			Universal_Resource_Scheduling: 1
 		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
-
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 	};
 })(OptionSet || (OptionSet = {}));

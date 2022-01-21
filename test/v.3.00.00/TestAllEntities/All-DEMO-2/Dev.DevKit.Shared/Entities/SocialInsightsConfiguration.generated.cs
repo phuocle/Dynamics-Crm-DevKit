@@ -13,11 +13,11 @@ namespace Dev.DevKit.Shared.Entities.SocialInsightsConfigurationOptionSets
 	public enum FormTypeCode
 	{
 		/// <summary>
-		/// System_Form = 1030
+		/// System Form = 1030
 		/// </summary>
 		System_Form = 1030,
 		/// <summary>
-		/// User_Form = 1031
+		/// User Form = 1031
 		/// </summary>
 		User_Form = 1031
 	}
@@ -29,7 +29,7 @@ namespace Dev.DevKit.Shared.Entities.SocialInsightsConfigurationOptionSets
 		/// </summary>
 		Class = 2,
 		/// <summary>
-		/// Search_Item = 1
+		/// Search Item = 1
 		/// </summary>
 		Search_Item = 1
 	}
@@ -59,6 +59,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "socialinsightsconfiguration";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 1300;
 
 		[DebuggerNonUserCode()]

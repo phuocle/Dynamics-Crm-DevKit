@@ -27,6 +27,7 @@ declare namespace DevKit {
 			msdyn_CustomGeoResourceField: DevKit.Controls.String;
 			/** Shows the logical name of the timestamp field to be used for geolocations. */
 			msdyn_CustomGeoTimestampField: DevKit.Controls.String;
+			/** Choose the unit to display the distance on the Schedule Assistant experience */
 			msdyn_DefaultRadiusUnit: DevKit.Controls.OptionSet;
 			msdyn_DefaultRadiusValue: DevKit.Controls.Integer;
 			/** Disable Sanitizing HTML Templates on the Schedule Board */
@@ -35,8 +36,11 @@ declare namespace DevKit {
 			msdyn_EnableAppointments: DevKit.Controls.OptionSet;
 			/** Determines if a custom entity will be used as a source of geo locations for resources to be displayed in the map view. */
 			msdyn_EnableCustomGeoLocation: DevKit.Controls.Boolean;
+			/** This only applies when directly calling the API. It does not apply when the Book button is clicked on the Schedule Board or on any schedulable entity. */
+			msdyn_EnableOutlookSchedules: DevKit.Controls.OptionSet;
 			msdyn_GeoLocationExpiresAfterXMinutes: DevKit.Controls.Integer;
 			msdyn_GeoLocationRefreshIntervalSeconds: DevKit.Controls.Integer;
+			msdyn_internalflag: DevKit.Controls.ActionCards;
 			/** Api key for map */
 			msdyn_MapApiKey: DevKit.Controls.String;
 			/** The name of the custom entity. */
@@ -45,10 +49,12 @@ declare namespace DevKit {
 			msdyn_SAAutoFilterServiceTerritory: DevKit.Controls.Boolean;
 			msdyn_ScheduleBoardRefreshIntervalSeconds: DevKit.Controls.Integer;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_schedulingparameter_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form msdyn_schedulingparameter_Information
+		* Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -57,6 +63,37 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_schedulingparameter_Information */
 		Body: DevKit.Formmsdyn_schedulingparameter_Information.Body;
+		/** The Process of form msdyn_schedulingparameter_Information */
+		Process: DevKit.Formmsdyn_schedulingparameter_Information.Process;
+		/** The SidePanes of form msdyn_schedulingparameter_Information */
+		SidePanes: DevKit.SidePanes;
+	}
+	namespace Formmsdyn_schedulingparameter_Information2 {
+		interface Tabs {
+		}
+		interface Body {
+			/** The name of the custom entity. */
+			msdyn_name: DevKit.Controls.String;
+			notescontrol: DevKit.Controls.Note;
+		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
+	}
+	class Formmsdyn_schedulingparameter_Information2 extends DevKit.IForm {
+		/**
+		* Information [Main Form]
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form msdyn_schedulingparameter_Information2 */
+		Body: DevKit.Formmsdyn_schedulingparameter_Information2.Body;
+		/** The Process of form msdyn_schedulingparameter_Information2 */
+		Process: DevKit.Formmsdyn_schedulingparameter_Information2.Process;
+		/** The SidePanes of form msdyn_schedulingparameter_Information2 */
+		SidePanes: DevKit.SidePanes;
 	}
 	class msdyn_schedulingparameterApi {
 		/**
@@ -116,6 +153,7 @@ declare namespace DevKit {
 		msdyn_CustomGeoResourceField: DevKit.WebApi.StringValue;
 		/** Shows the logical name of the timestamp field to be used for geolocations. */
 		msdyn_CustomGeoTimestampField: DevKit.WebApi.StringValue;
+		/** Choose the unit to display the distance on the Schedule Assistant experience */
 		msdyn_DefaultRadiusUnit: DevKit.WebApi.OptionSetValue;
 		msdyn_DefaultRadiusValue: DevKit.WebApi.IntegerValue;
 		/** Disable Sanitizing HTML Templates on the Schedule Board */
@@ -126,8 +164,12 @@ declare namespace DevKit {
 		msdyn_EnableCustomGeoLocation: DevKit.WebApi.BooleanValue;
 		/** Determines if scheduling optimization is enabled. */
 		msdyn_enableOptimizer: DevKit.WebApi.BooleanValue;
+		/** This only applies when directly calling the API. It does not apply when the Book button is clicked on the Schedule Board or on any schedulable entity. */
+		msdyn_EnableOutlookSchedules: DevKit.WebApi.OptionSetValue;
 		msdyn_GeoLocationExpiresAfterXMinutes: DevKit.WebApi.IntegerValue;
 		msdyn_GeoLocationRefreshIntervalSeconds: DevKit.WebApi.IntegerValue;
+		/** For internal use */
+		msdyn_internalflag: DevKit.WebApi.StringValue;
 		/** Api key for map */
 		msdyn_MapApiKey: DevKit.WebApi.StringValue;
 		/** The name of the custom entity. */
@@ -173,6 +215,12 @@ declare namespace OptionSet {
 			/** 192350001 */
 			Yes
 		}
+		enum msdyn_EnableOutlookSchedules {
+			/** 192350000 */
+			No,
+			/** 192350001 */
+			Yes
+		}
 		enum statecode {
 			/** 0 */
 			Active,
@@ -185,22 +233,22 @@ declare namespace OptionSet {
 			/** 2 */
 			Inactive
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

@@ -31,18 +31,11 @@ var DevKit;
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 })(DevKit || (DevKit = {}));
@@ -61,6 +54,7 @@ var OptionSet;
 			Desktop_Flow: 6,
 			Dialog: 1,
 			Modern_Flow: 5,
+			Web_Client_API_Flow: 9000,
 			Workflow: 0
 		},
 		ComponentState : {
@@ -97,10 +91,12 @@ var OptionSet;
 		},
 		StateCode : {
 			Activated: 1,
-			Draft: 0
+			Draft: 0,
+			Suspended: 2
 		},
 		StatusCode : {
 			Activated: 2,
+			CompanyDLPViolation: 3,
 			Draft: 1
 		},
 		Type : {
@@ -118,15 +114,14 @@ var OptionSet;
 			Post_operation: 40,
 			Pre_operation: 20
 		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
-
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 	};
 })(OptionSet || (OptionSet = {}));

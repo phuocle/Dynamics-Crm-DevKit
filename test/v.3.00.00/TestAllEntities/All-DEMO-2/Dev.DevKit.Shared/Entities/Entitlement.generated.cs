@@ -13,15 +13,15 @@ namespace Dev.DevKit.Shared.Entities.EntitlementOptionSets
 	public enum AllocationTypeCode
 	{
 		/// <summary>
-		/// Discount_and_Price_List = 192350000
+		/// Discount % and Price List = 192350000
 		/// </summary>
 		Discount_and_Price_List = 192350000,
 		/// <summary>
-		/// Number_of_cases = 0
+		/// Number of cases = 0
 		/// </summary>
 		Number_of_cases = 0,
 		/// <summary>
-		/// Number_of_hours = 1
+		/// Number of hours = 1
 		/// </summary>
 		Number_of_hours = 1
 	}
@@ -29,11 +29,11 @@ namespace Dev.DevKit.Shared.Entities.EntitlementOptionSets
 	public enum DecreaseRemainingOn
 	{
 		/// <summary>
-		/// Case_Creation = 1
+		/// Case Creation = 1
 		/// </summary>
 		Case_Creation = 1,
 		/// <summary>
-		/// Case_Resolution = 0
+		/// Case Resolution = 0
 		/// </summary>
 		Case_Resolution = 0
 	}
@@ -45,7 +45,7 @@ namespace Dev.DevKit.Shared.Entities.EntitlementOptionSets
 		/// </summary>
 		Case = 0,
 		/// <summary>
-		/// Work_Order = 192350000
+		/// Work Order = 192350000
 		/// </summary>
 		Work_Order = 192350000
 	}
@@ -69,15 +69,15 @@ namespace Dev.DevKit.Shared.Entities.EntitlementOptionSets
 	public enum msdyn_AppliesTo
 	{
 		/// <summary>
-		/// Both_Work_Order_Products_Services = 690970002
+		/// Both Work Order Products & Services = 690970002
 		/// </summary>
 		Both_Work_Order_Products_Services = 690970002,
 		/// <summary>
-		/// Work_Order_Products = 690970000
+		/// Work Order Products = 690970000
 		/// </summary>
 		Work_Order_Products = 690970000,
 		/// <summary>
-		/// Work_Order_Services = 690970001
+		/// Work Order Services = 690970001
 		/// </summary>
 		Work_Order_Services = 690970001
 	}
@@ -186,6 +186,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "entitlement";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 9700;
 
 		[DebuggerNonUserCode()]
@@ -262,9 +263,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.EntitlementOptionSets.AllocationTypeCode)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.AllocationTypeCode] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.AllocationTypeCode] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.AllocationTypeCode] = null;
+			}
 		}
 
 		/// <summary>
@@ -313,7 +317,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Choose a contact or account for which this entitlement has been defined.</para>
-		/// <para>Customer</para>
+		/// <para>Lookup to account, contact</para>
 		/// <para>Customer</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -338,9 +342,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.EntitlementOptionSets.DecreaseRemainingOn)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.DecreaseRemainingOn] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.DecreaseRemainingOn] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.DecreaseRemainingOn] = null;
+			}
 		}
 
 		/// <summary>
@@ -422,9 +429,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.EntitlementOptionSets.entitytype)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.entitytype] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.entitytype] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.entitytype] = null;
+			}
 		}
 
 		/// <summary>
@@ -533,9 +543,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.EntitlementOptionSets.msdyn_AppliesTo)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_AppliesTo] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_AppliesTo] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_AppliesTo] = null;
+			}
 		}
 
 		/// <summary>
@@ -600,7 +613,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

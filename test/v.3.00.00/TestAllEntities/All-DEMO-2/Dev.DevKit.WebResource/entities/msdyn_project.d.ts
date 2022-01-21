@@ -124,7 +124,7 @@ declare namespace DevKit {
 			/** Select the project template behind the project. */
 			msdyn_ProjectTemplate: DevKit.Controls.Lookup;
 			/** Select the project template behind the project. */
-			msdyn_ProjectTemplate_1: DevKit.Controls.Lookup;
+			msdyn_ProjectTemplate1: DevKit.Controls.Lookup;
 			/** Enter the scheduled end time of the project. */
 			msdyn_scheduledend: DevKit.Controls.Date;
 			/** Enter the scheduled start time of the project. */
@@ -195,22 +195,22 @@ declare namespace DevKit {
 			Project_Service_Project_Stages: ProcessProject_Service_Project_Stages;
 		}
 		interface Grid {
-			Schedule: DevKit.Controls.Grid;
-			SubGrid_TeamMember: DevKit.Controls.Grid;
 			Assignments: DevKit.Controls.Grid;
-			Reconciliation: DevKit.Controls.Grid;
 			Estimates: DevKit.Controls.Grid;
-			Tracking: DevKit.Controls.Grid;
-			SchedulePerformanceEffort: DevKit.Controls.Grid;
-			SchedulePerformanceCost: DevKit.Controls.Grid;
+			ExpenseEstimates: DevKit.Controls.Grid;
 			ProjectContract: DevKit.Controls.Grid;
 			ProjectQuote: DevKit.Controls.Grid;
-			ExpenseEstimates: DevKit.Controls.Grid;
+			Reconciliation: DevKit.Controls.Grid;
+			Schedule: DevKit.Controls.Grid;
+			SchedulePerformanceCost: DevKit.Controls.Grid;
+			SchedulePerformanceEffort: DevKit.Controls.Grid;
+			SubGrid_TeamMember: DevKit.Controls.Grid;
+			Tracking: DevKit.Controls.Grid;
 		}
 	}
 	class Formmsdyn_project_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form msdyn_project_Information
+		* Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -227,6 +227,8 @@ declare namespace DevKit {
 		Process: DevKit.Formmsdyn_project_Information.Process;
 		/** The Grid of form msdyn_project_Information */
 		Grid: DevKit.Formmsdyn_project_Information.Grid;
+		/** The SidePanes of form msdyn_project_Information */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormCreate_Project {
 		interface tab_tab_1_Sections {
@@ -258,6 +260,8 @@ declare namespace DevKit {
 			msdyn_projectmanager: DevKit.Controls.Lookup;
 			/** Select the project template behind the project. */
 			msdyn_ProjectTemplate: DevKit.Controls.Lookup;
+			/** Shows the contract for this project. */
+			msdyn_salesorderid: DevKit.Controls.Lookup;
 			/** Enter the scheduled end time of the project. */
 			msdyn_scheduledend: DevKit.Controls.Date;
 			/** Enter the scheduled start time of the project. */
@@ -276,7 +280,7 @@ declare namespace DevKit {
 	}
 	class FormCreate_Project extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Create_Project
+		* Create Project [Quick Create]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -562,22 +566,22 @@ declare namespace OptionSet {
 			/** 2 */
 			Inactive_Sets_project_to_read_only
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Create Project','Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

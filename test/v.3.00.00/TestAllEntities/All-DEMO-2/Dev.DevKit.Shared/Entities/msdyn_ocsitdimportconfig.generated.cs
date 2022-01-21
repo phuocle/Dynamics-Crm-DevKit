@@ -21,19 +21,19 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocsitdimportconfigOptionSets
 	public enum msdyn_loadstatus
 	{
 		/// <summary>
-		/// Load_completed = 192350002
+		/// Load completed = 192350002
 		/// </summary>
 		Load_completed = 192350002,
 		/// <summary>
-		/// Load_failed = 192350003
+		/// Load failed = 192350003
 		/// </summary>
 		Load_failed = 192350003,
 		/// <summary>
-		/// Loading_training_data = 192350001
+		/// Loading training data = 192350001
 		/// </summary>
 		Loading_training_data = 192350001,
 		/// <summary>
-		/// Triggering_load = 192350000
+		/// Triggering load = 192350000
 		/// </summary>
 		Triggering_load = 192350000
 	}
@@ -99,7 +99,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_ocsitdimportconfig";
 
-		public const int EntityTypeCode = 10623;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10760;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocsitdimportconfig()
@@ -254,9 +255,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_ocsitdimportconfigOptionSets.msdyn_importconfigtype)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_importconfigtype] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_importconfigtype] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_importconfigtype] = null;
+			}
 		}
 
 		/// <summary>
@@ -371,7 +375,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

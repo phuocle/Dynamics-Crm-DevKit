@@ -78,7 +78,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "uii_audit";
 
-		public const int EntityTypeCode = 10675;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10815;
 
 		[DebuggerNonUserCode()]
 		public UII_audit()
@@ -220,7 +221,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -446,7 +447,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Agent's Machine name.</para>
+		/// <para>Agent&apos;s Machine name.</para>
 		/// <para>String - MaxLength: 2000</para>
 		/// <para>Machine Name</para>
 		/// </summary>

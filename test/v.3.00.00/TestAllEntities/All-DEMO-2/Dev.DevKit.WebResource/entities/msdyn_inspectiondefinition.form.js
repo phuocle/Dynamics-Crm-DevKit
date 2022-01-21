@@ -19,42 +19,42 @@ var DevKit;
 			msdyn_EffectiveDate: {},
 			msdyn_IsRequiredToAnswer: {},
 			msdyn_JsonContent: {},
-			msdyn_JsonContent_1: {},
-			msdyn_JsonContent_2: {},
-			msdyn_JsonContent_3: {},
+			msdyn_JsonContent1: {},
+			msdyn_JsonContent2: {},
+			msdyn_JsonContent3: {},
 			msdyn_name: {},
 			msdyn_ParentInspectionId: {},
-			msdyn_ParentInspectionId_1: {},
+			msdyn_ParentInspectionId1: {},
 			msdyn_state: {},
 			msdyn_Version: {},
 			OwnerId: {}
 		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
-			Tab_Designer_bbd067a1_0128_4609_88dd_ecea1e595f69: {
+			TabDesignerbbd067a10128460988ddecea1e595f69: {
 				Section: {
-					Section_Designer_7ad92bc6_0a56_490d_9d9b_84d4bd317f91: {},
-					Section_General_0511acf3_e77d_465d_bee3_9da1d675c3f2: {}
+					SectionDesigner7ad92bc60a56490d9d9b84d4bd317f91: {},
+					SectionGeneral0511acf3e77d465dbee39da1d675c3f2: {}
 				}
 			},
-			Tab_Logic_a3eaa3be_f518_4f77_a566_de5f887905a2: {
+			TabLogica3eaa3bef5184f77a566de5f887905a2: {
 				Section: {
-					Section_Logic_15afbe51_4f2a_4d20_baaa_9a6bf8baf5de: {}
+					SectionLogic15afbe514f2a4d20baaa9a6bf8baf5de: {}
 				}
 			},
-			Tab_Preview_13ca3214_ee1f_4f51_a47d_f5806c9bf4d3: {
+			TabPreview13ca3214ee1f4f51a47df5806c9bf4d3: {
 				Section: {
-					Section_Preview_3d73cd56_88fb_432b_a5cf_cae62225e0df: {}
+					SectionPreview3d73cd5688fb432ba5cfcae62225e0df: {}
 				}
 			},
-			Tab_Translation: {
+			TabTranslation: {
 				Section: {
-					Section_Translation: {}
+					SectionTranslation: {}
 				}
 			},
-			Tab_Versions_485e645a_5783_4439_91bb_63077e2eadff: {
+			TabVersions485e645a5783443991bb63077e2eadff: {
 				Section: {
-					Section_Versions_f2391a5c_ab20_41ac_87a3_d748babb957f: {}
+					SectionVersionsf2391a5cab2041ac87a3d748babb957f: {}
 				}
 			}
 		};
@@ -66,6 +66,8 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		var quickForm = {
 			quick_view_inspectiondefinition_versions: {
 
@@ -80,6 +82,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 })(DevKit || (DevKit = {}));
@@ -99,15 +102,14 @@ var OptionSet;
 			Active: 1,
 			Inactive: 2
 		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
-
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 	};
 })(OptionSet || (OptionSet = {}));

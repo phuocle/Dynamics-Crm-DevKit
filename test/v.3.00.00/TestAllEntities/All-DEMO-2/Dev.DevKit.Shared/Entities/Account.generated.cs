@@ -13,7 +13,7 @@ namespace Dev.DevKit.Shared.Entities.AccountOptionSets
 	public enum AccountCategoryCode
 	{
 		/// <summary>
-		/// Preferred_Customer = 1
+		/// Preferred Customer = 1
 		/// </summary>
 		Preferred_Customer = 1,
 		/// <summary>
@@ -25,7 +25,7 @@ namespace Dev.DevKit.Shared.Entities.AccountOptionSets
 	public enum AccountClassificationCode
 	{
 		/// <summary>
-		/// Default_Value = 1
+		/// Default Value = 1
 		/// </summary>
 		Default_Value = 1
 	}
@@ -33,7 +33,7 @@ namespace Dev.DevKit.Shared.Entities.AccountOptionSets
 	public enum AccountRatingCode
 	{
 		/// <summary>
-		/// Default_Value = 1
+		/// Default Value = 1
 		/// </summary>
 		Default_Value = 1
 	}
@@ -41,7 +41,7 @@ namespace Dev.DevKit.Shared.Entities.AccountOptionSets
 	public enum Address1_AddressTypeCode
 	{
 		/// <summary>
-		/// Bill_To = 1
+		/// Bill To = 1
 		/// </summary>
 		Bill_To = 1,
 		/// <summary>
@@ -53,7 +53,7 @@ namespace Dev.DevKit.Shared.Entities.AccountOptionSets
 		/// </summary>
 		Primary = 3,
 		/// <summary>
-		/// Ship_To = 2
+		/// Ship To = 2
 		/// </summary>
 		Ship_To = 2
 	}
@@ -65,7 +65,7 @@ namespace Dev.DevKit.Shared.Entities.AccountOptionSets
 		/// </summary>
 		FOB = 1,
 		/// <summary>
-		/// No_Charge = 2
+		/// No Charge = 2
 		/// </summary>
 		No_Charge = 2
 	}
@@ -85,11 +85,11 @@ namespace Dev.DevKit.Shared.Entities.AccountOptionSets
 		/// </summary>
 		FedEx = 3,
 		/// <summary>
-		/// Full_Load = 6
+		/// Full Load = 6
 		/// </summary>
 		Full_Load = 6,
 		/// <summary>
-		/// Postal_Mail = 5
+		/// Postal Mail = 5
 		/// </summary>
 		Postal_Mail = 5,
 		/// <summary>
@@ -97,7 +97,7 @@ namespace Dev.DevKit.Shared.Entities.AccountOptionSets
 		/// </summary>
 		UPS = 4,
 		/// <summary>
-		/// Will_Call = 7
+		/// Will Call = 7
 		/// </summary>
 		Will_Call = 7
 	}
@@ -105,7 +105,7 @@ namespace Dev.DevKit.Shared.Entities.AccountOptionSets
 	public enum Address2_AddressTypeCode
 	{
 		/// <summary>
-		/// Default_Value = 1
+		/// Default Value = 1
 		/// </summary>
 		Default_Value = 1
 	}
@@ -113,7 +113,7 @@ namespace Dev.DevKit.Shared.Entities.AccountOptionSets
 	public enum Address2_FreightTermsCode
 	{
 		/// <summary>
-		/// Default_Value = 1
+		/// Default Value = 1
 		/// </summary>
 		Default_Value = 1
 	}
@@ -121,7 +121,7 @@ namespace Dev.DevKit.Shared.Entities.AccountOptionSets
 	public enum Address2_ShippingMethodCode
 	{
 		/// <summary>
-		/// Default_Value = 1
+		/// Default Value = 1
 		/// </summary>
 		Default_Value = 1
 	}
@@ -129,7 +129,7 @@ namespace Dev.DevKit.Shared.Entities.AccountOptionSets
 	public enum BusinessTypeCode
 	{
 		/// <summary>
-		/// Default_Value = 1
+		/// Default Value = 1
 		/// </summary>
 		Default_Value = 1
 	}
@@ -137,7 +137,7 @@ namespace Dev.DevKit.Shared.Entities.AccountOptionSets
 	public enum CustomerSizeCode
 	{
 		/// <summary>
-		/// Default_Value = 1
+		/// Default Value = 1
 		/// </summary>
 		Default_Value = 1
 	}
@@ -201,11 +201,11 @@ namespace Dev.DevKit.Shared.Entities.AccountOptionSets
 		/// </summary>
 		Accounting = 1,
 		/// <summary>
-		/// Agriculture_and_Non_petrol_Natural_Resource_Extraction = 2
+		/// Agriculture and Non-petrol Natural Resource Extraction = 2
 		/// </summary>
 		Agriculture_and_Non_petrol_Natural_Resource_Extraction = 2,
 		/// <summary>
-		/// Broadcasting_Printing_and_Publishing = 3
+		/// Broadcasting Printing and Publishing = 3
 		/// </summary>
 		Broadcasting_Printing_and_Publishing = 3,
 		/// <summary>
@@ -213,11 +213,11 @@ namespace Dev.DevKit.Shared.Entities.AccountOptionSets
 		/// </summary>
 		Brokers = 4,
 		/// <summary>
-		/// Building_Supply_Retail = 5
+		/// Building Supply Retail = 5
 		/// </summary>
 		Building_Supply_Retail = 5,
 		/// <summary>
-		/// Business_Services = 6
+		/// Business Services = 6
 		/// </summary>
 		Business_Services = 6,
 		/// <summary>
@@ -225,35 +225,35 @@ namespace Dev.DevKit.Shared.Entities.AccountOptionSets
 		/// </summary>
 		Consulting = 7,
 		/// <summary>
-		/// Consumer_Services = 8
+		/// Consumer Services = 8
 		/// </summary>
 		Consumer_Services = 8,
 		/// <summary>
-		/// Design_Direction_and_Creative_Management = 9
+		/// Design, Direction and Creative Management = 9
 		/// </summary>
 		Design_Direction_and_Creative_Management = 9,
 		/// <summary>
-		/// Distributors_Dispatchers_and_Processors = 10
+		/// Distributors, Dispatchers and Processors = 10
 		/// </summary>
 		Distributors_Dispatchers_and_Processors = 10,
 		/// <summary>
-		/// Doctors_Offices_and_Clinics = 11
+		/// Doctor's Offices and Clinics = 11
 		/// </summary>
 		Doctors_Offices_and_Clinics = 11,
 		/// <summary>
-		/// Durable_Manufacturing = 12
+		/// Durable Manufacturing = 12
 		/// </summary>
 		Durable_Manufacturing = 12,
 		/// <summary>
-		/// Eating_and_Drinking_Places = 13
+		/// Eating and Drinking Places = 13
 		/// </summary>
 		Eating_and_Drinking_Places = 13,
 		/// <summary>
-		/// Entertainment_Retail = 14
+		/// Entertainment Retail = 14
 		/// </summary>
 		Entertainment_Retail = 14,
 		/// <summary>
-		/// Equipment_Rental_and_Leasing = 15
+		/// Equipment Rental and Leasing = 15
 		/// </summary>
 		Equipment_Rental_and_Leasing = 15,
 		/// <summary>
@@ -261,15 +261,15 @@ namespace Dev.DevKit.Shared.Entities.AccountOptionSets
 		/// </summary>
 		Financial = 16,
 		/// <summary>
-		/// Food_and_Tobacco_Processing = 17
+		/// Food and Tobacco Processing = 17
 		/// </summary>
 		Food_and_Tobacco_Processing = 17,
 		/// <summary>
-		/// Inbound_Capital_Intensive_Processing = 18
+		/// Inbound Capital Intensive Processing = 18
 		/// </summary>
 		Inbound_Capital_Intensive_Processing = 18,
 		/// <summary>
-		/// Inbound_Repair_and_Services = 19
+		/// Inbound Repair and Services = 19
 		/// </summary>
 		Inbound_Repair_and_Services = 19,
 		/// <summary>
@@ -277,39 +277,39 @@ namespace Dev.DevKit.Shared.Entities.AccountOptionSets
 		/// </summary>
 		Insurance = 20,
 		/// <summary>
-		/// Legal_Services = 21
+		/// Legal Services = 21
 		/// </summary>
 		Legal_Services = 21,
 		/// <summary>
-		/// Non_Durable_Merchandise_Retail = 22
+		/// Non-Durable Merchandise Retail = 22
 		/// </summary>
 		Non_Durable_Merchandise_Retail = 22,
 		/// <summary>
-		/// Outbound_Consumer_Service = 23
+		/// Outbound Consumer Service = 23
 		/// </summary>
 		Outbound_Consumer_Service = 23,
 		/// <summary>
-		/// Petrochemical_Extraction_and_Distribution = 24
+		/// Petrochemical Extraction and Distribution = 24
 		/// </summary>
 		Petrochemical_Extraction_and_Distribution = 24,
 		/// <summary>
-		/// Service_Retail = 25
+		/// Service Retail = 25
 		/// </summary>
 		Service_Retail = 25,
 		/// <summary>
-		/// SIG_Affiliations = 26
+		/// SIG Affiliations = 26
 		/// </summary>
 		SIG_Affiliations = 26,
 		/// <summary>
-		/// Social_Services = 27
+		/// Social Services = 27
 		/// </summary>
 		Social_Services = 27,
 		/// <summary>
-		/// Special_Outbound_Trade_Contractors = 28
+		/// Special Outbound Trade Contractors = 28
 		/// </summary>
 		Special_Outbound_Trade_Contractors = 28,
 		/// <summary>
-		/// Specialty_Realty = 29
+		/// Specialty Realty = 29
 		/// </summary>
 		Specialty_Realty = 29,
 		/// <summary>
@@ -317,11 +317,11 @@ namespace Dev.DevKit.Shared.Entities.AccountOptionSets
 		/// </summary>
 		Transportation = 30,
 		/// <summary>
-		/// Utility_Creation_and_Distribution = 31
+		/// Utility Creation and Distribution = 31
 		/// </summary>
 		Utility_Creation_and_Distribution = 31,
 		/// <summary>
-		/// Vehicle_Retail = 32
+		/// Vehicle Retail = 32
 		/// </summary>
 		Vehicle_Retail = 32,
 		/// <summary>
@@ -373,19 +373,19 @@ namespace Dev.DevKit.Shared.Entities.AccountOptionSets
 	public enum PaymentTermsCode
 	{
 		/// <summary>
-		/// _2_10_Net_30 = 2
+		/// 2% 10, Net 30 = 2
 		/// </summary>
 		_2_10_Net_30 = 2,
 		/// <summary>
-		/// Net_30 = 1
+		/// Net 30 = 1
 		/// </summary>
 		Net_30 = 1,
 		/// <summary>
-		/// Net_45 = 3
+		/// Net 45 = 3
 		/// </summary>
 		Net_45 = 3,
 		/// <summary>
-		/// Net_60 = 4
+		/// Net 60 = 4
 		/// </summary>
 		Net_60 = 4
 	}
@@ -465,7 +465,7 @@ namespace Dev.DevKit.Shared.Entities.AccountOptionSets
 	public enum ShippingMethodCode
 	{
 		/// <summary>
-		/// Default_Value = 1
+		/// Default Value = 1
 		/// </summary>
 		Default_Value = 1
 	}
@@ -497,7 +497,7 @@ namespace Dev.DevKit.Shared.Entities.AccountOptionSets
 	public enum TerritoryCode
 	{
 		/// <summary>
-		/// Default_Value = 1
+		/// Default Value = 1
 		/// </summary>
 		Default_Value = 1
 	}
@@ -611,6 +611,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
 			public const string msdyn_BillingAccount = "msdyn_billingaccount";
 			public const string msdyn_externalaccountid = "msdyn_externalaccountid";
+			public const string msdyn_gdproptout = "msdyn_gdproptout";
 			public const string msdyn_PreferredResource = "msdyn_preferredresource";
 			public const string msdyn_SalesTaxCode = "msdyn_salestaxcode";
 			public const string msdyn_ServiceTerritory = "msdyn_serviceterritory";
@@ -683,6 +684,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "account";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 1;
 
 		[DebuggerNonUserCode()]
@@ -1044,7 +1046,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the name of the main contact at the account's primary address.</para>
+		/// <para>Type the name of the main contact at the account&apos;s primary address.</para>
 		/// <para>String - MaxLength: 100</para>
 		/// <para>Address 1: Primary Contact Name</para>
 		/// </summary>
@@ -1364,7 +1366,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the name of the main contact at the account's secondary address.</para>
+		/// <para>Type the name of the main contact at the account&apos;s secondary address.</para>
 		/// <para>String - MaxLength: 100</para>
 		/// <para>Address 2: Primary Contact Name</para>
 		/// </summary>
@@ -1657,7 +1659,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows the credit limit converted to the system's default base currency for reporting purposes.</para>
+		/// <para>Shows the credit limit converted to the system&apos;s default base currency for reporting purposes.</para>
 		/// <para>ReadOnly - Money - MinValue: -922,337,203,685,477 - MaxValue: 922,337,203,685,477</para>
 		/// <para>Credit Limit (Base)</para>
 		/// </summary>
@@ -1743,7 +1745,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type additional information to describe the account, such as an excerpt from the company's website.</para>
+		/// <para>Type additional information to describe the account, such as an excerpt from the company&apos;s website.</para>
 		/// <para>Memo - MaxLength: 2000</para>
 		/// <para>Description</para>
 		/// </summary>
@@ -1886,7 +1888,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency.</para>
+		/// <para>Shows the conversion rate of the record&apos;s currency. The exchange rate is used to convert all money fields in the record from the local currency to the system&apos;s default currency.</para>
 		/// <para>ReadOnly - Decimal - MinValue: 0 - MaxValue: 100,000,000,000</para>
 		/// <para>Exchange Rate</para>
 		/// </summary>
@@ -1921,7 +1923,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the URL for the account's FTP site to enable users to access data and share documents.</para>
+		/// <para>Type the URL for the account&apos;s FTP site to enable users to access data and share documents.</para>
 		/// <para>String - MaxLength: 200</para>
 		/// <para>FTP Site</para>
 		/// </summary>
@@ -1945,7 +1947,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select the account's primary industry for use in marketing segmentation and demographic analysis.</para>
+		/// <para>Select the account&apos;s primary industry for use in marketing segmentation and demographic analysis.</para>
 		/// <para>Picklist</para>
 		/// <para>Industry</para>
 		/// </summary>
@@ -2002,7 +2004,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the market capitalization of the account to identify the company's equity, used as an indicator in financial performance analysis.</para>
+		/// <para>Type the market capitalization of the account to identify the company&apos;s equity, used as an indicator in financial performance analysis.</para>
 		/// <para>Money - MinValue: 0 - MaxValue: 100,000,000,000,000</para>
 		/// <para>Market Capitalization</para>
 		/// </summary>
@@ -2025,7 +2027,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows the market capitalization converted to the system's default base currency.</para>
+		/// <para>Shows the market capitalization converted to the system&apos;s default base currency.</para>
 		/// <para>ReadOnly - Money - MinValue: -922,337,203,685,477 - MaxValue: 922,337,203,685,477</para>
 		/// <para>Market Capitalization (Base)</para>
 		/// </summary>
@@ -2140,6 +2142,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.msdyn_externalaccountid); }
 			set { Entity.Attributes[Fields.msdyn_externalaccountid] = value; }
+		}
+
+		/// <summary>
+		/// <para>Describes whether account is opted out or not</para>
+		/// <para>Boolean</para>
+		/// <para>GDPR Optout</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_gdproptout
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_gdproptout); }
+			set { Entity.Attributes[Fields.msdyn_gdproptout] = value; }
 		}
 
 		/// <summary>
@@ -2458,7 +2472,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user.</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -2469,7 +2483,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select the account's ownership structure, such as public or private.</para>
+		/// <para>Select the account&apos;s ownership structure, such as public or private.</para>
 		/// <para>Picklist</para>
 		/// <para>Ownership</para>
 		/// </summary>
@@ -2641,7 +2655,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Choose the account's preferred service facility or equipment to make sure services are scheduled correctly for the customer.</para>
+		/// <para>Choose the account&apos;s preferred service facility or equipment to make sure services are scheduled correctly for the customer.</para>
 		/// <para>Lookup to equipment</para>
 		/// <para>Preferred Facility/Equipment</para>
 		/// </summary>
@@ -2653,7 +2667,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Choose the account's preferred service for reference when you schedule service activities.</para>
+		/// <para>Choose the account&apos;s preferred service for reference when you schedule service activities.</para>
 		/// <para>Lookup to service</para>
 		/// <para>Preferred Service</para>
 		/// </summary>
@@ -2748,7 +2762,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows the annual revenue converted to the system's default base currency. The calculations use the exchange rate specified in the Currencies area.</para>
+		/// <para>Shows the annual revenue converted to the system&apos;s default base currency. The calculations use the exchange rate specified in the Currencies area.</para>
 		/// <para>ReadOnly - Money - MinValue: -922,337,203,685,477 - MaxValue: 922,337,203,685,477</para>
 		/// <para>Annual Revenue (Base)</para>
 		/// </summary>
@@ -2776,7 +2790,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select a shipping method for deliveries sent to the account's address to designate the preferred carrier or other delivery option.</para>
+		/// <para>Select a shipping method for deliveries sent to the account&apos;s address to designate the preferred carrier or other delivery option.</para>
 		/// <para>Picklist</para>
 		/// <para>Shipping Method</para>
 		/// </summary>
@@ -2799,7 +2813,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the Standard Industrial Classification (SIC) code that indicates the account's primary industry of business, for use in marketing segmentation and demographic analysis.</para>
+		/// <para>Type the Standard Industrial Classification (SIC) code that indicates the account&apos;s primary industry of business, for use in marketing segmentation and demographic analysis.</para>
 		/// <para>String - MaxLength: 20</para>
 		/// <para>SIC Code</para>
 		/// </summary>
@@ -2846,7 +2860,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows whether the account is active or inactive. Inactive accounts are read-only and can't be edited unless they are reactivated.</para>
+		/// <para>Shows whether the account is active or inactive. Inactive accounts are read-only and can&apos;t be edited unless they are reactivated.</para>
 		/// <para>State</para>
 		/// <para>Status</para>
 		/// </summary>
@@ -2869,7 +2883,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select the account's status.</para>
+		/// <para>Select the account&apos;s status.</para>
 		/// <para>Status</para>
 		/// <para>Status Reason</para>
 		/// </summary>
@@ -3069,7 +3083,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the account's website URL to get quick details about the company profile.</para>
+		/// <para>Type the account&apos;s website URL to get quick details about the company profile.</para>
 		/// <para>String - MaxLength: 200</para>
 		/// <para>Website</para>
 		/// </summary>

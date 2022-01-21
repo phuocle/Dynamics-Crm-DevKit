@@ -1,9 +1,13 @@
 ﻿//@ts-check
 ///<reference path="VirtualEntityMetadata.d.ts" />
 "use strict";
-var formInformation = (function () {
+var formVirtualEntityMetadata_Information = (function () {
 	"use strict";
+	/** @type DevKit.FormVirtualEntityMetadata_Information */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.FormVirtualEntityMetadata_Information(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}

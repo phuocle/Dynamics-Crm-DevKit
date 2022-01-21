@@ -44,6 +44,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "userapplicationmetadata";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 7001;
 
 		[DebuggerNonUserCode()]
@@ -270,7 +271,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the user or team who owns the application metadata</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

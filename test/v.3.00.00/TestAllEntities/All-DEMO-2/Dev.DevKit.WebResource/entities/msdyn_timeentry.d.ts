@@ -31,10 +31,12 @@ declare namespace DevKit {
 			msdyn_timeentrysettingId: DevKit.Controls.Lookup;
 			notescontrol: DevKit.Controls.Note;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormEntry_Edit_Form extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Entry_Edit_Form
+		* Entry Edit Form [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -43,6 +45,10 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Entry_Edit_Form */
 		Body: DevKit.FormEntry_Edit_Form.Body;
+		/** The Process of form Entry_Edit_Form */
+		Process: DevKit.FormEntry_Edit_Form.Process;
+		/** The SidePanes of form Entry_Edit_Form */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace Formmsdyn_timeentry_Field_Service_Information {
 		interface tab_General_Sections {
@@ -85,10 +91,12 @@ declare namespace DevKit {
 			/** Unique identifier for Work Orders associated with Time Entry. */
 			msdyn_WorkOrder: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_timeentry_Field_Service_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form msdyn_timeentry_Field_Service_Information
+		* Field Service Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -97,6 +105,10 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_timeentry_Field_Service_Information */
 		Body: DevKit.Formmsdyn_timeentry_Field_Service_Information.Body;
+		/** The Process of form msdyn_timeentry_Field_Service_Information */
+		Process: DevKit.Formmsdyn_timeentry_Field_Service_Information.Process;
+		/** The SidePanes of form msdyn_timeentry_Field_Service_Information */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace Formmsdyn_timeentry_Information {
 		interface tab__AE8B7CDD_484B_49A8_A00D_C201927D5729_Sections {
@@ -135,10 +147,12 @@ declare namespace DevKit {
 		interface Navigation {
 			nav_msdyn_msdyn_timeentry_msdyn_timeoffcalendar_timeEntry: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_timeentry_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form msdyn_timeentry_Information
+		* Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -149,6 +163,10 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyn_timeentry_Information.Body;
 		/** The Navigation of form msdyn_timeentry_Information */
 		Navigation: DevKit.Formmsdyn_timeentry_Information.Navigation;
+		/** The Process of form msdyn_timeentry_Information */
+		Process: DevKit.Formmsdyn_timeentry_Information.Process;
+		/** The SidePanes of form msdyn_timeentry_Information */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormRow_Edit_Form {
 		interface tab__AE8B7CDD_484B_49A8_A00D_C201927D5729_Sections {
@@ -176,10 +194,12 @@ declare namespace DevKit {
 			/** Select the time entry type. */
 			msdyn_type: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormRow_Edit_Form extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Row_Edit_Form
+		* Row Edit Form [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -188,6 +208,10 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Row_Edit_Form */
 		Body: DevKit.FormRow_Edit_Form.Body;
+		/** The Process of form Row_Edit_Form */
+		Process: DevKit.FormRow_Edit_Form.Process;
+		/** The SidePanes of form Row_Edit_Form */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormTESA_Time_Entry_Main_Form {
 		interface tab__AE8B7CDD_484B_49A8_A00D_C201927D5729_Sections {
@@ -205,10 +229,12 @@ declare namespace DevKit {
 			msdyn_description: DevKit.Controls.String;
 			notescontrol: DevKit.Controls.Note;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormTESA_Time_Entry_Main_Form extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form TESA_Time_Entry_Main_Form
+		* TESA Time Entry Main Form [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -217,6 +243,10 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form TESA_Time_Entry_Main_Form */
 		Body: DevKit.FormTESA_Time_Entry_Main_Form.Body;
+		/** The Process of form TESA_Time_Entry_Main_Form */
+		Process: DevKit.FormTESA_Time_Entry_Main_Form.Process;
+		/** The SidePanes of form TESA_Time_Entry_Main_Form */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormCreate_Time_Entry {
 		interface tab_Time_Entry_Quick_Create_Form_Sections {
@@ -252,7 +282,7 @@ declare namespace DevKit {
 	}
 	class FormCreate_Time_Entry extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Create_Time_Entry
+		* Create Time Entry [Quick Create]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -304,7 +334,7 @@ declare namespace DevKit {
 	}
 	class FormField_Service_Quick_Create extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Field_Service_Quick_Create
+		* Field Service Quick Create [Quick Create]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -333,7 +363,7 @@ declare namespace DevKit {
 	}
 	class FormTESA_Time_Entry_Quick_Create_Form extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form TESA_Time_Entry_Quick_Create_Form
+		* TESA Time Entry Quick Create Form [Quick Create]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -528,22 +558,22 @@ declare namespace OptionSet {
 			/** 2 */
 			Inactive
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Create Time Entry','Entry Edit Form','Field Service Information','Information','Row Edit Form','Quick Create','Main Form','Quick Create Form'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

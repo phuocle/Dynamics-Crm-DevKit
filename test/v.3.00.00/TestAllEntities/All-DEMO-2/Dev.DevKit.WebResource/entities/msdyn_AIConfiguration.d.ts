@@ -55,6 +55,8 @@ declare namespace DevKit {
 		msdyn_AIConfigurationIdUnique: DevKit.WebApi.GuidValueReadonly;
 		/** Unique identifier for AIModel associated with AIConfiguration. */
 		msdyn_AIModelId: DevKit.WebApi.LookupValue;
+		/** Unique identifier for Connection Reference associated with AIConfiguration. */
+		msdyn_ConnectionReferenceId: DevKit.WebApi.LookupValue;
 		msdyn_CreatedFromConfigurationId: DevKit.WebApi.LookupValue;
 		msdyn_CustomConfiguration: DevKit.WebApi.StringValue;
 		msdyn_DataBinding: DevKit.WebApi.StringValue;
@@ -62,7 +64,8 @@ declare namespace DevKit {
 		msdyn_lasttrainorrundate_TimezoneDateAndTime: DevKit.WebApi.TimezoneDateAndTimeValue;
 		msdyn_MajorIterationNumber: DevKit.WebApi.IntegerValue;
 		msdyn_MinorIterationNumber: DevKit.WebApi.IntegerValue;
-		msdyn_Model_Name: DevKit.WebApi.StringValueReadonly;
+		/** This is a file type attribute to store Ai builder Model. */
+		msdyn_Model: DevKit.WebApi.StringValueReadonly;
 		msdyn_ModelData: DevKit.WebApi.StringValue;
 		msdyn_modelglobalexplainability: DevKit.WebApi.StringValue;
 		msdyn_ModelPerformance: DevKit.WebApi.StringValue;
@@ -172,22 +175,22 @@ declare namespace OptionSet {
 			/** 14 */
 			UnsuccessfulTraining
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':[],'JsWebApi':true,'IsDebugForm':false,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}

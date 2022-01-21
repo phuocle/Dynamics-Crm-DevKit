@@ -193,17 +193,19 @@ declare namespace DevKit {
 		interface QuickForm {
 			msdyn_reconnecttimelimit: quickForm_msdyn_reconnecttimelimit;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
-			instance_CustomSystemMessage: DevKit.Controls.Grid;
-			PrechatUnauthenticatedQuestions: DevKit.Controls.Grid;
 			CustomOOOHMessages: DevKit.Controls.Grid;
 			includeDomain: DevKit.Controls.Grid;
+			instance_CustomSystemMessage: DevKit.Controls.Grid;
 			PostchatUnauthenticatedQuestions: DevKit.Controls.Grid;
+			PrechatUnauthenticatedQuestions: DevKit.Controls.Grid;
 		}
 	}
 	class Formmsdyn_livechatconfig_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form msdyn_livechatconfig_Information
+		* Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -216,8 +218,12 @@ declare namespace DevKit {
 		Header: DevKit.Formmsdyn_livechatconfig_Information.Header;
 		/** The QuickForm of form msdyn_livechatconfig_Information */
 		QuickForm: DevKit.Formmsdyn_livechatconfig_Information.QuickForm;
+		/** The Process of form msdyn_livechatconfig_Information */
+		Process: DevKit.Formmsdyn_livechatconfig_Information.Process;
 		/** The Grid of form msdyn_livechatconfig_Information */
 		Grid: DevKit.Formmsdyn_livechatconfig_Information.Grid;
+		/** The SidePanes of form msdyn_livechatconfig_Information */
+		SidePanes: DevKit.SidePanes;
 	}
 	class msdyn_livechatconfigApi {
 		/**
@@ -327,6 +333,8 @@ declare namespace DevKit {
 		msdyn_postchatenabled: DevKit.WebApi.BooleanValue;
 		/** Lookup to Dynamics 365 Customer Voice survey field */
 		msdyn_PostConversationSurvey: DevKit.WebApi.LookupValue;
+		/** Enable or disable bot survey */
+		msdyn_PostConversationSurveyBotSurvey: DevKit.WebApi.BooleanValue;
 		/** To enable or disable post conversation survey */
 		msdyn_PostConversationSurveyEnable: DevKit.WebApi.BooleanValue;
 		/** Prefix text for survey link message that will be sent to the user. */
@@ -503,22 +511,22 @@ declare namespace OptionSet {
 			/** 2 */
 			Inactive
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

@@ -43,13 +43,15 @@ declare namespace DevKit {
 		IsCustomizable: DevKit.WebApi.ManagedPropertyValue;
 		/** Indicates whether the solution component is part of a managed solution. */
 		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		/** For internal use only. */
 		IsValidated: DevKit.WebApi.BooleanValue;
 		/** Name of the KeyVault Secret or Certificate */
 		KeyName: DevKit.WebApi.StringValue;
+		/** The type of key to use. */
 		KeyType: DevKit.WebApi.OptionSetValue;
 		/** Unique identifier for entity instances */
 		KeyVaultReferenceId: DevKit.WebApi.GuidValue;
-		/** Keyvault URI */
+		/** The Uri for the Key Vault. */
 		KeyVaultUri: DevKit.WebApi.StringValue;
 		/** Unique identifier for managedidentity which if preauthorized for the keyvault. */
 		ManagedIdentityId: DevKit.WebApi.LookupValue;
@@ -73,12 +75,13 @@ declare namespace DevKit {
 		OwningTeam: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier for the user that owns the record. */
 		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		/** The type of pre-authorized application. */
 		PreAuthorizedApplicationType: DevKit.WebApi.OptionSetValue;
 		/** Unique identifier of the associated solution. */
 		SolutionId: DevKit.WebApi.GuidValueReadonly;
-		/** Status of the KeyVaultReference */
+		/** Status of the Key Vault Reference */
 		statecode: DevKit.WebApi.OptionSetValue;
-		/** Reason for the status of the KeyVaultReference */
+		/** Reason for the status of the Key Vault Reference */
 		statuscode: DevKit.WebApi.OptionSetValue;
 		/** For internal use only. */
 		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
@@ -128,22 +131,22 @@ declare namespace OptionSet {
 			/** 2 */
 			Inactive
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':[],'JsWebApi':true,'IsDebugForm':false,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}

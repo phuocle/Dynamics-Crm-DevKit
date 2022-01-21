@@ -27,7 +27,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_callablecontext_msdyn_playbooktemplate";
 
-		public const int EntityTypeCode = 10204;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10228;
 
 		[DebuggerNonUserCode()]
 		public msdyn_callablecontext_msdyn_playbooktemplate()

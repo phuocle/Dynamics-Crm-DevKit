@@ -21,13 +21,15 @@ declare namespace DevKit {
 			/** The name of the custom entity. */
 			msdyn_name: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			RatingModelDetails: DevKit.Controls.Grid;
 		}
 	}
 	class Formmsdyn_omnichannelconfiguration_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form msdyn_omnichannelconfiguration_Information
+		* Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -36,8 +38,47 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_omnichannelconfiguration_Information */
 		Body: DevKit.Formmsdyn_omnichannelconfiguration_Information.Body;
+		/** The Process of form msdyn_omnichannelconfiguration_Information */
+		Process: DevKit.Formmsdyn_omnichannelconfiguration_Information.Process;
 		/** The Grid of form msdyn_omnichannelconfiguration_Information */
 		Grid: DevKit.Formmsdyn_omnichannelconfiguration_Information.Grid;
+		/** The SidePanes of form msdyn_omnichannelconfiguration_Information */
+		SidePanes: DevKit.SidePanes;
+	}
+	namespace FormMarkdown_Settings {
+		interface tab__44EFFE7C_A18D_4D4C_B111_DB98E28BC808_Sections {
+			_360DEA1C_38CE_48A4_9E94_CCF1A7E7C18E: DevKit.Controls.Section;
+		}
+		interface tab__44EFFE7C_A18D_4D4C_B111_DB98E28BC808 extends DevKit.Controls.ITab {
+			Section: tab__44EFFE7C_A18D_4D4C_B111_DB98E28BC808_Sections;
+		}
+		interface Tabs {
+			_44EFFE7C_A18D_4D4C_B111_DB98E28BC808: tab__44EFFE7C_A18D_4D4C_B111_DB98E28BC808;
+		}
+		interface Body {
+			Tab: Tabs;
+			/** Enable markdown support for messages */
+			msdyn_enablemarkdown: DevKit.Controls.Boolean;
+			WebResource_ocpreviewterms: DevKit.Controls.WebResource;
+		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
+	}
+	class FormMarkdown_Settings extends DevKit.IForm {
+		/**
+		* Markdown Settings [Main Form]
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form Markdown_Settings */
+		Body: DevKit.FormMarkdown_Settings.Body;
+		/** The Process of form Markdown_Settings */
+		Process: DevKit.FormMarkdown_Settings.Process;
+		/** The SidePanes of form Markdown_Settings */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormMasking_settings {
 		interface tab__DCC1EB86_7EF2_4FF4_8D56_2A0F28FD1B5E_Sections {
@@ -63,6 +104,8 @@ declare namespace DevKit {
 			msdyn_enable_supervisor_assign: DevKit.Controls.Boolean;
 			/** Enables supervisor monitor feature for the org */
 			msdyn_enable_supervisor_monitor: DevKit.Controls.Boolean;
+			/** Enables supervisor transfer feature for the org */
+			msdyn_enable_supervisor_transfer: DevKit.Controls.Boolean;
 			/** Enables self service feature for the org */
 			msdyn_enable_visitorjourney: DevKit.Controls.Boolean;
 			/** Mask agent data */
@@ -72,13 +115,15 @@ declare namespace DevKit {
 			/** The name of the custom entity. */
 			msdyn_name: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			MaskingRulesInSettings: DevKit.Controls.Grid;
 		}
 	}
 	class FormMasking_settings extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Masking_settings
+		* Masking settings [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -87,10 +132,17 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Masking_settings */
 		Body: DevKit.FormMasking_settings.Body;
+		/** The Process of form Masking_settings */
+		Process: DevKit.FormMasking_settings.Process;
 		/** The Grid of form Masking_settings */
 		Grid: DevKit.FormMasking_settings.Grid;
+		/** The SidePanes of form Masking_settings */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormNotifications {
+		interface tab_agent_reject_notification_settings_Sections {
+			agent_reject_notification_settings_section: DevKit.Controls.Section;
+		}
 		interface tab_missed_notification_settings_Sections {
 			missed_notifications_settings_section: DevKit.Controls.Section;
 		}
@@ -100,6 +152,9 @@ declare namespace DevKit {
 		interface tab_tab_sound_notification_settings_Sections {
 			tab_sound_notification_settings_section_3: DevKit.Controls.Section;
 			tab_sound_notification_settings_section_4: DevKit.Controls.Section;
+		}
+		interface tab_agent_reject_notification_settings extends DevKit.Controls.ITab {
+			Section: tab_agent_reject_notification_settings_Sections;
 		}
 		interface tab_missed_notification_settings extends DevKit.Controls.ITab {
 			Section: tab_missed_notification_settings_Sections;
@@ -111,12 +166,18 @@ declare namespace DevKit {
 			Section: tab_tab_sound_notification_settings_Sections;
 		}
 		interface Tabs {
+			agent_reject_notification_settings: tab_agent_reject_notification_settings;
 			missed_notification_settings: tab_missed_notification_settings;
 			notification_templates: tab_notification_templates;
 			tab_sound_notification_settings: tab_tab_sound_notification_settings;
 		}
 		interface Body {
 			Tab: Tabs;
+			msdyn_agentrejectnotificationssubheading: DevKit.Controls.ActionCards;
+			/** Lookup to display DND presence. */
+			msdyn_dnd_presence_lookup: DevKit.Controls.Lookup;
+			/** Setting to change agent status when agent rejects a notification. */
+			msdyn_enable_agent_reject_notifications: DevKit.Controls.Boolean;
 			/** Setting to change agent status when a notification has been missed. */
 			msdyn_enable_missed_notifications: DevKit.Controls.Boolean;
 			/** Enable sound notifications feature */
@@ -127,15 +188,25 @@ declare namespace DevKit {
 			/** Field to host sound form control */
 			msdyn_SoundFormControl: DevKit.Controls.String;
 		}
+		interface quickForm_agent_reject_notification_presence_update_quick_view_form_Body {
+			msdyn_description: DevKit.Controls.QuickView;
+			msdyn_presencestatustext: DevKit.Controls.QuickView;
+		}
 		interface quickForm_missed_notification_presence_update_quick_view_form_Body {
 			msdyn_description: DevKit.Controls.QuickView;
 			msdyn_presencestatustext: DevKit.Controls.QuickView;
+		}
+		interface quickForm_agent_reject_notification_presence_update_quick_view_form extends DevKit.Controls.IQuickView {
+			Body: quickForm_agent_reject_notification_presence_update_quick_view_form_Body;
 		}
 		interface quickForm_missed_notification_presence_update_quick_view_form extends DevKit.Controls.IQuickView {
 			Body: quickForm_missed_notification_presence_update_quick_view_form_Body;
 		}
 		interface QuickForm {
+			agent_reject_notification_presence_update_quick_view_form: quickForm_agent_reject_notification_presence_update_quick_view_form;
 			missed_notification_presence_update_quick_view_form: quickForm_missed_notification_presence_update_quick_view_form;
+		}
+		interface Process extends DevKit.Controls.IProcess {
 		}
 		interface Grid {
 			templates_grid: DevKit.Controls.Grid;
@@ -143,7 +214,7 @@ declare namespace DevKit {
 	}
 	class FormNotifications extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Notifications
+		* Notifications [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -154,8 +225,12 @@ declare namespace DevKit {
 		Body: DevKit.FormNotifications.Body;
 		/** The QuickForm of form Notifications */
 		QuickForm: DevKit.FormNotifications.QuickForm;
+		/** The Process of form Notifications */
+		Process: DevKit.FormNotifications.Process;
 		/** The Grid of form Notifications */
 		Grid: DevKit.FormNotifications.Grid;
+		/** The SidePanes of form Notifications */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormPersonal_quick_replies {
 		interface tab_personal_message_settings_Sections {
@@ -172,10 +247,12 @@ declare namespace DevKit {
 			/** Enable personal messages feature for the org */
 			msdyn_isPersonalMessagesEnabled: DevKit.Controls.Boolean;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormPersonal_quick_replies extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Personal_quick_replies
+		* Personal quick replies [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -184,6 +261,10 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Personal_quick_replies */
 		Body: DevKit.FormPersonal_quick_replies.Body;
+		/** The Process of form Personal_quick_replies */
+		Process: DevKit.FormPersonal_quick_replies.Process;
+		/** The SidePanes of form Personal_quick_replies */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormReal_Time_Translation_Settings {
 		interface tab_Real_Time_Translation_Sections {
@@ -207,10 +288,12 @@ declare namespace DevKit {
 			WebResource_featureEnableTerms: DevKit.Controls.WebResource;
 			WebResource_ocpreviewterms: DevKit.Controls.WebResource;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormReal_Time_Translation_Settings extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Real_Time_Translation_Settings
+		* Real Time Translation Settings [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -219,6 +302,10 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Real_Time_Translation_Settings */
 		Body: DevKit.FormReal_Time_Translation_Settings.Body;
+		/** The Process of form Real_Time_Translation_Settings */
+		Process: DevKit.FormReal_Time_Translation_Settings.Process;
+		/** The SidePanes of form Real_Time_Translation_Settings */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormSelf_service_settings {
 		interface tab__44EFFE7C_A18D_4D4C_B111_DB98E28BC808_Sections {
@@ -243,15 +330,19 @@ declare namespace DevKit {
 			msdyn_enable_supervisor_assign: DevKit.Controls.Boolean;
 			/** Enables supervisor monitor feature for the org */
 			msdyn_enable_supervisor_monitor: DevKit.Controls.Boolean;
+			/** Enables supervisor transfer feature for the org */
+			msdyn_enable_supervisor_transfer: DevKit.Controls.Boolean;
 			/** Enables self service feature for the org */
 			msdyn_enable_visitorjourney: DevKit.Controls.Boolean;
 			/** The name of the custom entity. */
 			msdyn_name: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormSelf_service_settings extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Self_service_settings
+		* Self service settings [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -260,6 +351,10 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Self_service_settings */
 		Body: DevKit.FormSelf_service_settings.Body;
+		/** The Process of form Self_service_settings */
+		Process: DevKit.FormSelf_service_settings.Process;
+		/** The SidePanes of form Self_service_settings */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormSkill_based_routing_settings {
 		interface tab_tab_1_Sections {
@@ -277,13 +372,15 @@ declare namespace DevKit {
 			/** This will enable agents to view and update skills for a conversation. */
 			msdyn_IsUpdateSkillsEnabled: DevKit.Controls.Boolean;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			RatingModelDetails: DevKit.Controls.Grid;
 		}
 	}
 	class FormSkill_based_routing_settings extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Skill_based_routing_settings
+		* Skill based routing settings [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -292,8 +389,12 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Skill_based_routing_settings */
 		Body: DevKit.FormSkill_based_routing_settings.Body;
+		/** The Process of form Skill_based_routing_settings */
+		Process: DevKit.FormSkill_based_routing_settings.Process;
 		/** The Grid of form Skill_based_routing_settings */
 		Grid: DevKit.FormSkill_based_routing_settings.Grid;
+		/** The SidePanes of form Skill_based_routing_settings */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormSupervisor_settings {
 		interface tab__44EFFE7C_A18D_4D4C_B111_DB98E28BC808_Sections {
@@ -318,13 +419,17 @@ declare namespace DevKit {
 			msdyn_enable_supervisor_assign: DevKit.Controls.Boolean;
 			/** Enables supervisor monitor feature for the org */
 			msdyn_enable_supervisor_monitor: DevKit.Controls.Boolean;
+			/** Enables supervisor transfer feature for the org */
+			msdyn_enable_supervisor_transfer: DevKit.Controls.Boolean;
 			/** The name of the custom entity. */
 			msdyn_name: DevKit.Controls.String;
+		}
+		interface Process extends DevKit.Controls.IProcess {
 		}
 	}
 	class FormSupervisor_settings extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Supervisor_settings
+		* Supervisor settings [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -333,6 +438,44 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Supervisor_settings */
 		Body: DevKit.FormSupervisor_settings.Body;
+		/** The Process of form Supervisor_settings */
+		Process: DevKit.FormSupervisor_settings.Process;
+		/** The SidePanes of form Supervisor_settings */
+		SidePanes: DevKit.SidePanes;
+	}
+	namespace FormTranscript_settings {
+		interface tab_transcript_settings_Sections {
+			transcript_settings_section: DevKit.Controls.Section;
+		}
+		interface tab_transcript_settings extends DevKit.Controls.ITab {
+			Section: tab_transcript_settings_Sections;
+		}
+		interface Tabs {
+			transcript_settings: tab_transcript_settings;
+		}
+		interface Body {
+			Tab: Tabs;
+			/** Enable new conversation form feature */
+			msdyn_enablenewconversationform: DevKit.Controls.Boolean;
+		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
+	}
+	class FormTranscript_settings extends DevKit.IForm {
+		/**
+		* Transcript settings [Main Form]
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form Transcript_settings */
+		Body: DevKit.FormTranscript_settings.Body;
+		/** The Process of form Transcript_settings */
+		Process: DevKit.FormTranscript_settings.Process;
+		/** The SidePanes of form Transcript_settings */
+		SidePanes: DevKit.SidePanes;
 	}
 	class msdyn_omnichannelconfigurationApi {
 		/**
@@ -376,18 +519,30 @@ declare namespace DevKit {
 		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
 		/** Default language in which customer's messages are translated for an org */
 		msdyn_defaultAgentInputLanguage: DevKit.WebApi.OptionSetValue;
+		/** Lookup to display DND presence. */
+		msdyn_dnd_presence_lookup: DevKit.WebApi.LookupValue;
 		/** Setting to change advance entity routing for the org. */
 		msdyn_enable_advance_entity_routing: DevKit.WebApi.BooleanValue;
+		/** Setting to change agent status when agent rejects a notification. */
+		msdyn_enable_agent_reject_notifications: DevKit.WebApi.BooleanValue;
 		/** Setting to change agent status when a notification has been missed. */
 		msdyn_enable_missed_notifications: DevKit.WebApi.BooleanValue;
+		/** Enable consult pane */
+		msdyn_enable_new_consult_exp: DevKit.WebApi.BooleanValue;
 		/** Enables supervisor assign feature for the org */
 		msdyn_enable_supervisor_assign: DevKit.WebApi.BooleanValue;
 		/** Enables supervisor monitor feature for the org */
 		msdyn_enable_supervisor_monitor: DevKit.WebApi.BooleanValue;
+		/** Enables supervisor transfer feature for the org */
+		msdyn_enable_supervisor_transfer: DevKit.WebApi.BooleanValue;
 		/** Setting to change unified routing diagnostic for the org. */
 		msdyn_enable_unified_routing_diagnostic: DevKit.WebApi.BooleanValue;
 		/** Enables self service feature for the org */
 		msdyn_enable_visitorjourney: DevKit.WebApi.BooleanValue;
+		/** Enable markdown support for messages */
+		msdyn_enablemarkdown: DevKit.WebApi.BooleanValue;
+		/** Enable new conversation form feature */
+		msdyn_enablenewconversationform: DevKit.WebApi.BooleanValue;
 		/** Enable real time translation feature for the org */
 		msdyn_EnableRealTimeTranslation: DevKit.WebApi.BooleanValue;
 		/** Enable sound notifications feature */
@@ -536,22 +691,22 @@ declare namespace OptionSet {
 			/** 2 */
 			Inactive
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Information','Masking settings','Notifications','Personal quick replies','Real Time Translation Settings','Self service settings','Skill based routing settings','Supervisor settings'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

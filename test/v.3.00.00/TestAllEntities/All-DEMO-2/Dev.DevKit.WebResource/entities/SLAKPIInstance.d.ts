@@ -22,10 +22,12 @@ declare namespace DevKit {
 			/** Enter the date and time when the service level agreement (SLA) key performance indicator (KPI)will go to a warning state. */
 			WarningTime: DevKit.Controls.DateTime;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormSLA_KPI_Instance extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form SLA_KPI_Instance
+		* SLA KPI Instance [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -36,6 +38,10 @@ declare namespace DevKit {
 		Body: DevKit.FormSLA_KPI_Instance.Body;
 		/** The Header section of form SLA_KPI_Instance */
 		Header: DevKit.FormSLA_KPI_Instance.Header;
+		/** The Process of form SLA_KPI_Instance */
+		Process: DevKit.FormSLA_KPI_Instance.Process;
+		/** The SidePanes of form SLA_KPI_Instance */
+		SidePanes: DevKit.SidePanes;
 	}
 	class SLAKPIInstanceApi {
 		/**
@@ -101,16 +107,10 @@ declare namespace DevKit {
 		OwnerId_team: DevKit.WebApi.LookupValue;
 		/** Owning Business Unit. */
 		OwningBusinessUnit: DevKit.WebApi.LookupValue;
-		/** OwningTeam. */
-		OwningTeam: DevKit.WebApi.LookupValue;
-		/** Owning User. */
-		OwningUser: DevKit.WebApi.LookupValue;
 		PausedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** Unique identifier of the record that this service level agreement (SLA) key performance indicator (KPI) instance is associated with. */
 		Regarding: DevKit.WebApi.LookupValue;
 		RegardingEntityID: DevKit.WebApi.StringValue;
-		/** RegardingName */
-		RegardingIdName: DevKit.WebApi.StringValueReadonly;
 		/** Unique identifier of the SLA KPI Instance. */
 		SLAKPIInstanceId: DevKit.WebApi.GuidValue;
 		/** Reason for the status of the service level agreement (SLA) key performance indicator (KPI) instance. For example, the SLA KPI could be Noncompliant or Succeeded. */
@@ -160,22 +160,22 @@ declare namespace OptionSet {
 			/** 1 */
 			Yes
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['SLA KPI Instance'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

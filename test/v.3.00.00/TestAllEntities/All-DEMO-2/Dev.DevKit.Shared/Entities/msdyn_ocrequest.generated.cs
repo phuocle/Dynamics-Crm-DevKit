@@ -13,7 +13,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocrequestOptionSets
 	public enum msdyn_RequestType
 	{
 		/// <summary>
-		/// Email_transcript_request = 192350000
+		/// Email transcript request = 192350000
 		/// </summary>
 		Email_transcript_request = 192350000
 	}
@@ -37,7 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocrequestOptionSets
 		/// </summary>
 		Completed = 192350003,
 		/// <summary>
-		/// In_progress = 192350001
+		/// In progress = 192350001
 		/// </summary>
 		In_progress = 192350001,
 		/// <summary>
@@ -79,7 +79,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_ocrequest";
 
-		public const int EntityTypeCode = 10571;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10712;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocrequest()
@@ -274,9 +275,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_ocrequestOptionSets.msdyn_RequestType)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_RequestType] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_RequestType] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_RequestType] = null;
+			}
 		}
 
 		/// <summary>
@@ -293,7 +297,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

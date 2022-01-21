@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.botcomponentOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -33,11 +33,11 @@ namespace Dev.DevKit.Shared.Entities.botcomponentOptionSets
 	public enum ComponentType
 	{
 		/// <summary>
-		/// Bot_entity = 3
+		/// Bot entity = 3
 		/// </summary>
 		Bot_entity = 3,
 		/// <summary>
-		/// Bot_variable = 2
+		/// Bot variable = 2
 		/// </summary>
 		Bot_variable = 2,
 		/// <summary>
@@ -45,15 +45,15 @@ namespace Dev.DevKit.Shared.Entities.botcomponentOptionSets
 		/// </summary>
 		Dialog = 4,
 		/// <summary>
-		/// Dialog_schema = 8
+		/// Dialog schema = 8
 		/// </summary>
 		Dialog_schema = 8,
 		/// <summary>
-		/// Language_generation = 7
+		/// Language generation = 7
 		/// </summary>
 		Language_generation = 7,
 		/// <summary>
-		/// Language_understanding = 6
+		/// Language understanding = 6
 		/// </summary>
 		Language_understanding = 6,
 		/// <summary>
@@ -77,11 +77,11 @@ namespace Dev.DevKit.Shared.Entities.botcomponentOptionSets
 		/// </summary>
 		Arabic = 1025,
 		/// <summary>
-		/// Chinese_Simplified = 2052
+		/// Chinese (Simplified) = 2052
 		/// </summary>
 		Chinese_Simplified = 2052,
 		/// <summary>
-		/// Chinese_Traditional = 1028
+		/// Chinese (Traditional) = 1028
 		/// </summary>
 		Chinese_Traditional = 1028,
 		/// <summary>
@@ -133,7 +133,7 @@ namespace Dev.DevKit.Shared.Entities.botcomponentOptionSets
 		/// </summary>
 		Polish = 1045,
 		/// <summary>
-		/// Portuguese_Brazilian = 1046
+		/// Portuguese (Brazilian) = 1046
 		/// </summary>
 		Portuguese_Brazilian = 1046,
 		/// <summary>
@@ -152,6 +152,22 @@ namespace Dev.DevKit.Shared.Entities.botcomponentOptionSets
 		/// Turkish = 1055
 		/// </summary>
 		Turkish = 1055
+	}
+
+	public enum ReusePolicy
+	{
+		/// <summary>
+		/// None = 0
+		/// </summary>
+		None = 0,
+		/// <summary>
+		/// Private = 1
+		/// </summary>
+		Private = 1,
+		/// <summary>
+		/// Public = 2
+		/// </summary>
+		Public = 2
 	}
 
 	public enum statecode
@@ -185,6 +201,7 @@ namespace Dev.DevKit.Shared.Entities
 	{
 		public struct Fields
 		{
+			public const string AccentColor = "accentcolor";
 			public const string botcomponentId = "botcomponentid";
 			public const string Category = "category";
 			public const string ComponentIdUnique = "componentidunique";
@@ -196,6 +213,8 @@ namespace Dev.DevKit.Shared.Entities
 			public const string CreatedOnBehalfBy = "createdonbehalfby";
 			public const string Data = "data";
 			public const string Description = "description";
+			public const string HelpLink = "helplink";
+			public const string IconUrl = "iconurl";
 			public const string ImportSequenceNumber = "importsequencenumber";
 			public const string IsManaged = "ismanaged";
 			public const string Language = "language";
@@ -210,6 +229,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string OwningTeam = "owningteam";
 			public const string OwningUser = "owninguser";
 			public const string ParentBotComponentId = "parentbotcomponentid";
+			public const string ReusePolicy = "reusepolicy";
 			public const string SchemaName = "schemaname";
 			public const string SolutionId = "solutionid";
 			public const string statecode = "statecode";
@@ -222,7 +242,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "botcomponent";
 
-		public const int EntityTypeCode = 10043;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10067;
 
 		[DebuggerNonUserCode()]
 		public botcomponent()
@@ -270,6 +291,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			Entity = new Entity(EntityLogicalName, keys);
 			PreEntity = CloneThisEntity(Entity);
+		}
+
+		/// <summary>
+		/// <para>Accent Color for this re-usable subcomponent</para>
+		/// <para>String - MaxLength: 7</para>
+		/// <para>Accent Color</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string AccentColor
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.AccentColor); }
+			set { Entity.Attributes[Fields.AccentColor] = value; }
 		}
 
 		/// <summary>
@@ -342,9 +375,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.botcomponentOptionSets.ComponentType)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.ComponentType] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.ComponentType] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.ComponentType] = null;
+			}
 		}
 
 		/// <summary>
@@ -414,6 +450,30 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.Description); }
 			set { Entity.Attributes[Fields.Description] = value; }
+		}
+
+		/// <summary>
+		/// <para>Link to learn More about this subcomponent</para>
+		/// <para>String - MaxLength: 2000</para>
+		/// <para>Help Link</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string HelpLink
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.HelpLink); }
+			set { Entity.Attributes[Fields.HelpLink] = value; }
+		}
+
+		/// <summary>
+		/// <para>Icon Url for this subcomponent</para>
+		/// <para>String - MaxLength: 2000</para>
+		/// <para>Icon Url</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string IconUrl
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.IconUrl); }
+			set { Entity.Attributes[Fields.IconUrl] = value; }
 		}
 
 		/// <summary>
@@ -532,7 +592,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -585,6 +645,29 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<EntityReference>(Fields.ParentBotComponentId); }
 			set { Entity.Attributes[Fields.ParentBotComponentId] = value; }
+		}
+
+		/// <summary>
+		/// <para>Reuse Policy for the chatbot subcomponent</para>
+		/// <para>Picklist</para>
+		/// <para>Reuse Policy</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public Dev.DevKit.Shared.Entities.botcomponentOptionSets.ReusePolicy? ReusePolicy
+		{
+			get
+			{
+				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.ReusePolicy);
+				if (value == null) return null;
+				return (Dev.DevKit.Shared.Entities.botcomponentOptionSets.ReusePolicy)value.Value;
+			}
+			set
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.ReusePolicy] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.ReusePolicy] = null;
+			}
 		}
 
 		/// <summary>

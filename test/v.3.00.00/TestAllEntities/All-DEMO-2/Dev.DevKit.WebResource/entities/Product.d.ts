@@ -62,7 +62,7 @@ declare namespace DevKit {
 			/** Current cost for the product item. Used in price calculations. */
 			CurrentCost: DevKit.Controls.Money;
 			/** Current cost for the product item. Used in price calculations. */
-			CurrentCost_1: DevKit.Controls.Money;
+			CurrentCost1: DevKit.Controls.Money;
 			/** Default unit for the product. */
 			DefaultUoMId: DevKit.Controls.Lookup;
 			/** Default unit group for the product. */
@@ -86,7 +86,7 @@ declare namespace DevKit {
 			/** Specifies the parent product family hierarchy. */
 			ParentProductId: DevKit.Controls.Lookup;
 			/** Specifies the parent product family hierarchy. */
-			ParentProductId_1: DevKit.Controls.Lookup;
+			ParentProductId1: DevKit.Controls.Lookup;
 			/** List price for the product item. Used in price calculations. */
 			Price: DevKit.Controls.Money;
 			/** Select the default price list for the product. */
@@ -98,7 +98,7 @@ declare namespace DevKit {
 			/** Standard cost for the product item. Used in price calculations. */
 			StandardCost: DevKit.Controls.Money;
 			/** Standard cost for the product item. Used in price calculations. */
-			StandardCost_1: DevKit.Controls.Money;
+			StandardCost1: DevKit.Controls.Money;
 			/** Select a category for the product. */
 			SubjectId: DevKit.Controls.Lookup;
 			/** Date from which this product is valid. */
@@ -132,18 +132,20 @@ declare namespace DevKit {
 			navSalesLit: DevKit.Controls.NavigationItem,
 			navSubs: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
-			productassocaition_items: DevKit.Controls.Grid;
+			KnowledgeArticlesSubGrid: DevKit.Controls.Grid;
+			Price_List_Items: DevKit.Controls.Grid;
 			product_dynamic_properties: DevKit.Controls.Grid;
 			product_dynamic_properties_offline: DevKit.Controls.Grid;
-			Price_List_Items: DevKit.Controls.Grid;
+			productassocaition_items: DevKit.Controls.Grid;
 			productsubstitute_items: DevKit.Controls.Grid;
-			KnowledgeArticlesSubGrid: DevKit.Controls.Grid;
 		}
 	}
 	class FormProduct extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Product
+		* Product [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -156,8 +158,12 @@ declare namespace DevKit {
 		Header: DevKit.FormProduct.Header;
 		/** The Navigation of form Product */
 		Navigation: DevKit.FormProduct.Navigation;
+		/** The Process of form Product */
+		Process: DevKit.FormProduct.Process;
 		/** The Grid of form Product */
 		Grid: DevKit.FormProduct.Grid;
+		/** The SidePanes of form Product */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormProduct_Project_Information {
 		interface Header extends DevKit.Controls.IHeader {
@@ -249,17 +255,19 @@ declare namespace DevKit {
 			navPrices: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
-			productassocaition_items: DevKit.Controls.Grid;
-			product_dynamic_properties: DevKit.Controls.Grid;
 			Computed_Fields: DevKit.Controls.Grid;
 			Price_List_Items: DevKit.Controls.Grid;
+			product_dynamic_properties: DevKit.Controls.Grid;
+			productassocaition_items: DevKit.Controls.Grid;
 			productsubstitute_items: DevKit.Controls.Grid;
 		}
 	}
 	class FormProduct_Project_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Product_Project_Information
+		* Project Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -272,45 +280,12 @@ declare namespace DevKit {
 		Header: DevKit.FormProduct_Project_Information.Header;
 		/** The Navigation of form Product_Project_Information */
 		Navigation: DevKit.FormProduct_Project_Information.Navigation;
+		/** The Process of form Product_Project_Information */
+		Process: DevKit.FormProduct_Project_Information.Process;
 		/** The Grid of form Product_Project_Information */
 		Grid: DevKit.FormProduct_Project_Information.Grid;
-	}
-	namespace FormProduct_Quick_Create_FS_5x5 {
-		interface tab_tab_1_Sections {
-			tab_1_column_1_section_1: DevKit.Controls.Section;
-			tab_1_column_2_section_1: DevKit.Controls.Section;
-			tab_1_column_3_section_1: DevKit.Controls.Section;
-		}
-		interface tab_tab_1 extends DevKit.Controls.ITab {
-			Section: tab_tab_1_Sections;
-		}
-		interface Tabs {
-			tab_1: tab_tab_1;
-		}
-		interface Body {
-			Tab: Tabs;
-			/** Default unit for the product. */
-			DefaultUoMId: DevKit.Controls.Lookup;
-			/** Default unit group for the product. */
-			DefaultUoMScheduleId: DevKit.Controls.Lookup;
-			msdyn_FieldServiceProductType: DevKit.Controls.OptionSet;
-			/** Name of the product. */
-			Name: DevKit.Controls.String;
-			/** User-defined product ID. */
-			ProductNumber: DevKit.Controls.String;
-		}
-	}
-	class FormProduct_Quick_Create_FS_5x5 extends DevKit.IForm {
-		/**
-		* DynamicsCrm.DevKit form Product_Quick_Create_FS_5x5
-		* @param executionContext the execution context
-		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
-		*/
-		constructor(executionContext: any, defaultWebResourceName?: string);
-		/** Utility functions/methods/objects for Dynamics 365 form */
-		Utility: DevKit.Utility;
-		/** The Body section of form Product_Quick_Create_FS_5x5 */
-		Body: DevKit.FormProduct_Quick_Create_FS_5x5.Body;
+		/** The SidePanes of form Product_Project_Information */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormProduct_family_Quick_Create {
 		interface tab_tab_1_Sections {
@@ -345,7 +320,7 @@ declare namespace DevKit {
 	}
 	class FormProduct_family_Quick_Create extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Product_family_Quick_Create
+		* Product family Quick Create [Quick Create]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -393,7 +368,7 @@ declare namespace DevKit {
 	}
 	class FormProduct_Quick_Create extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Product_Quick_Create
+		* Product Quick Create [Quick Create]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -402,6 +377,43 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Product_Quick_Create */
 		Body: DevKit.FormProduct_Quick_Create.Body;
+	}
+	namespace FormProduct_Quick_Create_FS_5x5 {
+		interface tab_tab_1_Sections {
+			tab_1_column_1_section_1: DevKit.Controls.Section;
+			tab_1_column_2_section_1: DevKit.Controls.Section;
+			tab_1_column_3_section_1: DevKit.Controls.Section;
+		}
+		interface tab_tab_1 extends DevKit.Controls.ITab {
+			Section: tab_tab_1_Sections;
+		}
+		interface Tabs {
+			tab_1: tab_tab_1;
+		}
+		interface Body {
+			Tab: Tabs;
+			/** Default unit for the product. */
+			DefaultUoMId: DevKit.Controls.Lookup;
+			/** Default unit group for the product. */
+			DefaultUoMScheduleId: DevKit.Controls.Lookup;
+			msdyn_FieldServiceProductType: DevKit.Controls.OptionSet;
+			/** Name of the product. */
+			Name: DevKit.Controls.String;
+			/** User-defined product ID. */
+			ProductNumber: DevKit.Controls.String;
+		}
+	}
+	class FormProduct_Quick_Create_FS_5x5 extends DevKit.IForm {
+		/**
+		* Product Quick Create FS 5x5 [Quick Create]
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form Product_Quick_Create_FS_5x5 */
+		Body: DevKit.FormProduct_Quick_Create_FS_5x5.Body;
 	}
 	class ProductApi {
 		/**
@@ -478,6 +490,8 @@ declare namespace DevKit {
 		/** Default vendor that supplies this product */
 		msdyn_DefaultVendor: DevKit.WebApi.LookupValue;
 		msdyn_FieldServiceProductType: DevKit.WebApi.OptionSetValue;
+		/** Describes whether product is opted out or not */
+		msdyn_gdproptout: DevKit.WebApi.BooleanValue;
 		/** Type the name for the product when used on a purchase order. */
 		msdyn_PurchaseName: DevKit.WebApi.StringValue;
 		/** Select whether the item is taxable. If an item is set as not taxable, it won't be taxable even on a taxable work order. */
@@ -606,22 +620,22 @@ declare namespace OptionSet {
 			/** 3 */
 			Under_Revision
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Product','Product Quick Create FS 5x5','Project Information','Quick Create','Quick Create'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

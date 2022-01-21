@@ -21,16 +21,16 @@ var DevKit;
 			applicablewhencontrol: {},
 			BusinessHoursId: {},
 			FailureAfter: {},
-			FailureAfter_1: {},
+			FailureAfter1: {},
 			msdyn_AdvancedPauseConfiguration: {},
 			msdyn_PauseConfigurationXml: {},
 			msdyn_slakpiid: {},
 			Name: {},
-			Name_1: {},
+			Name1: {},
 			relatedcasefield: {},
 			successconditioncontrol: {},
 			WarnAfter: {},
-			WarnAfter_1: {},
+			WarnAfter1: {},
 			WebResource_preview: {},
 			WebResource_slaitem_applicablewhen_notification: {},
 			WebResource_slaitem_success_notification: {}
@@ -55,18 +55,11 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 })(DevKit || (DevKit = {}));
@@ -80,15 +73,14 @@ var OptionSet;
 			Published: 0,
 			Unpublished: 1
 		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
-
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 	};
 })(OptionSet || (OptionSet = {}));

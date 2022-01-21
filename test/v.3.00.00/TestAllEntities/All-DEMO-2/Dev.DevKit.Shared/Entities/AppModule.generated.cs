@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.AppModuleOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -33,11 +33,11 @@ namespace Dev.DevKit.Shared.Entities.AppModuleOptionSets
 	public enum NavigationType
 	{
 		/// <summary>
-		/// Multi_session = 1
+		/// Multi session = 1
 		/// </summary>
 		Multi_session = 1,
 		/// <summary>
-		/// Single_session = 0
+		/// Single session = 0
 		/// </summary>
 		Single_session = 0
 	}
@@ -120,6 +120,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "appmodule";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 9006;
 
 		[DebuggerNonUserCode()]

@@ -1,9 +1,13 @@
 ﻿//@ts-check
 ///<reference path="msdyn_AIOdLabel.d.ts" />
 "use strict";
-var formInformation = (function () {
+var formmsdyn_AIOdLabel_Information = (function () {
 	"use strict";
+	/** @type DevKit.Formmsdyn_AIOdLabel_Information */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.Formmsdyn_AIOdLabel_Information(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}

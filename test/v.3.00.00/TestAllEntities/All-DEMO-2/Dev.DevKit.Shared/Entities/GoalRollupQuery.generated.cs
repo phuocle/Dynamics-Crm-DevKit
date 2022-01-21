@@ -56,7 +56,6 @@ namespace Dev.DevKit.Shared.Entities
 			public const string OwningBusinessUnit = "owningbusinessunit";
 			public const string OwningTeam = "owningteam";
 			public const string OwningUser = "owninguser";
-			public const string QueryEntityType = "queryentitytype";
 			public const string StateCode = "statecode";
 			public const string StatusCode = "statuscode";
 			public const string TimeZoneRuleVersionNumber = "timezoneruleversionnumber";
@@ -66,6 +65,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "goalrollupquery";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 9602;
 
 		[DebuggerNonUserCode()]
@@ -248,7 +248,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user.</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -292,18 +292,6 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Enter the record type of the rollup query.</para>
-		/// <para>Required - EntityName</para>
-		/// <para>Entity Type</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string QueryEntityType
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.QueryEntityType); }
-			set { Entity.Attributes[Fields.QueryEntityType] = value; }
-		}
-
-		/// <summary>
 		/// <para>Shows whether the goal rollup query is active or inactive.</para>
 		/// <para>State</para>
 		/// <para>Status</para>
@@ -327,7 +315,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select the goal rollup query's status.</para>
+		/// <para>Select the goal rollup query&apos;s status.</para>
 		/// <para>Status</para>
 		/// <para>Status Reason</para>
 		/// </summary>

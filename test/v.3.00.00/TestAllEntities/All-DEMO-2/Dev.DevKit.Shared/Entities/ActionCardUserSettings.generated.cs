@@ -35,6 +35,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "actioncardusersettings";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 9973;
 
 		[DebuggerNonUserCode()]
@@ -163,7 +164,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the user or team who owns the settings.</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

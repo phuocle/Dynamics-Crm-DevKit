@@ -30,6 +30,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "runtimedependency";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 7200;
 
 		[DebuggerNonUserCode()]
@@ -103,7 +104,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Unique identifier of the dependent component's node.</para>
+		/// <para>Unique identifier of the dependent component&apos;s node.</para>
 		/// <para>Required - Uniqueidentifier</para>
 		/// <para>Dependent Component</para>
 		/// </summary>
@@ -138,7 +139,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Unique identifier of the required component's node</para>
+		/// <para>Unique identifier of the required component&apos;s node</para>
 		/// <para>Required - String - MaxLength: 300</para>
 		/// <para>Required Component</para>
 		/// </summary>

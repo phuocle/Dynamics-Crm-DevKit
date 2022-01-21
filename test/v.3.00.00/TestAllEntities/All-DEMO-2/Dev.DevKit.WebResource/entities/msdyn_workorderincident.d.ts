@@ -57,7 +57,7 @@ declare namespace DevKit {
 			/** Incident description */
 			msdyn_Description: DevKit.Controls.String;
 			/** Incident description */
-			msdyn_Description_1: DevKit.Controls.String;
+			msdyn_Description1: DevKit.Controls.String;
 			/** Shows the time estimated to resolve this incident. */
 			msdyn_EstimatedDuration: DevKit.Controls.Integer;
 			/** Workorder incident's functional location. */
@@ -91,16 +91,18 @@ declare namespace DevKit {
 			nav_msdyn_msdyn_workorderincident_msdyn_workorderservicetask_WorkOrderIncident: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			workorderproductsgrid: DevKit.Controls.Grid;
+			workorderresolutiongrid: DevKit.Controls.Grid;
 			workorderservicesgrid: DevKit.Controls.Grid;
 			workorderservicetasksgrid: DevKit.Controls.Grid;
-			workorderresolutiongrid: DevKit.Controls.Grid;
 		}
 	}
 	class Formmsdyn_workorderincident_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form msdyn_workorderincident_Information
+		* Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -113,8 +115,12 @@ declare namespace DevKit {
 		Footer: DevKit.Formmsdyn_workorderincident_Information.Footer;
 		/** The Navigation of form msdyn_workorderincident_Information */
 		Navigation: DevKit.Formmsdyn_workorderincident_Information.Navigation;
+		/** The Process of form msdyn_workorderincident_Information */
+		Process: DevKit.Formmsdyn_workorderincident_Information.Process;
 		/** The Grid of form msdyn_workorderincident_Information */
 		Grid: DevKit.Formmsdyn_workorderincident_Information.Grid;
+		/** The SidePanes of form msdyn_workorderincident_Information */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormWork_Order_Incident_Mobile {
 		interface tab__0366D152_E56D_4D51_B9ED_9BF3C729CE77_Sections {
@@ -166,6 +172,8 @@ declare namespace DevKit {
 			navAsyncOperations: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			workorderproductsgrid: DevKit.Controls.Grid;
 			workorderservicesgrid: DevKit.Controls.Grid;
@@ -174,7 +182,7 @@ declare namespace DevKit {
 	}
 	class FormWork_Order_Incident_Mobile extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Work_Order_Incident_Mobile
+		* Work Order Incident - Mobile [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -185,8 +193,12 @@ declare namespace DevKit {
 		Body: DevKit.FormWork_Order_Incident_Mobile.Body;
 		/** The Navigation of form Work_Order_Incident_Mobile */
 		Navigation: DevKit.FormWork_Order_Incident_Mobile.Navigation;
+		/** The Process of form Work_Order_Incident_Mobile */
+		Process: DevKit.FormWork_Order_Incident_Mobile.Process;
 		/** The Grid of form Work_Order_Incident_Mobile */
 		Grid: DevKit.FormWork_Order_Incident_Mobile.Grid;
+		/** The SidePanes of form Work_Order_Incident_Mobile */
+		SidePanes: DevKit.SidePanes;
 	}
 	class msdyn_workorderincidentApi {
 		/**
@@ -296,22 +308,22 @@ declare namespace OptionSet {
 			/** 2 */
 			Inactive
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Information','Work Order Incident - Mobile'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

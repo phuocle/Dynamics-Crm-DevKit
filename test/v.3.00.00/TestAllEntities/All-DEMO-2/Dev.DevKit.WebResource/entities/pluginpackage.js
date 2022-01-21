@@ -1,2 +1,2 @@
 ﻿//@ts-check
-///<reference path="pluginpackage.d.ts" />
+///<reference path="PluginPackage.d.ts" />

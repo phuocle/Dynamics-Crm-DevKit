@@ -40,10 +40,12 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_quotebookingservice_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form msdyn_quotebookingservice_Information
+		* Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -52,6 +54,87 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_quotebookingservice_Information */
 		Body: DevKit.Formmsdyn_quotebookingservice_Information.Body;
+		/** The Process of form msdyn_quotebookingservice_Information */
+		Process: DevKit.Formmsdyn_quotebookingservice_Information.Process;
+		/** The SidePanes of form msdyn_quotebookingservice_Information */
+		SidePanes: DevKit.SidePanes;
+	}
+	namespace Formmsdyn_quotebookingservice_Information2 {
+		interface Tabs {
+		}
+		interface Body {
+			/** The name of the custom entity. */
+			msdyn_name: DevKit.Controls.String;
+			notescontrol: DevKit.Controls.Note;
+			/** Owner Id */
+			OwnerId: DevKit.Controls.Lookup;
+		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
+	}
+	class Formmsdyn_quotebookingservice_Information2 extends DevKit.IForm {
+		/**
+		* Information [Main Form]
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form msdyn_quotebookingservice_Information2 */
+		Body: DevKit.Formmsdyn_quotebookingservice_Information2.Body;
+		/** The Process of form msdyn_quotebookingservice_Information2 */
+		Process: DevKit.Formmsdyn_quotebookingservice_Information2.Process;
+		/** The SidePanes of form msdyn_quotebookingservice_Information2 */
+		SidePanes: DevKit.SidePanes;
+	}
+	namespace Formmsdyn_quotebookingservice_Information3 {
+		interface tab_tab_1_Sections {
+			tab_1_column_1_section_1: DevKit.Controls.Section;
+			tab_1_column_2_section_1: DevKit.Controls.Section;
+			tab_1_column_3_section_1: DevKit.Controls.Section;
+		}
+		interface tab_tab_1 extends DevKit.Controls.ITab {
+			Section: tab_tab_1_Sections;
+		}
+		interface Tabs {
+			tab_1: tab_tab_1;
+		}
+		interface Body {
+			Tab: Tabs;
+			/** Shows the actual duration of service. */
+			msdyn_duration: DevKit.Controls.Integer;
+			/** Shows the total cost amount of the service. It is calculated as (Unit Cost) * Duration */
+			msdyn_EstimatedCostAmount: DevKit.Controls.Money;
+			/** Shows the total sales amount of the service. */
+			msdyn_EstimatedSalesAmount: DevKit.Controls.Money;
+			/** Enter the amount charged as a minimum charge. */
+			msdyn_minimumchargeamount: DevKit.Controls.Money;
+			/** Enter the duration of up to how long the minimum charge applies. */
+			msdyn_minimumchargeduration: DevKit.Controls.Integer;
+			/** Unique identifier for Quote Booking Setup associated with Quote Booking Service. */
+			msdyn_quotebookingsetup: DevKit.Controls.Lookup;
+			/** Unique identifier for Product/Service associated with Quote Booking Service. */
+			msdyn_Service: DevKit.Controls.Lookup;
+			/** The unit that determines the pricing for this service when Price List is set */
+			msdyn_unit: DevKit.Controls.Lookup;
+			/** Enter the amount you wish to charge the customer per unit. This field is optional. */
+			msdyn_unitamount: DevKit.Controls.Money;
+			/** Shows the estimated cost amount per unit. */
+			msdyn_unitcostamount: DevKit.Controls.Money;
+		}
+	}
+	class Formmsdyn_quotebookingservice_Information3 extends DevKit.IForm {
+		/**
+		* Information [Quick Create]
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form msdyn_quotebookingservice_Information3 */
+		Body: DevKit.Formmsdyn_quotebookingservice_Information3.Body;
 	}
 	class msdyn_quotebookingserviceApi {
 		/**
@@ -188,22 +271,22 @@ declare namespace OptionSet {
 			/** 2 */
 			Inactive
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

@@ -3,7 +3,11 @@
 "use strict";
 var formCharacteristic_Quick_Create = (function () {
 	"use strict";
+	/** @type DevKit.FormCharacteristic_Quick_Create */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.FormCharacteristic_Quick_Create(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}
@@ -12,9 +16,13 @@ var formCharacteristic_Quick_Create = (function () {
 		OnSave: onSave
 	};
 })();
-var formInformation = (function () {
+var formCharacteristic_Information = (function () {
 	"use strict";
+	/** @type DevKit.FormCharacteristic_Information */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.FormCharacteristic_Information(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}
@@ -25,7 +33,11 @@ var formInformation = (function () {
 })();
 var formSkill_Main_Form = (function () {
 	"use strict";
+	/** @type DevKit.FormSkill_Main_Form */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.FormSkill_Main_Form(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}

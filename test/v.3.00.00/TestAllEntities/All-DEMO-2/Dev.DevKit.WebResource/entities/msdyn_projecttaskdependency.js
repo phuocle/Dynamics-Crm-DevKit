@@ -1,9 +1,13 @@
 ﻿//@ts-check
 ///<reference path="msdyn_projecttaskdependency.d.ts" />
 "use strict";
-var formInformation = (function () {
+var formmsdyn_projecttaskdependency_Information = (function () {
 	"use strict";
+	/** @type DevKit.Formmsdyn_projecttaskdependency_Information */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.Formmsdyn_projecttaskdependency_Information(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}

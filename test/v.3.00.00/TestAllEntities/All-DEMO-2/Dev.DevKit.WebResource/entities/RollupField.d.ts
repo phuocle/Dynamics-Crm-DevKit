@@ -38,10 +38,12 @@ declare namespace DevKit {
 			SourceStatus: DevKit.Controls.Integer;
 			sourcestatus_UC: DevKit.Controls.ActionCards;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormRollupField_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form RollupField_Information
+		* Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -50,6 +52,10 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form RollupField_Information */
 		Body: DevKit.FormRollupField_Information.Body;
+		/** The Process of form RollupField_Information */
+		Process: DevKit.FormRollupField_Information.Process;
+		/** The SidePanes of form RollupField_Information */
+		SidePanes: DevKit.SidePanes;
 	}
 	class RollupFieldApi {
 		/**
@@ -99,8 +105,6 @@ declare namespace DevKit {
 		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
 		/** Shows who last updated the record on behalf of another user. */
 		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
-		/** Choose the ID of the organization that the record is associated with. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the rollup field. */
 		RollupFieldId: DevKit.WebApi.GuidValue;
 		/** Type the name of the field that the data for the goal rolls up from. */
@@ -119,22 +123,22 @@ declare namespace DevKit {
 }
 declare namespace OptionSet {
 	namespace RollupField {
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

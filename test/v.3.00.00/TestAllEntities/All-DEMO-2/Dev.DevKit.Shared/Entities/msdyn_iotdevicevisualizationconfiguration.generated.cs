@@ -45,11 +45,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_iotdevicevisualizationconfigurationOp
 		/// </summary>
 		Case = 192350001,
 		/// <summary>
-		/// IoT_Alert = 192350000
+		/// IoT Alert = 192350000
 		/// </summary>
 		IoT_Alert = 192350000,
 		/// <summary>
-		/// Work_Order = 192350002
+		/// Work Order = 192350002
 		/// </summary>
 		Work_Order = 192350002
 	}
@@ -73,15 +73,15 @@ namespace Dev.DevKit.Shared.Entities.msdyn_iotdevicevisualizationconfigurationOp
 	public enum msdyn_VisualizationConfigurationType
 	{
 		/// <summary>
-		/// Configuration_1 = 192350000
+		/// Configuration 1 = 192350000
 		/// </summary>
 		Configuration_1 = 192350000,
 		/// <summary>
-		/// Configuration_2 = 192350001
+		/// Configuration 2 = 192350001
 		/// </summary>
 		Configuration_2 = 192350001,
 		/// <summary>
-		/// Configuration_3 = 192350002
+		/// Configuration 3 = 192350002
 		/// </summary>
 		Configuration_3 = 192350002
 	}
@@ -150,7 +150,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_iotdevicevisualizationconfiguration";
 
-		public const int EntityTypeCode = 10134;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10146;
 
 		[DebuggerNonUserCode()]
 		public msdyn_iotdevicevisualizationconfiguration()
@@ -304,9 +305,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_iotdevicevisualizationconfigurationOptionSets.msdyn_Aggregation)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_Aggregation] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_Aggregation] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_Aggregation] = null;
+			}
 		}
 
 		/// <summary>
@@ -458,9 +462,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_iotdevicevisualizationconfigurationOptionSets.msdyn_VisualizationConfigurationType)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_VisualizationConfigurationType] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_VisualizationConfigurationType] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_VisualizationConfigurationType] = null;
+			}
 		}
 
 		/// <summary>
@@ -477,7 +484,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

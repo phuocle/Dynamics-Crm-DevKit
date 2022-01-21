@@ -64,6 +64,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_sdkmessagename = "msdyn_sdkmessagename";
 			public const string msdyn_solutioncomponentsummaryId = "msdyn_solutioncomponentsummaryid";
 			public const string msdyn_solutionid = "msdyn_solutionid";
+			public const string msdyn_standardstatus = "msdyn_standardstatus";
 			public const string msdyn_status = "msdyn_status";
 			public const string msdyn_statusname = "msdyn_statusname";
 			public const string msdyn_subtype = "msdyn_subtype";
@@ -80,7 +81,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_solutioncomponentsummary";
 
-		public const int EntityTypeCode = 10011;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10013;
 
 		[DebuggerNonUserCode()]
 		public msdyn_solutioncomponentsummary()
@@ -629,6 +631,17 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.msdyn_solutionid); }
 			set { Entity.Attributes[Fields.msdyn_solutionid] = value; }
+		}
+
+		/// <summary>
+		/// <para>String - MaxLength: 100</para>
+		/// <para>msdyn_standardstatus</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_standardstatus
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_standardstatus); }
+			set { Entity.Attributes[Fields.msdyn_standardstatus] = value; }
 		}
 
 		/// <summary>

@@ -13,15 +13,15 @@ namespace Dev.DevKit.Shared.Entities.msdyn_contractlineinvoicescheduleOptionSets
 	public enum msdyn_InvoiceRunStatus
 	{
 		/// <summary>
-		/// Not_Run = 192350000
+		/// Not Run = 192350000
 		/// </summary>
 		Not_Run = 192350000,
 		/// <summary>
-		/// Run_Failed = 192350002
+		/// Run Failed = 192350002
 		/// </summary>
 		Run_Failed = 192350002,
 		/// <summary>
-		/// Run_Successful = 192350001
+		/// Run Successful = 192350001
 		/// </summary>
 		Run_Successful = 192350001
 	}
@@ -84,7 +84,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_contractlineinvoiceschedule";
 
-		public const int EntityTypeCode = 10330;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10436;
 
 		[DebuggerNonUserCode()]
 		public msdyn_contractlineinvoiceschedule()
@@ -303,9 +304,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_contractlineinvoicescheduleOptionSets.msdyn_InvoiceRunStatus)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_InvoiceRunStatus] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_InvoiceRunStatus] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_InvoiceRunStatus] = null;
+			}
 		}
 
 		/// <summary>

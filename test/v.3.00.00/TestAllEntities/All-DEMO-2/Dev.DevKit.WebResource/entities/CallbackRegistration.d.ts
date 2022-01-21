@@ -36,11 +36,13 @@ declare namespace DevKit {
 		/** Shows who created the record on behalfÂ of another user. */
 		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
 		/** Entity Name. */
-		_EntityName: DevKit.WebApi.StringValue;
+		EntityName1: DevKit.WebApi.StringValue;
 		/** condition represented with OData $filter syntax */
 		FilterExpression: DevKit.WebApi.StringValue;
 		/** Comma-separated list of attributes. If at least one of these attributes is modified, the callback url should be called. */
 		FilteringAttributes: DevKit.WebApi.StringValue;
+		/** For internal use only. Holds hard delete information. */
+		HardDelete: DevKit.WebApi.BooleanValue;
 		/** Specifies the message type */
 		Message: DevKit.WebApi.OptionSetValue;
 		/** Shows who last updated the record. */
@@ -71,6 +73,8 @@ declare namespace DevKit {
 		Scope: DevKit.WebApi.OptionSetValue;
 		/** Name of the SDK message the subscriber is interested in */
 		SdkMessageName: DevKit.WebApi.StringValue;
+		/** For internal use only. Holds soft delete information. */
+		SoftDeleteStatus: DevKit.WebApi.IntegerValue;
 		/** Full callback registration Url. */
 		Url: DevKit.WebApi.StringValue;
 		/** Specifies the Callback registration version type */
@@ -81,27 +85,27 @@ declare namespace OptionSet {
 	namespace CallbackRegistration {
 		enum Message {
 			/** 1 */
-			Create,
+			Added,
 			/** 5 */
-			Create_or_Delete,
+			Added_or_Deleted,
 			/** 4 */
-			Create_or_Update,
+			Added_or_Modified,
 			/** 7 */
-			Create_or_Update_or_Delete,
+			Added_or_Modified_or_Deleted,
 			/** 2 */
-			Delete,
+			Deleted,
 			/** 3 */
-			Update,
+			Modified,
 			/** 6 */
-			Update_or_Delete
+			Modified_or_Deleted
 		}
 		enum RunAs {
 			/** 3 */
-			Process_Owner,
-			/** 2 */
-			Record_Owner,
+			Flow_owner,
 			/** 1 */
-			Triggering_User
+			Modifying_user,
+			/** 2 */
+			Row_owner
 		}
 		enum Scope {
 			/** 2 */
@@ -121,22 +125,22 @@ declare namespace OptionSet {
 			/** 3 */
 			V3
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':[],'JsWebApi':true,'IsDebugForm':false,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}

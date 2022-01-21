@@ -13,11 +13,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_analysisresultOptionSets
 	public enum msdyn_AnalysisComponentType
 	{
 		/// <summary>
-		/// Component_Health = 192350001
+		/// Component Health = 192350001
 		/// </summary>
 		Component_Health = 192350001,
 		/// <summary>
-		/// Organization_Health = 192350000
+		/// Organization Health = 192350000
 		/// </summary>
 		Organization_Health = 192350000
 	}
@@ -37,7 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_analysisresultOptionSets
 		/// </summary>
 		Maintainability = 192350006,
 		/// <summary>
-		/// Online_Migration = 192350005
+		/// Online Migration = 192350005
 		/// </summary>
 		Online_Migration = 192350005,
 		/// <summary>
@@ -53,7 +53,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_analysisresultOptionSets
 		/// </summary>
 		Supportability = 192350007,
 		/// <summary>
-		/// Upgrade_Readiness = 192350001
+		/// Upgrade Readiness = 192350001
 		/// </summary>
 		Upgrade_Readiness = 192350001,
 		/// <summary>
@@ -69,11 +69,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_analysisresultOptionSets
 		/// </summary>
 		Configuration = 192350002,
 		/// <summary>
-		/// Plug_In = 192350001
+		/// Plug-In = 192350001
 		/// </summary>
 		Plug_In = 192350001,
 		/// <summary>
-		/// Web_Resources = 192350000
+		/// Web Resources = 192350000
 		/// </summary>
 		Web_Resources = 192350000
 	}
@@ -93,7 +93,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_analysisresultOptionSets
 	public enum msdyn_ReturnStatus
 	{
 		/// <summary>
-		/// Config_Error = 192350002
+		/// Config Error = 192350002
 		/// </summary>
 		Config_Error = 192350002,
 		/// <summary>
@@ -220,7 +220,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_analysisresult";
 
-		public const int EntityTypeCode = 10097;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10107;
 
 		[DebuggerNonUserCode()]
 		public msdyn_analysisresult()
@@ -724,7 +725,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

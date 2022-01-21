@@ -21,11 +21,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_projectapprovalOptionSets
 		/// </summary>
 		Complimentary = 192350002,
 		/// <summary>
-		/// Non_Chargeable = 192350000
+		/// Non Chargeable = 192350000
 		/// </summary>
 		Non_Chargeable = 192350000,
 		/// <summary>
-		/// Not_Available = 192350003
+		/// Not Available = 192350003
 		/// </summary>
 		Not_Available = 192350003
 	}
@@ -53,15 +53,15 @@ namespace Dev.DevKit.Shared.Entities.msdyn_projectapprovalOptionSets
 		/// </summary>
 		Pending = 3,
 		/// <summary>
-		/// Recall_Request_Approved = 5
+		/// Recall Request Approved = 5
 		/// </summary>
 		Recall_Request_Approved = 5,
 		/// <summary>
-		/// Recall_Request_Rejected = 6
+		/// Recall Request Rejected = 6
 		/// </summary>
 		Recall_Request_Rejected = 6,
 		/// <summary>
-		/// Recall_Requested = 4
+		/// Recall Requested = 4
 		/// </summary>
 		Recall_Requested = 4,
 		/// <summary>
@@ -113,6 +113,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ModifiedBy = "modifiedby";
 			public const string ModifiedOn = "modifiedon";
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
+			public const string msdyn_ApprovalSet = "msdyn_approvalset";
 			public const string msdyn_ApprovedBy = "msdyn_approvedby";
 			public const string msdyn_ApprovedOn = "msdyn_approvedon";
 			public const string msdyn_BillingType = "msdyn_billingtype";
@@ -163,7 +164,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_projectapproval";
 
-		public const int EntityTypeCode = 10364;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10470;
 
 		[DebuggerNonUserCode()]
 		public msdyn_projectapproval()
@@ -300,6 +302,18 @@ namespace Dev.DevKit.Shared.Entities
 		public EntityReference ModifiedOnBehalfBy
 		{
 			get { return Entity.GetAttributeValue<EntityReference>(Fields.ModifiedOnBehalfBy); }
+		}
+
+		/// <summary>
+		/// <para>Shows the Approval Set that the transaction references.</para>
+		/// <para>Lookup to msdyn_approvalset</para>
+		/// <para>Approval Set</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public EntityReference msdyn_ApprovalSet
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.msdyn_ApprovalSet); }
+			set { Entity.Attributes[Fields.msdyn_ApprovalSet] = value; }
 		}
 
 		/// <summary>
@@ -818,7 +832,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

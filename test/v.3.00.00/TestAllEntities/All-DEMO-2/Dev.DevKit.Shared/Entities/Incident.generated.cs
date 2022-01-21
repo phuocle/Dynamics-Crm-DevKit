@@ -85,11 +85,11 @@ namespace Dev.DevKit.Shared.Entities.IncidentOptionSets
 		/// </summary>
 		Satisfied = 4,
 		/// <summary>
-		/// Very_Dissatisfied = 1
+		/// Very Dissatisfied = 1
 		/// </summary>
 		Very_Dissatisfied = 1,
 		/// <summary>
-		/// Very_Satisfied = 5
+		/// Very Satisfied = 5
 		/// </summary>
 		Very_Satisfied = 5
 	}
@@ -97,11 +97,11 @@ namespace Dev.DevKit.Shared.Entities.IncidentOptionSets
 	public enum FirstResponseSLAStatus
 	{
 		/// <summary>
-		/// In_Progress = 1
+		/// In Progress = 1
 		/// </summary>
 		In_Progress = 1,
 		/// <summary>
-		/// Nearing_Noncompliance = 2
+		/// Nearing Noncompliance = 2
 		/// </summary>
 		Nearing_Noncompliance = 2,
 		/// <summary>
@@ -117,7 +117,7 @@ namespace Dev.DevKit.Shared.Entities.IncidentOptionSets
 	public enum IncidentStageCode
 	{
 		/// <summary>
-		/// Default_Value = 1
+		/// Default Value = 1
 		/// </summary>
 		Default_Value = 1
 	}
@@ -141,11 +141,11 @@ namespace Dev.DevKit.Shared.Entities.IncidentOptionSets
 	public enum MessageTypeCode
 	{
 		/// <summary>
-		/// Private_Message = 1
+		/// Private Message = 1
 		/// </summary>
 		Private_Message = 1,
 		/// <summary>
-		/// Public_Message = 0
+		/// Public Message = 0
 		/// </summary>
 		Public_Message = 0
 	}
@@ -169,11 +169,11 @@ namespace Dev.DevKit.Shared.Entities.IncidentOptionSets
 	public enum ResolveBySLAStatus
 	{
 		/// <summary>
-		/// In_Progress = 1
+		/// In Progress = 1
 		/// </summary>
 		In_Progress = 1,
 		/// <summary>
-		/// Nearing_Noncompliance = 2
+		/// Nearing Noncompliance = 2
 		/// </summary>
 		Nearing_Noncompliance = 2,
 		/// <summary>
@@ -205,7 +205,7 @@ namespace Dev.DevKit.Shared.Entities.IncidentOptionSets
 	public enum SeverityCode
 	{
 		/// <summary>
-		/// Default_Value = 1
+		/// Default Value = 1
 		/// </summary>
 		Default_Value = 1
 	}
@@ -233,11 +233,11 @@ namespace Dev.DevKit.Shared.Entities.IncidentOptionSets
 		/// </summary>
 		Cancelled = 6,
 		/// <summary>
-		/// In_Progress = 1
+		/// In Progress = 1
 		/// </summary>
 		In_Progress = 1,
 		/// <summary>
-		/// Information_Provided = 1000
+		/// Information Provided = 1000
 		/// </summary>
 		Information_Provided = 1000,
 		/// <summary>
@@ -245,11 +245,11 @@ namespace Dev.DevKit.Shared.Entities.IncidentOptionSets
 		/// </summary>
 		Merged = 2000,
 		/// <summary>
-		/// On_Hold = 2
+		/// On Hold = 2
 		/// </summary>
 		On_Hold = 2,
 		/// <summary>
-		/// Problem_Solved = 5
+		/// Problem Solved = 5
 		/// </summary>
 		Problem_Solved = 5,
 		/// <summary>
@@ -257,7 +257,7 @@ namespace Dev.DevKit.Shared.Entities.IncidentOptionSets
 		/// </summary>
 		Researching = 4,
 		/// <summary>
-		/// Waiting_for_Details = 3
+		/// Waiting for Details = 3
 		/// </summary>
 		Waiting_for_Details = 3
 	}
@@ -338,6 +338,8 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ResolveByKPIId = "resolvebykpiid";
 			public const string ResolveBySLAStatus = "resolvebyslastatus";
 			public const string ResponseBy = "responseby";
+			[System.Obsolete("Deprecated from version: 6.0.0.0")]
+			public const string ResponsibleContactId = "responsiblecontactid";
 			public const string RouteCase = "routecase";
 			public const string SentimentValue = "sentimentvalue";
 			public const string ServiceStage = "servicestage";
@@ -360,6 +362,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "incident";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 112;
 
 		[DebuggerNonUserCode()]
@@ -643,7 +646,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities.</para>
-		/// <para>Customer</para>
+		/// <para>Lookup to account, contact</para>
 		/// <para>Customer</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -654,7 +657,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select the customer's level of satisfaction with the handling and resolution of the case.</para>
+		/// <para>Select the customer&apos;s level of satisfaction with the handling and resolution of the case.</para>
 		/// <para>Picklist</para>
 		/// <para>Satisfaction</para>
 		/// </summary>
@@ -746,7 +749,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency.</para>
+		/// <para>Shows the conversion rate of the record&apos;s currency. The exchange rate is used to convert all money fields in the record from the local currency to the system&apos;s default currency.</para>
 		/// <para>ReadOnly - Decimal - MinValue: 0 - MaxValue: 100,000,000,000</para>
 		/// <para>Exchange Rate</para>
 		/// </summary>
@@ -1076,7 +1079,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Case's functional location</para>
+		/// <para>Case&apos;s functional location</para>
 		/// <para>Lookup to msdyn_functionallocation</para>
 		/// <para>Functional Location</para>
 		/// </summary>
@@ -1147,7 +1150,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -1333,6 +1336,19 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Choose an additional customer contact who can also help resolve the case.</para>
+		/// <para>Lookup to contact</para>
+		/// <para>Responsible Contact</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		[System.Obsolete("Deprecated from version: 6.0.0.0")]
+		public EntityReference ResponsibleContactId
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.ResponsibleContactId); }
+			set { Entity.Attributes[Fields.ResponsibleContactId] = value; }
+		}
+
+		/// <summary>
 		/// <para>Tells whether the incident has been routed to queue or not.</para>
 		/// <para>Boolean</para>
 		/// <para>Route Case</para>
@@ -1380,7 +1396,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select the severity of this case to indicate the incident's impact on the customer's business.</para>
+		/// <para>Select the severity of this case to indicate the incident&apos;s impact on the customer&apos;s business.</para>
 		/// <para>Picklist</para>
 		/// <para>Severity</para>
 		/// </summary>
@@ -1450,7 +1466,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows whether the case is active, resolved, or canceled. Resolved and canceled cases are read-only and can't be edited unless they are reactivated.</para>
+		/// <para>Shows whether the case is active, resolved, or canceled. Resolved and canceled cases are read-only and can&apos;t be edited unless they are reactivated.</para>
 		/// <para>State</para>
 		/// <para>Status</para>
 		/// </summary>
@@ -1473,7 +1489,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select the case's status.</para>
+		/// <para>Select the case&apos;s status.</para>
 		/// <para>Status</para>
 		/// <para>Status Reason</para>
 		/// </summary>

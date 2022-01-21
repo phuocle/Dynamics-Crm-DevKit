@@ -17,35 +17,35 @@ namespace Dev.DevKit.Shared.Entities.QueueItemOptionSets
 		/// </summary>
 		Activity = 4200,
 		/// <summary>
-		/// Agreement_Booking_Date = 10414
+		/// Agreement Booking Date = 10524
 		/// </summary>
-		Agreement_Booking_Date = 10414,
+		Agreement_Booking_Date = 10524,
 		/// <summary>
-		/// Agreement_Booking_Setup = 10419
+		/// Agreement Booking Setup = 10529
 		/// </summary>
-		Agreement_Booking_Setup = 10419,
+		Agreement_Booking_Setup = 10529,
 		/// <summary>
-		/// Agreement_Invoice_Date = 10420
+		/// Agreement Invoice Date = 10530
 		/// </summary>
-		Agreement_Invoice_Date = 10420,
+		Agreement_Invoice_Date = 10530,
 		/// <summary>
-		/// Agreement_Invoice_Setup = 10422
+		/// Agreement Invoice Setup = 10532
 		/// </summary>
-		Agreement_Invoice_Setup = 10422,
+		Agreement_Invoice_Setup = 10532,
 		/// <summary>
 		/// Appointment = 4201
 		/// </summary>
 		Appointment = 4201,
 		/// <summary>
-		/// Booking_Alert = 10294
+		/// Booking Alert = 10400
 		/// </summary>
-		Booking_Alert = 10294,
+		Booking_Alert = 10400,
 		/// <summary>
-		/// Campaign_Activity = 4402
+		/// Campaign Activity = 4402
 		/// </summary>
 		Campaign_Activity = 4402,
 		/// <summary>
-		/// Campaign_Response = 4401
+		/// Campaign Response = 4401
 		/// </summary>
 		Campaign_Response = 4401,
 		/// <summary>
@@ -53,21 +53,21 @@ namespace Dev.DevKit.Shared.Entities.QueueItemOptionSets
 		/// </summary>
 		Case = 112,
 		/// <summary>
-		/// Conversation = 10564
+		/// Conversation = 10702
 		/// </summary>
-		Conversation = 10564,
+		Conversation = 10702,
 		/// <summary>
-		/// Customer_Voice_alert = 10238
+		/// Customer Voice alert = 10294
 		/// </summary>
-		Customer_Voice_alert = 10238,
+		Customer_Voice_alert = 10294,
 		/// <summary>
-		/// Customer_Voice_survey_invite = 10248
+		/// Customer Voice survey invite = 10304
 		/// </summary>
-		Customer_Voice_survey_invite = 10248,
+		Customer_Voice_survey_invite = 10304,
 		/// <summary>
-		/// Customer_Voice_survey_response = 10250
+		/// Customer Voice survey response = 10306
 		/// </summary>
-		Customer_Voice_survey_response = 10250,
+		Customer_Voice_survey_response = 10306,
 		/// <summary>
 		/// Email = 4202
 		/// </summary>
@@ -77,79 +77,83 @@ namespace Dev.DevKit.Shared.Entities.QueueItemOptionSets
 		/// </summary>
 		Fax = 4204,
 		/// <summary>
-		/// Fulfillment_Preference = 10317
+		/// Fulfillment Preference = 10423
 		/// </summary>
-		Fulfillment_Preference = 10317,
+		Fulfillment_Preference = 10423,
 		/// <summary>
-		/// Inventory_Adjustment = 10442
+		/// Inventory Adjustment = 10552
 		/// </summary>
-		Inventory_Adjustment = 10442,
+		Inventory_Adjustment = 10552,
 		/// <summary>
-		/// Inventory_Transfer = 10445
+		/// Inventory Transfer = 10555
 		/// </summary>
-		Inventory_Transfer = 10445,
+		Inventory_Transfer = 10555,
 		/// <summary>
-		/// IoT_Alert = 10126
+		/// IoT Alert = 10138
 		/// </summary>
-		IoT_Alert = 10126,
+		IoT_Alert = 10138,
 		/// <summary>
-		/// Knowledge_Article = 9953
+		/// Knowledge Article = 9953
 		/// </summary>
 		Knowledge_Article = 9953,
 		/// <summary>
-		/// Knowledge_Article_Template = 10061
+		/// Knowledge Article Template = 10086
 		/// </summary>
-		Knowledge_Article_Template = 10061,
+		Knowledge_Article_Template = 10086,
 		/// <summary>
 		/// Letter = 4207
 		/// </summary>
 		Letter = 4207,
 		/// <summary>
-		/// Ongoing_conversation_Deprecated = 10558
+		/// Ongoing conversation (Deprecated) = 10692
 		/// </summary>
-		Ongoing_conversation_Deprecated = 10558,
+		Ongoing_conversation_Deprecated = 10692,
 		/// <summary>
-		/// Outbound_message = 10673
+		/// Outbound message = 10813
 		/// </summary>
-		Outbound_message = 10673,
+		Outbound_message = 10813,
 		/// <summary>
-		/// Phone_Call = 4210
+		/// Overflow Action Config = 10679
+		/// </summary>
+		Overflow_Action_Config = 10679,
+		/// <summary>
+		/// Phone Call = 4210
 		/// </summary>
 		Phone_Call = 4210,
 		/// <summary>
-		/// Project = 10363
+		/// Project = 10469
 		/// </summary>
-		Project = 10363,
+		Project = 10469,
 		/// <summary>
-		/// Project_Service_Approval = 10324
+		/// Project Service Approval = 10430
 		/// </summary>
-		Project_Service_Approval = 10324,
+		Project_Service_Approval = 10430,
 		/// <summary>
-		/// Project_Task = 10368
+		/// Project Task = 10474
 		/// </summary>
-		Project_Task = 10368,
+		Project_Task = 10474,
 		/// <summary>
-		/// Quick_Campaign = 4406
+		/// Quick Campaign = 4406
 		/// </summary>
 		Quick_Campaign = 4406,
 		/// <summary>
-		/// Recurring_Appointment = 4251
+		/// Recurring Appointment = 4251
 		/// </summary>
 		Recurring_Appointment = 4251,
 		/// <summary>
-		/// Resource_Request = 10386
+		/// Resource Request = 10492
 		/// </summary>
-		Resource_Request = 10386,
+		Resource_Request = 10492,
 		/// <summary>
-		/// Service_Activity = 4214
+		/// Service Activity = 4214
 		/// </summary>
 		Service_Activity = 4214,
 		/// <summary>
-		/// Session = 10573
+		/// Session = 10717
 		/// </summary>
-		Session = 10573,
+		Session = 10717,
 		/// <summary>
-		/// Social_Activity = 4216
+		/// Social Activity = 4216
 		/// </summary>
 		Social_Activity = 4216,
 		/// <summary>
@@ -157,25 +161,25 @@ namespace Dev.DevKit.Shared.Entities.QueueItemOptionSets
 		/// </summary>
 		Task = 4212,
 		/// <summary>
-		/// Time_Group_Detail = 10318
+		/// Time Group Detail = 10424
 		/// </summary>
-		Time_Group_Detail = 10318,
+		Time_Group_Detail = 10424,
 		/// <summary>
-		/// Work_Order = 10485
+		/// Work Order = 10595
 		/// </summary>
-		Work_Order = 10485,
+		Work_Order = 10595,
 		/// <summary>
-		/// Work_Order_Incident = 10488
+		/// Work Order Incident = 10598
 		/// </summary>
-		Work_Order_Incident = 10488,
+		Work_Order_Incident = 10598,
 		/// <summary>
-		/// Work_Order_Service = 10491
+		/// Work Order Service = 10601
 		/// </summary>
-		Work_Order_Service = 10491,
+		Work_Order_Service = 10601,
 		/// <summary>
-		/// Work_Order_Service_Task = 10492
+		/// Work Order Service Task = 10602
 		/// </summary>
-		Work_Order_Service_Task = 10492
+		Work_Order_Service_Task = 10602
 	}
 
 	public enum StateCode
@@ -226,12 +230,22 @@ namespace Dev.DevKit.Shared.Entities
 			public const string OwnerId = "ownerid";
 			public const string OwningBusinessUnit = "owningbusinessunit";
 			public const string OwningUser = "owninguser";
+			[System.Obsolete("Deprecated from version: 5.0.0.0")]
+			public const string Priority = "priority";
 			public const string QueueId = "queueid";
 			public const string QueueItemId = "queueitemid";
+			[System.Obsolete("Deprecated from version: 5.0.0.0")]
+			public const string Sender = "sender";
+			[System.Obsolete("Deprecated from version: 5.0.0.0")]
+			public const string State = "state";
 			public const string StateCode = "statecode";
+			[System.Obsolete("Deprecated from version: 5.0.0.0")]
+			public const string Status = "status";
 			public const string StatusCode = "statuscode";
 			public const string TimeZoneRuleVersionNumber = "timezoneruleversionnumber";
 			public const string Title = "title";
+			[System.Obsolete("Deprecated from version: 5.0.0.0")]
+			public const string ToRecipients = "torecipients";
 			public const string TransactionCurrencyId = "transactioncurrencyid";
 			public const string UTCConversionTimeZoneCode = "utcconversiontimezonecode";
 			public const string VersionNumber = "versionnumber";
@@ -241,6 +255,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "queueitem";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 2029;
 
 		[DebuggerNonUserCode()]
@@ -336,7 +351,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency.</para>
+		/// <para>Shows the conversion rate of the record&apos;s currency. The exchange rate is used to convert all money fields in the record from the local currency to the system&apos;s default currency.</para>
 		/// <para>ReadOnly - Decimal - MinValue: 0 - MaxValue: 100,000,000,000</para>
 		/// <para>Exchange Rate</para>
 		/// </summary>
@@ -405,7 +420,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Choose the activity, case, or article assigned to the queue.</para>
-		/// <para>Required - Lookup to activitypointer;appointment;bulkoperation;campaignactivity;campaignresponse;email;fax;incident;knowledgearticle;letter;msdyn_agreementbookingdate;msdyn_agreementbookingsetup;msdyn_agreementinvoicedate;msdyn_agreementinvoicesetup;msdyn_approval;msdyn_bookingalert;msdyn_inventoryadjustment;msdyn_inventorytransfer;msdyn_iotalert;msdyn_knowledgearticletemplate;msdyn_liveconversation;msdyn_ocliveworkitem;msdyn_ocoutboundmessage;msdyn_ocsession;msdyn_project;msdyn_projecttask;msdyn_resourcerequest;msdyn_timegroup;msdyn_timegroupdetail;msdyn_workorder;msdyn_workorderincident;msdyn_workorderservice;msdyn_workorderservicetask;msfp_alert;msfp_surveyinvite;msfp_surveyresponse;phonecall;recurringappointmentmaster;serviceappointment;socialactivity;task</para>
+		/// <para>Required - Lookup to activitypointer, appointment, bulkoperation, campaignactivity, campaignresponse, email, fax, incident, knowledgearticle, letter, msdyn_agreementbookingdate, msdyn_agreementbookingsetup, msdyn_agreementinvoicedate, msdyn_agreementinvoicesetup, msdyn_approval, msdyn_bookingalert, msdyn_inventoryadjustment, msdyn_inventorytransfer, msdyn_iotalert, msdyn_knowledgearticletemplate, msdyn_liveconversation, msdyn_ocliveworkitem, msdyn_ocoutboundmessage, msdyn_ocsession, msdyn_overflowactionconfig, msdyn_project, msdyn_projecttask, msdyn_resourcerequest, msdyn_timegroup, msdyn_timegroupdetail, msdyn_workorder, msdyn_workorderincident, msdyn_workorderservice, msdyn_workorderservicetask, msfp_alert, msfp_surveyinvite, msfp_surveyresponse, phonecall, recurringappointmentmaster, serviceappointment, socialactivity, task</para>
 		/// <para>Object</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -456,7 +471,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the user or team who owns the queue item.</para>
-		/// <para>ReadOnly - Required - Owner</para>
+		/// <para>ReadOnly - Required - Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -488,6 +503,19 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Priority of the queue item.</para>
+		/// <para>Integer - MinValue: 0 - MaxValue: 1,000,000,000</para>
+		/// <para>Priority</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		[System.Obsolete("Deprecated from version: 5.0.0.0")]
+		public int? Priority
+		{
+			get { return Entity.GetAttributeValue<int?>(Fields.Priority); }
+			set { Entity.Attributes[Fields.Priority] = value; }
+		}
+
+		/// <summary>
 		/// <para>Choose the queue that the item is assigned to.</para>
 		/// <para>Required - Lookup to queue</para>
 		/// <para>Queue</para>
@@ -516,7 +544,33 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows whether the queue record is active or inactive. Inactive queue records are read-only and can't be edited unless they are reactivated.</para>
+		/// <para>Sender who created the queue item.</para>
+		/// <para>String - MaxLength: 250</para>
+		/// <para>From</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		[System.Obsolete("Deprecated from version: 5.0.0.0")]
+		public string Sender
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.Sender); }
+			set { Entity.Attributes[Fields.Sender] = value; }
+		}
+
+		/// <summary>
+		/// <para>Status of the queue item.</para>
+		/// <para>Integer - MinValue: 0 - MaxValue: 1,000,000,000</para>
+		/// <para>Status (deprecated)</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		[System.Obsolete("Deprecated from version: 5.0.0.0")]
+		public int? State
+		{
+			get { return Entity.GetAttributeValue<int?>(Fields.State); }
+			set { Entity.Attributes[Fields.State] = value; }
+		}
+
+		/// <summary>
+		/// <para>Shows whether the queue record is active or inactive. Inactive queue records are read-only and can&apos;t be edited unless they are reactivated.</para>
 		/// <para>State</para>
 		/// <para>Status</para>
 		/// </summary>
@@ -539,7 +593,20 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select the item's status.</para>
+		/// <para>Reason for the status of the queue item.</para>
+		/// <para>Integer - MinValue: 0 - MaxValue: 1,000,000,000</para>
+		/// <para>Status Reason (deprecated)</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		[System.Obsolete("Deprecated from version: 5.0.0.0")]
+		public int? Status
+		{
+			get { return Entity.GetAttributeValue<int?>(Fields.Status); }
+			set { Entity.Attributes[Fields.Status] = value; }
+		}
+
+		/// <summary>
+		/// <para>Select the item&apos;s status.</para>
 		/// <para>Status</para>
 		/// <para>Status Reason</para>
 		/// </summary>
@@ -585,6 +652,19 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Recipients listed on the To line of the message for email queue items.</para>
+		/// <para>String - MaxLength: 500</para>
+		/// <para>To</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		[System.Obsolete("Deprecated from version: 5.0.0.0")]
+		public string ToRecipients
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.ToRecipients); }
+			set { Entity.Attributes[Fields.ToRecipients] = value; }
+		}
+
+		/// <summary>
 		/// <para>Choose the local currency for the record to make sure budgets are reported in the correct currency.</para>
 		/// <para>Lookup to transactioncurrency</para>
 		/// <para>Currency</para>
@@ -621,7 +701,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Shows who is working on the queue item.</para>
-		/// <para>Lookup to systemuser;team</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Worked By</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

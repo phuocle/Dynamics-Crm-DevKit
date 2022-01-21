@@ -13,11 +13,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ciproviderOptionSets
 	public enum msdyn_ciproviderapiversion
 	{
 		/// <summary>
-		/// _10 = 0
+		/// 1.0 = 0
 		/// </summary>
 		_10 = 0,
 		/// <summary>
-		/// _20 = 1
+		/// 2.0 = 1
 		/// </summary>
 		_20 = 1
 	}
@@ -84,7 +84,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_ciprovider";
 
-		public const int EntityTypeCode = 10523;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10650;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ciprovider()

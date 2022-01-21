@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.solutioncomponentrelationshipconfigurationO
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -33,11 +33,11 @@ namespace Dev.DevKit.Shared.Entities.solutioncomponentrelationshipconfigurationO
 	public enum PrimaryEntityDependencyType
 	{
 		/// <summary>
-		/// Hard_Dependency = 0
+		/// Hard Dependency = 0
 		/// </summary>
 		Hard_Dependency = 0,
 		/// <summary>
-		/// Soft_Dependency = 1
+		/// Soft Dependency = 1
 		/// </summary>
 		Soft_Dependency = 1
 	}
@@ -45,11 +45,11 @@ namespace Dev.DevKit.Shared.Entities.solutioncomponentrelationshipconfigurationO
 	public enum SecondaryEntityDependencyType
 	{
 		/// <summary>
-		/// Hard_Dependency = 0
+		/// Hard Dependency = 0
 		/// </summary>
 		Hard_Dependency = 0,
 		/// <summary>
-		/// Soft_Dependency = 1
+		/// Soft Dependency = 1
 		/// </summary>
 		Soft_Dependency = 1
 	}
@@ -86,12 +86,14 @@ namespace Dev.DevKit.Shared.Entities
 		public struct Fields
 		{
 			public const string AddRelatedComponents = "addrelatedcomponents";
+			public const string CascadeRemoveComponents = "cascaderemovecomponents";
 			public const string ComponentIdUnique = "componentidunique";
 			public const string ComponentState = "componentstate";
 			public const string CreatedBy = "createdby";
 			public const string CreatedOn = "createdon";
 			public const string CreatedOnBehalfBy = "createdonbehalfby";
 			public const string EntityRelationshipId = "entityrelationshipid";
+			public const string ForceAddingManagedRelatedComponents = "forceaddingmanagedrelatedcomponents";
 			public const string ImportSequenceNumber = "importsequencenumber";
 			public const string IsManaged = "ismanaged";
 			public const string ModifiedBy = "modifiedby";
@@ -102,6 +104,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string OverriddenCreatedOn = "overriddencreatedon";
 			public const string OverwriteTime = "overwritetime";
 			public const string PrimaryEntityDependencyType = "primaryentitydependencytype";
+			public const string RespectParentRootComponentBehavior = "respectparentrootcomponentbehavior";
 			public const string SecondaryEntityDependencyType = "secondaryentitydependencytype";
 			public const string solutioncomponentrelationshipconfigurationId = "solutioncomponentrelationshipconfigurationid";
 			public const string SolutionId = "solutionid";
@@ -115,7 +118,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "solutioncomponentrelationshipconfiguration";
 
-		public const int EntityTypeCode = 10002;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10003;
 
 		[DebuggerNonUserCode()]
 		public solutioncomponentrelationshipconfiguration()
@@ -174,6 +178,17 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<bool?>(Fields.AddRelatedComponents); }
 			set { Entity.Attributes[Fields.AddRelatedComponents] = value; }
+		}
+
+		/// <summary>
+		/// <para>Boolean</para>
+		/// <para>Cascade Remove Components</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? CascadeRemoveComponents
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.CascadeRemoveComponents); }
+			set { Entity.Attributes[Fields.CascadeRemoveComponents] = value; }
 		}
 
 		/// <summary>
@@ -246,6 +261,17 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<EntityReference>(Fields.EntityRelationshipId); }
 			set { Entity.Attributes[Fields.EntityRelationshipId] = value; }
+		}
+
+		/// <summary>
+		/// <para>Boolean</para>
+		/// <para>Force Adding Managed Related Components</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? ForceAddingManagedRelatedComponents
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.ForceAddingManagedRelatedComponents); }
+			set { Entity.Attributes[Fields.ForceAddingManagedRelatedComponents] = value; }
 		}
 
 		/// <summary>
@@ -370,6 +396,17 @@ namespace Dev.DevKit.Shared.Entities
 				else
 					Entity.Attributes[Fields.PrimaryEntityDependencyType] = null;
 			}
+		}
+
+		/// <summary>
+		/// <para>Boolean</para>
+		/// <para>Respect Parent Root Component Behavior</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? RespectParentRootComponentBehavior
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.RespectParentRootComponentBehavior); }
+			set { Entity.Attributes[Fields.RespectParentRootComponentBehavior] = value; }
 		}
 
 		/// <summary>

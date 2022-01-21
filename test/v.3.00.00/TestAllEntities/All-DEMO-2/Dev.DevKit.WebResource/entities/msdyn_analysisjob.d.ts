@@ -36,25 +36,27 @@ declare namespace DevKit {
 			Tab: Tabs;
 			msdyn_EndTime: DevKit.Controls.DateTime;
 			msdyn_ErrorCount: DevKit.Controls.Integer;
-			msdyn_ErrorCount_1: DevKit.Controls.Integer;
+			msdyn_ErrorCount1: DevKit.Controls.Integer;
 			msdyn_Exception: DevKit.Controls.String;
 			/** The name of the custom entity. */
 			msdyn_name: DevKit.Controls.String;
 			msdyn_RuleFailCount: DevKit.Controls.Integer;
-			msdyn_RuleFailCount_1: DevKit.Controls.Integer;
+			msdyn_RuleFailCount1: DevKit.Controls.Integer;
 			msdyn_RulePassCount: DevKit.Controls.Integer;
-			msdyn_RulePassCount_1: DevKit.Controls.Integer;
+			msdyn_RulePassCount1: DevKit.Controls.Integer;
 			msdyn_RuleRunCount: DevKit.Controls.Integer;
-			msdyn_RuleRunCount_1: DevKit.Controls.Integer;
+			msdyn_RuleRunCount1: DevKit.Controls.Integer;
 			msdyn_StartTime: DevKit.Controls.DateTime;
 			msdyn_SuggestionCount: DevKit.Controls.Integer;
-			msdyn_SuggestionCount_1: DevKit.Controls.Integer;
+			msdyn_SuggestionCount1: DevKit.Controls.Integer;
 			msdyn_WarningCount: DevKit.Controls.Integer;
-			msdyn_WarningCount_1: DevKit.Controls.Integer;
+			msdyn_WarningCount1: DevKit.Controls.Integer;
 			/** Status of the Analysis Job */
 			statecode: DevKit.Controls.OptionSet;
 			/** Reason for the status of the Analysis Job */
 			statuscode: DevKit.Controls.OptionSet;
+		}
+		interface Process extends DevKit.Controls.IProcess {
 		}
 		interface Grid {
 			AssociatedAnalysisResults: DevKit.Controls.Grid;
@@ -62,7 +64,7 @@ declare namespace DevKit {
 	}
 	class Formmsdyn_analysisjob_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form msdyn_analysisjob_Information
+		* Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -73,8 +75,12 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyn_analysisjob_Information.Body;
 		/** The Header section of form msdyn_analysisjob_Information */
 		Header: DevKit.Formmsdyn_analysisjob_Information.Header;
+		/** The Process of form msdyn_analysisjob_Information */
+		Process: DevKit.Formmsdyn_analysisjob_Information.Process;
 		/** The Grid of form msdyn_analysisjob_Information */
 		Grid: DevKit.Formmsdyn_analysisjob_Information.Grid;
+		/** The SidePanes of form msdyn_analysisjob_Information */
+		SidePanes: DevKit.SidePanes;
 	}
 	class msdyn_analysisjobApi {
 		/**
@@ -123,6 +129,8 @@ declare namespace DevKit {
 		msdyn_EndTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		msdyn_ErrorCount: DevKit.WebApi.IntegerValue;
 		msdyn_Exception: DevKit.WebApi.StringValue;
+		/** Health rule set Failure In App Notification Enabled. */
+		msdyn_InAppNotificationEnabled: DevKit.WebApi.BooleanValue;
 		/** The name of the custom entity. */
 		msdyn_name: DevKit.WebApi.StringValue;
 		msdyn_RuleFailCount: DevKit.WebApi.IntegerValue;
@@ -185,22 +193,22 @@ declare namespace OptionSet {
 			/** 192350000 */
 			Running
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

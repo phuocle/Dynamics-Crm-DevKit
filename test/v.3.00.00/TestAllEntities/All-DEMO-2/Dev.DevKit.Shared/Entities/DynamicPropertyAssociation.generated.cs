@@ -25,11 +25,11 @@ namespace Dev.DevKit.Shared.Entities.DynamicPropertyAssociationOptionSets
 		/// </summary>
 		Draft = 2,
 		/// <summary>
-		/// Draft_Added = 3
+		/// Draft Added = 3
 		/// </summary>
 		Draft_Added = 3,
 		/// <summary>
-		/// Draft_Deleted = 4
+		/// Draft Deleted = 4
 		/// </summary>
 		Draft_Deleted = 4
 	}
@@ -82,6 +82,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "dynamicpropertyassociation";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 1235;
 
 		[DebuggerNonUserCode()]
@@ -229,7 +230,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency.</para>
+		/// <para>Shows the conversion rate of the record&apos;s currency. The exchange rate is used to convert all money fields in the record from the local currency to the system&apos;s default currency.</para>
 		/// <para>ReadOnly - Decimal - MinValue: 0 - MaxValue: 100,000,000,000</para>
 		/// <para>Exchange Rate</para>
 		/// </summary>
@@ -344,7 +345,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Shows the object that the property is associated with.</para>
-		/// <para>Lookup to product;productassociation</para>
+		/// <para>Lookup to product, productassociation</para>
 		/// <para>Regarding</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

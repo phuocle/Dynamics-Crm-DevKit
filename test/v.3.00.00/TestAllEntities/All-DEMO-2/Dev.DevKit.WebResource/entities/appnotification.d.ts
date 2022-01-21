@@ -9,20 +9,24 @@ declare namespace DevKit {
 			Body: DevKit.Controls.String;
 			/** Custom data for the notification that can be used by the notification card */
 			Data: DevKit.Controls.String;
-			/** Date and time when the notification will be deleted */
-			ExpiresOn: DevKit.Controls.Date;
 			IconType: DevKit.Controls.OptionSet;
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
+			/** Priority of the notification */
+			Priority: DevKit.Controls.OptionSet;
 			/** Title for the notification */
 			Title: DevKit.Controls.String;
 			/** Type of toast behavior for the notification */
 			ToastType: DevKit.Controls.OptionSet;
+			/** After the specified number of seconds the notification will be deleted */
+			TTLInSeconds: DevKit.Controls.Integer;
+		}
+		interface Process extends DevKit.Controls.IProcess {
 		}
 	}
 	class Formappnotification_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form appnotification_Information
+		* Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -31,6 +35,10 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form appnotification_Information */
 		Body: DevKit.Formappnotification_Information.Body;
+		/** The Process of form appnotification_Information */
+		Process: DevKit.Formappnotification_Information.Process;
+		/** The SidePanes of form appnotification_Information */
+		SidePanes: DevKit.SidePanes;
 	}
 	class appnotificationApi {
 		/**
@@ -72,8 +80,6 @@ declare namespace DevKit {
 		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
 		/** Custom data for the notification that can be used by the notification card */
 		Data: DevKit.WebApi.StringValue;
-		/** Date and time when the notification will be deleted */
-		ExpiresOn_DateOnly: DevKit.WebApi.DateOnlyValue;
 		IconType: DevKit.WebApi.OptionSetValue;
 		/** Sequence number of the import that created this record. */
 		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
@@ -95,18 +101,18 @@ declare namespace DevKit {
 		OwningTeam: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier for the user that owns the record. */
 		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		/** Partitioning will be based on owner and it is recommended to specify this field for all operations for performance reason */
+		PartitionId: DevKit.WebApi.StringValue;
 		/** Priority of the notification */
 		Priority: DevKit.WebApi.OptionSetValue;
-		/** Status of the notification */
-		statecode: DevKit.WebApi.OptionSetValue;
-		/** Reason for the status of the Notification */
-		statuscode: DevKit.WebApi.OptionSetValue;
 		/** For internal use only. */
 		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
 		/** Title for the notification */
 		Title: DevKit.WebApi.StringValue;
 		/** Type of toast behavior for the notification */
 		ToastType: DevKit.WebApi.OptionSetValue;
+		/** After the specified number of seconds the notification will be deleted */
+		TTLInSeconds: DevKit.WebApi.IntegerValue;
 		/** Time zone code that was in use when the record was created. */
 		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
 		/** Version Number */
@@ -135,42 +141,28 @@ declare namespace OptionSet {
 			/** 200000000 */
 			Normal
 		}
-		enum statecode {
-			/** 0 */
-			Active,
-			/** 1 */
-			Inactive
-		}
-		enum statuscode {
-			/** 3 */
-			Inactive,
-			/** 2 */
-			Read,
-			/** 1 */
-			Unread
-		}
 		enum ToastType {
 			/** 200000001 */
 			Hidden,
 			/** 200000000 */
 			Timed
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

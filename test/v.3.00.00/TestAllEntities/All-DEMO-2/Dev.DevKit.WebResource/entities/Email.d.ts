@@ -1,6 +1,91 @@
 ﻿//@ts-check
 ///<reference path="devkit.d.ts" />
 declare namespace DevKit {
+	namespace FormBulk_Email {
+		interface Header extends DevKit.Controls.IHeader {
+			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
+			OwnerId: DevKit.Controls.Lookup;
+			/** Select the priority so that preferred customers or critical issues are handled quickly. */
+			PriorityCode: DevKit.Controls.OptionSet;
+			/** Enter the expected due date and time for the activity to be completed to provide details about when the email will be sent. */
+			ScheduledEnd: DevKit.Controls.DateTime;
+			/** Select the email's status. */
+			StatusCode: DevKit.Controls.OptionSet;
+		}
+		interface tab_Email_Sections {
+			Email_MainSection: DevKit.Controls.Section;
+			Email_PreviewSection: DevKit.Controls.Section;
+		}
+		interface tab_Email_Engagement_Sections {
+			Email_Engagement_column_3_section_1: DevKit.Controls.Section;
+			emailengagementactions: DevKit.Controls.Section;
+			Emailrecipient_section_6: DevKit.Controls.Section;
+		}
+		interface tab_Email extends DevKit.Controls.ITab {
+			Section: tab_Email_Sections;
+		}
+		interface tab_Email_Engagement extends DevKit.Controls.ITab {
+			Section: tab_Email_Engagement_Sections;
+		}
+		interface Tabs {
+			Email: tab_Email;
+			Email_Engagement: tab_Email_Engagement;
+		}
+		interface Body {
+			Tab: Tabs;
+			/** Type the greeting and message text of the email. */
+			Description: DevKit.Controls.String;
+			/** Type the greeting and message text of the email. */
+			Description1: DevKit.Controls.String;
+			emailengagementactionscontrol: DevKit.Controls.EmailEngagement;
+			emailrecipientactivitycontrol: DevKit.Controls.EmailRecipient;
+			/** Enter the sender of the email. */
+			from: DevKit.Controls.Lookup;
+			/** Individual email will be sent to each recipient. */
+			msdyn_RecipientList: DevKit.Controls.String;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			RegardingObjectId: DevKit.Controls.Lookup;
+			/** Type a short description about the objective or primary topic of the email. */
+			Subject: DevKit.Controls.String;
+			/** Type a short description about the objective or primary topic of the email. */
+			Subject1: DevKit.Controls.String;
+			/** Enter the account, contact, lead, queue, or user recipients for the email. */
+			to: DevKit.Controls.Lookup;
+		}
+		interface Footer extends DevKit.Controls.IFooter {
+			/** For internal use only. Shows whether this email is followed. This is evaluated state which overrides user selection of follow email. */
+			IsEmailFollowed: DevKit.Controls.Boolean;
+			/** For internal use only. Shows whether this email Reminder is Set. */
+			IsEmailReminderSet: DevKit.Controls.Boolean;
+		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
+		interface Grid {
+			attachmentsGrid: DevKit.Controls.Grid;
+		}
+	}
+	class FormBulk_Email extends DevKit.IForm {
+		/**
+		* Bulk Email [Main Form]
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form Bulk_Email */
+		Body: DevKit.FormBulk_Email.Body;
+		/** The Footer section of form Bulk_Email */
+		Footer: DevKit.FormBulk_Email.Footer;
+		/** The Header section of form Bulk_Email */
+		Header: DevKit.FormBulk_Email.Header;
+		/** The Process of form Bulk_Email */
+		Process: DevKit.FormBulk_Email.Process;
+		/** The Grid of form Bulk_Email */
+		Grid: DevKit.FormBulk_Email.Grid;
+		/** The SidePanes of form Bulk_Email */
+		SidePanes: DevKit.SidePanes;
+	}
 	namespace FormEmail {
 		interface Header extends DevKit.Controls.IHeader {
 			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
@@ -54,13 +139,15 @@ declare namespace DevKit {
 			/** For internal use only. Shows whether this email Reminder is Set. */
 			IsEmailReminderSet: DevKit.Controls.Boolean;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			attachmentsGrid: DevKit.Controls.Grid;
 		}
 	}
 	class FormEmail extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Email
+		* Email [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -73,8 +160,12 @@ declare namespace DevKit {
 		Footer: DevKit.FormEmail.Footer;
 		/** The Header section of form Email */
 		Header: DevKit.FormEmail.Header;
+		/** The Process of form Email */
+		Process: DevKit.FormEmail.Process;
 		/** The Grid of form Email */
 		Grid: DevKit.FormEmail.Grid;
+		/** The SidePanes of form Email */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormEmail_for_Interactive_experience {
 		interface Header extends DevKit.Controls.IHeader {
@@ -115,13 +206,15 @@ declare namespace DevKit {
 			/** Enter the account, contact, lead, queue, or user recipients for the email. */
 			to: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			attachmentsGrid: DevKit.Controls.Grid;
 		}
 	}
 	class FormEmail_for_Interactive_experience extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Email_for_Interactive_experience
+		* Email for Interactive experience [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -132,8 +225,12 @@ declare namespace DevKit {
 		Body: DevKit.FormEmail_for_Interactive_experience.Body;
 		/** The Header section of form Email_for_Interactive_experience */
 		Header: DevKit.FormEmail_for_Interactive_experience.Header;
+		/** The Process of form Email_for_Interactive_experience */
+		Process: DevKit.FormEmail_for_Interactive_experience.Process;
 		/** The Grid of form Email_for_Interactive_experience */
 		Grid: DevKit.FormEmail_for_Interactive_experience.Grid;
+		/** The SidePanes of form Email_for_Interactive_experience */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormEnhanced_Email {
 		interface Header extends DevKit.Controls.IHeader {
@@ -189,13 +286,15 @@ declare namespace DevKit {
 			/** For internal use only. Shows whether this email Reminder is Set. */
 			IsEmailReminderSet: DevKit.Controls.Boolean;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			attachmentsGrid: DevKit.Controls.Grid;
 		}
 	}
 	class FormEnhanced_Email extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Enhanced_Email
+		* Enhanced Email [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -208,8 +307,12 @@ declare namespace DevKit {
 		Footer: DevKit.FormEnhanced_Email.Footer;
 		/** The Header section of form Enhanced_Email */
 		Header: DevKit.FormEnhanced_Email.Header;
+		/** The Process of form Enhanced_Email */
+		Process: DevKit.FormEnhanced_Email.Process;
 		/** The Grid of form Enhanced_Email */
 		Grid: DevKit.FormEnhanced_Email.Grid;
+		/** The SidePanes of form Enhanced_Email */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormEmail_Wizard {
 		interface Header extends DevKit.Controls.IHeader {
@@ -254,13 +357,15 @@ declare namespace DevKit {
 			/** Enter the account, contact, lead, queue, or user recipients for the email. */
 			to: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			attachmentsGrid: DevKit.Controls.Grid;
 		}
 	}
 	class FormEmail_Wizard extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Email_Wizard
+		* Wizard [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -271,8 +376,12 @@ declare namespace DevKit {
 		Body: DevKit.FormEmail_Wizard.Body;
 		/** The Header section of form Email_Wizard */
 		Header: DevKit.FormEmail_Wizard.Header;
+		/** The Process of form Email_Wizard */
+		Process: DevKit.FormEmail_Wizard.Process;
 		/** The Grid of form Email_Wizard */
 		Grid: DevKit.FormEmail_Wizard.Grid;
+		/** The SidePanes of form Email_Wizard */
+		SidePanes: DevKit.SidePanes;
 	}
 	class EmailApi {
 		/**
@@ -400,6 +509,8 @@ declare namespace DevKit {
 		LinksClickedCount: DevKit.WebApi.IntegerValue;
 		/** Unique identifier of the email message. Used only for email that is received. */
 		MessageId: DevKit.WebApi.StringValue;
+		/** For internal use only. */
+		MessageIdDupCheck: DevKit.WebApi.GuidValue;
 		/** MIME type of the email message data. */
 		MimeType: DevKit.WebApi.StringValue;
 		/** Shows who last updated the record. */
@@ -408,6 +519,8 @@ declare namespace DevKit {
 		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
 		/** Shows who last updated the record on behalf of another user. */
 		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Individual email will be sent to each recipient. */
+		msdyn_RecipientList: DevKit.WebApi.StringValue;
 		/** Select the notification code to identify issues with the email recipients or attachments, such as blocked attachments. */
 		Notifications: DevKit.WebApi.OptionSetValue;
 		/** Shows how long, in minutes, that the record was on hold. */
@@ -628,8 +741,6 @@ declare namespace DevKit {
 		ReplyCount: DevKit.WebApi.IntegerValueReadonly;
 		/** For internal use only */
 		ReservedForInternalUse: DevKit.WebApi.StringValue;
-		/** Safe body text of the e-mail. */
-		SafeDescription: DevKit.WebApi.StringValueReadonly;
 		/** Scheduled duration of the email activity, specified in minutes. */
 		ScheduledDurationMinutes: DevKit.WebApi.IntegerValueReadonly;
 		/** Enter the expected due date and time for the activity to be completed to provide details about when the email will be sent. */
@@ -650,7 +761,6 @@ declare namespace DevKit {
 		SLAId: DevKit.WebApi.LookupValue;
 		/** Last SLA that was applied to this email. This field is for internal use only. */
 		SLAInvokedId: DevKit.WebApi.LookupValueReadonly;
-		SLAName: DevKit.WebApi.StringValueReadonly;
 		/** Shows the date and time by which the activities are sorted. */
 		SortDate_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** Shows the ID of the stage. */
@@ -687,6 +797,54 @@ declare namespace DevKit {
 }
 declare namespace OptionSet {
 	namespace Email {
+		enum ActivityTypeCode {
+			/** 4201 */
+			Appointment,
+			/** 10400 */
+			Booking_Alert,
+			/** 4402 */
+			Campaign_Activity,
+			/** 4401 */
+			Campaign_Response,
+			/** 4206 */
+			Case_Resolution,
+			/** 10702 */
+			Conversation,
+			/** 10294 */
+			Customer_Voice_alert,
+			/** 10304 */
+			Customer_Voice_survey_invite,
+			/** 10306 */
+			Customer_Voice_survey_response,
+			/** 4202 */
+			Email,
+			/** 4204 */
+			Fax,
+			/** 4207 */
+			Letter,
+			/** 4208 */
+			Opportunity_Close,
+			/** 4209 */
+			Order_Close,
+			/** 10813 */
+			Outbound_message,
+			/** 4210 */
+			Phone_Call,
+			/** 10430 */
+			Project_Service_Approval,
+			/** 4406 */
+			Quick_Campaign,
+			/** 4211 */
+			Quote_Close,
+			/** 4251 */
+			Recurring_Appointment,
+			/** 4214 */
+			Service_Activity,
+			/** 10717 */
+			Session,
+			/** 4212 */
+			Task
+		}
 		enum CorrelationMethod {
 			/** 5 */
 			ConversationIndex,
@@ -773,22 +931,22 @@ declare namespace OptionSet {
 			/** 3 */
 			Sent
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Email','Email for Interactive experience','Enhanced Email','Wizard'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

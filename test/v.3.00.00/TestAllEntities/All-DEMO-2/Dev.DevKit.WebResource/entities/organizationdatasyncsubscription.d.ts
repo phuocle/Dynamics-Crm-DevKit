@@ -8,10 +8,12 @@ declare namespace DevKit {
 			/** The name of the custom entity. */
 			name: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formorganizationdatasyncsubscription_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form organizationdatasyncsubscription_Information
+		* Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -20,6 +22,10 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form organizationdatasyncsubscription_Information */
 		Body: DevKit.Formorganizationdatasyncsubscription_Information.Body;
+		/** The Process of form organizationdatasyncsubscription_Information */
+		Process: DevKit.Formorganizationdatasyncsubscription_Information.Process;
+		/** The SidePanes of form organizationdatasyncsubscription_Information */
+		SidePanes: DevKit.SidePanes;
 	}
 	class organizationdatasyncsubscriptionApi {
 		/**
@@ -60,9 +66,12 @@ declare namespace DevKit {
 		DataProcessingType: DevKit.WebApi.OptionSetValue;
 		EndpointSettings: DevKit.WebApi.StringValue;
 		EntityFilters: DevKit.WebApi.StringValue;
+		EntitySettings: DevKit.WebApi.StringValue;
+		FullSyncOnly: DevKit.WebApi.BooleanValue;
 		/** Sequence number of the import that created this record. */
 		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
 		IsOutOfBoxSubscription: DevKit.WebApi.BooleanValue;
+		MigrationState: DevKit.WebApi.OptionSetValue;
 		/** Unique identifier of the user who modified the record. */
 		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
 		/** Date and time when the record was modified. */
@@ -72,6 +81,8 @@ declare namespace DevKit {
 		/** The name of the custom entity. */
 		name: DevKit.WebApi.StringValue;
 		NeedCopyAttachmentsToBlob: DevKit.WebApi.BooleanValue;
+		NeedToCopyFilesToBlob: DevKit.WebApi.BooleanValue;
+		NewEntities: DevKit.WebApi.StringValue;
 		/** Unique identifier for entity instances */
 		organizationdatasyncsubscriptionId: DevKit.WebApi.GuidValue;
 		/** Unique identifier for the organization */
@@ -87,6 +98,7 @@ declare namespace DevKit {
 		SubscriptionEntities: DevKit.WebApi.StringValue;
 		/** For internal use only. */
 		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		UnsubscribedEntities: DevKit.WebApi.StringValue;
 		/** Time zone code that was in use when the record was created. */
 		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
 		/** Version number of OrganizationDataSyncSubscription. */
@@ -127,6 +139,12 @@ declare namespace OptionSet {
 			/** 0 */
 			Unknown
 		}
+		enum MigrationState {
+			/** 0 */
+			DsfCloudService,
+			/** 1 */
+			DsfSdk
+		}
 		enum statecode {
 			/** 0 */
 			Active,
@@ -141,22 +159,22 @@ declare namespace OptionSet {
 			/** 3 */
 			Uninitialized
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

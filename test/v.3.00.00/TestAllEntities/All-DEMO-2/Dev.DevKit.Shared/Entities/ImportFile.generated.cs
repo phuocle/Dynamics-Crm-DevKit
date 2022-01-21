@@ -61,7 +61,7 @@ namespace Dev.DevKit.Shared.Entities.ImportFileOptionSets
 		/// </summary>
 		XLSX = 3,
 		/// <summary>
-		/// XML_Spreadsheet_2003 = 1
+		/// XML Spreadsheet 2003 = 1
 		/// </summary>
 		XML_Spreadsheet_2003 = 1
 	}
@@ -85,31 +85,31 @@ namespace Dev.DevKit.Shared.Entities.ImportFileOptionSets
 	public enum ProcessingStatus
 	{
 		/// <summary>
-		/// Complex_Transformation = 4
+		/// Complex Transformation = 4
 		/// </summary>
 		Complex_Transformation = 4,
 		/// <summary>
-		/// Import_Complete = 11
+		/// Import Complete = 11
 		/// </summary>
 		Import_Complete = 11,
 		/// <summary>
-		/// Import_Pass_1 = 9
+		/// Import Pass 1 = 9
 		/// </summary>
 		Import_Pass_1 = 9,
 		/// <summary>
-		/// Import_Pass_2 = 10
+		/// Import Pass 2 = 10
 		/// </summary>
 		Import_Pass_2 = 10,
 		/// <summary>
-		/// Lookup_Transformation = 5
+		/// Lookup Transformation = 5
 		/// </summary>
 		Lookup_Transformation = 5,
 		/// <summary>
-		/// Not_Started = 1
+		/// Not Started = 1
 		/// </summary>
 		Not_Started = 1,
 		/// <summary>
-		/// Owner_Transformation = 7
+		/// Owner Transformation = 7
 		/// </summary>
 		Owner_Transformation = 7,
 		/// <summary>
@@ -117,19 +117,19 @@ namespace Dev.DevKit.Shared.Entities.ImportFileOptionSets
 		/// </summary>
 		Parsing = 2,
 		/// <summary>
-		/// Parsing_Complete = 3
+		/// Parsing Complete = 3
 		/// </summary>
 		Parsing_Complete = 3,
 		/// <summary>
-		/// Picklist_Transformation = 6
+		/// Picklist Transformation = 6
 		/// </summary>
 		Picklist_Transformation = 6,
 		/// <summary>
-		/// Primary_Key_Transformation = 12
+		/// Primary Key Transformation = 12
 		/// </summary>
 		Primary_Key_Transformation = 12,
 		/// <summary>
-		/// Transformation_Complete = 8
+		/// Transformation Complete = 8
 		/// </summary>
 		Transformation_Complete = 8
 	}
@@ -243,6 +243,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "importfile";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 4412;
 
 		[DebuggerNonUserCode()]
@@ -574,7 +575,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Enter the user who is assigned to follow up with or manage the import file. This field is updated every time the import file is assigned to a different user.</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -685,7 +686,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows the import file's processing status code. This indicates whether the data in the import file has been parsed, transformed, or imported.</para>
+		/// <para>Shows the import file&apos;s processing status code. This indicates whether the data in the import file has been parsed, transformed, or imported.</para>
 		/// <para>ReadOnly - Picklist</para>
 		/// <para>Processing Status</para>
 		/// </summary>
@@ -713,7 +714,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Choose the user that the records created during the import job should be assigned to.</para>
-		/// <para>Lookup to systemuser;team</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Records Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -772,7 +773,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows the status of the import file record. By default, all records are active and can't be deactivated.</para>
+		/// <para>Shows the status of the import file record. By default, all records are active and can&apos;t be deactivated.</para>
 		/// <para>State</para>
 		/// <para>Status</para>
 		/// </summary>
@@ -795,7 +796,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows the reason code that explains the import file's status to identify the stage of the import process, from parsing the data to completed.</para>
+		/// <para>Shows the reason code that explains the import file&apos;s status to identify the stage of the import process, from parsing the data to completed.</para>
 		/// <para>Status</para>
 		/// <para>Status Reason</para>
 		/// </summary>

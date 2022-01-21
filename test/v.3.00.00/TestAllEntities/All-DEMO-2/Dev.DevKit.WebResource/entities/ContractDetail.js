@@ -3,7 +3,11 @@
 "use strict";
 var formContract_Detail = (function () {
 	"use strict";
+	/** @type DevKit.FormContract_Detail */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.FormContract_Detail(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}
@@ -12,9 +16,13 @@ var formContract_Detail = (function () {
 		OnSave: onSave
 	};
 })();
-var formInformation = (function () {
+var formContractDetail_Information = (function () {
 	"use strict";
+	/** @type DevKit.FormContractDetail_Information */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.FormContractDetail_Information(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}

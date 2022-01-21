@@ -74,7 +74,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_bpf_baa0a411a239410cb8bded8b5fdd88e3";
 
-		public const int EntityTypeCode = 10428;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10538;
 
 		[DebuggerNonUserCode()]
 		public msdyn_bpf_baa0a411a239410cb8bded8b5fdd88e3()

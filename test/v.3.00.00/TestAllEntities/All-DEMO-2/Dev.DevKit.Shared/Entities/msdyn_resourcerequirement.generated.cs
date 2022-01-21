@@ -13,15 +13,15 @@ namespace Dev.DevKit.Shared.Entities.msdyn_resourcerequirementOptionSets
 	public enum msdyn_allocationmethod
 	{
 		/// <summary>
-		/// Distribute_evenly = 192350003
+		/// Distribute evenly = 192350003
 		/// </summary>
 		Distribute_evenly = 192350003,
 		/// <summary>
-		/// Front_load = 192350005
+		/// Front load = 192350005
 		/// </summary>
 		Front_load = 192350005,
 		/// <summary>
-		/// Full_capacity = 192350001
+		/// Full capacity = 192350001
 		/// </summary>
 		Full_capacity = 192350001,
 		/// <summary>
@@ -29,7 +29,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_resourcerequirementOptionSets
 		/// </summary>
 		None = 192350000,
 		/// <summary>
-		/// Percentage_capacity = 192350004
+		/// Percentage capacity = 192350004
 		/// </summary>
 		Percentage_capacity = 192350004
 	}
@@ -113,7 +113,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_resourcerequirementOptionSets
 		/// </summary>
 		Facility = 690970001,
 		/// <summary>
-		/// Location_Agnostic = 690970002
+		/// Location Agnostic = 690970002
 		/// </summary>
 		Location_Agnostic = 690970002,
 		/// <summary>
@@ -227,7 +227,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_resourcerequirement";
 
-		public const int EntityTypeCode = 10311;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10417;
 
 		[DebuggerNonUserCode()]
 		public msdyn_resourcerequirement()
@@ -381,9 +382,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_resourcerequirementOptionSets.msdyn_allocationmethod)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_allocationmethod] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_allocationmethod] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_allocationmethod] = null;
+			}
 		}
 
 		/// <summary>
@@ -498,7 +502,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Effort that's required from resource capacity</para>
+		/// <para>Effort that&apos;s required from resource capacity</para>
 		/// <para>Decimal - MinValue: 0 - MaxValue: 1,000,000,000</para>
 		/// <para>Effort</para>
 		/// </summary>
@@ -1016,9 +1020,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_resourcerequirementOptionSets.msdyn_type)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_type] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_type] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_type] = null;
+			}
 		}
 
 		/// <summary>
@@ -1081,7 +1088,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

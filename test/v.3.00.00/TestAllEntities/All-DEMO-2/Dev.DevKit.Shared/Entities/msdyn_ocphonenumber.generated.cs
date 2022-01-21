@@ -10,6 +10,26 @@ using System.Diagnostics;
 
 namespace Dev.DevKit.Shared.Entities.msdyn_ocphonenumberOptionSets
 {
+	public enum msdyn_appmodule
+	{
+		/// <summary>
+		/// Service = 192350000
+		/// </summary>
+		Service = 192350000
+	}
+
+	public enum msdyn_ocphonenumbersource
+	{
+		/// <summary>
+		/// Direct Offer = 192350000
+		/// </summary>
+		Direct_Offer = 192350000,
+		/// <summary>
+		/// Direct Routing = 192350001
+		/// </summary>
+		Direct_Routing = 192350001
+	}
+
 	public enum msdyn_type
 	{
 		/// <summary>
@@ -17,11 +37,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocphonenumberOptionSets
 		/// </summary>
 		Geo = 192350000,
 		/// <summary>
-		/// Short_code = 192350002
+		/// Short code = 192350002
 		/// </summary>
 		Short_code = 192350002,
 		/// <summary>
-		/// Toll_free = 192350001
+		/// Toll free = 192350001
 		/// </summary>
 		Toll_free = 192350001
 	}
@@ -64,10 +84,13 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ModifiedBy = "modifiedby";
 			public const string ModifiedOn = "modifiedon";
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
+			public const string msdyn_appmodule = "msdyn_appmodule";
+			public const string msdyn_carrierid = "msdyn_carrierid";
 			public const string msdyn_countryisocode = "msdyn_countryisocode";
 			public const string msdyn_name = "msdyn_name";
 			public const string msdyn_occommunicationprovidersettingId = "msdyn_occommunicationprovidersettingid";
 			public const string msdyn_ocphonenumberId = "msdyn_ocphonenumberid";
+			public const string msdyn_ocphonenumbersource = "msdyn_ocphonenumbersource";
 			public const string msdyn_phoneinboundenabled = "msdyn_phoneinboundenabled";
 			public const string msdyn_phonenumber = "msdyn_phonenumber";
 			public const string msdyn_phoneoutboundenabled = "msdyn_phoneoutboundenabled";
@@ -88,7 +111,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_ocphonenumber";
 
-		public const int EntityTypeCode = 10651;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10790;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocphonenumber()
@@ -217,6 +241,57 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Application module picklist</para>
+		/// <para>MultiSelectPicklist</para>
+		/// <para>Application module</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public System.Collections.Generic.List<Dev.DevKit.Shared.Entities.msdyn_ocphonenumberOptionSets.msdyn_appmodule> msdyn_appmodule
+		{
+			get
+			{
+				var data = new System.Collections.Generic.List<Dev.DevKit.Shared.Entities.msdyn_ocphonenumberOptionSets.msdyn_appmodule>();
+				var items = Entity.GetAttributeValue<OptionSetValueCollection>(Fields.msdyn_appmodule);
+				if (items != null)
+				{
+					foreach (OptionSetValue item in items)
+					{
+						data.Add((Dev.DevKit.Shared.Entities.msdyn_ocphonenumberOptionSets.msdyn_appmodule)item.Value);
+					}
+				}
+				return data;
+			}
+			set
+			{
+				var data = new OptionSetValueCollection();
+				foreach (var item in value)
+				{
+					data.Add(new OptionSetValue((int)item));
+				}
+				if (data.Count == 0)
+				{
+					Entity.Attributes[Fields.msdyn_appmodule] = null;
+				}
+				else
+				{
+					Entity.Attributes[Fields.msdyn_appmodule] = data;
+				}
+			}
+		}
+
+		/// <summary>
+		/// <para>Carrier associated to the phone number</para>
+		/// <para>Lookup to msdyn_occarrier</para>
+		/// <para>Carrier</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public EntityReference msdyn_carrierid
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.msdyn_carrierid); }
+			set { Entity.Attributes[Fields.msdyn_carrierid] = value; }
+		}
+
+		/// <summary>
 		/// <para>ISO code for the country</para>
 		/// <para>String - MaxLength: 3</para>
 		/// <para>Country ISO Code</para>
@@ -265,6 +340,29 @@ namespace Dev.DevKit.Shared.Entities
 			{
 				Entity.Attributes[Fields.msdyn_ocphonenumberId] = value;
 				Entity.Id = value;
+			}
+		}
+
+		/// <summary>
+		/// <para>Source of phone number</para>
+		/// <para>Required - Picklist</para>
+		/// <para>Phone number source</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public Dev.DevKit.Shared.Entities.msdyn_ocphonenumberOptionSets.msdyn_ocphonenumbersource? msdyn_ocphonenumbersource
+		{
+			get
+			{
+				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.msdyn_ocphonenumbersource);
+				if (value == null) return null;
+				return (Dev.DevKit.Shared.Entities.msdyn_ocphonenumberOptionSets.msdyn_ocphonenumbersource)value.Value;
+			}
+			set
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_ocphonenumbersource] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_ocphonenumbersource] = null;
 			}
 		}
 
@@ -365,7 +463,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

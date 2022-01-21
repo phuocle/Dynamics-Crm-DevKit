@@ -26,10 +26,12 @@ declare namespace DevKit {
 			/** Choose the external party enabled record that is associated with this external party item. */
 			RegardingObjectId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormExternalPartyItem_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form ExternalPartyItem_Information
+		* Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -40,6 +42,10 @@ declare namespace DevKit {
 		Body: DevKit.FormExternalPartyItem_Information.Body;
 		/** The Header section of form ExternalPartyItem_Information */
 		Header: DevKit.FormExternalPartyItem_Information.Header;
+		/** The Process of form ExternalPartyItem_Information */
+		Process: DevKit.FormExternalPartyItem_Information.Process;
+		/** The SidePanes of form ExternalPartyItem_Information */
+		SidePanes: DevKit.SidePanes;
 	}
 	class ExternalPartyItemApi {
 		/**
@@ -103,17 +109,10 @@ declare namespace DevKit {
 		OwnerId_systemuser: DevKit.WebApi.LookupValue;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
 		OwnerId_team: DevKit.WebApi.LookupValue;
-		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValue;
-		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
 		/** Choose the external party enabled record that is associated with this external party item. */
 		regardingobjectid_contact: DevKit.WebApi.LookupValue;
 		/** Choose the external party enabled record that is associated with this external party item. */
 		regardingobjectid_systemuser: DevKit.WebApi.LookupValue;
-		RegardingObjectIdDsc: DevKit.WebApi.IntegerValue;
-		/** Shows the name of the regarding object. */
-		RegardingObjectIdYomiName: DevKit.WebApi.StringValue;
 		/** Shows whether the external party item is enabled or disabled. */
 		StateCode: DevKit.WebApi.OptionSetValue;
 		/** Select the external party items status. */
@@ -137,22 +136,22 @@ declare namespace OptionSet {
 			/** 1 */
 			Enabled
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

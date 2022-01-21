@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.ProductOptionSets
 		/// </summary>
 		Inventory = 690970000,
 		/// <summary>
-		/// Non_Inventory = 690970001
+		/// Non-Inventory = 690970001
 		/// </summary>
 		Non_Inventory = 690970001,
 		/// <summary>
@@ -33,11 +33,11 @@ namespace Dev.DevKit.Shared.Entities.ProductOptionSets
 		/// </summary>
 		Product = 1,
 		/// <summary>
-		/// Product_Bundle = 3
+		/// Product Bundle = 3
 		/// </summary>
 		Product_Bundle = 3,
 		/// <summary>
-		/// Product_Family = 2
+		/// Product Family = 2
 		/// </summary>
 		Product_Family = 2
 	}
@@ -45,15 +45,15 @@ namespace Dev.DevKit.Shared.Entities.ProductOptionSets
 	public enum ProductTypeCode
 	{
 		/// <summary>
-		/// Flat_Fees = 4
+		/// Flat Fees = 4
 		/// </summary>
 		Flat_Fees = 4,
 		/// <summary>
-		/// Miscellaneous_Charges = 2
+		/// Miscellaneous Charges = 2
 		/// </summary>
 		Miscellaneous_Charges = 2,
 		/// <summary>
-		/// Sales_Inventory = 1
+		/// Sales Inventory = 1
 		/// </summary>
 		Sales_Inventory = 1,
 		/// <summary>
@@ -77,7 +77,7 @@ namespace Dev.DevKit.Shared.Entities.ProductOptionSets
 		/// </summary>
 		Retired = 1,
 		/// <summary>
-		/// Under_Revision = 3
+		/// Under Revision = 3
 		/// </summary>
 		Under_Revision = 3
 	}
@@ -97,7 +97,7 @@ namespace Dev.DevKit.Shared.Entities.ProductOptionSets
 		/// </summary>
 		Retired = 2,
 		/// <summary>
-		/// Under_Revision = 3
+		/// Under Revision = 3
 		/// </summary>
 		Under_Revision = 3
 	}
@@ -133,6 +133,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_ConvertToCustomerAsset = "msdyn_converttocustomerasset";
 			public const string msdyn_DefaultVendor = "msdyn_defaultvendor";
 			public const string msdyn_FieldServiceProductType = "msdyn_fieldserviceproducttype";
+			public const string msdyn_gdproptout = "msdyn_gdproptout";
 			public const string msdyn_PurchaseName = "msdyn_purchasename";
 			public const string msdyn_Taxable = "msdyn_taxable";
 			public const string msdyn_TransactionCategory = "msdyn_transactioncategory";
@@ -176,6 +177,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "product";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 1024;
 
 		[DebuggerNonUserCode()]
@@ -527,6 +529,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Describes whether product is opted out or not</para>
+		/// <para>Boolean</para>
+		/// <para>GDPR Optout</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_gdproptout
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_gdproptout); }
+			set { Entity.Attributes[Fields.msdyn_gdproptout] = value; }
+		}
+
+		/// <summary>
 		/// <para>Type the name for the product when used on a purchase order.</para>
 		/// <para>String - MaxLength: 100</para>
 		/// <para>Purchase Name</para>
@@ -539,7 +553,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select whether the item is taxable. If an item is set as not taxable, it won't be taxable even on a taxable work order.</para>
+		/// <para>Select whether the item is taxable. If an item is set as not taxable, it won&apos;t be taxable even on a taxable work order.</para>
 		/// <para>Required - Boolean</para>
 		/// <para>Taxable</para>
 		/// </summary>
@@ -940,7 +954,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Name of the product's supplier.</para>
+		/// <para>Name of the product&apos;s supplier.</para>
 		/// <para>String - MaxLength: 100</para>
 		/// <para>Supplier Name</para>
 		/// </summary>
@@ -1017,7 +1031,7 @@ namespace Dev.DevKit.Shared.Entities
 			{
 				if (value.HasValue)
 				{
-					DateTime? dateTime = value.Value.ToDateTime();
+					DateTime dateTime = value.Value.ToDateTime();
 					Entity.Attributes[Fields.ValidFromDate] = dateTime;
 				}
 				else
@@ -1043,7 +1057,7 @@ namespace Dev.DevKit.Shared.Entities
 			{
 				if (value.HasValue)
 				{
-					DateTime? dateTime = value.Value.ToDateTime();
+					DateTime dateTime = value.Value.ToDateTime();
 					Entity.Attributes[Fields.ValidToDate] = dateTime;
 				}
 				else

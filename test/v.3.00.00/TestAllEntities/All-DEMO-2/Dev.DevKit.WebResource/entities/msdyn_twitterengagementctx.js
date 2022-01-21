@@ -1,9 +1,13 @@
 ﻿//@ts-check
 ///<reference path="msdyn_twitterengagementctx.d.ts" />
 "use strict";
-var formInformation = (function () {
+var formmsdyn_twitterengagementctx_Information = (function () {
 	"use strict";
+	/** @type DevKit.Formmsdyn_twitterengagementctx_Information */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.Formmsdyn_twitterengagementctx_Information(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}

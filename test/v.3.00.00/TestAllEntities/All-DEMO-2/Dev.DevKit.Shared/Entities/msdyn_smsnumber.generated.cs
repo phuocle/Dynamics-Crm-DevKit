@@ -13,11 +13,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_smsnumberOptionSets
 	public enum msdyn_PostConversationSurveyMode
 	{
 		/// <summary>
-		/// Insert_survey_in_conversation = 192350000
+		/// Insert survey in conversation = 192350000
 		/// </summary>
 		Insert_survey_in_conversation = 192350000,
 		/// <summary>
-		/// Send_survey_link_to_conversation = 192350001
+		/// Send survey link to conversation = 192350001
 		/// </summary>
 		Send_survey_link_to_conversation = 192350001
 	}
@@ -25,7 +25,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_smsnumberOptionSets
 	public enum msdyn_Provider
 	{
 		/// <summary>
-		/// TeleSign_App = 192350000
+		/// TeleSign App = 192350000
 		/// </summary>
 		TeleSign_App = 192350000
 	}
@@ -33,15 +33,15 @@ namespace Dev.DevKit.Shared.Entities.msdyn_smsnumberOptionSets
 	public enum msdyn_Type
 	{
 		/// <summary>
-		/// Long_code = 192350000
+		/// Long code = 192350000
 		/// </summary>
 		Long_code = 192350000,
 		/// <summary>
-		/// Short_code = 192350001
+		/// Short code = 192350001
 		/// </summary>
 		Short_code = 192350001,
 		/// <summary>
-		/// Toll_free = 192350002
+		/// Toll free = 192350002
 		/// </summary>
 		Toll_free = 192350002
 	}
@@ -114,7 +114,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_smsnumber";
 
-		public const int EntityTypeCode = 10653;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10792;
 
 		[DebuggerNonUserCode()]
 		public msdyn_smsnumber()
@@ -485,7 +486,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

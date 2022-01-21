@@ -70,11 +70,23 @@ declare namespace DevKit {
 		/** Unique identifier of the object with which the attachment is associated. */
 		objectid_msdyn_customerassetattachment: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the attachment is associated. */
+		objectid_msdyn_kbattachment: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the attachment is associated. */
 		objectid_msdyn_knowledgearticleimage: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the attachment is associated. */
+		objectid_msdyn_ocrecording: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the attachment is associated. */
+		objectid_msdyn_pminferredtask: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the attachment is associated. */
+		objectid_msdyn_richtextfile: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the attachment is associated. */
 		objectid_msdyn_soundfile: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the attachment is associated. */
+		objectid_msdyn_transcript: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the attachment is associated. */
 		objectid_msfp_fileresponse: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the attachment is associated. */
+		objectid_pluginpackage: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the attachment is associated. */
 		objectid_revokeinheritedaccessrecordstracker: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the attachment is associated. */
@@ -101,22 +113,26 @@ declare namespace DevKit {
 }
 declare namespace OptionSet {
 	namespace FileAttachment {
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum ObjectTypeCode {
+			/** 1 */
+			Account
+		}
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':[],'JsWebApi':true,'IsDebugForm':false,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}

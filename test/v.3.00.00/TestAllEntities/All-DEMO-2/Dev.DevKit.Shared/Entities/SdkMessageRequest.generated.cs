@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.SdkMessageRequestOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -50,7 +50,6 @@ namespace Dev.DevKit.Shared.Entities
 			public const string Name = "name";
 			public const string OrganizationId = "organizationid";
 			public const string OverwriteTime = "overwritetime";
-			public const string PrimaryObjectTypeCode = "primaryobjecttypecode";
 			public const string SdkMessagePairId = "sdkmessagepairid";
 			public const string SdkMessageRequestId = "sdkmessagerequestid";
 			public const string SdkMessageRequestIdUnique = "sdkmessagerequestidunique";
@@ -61,6 +60,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "sdkmessagerequest";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 4609;
 
 		[DebuggerNonUserCode()]
@@ -259,17 +259,6 @@ namespace Dev.DevKit.Shared.Entities
 		public DateTime? OverwriteTimeUtc
 		{
 			get { return Entity.GetAttributeValue<DateTime?>(Fields.OverwriteTime); }
-		}
-
-		/// <summary>
-		/// <para>Type of entity with which the SDK request is associated.</para>
-		/// <para>ReadOnly - EntityName</para>
-		/// <para></para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string PrimaryObjectTypeCode
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.PrimaryObjectTypeCode); }
 		}
 
 		/// <summary>

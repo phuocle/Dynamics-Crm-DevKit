@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.MobileOfflineProfileItemOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -33,21 +33,525 @@ namespace Dev.DevKit.Shared.Entities.MobileOfflineProfileItemOptionSets
 	public enum RecordDistributionCriteria
 	{
 		/// <summary>
-		/// All_records = 1
+		/// All records = 1
 		/// </summary>
 		All_records = 1,
 		/// <summary>
-		/// Custom_data_filter = 3
+		/// Custom data filter = 3
 		/// </summary>
 		Custom_data_filter = 3,
 		/// <summary>
-		/// Download_related_data_only = 0
+		/// Download related data only = 0
 		/// </summary>
 		Download_related_data_only = 0,
 		/// <summary>
-		/// Other_data_filter = 2
+		/// Other data filter = 2
 		/// </summary>
 		Other_data_filter = 2
+	}
+
+	public enum SelectedEntityTypeCode
+	{
+		/// <summary>
+		/// Account = 1
+		/// </summary>
+		Account = 1,
+		/// <summary>
+		/// AccountLeads = 16
+		/// </summary>
+		AccountLeads = 16,
+		/// <summary>
+		/// Activity File Attachment = 10074
+		/// </summary>
+		Activity_File_Attachment = 10074,
+		/// <summary>
+		/// Agreement Business Process = 10538
+		/// </summary>
+		Agreement_Business_Process = 10538,
+		/// <summary>
+		/// Appointment = 4201
+		/// </summary>
+		Appointment = 4201,
+		/// <summary>
+		/// Asset Category Template Association = 10126
+		/// </summary>
+		Asset_Category_Template_Association = 10126,
+		/// <summary>
+		/// Asset Template Association = 10127
+		/// </summary>
+		Asset_Template_Association = 10127,
+		/// <summary>
+		/// Attachment = 1001
+		/// </summary>
+		Attachment = 1001,
+		/// <summary>
+		/// Bookable Resource = 1150
+		/// </summary>
+		Bookable_Resource = 1150,
+		/// <summary>
+		/// Bookable Resource Booking = 1145
+		/// </summary>
+		Bookable_Resource_Booking = 1145,
+		/// <summary>
+		/// Bookable Resource Booking Quick Note = 10622
+		/// </summary>
+		Bookable_Resource_Booking_Quick_Note = 10622,
+		/// <summary>
+		/// Booking Status = 1152
+		/// </summary>
+		Booking_Status = 1152,
+		/// <summary>
+		/// Booking Timestamp = 10535
+		/// </summary>
+		Booking_Timestamp = 10535,
+		/// <summary>
+		/// Case = 112
+		/// </summary>
+		Case = 112,
+		/// <summary>
+		/// Case to Work Order Business Process = 10537
+		/// </summary>
+		Case_to_Work_Order_Business_Process = 10537,
+		/// <summary>
+		/// CFS - IoT Alert Process Flow = 10634
+		/// </summary>
+		CFS_IoT_Alert_Process_Flow = 10634,
+		/// <summary>
+		/// Competitor = 123
+		/// </summary>
+		Competitor = 123,
+		/// <summary>
+		/// Competitor Address = 1004
+		/// </summary>
+		Competitor_Address = 1004,
+		/// <summary>
+		/// Competitor Product = 1006
+		/// </summary>
+		Competitor_Product = 1006,
+		/// <summary>
+		/// Connection = 3234
+		/// </summary>
+		Connection = 3234,
+		/// <summary>
+		/// Connection Role = 3231
+		/// </summary>
+		Connection_Role = 3231,
+		/// <summary>
+		/// Contact = 2
+		/// </summary>
+		Contact = 2,
+		/// <summary>
+		/// ContactLeads = 22
+		/// </summary>
+		ContactLeads = 22,
+		/// <summary>
+		/// Currency = 9105
+		/// </summary>
+		Currency = 9105,
+		/// <summary>
+		/// Customer Asset = 10128
+		/// </summary>
+		Customer_Asset = 10128,
+		/// <summary>
+		/// Customer Asset Category = 10130
+		/// </summary>
+		Customer_Asset_Category = 10130,
+		/// <summary>
+		/// Email = 4202
+		/// </summary>
+		Email = 4202,
+		/// <summary>
+		/// Entitlement = 9700
+		/// </summary>
+		Entitlement = 9700,
+		/// <summary>
+		/// Entitlement Contact = 7272
+		/// </summary>
+		Entitlement_Contact = 7272,
+		/// <summary>
+		/// Entitlement Product = 6363
+		/// </summary>
+		Entitlement_Product = 6363,
+		/// <summary>
+		/// Entitlement Template Product = 4545
+		/// </summary>
+		Entitlement_Template_Product = 4545,
+		/// <summary>
+		/// Field Service Price List Item = 10541
+		/// </summary>
+		Field_Service_Price_List_Item = 10541,
+		/// <summary>
+		/// Field Service Setting = 10542
+		/// </summary>
+		Field_Service_Setting = 10542,
+		/// <summary>
+		/// Functional Location = 10131
+		/// </summary>
+		Functional_Location = 10131,
+		/// <summary>
+		/// Geolocation Settings = 10635
+		/// </summary>
+		Geolocation_Settings = 10635,
+		/// <summary>
+		/// Image Descriptor = 1007
+		/// </summary>
+		Image_Descriptor = 1007,
+		/// <summary>
+		/// Incident KnowledgeBaseRecord = 9931
+		/// </summary>
+		Incident_KnowledgeBaseRecord = 9931,
+		/// <summary>
+		/// Incident Type = 10545
+		/// </summary>
+		Incident_Type = 10545,
+		/// <summary>
+		/// Incident Type Product = 10547
+		/// </summary>
+		Incident_Type_Product = 10547,
+		/// <summary>
+		/// Incident Type Resolution = 10627
+		/// </summary>
+		Incident_Type_Resolution = 10627,
+		/// <summary>
+		/// Incident Type Service = 10548
+		/// </summary>
+		Incident_Type_Service = 10548,
+		/// <summary>
+		/// Incident Type Service Task = 10549
+		/// </summary>
+		Incident_Type_Service_Task = 10549,
+		/// <summary>
+		/// Incident Types Setup = 10550
+		/// </summary>
+		Incident_Types_Setup = 10550,
+		/// <summary>
+		/// Inspection Attachment = 10519
+		/// </summary>
+		Inspection_Attachment = 10519,
+		/// <summary>
+		/// Inspection Response = 10522
+		/// </summary>
+		Inspection_Response = 10522,
+		/// <summary>
+		/// Inspection Template = 10518
+		/// </summary>
+		Inspection_Template = 10518,
+		/// <summary>
+		/// Inspection Template Version = 10520
+		/// </summary>
+		Inspection_Template_Version = 10520,
+		/// <summary>
+		/// Invoice = 1090
+		/// </summary>
+		Invoice = 1090,
+		/// <summary>
+		/// Invoice Line = 1091
+		/// </summary>
+		Invoice_Line = 1091,
+		/// <summary>
+		/// Invoice Process = 10433
+		/// </summary>
+		Invoice_Process = 10433,
+		/// <summary>
+		/// IoT Alert = 10138
+		/// </summary>
+		IoT_Alert = 10138,
+		/// <summary>
+		/// IoT Alert to Case Process = 10154
+		/// </summary>
+		IoT_Alert_to_Case_Process = 10154,
+		/// <summary>
+		/// IoT Device = 10139
+		/// </summary>
+		IoT_Device = 10139,
+		/// <summary>
+		/// IoT Device Category = 10140
+		/// </summary>
+		IoT_Device_Category = 10140,
+		/// <summary>
+		/// IoT Device Command = 10141
+		/// </summary>
+		IoT_Device_Command = 10141,
+		/// <summary>
+		/// IoT Device Command Definition = 10142
+		/// </summary>
+		IoT_Device_Command_Definition = 10142,
+		/// <summary>
+		/// IoT Device Data History = 10143
+		/// </summary>
+		IoT_Device_Data_History = 10143,
+		/// <summary>
+		/// IoT Device Property = 10144
+		/// </summary>
+		IoT_Device_Property = 10144,
+		/// <summary>
+		/// IoT Device Registration History = 10145
+		/// </summary>
+		IoT_Device_Registration_History = 10145,
+		/// <summary>
+		/// IoT Property Definition = 10148
+		/// </summary>
+		IoT_Property_Definition = 10148,
+		/// <summary>
+		/// IoT Provider = 10149
+		/// </summary>
+		IoT_Provider = 10149,
+		/// <summary>
+		/// IoT Provider Instance = 10150
+		/// </summary>
+		IoT_Provider_Instance = 10150,
+		/// <summary>
+		/// IoT Settings = 10151
+		/// </summary>
+		IoT_Settings = 10151,
+		/// <summary>
+		/// Knowledge Article = 9953
+		/// </summary>
+		Knowledge_Article = 9953,
+		/// <summary>
+		/// Knowledge Article Attachment = 10084
+		/// </summary>
+		Knowledge_Article_Attachment = 10084,
+		/// <summary>
+		/// Knowledge Article Image = 10080
+		/// </summary>
+		Knowledge_Article_Image = 10080,
+		/// <summary>
+		/// Knowledge Article Views = 9955
+		/// </summary>
+		Knowledge_Article_Views = 9955,
+		/// <summary>
+		/// Lead = 4
+		/// </summary>
+		Lead = 4,
+		/// <summary>
+		/// Lead To Opportunity Sales Process = 954
+		/// </summary>
+		Lead_To_Opportunity_Sales_Process = 954,
+		/// <summary>
+		/// LeadCompetitors = 24
+		/// </summary>
+		LeadCompetitors = 24,
+		/// <summary>
+		/// LeadProduct = 27
+		/// </summary>
+		LeadProduct = 27,
+		/// <summary>
+		/// Note = 5
+		/// </summary>
+		Note = 5,
+		/// <summary>
+		/// Opportunity = 3
+		/// </summary>
+		Opportunity = 3,
+		/// <summary>
+		/// Opportunity Line = 1083
+		/// </summary>
+		Opportunity_Line = 1083,
+		/// <summary>
+		/// Opportunity Sales Process = 953
+		/// </summary>
+		Opportunity_Sales_Process = 953,
+		/// <summary>
+		/// OpportunityCompetitors = 25
+		/// </summary>
+		OpportunityCompetitors = 25,
+		/// <summary>
+		/// Order = 1088
+		/// </summary>
+		Order = 1088,
+		/// <summary>
+		/// Order Line = 1089
+		/// </summary>
+		Order_Line = 1089,
+		/// <summary>
+		/// Phone Call = 4210
+		/// </summary>
+		Phone_Call = 4210,
+		/// <summary>
+		/// Phone To Case Process = 952
+		/// </summary>
+		Phone_To_Case_Process = 952,
+		/// <summary>
+		/// Price List = 1022
+		/// </summary>
+		Price_List = 1022,
+		/// <summary>
+		/// Price List Item = 1026
+		/// </summary>
+		Price_List_Item = 1026,
+		/// <summary>
+		/// Priority = 10409
+		/// </summary>
+		Priority = 10409,
+		/// <summary>
+		/// Product = 1024
+		/// </summary>
+		Product = 1024,
+		/// <summary>
+		/// Product Inventory = 10565
+		/// </summary>
+		Product_Inventory = 10565,
+		/// <summary>
+		/// Product Relationship = 1028
+		/// </summary>
+		Product_Relationship = 1028,
+		/// <summary>
+		/// Project Stages = 10432
+		/// </summary>
+		Project_Stages = 10432,
+		/// <summary>
+		/// Property = 1048
+		/// </summary>
+		Property = 1048,
+		/// <summary>
+		/// Property Asset Association = 10133
+		/// </summary>
+		Property_Asset_Association = 10133,
+		/// <summary>
+		/// Property Association = 1235
+		/// </summary>
+		Property_Association = 1235,
+		/// <summary>
+		/// Property Definition = 10132
+		/// </summary>
+		Property_Definition = 10132,
+		/// <summary>
+		/// Property Instance = 1333
+		/// </summary>
+		Property_Instance = 1333,
+		/// <summary>
+		/// Property Log = 10134
+		/// </summary>
+		Property_Log = 10134,
+		/// <summary>
+		/// Property Option Set Item = 1049
+		/// </summary>
+		Property_Option_Set_Item = 1049,
+		/// <summary>
+		/// Property Template Association = 10135
+		/// </summary>
+		Property_Template_Association = 10135,
+		/// <summary>
+		/// Purchase Order Business Process = 10536
+		/// </summary>
+		Purchase_Order_Business_Process = 10536,
+		/// <summary>
+		/// Queue = 2020
+		/// </summary>
+		Queue = 2020,
+		/// <summary>
+		/// Queue Item = 2029
+		/// </summary>
+		Queue_Item = 2029,
+		/// <summary>
+		/// Quote = 1084
+		/// </summary>
+		Quote = 1084,
+		/// <summary>
+		/// Quote Line = 1085
+		/// </summary>
+		Quote_Line = 1085,
+		/// <summary>
+		/// Resolution = 10630
+		/// </summary>
+		Resolution = 10630,
+		/// <summary>
+		/// Scheduling Parameter = 10421
+		/// </summary>
+		Scheduling_Parameter = 10421,
+		/// <summary>
+		/// Service Task Type = 10588
+		/// </summary>
+		Service_Task_Type = 10588,
+		/// <summary>
+		/// SLA KPI Instance = 9752
+		/// </summary>
+		SLA_KPI_Instance = 9752,
+		/// <summary>
+		/// Task = 4212
+		/// </summary>
+		Task = 4212,
+		/// <summary>
+		/// Tax Code = 10590
+		/// </summary>
+		Tax_Code = 10590,
+		/// <summary>
+		/// Team = 9
+		/// </summary>
+		Team = 9,
+		/// <summary>
+		/// Template For Properties = 10136
+		/// </summary>
+		Template_For_Properties = 10136,
+		/// <summary>
+		/// Territory = 2013
+		/// </summary>
+		Territory = 2013,
+		/// <summary>
+		/// Time Entry = 10495
+		/// </summary>
+		Time_Entry = 10495,
+		/// <summary>
+		/// Time Off Request = 10592
+		/// </summary>
+		Time_Off_Request = 10592,
+		/// <summary>
+		/// Time Source = 10510
+		/// </summary>
+		Time_Source = 10510,
+		/// <summary>
+		/// Unit = 1055
+		/// </summary>
+		Unit = 1055,
+		/// <summary>
+		/// Unit Group = 1056
+		/// </summary>
+		Unit_Group = 1056,
+		/// <summary>
+		/// User = 8
+		/// </summary>
+		User = 8,
+		/// <summary>
+		/// Warehouse = 10594
+		/// </summary>
+		Warehouse = 10594,
+		/// <summary>
+		/// Work Order = 10595
+		/// </summary>
+		Work_Order = 10595,
+		/// <summary>
+		/// Work Order Business Process = 10539
+		/// </summary>
+		Work_Order_Business_Process = 10539,
+		/// <summary>
+		/// Work Order Incident = 10598
+		/// </summary>
+		Work_Order_Incident = 10598,
+		/// <summary>
+		/// Work Order Product = 10599
+		/// </summary>
+		Work_Order_Product = 10599,
+		/// <summary>
+		/// Work Order Resolution = 10633
+		/// </summary>
+		Work_Order_Resolution = 10633,
+		/// <summary>
+		/// Work Order Service = 10601
+		/// </summary>
+		Work_Order_Service = 10601,
+		/// <summary>
+		/// Work Order Service Task = 10602
+		/// </summary>
+		Work_Order_Service_Task = 10602,
+		/// <summary>
+		/// Work Order Substatus = 10603
+		/// </summary>
+		Work_Order_Substatus = 10603,
+		/// <summary>
+		/// Work Order Type = 10604
+		/// </summary>
+		Work_Order_Type = 10604
 	}
 }
 
@@ -57,11 +561,15 @@ namespace Dev.DevKit.Shared.Entities
 	{
 		public struct Fields
 		{
+			[System.Obsolete("Deprecated from version: 8.0.0.0")]
+			public const string CanBeFollowed = "canbefollowed";
 			public const string ComponentState = "componentstate";
 			public const string CreatedBy = "createdby";
 			public const string CreatedOn = "createdon";
 			public const string CreatedOnBehalfBy = "createdonbehalfby";
 			public const string EntityObjectTypeCode = "entityobjecttypecode";
+			[System.Obsolete("Deprecated from version: 8.0.0.0")]
+			public const string GetRelatedEntityRecords = "getrelatedentityrecords";
 			public const string IntroducedVersion = "introducedversion";
 			public const string IsManaged = "ismanaged";
 			public const string IsValidated = "isvalidated";
@@ -76,6 +584,8 @@ namespace Dev.DevKit.Shared.Entities
 			public const string OverwriteTime = "overwritetime";
 			public const string ProcessId = "processid";
 			public const string ProfileItemEntityFilter = "profileitementityfilter";
+			[System.Obsolete("Deprecated from version: 8.0.0.0")]
+			public const string ProfileItemRule = "profileitemrule";
 			public const string PublishedOn = "publishedon";
 			public const string RecordDistributionCriteria = "recorddistributioncriteria";
 			public const string RecordsOwnedByMe = "recordsownedbyme";
@@ -91,10 +601,13 @@ namespace Dev.DevKit.Shared.Entities
 			public const string SyncIntervalInMinutes = "syncintervalinminutes";
 			public const string TraversedPath = "traversedpath";
 			public const string VersionNumber = "versionnumber";
+			[System.Obsolete("Deprecated from version: 8.0.0.0")]
+			public const string ViewQuery = "viewquery";
 		}
 
 		public const string EntityLogicalName = "mobileofflineprofileitem";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 9867;
 
 		[DebuggerNonUserCode()]
@@ -143,6 +656,19 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			Entity = new Entity(EntityLogicalName, keys);
 			PreEntity = CloneThisEntity(Entity);
+		}
+
+		/// <summary>
+		/// <para>Specifies whether records of this entity can be followed.</para>
+		/// <para>Boolean</para>
+		/// <para>Allow Entity to Follow Relationship</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		[System.Obsolete("Deprecated from version: 8.0.0.0")]
+		public bool? CanBeFollowed
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.CanBeFollowed); }
+			set { Entity.Attributes[Fields.CanBeFollowed] = value; }
 		}
 
 		/// <summary>
@@ -203,6 +729,19 @@ namespace Dev.DevKit.Shared.Entities
 		public int? EntityObjectTypeCode
 		{
 			get { return Entity.GetAttributeValue<int?>(Fields.EntityObjectTypeCode); }
+		}
+
+		/// <summary>
+		/// <para>Specify whether records related to this entity will be made available for offline access.</para>
+		/// <para>Boolean</para>
+		/// <para>Get Related Entities</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		[System.Obsolete("Deprecated from version: 8.0.0.0")]
+		public bool? GetRelatedEntityRecords
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.GetRelatedEntityRecords); }
+			set { Entity.Attributes[Fields.GetRelatedEntityRecords] = value; }
 		}
 
 		/// <summary>
@@ -370,6 +909,19 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Saved Query associated with the Mobile offline profile item rule.</para>
+		/// <para>Lookup to savedquery</para>
+		/// <para>View to sync data to device</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		[System.Obsolete("Deprecated from version: 8.0.0.0")]
+		public EntityReference ProfileItemRule
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.ProfileItemRule); }
+			set { Entity.Attributes[Fields.ProfileItemRule] = value; }
+		}
+
+		/// <summary>
 		/// <para>Displays the last published date time.</para>
 		/// <para>ReadOnly - DateTimeBehavior: UserLocal - DateTimeFormat: DateAndTime</para>
 		/// <para>Published On</para>
@@ -416,7 +968,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Download my business unit's records</para>
+		/// <para>Download my business unit&apos;s records</para>
 		/// <para>Boolean</para>
 		/// <para>Download my business unit's records</para>
 		/// </summary>
@@ -428,7 +980,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Download my team's records</para>
+		/// <para>Download my team&apos;s records</para>
 		/// <para>Boolean</para>
 		/// <para>Download my team's records</para>
 		/// </summary>
@@ -553,6 +1105,19 @@ namespace Dev.DevKit.Shared.Entities
 		public long? VersionNumber
 		{
 			get { return Entity.GetAttributeValue<long?>(Fields.VersionNumber); }
+		}
+
+		/// <summary>
+		/// <para>Contains converted sql of the referenced view.</para>
+		/// <para>Memo - MaxLength: 1073741823</para>
+		/// <para>View Query</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		[System.Obsolete("Deprecated from version: 8.0.0.0")]
+		public string ViewQuery
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.ViewQuery); }
+			set { Entity.Attributes[Fields.ViewQuery] = value; }
 		}
 	}
 }

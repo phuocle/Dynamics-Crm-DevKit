@@ -70,24 +70,26 @@ declare namespace DevKit {
 			/** Select whether you want the marketing list to be static or dynamic. The members in a static marketing list are unchanging. A dynamic marketing list is based on a dynamic query that retrieves the updated list of members */
 			Type: DevKit.Controls.Boolean;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
-			Campaigns: DevKit.Controls.Grid;
-			QuickCampaigns: DevKit.Controls.Grid;
-			accountsUCI: DevKit.Controls.Grid;
-			contacts: DevKit.Controls.Grid;
 			accounts: DevKit.Controls.Grid;
-			leads: DevKit.Controls.Grid;
+			accountsUCI: DevKit.Controls.Grid;
+			Campaigns: DevKit.Controls.Grid;
+			contacts: DevKit.Controls.Grid;
 			contactsUCI: DevKit.Controls.Grid;
-			leadsUCI: DevKit.Controls.Grid;
 			dynamic_accounts: DevKit.Controls.Grid;
 			dynamic_contacts: DevKit.Controls.Grid;
 			dynamic_leads: DevKit.Controls.Grid;
+			leads: DevKit.Controls.Grid;
+			leadsUCI: DevKit.Controls.Grid;
 			ListOperationsSubGrid: DevKit.Controls.Grid;
+			QuickCampaigns: DevKit.Controls.Grid;
 		}
 	}
 	class FormMarketing_List extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Marketing_List
+		* Marketing List [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -98,8 +100,12 @@ declare namespace DevKit {
 		Body: DevKit.FormMarketing_List.Body;
 		/** The Header section of form Marketing_List */
 		Header: DevKit.FormMarketing_List.Header;
+		/** The Process of form Marketing_List */
+		Process: DevKit.FormMarketing_List.Process;
 		/** The Grid of form Marketing_List */
 		Grid: DevKit.FormMarketing_List.Grid;
+		/** The SidePanes of form Marketing_List */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormMarketing_List_Light {
 		interface Header extends DevKit.Controls.IHeader {
@@ -165,23 +171,25 @@ declare namespace DevKit {
 			/** Select whether you want the marketing list to be static or dynamic. The members in a static marketing list are unchanging. A dynamic marketing list is based on a dynamic query that retrieves the updated list of members */
 			Type: DevKit.Controls.Boolean;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
-			accountsUCI: DevKit.Controls.Grid;
-			contactsUCI: DevKit.Controls.Grid;
-			leadsUCI: DevKit.Controls.Grid;
-			contacts: DevKit.Controls.Grid;
 			accounts: DevKit.Controls.Grid;
-			leads: DevKit.Controls.Grid;
+			accountsUCI: DevKit.Controls.Grid;
+			Campaigns: DevKit.Controls.Grid;
+			contacts: DevKit.Controls.Grid;
+			contactsUCI: DevKit.Controls.Grid;
 			dynamic_accounts: DevKit.Controls.Grid;
 			dynamic_contacts: DevKit.Controls.Grid;
 			dynamic_leads: DevKit.Controls.Grid;
-			Campaigns: DevKit.Controls.Grid;
+			leads: DevKit.Controls.Grid;
+			leadsUCI: DevKit.Controls.Grid;
 			QuickCampaigns: DevKit.Controls.Grid;
 		}
 	}
 	class FormMarketing_List_Light extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Marketing_List_Light
+		* Marketing List Light [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -192,8 +200,12 @@ declare namespace DevKit {
 		Body: DevKit.FormMarketing_List_Light.Body;
 		/** The Header section of form Marketing_List_Light */
 		Header: DevKit.FormMarketing_List_Light.Header;
+		/** The Process of form Marketing_List_Light */
+		Process: DevKit.FormMarketing_List_Light.Process;
 		/** The Grid of form Marketing_List_Light */
 		Grid: DevKit.FormMarketing_List_Light.Grid;
+		/** The SidePanes of form Marketing_List_Light */
+		SidePanes: DevKit.SidePanes;
 	}
 	class ListApi {
 		/**
@@ -325,22 +337,22 @@ declare namespace OptionSet {
 			/** 1 */
 			Inactive
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Marketing List','Marketing List Light'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

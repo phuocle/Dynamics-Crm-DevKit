@@ -28,7 +28,7 @@ declare namespace DevKit {
 			/** This optional field denotes the command definition that is used to construct the command string. */
 			msdyn_Command: DevKit.Controls.Lookup;
 			/** This optional field denotes the command definition that is used to construct the command string. */
-			msdyn_Command_1: DevKit.Controls.Lookup;
+			msdyn_Command1: DevKit.Controls.Lookup;
 			/** Describes the status of the command. If this stays at "In Progress" for a long time, verify the IoT endpoint configuration. */
 			msdyn_CommandStatus: DevKit.Controls.OptionSet;
 			/** A reason field that explains the command status. */
@@ -36,23 +36,23 @@ declare namespace DevKit {
 			/** The command will be sent to a device connected to this asset. */
 			msdyn_CustomerAsset: DevKit.Controls.Lookup;
 			/** The command will be sent to a device connected to this asset. */
-			msdyn_CustomerAsset_1: DevKit.Controls.Lookup;
+			msdyn_CustomerAsset1: DevKit.Controls.Lookup;
 			/** IoT device to send the message to. */
 			msdyn_Device: DevKit.Controls.Lookup;
 			/** IoT device to send the message to. */
-			msdyn_Device_1: DevKit.Controls.Lookup;
+			msdyn_Device1: DevKit.Controls.Lookup;
 			/** The ID of the IoT device to send the message to. */
 			msdyn_DeviceID: DevKit.Controls.String;
 			/** Message to send to the IoT device. E.g.: A Json string. */
 			msdyn_Message: DevKit.Controls.String;
 			/** Message to send to the IoT device. E.g.: A Json string. */
-			msdyn_Message_1: DevKit.Controls.String;
+			msdyn_Message1: DevKit.Controls.String;
 			/** Message to send to the IoT device. E.g.: A Json string. */
-			msdyn_Message_2: DevKit.Controls.String;
+			msdyn_Message2: DevKit.Controls.String;
 			/** The name of the custom entity. */
 			msdyn_name: DevKit.Controls.String;
 			/** The name of the custom entity. */
-			msdyn_name_1: DevKit.Controls.String;
+			msdyn_name1: DevKit.Controls.String;
 			/** Reference to a primary alert in response to which the message is being sent. */
 			msdyn_ParentAlert: DevKit.Controls.Lookup;
 			/** Yes, if a copy of the command should be sent to all registered devices connected under the parent entity of the selected device. No, if this command needs to be sent only to the selected device. */
@@ -60,10 +60,12 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_iotdevicecommand_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form msdyn_iotdevicecommand_Information
+		* Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -72,6 +74,10 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_iotdevicecommand_Information */
 		Body: DevKit.Formmsdyn_iotdevicecommand_Information.Body;
+		/** The Process of form msdyn_iotdevicecommand_Information */
+		Process: DevKit.Formmsdyn_iotdevicecommand_Information.Process;
+		/** The SidePanes of form msdyn_iotdevicecommand_Information */
+		SidePanes: DevKit.SidePanes;
 	}
 	class msdyn_iotdevicecommandApi {
 		/**
@@ -181,22 +187,22 @@ declare namespace OptionSet {
 			/** 2 */
 			Inactive
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

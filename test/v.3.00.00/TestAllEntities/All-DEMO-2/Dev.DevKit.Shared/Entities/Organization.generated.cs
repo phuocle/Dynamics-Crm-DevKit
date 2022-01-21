@@ -13,11 +13,11 @@ namespace Dev.DevKit.Shared.Entities.OrganizationOptionSets
 	public enum CurrencyDisplayOption
 	{
 		/// <summary>
-		/// Currency_code = 1
+		/// Currency code = 1
 		/// </summary>
 		Currency_code = 1,
 		/// <summary>
-		/// Currency_symbol = 0
+		/// Currency symbol = 0
 		/// </summary>
 		Currency_symbol = 0
 	}
@@ -25,40 +25,35 @@ namespace Dev.DevKit.Shared.Entities.OrganizationOptionSets
 	public enum CurrencyFormatCode
 	{
 		/// <summary>
-		/// _123_ = 3
+		/// 123 $ = 3
 		/// </summary>
 		_123_ = 3,
 		/// <summary>
-		/// _123_0 = 0
+		/// $123 = 0
 		/// </summary>
 		_123_0 = 0,
 		/// <summary>
-		/// _123_1 = 1
+		/// 123$ = 1
 		/// </summary>
 		_123_1 = 1,
 		/// <summary>
-		/// _123_2 = 2
+		/// $ 123 = 2
 		/// </summary>
 		_123_2 = 2
-	}
-
-	public enum DateFormatCode
-	{
-
 	}
 
 	public enum DefaultRecurrenceEndRangeType
 	{
 		/// <summary>
-		/// End_By_Date = 3
+		/// End By Date = 3
 		/// </summary>
 		End_By_Date = 3,
 		/// <summary>
-		/// No_End_Date = 1
+		/// No End Date = 1
 		/// </summary>
 		No_End_Date = 1,
 		/// <summary>
-		/// Number_of_Occurrences = 2
+		/// Number of Occurrences = 2
 		/// </summary>
 		Number_of_Occurrences = 2
 	}
@@ -66,11 +61,11 @@ namespace Dev.DevKit.Shared.Entities.OrganizationOptionSets
 	public enum DiscountCalculationMethod
 	{
 		/// <summary>
-		/// Line_item = 0
+		/// Line item = 0
 		/// </summary>
 		Line_item = 0,
 		/// <summary>
-		/// Per_unit = 1
+		/// Per unit = 1
 		/// </summary>
 		Per_unit = 1
 	}
@@ -78,11 +73,11 @@ namespace Dev.DevKit.Shared.Entities.OrganizationOptionSets
 	public enum EmailConnectionChannel
 	{
 		/// <summary>
-		/// Microsoft_Dynamics_365_Email_Router = 1
+		/// Microsoft Dynamics 365 Email Router = 1
 		/// </summary>
 		Microsoft_Dynamics_365_Email_Router = 1,
 		/// <summary>
-		/// Server_Side_Synchronization = 0
+		/// Server-Side Synchronization = 0
 		/// </summary>
 		Server_Side_Synchronization = 0
 	}
@@ -90,41 +85,37 @@ namespace Dev.DevKit.Shared.Entities.OrganizationOptionSets
 	public enum FiscalPeriodFormatPeriod
 	{
 		/// <summary>
-		/// M0 = 5
+		/// M{0} = 5
 		/// </summary>
 		M0 = 5,
 		/// <summary>
-		/// Month_0 = 4
+		/// Month {0} = 4
 		/// </summary>
 		Month_0 = 4,
 		/// <summary>
-		/// Month_Name = 7
+		/// Month Name = 7
 		/// </summary>
 		Month_Name = 7,
 		/// <summary>
-		/// P0 = 3
+		/// P{0} = 3
 		/// </summary>
 		P0 = 3,
 		/// <summary>
-		/// Q0 = 2
+		/// Q{0} = 2
 		/// </summary>
 		Q0 = 2,
 		/// <summary>
-		/// Quarter_0 = 1
+		/// Quarter {0} = 1
 		/// </summary>
 		Quarter_0 = 1,
 		/// <summary>
-		/// Semester_0 = 6
+		/// Semester {0} = 6
 		/// </summary>
 		Semester_0 = 6
 	}
 
 	public enum FiscalYearFormatPrefix
 	{
-		/// <summary>
-		/// _ = 2
-		/// </summary>
-		_ = 2,
 		/// <summary>
 		/// FY = 1
 		/// </summary>
@@ -134,13 +125,9 @@ namespace Dev.DevKit.Shared.Entities.OrganizationOptionSets
 	public enum FiscalYearFormatSuffix
 	{
 		/// <summary>
-		/// _ = 3
+		///  Fiscal Year = 2
 		/// </summary>
-		_ = 3,
-		/// <summary>
-		/// _Fiscal_Year = 2
-		/// </summary>
-		_Fiscal_Year = 2,
+		Fiscal_Year = 2,
 		/// <summary>
 		/// FY = 1
 		/// </summary>
@@ -166,35 +153,35 @@ namespace Dev.DevKit.Shared.Entities.OrganizationOptionSets
 	public enum FullNameConventionCode
 	{
 		/// <summary>
-		/// First_Name = 1
+		/// First Name = 1
 		/// </summary>
 		First_Name = 1,
 		/// <summary>
-		/// First_Name_Middle_Initial_Last_Name = 3
+		/// First Name, Middle Initial, Last Name = 3
 		/// </summary>
 		First_Name_Middle_Initial_Last_Name = 3,
 		/// <summary>
-		/// First_Name_Middle_Name_Last_Name = 5
+		/// First Name, Middle Name, Last Name = 5
 		/// </summary>
 		First_Name_Middle_Name_Last_Name = 5,
 		/// <summary>
-		/// Last_Name_First_Name = 0
+		/// Last Name, First Name = 0
 		/// </summary>
 		Last_Name_First_Name = 0,
 		/// <summary>
-		/// Last_Name_First_Name_Middle_Initial = 2
+		/// Last Name, First Name, Middle Initial = 2
 		/// </summary>
 		Last_Name_First_Name_Middle_Initial = 2,
 		/// <summary>
-		/// Last_Name_First_Name_Middle_Name = 4
+		/// Last Name, First Name, Middle Name = 4
 		/// </summary>
 		Last_Name_First_Name_Middle_Name = 4,
 		/// <summary>
-		/// Last_Name_no_space_First_Name = 7
+		/// Last Name, no space, First Name = 7
 		/// </summary>
 		Last_Name_no_space_First_Name = 7,
 		/// <summary>
-		/// Last_Name_space_First_Name = 6
+		/// Last Name, space, First Name = 6
 		/// </summary>
 		Last_Name_space_First_Name = 6
 	}
@@ -214,11 +201,11 @@ namespace Dev.DevKit.Shared.Entities.OrganizationOptionSets
 		/// </summary>
 		Outlook = 6,
 		/// <summary>
-		/// Outlook_Laptop_Client = 4
+		/// Outlook Laptop Client = 4
 		/// </summary>
 		Outlook_Laptop_Client = 4,
 		/// <summary>
-		/// Outlook_Workstation_Client = 2
+		/// Outlook Workstation Client = 2
 		/// </summary>
 		Outlook_Workstation_Client = 2,
 		/// <summary>
@@ -226,11 +213,11 @@ namespace Dev.DevKit.Shared.Entities.OrganizationOptionSets
 		/// </summary>
 		Web = 1,
 		/// <summary>
-		/// Web_Outlook_Laptop_Client = 5
+		/// Web; Outlook Laptop Client = 5
 		/// </summary>
 		Web_Outlook_Laptop_Client = 5,
 		/// <summary>
-		/// Web_Outlook_Workstation_Client = 3
+		/// Web; Outlook Workstation Client = 3
 		/// </summary>
 		Web_Outlook_Workstation_Client = 3
 	}
@@ -246,15 +233,15 @@ namespace Dev.DevKit.Shared.Entities.OrganizationOptionSets
 		/// </summary>
 		Dash = 1,
 		/// <summary>
-		/// Dash_plus_Space = 2
+		/// Dash plus Space = 2
 		/// </summary>
 		Dash_plus_Space = 2,
 		/// <summary>
-		/// Space_plus_Trailing_Dash = 4
+		/// Space plus Trailing Dash = 4
 		/// </summary>
 		Space_plus_Trailing_Dash = 4,
 		/// <summary>
-		/// Trailing_Dash = 3
+		/// Trailing Dash = 3
 		/// </summary>
 		Trailing_Dash = 3
 	}
@@ -298,19 +285,19 @@ namespace Dev.DevKit.Shared.Entities.OrganizationOptionSets
 	public enum ReportScriptErrors
 	{
 		/// <summary>
-		/// Ask_me_for_permission_to_send_an_error_report_to_Microsoft = 1
+		/// Ask me for permission to send an error report to Microsoft = 1
 		/// </summary>
 		Ask_me_for_permission_to_send_an_error_report_to_Microsoft = 1,
 		/// <summary>
-		/// Automatically_send_an_error_report_to_Microsoft_without_asking_me_for_permission = 2
+		/// Automatically send an error report to Microsoft without asking me for permission = 2
 		/// </summary>
 		Automatically_send_an_error_report_to_Microsoft_without_asking_me_for_permission = 2,
 		/// <summary>
-		/// Never_send_an_error_report_to_Microsoft_about_Microsoft_Dynamics_365 = 3
+		/// Never send an error report to Microsoft about Microsoft Dynamics 365 = 3
 		/// </summary>
 		Never_send_an_error_report_to_Microsoft_about_Microsoft_Dynamics_365 = 3,
 		/// <summary>
-		/// No_preference_for_sending_an_error_report_to_Microsoft_about_Microsoft_Dynamics_365 = 0
+		/// No preference for sending an error report to Microsoft about Microsoft Dynamics 365 = 0
 		/// </summary>
 		No_preference_for_sending_an_error_report_to_Microsoft_about_Microsoft_Dynamics_365 = 0
 	}
@@ -318,19 +305,19 @@ namespace Dev.DevKit.Shared.Entities.OrganizationOptionSets
 	public enum SchedulingEngine
 	{
 		/// <summary>
-		/// Default_Scheduling_Engine = 0
+		/// (Default) Scheduling Engine = 0
 		/// </summary>
-		Default_Scheduling_Engine = 0,
+		_Default_Scheduling_Engine = 0,
 		/// <summary>
-		/// Deprecated_Universal_Resource_Scheduling = 192350000
+		/// (Deprecated) Universal Resource Scheduling = 192350000
 		/// </summary>
-		Deprecated_Universal_Resource_Scheduling = 192350000
+		_Deprecated_Universal_Resource_Scheduling = 192350000
 	}
 
 	public enum SharePointDeploymentType
 	{
 		/// <summary>
-		/// On_Premises = 1
+		/// On-Premises = 1
 		/// </summary>
 		On_Premises = 1,
 		/// <summary>
@@ -355,16 +342,6 @@ namespace Dev.DevKit.Shared.Entities.OrganizationOptionSets
 		Processing = 1
 	}
 
-	public enum TimeFormatCode
-	{
-
-	}
-
-	public enum WeekStartDayCode
-	{
-
-	}
-
 	public enum YammerPostMethod
 	{
 		/// <summary>
@@ -386,6 +363,9 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			public const string ACIWebEndpointUrl = "aciwebendpointurl";
 			public const string AcknowledgementTemplateId = "acknowledgementtemplateid";
+			public const string AdvancedColumnEditorEnabled = "advancedcolumneditorenabled";
+			public const string AdvancedColumnFilteringEnabled = "advancedcolumnfilteringenabled";
+			public const string AdvancedFilteringEnabled = "advancedfilteringenabled";
 			public const string AdvancedLookupEnabled = "advancedlookupenabled";
 			public const string AllowAddressBookSyncs = "allowaddressbooksyncs";
 			public const string AllowAutoResponseCreation = "allowautoresponsecreation";
@@ -398,8 +378,10 @@ namespace Dev.DevKit.Shared.Entities
 			public const string AllowMarketingEmailExecution = "allowmarketingemailexecution";
 			public const string AllowOfflineScheduledSyncs = "allowofflinescheduledsyncs";
 			public const string AllowOutlookScheduledSyncs = "allowoutlookscheduledsyncs";
+			public const string AllowRedirectAdminSettingsToModernUI = "allowredirectadminsettingstomodernui";
 			public const string AllowUnresolvedPartiesOnEmailSend = "allowunresolvedpartiesonemailsend";
 			public const string AllowUserFormModePreference = "allowuserformmodepreference";
+			public const string AllowUsersHidingSystemViews = "allowusershidingsystemviews";
 			public const string AllowUsersSeeAppdownloadMessage = "allowusersseeappdownloadmessage";
 			public const string AllowWebExcelExport = "allowwebexcelexport";
 			public const string AMDesignator = "amdesignator";
@@ -430,6 +412,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ClientFeatureSet = "clientfeatureset";
 			public const string ContentSecurityPolicyConfiguration = "contentsecuritypolicyconfiguration";
 			public const string ContractPrefix = "contractprefix";
+			public const string CopresenceRefreshRate = "copresencerefreshrate";
 			public const string CortanaProactiveExperienceEnabled = "cortanaproactiveexperienceenabled";
 			public const string CreatedBy = "createdby";
 			public const string CreatedOn = "createdon";
@@ -439,9 +422,28 @@ namespace Dev.DevKit.Shared.Entities
 			public const string CurrencyDisplayOption = "currencydisplayoption";
 			public const string CurrencyFormatCode = "currencyformatcode";
 			public const string CurrencySymbol = "currencysymbol";
+			[System.Obsolete("Deprecated from version: 9.0.0.0")]
+			public const string CurrentBulkOperationNumber = "currentbulkoperationnumber";
+			[System.Obsolete("Deprecated from version: 9.0.0.0")]
+			public const string CurrentCampaignNumber = "currentcampaignnumber";
+			[System.Obsolete("Deprecated from version: 9.0.0.0")]
+			public const string CurrentCaseNumber = "currentcasenumber";
+			[System.Obsolete("Deprecated from version: 9.0.0.0")]
+			public const string CurrentCategoryNumber = "currentcategorynumber";
+			[System.Obsolete("Deprecated from version: 9.0.0.0")]
+			public const string CurrentContractNumber = "currentcontractnumber";
 			public const string CurrentImportSequenceNumber = "currentimportsequencenumber";
+			[System.Obsolete("Deprecated from version: 9.0.0.0")]
+			public const string CurrentInvoiceNumber = "currentinvoicenumber";
+			[System.Obsolete("Deprecated from version: 9.0.0.0")]
+			public const string CurrentKaNumber = "currentkanumber";
+			[System.Obsolete("Deprecated from version: 9.0.0.0")]
+			public const string CurrentKbNumber = "currentkbnumber";
+			[System.Obsolete("Deprecated from version: 9.0.0.0")]
+			public const string CurrentOrderNumber = "currentordernumber";
 			public const string CurrentParsedTableNumber = "currentparsedtablenumber";
-			public const string DateFormatCode = "dateformatcode";
+			[System.Obsolete("Deprecated from version: 9.0.0.0")]
+			public const string CurrentQuoteNumber = "currentquotenumber";
 			public const string DateFormatString = "dateformatstring";
 			public const string DateSeparator = "dateseparator";
 			public const string DaysSinceRecordLastModifiedMaxValue = "dayssincerecordlastmodifiedmaxvalue";
@@ -462,17 +464,20 @@ namespace Dev.DevKit.Shared.Entities
 			public const string EmailConnectionChannel = "emailconnectionchannel";
 			public const string EmailCorrelationEnabled = "emailcorrelationenabled";
 			public const string EmailSendPollingPeriod = "emailsendpollingperiod";
+			public const string EnableAsyncMergeAPIForUCI = "enableasyncmergeapiforuci";
 			public const string EnableBingMapsIntegration = "enablebingmapsintegration";
 			public const string EnableImmersiveSkypeIntegration = "enableimmersiveskypeintegration";
 			public const string EnableLivePersonaCardUCI = "enablelivepersonacarduci";
 			public const string EnableLivePersonCardIntegrationInOffice = "enablelivepersoncardintegrationinoffice";
 			public const string EnableLPAuthoring = "enablelpauthoring";
+			public const string EnableMakerSwitchToClassic = "enablemakerswitchtoclassic";
 			public const string EnableMicrosoftFlowIntegration = "enablemicrosoftflowintegration";
 			public const string EnablePricingOnCreate = "enablepricingoncreate";
 			public const string EnableSensitivityLabelsForTeamsCollab = "enablesensitivitylabelsforteamscollab";
 			public const string EnableSmartMatching = "enablesmartmatching";
 			public const string EnableUnifiedInterfaceShellRefresh = "enableunifiedinterfaceshellrefresh";
 			public const string EnforceReadOnlyPlugins = "enforcereadonlyplugins";
+			public const string EnhancedOQOIAddProductsSettings = "enhancedoqoiaddproductssettings";
 			public const string EntityImageId = "entityimageid";
 			public const string ExpireChangeTrackingInDays = "expirechangetrackingindays";
 			public const string ExpireSubscriptionsInDays = "expiresubscriptionsindays";
@@ -484,6 +489,8 @@ namespace Dev.DevKit.Shared.Entities
 			public const string FiscalPeriodFormat = "fiscalperiodformat";
 			public const string FiscalPeriodFormatPeriod = "fiscalperiodformatperiod";
 			public const string FiscalPeriodType = "fiscalperiodtype";
+			[System.Obsolete("Deprecated from version: 5.0.0.0")]
+			public const string FiscalSettingsUpdated = "fiscalsettingsupdated";
 			public const string FiscalYearDisplayCode = "fiscalyeardisplaycode";
 			public const string FiscalYearFormat = "fiscalyearformat";
 			public const string FiscalYearFormatPrefix = "fiscalyearformatprefix";
@@ -528,6 +535,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string IsAutoDataCaptureV2Enabled = "isautodatacapturev2enabled";
 			public const string IsAutoSaveEnabled = "isautosaveenabled";
 			public const string IsBPFEntityCustomizationFeatureEnabled = "isbpfentitycustomizationfeatureenabled";
+			public const string IsCollaborationExperienceEnabled = "iscollaborationexperienceenabled";
 			public const string IsConflictDetectionEnabledForMobileClient = "isconflictdetectionenabledformobileclient";
 			public const string IsContactMailingAddressSyncEnabled = "iscontactmailingaddresssyncenabled";
 			public const string IsContentSecurityPolicyEnabled = "iscontentsecuritypolicyenabled";
@@ -584,9 +592,12 @@ namespace Dev.DevKit.Shared.Entities
 			public const string IsRichTextNotesEnabled = "isrichtextnotesenabled";
 			public const string IsSalesAssistantEnabled = "issalesassistantenabled";
 			public const string IsSalesMobilePreviewEnabled = "issalesmobilepreviewenabled";
+			public const string IsSharingInOrgAllowed = "issharinginorgallowed";
 			public const string IsSOPIntegrationEnabled = "issopintegrationenabled";
 			public const string IsTextWrapEnabled = "istextwrapenabled";
 			public const string IsUserAccessAuditEnabled = "isuseraccessauditenabled";
+			[System.Obsolete("Deprecated from version: 5.0.0.0")]
+			public const string ISVIntegrationCode = "isvintegrationcode";
 			public const string IsWriteInProductsAllowed = "iswriteinproductsallowed";
 			public const string KaPrefix = "kaprefix";
 			public const string KbPrefix = "kbprefix";
@@ -599,6 +610,8 @@ namespace Dev.DevKit.Shared.Entities
 			public const string MailboxIntermittentIssueMinRange = "mailboxintermittentissueminrange";
 			public const string MailboxPermanentIssueMinRange = "mailboxpermanentissueminrange";
 			public const string MaxActionStepsInBPF = "maxactionstepsinbpf";
+			public const string MaxAllowedPendingRollupJobCount = "maxallowedpendingrollupjobcount";
+			public const string MaxAllowedPendingRollupJobPercentage = "maxallowedpendingrollupjobpercentage";
 			public const string MaxAppointmentDurationDays = "maxappointmentdurationdays";
 			public const string MaxConditionsForMobileOfflineFilters = "maxconditionsformobileofflinefilters";
 			public const string MaxDepthForHierarchicalSecurityModel = "maxdepthforhierarchicalsecuritymodel";
@@ -611,12 +624,16 @@ namespace Dev.DevKit.Shared.Entities
 			public const string MaxProductsInBundle = "maxproductsinbundle";
 			public const string MaxRecordsForExportToExcel = "maxrecordsforexporttoexcel";
 			public const string MaxRecordsForLookupFilters = "maxrecordsforlookupfilters";
+			public const string MaxRollupFieldsPerEntity = "maxrollupfieldsperentity";
+			public const string MaxRollupFieldsPerOrg = "maxrollupfieldsperorg";
 			public const string MaxSLAItemsPerSLA = "maxslaitemspersla";
 			public const string MaxSupportedInternetExplorerVersion = "maxsupportedinternetexplorerversion";
 			public const string MaxUploadFileSize = "maxuploadfilesize";
 			public const string MaxVerboseLoggingMailbox = "maxverboseloggingmailbox";
 			public const string MaxVerboseLoggingSyncCycles = "maxverboseloggingsynccycles";
 			public const string MetadataSyncLastTimeOfNeverExpiredDeletedObjects = "metadatasynclasttimeofneverexpireddeletedobjects";
+			[System.Obsolete("Deprecated from version: 5.0.0.0")]
+			public const string MetadataSyncTimestamp = "metadatasynctimestamp";
 			public const string MicrosoftFlowEnvironment = "microsoftflowenvironment";
 			public const string MinAddressBookSyncInterval = "minaddressbooksyncinterval";
 			public const string MinOfflineSyncInterval = "minofflinesyncinterval";
@@ -624,6 +641,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string MobileOfflineMinLicenseProd = "mobileofflineminlicenseprod";
 			public const string MobileOfflineMinLicenseTrial = "mobileofflineminlicensetrial";
 			public const string MobileOfflineSyncInterval = "mobileofflinesyncinterval";
+			public const string ModernAdvancedFindFiltering = "modernadvancedfindfiltering";
 			public const string ModifiedBy = "modifiedby";
 			public const string ModifiedOn = "modifiedon";
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
@@ -649,6 +667,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ParsedTableColumnPrefix = "parsedtablecolumnprefix";
 			public const string ParsedTablePrefix = "parsedtableprefix";
 			public const string PastExpansionWindow = "pastexpansionwindow";
+			public const string PcfDatasetGridEnabled = "pcfdatasetgridenabled";
 			public const string Picture = "picture";
 			public const string PinpointLanguageCode = "pinpointlanguagecode";
 			public const string PluginTraceLogSetting = "plugintracelogsetting";
@@ -662,12 +681,19 @@ namespace Dev.DevKit.Shared.Entities
 			public const string PrivReportingGroupName = "privreportinggroupname";
 			public const string ProductRecommendationsEnabled = "productrecommendationsenabled";
 			public const string QualifyLeadAdditionalOptions = "qualifyleadadditionaloptions";
+			public const string QuickActionToOpenRecordsInSidePaneEnabled = "quickactiontoopenrecordsinsidepaneenabled";
 			public const string QuickFindRecordLimitEnabled = "quickfindrecordlimitenabled";
 			public const string QuotePrefix = "quoteprefix";
+			public const string RecalculateSLA = "recalculatesla";
 			public const string RecurrenceDefaultNumberOfOccurrences = "recurrencedefaultnumberofoccurrences";
 			public const string RecurrenceExpansionJobBatchInterval = "recurrenceexpansionjobbatchinterval";
 			public const string RecurrenceExpansionJobBatchSize = "recurrenceexpansionjobbatchsize";
 			public const string RecurrenceExpansionSynchCreateMax = "recurrenceexpansionsynchcreatemax";
+			[System.Obsolete("Deprecated from version: 5.0.0.0")]
+			public const string ReferenceSiteMapXml = "referencesitemapxml";
+			public const string ReleaseWaveName = "releasewavename";
+			public const string RelevanceSearchEnabledByPlatform = "relevancesearchenabledbyplatform";
+			public const string RelevanceSearchModifiedOn = "relevancesearchmodifiedon";
 			public const string RenderSecureIFrameForEmail = "rendersecureiframeforemail";
 			public const string ReportingGroupId = "reportinggroupid";
 			public const string ReportingGroupName = "reportinggroupname";
@@ -682,6 +708,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string SchemaNamePrefix = "schemanameprefix";
 			public const string SendBulkEmailInUCI = "sendbulkemailinuci";
 			public const string ServeStaticResourcesFromAzureCDN = "servestaticresourcesfromazurecdn";
+			public const string SessionRecordingEnabled = "sessionrecordingenabled";
 			public const string SessionTimeoutEnabled = "sessiontimeoutenabled";
 			public const string SessionTimeoutInMins = "sessiontimeoutinmins";
 			public const string SessionTimeoutReminderInMins = "sessiontimeoutreminderinmins";
@@ -690,6 +717,8 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ShowKBArticleDeprecationNotification = "showkbarticledeprecationnotification";
 			public const string ShowWeekNumber = "showweeknumber";
 			public const string SignupOutlookDownloadFWLink = "signupoutlookdownloadfwlink";
+			[System.Obsolete("Deprecated from version: 5.0.0.0")]
+			public const string SiteMapXml = "sitemapxml";
 			public const string SlaPauseStates = "slapausestates";
 			public const string SocialInsightsEnabled = "socialinsightsenabled";
 			public const string SocialInsightsInstance = "socialinsightsinstance";
@@ -710,7 +739,6 @@ namespace Dev.DevKit.Shared.Entities
 			public const string TaskBasedFlowEnabled = "taskbasedflowenabled";
 			public const string TelemetryInstrumentationKey = "telemetryinstrumentationkey";
 			public const string TextAnalyticsEnabled = "textanalyticsenabled";
-			public const string TimeFormatCode = "timeformatcode";
 			public const string TimeFormatString = "timeformatstring";
 			public const string TimeSeparator = "timeseparator";
 			public const string TimeZoneRuleVersionNumber = "timezoneruleversionnumber";
@@ -729,12 +757,12 @@ namespace Dev.DevKit.Shared.Entities
 			public const string UserAccessAuditingInterval = "useraccessauditinginterval";
 			public const string UseReadForm = "usereadform";
 			public const string UserGroupId = "usergroupid";
+			public const string UserRatingEnabled = "userratingenabled";
 			public const string UseSkypeProtocol = "useskypeprotocol";
 			public const string UTCConversionTimeZoneCode = "utcconversiontimezonecode";
 			public const string V3CalloutConfigHash = "v3calloutconfighash";
 			public const string VersionNumber = "versionnumber";
 			public const string WebResourceHash = "webresourcehash";
-			public const string WeekStartDayCode = "weekstartdaycode";
 			public const string WidgetProperties = "widgetproperties";
 			public const string YammerGroupId = "yammergroupid";
 			public const string YammerNetworkPermalink = "yammernetworkpermalink";
@@ -745,6 +773,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "organization";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 1019;
 
 		[DebuggerNonUserCode()]
@@ -817,6 +846,42 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<EntityReference>(Fields.AcknowledgementTemplateId); }
 			set { Entity.Attributes[Fields.AcknowledgementTemplateId] = value; }
+		}
+
+		/// <summary>
+		/// <para>Flag to indicate if the display column options on a view in model-driven apps is enabled</para>
+		/// <para>Boolean</para>
+		/// <para>Advanced column editor enabled</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? AdvancedColumnEditorEnabled
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.AdvancedColumnEditorEnabled); }
+			set { Entity.Attributes[Fields.AdvancedColumnEditorEnabled] = value; }
+		}
+
+		/// <summary>
+		/// <para>Flag to indicate if the advanced column filtering in a view in model-driven apps is enabled</para>
+		/// <para>Boolean</para>
+		/// <para>Advanced column filtering enabled</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? AdvancedColumnFilteringEnabled
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.AdvancedColumnFilteringEnabled); }
+			set { Entity.Attributes[Fields.AdvancedColumnFilteringEnabled] = value; }
+		}
+
+		/// <summary>
+		/// <para>Flag to indicate if the advanced filtering on all tables in a model-driven app is enabled</para>
+		/// <para>Boolean</para>
+		/// <para>Advanced filtering enabled</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? AdvancedFilteringEnabled
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.AdvancedFilteringEnabled); }
+			set { Entity.Attributes[Fields.AdvancedFilteringEnabled] = value; }
 		}
 
 		/// <summary>
@@ -964,6 +1029,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Control whether the organization Allow Redirect Legacy Admin Settings To Modern UI</para>
+		/// <para>Boolean</para>
+		/// <para>Allow Redirect Legacy Admin Settings To Modern UI</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? AllowRedirectAdminSettingsToModernUI
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.AllowRedirectAdminSettingsToModernUI); }
+			set { Entity.Attributes[Fields.AllowRedirectAdminSettingsToModernUI] = value; }
+		}
+
+		/// <summary>
 		/// <para>Indicates whether users are allowed to send email to unresolved parties (parties must still have an email address).</para>
 		/// <para>Boolean</para>
 		/// <para>Allow Unresolved Address Email Send</para>
@@ -985,6 +1062,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<bool?>(Fields.AllowUserFormModePreference); }
 			set { Entity.Attributes[Fields.AllowUserFormModePreference] = value; }
+		}
+
+		/// <summary>
+		/// <para>Flag to indicate if allow end users to hide system views in model-driven apps is enabled</para>
+		/// <para>Boolean</para>
+		/// <para>Allow users hiding system views</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? AllowUsersHidingSystemViews
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.AllowUsersHidingSystemViews); }
+			set { Entity.Attributes[Fields.AllowUsersHidingSystemViews] = value; }
 		}
 
 		/// <summary>
@@ -1133,7 +1222,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Number of decimal places that can be used for the base currency.</para>
-		/// <para>ReadOnly - Integer - MinValue: 0 - MaxValue: 4</para>
+		/// <para>ReadOnly - Integer - MinValue: 0 - MaxValue: 10</para>
 		/// <para>Base Currency Precision</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -1344,6 +1433,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Refresh rate for copresence data in seconds.</para>
+		/// <para>Integer - MinValue: 30 - MaxValue: 2,147,483,647</para>
+		/// <para>CopresenceRefreshRate</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public int? CopresenceRefreshRate
+		{
+			get { return Entity.GetAttributeValue<int?>(Fields.CopresenceRefreshRate); }
+			set { Entity.Attributes[Fields.CopresenceRefreshRate] = value; }
+		}
+
+		/// <summary>
 		/// <para>Indicates whether the feature CortanaProactiveExperience Flow processes should be enabled for the organization.</para>
 		/// <para>Boolean</para>
 		/// <para>Enable Cortana Proactive Experience Flow processes for this Organization</para>
@@ -1402,7 +1503,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Number of decimal places that can be used for currency.</para>
-		/// <para>Integer - MinValue: -2,147,483,648 - MaxValue: 2,147,483,647</para>
+		/// <para>Integer - MinValue: 0 - MaxValue: 10</para>
 		/// <para>Currency Decimal Precision</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -1471,6 +1572,71 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Current bulk operation number. Deprecated. Use SetAutoNumberSeed message.</para>
+		/// <para>Integer - MinValue: 0 - MaxValue: 2,147,483,647</para>
+		/// <para>Current Bulk Operation Number</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		[System.Obsolete("Deprecated from version: 9.0.0.0")]
+		public int? CurrentBulkOperationNumber
+		{
+			get { return Entity.GetAttributeValue<int?>(Fields.CurrentBulkOperationNumber); }
+			set { Entity.Attributes[Fields.CurrentBulkOperationNumber] = value; }
+		}
+
+		/// <summary>
+		/// <para>Current campaign number. Deprecated. Use SetAutoNumberSeed message.</para>
+		/// <para>Integer - MinValue: -2,147,483,648 - MaxValue: 2,147,483,647</para>
+		/// <para>Current Campaign Number</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		[System.Obsolete("Deprecated from version: 9.0.0.0")]
+		public int? CurrentCampaignNumber
+		{
+			get { return Entity.GetAttributeValue<int?>(Fields.CurrentCampaignNumber); }
+			set { Entity.Attributes[Fields.CurrentCampaignNumber] = value; }
+		}
+
+		/// <summary>
+		/// <para>First case number to use. Deprecated. Use SetAutoNumberSeed message.</para>
+		/// <para>Integer - MinValue: -2,147,483,648 - MaxValue: 2,147,483,647</para>
+		/// <para>Current Case Number</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		[System.Obsolete("Deprecated from version: 9.0.0.0")]
+		public int? CurrentCaseNumber
+		{
+			get { return Entity.GetAttributeValue<int?>(Fields.CurrentCaseNumber); }
+			set { Entity.Attributes[Fields.CurrentCaseNumber] = value; }
+		}
+
+		/// <summary>
+		/// <para>Enter the first number to use for Categories. Deprecated. Use SetAutoNumberSeed message.</para>
+		/// <para>Integer - MinValue: -1 - MaxValue: 2,147,483,647</para>
+		/// <para>Current Category Number</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		[System.Obsolete("Deprecated from version: 9.0.0.0")]
+		public int? CurrentCategoryNumber
+		{
+			get { return Entity.GetAttributeValue<int?>(Fields.CurrentCategoryNumber); }
+			set { Entity.Attributes[Fields.CurrentCategoryNumber] = value; }
+		}
+
+		/// <summary>
+		/// <para>First contract number to use. Deprecated. Use SetAutoNumberSeed message.</para>
+		/// <para>Integer - MinValue: -2,147,483,648 - MaxValue: 2,147,483,647</para>
+		/// <para>Current Contract Number</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		[System.Obsolete("Deprecated from version: 9.0.0.0")]
+		public int? CurrentContractNumber
+		{
+			get { return Entity.GetAttributeValue<int?>(Fields.CurrentContractNumber); }
+			set { Entity.Attributes[Fields.CurrentContractNumber] = value; }
+		}
+
+		/// <summary>
 		/// <para>Import sequence to use.</para>
 		/// <para>ReadOnly - Integer - MinValue: -2,147,483,648 - MaxValue: 2,147,483,647</para>
 		/// <para>Current Import Sequence Number</para>
@@ -1479,6 +1645,58 @@ namespace Dev.DevKit.Shared.Entities
 		public int? CurrentImportSequenceNumber
 		{
 			get { return Entity.GetAttributeValue<int?>(Fields.CurrentImportSequenceNumber); }
+		}
+
+		/// <summary>
+		/// <para>First invoice number to use. Deprecated. Use SetAutoNumberSeed message.</para>
+		/// <para>Integer - MinValue: -2,147,483,648 - MaxValue: 2,147,483,647</para>
+		/// <para>Current Invoice Number</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		[System.Obsolete("Deprecated from version: 9.0.0.0")]
+		public int? CurrentInvoiceNumber
+		{
+			get { return Entity.GetAttributeValue<int?>(Fields.CurrentInvoiceNumber); }
+			set { Entity.Attributes[Fields.CurrentInvoiceNumber] = value; }
+		}
+
+		/// <summary>
+		/// <para>Enter the first number to use for knowledge articles. Deprecated. Use SetAutoNumberSeed message.</para>
+		/// <para>Integer - MinValue: -1 - MaxValue: 2,147,483,647</para>
+		/// <para>Current Knowledge Article Number</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		[System.Obsolete("Deprecated from version: 9.0.0.0")]
+		public int? CurrentKaNumber
+		{
+			get { return Entity.GetAttributeValue<int?>(Fields.CurrentKaNumber); }
+			set { Entity.Attributes[Fields.CurrentKaNumber] = value; }
+		}
+
+		/// <summary>
+		/// <para>First article number to use. Deprecated. Use SetAutoNumberSeed message.</para>
+		/// <para>Integer - MinValue: -2,147,483,648 - MaxValue: 2,147,483,647</para>
+		/// <para>Current Article Number</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		[System.Obsolete("Deprecated from version: 9.0.0.0")]
+		public int? CurrentKbNumber
+		{
+			get { return Entity.GetAttributeValue<int?>(Fields.CurrentKbNumber); }
+			set { Entity.Attributes[Fields.CurrentKbNumber] = value; }
+		}
+
+		/// <summary>
+		/// <para>First order number to use. Deprecated. Use SetAutoNumberSeed message.</para>
+		/// <para>Integer - MinValue: -2,147,483,648 - MaxValue: 2,147,483,647</para>
+		/// <para>Current Order Number</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		[System.Obsolete("Deprecated from version: 9.0.0.0")]
+		public int? CurrentOrderNumber
+		{
+			get { return Entity.GetAttributeValue<int?>(Fields.CurrentOrderNumber); }
+			set { Entity.Attributes[Fields.CurrentOrderNumber] = value; }
 		}
 
 		/// <summary>
@@ -1493,26 +1711,16 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Information about how the date is displayed throughout Microsoft CRM.</para>
-		/// <para>Picklist</para>
-		/// <para>Date Format Code</para>
+		/// <para>First quote number to use. Deprecated. Use SetAutoNumberSeed message.</para>
+		/// <para>Integer - MinValue: -2,147,483,648 - MaxValue: 2,147,483,647</para>
+		/// <para>Current Quote Number</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public Dev.DevKit.Shared.Entities.OrganizationOptionSets.DateFormatCode? DateFormatCode
+		[System.Obsolete("Deprecated from version: 9.0.0.0")]
+		public int? CurrentQuoteNumber
 		{
-			get
-			{
-				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.DateFormatCode);
-				if (value == null) return null;
-				return (Dev.DevKit.Shared.Entities.OrganizationOptionSets.DateFormatCode)value.Value;
-			}
-			set
-			{
-				if (value.HasValue)
-					Entity.Attributes[Fields.DateFormatCode] = new OptionSetValue((int)value.Value);
-				else
-					Entity.Attributes[Fields.DateFormatCode] = null;
-			}
+			get { return Entity.GetAttributeValue<int?>(Fields.CurrentQuoteNumber); }
+			set { Entity.Attributes[Fields.CurrentQuoteNumber] = value; }
 		}
 
 		/// <summary>
@@ -1787,6 +1995,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Determines whether records merged through the merge dialog in UCI are merged asynchronously</para>
+		/// <para>Boolean</para>
+		/// <para>Asynchronous merge enabled for UCI</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? EnableAsyncMergeAPIForUCI
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.EnableAsyncMergeAPIForUCI); }
+			set { Entity.Attributes[Fields.EnableAsyncMergeAPIForUCI] = value; }
+		}
+
+		/// <summary>
 		/// <para>Enable Integration with Bing Maps</para>
 		/// <para>Boolean</para>
 		/// <para>Enable Integration with Bing Maps</para>
@@ -1844,6 +2064,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<bool?>(Fields.EnableLPAuthoring); }
 			set { Entity.Attributes[Fields.EnableLPAuthoring] = value; }
+		}
+
+		/// <summary>
+		/// <para>Control whether the organization Switch Maker Portal to Classic</para>
+		/// <para>Boolean</para>
+		/// <para>Switch Maker Portal to Classic</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? EnableMakerSwitchToClassic
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.EnableMakerSwitchToClassic); }
+			set { Entity.Attributes[Fields.EnableMakerSwitchToClassic] = value; }
 		}
 
 		/// <summary>
@@ -1916,6 +2148,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<bool?>(Fields.EnforceReadOnlyPlugins); }
 			set { Entity.Attributes[Fields.EnforceReadOnlyPlugins] = value; }
+		}
+
+		/// <summary>
+		/// <para>JSON string containing settings for enhanced add products experience in Sales</para>
+		/// <para>String - MaxLength: 1000</para>
+		/// <para>Enhanced Add Products Settings</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string EnhancedOQOIAddProductsSettings
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.EnhancedOQOIAddProductsSettings); }
+			set { Entity.Attributes[Fields.EnhancedOQOIAddProductsSettings] = value; }
 		}
 
 		/// <summary>
@@ -2058,6 +2302,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<int?>(Fields.FiscalPeriodType); }
 			set { Entity.Attributes[Fields.FiscalPeriodType] = value; }
+		}
+
+		/// <summary>
+		/// <para>Information that specifies whether the fiscal settings have been updated.</para>
+		/// <para>ReadOnly - Boolean</para>
+		/// <para>Is Fiscal Settings Updated</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		[System.Obsolete("Deprecated from version: 5.0.0.0")]
+		public bool? FiscalSettingsUpdated
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.FiscalSettingsUpdated); }
 		}
 
 		/// <summary>
@@ -2285,7 +2541,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Number of days after the goal's end date after which the rollup of the goal stops automatically.</para>
+		/// <para>Number of days after the goal&apos;s end date after which the rollup of the goal stops automatically.</para>
 		/// <para>Integer - MinValue: 0 - MaxValue: 400</para>
 		/// <para>Rollup Expiration Time for Goal</para>
 		/// </summary>
@@ -2632,6 +2888,17 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Boolean</para>
+		/// <para>IsCollaborationExperienceEnabled</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? IsCollaborationExperienceEnabled
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.IsCollaborationExperienceEnabled); }
+			set { Entity.Attributes[Fields.IsCollaborationExperienceEnabled] = value; }
+		}
+
+		/// <summary>
 		/// <para>Information that specifies whether conflict detection for mobile client is enabled.</para>
 		/// <para>Boolean</para>
 		/// <para>Is Conflict Detection for Mobile Client enabled</para>
@@ -2847,7 +3114,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Indicates whether the organization's files are being stored in Azure.</para>
+		/// <para>Indicates whether the organization&apos;s files are being stored in Azure.</para>
 		/// <para>Boolean</para>
 		/// <para>Enable external file storage</para>
 		/// </summary>
@@ -3303,6 +3570,17 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Boolean</para>
+		/// <para>IsSharingInOrgAllowed</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? IsSharingInOrgAllowed
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.IsSharingInOrgAllowed); }
+			set { Entity.Attributes[Fields.IsSharingInOrgAllowed] = value; }
+		}
+
+		/// <summary>
 		/// <para>Enable sales order processing integration.</para>
 		/// <para>Boolean</para>
 		/// <para>Is Sales Order Integration Enabled</para>
@@ -3336,6 +3614,30 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<bool?>(Fields.IsUserAccessAuditEnabled); }
 			set { Entity.Attributes[Fields.IsUserAccessAuditEnabled] = value; }
+		}
+
+		/// <summary>
+		/// <para>Indicates whether loading of Microsoft Dynamics 365 in a browser window that does not have address, tool, and menu bars is enabled.</para>
+		/// <para>Picklist</para>
+		/// <para>ISV Integration Mode</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		[System.Obsolete("Deprecated from version: 5.0.0.0")]
+		public Dev.DevKit.Shared.Entities.OrganizationOptionSets.ISVIntegrationCode? ISVIntegrationCode
+		{
+			get
+			{
+				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.ISVIntegrationCode);
+				if (value == null) return null;
+				return (Dev.DevKit.Shared.Entities.OrganizationOptionSets.ISVIntegrationCode)value.Value;
+			}
+			set
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.ISVIntegrationCode] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.ISVIntegrationCode] = null;
+			}
 		}
 
 		/// <summary>
@@ -3483,6 +3785,30 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Maximum Allowed Pending Rollup Job Count</para>
+		/// <para>Integer - MinValue: 0 - MaxValue: 2,147,483,647</para>
+		/// <para>MaxAllowedPendingRollupJobCount</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public int? MaxAllowedPendingRollupJobCount
+		{
+			get { return Entity.GetAttributeValue<int?>(Fields.MaxAllowedPendingRollupJobCount); }
+			set { Entity.Attributes[Fields.MaxAllowedPendingRollupJobCount] = value; }
+		}
+
+		/// <summary>
+		/// <para>Percentage Of Entity Table Size For Kicking Off Bootstrap Job</para>
+		/// <para>Integer - MinValue: 0 - MaxValue: 100</para>
+		/// <para>MaxAllowedPendingRollupJobPercentage</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public int? MaxAllowedPendingRollupJobPercentage
+		{
+			get { return Entity.GetAttributeValue<int?>(Fields.MaxAllowedPendingRollupJobPercentage); }
+			set { Entity.Attributes[Fields.MaxAllowedPendingRollupJobPercentage] = value; }
+		}
+
+		/// <summary>
 		/// <para>Maximum number of days an appointment can last.</para>
 		/// <para>Integer - MinValue: 0 - MaxValue: 2,147,483,647</para>
 		/// <para>Max Appointment Duration</para>
@@ -3627,6 +3953,30 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Maximum Rollup Fields Per Entity</para>
+		/// <para>Integer - MinValue: 0 - MaxValue: 50</para>
+		/// <para>MaxRollupFieldsPerEntity</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public int? MaxRollupFieldsPerEntity
+		{
+			get { return Entity.GetAttributeValue<int?>(Fields.MaxRollupFieldsPerEntity); }
+			set { Entity.Attributes[Fields.MaxRollupFieldsPerEntity] = value; }
+		}
+
+		/// <summary>
+		/// <para>Maximum Rollup Fields Per Organization</para>
+		/// <para>Integer - MinValue: 0 - MaxValue: 500</para>
+		/// <para>MaxRollupFieldsPerOrg</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public int? MaxRollupFieldsPerOrg
+		{
+			get { return Entity.GetAttributeValue<int?>(Fields.MaxRollupFieldsPerOrg); }
+			set { Entity.Attributes[Fields.MaxRollupFieldsPerOrg] = value; }
+		}
+
+		/// <summary>
 		/// <para>Integer - MinValue: 0 - MaxValue: 2,147,483,647</para>
 		/// <para>Max SLA Items Per SLA</para>
 		/// </summary>
@@ -3691,6 +4041,18 @@ namespace Dev.DevKit.Shared.Entities
 		public DateTime? MetadataSyncLastTimeOfNeverExpiredDeletedObjectsUtc
 		{
 			get { return Entity.GetAttributeValue<DateTime?>(Fields.MetadataSyncLastTimeOfNeverExpiredDeletedObjects); }
+		}
+
+		/// <summary>
+		/// <para>Contains the maximum version number for attributes used by metadata synchronization that have changed.</para>
+		/// <para>ReadOnly - BigInt</para>
+		/// <para>Metadata sync version</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		[System.Obsolete("Deprecated from version: 5.0.0.0")]
+		public long? MetadataSyncTimestamp
+		{
+			get { return Entity.GetAttributeValue<long?>(Fields.MetadataSyncTimestamp); }
 		}
 
 		/// <summary>
@@ -3773,6 +4135,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<int?>(Fields.MobileOfflineSyncInterval); }
 			set { Entity.Attributes[Fields.MobileOfflineSyncInterval] = value; }
+		}
+
+		/// <summary>
+		/// <para>Flag to indicate if the modern advanced find filtering on all tables in a model-driven app is enabled</para>
+		/// <para>Boolean</para>
+		/// <para>Modern advanced find filtering</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? ModernAdvancedFindFiltering
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.ModernAdvancedFindFiltering); }
+			set { Entity.Attributes[Fields.ModernAdvancedFindFiltering] = value; }
 		}
 
 		/// <summary>
@@ -4084,6 +4458,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Leave empty to use default setting. Set to on/off to enable/disable replacement of default grids with modern ones in model-driven apps.</para>
+		/// <para>String - MaxLength: 16</para>
+		/// <para>Enable modern grids in model-driven apps</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string PcfDatasetGridEnabled
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.PcfDatasetGridEnabled); }
+			set { Entity.Attributes[Fields.PcfDatasetGridEnabled] = value; }
+		}
+
+		/// <summary>
 		/// <para>For internal use only.</para>
 		/// <para>Memo - MaxLength: 1073741823</para>
 		/// <para>Picture</para>
@@ -4167,7 +4553,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Number of decimal places that can be used for prices.</para>
-		/// <para>Integer - MinValue: 0 - MaxValue: 4</para>
+		/// <para>Integer - MinValue: 0 - MaxValue: 10</para>
 		/// <para>Pricing Decimal Precision</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -4250,6 +4636,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Flag to indicate if the feature to use quick action to open records in search side pane is enabled</para>
+		/// <para>Boolean</para>
+		/// <para>Enable quick actions to open records in search side pane</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? QuickActionToOpenRecordsInSidePaneEnabled
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.QuickActionToOpenRecordsInSidePaneEnabled); }
+			set { Entity.Attributes[Fields.QuickActionToOpenRecordsInSidePaneEnabled] = value; }
+		}
+
+		/// <summary>
 		/// <para>Indicates whether a quick find record limit should be enabled for this organization (allows for faster Quick Find queries but prevents overly broad searches).</para>
 		/// <para>Boolean</para>
 		/// <para>Quick Find Record Limit Enabled</para>
@@ -4271,6 +4669,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.QuotePrefix); }
 			set { Entity.Attributes[Fields.QuotePrefix] = value; }
+		}
+
+		/// <summary>
+		/// <para>Indicates whether SLA Recalculation has been enabled for the organization</para>
+		/// <para>Boolean</para>
+		/// <para>Indicates whether SLA Recalculation has been enabled for the organization</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? RecalculateSLA
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.RecalculateSLA); }
+			set { Entity.Attributes[Fields.RecalculateSLA] = value; }
 		}
 
 		/// <summary>
@@ -4322,7 +4732,56 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Flag to render the body of email in the Web form in an IFRAME with the security='restricted' attribute set. This is additional security but can cause a credentials prompt.</para>
+		/// <para>XML string that defines the navigation structure for the application. This is the site map from the previously upgraded build and is used in a 3-way merge during upgrade.</para>
+		/// <para>String - MaxLength: 1073741823</para>
+		/// <para>Reference SiteMap XML</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		[System.Obsolete("Deprecated from version: 5.0.0.0")]
+		public string ReferenceSiteMapXml
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.ReferenceSiteMapXml); }
+			set { Entity.Attributes[Fields.ReferenceSiteMapXml] = value; }
+		}
+
+		/// <summary>
+		/// <para>Release Wave Applied to Environment.</para>
+		/// <para>String - MaxLength: 200</para>
+		/// <para>Release Wave</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string ReleaseWaveName
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.ReleaseWaveName); }
+			set { Entity.Attributes[Fields.ReleaseWaveName] = value; }
+		}
+
+		/// <summary>
+		/// <para>Indicates whether relevance search was enabled for the environment as part of Dataverse&apos;s relevance search on-by-default sweep</para>
+		/// <para>Boolean</para>
+		/// <para>Relevance search enabled automatically by Dataverse</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? RelevanceSearchEnabledByPlatform
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.RelevanceSearchEnabledByPlatform); }
+			set { Entity.Attributes[Fields.RelevanceSearchEnabledByPlatform] = value; }
+		}
+
+		/// <summary>
+		/// <para>This setting contains the last modified date for relevance search setting that appears as a toggle in PPAC.</para>
+		/// <para>DateTimeBehavior: UserLocal - DateTimeFormat: DateAndTime</para>
+		/// <para>RelevanceSearchModifiedOnDate</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public DateTime? RelevanceSearchModifiedOnUtc
+		{
+			get { return Entity.GetAttributeValue<DateTime?>(Fields.RelevanceSearchModifiedOn); }
+			set { Entity.Attributes[Fields.RelevanceSearchModifiedOn] = value; }
+		}
+
+		/// <summary>
+		/// <para>Flag to render the body of email in the Web form in an IFRAME with the security=&apos;restricted&apos; attribute set. This is additional security but can cause a credentials prompt.</para>
 		/// <para>Boolean</para>
 		/// <para>Render Secure Frame For Email</para>
 		/// </summary>
@@ -4512,6 +4971,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Enable the session recording feature to record user sessions in UCI</para>
+		/// <para>Boolean</para>
+		/// <para>Enable the session recording feature</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? SessionRecordingEnabled
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.SessionRecordingEnabled); }
+			set { Entity.Attributes[Fields.SessionRecordingEnabled] = value; }
+		}
+
+		/// <summary>
 		/// <para>Information that specifies whether session timeout is enabled</para>
 		/// <para>Boolean</para>
 		/// <para>Session timeout enabled</para>
@@ -4616,6 +5087,19 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.SignupOutlookDownloadFWLink); }
 			set { Entity.Attributes[Fields.SignupOutlookDownloadFWLink] = value; }
+		}
+
+		/// <summary>
+		/// <para>XML string that defines the navigation structure for the application.</para>
+		/// <para>Memo - MaxLength: 1073741823</para>
+		/// <para>SiteMap XML</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		[System.Obsolete("Deprecated from version: 5.0.0.0")]
+		public string SiteMapXml
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.SiteMapXml); }
+			set { Entity.Attributes[Fields.SiteMapXml] = value; }
 		}
 
 		/// <summary>
@@ -4870,29 +5354,6 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Information that specifies how the time is displayed throughout Microsoft CRM.</para>
-		/// <para>Picklist</para>
-		/// <para>Time Format Code</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public Dev.DevKit.Shared.Entities.OrganizationOptionSets.TimeFormatCode? TimeFormatCode
-		{
-			get
-			{
-				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.TimeFormatCode);
-				if (value == null) return null;
-				return (Dev.DevKit.Shared.Entities.OrganizationOptionSets.TimeFormatCode)value.Value;
-			}
-			set
-			{
-				if (value.HasValue)
-					Entity.Attributes[Fields.TimeFormatCode] = new OptionSetValue((int)value.Value);
-				else
-					Entity.Attributes[Fields.TimeFormatCode] = null;
-			}
-		}
-
-		/// <summary>
 		/// <para>Text for how time is displayed in Microsoft Dynamics 365.</para>
 		/// <para>String - MaxLength: 255</para>
 		/// <para>Time Format String</para>
@@ -5109,6 +5570,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Enable the user rating feature to show the NSAT score and comment to maker</para>
+		/// <para>Boolean</para>
+		/// <para>Enable the user rating feature</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? UserRatingEnabled
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.UserRatingEnabled); }
+			set { Entity.Attributes[Fields.UserRatingEnabled] = value; }
+		}
+
+		/// <summary>
 		/// <para>Indicates default protocol selected for organization.</para>
 		/// <para>Boolean</para>
 		/// <para>User Skype Protocol</para>
@@ -5164,29 +5637,6 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.WebResourceHash); }
 			set { Entity.Attributes[Fields.WebResourceHash] = value; }
-		}
-
-		/// <summary>
-		/// <para>Designated first day of the week throughout Microsoft Dynamics 365.</para>
-		/// <para>Picklist</para>
-		/// <para>Week Start Day Code</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public Dev.DevKit.Shared.Entities.OrganizationOptionSets.WeekStartDayCode? WeekStartDayCode
-		{
-			get
-			{
-				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.WeekStartDayCode);
-				if (value == null) return null;
-				return (Dev.DevKit.Shared.Entities.OrganizationOptionSets.WeekStartDayCode)value.Value;
-			}
-			set
-			{
-				if (value.HasValue)
-					Entity.Attributes[Fields.WeekStartDayCode] = new OptionSetValue((int)value.Value);
-				else
-					Entity.Attributes[Fields.WeekStartDayCode] = null;
-			}
 		}
 
 		/// <summary>

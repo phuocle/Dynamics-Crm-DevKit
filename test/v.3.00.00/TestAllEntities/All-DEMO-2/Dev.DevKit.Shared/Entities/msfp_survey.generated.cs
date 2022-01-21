@@ -65,6 +65,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msfp_anonymousurl = "msfp_anonymousurl";
 			public const string msfp_description = "msfp_description";
 			public const string msfp_embedcode = "msfp_embedcode";
+			public const string msfp_enddate = "msfp_enddate";
 			public const string msfp_friendlyname = "msfp_friendlyname";
 			public const string msfp_name = "msfp_name";
 			public const string msfp_otherproperties = "msfp_otherproperties";
@@ -75,6 +76,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msfp_sourcesurveyidentifier = "msfp_sourcesurveyidentifier";
 			public const string msfp_sourcesurveymodifieddate = "msfp_sourcesurveymodifieddate";
 			public const string msfp_sourcesurveyversion = "msfp_sourcesurveyversion";
+			public const string msfp_startdate = "msfp_startdate";
 			public const string msfp_surveyId = "msfp_surveyid";
 			public const string msfp_surveysource = "msfp_surveysource";
 			public const string msfp_surveyurl = "msfp_surveyurl";
@@ -93,7 +95,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msfp_survey";
 
-		public const int EntityTypeCode = 10247;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10303;
 
 		[DebuggerNonUserCode()]
 		public msfp_survey()
@@ -282,6 +285,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>End date and time of the survey, if configured.</para>
+		/// <para>DateTimeBehavior: UserLocal - DateTimeFormat: DateAndTime</para>
+		/// <para>End date</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public DateTime? msfp_enddateUtc
+		{
+			get { return Entity.GetAttributeValue<DateTime?>(Fields.msfp_enddate); }
+			set { Entity.Attributes[Fields.msfp_enddate] = value; }
+		}
+
+		/// <summary>
 		/// <para>Friendly name of the survey.</para>
 		/// <para>String - MaxLength: 400</para>
 		/// <para>Friendly name</para>
@@ -402,6 +417,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Start date and time of the survey, if configured.</para>
+		/// <para>DateTimeBehavior: UserLocal - DateTimeFormat: DateAndTime</para>
+		/// <para>Start date</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public DateTime? msfp_startdateUtc
+		{
+			get { return Entity.GetAttributeValue<DateTime?>(Fields.msfp_startdate); }
+			set { Entity.Attributes[Fields.msfp_startdate] = value; }
+		}
+
+		/// <summary>
 		/// <para>Unique identifier for entity instances</para>
 		/// <para>Primary Key - Uniqueidentifier</para>
 		/// <para>Survey</para>
@@ -467,7 +494,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

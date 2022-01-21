@@ -49,14 +49,16 @@ declare namespace DevKit {
 			navOpportunities: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
-			OpportunityCurrentFiscalYear: DevKit.Controls.Grid;
 			ChartTest: DevKit.Controls.Grid;
+			OpportunityCurrentFiscalYear: DevKit.Controls.Grid;
 		}
 	}
 	class FormCompetitor extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Competitor
+		* Competitor [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -69,8 +71,12 @@ declare namespace DevKit {
 		Header: DevKit.FormCompetitor.Header;
 		/** The Navigation of form Competitor */
 		Navigation: DevKit.FormCompetitor.Navigation;
+		/** The Process of form Competitor */
+		Process: DevKit.FormCompetitor.Process;
 		/** The Grid of form Competitor */
 		Grid: DevKit.FormCompetitor.Grid;
+		/** The SidePanes of form Competitor */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormCompetitor_Information {
 		interface tab_analysis_Sections {
@@ -137,10 +143,12 @@ declare namespace DevKit {
 			/** Type the website URL for the competitor. */
 			WebSiteUrl: DevKit.Controls.String;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormCompetitor_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Competitor_Information
+		* Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -149,6 +157,50 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Competitor_Information */
 		Body: DevKit.FormCompetitor_Information.Body;
+		/** The Process of form Competitor_Information */
+		Process: DevKit.FormCompetitor_Information.Process;
+		/** The SidePanes of form Competitor_Information */
+		SidePanes: DevKit.SidePanes;
+	}
+	namespace FormCompetitor2 {
+		interface tab_newCompetitor_Sections {
+			quickCompetitor_column1: DevKit.Controls.Section;
+			quickCompetitor_column2: DevKit.Controls.Section;
+			quickCompetitor_column3: DevKit.Controls.Section;
+		}
+		interface tab_newCompetitor extends DevKit.Controls.ITab {
+			Section: tab_newCompetitor_Sections;
+		}
+		interface Tabs {
+			newCompetitor: tab_newCompetitor;
+		}
+		interface Body {
+			Tab: Tabs;
+			/** Type the company or business name used to identify the competitor in data views and related records. */
+			Name: DevKit.Controls.String;
+			/** Type the amount of revenue reported in the competitor's annual report or other source. */
+			ReportedRevenue: DevKit.Controls.Money;
+			/** Type notes or other information about the competitor's strengths, such as top-selling products and targeted industries or markets. */
+			Strengths: DevKit.Controls.String;
+			/** Type the stock exchange symbol for the competitor to track financial performance of the company. You can click the code entered in this field to access the latest trading information from MSN Money. */
+			TickerSymbol: DevKit.Controls.String;
+			/** Type notes or other information about the competitor's weaknesses or areas in which your organization outperforms the competitor. */
+			Weaknesses: DevKit.Controls.String;
+			/** Type the website URL for the competitor. */
+			WebSiteUrl: DevKit.Controls.String;
+		}
+	}
+	class FormCompetitor2 extends DevKit.IForm {
+		/**
+		* Competitor [Quick Create]
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form Competitor2 */
+		Body: DevKit.FormCompetitor2.Body;
 	}
 	class CompetitorApi {
 		/**
@@ -289,6 +341,8 @@ declare namespace DevKit {
 		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
 		/** Shows who last updated the record on behalf of another user. */
 		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Describes whether competitor is opted out or not */
+		msdyn_gdproptout: DevKit.WebApi.BooleanValue;
 		/** Type the company or business name used to identify the competitor in data views and related records. */
 		Name: DevKit.WebApi.StringValue;
 		/** Type notes or other information about the competitive opportunities or selling points you can make. */
@@ -359,22 +413,22 @@ declare namespace OptionSet {
 			/** 1 */
 			Default_Value
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Competitor','Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

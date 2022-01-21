@@ -13,7 +13,7 @@ namespace Dev.DevKit.Shared.Entities.msfp_questionOptionSets
 	public enum msfp_choicetype
 	{
 		/// <summary>
-		/// Multi_choice = 647390001
+		/// Multi choice = 647390001
 		/// </summary>
 		Multi_choice = 647390001,
 		/// <summary>
@@ -21,7 +21,7 @@ namespace Dev.DevKit.Shared.Entities.msfp_questionOptionSets
 		/// </summary>
 		none = 647390002,
 		/// <summary>
-		/// Single_choice = 647390000
+		/// Single choice = 647390000
 		/// </summary>
 		Single_choice = 647390000
 	}
@@ -37,15 +37,15 @@ namespace Dev.DevKit.Shared.Entities.msfp_questionOptionSets
 		/// </summary>
 		Date = 647390003,
 		/// <summary>
-		/// Date_and_time = 647390010
+		/// Date and time = 647390010
 		/// </summary>
 		Date_and_time = 647390010,
 		/// <summary>
-		/// Drop_down = 647390011
+		/// Drop-down = 647390011
 		/// </summary>
 		Drop_down = 647390011,
 		/// <summary>
-		/// File_Upload = 647390008
+		/// File Upload = 647390008
 		/// </summary>
 		File_Upload = 647390008,
 		/// <summary>
@@ -150,7 +150,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msfp_question";
 
-		public const int EntityTypeCode = 10244;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10300;
 
 		[DebuggerNonUserCode()]
 		public msfp_question()
@@ -558,7 +559,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

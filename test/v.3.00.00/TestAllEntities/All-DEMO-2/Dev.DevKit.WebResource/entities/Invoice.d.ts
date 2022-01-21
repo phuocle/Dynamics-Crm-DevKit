@@ -117,14 +117,14 @@ declare namespace DevKit {
 			Project_Service_Invoice_Process: ProcessProject_Service_Invoice_Process;
 		}
 		interface Grid {
+			GridInvoicingPeriod: DevKit.Controls.Grid;
 			GridServiceLines: DevKit.Controls.Grid;
 			invoicedetailsGrid: DevKit.Controls.Grid;
-			GridInvoicingPeriod: DevKit.Controls.Grid;
 		}
 	}
 	class FormInvoice_Field_Service_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Invoice_Field_Service_Information
+		* Field Service Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -141,6 +141,8 @@ declare namespace DevKit {
 		Process: DevKit.FormInvoice_Field_Service_Information.Process;
 		/** The Grid of form Invoice_Field_Service_Information */
 		Grid: DevKit.FormInvoice_Field_Service_Information.Grid;
+		/** The SidePanes of form Invoice_Field_Service_Information */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormInvoice_Information {
 		interface tab_addresses_Sections {
@@ -288,7 +290,7 @@ declare namespace DevKit {
 	}
 	class FormInvoice_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Invoice_Information
+		* Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -299,6 +301,8 @@ declare namespace DevKit {
 		Body: DevKit.FormInvoice_Information.Body;
 		/** The Process of form Invoice_Information */
 		Process: DevKit.FormInvoice_Information.Process;
+		/** The SidePanes of form Invoice_Information */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormInvoice {
 		interface Header extends DevKit.Controls.IHeader {
@@ -409,7 +413,7 @@ declare namespace DevKit {
 	}
 	class FormInvoice extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Invoice
+		* Invoice [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -426,6 +430,8 @@ declare namespace DevKit {
 		Process: DevKit.FormInvoice.Process;
 		/** The Grid of form Invoice */
 		Grid: DevKit.FormInvoice.Grid;
+		/** The SidePanes of form Invoice */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormProject_Invoice {
 		interface Header extends DevKit.Controls.IHeader {
@@ -531,13 +537,13 @@ declare namespace DevKit {
 			Project_Service_Invoice_Process: ProcessProject_Service_Invoice_Process;
 		}
 		interface Grid {
-			ProjectInvoiceLines: DevKit.Controls.Grid;
 			invoicedetailsGrid: DevKit.Controls.Grid;
+			ProjectInvoiceLines: DevKit.Controls.Grid;
 		}
 	}
 	class FormProject_Invoice extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Project_Invoice
+		* Project Invoice [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -554,6 +560,53 @@ declare namespace DevKit {
 		Process: DevKit.FormProject_Invoice.Process;
 		/** The Grid of form Project_Invoice */
 		Grid: DevKit.FormProject_Invoice.Grid;
+		/** The SidePanes of form Project_Invoice */
+		SidePanes: DevKit.SidePanes;
+	}
+	namespace FormInvoice2 {
+		interface tab_newInvoice_Sections {
+			quickInvoice_salesinformation: DevKit.Controls.Section;
+			quickInvoice_summary: DevKit.Controls.Section;
+		}
+		interface tab_newInvoice extends DevKit.Controls.ITab {
+			Section: tab_newInvoice_Sections;
+		}
+		interface Tabs {
+			newInvoice: tab_newInvoice;
+		}
+		interface Body {
+			Tab: Tabs;
+			/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
+			CustomerId: DevKit.Controls.Lookup;
+			/** Type additional information to describe the invoice, such as shipping details or product substitutions. */
+			Description: DevKit.Controls.String;
+			/** Type a descriptive name for the invoice. */
+			Name: DevKit.Controls.String;
+			/** Choose the opportunity that the invoice is related to for reporting and analytics. */
+			OpportunityId: DevKit.Controls.Lookup;
+			/** Owner Id */
+			OwnerId: DevKit.Controls.Lookup;
+			/** Choose the price list associated with this record to make sure the products associated with the campaign are offered at the correct prices. */
+			PriceLevelId: DevKit.Controls.Lookup;
+			/** Choose the order related to the invoice to make sure the order is fulfilled and invoiced correctly. */
+			SalesOrderId: DevKit.Controls.Lookup;
+			/** Select the invoice's status. */
+			StatusCode: DevKit.Controls.OptionSet;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			TransactionCurrencyId: DevKit.Controls.Lookup;
+		}
+	}
+	class FormInvoice2 extends DevKit.IForm {
+		/**
+		* Invoice [Quick Create]
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form Invoice2 */
+		Body: DevKit.FormInvoice2.Body;
 	}
 	class InvoiceApi {
 		/**
@@ -613,7 +666,9 @@ declare namespace DevKit {
 		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
 		/** Shows who created the record on behalf of another user. */
 		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
 		customerid_account: DevKit.WebApi.LookupValue;
+		/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
 		customerid_contact: DevKit.WebApi.LookupValue;
 		/** Enter the date when the products included in the invoice were delivered. */
 		DateDelivered_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
@@ -734,7 +789,6 @@ declare namespace DevKit {
 		SLAId: DevKit.WebApi.LookupValue;
 		/** Last SLA that was applied to this invoice. This field is for internal use only. */
 		SLAInvokedId: DevKit.WebApi.LookupValueReadonly;
-		SLAName: DevKit.WebApi.StringValueReadonly;
 		/** Contains the id of the stage where the entity is located. */
 		StageId: DevKit.WebApi.GuidValue;
 		/** Shows whether the invoice is active, paid, or canceled. Paid and canceled invoices are read-only and can't be edited unless they are reactivated. */
@@ -869,7 +923,7 @@ declare namespace OptionSet {
 			/** 31 */
 			Missing_Product_Default_UOM,
 			/** 32 */
-			Missing_Product_UOM_Schedule_,
+			Missing_Product_UOM_Schedule,
 			/** 4 */
 			Missing_Quantity,
 			/** 16 */
@@ -951,22 +1005,22 @@ declare namespace OptionSet {
 			/** 2 */
 			Partially_Shipped
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Field Service Information','Information','Invoice','Project Invoice'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

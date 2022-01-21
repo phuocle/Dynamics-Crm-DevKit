@@ -49,7 +49,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_transactiontypeOptionSets
 	public enum msdyn_TransactionTypeCode
 	{
 		/// <summary>
-		/// Billed_Sales = 192350006
+		/// Billed Sales = 192350006
 		/// </summary>
 		Billed_Sales = 192350006,
 		/// <summary>
@@ -57,19 +57,19 @@ namespace Dev.DevKit.Shared.Entities.msdyn_transactiontypeOptionSets
 		/// </summary>
 		Cost = 192350000,
 		/// <summary>
-		/// Inter_Organizational_Sales = 192350008
+		/// Inter-Organizational Sales = 192350008
 		/// </summary>
 		Inter_Organizational_Sales = 192350008,
 		/// <summary>
-		/// Project_Contract = 192350004
+		/// Project Contract = 192350004
 		/// </summary>
 		Project_Contract = 192350004,
 		/// <summary>
-		/// Resourcing_Unit_Cost = 192350007
+		/// Resourcing Unit Cost = 192350007
 		/// </summary>
 		Resourcing_Unit_Cost = 192350007,
 		/// <summary>
-		/// Unbilled_Sales = 192350005
+		/// Unbilled Sales = 192350005
 		/// </summary>
 		Unbilled_Sales = 192350005
 	}
@@ -129,7 +129,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_transactiontype";
 
-		public const int EntityTypeCode = 10396;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10502;
 
 		[DebuggerNonUserCode()]
 		public msdyn_transactiontype()
@@ -294,9 +295,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_transactiontypeOptionSets.msdyn_TransactionClassification)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_TransactionClassification] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_TransactionClassification] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_TransactionClassification] = null;
+			}
 		}
 
 		/// <summary>
@@ -314,9 +318,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_transactiontypeOptionSets.msdyn_TransactionTypeCode)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_TransactionTypeCode] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_TransactionTypeCode] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_TransactionTypeCode] = null;
+			}
 		}
 
 		/// <summary>

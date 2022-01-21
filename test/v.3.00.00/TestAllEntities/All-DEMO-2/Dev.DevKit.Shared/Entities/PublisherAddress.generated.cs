@@ -13,7 +13,7 @@ namespace Dev.DevKit.Shared.Entities.PublisherAddressOptionSets
 	public enum AddressTypeCode
 	{
 		/// <summary>
-		/// Bill_To = 1
+		/// Bill To = 1
 		/// </summary>
 		Bill_To = 1,
 		/// <summary>
@@ -25,7 +25,7 @@ namespace Dev.DevKit.Shared.Entities.PublisherAddressOptionSets
 		/// </summary>
 		Primary = 3,
 		/// <summary>
-		/// Ship_To = 2
+		/// Ship To = 2
 		/// </summary>
 		Ship_To = 2
 	}
@@ -37,7 +37,7 @@ namespace Dev.DevKit.Shared.Entities.PublisherAddressOptionSets
 		/// </summary>
 		FOB = 1,
 		/// <summary>
-		/// No_Charge = 2
+		/// No Charge = 2
 		/// </summary>
 		No_Charge = 2
 	}
@@ -96,6 +96,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "publisheraddress";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 7102;
 
 		[DebuggerNonUserCode()]

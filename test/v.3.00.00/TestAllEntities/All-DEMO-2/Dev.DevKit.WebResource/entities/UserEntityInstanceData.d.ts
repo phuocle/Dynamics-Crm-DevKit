@@ -56,6 +56,8 @@ declare namespace DevKit {
 		/** Unique identifier of the source record. */
 		objectid_annotation: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
+		objectid_appaction: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
 		objectid_appelement: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_applicationuser: DevKit.WebApi.LookupValue;
@@ -63,8 +65,6 @@ declare namespace DevKit {
 		objectid_appmodulecomponentedge: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_appmodulecomponentnode: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the source record. */
-		objectid_appnotification: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_appointment: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
@@ -152,6 +152,8 @@ declare namespace DevKit {
 		/** Unique identifier of the source record. */
 		objectid_columnmapping: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
+		objectid_comment: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
 		objectid_commitment: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_competitor: DevKit.WebApi.LookupValue;
@@ -216,6 +218,8 @@ declare namespace DevKit {
 		/** Unique identifier of the source record. */
 		objectid_datalakeworkspacepermission: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
+		objectid_datasyncstate: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
 		objectid_dependency: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_dependencynode: DevKit.WebApi.LookupValue;
@@ -270,6 +274,8 @@ declare namespace DevKit {
 		/** Unique identifier of the source record. */
 		objectid_entityimageconfig: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
+		objectid_entityindex: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
 		objectid_entitymap: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_environmentvariabledefinition: DevKit.WebApi.LookupValue;
@@ -283,6 +289,8 @@ declare namespace DevKit {
 		externalparty_userentityinstancedatas: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_fax: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
+		objectid_featurecontrolsetting: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_fieldpermission: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
@@ -323,6 +331,8 @@ declare namespace DevKit {
 		objectid_incidentknowledgebaserecord: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_incidentresolution: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
+		objectid_indexattributes: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_internaladdress: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
@@ -444,6 +454,8 @@ declare namespace DevKit {
 		/** Unique identifier of the source record. */
 		objectid_msdyn_aiconfiguration: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
+		objectid_msdyn_aicontactsuggestion: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
 		objectid_msdyn_aifptrainingdocument: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_msdyn_aimodel: DevKit.WebApi.LookupValue;
@@ -480,13 +492,25 @@ declare namespace DevKit {
 		/** Unique identifier of the source record. */
 		objectid_msdyn_approval: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
+		objectid_msdyn_approvalset: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
 		objectid_msdyn_assetcategorytemplateassociation: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
+		objectid_msdyn_assetsuggestionssetting: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_msdyn_assettemplateassociation: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_msdyn_assignmentconfiguration: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_msdyn_assignmentconfigurationstep: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
+		objectid_msdyn_assignmentmap: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
+		objectid_msdyn_assignmentrule: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
+		objectid_msdyn_attribute: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
+		objectid_msdyn_attributevalue: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_msdyn_authenticationsettings: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
@@ -592,6 +616,10 @@ declare namespace DevKit {
 		/** Unique identifier of the source record. */
 		objectid_msdyn_contactpricelist: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
+		objectid_msdyn_contactsuggestionrule: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
+		objectid_msdyn_contactsuggestionruleset: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
 		objectid_msdyn_contractlinedetailperformance: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_msdyn_contractlineinvoiceschedule: DevKit.WebApi.LookupValue;
@@ -630,6 +658,12 @@ declare namespace DevKit {
 		/** Unique identifier of the source record. */
 		objectid_msdyn_dataanalyticsreport_csrmanager: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
+		objectid_msdyn_dataanalyticsreport_fs: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
+		objectid_msdyn_dataanalyticsreport_fspredictrs: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
+		objectid_msdyn_dataanalyticsreport_fspredictwhd: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
 		objectid_msdyn_dataanalyticsreport_ksinsights: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_msdyn_dataanalyticsreport_oc: DevKit.WebApi.LookupValue;
@@ -644,6 +678,10 @@ declare namespace DevKit {
 		/** Unique identifier of the source record. */
 		objectid_msdyn_datainsightsandanalyticsfeature: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
+		objectid_msdyn_dealmanageraccess: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
+		objectid_msdyn_dealmanagersettings: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
 		objectid_msdyn_decisioncontract: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_msdyn_decisionruleset: DevKit.WebApi.LookupValue;
@@ -654,11 +692,15 @@ declare namespace DevKit {
 		/** Unique identifier of the source record. */
 		objectid_msdyn_dimensionfieldname: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
+		objectid_msdyn_effortpredictionresult: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
 		objectid_msdyn_entitlementapplication: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_msdyn_entityconfig: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_msdyn_entityconfiguration: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
+		objectid_msdyn_entitylinkchatconfiguration: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_msdyn_entityrankingrule: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
@@ -673,6 +715,8 @@ declare namespace DevKit {
 		objectid_msdyn_expensecategory: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_msdyn_expensereceipt: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
+		objectid_msdyn_extendedusersetting: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_msdyn_facebookengagementctx: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
@@ -721,6 +765,10 @@ declare namespace DevKit {
 		objectid_msdyn_helppage: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_msdyn_icebreakersconfig: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
+		objectid_msdyn_iermlmodel: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
+		objectid_msdyn_iermltraining: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_msdyn_incidenttype: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
@@ -806,7 +854,11 @@ declare namespace DevKit {
 		/** Unique identifier of the source record. */
 		objectid_msdyn_kalanguagesetting: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
+		objectid_msdyn_kbattachment: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
 		objectid_msdyn_kbenrichment: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
+		objectid_msdyn_kbkeywordsdescsuggestionsetting: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_msdyn_kmfederatedsearchconfig: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
@@ -827,6 +879,8 @@ declare namespace DevKit {
 		objectid_msdyn_kpieventdata: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_msdyn_kpieventdefinition: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
+		objectid_msdyn_leadmodelconfig: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_msdyn_lineengagementctx: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
@@ -856,6 +910,8 @@ declare namespace DevKit {
 		/** Unique identifier of the source record. */
 		objectid_msdyn_mlresultcache: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
+		objectid_msdyn_modelpreviewstatus: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
 		objectid_msdyn_msteamssetting: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_msdyn_msteamssettingsv2: DevKit.WebApi.LookupValue;
@@ -866,7 +922,11 @@ declare namespace DevKit {
 		/** Unique identifier of the source record. */
 		objectid_msdyn_notificationtemplate: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
+		objectid_msdyn_ocautoblockrule: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
 		objectid_msdyn_ocbotchannelregistration: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
+		objectid_msdyn_occarrier: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_msdyn_occhannelconfiguration: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
@@ -881,6 +941,8 @@ declare namespace DevKit {
 		objectid_msdyn_ocfbapplication: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_msdyn_ocfbpage: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
+		objectid_msdyn_ocflaggedspam: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_msdyn_oclanguage: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
@@ -910,6 +972,8 @@ declare namespace DevKit {
 		/** Unique identifier of the source record. */
 		objectid_msdyn_ocprovisioningstate: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
+		objectid_msdyn_ocrecording: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
 		objectid_msdyn_ocrequest: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_msdyn_ocruleitem: DevKit.WebApi.LookupValue;
@@ -923,6 +987,8 @@ declare namespace DevKit {
 		objectid_msdyn_ocsession: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_msdyn_ocsessioncharacteristic: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
+		objectid_msdyn_ocsessionparticipantevent: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_msdyn_ocsessionsentiment: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
@@ -974,6 +1040,8 @@ declare namespace DevKit {
 		/** Unique identifier of the source record. */
 		objectid_msdyn_opportunitylinetransactionclassificatio: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
+		objectid_msdyn_opportunitymodelconfig: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
 		objectid_msdyn_opportunitypricelist: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_msdyn_orderinvoicingdate: DevKit.WebApi.LookupValue;
@@ -995,6 +1063,8 @@ declare namespace DevKit {
 		objectid_msdyn_orderpricelist: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_msdyn_organizationalunit: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
+		objectid_msdyn_overflowactionconfig: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_msdyn_paneconfiguration: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
@@ -1037,6 +1107,12 @@ declare namespace DevKit {
 		objectid_msdyn_postconfig: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_msdyn_postruleconfig: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
+		objectid_msdyn_predictivemodelscore: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
+		objectid_msdyn_predictivescore: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
+		objectid_msdyn_predictworkhourdurationsetting: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_msdyn_presence: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
@@ -1142,6 +1218,8 @@ declare namespace DevKit {
 		/** Unique identifier of the source record. */
 		objectid_msdyn_quotepricelist: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
+		objectid_msdyn_recording: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
 		objectid_msdyn_relationshipinsightsunifiedconfig: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_msdyn_requirementcharacteristic: DevKit.WebApi.LookupValue;
@@ -1212,7 +1290,15 @@ declare namespace DevKit {
 		/** Unique identifier of the source record. */
 		objectid_msdyn_rulesetdependencymapping: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
+		objectid_msdyn_salesaccelerationsettings: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
+		objectid_msdyn_salesassignmentsetting: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
 		objectid_msdyn_salesinsightssettings: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
+		objectid_msdyn_salesroutingrun: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
+		objectid_msdyn_salestag: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_msdyn_scenario: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
@@ -1224,7 +1310,19 @@ declare namespace DevKit {
 		/** Unique identifier of the source record. */
 		objectid_msdyn_searchconfiguration: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
+		objectid_msdyn_segment: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
+		objectid_msdyn_segmentcatalogue: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
 		objectid_msdyn_sentimentanalysis: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
+		objectid_msdyn_sequence: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
+		objectid_msdyn_sequencestat: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
+		objectid_msdyn_sequencetarget: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
+		objectid_msdyn_sequencetargetstep: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_msdyn_serviceconfiguration: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
@@ -1283,6 +1381,12 @@ declare namespace DevKit {
 		objectid_msdyn_taxcode: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_msdyn_taxcodedetail: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
+		objectid_msdyn_teamschannelengagementctx: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
+		objectid_msdyn_teamschatassociation: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
+		objectid_msdyn_teamschatsuggestion: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_msdyn_teamscollaboration: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
@@ -1387,6 +1491,10 @@ declare namespace DevKit {
 		objectid_msdyn_workordersubstatus: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_msdyn_workordertype: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
+		objectid_msdyn_workqueuestate: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
+		objectid_msdyn_workqueueusersetting: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_msdyusd_actioncallworkflow: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
@@ -1502,6 +1610,8 @@ declare namespace DevKit {
 		/** Unique identifier of the source record. */
 		objectid_pluginassembly: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
+		objectid_pluginpackage: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
 		objectid_plugintype: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_plugintypestatistic: DevKit.WebApi.LookupValue;
@@ -1517,6 +1627,8 @@ declare namespace DevKit {
 		objectid_principalobjectattributeaccess: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_privilege: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
+		objectid_privilegesremovalsetting: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_processsession: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
@@ -1646,6 +1758,8 @@ declare namespace DevKit {
 		/** Unique identifier of the source record. */
 		objectid_serviceplan: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
+		objectid_serviceplanmapping: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
 		objectid_settingdefinition: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_sharepointdocumentlocation: DevKit.WebApi.LookupValue;
@@ -1665,6 +1779,8 @@ declare namespace DevKit {
 		objectid_solutioncomponent: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_solutioncomponentattributeconfiguration: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
+		objectid_solutioncomponentbatchconfiguration: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_solutioncomponentconfiguration: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
@@ -1822,22 +1938,22 @@ declare namespace DevKit {
 }
 declare namespace OptionSet {
 	namespace UserEntityInstanceData {
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':[],'JsWebApi':true,'IsDebugForm':false,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}

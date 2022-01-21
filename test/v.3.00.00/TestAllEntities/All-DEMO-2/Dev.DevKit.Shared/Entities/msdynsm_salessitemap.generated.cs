@@ -61,7 +61,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdynsm_salessitemap";
 
-		public const int EntityTypeCode = 10520;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10647;
 
 		[DebuggerNonUserCode()]
 		public msdynsm_salessitemap()

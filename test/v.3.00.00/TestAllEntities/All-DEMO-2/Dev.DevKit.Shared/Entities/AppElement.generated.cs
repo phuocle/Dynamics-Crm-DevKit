@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.AppElementOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -91,7 +91,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "appelement";
 
-		public const int EntityTypeCode = 10024;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10031;
 
 		[DebuggerNonUserCode()]
 		public AppElement()
@@ -333,7 +334,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier for AppModule associated with AppElement.</para>
-		/// <para>Required - Lookup to appmodule</para>
+		/// <para>Lookup to appmodule</para>
 		/// <para>Parent AppModule</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

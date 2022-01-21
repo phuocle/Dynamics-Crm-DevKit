@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.connectorOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -112,6 +112,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "connector";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 372;
 
 		[DebuggerNonUserCode()]
@@ -244,9 +245,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.connectorOptionSets.ConnectorType)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.ConnectorType] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.ConnectorType] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.ConnectorType] = null;
+			}
 		}
 
 		/// <summary>
@@ -445,7 +449,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -609,8 +613,8 @@ namespace Dev.DevKit.Shared.Entities
 		[DebuggerNonUserCode()]
 		public byte[] EntityImage
 		{
-			get { return Entity.GetAttributeValue<byte[]>("entityimage"); }
-			set { Entity.Attributes["entityimage"] = value; }
+			get { return Entity.GetAttributeValue<byte[]>("iconblob"); }
+			set { Entity.Attributes["iconblob"] = value; }
 		}
 
 		/// <summary>
@@ -619,7 +623,26 @@ namespace Dev.DevKit.Shared.Entities
 		[DebuggerNonUserCode()]
 		public string EntityImageUrl
 		{
-			get { return Entity.GetAttributeValue<string>("entityimage_url"); }
+			get { return Entity.GetAttributeValue<string>("iconblob_url"); }
+		}
+
+		/// <summary>
+		/// <para>byte[]</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public byte[] IconBlob
+		{
+			get { return Entity.GetAttributeValue<byte[]>("iconblob"); }
+			set { Entity.Attributes["iconblob"] = value; }
+		}
+
+		/// <summary>
+		/// <para>ReadOnly - String</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string IconBlobUrl
+		{
+			get { return Entity.GetAttributeValue<string>("iconblob_url"); }
 		}
 	}
 }

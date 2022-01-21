@@ -68,7 +68,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_ocliveworkitemcontextitem";
 
-		public const int EntityTypeCode = 10565;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10705;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocliveworkitemcontextitem()
@@ -286,7 +287,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

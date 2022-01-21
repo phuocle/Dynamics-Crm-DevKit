@@ -13,15 +13,15 @@ namespace Dev.DevKit.Shared.Entities.msdyn_rmaOptionSets
 	public enum msdyn_ProcessingAction
 	{
 		/// <summary>
-		/// Change_Asset_Ownership = 690970002
+		/// Change Asset Ownership = 690970002
 		/// </summary>
 		Change_Asset_Ownership = 690970002,
 		/// <summary>
-		/// Create_RTV = 690970000
+		/// Create RTV = 690970000
 		/// </summary>
 		Create_RTV = 690970000,
 		/// <summary>
-		/// Return_to_Warehouse = 690970001
+		/// Return to Warehouse = 690970001
 		/// </summary>
 		Return_to_Warehouse = 690970001
 	}
@@ -37,7 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_rmaOptionSets
 		/// </summary>
 		Pending = 690970000,
 		/// <summary>
-		/// Products_Received = 690970002
+		/// Products Received = 690970002
 		/// </summary>
 		Products_Received = 690970002
 	}
@@ -119,7 +119,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_rma";
 
-		public const int EntityTypeCode = 10470;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10580;
 
 		[DebuggerNonUserCode()]
 		public msdyn_rma()
@@ -491,9 +492,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_rmaOptionSets.msdyn_SystemStatus)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_SystemStatus] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_SystemStatus] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_SystemStatus] = null;
+			}
 		}
 
 		/// <summary>
@@ -585,7 +589,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

@@ -22,7 +22,7 @@ var DevKit;
 			msdyn_Description: {},
 			msdyn_EstimatedDuration: {},
 			msdyn_Inspection: {},
-			msdyn_Inspection_1: {},
+			msdyn_Inspection1: {},
 			msdyn_InspectionEnabled: {},
 			msdyn_LineOrder: {},
 			msdyn_name: {},
@@ -59,11 +59,8 @@ var DevKit;
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		var navigation = {
 			nav_msdyn_msdyn_agreementbookingservicetask_msdyn_workorderservicetask_AgreementBookingServiceTask: {},
 			navProcessSessions: {}
@@ -72,6 +69,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.Formmsdyn_agreementbookingservicetask_Information = function(executionContext, defaultWebResourceName) {
@@ -93,7 +91,7 @@ var DevKit;
 			msdyn_Description: {},
 			msdyn_EstimatedDuration: {},
 			msdyn_Inspection: {},
-			msdyn_Inspection_1: {},
+			msdyn_Inspection1: {},
 			msdyn_InspectionEnabled: {},
 			msdyn_LineOrder: {},
 			msdyn_name: {},
@@ -117,11 +115,8 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, footer, "footer_");
 		form.Footer = footer;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		var navigation = {
 			nav_msdyn_msdyn_agreementbookingservicetask_msdyn_workorderservicetask_AgreementBookingServiceTask: {},
 			navProcessSessions: {}
@@ -130,6 +125,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 })(DevKit || (DevKit = {}));
@@ -145,15 +141,14 @@ var OptionSet;
 			Active: 1,
 			Inactive: 2
 		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
-
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 	};
 })(OptionSet || (OptionSet = {}));

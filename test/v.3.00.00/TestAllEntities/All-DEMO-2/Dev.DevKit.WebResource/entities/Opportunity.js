@@ -1,9 +1,13 @@
 ﻿//@ts-check
 ///<reference path="Opportunity.d.ts" />
 "use strict";
-var formAI_for_Sales = (function () {
+var formOpportunity_AI_for_Sales = (function () {
 	"use strict";
+	/** @type DevKit.FormOpportunity_AI_for_Sales */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.FormOpportunity_AI_for_Sales(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}
@@ -12,9 +16,13 @@ var formAI_for_Sales = (function () {
 		OnSave: onSave
 	};
 })();
-var formField_Service_Information = (function () {
+var formOpportunity_Field_Service_Information = (function () {
 	"use strict";
+	/** @type DevKit.FormOpportunity_Field_Service_Information */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.FormOpportunity_Field_Service_Information(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}
@@ -25,7 +33,11 @@ var formField_Service_Information = (function () {
 })();
 var formOpportunity = (function () {
 	"use strict";
+	/** @type DevKit.FormOpportunity */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.FormOpportunity(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}
@@ -34,9 +46,28 @@ var formOpportunity = (function () {
 		OnSave: onSave
 	};
 })();
-var formProject_Information = (function () {
+var formOpportunity2 = (function () {
 	"use strict";
+	/** @type DevKit.FormOpportunity2 */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.FormOpportunity2(executionContext);
+
+	}
+	async function onSave(executionContext) {
+	}
+	return {
+		OnLoad: onLoad,
+		OnSave: onSave
+	};
+})();
+var formOpportunity_Project_Information = (function () {
+	"use strict";
+	/** @type DevKit.FormOpportunity_Project_Information */
+	var form = null;
+	async function onLoad(executionContext) {
+		form = new DevKit.FormOpportunity_Project_Information(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}

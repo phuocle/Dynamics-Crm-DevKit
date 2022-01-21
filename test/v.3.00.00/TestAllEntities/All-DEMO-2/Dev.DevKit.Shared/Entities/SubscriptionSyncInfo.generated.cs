@@ -34,6 +34,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "subscriptionsyncinfo";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 33;
 
 		[DebuggerNonUserCode()]
@@ -172,7 +173,7 @@ namespace Dev.DevKit.Shared.Entities
 		/// <para></para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public int? SubscriptionSyncInfoId
+		public int? SubscriptionSyncInfoId1
 		{
 			get { return Entity.GetAttributeValue<int?>(Fields.SubscriptionSyncInfoId); }
 		}

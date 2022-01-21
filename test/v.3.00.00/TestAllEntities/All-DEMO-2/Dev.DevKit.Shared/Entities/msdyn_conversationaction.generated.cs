@@ -13,15 +13,15 @@ namespace Dev.DevKit.Shared.Entities.msdyn_conversationactionOptionSets
 	public enum msdyn_EventName
 	{
 		/// <summary>
-		/// Customer_Defined_Function = 100000002
+		/// Customer Defined Function = 100000002
 		/// </summary>
 		Customer_Defined_Function = 100000002,
 		/// <summary>
-		/// Open_App_Tab_Template = 100000000
+		/// Open App Tab Template = 100000000
 		/// </summary>
 		Open_App_Tab_Template = 100000000,
 		/// <summary>
-		/// Send_message = 100000001
+		/// Send message = 100000001
 		/// </summary>
 		Send_message = 100000001
 	}
@@ -86,7 +86,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_conversationaction";
 
-		public const int EntityTypeCode = 10590;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10688;
 
 		[DebuggerNonUserCode()]
 		public msdyn_conversationaction()
@@ -245,9 +246,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_conversationactionOptionSets.msdyn_EventName)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_EventName] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_EventName] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_EventName] = null;
+			}
 		}
 
 		/// <summary>
@@ -336,7 +340,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

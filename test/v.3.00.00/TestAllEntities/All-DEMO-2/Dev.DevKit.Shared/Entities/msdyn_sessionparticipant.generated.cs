@@ -10,6 +10,14 @@ using System.Diagnostics;
 
 namespace Dev.DevKit.Shared.Entities.msdyn_sessionparticipantOptionSets
 {
+	public enum msdyn_externalparticipantchanneltype
+	{
+		/// <summary>
+		/// Phone Number = 426120000
+		/// </summary>
+		Phone_Number = 426120000
+	}
+
 	public enum msdyn_mode
 	{
 		/// <summary>
@@ -68,6 +76,8 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_activetime = "msdyn_activetime";
 			public const string msdyn_addedon = "msdyn_addedon";
 			public const string msdyn_agentid = "msdyn_agentid";
+			public const string msdyn_externalparticipantchannel = "msdyn_externalparticipantchannel";
+			public const string msdyn_externalparticipantchanneltype = "msdyn_externalparticipantchanneltype";
 			public const string msdyn_idletime = "msdyn_idletime";
 			public const string msdyn_inactivetime = "msdyn_inactivetime";
 			public const string msdyn_joinedon = "msdyn_joinedon";
@@ -91,7 +101,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_sessionparticipant";
 
-		public const int EntityTypeCode = 10584;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10737;
 
 		[DebuggerNonUserCode()]
 		public msdyn_sessionparticipant()
@@ -268,6 +279,40 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>String - MaxLength: 100</para>
+		/// <para>External channel of participant</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_externalparticipantchannel
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_externalparticipantchannel); }
+			set { Entity.Attributes[Fields.msdyn_externalparticipantchannel] = value; }
+		}
+
+		/// <summary>
+		/// <para>Channel type of external participant</para>
+		/// <para>Picklist</para>
+		/// <para>Channel type of external participant</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public Dev.DevKit.Shared.Entities.msdyn_sessionparticipantOptionSets.msdyn_externalparticipantchanneltype? msdyn_externalparticipantchanneltype
+		{
+			get
+			{
+				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.msdyn_externalparticipantchanneltype);
+				if (value == null) return null;
+				return (Dev.DevKit.Shared.Entities.msdyn_sessionparticipantOptionSets.msdyn_externalparticipantchanneltype)value.Value;
+			}
+			set
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_externalparticipantchanneltype] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_externalparticipantchanneltype] = null;
+			}
+		}
+
+		/// <summary>
 		/// <para>Idle time for agent on the session</para>
 		/// <para>Integer - MinValue: 0 - MaxValue: 2,147,483,647</para>
 		/// <para>Idle time</para>
@@ -404,7 +449,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

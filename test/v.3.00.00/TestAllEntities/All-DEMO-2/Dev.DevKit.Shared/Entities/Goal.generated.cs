@@ -129,27 +129,27 @@ namespace Dev.DevKit.Shared.Entities.GoalOptionSets
 		/// </summary>
 		P9 = 409,
 		/// <summary>
-		/// Quarter_1 = 1
+		/// Quarter 1 = 1
 		/// </summary>
 		Quarter_1 = 1,
 		/// <summary>
-		/// Quarter_2 = 2
+		/// Quarter 2 = 2
 		/// </summary>
 		Quarter_2 = 2,
 		/// <summary>
-		/// Quarter_3 = 3
+		/// Quarter 3 = 3
 		/// </summary>
 		Quarter_3 = 3,
 		/// <summary>
-		/// Quarter_4 = 4
+		/// Quarter 4 = 4
 		/// </summary>
 		Quarter_4 = 4,
 		/// <summary>
-		/// Semester_1 = 201
+		/// Semester 1 = 201
 		/// </summary>
 		Semester_1 = 201,
 		/// <summary>
-		/// Semester_2 = 202
+		/// Semester 2 = 202
 		/// </summary>
 		Semester_2 = 202,
 		/// <summary>
@@ -558,6 +558,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "goal";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 9600;
 
 		[DebuggerNonUserCode()]
@@ -771,7 +772,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select whether only the goal owner's records, or all records, should be rolled up for goal results.</para>
+		/// <para>Select whether only the goal owner&apos;s records, or all records, should be rolled up for goal results.</para>
 		/// <para>Boolean</para>
 		/// <para>Record Set for Rollup</para>
 		/// </summary>
@@ -912,7 +913,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency.</para>
+		/// <para>Shows the conversion rate of the record&apos;s currency. The exchange rate is used to convert all money fields in the record from the local currency to the system&apos;s default currency.</para>
 		/// <para>ReadOnly - Decimal - MinValue: 0 - MaxValue: 100,000,000,000</para>
 		/// <para>Exchange Rate</para>
 		/// </summary>
@@ -946,7 +947,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select the fiscal year for the goal that's being tracked.</para>
+		/// <para>Select the fiscal year for the goal that&apos;s being tracked.</para>
 		/// <para>Picklist</para>
 		/// <para>Fiscal Year</para>
 		/// </summary>
@@ -998,7 +999,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Choose the user or team responsible for meeting the goal.</para>
-		/// <para>Required - Lookup to systemuser;team</para>
+		/// <para>Required - Lookup to systemuser, team</para>
 		/// <para>Goal Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -1237,7 +1238,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user.</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser</para>
 		/// <para>Manager</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -1437,7 +1438,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows whether the goal is open, completed, or canceled. Completed and canceled goals are read-only and can't be edited.</para>
+		/// <para>Shows whether the goal is open, completed, or canceled. Completed and canceled goals are read-only and can&apos;t be edited.</para>
 		/// <para>State</para>
 		/// <para>Status</para>
 		/// </summary>
@@ -1460,7 +1461,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select the goal's status.</para>
+		/// <para>Select the goal&apos;s status.</para>
 		/// <para>Status</para>
 		/// <para>Status Reason</para>
 		/// </summary>

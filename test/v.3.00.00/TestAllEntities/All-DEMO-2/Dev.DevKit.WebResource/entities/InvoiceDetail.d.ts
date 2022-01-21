@@ -117,10 +117,12 @@ declare namespace DevKit {
 			/** Select whether the invoice product should be shipped to the specified address or held until the customer calls with further pick up or delivery instructions. */
 			WillCall: DevKit.Controls.Boolean;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormInvoiceDetail_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form InvoiceDetail_Information
+		* Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -129,6 +131,10 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form InvoiceDetail_Information */
 		Body: DevKit.FormInvoiceDetail_Information.Body;
+		/** The Process of form InvoiceDetail_Information */
+		Process: DevKit.FormInvoiceDetail_Information.Process;
+		/** The SidePanes of form InvoiceDetail_Information */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormProject {
 		interface tab_address_Sections {
@@ -212,7 +218,7 @@ declare namespace DevKit {
 			/** Shows the total price of the invoice product, based on the price per unit, volume discount, and quantity. */
 			BaseAmount: DevKit.Controls.Money;
 			/** Shows the total price of the invoice product, based on the price per unit, volume discount, and quantity. */
-			BaseAmount_1: DevKit.Controls.Money;
+			BaseAmount1: DevKit.Controls.Money;
 			/** Shows the total amount due for the invoice product, based on the sum of the unit price, quantity, discounts, and tax. */
 			ExtendedAmount: DevKit.Controls.Money;
 			/** Unique identifier of the invoice associated with the invoice product line item. */
@@ -242,7 +248,7 @@ declare namespace DevKit {
 			/** Type a name or description to identify the type of write-in product included in the invoice. */
 			ProductDescription: DevKit.Controls.String;
 			/** Type a name or description to identify the type of write-in product included in the invoice. */
-			ProductDescription_1: DevKit.Controls.String;
+			ProductDescription1: DevKit.Controls.String;
 			/** Choose the product to include on the invoice. */
 			ProductId: DevKit.Controls.Lookup;
 			/** Product Type */
@@ -292,16 +298,18 @@ declare namespace DevKit {
 			/** Select whether the invoice product should be shipped to the specified address or held until the customer calls with further pick up or delivery instructions. */
 			WillCall: DevKit.Controls.Boolean;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
-			MilestonesGrid: DevKit.Controls.Grid;
 			ChargeableTransactionsGrid: DevKit.Controls.Grid;
 			ComplimentaryTransactionsGrid: DevKit.Controls.Grid;
+			MilestonesGrid: DevKit.Controls.Grid;
 			NonChargeableTransactionsGrid: DevKit.Controls.Grid;
 		}
 	}
 	class FormProject extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Project
+		* Project [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -310,8 +318,12 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Project */
 		Body: DevKit.FormProject.Body;
+		/** The Process of form Project */
+		Process: DevKit.FormProject.Process;
 		/** The Grid of form Project */
 		Grid: DevKit.FormProject.Grid;
+		/** The SidePanes of form Project */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormInvoiceDetail {
 		interface tab_general_Sections {
@@ -381,7 +393,7 @@ declare namespace DevKit {
 	}
 	class FormInvoiceDetail extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form InvoiceDetail
+		* InvoiceDetail [Quick Create]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -517,12 +529,8 @@ declare namespace DevKit {
 		OwnerId_systemuser: DevKit.WebApi.LookupValueReadonly;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
 		OwnerId_team: DevKit.WebApi.LookupValueReadonly;
-		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier for the team that owns the record. */
 		OwningTeam: DevKit.WebApi.LookupValueReadonly;
-		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
 		/** Choose the parent bundle associated with this product */
 		ParentBundleId: DevKit.WebApi.GuidValue;
 		/** Choose the parent bundle associated with this product */
@@ -611,8 +619,6 @@ declare namespace DevKit {
 }
 declare namespace OptionSet {
 	namespace InvoiceDetail {
-		enum InvoiceStateCode {
-		}
 		enum msdyn_BillingMethod {
 			/** 192350001 */
 			Fixed_Price,
@@ -685,7 +691,7 @@ declare namespace OptionSet {
 			/** 31 */
 			Missing_Product_Default_UOM,
 			/** 32 */
-			Missing_Product_UOM_Schedule_,
+			Missing_Product_UOM_Schedule,
 			/** 4 */
 			Missing_Quantity,
 			/** 16 */
@@ -741,22 +747,22 @@ declare namespace OptionSet {
 			/** 3 */
 			SkipPriceCalcOnUpSert
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Information','InvoiceDetail','Project'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

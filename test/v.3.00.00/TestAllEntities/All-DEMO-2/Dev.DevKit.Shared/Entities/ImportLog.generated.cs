@@ -13,11 +13,11 @@ namespace Dev.DevKit.Shared.Entities.ImportLogOptionSets
 	public enum LogPhaseCode
 	{
 		/// <summary>
-		/// Import_Create = 2
+		/// Import Create = 2
 		/// </summary>
 		Import_Create = 2,
 		/// <summary>
-		/// Import_Update = 3
+		/// Import Update = 3
 		/// </summary>
 		Import_Update = 3,
 		/// <summary>
@@ -80,6 +80,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "importlog";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 4423;
 
 		[DebuggerNonUserCode()]
@@ -333,7 +334,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the user or team who owns the import log.</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

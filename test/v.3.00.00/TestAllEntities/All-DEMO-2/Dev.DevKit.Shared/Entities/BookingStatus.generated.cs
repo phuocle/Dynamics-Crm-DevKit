@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.BookingStatusOptionSets
 		/// </summary>
 		Canceled = 192350004,
 		/// <summary>
-		/// Hard_Book = 192350001
+		/// Hard Book = 192350001
 		/// </summary>
 		Hard_Book = 192350001,
 		/// <summary>
@@ -29,7 +29,7 @@ namespace Dev.DevKit.Shared.Entities.BookingStatusOptionSets
 		/// </summary>
 		Proposed = 192350003,
 		/// <summary>
-		/// Soft_Book = 192350002
+		/// Soft Book = 192350002
 		/// </summary>
 		Soft_Book = 192350002
 	}
@@ -45,11 +45,11 @@ namespace Dev.DevKit.Shared.Entities.BookingStatusOptionSets
 		/// </summary>
 		Completed = 690970004,
 		/// <summary>
-		/// In_Progress = 690970003
+		/// In Progress = 690970003
 		/// </summary>
 		In_Progress = 690970003,
 		/// <summary>
-		/// On_Break = 690970002
+		/// On Break = 690970002
 		/// </summary>
 		On_Break = 690970002,
 		/// <summary>
@@ -77,11 +77,11 @@ namespace Dev.DevKit.Shared.Entities.BookingStatusOptionSets
 		/// </summary>
 		Completed = 8,
 		/// <summary>
-		/// In_Progress = 6
+		/// In Progress = 6
 		/// </summary>
 		In_Progress = 6,
 		/// <summary>
-		/// No_Show = 10
+		/// No Show = 10
 		/// </summary>
 		No_Show = 10,
 		/// <summary>
@@ -174,6 +174,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "bookingstatus";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 1152;
 
 		[DebuggerNonUserCode()]
@@ -469,7 +470,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

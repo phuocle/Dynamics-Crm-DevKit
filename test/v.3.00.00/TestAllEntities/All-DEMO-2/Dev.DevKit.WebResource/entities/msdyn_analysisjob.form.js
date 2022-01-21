@@ -18,24 +18,24 @@ var DevKit;
 			AssociatedAnalysisResults: {},
 			msdyn_EndTime: {},
 			msdyn_ErrorCount: {},
-			msdyn_ErrorCount_1: {},
+			msdyn_ErrorCount1: {},
 			msdyn_Exception: {},
 			msdyn_name: {},
 			msdyn_RuleFailCount: {},
-			msdyn_RuleFailCount_1: {},
+			msdyn_RuleFailCount1: {},
 			msdyn_RulePassCount: {},
-			msdyn_RulePassCount_1: {},
+			msdyn_RulePassCount1: {},
 			msdyn_RuleRunCount: {},
-			msdyn_RuleRunCount_1: {},
+			msdyn_RuleRunCount1: {},
 			msdyn_sevcriticalcount: {},
 			msdyn_sevhighcount: {},
 			msdyn_sevlowcount: {},
 			msdyn_sevmediumcount: {},
 			msdyn_StartTime: {},
 			msdyn_SuggestionCount: {},
-			msdyn_SuggestionCount_1: {},
+			msdyn_SuggestionCount1: {},
 			msdyn_WarningCount: {},
-			msdyn_WarningCount_1: {},
+			msdyn_WarningCount1: {},
 			statecode: {},
 			statuscode: {}
 		};
@@ -68,23 +68,16 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		var grid = {
 			AssociatedAnalysisResults: {},
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 })(DevKit || (DevKit = {}));
@@ -104,15 +97,14 @@ var OptionSet;
 			Pending: 1,
 			Running: 192350000
 		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
-
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 	};
 })(OptionSet || (OptionSet = {}));

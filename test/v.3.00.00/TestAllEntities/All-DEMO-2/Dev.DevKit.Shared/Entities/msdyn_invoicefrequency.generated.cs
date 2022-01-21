@@ -13,11 +13,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_invoicefrequencyOptionSets
 	public enum msdyn_daysofrun
 	{
 		/// <summary>
-		/// Day_of_period = 192350000
+		/// Day of period = 192350000
 		/// </summary>
 		Day_of_period = 192350000,
 		/// <summary>
-		/// Weekday_of_period = 192350001
+		/// Weekday of period = 192350001
 		/// </summary>
 		Weekday_of_period = 192350001
 	}
@@ -41,19 +41,19 @@ namespace Dev.DevKit.Shared.Entities.msdyn_invoicefrequencyOptionSets
 	public enum msdyn_runspermonth
 	{
 		/// <summary>
-		/// _1 = 1
+		/// 1 = 1
 		/// </summary>
 		_1 = 1,
 		/// <summary>
-		/// _2 = 2
+		/// 2 = 2
 		/// </summary>
 		_2 = 2,
 		/// <summary>
-		/// _3 = 3
+		/// 3 = 3
 		/// </summary>
 		_3 = 3,
 		/// <summary>
-		/// _4 = 4
+		/// 4 = 4
 		/// </summary>
 		_4 = 4
 	}
@@ -112,7 +112,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_invoicefrequency";
 
-		public const int EntityTypeCode = 10346;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10452;
 
 		[DebuggerNonUserCode()]
 		public msdyn_invoicefrequency()
@@ -255,9 +256,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_invoicefrequencyOptionSets.msdyn_daysofrun)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_daysofrun] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_daysofrun] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_daysofrun] = null;
+			}
 		}
 
 		/// <summary>
@@ -303,9 +307,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_invoicefrequencyOptionSets.msdyn_period)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_period] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_period] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_period] = null;
+			}
 		}
 
 		/// <summary>
@@ -323,9 +330,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_invoicefrequencyOptionSets.msdyn_runspermonth)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_runspermonth] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_runspermonth] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_runspermonth] = null;
+			}
 		}
 
 		/// <summary>

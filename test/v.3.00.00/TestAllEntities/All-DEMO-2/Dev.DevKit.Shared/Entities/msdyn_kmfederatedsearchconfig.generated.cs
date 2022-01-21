@@ -13,13 +13,13 @@ namespace Dev.DevKit.Shared.Entities.msdyn_kmfederatedsearchconfigOptionSets
 	public enum SearchType
 	{
 		/// <summary>
-		/// Cross_Organizational_Search = 100000000
+		/// Cross-Organizational Search = 100000000
 		/// </summary>
 		Cross_Organizational_Search = 100000000,
 		/// <summary>
-		/// Microsoft_Search_Connector = 100000002
+		/// Microsoft Graph Connector = 100000002
 		/// </summary>
-		Microsoft_Search_Connector = 100000002,
+		Microsoft_Graph_Connector = 100000002,
 		/// <summary>
 		/// Sharepoint = 100000001
 		/// </summary>
@@ -85,7 +85,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_kmfederatedsearchconfig";
 
-		public const int EntityTypeCode = 10055;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10079;
 
 		[DebuggerNonUserCode()]
 		public msdyn_kmfederatedsearchconfig()
@@ -290,7 +291,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -347,9 +348,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_kmfederatedsearchconfigOptionSets.SearchType)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.SearchType] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.SearchType] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.SearchType] = null;
+			}
 		}
 
 		/// <summary>

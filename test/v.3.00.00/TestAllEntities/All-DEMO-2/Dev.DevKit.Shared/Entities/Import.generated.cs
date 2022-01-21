@@ -70,6 +70,8 @@ namespace Dev.DevKit.Shared.Entities
 			public const string CreatedOnBehalfBy = "createdonbehalfby";
 			public const string EMailAddress = "emailaddress";
 			public const string ImportId = "importid";
+			[System.Obsolete("Deprecated from version: 5.0.0.0")]
+			public const string IsImport = "isimport";
 			public const string ModeCode = "modecode";
 			public const string ModifiedBy = "modifiedby";
 			public const string ModifiedOn = "modifiedon";
@@ -87,6 +89,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "import";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 4410;
 
 		[DebuggerNonUserCode()]
@@ -199,6 +202,19 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Information about whether the source of this import job is data import or data migration.</para>
+		/// <para>Boolean</para>
+		/// <para>Is Import</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		[System.Obsolete("Deprecated from version: 5.0.0.0")]
+		public bool? IsImport
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.IsImport); }
+			set { Entity.Attributes[Fields.IsImport] = value; }
+		}
+
+		/// <summary>
 		/// <para>Select whether to create or update records in Microsoft Dynamics 365 during the import job.</para>
 		/// <para>Picklist</para>
 		/// <para>Mode</para>
@@ -268,7 +284,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user.</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -335,7 +351,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows the status of the import job. By default, import jobs are active and can't be deactivated.</para>
+		/// <para>Shows the status of the import job. By default, import jobs are active and can&apos;t be deactivated.</para>
 		/// <para>ReadOnly - State</para>
 		/// <para>Status</para>
 		/// </summary>
@@ -351,7 +367,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows the reason code that explains the import job's status to identify the job's stage of the import processes, from transforming the data to completed.</para>
+		/// <para>Shows the reason code that explains the import job&apos;s status to identify the job&apos;s stage of the import processes, from transforming the data to completed.</para>
 		/// <para>Status</para>
 		/// <para>Status Reason</para>
 		/// </summary>

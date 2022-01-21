@@ -145,7 +145,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_projecttask";
 
-		public const int EntityTypeCode = 10368;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10474;
 
 		[DebuggerNonUserCode()]
 		public msdyn_projecttask()
@@ -1084,9 +1085,9 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Internal flag to avoid the update process on the estimate lines of the project task</para>
+		/// <para>Internal flag to avoid the update process on the estimate lines of the project task (Deprecated in v3.0)</para>
 		/// <para>Boolean</para>
-		/// <para>Skip Update Estimate Line</para>
+		/// <para>Skip Update Estimate Line (Deprecated in v3.0)</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public bool? msdyn_skipupdateestimateline
@@ -1177,7 +1178,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

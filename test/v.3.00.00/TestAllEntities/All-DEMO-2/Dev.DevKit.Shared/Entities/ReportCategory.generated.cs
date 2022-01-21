@@ -13,19 +13,19 @@ namespace Dev.DevKit.Shared.Entities.ReportCategoryOptionSets
 	public enum CategoryCode
 	{
 		/// <summary>
-		/// Administrative_Reports = 4
+		/// Administrative Reports = 4
 		/// </summary>
 		Administrative_Reports = 4,
 		/// <summary>
-		/// Marketing_Reports = 3
+		/// Marketing Reports = 3
 		/// </summary>
 		Marketing_Reports = 3,
 		/// <summary>
-		/// Sales_Reports = 1
+		/// Sales Reports = 1
 		/// </summary>
 		Sales_Reports = 1,
 		/// <summary>
-		/// Service_Reports = 2
+		/// Service Reports = 2
 		/// </summary>
 		Service_Reports = 2
 	}
@@ -37,7 +37,7 @@ namespace Dev.DevKit.Shared.Entities.ReportCategoryOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -85,6 +85,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "reportcategory";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 9102;
 
 		[DebuggerNonUserCode()]
@@ -150,9 +151,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.ReportCategoryOptionSets.CategoryCode)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.CategoryCode] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.CategoryCode] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.CategoryCode] = null;
+			}
 		}
 
 		/// <summary>
@@ -284,7 +288,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the user or team who owns the report category.</para>
-		/// <para>ReadOnly - Required - Owner</para>
+		/// <para>ReadOnly - Required - Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

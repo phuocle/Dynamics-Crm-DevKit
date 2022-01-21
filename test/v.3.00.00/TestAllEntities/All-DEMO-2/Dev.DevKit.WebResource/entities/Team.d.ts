@@ -1,6 +1,61 @@
 ﻿//@ts-check
 ///<reference path="devkit.d.ts" />
 declare namespace DevKit {
+	namespace FormTeam_New_Form {
+		interface Header extends DevKit.Controls.IHeader {
+			/** Unique identifier of the default queue for the team. */
+			QueueId: DevKit.Controls.Lookup;
+		}
+		interface tab_general_Sections {
+			Description: DevKit.Controls.Section;
+			General: DevKit.Controls.Section;
+			TeamMembers: DevKit.Controls.Section;
+		}
+		interface tab_general extends DevKit.Controls.ITab {
+			Section: tab_general_Sections;
+		}
+		interface Tabs {
+			general: tab_general;
+		}
+		interface Body {
+			Tab: Tabs;
+			/** Unique identifier of the user primary responsible for the team. */
+			AdministratorId: DevKit.Controls.Lookup;
+			/** Unique identifier of the business unit with which the team is associated. */
+			BusinessUnitId: DevKit.Controls.Lookup;
+			/** Description of the team. */
+			Description: DevKit.Controls.String;
+			/** Name of the team. */
+			Name: DevKit.Controls.String;
+			/** Select the team type. */
+			TeamType: DevKit.Controls.OptionSet;
+		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
+		interface Grid {
+			Members: DevKit.Controls.Grid;
+		}
+	}
+	class FormTeam_New_Form extends DevKit.IForm {
+		/**
+		* New Form [Main Form]
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form Team_New_Form */
+		Body: DevKit.FormTeam_New_Form.Body;
+		/** The Header section of form Team_New_Form */
+		Header: DevKit.FormTeam_New_Form.Header;
+		/** The Process of form Team_New_Form */
+		Process: DevKit.FormTeam_New_Form.Process;
+		/** The Grid of form Team_New_Form */
+		Grid: DevKit.FormTeam_New_Form.Grid;
+		/** The SidePanes of form Team_New_Form */
+		SidePanes: DevKit.SidePanes;
+	}
 	namespace FormTeam {
 		interface Header extends DevKit.Controls.IHeader {
 			/** Unique identifier of the default queue for the team. */
@@ -33,13 +88,15 @@ declare namespace DevKit {
 			/** Select the team type. */
 			TeamType: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			Members: DevKit.Controls.Grid;
 		}
 	}
 	class FormTeam extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Team
+		* Team [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -50,8 +107,12 @@ declare namespace DevKit {
 		Body: DevKit.FormTeam.Body;
 		/** The Header section of form Team */
 		Header: DevKit.FormTeam.Header;
+		/** The Process of form Team */
+		Process: DevKit.FormTeam.Process;
 		/** The Grid of form Team */
 		Grid: DevKit.FormTeam.Grid;
+		/** The SidePanes of form Team */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormTeam_form_Business {
 		interface tab_general_Sections {
@@ -87,13 +148,15 @@ declare namespace DevKit {
 			navProcessSessions: DevKit.Controls.NavigationItem,
 			navRoles: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			Members: DevKit.Controls.Grid;
 		}
 	}
 	class FormTeam_form_Business extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Team_form_Business
+		* Team form – Business [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -104,8 +167,12 @@ declare namespace DevKit {
 		Body: DevKit.FormTeam_form_Business.Body;
 		/** The Navigation of form Team_form_Business */
 		Navigation: DevKit.FormTeam_form_Business.Navigation;
+		/** The Process of form Team_form_Business */
+		Process: DevKit.FormTeam_form_Business.Process;
 		/** The Grid of form Team_form_Business */
 		Grid: DevKit.FormTeam_form_Business.Grid;
+		/** The SidePanes of form Team_form_Business */
+		SidePanes: DevKit.SidePanes;
 	}
 	class TeamApi {
 		/**
@@ -155,6 +222,7 @@ declare namespace DevKit {
 		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
 		/** Information about whether the team is a default business unit team. */
 		IsDefault: DevKit.WebApi.BooleanValueReadonly;
+		IsSasTokenSet: DevKit.WebApi.BooleanValueReadonly;
 		MembershipType: DevKit.WebApi.OptionSetValue;
 		/** Unique identifier of the user who last modified the team. */
 		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
@@ -176,6 +244,10 @@ declare namespace DevKit {
 		regardingobjectid_knowledgearticle: DevKit.WebApi.LookupValue;
 		/** Choose the record that the team relates to. */
 		regardingobjectid_opportunity: DevKit.WebApi.LookupValue;
+		/** Sas Token for Team. */
+		SasToken: DevKit.WebApi.StringValueReadonly;
+		/** For internal use only. */
+		ShareLinkQualifier: DevKit.WebApi.StringValueReadonly;
 		/** Shows the ID of the stage. */
 		StageId: DevKit.WebApi.GuidValue;
 		/** Select whether the team will be managed by the system. */
@@ -218,22 +290,22 @@ declare namespace OptionSet {
 			/** 0 */
 			Owner
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Team','Team form – Business'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

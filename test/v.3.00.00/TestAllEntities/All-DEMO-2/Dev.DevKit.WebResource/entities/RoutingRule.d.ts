@@ -31,13 +31,15 @@ declare namespace DevKit {
 			/** For internal use only. */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			RuleItems: DevKit.Controls.Grid;
 		}
 	}
 	class FormRouting_Rule_Set extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Routing_Rule_Set
+		* Routing Rule Set [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -46,8 +48,12 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Routing_Rule_Set */
 		Body: DevKit.FormRouting_Rule_Set.Body;
+		/** The Process of form Routing_Rule_Set */
+		Process: DevKit.FormRouting_Rule_Set.Process;
 		/** The Grid of form Routing_Rule_Set */
 		Grid: DevKit.FormRouting_Rule_Set.Grid;
+		/** The SidePanes of form Routing_Rule_Set */
+		SidePanes: DevKit.SidePanes;
 	}
 	class RoutingRuleApi {
 		/**
@@ -108,8 +114,6 @@ declare namespace DevKit {
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
 		OwnerId_team: DevKit.WebApi.LookupValue;
 		/** For internal use only */
-		OwnerIdYomiName: DevKit.WebApi.StringValue;
-		/** For internal use only */
 		OwningBusinessUnit: DevKit.WebApi.LookupValue;
 		/** Unique identifier for the team that owns the record. */
 		OwningTeam: DevKit.WebApi.LookupValue;
@@ -163,22 +167,22 @@ declare namespace OptionSet {
 			/** 1 */
 			Draft
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Routing Rule Set'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

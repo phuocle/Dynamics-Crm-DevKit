@@ -13,11 +13,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_iotsettingsOptionSets
 	public enum msdyn_defaultiotsource
 	{
 		/// <summary>
-		/// Azure_IoT_Central = 192350002
+		/// Azure IoT Central = 192350002
 		/// </summary>
 		Azure_IoT_Central = 192350002,
 		/// <summary>
-		/// Azure_IoT_Suite = 192350001
+		/// Azure IoT Suite = 192350001
 		/// </summary>
 		Azure_IoT_Suite = 192350001,
 		/// <summary>
@@ -92,7 +92,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_iotsettings";
 
-		public const int EntityTypeCode = 10139;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10151;
 
 		[DebuggerNonUserCode()]
 		public msdyn_iotsettings()
@@ -221,7 +222,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>This value will be used to specify the command name when sending device commands. Default property value is "CommandName" when this field is unspecified.</para>
+		/// <para>This value will be used to specify the command name when sending device commands. Default property value is &quot;CommandName&quot; when this field is unspecified.</para>
 		/// <para>String - MaxLength: 100</para>
 		/// <para>Command Name Property</para>
 		/// </summary>
@@ -233,7 +234,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>This value will be used to specify the command parameters when sending device commands. Default property value is "Parameters" when this field is unspecified.</para>
+		/// <para>This value will be used to specify the command parameters when sending device commands. Default property value is &quot;Parameters&quot; when this field is unspecified.</para>
 		/// <para>String - MaxLength: 100</para>
 		/// <para>Command Parameters Property</para>
 		/// </summary>
@@ -415,7 +416,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

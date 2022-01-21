@@ -1,9 +1,13 @@
 ﻿//@ts-check
 ///<reference path="msdyn_agreement.d.ts" />
 "use strict";
-var formAgreement = (function () {
+var formmsdyn_agreement_Agreement = (function () {
 	"use strict";
+	/** @type DevKit.Formmsdyn_agreement_Agreement */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.Formmsdyn_agreement_Agreement(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}
@@ -14,7 +18,11 @@ var formAgreement = (function () {
 })();
 var formAgreement_Mobile = (function () {
 	"use strict";
+	/** @type DevKit.FormAgreement_Mobile */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.FormAgreement_Mobile(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}

@@ -3,7 +3,11 @@
 "use strict";
 var formRTV = (function () {
 	"use strict";
+	/** @type DevKit.FormRTV */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.FormRTV(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}

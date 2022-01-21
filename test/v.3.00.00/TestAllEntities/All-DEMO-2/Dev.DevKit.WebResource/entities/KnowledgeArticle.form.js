@@ -47,6 +47,7 @@ var DevKit;
 			StatusCode: {},
 			SubjectId: {},
 			Title: {},
+			webResource_allowed_origins_disclaimer: {},
 			workordersubgrid: {}
 		};
 		devKit.LoadFields(formContext, body);
@@ -88,6 +89,16 @@ var DevKit;
 		devKit.LoadFields(formContext, footer, "footer_");
 		form.Footer = footer;
 		var process = devKit.LoadProcess(formContext);
+		var _Expired_Process = {
+			ExpirationDate: {},
+			ExpirationDate_1: {},
+			ExpiredReviewOptions: {},
+			SetProductAssociations: {},
+			SetProductAssociations_1: {},
+			UpdateContent: {}
+		}
+		devKit.LoadFields(formContext, _Expired_Process, "header_process_");
+		process.Expired_Process = _Expired_Process;
 		var _New_Process = {
 			ExpirationDate: {},
 			Keywords: {},
@@ -107,16 +118,6 @@ var DevKit;
 		}
 		devKit.LoadFields(formContext, _Translation_Process, "header_process_");
 		process.Translation_Process = _Translation_Process;
-		var _Expired_Process = {
-			ExpirationDate: {},
-			ExpirationDate_1: {},
-			ExpiredReviewOptions: {},
-			SetProductAssociations: {},
-			SetProductAssociations_1: {},
-			UpdateContent: {}
-		}
-		devKit.LoadFields(formContext, _Expired_Process, "header_process_");
-		process.Expired_Process = _Expired_Process;
 		form.Process = process;
 		var quickForm = {
 			relatedarticlequickform: {
@@ -127,25 +128,21 @@ var DevKit;
 		devKit.LoadQuickForms(formContext, quickForm);
 		form.QuickForm = quickForm;
 		var grid = {
-			RelatedTranslationsGrid: {},
-			RelatedCategoriesGrid: {},
-			workordersubgrid: {},
 			customerassetsubgrid: {},
-			productsubgrid: {},
+			Feedback: {},
 			incidenttypesubgrid: {},
 			KnowledgearticleviewsGrid: {},
-			Feedback: {},
+			productsubgrid: {},
 			RelatedCasesGrid: {},
+			RelatedCategoriesGrid: {},
+			RelatedTranslationsGrid: {},
+			workordersubgrid: {},
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormKnowledge_Article_for_Interactive_experience = function(executionContext, defaultWebResourceName) {
@@ -170,6 +167,7 @@ var DevKit;
 			Feedback: {},
 			IsInternal: {},
 			Keywords: {},
+			KnowledgeArticleAttachmentControl: {},
 			KnowledgeArticleViews: {},
 			KnowledgearticleviewsGrid: {},
 			LanguageLocaleId: {},
@@ -177,6 +175,7 @@ var DevKit;
 			MinorVersionNumber: {},
 			ModifiedBy: {},
 			ModifiedOn: {},
+			msdyn_keywordsdescsuggestioncontrol: {},
 			notescontrol: {},
 			OwnerId: {},
 			ParentArticleContentId: {},
@@ -189,7 +188,8 @@ var DevKit;
 			RootArticleId: {},
 			StatusCode: {},
 			SubjectId: {},
-			Title: {}
+			Title: {},
+			webResource_allowed_origins_disclaimer: {}
 		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
@@ -203,7 +203,9 @@ var DevKit;
 			general: {
 				Section: {
 					Content: {},
-					Knowledge_Information: {}
+					Knowledge_Information: {},
+					Knowledge_Suggestion: {},
+					KnowledgeArticleAttachmentSectionV2: {}
 				}
 			},
 			summary: {
@@ -230,6 +232,16 @@ var DevKit;
 		devKit.LoadFields(formContext, footer, "footer_");
 		form.Footer = footer;
 		var process = devKit.LoadProcess(formContext);
+		var _Expired_Process = {
+			ExpirationDate: {},
+			ExpirationDate_1: {},
+			ExpiredReviewOptions: {},
+			SetProductAssociations: {},
+			SetProductAssociations_1: {},
+			UpdateContent: {}
+		}
+		devKit.LoadFields(formContext, _Expired_Process, "header_process_");
+		process.Expired_Process = _Expired_Process;
 		var _New_Process = {
 			ExpirationDate: {},
 			Keywords: {},
@@ -249,16 +261,6 @@ var DevKit;
 		}
 		devKit.LoadFields(formContext, _Translation_Process, "header_process_");
 		process.Translation_Process = _Translation_Process;
-		var _Expired_Process = {
-			ExpirationDate: {},
-			ExpirationDate_1: {},
-			ExpiredReviewOptions: {},
-			SetProductAssociations: {},
-			SetProductAssociations_1: {},
-			UpdateContent: {}
-		}
-		devKit.LoadFields(formContext, _Expired_Process, "header_process_");
-		process.Expired_Process = _Expired_Process;
 		form.Process = process;
 		var quickForm = {
 			relatedarticlequickform: {
@@ -269,22 +271,19 @@ var DevKit;
 		devKit.LoadQuickForms(formContext, quickForm);
 		form.QuickForm = quickForm;
 		var grid = {
-			RelatedTranslationsGrid: {},
-			RelatedCategoriesGrid: {},
 			AssociatedProductsGrid: {},
-			KnowledgearticleviewsGrid: {},
 			Feedback: {},
+			KnowledgeArticleAttachmentControl: {},
+			KnowledgearticleviewsGrid: {},
 			RelatedCasesGrid: {},
+			RelatedCategoriesGrid: {},
+			RelatedTranslationsGrid: {},
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormKnowledge_Article_Quick_Create = function(executionContext, defaultWebResourceName) {
@@ -306,7 +305,7 @@ var DevKit;
 			OwnerId: {},
 			primaryauthorid: {},
 			Title: {}
-		}
+		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
 			newKnowledgeArticle: {
@@ -316,13 +315,15 @@ var DevKit;
 					quickKnowledgeowner: {}
 				}
 			}
-		}
+		};
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
+		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
-	}
+	};
 })(DevKit || (DevKit = {}));
 /** @namespace OptionSet */
 var OptionSet;
@@ -362,15 +363,14 @@ var OptionSet;
 			Scheduled: 6,
 			Updating: 9
 		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
-
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 	};
 })(OptionSet || (OptionSet = {}));

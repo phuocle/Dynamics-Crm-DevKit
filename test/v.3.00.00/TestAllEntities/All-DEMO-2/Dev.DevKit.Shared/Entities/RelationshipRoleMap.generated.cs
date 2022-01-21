@@ -19,7 +19,6 @@ namespace Dev.DevKit.Shared.Entities
 	{
 		public struct Fields
 		{
-			public const string AssociateObjectTypeCode = "associateobjecttypecode";
 			public const string CreatedBy = "createdby";
 			public const string CreatedOn = "createdon";
 			public const string CreatedOnBehalfBy = "createdonbehalfby";
@@ -27,7 +26,6 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ModifiedOn = "modifiedon";
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
 			public const string OrganizationId = "organizationid";
-			public const string PrimaryObjectTypeCode = "primaryobjecttypecode";
 			public const string RelationshipRoleId = "relationshiproleid";
 			public const string RelationshipRoleMapId = "relationshiprolemapid";
 			public const string VersionNumber = "versionnumber";
@@ -35,6 +33,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "relationshiprolemap";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 4501;
 
 		[DebuggerNonUserCode()]
@@ -83,18 +82,6 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			Entity = new Entity(EntityLogicalName, keys);
 			PreEntity = CloneThisEntity(Entity);
-		}
-
-		/// <summary>
-		/// <para>Type of the associated entity in the relationship role mapping.</para>
-		/// <para>EntityName</para>
-		/// <para></para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string AssociateObjectTypeCode
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.AssociateObjectTypeCode); }
-			set { Entity.Attributes[Fields.AssociateObjectTypeCode] = value; }
 		}
 
 		/// <summary>
@@ -172,18 +159,6 @@ namespace Dev.DevKit.Shared.Entities
 		public Guid? OrganizationId
 		{
 			get { return Entity.GetAttributeValue<Guid?>(Fields.OrganizationId); }
-		}
-
-		/// <summary>
-		/// <para>Type of the primary entity in the relationship role mapping.</para>
-		/// <para>EntityName</para>
-		/// <para></para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string PrimaryObjectTypeCode
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.PrimaryObjectTypeCode); }
-			set { Entity.Attributes[Fields.PrimaryObjectTypeCode] = value; }
 		}
 
 		/// <summary>

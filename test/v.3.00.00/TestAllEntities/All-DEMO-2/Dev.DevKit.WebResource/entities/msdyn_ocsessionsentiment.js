@@ -1,9 +1,13 @@
 ﻿//@ts-check
 ///<reference path="msdyn_ocsessionsentiment.d.ts" />
 "use strict";
-var formInformation = (function () {
+var formmsdyn_ocsessionsentiment_Information = (function () {
 	"use strict";
+	/** @type DevKit.Formmsdyn_ocsessionsentiment_Information */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.Formmsdyn_ocsessionsentiment_Information(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}

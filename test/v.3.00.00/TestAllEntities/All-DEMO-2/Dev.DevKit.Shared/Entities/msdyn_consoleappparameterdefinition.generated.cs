@@ -13,7 +13,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_consoleappparameterdefinitionOptionSe
 	public enum msdyn_RuntimeType
 	{
 		/// <summary>
-		/// _string = 110000000
+		/// string = 110000000
 		/// </summary>
 		_string = 110000000,
 		/// <summary>
@@ -84,7 +84,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_consoleappparameterdefinition";
 
-		public const int EntityTypeCode = 10526;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10653;
 
 		[DebuggerNonUserCode()]
 		public msdyn_consoleappparameterdefinition()
@@ -241,7 +242,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Yes - value will be picked from templateParameters argument at runtime No - value must be supplied when creating a template that uses this parameter</para>
+		/// <para>Yes - value will be picked from templateParameters argument at runtimeNo - value must be supplied when creating a template that uses this parameter</para>
 		/// <para>Boolean</para>
 		/// <para>Is Runtime</para>
 		/// </summary>

@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_propertyOptionSets
 		/// </summary>
 		Boolean = 192350002,
 		/// <summary>
-		/// Datetime = 192350003
+		/// Date/time = 192350003
 		/// </summary>
 		Datetime = 192350003,
 		/// <summary>
@@ -85,7 +85,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_property";
 
-		public const int EntityTypeCode = 10120;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10132;
 
 		[DebuggerNonUserCode()]
 		public msdyn_property()
@@ -254,9 +255,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_propertyOptionSets.msdyn_propertytype)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_propertytype] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_propertytype] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_propertytype] = null;
+			}
 		}
 
 		/// <summary>
@@ -273,7 +277,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

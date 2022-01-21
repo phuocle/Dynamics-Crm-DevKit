@@ -13,7 +13,7 @@ namespace Dev.DevKit.Shared.Entities.CalendarOptionSets
 	public enum Type
 	{
 		/// <summary>
-		/// Customer_Service = 1
+		/// Customer Service = 1
 		/// </summary>
 		Customer_Service = 1,
 		/// <summary>
@@ -21,13 +21,9 @@ namespace Dev.DevKit.Shared.Entities.CalendarOptionSets
 		/// </summary>
 		Default = 0,
 		/// <summary>
-		/// Holiday_Schedule = 2
+		/// Holiday Schedule = 2
 		/// </summary>
-		Holiday_Schedule = 2,
-		/// <summary>
-		/// Inner_Calendar_type = -1
-		/// </summary>
-		Inner_Calendar_type = -1
+		Holiday_Schedule = 2
 	}
 }
 
@@ -57,6 +53,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "calendar";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 4003;
 
 		[DebuggerNonUserCode()]

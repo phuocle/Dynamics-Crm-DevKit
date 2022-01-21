@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.RelationshipOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -49,6 +49,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "relationship";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 9813;
 
 		[DebuggerNonUserCode()]
@@ -116,7 +117,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Referenced Entity's Alternate Key</para>
+		/// <para>Referenced Entity&apos;s Alternate Key</para>
 		/// <para>Uniqueidentifier</para>
 		/// <para>Entity Key Id</para>
 		/// </summary>

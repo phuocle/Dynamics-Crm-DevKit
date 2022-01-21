@@ -106,6 +106,12 @@ declare namespace DevKit {
 			nav_msdyn_quote_msdyn_quoteinvoicingsetup_Quote: DevKit.Controls.NavigationItem,
 			navProducts: DevKit.Controls.NavigationItem
 		}
+		interface ProcessProject_Service_Project_Stages {
+
+		}
+		interface Process extends DevKit.Controls.IProcess {
+			Project_Service_Project_Stages: ProcessProject_Service_Project_Stages;
+		}
 		interface Grid {
 			quotedetailsGrid: DevKit.Controls.Grid;
 			servicesGrid: DevKit.Controls.Grid;
@@ -113,7 +119,7 @@ declare namespace DevKit {
 	}
 	class FormQuote_Field_Service_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Quote_Field_Service_Information
+		* Field Service Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -126,8 +132,12 @@ declare namespace DevKit {
 		Header: DevKit.FormQuote_Field_Service_Information.Header;
 		/** The Navigation of form Quote_Field_Service_Information */
 		Navigation: DevKit.FormQuote_Field_Service_Information.Navigation;
+		/** The Process of form Quote_Field_Service_Information */
+		Process: DevKit.FormQuote_Field_Service_Information.Process;
 		/** The Grid of form Quote_Field_Service_Information */
 		Grid: DevKit.FormQuote_Field_Service_Information.Grid;
+		/** The SidePanes of form Quote_Field_Service_Information */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormQuote_Project_Information {
 		interface Header extends DevKit.Controls.IHeader {
@@ -220,11 +230,11 @@ declare namespace DevKit {
 			/** Shows the estimated gross margin after accounting for non-chargeable components. */
 			msdyn_AdjustedGrossMargin: DevKit.Controls.Decimal;
 			/** Shows the estimated gross margin after accounting for non-chargeable components. */
-			msdyn_AdjustedGrossMargin_1: DevKit.Controls.Decimal;
+			msdyn_AdjustedGrossMargin1: DevKit.Controls.Decimal;
 			/** Shows how the quote estimation of sales value and schedule compare to customer expectations on those parameters. Possible values are 1: Within Customer expectations, 2: Not Within Customer expectations, and 0: Customer expectations Not Available. */
 			msdyn_Competitive: DevKit.Controls.OptionSet;
 			/** Shows how the quote estimation of sales value and schedule compare to customer expectations on those parameters. Possible values are 1: Within Customer expectations, 2: Not Within Customer expectations, and 0: Customer expectations Not Available. */
-			msdyn_Competitive_1: DevKit.Controls.OptionSet;
+			msdyn_Competitive1: DevKit.Controls.OptionSet;
 			/** The organizational unit in charge of the contract. */
 			msdyn_ContractOrganizationalUnitId: DevKit.Controls.Lookup;
 			/** Shows the total customer budget for the quote, computed from all the quote lines. */
@@ -232,23 +242,23 @@ declare namespace DevKit {
 			/** Shows how the estimated sales value on the quote compares to customer budgets. Possible values are 1: Within Customer Budget, 2: Exceeds Customer Budget, 0: Budget Estimate Not Available */
 			msdyn_EstimatedBudget: DevKit.Controls.OptionSet;
 			/** Shows how the estimated sales value on the quote compares to customer budgets. Possible values are 1: Within Customer Budget, 2: Exceeds Customer Budget, 0: Budget Estimate Not Available */
-			msdyn_EstimatedBudget_1: DevKit.Controls.OptionSet;
+			msdyn_EstimatedBudget1: DevKit.Controls.OptionSet;
 			/** Estimated completion date, computed from the details of each quote line. */
 			msdyn_EstimatedCompletionRollUp: DevKit.Controls.Date;
 			/** Shows how the estimated schedule on the quote compares to customer expectations. Possible values are 1: Estimated To Finish Early, 2: Estimated To Finish Late, 3: Estimated To Finish On Schedule, and 0: Schedule Not Available. */
 			msdyn_EstimatedSchedule: DevKit.Controls.OptionSet;
 			/** Shows how the estimated schedule on the quote compares to customer expectations. Possible values are 1: Estimated To Finish Early, 2: Estimated To Finish Late, 3: Estimated To Finish On Schedule, and 0: Schedule Not Available. */
-			msdyn_EstimatedSchedule_1: DevKit.Controls.OptionSet;
+			msdyn_EstimatedSchedule1: DevKit.Controls.OptionSet;
 			/** Shows the estimated gross margin without accounting for non-chargeable components. */
 			msdyn_GrossMargin: DevKit.Controls.Decimal;
 			/** Shows the estimated gross margin without accounting for non-chargeable components. */
-			msdyn_GrossMargin_1: DevKit.Controls.Decimal;
+			msdyn_GrossMargin1: DevKit.Controls.Decimal;
 			/** Internal use only. */
 			msdyn_OrderType: DevKit.Controls.OptionSet;
 			/** Shows the estimated profitability of the quote. Possible values are Profitable, Not Profitable, and Profitability not available. */
 			msdyn_Profitability: DevKit.Controls.OptionSet;
 			/** Shows the estimated profitability of the quote. Possible values are Profitable, Not Profitable, and Profitability not available. */
-			msdyn_Profitability_1: DevKit.Controls.OptionSet;
+			msdyn_Profitability1: DevKit.Controls.OptionSet;
 			msdyn_TotalChargeableCostRollup: DevKit.Controls.Money;
 			msdyn_TotalNonchargeableCostRollup: DevKit.Controls.Money;
 			/** Type a descriptive name for the quote. */
@@ -265,7 +275,7 @@ declare namespace DevKit {
 			/** Enter the delivery date requested by the customer for all products in the quote. */
 			RequestDeliveryBy: DevKit.Controls.Date;
 			/** Enter the delivery date requested by the customer for all products in the quote. */
-			RequestDeliveryBy_1: DevKit.Controls.Date;
+			RequestDeliveryBy1: DevKit.Controls.Date;
 			/** Shows the version number of the quote for revision history tracking. */
 			RevisionNumber: DevKit.Controls.Integer;
 			/** Select a shipping method for deliveries sent to this address. */
@@ -277,7 +287,7 @@ declare namespace DevKit {
 			/** Shows the total amount due, calculated as the sum of the products, discounts, freight, and taxes for the quote. */
 			TotalAmount: DevKit.Controls.Money;
 			/** Shows the total amount due, calculated as the sum of the products, discounts, freight, and taxes for the quote. */
-			TotalAmount_1: DevKit.Controls.Money;
+			TotalAmount1: DevKit.Controls.Money;
 			/** Value of the Total Amount in base currency. */
 			TotalAmount_Base: DevKit.Controls.Money;
 			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
@@ -296,19 +306,25 @@ declare namespace DevKit {
 			navProcessSessions: DevKit.Controls.NavigationItem,
 			navProducts: DevKit.Controls.NavigationItem
 		}
+		interface ProcessProject_Service_Project_Stages {
+
+		}
+		interface Process extends DevKit.Controls.IProcess {
+			Project_Service_Project_Stages: ProcessProject_Service_Project_Stages;
+		}
 		interface Grid {
+			costRevenueDistribution: DevKit.Controls.Grid;
+			ProjectPriceListsSubGrid: DevKit.Controls.Grid;
 			ProjectQuoteLines: DevKit.Controls.Grid;
 			quotedetailsGrid: DevKit.Controls.Grid;
-			ProjectPriceListsSubGrid: DevKit.Controls.Grid;
-			costRevenueDistribution: DevKit.Controls.Grid;
-			quoteLineDetailAnalysis: DevKit.Controls.Grid;
 			quoteLineComparisonGrid: DevKit.Controls.Grid;
+			quoteLineDetailAnalysis: DevKit.Controls.Grid;
 			totalQuoteAmountComparisonGrid: DevKit.Controls.Grid;
 		}
 	}
 	class FormQuote_Project_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Quote_Project_Information
+		* Project Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -321,10 +337,141 @@ declare namespace DevKit {
 		Header: DevKit.FormQuote_Project_Information.Header;
 		/** The Navigation of form Quote_Project_Information */
 		Navigation: DevKit.FormQuote_Project_Information.Navigation;
+		/** The Process of form Quote_Project_Information */
+		Process: DevKit.FormQuote_Project_Information.Process;
 		/** The Grid of form Quote_Project_Information */
 		Grid: DevKit.FormQuote_Project_Information.Grid;
+		/** The SidePanes of form Quote_Project_Information */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormQuote {
+		interface Header extends DevKit.Controls.IHeader {
+			/** Enter the date when the quote pricing is effective or was first communicated to the customer. */
+			EffectiveFrom: DevKit.Controls.Date;
+			/** Enter the expiration date or last day the quote pricing is effective for the customer. */
+			EffectiveTo: DevKit.Controls.Date;
+			/** Select the quote's status. */
+			StatusCode: DevKit.Controls.OptionSet;
+			/** Shows the total amount due, calculated as the sum of the products, discounts, freight, and taxes for the quote. */
+			TotalAmount: DevKit.Controls.Money;
+		}
+		interface tab_details_tab_Sections {
+			Social_Pane: DevKit.Controls.Section;
+			tab_2_section_2: DevKit.Controls.Section;
+		}
+		interface tab_Summary_tab_Sections {
+			addresses: DevKit.Controls.Section;
+			description_section: DevKit.Controls.Section;
+			DynamicProperties: DevKit.Controls.Section;
+			products: DevKit.Controls.Section;
+			quote_information: DevKit.Controls.Section;
+			sales_information: DevKit.Controls.Section;
+			shipping_information: DevKit.Controls.Section;
+			suggestionsection: DevKit.Controls.Section;
+			totals: DevKit.Controls.Section;
+		}
+		interface tab_details_tab extends DevKit.Controls.ITab {
+			Section: tab_details_tab_Sections;
+		}
+		interface tab_Summary_tab extends DevKit.Controls.ITab {
+			Section: tab_Summary_tab_Sections;
+		}
+		interface Tabs {
+			details_tab: tab_details_tab;
+			Summary_tab: tab_Summary_tab;
+		}
+		interface Body {
+			Tab: Tabs;
+			/** Shows the complete Bill To address. */
+			BillTo_Composite: DevKit.Controls.String;
+			/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
+			CustomerId: DevKit.Controls.Lookup;
+			/** Type additional information to describe the quote, such as the products or services offered or details about the customer's product preferences. */
+			Description: DevKit.Controls.String;
+			/** Type the discount amount for the quote if the customer is eligible for special savings. */
+			DiscountAmount: DevKit.Controls.Money;
+			/** Type the discount rate that should be applied to the Detail Amount field to include additional savings for the customer in the quote. */
+			DiscountPercentage: DevKit.Controls.Decimal;
+			/** Type the cost of freight or shipping for the products included in the quote for use in calculating the Total Amount field. */
+			FreightAmount: DevKit.Controls.Money;
+			/** Select the freight terms to make sure shipping charges are processed correctly. */
+			FreightTermsCode: DevKit.Controls.OptionSet;
+			/** Internal use only. */
+			msdyn_OrderType: DevKit.Controls.OptionSet;
+			/** Type a descriptive name for the quote. */
+			Name: DevKit.Controls.String;
+			notescontrol: DevKit.Controls.Note;
+			/** Choose the opportunity that the quote is related to for reporting and analytics. */
+			OpportunityId: DevKit.Controls.Lookup;
+			/** Owner Id */
+			OwnerId: DevKit.Controls.Lookup;
+			/** Select the payment terms to indicate when the customer needs to pay the total amount. */
+			PaymentTermsCode: DevKit.Controls.OptionSet;
+			/** Choose the price list associated with this record to make sure the products associated with the campaign are offered at the correct prices. */
+			PriceLevelId: DevKit.Controls.Lookup;
+			/** Shows the quote number for customer reference and searching capabilities. The number cannot be modified. */
+			QuoteNumber: DevKit.Controls.String;
+			/** Shows the version number of the quote for revision history tracking. */
+			RevisionNumber: DevKit.Controls.Integer;
+			/** Select a shipping method for deliveries sent to this address. */
+			ShippingMethodCode: DevKit.Controls.OptionSet;
+			/** Shows the complete Ship To address. */
+			ShipTo_Composite: DevKit.Controls.String;
+			/** Shows the total amount due, calculated as the sum of the products, discounts, freight, and taxes for the quote. */
+			TotalAmount: DevKit.Controls.Money;
+			/** Shows the total product amount for the quote, minus any discounts. This value is added to freight and tax amounts in the calculation for the total amount due for the quote. */
+			TotalAmountLessFreight: DevKit.Controls.Money;
+			/** Shows the sum of all existing and write-in products included on the quote, based on the specified price list and quantities. */
+			TotalLineItemAmount: DevKit.Controls.Money;
+			/** Shows the total of the Tax amounts specified on all products included in the quote, included in the Total Amount due calculation for the quote. */
+			TotalTax: DevKit.Controls.Money;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			TransactionCurrencyId: DevKit.Controls.Lookup;
+			/** Select whether the products included in the quote should be shipped to the specified address or held until the customer calls with further pick up or delivery instructions. */
+			WillCall: DevKit.Controls.Boolean;
+		}
+		interface Navigation {
+			nav_msdyn_quote_msdyn_quotebookingincident_Quote: DevKit.Controls.NavigationItem,
+			nav_msdyn_quote_msdyn_quotebookingproduct_Quote: DevKit.Controls.NavigationItem,
+			nav_msdyn_quote_msdyn_quotebookingservice_Quote: DevKit.Controls.NavigationItem,
+			nav_msdyn_quote_msdyn_quotebookingservicetask_Quote: DevKit.Controls.NavigationItem,
+			nav_msdyn_quote_msdyn_quotebookingsetup_Quote: DevKit.Controls.NavigationItem,
+			nav_msdyn_quote_msdyn_quoteinvoicingsetup_Quote: DevKit.Controls.NavigationItem,
+			navProducts: DevKit.Controls.NavigationItem
+		}
+		interface ProcessProject_Service_Project_Stages {
+
+		}
+		interface Process extends DevKit.Controls.IProcess {
+			Project_Service_Project_Stages: ProcessProject_Service_Project_Stages;
+		}
+		interface Grid {
+			quotedetailsGrid: DevKit.Controls.Grid;
+		}
+	}
+	class FormQuote extends DevKit.IForm {
+		/**
+		* Quote [Main Form]
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form Quote */
+		Body: DevKit.FormQuote.Body;
+		/** The Header section of form Quote */
+		Header: DevKit.FormQuote.Header;
+		/** The Navigation of form Quote */
+		Navigation: DevKit.FormQuote.Navigation;
+		/** The Process of form Quote */
+		Process: DevKit.FormQuote.Process;
+		/** The Grid of form Quote */
+		Grid: DevKit.FormQuote.Grid;
+		/** The SidePanes of form Quote */
+		SidePanes: DevKit.SidePanes;
+	}
+	namespace FormQuote2 {
 		interface tab_newQuote_Sections {
 			quickQuote_salesinformation: DevKit.Controls.Section;
 			quickQuote_summary: DevKit.Controls.Section;
@@ -353,17 +500,17 @@ declare namespace DevKit {
 			TransactionCurrencyId: DevKit.Controls.Lookup;
 		}
 	}
-	class FormQuote extends DevKit.IForm {
+	class FormQuote2 extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Quote
+		* Quote [Quick Create]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
 		constructor(executionContext: any, defaultWebResourceName?: string);
 		/** Utility functions/methods/objects for Dynamics 365 form */
 		Utility: DevKit.Utility;
-		/** The Body section of form Quote */
-		Body: DevKit.FormQuote.Body;
+		/** The Body section of form Quote2 */
+		Body: DevKit.FormQuote2.Body;
 	}
 	class QuoteApi {
 		/**
@@ -431,7 +578,9 @@ declare namespace DevKit {
 		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
 		/** Shows who created the record on behalf of another user. */
 		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
 		customerid_account: DevKit.WebApi.LookupValue;
+		/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
 		customerid_contact: DevKit.WebApi.LookupValue;
 		/** Type additional information to describe the quote, such as the products or services offered or details about the customer's product preferences. */
 		Description: DevKit.WebApi.StringValue;
@@ -604,7 +753,6 @@ declare namespace DevKit {
 		SLAId: DevKit.WebApi.LookupValue;
 		/** Last SLA that was applied to this quote. This field is for internal use only. */
 		SLAInvokedId: DevKit.WebApi.LookupValueReadonly;
-		SLAName: DevKit.WebApi.StringValueReadonly;
 		/** Contains the id of the stage where the entity is located. */
 		StageId: DevKit.WebApi.GuidValue;
 		/** Shows whether the quote is draft, active, won, or closed. Only draft quotes can be edited. */
@@ -779,7 +927,7 @@ declare namespace OptionSet {
 			/** 31 */
 			Missing_Product_Default_UOM,
 			/** 32 */
-			Missing_Product_UOM_Schedule_,
+			Missing_Product_UOM_Schedule,
 			/** 4 */
 			Missing_Quantity,
 			/** 16 */
@@ -851,22 +999,22 @@ declare namespace OptionSet {
 			/** 4 */
 			Won
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Field Service Information','Project Information','Quote'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

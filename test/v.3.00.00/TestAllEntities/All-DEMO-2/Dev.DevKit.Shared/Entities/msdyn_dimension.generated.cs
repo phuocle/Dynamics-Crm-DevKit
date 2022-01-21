@@ -13,11 +13,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_dimensionOptionSets
 	public enum msdyn_Type
 	{
 		/// <summary>
-		/// Amount_based = 192350000
+		/// Amount-based = 192350000
 		/// </summary>
 		Amount_based = 192350000,
 		/// <summary>
-		/// Markup_based = 192350001
+		/// Markup-based = 192350001
 		/// </summary>
 		Markup_based = 192350001
 	}
@@ -83,7 +83,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_dimension";
 
-		public const int EntityTypeCode = 10334;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10440;
 
 		[DebuggerNonUserCode()]
 		public msdyn_dimension()
@@ -326,9 +327,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_dimensionOptionSets.msdyn_Type)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_Type] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_Type] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_Type] = null;
+			}
 		}
 
 		/// <summary>
@@ -345,7 +349,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

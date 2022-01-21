@@ -13,27 +13,27 @@ namespace Dev.DevKit.Shared.Entities.msdyn_questionsequenceOptionSets
 	public enum msdyn_chatquestionnairetype
 	{
 		/// <summary>
-		/// Offline_authenticated = 192350002
+		/// Offline authenticated = 192350002
 		/// </summary>
 		Offline_authenticated = 192350002,
 		/// <summary>
-		/// Offline_unauthenticated = 192350003
+		/// Offline unauthenticated = 192350003
 		/// </summary>
 		Offline_unauthenticated = 192350003,
 		/// <summary>
-		/// Post_chat_authenticated = 192350004
+		/// Post-chat authenticated = 192350004
 		/// </summary>
 		Post_chat_authenticated = 192350004,
 		/// <summary>
-		/// Post_chat_unauthenticated = 192350005
+		/// Post-chat unauthenticated = 192350005
 		/// </summary>
 		Post_chat_unauthenticated = 192350005,
 		/// <summary>
-		/// Pre_chat_authenticated = 192350000
+		/// Pre-chat authenticated = 192350000
 		/// </summary>
 		Pre_chat_authenticated = 192350000,
 		/// <summary>
-		/// Pre_chat_unauthenticated = 192350001
+		/// Pre-chat unauthenticated = 192350001
 		/// </summary>
 		Pre_chat_unauthenticated = 192350001
 	}
@@ -97,7 +97,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_questionsequence";
 
-		public const int EntityTypeCode = 10637;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10777;
 
 		[DebuggerNonUserCode()]
 		public msdyn_questionsequence()
@@ -252,9 +253,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_questionsequenceOptionSets.msdyn_chatquestionnairetype)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_chatquestionnairetype] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_chatquestionnairetype] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_chatquestionnairetype] = null;
+			}
 		}
 
 		/// <summary>
@@ -323,7 +327,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

@@ -10,7 +10,13 @@ using System.Diagnostics;
 
 namespace Dev.DevKit.Shared.Entities.ResourceSpecOptionSets
 {
-
+	public enum ObjectTypeCode
+	{
+		/// <summary>
+		/// Default Value = 1
+		/// </summary>
+		Default_Value = 1
+	}
 }
 
 namespace Dev.DevKit.Shared.Entities
@@ -46,6 +52,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "resourcespec";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 4006;
 
 		[DebuggerNonUserCode()]
@@ -261,7 +268,7 @@ namespace Dev.DevKit.Shared.Entities
 		/// <summary>
 		/// <para>Type of entity with which the resource specification is associated.</para>
 		/// <para>EntityName</para>
-		/// <para>Object Type </para>
+		/// <para>Object Type</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public string ObjectTypeCode

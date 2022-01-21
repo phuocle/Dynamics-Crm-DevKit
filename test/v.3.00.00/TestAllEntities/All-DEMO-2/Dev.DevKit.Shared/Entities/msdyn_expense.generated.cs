@@ -29,7 +29,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_expenseOptionSets
 		/// </summary>
 		Posted = 192350004,
 		/// <summary>
-		/// Recall_Requested = 192350006
+		/// Recall Requested = 192350006
 		/// </summary>
 		Recall_Requested = 192350006,
 		/// <summary>
@@ -61,7 +61,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_expenseOptionSets
 		/// </summary>
 		Posted = 192350004,
 		/// <summary>
-		/// Recall_Requested = 192350006
+		/// Recall Requested = 192350006
 		/// </summary>
 		Recall_Requested = 192350006,
 		/// <summary>
@@ -169,7 +169,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_expense";
 
-		public const int EntityTypeCode = 10338;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10444;
 
 		[DebuggerNonUserCode()]
 		public msdyn_expense()
@@ -435,7 +436,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Enter the expense's purpose.</para>
+		/// <para>Enter the expense&apos;s purpose.</para>
 		/// <para>String - MaxLength: 100</para>
 		/// <para>Expense Purpose</para>
 		/// </summary>
@@ -665,7 +666,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

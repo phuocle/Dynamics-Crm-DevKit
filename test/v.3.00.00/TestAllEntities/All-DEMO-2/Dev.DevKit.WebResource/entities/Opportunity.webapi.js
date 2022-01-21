@@ -6,65 +6,65 @@ var DevKit;
 	DevKit.OpportunityApi = function (e) {
 		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-        function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
-            var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-            var property = {};
-            var getFormattedValue = function () {
-                if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-                    return EMPTY_STRING;
-                }
-                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-                    if (entity[logicalName + l] === entityLogicalName) {
-                        return entity[logicalName + f];
-                    }
-                    return EMPTY_STRING;
-                }
-                if (isMultiOptionSet) {
-                    return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
-                }
-                return entity[logicalName + f];
-            };
-            var getValue = function () {
-                if (entity[logicalName] === undefined || entity[logicalName] === null) {
-                    return null;
-                }
-                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-                    if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
-                        return entity[logicalName];
-                    }
-                    return null;
-                }
-                if (isMultiOptionSet) {
-                    return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
-                }
-                return entity[logicalName];
-            };
-            var setValue = function (value) {
-                if (isMultiOptionSet) value = value.join(',');
-                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-                    value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
-                    upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
-                } else {
-                    upsertEntity[logicalName] = value;
-                }
-                entity[logicalName] = value;
-            };
-            Object.defineProperty(property, 'FormattedValue', {
-                get: getFormattedValue
-            });
-            if (readOnly) {
-                Object.defineProperty(property, 'Value', {
-                    get: getValue
-                });
-            }
-            else {
-                Object.defineProperty(property, 'Value', {
-                    get: getValue,
-                    set: setValue
-                });
-            }
-            return property;
-        }
+		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
+			var property = {};
+			var getFormattedValue = function () {
+				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
+					return EMPTY_STRING;
+				}
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					if (entity[logicalName + l] === entityLogicalName) {
+						return entity[logicalName + f];
+					}
+					return EMPTY_STRING;
+				}
+				if (isMultiOptionSet) {
+					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
+				}
+				return entity[logicalName + f];
+			};
+			var getValue = function () {
+				if (entity[logicalName] === undefined || entity[logicalName] === null) {
+					return null;
+				}
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
+						return entity[logicalName];
+					}
+					return null;
+				}
+				if (isMultiOptionSet) {
+					return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
+				}
+				return entity[logicalName];
+			};
+			var setValue = function (value) {
+				if (isMultiOptionSet) value = value.join(',');
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
+				} else {
+					upsertEntity[logicalName] = value;
+				}
+				entity[logicalName] = value;
+			};
+			Object.defineProperty(property, 'FormattedValue', {
+				get: getFormattedValue
+			});
+			if (readOnly) {
+				Object.defineProperty(property, 'Value', {
+					get: getValue
+				});
+			}
+			else {
+				Object.defineProperty(property, 'Value', {
+					get: getValue,
+					set: setValue
+				});
+			}
+			return property;
+		}
 		var opportunity = {
 			AccountId: { b: 'accountid', a: '_accountid_value', c: 'accounts', d: 'account', r: true },
 			ActualCloseDate_DateOnly: { a: 'actualclosedate' },
@@ -120,7 +120,15 @@ var DevKit;
 			msdyn_AccountManagerId: { b: 'msdyn_AccountManagerId', a: '_msdyn_accountmanagerid_value', c: 'systemusers', d: 'systemuser' },
 			msdyn_ContractOrganizationalUnitId: { b: 'msdyn_ContractOrganizationalUnitId', a: '_msdyn_contractorganizationalunitid_value', c: 'msdyn_organizationalunits', d: 'msdyn_organizationalunit' },
 			msdyn_forecastcategory: { a: 'msdyn_forecastcategory' },
+			msdyn_gdproptout: { a: 'msdyn_gdproptout' },
+			msdyn_OpportunityGrade: { a: 'msdyn_opportunitygrade' },
+			msdyn_OpportunityScore: { a: 'msdyn_opportunityscore' },
+			msdyn_OpportunityScoreTrend: { a: 'msdyn_opportunityscoretrend' },
 			msdyn_OrderType: { a: 'msdyn_ordertype' },
+			msdyn_PredictiveScoreId: { b: 'msdyn_PredictiveScoreId', a: '_msdyn_predictivescoreid_value', c: 'msdyn_predictivescores', d: 'msdyn_predictivescore' },
+			msdyn_ScoreHistory: { a: 'msdyn_scorehistory' },
+			msdyn_ScoreReasons: { a: 'msdyn_scorereasons' },
+			msdyn_segmentid: { b: 'msdyn_segmentid', a: '_msdyn_segmentid_value', c: 'msdyn_segments', d: 'msdyn_segment' },
 			msdyn_WorkOrderType: { b: 'msdyn_WorkOrderType', a: '_msdyn_workordertype_value', c: 'msdyn_workordertypes', d: 'msdyn_workordertype' },
 			Name: { a: 'name' },
 			Need: { a: 'need' },
@@ -159,7 +167,6 @@ var DevKit;
 			SkipPriceCalculation: { a: 'skippricecalculation' },
 			SLAId: { b: 'slaid', a: '_slaid_value', c: 'slas', d: 'sla' },
 			SLAInvokedId: { b: 'slainvokedid', a: '_slainvokedid_value', c: 'slas', d: 'sla', r: true },
-			SLAName: { a: 'slaname', r: true },
 			StageId: { a: 'stageid' },
 			StateCode: { a: 'statecode' },
 			StatusCode: { a: 'statuscode' },
@@ -244,6 +251,18 @@ var OptionSet;
 			Pipeline: 100000001,
 			Won: 100000005
 		},
+		msdyn_OpportunityGrade : {
+			Grade_A: 0,
+			Grade_B: 1,
+			Grade_C: 2,
+			Grade_D: 3
+		},
+		msdyn_OpportunityScoreTrend : {
+			Declining: 2,
+			Improving: 0,
+			Not_enough_info: 3,
+			Steady: 1
+		},
 		msdyn_OrderType : {
 			Item_based: 192350000,
 			Service_Maintenance_Based: 690970002,
@@ -290,7 +309,7 @@ var OptionSet;
 			Missing_Pricing_Code: 8,
 			Missing_Product: 6,
 			Missing_Product_Default_UOM: 31,
-			Missing_Product_UOM_Schedule_: 32,
+			Missing_Product_UOM_Schedule: 32,
 			Missing_Quantity: 4,
 			Missing_Standard_Cost: 16,
 			Missing_Unit_Price: 5,
@@ -348,15 +367,14 @@ var OptionSet;
 			This_Quarter: 1,
 			This_Year: 3
 		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
-
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 	};
 })(OptionSet || (OptionSet = {}));

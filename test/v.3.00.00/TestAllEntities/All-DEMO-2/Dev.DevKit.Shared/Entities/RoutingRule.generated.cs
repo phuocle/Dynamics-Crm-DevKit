@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.RoutingRuleOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -94,6 +94,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "routingrule";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 8181;
 
 		[DebuggerNonUserCode()]
@@ -308,7 +309,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>For internal use only.</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

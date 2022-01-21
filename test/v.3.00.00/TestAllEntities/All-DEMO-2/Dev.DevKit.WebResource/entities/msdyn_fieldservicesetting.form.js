@@ -20,7 +20,7 @@ var DevKit;
 			msdyn_AdvancedSettings: {},
 			msdyn_AgreementPrefix: {},
 			msdyn_AgreementRecordGeneration: {},
-			msdyn_AgreementRecordGeneration_1: {},
+			msdyn_AgreementRecordGeneration1: {},
 			msdyn_AgreementStartingNumber: {},
 			msdyn_AnalyticsIngestDataInXDays: {},
 			msdyn_AutoAllocateEstimatedProducts: {},
@@ -29,7 +29,9 @@ var DevKit;
 			msdyn_AutoNumberingOptIn: {},
 			msdyn_BreakPayType: {},
 			msdyn_BusinessClosurePayType: {},
+			msdyn_CalculatePrice: {},
 			msdyn_CalculateTax: {},
+			msdyn_datepopulationtype: {},
 			msdyn_DefaultCrewStrategy: {},
 			msdyn_DefaultWarehouse: {},
 			msdyn_DefaultWorkOrderCompletedStatus: {},
@@ -42,6 +44,7 @@ var DevKit;
 			msdyn_EnableSuggestedDuration: {},
 			msdyn_EnhancedBackgroundProcessing: {},
 			msdyn_EntityNumberLength: {},
+			msdyn_GenerateActuals: {},
 			msdyn_GenerateAgreementInvoicesXDaysInAdvance: {},
 			msdyn_GenerateAgreementWOXDaysInAdvance: {},
 			msdyn_GenerateBookingDatesXMonthsInAdvance: {},
@@ -50,6 +53,7 @@ var DevKit;
 			msdyn_InspectionAnalyticsEnabled: {},
 			msdyn_InspectionAnalyticsFrequency: {},
 			msdyn_InspectionAnalyticsRecommendedTime: {},
+			msdyn_InternalFlags: {},
 			msdyn_InventoryAdjustmentPrefix: {},
 			msdyn_InventoryAdjustmentStartingNumber: {},
 			msdyn_InventoryTransferPrefix: {},
@@ -67,6 +71,7 @@ var DevKit;
 			msdyn_RTVPrefix: {},
 			msdyn_RTVStartingNumber: {},
 			msdyn_RunFrequencyOfIncidentTypeRecommendation: {},
+			msdyn_ShowSimplifiedWorkOrderCommands: {},
 			msdyn_suggestreparentingcustomerassets: {},
 			msdyn_TimeCostActualsSource: {},
 			msdyn_TimeEntryGenerationStrategy: {},
@@ -129,6 +134,7 @@ var DevKit;
 			tab_6: {
 				Section: {
 					Crew_Management: {},
+					Mobile: {},
 					tab_3_section_1: {},
 					tab_6_section_2: {}
 				}
@@ -162,14 +168,11 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, footer, "footer_");
 		form.Footer = footer;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		var grid = {
-			IncidentTypeSuggestionResultGrid: {},
 			fieldserviceslaconfigurationgrid: {},
+			IncidentTypeSuggestionResultGrid: {},
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
@@ -180,6 +183,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 })(DevKit || (DevKit = {}));
@@ -188,17 +192,17 @@ var OptionSet;
 (function (OptionSet) {
 	OptionSet.msdyn_fieldservicesetting = {
 		msdyn_DefaultCrewStrategy : {
-			Cascade_and_Accept_Cascade_Completely: 192350000,
+			Cascade_and_Accept_Cascade_Completely_Not_Recommended: 192350000,
 			Crew_Leader_Management: 192350001,
 			Crew_Member_Self_Management: 192350002
 		},
 		msdyn_DefaultWorkOrderCompletedStatus : {
-			Closed_Canceled: 690970005,
-			Closed_Posted: 690970004,
-			Open_Completed: 690970003,
-			Open_In_Progress: 690970002,
-			Open_Scheduled: 690970001,
-			Open_Unscheduled: 690970000
+			Canceled: 690970005,
+			Completed: 690970003,
+			In_Progress: 690970002,
+			Posted: 690970004,
+			Scheduled: 690970001,
+			Unscheduled: 690970000
 		},
 		msdyn_HistoricalDataFilter : {
 			All: 100000003,
@@ -250,15 +254,14 @@ var OptionSet;
 			Active: 1,
 			Inactive: 2
 		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
-
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 	};
 })(OptionSet || (OptionSet = {}));

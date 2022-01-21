@@ -70,7 +70,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_timegroupdetail";
 
-		public const int EntityTypeCode = 10318;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10424;
 
 		[DebuggerNonUserCode()]
 		public msdyn_timegroupdetail()
@@ -210,7 +211,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Enter the name of the "Time Group Detail" entity.</para>
+		/// <para>Enter the name of the &quot;Time Group Detail&quot; entity.</para>
 		/// <para>String - MaxLength: 100</para>
 		/// <para>Name</para>
 		/// </summary>
@@ -274,7 +275,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

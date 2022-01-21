@@ -33,10 +33,12 @@ declare namespace DevKit {
 			nav_msdyn_msdyn_workordersubstatus_msdyn_workorder_Status: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_workordersubstatus_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form msdyn_workordersubstatus_Information
+		* Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -47,6 +49,10 @@ declare namespace DevKit {
 		Body: DevKit.Formmsdyn_workordersubstatus_Information.Body;
 		/** The Navigation of form msdyn_workordersubstatus_Information */
 		Navigation: DevKit.Formmsdyn_workordersubstatus_Information.Navigation;
+		/** The Process of form msdyn_workordersubstatus_Information */
+		Process: DevKit.Formmsdyn_workordersubstatus_Information.Process;
+		/** The SidePanes of form msdyn_workordersubstatus_Information */
+		SidePanes: DevKit.SidePanes;
 	}
 	class msdyn_workordersubstatusApi {
 		/**
@@ -124,17 +130,17 @@ declare namespace OptionSet {
 	namespace msdyn_workordersubstatus {
 		enum msdyn_SystemStatus {
 			/** 690970005 */
-			Closed_Canceled,
-			/** 690970004 */
-			Closed_Posted,
+			Canceled,
 			/** 690970003 */
-			Open_Completed,
+			Completed,
 			/** 690970002 */
-			Open_In_Progress,
+			In_Progress,
+			/** 690970004 */
+			Posted,
 			/** 690970001 */
-			Open_Scheduled,
+			Scheduled,
 			/** 690970000 */
-			Open_Unscheduled
+			Unscheduled
 		}
 		enum statecode {
 			/** 0 */
@@ -148,22 +154,22 @@ declare namespace OptionSet {
 			/** 2 */
 			Inactive
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

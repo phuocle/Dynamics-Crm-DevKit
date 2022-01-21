@@ -13,7 +13,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_requirementresourcepreferenceOptionSe
 	public enum msdyn_PreferenceType
 	{
 		/// <summary>
-		/// Must_choose_from = 690970002
+		/// Must choose from = 690970002
 		/// </summary>
 		Must_choose_from = 690970002,
 		/// <summary>
@@ -87,7 +87,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_requirementresourcepreference";
 
-		public const int EntityTypeCode = 10309;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10415;
 
 		[DebuggerNonUserCode()]
 		public msdyn_requirementresourcepreference()
@@ -288,9 +289,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_requirementresourcepreferenceOptionSets.msdyn_PreferenceType)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_PreferenceType] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_PreferenceType] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_PreferenceType] = null;
+			}
 		}
 
 		/// <summary>
@@ -347,7 +351,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

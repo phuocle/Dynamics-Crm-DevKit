@@ -13,23 +13,23 @@ namespace Dev.DevKit.Shared.Entities.ActivityPartyOptionSets
 	public enum InstanceTypeCode
 	{
 		/// <summary>
-		/// Not_Recurring = 0
+		/// Not Recurring = 0
 		/// </summary>
 		Not_Recurring = 0,
 		/// <summary>
-		/// Recurring_Exception = 3
+		/// Recurring Exception = 3
 		/// </summary>
 		Recurring_Exception = 3,
 		/// <summary>
-		/// Recurring_Future_Exception = 4
+		/// Recurring Future Exception = 4
 		/// </summary>
 		Recurring_Future_Exception = 4,
 		/// <summary>
-		/// Recurring_Instance = 2
+		/// Recurring Instance = 2
 		/// </summary>
 		Recurring_Instance = 2,
 		/// <summary>
-		/// Recurring_Master = 1
+		/// Recurring Master = 1
 		/// </summary>
 		Recurring_Master = 1
 	}
@@ -37,11 +37,11 @@ namespace Dev.DevKit.Shared.Entities.ActivityPartyOptionSets
 	public enum ParticipationTypeMask
 	{
 		/// <summary>
-		/// BCC_Recipient = 4
+		/// BCC Recipient = 4
 		/// </summary>
 		BCC_Recipient = 4,
 		/// <summary>
-		/// CC_Recipient = 3
+		/// CC Recipient = 3
 		/// </summary>
 		CC_Recipient = 3,
 		/// <summary>
@@ -49,7 +49,7 @@ namespace Dev.DevKit.Shared.Entities.ActivityPartyOptionSets
 		/// </summary>
 		Customer = 11,
 		/// <summary>
-		/// Optional_attendee = 6
+		/// Optional attendee = 6
 		/// </summary>
 		Optional_attendee = 6,
 		/// <summary>
@@ -65,7 +65,7 @@ namespace Dev.DevKit.Shared.Entities.ActivityPartyOptionSets
 		/// </summary>
 		Regarding = 8,
 		/// <summary>
-		/// Required_attendee = 5
+		/// Required attendee = 5
 		/// </summary>
 		Required_attendee = 5,
 		/// <summary>
@@ -77,7 +77,7 @@ namespace Dev.DevKit.Shared.Entities.ActivityPartyOptionSets
 		/// </summary>
 		Sender = 1,
 		/// <summary>
-		/// To_Recipient = 2
+		/// To Recipient = 2
 		/// </summary>
 		To_Recipient = 2
 	}
@@ -114,6 +114,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "activityparty";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 135;
 
 		[DebuggerNonUserCode()]
@@ -165,7 +166,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Unique identifier of the activity associated with the activity party. (A "party" is any person who is associated with an activity.)</para>
+		/// <para>Unique identifier of the activity associated with the activity party. (A &quot;party&quot; is any person who is associated with an activity.)</para>
 		/// <para>Lookup to activitypointer</para>
 		/// <para>Activity</para>
 		/// </summary>
@@ -195,7 +196,7 @@ namespace Dev.DevKit.Shared.Entities
 		/// <summary>
 		/// <para>Email address to which an email is delivered, and which is associated with the target entity.</para>
 		/// <para>String - MaxLength: 200</para>
-		/// <para>Address </para>
+		/// <para>Address</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public string AddressUsed
@@ -312,7 +313,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the user or team who owns the activity_party.</para>
-		/// <para>ReadOnly - Required - Owner</para>
+		/// <para>ReadOnly - Required - Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -366,7 +367,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the party associated with the activity.</para>
-		/// <para>Lookup to account;bulkoperation;campaign;campaignactivity;contact;contract;entitlement;equipment;incident;invoice;knowledgearticle;lead;opportunity;queue;quote;salesorder;systemuser</para>
+		/// <para>Lookup to account, bulkoperation, campaign, campaignactivity, contact, contract, entitlement, equipment, incident, invoice, knowledgearticle, lead, opportunity, queue, quote, salesorder, systemuser</para>
 		/// <para>Party</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

@@ -52,6 +52,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string name = "name";
 			public const string OverriddenCreatedOn = "overriddencreatedon";
 			public const string ProcessedRecords = "processedrecords";
+			public const string RecordsAttachment = "recordsattachment";
 			public const string RecordsJson = "recordsjson";
 			public const string statecode = "statecode";
 			public const string statuscode = "statuscode";
@@ -63,7 +64,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "cascadegrantrevokeaccessrecordstracker";
 
-		public const int EntityTypeCode = 10018;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10028;
 
 		[DebuggerNonUserCode()]
 		public cascadegrantrevokeaccessrecordstracker()
@@ -240,6 +242,16 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<int?>(Fields.ProcessedRecords); }
 			set { Entity.Attributes[Fields.ProcessedRecords] = value; }
+		}
+
+		/// <summary>
+		/// <para>ReadOnly - Virtual</para>
+		/// <para>RecordsAttachment</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string RecordsAttachment
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.RecordsAttachment); }
 		}
 
 		/// <summary>

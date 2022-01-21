@@ -42,11 +42,14 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, footer, "footer_");
 		form.Footer = footer;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
+		var process = devKit.LoadProcess(formContext);
+		var _Purchase_Order_Business_Process = {
+			msdyn_BillDate: {},
+			msdyn_VendorInvoiceNumber: {}
+		}
+		devKit.LoadFields(formContext, _Purchase_Order_Business_Process, "header_process_");
+		process.Purchase_Order_Business_Process = _Purchase_Order_Business_Process;
+		form.Process = process;
 		var navigation = {
 			nav_msdyn_msdyn_purchaseorderbill_msdyn_purchaseorderreceiptproduct_PurchaseOrderBill: {},
 			navProcessSessions: {}
@@ -55,6 +58,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormPurchase_Order_Bill_Mobile = function(executionContext, defaultWebResourceName) {
@@ -104,11 +108,14 @@ var DevKit;
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
+		var process = devKit.LoadProcess(formContext);
+		var _Purchase_Order_Business_Process = {
+			msdyn_BillDate: {},
+			msdyn_VendorInvoiceNumber: {}
+		}
+		devKit.LoadFields(formContext, _Purchase_Order_Business_Process, "header_process_");
+		process.Purchase_Order_Business_Process = _Purchase_Order_Business_Process;
+		form.Process = process;
 		var navigation = {
 			nav_msdyn_msdyn_purchaseorderbill_msdyn_purchaseorderreceiptproduct_PurchaseOrderBill: {},
 			navProcessSessions: {}
@@ -117,6 +124,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 })(DevKit || (DevKit = {}));
@@ -132,15 +140,14 @@ var OptionSet;
 			Active: 1,
 			Inactive: 2
 		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
-
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 	};
 })(OptionSet || (OptionSet = {}));

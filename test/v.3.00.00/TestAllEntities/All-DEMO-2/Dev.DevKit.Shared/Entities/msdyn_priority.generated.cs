@@ -13,43 +13,43 @@ namespace Dev.DevKit.Shared.Entities.msdyn_priorityOptionSets
 	public enum msdyn_LevelofImportance
 	{
 		/// <summary>
-		/// _1 = 1
+		/// 1 = 1
 		/// </summary>
 		_1 = 1,
 		/// <summary>
-		/// _10 = 10
+		/// 10 = 10
 		/// </summary>
 		_10 = 10,
 		/// <summary>
-		/// _2 = 2
+		/// 2 = 2
 		/// </summary>
 		_2 = 2,
 		/// <summary>
-		/// _3 = 3
+		/// 3 = 3
 		/// </summary>
 		_3 = 3,
 		/// <summary>
-		/// _4 = 4
+		/// 4 = 4
 		/// </summary>
 		_4 = 4,
 		/// <summary>
-		/// _5 = 5
+		/// 5 = 5
 		/// </summary>
 		_5 = 5,
 		/// <summary>
-		/// _6 = 6
+		/// 6 = 6
 		/// </summary>
 		_6 = 6,
 		/// <summary>
-		/// _7 = 7
+		/// 7 = 7
 		/// </summary>
 		_7 = 7,
 		/// <summary>
-		/// _8 = 8
+		/// 8 = 8
 		/// </summary>
 		_8 = 8,
 		/// <summary>
-		/// _9 = 9
+		/// 9 = 9
 		/// </summary>
 		_9 = 9
 	}
@@ -110,7 +110,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_priority";
 
-		public const int EntityTypeCode = 10303;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10409;
 
 		[DebuggerNonUserCode()]
 		public msdyn_priority()
@@ -315,7 +316,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

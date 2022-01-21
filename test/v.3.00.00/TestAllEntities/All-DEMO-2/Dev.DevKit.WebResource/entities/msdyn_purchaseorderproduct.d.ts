@@ -60,10 +60,12 @@ declare namespace DevKit {
 			nav_msdyn_msdyn_purchaseorderproduct_msdyn_purchaseorderreceiptproduct_POProduct: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_purchaseorderproduct_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form msdyn_purchaseorderproduct_Information
+		* Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -76,6 +78,10 @@ declare namespace DevKit {
 		Footer: DevKit.Formmsdyn_purchaseorderproduct_Information.Footer;
 		/** The Navigation of form msdyn_purchaseorderproduct_Information */
 		Navigation: DevKit.Formmsdyn_purchaseorderproduct_Information.Navigation;
+		/** The Process of form msdyn_purchaseorderproduct_Information */
+		Process: DevKit.Formmsdyn_purchaseorderproduct_Information.Process;
+		/** The SidePanes of form msdyn_purchaseorderproduct_Information */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormPurchase_Order_Product_Mobile {
 		interface tab_fstab_general_Sections {
@@ -149,10 +155,12 @@ declare namespace DevKit {
 			nav_msdyn_msdyn_purchaseorderproduct_msdyn_purchaseorderreceiptproduct_POProduct: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormPurchase_Order_Product_Mobile extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Purchase_Order_Product_Mobile
+		* Purchase Order Product - Mobile [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -163,6 +171,10 @@ declare namespace DevKit {
 		Body: DevKit.FormPurchase_Order_Product_Mobile.Body;
 		/** The Navigation of form Purchase_Order_Product_Mobile */
 		Navigation: DevKit.FormPurchase_Order_Product_Mobile.Navigation;
+		/** The Process of form Purchase_Order_Product_Mobile */
+		Process: DevKit.FormPurchase_Order_Product_Mobile.Process;
+		/** The SidePanes of form Purchase_Order_Product_Mobile */
+		SidePanes: DevKit.SidePanes;
 	}
 	class msdyn_purchaseorderproductApi {
 		/**
@@ -294,22 +306,22 @@ declare namespace OptionSet {
 			/** 2 */
 			Inactive
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Information','Purchase Order Product - Mobile'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

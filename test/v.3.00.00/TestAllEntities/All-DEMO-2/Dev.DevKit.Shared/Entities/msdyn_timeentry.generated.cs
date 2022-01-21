@@ -25,7 +25,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_timeentryOptionSets
 		/// </summary>
 		Draft = 192350000,
 		/// <summary>
-		/// Recall_Requested = 192350004
+		/// Recall Requested = 192350004
 		/// </summary>
 		Recall_Requested = 192350004,
 		/// <summary>
@@ -41,7 +41,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_timeentryOptionSets
 	public enum msdyn_relatedItemType
 	{
 		/// <summary>
-		/// Exchange_Appointments = 192350100
+		/// Exchange Appointments = 192350100
 		/// </summary>
 		Exchange_Appointments = 192350100,
 		/// <summary>
@@ -49,11 +49,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_timeentryOptionSets
 		/// </summary>
 		None = 192350000,
 		/// <summary>
-		/// Resource_Assignment = 192350002
+		/// Resource Assignment = 192350002
 		/// </summary>
 		Resource_Assignment = 192350002,
 		/// <summary>
-		/// Resource_Booking = 192350001
+		/// Resource Booking = 192350001
 		/// </summary>
 		Resource_Booking = 192350001
 	}
@@ -73,7 +73,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_timeentryOptionSets
 		/// </summary>
 		Draft = 192350000,
 		/// <summary>
-		/// Recall_Requested = 192350004
+		/// Recall Requested = 192350004
 		/// </summary>
 		Recall_Requested = 192350004,
 		/// <summary>
@@ -93,7 +93,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_timeentryOptionSets
 		/// </summary>
 		Absence = 192350001,
 		/// <summary>
-		/// On_Break = 192355000
+		/// On Break = 192355000
 		/// </summary>
 		On_Break = 192355000,
 		/// <summary>
@@ -194,7 +194,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_timeentry";
 
-		public const int EntityTypeCode = 10389;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10495;
 
 		[DebuggerNonUserCode()]
 		public msdyn_timeentry()
@@ -649,9 +650,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_timeentryOptionSets.msdyn_type)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_type] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_type] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_type] = null;
+			}
 		}
 
 		/// <summary>
@@ -680,7 +684,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

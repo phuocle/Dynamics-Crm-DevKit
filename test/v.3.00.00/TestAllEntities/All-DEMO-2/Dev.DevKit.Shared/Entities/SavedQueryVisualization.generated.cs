@@ -13,11 +13,11 @@ namespace Dev.DevKit.Shared.Entities.SavedQueryVisualizationOptionSets
 	public enum ChartType
 	{
 		/// <summary>
-		/// ASPNET_Charts = 0
+		/// ASP.NET Charts = 0
 		/// </summary>
 		ASPNET_Charts = 0,
 		/// <summary>
-		/// Power_BI = 1
+		/// Power BI = 1
 		/// </summary>
 		Power_BI = 1
 	}
@@ -29,7 +29,7 @@ namespace Dev.DevKit.Shared.Entities.SavedQueryVisualizationOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -45,11 +45,11 @@ namespace Dev.DevKit.Shared.Entities.SavedQueryVisualizationOptionSets
 	public enum Type
 	{
 		/// <summary>
-		/// for_data_centric_as_well_as_interaction_centric = 0
+		/// for data centric as well as interaction centric = 0
 		/// </summary>
 		for_data_centric_as_well_as_interaction_centric = 0,
 		/// <summary>
-		/// just_for_interaction_centric = 1
+		/// just for interaction centric = 1
 		/// </summary>
 		just_for_interaction_centric = 1
 	}
@@ -78,7 +78,6 @@ namespace Dev.DevKit.Shared.Entities
 			public const string OrganizationId = "organizationid";
 			public const string OverwriteTime = "overwritetime";
 			public const string PresentationDescription = "presentationdescription";
-			public const string PrimaryEntityTypeCode = "primaryentitytypecode";
 			public const string SavedQueryVisualizationId = "savedqueryvisualizationid";
 			public const string SavedQueryVisualizationIdUnique = "savedqueryvisualizationidunique";
 			public const string SolutionId = "solutionid";
@@ -90,6 +89,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "savedqueryvisualization";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 1111;
 
 		[DebuggerNonUserCode()]
@@ -348,18 +348,6 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.PresentationDescription); }
 			set { Entity.Attributes[Fields.PresentationDescription] = value; }
-		}
-
-		/// <summary>
-		/// <para>Type of entity with which the system chart is attached.</para>
-		/// <para>EntityName</para>
-		/// <para>Primary Type Code</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string PrimaryEntityTypeCode
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.PrimaryEntityTypeCode); }
-			set { Entity.Attributes[Fields.PrimaryEntityTypeCode] = value; }
 		}
 
 		/// <summary>

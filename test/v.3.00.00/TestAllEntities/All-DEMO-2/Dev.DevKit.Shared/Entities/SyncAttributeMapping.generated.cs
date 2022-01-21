@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.SyncAttributeMappingOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -83,7 +83,6 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ComponentState = "componentstate";
 			public const string ComputedProperties = "computedproperties";
 			public const string DefaultSyncDirection = "defaultsyncdirection";
-			public const string EntityTypeCode = "entitytypecode";
 			public const string IsComputed = "iscomputed";
 			public const string IsManaged = "ismanaged";
 			public const string MappingName = "mappingname";
@@ -100,6 +99,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "syncattributemapping";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 1401;
 
 		[DebuggerNonUserCode()]
@@ -235,18 +235,6 @@ namespace Dev.DevKit.Shared.Entities
 				else
 					Entity.Attributes[Fields.DefaultSyncDirection] = null;
 			}
-		}
-
-		/// <summary>
-		/// <para>Entity name.</para>
-		/// <para>EntityName</para>
-		/// <para>Name of the Entity for which this attribute mapping is defined</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string EntityTypeCode1
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.EntityTypeCode); }
-			set { Entity.Attributes[Fields.EntityTypeCode] = value; }
 		}
 
 		/// <summary>

@@ -1,9 +1,28 @@
 ﻿//@ts-check
 ///<reference path="msdyn_actioncardregarding.d.ts" />
 "use strict";
-var formInformation = (function () {
+var formmsdyn_actioncardregarding_Information = (function () {
 	"use strict";
+	/** @type DevKit.Formmsdyn_actioncardregarding_Information */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.Formmsdyn_actioncardregarding_Information(executionContext);
+
+	}
+	async function onSave(executionContext) {
+	}
+	return {
+		OnLoad: onLoad,
+		OnSave: onSave
+	};
+})();
+var formmsdyn_actioncardregarding_Information2 = (function () {
+	"use strict";
+	/** @type DevKit.Formmsdyn_actioncardregarding_Information2 */
+	var form = null;
+	async function onLoad(executionContext) {
+		form = new DevKit.Formmsdyn_actioncardregarding_Information2(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}

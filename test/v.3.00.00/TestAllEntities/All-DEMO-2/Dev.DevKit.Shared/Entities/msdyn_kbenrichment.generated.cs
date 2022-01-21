@@ -64,7 +64,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_kbenrichment";
 
-		public const int EntityTypeCode = 10181;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10204;
 
 		[DebuggerNonUserCode()]
 		public msdyn_kbenrichment()

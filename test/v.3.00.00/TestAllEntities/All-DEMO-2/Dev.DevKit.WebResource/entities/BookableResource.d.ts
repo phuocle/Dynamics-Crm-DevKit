@@ -84,16 +84,18 @@ declare namespace DevKit {
 			navParentGroups: DevKit.Controls.NavigationItem,
 			navResourceCategories: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
-			ResourceCategory: DevKit.Controls.Grid;
-			ResourceCharacteristics: DevKit.Controls.Grid;
 			BookableResourceCharacteristics: DevKit.Controls.Grid;
 			CATEGORYASSOCIATIONS: DevKit.Controls.Grid;
+			ResourceCategory: DevKit.Controls.Grid;
+			ResourceCharacteristics: DevKit.Controls.Grid;
 		}
 	}
 	class FormBookable_Resource_Mobile extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Bookable_Resource_Mobile
+		* Bookable Resource - Mobile [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -104,8 +106,12 @@ declare namespace DevKit {
 		Body: DevKit.FormBookable_Resource_Mobile.Body;
 		/** The Navigation of form Bookable_Resource_Mobile */
 		Navigation: DevKit.FormBookable_Resource_Mobile.Navigation;
+		/** The Process of form Bookable_Resource_Mobile */
+		Process: DevKit.FormBookable_Resource_Mobile.Process;
 		/** The Grid of form Bookable_Resource_Mobile */
 		Grid: DevKit.FormBookable_Resource_Mobile.Grid;
+		/** The SidePanes of form Bookable_Resource_Mobile */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormBookableResource_Information {
 		interface tab__E37F4524_4A66_42DC_974C_078756AEF3FB_Sections {
@@ -184,6 +190,8 @@ declare namespace DevKit {
 			msdyn_EnabledForFieldServiceMobile: DevKit.Controls.Boolean;
 			/** Enables drip scheduling on the mobile app. */
 			msdyn_EnableDripScheduling: DevKit.Controls.Boolean;
+			/** This only applies when directly calling the API. It does not apply when the Book button is clicked on the Schedule Board or on any schedulable entity. */
+			msdyn_EnableOutlookSchedules: DevKit.Controls.OptionSet;
 			/** Shows the default ending location type when booking daily schedules for this resource. */
 			msdyn_EndLocation: DevKit.Controls.OptionSet;
 			/** Unique identifier for Facility Equipment */
@@ -212,7 +220,7 @@ declare namespace DevKit {
 			/** Select the user who represents this resource. */
 			UserId: DevKit.Controls.Lookup;
 			/** Select the user who represents this resource. */
-			UserId_1: DevKit.Controls.Lookup;
+			UserId1: DevKit.Controls.Lookup;
 		}
 		interface Navigation {
 			nav_msdyn_bookableresource_account_PreferredResource: DevKit.Controls.NavigationItem,
@@ -240,7 +248,6 @@ declare namespace DevKit {
 			nav_msdyn_bookableresource_msdyn_quotelinetransaction_bookableresource: DevKit.Controls.NavigationItem,
 			nav_msdyn_bookableresource_msdyn_resourceassignment_bookableresourceid: DevKit.Controls.NavigationItem,
 			nav_msdyn_bookableresource_msdyn_resourceterritory_Resource: DevKit.Controls.NavigationItem,
-			nav_msdyn_bookableresource_msdyn_timeentry_bookableresource: DevKit.Controls.NavigationItem,
 			nav_msdyn_bookableresource_msdyn_timeoffrequest_Resource: DevKit.Controls.NavigationItem,
 			nav_msdyn_bookableresource_msdyn_userworkhistory_Bookableresource: DevKit.Controls.NavigationItem,
 			nav_msdyn_bookableresource_msdyn_workorder_PreferredResource: DevKit.Controls.NavigationItem,
@@ -256,18 +263,20 @@ declare namespace DevKit {
 			navResourceOneAssociation: DevKit.Controls.NavigationItem,
 			navResourceTwoAssociation: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
-			ResourceCharacteristics: DevKit.Controls.Grid;
-			ResourceCategory: DevKit.Controls.Grid;
-			Resourceskills: DevKit.Controls.Grid;
-			ResourceRole: DevKit.Controls.Grid;
 			BookableResourceCharacteristics: DevKit.Controls.Grid;
 			CATEGORYASSOCIATIONS: DevKit.Controls.Grid;
+			ResourceCategory: DevKit.Controls.Grid;
+			ResourceCharacteristics: DevKit.Controls.Grid;
+			ResourceRole: DevKit.Controls.Grid;
+			Resourceskills: DevKit.Controls.Grid;
 		}
 	}
 	class FormBookableResource_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form BookableResource_Information
+		* Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -278,8 +287,12 @@ declare namespace DevKit {
 		Body: DevKit.FormBookableResource_Information.Body;
 		/** The Navigation of form BookableResource_Information */
 		Navigation: DevKit.FormBookableResource_Information.Navigation;
+		/** The Process of form BookableResource_Information */
+		Process: DevKit.FormBookableResource_Information.Process;
 		/** The Grid of form BookableResource_Information */
 		Grid: DevKit.FormBookableResource_Information.Grid;
+		/** The SidePanes of form BookableResource_Information */
+		SidePanes: DevKit.SidePanes;
 	}
 	class BookableResourceApi {
 		/**
@@ -346,6 +359,8 @@ declare namespace DevKit {
 		msdyn_EnabledForFieldServiceMobile: DevKit.WebApi.BooleanValue;
 		/** Enables drip scheduling on the mobile app. */
 		msdyn_EnableDripScheduling: DevKit.WebApi.BooleanValue;
+		/** This only applies when directly calling the API. It does not apply when the Book button is clicked on the Schedule Board or on any schedulable entity. */
+		msdyn_EnableOutlookSchedules: DevKit.WebApi.OptionSetValue;
 		/** Shows the default ending location type when booking daily schedules for this resource. */
 		msdyn_EndLocation: DevKit.WebApi.OptionSetValue;
 		/** Unique identifier for Facility Equipment */
@@ -358,9 +373,11 @@ declare namespace DevKit {
 		msdyn_InternalFlags: DevKit.WebApi.StringValue;
 		/** Is Default */
 		msdyn_isgenericresourceprojectscoped: DevKit.WebApi.BooleanValue;
+		/** The location latitude. */
 		msdyn_Latitude: DevKit.WebApi.DoubleValue;
 		/** The location timestamp. */
 		msdyn_locationtimestamp_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		/** The location longitude. */
 		msdyn_Longitude: DevKit.WebApi.DoubleValue;
 		/** Organizational Unit that resource belong to */
 		msdyn_organizationalunit: DevKit.WebApi.LookupValue;
@@ -419,13 +436,19 @@ declare namespace OptionSet {
 	namespace BookableResource {
 		enum msdyn_CrewStrategy {
 			/** 192350000 */
-			Cascade_and_Accept_Cascade_Completely,
+			Cascade_and_Accept_Cascade_Completely_Not_Recommended,
 			/** 192350001 */
 			Crew_Leader_Management,
 			/** 192350002 */
 			Crew_Member_Self_Management
 		}
 		enum msdyn_EnableAppointments {
+			/** 192350000 */
+			No,
+			/** 192350001 */
+			Yes
+		}
+		enum msdyn_EnableOutlookSchedules {
 			/** 192350000 */
 			No,
 			/** 192350001 */
@@ -493,22 +516,22 @@ declare namespace OptionSet {
 			/** 2 */
 			Inactive
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Bookable Resource - Mobile','Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

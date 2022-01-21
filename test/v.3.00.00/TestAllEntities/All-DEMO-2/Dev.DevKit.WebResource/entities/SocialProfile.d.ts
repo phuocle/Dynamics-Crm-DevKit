@@ -44,10 +44,12 @@ declare namespace DevKit {
 		interface QuickForm {
 			related_sp: quickForm_related_sp;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormSocial_Profile extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Social_Profile
+		* Social Profile [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -60,6 +62,10 @@ declare namespace DevKit {
 		Header: DevKit.FormSocial_Profile.Header;
 		/** The QuickForm of form Social_Profile */
 		QuickForm: DevKit.FormSocial_Profile.QuickForm;
+		/** The Process of form Social_Profile */
+		Process: DevKit.FormSocial_Profile.Process;
+		/** The SidePanes of form Social_Profile */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormSocial_Profile_for_Interactive_experience {
 		interface Header extends DevKit.Controls.IHeader {
@@ -124,10 +130,12 @@ declare namespace DevKit {
 			customer_qfc: quickForm_customer_qfc;
 			related_sp: quickForm_related_sp;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormSocial_Profile_for_Interactive_experience extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Social_Profile_for_Interactive_experience
+		* Social Profile for Interactive experience [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -140,6 +148,10 @@ declare namespace DevKit {
 		Header: DevKit.FormSocial_Profile_for_Interactive_experience.Header;
 		/** The QuickForm of form Social_Profile_for_Interactive_experience */
 		QuickForm: DevKit.FormSocial_Profile_for_Interactive_experience.QuickForm;
+		/** The Process of form Social_Profile_for_Interactive_experience */
+		Process: DevKit.FormSocial_Profile_for_Interactive_experience.Process;
+		/** The SidePanes of form Social_Profile_for_Interactive_experience */
+		SidePanes: DevKit.SidePanes;
 	}
 	class SocialProfileApi {
 		/**
@@ -177,10 +189,10 @@ declare namespace DevKit {
 		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
 		/** Unique identifier of the delegate user who created the record. */
 		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Shows the customer that this social profile belongs to. */
 		customerid_account: DevKit.WebApi.LookupValue;
+		/** Shows the customer that this social profile belongs to. */
 		customerid_contact: DevKit.WebApi.LookupValue;
-		/** Select the parent account or parent contact for the contact */
-		CustomerIdYomiName: DevKit.WebApi.StringValue;
 		/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
 		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
 		/** Unique identifier of the data import or data migration that created this record. */
@@ -193,6 +205,8 @@ declare namespace DevKit {
 		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
 		/** Unique identifier of the delegate user who modified the record. */
 		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Flag specifying whether Customer has opted out of getting messages using this SP. */
+		msdyn_customeroptout: DevKit.WebApi.BooleanValue;
 		/** Customer's Followers on the Social channel. */
 		msdyn_ocfollowercount: DevKit.WebApi.IntegerValue;
 		/** Customer's followings on the Social channel */
@@ -289,22 +303,22 @@ declare namespace OptionSet {
 			/** 2 */
 			Inactive
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Social Profile','Social Profile for Interactive experience'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

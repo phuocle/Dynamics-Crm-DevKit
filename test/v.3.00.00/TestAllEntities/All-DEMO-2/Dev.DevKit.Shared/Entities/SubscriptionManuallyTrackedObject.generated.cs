@@ -10,7 +10,17 @@ using System.Diagnostics;
 
 namespace Dev.DevKit.Shared.Entities.SubscriptionManuallyTrackedObjectOptionSets
 {
-
+	public enum ObjectTypeCode
+	{
+		/// <summary>
+		/// Contact = 2
+		/// </summary>
+		Contact = 2,
+		/// <summary>
+		/// Task = 4212
+		/// </summary>
+		Task = 4212
+	}
 }
 
 namespace Dev.DevKit.Shared.Entities
@@ -29,6 +39,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "subscriptionmanuallytrackedobject";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 37;
 
 		[DebuggerNonUserCode()]

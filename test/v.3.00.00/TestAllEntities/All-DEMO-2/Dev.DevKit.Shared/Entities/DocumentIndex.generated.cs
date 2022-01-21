@@ -13,7 +13,7 @@ namespace Dev.DevKit.Shared.Entities.DocumentIndexOptionSets
 	public enum DocumentTypeCode
 	{
 		/// <summary>
-		/// Default_Value = 1
+		/// Default Value = 1
 		/// </summary>
 		Default_Value = 1
 	}
@@ -48,6 +48,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "documentindex";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 126;
 
 		[DebuggerNonUserCode()]
@@ -162,7 +163,7 @@ namespace Dev.DevKit.Shared.Entities
 		/// <summary>
 		/// <para>For internal use only.</para>
 		/// <para>Picklist</para>
-		/// <para>Document Type </para>
+		/// <para>Document Type</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public Dev.DevKit.Shared.Entities.DocumentIndexOptionSets.DocumentTypeCode? DocumentTypeCode

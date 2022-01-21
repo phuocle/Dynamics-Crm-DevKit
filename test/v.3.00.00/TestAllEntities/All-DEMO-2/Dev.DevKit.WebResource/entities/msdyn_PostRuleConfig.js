@@ -1,9 +1,13 @@
 ﻿//@ts-check
 ///<reference path="msdyn_PostRuleConfig.d.ts" />
 "use strict";
-var formAuto_post_rule = (function () {
+var formAutopost_rule = (function () {
 	"use strict";
+	/** @type DevKit.FormAutopost_rule */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.FormAutopost_rule(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}
@@ -12,9 +16,13 @@ var formAuto_post_rule = (function () {
 		OnSave: onSave
 	};
 })();
-var formInformation = (function () {
+var formmsdyn_PostRuleConfig_Information = (function () {
 	"use strict";
+	/** @type DevKit.Formmsdyn_PostRuleConfig_Information */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.Formmsdyn_PostRuleConfig_Information(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}

@@ -13,15 +13,15 @@ namespace Dev.DevKit.Shared.Entities.msdyn_incidenttyperecommendationresultOptio
 	public enum msdyn_RecommendationType
 	{
 		/// <summary>
-		/// Incident_Type = 192350002
+		/// Incident Type = 192350002
 		/// </summary>
 		Incident_Type = 192350002,
 		/// <summary>
-		/// Work_Order_Product = 192350000
+		/// Work Order Product = 192350000
 		/// </summary>
 		Work_Order_Product = 192350000,
 		/// <summary>
-		/// Work_Order_Service = 192350001
+		/// Work Order Service = 192350001
 		/// </summary>
 		Work_Order_Service = 192350001
 	}
@@ -104,7 +104,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_incidenttyperecommendationresult";
 
-		public const int EntityTypeCode = 10503;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10625;
 
 		[DebuggerNonUserCode()]
 		public msdyn_incidenttyperecommendationresult()
@@ -371,9 +372,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_incidenttyperecommendationresultOptionSets.msdyn_RecommendationType)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_RecommendationType] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_RecommendationType] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_RecommendationType] = null;
+			}
 		}
 
 		/// <summary>
@@ -390,7 +394,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Shows unique identifier of the related run job.</para>
-		/// <para>Required - String - MaxLength: 100</para>
+		/// <para>String - MaxLength: 100</para>
 		/// <para>Run Id</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -474,7 +478,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

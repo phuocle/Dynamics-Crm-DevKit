@@ -27,10 +27,12 @@ declare namespace DevKit {
 			/** Choose the subject for the sales literature to relate the item to a product or business group. Administrators can configure subjects under Business Management in the Settings area. */
 			SubjectId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormSalesLiterature_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form SalesLiterature_Information
+		* Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -39,6 +41,10 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form SalesLiterature_Information */
 		Body: DevKit.FormSalesLiterature_Information.Body;
+		/** The Process of form SalesLiterature_Information */
+		Process: DevKit.FormSalesLiterature_Information.Process;
+		/** The SidePanes of form SalesLiterature_Information */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormSales_Literature {
 		interface Header extends DevKit.Controls.IHeader {
@@ -75,15 +81,17 @@ declare namespace DevKit {
 			navDocument: DevKit.Controls.NavigationItem,
 			navProducts: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
-			SalesAttachments: DevKit.Controls.Grid;
-			Products: DevKit.Controls.Grid;
 			Competitors: DevKit.Controls.Grid;
+			Products: DevKit.Controls.Grid;
+			SalesAttachments: DevKit.Controls.Grid;
 		}
 	}
 	class FormSales_Literature extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Sales_Literature
+		* Sales Literature [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -96,8 +104,12 @@ declare namespace DevKit {
 		Header: DevKit.FormSales_Literature.Header;
 		/** The Navigation of form Sales_Literature */
 		Navigation: DevKit.FormSales_Literature.Navigation;
+		/** The Process of form Sales_Literature */
+		Process: DevKit.FormSales_Literature.Process;
 		/** The Grid of form Sales_Literature */
 		Grid: DevKit.FormSales_Literature.Grid;
+		/** The SidePanes of form Sales_Literature */
+		SidePanes: DevKit.SidePanes;
 	}
 	class SalesLiteratureApi {
 		/**
@@ -212,22 +224,22 @@ declare namespace OptionSet {
 			/** 4 */
 			Spreadsheets
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Information','Sales Literature'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

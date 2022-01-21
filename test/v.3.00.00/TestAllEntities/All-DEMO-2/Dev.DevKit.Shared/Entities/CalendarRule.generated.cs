@@ -56,6 +56,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "calendarrule";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 4004;
 
 		[DebuggerNonUserCode()]
@@ -394,7 +395,7 @@ namespace Dev.DevKit.Shared.Entities
 		/// <summary>
 		/// <para>Unique identifier of the organization with which the calendar rule is associated.</para>
 		/// <para>ReadOnly - Required - Uniqueidentifier</para>
-		/// <para>Organization </para>
+		/// <para>Organization</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public Guid? OrganizationId

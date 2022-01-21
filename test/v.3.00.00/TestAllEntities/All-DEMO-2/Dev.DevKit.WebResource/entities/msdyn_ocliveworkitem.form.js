@@ -25,7 +25,8 @@ var DevKit;
 			msdyn_modifiedon: {},
 			msdyn_statusupdatedon: {},
 			msdyn_title: {},
-			msdyn_title_1: {},
+			msdyn_title1: {},
+			msdyn_title2: {},
 			msdyn_TranscriptControl: {},
 			msdyn_transfercount: {},
 			RegardingObjectId: {},
@@ -35,6 +36,11 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
+			AlternativeDetails: {
+				Section: {
+					General: {}
+				}
+			},
 			Details: {
 				Section: {
 					Details: {},
@@ -48,11 +54,8 @@ var DevKit;
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		var grid = {
 			SessionDetails: {},
 		};
@@ -72,6 +75,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormCustomer_summary = function(executionContext, defaultWebResourceName) {
@@ -89,10 +93,10 @@ var DevKit;
 			KBSearchcontrol: {},
 			msdyn_ConversationSummaryField: {},
 			msdyn_customer: {},
-			msdyn_customer_1: {},
-			msdyn_customer_2: {},
+			msdyn_customer1: {},
+			msdyn_customer2: {},
 			msdyn_IssueId: {},
-			msdyn_IssueId_1: {},
+			msdyn_IssueId1: {},
 			msdyn_TimelineControlField: {},
 			notescontrol: {},
 			OCSearchRuntimeControl: {}
@@ -121,6 +125,8 @@ var DevKit;
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		var quickForm = {
 			CustomerProfile: {
 				Address1_City: {},
@@ -138,13 +144,9 @@ var DevKit;
 		};
 		devKit.LoadQuickForms(formContext, quickForm);
 		form.QuickForm = quickForm;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 })(DevKit || (DevKit = {}));
@@ -152,6 +154,31 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.msdyn_ocliveworkitem = {
+		ActivityTypeCode : {
+			Appointment: 4201,
+			Booking_Alert: 10400,
+			Campaign_Activity: 4402,
+			Campaign_Response: 4401,
+			Case_Resolution: 4206,
+			Conversation: 10702,
+			Customer_Voice_alert: 10294,
+			Customer_Voice_survey_invite: 10304,
+			Customer_Voice_survey_response: 10306,
+			Email: 4202,
+			Fax: 4204,
+			Letter: 4207,
+			Opportunity_Close: 4208,
+			Order_Close: 4209,
+			Outbound_message: 10813,
+			Phone_Call: 4210,
+			Project_Service_Approval: 10430,
+			Quick_Campaign: 4406,
+			Quote_Close: 4211,
+			Recurring_Appointment: 4251,
+			Service_Activity: 4214,
+			Session: 10717,
+			Task: 4212
+		},
 		Community : {
 			Cortana: 5,
 			Direct_Line: 6,
@@ -208,6 +235,16 @@ var OptionSet;
 			Very_negative: 7,
 			Very_positive: 13
 		},
+		msdyn_urcustomersentimentlabel : {
+			NA: 0,
+			Negative: 8,
+			Neutral: 10,
+			Positive: 12,
+			Slightly_negative: 9,
+			Slightly_positive: 11,
+			Very_negative: 7,
+			Very_positive: 13
+		},
 		msdyn_workstreamworkdistributionmode : {
 			Pick: 192350001,
 			Push: 192350000
@@ -233,15 +270,14 @@ var OptionSet;
 			Waiting: 3,
 			Wrap_up: 5
 		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
-
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 	};
 })(OptionSet || (OptionSet = {}));

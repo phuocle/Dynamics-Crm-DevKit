@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.MailMergeTemplateOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -33,11 +33,11 @@ namespace Dev.DevKit.Shared.Entities.MailMergeTemplateOptionSets
 	public enum DocumentFormat
 	{
 		/// <summary>
-		/// _2003 = 1
+		/// 2003 = 1
 		/// </summary>
 		_2003 = 1,
 		/// <summary>
-		/// _2007 = 2
+		/// 2007 = 2
 		/// </summary>
 		_2007 = 2
 	}
@@ -45,7 +45,7 @@ namespace Dev.DevKit.Shared.Entities.MailMergeTemplateOptionSets
 	public enum MailMergeType
 	{
 		/// <summary>
-		/// Email_Message = 2
+		/// Email Message = 2
 		/// </summary>
 		Email_Message = 2,
 		/// <summary>
@@ -92,6 +92,14 @@ namespace Dev.DevKit.Shared.Entities.MailMergeTemplateOptionSets
 		/// Inactive = 2
 		/// </summary>
 		Inactive = 2
+	}
+
+	public enum TemplateTypeCode
+	{
+		/// <summary>
+		/// Quote = 1084
+		/// </summary>
+		Quote = 1084
 	}
 }
 
@@ -143,6 +151,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "mailmergetemplate";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 9106;
 
 		[DebuggerNonUserCode()]
@@ -502,7 +511,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the user or team who owns the mail merge template.</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

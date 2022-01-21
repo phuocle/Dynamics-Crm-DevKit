@@ -27,7 +27,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_msdyn_workorder_knowledgebaserecord";
 
-		public const int EntityTypeCode = 10509;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10631;
 
 		[DebuggerNonUserCode()]
 		public msdyn_msdyn_workorder_knowledgebaserecord()

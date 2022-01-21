@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.RibbonCustomizationOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -52,6 +52,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "ribboncustomization";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 1120;
 
 		[DebuggerNonUserCode()]
@@ -119,7 +120,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Specifies which entity's ribbons this customization applies to. If null, then the customizations apply to the global ribbons.</para>
+		/// <para>Specifies which entity&apos;s ribbons this customization applies to. If null, then the customizations apply to the global ribbons.</para>
 		/// <para>String - MaxLength: 128</para>
 		/// <para></para>
 		/// </summary>

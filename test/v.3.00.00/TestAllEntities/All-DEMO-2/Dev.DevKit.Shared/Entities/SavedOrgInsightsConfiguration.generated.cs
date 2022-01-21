@@ -13,19 +13,19 @@ namespace Dev.DevKit.Shared.Entities.SavedOrgInsightsConfigurationOptionSets
 	public enum Lookback
 	{
 		/// <summary>
-		/// _2H = 1
+		/// 2H = 1
 		/// </summary>
 		_2H = 1,
 		/// <summary>
-		/// _30D = 4
+		/// 30D = 4
 		/// </summary>
 		_30D = 4,
 		/// <summary>
-		/// _48H = 2
+		/// 48H = 2
 		/// </summary>
 		_48H = 2,
 		/// <summary>
-		/// _7D = 3
+		/// 7D = 3
 		/// </summary>
 		_7D = 3
 	}
@@ -37,7 +37,7 @@ namespace Dev.DevKit.Shared.Entities.SavedOrgInsightsConfigurationOptionSets
 		/// </summary>
 		Category = 2,
 		/// <summary>
-		/// Time_Series = 1
+		/// Time Series = 1
 		/// </summary>
 		Time_Series = 1
 	}
@@ -120,6 +120,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "savedorginsightsconfiguration";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 1309;
 
 		[DebuggerNonUserCode()]

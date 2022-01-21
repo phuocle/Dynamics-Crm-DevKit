@@ -23,12 +23,12 @@ namespace Dev.DevKit.Shared.Entities
 			public const string DeleteTime = "deletetime";
 			public const string IsLogicalDelete = "islogicaldelete";
 			public const string ObjectId = "objectid";
-			public const string ObjectTypeCode = "objecttypecode";
 			public const string TimeStamp = "timestamp";
 		}
 
 		public const string EntityLogicalName = "subscriptiontrackingdeletedobject";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 35;
 
 		[DebuggerNonUserCode()]
@@ -123,17 +123,6 @@ namespace Dev.DevKit.Shared.Entities
 		public Guid? ObjectId
 		{
 			get { return Entity.GetAttributeValue<Guid?>(Fields.ObjectId); }
-		}
-
-		/// <summary>
-		/// <para>Type of entity that was deleted.</para>
-		/// <para>ReadOnly - EntityName</para>
-		/// <para></para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string ObjectTypeCode
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.ObjectTypeCode); }
 		}
 
 		/// <summary>

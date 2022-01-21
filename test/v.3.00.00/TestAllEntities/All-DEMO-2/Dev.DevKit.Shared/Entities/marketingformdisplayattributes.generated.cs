@@ -63,7 +63,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "marketingformdisplayattributes";
 
-		public const int EntityTypeCode = 10733;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10114;
 
 		[DebuggerNonUserCode()]
 		public marketingformdisplayattributes()

@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.PostRoleOptionSets
 		/// </summary>
 		Mentioning = 2,
 		/// <summary>
-		/// Mentioning_And_Regarding = 3
+		/// Mentioning And Regarding = 3
 		/// </summary>
 		Mentioning_And_Regarding = 3,
 		/// <summary>
@@ -46,6 +46,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "postrole";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 8001;
 
 		[DebuggerNonUserCode()]
@@ -137,7 +138,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Choose the record that the post role relates to.</para>
-		/// <para>Lookup to account;appointment;competitor;contact;incident;knowledgearticle;lead;opportunity;phonecall;processsession;queue;recurringappointmentmaster;systemuser;task;team</para>
+		/// <para>Lookup to account, appointment, competitor, contact, incident, knowledgearticle, lead, opportunity, phonecall, processsession, queue, recurringappointmentmaster, systemuser, task, team</para>
 		/// <para>RegardingObjectId</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -162,9 +163,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.PostRoleOptionSets.Type)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.Type] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.Type] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.Type] = null;
+			}
 		}
 	}
 }

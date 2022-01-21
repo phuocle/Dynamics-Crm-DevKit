@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.RoleOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -33,11 +33,11 @@ namespace Dev.DevKit.Shared.Entities.RoleOptionSets
 	public enum IsInherited
 	{
 		/// <summary>
-		/// Direct_User_Basic_access_level_and_Team_privileges = 1
+		/// Direct User (Basic) access level and Team privileges = 1
 		/// </summary>
 		Direct_User_Basic_access_level_and_Team_privileges = 1,
 		/// <summary>
-		/// Team_privileges_only = 0
+		/// Team privileges only = 0
 		/// </summary>
 		Team_privileges_only = 0
 	}
@@ -76,6 +76,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "role";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 1036;
 
 		[DebuggerNonUserCode()]

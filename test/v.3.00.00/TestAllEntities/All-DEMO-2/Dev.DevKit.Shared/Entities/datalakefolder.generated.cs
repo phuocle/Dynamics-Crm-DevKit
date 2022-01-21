@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.datalakefolderOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -64,6 +64,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ComponentIdUnique = "componentidunique";
 			public const string ComponentState = "componentstate";
 			public const string containerendpoint = "containerendpoint";
+			public const string ContributorSecurityGroupId = "contributorsecuritygroupid";
 			public const string CreatedBy = "createdby";
 			public const string CreatedOn = "createdon";
 			public const string CreatedOnBehalfBy = "createdonbehalfby";
@@ -73,6 +74,8 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ImportSequenceNumber = "importsequencenumber";
 			public const string iscustomercapacity = "iscustomercapacity";
 			public const string isdeepcopyenabled = "isdeepcopyenabled";
+			public const string IsExternalLake = "isexternallake";
+			public const string IsExternalLakeReadOnly = "isexternallakereadonly";
 			public const string IsManaged = "ismanaged";
 			public const string isprivate = "isprivate";
 			public const string ModifiedBy = "modifiedby";
@@ -87,6 +90,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string OwningTeam = "owningteam";
 			public const string OwningUser = "owninguser";
 			public const string path = "path";
+			public const string ReaderSecurityGroupId = "readersecuritygroupid";
 			public const string SolutionId = "solutionid";
 			public const string statecode = "statecode";
 			public const string statuscode = "statuscode";
@@ -98,7 +102,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "datalakefolder";
 
-		public const int EntityTypeCode = 10014;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10024;
 
 		[DebuggerNonUserCode()]
 		public datalakefolder()
@@ -177,13 +182,26 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Azure Data Lake container endpoint for this folder.</para>
-		/// <para>ReadOnly - String - MaxLength: 100</para>
+		/// <para>String - MaxLength: 100</para>
 		/// <para>Container Endpoint</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public string containerendpoint
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.containerendpoint); }
+			set { Entity.Attributes[Fields.containerendpoint] = value; }
+		}
+
+		/// <summary>
+		/// <para>The security group for contributor access.</para>
+		/// <para>Uniqueidentifier</para>
+		/// <para>Contributor Security Group Id</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public Guid? ContributorSecurityGroupId
+		{
+			get { return Entity.GetAttributeValue<Guid?>(Fields.ContributorSecurityGroupId); }
+			set { Entity.Attributes[Fields.ContributorSecurityGroupId] = value; }
 		}
 
 		/// <summary>
@@ -296,6 +314,30 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Indicates whether lake is managed or external.</para>
+		/// <para>Boolean</para>
+		/// <para>Is External Lake</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? IsExternalLake
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.IsExternalLake); }
+			set { Entity.Attributes[Fields.IsExternalLake] = value; }
+		}
+
+		/// <summary>
+		/// <para>Indicates whether external lake is read only.</para>
+		/// <para>Boolean</para>
+		/// <para>Is External Lake Read Only</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? IsExternalLakeReadOnly
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.IsExternalLakeReadOnly); }
+			set { Entity.Attributes[Fields.IsExternalLakeReadOnly] = value; }
+		}
+
+		/// <summary>
 		/// <para>Indicates whether the solution component is part of a managed solution.</para>
 		/// <para>ReadOnly - Boolean</para>
 		/// <para>Is Managed</para>
@@ -388,7 +430,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -445,13 +487,26 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Folder path in the Azure Data Lake container.</para>
-		/// <para>ReadOnly - String - MaxLength: 100</para>
+		/// <para>String - MaxLength: 100</para>
 		/// <para>Path</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public string path
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.path); }
+			set { Entity.Attributes[Fields.path] = value; }
+		}
+
+		/// <summary>
+		/// <para>The security group for reader access.</para>
+		/// <para>Uniqueidentifier</para>
+		/// <para>Reader Security Group Id</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public Guid? ReaderSecurityGroupId
+		{
+			get { return Entity.GetAttributeValue<Guid?>(Fields.ReaderSecurityGroupId); }
+			set { Entity.Attributes[Fields.ReaderSecurityGroupId] = value; }
 		}
 
 		/// <summary>
@@ -467,7 +522,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Status of the Data Lake Folder</para>
-		/// <para>ReadOnly - State</para>
+		/// <para>State</para>
 		/// <para>Status</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -479,11 +534,18 @@ namespace Dev.DevKit.Shared.Entities
 				if (value == null) return null;
 				return (Dev.DevKit.Shared.Entities.datalakefolderOptionSets.statecode)value.Value;
 			}
+			set
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.statecode] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.statecode] = null;
+			}
 		}
 
 		/// <summary>
 		/// <para>Reason for the status of the Data Lake Folder</para>
-		/// <para>ReadOnly - Status</para>
+		/// <para>Status</para>
 		/// <para>Status Reason</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -494,6 +556,13 @@ namespace Dev.DevKit.Shared.Entities
 				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.statuscode);
 				if (value == null) return null;
 				return (Dev.DevKit.Shared.Entities.datalakefolderOptionSets.statuscode)value.Value;
+			}
+			set
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.statuscode] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.statuscode] = null;
 			}
 		}
 

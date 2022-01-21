@@ -27,7 +27,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyusd_subactioncalls";
 
-		public const int EntityTypeCode = 10723;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10863;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_subactioncalls()

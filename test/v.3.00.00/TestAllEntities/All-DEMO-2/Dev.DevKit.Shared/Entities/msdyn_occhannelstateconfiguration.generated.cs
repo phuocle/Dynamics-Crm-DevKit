@@ -29,7 +29,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_occhannelstateconfigurationOptionSets
 		/// </summary>
 		Waiting = 2,
 		/// <summary>
-		/// Wrap_up = 4
+		/// Wrap-up = 4
 		/// </summary>
 		Wrap_up = 4
 	}
@@ -89,7 +89,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_occhannelstateconfiguration";
 
-		public const int EntityTypeCode = 10563;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10699;
 
 		[DebuggerNonUserCode()]
 		public msdyn_occhannelstateconfiguration()
@@ -284,9 +285,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_occhannelstateconfigurationOptionSets.msdyn_ocliveworkitemstate)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_ocliveworkitemstate] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_ocliveworkitemstate] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_ocliveworkitemstate] = null;
+			}
 		}
 
 		/// <summary>

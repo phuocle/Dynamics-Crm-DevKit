@@ -13,27 +13,27 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ConfigurationOptionSets
 	public enum msdyn_Type
 	{
 		/// <summary>
-		/// Clone_Entity_Query = 192350005
+		/// Clone Entity Query = 192350005
 		/// </summary>
 		Clone_Entity_Query = 192350005,
 		/// <summary>
-		/// Filter_Layout = 192350000
+		/// Filter Layout = 192350000
 		/// </summary>
 		Filter_Layout = 192350000,
 		/// <summary>
-		/// Resource_Cell_Template = 192350001
+		/// Resource Cell Template = 192350001
 		/// </summary>
 		Resource_Cell_Template = 192350001,
 		/// <summary>
-		/// Retrieve_Resources_Query = 192350002
+		/// Retrieve Resources Query = 192350002
 		/// </summary>
 		Retrieve_Resources_Query = 192350002,
 		/// <summary>
-		/// Schedule_Assistant_Filter_Layout = 192350003
+		/// Schedule Assistant Filter Layout = 192350003
 		/// </summary>
 		Schedule_Assistant_Filter_Layout = 192350003,
 		/// <summary>
-		/// Schedule_Assistant_Retrieve_Constraints_Query = 192350004
+		/// Schedule Assistant Retrieve Constraints Query = 192350004
 		/// </summary>
 		Schedule_Assistant_Retrieve_Constraints_Query = 192350004
 	}
@@ -94,7 +94,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_configuration";
 
-		public const int EntityTypeCode = 10301;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10407;
 
 		[DebuggerNonUserCode()]
 		public msdyn_Configuration()
@@ -298,7 +299,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

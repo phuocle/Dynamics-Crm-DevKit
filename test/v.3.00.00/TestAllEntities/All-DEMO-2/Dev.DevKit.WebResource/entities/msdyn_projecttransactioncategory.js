@@ -1,9 +1,13 @@
 ﻿//@ts-check
 ///<reference path="msdyn_projecttransactioncategory.d.ts" />
 "use strict";
-var formInformation = (function () {
+var formmsdyn_projecttransactioncategory_Information = (function () {
 	"use strict";
+	/** @type DevKit.Formmsdyn_projecttransactioncategory_Information */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.Formmsdyn_projecttransactioncategory_Information(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}

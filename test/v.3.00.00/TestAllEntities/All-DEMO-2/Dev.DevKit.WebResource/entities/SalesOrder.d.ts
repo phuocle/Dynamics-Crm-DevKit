@@ -101,14 +101,16 @@ declare namespace DevKit {
 			nav_msdyn_salesorder_msdyn_orderinvoicingsetupdate_Order: DevKit.Controls.NavigationItem,
 			navProducts: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
-			salesorderdetailsGrid: DevKit.Controls.Grid;
 			OrderServicesGrid: DevKit.Controls.Grid;
+			salesorderdetailsGrid: DevKit.Controls.Grid;
 		}
 	}
 	class FormSalesOrder_Field_Service_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form SalesOrder_Field_Service_Information
+		* Field Service Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -121,8 +123,130 @@ declare namespace DevKit {
 		Header: DevKit.FormSalesOrder_Field_Service_Information.Header;
 		/** The Navigation of form SalesOrder_Field_Service_Information */
 		Navigation: DevKit.FormSalesOrder_Field_Service_Information.Navigation;
+		/** The Process of form SalesOrder_Field_Service_Information */
+		Process: DevKit.FormSalesOrder_Field_Service_Information.Process;
 		/** The Grid of form SalesOrder_Field_Service_Information */
 		Grid: DevKit.FormSalesOrder_Field_Service_Information.Grid;
+		/** The SidePanes of form SalesOrder_Field_Service_Information */
+		SidePanes: DevKit.SidePanes;
+	}
+	namespace FormOrder {
+		interface Header extends DevKit.Controls.IHeader {
+			/** Owner Id */
+			OwnerId: DevKit.Controls.Lookup;
+			/** Shows whether the order is active, submitted, fulfilled, canceled, or invoiced. Only active orders can be edited. */
+			StateCode: DevKit.Controls.OptionSet;
+			/** Select the order's status. */
+			StatusCode: DevKit.Controls.OptionSet;
+			/** Shows the total amount due, calculated as the sum of the products, discounts, freight, and taxes for the order. */
+			TotalAmount: DevKit.Controls.Money;
+		}
+		interface tab_summary_tab_Sections {
+			addresses: DevKit.Controls.Section;
+			description_section: DevKit.Controls.Section;
+			DynamicProperties: DevKit.Controls.Section;
+			order_information: DevKit.Controls.Section;
+			products: DevKit.Controls.Section;
+			sales_information: DevKit.Controls.Section;
+			shipping_dates: DevKit.Controls.Section;
+			shipping_information: DevKit.Controls.Section;
+			Social_Pane: DevKit.Controls.Section;
+			suggestionsection: DevKit.Controls.Section;
+			totals: DevKit.Controls.Section;
+		}
+		interface tab_summary_tab extends DevKit.Controls.ITab {
+			Section: tab_summary_tab_Sections;
+		}
+		interface Tabs {
+			summary_tab: tab_summary_tab;
+		}
+		interface Body {
+			Tab: Tabs;
+			/** Shows the complete Bill To address. */
+			BillTo_Composite: DevKit.Controls.String;
+			/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
+			CustomerId: DevKit.Controls.Lookup;
+			/** Enter the date that all or part of the order was shipped to the customer. */
+			DateFulfilled: DevKit.Controls.Date;
+			/** Type additional information to describe the order, such as the products or services offered or details about the customer's product preferences. */
+			Description: DevKit.Controls.String;
+			/** Type the discount amount for the order if the customer is eligible for special savings. */
+			DiscountAmount: DevKit.Controls.Money;
+			/** Type the discount rate that should be applied to the Detail Amount field to include additional savings for the customer in the order. */
+			DiscountPercentage: DevKit.Controls.Decimal;
+			/** Type the cost of freight or shipping for the products included in the order for use in calculating the Total Amount field. */
+			FreightAmount: DevKit.Controls.Money;
+			/** Select the freight terms to make sure shipping charges are processed correctly. */
+			FreightTermsCode: DevKit.Controls.OptionSet;
+			/** Select whether prices specified on the invoice are locked from any further updates. */
+			IsPriceLocked: DevKit.Controls.Boolean;
+			/** Internal use only */
+			msdyn_ordertype: DevKit.Controls.OptionSet;
+			/** Type a descriptive name for the order. */
+			Name: DevKit.Controls.String;
+			notescontrol: DevKit.Controls.Note;
+			/** Choose the related opportunity so that the data for the order and opportunity are linked for reporting and analytics. */
+			OpportunityId: DevKit.Controls.Lookup;
+			/** Shows the order number for customer reference and to use in search. The number cannot be modified. */
+			OrderNumber: DevKit.Controls.String;
+			/** Select the payment terms to indicate when the customer needs to pay the total amount. */
+			PaymentTermsCode: DevKit.Controls.OptionSet;
+			/** Choose the price list associated with this record to make sure the products associated with the campaign are offered at the correct prices. */
+			PriceLevelId: DevKit.Controls.Lookup;
+			/** Choose the related quote so that order data and quote data are linked for reporting and analytics. */
+			QuoteId: DevKit.Controls.Lookup;
+			/** Enter the delivery date requested by the customer for all products in the order. */
+			RequestDeliveryBy: DevKit.Controls.Date;
+			/** Select a shipping method for deliveries sent to this address. */
+			ShippingMethodCode: DevKit.Controls.OptionSet;
+			/** Shows the complete Ship To address. */
+			ShipTo_Composite: DevKit.Controls.String;
+			/** Shows the total amount due, calculated as the sum of the products, discounts, freight, and taxes for the order. */
+			TotalAmount: DevKit.Controls.Money;
+			/** Shows the total product amount for the order, minus any discounts. This value is added to freight and tax amounts in the calculation for the total amount due for the order. */
+			TotalAmountLessFreight: DevKit.Controls.Money;
+			/** Shows the sum of all existing and write-in products included on the order, based on the specified price list and quantities. */
+			TotalLineItemAmount: DevKit.Controls.Money;
+			/** Shows the Tax amounts specified on all products included in the order, included in the Total Amount due calculation for the order. */
+			TotalTax: DevKit.Controls.Money;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			TransactionCurrencyId: DevKit.Controls.Lookup;
+			/** Select whether the products included in the order should be shipped to the specified address or held until the customer calls with further pick-up or delivery instructions. */
+			WillCall: DevKit.Controls.Boolean;
+		}
+		interface Navigation {
+			nav_msdyn_salesorder_msdyn_orderinvoicingdate_Order: DevKit.Controls.NavigationItem,
+			nav_msdyn_salesorder_msdyn_orderinvoicingsetup_Order: DevKit.Controls.NavigationItem,
+			nav_msdyn_salesorder_msdyn_orderinvoicingsetupdate_Order: DevKit.Controls.NavigationItem,
+			navProducts: DevKit.Controls.NavigationItem
+		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
+		interface Grid {
+			salesorderdetailsGrid: DevKit.Controls.Grid;
+		}
+	}
+	class FormOrder extends DevKit.IForm {
+		/**
+		* Order [Main Form]
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form Order */
+		Body: DevKit.FormOrder.Body;
+		/** The Header section of form Order */
+		Header: DevKit.FormOrder.Header;
+		/** The Navigation of form Order */
+		Navigation: DevKit.FormOrder.Navigation;
+		/** The Process of form Order */
+		Process: DevKit.FormOrder.Process;
+		/** The Grid of form Order */
+		Grid: DevKit.FormOrder.Grid;
+		/** The SidePanes of form Order */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormSalesOrder_Project_Information {
 		interface Header extends DevKit.Controls.IHeader {
@@ -230,18 +354,20 @@ declare namespace DevKit {
 			navInvoices: DevKit.Controls.NavigationItem,
 			navProducts: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
-			ProjectContractLines: DevKit.Controls.Grid;
-			salesorderdetailsGrid: DevKit.Controls.Grid;
-			ProjectPriceListsSubGrid: DevKit.Controls.Grid;
-			WebResource_ContractPerformance: DevKit.Controls.Grid;
 			ContractPerformance_ContractLines: DevKit.Controls.Grid;
 			ContractPerformance_ProductContractLines: DevKit.Controls.Grid;
+			ProjectContractLines: DevKit.Controls.Grid;
+			ProjectPriceListsSubGrid: DevKit.Controls.Grid;
+			salesorderdetailsGrid: DevKit.Controls.Grid;
+			WebResource_ContractPerformance: DevKit.Controls.Grid;
 		}
 	}
 	class FormSalesOrder_Project_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form SalesOrder_Project_Information
+		* Project Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -254,10 +380,14 @@ declare namespace DevKit {
 		Header: DevKit.FormSalesOrder_Project_Information.Header;
 		/** The Navigation of form SalesOrder_Project_Information */
 		Navigation: DevKit.FormSalesOrder_Project_Information.Navigation;
+		/** The Process of form SalesOrder_Project_Information */
+		Process: DevKit.FormSalesOrder_Project_Information.Process;
 		/** The Grid of form SalesOrder_Project_Information */
 		Grid: DevKit.FormSalesOrder_Project_Information.Grid;
+		/** The SidePanes of form SalesOrder_Project_Information */
+		SidePanes: DevKit.SidePanes;
 	}
-	namespace FormOrder {
+	namespace FormOrder2 {
 		interface tab_newSalesOrder_Sections {
 			quickOrder_salesinformation: DevKit.Controls.Section;
 			quickOrder_summary: DevKit.Controls.Section;
@@ -290,17 +420,17 @@ declare namespace DevKit {
 			TransactionCurrencyId: DevKit.Controls.Lookup;
 		}
 	}
-	class FormOrder extends DevKit.IForm {
+	class FormOrder2 extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Order
+		* Order [Quick Create]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
 		constructor(executionContext: any, defaultWebResourceName?: string);
 		/** Utility functions/methods/objects for Dynamics 365 form */
 		Utility: DevKit.Utility;
-		/** The Body section of form Order */
-		Body: DevKit.FormOrder.Body;
+		/** The Body section of form Order2 */
+		Body: DevKit.FormOrder2.Body;
 	}
 	namespace FormSalesOrder_Project_Quick_Create {
 		interface tab_tab_1_Sections {
@@ -332,7 +462,7 @@ declare namespace DevKit {
 	}
 	class FormSalesOrder_Project_Quick_Create extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form SalesOrder_Project_Quick_Create
+		* Project Quick Create [Quick Create]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -406,7 +536,9 @@ declare namespace DevKit {
 		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
 		/** Shows who created the record on behalf of another user. */
 		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
 		customerid_account: DevKit.WebApi.LookupValue;
+		/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
 		customerid_contact: DevKit.WebApi.LookupValue;
 		/** Enter the date that all or part of the order was shipped to the customer. */
 		DateFulfilled_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
@@ -549,7 +681,6 @@ declare namespace DevKit {
 		SLAId: DevKit.WebApi.LookupValue;
 		/** Last SLA that was applied to this sales order. This field is for internal use only. */
 		SLAInvokedId: DevKit.WebApi.LookupValueReadonly;
-		SLAName: DevKit.WebApi.StringValueReadonly;
 		/** Contains the id of the stage where the entity is located. */
 		StageId: DevKit.WebApi.GuidValue;
 		/** Shows whether the order is active, submitted, fulfilled, canceled, or invoiced. Only active orders can be edited. */
@@ -712,7 +843,7 @@ declare namespace OptionSet {
 			/** 31 */
 			Missing_Product_Default_UOM,
 			/** 32 */
-			Missing_Product_UOM_Schedule_,
+			Missing_Product_UOM_Schedule,
 			/** 4 */
 			Missing_Quantity,
 			/** 16 */
@@ -792,22 +923,22 @@ declare namespace OptionSet {
 			/** 2 */
 			Pending
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Field Service Information','Order','Project Information','Quick Create'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

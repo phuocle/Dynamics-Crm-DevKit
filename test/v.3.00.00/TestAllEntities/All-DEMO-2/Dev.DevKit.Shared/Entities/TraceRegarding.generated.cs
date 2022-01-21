@@ -22,12 +22,12 @@ namespace Dev.DevKit.Shared.Entities
 			public const string RegardingObjectId = "regardingobjectid";
 			public const string RegardingObjectOwnerId = "regardingobjectownerid";
 			public const string RegardingObjectOwningBusinessUnit = "regardingobjectowningbusinessunit";
-			public const string RegardingObjectTypeCodeForSharing = "regardingobjecttypecodeforsharing";
 			public const string TraceRegardingId = "traceregardingid";
 		}
 
 		public const string EntityLogicalName = "traceregarding";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 8052;
 
 		[DebuggerNonUserCode()]
@@ -80,7 +80,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the regarding object.</para>
-		/// <para>Lookup to emailserverprofile;mailbox</para>
+		/// <para>Lookup to emailserverprofile, mailbox</para>
 		/// <para>Regarding</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -92,7 +92,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the user or team who owns the regarding object.</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -111,17 +111,6 @@ namespace Dev.DevKit.Shared.Entities
 		public EntityReference RegardingObjectOwningBusinessUnit
 		{
 			get { return Entity.GetAttributeValue<EntityReference>(Fields.RegardingObjectOwningBusinessUnit); }
-		}
-
-		/// <summary>
-		/// <para>For internal use only.</para>
-		/// <para>ReadOnly - EntityName</para>
-		/// <para>Regarding Object Type For Sharing</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string RegardingObjectTypeCodeForSharing
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.RegardingObjectTypeCodeForSharing); }
 		}
 
 		/// <summary>

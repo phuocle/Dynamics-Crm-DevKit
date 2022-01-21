@@ -5,6 +5,7 @@ declare namespace DevKit {
 		interface tab__4C87DA2D_AA4A_4EAE_972E_EAC9DBC05C4F_Sections {
 			_2495CB91_9D0E_4216_806C_D7287B3B2D42: DevKit.Controls.Section;
 			_4C87DA2D_AA4A_4EAE_972E_EAC9DBC05C4F_SECTION_2: DevKit.Controls.Section;
+			_4C87DA2D_AA4A_4EAE_972E_EAC9DBC05C4F_SECTION_3: DevKit.Controls.Section;
 		}
 		interface tab_AmountBasedPricingDimensionTab_Sections {
 			AmountBasedPricingDimensionSection: DevKit.Controls.Section;
@@ -37,6 +38,8 @@ declare namespace DevKit {
 			Tab: Tabs;
 			/** Date and time when the record was created. */
 			CreatedOn: DevKit.Controls.DateTime;
+			/** Process approvals in the background when the number of approvals exceed this number. */
+			msdyn_BackgroundApprovalThreshold: DevKit.Controls.Integer;
 			/** Select the default organizational unit that will be used for new resources. */
 			msdyn_defaultorganizationalunit: DevKit.Controls.Lookup;
 			/** Select the default work template for new projects. */
@@ -54,15 +57,17 @@ declare namespace DevKit {
 			/** Shows the default role to be used when a team member is added to the project team. */
 			msdyn_teammemberrole: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
-			PriceListGrid: DevKit.Controls.Grid;
 			AmountBasedPricingDimensionGrid: DevKit.Controls.Grid;
 			MarkupBasedPricingDimensionGrid: DevKit.Controls.Grid;
+			PriceListGrid: DevKit.Controls.Grid;
 		}
 	}
 	class Formmsdyn_projectparameter_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form msdyn_projectparameter_Information
+		* Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -71,8 +76,12 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_projectparameter_Information */
 		Body: DevKit.Formmsdyn_projectparameter_Information.Body;
+		/** The Process of form msdyn_projectparameter_Information */
+		Process: DevKit.Formmsdyn_projectparameter_Information.Process;
 		/** The Grid of form msdyn_projectparameter_Information */
 		Grid: DevKit.Formmsdyn_projectparameter_Information.Grid;
+		/** The SidePanes of form msdyn_projectparameter_Information */
+		SidePanes: DevKit.SidePanes;
 	}
 	class msdyn_projectparameterApi {
 		/**
@@ -116,6 +125,8 @@ declare namespace DevKit {
 		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
 		/** Allow resources to update their skills via the Project Finder Mobile app. */
 		msdyn_Allowskillupdatebyresource: DevKit.WebApi.BooleanValue;
+		/** Process approvals in the background when the number of approvals exceed this number. */
+		msdyn_BackgroundApprovalThreshold: DevKit.WebApi.IntegerValue;
 		/** Select the default organizational unit that will be used for new resources. */
 		msdyn_defaultorganizationalunit: DevKit.WebApi.LookupValue;
 		/** Select the default work template for new projects. */
@@ -174,22 +185,22 @@ declare namespace OptionSet {
 			/** 2 */
 			Inactive
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

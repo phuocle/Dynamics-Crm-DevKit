@@ -13,15 +13,15 @@ namespace Dev.DevKit.Shared.Entities.ApplicationUserOptionSets
 	public enum ApplicationType
 	{
 		/// <summary>
-		/// External_applications = 2
+		/// External applications = 2
 		/// </summary>
 		External_applications = 2,
 		/// <summary>
-		/// First_party_applications = 0
+		/// First party applications = 0
 		/// </summary>
 		First_party_applications = 0,
 		/// <summary>
-		/// Platform_applications = 1
+		/// Platform applications = 1
 		/// </summary>
 		Platform_applications = 1
 	}
@@ -33,7 +33,7 @@ namespace Dev.DevKit.Shared.Entities.ApplicationUserOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -106,7 +106,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "applicationuser";
 
-		public const int EntityTypeCode = 10021;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10041;
 
 		[DebuggerNonUserCode()]
 		public ApplicationUser()

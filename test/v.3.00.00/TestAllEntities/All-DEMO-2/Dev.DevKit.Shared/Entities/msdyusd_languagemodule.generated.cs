@@ -68,7 +68,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyusd_languagemodule";
 
-		public const int EntityTypeCode = 10695;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10835;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_languagemodule()
@@ -247,7 +248,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>This should contain the name of an XML Web Resource with ASP.NET (.resx) formatting.    &lt;root&gt;  &lt;data name="Welcome"&gt;   &lt;value&gt;Welcome&lt;/value&gt;  &lt;/data&gt; &lt;/root&gt;</para>
+		/// <para>This should contain the name of an XML Web Resource with ASP.NET (.resx) formatting.   &lt;root&gt; &lt;data name=&quot;Welcome&quot;&gt;  &lt;value&gt;Welcome&lt;/value&gt; &lt;/data&gt;&lt;/root&gt;</para>
 		/// <para>Required - String - MaxLength: 2000</para>
 		/// <para>XML Web Resource Name</para>
 		/// </summary>
@@ -284,7 +285,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

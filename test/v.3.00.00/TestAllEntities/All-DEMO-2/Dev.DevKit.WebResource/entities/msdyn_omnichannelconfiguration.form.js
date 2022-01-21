@@ -32,23 +32,49 @@ var DevKit;
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		var grid = {
 			RatingModelDetails: {},
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
+		return form;
+	};
+	DevKit.FormMarkdown_Settings = function(executionContext, defaultWebResourceName) {
+		var formContext = null;
+		if (executionContext !== undefined) {
+			if (executionContext.getFormContext === undefined) {
+				formContext = executionContext;
+			}
+			else {
+				formContext = executionContext.getFormContext();
+			}
+		}
+		var form = devKit.LoadForm(formContext);
+		var body = {
+			msdyn_enablemarkdown: {},
+			WebResource_ocpreviewterms: {}
+		};
+		devKit.LoadFields(formContext, body);
+		var tab = {
+			_44EFFE7C_A18D_4D4C_B111_DB98E28BC808: {
+				Section: {
+					_360DEA1C_38CE_48A4_9E94_CCF1A7E7C18E: {}
+				}
+			}
+		};
+		devKit.LoadTabs(formContext, tab);
+		body.Tab = tab;
+		form.Body = body;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
+		form.Utility = devKit.LoadUtility(defaultWebResourceName);
+		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormMasking_settings = function(executionContext, defaultWebResourceName) {
@@ -66,6 +92,7 @@ var DevKit;
 			MaskingRulesInSettings: {},
 			msdyn_enable_supervisor_assign: {},
 			msdyn_enable_supervisor_monitor: {},
+			msdyn_enable_supervisor_transfer: {},
 			msdyn_enable_visitorjourney: {},
 			msdyn_maskforagent: {},
 			msdyn_maskforcustomer: {},
@@ -88,23 +115,16 @@ var DevKit;
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		var grid = {
 			MaskingRulesInSettings: {},
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormNotifications = function(executionContext, defaultWebResourceName) {
@@ -119,16 +139,25 @@ var DevKit;
 		}
 		var form = devKit.LoadForm(formContext);
 		var body = {
+			msdyn_agentrejectnotificationssubheading: {},
+			msdyn_dnd_presence_lookup: {},
+			msdyn_dnd_presence_lookup1: {},
+			msdyn_enable_agent_reject_notifications: {},
 			msdyn_enable_missed_notifications: {},
 			msdyn_enablesoundnotifications: {},
 			msdyn_inactive_presence_lookup: {},
-			msdyn_inactive_presence_lookup_1: {},
+			msdyn_inactive_presence_lookup1: {},
 			msdyn_missednotificationssubheading: {},
 			msdyn_SoundFormControl: {},
 			templates_grid: {}
 		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
+			agent_reject_notification_settings: {
+				Section: {
+					agent_reject_notification_settings_section: {}
+				}
+			},
 			missed_notification_settings: {
 				Section: {
 					missed_notifications_settings_section: {}
@@ -149,7 +178,13 @@ var DevKit;
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		var quickForm = {
+			agent_reject_notification_presence_update_quick_view_form: {
+				msdyn_description: {},
+				msdyn_presencestatustext: {}
+			},
 			missed_notification_presence_update_quick_view_form: {
 				msdyn_description: {},
 				msdyn_presencestatustext: {}
@@ -162,13 +197,9 @@ var DevKit;
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormPersonal_quick_replies = function(executionContext, defaultWebResourceName) {
@@ -196,18 +227,11 @@ var DevKit;
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormReal_Time_Translation_Settings = function(executionContext, defaultWebResourceName) {
@@ -240,18 +264,11 @@ var DevKit;
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormSelf_service_settings = function(executionContext, defaultWebResourceName) {
@@ -268,6 +285,7 @@ var DevKit;
 		var body = {
 			msdyn_enable_supervisor_assign: {},
 			msdyn_enable_supervisor_monitor: {},
+			msdyn_enable_supervisor_transfer: {},
 			msdyn_enable_visitorjourney: {},
 			msdyn_name: {}
 		};
@@ -287,18 +305,11 @@ var DevKit;
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormSkill_based_routing_settings = function(executionContext, defaultWebResourceName) {
@@ -328,23 +339,16 @@ var DevKit;
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		var grid = {
 			RatingModelDetails: {},
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormSupervisor_settings = function(executionContext, defaultWebResourceName) {
@@ -361,6 +365,7 @@ var DevKit;
 		var body = {
 			msdyn_enable_supervisor_assign: {},
 			msdyn_enable_supervisor_monitor: {},
+			msdyn_enable_supervisor_transfer: {},
 			msdyn_name: {}
 		};
 		devKit.LoadFields(formContext, body);
@@ -379,18 +384,43 @@ var DevKit;
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
+		return form;
+	};
+	DevKit.FormTranscript_settings = function(executionContext, defaultWebResourceName) {
+		var formContext = null;
+		if (executionContext !== undefined) {
+			if (executionContext.getFormContext === undefined) {
+				formContext = executionContext;
+			}
+			else {
+				formContext = executionContext.getFormContext();
+			}
+		}
+		var form = devKit.LoadForm(formContext);
+		var body = {
+			msdyn_enablenewconversationform: {}
+		};
+		devKit.LoadFields(formContext, body);
+		var tab = {
+			transcript_settings: {
+				Section: {
+					transcript_settings_section: {}
+				}
+			}
+		};
+		devKit.LoadTabs(formContext, tab);
+		body.Tab = tab;
+		form.Body = body;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
+		form.Utility = devKit.LoadUtility(defaultWebResourceName);
+		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 })(DevKit || (DevKit = {}));
@@ -452,15 +482,14 @@ var OptionSet;
 			Active: 1,
 			Inactive: 2
 		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
-
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 	};
 })(OptionSet || (OptionSet = {}));

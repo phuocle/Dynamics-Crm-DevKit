@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.ChannelPropertyOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -33,15 +33,15 @@ namespace Dev.DevKit.Shared.Entities.ChannelPropertyOptionSets
 	public enum DataType
 	{
 		/// <summary>
-		/// Floating_Point_Number = 0
+		/// Floating Point Number = 0
 		/// </summary>
 		Floating_Point_Number = 0,
 		/// <summary>
-		/// Single_Line_Of_Text = 1
+		/// Single Line Of Text = 1
 		/// </summary>
 		Single_Line_Of_Text = 1,
 		/// <summary>
-		/// Whole_Number = 2
+		/// Whole Number = 2
 		/// </summary>
 		Whole_Number = 2
 	}
@@ -105,6 +105,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "channelproperty";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 1236;
 
 		[DebuggerNonUserCode()]

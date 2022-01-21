@@ -82,7 +82,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_smsengagementctx";
 
-		public const int EntityTypeCode = 10652;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10791;
 
 		[DebuggerNonUserCode()]
 		public msdyn_smsengagementctx()
@@ -211,7 +212,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Country code of the customer's (C2) phone number. For instance, US will be "1", India will be "91"</para>
+		/// <para>Country code of the customer&apos;s (C2) phone number. For instance, US will be &quot;1&quot;, India will be &quot;91&quot;</para>
 		/// <para>String - MaxLength: 100</para>
 		/// <para>Country code</para>
 		/// </summary>
@@ -335,7 +336,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

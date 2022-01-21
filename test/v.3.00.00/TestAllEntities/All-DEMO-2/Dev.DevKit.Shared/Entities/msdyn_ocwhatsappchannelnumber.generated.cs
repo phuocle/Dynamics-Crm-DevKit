@@ -13,11 +13,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocwhatsappchannelnumberOptionSets
 	public enum msdyn_PostConversationSurveyMode
 	{
 		/// <summary>
-		/// Insert_survey_in_conversation = 192350000
+		/// Insert survey in conversation = 192350000
 		/// </summary>
 		Insert_survey_in_conversation = 192350000,
 		/// <summary>
-		/// Send_survey_link_to_conversation = 192350001
+		/// Send survey link to conversation = 192350001
 		/// </summary>
 		Send_survey_link_to_conversation = 192350001
 	}
@@ -86,7 +86,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_ocwhatsappchannelnumber";
 
-		public const int EntityTypeCode = 10666;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10805;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocwhatsappchannelnumber()
@@ -387,7 +388,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

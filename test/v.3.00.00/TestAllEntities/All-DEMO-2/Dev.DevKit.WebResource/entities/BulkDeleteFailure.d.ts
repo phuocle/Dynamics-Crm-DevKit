@@ -67,6 +67,8 @@ declare namespace DevKit {
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_annualfiscalcalendar: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_appaction: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_appelement: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_applicationuser: DevKit.WebApi.LookupValueReadonly;
@@ -74,8 +76,6 @@ declare namespace DevKit {
 		regardingobjectid_appmodulecomponentedge: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_appmodulecomponentnode: DevKit.WebApi.LookupValueReadonly;
-		/** Unique identifier of the record that can not be deleted. */
-		regardingobjectid_appnotification: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_appointment: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
@@ -147,6 +147,8 @@ declare namespace DevKit {
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_childincidentcount: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_comment: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_commitment: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_competitor: DevKit.WebApi.LookupValueReadonly;
@@ -201,6 +203,8 @@ declare namespace DevKit {
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_datalakeworkspacepermission: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_datasyncstate: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_discount: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_discounttype: DevKit.WebApi.LookupValueReadonly;
@@ -239,6 +243,8 @@ declare namespace DevKit {
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_entityimageconfig: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_entityindex: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_entitymap: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_environmentvariabledefinition: DevKit.WebApi.LookupValueReadonly;
@@ -254,6 +260,8 @@ declare namespace DevKit {
 		externalpartyitem_bulkdeletefailures: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_fax: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_featurecontrolsetting: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_fixedmonthlyfiscalcalendar: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
@@ -280,6 +288,8 @@ declare namespace DevKit {
 		regardingobjectid_incidentknowledgebaserecord: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_incidentresolution: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_indexattributes: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_internalcatalogassignment: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
@@ -389,6 +399,8 @@ declare namespace DevKit {
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_aiconfiguration: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_msdyn_aicontactsuggestion: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_aifptrainingdocument: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_aimodel: DevKit.WebApi.LookupValueReadonly;
@@ -425,13 +437,25 @@ declare namespace DevKit {
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_approval: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_msdyn_approvalset: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_assetcategorytemplateassociation: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_msdyn_assetsuggestionssetting: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_assettemplateassociation: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_assignmentconfiguration: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_assignmentconfigurationstep: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_msdyn_assignmentmap: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_msdyn_assignmentrule: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_msdyn_attribute: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_msdyn_attributevalue: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_authenticationsettings: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
@@ -537,6 +561,10 @@ declare namespace DevKit {
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_contactpricelist: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_msdyn_contactsuggestionrule: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_msdyn_contactsuggestionruleset: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_contractlinedetailperformance: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_contractlineinvoiceschedule: DevKit.WebApi.LookupValueReadonly;
@@ -575,6 +603,12 @@ declare namespace DevKit {
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_dataanalyticsreport_csrmanager: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_msdyn_dataanalyticsreport_fs: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_msdyn_dataanalyticsreport_fspredictrs: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_msdyn_dataanalyticsreport_fspredictwhd: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_dataanalyticsreport_ksinsights: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_dataanalyticsreport_oc: DevKit.WebApi.LookupValueReadonly;
@@ -589,6 +623,10 @@ declare namespace DevKit {
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_datainsightsandanalyticsfeature: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_msdyn_dealmanageraccess: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_msdyn_dealmanagersettings: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_decisioncontract: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_decisionruleset: DevKit.WebApi.LookupValueReadonly;
@@ -599,11 +637,15 @@ declare namespace DevKit {
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_dimensionfieldname: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_msdyn_effortpredictionresult: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_entitlementapplication: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_entityconfig: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_entityconfiguration: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_msdyn_entitylinkchatconfiguration: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_entityrankingrule: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
@@ -618,6 +660,8 @@ declare namespace DevKit {
 		regardingobjectid_msdyn_expensecategory: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_expensereceipt: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_msdyn_extendedusersetting: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_facebookengagementctx: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
@@ -666,6 +710,10 @@ declare namespace DevKit {
 		regardingobjectid_msdyn_helppage: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_icebreakersconfig: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_msdyn_iermlmodel: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_msdyn_iermltraining: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_incidenttype: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
@@ -751,7 +799,11 @@ declare namespace DevKit {
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_kalanguagesetting: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_msdyn_kbattachment: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_kbenrichment: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_msdyn_kbkeywordsdescsuggestionsetting: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_kmfederatedsearchconfig: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
@@ -772,6 +824,8 @@ declare namespace DevKit {
 		regardingobjectid_msdyn_kpieventdata: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_kpieventdefinition: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_msdyn_leadmodelconfig: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_lineengagementctx: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
@@ -801,6 +855,8 @@ declare namespace DevKit {
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_mlresultcache: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_msdyn_modelpreviewstatus: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_msteamssetting: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_msteamssettingsv2: DevKit.WebApi.LookupValueReadonly;
@@ -811,7 +867,11 @@ declare namespace DevKit {
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_notificationtemplate: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_msdyn_ocautoblockrule: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_ocbotchannelregistration: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_msdyn_occarrier: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_occhannelconfiguration: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
@@ -826,6 +886,8 @@ declare namespace DevKit {
 		regardingobjectid_msdyn_ocfbapplication: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_ocfbpage: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_msdyn_ocflaggedspam: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_oclanguage: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
@@ -855,6 +917,8 @@ declare namespace DevKit {
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_ocprovisioningstate: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_msdyn_ocrecording: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_ocrequest: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_ocruleitem: DevKit.WebApi.LookupValueReadonly;
@@ -868,6 +932,8 @@ declare namespace DevKit {
 		regardingobjectid_msdyn_ocsession: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_ocsessioncharacteristic: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_msdyn_ocsessionparticipantevent: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_ocsessionsentiment: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
@@ -919,6 +985,8 @@ declare namespace DevKit {
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_opportunitylinetransactionclassificatio: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_msdyn_opportunitymodelconfig: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_opportunitypricelist: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_orderinvoicingdate: DevKit.WebApi.LookupValueReadonly;
@@ -940,6 +1008,8 @@ declare namespace DevKit {
 		regardingobjectid_msdyn_orderpricelist: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_organizationalunit: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_msdyn_overflowactionconfig: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_paneconfiguration: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
@@ -982,6 +1052,12 @@ declare namespace DevKit {
 		regardingobjectid_msdyn_postconfig: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_postruleconfig: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_msdyn_predictivemodelscore: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_msdyn_predictivescore: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_msdyn_predictworkhourdurationsetting: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_presence: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
@@ -1087,6 +1163,8 @@ declare namespace DevKit {
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_quotepricelist: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_msdyn_recording: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_relationshipinsightsunifiedconfig: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_requirementcharacteristic: DevKit.WebApi.LookupValueReadonly;
@@ -1157,7 +1235,15 @@ declare namespace DevKit {
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_rulesetdependencymapping: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_msdyn_salesaccelerationsettings: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_msdyn_salesassignmentsetting: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_salesinsightssettings: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_msdyn_salesroutingrun: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_msdyn_salestag: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_scenario: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
@@ -1169,7 +1255,19 @@ declare namespace DevKit {
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_searchconfiguration: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_msdyn_segment: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_msdyn_segmentcatalogue: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_sentimentanalysis: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_msdyn_sequence: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_msdyn_sequencestat: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_msdyn_sequencetarget: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_msdyn_sequencetargetstep: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_serviceconfiguration: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
@@ -1228,6 +1326,12 @@ declare namespace DevKit {
 		regardingobjectid_msdyn_taxcode: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_taxcodedetail: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_msdyn_teamschannelengagementctx: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_msdyn_teamschatassociation: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_msdyn_teamschatsuggestion: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_teamscollaboration: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
@@ -1333,6 +1437,10 @@ declare namespace DevKit {
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyn_workordertype: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_msdyn_workqueuestate: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_msdyn_workqueueusersetting: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyusd_actioncallworkflow: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_msdyusd_agentscriptaction: DevKit.WebApi.LookupValueReadonly;
@@ -1437,11 +1545,15 @@ declare namespace DevKit {
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_phonetocaseprocess: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_pluginpackage: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_post: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_pricelevel: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_privilege: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_privilegesremovalsetting: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_processstageparameter: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
@@ -1519,6 +1631,8 @@ declare namespace DevKit {
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_serviceplan: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_serviceplanmapping: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_settingdefinition: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_site: DevKit.WebApi.LookupValueReadonly;
@@ -1528,6 +1642,8 @@ declare namespace DevKit {
 		regardingobjectid_socialactivity: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_solutioncomponentattributeconfiguration: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_solutioncomponentbatchconfiguration: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_solutioncomponentconfiguration: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
@@ -1602,27 +1718,26 @@ declare namespace DevKit {
 		regardingobjectid_virtualentitymetadata: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_workflowbinary: DevKit.WebApi.LookupValueReadonly;
-		RegardingObjectIdYomiName: DevKit.WebApi.StringValue;
 	}
 }
 declare namespace OptionSet {
 	namespace BulkDeleteFailure {
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':[],'JsWebApi':true,'IsDebugForm':false,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}

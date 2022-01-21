@@ -13,19 +13,19 @@ namespace Dev.DevKit.Shared.Entities.msdyn_livechatconfigOptionSets
 	public enum msdyn_agentDisplayName
 	{
 		/// <summary>
-		/// First_name = 192350001
+		/// First name = 192350001
 		/// </summary>
 		First_name = 192350001,
 		/// <summary>
-		/// Full_name = 192350000
+		/// Full name = 192350000
 		/// </summary>
 		Full_name = 192350000,
 		/// <summary>
-		/// Last_name = 192350002
+		/// Last name = 192350002
 		/// </summary>
 		Last_name = 192350002,
 		/// <summary>
-		/// Nick_name = 192350003
+		/// Nick name = 192350003
 		/// </summary>
 		Nick_name = 192350003
 	}
@@ -33,15 +33,15 @@ namespace Dev.DevKit.Shared.Entities.msdyn_livechatconfigOptionSets
 	public enum msdyn_callingoptions
 	{
 		/// <summary>
-		/// No_calling = 192350000
+		/// No calling = 192350000
 		/// </summary>
 		No_calling = 192350000,
 		/// <summary>
-		/// Video_and_voice_calling = 192350001
+		/// Video and voice calling = 192350001
 		/// </summary>
 		Video_and_voice_calling = 192350001,
 		/// <summary>
-		/// Voice_only = 192350002
+		/// Voice only = 192350002
 		/// </summary>
 		Voice_only = 192350002
 	}
@@ -49,11 +49,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_livechatconfigOptionSets
 	public enum msdyn_conversationmode
 	{
 		/// <summary>
-		/// Live_Chat = 192350000
+		/// Live Chat = 192350000
 		/// </summary>
 		Live_Chat = 192350000,
 		/// <summary>
-		/// Persistent_Chat = 192350001
+		/// Persistent Chat = 192350001
 		/// </summary>
 		Persistent_Chat = 192350001
 	}
@@ -61,7 +61,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_livechatconfigOptionSets
 	public enum msdyn_Language
 	{
 		/// <summary>
-		/// Auto_Detect = 192350000
+		/// Auto-Detect = 192350000
 		/// </summary>
 		Auto_Detect = 192350000,
 		/// <summary>
@@ -125,11 +125,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_livechatconfigOptionSets
 	public enum msdyn_PostConversationSurveyMode
 	{
 		/// <summary>
-		/// Insert_survey_in_conversation = 192350000
+		/// Insert survey in conversation = 192350000
 		/// </summary>
 		Insert_survey_in_conversation = 192350000,
 		/// <summary>
-		/// Send_survey_link_to_conversation = 192350001
+		/// Send survey link to conversation = 192350001
 		/// </summary>
 		Send_survey_link_to_conversation = 192350001
 	}
@@ -137,11 +137,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_livechatconfigOptionSets
 	public enum msdyn_widgetPosition
 	{
 		/// <summary>
-		/// Bottom_left = 192236011
+		/// Bottom left = 192236011
 		/// </summary>
 		Bottom_left = 192236011,
 		/// <summary>
-		/// Bottom_right = 192236010
+		/// Bottom right = 192236010
 		/// </summary>
 		Bottom_right = 192236010
 	}
@@ -270,6 +270,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_positioninqueue_enabled = "msdyn_positioninqueue_enabled";
 			public const string msdyn_postchatenabled = "msdyn_postchatenabled";
 			public const string msdyn_PostConversationSurvey = "msdyn_postconversationsurvey";
+			public const string msdyn_PostConversationSurveyBotSurvey = "msdyn_postconversationsurveybotsurvey";
 			public const string msdyn_PostConversationSurveyEnable = "msdyn_postconversationsurveyenable";
 			public const string msdyn_PostConversationSurveyMessageText = "msdyn_postconversationsurveymessagetext";
 			public const string msdyn_PostConversationSurveyMode = "msdyn_postconversationsurveymode";
@@ -306,7 +307,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_livechatconfig";
 
-		public const int EntityTypeCode = 10633;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10773;
 
 		[DebuggerNonUserCode()]
 		public msdyn_livechatconfig()
@@ -520,9 +522,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_livechatconfigOptionSets.msdyn_callingoptions)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_callingoptions] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_callingoptions] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_callingoptions] = null;
+			}
 		}
 
 		/// <summary>
@@ -707,9 +712,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_livechatconfigOptionSets.msdyn_Language)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_Language] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_Language] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_Language] = null;
+			}
 		}
 
 		/// <summary>
@@ -815,9 +823,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_livechatconfigOptionSets.msdyn_offlinewidgetthemecolor)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_offlinewidgetthemecolor] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_offlinewidgetthemecolor] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_offlinewidgetthemecolor] = null;
+			}
 		}
 
 		/// <summary>
@@ -893,6 +904,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Enable or disable bot survey</para>
+		/// <para>Boolean</para>
+		/// <para>Bot Survey</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_PostConversationSurveyBotSurvey
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_PostConversationSurveyBotSurvey); }
+			set { Entity.Attributes[Fields.msdyn_PostConversationSurveyBotSurvey] = value; }
+		}
+
+		/// <summary>
 		/// <para>To enable or disable post conversation survey</para>
 		/// <para>Boolean</para>
 		/// <para>Enable</para>
@@ -953,7 +976,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Prechat Question set for authenticated users</para>
-		/// <para>Lookup to </para>
+		/// <para>Lookup to msdyn_questionsequence</para>
 		/// <para>Question Set for Authenticated Users</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -965,7 +988,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Prechat Question set for unauthenticated users</para>
-		/// <para>Lookup to </para>
+		/// <para>Lookup to msdyn_questionsequence</para>
 		/// <para>Question Set for Unauthenticated Users</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -988,7 +1011,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>We'll redirect customers to this webpage.</para>
+		/// <para>We&apos;ll redirect customers to this webpage.</para>
 		/// <para>String - MaxLength: 100</para>
 		/// <para>Redirection URL</para>
 		/// </summary>
@@ -1048,7 +1071,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>The previous agent's capacity will be held for this time period.</para>
+		/// <para>The previous agent&apos;s capacity will be held for this time period.</para>
 		/// <para>Integer - MinValue: 0 - MaxValue: 2,147,483,647</para>
 		/// <para>Reconnect to previous agent for</para>
 		/// </summary>
@@ -1098,9 +1121,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_livechatconfigOptionSets.msdyn_widgetPosition)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_widgetPosition] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_widgetPosition] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_widgetPosition] = null;
+			}
 		}
 
 		/// <summary>
@@ -1154,9 +1180,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_livechatconfigOptionSets.msdyn_widgetThemeColor)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_widgetThemeColor] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_widgetThemeColor] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_widgetThemeColor] = null;
+			}
 		}
 
 		/// <summary>
@@ -1197,7 +1226,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

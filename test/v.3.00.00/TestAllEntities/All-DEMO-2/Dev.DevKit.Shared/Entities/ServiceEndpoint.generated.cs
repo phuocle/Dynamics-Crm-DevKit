@@ -13,7 +13,7 @@ namespace Dev.DevKit.Shared.Entities.ServiceEndpointOptionSets
 	public enum AuthType
 	{
 		/// <summary>
-		/// Access_Key = 8
+		/// Access Key = 8
 		/// </summary>
 		Access_Key = 8,
 		/// <summary>
@@ -21,27 +21,27 @@ namespace Dev.DevKit.Shared.Entities.ServiceEndpointOptionSets
 		/// </summary>
 		ACS = 1,
 		/// <summary>
-		/// Connection_String = 7
+		/// Connection String = 7
 		/// </summary>
 		Connection_String = 7,
 		/// <summary>
-		/// Http_Header = 5
+		/// Http Header = 5
 		/// </summary>
 		Http_Header = 5,
 		/// <summary>
-		/// Http_Query_String = 6
+		/// Http Query String = 6
 		/// </summary>
 		Http_Query_String = 6,
 		/// <summary>
-		/// SAS_Key = 2
+		/// SAS Key = 2
 		/// </summary>
 		SAS_Key = 2,
 		/// <summary>
-		/// SAS_Token = 3
+		/// SAS Token = 3
 		/// </summary>
 		SAS_Token = 3,
 		/// <summary>
-		/// Webhook_Key = 4
+		/// Webhook Key = 4
 		/// </summary>
 		Webhook_Key = 4
 	}
@@ -53,7 +53,7 @@ namespace Dev.DevKit.Shared.Entities.ServiceEndpointOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -81,11 +81,11 @@ namespace Dev.DevKit.Shared.Entities.ServiceEndpointOptionSets
 	public enum Contract
 	{
 		/// <summary>
-		/// Event_Grid = 9
+		/// Event Grid = 9
 		/// </summary>
 		Event_Grid = 9,
 		/// <summary>
-		/// Event_Hub = 7
+		/// Event Hub = 7
 		/// </summary>
 		Event_Hub = 7,
 		/// <summary>
@@ -97,7 +97,7 @@ namespace Dev.DevKit.Shared.Entities.ServiceEndpointOptionSets
 		/// </summary>
 		Queue = 2,
 		/// <summary>
-		/// Queue_Persistent = 6
+		/// Queue (Persistent) = 6
 		/// </summary>
 		Queue_Persistent = 6,
 		/// <summary>
@@ -118,10 +118,22 @@ namespace Dev.DevKit.Shared.Entities.ServiceEndpointOptionSets
 		Webhook = 8
 	}
 
+	public enum MessageCharset
+	{
+		/// <summary>
+		/// Default = 0
+		/// </summary>
+		Default = 0,
+		/// <summary>
+		/// UTF8 = 1
+		/// </summary>
+		UTF8 = 1
+	}
+
 	public enum MessageFormat
 	{
 		/// <summary>
-		/// Binary_XML = 1
+		/// Binary XML = 1
 		/// </summary>
 		Binary_XML = 1,
 		/// <summary>
@@ -129,7 +141,7 @@ namespace Dev.DevKit.Shared.Entities.ServiceEndpointOptionSets
 		/// </summary>
 		Json = 2,
 		/// <summary>
-		/// Text_XML = 3
+		/// Text XML = 3
 		/// </summary>
 		Text_XML = 3
 	}
@@ -137,11 +149,11 @@ namespace Dev.DevKit.Shared.Entities.ServiceEndpointOptionSets
 	public enum NamespaceFormat
 	{
 		/// <summary>
-		/// Namespace_Address = 2
+		/// Namespace Address = 2
 		/// </summary>
 		Namespace_Address = 2,
 		/// <summary>
-		/// Namespace_Name = 1
+		/// Namespace Name = 1
 		/// </summary>
 		Namespace_Name = 1
 	}
@@ -149,11 +161,11 @@ namespace Dev.DevKit.Shared.Entities.ServiceEndpointOptionSets
 	public enum SchemaType
 	{
 		/// <summary>
-		/// Cloud_Events = 2
+		/// Cloud Events = 2
 		/// </summary>
 		Cloud_Events = 2,
 		/// <summary>
-		/// Event_Grid = 1
+		/// Event Grid = 1
 		/// </summary>
 		Event_Grid = 1
 	}
@@ -196,6 +208,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string IsSASKeySet = "issaskeyset";
 			public const string IsSASTokenSet = "issastokenset";
 			public const string KeyVaultReferenceId = "keyvaultreferenceid";
+			public const string MessageCharset = "messagecharset";
 			public const string MessageFormat = "messageformat";
 			public const string ModifiedBy = "modifiedby";
 			public const string ModifiedOn = "modifiedon";
@@ -223,6 +236,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "serviceendpoint";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 4618;
 
 		[DebuggerNonUserCode()]
@@ -478,6 +492,29 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<EntityReference>(Fields.KeyVaultReferenceId); }
 			set { Entity.Attributes[Fields.KeyVaultReferenceId] = value; }
+		}
+
+		/// <summary>
+		/// <para>Specifies the character encoding for message content</para>
+		/// <para>Picklist</para>
+		/// <para>Specifies the character encoding to be used for messages sent to a service endpoint</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public Dev.DevKit.Shared.Entities.ServiceEndpointOptionSets.MessageCharset? MessageCharset
+		{
+			get
+			{
+				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.MessageCharset);
+				if (value == null) return null;
+				return (Dev.DevKit.Shared.Entities.ServiceEndpointOptionSets.MessageCharset)value.Value;
+			}
+			set
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.MessageCharset] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.MessageCharset] = null;
+			}
 		}
 
 		/// <summary>

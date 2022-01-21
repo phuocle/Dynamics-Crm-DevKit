@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_fieldservicesystemjobOptionSets
 		/// </summary>
 		Json = 690970001,
 		/// <summary>
-		/// String_List = 690970000
+		/// String List = 690970000
 		/// </summary>
 		String_List = 690970000,
 		/// <summary>
@@ -37,7 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_fieldservicesystemjobOptionSets
 		/// </summary>
 		Failed = 690970003,
 		/// <summary>
-		/// In_Progress = 690970001
+		/// In Progress = 690970001
 		/// </summary>
 		In_Progress = 690970001,
 		/// <summary>
@@ -53,7 +53,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_fieldservicesystemjobOptionSets
 		/// </summary>
 		Json = 690970001,
 		/// <summary>
-		/// String_List = 690970000
+		/// String List = 690970000
 		/// </summary>
 		String_List = 690970000,
 		/// <summary>
@@ -123,7 +123,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_fieldservicesystemjob";
 
-		public const int EntityTypeCode = 10434;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10544;
 
 		[DebuggerNonUserCode()]
 		public msdyn_fieldservicesystemjob()
@@ -360,9 +361,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_fieldservicesystemjobOptionSets.msdyn_JobStatus)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_JobStatus] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_JobStatus] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_JobStatus] = null;
+			}
 		}
 
 		/// <summary>

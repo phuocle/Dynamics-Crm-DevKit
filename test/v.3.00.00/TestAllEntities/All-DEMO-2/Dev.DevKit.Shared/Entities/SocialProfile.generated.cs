@@ -17,11 +17,11 @@ namespace Dev.DevKit.Shared.Entities.SocialProfileOptionSets
 		/// </summary>
 		Cortana = 5,
 		/// <summary>
-		/// Direct_Line = 6
+		/// Direct Line = 6
 		/// </summary>
 		Direct_Line = 6,
 		/// <summary>
-		/// Direct_Line_Speech = 8
+		/// Direct Line Speech = 8
 		/// </summary>
 		Direct_Line_Speech = 8,
 		/// <summary>
@@ -45,7 +45,7 @@ namespace Dev.DevKit.Shared.Entities.SocialProfileOptionSets
 		/// </summary>
 		Line = 3,
 		/// <summary>
-		/// Microsoft_Teams = 7
+		/// Microsoft Teams = 7
 		/// </summary>
 		Microsoft_Teams = 7,
 		/// <summary>
@@ -121,6 +121,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ModifiedBy = "modifiedby";
 			public const string ModifiedOn = "modifiedon";
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
+			public const string msdyn_customeroptout = "msdyn_customeroptout";
 			public const string msdyn_ocfollowercount = "msdyn_ocfollowercount";
 			public const string msdyn_ocfollowingcount = "msdyn_ocfollowingcount";
 			public const string msdyn_ocfriendcount = "msdyn_ocfriendcount";
@@ -147,6 +148,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "socialprofile";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 99;
 
 		[DebuggerNonUserCode()]
@@ -267,7 +269,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Shows the customer that this social profile belongs to.</para>
-		/// <para>Customer</para>
+		/// <para>Lookup to account, contact</para>
 		/// <para>Customer</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -278,7 +280,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency.</para>
+		/// <para>Shows the conversion rate of the record&apos;s currency. The exchange rate is used to convert all money fields in the record from the local currency to the system&apos;s default currency.</para>
 		/// <para>ReadOnly - Decimal - MinValue: 0 - MaxValue: 100,000,000,000</para>
 		/// <para>Exchange Rate</para>
 		/// </summary>
@@ -346,7 +348,19 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Customer's Followers on the Social channel.</para>
+		/// <para>Flag specifying whether Customer has opted out of getting messages using this SP.</para>
+		/// <para>Boolean</para>
+		/// <para>customeroptout</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_customeroptout
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_customeroptout); }
+			set { Entity.Attributes[Fields.msdyn_customeroptout] = value; }
+		}
+
+		/// <summary>
+		/// <para>Customer&apos;s Followers on the Social channel.</para>
 		/// <para>Integer - MinValue: -2,147,483,648 - MaxValue: 2,147,483,647</para>
 		/// <para>Follower Count</para>
 		/// </summary>
@@ -358,7 +372,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Customer's followings on the Social channel</para>
+		/// <para>Customer&apos;s followings on the Social channel</para>
 		/// <para>Integer - MinValue: -2,147,483,648 - MaxValue: 2,147,483,647</para>
 		/// <para>Followings Count</para>
 		/// </summary>
@@ -370,7 +384,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Customer's Friend count on the Social Channel</para>
+		/// <para>Customer&apos;s Friend count on the Social Channel</para>
 		/// <para>Integer - MinValue: -2,147,483,648 - MaxValue: 2,147,483,647</para>
 		/// <para>Friend Count</para>
 		/// </summary>
@@ -406,7 +420,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Link to the Customer's Social Channel Profile image.</para>
+		/// <para>Link to the Customer&apos;s Social Channel Profile image.</para>
 		/// <para>String - MaxLength: 4000</para>
 		/// <para>Profile Image Link</para>
 		/// </summary>
@@ -431,7 +445,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Shows the user or team that is assigned to manage the record. This field is updated every time the record is assigned to a different user.</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

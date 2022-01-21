@@ -12,7 +12,7 @@ declare namespace DevKit {
 			/** Select the case's status. */
 			StatusCode: DevKit.Controls.OptionSet;
 		}
-		interface tab__Enhanced_SLA_Details_Tab_Sections {
+		interface tab_Enhanced_SLA_Details_Tab_Sections {
 			Applicable_SLAENHANCED: DevKit.Controls.Section;
 			SLAKPIInstances: DevKit.Controls.Section;
 		}
@@ -53,8 +53,8 @@ declare namespace DevKit {
 			social: DevKit.Controls.Section;
 			social3: DevKit.Controls.Section;
 		}
-		interface tab__Enhanced_SLA_Details_Tab extends DevKit.Controls.ITab {
-			Section: tab__Enhanced_SLA_Details_Tab_Sections;
+		interface tab_Enhanced_SLA_Details_Tab extends DevKit.Controls.ITab {
+			Section: tab_Enhanced_SLA_Details_Tab_Sections;
 		}
 		interface tab_ADDITIONALDETAILS_TAB extends DevKit.Controls.ITab {
 			Section: tab_ADDITIONALDETAILS_TAB_Sections;
@@ -81,7 +81,7 @@ declare namespace DevKit {
 			Section: tab_SOCIALDETAILS_TAB_Sections;
 		}
 		interface Tabs {
-			_Enhanced_SLA_Details_Tab: tab__Enhanced_SLA_Details_Tab;
+			Enhanced_SLA_Details_Tab: tab_Enhanced_SLA_Details_Tab;
 			ADDITIONALDETAILS_TAB: tab_ADDITIONALDETAILS_TAB;
 			AssociatedKnowledgeBaseRecords: tab_AssociatedKnowledgeBaseRecords;
 			CASERELATIONSHIP_TAB: tab_CASERELATIONSHIP_TAB;
@@ -136,7 +136,7 @@ declare namespace DevKit {
 			/** The iot alert that initiated this case */
 			msdyn_iotalert: DevKit.Controls.Lookup;
 			/** The iot alert that initiated this case */
-			msdyn_iotalert_1: DevKit.Controls.Lookup;
+			msdyn_iotalert1: DevKit.Controls.Lookup;
 			notescontrol: DevKit.Controls.Note;
 			/** Choose the parent case for a case. */
 			ParentCaseId: DevKit.Controls.Lookup;
@@ -192,16 +192,6 @@ declare namespace DevKit {
 			firstresponseslaquickform: quickForm_firstresponseslaquickform;
 			resolvebyslaquickform: quickForm_resolvebyslaquickform;
 		}
-		interface ProcessPhone_to_Case_Process {
-			/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
-			CustomerId: DevKit.Controls.Lookup;
-			/** Select an existing case for the customer that has been populated. For internal use only. */
-			ExistingCase: DevKit.Controls.Lookup;
-			/** Owner Id */
-			OwnerId: DevKit.Controls.Lookup;
-			/** Select a primary contact for this case. */
-			PrimaryContactId: DevKit.Controls.Lookup;
-		}
 		interface ProcessCase_to_Work_Order_Business_Process {
 			/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
 			CustomerId: DevKit.Controls.Lookup;
@@ -212,22 +202,54 @@ declare namespace DevKit {
 			/** Select a primary contact for this case. */
 			PrimaryContactId: DevKit.Controls.Lookup;
 		}
+		interface ProcessCFS_IoT_Alert_Process_Flow {
+			/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
+			CustomerId: DevKit.Controls.Lookup;
+			/** Unique identifier for Incident Type associated with Case. */
+			msdyn_IncidentType: DevKit.Controls.Lookup;
+			/** Type a subject or descriptive name, such as the request, issue, or company name, to identify the case in Microsoft Dynamics 365 views. */
+			Title: DevKit.Controls.String;
+		}
+		interface ProcessIoT_Alert_to_Case_Process {
+			/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
+			CustomerId: DevKit.Controls.Lookup;
+			/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
+			CustomerId_1: DevKit.Controls.Lookup;
+			/** Owner Id */
+			OwnerId: DevKit.Controls.Lookup;
+			/** Select a primary contact for this case. */
+			PrimaryContactId: DevKit.Controls.Lookup;
+			/** Type a subject or descriptive name, such as the request, issue, or company name, to identify the case in Microsoft Dynamics 365 views. */
+			Title: DevKit.Controls.String;
+		}
+		interface ProcessPhone_to_Case_Process {
+			/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
+			CustomerId: DevKit.Controls.Lookup;
+			/** Select an existing case for the customer that has been populated. For internal use only. */
+			ExistingCase: DevKit.Controls.Lookup;
+			/** Owner Id */
+			OwnerId: DevKit.Controls.Lookup;
+			/** Select a primary contact for this case. */
+			PrimaryContactId: DevKit.Controls.Lookup;
+		}
 		interface Process extends DevKit.Controls.IProcess {
-			Phone_to_Case_Process: ProcessPhone_to_Case_Process;
 			Case_to_Work_Order_Business_Process: ProcessCase_to_Work_Order_Business_Process;
+			CFS_IoT_Alert_Process_Flow: ProcessCFS_IoT_Alert_Process_Flow;
+			IoT_Alert_to_Case_Process: ProcessIoT_Alert_to_Case_Process;
+			Phone_to_Case_Process: ProcessPhone_to_Case_Process;
 		}
 		interface Grid {
-			RelatedSolutionGrid: DevKit.Controls.Grid;
-			MergedCasesGrid: DevKit.Controls.Grid;
-			ChildCasesGrid: DevKit.Controls.Grid;
 			Associated_Articles: DevKit.Controls.Grid;
 			Associated_KnowledgeArticles: DevKit.Controls.Grid;
+			ChildCasesGrid: DevKit.Controls.Grid;
+			MergedCasesGrid: DevKit.Controls.Grid;
+			RelatedSolutionGrid: DevKit.Controls.Grid;
 			SLA_KPI_Instances_List: DevKit.Controls.Grid;
 		}
 	}
 	class FormCase extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Case
+		* Case [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -246,6 +268,8 @@ declare namespace DevKit {
 		Process: DevKit.FormCase.Process;
 		/** The Grid of form Case */
 		Grid: DevKit.FormCase.Grid;
+		/** The SidePanes of form Case */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormCase_for_Interactive_experience {
 		interface Header extends DevKit.Controls.IHeader {
@@ -258,7 +282,7 @@ declare namespace DevKit {
 			/** Select the case's status. */
 			StatusCode: DevKit.Controls.OptionSet;
 		}
-		interface tab__Enhanced_SLA_Details_Tab_Sections {
+		interface tab_Enhanced_SLA_Details_Tab_Sections {
 			SLAKPIInstances: DevKit.Controls.Section;
 		}
 		interface tab_CASERELATIONSHIP_TAB_Sections {
@@ -286,8 +310,8 @@ declare namespace DevKit {
 			SLAKPI_Timer_Section: DevKit.Controls.Section;
 			Timeline: DevKit.Controls.Section;
 		}
-		interface tab__Enhanced_SLA_Details_Tab extends DevKit.Controls.ITab {
-			Section: tab__Enhanced_SLA_Details_Tab_Sections;
+		interface tab_Enhanced_SLA_Details_Tab extends DevKit.Controls.ITab {
+			Section: tab_Enhanced_SLA_Details_Tab_Sections;
 		}
 		interface tab_CASERELATIONSHIP_TAB extends DevKit.Controls.ITab {
 			Section: tab_CASERELATIONSHIP_TAB_Sections;
@@ -305,7 +329,7 @@ declare namespace DevKit {
 			Section: tab_Summary_Sections;
 		}
 		interface Tabs {
-			_Enhanced_SLA_Details_Tab: tab__Enhanced_SLA_Details_Tab;
+			Enhanced_SLA_Details_Tab: tab_Enhanced_SLA_Details_Tab;
 			CASERELATIONSHIP_TAB: tab_CASERELATIONSHIP_TAB;
 			Details: tab_Details;
 			DeviceInsightsTab: tab_DeviceInsightsTab;
@@ -319,23 +343,23 @@ declare namespace DevKit {
 			/** Select how contact about the case was originated, such as email, phone, or web, for use in reporting and analysis. */
 			CaseOriginCode: DevKit.Controls.OptionSet;
 			/** Select how contact about the case was originated, such as email, phone, or web, for use in reporting and analysis. */
-			CaseOriginCode_1: DevKit.Controls.OptionSet;
+			CaseOriginCode1: DevKit.Controls.OptionSet;
 			/** Select the type of case to identify the incident for use in case routing and analysis. */
 			CaseTypeCode: DevKit.Controls.OptionSet;
 			/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
 			CustomerId: DevKit.Controls.Lookup;
 			/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
-			CustomerId_1: DevKit.Controls.Lookup;
+			CustomerId1: DevKit.Controls.Lookup;
 			/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
-			CustomerId_2: DevKit.Controls.Lookup;
+			CustomerId2: DevKit.Controls.Lookup;
 			/** Type additional information to describe the case to assist the service team in reaching a resolution. */
 			Description: DevKit.Controls.String;
 			/** Type additional information to describe the case to assist the service team in reaching a resolution. */
-			Description_1: DevKit.Controls.String;
+			Description1: DevKit.Controls.String;
 			/** Choose the entitlement that is applicable for the case. */
 			EntitlementId: DevKit.Controls.Lookup;
 			/** Choose the entitlement that is applicable for the case. */
-			EntitlementId_1: DevKit.Controls.Lookup;
+			EntitlementId1: DevKit.Controls.Lookup;
 			/** Indicates the date and time when the case was escalated. */
 			EscalatedOn: DevKit.Controls.DateTime;
 			/** Indicates if the first response has been sent. */
@@ -351,9 +375,9 @@ declare namespace DevKit {
 			/** The iot alert that initiated this case */
 			msdyn_iotalert: DevKit.Controls.Lookup;
 			/** The iot alert that initiated this case */
-			msdyn_iotalert_1: DevKit.Controls.Lookup;
+			msdyn_iotalert1: DevKit.Controls.Lookup;
 			/** The iot alert that initiated this case */
-			msdyn_iotalert_2: DevKit.Controls.Lookup;
+			msdyn_iotalert2: DevKit.Controls.Lookup;
 			notescontrol: DevKit.Controls.Note;
 			/** Choose the parent case for a case. */
 			ParentCaseId: DevKit.Controls.Lookup;
@@ -362,7 +386,7 @@ declare namespace DevKit {
 			/** Choose the product associated with the case to identify warranty, service, or other product issues and be able to report the number of incidents for each product. */
 			ProductId: DevKit.Controls.Lookup;
 			/** Choose the product associated with the case to identify warranty, service, or other product issues and be able to report the number of incidents for each product. */
-			ProductId_1: DevKit.Controls.Lookup;
+			ProductId1: DevKit.Controls.Lookup;
 			/** Enter the date by when the case must be resolved. */
 			ResolveBy: DevKit.Controls.DateTime;
 			/** For internal use only. */
@@ -374,16 +398,16 @@ declare namespace DevKit {
 			/** Choose the subject for the case, such as catalog request or product complaint, so customer service managers can identify frequent requests or problem areas. Administrators can configure subjects under Business Management in the Settings area. */
 			SubjectId: DevKit.Controls.Lookup;
 			/** Choose the subject for the case, such as catalog request or product complaint, so customer service managers can identify frequent requests or problem areas. Administrators can configure subjects under Business Management in the Settings area. */
-			SubjectId_1: DevKit.Controls.Lookup;
+			SubjectId1: DevKit.Controls.Lookup;
 			/** Shows the case number for customer reference and searching capabilities. This cannot be modified. */
 			TicketNumber: DevKit.Controls.String;
 			/** Shows the case number for customer reference and searching capabilities. This cannot be modified. */
-			TicketNumber_1: DevKit.Controls.String;
+			TicketNumber1: DevKit.Controls.String;
 			/** Type a subject or descriptive name, such as the request, issue, or company name, to identify the case in Microsoft Dynamics 365 views. */
 			Title: DevKit.Controls.String;
 			similarCaseRecordcontrol_id: DevKit.Controls.ActionCards;
 			/** Type a subject or descriptive name, such as the request, issue, or company name, to identify the case in Microsoft Dynamics 365 views. */
-			Title_1: DevKit.Controls.String;
+			Title1: DevKit.Controls.String;
 		}
 		interface quickForm_customerpane_qfc_Body {
 			EMailAddress1: DevKit.Controls.QuickView;
@@ -410,16 +434,6 @@ declare namespace DevKit {
 			FirstResponseByKPI: quickForm_FirstResponseByKPI;
 			ResolveByKPI: quickForm_ResolveByKPI;
 		}
-		interface ProcessPhone_to_Case_Process {
-			/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
-			CustomerId: DevKit.Controls.Lookup;
-			/** Select an existing case for the customer that has been populated. For internal use only. */
-			ExistingCase: DevKit.Controls.Lookup;
-			/** Owner Id */
-			OwnerId: DevKit.Controls.Lookup;
-			/** Select a primary contact for this case. */
-			PrimaryContactId: DevKit.Controls.Lookup;
-		}
 		interface ProcessCase_to_Work_Order_Business_Process {
 			/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
 			CustomerId: DevKit.Controls.Lookup;
@@ -430,21 +444,53 @@ declare namespace DevKit {
 			/** Select a primary contact for this case. */
 			PrimaryContactId: DevKit.Controls.Lookup;
 		}
+		interface ProcessCFS_IoT_Alert_Process_Flow {
+			/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
+			CustomerId: DevKit.Controls.Lookup;
+			/** Unique identifier for Incident Type associated with Case. */
+			msdyn_IncidentType: DevKit.Controls.Lookup;
+			/** Type a subject or descriptive name, such as the request, issue, or company name, to identify the case in Microsoft Dynamics 365 views. */
+			Title: DevKit.Controls.String;
+		}
+		interface ProcessIoT_Alert_to_Case_Process {
+			/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
+			CustomerId: DevKit.Controls.Lookup;
+			/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
+			CustomerId_1: DevKit.Controls.Lookup;
+			/** Owner Id */
+			OwnerId: DevKit.Controls.Lookup;
+			/** Select a primary contact for this case. */
+			PrimaryContactId: DevKit.Controls.Lookup;
+			/** Type a subject or descriptive name, such as the request, issue, or company name, to identify the case in Microsoft Dynamics 365 views. */
+			Title: DevKit.Controls.String;
+		}
+		interface ProcessPhone_to_Case_Process {
+			/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
+			CustomerId: DevKit.Controls.Lookup;
+			/** Select an existing case for the customer that has been populated. For internal use only. */
+			ExistingCase: DevKit.Controls.Lookup;
+			/** Owner Id */
+			OwnerId: DevKit.Controls.Lookup;
+			/** Select a primary contact for this case. */
+			PrimaryContactId: DevKit.Controls.Lookup;
+		}
 		interface Process extends DevKit.Controls.IProcess {
-			Phone_to_Case_Process: ProcessPhone_to_Case_Process;
 			Case_to_Work_Order_Business_Process: ProcessCase_to_Work_Order_Business_Process;
+			CFS_IoT_Alert_Process_Flow: ProcessCFS_IoT_Alert_Process_Flow;
+			IoT_Alert_to_Case_Process: ProcessIoT_Alert_to_Case_Process;
+			Phone_to_Case_Process: ProcessPhone_to_Case_Process;
 		}
 		interface Grid {
-			MergedCasesGrid: DevKit.Controls.Grid;
-			ChildCasesGrid: DevKit.Controls.Grid;
 			Associated_KnowledgeArticles: DevKit.Controls.Grid;
-			SLA_KPI_Instances_List: DevKit.Controls.Grid;
+			ChildCasesGrid: DevKit.Controls.Grid;
 			Devices: DevKit.Controls.Grid;
+			MergedCasesGrid: DevKit.Controls.Grid;
+			SLA_KPI_Instances_List: DevKit.Controls.Grid;
 		}
 	}
 	class FormCase_for_Interactive_experience extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Case_for_Interactive_experience
+		* Case for Interactive experience [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -461,6 +507,8 @@ declare namespace DevKit {
 		Process: DevKit.FormCase_for_Interactive_experience.Process;
 		/** The Grid of form Case_for_Interactive_experience */
 		Grid: DevKit.FormCase_for_Interactive_experience.Grid;
+		/** The SidePanes of form Case_for_Interactive_experience */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormCase_for_Multisession_experience {
 		interface Header extends DevKit.Controls.IHeader {
@@ -535,16 +583,6 @@ declare namespace DevKit {
 			navActivities: DevKit.Controls.NavigationItem,
 			navActivityHistory: DevKit.Controls.NavigationItem
 		}
-		interface ProcessPhone_to_Case_Process {
-			/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
-			CustomerId: DevKit.Controls.Lookup;
-			/** Select an existing case for the customer that has been populated. For internal use only. */
-			ExistingCase: DevKit.Controls.Lookup;
-			/** Owner Id */
-			OwnerId: DevKit.Controls.Lookup;
-			/** Select a primary contact for this case. */
-			PrimaryContactId: DevKit.Controls.Lookup;
-		}
 		interface ProcessCase_to_Work_Order_Business_Process {
 			/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
 			CustomerId: DevKit.Controls.Lookup;
@@ -555,20 +593,52 @@ declare namespace DevKit {
 			/** Select a primary contact for this case. */
 			PrimaryContactId: DevKit.Controls.Lookup;
 		}
+		interface ProcessCFS_IoT_Alert_Process_Flow {
+			/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
+			CustomerId: DevKit.Controls.Lookup;
+			/** Unique identifier for Incident Type associated with Case. */
+			msdyn_IncidentType: DevKit.Controls.Lookup;
+			/** Type a subject or descriptive name, such as the request, issue, or company name, to identify the case in Microsoft Dynamics 365 views. */
+			Title: DevKit.Controls.String;
+		}
+		interface ProcessIoT_Alert_to_Case_Process {
+			/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
+			CustomerId: DevKit.Controls.Lookup;
+			/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
+			CustomerId_1: DevKit.Controls.Lookup;
+			/** Owner Id */
+			OwnerId: DevKit.Controls.Lookup;
+			/** Select a primary contact for this case. */
+			PrimaryContactId: DevKit.Controls.Lookup;
+			/** Type a subject or descriptive name, such as the request, issue, or company name, to identify the case in Microsoft Dynamics 365 views. */
+			Title: DevKit.Controls.String;
+		}
+		interface ProcessPhone_to_Case_Process {
+			/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
+			CustomerId: DevKit.Controls.Lookup;
+			/** Select an existing case for the customer that has been populated. For internal use only. */
+			ExistingCase: DevKit.Controls.Lookup;
+			/** Owner Id */
+			OwnerId: DevKit.Controls.Lookup;
+			/** Select a primary contact for this case. */
+			PrimaryContactId: DevKit.Controls.Lookup;
+		}
 		interface Process extends DevKit.Controls.IProcess {
-			Phone_to_Case_Process: ProcessPhone_to_Case_Process;
 			Case_to_Work_Order_Business_Process: ProcessCase_to_Work_Order_Business_Process;
+			CFS_IoT_Alert_Process_Flow: ProcessCFS_IoT_Alert_Process_Flow;
+			IoT_Alert_to_Case_Process: ProcessIoT_Alert_to_Case_Process;
+			Phone_to_Case_Process: ProcessPhone_to_Case_Process;
 		}
 		interface Grid {
 			Associated_KnowledgeArticles: DevKit.Controls.Grid;
-			relatedCases: DevKit.Controls.Grid;
 			ChildCasesGrid: DevKit.Controls.Grid;
 			MergedCasesGrid: DevKit.Controls.Grid;
+			relatedCases: DevKit.Controls.Grid;
 		}
 	}
 	class FormCase_for_Multisession_experience extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Case_for_Multisession_experience
+		* Case for Multisession experience [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -585,6 +655,8 @@ declare namespace DevKit {
 		Process: DevKit.FormCase_for_Multisession_experience.Process;
 		/** The Grid of form Case_for_Multisession_experience */
 		Grid: DevKit.FormCase_for_Multisession_experience.Grid;
+		/** The SidePanes of form Case_for_Multisession_experience */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormIncident_Information {
 		interface tab_general_Sections {
@@ -654,16 +726,6 @@ declare namespace DevKit {
 			navActivities: DevKit.Controls.NavigationItem,
 			navActivityHistory: DevKit.Controls.NavigationItem
 		}
-		interface ProcessPhone_to_Case_Process {
-			/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
-			CustomerId: DevKit.Controls.Lookup;
-			/** Select an existing case for the customer that has been populated. For internal use only. */
-			ExistingCase: DevKit.Controls.Lookup;
-			/** Owner Id */
-			OwnerId: DevKit.Controls.Lookup;
-			/** Select a primary contact for this case. */
-			PrimaryContactId: DevKit.Controls.Lookup;
-		}
 		interface ProcessCase_to_Work_Order_Business_Process {
 			/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
 			CustomerId: DevKit.Controls.Lookup;
@@ -674,14 +736,46 @@ declare namespace DevKit {
 			/** Select a primary contact for this case. */
 			PrimaryContactId: DevKit.Controls.Lookup;
 		}
+		interface ProcessCFS_IoT_Alert_Process_Flow {
+			/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
+			CustomerId: DevKit.Controls.Lookup;
+			/** Unique identifier for Incident Type associated with Case. */
+			msdyn_IncidentType: DevKit.Controls.Lookup;
+			/** Type a subject or descriptive name, such as the request, issue, or company name, to identify the case in Microsoft Dynamics 365 views. */
+			Title: DevKit.Controls.String;
+		}
+		interface ProcessIoT_Alert_to_Case_Process {
+			/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
+			CustomerId: DevKit.Controls.Lookup;
+			/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
+			CustomerId_1: DevKit.Controls.Lookup;
+			/** Owner Id */
+			OwnerId: DevKit.Controls.Lookup;
+			/** Select a primary contact for this case. */
+			PrimaryContactId: DevKit.Controls.Lookup;
+			/** Type a subject or descriptive name, such as the request, issue, or company name, to identify the case in Microsoft Dynamics 365 views. */
+			Title: DevKit.Controls.String;
+		}
+		interface ProcessPhone_to_Case_Process {
+			/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
+			CustomerId: DevKit.Controls.Lookup;
+			/** Select an existing case for the customer that has been populated. For internal use only. */
+			ExistingCase: DevKit.Controls.Lookup;
+			/** Owner Id */
+			OwnerId: DevKit.Controls.Lookup;
+			/** Select a primary contact for this case. */
+			PrimaryContactId: DevKit.Controls.Lookup;
+		}
 		interface Process extends DevKit.Controls.IProcess {
-			Phone_to_Case_Process: ProcessPhone_to_Case_Process;
 			Case_to_Work_Order_Business_Process: ProcessCase_to_Work_Order_Business_Process;
+			CFS_IoT_Alert_Process_Flow: ProcessCFS_IoT_Alert_Process_Flow;
+			IoT_Alert_to_Case_Process: ProcessIoT_Alert_to_Case_Process;
+			Phone_to_Case_Process: ProcessPhone_to_Case_Process;
 		}
 	}
 	class FormIncident_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Incident_Information
+		* Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -694,6 +788,8 @@ declare namespace DevKit {
 		Navigation: DevKit.FormIncident_Information.Navigation;
 		/** The Process of form Incident_Information */
 		Process: DevKit.FormIncident_Information.Process;
+		/** The SidePanes of form Incident_Information */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormTimelineWallControl_Case_Main {
 		interface Header extends DevKit.Controls.IHeader {
@@ -717,16 +813,6 @@ declare namespace DevKit {
 			navActivities: DevKit.Controls.NavigationItem,
 			navActivityHistory: DevKit.Controls.NavigationItem
 		}
-		interface ProcessPhone_to_Case_Process {
-			/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
-			CustomerId: DevKit.Controls.Lookup;
-			/** Select an existing case for the customer that has been populated. For internal use only. */
-			ExistingCase: DevKit.Controls.Lookup;
-			/** Owner Id */
-			OwnerId: DevKit.Controls.Lookup;
-			/** Select a primary contact for this case. */
-			PrimaryContactId: DevKit.Controls.Lookup;
-		}
 		interface ProcessCase_to_Work_Order_Business_Process {
 			/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
 			CustomerId: DevKit.Controls.Lookup;
@@ -737,14 +823,46 @@ declare namespace DevKit {
 			/** Select a primary contact for this case. */
 			PrimaryContactId: DevKit.Controls.Lookup;
 		}
+		interface ProcessCFS_IoT_Alert_Process_Flow {
+			/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
+			CustomerId: DevKit.Controls.Lookup;
+			/** Unique identifier for Incident Type associated with Case. */
+			msdyn_IncidentType: DevKit.Controls.Lookup;
+			/** Type a subject or descriptive name, such as the request, issue, or company name, to identify the case in Microsoft Dynamics 365 views. */
+			Title: DevKit.Controls.String;
+		}
+		interface ProcessIoT_Alert_to_Case_Process {
+			/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
+			CustomerId: DevKit.Controls.Lookup;
+			/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
+			CustomerId_1: DevKit.Controls.Lookup;
+			/** Owner Id */
+			OwnerId: DevKit.Controls.Lookup;
+			/** Select a primary contact for this case. */
+			PrimaryContactId: DevKit.Controls.Lookup;
+			/** Type a subject or descriptive name, such as the request, issue, or company name, to identify the case in Microsoft Dynamics 365 views. */
+			Title: DevKit.Controls.String;
+		}
+		interface ProcessPhone_to_Case_Process {
+			/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
+			CustomerId: DevKit.Controls.Lookup;
+			/** Select an existing case for the customer that has been populated. For internal use only. */
+			ExistingCase: DevKit.Controls.Lookup;
+			/** Owner Id */
+			OwnerId: DevKit.Controls.Lookup;
+			/** Select a primary contact for this case. */
+			PrimaryContactId: DevKit.Controls.Lookup;
+		}
 		interface Process extends DevKit.Controls.IProcess {
-			Phone_to_Case_Process: ProcessPhone_to_Case_Process;
 			Case_to_Work_Order_Business_Process: ProcessCase_to_Work_Order_Business_Process;
+			CFS_IoT_Alert_Process_Flow: ProcessCFS_IoT_Alert_Process_Flow;
+			IoT_Alert_to_Case_Process: ProcessIoT_Alert_to_Case_Process;
+			Phone_to_Case_Process: ProcessPhone_to_Case_Process;
 		}
 	}
 	class FormTimelineWallControl_Case_Main extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form TimelineWallControl_Case_Main
+		* TimelineWallControl - Case- Main [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -759,52 +877,8 @@ declare namespace DevKit {
 		Navigation: DevKit.FormTimelineWallControl_Case_Main.Navigation;
 		/** The Process of form TimelineWallControl_Case_Main */
 		Process: DevKit.FormTimelineWallControl_Case_Main.Process;
-	}
-	namespace FormCase_Quick_Create_for_Multisession {
-		interface tab_tab_1_Sections {
-			tab_1_column_1_section_1: DevKit.Controls.Section;
-			tab_1_column_2_section_1: DevKit.Controls.Section;
-			tab_1_column_3_section_1: DevKit.Controls.Section;
-		}
-		interface tab_tab_1 extends DevKit.Controls.ITab {
-			Section: tab_tab_1_Sections;
-		}
-		interface Tabs {
-			tab_1: tab_tab_1;
-		}
-		interface Body {
-			Tab: Tabs;
-			/** Select the type of case to identify the incident for use in case routing and analysis. */
-			CaseTypeCode: DevKit.Controls.OptionSet;
-			/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
-			CustomerId: DevKit.Controls.Lookup;
-			/** Type additional information to describe the case to assist the service team in reaching a resolution. */
-			Description: DevKit.Controls.String;
-			/** Owner Id */
-			OwnerId: DevKit.Controls.Lookup;
-			/** Choose the parent case for a case. */
-			ParentCaseId: DevKit.Controls.Lookup;
-			/** Select the priority so that preferred customers or critical issues are handled quickly. */
-			PriorityCode: DevKit.Controls.OptionSet;
-			/** Select the case's status. */
-			StatusCode: DevKit.Controls.OptionSet;
-			/** Choose the subject for the case, such as catalog request or product complaint, so customer service managers can identify frequent requests or problem areas. Administrators can configure subjects under Business Management in the Settings area. */
-			SubjectId: DevKit.Controls.Lookup;
-			/** Type a subject or descriptive name, such as the request, issue, or company name, to identify the case in Microsoft Dynamics 365 views. */
-			Title: DevKit.Controls.String;
-		}
-	}
-	class FormCase_Quick_Create_for_Multisession extends DevKit.IForm {
-		/**
-		* DynamicsCrm.DevKit form Case_Quick_Create_for_Multisession
-		* @param executionContext the execution context
-		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
-		*/
-		constructor(executionContext: any, defaultWebResourceName?: string);
-		/** Utility functions/methods/objects for Dynamics 365 form */
-		Utility: DevKit.Utility;
-		/** The Body section of form Case_Quick_Create_for_Multisession */
-		Body: DevKit.FormCase_Quick_Create_for_Multisession.Body;
+		/** The SidePanes of form TimelineWallControl_Case_Main */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormApp_for_Outlook_Case_Quick_Create {
 		interface tab_tab_1_Sections {
@@ -850,7 +924,7 @@ declare namespace DevKit {
 	}
 	class FormApp_for_Outlook_Case_Quick_Create extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form App_for_Outlook_Case_Quick_Create
+		* App for Outlook Case Quick Create [Quick Create]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -908,7 +982,7 @@ declare namespace DevKit {
 	}
 	class FormCase_Quick_Create extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Case_Quick_Create
+		* Case Quick Create [Quick Create]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -917,6 +991,52 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Case_Quick_Create */
 		Body: DevKit.FormCase_Quick_Create.Body;
+	}
+	namespace FormCase_Quick_Create_for_Multisession {
+		interface tab_tab_1_Sections {
+			tab_1_column_1_section_1: DevKit.Controls.Section;
+			tab_1_column_2_section_1: DevKit.Controls.Section;
+			tab_1_column_3_section_1: DevKit.Controls.Section;
+		}
+		interface tab_tab_1 extends DevKit.Controls.ITab {
+			Section: tab_tab_1_Sections;
+		}
+		interface Tabs {
+			tab_1: tab_tab_1;
+		}
+		interface Body {
+			Tab: Tabs;
+			/** Select the type of case to identify the incident for use in case routing and analysis. */
+			CaseTypeCode: DevKit.Controls.OptionSet;
+			/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
+			CustomerId: DevKit.Controls.Lookup;
+			/** Type additional information to describe the case to assist the service team in reaching a resolution. */
+			Description: DevKit.Controls.String;
+			/** Owner Id */
+			OwnerId: DevKit.Controls.Lookup;
+			/** Choose the parent case for a case. */
+			ParentCaseId: DevKit.Controls.Lookup;
+			/** Select the priority so that preferred customers or critical issues are handled quickly. */
+			PriorityCode: DevKit.Controls.OptionSet;
+			/** Select the case's status. */
+			StatusCode: DevKit.Controls.OptionSet;
+			/** Choose the subject for the case, such as catalog request or product complaint, so customer service managers can identify frequent requests or problem areas. Administrators can configure subjects under Business Management in the Settings area. */
+			SubjectId: DevKit.Controls.Lookup;
+			/** Type a subject or descriptive name, such as the request, issue, or company name, to identify the case in Microsoft Dynamics 365 views. */
+			Title: DevKit.Controls.String;
+		}
+	}
+	class FormCase_Quick_Create_for_Multisession extends DevKit.IForm {
+		/**
+		* Case Quick Create for Multisession [Quick Create]
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form Case_Quick_Create_for_Multisession */
+		Body: DevKit.FormCase_Quick_Create_for_Multisession.Body;
 	}
 	class IncidentApi {
 		/**
@@ -978,7 +1098,9 @@ declare namespace DevKit {
 		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
 		/** Tells whether customer service representative has contacted the customer or not. */
 		CustomerContacted: DevKit.WebApi.BooleanValue;
+		/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
 		customerid_account: DevKit.WebApi.LookupValue;
+		/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
 		customerid_contact: DevKit.WebApi.LookupValue;
 		/** Select the customer's level of satisfaction with the handling and resolution of the case. */
 		CustomerSatisfactionCode: DevKit.WebApi.OptionSetValue;
@@ -1087,6 +1209,8 @@ declare namespace DevKit {
 		ResolveBySLAStatus: DevKit.WebApi.OptionSetValue;
 		/** For internal use only. */
 		ResponseBy_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		/** Choose an additional customer contact who can also help resolve the case. */
+		ResponsibleContactId: DevKit.WebApi.LookupValue;
 		/** Tells whether the incident has been routed to queue or not. */
 		RouteCase: DevKit.WebApi.BooleanValue;
 		/** Value derived after assessing words commonly associated with a negative, neutral, or positive sentiment that occurs in a social post. Sentiment information can also be reported as numeric values. */
@@ -1099,7 +1223,6 @@ declare namespace DevKit {
 		SLAId: DevKit.WebApi.LookupValue;
 		/** Last SLA that was applied to this case. This field is for internal use only. */
 		SLAInvokedId: DevKit.WebApi.LookupValueReadonly;
-		SLAName: DevKit.WebApi.StringValueReadonly;
 		/** Unique identifier of the social profile with which the case is associated. */
 		SocialProfileId: DevKit.WebApi.LookupValue;
 		/** Contains the id of the stage where the entity is located. */
@@ -1254,22 +1377,22 @@ declare namespace OptionSet {
 			/** 3 */
 			Waiting_for_Details
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Case','Case for Interactive experience','Case for Multisession experience','Case Quick Create for Multisession','Information','TimelineWallControl - Case- Main','Quick Create','Quick Create'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

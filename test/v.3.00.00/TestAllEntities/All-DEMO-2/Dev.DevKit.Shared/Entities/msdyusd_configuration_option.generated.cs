@@ -27,7 +27,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyusd_configuration_option";
 
-		public const int EntityTypeCode = 10716;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10856;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_configuration_option()

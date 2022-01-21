@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_productivitymacrosolutionconfiguratio
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -101,7 +101,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_productivitymacrosolutionconfiguration";
 
-		public const int EntityTypeCode = 10168;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10180;
 
 		[DebuggerNonUserCode()]
 		public msdyn_productivitymacrosolutionconfiguration()
@@ -452,7 +453,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

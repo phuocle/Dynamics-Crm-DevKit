@@ -10,15 +10,10 @@ using System.Diagnostics;
 
 namespace Dev.DevKit.Shared.Entities.ContractDetailOptionSets
 {
-	public enum ContractStateCode
-	{
-
-	}
-
 	public enum ServiceContractUnitsCode
 	{
 		/// <summary>
-		/// Default_Value = 1
+		/// Default Value = 1
 		/// </summary>
 		Default_Value = 1
 	}
@@ -78,7 +73,6 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ContactId = "contactid";
 			public const string ContractDetailId = "contractdetailid";
 			public const string ContractId = "contractid";
-			public const string ContractStateCode = "contractstatecode";
 			public const string CreatedBy = "createdby";
 			public const string CreatedOn = "createdon";
 			public const string CreatedOnBehalfBy = "createdonbehalfby";
@@ -124,6 +118,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "contractdetail";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 1011;
 
 		[DebuggerNonUserCode()]
@@ -270,22 +265,6 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Status of the contract.</para>
-		/// <para>ReadOnly - Picklist</para>
-		/// <para>Contract State</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public Dev.DevKit.Shared.Entities.ContractDetailOptionSets.ContractStateCode? ContractStateCode
-		{
-			get
-			{
-				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.ContractStateCode);
-				if (value == null) return null;
-				return (Dev.DevKit.Shared.Entities.ContractDetailOptionSets.ContractStateCode)value.Value;
-			}
-		}
-
-		/// <summary>
 		/// <para>Shows who created the record.</para>
 		/// <para>ReadOnly - Lookup to systemuser</para>
 		/// <para>Created By</para>
@@ -320,7 +299,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Select the customer account or contact to provide a quick link to additional customer details, such as address, phone number, activities, and orders.</para>
-		/// <para>Customer</para>
+		/// <para>Lookup to account, contact</para>
 		/// <para>Customer</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -394,7 +373,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency.</para>
+		/// <para>Shows the conversion rate of the record&apos;s currency. The exchange rate is used to convert all money fields in the record from the local currency to the system&apos;s default currency.</para>
 		/// <para>ReadOnly - Decimal - MinValue: 0 - MaxValue: 100,000,000,000</para>
 		/// <para>Exchange Rate</para>
 		/// </summary>
@@ -441,7 +420,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the line item number for the contract line to easily identify the contract line and make sure it's listed in the correct order in the parent contract.</para>
+		/// <para>Type the line item number for the contract line to easily identify the contract line and make sure it&apos;s listed in the correct order in the parent contract.</para>
 		/// <para>Integer - MinValue: 0 - MaxValue: 1,000,000,000</para>
 		/// <para>Line Item Order</para>
 		/// </summary>
@@ -531,7 +510,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>ReadOnly - Required - Owner</para>
+		/// <para>ReadOnly - Required - Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -704,7 +683,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows whether the contract line is existing, renewed, canceled, or expired. You can't edit a contract line after it is saved, regardless of the status.</para>
+		/// <para>Shows whether the contract line is existing, renewed, canceled, or expired. You can&apos;t edit a contract line after it is saved, regardless of the status.</para>
 		/// <para>State</para>
 		/// <para>Status</para>
 		/// </summary>
@@ -727,7 +706,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select the contract line's status.</para>
+		/// <para>Select the contract line&apos;s status.</para>
 		/// <para>Status</para>
 		/// <para>Status Reason</para>
 		/// </summary>

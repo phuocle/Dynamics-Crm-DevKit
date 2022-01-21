@@ -45,7 +45,7 @@ namespace Dev.DevKit.Shared.Entities.RollupPropertiesOptionSets
 		/// </summary>
 		Failed = 4,
 		/// <summary>
-		/// In_Progress = 1
+		/// In Progress = 1
 		/// </summary>
 		In_Progress = 1,
 		/// <summary>
@@ -122,6 +122,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "rollupproperties";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 9510;
 
 		[DebuggerNonUserCode()]

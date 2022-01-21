@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "suggestioncardtemplate";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 1190;
 
 		[DebuggerNonUserCode()]

@@ -33,11 +33,11 @@ namespace Dev.DevKit.Shared.Entities.SLAKPIInstanceOptionSets
 		/// </summary>
 		Canceled = 5,
 		/// <summary>
-		/// In_Progress = 0
+		/// In Progress = 0
 		/// </summary>
 		In_Progress = 0,
 		/// <summary>
-		/// Nearing_Noncompliance = 2
+		/// Nearing Noncompliance = 2
 		/// </summary>
 		Nearing_Noncompliance = 2,
 		/// <summary>
@@ -113,6 +113,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "slakpiinstance";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 9752;
 
 		[DebuggerNonUserCode()]
@@ -391,7 +392,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user or team.</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

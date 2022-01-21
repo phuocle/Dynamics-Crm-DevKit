@@ -22,12 +22,12 @@ var DevKit;
 			msdyn_Category: {},
 			msdyn_ConnectionState: {},
 			msdyn_DeviceId: {},
-			msdyn_DeviceId_1: {},
-			msdyn_DeviceId_2: {},
+			msdyn_DeviceId1: {},
+			msdyn_DeviceId2: {},
 			msdyn_DeviceReportedProperties: {},
-			msdyn_DeviceReportedProperties_1: {},
+			msdyn_DeviceReportedProperties1: {},
 			msdyn_DeviceSettings: {},
-			msdyn_DeviceSettings_1: {},
+			msdyn_DeviceSettings1: {},
 			msdyn_IoTProviderInstance: {},
 			msdyn_IsSimulated: {},
 			msdyn_LastActivityTime: {},
@@ -35,7 +35,7 @@ var DevKit;
 			msdyn_RegistrationMessage: {},
 			msdyn_RegistrationStatus: {},
 			msdyn_Tags: {},
-			msdyn_Tags_1: {},
+			msdyn_Tags1: {},
 			msdyn_Timezone: {},
 			RegistrationHistory: {},
 			WebResource_PowerBIDevice: {}
@@ -85,26 +85,19 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		var grid = {
-			DeviceDataHistory: {},
 			AlertsGrid: {},
 			CommandsGrid: {},
+			DeviceDataHistory: {},
 			RegistrationHistory: {},
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormIoT_Device_MFD = function(executionContext, defaultWebResourceName) {
@@ -142,23 +135,16 @@ var DevKit;
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		var grid = {
 			DeviceDataHistory: {},
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 })(DevKit || (DevKit = {}));
@@ -185,15 +171,14 @@ var OptionSet;
 			Active: 1,
 			Inactive: 2
 		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
-
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 	};
 })(OptionSet || (OptionSet = {}));

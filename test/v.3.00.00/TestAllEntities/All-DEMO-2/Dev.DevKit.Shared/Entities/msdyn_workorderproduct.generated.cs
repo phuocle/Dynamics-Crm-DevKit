@@ -130,7 +130,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_workorderproduct";
 
-		public const int EntityTypeCode = 10489;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10599;
 
 		[DebuggerNonUserCode()]
 		public msdyn_workorderproduct()
@@ -344,7 +345,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Enter the commission costs associated with this product. The value is manually specified and isn't automatically calculated.</para>
+		/// <para>Enter the commission costs associated with this product. The value is manually specified and isn&apos;t automatically calculated.</para>
 		/// <para>Money - MinValue: 0 - MaxValue: 1,000,000,000</para>
 		/// <para>Commission Costs</para>
 		/// </summary>
@@ -789,9 +790,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_workorderproductOptionSets.msdyn_LineStatus)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_LineStatus] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_LineStatus] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_LineStatus] = null;
+			}
 		}
 
 		/// <summary>
@@ -843,7 +847,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Enter the quantity you wish to bill the customer for. By default, this will default to the same value as "Quantity."</para>
+		/// <para>Enter the quantity you wish to bill the customer for. By default, this will default to the same value as &quot;Quantity.&quot;</para>
 		/// <para>Required - Double - MinValue: 0 - MaxValue: 1,000,000,000</para>
 		/// <para>Quantity To Bill</para>
 		/// </summary>
@@ -1151,7 +1155,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

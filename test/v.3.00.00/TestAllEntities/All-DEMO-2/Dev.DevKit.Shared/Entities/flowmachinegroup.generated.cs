@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.flowmachinegroupOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -113,7 +113,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "flowmachinegroup";
 
-		public const int EntityTypeCode = 10034;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10046;
 
 		[DebuggerNonUserCode()]
 		public flowmachinegroup()
@@ -250,9 +251,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.flowmachinegroupOptionSets.FlowGroupType)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.FlowGroupType] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.FlowGroupType] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.FlowGroupType] = null;
+			}
 		}
 
 		/// <summary>
@@ -371,7 +375,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

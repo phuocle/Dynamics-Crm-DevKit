@@ -1,9 +1,13 @@
 ﻿//@ts-check
 ///<reference path="msdyn_livechatwidgetlocation.d.ts" />
 "use strict";
-var formInformation = (function () {
+var formmsdyn_livechatwidgetlocation_Information = (function () {
 	"use strict";
+	/** @type DevKit.Formmsdyn_livechatwidgetlocation_Information */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.Formmsdyn_livechatwidgetlocation_Information(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}
@@ -12,9 +16,13 @@ var formInformation = (function () {
 		OnSave: onSave
 	};
 })();
-var formNew_Form = (function () {
+var formmsdyn_livechatwidgetlocation_New_Form = (function () {
 	"use strict";
+	/** @type DevKit.Formmsdyn_livechatwidgetlocation_New_Form */
+	var form = null;
 	async function onLoad(executionContext) {
+		form = new DevKit.Formmsdyn_livechatwidgetlocation_New_Form(executionContext);
+
 	}
 	async function onSave(executionContext) {
 	}

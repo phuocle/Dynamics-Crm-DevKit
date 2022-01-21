@@ -6,65 +6,65 @@ var DevKit;
 	DevKit.ConnectionApi = function (e) {
 		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-        function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
-            var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-            var property = {};
-            var getFormattedValue = function () {
-                if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-                    return EMPTY_STRING;
-                }
-                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-                    if (entity[logicalName + l] === entityLogicalName) {
-                        return entity[logicalName + f];
-                    }
-                    return EMPTY_STRING;
-                }
-                if (isMultiOptionSet) {
-                    return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
-                }
-                return entity[logicalName + f];
-            };
-            var getValue = function () {
-                if (entity[logicalName] === undefined || entity[logicalName] === null) {
-                    return null;
-                }
-                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-                    if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
-                        return entity[logicalName];
-                    }
-                    return null;
-                }
-                if (isMultiOptionSet) {
-                    return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
-                }
-                return entity[logicalName];
-            };
-            var setValue = function (value) {
-                if (isMultiOptionSet) value = value.join(',');
-                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-                    value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
-                    upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
-                } else {
-                    upsertEntity[logicalName] = value;
-                }
-                entity[logicalName] = value;
-            };
-            Object.defineProperty(property, 'FormattedValue', {
-                get: getFormattedValue
-            });
-            if (readOnly) {
-                Object.defineProperty(property, 'Value', {
-                    get: getValue
-                });
-            }
-            else {
-                Object.defineProperty(property, 'Value', {
-                    get: getValue,
-                    set: setValue
-                });
-            }
-            return property;
-        }
+		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
+			var property = {};
+			var getFormattedValue = function () {
+				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
+					return EMPTY_STRING;
+				}
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					if (entity[logicalName + l] === entityLogicalName) {
+						return entity[logicalName + f];
+					}
+					return EMPTY_STRING;
+				}
+				if (isMultiOptionSet) {
+					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
+				}
+				return entity[logicalName + f];
+			};
+			var getValue = function () {
+				if (entity[logicalName] === undefined || entity[logicalName] === null) {
+					return null;
+				}
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
+						return entity[logicalName];
+					}
+					return null;
+				}
+				if (isMultiOptionSet) {
+					return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
+				}
+				return entity[logicalName];
+			};
+			var setValue = function (value) {
+				if (isMultiOptionSet) value = value.join(',');
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
+				} else {
+					upsertEntity[logicalName] = value;
+				}
+				entity[logicalName] = value;
+			};
+			Object.defineProperty(property, 'FormattedValue', {
+				get: getFormattedValue
+			});
+			if (readOnly) {
+				Object.defineProperty(property, 'Value', {
+					get: getValue
+				});
+			}
+			else {
+				Object.defineProperty(property, 'Value', {
+					get: getValue,
+					set: setValue
+				});
+			}
+			return property;
+		}
 		var connection = {
 			ConnectionId: { a: 'connectionid' },
 			CreatedBy: { b: 'createdby', a: '_createdby_value', c: 'systemusers', d: 'systemuser', r: true },
@@ -125,6 +125,8 @@ var DevKit;
 			record1id_msdyn_agreementinvoiceproduct: { b: 'record1id_msdyn_agreementinvoiceproduct', a: '_record1id_value', c: 'msdyn_agreementinvoiceproducts', d: 'msdyn_agreementinvoiceproduct' },
 			record1id_msdyn_agreementinvoicesetup: { b: 'record1id_msdyn_agreementinvoicesetup', a: '_record1id_value', c: 'msdyn_agreementinvoicesetups', d: 'msdyn_agreementinvoicesetup' },
 			record1id_msdyn_approval: { b: 'record1id_msdyn_approval', a: '_record1id_value', c: 'msdyn_approvals', d: 'msdyn_approval' },
+			record1id_msdyn_assignmentmap: { b: 'record1id_msdyn_assignmentmap', a: '_record1id_value', c: 'msdyn_assignmentmaps', d: 'msdyn_assignmentmap' },
+			record1id_msdyn_assignmentrule: { b: 'record1id_msdyn_assignmentrule', a: '_record1id_value', c: 'msdyn_assignmentrules', d: 'msdyn_assignmentrule' },
 			record1id_msdyn_bookingalert: { b: 'record1id_msdyn_bookingalert', a: '_record1id_value', c: 'msdyn_bookingalerts', d: 'msdyn_bookingalert' },
 			record1id_msdyn_bookingalertstatus: { b: 'record1id_msdyn_bookingalertstatus', a: '_record1id_value', c: 'msdyn_bookingalertstatuses', d: 'msdyn_bookingalertstatus' },
 			record1id_msdyn_bookingrule: { b: 'record1id_msdyn_bookingrule', a: '_record1id_value', c: 'msdyn_bookingrules', d: 'msdyn_bookingrule' },
@@ -175,6 +177,8 @@ var DevKit;
 			record1id_msdyn_rtv: { b: 'record1id_msdyn_rtv', a: '_record1id_value', c: 'msdyn_rtvs', d: 'msdyn_rtv' },
 			record1id_msdyn_rtvproduct: { b: 'record1id_msdyn_rtvproduct', a: '_record1id_value', c: 'msdyn_rtvproducts', d: 'msdyn_rtvproduct' },
 			record1id_msdyn_rtvsubstatus: { b: 'record1id_msdyn_rtvsubstatus', a: '_record1id_value', c: 'msdyn_rtvsubstatuses', d: 'msdyn_rtvsubstatus' },
+			record1id_msdyn_sequence: { b: 'record1id_msdyn_sequence', a: '_record1id_value', c: 'msdyn_sequences', d: 'msdyn_sequence' },
+			record1id_msdyn_sequencetarget: { b: 'record1id_msdyn_sequencetarget', a: '_record1id_value', c: 'msdyn_sequencetargets', d: 'msdyn_sequencetarget' },
 			record1id_msdyn_shipvia: { b: 'record1id_msdyn_shipvia', a: '_record1id_value', c: 'msdyn_shipvias', d: 'msdyn_shipvia' },
 			record1id_msdyn_systemuserschedulersetting: { b: 'record1id_msdyn_systemuserschedulersetting', a: '_record1id_value', c: 'msdyn_systemuserschedulersettings', d: 'msdyn_systemuserschedulersetting' },
 			record1id_msdyn_taxcode: { b: 'record1id_msdyn_taxcode', a: '_record1id_value', c: 'msdyn_taxcodes', d: 'msdyn_taxcode' },
@@ -248,6 +252,8 @@ var DevKit;
 			record2id_msdyn_agreementinvoiceproduct: { b: 'record2id_msdyn_agreementinvoiceproduct', a: '_record2id_value', c: 'msdyn_agreementinvoiceproducts', d: 'msdyn_agreementinvoiceproduct' },
 			record2id_msdyn_agreementinvoicesetup: { b: 'record2id_msdyn_agreementinvoicesetup', a: '_record2id_value', c: 'msdyn_agreementinvoicesetups', d: 'msdyn_agreementinvoicesetup' },
 			record2id_msdyn_approval: { b: 'record2id_msdyn_approval', a: '_record2id_value', c: 'msdyn_approvals', d: 'msdyn_approval' },
+			record2id_msdyn_assignmentmap: { b: 'record2id_msdyn_assignmentmap', a: '_record2id_value', c: 'msdyn_assignmentmaps', d: 'msdyn_assignmentmap' },
+			record2id_msdyn_assignmentrule: { b: 'record2id_msdyn_assignmentrule', a: '_record2id_value', c: 'msdyn_assignmentrules', d: 'msdyn_assignmentrule' },
 			record2id_msdyn_bookingalert: { b: 'record2id_msdyn_bookingalert', a: '_record2id_value', c: 'msdyn_bookingalerts', d: 'msdyn_bookingalert' },
 			record2id_msdyn_bookingalertstatus: { b: 'record2id_msdyn_bookingalertstatus', a: '_record2id_value', c: 'msdyn_bookingalertstatuses', d: 'msdyn_bookingalertstatus' },
 			record2id_msdyn_bookingrule: { b: 'record2id_msdyn_bookingrule', a: '_record2id_value', c: 'msdyn_bookingrules', d: 'msdyn_bookingrule' },
@@ -298,6 +304,8 @@ var DevKit;
 			record2id_msdyn_rtv: { b: 'record2id_msdyn_rtv', a: '_record2id_value', c: 'msdyn_rtvs', d: 'msdyn_rtv' },
 			record2id_msdyn_rtvproduct: { b: 'record2id_msdyn_rtvproduct', a: '_record2id_value', c: 'msdyn_rtvproducts', d: 'msdyn_rtvproduct' },
 			record2id_msdyn_rtvsubstatus: { b: 'record2id_msdyn_rtvsubstatus', a: '_record2id_value', c: 'msdyn_rtvsubstatuses', d: 'msdyn_rtvsubstatus' },
+			record2id_msdyn_sequence: { b: 'record2id_msdyn_sequence', a: '_record2id_value', c: 'msdyn_sequences', d: 'msdyn_sequence' },
+			record2id_msdyn_sequencetarget: { b: 'record2id_msdyn_sequencetarget', a: '_record2id_value', c: 'msdyn_sequencetargets', d: 'msdyn_sequencetarget' },
 			record2id_msdyn_shipvia: { b: 'record2id_msdyn_shipvia', a: '_record2id_value', c: 'msdyn_shipvias', d: 'msdyn_shipvia' },
 			record2id_msdyn_systemuserschedulersetting: { b: 'record2id_msdyn_systemuserschedulersetting', a: '_record2id_value', c: 'msdyn_systemuserschedulersettings', d: 'msdyn_systemuserschedulersetting' },
 			record2id_msdyn_taxcode: { b: 'record2id_msdyn_taxcode', a: '_record2id_value', c: 'msdyn_taxcodes', d: 'msdyn_taxcode' },
@@ -385,21 +393,23 @@ var OptionSet;
 		Record1ObjectTypeCode : {
 			Account: 1,
 			Activity: 4200,
-			Agreement: 10413,
-			Agreement_Booking_Date: 10414,
-			Agreement_Booking_Incident: 10415,
-			Agreement_Booking_Product: 10416,
-			Agreement_Booking_Service: 10417,
-			Agreement_Booking_Service_Task: 10418,
-			Agreement_Booking_Setup: 10419,
-			Agreement_Invoice_Date: 10420,
-			Agreement_Invoice_Product: 10421,
-			Agreement_Invoice_Setup: 10422,
+			Agreement: 10523,
+			Agreement_Booking_Date: 10524,
+			Agreement_Booking_Incident: 10525,
+			Agreement_Booking_Product: 10526,
+			Agreement_Booking_Service: 10527,
+			Agreement_Booking_Service_Task: 10528,
+			Agreement_Booking_Setup: 10529,
+			Agreement_Invoice_Date: 10530,
+			Agreement_Invoice_Product: 10531,
+			Agreement_Invoice_Setup: 10532,
 			Appointment: 4201,
-			Booking_Alert: 10294,
-			Booking_Alert_Status: 10295,
-			Booking_Rule: 10297,
-			Booking_Timestamp: 10425,
+			Assignment_Map: 10277,
+			Assignment_Rule: 10274,
+			Booking_Alert: 10400,
+			Booking_Alert_Status: 10401,
+			Booking_Rule: 10403,
+			Booking_Timestamp: 10535,
 			Campaign: 4400,
 			Campaign_Activity: 4402,
 			Case: 112,
@@ -407,122 +417,126 @@ var OptionSet;
 			Competitor: 123,
 			Contact: 2,
 			Contract: 1010,
-			Conversation: 10564,
-			Customer_Asset: 10116,
-			Customer_Voice_alert: 10238,
-			Customer_Voice_survey_invite: 10248,
-			Customer_Voice_survey_response: 10250,
+			Conversation: 10702,
+			Customer_Asset: 10128,
+			Customer_Voice_alert: 10294,
+			Customer_Voice_survey_invite: 10304,
+			Customer_Voice_survey_response: 10306,
 			Email: 4202,
 			Entitlement: 9700,
 			Entitlement_Channel: 9701,
 			Entitlement_Template_Channel: 9703,
 			FacilityEquipment: 4000,
 			Fax: 4204,
-			Fulfillment_Preference: 10317,
+			Fulfillment_Preference: 10423,
 			Goal: 9600,
-			Incident_Type_Characteristic: 10436,
-			Incident_Type_Product: 10437,
-			Incident_Type_Service: 10438,
-			Inventory_Adjustment: 10442,
-			Inventory_Adjustment_Product: 10443,
-			Inventory_Journal: 10444,
-			Inventory_Transfer: 10445,
+			Incident_Type_Characteristic: 10546,
+			Incident_Type_Product: 10547,
+			Incident_Type_Service: 10548,
+			Inventory_Adjustment: 10552,
+			Inventory_Adjustment_Product: 10553,
+			Inventory_Journal: 10554,
+			Inventory_Transfer: 10555,
 			Invoice: 1090,
-			IoT_Alert: 10126,
-			IoT_Device: 10127,
-			IoT_Device_Category: 10128,
-			IoT_Device_Command: 10129,
-			IoT_Device_Registration_History: 10133,
+			IoT_Alert: 10138,
+			IoT_Device: 10139,
+			IoT_Device_Category: 10140,
+			IoT_Device_Command: 10141,
+			IoT_Device_Registration_History: 10145,
 			Knowledge_Article: 9953,
 			Knowledge_Base_Record: 9930,
 			Lead: 4,
 			Letter: 4207,
 			Marketing_List: 4300,
-			Ongoing_conversation_Deprecated: 10558,
+			Ongoing_conversation_Deprecated: 10692,
 			Opportunity: 3,
-			Option: 10679,
+			Option: 10819,
 			Order: 1088,
-			Outbound_message: 10673,
-			Payment: 10450,
-			Payment_Detail: 10451,
-			Payment_Method: 10452,
-			Payment_Term: 10453,
+			Outbound_message: 10813,
+			Payment: 10560,
+			Payment_Detail: 10561,
+			Payment_Method: 10562,
+			Payment_Term: 10563,
 			Phone_Call: 4210,
 			Position: 50,
-			Postal_Code: 10454,
+			Postal_Code: 10564,
 			Price_List: 1022,
-			Process_Notes: 10362,
+			Process_Notes: 10468,
 			Process_Session: 4710,
 			Product: 1024,
-			Product_Inventory: 10455,
-			Profile_Album: 10233,
-			Project: 10363,
-			Project_Service_Approval: 10324,
-			Project_Team_Member: 10371,
-			Purchase_Order: 10456,
-			Purchase_Order_Bill: 10457,
-			Purchase_Order_Product: 10458,
-			Purchase_Order_Receipt: 10459,
-			Purchase_Order_Receipt_Product: 10460,
-			Purchase_Order_SubStatus: 10461,
+			Product_Inventory: 10565,
+			Profile_Album: 10289,
+			Project: 10469,
+			Project_Service_Approval: 10430,
+			Project_Team_Member: 10477,
+			Purchase_Order: 10566,
+			Purchase_Order_Bill: 10567,
+			Purchase_Order_Product: 10568,
+			Purchase_Order_Receipt: 10569,
+			Purchase_Order_Receipt_Product: 10570,
+			Purchase_Order_SubStatus: 10571,
 			Quote: 1084,
-			Quote_Booking_Incident: 10462,
-			Quote_Booking_Product: 10463,
-			Quote_Booking_Service: 10464,
-			Quote_Booking_Service_Task: 10465,
+			Quote_Booking_Incident: 10572,
+			Quote_Booking_Product: 10573,
+			Quote_Booking_Service: 10574,
+			Quote_Booking_Service_Task: 10575,
 			Recurring_Appointment: 4251,
 			Resource_Group: 4007,
-			Resource_Restriction_Deprecated: 10490,
-			Resource_Territory: 10313,
-			RMA: 10470,
-			RMA_Product: 10471,
-			RMA_Receipt: 10472,
-			RMA_Receipt_Product: 10473,
-			RMA_SubStatus: 10474,
-			RTV: 10475,
-			RTV_Product: 10476,
-			RTV_Substatus: 10477,
+			Resource_Restriction_Deprecated: 10600,
+			Resource_Territory: 10419,
+			RMA: 10580,
+			RMA_Product: 10581,
+			RMA_Receipt: 10582,
+			RMA_Receipt_Product: 10583,
+			RMA_SubStatus: 10584,
+			RTV: 10585,
+			RTV_Product: 10586,
+			RTV_Substatus: 10587,
 			Scheduling_Group: 4005,
+			Sequence: 10268,
+			Sequence_Target: 10270,
 			Service_Activity: 4214,
-			Session: 10573,
-			Ship_Via: 10479,
+			Session: 10717,
+			Ship_Via: 10589,
 			Social_Activity: 4216,
 			Social_Profile: 99,
-			System_User_Scheduler_Setting: 10316,
+			System_User_Scheduler_Setting: 10422,
 			Task: 4212,
-			Tax_Code: 10480,
+			Tax_Code: 10590,
 			Team: 9,
 			Territory: 2013,
-			Time_Group_Detail: 10318,
-			Time_Off_Request: 10482,
-			Toolbar_Button: 10702,
+			Time_Group_Detail: 10424,
+			Time_Off_Request: 10592,
+			Toolbar_Button: 10842,
 			User: 8,
-			Warehouse: 10484,
-			Work_Order: 10485,
-			Work_Order_Characteristic_Deprecated: 10486,
-			Work_Order_Incident: 10488,
-			Work_Order_Product: 10489,
-			Work_Order_Service: 10491,
-			Work_Order_Service_Task: 10492
+			Warehouse: 10594,
+			Work_Order: 10595,
+			Work_Order_Characteristic_Deprecated: 10596,
+			Work_Order_Incident: 10598,
+			Work_Order_Product: 10599,
+			Work_Order_Service: 10601,
+			Work_Order_Service_Task: 10602
 		},
 		Record2ObjectTypeCode : {
 			Account: 1,
 			Activity: 4200,
-			Agreement: 10413,
-			Agreement_Booking_Date: 10414,
-			Agreement_Booking_Incident: 10415,
-			Agreement_Booking_Product: 10416,
-			Agreement_Booking_Service: 10417,
-			Agreement_Booking_Service_Task: 10418,
-			Agreement_Booking_Setup: 10419,
-			Agreement_Invoice_Date: 10420,
-			Agreement_Invoice_Product: 10421,
-			Agreement_Invoice_Setup: 10422,
+			Agreement: 10523,
+			Agreement_Booking_Date: 10524,
+			Agreement_Booking_Incident: 10525,
+			Agreement_Booking_Product: 10526,
+			Agreement_Booking_Service: 10527,
+			Agreement_Booking_Service_Task: 10528,
+			Agreement_Booking_Setup: 10529,
+			Agreement_Invoice_Date: 10530,
+			Agreement_Invoice_Product: 10531,
+			Agreement_Invoice_Setup: 10532,
 			Appointment: 4201,
-			Booking_Alert: 10294,
-			Booking_Alert_Status: 10295,
-			Booking_Rule: 10297,
-			Booking_Timestamp: 10425,
+			Assignment_Map: 10277,
+			Assignment_Rule: 10274,
+			Booking_Alert: 10400,
+			Booking_Alert_Status: 10401,
+			Booking_Rule: 10403,
+			Booking_Timestamp: 10535,
 			Campaign: 4400,
 			Campaign_Activity: 4402,
 			Case: 112,
@@ -530,103 +544,105 @@ var OptionSet;
 			Competitor: 123,
 			Contact: 2,
 			Contract: 1010,
-			Conversation: 10564,
-			Customer_Asset: 10116,
-			Customer_Voice_alert: 10238,
-			Customer_Voice_survey_invite: 10248,
-			Customer_Voice_survey_response: 10250,
+			Conversation: 10702,
+			Customer_Asset: 10128,
+			Customer_Voice_alert: 10294,
+			Customer_Voice_survey_invite: 10304,
+			Customer_Voice_survey_response: 10306,
 			Email: 4202,
 			Entitlement: 9700,
 			Entitlement_Channel: 9701,
 			Entitlement_Template_Channel: 9703,
 			FacilityEquipment: 4000,
 			Fax: 4204,
-			Fulfillment_Preference: 10317,
+			Fulfillment_Preference: 10423,
 			Goal: 9600,
-			Incident_Type_Characteristic: 10436,
-			Incident_Type_Product: 10437,
-			Incident_Type_Service: 10438,
-			Inventory_Adjustment: 10442,
-			Inventory_Adjustment_Product: 10443,
-			Inventory_Journal: 10444,
-			Inventory_Transfer: 10445,
+			Incident_Type_Characteristic: 10546,
+			Incident_Type_Product: 10547,
+			Incident_Type_Service: 10548,
+			Inventory_Adjustment: 10552,
+			Inventory_Adjustment_Product: 10553,
+			Inventory_Journal: 10554,
+			Inventory_Transfer: 10555,
 			Invoice: 1090,
-			IoT_Alert: 10126,
-			IoT_Device: 10127,
-			IoT_Device_Category: 10128,
-			IoT_Device_Command: 10129,
-			IoT_Device_Registration_History: 10133,
+			IoT_Alert: 10138,
+			IoT_Device: 10139,
+			IoT_Device_Category: 10140,
+			IoT_Device_Command: 10141,
+			IoT_Device_Registration_History: 10145,
 			Knowledge_Article: 9953,
 			Knowledge_Base_Record: 9930,
 			Lead: 4,
 			Letter: 4207,
 			Marketing_List: 4300,
-			Ongoing_conversation_Deprecated: 10558,
+			Ongoing_conversation_Deprecated: 10692,
 			Opportunity: 3,
-			Option: 10679,
+			Option: 10819,
 			Order: 1088,
-			Outbound_message: 10673,
-			Payment: 10450,
-			Payment_Detail: 10451,
-			Payment_Method: 10452,
-			Payment_Term: 10453,
+			Outbound_message: 10813,
+			Payment: 10560,
+			Payment_Detail: 10561,
+			Payment_Method: 10562,
+			Payment_Term: 10563,
 			Phone_Call: 4210,
 			Position: 50,
-			Postal_Code: 10454,
+			Postal_Code: 10564,
 			Price_List: 1022,
-			Process_Notes: 10362,
+			Process_Notes: 10468,
 			Process_Session: 4710,
 			Product: 1024,
-			Product_Inventory: 10455,
-			Profile_Album: 10233,
-			Project: 10363,
-			Project_Service_Approval: 10324,
-			Project_Team_Member: 10371,
-			Purchase_Order: 10456,
-			Purchase_Order_Bill: 10457,
-			Purchase_Order_Product: 10458,
-			Purchase_Order_Receipt: 10459,
-			Purchase_Order_Receipt_Product: 10460,
-			Purchase_Order_SubStatus: 10461,
+			Product_Inventory: 10565,
+			Profile_Album: 10289,
+			Project: 10469,
+			Project_Service_Approval: 10430,
+			Project_Team_Member: 10477,
+			Purchase_Order: 10566,
+			Purchase_Order_Bill: 10567,
+			Purchase_Order_Product: 10568,
+			Purchase_Order_Receipt: 10569,
+			Purchase_Order_Receipt_Product: 10570,
+			Purchase_Order_SubStatus: 10571,
 			Quote: 1084,
-			Quote_Booking_Incident: 10462,
-			Quote_Booking_Product: 10463,
-			Quote_Booking_Service: 10464,
-			Quote_Booking_Service_Task: 10465,
+			Quote_Booking_Incident: 10572,
+			Quote_Booking_Product: 10573,
+			Quote_Booking_Service: 10574,
+			Quote_Booking_Service_Task: 10575,
 			Recurring_Appointment: 4251,
 			Resource_Group: 4007,
-			Resource_Restriction_Deprecated: 10490,
-			Resource_Territory: 10313,
-			RMA: 10470,
-			RMA_Product: 10471,
-			RMA_Receipt: 10472,
-			RMA_Receipt_Product: 10473,
-			RMA_SubStatus: 10474,
-			RTV: 10475,
-			RTV_Product: 10476,
-			RTV_Substatus: 10477,
+			Resource_Restriction_Deprecated: 10600,
+			Resource_Territory: 10419,
+			RMA: 10580,
+			RMA_Product: 10581,
+			RMA_Receipt: 10582,
+			RMA_Receipt_Product: 10583,
+			RMA_SubStatus: 10584,
+			RTV: 10585,
+			RTV_Product: 10586,
+			RTV_Substatus: 10587,
 			Scheduling_Group: 4005,
+			Sequence: 10268,
+			Sequence_Target: 10270,
 			Service_Activity: 4214,
-			Session: 10573,
-			Ship_Via: 10479,
+			Session: 10717,
+			Ship_Via: 10589,
 			Social_Activity: 4216,
 			Social_Profile: 99,
-			System_User_Scheduler_Setting: 10316,
+			System_User_Scheduler_Setting: 10422,
 			Task: 4212,
-			Tax_Code: 10480,
+			Tax_Code: 10590,
 			Team: 9,
 			Territory: 2013,
-			Time_Group_Detail: 10318,
-			Time_Off_Request: 10482,
-			Toolbar_Button: 10702,
+			Time_Group_Detail: 10424,
+			Time_Off_Request: 10592,
+			Toolbar_Button: 10842,
 			User: 8,
-			Warehouse: 10484,
-			Work_Order: 10485,
-			Work_Order_Characteristic_Deprecated: 10486,
-			Work_Order_Incident: 10488,
-			Work_Order_Product: 10489,
-			Work_Order_Service: 10491,
-			Work_Order_Service_Task: 10492
+			Warehouse: 10594,
+			Work_Order: 10595,
+			Work_Order_Characteristic_Deprecated: 10596,
+			Work_Order_Incident: 10598,
+			Work_Order_Product: 10599,
+			Work_Order_Service: 10601,
+			Work_Order_Service_Task: 10602
 		},
 		StateCode : {
 			Active: 0,
@@ -636,15 +652,14 @@ var OptionSet;
 			Active: 1,
 			Inactive: 2
 		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
-
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 	};
 })(OptionSet || (OptionSet = {}));

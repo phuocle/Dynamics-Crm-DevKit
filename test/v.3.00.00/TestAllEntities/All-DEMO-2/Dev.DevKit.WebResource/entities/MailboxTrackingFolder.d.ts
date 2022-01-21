@@ -58,8 +58,6 @@ declare namespace DevKit {
 		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the team who owns the folder mapping. */
 		OwningTeam: DevKit.WebApi.LookupValueReadonly;
-		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_account: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
@@ -71,6 +69,8 @@ declare namespace DevKit {
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_adminsettingsentity: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_appaction: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_appelement: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_applicationuser: DevKit.WebApi.LookupValue;
@@ -78,8 +78,6 @@ declare namespace DevKit {
 		regardingobjectid_appmodulecomponentedge: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_appmodulecomponentnode: DevKit.WebApi.LookupValue;
-		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_appnotification: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_appsetting: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
@@ -139,6 +137,8 @@ declare namespace DevKit {
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_childincidentcount: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_comment: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_commitment: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_competitor: DevKit.WebApi.LookupValue;
@@ -189,6 +189,8 @@ declare namespace DevKit {
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_datalakeworkspacepermission: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_datasyncstate: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_discount: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_discounttype: DevKit.WebApi.LookupValue;
@@ -221,6 +223,8 @@ declare namespace DevKit {
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_entityimageconfig: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_entityindex: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_environmentvariabledefinition: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_environmentvariablevalue: DevKit.WebApi.LookupValue;
@@ -228,6 +232,8 @@ declare namespace DevKit {
 		regardingobjectid_equipment: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_exportsolutionupload: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_featurecontrolsetting: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_flowmachine: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
@@ -242,6 +248,8 @@ declare namespace DevKit {
 		regardingobjectid_incidentknowledgebaserecord: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_incidentresolution: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_indexattributes: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_internalcatalogassignment: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
@@ -335,6 +343,8 @@ declare namespace DevKit {
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_aiconfiguration: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_msdyn_aicontactsuggestion: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_aifptrainingdocument: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_aimodel: DevKit.WebApi.LookupValue;
@@ -371,13 +381,25 @@ declare namespace DevKit {
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_approval: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_msdyn_approvalset: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_assetcategorytemplateassociation: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_msdyn_assetsuggestionssetting: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_assettemplateassociation: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_assignmentconfiguration: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_assignmentconfigurationstep: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_msdyn_assignmentmap: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_msdyn_assignmentrule: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_msdyn_attribute: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_msdyn_attributevalue: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_authenticationsettings: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
@@ -483,6 +505,10 @@ declare namespace DevKit {
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_contactpricelist: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_msdyn_contactsuggestionrule: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_msdyn_contactsuggestionruleset: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_contractlinedetailperformance: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_contractlineinvoiceschedule: DevKit.WebApi.LookupValue;
@@ -521,6 +547,12 @@ declare namespace DevKit {
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_dataanalyticsreport_csrmanager: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_msdyn_dataanalyticsreport_fs: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_msdyn_dataanalyticsreport_fspredictrs: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_msdyn_dataanalyticsreport_fspredictwhd: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_dataanalyticsreport_ksinsights: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_dataanalyticsreport_oc: DevKit.WebApi.LookupValue;
@@ -535,6 +567,10 @@ declare namespace DevKit {
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_datainsightsandanalyticsfeature: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_msdyn_dealmanageraccess: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_msdyn_dealmanagersettings: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_decisioncontract: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_decisionruleset: DevKit.WebApi.LookupValue;
@@ -545,11 +581,15 @@ declare namespace DevKit {
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_dimensionfieldname: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_msdyn_effortpredictionresult: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_entitlementapplication: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_entityconfig: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_entityconfiguration: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_msdyn_entitylinkchatconfiguration: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_entityrankingrule: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
@@ -564,6 +604,8 @@ declare namespace DevKit {
 		regardingobjectid_msdyn_expensecategory: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_expensereceipt: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_msdyn_extendedusersetting: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_facebookengagementctx: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
@@ -612,6 +654,10 @@ declare namespace DevKit {
 		regardingobjectid_msdyn_helppage: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_icebreakersconfig: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_msdyn_iermlmodel: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_msdyn_iermltraining: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_incidenttype: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
@@ -697,7 +743,11 @@ declare namespace DevKit {
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_kalanguagesetting: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_msdyn_kbattachment: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_kbenrichment: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_msdyn_kbkeywordsdescsuggestionsetting: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_kmfederatedsearchconfig: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
@@ -718,6 +768,8 @@ declare namespace DevKit {
 		regardingobjectid_msdyn_kpieventdata: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_kpieventdefinition: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_msdyn_leadmodelconfig: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_lineengagementctx: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
@@ -747,6 +799,8 @@ declare namespace DevKit {
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_mlresultcache: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_msdyn_modelpreviewstatus: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_msteamssetting: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_msteamssettingsv2: DevKit.WebApi.LookupValue;
@@ -757,7 +811,11 @@ declare namespace DevKit {
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_notificationtemplate: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_msdyn_ocautoblockrule: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_ocbotchannelregistration: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_msdyn_occarrier: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_occhannelconfiguration: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
@@ -772,6 +830,8 @@ declare namespace DevKit {
 		regardingobjectid_msdyn_ocfbapplication: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_ocfbpage: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_msdyn_ocflaggedspam: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_oclanguage: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
@@ -801,6 +861,8 @@ declare namespace DevKit {
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_ocprovisioningstate: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_msdyn_ocrecording: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_ocrequest: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_ocruleitem: DevKit.WebApi.LookupValue;
@@ -814,6 +876,8 @@ declare namespace DevKit {
 		regardingobjectid_msdyn_ocsession: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_ocsessioncharacteristic: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_msdyn_ocsessionparticipantevent: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_ocsessionsentiment: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
@@ -865,6 +929,8 @@ declare namespace DevKit {
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_opportunitylinetransactionclassificatio: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_msdyn_opportunitymodelconfig: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_opportunitypricelist: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_orderinvoicingdate: DevKit.WebApi.LookupValue;
@@ -886,6 +952,8 @@ declare namespace DevKit {
 		regardingobjectid_msdyn_orderpricelist: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_organizationalunit: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_msdyn_overflowactionconfig: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_paneconfiguration: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
@@ -928,6 +996,12 @@ declare namespace DevKit {
 		regardingobjectid_msdyn_postconfig: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_postruleconfig: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_msdyn_predictivemodelscore: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_msdyn_predictivescore: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_msdyn_predictworkhourdurationsetting: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_presence: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
@@ -1033,6 +1107,8 @@ declare namespace DevKit {
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_quotepricelist: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_msdyn_recording: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_relationshipinsightsunifiedconfig: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_requirementcharacteristic: DevKit.WebApi.LookupValue;
@@ -1103,7 +1179,15 @@ declare namespace DevKit {
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_rulesetdependencymapping: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_msdyn_salesaccelerationsettings: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_msdyn_salesassignmentsetting: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_salesinsightssettings: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_msdyn_salesroutingrun: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_msdyn_salestag: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_scenario: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
@@ -1115,7 +1199,19 @@ declare namespace DevKit {
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_searchconfiguration: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_msdyn_segment: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_msdyn_segmentcatalogue: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_sentimentanalysis: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_msdyn_sequence: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_msdyn_sequencestat: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_msdyn_sequencetarget: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_msdyn_sequencetargetstep: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_serviceconfiguration: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
@@ -1174,6 +1270,12 @@ declare namespace DevKit {
 		regardingobjectid_msdyn_taxcode: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_taxcodedetail: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_msdyn_teamschannelengagementctx: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_msdyn_teamschatassociation: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_msdyn_teamschatsuggestion: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_teamscollaboration: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
@@ -1279,6 +1381,10 @@ declare namespace DevKit {
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_workordertype: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_msdyn_workqueuestate: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_msdyn_workqueueusersetting: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyusd_actioncallworkflow: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyusd_agentscriptaction: DevKit.WebApi.LookupValue;
@@ -1379,7 +1485,11 @@ declare namespace DevKit {
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_phonetocaseprocess: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_pluginpackage: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_pricelevel: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_privilegesremovalsetting: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_processstageparameter: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
@@ -1435,11 +1545,15 @@ declare namespace DevKit {
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_serviceplan: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_serviceplanmapping: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_settingdefinition: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_site: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_solutioncomponentattributeconfiguration: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_solutioncomponentbatchconfiguration: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_solutioncomponentconfiguration: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
@@ -1500,22 +1614,22 @@ declare namespace DevKit {
 }
 declare namespace OptionSet {
 	namespace MailboxTrackingFolder {
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':[],'JsWebApi':true,'IsDebugForm':false,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}

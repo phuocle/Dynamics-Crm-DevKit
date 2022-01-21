@@ -44,6 +44,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "exchangesyncidmapping";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 4120;
 
 		[DebuggerNonUserCode()]
@@ -243,7 +244,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para></para>
 		/// </summary>
 		[DebuggerNonUserCode()]

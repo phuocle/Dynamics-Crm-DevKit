@@ -1,9 +1,9 @@
 ﻿//@ts-check
 ///<reference path="devkit.d.ts" />
 declare namespace DevKit {
-	class pluginpackageApi {
+	class PluginPackageApi {
 		/**
-		* DynamicsCrm.DevKit pluginpackageApi
+		* DynamicsCrm.DevKit PluginPackageApi
 		* @param entity The entity object
 		*/
 		constructor(entity?: any);
@@ -31,14 +31,15 @@ declare namespace DevKit {
 		ComponentIdUnique: DevKit.WebApi.GuidValueReadonly;
 		/** For internal use only. */
 		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
-		Contents_Name: DevKit.WebApi.StringValueReadonly;
+		Content: DevKit.WebApi.StringValue;
 		/** Unique identifier of the user who created the record. */
 		CreatedBy: DevKit.WebApi.LookupValueReadonly;
 		/** Date and time when the record was created. */
 		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
 		/** Unique identifier of the delegate user who created the record. */
 		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
-		EncodedContents: DevKit.WebApi.StringValue;
+		/** Lookup to FileAttachment */
+		FileId: DevKit.WebApi.StringValueReadonly;
 		/** Sequence number of the import that created this record. */
 		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
 		/** For internal use only. */
@@ -51,8 +52,8 @@ declare namespace DevKit {
 		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
 		/** Unique identifier of the delegate user who modified the record. */
 		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
-		/** The name of the custom entity. */
-		name: DevKit.WebApi.StringValue;
+		/** The name of the plugin package entity. */
+		Name: DevKit.WebApi.StringValue;
 		/** Unique identifier for the organization */
 		OrganizationId: DevKit.WebApi.LookupValueReadonly;
 		/** Date and time that the record was migrated. */
@@ -60,7 +61,7 @@ declare namespace DevKit {
 		/** For internal use only. */
 		OverwriteTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
 		/** Unique identifier for entity instances */
-		pluginpackageId: DevKit.WebApi.GuidValue;
+		PluginPackageId: DevKit.WebApi.GuidValue;
 		/** Unique identifier of the associated solution. */
 		SolutionId: DevKit.WebApi.GuidValueReadonly;
 		/** Status of the Plugin Package */
@@ -71,16 +72,18 @@ declare namespace DevKit {
 		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
 		/** For internal use only. */
 		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
-		/** Unique Name for the entity. */
+		/** Unique name for the package */
 		UniqueName: DevKit.WebApi.StringValue;
 		/** Time zone code that was in use when the record was created. */
 		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		/** Version of the package */
+		Version: DevKit.WebApi.StringValue;
 		/** Version Number */
 		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
 	}
 }
 declare namespace OptionSet {
-	namespace pluginpackage {
+	namespace PluginPackage {
 		enum ComponentState {
 			/** 2 */
 			Deleted,
@@ -103,22 +106,22 @@ declare namespace OptionSet {
 			/** 2 */
 			Inactive
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':[],'JsWebApi':true,'IsDebugForm':false,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}

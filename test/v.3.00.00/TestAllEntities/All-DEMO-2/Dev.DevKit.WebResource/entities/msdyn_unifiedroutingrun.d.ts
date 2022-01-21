@@ -10,10 +10,12 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_unifiedroutingrun_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form msdyn_unifiedroutingrun_Information
+		* Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -22,6 +24,10 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_unifiedroutingrun_Information */
 		Body: DevKit.Formmsdyn_unifiedroutingrun_Information.Body;
+		/** The Process of form msdyn_unifiedroutingrun_Information */
+		Process: DevKit.Formmsdyn_unifiedroutingrun_Information.Process;
+		/** The SidePanes of form msdyn_unifiedroutingrun_Information */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace FormUnified_routing_run_diagnostics {
 		interface Tabs {
@@ -29,10 +35,12 @@ declare namespace DevKit {
 		interface Body {
 			msdyn_name: DevKit.Controls.ActionCards;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormUnified_routing_run_diagnostics extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Unified_routing_run_diagnostics
+		* Unified routing run diagnostics [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -41,6 +49,10 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Unified_routing_run_diagnostics */
 		Body: DevKit.FormUnified_routing_run_diagnostics.Body;
+		/** The Process of form Unified_routing_run_diagnostics */
+		Process: DevKit.FormUnified_routing_run_diagnostics.Process;
+		/** The SidePanes of form Unified_routing_run_diagnostics */
+		SidePanes: DevKit.SidePanes;
 	}
 	class msdyn_unifiedroutingrunApi {
 		/**
@@ -89,6 +101,8 @@ declare namespace DevKit {
 		msdyn_name: DevKit.WebApi.StringValue;
 		msdyn_queue: DevKit.WebApi.LookupValue;
 		msdyn_routingduration: DevKit.WebApi.IntegerValue;
+		/** Routing duration in seconds */
+		msdyn_routingdurationinseconds: DevKit.WebApi.IntegerValue;
 		msdyn_routingstatus: DevKit.WebApi.OptionSetValue;
 		/** Run number */
 		msdyn_runnumber: DevKit.WebApi.IntegerValue;
@@ -154,22 +168,22 @@ declare namespace OptionSet {
 			/** 2 */
 			Inactive
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Information','Unified routing run diagnostics'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

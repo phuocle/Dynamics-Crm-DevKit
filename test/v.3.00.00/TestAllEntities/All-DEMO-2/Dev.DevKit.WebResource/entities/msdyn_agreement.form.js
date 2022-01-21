@@ -20,7 +20,7 @@ var DevKit;
 			invoicegrid: {},
 			msdyn_AgreementDetails: {},
 			msdyn_AgreementRecordGeneration: {},
-			msdyn_AgreementRecordGeneration_1: {},
+			msdyn_AgreementRecordGeneration1: {},
 			msdyn_BillingAccount: {},
 			msdyn_DateCanceled: {},
 			msdyn_Description: {},
@@ -83,16 +83,9 @@ var DevKit;
 		form.Header = header;
 		var process = devKit.LoadProcess(formContext);
 		var _Agreement_Business_Process = {
-			msdyn_autogeneratewo: {},
 			msdyn_BillingAccount: {},
-			msdyn_Description: {},
-			msdyn_Description_1: {},
 			msdyn_Duration: {},
 			msdyn_EndDate: {},
-			msdyn_estimatedduration: {},
-			msdyn_name: {},
-			msdyn_postbookingflexibility: {},
-			msdyn_prebookingflexibility: {},
 			msdyn_PriceList: {},
 			msdyn_ServiceAccount: {},
 			msdyn_StartDate: {},
@@ -100,21 +93,15 @@ var DevKit;
 			msdyn_SubStatus_1: {},
 			msdyn_SystemStatus: {},
 			msdyn_SystemStatus_1: {},
-			msdyn_SystemStatus_2: {},
-			msdyn_workordertype: {}
+			msdyn_SystemStatus_2: {}
 		}
 		devKit.LoadFields(formContext, _Agreement_Business_Process, "header_process_");
 		process.Agreement_Business_Process = _Agreement_Business_Process;
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var grid = {
 			bookingsgrid: {},
-			invoicegrid: {},
 			ContractLines: {},
+			invoicegrid: {},
 			QuotesLinesGrid: {},
 		};
 		devKit.LoadGrids(formContext, grid);
@@ -138,6 +125,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormAgreement_Mobile = function(executionContext, defaultWebResourceName) {
@@ -199,16 +187,9 @@ var DevKit;
 		form.Body = body;
 		var process = devKit.LoadProcess(formContext);
 		var _Agreement_Business_Process = {
-			msdyn_autogeneratewo: {},
 			msdyn_BillingAccount: {},
-			msdyn_Description: {},
-			msdyn_Description_1: {},
 			msdyn_Duration: {},
 			msdyn_EndDate: {},
-			msdyn_estimatedduration: {},
-			msdyn_name: {},
-			msdyn_postbookingflexibility: {},
-			msdyn_prebookingflexibility: {},
 			msdyn_PriceList: {},
 			msdyn_ServiceAccount: {},
 			msdyn_StartDate: {},
@@ -216,17 +197,11 @@ var DevKit;
 			msdyn_SubStatus_1: {},
 			msdyn_SystemStatus: {},
 			msdyn_SystemStatus_1: {},
-			msdyn_SystemStatus_2: {},
-			msdyn_workordertype: {}
+			msdyn_SystemStatus_2: {}
 		}
 		devKit.LoadFields(formContext, _Agreement_Business_Process, "header_process_");
 		process.Agreement_Business_Process = _Agreement_Business_Process;
 		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
 		var grid = {
 			bookingsgrid: {},
 			invoicegrid: {},
@@ -255,6 +230,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 })(DevKit || (DevKit = {}));
@@ -276,15 +252,14 @@ var OptionSet;
 			Active: 1,
 			Inactive: 2
 		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
-
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 	};
 })(OptionSet || (OptionSet = {}));

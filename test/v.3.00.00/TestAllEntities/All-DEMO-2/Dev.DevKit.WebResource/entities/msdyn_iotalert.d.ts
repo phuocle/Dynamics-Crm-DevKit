@@ -46,7 +46,7 @@ declare namespace DevKit {
 			/** Data sent from the device about the alert. */
 			msdyn_AlertData: DevKit.Controls.String;
 			/** Data sent from the device about the alert. */
-			msdyn_AlertData_1: DevKit.Controls.String;
+			msdyn_AlertData1: DevKit.Controls.String;
 			/** The suggested priority score for this alert. */
 			msdyn_alertpriorityscore: DevKit.Controls.Integer;
 			/** The time the alert was issued. */
@@ -63,9 +63,9 @@ declare namespace DevKit {
 			/** The IoT device for which this alert was raised. */
 			msdyn_Device: DevKit.Controls.Lookup;
 			/** The IoT device for which this alert was raised. */
-			msdyn_Device_1: DevKit.Controls.Lookup;
+			msdyn_Device1: DevKit.Controls.Lookup;
 			/** The IoT device for which this alert was raised. */
-			msdyn_Device_2: DevKit.Controls.Lookup;
+			msdyn_Device2: DevKit.Controls.Lookup;
 			/** The ID of the IoT device that sent the alert. */
 			msdyn_DeviceID: DevKit.Controls.String;
 			/** Reference to a primary alert. This field is inferred if Primary Alert Token is set. */
@@ -89,16 +89,6 @@ declare namespace DevKit {
 		interface QuickForm {
 			AssetWorkOrdersView: quickForm_AssetWorkOrdersView;
 		}
-		interface ProcessIoT_Alert_to_Case_Process {
-			/** The time the alert was issued. */
-			msdyn_AlertTime: DevKit.Controls.DateTime;
-			/** The asset connected to the IoT device that raised the alert. */
-			msdyn_CustomerAsset: DevKit.Controls.Lookup;
-			/** A description for the alert. */
-			msdyn_Description: DevKit.Controls.String;
-			/** Owner Id */
-			OwnerId: DevKit.Controls.Lookup;
-		}
 		interface ProcessCFS_IoT_Alert_Process_Flow {
 			/** The time the alert was issued. */
 			msdyn_AlertTime: DevKit.Controls.DateTime;
@@ -107,9 +97,17 @@ declare namespace DevKit {
 			/** The IoT device for which this alert was raised. */
 			msdyn_Device: DevKit.Controls.Lookup;
 		}
+		interface ProcessIoT_Alert_to_Case_Process {
+			/** The time the alert was issued. */
+			msdyn_AlertTime: DevKit.Controls.DateTime;
+			/** The asset connected to the IoT device that raised the alert. */
+			msdyn_CustomerAsset: DevKit.Controls.Lookup;
+			/** A description for the alert. */
+			msdyn_Description: DevKit.Controls.String;
+		}
 		interface Process extends DevKit.Controls.IProcess {
-			IoT_Alert_to_Case_Process: ProcessIoT_Alert_to_Case_Process;
 			CFS_IoT_Alert_Process_Flow: ProcessCFS_IoT_Alert_Process_Flow;
+			IoT_Alert_to_Case_Process: ProcessIoT_Alert_to_Case_Process;
 		}
 		interface Grid {
 			DeviceCommandsGrid: DevKit.Controls.Grid;
@@ -117,7 +115,7 @@ declare namespace DevKit {
 	}
 	class Formmsdyn_iotalert_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form msdyn_iotalert_Information
+		* Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -134,6 +132,8 @@ declare namespace DevKit {
 		Process: DevKit.Formmsdyn_iotalert_Information.Process;
 		/** The Grid of form msdyn_iotalert_Information */
 		Grid: DevKit.Formmsdyn_iotalert_Information.Grid;
+		/** The SidePanes of form msdyn_iotalert_Information */
+		SidePanes: DevKit.SidePanes;
 	}
 	class msdyn_iotalertApi {
 		/**
@@ -288,22 +288,22 @@ declare namespace OptionSet {
 			/** 2 */
 			Inactive
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

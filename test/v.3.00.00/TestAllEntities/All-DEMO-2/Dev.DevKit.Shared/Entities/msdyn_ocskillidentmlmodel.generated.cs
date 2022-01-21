@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocskillidentmlmodelOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -49,35 +49,35 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocskillidentmlmodelOptionSets
 	public enum msdyn_ocskillidentmlmodeltrainingstatus
 	{
 		/// <summary>
-		/// Loading_data = 100000007
+		/// Loading data = 100000007
 		/// </summary>
 		Loading_data = 100000007,
 		/// <summary>
-		/// Not_trained = 100000000
+		/// Not trained = 100000000
 		/// </summary>
 		Not_trained = 100000000,
 		/// <summary>
-		/// Publish_completed = 100000006
+		/// Publish completed = 100000006
 		/// </summary>
 		Publish_completed = 100000006,
 		/// <summary>
-		/// Publish_failed = 100000005
+		/// Publish failed = 100000005
 		/// </summary>
 		Publish_failed = 100000005,
 		/// <summary>
-		/// Publish_in_progress = 100000004
+		/// Publish in progress = 100000004
 		/// </summary>
 		Publish_in_progress = 100000004,
 		/// <summary>
-		/// Training_completed = 100000002
+		/// Training completed = 100000002
 		/// </summary>
 		Training_completed = 100000002,
 		/// <summary>
-		/// Training_failed = 100000003
+		/// Training failed = 100000003
 		/// </summary>
 		Training_failed = 100000003,
 		/// <summary>
-		/// Training_in_progress = 100000001
+		/// Training in progress = 100000001
 		/// </summary>
 		Training_in_progress = 100000001
 	}
@@ -148,7 +148,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_ocskillidentmlmodel";
 
-		public const int EntityTypeCode = 10626;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10763;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocskillidentmlmodel()
@@ -355,7 +356,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Indicates model's status</para>
+		/// <para>Indicates model&apos;s status</para>
 		/// <para>Picklist</para>
 		/// <para>Model status</para>
 		/// </summary>
@@ -378,7 +379,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Indicates model's recent training status</para>
+		/// <para>Indicates model&apos;s recent training status</para>
 		/// <para>Picklist</para>
 		/// <para>Training status</para>
 		/// </summary>
@@ -461,7 +462,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

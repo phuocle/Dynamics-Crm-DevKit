@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.SdkMessageProcessingStepOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -36,10 +36,6 @@ namespace Dev.DevKit.Shared.Entities.SdkMessageProcessingStepOptionSets
 		/// Child = 1
 		/// </summary>
 		Child = 1,
-		/// <summary>
-		/// Internal = -1
-		/// </summary>
-		Internal = -1,
 		/// <summary>
 		/// Parent = 0
 		/// </summary>
@@ -61,55 +57,55 @@ namespace Dev.DevKit.Shared.Entities.SdkMessageProcessingStepOptionSets
 	public enum Stage
 	{
 		/// <summary>
-		/// Final_Post_operation_For_internal_use_only = 55
+		/// Final Post-operation (For internal use only) = 55
 		/// </summary>
 		Final_Post_operation_For_internal_use_only = 55,
 		/// <summary>
-		/// Initial_Pre_operation_For_internal_use_only = 5
+		/// Initial Pre-operation (For internal use only) = 5
 		/// </summary>
 		Initial_Pre_operation_For_internal_use_only = 5,
 		/// <summary>
-		/// Internal_Post_operation_After_External_Plugins_For_internal_use_only = 45
+		/// Internal Post-operation After External Plugins (For internal use only) = 45
 		/// </summary>
 		Internal_Post_operation_After_External_Plugins_For_internal_use_only = 45,
 		/// <summary>
-		/// Internal_Post_operation_Before_External_Plugins_For_internal_use_only = 35
+		/// Internal Post-operation Before External Plugins (For internal use only) = 35
 		/// </summary>
 		Internal_Post_operation_Before_External_Plugins_For_internal_use_only = 35,
 		/// <summary>
-		/// Internal_Pre_operation_After_External_Plugins_For_internal_use_only = 25
+		/// Internal Pre-operation After External Plugins (For internal use only) = 25
 		/// </summary>
 		Internal_Pre_operation_After_External_Plugins_For_internal_use_only = 25,
 		/// <summary>
-		/// Internal_Pre_operation_Before_External_Plugins_For_internal_use_only = 15
+		/// Internal Pre-operation Before External Plugins (For internal use only) = 15
 		/// </summary>
 		Internal_Pre_operation_Before_External_Plugins_For_internal_use_only = 15,
 		/// <summary>
-		/// Main_Operation_For_internal_use_only = 30
+		/// Main Operation (For internal use only) = 30
 		/// </summary>
 		Main_Operation_For_internal_use_only = 30,
 		/// <summary>
-		/// Post_Commit_stage_fired_after_transaction_commit_For_internal_use_only = 90
+		/// Post-Commit stage fired after transaction commit (For internal use only) = 90
 		/// </summary>
 		Post_Commit_stage_fired_after_transaction_commit_For_internal_use_only = 90,
 		/// <summary>
-		/// Post_operation = 40
+		/// Post-operation = 40
 		/// </summary>
 		Post_operation = 40,
 		/// <summary>
-		/// Post_operation_Deprecated = 50
+		/// Post-operation (Deprecated) = 50
 		/// </summary>
 		Post_operation_Deprecated = 50,
 		/// <summary>
-		/// Pre_Commit_stage_fired_before_transaction_commit_For_internal_use_only = 80
+		/// Pre-Commit stage fired before transaction commit (For internal use only) = 80
 		/// </summary>
 		Pre_Commit_stage_fired_before_transaction_commit_For_internal_use_only = 80,
 		/// <summary>
-		/// Pre_operation = 20
+		/// Pre-operation = 20
 		/// </summary>
 		Pre_operation = 20,
 		/// <summary>
-		/// Pre_validation = 10
+		/// Pre-validation = 10
 		/// </summary>
 		Pre_validation = 10
 	}
@@ -145,11 +141,11 @@ namespace Dev.DevKit.Shared.Entities.SdkMessageProcessingStepOptionSets
 		/// </summary>
 		Both = 2,
 		/// <summary>
-		/// Microsoft_Dynamics_365_Client_for_Outlook_Only = 1
+		/// Microsoft Dynamics 365 Client for Outlook Only = 1
 		/// </summary>
 		Microsoft_Dynamics_365_Client_for_Outlook_Only = 1,
 		/// <summary>
-		/// Server_Only = 0
+		/// Server Only = 0
 		/// </summary>
 		Server_Only = 0
 	}
@@ -163,6 +159,7 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			public const string AsyncAutoDelete = "asyncautodelete";
 			public const string CanUseReadOnlyConnection = "canusereadonlyconnection";
+			public const string Category = "category";
 			public const string ComponentState = "componentstate";
 			public const string Configuration = "configuration";
 			public const string CreatedBy = "createdby";
@@ -175,6 +172,8 @@ namespace Dev.DevKit.Shared.Entities
 			public const string FilteringAttributes = "filteringattributes";
 			public const string ImpersonatingUserId = "impersonatinguserid";
 			public const string IntroducedVersion = "introducedversion";
+			[System.Obsolete("Deprecated from version: 5.0.0.0")]
+			public const string InvocationSource = "invocationsource";
 			public const string IsManaged = "ismanaged";
 			public const string Mode = "mode";
 			public const string ModifiedBy = "modifiedby";
@@ -183,6 +182,8 @@ namespace Dev.DevKit.Shared.Entities
 			public const string Name = "name";
 			public const string OrganizationId = "organizationid";
 			public const string OverwriteTime = "overwritetime";
+			[System.Obsolete("Deprecated from version: 5.0.0.0")]
+			public const string PluginTypeId = "plugintypeid";
 			public const string Rank = "rank";
 			public const string RuntimeIntegrationProperties = "runtimeintegrationproperties";
 			public const string SdkMessageFilterId = "sdkmessagefilterid";
@@ -201,6 +202,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "sdkmessageprocessingstep";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 4608;
 
 		[DebuggerNonUserCode()]
@@ -273,6 +275,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<bool?>(Fields.CanUseReadOnlyConnection); }
 			set { Entity.Attributes[Fields.CanUseReadOnlyConnection] = value; }
+		}
+
+		/// <summary>
+		/// <para>For internal use only.</para>
+		/// <para>String - MaxLength: 100</para>
+		/// <para>Category</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string Category
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.Category); }
+			set { Entity.Attributes[Fields.Category] = value; }
 		}
 
 		/// <summary>
@@ -373,7 +387,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the associated event handler.</para>
-		/// <para>Lookup to plugintype;serviceendpoint</para>
+		/// <para>Lookup to plugintype, serviceendpoint</para>
 		/// <para>Event Handler</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -417,6 +431,30 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.IntroducedVersion); }
 			set { Entity.Attributes[Fields.IntroducedVersion] = value; }
+		}
+
+		/// <summary>
+		/// <para>Identifies if a plug-in should be executed from a parent pipeline, a child pipeline, or both.</para>
+		/// <para>Picklist</para>
+		/// <para>Invocation Source</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		[System.Obsolete("Deprecated from version: 5.0.0.0")]
+		public Dev.DevKit.Shared.Entities.SdkMessageProcessingStepOptionSets.InvocationSource? InvocationSource
+		{
+			get
+			{
+				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.InvocationSource);
+				if (value == null) return null;
+				return (Dev.DevKit.Shared.Entities.SdkMessageProcessingStepOptionSets.InvocationSource)value.Value;
+			}
+			set
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.InvocationSource] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.InvocationSource] = null;
+			}
 		}
 
 		/// <summary>
@@ -518,6 +556,19 @@ namespace Dev.DevKit.Shared.Entities
 		public DateTime? OverwriteTimeUtc
 		{
 			get { return Entity.GetAttributeValue<DateTime?>(Fields.OverwriteTime); }
+		}
+
+		/// <summary>
+		/// <para>Unique identifier of the plug-in type associated with the step.</para>
+		/// <para>Lookup to sdkmessagefilter</para>
+		/// <para>Plug-In Type</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		[System.Obsolete("Deprecated from version: 5.0.0.0")]
+		public EntityReference PluginTypeId
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.PluginTypeId); }
+			set { Entity.Attributes[Fields.PluginTypeId] = value; }
 		}
 
 		/// <summary>

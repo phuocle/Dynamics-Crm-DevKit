@@ -6,65 +6,65 @@ var DevKit;
 	DevKit.LeadApi = function (e) {
 		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-        function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
-            var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-            var property = {};
-            var getFormattedValue = function () {
-                if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-                    return EMPTY_STRING;
-                }
-                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-                    if (entity[logicalName + l] === entityLogicalName) {
-                        return entity[logicalName + f];
-                    }
-                    return EMPTY_STRING;
-                }
-                if (isMultiOptionSet) {
-                    return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
-                }
-                return entity[logicalName + f];
-            };
-            var getValue = function () {
-                if (entity[logicalName] === undefined || entity[logicalName] === null) {
-                    return null;
-                }
-                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-                    if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
-                        return entity[logicalName];
-                    }
-                    return null;
-                }
-                if (isMultiOptionSet) {
-                    return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
-                }
-                return entity[logicalName];
-            };
-            var setValue = function (value) {
-                if (isMultiOptionSet) value = value.join(',');
-                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-                    value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
-                    upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
-                } else {
-                    upsertEntity[logicalName] = value;
-                }
-                entity[logicalName] = value;
-            };
-            Object.defineProperty(property, 'FormattedValue', {
-                get: getFormattedValue
-            });
-            if (readOnly) {
-                Object.defineProperty(property, 'Value', {
-                    get: getValue
-                });
-            }
-            else {
-                Object.defineProperty(property, 'Value', {
-                    get: getValue,
-                    set: setValue
-                });
-            }
-            return property;
-        }
+		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
+			var property = {};
+			var getFormattedValue = function () {
+				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
+					return EMPTY_STRING;
+				}
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					if (entity[logicalName + l] === entityLogicalName) {
+						return entity[logicalName + f];
+					}
+					return EMPTY_STRING;
+				}
+				if (isMultiOptionSet) {
+					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
+				}
+				return entity[logicalName + f];
+			};
+			var getValue = function () {
+				if (entity[logicalName] === undefined || entity[logicalName] === null) {
+					return null;
+				}
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
+						return entity[logicalName];
+					}
+					return null;
+				}
+				if (isMultiOptionSet) {
+					return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
+				}
+				return entity[logicalName];
+			};
+			var setValue = function (value) {
+				if (isMultiOptionSet) value = value.join(',');
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
+				} else {
+					upsertEntity[logicalName] = value;
+				}
+				entity[logicalName] = value;
+			};
+			Object.defineProperty(property, 'FormattedValue', {
+				get: getFormattedValue
+			});
+			if (readOnly) {
+				Object.defineProperty(property, 'Value', {
+					get: getValue
+				});
+			}
+			else {
+				Object.defineProperty(property, 'Value', {
+					get: getValue,
+					set: setValue
+				});
+			}
+			return property;
+		}
 		var lead = {
 			AccountId: { b: 'accountid', a: '_accountid_value', c: 'accounts', d: 'account', r: true },
 			Address1_AddressId: { a: 'address1_addressid' },
@@ -163,7 +163,6 @@ var DevKit;
 			LeadQualityCode: { a: 'leadqualitycode' },
 			LeadSourceCode: { a: 'leadsourcecode' },
 			MasterId: { b: 'masterid', a: '_masterid_value', c: 'leads', d: 'lead', r: true },
-			MasterLeadIdName: { a: 'masterleadidname', r: true },
 			Merged: { a: 'merged', r: true },
 			MiddleName: { a: 'middlename' },
 			MobilePhone: { a: 'mobilephone' },
@@ -171,7 +170,15 @@ var DevKit;
 			ModifiedOn_UtcDateAndTime: { a: 'modifiedon', r: true },
 			ModifiedOnBehalfBy: { b: 'modifiedonbehalfby', a: '_modifiedonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
 			msdyn_gdproptout: { a: 'msdyn_gdproptout' },
+			msdyn_LeadGrade: { a: 'msdyn_leadgrade' },
+			msdyn_LeadScore: { a: 'msdyn_leadscore' },
+			msdyn_LeadScoreTrend: { a: 'msdyn_leadscoretrend' },
 			msdyn_ordertype: { a: 'msdyn_ordertype' },
+			msdyn_PredictiveScoreId: { b: 'msdyn_PredictiveScoreId', a: '_msdyn_predictivescoreid_value', c: 'msdyn_predictivescores', d: 'msdyn_predictivescore' },
+			msdyn_salesassignmentresult: { a: 'msdyn_salesassignmentresult' },
+			msdyn_ScoreHistory: { a: 'msdyn_scorehistory' },
+			msdyn_ScoreReasons: { a: 'msdyn_scorereasons' },
+			msdyn_segmentid: { b: 'msdyn_segmentid', a: '_msdyn_segmentid_value', c: 'msdyn_segments', d: 'msdyn_segment' },
 			Need: { a: 'need' },
 			NumberOfEmployees: { a: 'numberofemployees' },
 			OnHoldTime: { a: 'onholdtime', r: true },
@@ -204,7 +211,6 @@ var DevKit;
 			SIC: { a: 'sic' },
 			SLAId: { b: 'slaid', a: '_slaid_value', c: 'slas', d: 'sla' },
 			SLAInvokedId: { b: 'slainvokedid', a: '_slainvokedid_value', c: 'slas', d: 'sla', r: true },
-			SLAName: { a: 'slaname', r: true },
 			StageId: { a: 'stageid' },
 			StateCode: { a: 'statecode' },
 			StatusCode: { a: 'statuscode' },
@@ -340,10 +346,26 @@ var OptionSet;
 			Web: 8,
 			Word_of_Mouth: 9
 		},
+		msdyn_LeadGrade : {
+			Grade_A: 0,
+			Grade_B: 1,
+			Grade_C: 2,
+			Grade_D: 3
+		},
+		msdyn_LeadScoreTrend : {
+			Declining: 2,
+			Improving: 0,
+			Not_enough_info: 3,
+			Steady: 1
+		},
 		msdyn_ordertype : {
 			Item_based: 192350000,
 			Service_Maintenance_Based: 690970002,
 			Work_based: 192350001
+		},
+		msdyn_salesassignmentresult : {
+			Failed: 1,
+			Succeeded: 0
 		},
 		Need : {
 			Good_to_have: 2,
@@ -393,15 +415,14 @@ var OptionSet;
 			No_Longer_Interested: 6,
 			Qualified: 3
 		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
-
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 	};
 })(OptionSet || (OptionSet = {}));

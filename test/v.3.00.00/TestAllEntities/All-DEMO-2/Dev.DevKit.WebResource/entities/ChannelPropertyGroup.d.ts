@@ -21,13 +21,15 @@ declare namespace DevKit {
 			/** Select the activity that the property group is associated with. */
 			RegardingTypeCode: DevKit.Controls.OptionSet;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 		interface Grid {
 			propertiesGrid: DevKit.Controls.Grid;
 		}
 	}
 	class FormChannel_Property_Group extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Channel_Property_Group
+		* Channel Property Group [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -36,8 +38,12 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Channel_Property_Group */
 		Body: DevKit.FormChannel_Property_Group.Body;
+		/** The Process of form Channel_Property_Group */
+		Process: DevKit.FormChannel_Property_Group.Process;
 		/** The Grid of form Channel_Property_Group */
 		Grid: DevKit.FormChannel_Property_Group.Grid;
+		/** The SidePanes of form Channel_Property_Group */
+		SidePanes: DevKit.SidePanes;
 	}
 	class ChannelPropertyGroupApi {
 		/**
@@ -126,27 +132,27 @@ declare namespace OptionSet {
 		enum RegardingTypeCode {
 			/** 4201 */
 			Appointment,
-			/** 10294 */
+			/** 10400 */
 			Booking_Alert,
-			/** 10564 */
+			/** 10702 */
 			Conversation,
-			/** 10238 */
+			/** 10294 */
 			Customer_Voice_alert,
-			/** 10248 */
+			/** 10304 */
 			Customer_Voice_survey_invite,
-			/** 10250 */
+			/** 10306 */
 			Customer_Voice_survey_response,
 			/** 4202 */
 			Email,
-			/** 10673 */
+			/** 10813 */
 			Outbound_message,
 			/** 4210 */
 			Phone_Call,
-			/** 10324 */
+			/** 10430 */
 			Project_Service_Approval,
 			/** 4214 */
 			Service_Activity,
-			/** 10573 */
+			/** 10717 */
 			Session,
 			/** 4216 */
 			Social_Activity,
@@ -165,22 +171,22 @@ declare namespace OptionSet {
 			/** 2 */
 			Inactive
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Channel Property Group'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

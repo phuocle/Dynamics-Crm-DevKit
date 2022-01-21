@@ -16,7 +16,7 @@ var DevKit;
 		var form = devKit.LoadForm(formContext);
 		var body = {
 			CurrentCost: {},
-			CurrentCost_1: {},
+			CurrentCost1: {},
 			DefaultUoMId: {},
 			DefaultUoMScheduleId: {},
 			Description: {},
@@ -31,7 +31,7 @@ var DevKit;
 			Name: {},
 			notescontrol: {},
 			ParentProductId: {},
-			ParentProductId_1: {},
+			ParentProductId1: {},
 			Price: {},
 			Price_List_Items: {},
 			PriceLevelId: {},
@@ -42,7 +42,7 @@ var DevKit;
 			productsubstitute_items: {},
 			QuantityDecimal: {},
 			StandardCost: {},
-			StandardCost_1: {},
+			StandardCost1: {},
 			SubjectId: {},
 			ValidFromDate: {},
 			ValidToDate: {}
@@ -95,18 +95,15 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		var grid = {
-			productassocaition_items: {},
+			KnowledgeArticlesSubGrid: {},
+			Price_List_Items: {},
 			product_dynamic_properties: {},
 			product_dynamic_properties_offline: {},
-			Price_List_Items: {},
+			productassocaition_items: {},
 			productsubstitute_items: {},
-			KnowledgeArticlesSubGrid: {},
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
@@ -140,6 +137,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 	DevKit.FormProduct_Project_Information = function(executionContext, defaultWebResourceName) {
@@ -221,16 +219,13 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
+		var process = devKit.LoadProcess(formContext);
+		form.Process = process;
 		var grid = {
-			productassocaition_items: {},
-			product_dynamic_properties: {},
 			Computed_Fields: {},
 			Price_List_Items: {},
+			product_dynamic_properties: {},
+			productassocaition_items: {},
 			productsubstitute_items: {},
 		};
 		devKit.LoadGrids(formContext, grid);
@@ -244,43 +239,9 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
-	DevKit.FormProduct_Quick_Create_FS_5x5 = function(executionContext, defaultWebResourceName) {
-		var formContext = null;
-		if (executionContext !== undefined)
-		{
-			if (executionContext.getFormContext === undefined) {
-				formContext = executionContext;
-			}
-			else {
-				formContext = executionContext.getFormContext();
-			}
-		}
-		var form = devKit.LoadForm(formContext);
-		var body = {
-			DefaultUoMId: {},
-			DefaultUoMScheduleId: {},
-			msdyn_FieldServiceProductType: {},
-			Name: {},
-			ProductNumber: {}
-		}
-		devKit.LoadFields(formContext, body);
-		var tab = {
-			tab_1: {
-				Section: {
-					tab_1_column_1_section_1: {},
-					tab_1_column_2_section_1: {},
-					tab_1_column_3_section_1: {}
-				}
-			}
-		}
-		devKit.LoadTabs(formContext, tab);
-		body.Tab = tab;
-		form.Body = body;
-		form.Utility = devKit.LoadUtility(defaultWebResourceName);
-		return form;
-	}
 	DevKit.FormProduct_family_Quick_Create = function(executionContext, defaultWebResourceName) {
 		var formContext = null;
 		if (executionContext !== undefined)
@@ -302,7 +263,7 @@ var DevKit;
 			QuantityDecimal: {},
 			ValidFromDate: {},
 			ValidToDate: {}
-		}
+		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
 			tab_1: {
@@ -311,13 +272,15 @@ var DevKit;
 					tab_1_column_2_section_1: {}
 				}
 			}
-		}
+		};
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
+		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
-	}
+	};
 	DevKit.FormProduct_Quick_Create = function(executionContext, defaultWebResourceName) {
 		var formContext = null;
 		if (executionContext !== undefined)
@@ -341,7 +304,7 @@ var DevKit;
 			SubjectId: {},
 			ValidFromDate: {},
 			ValidToDate: {}
-		}
+		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
 			tab_1: {
@@ -351,13 +314,52 @@ var DevKit;
 					tab_1_column_3_section_1: {}
 				}
 			}
-		}
+		};
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
+		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
-	}
+	};
+	DevKit.FormProduct_Quick_Create_FS_5x5 = function(executionContext, defaultWebResourceName) {
+		var formContext = null;
+		if (executionContext !== undefined)
+		{
+			if (executionContext.getFormContext === undefined) {
+				formContext = executionContext;
+			}
+			else {
+				formContext = executionContext.getFormContext();
+			}
+		}
+		var form = devKit.LoadForm(formContext);
+		var body = {
+			DefaultUoMId: {},
+			DefaultUoMScheduleId: {},
+			msdyn_FieldServiceProductType: {},
+			Name: {},
+			ProductNumber: {}
+		};
+		devKit.LoadFields(formContext, body);
+		var tab = {
+			tab_1: {
+				Section: {
+					tab_1_column_1_section_1: {},
+					tab_1_column_2_section_1: {},
+					tab_1_column_3_section_1: {}
+				}
+			}
+		};
+		devKit.LoadTabs(formContext, tab);
+		body.Tab = tab;
+		form.Body = body;
+		form.Utility = devKit.LoadUtility(defaultWebResourceName);
+		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
+		return form;
+	};
 })(DevKit || (DevKit = {}));
 /** @namespace OptionSet */
 var OptionSet;
@@ -391,15 +393,14 @@ var OptionSet;
 			Retired: 2,
 			Under_Revision: 3
 		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
-
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 	};
 })(OptionSet || (OptionSet = {}));

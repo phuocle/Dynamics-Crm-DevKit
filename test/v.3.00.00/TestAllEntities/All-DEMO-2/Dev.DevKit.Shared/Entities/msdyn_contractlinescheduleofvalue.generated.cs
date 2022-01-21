@@ -13,19 +13,19 @@ namespace Dev.DevKit.Shared.Entities.msdyn_contractlinescheduleofvalueOptionSets
 	public enum msdyn_Invoicestatus
 	{
 		/// <summary>
-		/// Customer_invoice_created = 192350002
+		/// Customer invoice created = 192350002
 		/// </summary>
 		Customer_invoice_created = 192350002,
 		/// <summary>
-		/// Customer_invoice_posted = 192350003
+		/// Customer invoice posted = 192350003
 		/// </summary>
 		Customer_invoice_posted = 192350003,
 		/// <summary>
-		/// Not_Ready_for_invoicing = 192350000
+		/// Not Ready for invoicing = 192350000
 		/// </summary>
 		Not_Ready_for_invoicing = 192350000,
 		/// <summary>
-		/// Ready_for_invoicing = 192350001
+		/// Ready for invoicing = 192350001
 		/// </summary>
 		Ready_for_invoicing = 192350001
 	}
@@ -69,7 +69,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_contractlinescheduleofvalueOptionSets
 	public enum msdyn_TransactionTypeCode
 	{
 		/// <summary>
-		/// Billed_Sales = 192350006
+		/// Billed Sales = 192350006
 		/// </summary>
 		Billed_Sales = 192350006,
 		/// <summary>
@@ -77,19 +77,19 @@ namespace Dev.DevKit.Shared.Entities.msdyn_contractlinescheduleofvalueOptionSets
 		/// </summary>
 		Cost = 192350000,
 		/// <summary>
-		/// Inter_Organizational_Sales = 192350008
+		/// Inter-Organizational Sales = 192350008
 		/// </summary>
 		Inter_Organizational_Sales = 192350008,
 		/// <summary>
-		/// Project_Contract = 192350004
+		/// Project Contract = 192350004
 		/// </summary>
 		Project_Contract = 192350004,
 		/// <summary>
-		/// Resourcing_Unit_Cost = 192350007
+		/// Resourcing Unit Cost = 192350007
 		/// </summary>
 		Resourcing_Unit_Cost = 192350007,
 		/// <summary>
-		/// Unbilled_Sales = 192350005
+		/// Unbilled Sales = 192350005
 		/// </summary>
 		Unbilled_Sales = 192350005
 	}
@@ -171,7 +171,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_contractlinescheduleofvalue";
 
-		public const int EntityTypeCode = 10331;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10437;
 
 		[DebuggerNonUserCode()]
 		public msdyn_contractlinescheduleofvalue()
@@ -643,9 +644,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_contractlinescheduleofvalueOptionSets.msdyn_TransactionClassification)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_TransactionClassification] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_TransactionClassification] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_TransactionClassification] = null;
+			}
 		}
 
 		/// <summary>
@@ -663,9 +667,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_contractlinescheduleofvalueOptionSets.msdyn_TransactionTypeCode)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_TransactionTypeCode] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_TransactionTypeCode] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_TransactionTypeCode] = null;
+			}
 		}
 
 		/// <summary>
@@ -682,7 +689,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

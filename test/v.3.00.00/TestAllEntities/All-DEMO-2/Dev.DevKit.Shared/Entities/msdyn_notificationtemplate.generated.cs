@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_notificationtemplateOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -37,7 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_notificationtemplateOptionSets
 		/// </summary>
 		Never = 509180000,
 		/// <summary>
-		/// When_app_is_in_background = 509180001
+		/// When app is in background = 509180001
 		/// </summary>
 		When_app_is_in_background = 509180001
 	}
@@ -126,7 +126,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_notificationtemplate";
 
-		public const int EntityTypeCode = 10148;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10160;
 
 		[DebuggerNonUserCode()]
 		public msdyn_notificationtemplate()
@@ -511,7 +512,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

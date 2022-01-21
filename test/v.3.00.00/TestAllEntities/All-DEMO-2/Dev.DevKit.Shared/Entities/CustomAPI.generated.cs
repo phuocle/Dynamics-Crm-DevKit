@@ -13,7 +13,7 @@ namespace Dev.DevKit.Shared.Entities.CustomAPIOptionSets
 	public enum AllowedCustomProcessingStepType
 	{
 		/// <summary>
-		/// Async_Only = 1
+		/// Async Only = 1
 		/// </summary>
 		Async_Only = 1,
 		/// <summary>
@@ -21,7 +21,7 @@ namespace Dev.DevKit.Shared.Entities.CustomAPIOptionSets
 		/// </summary>
 		None = 0,
 		/// <summary>
-		/// Sync_and_Async = 2
+		/// Sync and Async = 2
 		/// </summary>
 		Sync_and_Async = 2
 	}
@@ -33,7 +33,7 @@ namespace Dev.DevKit.Shared.Entities.CustomAPIOptionSets
 		/// </summary>
 		Entity = 1,
 		/// <summary>
-		/// Entity_Collection = 2
+		/// Entity Collection = 2
 		/// </summary>
 		Entity_Collection = 2,
 		/// <summary>
@@ -49,7 +49,7 @@ namespace Dev.DevKit.Shared.Entities.CustomAPIOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -134,7 +134,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "customapi";
 
-		public const int EntityTypeCode = 10069;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10020;
 
 		[DebuggerNonUserCode()]
 		public CustomAPI()
@@ -471,7 +472,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

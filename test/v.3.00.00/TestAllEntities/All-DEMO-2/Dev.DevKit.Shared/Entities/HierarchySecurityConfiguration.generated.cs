@@ -21,12 +21,12 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			public const string EntityName = "entityname";
 			public const string HierarchySecurityModelingSettingId = "hierarchysecuritymodelingsettingid";
-			public const string ObjectTypeCode = "objecttypecode";
 			public const string VersionNumber = "versionnumber";
 		}
 
 		public const string EntityLogicalName = "hierarchysecurityconfiguration";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 9919;
 
 		[DebuggerNonUserCode()]
@@ -99,18 +99,6 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<Guid?>(Fields.HierarchySecurityModelingSettingId); }
 			set { Entity.Attributes[Fields.HierarchySecurityModelingSettingId] = value; }
-		}
-
-		/// <summary>
-		/// <para>For internal use only.</para>
-		/// <para>EntityName</para>
-		/// <para></para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string ObjectTypeCode
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.ObjectTypeCode); }
-			set { Entity.Attributes[Fields.ObjectTypeCode] = value; }
 		}
 
 		/// <summary>

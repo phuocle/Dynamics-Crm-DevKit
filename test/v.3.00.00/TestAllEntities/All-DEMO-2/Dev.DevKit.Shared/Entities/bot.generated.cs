@@ -17,11 +17,11 @@ namespace Dev.DevKit.Shared.Entities.botOptionSets
 		/// </summary>
 		Any = 0,
 		/// <summary>
-		/// Chatbot_readers = 1
+		/// Chatbot readers = 1
 		/// </summary>
 		Chatbot_readers = 1,
 		/// <summary>
-		/// Group_membership = 2
+		/// Group membership = 2
 		/// </summary>
 		Group_membership = 2
 	}
@@ -29,11 +29,11 @@ namespace Dev.DevKit.Shared.Entities.botOptionSets
 	public enum authenticationmode
 	{
 		/// <summary>
-		/// Custom_Azure_Active_Directory = 3
+		/// Custom Azure Active Directory = 3
 		/// </summary>
 		Custom_Azure_Active_Directory = 3,
 		/// <summary>
-		/// Generic_OAuth2 = 4
+		/// Generic OAuth2 = 4
 		/// </summary>
 		Generic_OAuth2 = 4,
 		/// <summary>
@@ -57,7 +57,7 @@ namespace Dev.DevKit.Shared.Entities.botOptionSets
 		/// </summary>
 		Always = 1,
 		/// <summary>
-		/// As_Needed = 0
+		/// As Needed = 0
 		/// </summary>
 		As_Needed = 0
 	}
@@ -69,7 +69,7 @@ namespace Dev.DevKit.Shared.Entities.botOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -89,11 +89,11 @@ namespace Dev.DevKit.Shared.Entities.botOptionSets
 		/// </summary>
 		Arabic = 1025,
 		/// <summary>
-		/// Chinese_Simplified = 2052
+		/// Chinese (Simplified) = 2052
 		/// </summary>
 		Chinese_Simplified = 2052,
 		/// <summary>
-		/// Chinese_Traditional = 1028
+		/// Chinese (Traditional) = 1028
 		/// </summary>
 		Chinese_Traditional = 1028,
 		/// <summary>
@@ -145,7 +145,7 @@ namespace Dev.DevKit.Shared.Entities.botOptionSets
 		/// </summary>
 		Polish = 1045,
 		/// <summary>
-		/// Portuguese_Brazilian = 1046
+		/// Portuguese (Brazilian) = 1046
 		/// </summary>
 		Portuguese_Brazilian = 1046,
 		/// <summary>
@@ -249,7 +249,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "bot";
 
-		public const int EntityTypeCode = 10042;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10066;
 
 		[DebuggerNonUserCode()]
 		public bot()
@@ -314,9 +315,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.botOptionSets.accesscontrolpolicy)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.accesscontrolpolicy] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.accesscontrolpolicy] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.accesscontrolpolicy] = null;
+			}
 		}
 
 		/// <summary>
@@ -346,9 +350,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.botOptionSets.authenticationmode)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.authenticationmode] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.authenticationmode] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.authenticationmode] = null;
+			}
 		}
 
 		/// <summary>
@@ -366,9 +373,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.botOptionSets.authenticationtrigger)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.authenticationtrigger] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.authenticationtrigger] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.authenticationtrigger] = null;
+			}
 		}
 
 		/// <summary>
@@ -521,9 +531,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.botOptionSets.Language)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.Language] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.Language] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.Language] = null;
+			}
 		}
 
 		/// <summary>
@@ -596,7 +609,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

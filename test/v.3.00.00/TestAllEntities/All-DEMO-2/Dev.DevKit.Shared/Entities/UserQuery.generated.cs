@@ -66,7 +66,6 @@ namespace Dev.DevKit.Shared.Entities
 			public const string OwningUser = "owninguser";
 			public const string ParentQueryId = "parentqueryid";
 			public const string QueryType = "querytype";
-			public const string ReturnedTypeCode = "returnedtypecode";
 			public const string StateCode = "statecode";
 			public const string StatusCode = "statuscode";
 			public const string UserQueryId = "userqueryid";
@@ -75,6 +74,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "userquery";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 4230;
 
 		[DebuggerNonUserCode()]
@@ -301,7 +301,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user.</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -369,18 +369,6 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type of entity that the saved view displays.</para>
-		/// <para>EntityName</para>
-		/// <para>Returned Type</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string ReturnedTypeCode
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.ReturnedTypeCode); }
-			set { Entity.Attributes[Fields.ReturnedTypeCode] = value; }
-		}
-
-		/// <summary>
 		/// <para>Shows whether the saved view is active or inactive.</para>
 		/// <para>State</para>
 		/// <para>Status</para>
@@ -404,7 +392,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select the item's status.</para>
+		/// <para>Select the item&apos;s status.</para>
 		/// <para>Status</para>
 		/// <para>Status Reason</para>
 		/// </summary>

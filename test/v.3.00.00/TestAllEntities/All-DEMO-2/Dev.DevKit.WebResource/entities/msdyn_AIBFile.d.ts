@@ -15,10 +15,12 @@ declare namespace DevKit {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_AIBFile_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form msdyn_AIBFile_Information
+		* Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -27,6 +29,10 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form msdyn_AIBFile_Information */
 		Body: DevKit.Formmsdyn_AIBFile_Information.Body;
+		/** The Process of form msdyn_AIBFile_Information */
+		Process: DevKit.Formmsdyn_AIBFile_Information.Process;
+		/** The SidePanes of form msdyn_AIBFile_Information */
+		SidePanes: DevKit.SidePanes;
 	}
 	class msdyn_AIBFileApi {
 		/**
@@ -72,7 +78,11 @@ declare namespace DevKit {
 		/** Unique identifier for entity instances */
 		msdyn_AIBFileId: DevKit.WebApi.GuidValue;
 		msdyn_Checksum: DevKit.WebApi.StringValue;
-		msdyn_File_Name: DevKit.WebApi.StringValueReadonly;
+		msdyn_File: DevKit.WebApi.StringValueReadonly;
+		EntityImage: DevKit.WebApi.StringValue;
+		EntityImage_Timestamp: DevKit.WebApi.BigIntValueReadonly;
+		EntityImage_URL: DevKit.WebApi.StringValueReadonly;
+		msdyn_Image: DevKit.WebApi.StringValue;
 		msdyn_Image_Timestamp: DevKit.WebApi.BigIntValueReadonly;
 		msdyn_Image_URL: DevKit.WebApi.StringValueReadonly;
 		msdyn_ImageId: DevKit.WebApi.GuidValueReadonly;
@@ -119,22 +129,22 @@ declare namespace OptionSet {
 			/** 2 */
 			Inactive
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

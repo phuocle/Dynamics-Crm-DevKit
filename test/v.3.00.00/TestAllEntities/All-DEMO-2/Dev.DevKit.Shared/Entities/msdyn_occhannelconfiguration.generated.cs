@@ -13,7 +13,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_occhannelconfigurationOptionSets
 	public enum msdyn_streamsource
 	{
 		/// <summary>
-		/// Co_browse = 192390000
+		/// Co-browse = 192390000
 		/// </summary>
 		Co_browse = 192390000,
 		/// <summary>
@@ -21,7 +21,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_occhannelconfigurationOptionSets
 		/// </summary>
 		Custom = 192350002,
 		/// <summary>
-		/// Entity_Records = 192350000
+		/// Entity Records = 192350000
 		/// </summary>
 		Entity_Records = 192350000,
 		/// <summary>
@@ -33,15 +33,15 @@ namespace Dev.DevKit.Shared.Entities.msdyn_occhannelconfigurationOptionSets
 		/// </summary>
 		LINE = 192310000,
 		/// <summary>
-		/// Live_chat = 192360000
+		/// Live chat = 192360000
 		/// </summary>
 		Live_chat = 192360000,
 		/// <summary>
-		/// Microsoft_Teams = 19241000
+		/// Microsoft Teams = 19241000
 		/// </summary>
 		Microsoft_Teams = 19241000,
 		/// <summary>
-		/// Screen_sharing = 192400000
+		/// Screen sharing = 192400000
 		/// </summary>
 		Screen_sharing = 192400000,
 		/// <summary>
@@ -127,7 +127,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_occhannelconfiguration";
 
-		public const int EntityTypeCode = 10562;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10698;
 
 		[DebuggerNonUserCode()]
 		public msdyn_occhannelconfiguration()
@@ -358,9 +359,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_occhannelconfigurationOptionSets.msdyn_streamsource)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_streamsource] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_streamsource] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_streamsource] = null;
+			}
 		}
 
 		/// <summary>

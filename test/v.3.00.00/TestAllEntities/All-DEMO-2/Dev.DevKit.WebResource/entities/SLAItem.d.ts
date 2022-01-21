@@ -32,7 +32,7 @@ declare namespace DevKit {
 			/** Select how soon the success criteria must be met until the SLA item is considered failed and failure actions are initiated. The actual duration is based on the business hours as specified in the associated SLA record. */
 			FailureAfter: DevKit.Controls.Integer;
 			/** Select how soon the success criteria must be met until the SLA item is considered failed and failure actions are initiated. The actual duration is based on the business hours as specified in the associated SLA record. */
-			FailureAfter_1: DevKit.Controls.Integer;
+			FailureAfter1: DevKit.Controls.Integer;
 			msdyn_AdvancedPauseConfiguration: DevKit.Controls.Boolean;
 			msdyn_pauseconfigurationxml: DevKit.Controls.ActionCards;
 			/** Unique identifier for SLAKPI associated with SLA Item. */
@@ -40,20 +40,22 @@ declare namespace DevKit {
 			/** Type a descriptive name of the service level agreement (SLA) item. */
 			Name: DevKit.Controls.String;
 			/** Type a descriptive name of the service level agreement (SLA) item. */
-			Name_1: DevKit.Controls.String;
+			Name1: DevKit.Controls.String;
 			successconditioncontrol: DevKit.Controls.ActionCards;
 			/** Select how soon the success criteria must be met before warning actions are initiated. The actual duration is based on the business hours as specified in the associated SLA record. */
 			WarnAfter: DevKit.Controls.Integer;
 			/** Select how soon the success criteria must be met before warning actions are initiated. The actual duration is based on the business hours as specified in the associated SLA record. */
-			WarnAfter_1: DevKit.Controls.Integer;
+			WarnAfter1: DevKit.Controls.Integer;
 			WebResource_preview: DevKit.Controls.WebResource;
 			WebResource_slaitem_applicablewhen_notification: DevKit.Controls.WebResource;
 			WebResource_slaitem_success_notification: DevKit.Controls.WebResource;
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class FormSLAItem_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form SLAItem_Information
+		* Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -64,6 +66,10 @@ declare namespace DevKit {
 		Body: DevKit.FormSLAItem_Information.Body;
 		/** The Header section of form SLAItem_Information */
 		Header: DevKit.FormSLAItem_Information.Header;
+		/** The Process of form SLAItem_Information */
+		Process: DevKit.FormSLAItem_Information.Process;
+		/** The SidePanes of form SLAItem_Information */
+		SidePanes: DevKit.SidePanes;
 	}
 	class SLAItemApi {
 		/**
@@ -138,8 +144,6 @@ declare namespace DevKit {
 		OwnerId_team: DevKit.WebApi.LookupValue;
 		/** Unique identifier for the business unit that owns the record */
 		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
-		/** Unique identifier of the user who owns the SLA Item record. */
-		OwningUser: DevKit.WebApi.LookupValue;
 		/** Select the service level agreement (SLA) key performance indicator (KPI) that this SLA Item is created for. */
 		RelatedField: DevKit.WebApi.StringValue;
 		/** Select the time zone, or UTC offset, for this address so that other people can reference it when they contact someone at this address. */
@@ -178,22 +182,22 @@ declare namespace OptionSet {
 			/** 1 */
 			Unpublished
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

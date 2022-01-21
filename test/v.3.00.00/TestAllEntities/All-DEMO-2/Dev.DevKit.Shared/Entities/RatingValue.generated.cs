@@ -29,7 +29,7 @@ namespace Dev.DevKit.Shared.Entities.RatingValueOptionSets
 		/// </summary>
 		Active = 1,
 		/// <summary>
-		/// Disabled_By_Generation_Process = 192350000
+		/// Disabled By Generation Process = 192350000
 		/// </summary>
 		Disabled_By_Generation_Process = 192350000,
 		/// <summary>
@@ -73,6 +73,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "ratingvalue";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 1142;
 
 		[DebuggerNonUserCode()]
@@ -249,7 +250,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

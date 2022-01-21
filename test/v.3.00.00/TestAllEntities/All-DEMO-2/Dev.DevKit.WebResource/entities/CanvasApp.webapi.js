@@ -6,65 +6,65 @@ var DevKit;
 	DevKit.CanvasAppApi = function (e) {
 		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-        function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
-            var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-            var property = {};
-            var getFormattedValue = function () {
-                if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-                    return EMPTY_STRING;
-                }
-                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-                    if (entity[logicalName + l] === entityLogicalName) {
-                        return entity[logicalName + f];
-                    }
-                    return EMPTY_STRING;
-                }
-                if (isMultiOptionSet) {
-                    return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
-                }
-                return entity[logicalName + f];
-            };
-            var getValue = function () {
-                if (entity[logicalName] === undefined || entity[logicalName] === null) {
-                    return null;
-                }
-                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-                    if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
-                        return entity[logicalName];
-                    }
-                    return null;
-                }
-                if (isMultiOptionSet) {
-                    return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
-                }
-                return entity[logicalName];
-            };
-            var setValue = function (value) {
-                if (isMultiOptionSet) value = value.join(',');
-                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-                    value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
-                    upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
-                } else {
-                    upsertEntity[logicalName] = value;
-                }
-                entity[logicalName] = value;
-            };
-            Object.defineProperty(property, 'FormattedValue', {
-                get: getFormattedValue
-            });
-            if (readOnly) {
-                Object.defineProperty(property, 'Value', {
-                    get: getValue
-                });
-            }
-            else {
-                Object.defineProperty(property, 'Value', {
-                    get: getValue,
-                    set: setValue
-                });
-            }
-            return property;
-        }
+		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
+			var property = {};
+			var getFormattedValue = function () {
+				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
+					return EMPTY_STRING;
+				}
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					if (entity[logicalName + l] === entityLogicalName) {
+						return entity[logicalName + f];
+					}
+					return EMPTY_STRING;
+				}
+				if (isMultiOptionSet) {
+					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
+				}
+				return entity[logicalName + f];
+			};
+			var getValue = function () {
+				if (entity[logicalName] === undefined || entity[logicalName] === null) {
+					return null;
+				}
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
+						return entity[logicalName];
+					}
+					return null;
+				}
+				if (isMultiOptionSet) {
+					return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
+				}
+				return entity[logicalName];
+			};
+			var setValue = function (value) {
+				if (isMultiOptionSet) value = value.join(',');
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
+				} else {
+					upsertEntity[logicalName] = value;
+				}
+				entity[logicalName] = value;
+			};
+			Object.defineProperty(property, 'FormattedValue', {
+				get: getFormattedValue
+			});
+			if (readOnly) {
+				Object.defineProperty(property, 'Value', {
+					get: getValue
+				});
+			}
+			else {
+				Object.defineProperty(property, 'Value', {
+					get: getValue,
+					set: setValue
+				});
+			}
+			return property;
+		}
 		var canvasapp = {
 			AADCreatedById: { a: 'aadcreatedbyid' },
 			AADLastModifiedById: { a: 'aadlastmodifiedbyid' },
@@ -74,10 +74,10 @@ var DevKit;
 			AppComponents: { a: 'appcomponents' },
 			AppOpenUri: { a: 'appopenuri' },
 			AppVersion: { a: 'appversion' },
-			Assets_Name: { a: 'assets_name', r: true },
+			Assets: { a: 'assets', r: true },
 			AuthorizationReferences: { a: 'authorizationreferences' },
 			BackgroundColor: { a: 'backgroundcolor' },
-			BackgroundImage_Name: { a: 'backgroundimage_name', r: true },
+			BackgroundImage: { a: 'background_image', r: true },
 			BypassConsent: { a: 'bypassconsent' },
 			CanConsumeAppPass: { a: 'canconsumeapppass' },
 			CanvasAppId: { a: 'canvasappid' },
@@ -92,7 +92,7 @@ var DevKit;
 			DatabaseReferences: { a: 'databasereferences' },
 			Description: { a: 'description' },
 			DisplayName: { a: 'displayname' },
-			Document_Name: { a: 'document_name', r: true },
+			Document: { a: 'document', r: true },
 			EmbeddedApp: { a: 'embeddedapp' },
 			GalleryItemId: { a: 'galleryitemid' },
 			IntroducedVersion: { a: 'introducedversion' },
@@ -102,10 +102,10 @@ var DevKit;
 			IsHeroApp: { a: 'isheroapp' },
 			IsHidden: { a: 'ishidden' },
 			IsManaged: { a: 'ismanaged', r: true },
-			LargeIcon_Name: { a: 'largeicon_name', r: true },
+			LargeIcon: { a: 'large_icon', r: true },
 			LastModifiedTime_UtcDateAndTime: { a: 'lastmodifiedtime' },
 			LastPublishTime_UtcDateAndTime: { a: 'lastpublishtime' },
-			MediumIcon_Name: { a: 'mediumicon_name', r: true },
+			MediumIcon: { a: 'medium_icon', r: true },
 			MinClientVersion: { a: 'minclientversion' },
 			Name: { a: 'name' },
 			OverwriteTime_UtcDateOnly: { a: 'overwritetime', r: true },
@@ -115,14 +115,15 @@ var DevKit;
 			OwningTeam: { b: 'owningteam', a: '_owningteam_value', c: 'teams', d: 'team', r: true },
 			OwningUser: { b: 'owninguser', a: '_owninguser_value', c: 'systemusers', d: 'systemuser', r: true },
 			Publisher: { a: 'publisher' },
-			SmallIcon_Name: { a: 'smallicon_name', r: true },
+			SmallIcon: { a: 'small_icon', r: true },
 			SolutionId: { a: 'solutionid', r: true },
 			Status: { a: 'status' },
 			SupportingSolutionId: { a: 'supportingsolutionid', r: true },
 			Tags: { a: 'tags' },
-			TeamsIcon_Name: { a: 'teamsicon_name', r: true },
+			TeamsIcon: { a: 'teams_icon', r: true },
+			UniqueCanvasAppId: { a: 'uniquecanvasappid' },
 			VersionNumber: { a: 'versionnumber', r: true },
-			WideIcon_Name: { a: 'wideicon_name', r: true }
+			WideIcon: { a: 'wide_icon', r: true }
 		};
 		if (e === undefined) e = {};
 		var u = {};
@@ -176,15 +177,14 @@ var OptionSet;
 			Published: 0,
 			Unpublished: 1
 		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
-
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 	};
 })(OptionSet || (OptionSet = {}));

@@ -21,11 +21,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_opportunitylinetransactionclassificat
 		/// </summary>
 		Complimentary = 192350002,
 		/// <summary>
-		/// Non_Chargeable = 192350000
+		/// Non Chargeable = 192350000
 		/// </summary>
 		Non_Chargeable = 192350000,
 		/// <summary>
-		/// Not_Available = 192350003
+		/// Not Available = 192350003
 		/// </summary>
 		Not_Available = 192350003
 	}
@@ -124,7 +124,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_opportunitylinetransactionclassificatio";
 
-		public const int EntityTypeCode = 10355;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10461;
 
 		[DebuggerNonUserCode()]
 		public msdyn_opportunitylinetransactionclassificatio()
@@ -342,9 +343,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_opportunitylinetransactionclassificatioOptionSets.msdyn_TransactionClassification)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_TransactionClassification] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_TransactionClassification] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_TransactionClassification] = null;
+			}
 		}
 
 		/// <summary>
@@ -361,7 +365,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

@@ -1,7 +1,7 @@
 ﻿//@ts-check
 ///<reference path="devkit.d.ts" />
 declare namespace DevKit {
-	namespace FormAuto_post_rule {
+	namespace FormAutopost_rule {
 		interface Tabs {
 		}
 		interface Body {
@@ -27,22 +27,28 @@ declare namespace DevKit {
 			navAudit: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
-	class FormAuto_post_rule extends DevKit.IForm {
+	class FormAutopost_rule extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Auto_post_rule
+		* Auto-post rule [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
 		constructor(executionContext: any, defaultWebResourceName?: string);
 		/** Utility functions/methods/objects for Dynamics 365 form */
 		Utility: DevKit.Utility;
-		/** The Body section of form Auto_post_rule */
-		Body: DevKit.FormAuto_post_rule.Body;
-		/** The Footer section of form Auto_post_rule */
-		Footer: DevKit.FormAuto_post_rule.Footer;
-		/** The Navigation of form Auto_post_rule */
-		Navigation: DevKit.FormAuto_post_rule.Navigation;
+		/** The Body section of form Autopost_rule */
+		Body: DevKit.FormAutopost_rule.Body;
+		/** The Footer section of form Autopost_rule */
+		Footer: DevKit.FormAutopost_rule.Footer;
+		/** The Navigation of form Autopost_rule */
+		Navigation: DevKit.FormAutopost_rule.Navigation;
+		/** The Process of form Autopost_rule */
+		Process: DevKit.FormAutopost_rule.Process;
+		/** The SidePanes of form Autopost_rule */
+		SidePanes: DevKit.SidePanes;
 	}
 	namespace Formmsdyn_PostRuleConfig_Information {
 		interface Tabs {
@@ -72,10 +78,12 @@ declare namespace DevKit {
 			navAudit: DevKit.Controls.NavigationItem,
 			navProcessSessions: DevKit.Controls.NavigationItem
 		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
 	}
 	class Formmsdyn_PostRuleConfig_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form msdyn_PostRuleConfig_Information
+		* Information [Main Form]
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -88,6 +96,10 @@ declare namespace DevKit {
 		Footer: DevKit.Formmsdyn_PostRuleConfig_Information.Footer;
 		/** The Navigation of form msdyn_PostRuleConfig_Information */
 		Navigation: DevKit.Formmsdyn_PostRuleConfig_Information.Navigation;
+		/** The Process of form msdyn_PostRuleConfig_Information */
+		Process: DevKit.Formmsdyn_PostRuleConfig_Information.Process;
+		/** The SidePanes of form msdyn_PostRuleConfig_Information */
+		SidePanes: DevKit.SidePanes;
 	}
 	class msdyn_PostRuleConfigApi {
 		/**
@@ -175,22 +187,22 @@ declare namespace OptionSet {
 			/** 2 */
 			Inactive
 		}
-        enum RollupState {
-            /** 0 - Attribute value is yet to be calculated */
-            NotCalculated,
-            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-            Calculated,
-            /** 2 - Attribute value calculation lead to overflow error */
-            OverflowError,
-            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-            OtherError,
-            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-            RetryLimitExceeded,
-            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-            HierarchicalRecursionLimitReached,
-            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-            LoopDetected
-        }
+		enum RollupState {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
 	}
 }
-//{'JsForm':['Auto-post rule','Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}

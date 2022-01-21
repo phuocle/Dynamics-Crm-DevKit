@@ -17,18 +17,18 @@ var DevKit;
 		var body = {
 			DeviceCommandsGrid: {},
 			msdyn_AlertData: {},
-			msdyn_AlertData_1: {},
+			msdyn_AlertData1: {},
 			msdyn_alertpriorityscore: {},
 			msdyn_AlertTime: {},
 			msdyn_AlertToken: {},
 			msdyn_alerttype: {},
 			msdyn_AlertURL: {},
 			msdyn_CustomerAsset: {},
-			msdyn_CustomerAsset_1: {},
+			msdyn_CustomerAsset1: {},
 			msdyn_Description: {},
 			msdyn_Device: {},
-			msdyn_Device_1: {},
-			msdyn_Device_2: {},
+			msdyn_Device1: {},
+			msdyn_Device2: {},
 			msdyn_DeviceID: {},
 			msdyn_ParentAlert: {},
 			msdyn_ParentAlertToken: {},
@@ -75,32 +75,20 @@ var DevKit;
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
 		var process = devKit.LoadProcess(formContext);
-		var _IoT_Alert_to_Case_Process = {
-			customerid: {},
-			msdyn_AlertTime: {},
-			msdyn_CustomerAsset: {},
-			msdyn_Description: {},
-			OwnerId: {},
-			primarycontactid: {},
-			title: {}
-		}
-		devKit.LoadFields(formContext, _IoT_Alert_to_Case_Process, "header_process_");
-		process.IoT_Alert_to_Case_Process = _IoT_Alert_to_Case_Process;
 		var _CFS_IoT_Alert_Process_Flow = {
-			customerid: {},
 			msdyn_AlertTime: {},
 			msdyn_Description: {},
-			msdyn_Device: {},
-			msdyn_incidenttype: {},
-			msdyn_priority: {},
-			msdyn_serviceaccount: {},
-			msdyn_substatus: {},
-			msdyn_systemstatus: {},
-			msdyn_workordertype: {},
-			title: {}
+			msdyn_Device: {}
 		}
 		devKit.LoadFields(formContext, _CFS_IoT_Alert_Process_Flow, "header_process_");
 		process.CFS_IoT_Alert_Process_Flow = _CFS_IoT_Alert_Process_Flow;
+		var _IoT_Alert_to_Case_Process = {
+			msdyn_AlertTime: {},
+			msdyn_CustomerAsset: {},
+			msdyn_Description: {}
+		}
+		devKit.LoadFields(formContext, _IoT_Alert_to_Case_Process, "header_process_");
+		process.IoT_Alert_to_Case_Process = _IoT_Alert_to_Case_Process;
 		form.Process = process;
 		var quickForm = {
 			AssetWorkOrdersView: {
@@ -114,13 +102,9 @@ var DevKit;
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
-		var navigation = {
-
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 })(DevKit || (DevKit = {}));
@@ -155,15 +139,14 @@ var OptionSet;
 			In_Progress_Work_Order_Created: 4,
 			Inactive: 2
 		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
-
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 	};
 })(OptionSet || (OptionSet = {}));
