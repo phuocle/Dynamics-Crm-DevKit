@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicsCrm.DevKit.Lib", "D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicsCrm.DevKit.Cli", "DynamicsCrm.DevKit.Cli\DynamicsCrm.DevKit.Cli.csproj", "{E81879B8-B13E-4856-8653-CE3F3415C512}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicsCrm.DevKit.CrmSvcUtilExtensions", "DynamicsCrm.DevKit.CrmSvcUtilExtensions\DynamicsCrm.DevKit.CrmSvcUtilExtensions.csproj", "{AF511858-3072-45D7-932D-C0D98470914E}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		DynamicsCrm.DevKit.Shared\DynamicsCrm.DevKit.Shared.projitems*{0bd4ada6-cf1e-4123-b30e-c9d33298bccd}*SharedItemsImports = 5
@@ -53,6 +55,14 @@ Global
 		{E81879B8-B13E-4856-8653-CE3F3415C512}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E81879B8-B13E-4856-8653-CE3F3415C512}.Release|x86.ActiveCfg = Release|Any CPU
 		{E81879B8-B13E-4856-8653-CE3F3415C512}.Release|x86.Build.0 = Release|Any CPU
+		{AF511858-3072-45D7-932D-C0D98470914E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF511858-3072-45D7-932D-C0D98470914E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF511858-3072-45D7-932D-C0D98470914E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AF511858-3072-45D7-932D-C0D98470914E}.Debug|x86.Build.0 = Debug|Any CPU
+		{AF511858-3072-45D7-932D-C0D98470914E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF511858-3072-45D7-932D-C0D98470914E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF511858-3072-45D7-932D-C0D98470914E}.Release|x86.ActiveCfg = Release|Any CPU
+		{AF511858-3072-45D7-932D-C0D98470914E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

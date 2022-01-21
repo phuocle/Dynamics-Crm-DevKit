@@ -39,6 +39,16 @@
       "commandName": "Project",
       "commandLineArgs": "/sdklogin:\"yes\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"JS-WEBAPI\"",
       "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.00.00\\TestAllEntities\\All-DEMO-2\\Dev.DevKit.WebResource\\entities"
+    },
+    "ALL-DEMO-proxy-user-pass": {
+      "commandName": "Project",
+      "commandLineArgs": "/conn:\"AuthType=OAuth;Url=https://pmm-dev.crm5.dynamics.com;Username=phuoc.le@abiz.co;Password=T7H3v4wyYg+QhUOerrXP5w==;\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"proxytypes\" /profile:\"ALL\" /version:\"9.1.0.92\"",
+      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.00.00\\TestAllEntities\\All-DEMO-2\\Dev.DevKit.ProxyTypes"
+    },
+    "ALL-DEMO-proxy-clientsecret": {
+      "commandName": "Project",
+      "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://pmm-dev.crm5.dynamics.com;ClientId=a871ae25-6786-424b-b167-56eb598b8c76;ClientSecret=T2W7Q~JIzIvhWrIt~5MaUTBTamAqKGV1NhMvm;\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"proxytypes\" /profile:\"ALL\" /version:\"9.1.0.92\"",
+      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.00.00\\TestAllEntities\\All-DEMO-2\\Dev.DevKit.ProxyTypes"
     }
   }
 }

@@ -110,21 +110,23 @@ namespace DynamicsCrm.DevKit.Cli
             }
             else
             {
-                CrmServiceClient = XrmHelper.IsConnected(arguments.Connection);
+                CrmServiceClient = XrmHelper.IsConnected(XrmHelper.BuildConnectionString(arguments.Connection), out var error);
                 if (CrmServiceClient == null)
                 {
-                    CliLog.WriteLineError(ConsoleColor.Yellow, $"Connection String failed !!!");
+                    CliLog.WriteLineError(ConsoleColor.Yellow, error);
                     return false;
                 }
             }
             arguments.CrmServiceClient = CrmServiceClient;
-            CliLog.Write(ConsoleColor.White, "|", ConsoleColor.Green, "Connected: ");
-            CliLog.WriteSuccess(ConsoleColor.White, XrmHelper.ConnectedUrl(CrmServiceClient));
-            CliLog.WriteLine(ConsoleColor.Black, "█");
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Connection Timeout: ", ConsoleColor.White, CrmServiceClient.MaxConnectionTimeout.TotalSeconds.ToString("#,###"), ConsoleColor.Green, " (seconds)");
-            //CliLog.Write(ConsoleColor.White, "|", ConsoleColor.Green, "Connection Timeout: ");
-            //CliLog.WriteSuccess(ConsoleColor.White, $"{CrmServiceClient.MaxConnectionTimeout.TotalSeconds.ToString("#,###")}");
-            //CliLog.WriteLine(ConsoleColor.Green, " (seconds)");
+            if (CrmServiceClient != null)
+            {
+                CliLog.WriteLine(ConsoleColor.White, "|");
+                CliLog.Write(ConsoleColor.White, "|", ConsoleColor.Green, "Connected: ");
+                CliLog.WriteSuccess(ConsoleColor.White, XrmHelper.ConnectedUrl(CrmServiceClient));
+                CliLog.Write(ConsoleColor.Green, " with connection timeout: ");
+                CliLog.WriteSuccess(ConsoleColor.White, CrmServiceClient.MaxConnectionTimeout.TotalSeconds.ToString("#,###"));
+                CliLog.WriteLine(ConsoleColor.Green, " (seconds)");
+            }
             CliLog.WriteLine(ConsoleColor.White, "|");
             return true;
         }

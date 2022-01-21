@@ -11,7 +11,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     {
         public string CurrentDirectory { get; set; }
         public CrmServiceClient CrmServiceClient { get; set; }
-        public string TaskType => "[UPLOAD-REPORT]";
+        public string TaskType => $"[{nameof(CliType.uploadreports).ToUpper()}]";
 
         public bool IsValid()
         {

@@ -24,6 +24,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var generator = new TaskGenerator(arg.CrmServiceClient, arg.CurrentDirectory, json.generators.FirstOrDefault(x => x.profile == arg.Profile));
                     generator.Run();
                     break;
+                case nameof(CliType.proxytypes):
+                    var proxy = new TaskProxyType(arg.CrmServiceClient, arg.CurrentDirectory, json.proxytypes.FirstOrDefault(x => x.profile == arg.Profile), arg.Version, arg.IsSdkLogin, arg.Connection);
+                    proxy.Run();
+                    break;
             }
         }
     }

@@ -413,7 +413,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             CrmServiceClient = crmServiceClient;
             CurrentDirectory = currentDirectory;
             this.json = json;
-            TaskType = $"[GENERATOR - {json.type.ToUpper() }]";
+            TaskType = $"[{nameof(CliType.generators).ToUpper()} - {json.type.ToUpper()}]";
         }
     }
 }

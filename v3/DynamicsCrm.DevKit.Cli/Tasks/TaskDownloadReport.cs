@@ -11,7 +11,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     {
         public string CurrentDirectory { get; set; }
         public CrmServiceClient CrmServiceClient { get; set; }
-        public string TaskType => "[DOWNLOAD-REPORT]";
+        public string TaskType => $"[{nameof(CliType.downloadreports).ToUpper()}]";
         public bool IsValid()
         {
             if (json == null)
