@@ -36,7 +36,9 @@ namespace DynamicsCrm.DevKit.Cli
             CliLog.WriteLine(ConsoleColor.Green, " | | | | | | | '_ \\ / _` | '_ ` _ \\| |/ __/ __| |   | '__| '_ ` _ \\  | | | |/ _ \\ \\ / / ' /| | __|| |   | | |");
             CliLog.WriteLine(ConsoleColor.Green, " | |_| | |_| | | | | (_| | | | | | | | (__\\__ \\ |___| |  | | | | | |_| |_| |  __/\\ V /| . \\| | |_ | |___| | |");
             CliLog.WriteLine(ConsoleColor.Green, " |____/ \\__, |_| |_|\\__,_|_| |_| |_|_|\\___|___/\\____|_|  |_| |_| |_(_)____/ \\___| \\_/ |_|\\_\\_|\\__(_)____|_|_|");
-            CliLog.WriteLine(ConsoleColor.Green, "        |___/                        ", ConsoleColor.White, "https://github.com/phuocle/Dynamics-Crm-DevKit", ConsoleColor.Blue, $" {Const.Version}", ConsoleColor.White, " Build: ", ConsoleColor.Blue, Const.Build);
+            CliLog.Write(ConsoleColor.Green, "        |___/                        ", ConsoleColor.White, "https://github.com/phuocle/Dynamics-Crm-DevKit ");
+            CliLog.WriteSuccess(ConsoleColor.White, Const.Version);
+            CliLog.WriteLine(ConsoleColor.White, " Build: ", ConsoleColor.Blue, Const.Build);
             CliLog.WriteLine(ConsoleColor.White, "|");
             if (IsValid(arguments))
             {
@@ -120,6 +122,9 @@ namespace DynamicsCrm.DevKit.Cli
             CliLog.WriteSuccess(ConsoleColor.White, XrmHelper.ConnectedUrl(CrmServiceClient));
             CliLog.WriteLine(ConsoleColor.Black, "█");
             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Connection Timeout: ", ConsoleColor.White, CrmServiceClient.MaxConnectionTimeout.TotalSeconds.ToString("#,###"), ConsoleColor.Green, " (seconds)");
+            //CliLog.Write(ConsoleColor.White, "|", ConsoleColor.Green, "Connection Timeout: ");
+            //CliLog.WriteSuccess(ConsoleColor.White, $"{CrmServiceClient.MaxConnectionTimeout.TotalSeconds.ToString("#,###")}");
+            //CliLog.WriteLine(ConsoleColor.Green, " (seconds)");
             CliLog.WriteLine(ConsoleColor.White, "|");
             return true;
         }

@@ -11,6 +11,7 @@ namespace DynamicsCrm.DevKit.Cli
         {
             Console.BackgroundColor = ConsoleColor.Black;
             Console.Title = Const.WindowTitle;
+            Console.CursorVisible = false;
             Console.Clear();
         }
 
@@ -130,10 +131,20 @@ namespace DynamicsCrm.DevKit.Cli
         public static void Waiting(string message = "")
         {
             Write(ConsoleColor.White, "| ", message);
+            int counter = 0;
+            Console.CursorVisible = false;
             while (true)
             {
-                CliLog.Write(ConsoleColor.White, ".");
+                switch (counter % 4)
+                {
+                    case 0: Console.Write("┐"); counter = 0; break;
+                    case 1: Console.Write("┌"); break;
+                    case 2: Console.Write("└"); break;
+                    case 3: Console.Write("┘"); break;
+                }
+                counter++;
                 Thread.Sleep(1000);
+                Console.SetCursorPosition(Console.CursorLeft - 1, Console.CursorTop);
             }
         }
     }

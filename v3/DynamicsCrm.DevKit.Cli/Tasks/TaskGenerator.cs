@@ -388,8 +388,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 var wait = new Thread(() => CliLog.Waiting("Reading entities Metadata "));
                 wait.Start();
                 XrmHelper.ReadEntitiesMetadata(crmServiceClient);
-                CliLog.WriteLine("");
                 wait.Abort();
+                if(Console.CursorLeft > 0) Console.SetCursorPosition(Console.CursorLeft - 1, Console.CursorTop);
+                CliLog.WriteSuccess(ConsoleColor.White, "done");
+                CliLog.WriteLine();
 
                 if (json.type.ToLower() != nameof(GeneratorType.csharp))
                 {
@@ -397,14 +399,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     wait = new Thread(() => CliLog.Waiting("Reading entities FormXml "));
                     wait.Start();
                     XrmHelper.ReadEntitiesFormXml(crmServiceClient);
-                    CliLog.WriteLine("");
                     wait.Abort();
-
-                    //wait = new Thread(() => CliLog.Waiting("Reading entities Process "));
-                    //wait.Start();
-                    //XrmHelper.ReadEntitiesProcessForm(crmServiceClient);
-                    //CliLog.WriteLine("");
-                    //wait.Abort();
+                    if (Console.CursorLeft > 0) Console.SetCursorPosition(Console.CursorLeft - 1, Console.CursorTop);
+                    CliLog.WriteSuccess(ConsoleColor.White, "done");
+                    CliLog.WriteLine();
                 }
                 CliLog.WriteLine(ConsoleColor.White, "|");
             }
