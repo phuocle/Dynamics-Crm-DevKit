@@ -39,8 +39,8 @@
 	  <PackageReference Include="Microsoft.CrmSdk.Workflow" Version="9.0.2.42" />
 	  <PackageReference Include="Microsoft.CrmSdk.XrmTooling.CoreAssembly" Version="9.1.0.92" />
 	  <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-	  <PackageReference Include="NuGet.Packaging" Version="6.0.0-preview.4.243" />
-	  <PackageReference Include="NuGet.Protocol" Version="6.0.0-preview.4.243" />
+	  <PackageReference Include="NuGet.Packaging" Version="6.0.0" />
+	  <PackageReference Include="NuGet.Protocol" Version="6.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>

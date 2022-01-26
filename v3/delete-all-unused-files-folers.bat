@@ -1,1 +1,1 @@
-for /d /r . %%d in (bin,obj,packages,Release,.vs) do @if exist "%%d" rd /s/q "%%d"
+for /d /r . %%d in (bin,obj,packages,Release,.vs,Published) do @if exist "%%d" rd /s/q "%%d"
