@@ -12,10 +12,21 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 {
     public class TaskGenerator : ITask
     {
+        public TaskGenerator(CommandLineArgs arg, JsonGenerator json)
+        {
+            this.Arg = arg;
+            this.json = json;
+            CrmServiceClient = arg.CrmServiceClient;
+            CurrentDirectory = arg.CurrentDirectory;
+
+            TaskType = $"[{nameof(CliType.generators).ToUpper()} - {json.type.ToUpper()}]";
+        }
+        public CommandLineArgs Arg { get; set; }
+        private JsonGenerator json { get; set; }
+
         public string CurrentDirectory { get; set; }
         public CrmServiceClient CrmServiceClient { get; set; }
         public string TaskType { get; set; }
-        private JsonGenerator json { get; set; }
         private string CurrentFolder => $"{CurrentDirectory}\\{json.rootfolder}";
         private static bool IsAll { get; set; } = false;
 
@@ -406,14 +417,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 CliLog.WriteLine(ConsoleColor.White, "|");
             }
-        }
-
-        public TaskGenerator(CrmServiceClient crmServiceClient, string currentDirectory, JsonGenerator json)
-        {
-            CrmServiceClient = crmServiceClient;
-            CurrentDirectory = currentDirectory;
-            this.json = json;
-            TaskType = $"[{nameof(CliType.generators).ToUpper()} - {json.type.ToUpper()}]";
         }
     }
 }

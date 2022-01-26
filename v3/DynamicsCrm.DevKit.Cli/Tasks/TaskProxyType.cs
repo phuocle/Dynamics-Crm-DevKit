@@ -12,15 +12,18 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     public class TaskProxyType : ITask
     {
         private const string ENVIRONMENT_ENTITIES = "DynamicsCrm.DevKit.CrmSvcUtilExtensions.Entities";
-        public TaskProxyType(CrmServiceClient crmServiceClient, string currentDirectory, JsonProxyType json, string version, bool isSdkLogin, string connection)
+        public TaskProxyType(CommandLineArgs arg, JsonProxyType json)
         {
-            CrmServiceClient = crmServiceClient;
-            CurrentDirectory = currentDirectory;
+            this.Arg = arg;
             this.json = json;
-            Version = version;
-            IsSdkLogin = isSdkLogin;
-            Connection = connection;
+            CrmServiceClient = arg.CrmServiceClient;
+            CurrentDirectory = arg.CurrentDirectory;
+            Version = arg.Version;
+            IsSdkLogin = arg.IsSdkLogin;
+            Connection = arg.Connection;
         }
+        public CommandLineArgs Arg { get; set; }
+        public JsonProxyType json { get; set; }
 
         public string CurrentDirectory { get; set; }
 
@@ -28,11 +31,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         public CrmServiceClient CrmServiceClient { get; set; }
 
-        private JsonProxyType json { get; set; }
         private string Version { get; set; }
         private string CrmSvcUtil { get; set; }
         private bool IsSdkLogin { get; set; }
         private string Connection { get; set; }
+
 
         public bool IsValid()
         {

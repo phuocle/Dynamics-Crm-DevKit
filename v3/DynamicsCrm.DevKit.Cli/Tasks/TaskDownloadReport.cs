@@ -9,6 +9,18 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 {
     public class TaskDownloadReport : ITask
     {
+        public TaskDownloadReport(CommandLineArgs arg, JsonDownloadReport json)
+        {
+            this.Arg = arg;
+            this.json = json;
+            CrmServiceClient = arg.CrmServiceClient;
+            CurrentDirectory = arg.CurrentDirectory;
+
+
+        }
+        public CommandLineArgs Arg { get; set; }
+        private JsonDownloadReport json { get; set; }
+
         public string CurrentDirectory { get; set; }
         public CrmServiceClient CrmServiceClient { get; set; }
         public string TaskType => $"[{nameof(CliType.downloadreports).ToUpper()}]";
@@ -42,13 +54,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
             }
             return true;
-        }
-        private JsonDownloadReport json { get; set; }
-        public TaskDownloadReport(CrmServiceClient crmServiceClient, string currentDirectory, JsonDownloadReport json)
-        {
-            CrmServiceClient = crmServiceClient;
-            CurrentDirectory = currentDirectory;
-            this.json = json;
         }
 
         public void Run()

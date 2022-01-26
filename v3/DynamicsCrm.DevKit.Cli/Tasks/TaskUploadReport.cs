@@ -9,6 +9,16 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 {
     public class TaskUploadReport : ITask
     {
+        public TaskUploadReport(CommandLineArgs arg, JsonUploadReport json)
+        {
+            this.Arg = arg;
+            this.json = json;
+            CrmServiceClient = arg.CrmServiceClient;
+            CurrentDirectory = arg.CurrentDirectory;
+        }
+        public CommandLineArgs Arg { get; set; }
+        private JsonUploadReport json { get; set; }
+
         public string CurrentDirectory { get; set; }
         public CrmServiceClient CrmServiceClient { get; set; }
         public string TaskType => $"[{nameof(CliType.uploadreports).ToUpper()}]";
@@ -91,14 +101,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
             CliLog.WriteLine(ConsoleColor.White, "|");
             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "END ", ConsoleColor.Blue, TaskType);
-        }
-
-        private JsonUploadReport json { get; set; }
-        public TaskUploadReport(CrmServiceClient crmServiceClient, string currentDirectory, JsonUploadReport json)
-        {
-            CrmServiceClient = crmServiceClient;
-            CurrentDirectory = currentDirectory;
-            this.json = json;
         }
     }
 }
