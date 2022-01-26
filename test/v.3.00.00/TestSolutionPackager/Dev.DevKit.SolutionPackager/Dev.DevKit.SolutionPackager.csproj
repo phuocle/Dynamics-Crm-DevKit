@@ -1,0 +1,235 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{1DD89E73-5314-4A94-AF3B-60FD5D2C572E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Dev.DevKit.SolutionPackager</RootNamespace>
+    <AssemblyName>Dev.DevKit.SolutionPackager</AssemblyName>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>..\Release\dll\</OutputPath>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>
+    </DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
+    <NoWarn>CS8032</NoWarn>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="bin\coretools\CrmSvcUtil.exe.config" />
+    <None Include="bin\coretools\LicenseTerms.docx" />
+    <None Include="bin\coretools\pacTelemetryUpload.exe.config" />
+    <None Include="bin\coretools\SolutionPackager.exe.config" />
+    <None Include="Dev\Solutions-Extract\TestPluginWorkflowCustomActionCustomApi_1.0.0000.0.zip" />
+    <None Include="Dev\Solutions-Extract\TestPluginWorkflowCustomActionCustomApi_1.0.0000.0_managed.zip" />
+    <None Include="Dev\Solutions-Pack\TestPluginWorkflowCustomActionCustomApi_1.0.0000.0.zip" />
+    <None Include="Dev\Solutions-Pack\TestPluginWorkflowCustomActionCustomApi_1.0.0000.0_managed.zip" />
+    <None Include="packages.config" />
+    <None Include="mapping.xml" />
+    <None Include="Extract-Both.bat" />
+    <None Include="Pack-Both.bat" />
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.2.13.33\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="bin\coretools\CrmSvcUtil.exe" />
+    <Content Include="bin\coretools\CrmSvcUtil.xml" />
+    <Content Include="bin\coretools\Microsoft.ApplicationInsights.dll" />
+    <Content Include="bin\coretools\Microsoft.Crm.Sdk.Proxy.dll" />
+    <Content Include="bin\coretools\Microsoft.IdentityModel.Clients.ActiveDirectory.dll" />
+    <Content Include="bin\coretools\Microsoft.PowerPlatform.Tooling.BatchedTelemetry.dll" />
+    <Content Include="bin\coretools\Microsoft.Rest.ClientRuntime.dll" />
+    <Content Include="bin\coretools\Microsoft.Xrm.Sdk.Deployment.dll" />
+    <Content Include="bin\coretools\Microsoft.Xrm.Sdk.dll" />
+    <Content Include="bin\coretools\Microsoft.Xrm.Tooling.Connector.dll" />
+    <Content Include="bin\coretools\Microsoft.Xrm.Tooling.CrmConnectControl.dll" />
+    <Content Include="bin\coretools\Microsoft.Xrm.Tooling.Ui.Styles.dll" />
+    <Content Include="bin\coretools\Newtonsoft.Json.dll" />
+    <Content Include="bin\coretools\Other Redistributable.txt" />
+    <Content Include="bin\coretools\pacTelemetryUpload.exe" />
+    <Content Include="bin\coretools\SolutionPackager.exe" />
+    <Content Include="bin\coretools\SolutionPackagerLib.dll" />
+    <Content Include="bin\coretools\System.Diagnostics.DiagnosticSource.dll" />
+    <Content Include="bin\coretools\System.Text.Json.dll" />
+    <Content Include="bin\coretools\System.ValueTuple.dll" />
+    <Content Include="bin\Debug\Dev.DevKit.SolutionPackager.dll" />
+    <Content Include="bin\Debug\Dev.DevKit.SolutionPackager.pdb" />
+    <Content Include="Dev\Both\customapis\devkit_CustomApiEntityCollection\customapi.xml" />
+    <Content Include="Dev\Both\customapis\devkit_CustomApiEntityCollection\customapirequestparameters\devkit_InEntityCollection\customapirequestparameter.xml" />
+    <Content Include="Dev\Both\customapis\devkit_CustomApiEntityCollection\customapirequestparameters\devkit_InStringArray\customapirequestparameter.xml" />
+    <Content Include="Dev\Both\customapis\devkit_CustomApiEntityCollection\customapiresponseproperties\devkit_OutEntityCollection\customapiresponseproperty.xml" />
+    <Content Include="Dev\Both\customapis\devkit_CustomApiEntity\customapi.xml" />
+    <Content Include="Dev\Both\customapis\devkit_CustomApiEntity\customapirequestparameters\devkit_InEntityReference\customapirequestparameter.xml" />
+    <Content Include="Dev\Both\customapis\devkit_CustomApiEntity\customapirequestparameters\devkit_InEntity\customapirequestparameter.xml" />
+    <Content Include="Dev\Both\customapis\devkit_CustomApiEntity\customapiresponseproperties\devkit_OutEntityReference\customapiresponseproperty.xml" />
+    <Content Include="Dev\Both\customapis\devkit_CustomApiEntity\customapiresponseproperties\devkit_OutEntity\customapiresponseproperty.xml" />
+    <Content Include="Dev\Both\customapis\devkit_CustomApiEntity\customapiresponseproperties\devkit_OutStringArray\customapiresponseproperty.xml" />
+    <Content Include="Dev\Both\customapis\devkit_CustomApi\customapi.xml" />
+    <Content Include="Dev\Both\customapis\devkit_CustomApi\customapirequestparameters\devkit_InBoolean\customapirequestparameter.xml" />
+    <Content Include="Dev\Both\customapis\devkit_CustomApi\customapirequestparameters\devkit_InDateTime\customapirequestparameter.xml" />
+    <Content Include="Dev\Both\customapis\devkit_CustomApi\customapirequestparameters\devkit_InDecimal\customapirequestparameter.xml" />
+    <Content Include="Dev\Both\customapis\devkit_CustomApi\customapirequestparameters\devkit_InFloat\customapirequestparameter.xml" />
+    <Content Include="Dev\Both\customapis\devkit_CustomApi\customapirequestparameters\devkit_InGuid\customapirequestparameter.xml" />
+    <Content Include="Dev\Both\customapis\devkit_CustomApi\customapirequestparameters\devkit_InInteger\customapirequestparameter.xml" />
+    <Content Include="Dev\Both\customapis\devkit_CustomApi\customapirequestparameters\devkit_InMoney\customapirequestparameter.xml" />
+    <Content Include="Dev\Both\customapis\devkit_CustomApi\customapirequestparameters\devkit_InPicklist\customapirequestparameter.xml" />
+    <Content Include="Dev\Both\customapis\devkit_CustomApi\customapirequestparameters\devkit_InString\customapirequestparameter.xml" />
+    <Content Include="Dev\Both\customapis\devkit_CustomApi\customapiresponseproperties\devkit_OutBoolean\customapiresponseproperty.xml" />
+    <Content Include="Dev\Both\customapis\devkit_CustomApi\customapiresponseproperties\devkit_OutDateTime\customapiresponseproperty.xml" />
+    <Content Include="Dev\Both\customapis\devkit_CustomApi\customapiresponseproperties\devkit_OutDecimal\customapiresponseproperty.xml" />
+    <Content Include="Dev\Both\customapis\devkit_CustomApi\customapiresponseproperties\devkit_OutFloat\customapiresponseproperty.xml" />
+    <Content Include="Dev\Both\customapis\devkit_CustomApi\customapiresponseproperties\devkit_OutGuid\customapiresponseproperty.xml" />
+    <Content Include="Dev\Both\customapis\devkit_CustomApi\customapiresponseproperties\devkit_OutInteger\customapiresponseproperty.xml" />
+    <Content Include="Dev\Both\customapis\devkit_CustomApi\customapiresponseproperties\devkit_OutMoney\customapiresponseproperty.xml" />
+    <Content Include="Dev\Both\customapis\devkit_CustomApi\customapiresponseproperties\devkit_OutPicklist\customapiresponseproperty.xml" />
+    <Content Include="Dev\Both\customapis\devkit_CustomApi\customapiresponseproperties\devkit_OutString\customapiresponseproperty.xml" />
+    <Content Include="Dev\Both\Entities\devkit_DataSource2\Entity.xml" />
+    <Content Include="Dev\Both\Entities\devkit_DataSource2\FormXml\card\{cc718c06-904d-426d-8d52-944b01d2552b}.xml" />
+    <Content Include="Dev\Both\Entities\devkit_DataSource2\FormXml\card\{cc718c06-904d-426d-8d52-944b01d2552b}_managed.xml" />
+    <Content Include="Dev\Both\Entities\devkit_DataSource2\FormXml\main\{e82bd7ed-9a9d-4e9e-b886-d6f572bc933d}.xml" />
+    <Content Include="Dev\Both\Entities\devkit_DataSource2\FormXml\main\{e82bd7ed-9a9d-4e9e-b886-d6f572bc933d}_managed.xml" />
+    <Content Include="Dev\Both\Entities\devkit_DataSource2\FormXml\quick\{daea0c55-8c4c-4b82-a6a9-59af2db1a2aa}.xml" />
+    <Content Include="Dev\Both\Entities\devkit_DataSource2\FormXml\quick\{daea0c55-8c4c-4b82-a6a9-59af2db1a2aa}_managed.xml" />
+    <Content Include="Dev\Both\Entities\devkit_DataSource2\RibbonDiff.xml" />
+    <Content Include="Dev\Both\Entities\devkit_DataSource2\SavedQueries\{01d006af-c033-4242-84bc-8e086dc0b6a9}.xml" />
+    <Content Include="Dev\Both\Entities\devkit_DataSource2\SavedQueries\{1549cf4e-3b71-406a-82b4-22116a3f83d2}.xml" />
+    <Content Include="Dev\Both\Entities\devkit_DataSource2\SavedQueries\{426458d1-373f-4909-a47a-fbe3fb667a78}.xml" />
+    <Content Include="Dev\Both\Entities\devkit_DataSource2\SavedQueries\{6bbbb583-fa4b-4409-bdc5-8ae3416cb154}.xml" />
+    <Content Include="Dev\Both\Entities\devkit_DataSource2\SavedQueries\{7e0284a2-d2c4-eb11-bacc-00224816b7d6}.xml" />
+    <Content Include="Dev\Both\Entities\devkit_DataSource2\SavedQueries\{d7dec79a-84ff-44e8-a1f9-2da7ac64b842}.xml" />
+    <Content Include="Dev\Both\Entities\devkit_DataSource3\Entity.xml" />
+    <Content Include="Dev\Both\Entities\devkit_DataSource3\FormXml\card\{2f99dc5b-8e35-4334-bc99-bf55a9f43b6b}.xml" />
+    <Content Include="Dev\Both\Entities\devkit_DataSource3\FormXml\card\{2f99dc5b-8e35-4334-bc99-bf55a9f43b6b}_managed.xml" />
+    <Content Include="Dev\Both\Entities\devkit_DataSource3\FormXml\main\{f8f08f4f-858e-4e5e-a3b9-6863ee30c560}.xml" />
+    <Content Include="Dev\Both\Entities\devkit_DataSource3\FormXml\main\{f8f08f4f-858e-4e5e-a3b9-6863ee30c560}_managed.xml" />
+    <Content Include="Dev\Both\Entities\devkit_DataSource3\FormXml\quick\{5a396cc2-9da8-4d92-853b-a365e8ba667d}.xml" />
+    <Content Include="Dev\Both\Entities\devkit_DataSource3\FormXml\quick\{5a396cc2-9da8-4d92-853b-a365e8ba667d}_managed.xml" />
+    <Content Include="Dev\Both\Entities\devkit_DataSource3\RibbonDiff.xml" />
+    <Content Include="Dev\Both\Entities\devkit_DataSource3\SavedQueries\{1cfe24b0-5a97-4a7d-b5e7-1af893d3602a}.xml" />
+    <Content Include="Dev\Both\Entities\devkit_DataSource3\SavedQueries\{2bbb6ab6-da6f-43ea-a8a3-3a829028d63b}.xml" />
+    <Content Include="Dev\Both\Entities\devkit_DataSource3\SavedQueries\{74613fa3-3afd-4947-8bd6-262136546a29}.xml" />
+    <Content Include="Dev\Both\Entities\devkit_DataSource3\SavedQueries\{7464c1f8-c932-4926-b030-effdfe1a77c4}.xml" />
+    <Content Include="Dev\Both\Entities\devkit_DataSource3\SavedQueries\{c07e1384-83c4-49d0-af18-f514bf7f85d1}.xml" />
+    <Content Include="Dev\Both\Entities\devkit_DataSource3\SavedQueries\{ecd48dee-d3c4-eb11-bacc-00224816b7d6}.xml" />
+    <Content Include="Dev\Both\Entities\devkit_DataSource\Entity.xml" />
+    <Content Include="Dev\Both\Entities\devkit_DataSource\FormXml\card\{ea493e6d-5c6a-4360-a172-ff23897fa918}.xml" />
+    <Content Include="Dev\Both\Entities\devkit_DataSource\FormXml\card\{ea493e6d-5c6a-4360-a172-ff23897fa918}_managed.xml" />
+    <Content Include="Dev\Both\Entities\devkit_DataSource\FormXml\main\{1a90a451-7faf-4cb3-93cf-b35e222b44f0}.xml" />
+    <Content Include="Dev\Both\Entities\devkit_DataSource\FormXml\main\{1a90a451-7faf-4cb3-93cf-b35e222b44f0}_managed.xml" />
+    <Content Include="Dev\Both\Entities\devkit_DataSource\FormXml\quick\{b966e491-ea44-4a1f-ac09-270172640863}.xml" />
+    <Content Include="Dev\Both\Entities\devkit_DataSource\FormXml\quick\{b966e491-ea44-4a1f-ac09-270172640863}_managed.xml" />
+    <Content Include="Dev\Both\Entities\devkit_DataSource\RibbonDiff.xml" />
+    <Content Include="Dev\Both\Entities\devkit_DataSource\SavedQueries\{1c7f3756-7df8-4af3-941b-ee7defa53a8b}.xml" />
+    <Content Include="Dev\Both\Entities\devkit_DataSource\SavedQueries\{2619ce8d-d9ca-4c29-974a-fc8748abc31d}.xml" />
+    <Content Include="Dev\Both\Entities\devkit_DataSource\SavedQueries\{61d48f8f-d347-43e4-ac1d-df5bf7f134f5}.xml" />
+    <Content Include="Dev\Both\Entities\devkit_DataSource\SavedQueries\{7ce853aa-c33d-49d3-96bc-3346160fd3cb}.xml" />
+    <Content Include="Dev\Both\Entities\devkit_DataSource\SavedQueries\{9a97ea1e-b1d2-47f2-981c-5b77e3151c2e}.xml" />
+    <Content Include="Dev\Both\Entities\devkit_DataSource\SavedQueries\{d2122b1a-d1bd-eb11-bacc-000d3a80a94b}.xml" />
+    <Content Include="Dev\Both\EntityDataProviders\{04598487-e6c8-eb11-bacc-000d3a807100}.xml" />
+    <Content Include="Dev\Both\EntityDataProviders\{072b6c9e-ecc8-eb11-bacc-000d3a807100}.xml" />
+    <Content Include="Dev\Both\EntityDataProviders\{4b705e98-ecc8-eb11-bacc-000d3a807100}.xml" />
+    <Content Include="Dev\Both\Other\Customizations.xml" />
+    <Content Include="Dev\Both\Other\Solution.xml" />
+    <Content Include="Dev\Both\PluginAssemblies\DevDevKitCustomAction-87D4E37F-BEC6-EB11-BACC-000D3A807100\DevDevKitCustomAction.dll" />
+    <Content Include="Dev\Both\PluginAssemblies\DevDevKitCustomAction-87D4E37F-BEC6-EB11-BACC-000D3A807100\DevDevKitCustomAction.dll.data.xml" />
+    <Content Include="Dev\Both\PluginAssemblies\DevDevKitCustomActionEntities-C2028DDF-30C7-EB11-BACC-000D3A807100\DevDevKitCustomActionEntities.dll" />
+    <Content Include="Dev\Both\PluginAssemblies\DevDevKitCustomActionEntities-C2028DDF-30C7-EB11-BACC-000D3A807100\DevDevKitCustomActionEntities.dll.data.xml" />
+    <Content Include="Dev\Both\PluginAssemblies\DevDevKitCustomApi-705B2B7E-31C7-EB11-BACC-000D3A807100\DevDevKitCustomApi.dll" />
+    <Content Include="Dev\Both\PluginAssemblies\DevDevKitCustomApi-705B2B7E-31C7-EB11-BACC-000D3A807100\DevDevKitCustomApi.dll.data.xml" />
+    <Content Include="Dev\Both\PluginAssemblies\DevDevKitDataProvider-FC588487-E6C8-EB11-BACC-000D3A807100\DevDevKitDataProvider.dll" />
+    <Content Include="Dev\Both\PluginAssemblies\DevDevKitDataProvider-FC588487-E6C8-EB11-BACC-000D3A807100\DevDevKitDataProvider.dll.data.xml" />
+    <Content Include="Dev\Both\PluginAssemblies\DevDevKitPluginAccount-8980219F-F1D6-EB11-BACB-002248168D13\DevDevKitPluginAccount.dll" />
+    <Content Include="Dev\Both\PluginAssemblies\DevDevKitPluginAccount-8980219F-F1D6-EB11-BACB-002248168D13\DevDevKitPluginAccount.dll.data.xml" />
+    <Content Include="Dev\Both\PluginAssemblies\DevDevKitPluginActivities-E019AD23-C2C6-EB11-BACC-000D3A807100\DevDevKitPluginActivities.dll" />
+    <Content Include="Dev\Both\PluginAssemblies\DevDevKitPluginActivities-E019AD23-C2C6-EB11-BACC-000D3A807100\DevDevKitPluginActivities.dll.data.xml" />
+    <Content Include="Dev\Both\PluginAssemblies\DevDevKitPluginContact-FD1EF018-C2C6-EB11-BACC-000D3A807100\DevDevKitPluginContact.dll" />
+    <Content Include="Dev\Both\PluginAssemblies\DevDevKitPluginContact-FD1EF018-C2C6-EB11-BACC-000D3A807100\DevDevKitPluginContact.dll.data.xml" />
+    <Content Include="Dev\Both\PluginAssemblies\DevDevKitServer-C305267F-ECC8-EB11-BACC-000D3A807100\DevDevKitServer.dll" />
+    <Content Include="Dev\Both\PluginAssemblies\DevDevKitServer-C305267F-ECC8-EB11-BACC-000D3A807100\DevDevKitServer.dll.data.xml" />
+    <Content Include="Dev\Both\PluginAssemblies\DevDevKitWorkflow-FEA750DD-BDC6-EB11-BACC-000D3A807100\DevDevKitWorkflow.dll" />
+    <Content Include="Dev\Both\PluginAssemblies\DevDevKitWorkflow-FEA750DD-BDC6-EB11-BACC-000D3A807100\DevDevKitWorkflow.dll.data.xml" />
+    <Content Include="Dev\Both\SdkMessageProcessingSteps\{0108b1da-a812-ec11-b6e6-000d3a803987}.xml" />
+    <Content Include="Dev\Both\SdkMessageProcessingSteps\{011ff018-c2c6-eb11-bacc-000d3a807100}.xml" />
+    <Content Include="Dev\Both\SdkMessageProcessingSteps\{08f5a3e6-a812-ec11-b6e6-000d3a803987}.xml" />
+    <Content Include="Dev\Both\SdkMessageProcessingSteps\{0bf5a3e6-a812-ec11-b6e6-000d3a803987}.xml" />
+    <Content Include="Dev\Both\SdkMessageProcessingSteps\{0ff5a3e6-a812-ec11-b6e6-000d3a803987}.xml" />
+    <Content Include="Dev\Both\SdkMessageProcessingSteps\{12b81292-ecc8-eb11-bacc-000d3a807100}.xml" />
+    <Content Include="Dev\Both\SdkMessageProcessingSteps\{12f5a3e6-a812-ec11-b6e6-000d3a803987}.xml" />
+    <Content Include="Dev\Both\SdkMessageProcessingSteps\{18f5a3e6-a812-ec11-b6e6-000d3a803987}.xml" />
+    <Content Include="Dev\Both\SdkMessageProcessingSteps\{1cf5a3e6-a812-ec11-b6e6-000d3a803987}.xml" />
+    <Content Include="Dev\Both\SdkMessageProcessingSteps\{21f5a3e6-a812-ec11-b6e6-000d3a803987}.xml" />
+    <Content Include="Dev\Both\SdkMessageProcessingSteps\{3c4e5aa5-f1d6-eb11-bacb-002248168d13}.xml" />
+    <Content Include="Dev\Both\SdkMessageProcessingSteps\{3e705e98-ecc8-eb11-bacc-000d3a807100}.xml" />
+    <Content Include="Dev\Both\SdkMessageProcessingSteps\{404e5aa5-f1d6-eb11-bacb-002248168d13}.xml" />
+    <Content Include="Dev\Both\SdkMessageProcessingSteps\{444e5aa5-f1d6-eb11-bacb-002248168d13}.xml" />
+    <Content Include="Dev\Both\SdkMessageProcessingSteps\{4a4e5aa5-f1d6-eb11-bacb-002248168d13}.xml" />
+    <Content Include="Dev\Both\SdkMessageProcessingSteps\{4e4e5aa5-f1d6-eb11-bacb-002248168d13}.xml" />
+    <Content Include="Dev\Both\SdkMessageProcessingSteps\{52e022e6-30c7-eb11-bacc-000d3a807100}.xml" />
+    <Content Include="Dev\Both\SdkMessageProcessingSteps\{55984b85-ecc8-eb11-bacc-000d3a807100}.xml" />
+    <Content Include="Dev\Both\SdkMessageProcessingSteps\{62984b85-ecc8-eb11-bacc-000d3a807100}.xml" />
+    <Content Include="Dev\Both\SdkMessageProcessingSteps\{66984b85-ecc8-eb11-bacc-000d3a807100}.xml" />
+    <Content Include="Dev\Both\SdkMessageProcessingSteps\{6c2c51a8-ccd3-eb11-bacc-000d3a80041c}.xml" />
+    <Content Include="Dev\Both\SdkMessageProcessingSteps\{6f2c51a8-ccd3-eb11-bacc-000d3a80041c}.xml" />
+    <Content Include="Dev\Both\SdkMessageProcessingSteps\{722c51a8-ccd3-eb11-bacc-000d3a80041c}.xml" />
+    <Content Include="Dev\Both\SdkMessageProcessingSteps\{8bd4e37f-bec6-eb11-bacc-000d3a807100}.xml" />
+    <Content Include="Dev\Both\SdkMessageProcessingSteps\{aaba9ded-a812-ec11-b6e6-000d3a803987}.xml" />
+    <Content Include="Dev\Both\SdkMessageProcessingSteps\{adba9ded-a812-ec11-b6e6-000d3a803987}.xml" />
+    <Content Include="Dev\Both\SdkMessageProcessingSteps\{c6028ddf-30c7-eb11-bacc-000d3a807100}.xml" />
+    <Content Include="Dev\Both\SdkMessageProcessingSteps\{e419ad23-c2c6-eb11-bacc-000d3a807100}.xml" />
+    <Content Include="Dev\Both\SdkMessageProcessingSteps\{e819ad23-c2c6-eb11-bacc-000d3a807100}.xml" />
+    <Content Include="Dev\Both\SdkMessageProcessingSteps\{ec19ad23-c2c6-eb11-bacc-000d3a807100}.xml" />
+    <Content Include="Dev\Both\SdkMessageProcessingSteps\{f019ad23-c2c6-eb11-bacc-000d3a807100}.xml" />
+    <Content Include="Dev\Both\Workflows\Ajax-D0364D44-7D05-49C0-BCA6-576791EA9603.xaml.data.xml" />
+    <Content Include="Dev\Both\Workflows\DeleteAllData-DC2B7307-4683-4EDA-89BA-FDEE89DFAF0B.xaml.data.xml" />
+    <Content Include="Dev\Both\Workflows\SendEmail-C249171F-AFBE-4C9C-A129-C4B8E78785C6.xaml.data.xml" />
+    <Content Include="Dev\Both\Workflows\SetPrimaryContact-FA43886E-1F2F-475E-948B-55E75D501D53.xaml.data.xml" />
+    <Content Include="Dev\log\2021-09-10 10-53.Both.txt" />
+    <Content Include="Dev\log\2021-09-10 10-54.Both.txt" />
+    <Content Include="Dev\log\2021-09-11 09-38.Both.txt" />
+    <Content Include="Dev\log\2021-09-11 09-39.Both.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Dev\Both\Resources\en-US\resources.en-US.resx" />
+    <EmbeddedResource Include="Dev\Both\Resources\vi-VN\resources.vi-VN.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Dev\Both\Workflows\Ajax-D0364D44-7D05-49C0-BCA6-576791EA9603.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Dev\Both\Workflows\DeleteAllData-DC2B7307-4683-4EDA-89BA-FDEE89DFAF0B.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Dev\Both\Workflows\SendEmail-C249171F-AFBE-4C9C-A129-C4B8E78785C6.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Dev\Both\Workflows\SetPrimaryContact-FA43886E-1F2F-475E-948B-55E75D501D53.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

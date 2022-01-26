@@ -26,16 +26,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         public JsonProxyType json { get; set; }
 
         public string CurrentDirectory { get; set; }
-
         public string TaskType => $"[{nameof(CliType.proxytypes).ToUpper()}]";
-
         public CrmServiceClient CrmServiceClient { get; set; }
-
         private string Version { get; set; }
         private string CrmSvcUtil { get; set; }
         private bool IsSdkLogin { get; set; }
         private string Connection { get; set; }
-
 
         public bool IsValid()
         {
@@ -78,13 +74,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
         }
 
-        private string GetParentFolder(string currentDirectory)
-        {
-            var directory = new DirectoryInfo(CurrentDirectory);
-            if (directory.Parent == null) return null;
-            if (Directory.Exists($"{directory.Parent.FullName}\\packages")) return directory.Parent.FullName;
-            return GetParentFolder(directory.Parent.FullName);
-        }
+        //private string GetParentFolder(string currentDirectory)
+        //{
+        //    var directory = new DirectoryInfo(CurrentDirectory);
+        //    if (directory.Parent == null) return null;
+        //    if (Directory.Exists($"{directory.Parent.FullName}\\packages")) return directory.Parent.FullName;
+        //    return GetParentFolder(directory.Parent.FullName);
+        //}
 
 
         public void Run()

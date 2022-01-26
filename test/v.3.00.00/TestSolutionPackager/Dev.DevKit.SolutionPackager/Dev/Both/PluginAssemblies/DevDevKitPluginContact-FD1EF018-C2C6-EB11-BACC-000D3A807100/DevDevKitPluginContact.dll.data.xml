@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PluginAssembly FullName="Dev.DevKit.Plugin.Contact, Version=1.0.0.0, Culture=en, PublicKeyToken=70a78f26ca2483c5" PluginAssemblyId="fd1ef018-c2c6-eb11-bacc-000d3a807100" CustomizationLevel="1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <IsolationMode>2</IsolationMode>
+  <SourceType>0</SourceType>
+  <IntroducedVersion>1.0.0.0</IntroducedVersion>
+  <FileName>/PluginAssemblies/DevDevKitPluginContact-FD1EF018-C2C6-EB11-BACC-000D3A807100/DevDevKitPluginContact.dll</FileName>
+  <PluginTypes>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.PluginContact.PostContactCreateAsynchronous, Dev.DevKit.Plugin.Contact, Version=1.0.0.0, Culture=en, PublicKeyToken=70a78f26ca2483c5" PluginTypeId="001ff018-c2c6-eb11-bacc-000d3a807100" Name="Dev.DevKit.PluginContact.PostContactCreateAsynchronous">
+      <FriendlyName>Dev.DevKit.PluginContact.PostContactCreateAsynchronous</FriendlyName>
+    </PluginType>
+  </PluginTypes>
+</PluginAssembly>

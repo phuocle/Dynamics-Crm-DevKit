@@ -1,0 +1,22 @@
+﻿{
+  "solutionpackagers": [
+    {
+      "profile": "Extract-Both",
+      "rootfolder": "",
+      "solution": "TestPluginWorkflowCustomActionCustomApi",
+      "solutiontype": "Both",
+      "folder": "Dev",
+      "type": "Extract",
+      "mapfile": ""
+    },
+    {
+      "profile": "Pack-Both",
+      "rootfolder": "",
+      "solution": "TestPluginWorkflowCustomActionCustomApi",
+      "solutiontype": "Both",
+      "folder": "Dev",
+      "type": "Pack",
+      "mapfile": ""
+    }
+  ]
+}

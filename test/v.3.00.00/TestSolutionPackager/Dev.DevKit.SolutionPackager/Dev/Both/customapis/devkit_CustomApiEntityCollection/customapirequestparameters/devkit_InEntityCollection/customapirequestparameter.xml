@@ -1,0 +1,12 @@
+<customapirequestparameter uniquename="devkit_InEntityCollection">
+  <description default="This is the InEntityCollection">
+    <label description="This is the InEntityCollection" languagecode="1033" />
+  </description>
+  <displayname default="InEntityCollection">
+    <label description="InEntityCollection" languagecode="1033" />
+  </displayname>
+  <iscustomizable>1</iscustomizable>
+  <isoptional>0</isoptional>
+  <name>InEntityCollection</name>
+  <type>4</type>
+</customapirequestparameter>

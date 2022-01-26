@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SdkMessageProcessingStep Name="Dev.DevKit.Server.Plugins.PhoneCall.PreValidationPhoneCallDeleteSynchronous" SdkMessageProcessingStepId="{6f2c51a8-ccd3-eb11-bacc-000d3a80041c}" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SdkMessageId>a1bdbb1b-ea3e-db11-86a7-000a3a5473e8</SdkMessageId>
+  <PluginTypeName>Dev.DevKit.Server.Plugins.PhoneCall.PreValidationPhoneCallDeleteSynchronous, Dev.DevKit.Server, Version=1.0.0.0, Culture=en, PublicKeyToken=f16987165f9b56ef</PluginTypeName>
+  <PluginTypeId>4f984b85-ecc8-eb11-bacc-000d3a807100</PluginTypeId>
+  <PrimaryEntity>phonecall</PrimaryEntity>
+  <AsyncAutoDelete>0</AsyncAutoDelete>
+  <FilteringAttributes></FilteringAttributes>
+  <InvocationSource>0</InvocationSource>
+  <Mode>0</Mode>
+  <Rank>1</Rank>
+  <EventHandlerTypeCode>4602</EventHandlerTypeCode>
+  <Stage>10</Stage>
+  <IsCustomizable>1</IsCustomizable>
+  <IsHidden>0</IsHidden>
+  <SupportedDeployment>0</SupportedDeployment>
+  <IntroducedVersion>1.0.0.0</IntroducedVersion>
+  <SdkMessageProcessingStepImages />
+</SdkMessageProcessingStep>
