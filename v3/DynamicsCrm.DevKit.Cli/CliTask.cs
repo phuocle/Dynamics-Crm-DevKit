@@ -1,9 +1,10 @@
-﻿using DynamicsCrm.DevKit.Shared;
+﻿using DynamicsCrm.DevKit.Cli.Tasks;
+using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
 using System.IO;
 using System.Linq;
 
-namespace DynamicsCrm.DevKit.Cli.Tasks
+namespace DynamicsCrm.DevKit.Cli
 {
     internal class CliTask
     {

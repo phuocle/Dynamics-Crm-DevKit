@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xrm.Tooling.Connector;
 
-namespace DynamicsCrm.DevKit.Cli.Tasks
+namespace DynamicsCrm.DevKit.Cli
 {
     internal interface ITask
     {
