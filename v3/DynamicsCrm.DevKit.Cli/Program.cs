@@ -96,28 +96,35 @@ namespace DynamicsCrm.DevKit.Cli
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"/profile: required !!!");
                 return false;
             }
-            if (arguments.IsSdkLogin)
+            if (IsNeedCrmServiceClient(arguments))
             {
-                var ignoreCliTypes = new List<string>() { nameof(CliType.proxytypes) };
-                if (!ignoreCliTypes.Any(x => arguments.Type == x))
+                if (arguments.IsSdkLogin)
                 {
-                    if (!IsConnectedDynamics365BySdkLogin())
+                    var ignoreCliTypes = new List<string>() { nameof(CliType.proxytypes) };
+                    if (!ignoreCliTypes.Any(x => arguments.Type == x))
                     {
-                        CliLog.WriteLineError(ConsoleColor.Yellow, $"SdkLogin failed !!!");
+                        if (!IsConnectedDynamics365BySdkLogin())
+                        {
+                            CliLog.WriteLineError(ConsoleColor.Yellow, $"SdkLogin failed !!!");
+                            return false;
+                        }
+                    }
+                }
+                else
+                {
+                    CrmServiceClient = XrmHelper.IsConnected(XrmHelper.BuildConnectionString(arguments.Connection), out var error);
+                    if (CrmServiceClient == null)
+                    {
+                        CliLog.WriteLineError(ConsoleColor.Yellow, error);
                         return false;
                     }
                 }
+                arguments.CrmServiceClient = CrmServiceClient;
             }
             else
             {
-                CrmServiceClient = XrmHelper.IsConnected(XrmHelper.BuildConnectionString(arguments.Connection), out var error);
-                if (CrmServiceClient == null)
-                {
-                    CliLog.WriteLineError(ConsoleColor.Yellow, error);
-                    return false;
-                }
+                arguments.CrmServiceClient = null;
             }
-            arguments.CrmServiceClient = CrmServiceClient;
             if (CrmServiceClient != null)
             {
                 CliLog.WriteLine(ConsoleColor.White, "|");
@@ -128,6 +135,19 @@ namespace DynamicsCrm.DevKit.Cli
                 CliLog.WriteLine(ConsoleColor.Green, " (seconds)");
             }
             CliLog.WriteLine(ConsoleColor.White, "|");
+            return true;
+        }
+
+        private static bool IsNeedCrmServiceClient(CommandLineArgs arguments)
+        {
+            if (arguments.IsSdkLogin && arguments.Type.ToLower() == nameof(CliType.proxytypes))
+                return false;
+            if (arguments.Type.ToLower() == nameof(CliType.solutionpackagers))
+            {
+                var json = SimpleJson.DeserializeObject<Json>(File.ReadAllText(arguments.JsonFile));
+                var jsonSolutionPackager = json.solutionpackagers.FirstOrDefault(x => x.profile == arguments.Profile);
+                if (jsonSolutionPackager?.type?.ToLower() == "Pack".ToLower()) return false;
+            }
             return true;
         }
 

@@ -147,7 +147,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
             while (!process.StandardOutput.EndOfStream)
             {
-                CliLog.WriteLine(ConsoleColor.White, "|");
                 var line = process.StandardOutput.ReadLine();
                 CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Yellow, line);
             }
