@@ -240,5 +240,22 @@ namespace DynamicsCrm.DevKit.Shared
                 return guid.Replace("{", string.Empty).Replace("}", string.Empty);
             return guid;
         }
+
+        public static string WriteTempFile(string filename, byte[] solutionBytes)
+        {
+            try
+            {
+                var tempFolder = Path.GetTempPath();
+                var tempFile = Path.Combine(tempFolder, filename);
+                if (File.Exists(tempFile))
+                    File.Delete(tempFile);
+                File.WriteAllBytes(tempFile, solutionBytes);
+                return tempFile;
+            }
+            catch
+            {
+                return null;
+            }
+        }
     }
 }

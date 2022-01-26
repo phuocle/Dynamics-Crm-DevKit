@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ImportExportXml version="9.2.21083.136" SolutionPackageVersion="9.2" languagecode="1033" generatedBy="CrmLive" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<ImportExportXml version="9.2.21123.167" SolutionPackageVersion="9.2" languagecode="1033" generatedBy="CrmLive" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <SolutionManifest>
     <UniqueName>TestPluginWorkflowCustomActionCustomApi</UniqueName>
     <LocalizedNames>
       <LocalizedName description="TestPlugin-Workflow-CustomAction-CustomApi" languagecode="1033" />
     </LocalizedNames>
     <Descriptions />
-    <Version>1.2022.126.1</Version>
+    <Version>1.0.0.0</Version>
     <Managed>2</Managed>
     <Publisher>
       <UniqueName>DynamicsCrmDevKit</UniqueName>
@@ -112,6 +112,7 @@
       <RootComponent type="92" id="{4e4e5aa5-f1d6-eb11-bacb-002248168d13}" behavior="0" />
       <RootComponent type="92" id="{52e022e6-30c7-eb11-bacc-000d3a807100}" behavior="0" />
       <RootComponent type="92" id="{55984b85-ecc8-eb11-bacc-000d3a807100}" behavior="0" />
+      <RootComponent type="92" id="{5a8fb7cb-7814-ec11-b6e6-000d3a821f4b}" behavior="0" />
       <RootComponent type="92" id="{62984b85-ecc8-eb11-bacc-000d3a807100}" behavior="0" />
       <RootComponent type="92" id="{66984b85-ecc8-eb11-bacc-000d3a807100}" behavior="0" />
       <RootComponent type="92" id="{6c2c51a8-ccd3-eb11-bacc-000d3a80041c}" behavior="0" />

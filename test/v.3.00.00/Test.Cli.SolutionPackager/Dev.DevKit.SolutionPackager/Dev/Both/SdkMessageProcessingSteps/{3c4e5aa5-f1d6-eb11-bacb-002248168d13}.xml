@@ -16,5 +16,14 @@
   <IsHidden>0</IsHidden>
   <SupportedDeployment>0</SupportedDeployment>
   <IntroducedVersion>1.0.0.0</IntroducedVersion>
-  <SdkMessageProcessingStepImages />
+  <SdkMessageProcessingStepImages>
+    <SdkMessageProcessingStepImage Name="PostImage">
+      <SdkMessageProcessingStepImageId>{acb6704f-5a14-ec11-b6e6-000d3a821f4b}</SdkMessageProcessingStepImageId>
+      <Attributes>name,accountnumber,telephone1</Attributes>
+      <EntityAlias>PostImage</EntityAlias>
+      <ImageType>1</ImageType>
+      <MessagePropertyName>Id</MessagePropertyName>
+      <IsCustomizable>1</IsCustomizable>
+    </SdkMessageProcessingStepImage>
+  </SdkMessageProcessingStepImages>
 </SdkMessageProcessingStep>

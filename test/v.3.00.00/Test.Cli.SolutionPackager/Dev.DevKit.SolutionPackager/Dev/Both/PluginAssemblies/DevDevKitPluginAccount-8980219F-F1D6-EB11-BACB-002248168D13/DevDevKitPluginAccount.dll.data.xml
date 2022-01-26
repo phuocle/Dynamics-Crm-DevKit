@@ -11,6 +11,9 @@
     <PluginType AssemblyQualifiedName="Dev.DevKit.PluginAccount.PostAccountCreateAsynchronous2, Dev.DevKit.Plugin.Account, Version=1.0.0.0, Culture=en, PublicKeyToken=9dcd893647daec04" PluginTypeId="3f4e5aa5-f1d6-eb11-bacb-002248168d13" Name="Dev.DevKit.PluginAccount.PostAccountCreateAsynchronous2">
       <FriendlyName>Dev.DevKit.PluginAccount.PostAccountCreateAsynchronous2</FriendlyName>
     </PluginType>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.PluginAccount.PostAccountDeleteAsynchronous, Dev.DevKit.Plugin.Account, Version=1.0.0.0, Culture=en, PublicKeyToken=9dcd893647daec04" PluginTypeId="598fb7cb-7814-ec11-b6e6-000d3a821f4b" Name="Dev.DevKit.PluginAccount.PostAccountDeleteAsynchronous">
+      <FriendlyName>Dev.DevKit.PluginAccount.PostAccountDeleteAsynchronous</FriendlyName>
+    </PluginType>
     <PluginType AssemblyQualifiedName="Dev.DevKit.PluginAccount.PostAccountUpdateAsynchronous, Dev.DevKit.Plugin.Account, Version=1.0.0.0, Culture=en, PublicKeyToken=9dcd893647daec04" PluginTypeId="434e5aa5-f1d6-eb11-bacb-002248168d13" Name="Dev.DevKit.PluginAccount.PostAccountUpdateAsynchronous">
       <FriendlyName>Dev.DevKit.PluginAccount.PostAccountUpdateAsynchronous</FriendlyName>
     </PluginType>

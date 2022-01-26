@@ -1,11 +1,14 @@
 ﻿using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
+using Microsoft.Crm.Sdk.Messages;
+using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Tooling.Connector;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
@@ -133,6 +136,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 else
                 {
+                    CliLog.WriteLine(ConsoleColor.White, "|");
+                    CliLog.Write(ConsoleColor.White, "|", ConsoleColor.Green, json.type, ConsoleColor.White, " solution: ", ConsoleColor.Green, json.solution, ConsoleColor.White, " to: ");
+                    CliLog.WriteSuccess(ConsoleColor.White, $"{CurrentDirectory}\\{json.folder}\\{json.solutiontype}");
+                    CliLog.WriteLine(ConsoleColor.Black, "█");
                 }
 
                 RunSolutionPackager(solutionZipFile);
@@ -175,7 +182,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             if (json.type.ToLower().Trim() == "Extract".ToLower())
             {
-                return string.Empty;
+                if (json.solutiontype.ToLower().Trim() == "Both".ToLower())
+                {
+                    ExportSolution("Managed");
+                    return ExportSolution("Unmanaged");
+                }
+                else {
+                    return ExportSolution(json.solutiontype);
+                }
             }
             else
             {
@@ -184,6 +198,60 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 var solutionFile = Path.Combine(CurrentDirectory, json.folder, "Solutions-Pack", fileName);
                 return solutionFile;
             }
+        }
+
+        private string ExportSolution(string solutionType)
+        {
+            var timer = Stopwatch.StartNew();
+            var request = new ExportSolutionRequest
+            {
+                Managed = solutionType.ToLower() == "Managed".ToLower(),
+                SolutionName = json.solution
+            };
+            var wait = new Thread(() => CliLog.Waiting($"Export {solutionType} solution: {json.solution} "));
+            wait.Start();
+
+            var crmVersion = GetCrmVersionFromInstance();
+            var response = (ExportSolutionResponse)CrmServiceClient.Execute(request);
+
+            wait.Abort();
+            var fileName = FormatSolutionVersionString(json.solution, System.Version.Parse(crmVersion), json.solutiontype);
+            var solutionFile = Path.Combine(CurrentDirectory, json.folder, "Solutions-Extract", fileName);
+            if (solutionType.ToLower() == "Managed".ToLower())
+                solutionFile = $"{Path.GetDirectoryName(solutionFile)}\\{Path.GetFileNameWithoutExtension(solutionFile)}_managed.zip";
+            var tempFile = Utility.WriteTempFile(fileName, response.ExportSolutionFile);
+            var dir = Path.GetDirectoryName(solutionFile);
+            if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
+            File.Copy(tempFile, solutionFile, true);
+
+            if (Console.CursorLeft > 0) Console.SetCursorPosition(Console.CursorLeft - 1, Console.CursorTop);
+            CliLog.Write(ConsoleColor.White, "to: ");
+            CliLog.WriteSuccess(ConsoleColor.White, solutionFile);
+            CliLog.Write(ConsoleColor.White, " take: ");
+            CliLog.WriteSuccess(ConsoleColor.White, $"{timer.Elapsed:c}");
+            CliLog.WriteLine(ConsoleColor.Black, "█");
+            return solutionFile;
+        }
+
+        private string GetCrmVersionFromInstance()
+        {
+            var fetchData = new
+            {
+                uniquename = json.solution
+            };
+            var fetchXml = $@"
+<fetch>
+  <entity name='solution'>
+    <attribute name='version' />
+    <filter type='and'>
+      <condition attribute='uniquename' operator='eq' value='{fetchData.uniquename}'/>
+    </filter>
+  </entity>
+</fetch>";
+            var rows = CrmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            if (rows.Entities.Count != 1) return "1.0.0.0";
+            var solution = rows.Entities[0];
+            return solution.GetAttributeValue<string>("version");
         }
 
         private string GetCrmVersionFromSolutionFolder()
