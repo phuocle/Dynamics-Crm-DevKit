@@ -121,7 +121,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     if (json.solutiontype.ToLower().Trim() == "Both".ToLower())
                     {
-                        CliLog.Write(ConsoleColor.White, "|", ConsoleColor.Green, json.type, ConsoleColor.White, " solution: ", ConsoleColor.Green, json.solution, ConsoleColor.White, " to: ");
+                        CliLog.Write(ConsoleColor.White, "| ", ConsoleColor.Green, $"{json.type}ing", ConsoleColor.White, " solution: ", ConsoleColor.Green, json.solution, ConsoleColor.White, " to: ");
                         CliLog.WriteSuccess(ConsoleColor.White, solutionZipFile);
                         CliLog.Write(ConsoleColor.White, " and ");
                         CliLog.WriteSuccess(ConsoleColor.White, $"{Path.GetDirectoryName(solutionZipFile)}\\{Path.GetFileNameWithoutExtension(solutionZipFile)}_managed.zip");
@@ -129,7 +129,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     }
                     else
                     {
-                        CliLog.Write(ConsoleColor.White, "|", ConsoleColor.Green, json.type, ConsoleColor.White, " solution: ", ConsoleColor.Green, json.solution, ConsoleColor.White, " to: ");
+                        CliLog.Write(ConsoleColor.White, "| ", ConsoleColor.Green, $"{json.type}ing", ConsoleColor.White, " solution: ", ConsoleColor.Green, json.solution, ConsoleColor.White, " to: ");
                         CliLog.WriteSuccess(ConsoleColor.White, solutionZipFile);
                         CliLog.WriteLine(ConsoleColor.Black, "█");
                     }
@@ -137,7 +137,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 else
                 {
                     CliLog.WriteLine(ConsoleColor.White, "|");
-                    CliLog.Write(ConsoleColor.White, "|", ConsoleColor.Green, json.type, ConsoleColor.White, " solution: ", ConsoleColor.Green, json.solution, ConsoleColor.White, " to: ");
+                    CliLog.Write(ConsoleColor.White, "| ", ConsoleColor.Green, $"{json.type}ing", ConsoleColor.White, " solution: ", ConsoleColor.Green, json.solution, ConsoleColor.White, " to: ");
                     CliLog.WriteSuccess(ConsoleColor.White, $"{CurrentDirectory}\\{json.folder}\\{json.solutiontype}");
                     CliLog.WriteLine(ConsoleColor.Black, "█");
                 }
@@ -154,7 +154,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var command = CreateCommandArgs(solutionZipFile);
             var path = "\"" + SolutionPackagerExe + "\"";
             CliLog.WriteLine();
-            CliLog.WriteLine(ConsoleColor.White, " " + path + " " + command);
+            CliLog.WriteLine();
+            CliLog.WriteLine(ConsoleColor.White, path + " " + command);
+            CliLog.WriteLine();
             CliLog.WriteLine();
 
             var process = new Process
