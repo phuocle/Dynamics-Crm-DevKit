@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PluginAssembly FullName="Dev.DevKit.CustomApi, Version=1.0.0.0, Culture=en, PublicKeyToken=4d20ad2e98c0d95d" PluginAssemblyId="705b2b7e-31c7-eb11-bacc-000d3a807100" CustomizationLevel="1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <IsolationMode>2</IsolationMode>
+  <SourceType>0</SourceType>
+  <IntroducedVersion>1.0.0.0</IntroducedVersion>
+  <FileName>/PluginAssemblies/DevDevKitCustomApi-705B2B7E-31C7-EB11-BACC-000D3A807100/DevDevKitCustomApi.dll</FileName>
+  <PluginTypes>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.CustomApi.devkit_CustomApiRequest, Dev.DevKit.CustomApi, Version=1.0.0.0, Culture=en, PublicKeyToken=4d20ad2e98c0d95d" PluginTypeId="735b2b7e-31c7-eb11-bacc-000d3a807100" Name="Dev.DevKit.CustomApi.devkit_CustomApiRequest">
+      <FriendlyName>Dev.DevKit.CustomApi.devkit_CustomApiRequest</FriendlyName>
+    </PluginType>
+  </PluginTypes>
+</PluginAssembly>

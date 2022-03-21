@@ -1,0 +1,12 @@
+<customapirequestparameter uniquename="devkit_InMoney">
+  <description default="This is the InMoney">
+    <label description="This is the InMoney" languagecode="1033" />
+  </description>
+  <displayname default="InMoney">
+    <label description="InMoney" languagecode="1033" />
+  </displayname>
+  <iscustomizable>1</iscustomizable>
+  <isoptional>0</isoptional>
+  <name>InMoney</name>
+  <type>8</type>
+</customapirequestparameter>

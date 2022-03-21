@@ -1,0 +1,11 @@
+<customapiresponseproperty uniquename="devkit_OutMoney">
+  <description default="This is the OutMoney">
+    <label description="This is the OutMoney" languagecode="1033" />
+  </description>
+  <displayname default="OutMoney">
+    <label description="OutMoney" languagecode="1033" />
+  </displayname>
+  <iscustomizable>1</iscustomizable>
+  <name>OutMoney</name>
+  <type>8</type>
+</customapiresponseproperty>
