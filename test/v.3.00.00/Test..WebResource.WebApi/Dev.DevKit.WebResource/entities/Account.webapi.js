@@ -4,7 +4,7 @@ var DevKit;
 (function (DevKit) {
 	'use strict';
 	DevKit.AccountApi = function (e) {
-		var EMPTY_STRING = '';
+		//var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
         function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
             var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
@@ -64,8 +64,58 @@ var DevKit;
                 });
             }
             return property;
-        }
-		var account = {
+		}
+		function webApiField2(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
+			var getFormattedValue = function () {
+				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
+					return '';
+				}
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					if (entity[logicalName + l] === entityLogicalName) {
+						return entity[logicalName + f];
+					}
+					return '';
+				}
+				if (isMultiOptionSet) {
+					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
+				}
+				return entity[logicalName + f];
+			};
+			var getValue = function () {
+				if (entity[logicalName] === undefined || entity[logicalName] === null) {
+					return null;
+				}
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
+						return entity[logicalName];
+					}
+					return null;
+				}
+				if (isMultiOptionSet) {
+					return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
+				}
+				return entity[logicalName];
+			};
+			var setValue = function (value) {
+				if (isMultiOptionSet) value = value.join(',');
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					value = value.replace('{', '').replace('}', '');
+					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
+				} else {
+					upsertEntity[logicalName] = value;
+				}
+				entity[logicalName] = value;
+			};
+			Object.defineProperty(obj.FormattedValue, field, {
+				get: getFormattedValue
+			});
+			Object.defineProperty(obj, field, {
+				get: getValue,
+				set: setValue,
+			});
+		}
+		var _account = {
 			AccountCategoryCode: { a: 'accountcategorycode' },
 			AccountClassificationCode: { a: 'accountclassificationcode' },
 			AccountId: { a: 'accountid' },
@@ -222,20 +272,23 @@ var DevKit;
 		};
 		if (e === undefined) e = {};
 		var u = {};
-		for (var field in account) {
-			var a = account[field].a;
-			var b = account[field].b;
-			var c = account[field].c;
-			var d = account[field].d;
-			var g = account[field].g;
-			var r = account[field].r;
-			account[field] = webApiField(e, a, b, c, d, r, u, g);
+		var account = {};
+		account.ODataEntity = e;
+		account.FormattedValue = {};
+		for (var field in _account) {
+			var a = _account[field].a;
+			var b = _account[field].b;
+			var c = _account[field].c;
+			var d = _account[field].d;
+			var g = _account[field].g;
+			var r = _account[field].r;
+			webApiField2(account, field, e, a, b, c, d, r, u, g);
 		}
 		account.Entity = u;
 		account.EntityName = 'account';
 		account.EntityCollectionName = 'accounts';
 		account['@odata.etag'] = e['@odata.etag'];
-		account.getAliasedValue = function (alias, isMultiOptionSet) {
+		account.getAliasedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias] === undefined || e[alias] === null) {
 				return null;
 			}
@@ -244,7 +297,7 @@ var DevKit;
 			}
 			return e[alias];
 		}
-		account.getAliasedFormattedValue = function (alias, isMultiOptionSet) {
+		account.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
 				return EMPTY_STRING;
 			}
