@@ -38,7 +38,9 @@ namespace DynamicsCrm.DevKit.Cli
             CliLog.WriteLine(ConsoleColor.Green, " |____/ \\__, |_| |_|\\__,_|_| |_| |_|_|\\___|___/\\____|_|  |_| |_| |_(_)____/ \\___| \\_/ |_|\\_\\_|\\__(_)____|_|_|");
             CliLog.Write(ConsoleColor.Green, "        |___/                        ", ConsoleColor.White, "https://github.com/phuocle/Dynamics-Crm-DevKit ");
             CliLog.WriteSuccess(ConsoleColor.White, Const.Version);
-            CliLog.WriteLine(ConsoleColor.White, " Build: ", ConsoleColor.Blue, Const.Build);
+            CliLog.Write(ConsoleColor.White, " Build: ");
+            CliLog.WriteSuccess(ConsoleColor.White, Const.Build);
+            CliLog.WriteLine(ConsoleColor.Black, "█");
             CliLog.WriteLine(ConsoleColor.White, "|");
             if (IsValid(arguments))
             {

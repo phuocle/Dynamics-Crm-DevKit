@@ -7,21 +7,25 @@ using System.Linq;
 
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
-    public class TaskDownloadReport : ITask
+    public class TaskDownloadWebResource : ITask
     {
-        public TaskDownloadReport(CommandLineArgs arg, JsonDownloadReport json)
+        private JsonDownloadWebResource json { get; set; }
+
+        public TaskDownloadWebResource(CommandLineArgs arg, JsonDownloadWebResource json)
         {
             this.Arg = arg;
             this.json = json;
             CrmServiceClient = arg.CrmServiceClient;
             CurrentDirectory = arg.CurrentDirectory;
         }
-        public CommandLineArgs Arg { get; set; }
-        private JsonDownloadReport json { get; set; }
 
         public string CurrentDirectory { get; set; }
+
+        public string TaskType => $"[{nameof(CliType.downloadwebresources).ToUpper()}]";
+
         public CrmServiceClient CrmServiceClient { get; set; }
-        public string TaskType => $"[{nameof(CliType.downloadreports).ToUpper()}]";
+        public CommandLineArgs Arg { get; set; }
+
         public bool IsValid()
         {
             if (json == null)
@@ -58,41 +62,32 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "START ", ConsoleColor.Blue, TaskType);
             CliLog.WriteLine(ConsoleColor.White, "|");
-
             if (IsValid())
             {
-                var reportFiles = XrmHelper.GetReportsBySolution(CrmServiceClient, json.solution);
-                if (reportFiles.Count == 0)
+                var webResourcesFiles = XrmHelper.GetWebResourcesBySolution(CrmServiceClient, json.solution);
+                if (webResourcesFiles.Count == 0)
                 {
-                    CliLog.WriteLineWarning(ConsoleColor.Green, "Not found any reports to download");
+                    CliLog.WriteLineWarning(ConsoleColor.Green, "Not found any webresource to download");
                 }
                 else
                 {
-                    var totalDownloadFiles = reportFiles.Count;
+                    var totalDownloadFiles = webResourcesFiles.Count;
                     var len = totalDownloadFiles.ToString().Length;
-                    CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Found: ", ConsoleColor.Blue, totalDownloadFiles, ConsoleColor.Green, " reports");
+                    CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Found: ", ConsoleColor.Blue, totalDownloadFiles, ConsoleColor.Green, " webresources");
                     CliLog.WriteLine(ConsoleColor.White, "|");
                     var i = 1;
-                    reportFiles = reportFiles.OrderBy(x => x.Language).ToList();
-                    foreach (var reportFile in reportFiles)
+                    foreach (var webResourceFile in webResourcesFiles)
                     {
-                        var fileName = Path.Combine(CurrentDirectory, json.solution, reportFile.Language, reportFile.FileName);
-                        if (!File.Exists(fileName))
-                        {
-                            Utility.ForceWriteAllText(fileName, reportFile.Content);
-                            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Downloaded, ConsoleColor.White, reportFile.Language, ConsoleColor.Green, " report file name ", ConsoleColor.White, reportFile.FileName, ConsoleColor.Green, " to: ", ConsoleColor.White, fileName);
-                        }
-                        else
-                        {
-                            var newFileName = Utility.GeNextFileName(fileName);
-                            Utility.ForceWriteAllText(newFileName, reportFile.Content);
-                            CliLog.WriteLineWarning(ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Downloaded, ConsoleColor.White, reportFile.Language, ConsoleColor.Green, " report file name ", ConsoleColor.White, reportFile.FileName, ConsoleColor.Magenta, $" {CliAction.Duplicated}", ConsoleColor.Green, "to: ", ConsoleColor.White, newFileName);
-                        }
+                        var fileName = Path.Combine(CurrentDirectory, json.solution, webResourceFile.FileName);
+                        var directoryName = Path.GetDirectoryName(fileName);
+                        if (!Directory.Exists(directoryName)) Directory.CreateDirectory(directoryName ?? throw new InvalidOperationException());
+                        byte[] decode = Convert.FromBase64String(webResourceFile.Content);
+                        File.WriteAllBytes(fileName, decode);
+                        CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Downloaded, ConsoleColor.White, webResourceFile.FileName, ConsoleColor.Green, " to: ", ConsoleColor.White, fileName);
                         i++;
                     }
                 }
             }
-
             CliLog.WriteLine(ConsoleColor.White, "|");
             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "END ", ConsoleColor.Blue, TaskType);
         }

@@ -59,6 +59,11 @@
       "commandName": "Project",
       "commandLineArgs": "/sdklogin:\"yes\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"solutionpackagers\" /profile:\"Extract-Both\" /version:\"9.1.0.92\"",
       "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.00.00\\Test.Cli.SolutionPackager\\Dev.DevKit.SolutionPackager"
+    },
+    "downloadwebresources": {
+      "commandName": "Project",
+      "commandLineArgs": "/sdklogin:\"yes\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"downloadwebresources\" /profile:\"DEBUG\"",
+      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.00.00\\Test.Cli.DownloadWebresources\\Dev.DevKit.WebResource"
     }
   }
 }

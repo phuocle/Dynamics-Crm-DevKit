@@ -33,6 +33,10 @@ namespace DynamicsCrm.DevKit.Cli
                     var packager = new TaskSolutionPackager(arg, json.solutionpackagers.FirstOrDefault(x => x.profile == arg.Profile));
                     packager.Run();
                     break;
+                case nameof(CliType.downloadwebresources):
+                    var downloadWebResource = new TaskDownloadWebResource(arg, json.downloadwebresources.FirstOrDefault(x => x.profile == arg.Profile));
+                    downloadWebResource.Run();
+                    break;
             }
         }
     }
