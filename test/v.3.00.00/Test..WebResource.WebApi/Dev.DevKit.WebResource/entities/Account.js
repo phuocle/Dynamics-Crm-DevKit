@@ -35,7 +35,14 @@ var formAccount = (function () {
 		var accountApi = new DevKit.AccountApi(rows.entities[0]);
 		var accountnumber = accountApi.AccountNumber;
 		accountApi.Name = "ABCD";
+		accountApi.CreditLimit = null;
+		accountApi.CreditLimit = 123.455;
 		accountApi.PrimaryContactId = "AAAA";
+		var a = accountApi.CreatedOn_UtcDateAndTime;
+		var formatName = accountApi.FormattedValue.Name;
+		if (accountApi.AccountCategoryCode === OptionSet.Account.AccountCategoryCode.Preferred_Customer) {
+		}
+
 		debugger;
 	}
 	return {

@@ -209,8 +209,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
+		/** The entity object for create/update */
 		Entity: any;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -218,7 +220,7 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Select a category to indicate whether the customer account is standard or preferred. */
-		AccountCategoryCode: DevKit.WebApi.OptionSetValue;
+		AccountCategoryCode: OptionSet.Account.AccountCategoryCode;
 		/** Select a classification code to indicate the potential value of the customer account based on the projected return on investment, cooperation level, sales cycle length or other criteria. */
 		AccountClassificationCode: DevKit.WebApi.OptionSetValue;
 		/** Unique identifier of the account. */
@@ -342,11 +344,11 @@ declare namespace DevKit {
 		/** Shows the external party who created the record. */
 		CreatedByExternalParty: DevKit.WebApi.LookupValueReadonly;
 		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
 		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
 		/** Type the credit limit of the account. This is a useful reference when you address invoice and accounting issues with the customer. */
-		CreditLimit: DevKit.WebApi.MoneyValue;
+		CreditLimit?: number;
 		/** Shows the credit limit converted to the system's default base currency for reporting purposes. */
 		CreditLimit_Base: DevKit.WebApi.MoneyValueReadonly;
 		/** Select whether the credit for the account is on hold. This is a useful reference while addressing the invoice and accounting issues with the customer. */
@@ -424,7 +426,7 @@ declare namespace DevKit {
 		/** Shows who created the record on behalf of another user. */
 		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
 		/** Type the company or business name. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Type the number of employees that work at the account for use in marketing segmentation and demographic analysis. */
 		NumberOfEmployees: DevKit.WebApi.IntegerValue;
 		/** Shows how long, in minutes, that the record was on hold. */
@@ -458,7 +460,7 @@ declare namespace DevKit {
 		/** Choose the preferred service representative for reference when you schedule service activities for the account. */
 		PreferredSystemUserId: DevKit.WebApi.LookupValue;
 		/** Choose the primary contact for the account to provide quick access to contact details. */
-		PrimaryContactId: DevKit.WebApi.LookupValue;
+		PrimaryContactId: Guid
 		/** Primary Satori ID for Account */
 		PrimarySatoriId: DevKit.WebApi.StringValue;
 		/** Primary Twitter ID for Account */
@@ -514,6 +516,9 @@ declare namespace DevKit {
 		WebSiteURL: DevKit.WebApi.StringValue;
 		/** Type the phonetic spelling of the company name, if specified in Japanese, to make sure the name is pronounced correctly in phone calls and other communications. */
 		YomiName: DevKit.WebApi.StringValue;
+		readonly FormattedValue: {
+			readonly Name: string
+		}
 	}
 }
 declare namespace OptionSet {

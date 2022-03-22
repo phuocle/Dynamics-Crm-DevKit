@@ -50,10 +50,17 @@ var DevKit;
 			Object.defineProperty(obj.FormattedValue, field, {
 				get: getFormattedValue
 			});
-			Object.defineProperty(obj, field, {
-				get: getValue,
-				set: setValue,
-			});
+			if (readOnly) {
+				Object.defineProperty(obj, field, {
+					get: getValue
+				});
+			}
+			else {
+				Object.defineProperty(obj, field, {
+					get: getValue,
+					set: setValue,
+				});
+			}
 		}
 		var _account = {
 			AccountCategoryCode: { a: 'accountcategorycode' },
