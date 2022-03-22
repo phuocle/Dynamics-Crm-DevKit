@@ -73,8 +73,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -82,45 +84,45 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** An internal state which indicates whether at least one optimization is applied. */
-		AnyOptimizationApplied: DevKit.WebApi.BooleanValueReadonly;
+		readonly AnyOptimizationApplied: boolean;
 		/** An internal state which indicates whether at least one optimization is available for this record. */
-		AnyOptimizationAvailable: DevKit.WebApi.BooleanValueReadonly;
+		readonly AnyOptimizationAvailable: boolean;
 		/** Name of the component */
-		Component: DevKit.WebApi.StringValueReadonly;
+		readonly Component: string;
 		/** Number of times a queries were executed (Aggregated) */
-		Count: DevKit.WebApi.IntegerValueReadonly;
+		readonly Count: number;
 		/** Unique identifier of the performance suggestion. */
-		DataPerformanceId: DevKit.WebApi.GuidValue;
+		DataPerformanceId: string;
 		/** Primary entity */
-		Entity1: DevKit.WebApi.StringValueReadonly;
+		readonly Entity1: string;
 		/** The expected average cost benefit of an optimization. */
-		EstimatedOptimizationImpact: DevKit.WebApi.DecimalValueReadonly;
+		readonly EstimatedOptimizationImpact: number;
 		/** The execution period for which the performance metrics are calculated. */
-		ExecutionPeriod: DevKit.WebApi.StringValueReadonly;
+		readonly ExecutionPeriod: string;
 		/** An internal state which shows the result of the last action that was taken on this record. */
-		LastActionResult: DevKit.WebApi.StringValueReadonly;
+		readonly LastActionResult: string;
 		/** Last time an optimization was applied. */
-		LastOptimizationDate_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly LastOptimizationDate_UtcDateAndTime: Date;
 		/** Maximum execution time in seconds. (Aggregated) */
-		MaxTime: DevKit.WebApi.DecimalValueReadonly;
+		readonly MaxTime: number;
 		/** Average execution time in seconds. (Aggregated) */
-		MedianTime: DevKit.WebApi.DecimalValueReadonly;
+		readonly MedianTime: number;
 		/** Minimum execution time in seconds. (Aggregated) */
-		MinTime: DevKit.WebApi.DecimalValueReadonly;
+		readonly MinTime: number;
 		/** Data operation that triggered the query (Retrieve Multiple, etc.) */
-		Operation: DevKit.WebApi.StringValueReadonly;
+		readonly Operation: string;
 		/** Current optimization status of the record, showed to the customer. */
-		OptimizationStatus: DevKit.WebApi.StringValueReadonly;
+		readonly OptimizationStatus: string;
 		/** Storage consumed by the optimization. (MB) */
-		OptimizationStorage: DevKit.WebApi.DecimalValueReadonly;
+		readonly OptimizationStorage: number;
 		/** Unique identifier of the organization associated. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Actual performance change after taking an optimization action on the record. */
-		RealizedOptimizationImpact: DevKit.WebApi.StringValueReadonly;
+		readonly RealizedOptimizationImpact: string;
 		/** Name of the solution that owns the component */
-		Solution: DevKit.WebApi.StringValueReadonly;
+		readonly Solution: string;
 		/** Query Weight of the component. Factored with the Optimization Impact to determine the overall importance of applying an optimization. (P2) */
-		Weight: DevKit.WebApi.DecimalValueReadonly;
+		readonly Weight: number;
 	}
 }
 declare namespace OptionSet {
@@ -143,4 +145,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

@@ -86,8 +86,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -95,71 +97,71 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the playbook was started. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
-		msdyn_activitiesassociated: DevKit.WebApi.IntegerValue;
-		msdyn_activitiesclosed: DevKit.WebApi.IntegerValue;
+		readonly ModifiedOnBehalfBy: string;
+		msdyn_activitiesassociated: number;
+		msdyn_activitiesclosed: number;
 		/** Select the playbook category for the playbook. */
-		msdyn_categoryid: DevKit.WebApi.LookupValue;
+		msdyn_categoryid: string;
 		/** Estimated close date for a playbook based on the estimated duration specified for the playbook template. */
-		msdyn_estimatedclose_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		msdyn_estimatedclose_UtcDateOnly: Date;
 		/** Internal Use Only */
-		msdyn_evaluateactivityclosure: DevKit.WebApi.BooleanValue;
+		msdyn_evaluateactivityclosure: boolean;
 		/** Type the name of the playbook. */
-		msdyn_name: DevKit.WebApi.StringValue;
+		msdyn_name: string;
 		/** Unique identifier for entity instances */
-		msdyn_playbookinstanceId: DevKit.WebApi.GuidValue;
+		msdyn_playbookinstanceId: string;
 		/** Shows the unique ID of the playbook template associated with the playbook. */
-		msdyn_playbooktemplateid: DevKit.WebApi.LookupValue;
+		msdyn_playbooktemplateid: string;
 		/** Select whether or not to track the progress of the playbook by creating the activities under a playbook which is in turn linked to the record type the playbook applies to. */
-		msdyn_trackprogress: DevKit.WebApi.BooleanValue;
+		msdyn_trackprogress: boolean;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Shows the entity the playbook is launched for. */
-		regarding_account: DevKit.WebApi.LookupValue;
+		regarding_account: string;
 		/** Shows the entity the playbook is launched for. */
-		regarding_contact: DevKit.WebApi.LookupValue;
+		regarding_contact: string;
 		/** Shows the entity the playbook is launched for. */
-		regarding_invoice: DevKit.WebApi.LookupValue;
+		regarding_invoice: string;
 		/** Shows the entity the playbook is launched for. */
-		regarding_lead: DevKit.WebApi.LookupValue;
+		regarding_lead: string;
 		/** Shows the entity the playbook is launched for. */
-		regarding_opportunity: DevKit.WebApi.LookupValue;
+		regarding_opportunity: string;
 		/** Shows the entity the playbook is launched for. */
-		regarding_quote: DevKit.WebApi.LookupValue;
+		regarding_quote: string;
 		/** Shows the entity the playbook is launched for. */
-		regarding_salesorder: DevKit.WebApi.LookupValue;
+		regarding_salesorder: string;
 		/** Status of the Playbook */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.msdyn_playbookinstance.statecode;
 		/** Playbook result */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.msdyn_playbookinstance.statuscode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -202,4 +204,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

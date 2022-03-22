@@ -62,8 +62,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -71,41 +73,41 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Shows the business unit that the record owner belongs to. */
-		BusinessUnitId: DevKit.WebApi.LookupValue;
+		BusinessUnitId: string;
 		/** Unique identifier of the resource group. */
-		ConstraintBasedGroupId: DevKit.WebApi.GuidValue;
+		ConstraintBasedGroupId: string;
 		/** Shows the constraints defined for the users, equipment, teams, and other resource groups included as resources for the group, stored in XML format. */
-		Constraints: DevKit.WebApi.StringValue;
+		Constraints: string;
 		/** Unique identifier of the user who created the resource group. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the resource group was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the constraintbasedgroup. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Type additional information to describe the resource group, such as the intended use or associated resource types. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Shows whether the resource group is static, dynamic or hidden. Hidden groups are for system use only and are not viewable in Microsoft Dynamics 365. */
-		GroupTypeCode: DevKit.WebApi.OptionSetValue;
+		GroupTypeCode: OptionSet.ConstraintBasedGroup.GroupTypeCode;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the user who last modified the resource group. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the resource group was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the constraintbasedgroup. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Type a title or name that describes the resource group. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Unique identifier of the organization associated with the resource group. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -136,4 +138,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

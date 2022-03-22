@@ -227,8 +227,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -236,108 +238,108 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** This attribute is no longer used. The data is now in the Mailbox.AllowEmailConnectorToUseCredentials attribute. */
-		AllowEmailCredentials: DevKit.WebApi.BooleanValueReadonly;
+		readonly AllowEmailCredentials: boolean;
 		/** Unique identifier of the business unit with which the queue is associated. */
-		BusinessUnitId: DevKit.WebApi.LookupValue;
+		BusinessUnitId: string;
 		/** Unique identifier of the user who created the queue record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the queue was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the queue. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Select the mailbox associated with this queue. */
-		DefaultMailbox: DevKit.WebApi.LookupValueReadonly;
+		readonly DefaultMailbox: string;
 		/** Description of the queue. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Email address that is associated with the queue. */
-		EMailAddress: DevKit.WebApi.StringValue;
+		EMailAddress: string;
 		/** This attribute is no longer used. The data is now in the Mailbox.Password attribute. */
-		EmailPassword: DevKit.WebApi.StringValueReadonly;
+		readonly EmailPassword: string;
 		/** Shows the status of the primary email address. */
-		EmailRouterAccessApproval: DevKit.WebApi.OptionSetValue;
+		EmailRouterAccessApproval: OptionSet.Queue.EmailRouterAccessApproval;
 		/** This attribute is no longer used. The data is now in the Mailbox.UserName attribute. */
-		EmailUsername: DevKit.WebApi.StringValueReadonly;
+		readonly EmailUsername: string;
 		/** The default image for the entity. */
-		EntityImage: DevKit.WebApi.StringValue;
-		EntityImage_Timestamp: DevKit.WebApi.BigIntValueReadonly;
-		EntityImage_URL: DevKit.WebApi.StringValueReadonly;
+		EntityImage: string;
+		EntityImage_Timestamp: number;
+		EntityImage_URL: string;
 		/** For internal use only. */
-		EntityImageId: DevKit.WebApi.GuidValueReadonly;
+		readonly EntityImageId: string;
 		/** Exchange rate for the currency associated with the queue with respect to the base currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Information that specifies whether a queue is to ignore unsolicited email (deprecated). */
-		IgnoreUnsolicitedEmail: DevKit.WebApi.BooleanValue;
+		IgnoreUnsolicitedEmail: boolean;
 		/** Unique identifier of the data import or data migration that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Incoming email delivery method for the queue. */
-		IncomingEmailDeliveryMethod: DevKit.WebApi.OptionSetValue;
+		IncomingEmailDeliveryMethod: OptionSet.Queue.IncomingEmailDeliveryMethod;
 		/** Convert Incoming Email To Activities */
-		IncomingEmailFilteringMethod: DevKit.WebApi.OptionSetValue;
+		IncomingEmailFilteringMethod: OptionSet.Queue.IncomingEmailFilteringMethod;
 		/** Shows the status of approval of the email address by O365 Admin. */
-		IsEmailAddressApprovedByO365Admin: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsEmailAddressApprovedByO365Admin: boolean;
 		/** Indication of whether a queue is the fax delivery queue. */
-		IsFaxQueue: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsFaxQueue: boolean;
 		/** Unique identifier of the user who last modified the queue. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the queue was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the queue. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Link assignment input contract with queue. */
-		msdyn_assignmentinputcontractid: DevKit.WebApi.LookupValue;
-		msdyn_assignmentstrategy: DevKit.WebApi.OptionSetValue;
+		msdyn_assignmentinputcontractid: string;
+		msdyn_assignmentstrategy: OptionSet.Queue.msdyn_assignmentstrategy;
 		/** Shows whether the queue is set as default or not. */
-		msdyn_isdefaultqueue: DevKit.WebApi.BooleanValue;
+		msdyn_isdefaultqueue: boolean;
 		/** Shows whether the queue is used as Omnichannel queue for work distribution. */
-		msdyn_isomnichannelqueue: DevKit.WebApi.BooleanValue;
+		msdyn_isomnichannelqueue: boolean;
 		/** Maximum queue size */
-		msdyn_maxqueuesize: DevKit.WebApi.IntegerValue;
+		msdyn_maxqueuesize: number;
 		/** Unique identifier for Operating hour associated with Queue */
-		msdyn_operatinghourid: DevKit.WebApi.LookupValue;
+		msdyn_operatinghourid: string;
 		/** Priority of the queue to indicate conversation assignment order to the agent. */
-		msdyn_priority: DevKit.WebApi.IntegerValue;
+		msdyn_priority: number;
 		/** Defines the type of channels handled by this queue */
-		msdyn_queuetype: DevKit.WebApi.OptionSetValue;
+		msdyn_queuetype: OptionSet.Queue.msdyn_queuetype;
 		/** Unique Name for the entity. */
-		msdyn_uniquename: DevKit.WebApi.StringValue;
+		msdyn_uniquename: string;
 		/** Name of the queue. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Number of Queue items associated with the queue. */
-		NumberOfItems: DevKit.WebApi.IntegerValueReadonly;
+		readonly NumberOfItems: number;
 		/** Number of Members associated with the queue. */
-		NumberOfMembers: DevKit.WebApi.IntegerValueReadonly;
+		readonly NumberOfMembers: number;
 		/** Unique identifier of the organization associated with the queue. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Outgoing email delivery method for the queue. */
-		OutgoingEmailDeliveryMethod: DevKit.WebApi.OptionSetValue;
+		OutgoingEmailDeliveryMethod: OptionSet.Queue.OutgoingEmailDeliveryMethod;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier of the business unit that owns the queue. */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier of the team who owns the queue. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier of the user who owns the queue. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Unique identifier of the owner of the queue. */
-		PrimaryUserId: DevKit.WebApi.LookupValue;
+		PrimaryUserId: string;
 		/** Unique identifier of the queue. */
-		QueueId: DevKit.WebApi.GuidValue;
+		QueueId: string;
 		/** Type of queue that is automatically assigned when a user or queue is created. The type can be public, private, or work in process. */
-		QueueTypeCode: DevKit.WebApi.OptionSetValueReadonly;
+		readonly QueueTypeCode: OptionSet.Queue.QueueTypeCode;
 		/** Select whether the queue is public or private. A public queue can be viewed by all. A private queue can be viewed only by the members added to the queue. */
-		QueueViewType: DevKit.WebApi.OptionSetValue;
+		QueueViewType: OptionSet.Queue.QueueViewType;
 		/** Status of the queue. */
-		StateCode: DevKit.WebApi.OptionSetValue;
+		StateCode: OptionSet.Queue.StateCode;
 		/** Reason for the status of the queue. */
-		StatusCode: DevKit.WebApi.OptionSetValue;
+		StatusCode: OptionSet.Queue.StatusCode;
 		/** Unique identifier of the currency associated with the queue. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** Version number of the queue. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -432,4 +434,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

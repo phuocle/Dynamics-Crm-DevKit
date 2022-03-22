@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,49 +30,49 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Date of Latest Auto Post on the Regarding entity */
-		LatestAutoPostModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly LatestAutoPostModifiedOn_UtcDateAndTime: Date;
 		/** Date of Latest Manual Post on the Regarding entity */
-		LatestManualPostModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly LatestManualPostModifiedOn_UtcDateAndTime: Date;
 		/** Shows the ID of the record that the post is referring to. */
-		PostRegardingId: DevKit.WebApi.GuidValue;
+		PostRegardingId: string;
 		/** Choose the record that the post relates to. */
-		regardingobjectid_account: DevKit.WebApi.LookupValue;
+		regardingobjectid_account: string;
 		/** Choose the record that the post relates to. */
-		regardingobjectid_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_appointment: string;
 		/** Choose the record that the post relates to. */
-		regardingobjectid_competitor: DevKit.WebApi.LookupValue;
+		regardingobjectid_competitor: string;
 		/** Choose the record that the post relates to. */
-		regardingobjectid_contact: DevKit.WebApi.LookupValue;
+		regardingobjectid_contact: string;
 		/** Choose the record that the post relates to. */
-		regardingobjectid_externalparty: DevKit.WebApi.LookupValue;
+		regardingobjectid_externalparty: string;
 		/** Choose the record that the post relates to. */
-		regardingobjectid_incident: DevKit.WebApi.LookupValue;
+		regardingobjectid_incident: string;
 		/** Choose the record that the post relates to. */
-		regardingobjectid_knowledgearticle: DevKit.WebApi.LookupValue;
+		regardingobjectid_knowledgearticle: string;
 		/** Choose the record that the post relates to. */
-		regardingobjectid_lead: DevKit.WebApi.LookupValue;
+		regardingobjectid_lead: string;
 		/** Choose the record that the post relates to. */
-		regardingobjectid_opportunity: DevKit.WebApi.LookupValue;
+		regardingobjectid_opportunity: string;
 		/** Choose the record that the post relates to. */
-		regardingobjectid_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_phonecall: string;
 		/** Choose the record that the post relates to. */
-		regardingobjectid_processsession: DevKit.WebApi.LookupValue;
+		regardingobjectid_processsession: string;
 		/** Choose the record that the post relates to. */
-		regardingobjectid_queue: DevKit.WebApi.LookupValue;
+		regardingobjectid_queue: string;
 		/** Choose the record that the post relates to. */
-		regardingobjectid_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		regardingobjectid_recurringappointmentmaster: string;
 		/** Choose the record that the post relates to. */
-		regardingobjectid_systemuser: DevKit.WebApi.LookupValue;
+		regardingobjectid_systemuser: string;
 		/** Choose the record that the post relates to. */
-		regardingobjectid_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_task: string;
 		/** Choose the record that the post relates to. */
-		regardingobjectid_team: DevKit.WebApi.LookupValue;
+		regardingobjectid_team: string;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Select the business unit that owns the regarding object. */
-		RegardingObjectOwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly RegardingObjectOwningBusinessUnit: string;
 	}
 }
 declare namespace OptionSet {
@@ -93,4 +95,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,67 +30,67 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Information that specifies whether this component can be deleted. */
-		CanBeDeleted: DevKit.WebApi.ManagedPropertyValue;
+		CanBeDeleted: string;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.WebResource.ComponentState;
 		/** Bytes of the web resource, in Base64 format. */
-		Content: DevKit.WebApi.StringValue;
+		Content: string;
 		/** Reference to the content file on Azure. */
-		ContentFileRef: DevKit.WebApi.StringValueReadonly;
+		readonly ContentFileRef: string;
 		/** Json representation of the content of the resource. */
-		ContentJson: DevKit.WebApi.StringValue;
+		ContentJson: string;
 		/** Reference to the Json content file on Azure. */
-		ContentJsonFileRef: DevKit.WebApi.StringValueReadonly;
+		readonly ContentJsonFileRef: string;
 		/** Unique identifier of the user who created the web resource. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the web resource was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the web resource. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** For internal use only. */
-		DependencyXml: DevKit.WebApi.StringValue;
+		DependencyXml: string;
 		/** Description of the web resource. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Display name of the web resource. */
-		DisplayName: DevKit.WebApi.StringValue;
+		DisplayName: string;
 		/** Version in which the form is introduced. */
-		IntroducedVersion: DevKit.WebApi.StringValue;
+		IntroducedVersion: string;
 		/** Information that specifies whether this web resource is available for mobile client in offline mode. */
-		IsAvailableForMobileOffline: DevKit.WebApi.BooleanValue;
+		IsAvailableForMobileOffline: boolean;
 		/** Information that specifies whether this component can be customized. */
-		IsCustomizable: DevKit.WebApi.ManagedPropertyValue;
+		IsCustomizable: string;
 		/** Information that specifies whether this web resource is enabled for mobile client. */
-		IsEnabledForMobileClient: DevKit.WebApi.BooleanValue;
+		IsEnabledForMobileClient: boolean;
 		/** Information that specifies whether this component should be hidden. */
-		IsHidden: DevKit.WebApi.ManagedPropertyValue;
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		IsHidden: string;
+		readonly IsManaged: boolean;
 		/** Language of the web resource. */
-		LanguageCode: DevKit.WebApi.IntegerValue;
+		LanguageCode: number;
 		/** Unique identifier of the user who last modified the web resource. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the web resource was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the web resource. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Name of the web resource. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Unique identifier of the organization associated with the web resource. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** For internal use only. */
-		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly OverwriteTime_UtcDateOnly: Date;
 		/** Silverlight runtime version number required by a silverlight web resource. */
-		SilverlightVersion: DevKit.WebApi.StringValue;
+		SilverlightVersion: string;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** For internal use only. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly SupportingSolutionId: string;
+		readonly VersionNumber: number;
 		/** Unique identifier of the web resource. */
-		WebResourceId: DevKit.WebApi.GuidValue;
+		WebResourceId: string;
 		/** For internal use only. */
-		WebResourceIdUnique: DevKit.WebApi.GuidValueReadonly;
+		readonly WebResourceIdUnique: string;
 		/** Drop-down list for selecting the type of the web resource. */
-		WebResourceType: DevKit.WebApi.OptionSetValue;
+		WebResourceType: OptionSet.WebResource.WebResourceType;
 	}
 }
 declare namespace OptionSet {
@@ -147,4 +149,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

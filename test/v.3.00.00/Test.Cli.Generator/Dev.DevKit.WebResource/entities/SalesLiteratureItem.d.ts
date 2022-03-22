@@ -107,8 +107,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -116,58 +118,58 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Abstract of the document. */
-		Abstract: DevKit.WebApi.StringValue;
+		Abstract: string;
 		/** URL of the Website on which the document is located. */
-		AttachedDocumentUrl: DevKit.WebApi.StringValue;
+		AttachedDocumentUrl: string;
 		/** Author name for the document. */
-		AuthorName: DevKit.WebApi.StringValue;
+		AuthorName: string;
 		/** Unique identifier of the user who created the document. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the document was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the salesliteratureitem. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Shows the encoded contents of the sales literature document attachment. */
-		DocumentBody: DevKit.WebApi.StringValue;
+		DocumentBody: string;
 		/** File name of the document. */
-		FileName: DevKit.WebApi.StringValue;
+		FileName: string;
 		/** File size of the document. */
-		FileSize: DevKit.WebApi.IntegerValue;
-		FileType: DevKit.WebApi.IntegerValueReadonly;
+		FileSize: number;
+		readonly FileType: number;
 		/** Select the file type of the document. */
-		FileTypeCode: DevKit.WebApi.OptionSetValue;
+		FileTypeCode: OptionSet.SalesLiteratureItem.FileTypeCode;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Tells whether the document can be shared with customers or is for internal use only. */
-		IsCustomerViewable: DevKit.WebApi.BooleanValue;
+		IsCustomerViewable: boolean;
 		/** Keywords to use for searches in documents. */
-		KeyWords: DevKit.WebApi.StringValue;
+		KeyWords: string;
 		/** Shows the file type of the sales literature document attachment, such as text or document. */
-		MimeType: DevKit.WebApi.StringValue;
+		MimeType: string;
 		/** Defines the mode of the sales literature document attachment. */
-		Mode: DevKit.WebApi.StringValue;
+		Mode: string;
 		/** Unique identifier of the user who last modified the document. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the document was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the salesliteratureitem. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Unique identifier of the organization associated with the document. */
-		OrganizationId: DevKit.WebApi.GuidValueReadonly;
+		readonly OrganizationId: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Unique identifier of the sales literature that is associated with the individual item. */
-		SalesLiteratureId: DevKit.WebApi.LookupValue;
+		SalesLiteratureId: string;
 		/** Unique identifier for the document. */
-		SalesLiteratureItemId: DevKit.WebApi.GuidValue;
+		SalesLiteratureItemId: string;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Type the title or name that describes the document. */
-		Title: DevKit.WebApi.StringValue;
+		Title: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -194,4 +196,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

@@ -65,8 +65,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -74,157 +76,159 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Shows who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Shows the date the record was assigned to the queue. */
-		EnteredOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly EnteredOn_UtcDateAndTime: Date;
 		/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Unique identifier of the data import or data migration that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Shows who last updated the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the queueitem. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Liveworkstream this queue item belongs to */
-		msdyn_liveworkstreamid: DevKit.WebApi.LookupValue;
+		msdyn_liveworkstreamid: string;
 		/** Choose the activity, case, or article assigned to the queue. */
-		objectid_activitypointer: DevKit.WebApi.LookupValue;
+		objectid_activitypointer: string;
 		/** Choose the activity, case, or article assigned to the queue. */
-		objectid_appointment: DevKit.WebApi.LookupValue;
+		objectid_appointment: string;
 		/** Choose the activity, case, or article assigned to the queue. */
-		objectid_bulkoperation: DevKit.WebApi.LookupValue;
+		objectid_bulkoperation: string;
 		/** Choose the activity, case, or article assigned to the queue. */
-		objectid_campaignactivity: DevKit.WebApi.LookupValue;
+		objectid_campaignactivity: string;
 		/** Choose the activity, case, or article assigned to the queue. */
-		objectid_campaignresponse: DevKit.WebApi.LookupValue;
+		objectid_campaignresponse: string;
 		/** Choose the activity, case, or article assigned to the queue. */
-		objectid_email: DevKit.WebApi.LookupValue;
+		objectid_chat: string;
 		/** Choose the activity, case, or article assigned to the queue. */
-		objectid_fax: DevKit.WebApi.LookupValue;
+		objectid_email: string;
 		/** Choose the activity, case, or article assigned to the queue. */
-		objectid_incident: DevKit.WebApi.LookupValue;
+		objectid_fax: string;
 		/** Choose the activity, case, or article assigned to the queue. */
-		objectid_knowledgearticle: DevKit.WebApi.LookupValue;
+		objectid_incident: string;
 		/** Choose the activity, case, or article assigned to the queue. */
-		objectid_letter: DevKit.WebApi.LookupValue;
+		objectid_knowledgearticle: string;
 		/** Choose the activity, case, or article assigned to the queue. */
-		objectid_msdyn_agreementbookingdate: DevKit.WebApi.LookupValue;
+		objectid_letter: string;
 		/** Choose the activity, case, or article assigned to the queue. */
-		objectid_msdyn_agreementbookingsetup: DevKit.WebApi.LookupValue;
+		objectid_msdyn_agreementbookingdate: string;
 		/** Choose the activity, case, or article assigned to the queue. */
-		objectid_msdyn_agreementinvoicedate: DevKit.WebApi.LookupValue;
+		objectid_msdyn_agreementbookingsetup: string;
 		/** Choose the activity, case, or article assigned to the queue. */
-		objectid_msdyn_agreementinvoicesetup: DevKit.WebApi.LookupValue;
+		objectid_msdyn_agreementinvoicedate: string;
 		/** Choose the activity, case, or article assigned to the queue. */
-		objectid_msdyn_approval: DevKit.WebApi.LookupValue;
+		objectid_msdyn_agreementinvoicesetup: string;
 		/** Choose the activity, case, or article assigned to the queue. */
-		objectid_msdyn_bookingalert: DevKit.WebApi.LookupValue;
+		objectid_msdyn_approval: string;
 		/** Choose the activity, case, or article assigned to the queue. */
-		objectid_msdyn_inventoryadjustment: DevKit.WebApi.LookupValue;
+		objectid_msdyn_bookingalert: string;
 		/** Choose the activity, case, or article assigned to the queue. */
-		objectid_msdyn_inventorytransfer: DevKit.WebApi.LookupValue;
+		objectid_msdyn_inventoryadjustment: string;
 		/** Choose the activity, case, or article assigned to the queue. */
-		objectid_msdyn_iotalert: DevKit.WebApi.LookupValue;
+		objectid_msdyn_inventorytransfer: string;
 		/** Choose the activity, case, or article assigned to the queue. */
-		objectid_msdyn_knowledgearticletemplate: DevKit.WebApi.LookupValue;
+		objectid_msdyn_iotalert: string;
 		/** Choose the activity, case, or article assigned to the queue. */
-		objectid_msdyn_liveconversation: DevKit.WebApi.LookupValue;
+		objectid_msdyn_knowledgearticletemplate: string;
 		/** Choose the activity, case, or article assigned to the queue. */
-		objectid_msdyn_ocliveworkitem: DevKit.WebApi.LookupValue;
+		objectid_msdyn_liveconversation: string;
 		/** Choose the activity, case, or article assigned to the queue. */
-		objectid_msdyn_ocoutboundmessage: DevKit.WebApi.LookupValue;
+		objectid_msdyn_ocliveworkitem: string;
 		/** Choose the activity, case, or article assigned to the queue. */
-		objectid_msdyn_ocsession: DevKit.WebApi.LookupValue;
+		objectid_msdyn_ocoutboundmessage: string;
 		/** Choose the activity, case, or article assigned to the queue. */
-		objectid_msdyn_overflowactionconfig: DevKit.WebApi.LookupValue;
+		objectid_msdyn_ocsession: string;
 		/** Choose the activity, case, or article assigned to the queue. */
-		objectid_msdyn_project: DevKit.WebApi.LookupValue;
+		objectid_msdyn_overflowactionconfig: string;
 		/** Choose the activity, case, or article assigned to the queue. */
-		objectid_msdyn_projecttask: DevKit.WebApi.LookupValue;
+		objectid_msdyn_project: string;
 		/** Choose the activity, case, or article assigned to the queue. */
-		objectid_msdyn_resourcerequest: DevKit.WebApi.LookupValue;
+		objectid_msdyn_projecttask: string;
 		/** Choose the activity, case, or article assigned to the queue. */
-		objectid_msdyn_timegroup: DevKit.WebApi.LookupValue;
+		objectid_msdyn_resourcerequest: string;
 		/** Choose the activity, case, or article assigned to the queue. */
-		objectid_msdyn_timegroupdetail: DevKit.WebApi.LookupValue;
+		objectid_msdyn_timegroup: string;
 		/** Choose the activity, case, or article assigned to the queue. */
-		objectid_msdyn_workorder: DevKit.WebApi.LookupValue;
+		objectid_msdyn_timegroupdetail: string;
 		/** Choose the activity, case, or article assigned to the queue. */
-		objectid_msdyn_workorderincident: DevKit.WebApi.LookupValue;
+		objectid_msdyn_workorder: string;
 		/** Choose the activity, case, or article assigned to the queue. */
-		objectid_msdyn_workorderservice: DevKit.WebApi.LookupValue;
+		objectid_msdyn_workorderincident: string;
 		/** Choose the activity, case, or article assigned to the queue. */
-		objectid_msdyn_workorderservicetask: DevKit.WebApi.LookupValue;
+		objectid_msdyn_workorderservice: string;
 		/** Choose the activity, case, or article assigned to the queue. */
-		objectid_msfp_alert: DevKit.WebApi.LookupValue;
+		objectid_msdyn_workorderservicetask: string;
 		/** Choose the activity, case, or article assigned to the queue. */
-		objectid_msfp_surveyinvite: DevKit.WebApi.LookupValue;
+		objectid_msfp_alert: string;
 		/** Choose the activity, case, or article assigned to the queue. */
-		objectid_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		objectid_msfp_surveyinvite: string;
 		/** Choose the activity, case, or article assigned to the queue. */
-		objectid_phonecall: DevKit.WebApi.LookupValue;
+		objectid_msfp_surveyresponse: string;
 		/** Choose the activity, case, or article assigned to the queue. */
-		objectid_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		objectid_phonecall: string;
 		/** Choose the activity, case, or article assigned to the queue. */
-		objectid_serviceappointment: DevKit.WebApi.LookupValue;
+		objectid_recurringappointmentmaster: string;
 		/** Choose the activity, case, or article assigned to the queue. */
-		objectid_socialactivity: DevKit.WebApi.LookupValue;
+		objectid_serviceappointment: string;
 		/** Choose the activity, case, or article assigned to the queue. */
-		objectid_task: DevKit.WebApi.LookupValue;
+		objectid_socialactivity: string;
+		/** Choose the activity, case, or article assigned to the queue. */
+		objectid_task: string;
 		/** Select the type of the queue item, such as activity, case, or appointment. */
-		ObjectTypeCode: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ObjectTypeCode: OptionSet.QueueItem.ObjectTypeCode;
 		/** Unique identifier of the organization with which the queue item is associated. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValueReadonly;
+		readonly OwnerId_team: string;
 		/** Unique identifier of the business unit that owns the queue item. */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier of the user who owns the queue item. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Priority of the queue item. */
-		Priority: DevKit.WebApi.IntegerValue;
+		Priority: number;
 		/** Choose the queue that the item is assigned to. */
-		QueueId: DevKit.WebApi.LookupValue;
+		QueueId: string;
 		/** Unique identifier of the queue item. */
-		QueueItemId: DevKit.WebApi.GuidValue;
+		QueueItemId: string;
 		/** Sender who created the queue item. */
-		Sender: DevKit.WebApi.StringValue;
+		Sender: string;
 		/** Status of the queue item. */
-		State: DevKit.WebApi.IntegerValue;
+		State: number;
 		/** Shows whether the queue record is active or inactive. Inactive queue records are read-only and can't be edited unless they are reactivated. */
-		StateCode: DevKit.WebApi.OptionSetValue;
+		StateCode: OptionSet.QueueItem.StateCode;
 		/** Reason for the status of the queue item. */
-		Status: DevKit.WebApi.IntegerValue;
+		Status: number;
 		/** Select the item's status. */
-		StatusCode: DevKit.WebApi.OptionSetValue;
+		StatusCode: OptionSet.QueueItem.StatusCode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Shows the title or name that describes the queue record. This value is copied from the record that was assigned to the queue. */
-		Title: DevKit.WebApi.StringValueReadonly;
+		readonly Title: string;
 		/** Recipients listed on the To line of the message for email queue items. */
-		ToRecipients: DevKit.WebApi.StringValue;
+		ToRecipients: string;
 		/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version number of the queue item. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 		/** Shows who is working on the queue item. */
-		workerid_systemuser: DevKit.WebApi.LookupValue;
+		workerid_systemuser: string;
 		/** Shows who is working on the queue item. */
-		workerid_team: DevKit.WebApi.LookupValue;
+		workerid_team: string;
 		/** Shows the date and time when the queue item was last assigned to a user. */
-		WorkerIdModifiedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly WorkerIdModifiedOn_UtcDateOnly: Date;
 	}
 }
 declare namespace OptionSet {
@@ -232,17 +236,19 @@ declare namespace OptionSet {
 		enum ObjectTypeCode {
 			/** 4200 */
 			Activity,
-			/** 10524 */
+			/** 10086 */
+			Activity_record_for_the_Teams_chat,
+			/** 10525 */
 			Agreement_Booking_Date,
-			/** 10529 */
-			Agreement_Booking_Setup,
 			/** 10530 */
+			Agreement_Booking_Setup,
+			/** 10531 */
 			Agreement_Invoice_Date,
-			/** 10532 */
+			/** 10533 */
 			Agreement_Invoice_Setup,
 			/** 4201 */
 			Appointment,
-			/** 10400 */
+			/** 10404 */
 			Booking_Alert,
 			/** 4402 */
 			Campaign_Activity,
@@ -250,69 +256,69 @@ declare namespace OptionSet {
 			Campaign_Response,
 			/** 112 */
 			Case,
-			/** 10702 */
+			/** 10707 */
 			Conversation,
-			/** 10294 */
+			/** 10313 */
 			Customer_Voice_alert,
-			/** 10304 */
+			/** 10323 */
 			Customer_Voice_survey_invite,
-			/** 10306 */
+			/** 10325 */
 			Customer_Voice_survey_response,
 			/** 4202 */
 			Email,
 			/** 4204 */
 			Fax,
-			/** 10423 */
+			/** 10427 */
 			Fulfillment_Preference,
-			/** 10552 */
+			/** 10553 */
 			Inventory_Adjustment,
-			/** 10555 */
+			/** 10556 */
 			Inventory_Transfer,
-			/** 10138 */
+			/** 10152 */
 			IoT_Alert,
 			/** 9953 */
 			Knowledge_Article,
-			/** 10086 */
+			/** 10098 */
 			Knowledge_Article_Template,
 			/** 4207 */
 			Letter,
-			/** 10692 */
+			/** 10697 */
 			Ongoing_conversation_Deprecated,
-			/** 10813 */
+			/** 10817 */
 			Outbound_message,
-			/** 10679 */
+			/** 10680 */
 			Overflow_Action_Config,
 			/** 4210 */
 			Phone_Call,
-			/** 10469 */
+			/** 10473 */
 			Project,
-			/** 10430 */
+			/** 10434 */
 			Project_Service_Approval,
-			/** 10474 */
+			/** 10478 */
 			Project_Task,
 			/** 4406 */
 			Quick_Campaign,
 			/** 4251 */
 			Recurring_Appointment,
-			/** 10492 */
+			/** 10496 */
 			Resource_Request,
 			/** 4214 */
 			Service_Activity,
-			/** 10717 */
+			/** 10721 */
 			Session,
 			/** 4216 */
 			Social_Activity,
 			/** 4212 */
 			Task,
-			/** 10424 */
+			/** 10428 */
 			Time_Group_Detail,
-			/** 10595 */
+			/** 10596 */
 			Work_Order,
-			/** 10598 */
+			/** 10599 */
 			Work_Order_Incident,
-			/** 10601 */
-			Work_Order_Service,
 			/** 10602 */
+			Work_Order_Service,
+			/** 10603 */
 			Work_Order_Service_Task
 		}
 		enum StateCode {
@@ -345,4 +351,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

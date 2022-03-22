@@ -1056,8 +1056,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -1065,188 +1067,188 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the account with which the case is associated. */
-		AccountId: DevKit.WebApi.LookupValueReadonly;
+		readonly AccountId: string;
 		/** This attribute is used for Sample Service Business Processes. */
-		ActivitiesComplete: DevKit.WebApi.BooleanValue;
+		ActivitiesComplete: boolean;
 		/** Type the number of service units that were actually required to resolve the case. */
-		ActualServiceUnits: DevKit.WebApi.IntegerValue;
+		ActualServiceUnits: number;
 		/** Type the number of service units that were billed to the customer for the case. */
-		BilledServiceUnits: DevKit.WebApi.IntegerValue;
+		BilledServiceUnits: number;
 		/** Details whether the profile is blocked or not. */
-		BlockedProfile: DevKit.WebApi.BooleanValue;
+		BlockedProfile: boolean;
 		/** Select how contact about the case was originated, such as email, phone, or web, for use in reporting and analysis. */
-		CaseOriginCode: DevKit.WebApi.OptionSetValue;
+		CaseOriginCode: OptionSet.Incident.CaseOriginCode;
 		/** Select the type of case to identify the incident for use in case routing and analysis. */
-		CaseTypeCode: DevKit.WebApi.OptionSetValue;
+		CaseTypeCode: OptionSet.Incident.CaseTypeCode;
 		/** This attribute is used for Sample Service Business Processes. */
-		CheckEmail: DevKit.WebApi.BooleanValue;
+		CheckEmail: boolean;
 		/** Unique identifier of the contact associated with the case. */
-		ContactId: DevKit.WebApi.LookupValueReadonly;
+		readonly ContactId: string;
 		/** Choose the contract line that the case should be logged under to make sure the customer is charged correctly. */
-		ContractDetailId: DevKit.WebApi.LookupValue;
+		ContractDetailId: string;
 		/** Choose the service contract that the case should be logged under to make sure the customer is eligible for support services. */
-		ContractId: DevKit.WebApi.LookupValue;
+		ContractId: string;
 		/** Select the service level for the case to make sure the case is handled correctly. */
-		ContractServiceLevelCode: DevKit.WebApi.OptionSetValue;
+		ContractServiceLevelCode: OptionSet.Incident.ContractServiceLevelCode;
 		/** Shows who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Shows the external party who created the record. */
-		CreatedByExternalParty: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedByExternalParty: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Tells whether customer service representative has contacted the customer or not. */
-		CustomerContacted: DevKit.WebApi.BooleanValue;
+		CustomerContacted: boolean;
 		/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
-		customerid_account: DevKit.WebApi.LookupValue;
+		customerid_account: string;
 		/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
-		customerid_contact: DevKit.WebApi.LookupValue;
+		customerid_contact: string;
 		/** Select the customer's level of satisfaction with the handling and resolution of the case. */
-		CustomerSatisfactionCode: DevKit.WebApi.OptionSetValue;
+		CustomerSatisfactionCode: OptionSet.Incident.CustomerSatisfactionCode;
 		/** Shows whether terms of the associated entitlement should be decremented or not. */
-		DecrementEntitlementTerm: DevKit.WebApi.BooleanValue;
+		DecrementEntitlementTerm: boolean;
 		/** Type additional information to describe the case to assist the service team in reaching a resolution. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** The primary email address for the entity. */
-		EmailAddress: DevKit.WebApi.StringValue;
+		EmailAddress: string;
 		/** Choose the entitlement that is applicable for the case. */
-		EntitlementId: DevKit.WebApi.LookupValue;
+		EntitlementId: string;
 		/** The default image for the entity. */
-		EntityImage: DevKit.WebApi.StringValue;
-		EntityImage_Timestamp: DevKit.WebApi.BigIntValueReadonly;
-		EntityImage_URL: DevKit.WebApi.StringValueReadonly;
-		EntityImageId: DevKit.WebApi.GuidValueReadonly;
+		EntityImage: string;
+		EntityImage_Timestamp: number;
+		EntityImage_URL: string;
+		readonly EntityImageId: string;
 		/** Indicates the date and time when the case was escalated. */
-		EscalatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly EscalatedOn_UtcDateAndTime: Date;
 		/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Select an existing case for the customer that has been populated. For internal use only. */
-		ExistingCase: DevKit.WebApi.LookupValue;
+		ExistingCase: string;
 		/** For internal use only. */
-		FirstResponseByKPIId: DevKit.WebApi.LookupValue;
+		FirstResponseByKPIId: string;
 		/** Indicates if the first response has been sent. */
-		FirstResponseSent: DevKit.WebApi.BooleanValue;
+		FirstResponseSent: boolean;
 		/** Shows the status of the initial response time for the case according to the terms of the SLA. */
-		FirstResponseSLAStatus: DevKit.WebApi.OptionSetValue;
+		FirstResponseSLAStatus: OptionSet.Incident.FirstResponseSLAStatus;
 		/** Enter the date by which a customer service representative has to follow up with the customer on this case. */
-		FollowupBy_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		FollowupBy_UtcDateOnly: Date;
 		/** This attribute is used for Sample Service Business Processes. */
-		FollowUpTaskCreated: DevKit.WebApi.BooleanValue;
+		FollowUpTaskCreated: boolean;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the case. */
-		IncidentId: DevKit.WebApi.GuidValue;
+		IncidentId: string;
 		/** Select the current stage of the service process for the case to assist service team members when they review or transfer a case. */
-		IncidentStageCode: DevKit.WebApi.OptionSetValue;
+		IncidentStageCode: OptionSet.Incident.IncidentStageCode;
 		/** Will contain the Influencer score coming from NetBreeze. */
-		InfluenceScore: DevKit.WebApi.DoubleValue;
+		InfluenceScore: number;
 		/** Shows customer satisfaction by tracking effort required by the customer. Low scores typically mean higher customer satisfaction as the customer had to travel through less channels to find a resolution */
-		int_CustomerEffort: DevKit.WebApi.OptionSetValue;
+		int_CustomerEffort: OptionSet.Incident.int_CustomerEffort;
 		/** Mark Yes if an opportunity exists to sell additional products or services to the customer. */
-		int_UpSellReferral: DevKit.WebApi.BooleanValue;
+		int_UpSellReferral: boolean;
 		/** For system use only. */
-		IsDecrementing: DevKit.WebApi.BooleanValue;
+		IsDecrementing: boolean;
 		/** Indicates if the case has been escalated. */
-		IsEscalated: DevKit.WebApi.BooleanValue;
+		IsEscalated: boolean;
 		/** Choose the article that contains additional information or a resolution for the case, for reference during research or follow up with the customer. */
-		KbArticleId: DevKit.WebApi.LookupValue;
+		KbArticleId: string;
 		/** Contains the date time stamp of the last on hold time. */
-		LastOnHoldTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		LastOnHoldTime_UtcDateAndTime: Date;
 		/** Choose the primary case the current case was merged into. */
-		MasterId: DevKit.WebApi.LookupValue;
+		MasterId: string;
 		/** Tells whether the incident has been merged with another incident. */
-		Merged: DevKit.WebApi.BooleanValueReadonly;
+		readonly Merged: boolean;
 		/** Shows whether the post originated as a public or private message. */
-		MessageTypeCode: DevKit.WebApi.OptionSetValue;
+		MessageTypeCode: OptionSet.Incident.MessageTypeCode;
 		/** Shows who last updated the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Shows the external party who modified the record. */
-		ModifiedByExternalParty: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedByExternalParty: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Shows who last updated the record on behalf of another user. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Case's functional location */
-		msdyn_FunctionalLocation: DevKit.WebApi.LookupValue;
+		msdyn_FunctionalLocation: string;
 		/** Unique identifier for Incident Type associated with Case. */
-		msdyn_IncidentType: DevKit.WebApi.LookupValue;
+		msdyn_IncidentType: string;
 		/** The iot alert that initiated this case */
-		msdyn_iotalert: DevKit.WebApi.LookupValue;
+		msdyn_iotalert: string;
 		/** Number of child incidents associated with the incident. */
-		NumberOfChildIncidents: DevKit.WebApi.IntegerValueReadonly;
+		readonly NumberOfChildIncidents: number;
 		/** Shows the duration in minutes for which the case was on hold. */
-		OnHoldTime: DevKit.WebApi.IntegerValueReadonly;
+		readonly OnHoldTime: number;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Choose the parent case for a case. */
-		ParentCaseId: DevKit.WebApi.LookupValue;
+		ParentCaseId: string;
 		/** Select a primary contact for this case. */
-		PrimaryContactId: DevKit.WebApi.LookupValue;
+		PrimaryContactId: string;
 		/** Select the priority so that preferred customers or critical issues are handled quickly. */
-		PriorityCode: DevKit.WebApi.OptionSetValue;
+		PriorityCode: OptionSet.Incident.PriorityCode;
 		/** Contains the id of the process associated with the entity. */
-		ProcessId: DevKit.WebApi.GuidValue;
+		ProcessId: string;
 		/** Choose the product associated with the case to identify warranty, service, or other product issues and be able to report the number of incidents for each product. */
-		ProductId: DevKit.WebApi.LookupValue;
+		ProductId: string;
 		/** Type the serial number of the product that is associated with this case, so that the number of cases per product can be reported. */
-		ProductSerialNumber: DevKit.WebApi.StringValue;
+		ProductSerialNumber: string;
 		/** Enter the date by when the case must be resolved. */
-		ResolveBy_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		ResolveBy_UtcDateAndTime: Date;
 		/** For internal use only. */
-		ResolveByKPIId: DevKit.WebApi.LookupValue;
+		ResolveByKPIId: string;
 		/** Shows the status of the resolution time for the case according to the terms of the SLA. */
-		ResolveBySLAStatus: DevKit.WebApi.OptionSetValue;
+		ResolveBySLAStatus: OptionSet.Incident.ResolveBySLAStatus;
 		/** For internal use only. */
-		ResponseBy_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		ResponseBy_UtcDateAndTime: Date;
 		/** Choose an additional customer contact who can also help resolve the case. */
-		ResponsibleContactId: DevKit.WebApi.LookupValue;
+		ResponsibleContactId: string;
 		/** Tells whether the incident has been routed to queue or not. */
-		RouteCase: DevKit.WebApi.BooleanValue;
+		RouteCase: boolean;
 		/** Value derived after assessing words commonly associated with a negative, neutral, or positive sentiment that occurs in a social post. Sentiment information can also be reported as numeric values. */
-		SentimentValue: DevKit.WebApi.DoubleValue;
+		SentimentValue: number;
 		/** Select the stage, in the case resolution process, that the case is in. */
-		ServiceStage: DevKit.WebApi.OptionSetValue;
+		ServiceStage: OptionSet.Incident.ServiceStage;
 		/** Select the severity of this case to indicate the incident's impact on the customer's business. */
-		SeverityCode: DevKit.WebApi.OptionSetValue;
+		SeverityCode: OptionSet.Incident.SeverityCode;
 		/** Choose the service level agreement (SLA) that you want to apply to the case record. */
-		SLAId: DevKit.WebApi.LookupValue;
+		SLAId: string;
 		/** Last SLA that was applied to this case. This field is for internal use only. */
-		SLAInvokedId: DevKit.WebApi.LookupValueReadonly;
+		readonly SLAInvokedId: string;
 		/** Unique identifier of the social profile with which the case is associated. */
-		SocialProfileId: DevKit.WebApi.LookupValue;
+		SocialProfileId: string;
 		/** Contains the id of the stage where the entity is located. */
-		StageId: DevKit.WebApi.GuidValue;
+		StageId: string;
 		/** Shows whether the case is active, resolved, or canceled. Resolved and canceled cases are read-only and can't be edited unless they are reactivated. */
-		StateCode: DevKit.WebApi.OptionSetValue;
+		StateCode: OptionSet.Incident.StateCode;
 		/** Select the case's status. */
-		StatusCode: DevKit.WebApi.OptionSetValue;
+		StatusCode: OptionSet.Incident.StatusCode;
 		/** Choose the subject for the case, such as catalog request or product complaint, so customer service managers can identify frequent requests or problem areas. Administrators can configure subjects under Business Management in the Settings area. */
-		SubjectId: DevKit.WebApi.LookupValue;
+		SubjectId: string;
 		/** Shows the case number for customer reference and searching capabilities. This cannot be modified. */
-		TicketNumber: DevKit.WebApi.StringValue;
+		TicketNumber: string;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Type a subject or descriptive name, such as the request, issue, or company name, to identify the case in Microsoft Dynamics 365 views. */
-		Title: DevKit.WebApi.StringValue;
+		Title: string;
 		/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** A comma separated list of string values representing the unique identifiers of stages in a Business Process Flow Instance in the order that they occur. */
-		TraversedPath: DevKit.WebApi.StringValue;
+		TraversedPath: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -1395,4 +1397,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

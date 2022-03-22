@@ -325,8 +325,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -334,151 +336,151 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Shows the exchange rate for the currency associated with the entity with respect to the base currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Shows the sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Shows who last updated the record on behalf of another user. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Enter any additional costs associated with this product. The values are manually entered. Note: additional cost is not unit dependent. */
-		msdyn_AdditionalCost: DevKit.WebApi.MoneyValue;
+		msdyn_AdditionalCost: number;
 		/** Shows the value of the additional cost in the base currency. */
-		msdyn_additionalcost_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_additionalcost_Base: number;
 		/** Agreement Booking Product linked to this Work Order Product */
-		msdyn_AgreementBookingProduct: DevKit.WebApi.LookupValue;
-		msdyn_Allocated: DevKit.WebApi.BooleanValue;
+		msdyn_AgreementBookingProduct: string;
+		msdyn_Allocated: boolean;
 		/** The booking where this product was added */
-		msdyn_Booking: DevKit.WebApi.LookupValue;
+		msdyn_Booking: string;
 		/** Enter the commission costs associated with this product. The value is manually specified and isn't automatically calculated. */
-		msdyn_CommissionCosts: DevKit.WebApi.MoneyValue;
+		msdyn_CommissionCosts: number;
 		/** Shows the value of the commission costs in the base currency. */
-		msdyn_commissioncosts_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_commissioncosts_Base: number;
 		/** Unique identifier for Customer Asset associated with Work Order Product. */
-		msdyn_CustomerAsset: DevKit.WebApi.LookupValue;
+		msdyn_CustomerAsset: string;
 		/** Enter the description of the product as presented to the customer. The value defaults to the description defined on the product. */
-		msdyn_Description: DevKit.WebApi.StringValue;
+		msdyn_Description: string;
 		/** Choose whether to disable entitlement selection for this work order product. */
-		msdyn_DisableEntitlement: DevKit.WebApi.BooleanValue;
+		msdyn_DisableEntitlement: boolean;
 		/** Specify any discount amount on this product. Note: If you enter a discount amount you cannot enter a discount % */
-		msdyn_DiscountAmount: DevKit.WebApi.MoneyValue;
+		msdyn_DiscountAmount: number;
 		/** Shows the value of the discount amount in the base currency. */
-		msdyn_discountamount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_discountamount_Base: number;
 		/** Specify any discount % on this product. Note: If you enter a discount % it will overwrite the discount $ */
-		msdyn_DiscountPercent: DevKit.WebApi.DoubleValue;
+		msdyn_DiscountPercent: number;
 		/** Entitlement to apply to the Work Order Product. */
-		msdyn_Entitlement: DevKit.WebApi.LookupValue;
+		msdyn_Entitlement: string;
 		/** Enter a discount amount on the subtotal amount. Note: If you enter a discount amount you cannot enter a discount % */
-		msdyn_EstimateDiscountAmount: DevKit.WebApi.MoneyValue;
+		msdyn_EstimateDiscountAmount: number;
 		/** Shows the value of the estimate discount amount in the base currency. */
-		msdyn_estimatediscountamount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_estimatediscountamount_Base: number;
 		/** Enter a discount % on the subtotal amount. Note: If you enter a discount % it will overwrite the discount $ */
-		msdyn_EstimateDiscountPercent: DevKit.WebApi.DoubleValue;
+		msdyn_EstimateDiscountPercent: number;
 		/** Enter the estimated required quantity of this product. */
-		msdyn_EstimateQuantity: DevKit.WebApi.DoubleValue;
+		msdyn_EstimateQuantity: number;
 		/** Shows the total amount for this product, excluding discounts. */
-		msdyn_EstimateSubtotal: DevKit.WebApi.MoneyValue;
+		msdyn_EstimateSubtotal: number;
 		/** Shows the value of the estimate subtotal in the base currency. */
-		msdyn_estimatesubtotal_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_estimatesubtotal_Base: number;
 		/** Shows the estimated total amount of this product, including discounts. */
-		msdyn_EstimateTotalAmount: DevKit.WebApi.MoneyValue;
+		msdyn_EstimateTotalAmount: number;
 		/** Shows the value of the estimate total amount in the base currency. */
-		msdyn_estimatetotalamount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_estimatetotalamount_Base: number;
 		/** Shows the estimated total cost of this product. */
-		msdyn_EstimateTotalCost: DevKit.WebApi.MoneyValue;
+		msdyn_EstimateTotalCost: number;
 		/** Shows the value of the estimate total cost in the base currency. */
-		msdyn_estimatetotalcost_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_estimatetotalcost_Base: number;
 		/** Shows the estimated sale amount per unit. */
-		msdyn_EstimateUnitAmount: DevKit.WebApi.MoneyValue;
+		msdyn_EstimateUnitAmount: number;
 		/** Shows the value of the estimate unit amount in the base currency. */
-		msdyn_estimateunitamount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_estimateunitamount_Base: number;
 		/** Shows the estimated cost amount per unit. */
-		msdyn_EstimateUnitCost: DevKit.WebApi.MoneyValue;
+		msdyn_EstimateUnitCost: number;
 		/** Shows the value of the estimate unit cost in the base currency. */
-		msdyn_estimateunitcost_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_estimateunitcost_Base: number;
 		/** Enter any internal notes you want to track on this product. */
-		msdyn_InternalDescription: DevKit.WebApi.StringValue;
+		msdyn_InternalDescription: string;
 		/** For internal use only. */
-		msdyn_InternalFlags: DevKit.WebApi.StringValue;
-		msdyn_LineOrder: DevKit.WebApi.IntegerValue;
+		msdyn_InternalFlags: string;
+		msdyn_LineOrder: number;
 		/** Enter the current status of the line, estimate or used. */
-		msdyn_LineStatus: DevKit.WebApi.OptionSetValue;
+		msdyn_LineStatus: OptionSet.msdyn_workorderproduct.msdyn_LineStatus;
 		/** Enter the name of the custom entity. */
-		msdyn_name: DevKit.WebApi.StringValue;
+		msdyn_name: string;
 		/** Price List that determines the pricing for this product */
-		msdyn_PriceList: DevKit.WebApi.LookupValue;
+		msdyn_PriceList: string;
 		/** Product to use */
-		msdyn_Product: DevKit.WebApi.LookupValue;
+		msdyn_Product: string;
 		/** Purchase Order Receipt Product linked to this Work Order Product */
-		msdyn_PurchaseOrderReceiptProduct: DevKit.WebApi.LookupValue;
+		msdyn_PurchaseOrderReceiptProduct: string;
 		/** Enter the quantity you wish to bill the customer for. By default, this will default to the same value as "Quantity." */
-		msdyn_QtyToBill: DevKit.WebApi.DoubleValue;
+		msdyn_QtyToBill: number;
 		/** Shows the actual quantity of the product. */
-		msdyn_Quantity: DevKit.WebApi.DoubleValue;
+		msdyn_Quantity: number;
 		/** Enter the total amount excluding discounts. */
-		msdyn_Subtotal: DevKit.WebApi.MoneyValue;
+		msdyn_Subtotal: number;
 		/** Shows the value of the subtotal in the base currency. */
-		msdyn_subtotal_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_subtotal_Base: number;
 		/** Specify if product is taxable. If you do not wish to charge tax set this field to No. */
-		msdyn_Taxable: DevKit.WebApi.BooleanValue;
+		msdyn_Taxable: boolean;
 		/** Enter the total amount charged to the customer. */
-		msdyn_TotalAmount: DevKit.WebApi.MoneyValue;
+		msdyn_TotalAmount: number;
 		/** Shows the value of the total amount in the base currency. */
-		msdyn_totalamount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_totalamount_Base: number;
 		/** Shows the total cost of this product. This is calculated by (Unit Cost * Units) + Additional Cost + Commission Costs. */
-		msdyn_TotalCost: DevKit.WebApi.MoneyValue;
+		msdyn_TotalCost: number;
 		/** Shows the value of the total cost in the base currency. */
-		msdyn_totalcost_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_totalcost_Base: number;
 		/** The unit that determines the pricing and final quantity for this product */
-		msdyn_Unit: DevKit.WebApi.LookupValue;
+		msdyn_Unit: string;
 		/** Enter the amount you want to charge the customer per unit. By default, this is calculated based on the selected price list. The amount can be changed. */
-		msdyn_UnitAmount: DevKit.WebApi.MoneyValue;
+		msdyn_UnitAmount: number;
 		/** Shows the value of the unit amount in the base currency. */
-		msdyn_unitamount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_unitamount_Base: number;
 		/** Shows the actual cost per unit. */
-		msdyn_UnitCost: DevKit.WebApi.MoneyValue;
+		msdyn_UnitCost: number;
 		/** Shows the value of the unit cost in the base currency. */
-		msdyn_unitcost_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_unitcost_Base: number;
 		/** Warehouse this product is being retrieved from */
-		msdyn_Warehouse: DevKit.WebApi.LookupValue;
+		msdyn_Warehouse: string;
 		/** Unique identifier for Work Order associated with Work Order Product. */
-		msdyn_WorkOrder: DevKit.WebApi.LookupValue;
+		msdyn_WorkOrder: string;
 		/** The Incident related to this product */
-		msdyn_WorkOrderIncident: DevKit.WebApi.LookupValue;
+		msdyn_WorkOrderIncident: string;
 		/** Shows the entity instances. */
-		msdyn_workorderproductId: DevKit.WebApi.GuidValue;
+		msdyn_workorderproductId: string;
 		/** Shows the date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Status of the Work Order Product */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.msdyn_workorderproduct.statecode;
 		/** Reason for the status of the Work Order Product */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.msdyn_workorderproduct.statuscode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Unique identifier of the currency associated with the entity. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** Shows the time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -519,4 +521,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

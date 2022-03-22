@@ -186,8 +186,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -195,101 +197,101 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Shows the allocation method used to book resources on the project (full capacity, percentage, and so on). */
-		msdyn_allocationmethod: DevKit.WebApi.OptionSetValue;
+		msdyn_allocationmethod: OptionSet.msdyn_projectteam.msdyn_allocationmethod;
 		/** Shows the number of applicants for this project team. */
-		msdyn_Applicantcount: DevKit.WebApi.IntegerValueReadonly;
+		readonly msdyn_Applicantcount: number;
 		/** Last Updated time of rollup field Applicant count. */
-		msdyn_Applicantcount_Date_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly msdyn_Applicantcount_Date_UtcDateAndTime: Date;
 		/** State of rollup field Applicant count. */
-		msdyn_Applicantcount_State: DevKit.WebApi.IntegerValueReadonly;
+		readonly msdyn_Applicantcount_State: number;
 		/** Shows if there are applicants available for this project team. */
-		msdyn_Applicantsavailable: DevKit.WebApi.BooleanValueReadonly;
+		readonly msdyn_Applicantsavailable: boolean;
 		/** Type the total assigned hours for project team member. */
-		msdyn_AssignedHours: DevKit.WebApi.DecimalValue;
+		msdyn_AssignedHours: number;
 		/** Select whether the team member is billable */
-		msdyn_BillingType: DevKit.WebApi.OptionSetValue;
+		msdyn_BillingType: OptionSet.msdyn_projectteam.msdyn_BillingType;
 		/** Shows the resource. */
-		msdyn_bookableresourceid: DevKit.WebApi.LookupValue;
+		msdyn_bookableresourceid: string;
 		/** Shows the calendar used for staffing this project team. */
-		msdyn_calendarId: DevKit.WebApi.StringValue;
+		msdyn_calendarId: string;
 		/** Type the system description. */
-		msdyn_Description: DevKit.WebApi.StringValue;
+		msdyn_Description: string;
 		/** Enter the resource team membership start date. */
-		msdyn_From_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		msdyn_From_UtcDateOnly: Date;
 		/** Hard Booked Hours */
-		msdyn_hardbookedhours: DevKit.WebApi.DecimalValue;
+		msdyn_hardbookedhours: number;
 		/** Duplicate for resource requirement */
-		msdyn_hours: DevKit.WebApi.DecimalValue;
+		msdyn_hours: number;
 		/** Shows the number of hours required of this team member on the project. */
-		msdyn_HoursRequested: DevKit.WebApi.DoubleValue;
+		msdyn_HoursRequested: number;
 		/** Shows the membership status of this project team member. */
-		msdyn_MembershipStatus: DevKit.WebApi.OptionSetValue;
+		msdyn_MembershipStatus: OptionSet.msdyn_projectteam.msdyn_MembershipStatus;
 		/** The id of the project team member in MS Project Client. */
-		msdyn_msprojectclientid: DevKit.WebApi.StringValue;
+		msdyn_msprojectclientid: string;
 		/** Type the name of the custom entity. */
-		msdyn_name: DevKit.WebApi.StringValue;
+		msdyn_name: string;
 		/** Shows the number of resources requested. */
-		msdyn_Number: DevKit.WebApi.IntegerValue;
+		msdyn_Number: number;
 		/** The organizational unit of the resource performing the work. */
-		msdyn_organizationalunit: DevKit.WebApi.LookupValue;
+		msdyn_organizationalunit: string;
 		/** Duplicate for resource requirement */
-		msdyn_percentage: DevKit.WebApi.DecimalValue;
+		msdyn_percentage: number;
 		/** Select the project that this team members are part of. */
-		msdyn_project: DevKit.WebApi.LookupValue;
+		msdyn_project: string;
 		/** Select whether the team member can approve time and expenses. */
-		msdyn_ProjectApprover: DevKit.WebApi.BooleanValue;
+		msdyn_ProjectApprover: boolean;
 		/** Unique identifier for entity instances */
-		msdyn_projectteamId: DevKit.WebApi.GuidValue;
+		msdyn_projectteamId: string;
 		/** Required hours of team member from team member requirement */
-		msdyn_requiredhours: DevKit.WebApi.DecimalValue;
+		msdyn_requiredhours: number;
 		/** Select the role this team member is playing in this team. */
-		msdyn_resourcecategory: DevKit.WebApi.LookupValue;
+		msdyn_resourcecategory: string;
 		/** Unique identifier for Resource Requirement associated with Project Team Member. */
-		msdyn_resourcerequirementid: DevKit.WebApi.LookupValue;
+		msdyn_resourcerequirementid: string;
 		/** Enter a description of the role for this team member. */
-		msdyn_RoleDescription: DevKit.WebApi.StringValue;
+		msdyn_RoleDescription: string;
 		/** Soft Booked Hours */
-		msdyn_softbookedhours: DevKit.WebApi.DecimalValue;
+		msdyn_softbookedhours: number;
 		/** Enter the end date of the resource membership in a team. */
-		msdyn_To_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		msdyn_To_UtcDateOnly: Date;
 		/** Template to use for generic resource's schedule. Will be ignored if its a user or facility resource */
-		msdyn_worktemplate: DevKit.WebApi.LookupValue;
+		msdyn_worktemplate: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Shows the status of the project team. */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.msdyn_projectteam.statecode;
 		/** Reason for the status of the Project Team */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.msdyn_projectteam.statuscode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -354,4 +356,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

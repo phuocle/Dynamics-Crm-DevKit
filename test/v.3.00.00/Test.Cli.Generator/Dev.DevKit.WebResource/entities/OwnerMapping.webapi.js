@@ -4,20 +4,18 @@ var DevKit;
 (function (DevKit) {
 	'use strict';
 	DevKit.OwnerMappingApi = function (e) {
-		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
 			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-			var property = {};
 			var getFormattedValue = function () {
 				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-					return EMPTY_STRING;
+					return '';
 				}
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
 					if (entity[logicalName + l] === entityLogicalName) {
 						return entity[logicalName + f];
 					}
-					return EMPTY_STRING;
+					return '';
 				}
 				if (isMultiOptionSet) {
 					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -42,30 +40,29 @@ var DevKit;
 			var setValue = function (value) {
 				if (isMultiOptionSet) value = value.join(',');
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+					value = value.replace('{', '').replace('}', '');
 					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
 				} else {
 					upsertEntity[logicalName] = value;
 				}
 				entity[logicalName] = value;
 			};
-			Object.defineProperty(property, 'FormattedValue', {
+			Object.defineProperty(obj.FormattedValue, field, {
 				get: getFormattedValue
 			});
 			if (readOnly) {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue
 				});
 			}
 			else {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue,
 					set: setValue
 				});
 			}
-			return property;
 		}
-		var ownermapping = {
+		var _ownermapping = {
 			ComponentState: { a: 'componentstate', r: true },
 			CreatedBy: { b: 'createdby', a: '_createdby_value', c: 'systemusers', d: 'systemuser', r: true },
 			CreatedOn_UtcDateAndTime: { a: 'createdon', r: true },
@@ -92,20 +89,23 @@ var DevKit;
 		};
 		if (e === undefined) e = {};
 		var u = {};
-		for (var field in ownermapping) {
-			var a = ownermapping[field].a;
-			var b = ownermapping[field].b;
-			var c = ownermapping[field].c;
-			var d = ownermapping[field].d;
-			var g = ownermapping[field].g;
-			var r = ownermapping[field].r;
-			ownermapping[field] = webApiField(e, a, b, c, d, r, u, g);
+		var ownermapping = {};
+		ownermapping.ODataEntity = e;
+		ownermapping.FormattedValue = {};
+		for (var field in _ownermapping) {
+			var a = _ownermapping[field].a;
+			var b = _ownermapping[field].b;
+			var c = _ownermapping[field].c;
+			var d = _ownermapping[field].d;
+			var g = _ownermapping[field].g;
+			var r = _ownermapping[field].r;
+			webApiField(ownermapping, field, e, a, b, c, d, r, u, g);
 		}
 		ownermapping.Entity = u;
 		ownermapping.EntityName = 'ownermapping';
 		ownermapping.EntityCollectionName = 'ownermappings';
 		ownermapping['@odata.etag'] = e['@odata.etag'];
-		ownermapping.getAliasedValue = function (alias, isMultiOptionSet) {
+		ownermapping.getAliasedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias] === undefined || e[alias] === null) {
 				return null;
 			}
@@ -114,7 +114,7 @@ var DevKit;
 			}
 			return e[alias];
 		}
-		ownermapping.getAliasedFormattedValue = function (alias, isMultiOptionSet) {
+		ownermapping.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
 				return EMPTY_STRING;
 			}

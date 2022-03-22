@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,26 +30,26 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Body of application file */
-		Body: DevKit.WebApi.StringValue;
+		Body: string;
 		/** Unique identifier of the user who created the application file. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the application file was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the applicationfile. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Unique identifier for application file instances */
-		FileId: DevKit.WebApi.GuidValue;
+		FileId: string;
 		/** Unique identifier of the user who last modified the application file. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the application file was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the applicationfile. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** File name */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Unique identifier for the organization */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly OrganizationId: string;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -70,4 +72,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

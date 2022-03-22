@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,49 +30,49 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** The Activity Id. */
-		ActivityId: DevKit.WebApi.GuidValue;
+		ActivityId: string;
 		/** The Correlation Id. */
-		CorrelationId: DevKit.WebApi.GuidValue;
+		CorrelationId: string;
 		/** DateTime of the end of the solution event. */
-		EndTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		EndTime_UtcDateAndTime: Date;
 		/** The error code of the operation performed on the solution. */
-		ErrorCode: DevKit.WebApi.IntegerValue;
+		ErrorCode: number;
 		/** The Exception Message. */
-		ExceptionMessage: DevKit.WebApi.StringValue;
+		ExceptionMessage: string;
 		/** The Exception Stack. */
-		ExceptionStack: DevKit.WebApi.StringValue;
+		ExceptionStack: string;
 		/** Is Solution Managed */
-		IsManaged: DevKit.WebApi.BooleanValue;
+		IsManaged: boolean;
 		/** Is the solution published by a Microsoft publisher. */
-		IsMicrosoftPublisher: DevKit.WebApi.BooleanValue;
+		IsMicrosoftPublisher: boolean;
 		/** Does the event overwrite customizations. */
-		IsOverwriteCustomizations: DevKit.WebApi.BooleanValue;
+		IsOverwriteCustomizations: boolean;
 		/** Is Solution Patch */
-		IsPatch: DevKit.WebApi.BooleanValue;
+		IsPatch: boolean;
 		/** The operation performed on the solution. */
-		Operation: DevKit.WebApi.OptionSetValue;
+		Operation: OptionSet.SolutionHistoryData.Operation;
 		/** Name of the package. */
-		PackageName: DevKit.WebApi.StringValue;
+		PackageName: string;
 		/** Version of the package. */
-		PackageVersion: DevKit.WebApi.StringValue;
+		PackageVersion: string;
 		/** Name of the solution's publisher. */
-		PublisherName: DevKit.WebApi.StringValue;
+		PublisherName: string;
 		/** The result of the operation performed on the solution. */
-		Result: DevKit.WebApi.IntegerValue;
+		Result: number;
 		/** Unique identifier for entity instances */
-		SolutionHistoryDataId: DevKit.WebApi.GuidValue;
+		SolutionHistoryDataId: string;
 		/** The Solution. */
-		SolutionId: DevKit.WebApi.GuidValue;
+		SolutionId: string;
 		/** Name of the solution. */
-		SolutionName: DevKit.WebApi.StringValue;
+		SolutionName: string;
 		/** The Version of the Solution. */
-		SolutionVersion: DevKit.WebApi.StringValue;
+		SolutionVersion: string;
 		/** DateTime of the start of the solution event. */
-		StartTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		StartTime_UtcDateAndTime: Date;
 		/** The status of the operation performed on the solution. */
-		Status: DevKit.WebApi.OptionSetValue;
+		Status: OptionSet.SolutionHistoryData.Status;
 		/** The suboperation performed on the solution. */
-		SubOperation: DevKit.WebApi.OptionSetValue;
+		SubOperation: OptionSet.SolutionHistoryData.SubOperation;
 	}
 }
 declare namespace OptionSet {
@@ -119,4 +121,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

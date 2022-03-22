@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,21 +30,21 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier for entity instances */
-		availabletimesId: DevKit.WebApi.GuidValue;
+		availabletimesId: string;
 		/** The name of the available times virtual entity. */
-		Name: DevKit.WebApi.StringValue;
-		Resources: DevKit.WebApi.StringValue;
-		ResourcesJson: DevKit.WebApi.StringValue;
-		ScheduledEnd_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		Name: string;
+		Resources: string;
+		ResourcesJson: string;
+		ScheduledEnd_UtcDateAndTime: Date;
 		/** Scheduled End Local Time */
-		ScheduledEndLocalTime: DevKit.WebApi.StringValue;
-		ScheduledStart_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		ScheduledEndLocalTime: string;
+		ScheduledStart_UtcDateAndTime: Date;
 		/** Scheduled Start Local Time */
-		ScheduledStartLocalTime: DevKit.WebApi.StringValue;
+		ScheduledStartLocalTime: string;
 		/** Site */
-		Site: DevKit.WebApi.StringValue;
+		Site: string;
 		/** Site Identifier */
-		SiteId: DevKit.WebApi.GuidValue;
+		SiteId: string;
 	}
 }
 declare namespace OptionSet {
@@ -65,4 +67,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

@@ -55,8 +55,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -64,53 +66,53 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Shows the data value at which an error occurred during the quick campaign. */
-		AdditionalInfo: DevKit.WebApi.StringValue;
+		AdditionalInfo: string;
 		/** Shows the quick campaign record that the log applies to. This information is used to relate log data to the parent quick campaign. */
-		BulkOperationId: DevKit.WebApi.LookupValue;
+		BulkOperationId: string;
 		/** Unique identifier of the bulk operation log. */
-		BulkOperationLogId: DevKit.WebApi.GuidValue;
+		BulkOperationLogId: string;
 		/** Shows the campaign activity record that the log applies to. This information is used to relate log data to the parent campaign activity. */
-		CampaignActivityId: DevKit.WebApi.LookupValue;
+		CampaignActivityId: string;
 		/** Choose the activity or other item created by the bulk operation. */
-		createdobjectid_account: DevKit.WebApi.LookupValue;
+		createdobjectid_account: string;
 		/** Choose the activity or other item created by the bulk operation. */
-		createdobjectid_activitypointer: DevKit.WebApi.LookupValue;
+		createdobjectid_activitypointer: string;
 		/** Choose the activity or other item created by the bulk operation. */
-		createdobjectid_contact: DevKit.WebApi.LookupValue;
+		createdobjectid_contact: string;
 		/** Choose the activity or other item created by the bulk operation. */
-		createdobjectid_lead: DevKit.WebApi.LookupValue;
+		createdobjectid_lead: string;
 		/** Choose the activity or other item created by the bulk operation. */
-		createdobjectid_opportunity: DevKit.WebApi.LookupValue;
+		createdobjectid_opportunity: string;
 		/** The error description formatted. */
-		ErrorDescriptionFormatted: DevKit.WebApi.StringValue;
+		ErrorDescriptionFormatted: string;
 		/** Shows the error code that is used to troubleshoot issues in the bulk operation. */
-		ErrorNumber: DevKit.WebApi.IntegerValueReadonly;
+		readonly ErrorNumber: number;
 		/** The error number formatted. */
-		ErrorNumberFormatted: DevKit.WebApi.StringValue;
+		ErrorNumberFormatted: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** name */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValueReadonly;
+		readonly OwnerId_team: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Choose the account, contact, lead, or list that the bulk operation log item applies to. */
-		regardingobjectid_account: DevKit.WebApi.LookupValue;
+		regardingobjectid_account: string;
 		/** Choose the account, contact, lead, or list that the bulk operation log item applies to. */
-		regardingobjectid_contact: DevKit.WebApi.LookupValue;
+		regardingobjectid_contact: string;
 		/** Choose the account, contact, lead, or list that the bulk operation log item applies to. */
-		regardingobjectid_lead: DevKit.WebApi.LookupValue;
+		regardingobjectid_lead: string;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -133,4 +135,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

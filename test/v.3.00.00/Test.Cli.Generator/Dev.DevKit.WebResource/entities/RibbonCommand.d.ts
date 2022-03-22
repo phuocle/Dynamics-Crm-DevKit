@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,42 +30,42 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** The command's Id */
-		Command: DevKit.WebApi.StringValue;
+		Command: string;
 		/** The JScript library and function to run when this command is executed. */
-		CommandDefinition: DevKit.WebApi.StringValue;
+		CommandDefinition: string;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.RibbonCommand.ComponentState;
 		/** Shows who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics CRM options. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** The entity this rule applies to, also the entity this rule was imported from, will be exported to. */
-		Entity1: DevKit.WebApi.StringValue;
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		Entity1: string;
+		readonly IsManaged: boolean;
 		/** Shows who last updated the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics CRM options. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Shows who last updated the record on behalf of another user. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Unique identifier of the organization. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** For internal use only. */
-		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly OverwriteTime_UtcDateOnly: Date;
 		/** Unique identifier. */
-		RibbonCommandId: DevKit.WebApi.GuidValue;
+		RibbonCommandId: string;
 		/** Unique identifier of the form used when synchronizing customizations for the Microsoft Dynamics 365 client for Outlook. */
-		RibbonCommandUniqueId: DevKit.WebApi.GuidValueReadonly;
+		readonly RibbonCommandUniqueId: string;
 		/** Unique identifier of the ribbon customization with which the ribbon command is associated. */
-		RibbonCustomizationId: DevKit.WebApi.LookupValue;
+		RibbonCustomizationId: string;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** For internal use only. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SupportingSolutionId: string;
 		/** Represents a version of customizations to be synchronized with the Microsoft Dynamics 365 client for Outlook. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -96,4 +98,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

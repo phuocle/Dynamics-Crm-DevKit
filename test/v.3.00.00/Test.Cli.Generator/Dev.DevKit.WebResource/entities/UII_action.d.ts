@@ -100,8 +100,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -109,74 +111,74 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Help text used to describe action parameters */
-		msdyusd_Help: DevKit.WebApi.StringValue;
-		msdyusd_UnifiedServiceDeskCreated: DevKit.WebApi.BooleanValue;
+		msdyusd_Help: string;
+		msdyusd_UnifiedServiceDeskCreated: boolean;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Status of the UII Action */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.UII_action.statecode;
 		/** Reason for the status of the UII Action */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.UII_action.statuscode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Unique identifier for entity instances */
-		UII_actionId: DevKit.WebApi.GuidValue;
+		UII_actionId: string;
 		/** Determines the mode of automation for this action */
-		UII_AutomationMode: DevKit.WebApi.OptionSetValue;
+		UII_AutomationMode: OptionSet.UII_action.UII_AutomationMode;
 		/** THis attribute captures the additional data in an xml format which can be used by the action. */
-		UII_ExtensionsXML: DevKit.WebApi.StringValue;
+		UII_ExtensionsXML: string;
 		/** Every Action should be mapped to a Hosted Application. The Hosted Application can have many Actions. */
-		uii_hostedapplicationid: DevKit.WebApi.LookupValue;
+		uii_hostedapplicationid: string;
 		/** sets whether this action is executed as default action for the hosted application */
-		UII_isDefault: DevKit.WebApi.BooleanValue;
+		UII_isDefault: boolean;
 		/** Focus the application after the action is completed */
-		UII_isFocussedApplication: DevKit.WebApi.BooleanValue;
+		UII_isFocussedApplication: boolean;
 		/** Run automation asynchronously to desktop thread */
-		UII_isRunModeAsynchronous: DevKit.WebApi.BooleanValue;
+		UII_isRunModeAsynchronous: boolean;
 		/** Specify the Method to be used to Navigate */
-		UII_Method: DevKit.WebApi.OptionSetValue;
+		UII_Method: OptionSet.UII_action.UII_Method;
 		/** The name of the custom entity. */
-		UII_name: DevKit.WebApi.StringValue;
+		UII_name: string;
 		/** Speify the Query String needs to be added to the URL attribute. */
-		UII_QueryString: DevKit.WebApi.StringValue;
+		UII_QueryString: string;
 		/** Captures the Script path file which will be executed on selection of No Automation mode. */
-		UII_ScriptFilePathtoRun: DevKit.WebApi.StringValue;
+		UII_ScriptFilePathtoRun: string;
 		/** Specify the URL to which the hosted web application should navigate. */
-		UII_URL: DevKit.WebApi.StringValue;
+		UII_URL: string;
 		/** Captures the Workflow Assembly Type. This is required when Workflow Automation mode is selected */
-		UII_WorkflowAssemblyType: DevKit.WebApi.StringValue;
+		UII_WorkflowAssemblyType: string;
 		/** When Workflow XAML mode is selected for automation mode, this attribute captures the Rules xml. */
-		UII_WorkflowRules: DevKit.WebApi.StringValue;
+		UII_WorkflowRules: string;
 		/** When Workflow XAML mode is selected for automation mode, this attribute captures the XAML code */
-		UII_WorkflowXAML: DevKit.WebApi.StringValue;
+		UII_WorkflowXAML: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -225,4 +227,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

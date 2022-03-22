@@ -84,8 +84,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -93,67 +95,67 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** A link to an optional configuration page for this solution. */
-		ConfigurationPageId: DevKit.WebApi.LookupValue;
+		ConfigurationPageId: string;
 		/** Unique identifier of the user who created the solution. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the solution was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the solution. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Description of the solution. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** File Id for the blob url used for file storage. */
-		FileId: DevKit.WebApi.StringValueReadonly;
+		readonly FileId: string;
 		/** User display name for the solution. */
-		FriendlyName: DevKit.WebApi.StringValue;
+		FriendlyName: string;
 		/** Date and time when the solution was installed/upgraded. */
-		InstalledOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly InstalledOn_UtcDateOnly: Date;
 		/** Information about whether the solution is api managed. */
-		IsApiManaged: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsApiManaged: boolean;
 		/** Indicates whether the solution is internal or not. */
-		IsInternal: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsInternal: boolean;
 		/** Indicates whether the solution is managed or unmanaged. */
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsManaged: boolean;
 		/** Indicates whether the solution is visible outside of the platform. */
-		IsVisible: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsVisible: boolean;
 		/** Unique identifier of the user who last modified the solution. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the solution was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the solution. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Unique identifier of the organization associated with the solution. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Unique identifier of the parent solution. Should only be non-null if this solution is a patch. */
-		ParentSolutionId: DevKit.WebApi.LookupValueReadonly;
-		PinpointAssetId: DevKit.WebApi.StringValueReadonly;
+		readonly ParentSolutionId: string;
+		readonly PinpointAssetId: string;
 		/** Identifier of the publisher of this solution in Microsoft Pinpoint. */
-		PinpointPublisherId: DevKit.WebApi.BigIntValueReadonly;
+		readonly PinpointPublisherId: number;
 		/** Default locale of the solution in Microsoft Pinpoint. */
-		PinpointSolutionDefaultLocale: DevKit.WebApi.StringValueReadonly;
+		readonly PinpointSolutionDefaultLocale: string;
 		/** Identifier of the solution in Microsoft Pinpoint. */
-		PinpointSolutionId: DevKit.WebApi.BigIntValueReadonly;
+		readonly PinpointSolutionId: number;
 		/** Unique identifier of the publisher. */
-		PublisherId: DevKit.WebApi.LookupValue;
+		PublisherId: string;
 		/** Unique identifier of the solution. */
-		SolutionId: DevKit.WebApi.GuidValue;
+		SolutionId: string;
 		/** Solution package source organization version */
-		SolutionPackageVersion: DevKit.WebApi.StringValue;
+		SolutionPackageVersion: string;
 		/** Solution Type */
-		SolutionType: DevKit.WebApi.OptionSetValue;
+		SolutionType: OptionSet.Solution.SolutionType;
 		/** The template suffix of this solution */
-		TemplateSuffix: DevKit.WebApi.StringValue;
+		TemplateSuffix: string;
 		/** thumbprint of the solution signature */
-		Thumbprint: DevKit.WebApi.StringValue;
+		Thumbprint: string;
 		/** The unique name of this solution */
-		UniqueName: DevKit.WebApi.StringValue;
+		UniqueName: string;
 		/** Date and time when the solution was updated. */
-		UpdatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly UpdatedOn_UtcDateAndTime: Date;
 		/** Contains component info for the solution upgrade operation */
-		UpgradeInfo: DevKit.WebApi.StringValueReadonly;
+		readonly UpgradeInfo: string;
 		/** Solution version, used to identify a solution for upgrades and hotfixes. */
-		Version: DevKit.WebApi.StringValue;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		Version: string;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -184,4 +186,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

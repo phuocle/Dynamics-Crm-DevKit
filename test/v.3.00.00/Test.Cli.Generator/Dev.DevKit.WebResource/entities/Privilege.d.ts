@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,40 +30,40 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Rights a user has to an instance of an entity. */
-		AccessRight: DevKit.WebApi.IntegerValue;
+		AccessRight: number;
 		/** Information that specifies whether the privilege applies to the user, the user's team, or objects shared by the user. */
-		CanBeBasic: DevKit.WebApi.BooleanValue;
+		CanBeBasic: boolean;
 		/** Information that specifies whether the privilege applies to child business units of the business unit associated with the user. */
-		CanBeDeep: DevKit.WebApi.BooleanValue;
+		CanBeDeep: boolean;
 		/** Information that specifies whether the privilege applies to the local reference of an external party. */
-		CanBeEntityReference: DevKit.WebApi.BooleanValue;
+		CanBeEntityReference: boolean;
 		/** Information that specifies whether the privilege applies to the entire organization. */
-		CanBeGlobal: DevKit.WebApi.BooleanValue;
+		CanBeGlobal: boolean;
 		/** Information that specifies whether the privilege applies to the user's business unit. */
-		CanBeLocal: DevKit.WebApi.BooleanValue;
+		CanBeLocal: boolean;
 		/** Information that specifies whether the privilege applies to parent reference of the external party. */
-		CanBeParentEntityReference: DevKit.WebApi.BooleanValue;
+		CanBeParentEntityReference: boolean;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.Privilege.ComponentState;
 		/** Version in which the component is introduced. */
-		IntroducedVersion: DevKit.WebApi.StringValue;
+		IntroducedVersion: string;
 		/** Specifies whether the privilege is disabled. */
-		IsDisabledWhenIntegrated: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsDisabledWhenIntegrated: boolean;
 		/** Information that specifies whether this component is managed. */
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsManaged: boolean;
 		/** Name of the privilege. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** For internal use only. */
-		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly OverwriteTime_UtcDateOnly: Date;
 		/** Unique identifier of the privilege. */
-		PrivilegeId: DevKit.WebApi.GuidValue;
+		PrivilegeId: string;
 		/** Unique identifier of the Privilege used when synchronizing customizations for the Microsoft Dynamics CRM client for Outlook */
-		PrivilegeRowId: DevKit.WebApi.GuidValue;
+		PrivilegeRowId: string;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** For internal use only. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly SupportingSolutionId: string;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -94,4 +96,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

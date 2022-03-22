@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,27 +30,27 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Client (subscriber) version number. */
-		ClientVersion: DevKit.WebApi.StringValue;
+		ClientVersion: string;
 		/** For internal use only. */
-		DataSize: DevKit.WebApi.IntegerValue;
+		DataSize: number;
 		/** For internal use only. */
-		DeleteObjectCount: DevKit.WebApi.IntegerValue;
+		DeleteObjectCount: number;
 		/** For internal use only. */
-		EndTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly EndTime_UtcDateOnly: Date;
 		/** For internal use only. */
-		InsertObjectCount: DevKit.WebApi.IntegerValue;
+		InsertObjectCount: number;
 		/** For internal use only. */
-		StartTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly StartTime_UtcDateOnly: Date;
 		/** For internal use only. */
-		SubscriptionId: DevKit.WebApi.LookupValue;
+		SubscriptionId: string;
 		/** For internal use only. */
-		SubscriptionSyncInfoId1: DevKit.WebApi.IntegerValueReadonly;
+		readonly SubscriptionSyncInfoId1: number;
 		/** For internal use only. */
-		SyncResult: DevKit.WebApi.BooleanValue;
+		SyncResult: boolean;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 	}
 }
 declare namespace OptionSet {
@@ -71,4 +73,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

@@ -4,20 +4,18 @@ var DevKit;
 (function (DevKit) {
 	'use strict';
 	DevKit.msdyn_effortpredictionresultApi = function (e) {
-		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
 			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-			var property = {};
 			var getFormattedValue = function () {
 				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-					return EMPTY_STRING;
+					return '';
 				}
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
 					if (entity[logicalName + l] === entityLogicalName) {
 						return entity[logicalName + f];
 					}
-					return EMPTY_STRING;
+					return '';
 				}
 				if (isMultiOptionSet) {
 					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -42,30 +40,29 @@ var DevKit;
 			var setValue = function (value) {
 				if (isMultiOptionSet) value = value.join(',');
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+					value = value.replace('{', '').replace('}', '');
 					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
 				} else {
 					upsertEntity[logicalName] = value;
 				}
 				entity[logicalName] = value;
 			};
-			Object.defineProperty(property, 'FormattedValue', {
+			Object.defineProperty(obj.FormattedValue, field, {
 				get: getFormattedValue
 			});
 			if (readOnly) {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue
 				});
 			}
 			else {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue,
 					set: setValue
 				});
 			}
-			return property;
 		}
-		var msdyn_effortpredictionresult = {
+		var _msdyn_effortpredictionresult = {
 			ComponentIdUnique: { a: 'componentidunique', r: true },
 			ComponentState: { a: 'componentstate', r: true },
 			CreatedBy: { b: 'createdby', a: '_createdby_value', c: 'systemusers', d: 'systemuser', r: true },
@@ -100,20 +97,23 @@ var DevKit;
 		};
 		if (e === undefined) e = {};
 		var u = {};
-		for (var field in msdyn_effortpredictionresult) {
-			var a = msdyn_effortpredictionresult[field].a;
-			var b = msdyn_effortpredictionresult[field].b;
-			var c = msdyn_effortpredictionresult[field].c;
-			var d = msdyn_effortpredictionresult[field].d;
-			var g = msdyn_effortpredictionresult[field].g;
-			var r = msdyn_effortpredictionresult[field].r;
-			msdyn_effortpredictionresult[field] = webApiField(e, a, b, c, d, r, u, g);
+		var msdyn_effortpredictionresult = {};
+		msdyn_effortpredictionresult.ODataEntity = e;
+		msdyn_effortpredictionresult.FormattedValue = {};
+		for (var field in _msdyn_effortpredictionresult) {
+			var a = _msdyn_effortpredictionresult[field].a;
+			var b = _msdyn_effortpredictionresult[field].b;
+			var c = _msdyn_effortpredictionresult[field].c;
+			var d = _msdyn_effortpredictionresult[field].d;
+			var g = _msdyn_effortpredictionresult[field].g;
+			var r = _msdyn_effortpredictionresult[field].r;
+			webApiField(msdyn_effortpredictionresult, field, e, a, b, c, d, r, u, g);
 		}
 		msdyn_effortpredictionresult.Entity = u;
 		msdyn_effortpredictionresult.EntityName = 'msdyn_effortpredictionresult';
 		msdyn_effortpredictionresult.EntityCollectionName = 'msdyn_effortpredictionresults';
 		msdyn_effortpredictionresult['@odata.etag'] = e['@odata.etag'];
-		msdyn_effortpredictionresult.getAliasedValue = function (alias, isMultiOptionSet) {
+		msdyn_effortpredictionresult.getAliasedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias] === undefined || e[alias] === null) {
 				return null;
 			}
@@ -122,7 +122,7 @@ var DevKit;
 			}
 			return e[alias];
 		}
-		msdyn_effortpredictionresult.getAliasedFormattedValue = function (alias, isMultiOptionSet) {
+		msdyn_effortpredictionresult.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
 				return EMPTY_STRING;
 			}

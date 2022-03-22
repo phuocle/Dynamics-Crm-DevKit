@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,23 +30,23 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of a dependency. */
-		DependencyId: DevKit.WebApi.GuidValueReadonly;
+		readonly DependencyId: string;
 		/** The dependency type of the dependency. */
-		DependencyType: DevKit.WebApi.OptionSetValueReadonly;
-		DependentComponentBaseSolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly DependencyType: OptionSet.Dependency.DependencyType;
+		readonly DependentComponentBaseSolutionId: string;
 		/** Unique identifier of the dependent component's node. */
-		DependentComponentNodeId: DevKit.WebApi.LookupValueReadonly;
-		DependentComponentObjectId: DevKit.WebApi.GuidValueReadonly;
-		DependentComponentParentId: DevKit.WebApi.GuidValueReadonly;
-		DependentComponentType: DevKit.WebApi.OptionSetValueReadonly;
-		RequiredComponentBaseSolutionId: DevKit.WebApi.GuidValueReadonly;
-		RequiredComponentIntroducedVersion: DevKit.WebApi.DoubleValueReadonly;
+		readonly DependentComponentNodeId: string;
+		readonly DependentComponentObjectId: string;
+		readonly DependentComponentParentId: string;
+		readonly DependentComponentType: OptionSet.Dependency.DependentComponentType;
+		readonly RequiredComponentBaseSolutionId: string;
+		readonly RequiredComponentIntroducedVersion: number;
 		/** Unique identifier of the required component's node */
-		RequiredComponentNodeId: DevKit.WebApi.LookupValueReadonly;
-		RequiredComponentObjectId: DevKit.WebApi.GuidValueReadonly;
-		RequiredComponentParentId: DevKit.WebApi.GuidValueReadonly;
-		RequiredComponentType: DevKit.WebApi.OptionSetValueReadonly;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly RequiredComponentNodeId: string;
+		readonly RequiredComponentObjectId: string;
+		readonly RequiredComponentParentId: string;
+		readonly RequiredComponentType: OptionSet.Dependency.RequiredComponentType;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -441,4 +443,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

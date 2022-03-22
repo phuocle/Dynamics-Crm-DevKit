@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,72 +30,72 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** For internal use only. */
-		Actions: DevKit.WebApi.StringValue;
+		Actions: string;
 		/** AdaptiveCard template. */
-		AdaptiveCardTemplate: DevKit.WebApi.StringValue;
+		AdaptiveCardTemplate: string;
 		/** Bolean option for a cardtype. */
-		BoolCardOption: DevKit.WebApi.BooleanValue;
+		BoolCardOption: boolean;
 		/** The name of the custom entity. */
-		CardName: DevKit.WebApi.StringValue;
+		CardName: string;
 		/** The CardType ENUM value. */
-		CardType1: DevKit.WebApi.IntegerValue;
+		CardType1: number;
 		/** The CardTypeIcon of the card. */
-		CardTypeIcon: DevKit.WebApi.StringValue;
+		CardTypeIcon: string;
 		/** Unique identifier for entity instances */
-		CardTypeId: DevKit.WebApi.GuidValue;
+		CardTypeId: string;
 		/** Determines on which client is this card available on. */
-		ClientAvailability: DevKit.WebApi.OptionSetValue;
+		ClientAvailability: OptionSet.CardType.ClientAvailability;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Exchange rate for the currency associated with the CardType with respect to the base currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** GroupCategory dictates the grouping of cards in the Assistant. */
-		GroupCategory: DevKit.WebApi.IntegerValue;
+		GroupCategory: number;
 		/** Specifies the card group type */
-		GroupType: DevKit.WebApi.StringValue;
+		GroupType: string;
 		/** Specifies if the card type has snooze dismiss */
-		HasSnoozeDismiss: DevKit.WebApi.BooleanValue;
+		HasSnoozeDismiss: boolean;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Any int option for a cardtype. */
-		IntCardOption: DevKit.WebApi.IntegerValue;
+		IntCardOption: number;
 		/** IsBaseCard */
-		IsBaseCard: DevKit.WebApi.BooleanValue;
+		IsBaseCard: boolean;
 		/** IsEnabled */
-		IsEnabled: DevKit.WebApi.BooleanValue;
+		IsEnabled: boolean;
 		/** IsLiveOnly */
-		IsLiveOnly: DevKit.WebApi.BooleanValue;
+		IsLiveOnly: boolean;
 		/** IsPreviewCard */
-		IsPreviewCard: DevKit.WebApi.BooleanValue;
+		IsPreviewCard: boolean;
 		/** This column is updated by the Plugin based on the last fetched data. */
-		LastSyncTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		LastSyncTime_UtcDateAndTime: Date;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** The Priority of the CardType */
-		Priority: DevKit.WebApi.IntegerValue;
+		Priority: number;
 		/** The publisher name of card type */
-		PublisherName: DevKit.WebApi.StringValue;
+		PublisherName: string;
 		/** This column is updated by the Plugin based on the last fetched data. */
-		ScheduleTime_TimezoneDateAndTime: DevKit.WebApi.TimezoneDateAndTimeValue;
+		ScheduleTime_TimezoneDateAndTime: Date;
 		/** The soft title of the card. */
-		SoftTitle: DevKit.WebApi.StringValue;
+		SoftTitle: string;
 		/** Any string option for a cardtype. */
-		StringCardOption: DevKit.WebApi.StringValue;
+		StringCardOption: string;
 		/** The summary text of the card. */
-		SummaryText: DevKit.WebApi.StringValue;
+		SummaryText: string;
 		/** Exchange rate for the currency associated with the CardType with respect to the base currency. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		TransactionCurrencyId: string;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -124,4 +126,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

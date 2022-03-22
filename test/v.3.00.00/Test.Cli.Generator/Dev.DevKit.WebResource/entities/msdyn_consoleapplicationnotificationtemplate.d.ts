@@ -82,8 +82,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -91,69 +93,69 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Display label for the button to accept a notification */
-		msdyn_AcceptButtonText: DevKit.WebApi.StringValue;
+		msdyn_AcceptButtonText: string;
 		/** The action buttons to be displayed. (Deprecated) */
-		msdyn_ActionButtons: DevKit.WebApi.MultiOptionSetValue;
-		msdyn_AutoAcceptNotification: DevKit.WebApi.BooleanValue;
+		msdyn_ActionButtons: Array<OptionSet.msdyn_consoleapplicationnotificationtemplate.msdyn_ActionButtons>;
+		msdyn_AutoAcceptNotification: boolean;
 		/** Unique identifier for entity instances */
-		msdyn_consoleapplicationnotificationtemplateId: DevKit.WebApi.GuidValue;
+		msdyn_consoleapplicationnotificationtemplateId: string;
 		/** Display icon for this notification. Can be either an image URL or a font-icon */
-		msdyn_Icon: DevKit.WebApi.StringValue;
+		msdyn_Icon: string;
 		/** The name of this Notification template. */
-		msdyn_name: DevKit.WebApi.StringValue;
+		msdyn_name: string;
 		/** JSON object to pass key-value pairs for action buttons that are to be present on the notification */
-		msdyn_NotificationButtons: DevKit.WebApi.StringValue;
+		msdyn_NotificationButtons: string;
 		/** Deprecated field */
-		msdyn_NotificationFieldsPlaceholder: DevKit.WebApi.StringValue;
-		msdyn_RejectButtonAutoAccept: DevKit.WebApi.BooleanValue;
+		msdyn_NotificationFieldsPlaceholder: string;
+		msdyn_RejectButtonAutoAccept: boolean;
 		/** Display label for the button to reject a notification */
-		msdyn_RejectButtonText: DevKit.WebApi.StringValue;
+		msdyn_RejectButtonText: string;
 		/** Notification display order relative to other notification templates. */
-		msdyn_RenderingOrder: DevKit.WebApi.IntegerValue;
+		msdyn_RenderingOrder: number;
 		/** Show countdown for when the notification will disappear */
-		msdyn_Showtimeout: DevKit.WebApi.OptionSetValue;
+		msdyn_Showtimeout: OptionSet.msdyn_consoleapplicationnotificationtemplate.msdyn_Showtimeout;
 		/** Theme color for Notification template. */
-		msdyn_Theme: DevKit.WebApi.OptionSetValue;
+		msdyn_Theme: OptionSet.msdyn_consoleapplicationnotificationtemplate.msdyn_Theme;
 		/** Notification time out period. */
-		msdyn_Timeout: DevKit.WebApi.IntegerValue;
+		msdyn_Timeout: number;
 		/** The title to be displayed for this notification. */
-		msdyn_Title: DevKit.WebApi.StringValue;
+		msdyn_Title: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Status of the Notification Template */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.msdyn_consoleapplicationnotificationtemplate.statecode;
 		/** Reason for the status of the Notification Template */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.msdyn_consoleapplicationnotificationtemplate.statuscode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -206,4 +208,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

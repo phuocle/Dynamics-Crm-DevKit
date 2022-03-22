@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,69 +30,69 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Information about which internal address is applicable. */
-		AddressNumber: DevKit.WebApi.IntegerValue;
+		AddressNumber: number;
 		/** Type of address for the internal address. */
-		AddressTypeCode: DevKit.WebApi.OptionSetValue;
-		BusinessUnitId: DevKit.WebApi.GuidValueReadonly;
+		AddressTypeCode: OptionSet.InternalAddress.AddressTypeCode;
+		readonly BusinessUnitId: string;
 		/** City name in the internal address. */
-		City: DevKit.WebApi.StringValue;
+		City: string;
 		/** Shows the complete address. */
-		Composite: DevKit.WebApi.StringValueReadonly;
+		readonly Composite: string;
 		/** Country/region name in the internal address. */
-		Country: DevKit.WebApi.StringValue;
+		Country: string;
 		/** County name in the internal address. */
-		County: DevKit.WebApi.StringValue;
+		County: string;
 		/** Unique identifier of the user who created the internal address record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the internal address was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the internal address. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Fax number for the internal address. */
-		Fax: DevKit.WebApi.StringValue;
+		Fax: string;
 		/** Unique identifier of the internal address. */
-		InternalAddressId: DevKit.WebApi.GuidValue;
+		InternalAddressId: string;
 		/** Latitude for the internal address. */
-		Latitude: DevKit.WebApi.DoubleValue;
+		Latitude: number;
 		/** First line for entering address information. */
-		Line1: DevKit.WebApi.StringValue;
+		Line1: string;
 		/** Second line for entering address information. */
-		Line2: DevKit.WebApi.StringValue;
+		Line2: string;
 		/** Third line for entering address information. */
-		Line3: DevKit.WebApi.StringValue;
+		Line3: string;
 		/** Longitude for the internal address. */
-		Longitude: DevKit.WebApi.DoubleValue;
+		Longitude: number;
 		/** Unique identifier of the user who last modified the internal address. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the internal address record was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the internaladdress. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Name used to identify the internal address. */
-		Name: DevKit.WebApi.StringValue;
-		OrganizationId: DevKit.WebApi.GuidValueReadonly;
+		Name: string;
+		readonly OrganizationId: string;
 		/** Unique identifier of the parent object with which the internal address is associated. */
-		ParentId: DevKit.WebApi.GuidValue;
+		ParentId: string;
 		/** ZIP Code or postal code in the internal address. */
-		PostalCode: DevKit.WebApi.StringValue;
+		PostalCode: string;
 		/** Post office box number in the internal address. */
-		PostOfficeBox: DevKit.WebApi.StringValue;
+		PostOfficeBox: string;
 		/** Method of shipment for the internal address. */
-		ShippingMethodCode: DevKit.WebApi.OptionSetValue;
+		ShippingMethodCode: OptionSet.InternalAddress.ShippingMethodCode;
 		/** State or province in the internal address. */
-		StateOrProvince: DevKit.WebApi.StringValue;
+		StateOrProvince: string;
 		/** First telephone number for the internal address. */
-		Telephone1: DevKit.WebApi.StringValue;
+		Telephone1: string;
 		/** Second telephone number for an internal address. */
-		Telephone2: DevKit.WebApi.StringValue;
+		Telephone2: string;
 		/** Third telephone number for an internal address. */
-		Telephone3: DevKit.WebApi.StringValue;
+		Telephone3: string;
 		/** United Parcel Service (UPS) zone for the internal address. */
-		UPSZone: DevKit.WebApi.StringValue;
+		UPSZone: string;
 		/** UTC offset for the internal address. The difference between local time and standard Coordinated Universal Time. */
-		UTCOffset: DevKit.WebApi.IntegerValue;
+		UTCOffset: number;
 		/** Version number of the internal address. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -113,4 +115,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

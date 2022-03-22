@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,43 +30,43 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the organization associated with the solution. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Unique identifier of the post with which the post role is associated. */
-		PostId: DevKit.WebApi.LookupValue;
+		PostId: string;
 		/** Unique identifier of the post role. */
-		PostRoleId: DevKit.WebApi.GuidValue;
+		PostRoleId: string;
 		/** Choose the record that the post role relates to. */
-		regardingobjectid_account: DevKit.WebApi.LookupValue;
+		regardingobjectid_account: string;
 		/** Choose the record that the post role relates to. */
-		regardingobjectid_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_appointment: string;
 		/** Choose the record that the post role relates to. */
-		regardingobjectid_competitor: DevKit.WebApi.LookupValue;
+		regardingobjectid_competitor: string;
 		/** Choose the record that the post role relates to. */
-		regardingobjectid_contact: DevKit.WebApi.LookupValue;
+		regardingobjectid_contact: string;
 		/** Choose the record that the post role relates to. */
-		regardingobjectid_incident: DevKit.WebApi.LookupValue;
+		regardingobjectid_incident: string;
 		/** Choose the record that the post role relates to. */
-		regardingobjectid_knowledgearticle: DevKit.WebApi.LookupValue;
+		regardingobjectid_knowledgearticle: string;
 		/** Choose the record that the post role relates to. */
-		regardingobjectid_lead: DevKit.WebApi.LookupValue;
+		regardingobjectid_lead: string;
 		/** Choose the record that the post role relates to. */
-		regardingobjectid_opportunity: DevKit.WebApi.LookupValue;
+		regardingobjectid_opportunity: string;
 		/** Choose the record that the post role relates to. */
-		regardingobjectid_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_phonecall: string;
 		/** Choose the record that the post role relates to. */
-		regardingobjectid_processsession: DevKit.WebApi.LookupValue;
+		regardingobjectid_processsession: string;
 		/** Choose the record that the post role relates to. */
-		regardingobjectid_queue: DevKit.WebApi.LookupValue;
+		regardingobjectid_queue: string;
 		/** Choose the record that the post role relates to. */
-		regardingobjectid_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		regardingobjectid_recurringappointmentmaster: string;
 		/** Choose the record that the post role relates to. */
-		regardingobjectid_systemuser: DevKit.WebApi.LookupValue;
+		regardingobjectid_systemuser: string;
 		/** Choose the record that the post role relates to. */
-		regardingobjectid_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_task: string;
 		/** Choose the record that the post role relates to. */
-		regardingobjectid_team: DevKit.WebApi.LookupValue;
+		regardingobjectid_team: string;
 		/** Select the role type for the post. */
-		Type: DevKit.WebApi.OptionSetValue;
+		Type: OptionSet.PostRole.Type;
 	}
 }
 declare namespace OptionSet {
@@ -97,4 +99,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

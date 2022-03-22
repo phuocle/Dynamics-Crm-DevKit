@@ -4,20 +4,18 @@ var DevKit;
 (function (DevKit) {
 	'use strict';
 	DevKit.ConnectionApi = function (e) {
-		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
 			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-			var property = {};
 			var getFormattedValue = function () {
 				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-					return EMPTY_STRING;
+					return '';
 				}
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
 					if (entity[logicalName + l] === entityLogicalName) {
 						return entity[logicalName + f];
 					}
-					return EMPTY_STRING;
+					return '';
 				}
 				if (isMultiOptionSet) {
 					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -42,30 +40,29 @@ var DevKit;
 			var setValue = function (value) {
 				if (isMultiOptionSet) value = value.join(',');
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+					value = value.replace('{', '').replace('}', '');
 					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
 				} else {
 					upsertEntity[logicalName] = value;
 				}
 				entity[logicalName] = value;
 			};
-			Object.defineProperty(property, 'FormattedValue', {
+			Object.defineProperty(obj.FormattedValue, field, {
 				get: getFormattedValue
 			});
 			if (readOnly) {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue
 				});
 			}
 			else {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue,
 					set: setValue
 				});
 			}
-			return property;
 		}
-		var connection = {
+		var _connection = {
 			ConnectionId: { a: 'connectionid' },
 			CreatedBy: { b: 'createdby', a: '_createdby_value', c: 'systemusers', d: 'systemuser', r: true },
 			CreatedOn_UtcDateAndTime: { a: 'createdon', r: true },
@@ -177,6 +174,7 @@ var DevKit;
 			record1id_msdyn_rtv: { b: 'record1id_msdyn_rtv', a: '_record1id_value', c: 'msdyn_rtvs', d: 'msdyn_rtv' },
 			record1id_msdyn_rtvproduct: { b: 'record1id_msdyn_rtvproduct', a: '_record1id_value', c: 'msdyn_rtvproducts', d: 'msdyn_rtvproduct' },
 			record1id_msdyn_rtvsubstatus: { b: 'record1id_msdyn_rtvsubstatus', a: '_record1id_value', c: 'msdyn_rtvsubstatuses', d: 'msdyn_rtvsubstatus' },
+			record1id_msdyn_salessuggestion: { b: 'record1id_msdyn_salessuggestion', a: '_record1id_value', c: 'msdyn_salessuggestions', d: 'msdyn_salessuggestion' },
 			record1id_msdyn_sequence: { b: 'record1id_msdyn_sequence', a: '_record1id_value', c: 'msdyn_sequences', d: 'msdyn_sequence' },
 			record1id_msdyn_sequencetarget: { b: 'record1id_msdyn_sequencetarget', a: '_record1id_value', c: 'msdyn_sequencetargets', d: 'msdyn_sequencetarget' },
 			record1id_msdyn_shipvia: { b: 'record1id_msdyn_shipvia', a: '_record1id_value', c: 'msdyn_shipvias', d: 'msdyn_shipvia' },
@@ -304,6 +302,7 @@ var DevKit;
 			record2id_msdyn_rtv: { b: 'record2id_msdyn_rtv', a: '_record2id_value', c: 'msdyn_rtvs', d: 'msdyn_rtv' },
 			record2id_msdyn_rtvproduct: { b: 'record2id_msdyn_rtvproduct', a: '_record2id_value', c: 'msdyn_rtvproducts', d: 'msdyn_rtvproduct' },
 			record2id_msdyn_rtvsubstatus: { b: 'record2id_msdyn_rtvsubstatus', a: '_record2id_value', c: 'msdyn_rtvsubstatuses', d: 'msdyn_rtvsubstatus' },
+			record2id_msdyn_salessuggestion: { b: 'record2id_msdyn_salessuggestion', a: '_record2id_value', c: 'msdyn_salessuggestions', d: 'msdyn_salessuggestion' },
 			record2id_msdyn_sequence: { b: 'record2id_msdyn_sequence', a: '_record2id_value', c: 'msdyn_sequences', d: 'msdyn_sequence' },
 			record2id_msdyn_sequencetarget: { b: 'record2id_msdyn_sequencetarget', a: '_record2id_value', c: 'msdyn_sequencetargets', d: 'msdyn_sequencetarget' },
 			record2id_msdyn_shipvia: { b: 'record2id_msdyn_shipvia', a: '_record2id_value', c: 'msdyn_shipvias', d: 'msdyn_shipvia' },
@@ -352,20 +351,23 @@ var DevKit;
 		};
 		if (e === undefined) e = {};
 		var u = {};
-		for (var field in connection) {
-			var a = connection[field].a;
-			var b = connection[field].b;
-			var c = connection[field].c;
-			var d = connection[field].d;
-			var g = connection[field].g;
-			var r = connection[field].r;
-			connection[field] = webApiField(e, a, b, c, d, r, u, g);
+		var connection = {};
+		connection.ODataEntity = e;
+		connection.FormattedValue = {};
+		for (var field in _connection) {
+			var a = _connection[field].a;
+			var b = _connection[field].b;
+			var c = _connection[field].c;
+			var d = _connection[field].d;
+			var g = _connection[field].g;
+			var r = _connection[field].r;
+			webApiField(connection, field, e, a, b, c, d, r, u, g);
 		}
 		connection.Entity = u;
 		connection.EntityName = 'connection';
 		connection.EntityCollectionName = 'connections';
 		connection['@odata.etag'] = e['@odata.etag'];
-		connection.getAliasedValue = function (alias, isMultiOptionSet) {
+		connection.getAliasedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias] === undefined || e[alias] === null) {
 				return null;
 			}
@@ -374,7 +376,7 @@ var DevKit;
 			}
 			return e[alias];
 		}
-		connection.getAliasedFormattedValue = function (alias, isMultiOptionSet) {
+		connection.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
 				return EMPTY_STRING;
 			}
@@ -393,23 +395,23 @@ var OptionSet;
 		Record1ObjectTypeCode : {
 			Account: 1,
 			Activity: 4200,
-			Agreement: 10523,
-			Agreement_Booking_Date: 10524,
-			Agreement_Booking_Incident: 10525,
-			Agreement_Booking_Product: 10526,
-			Agreement_Booking_Service: 10527,
-			Agreement_Booking_Service_Task: 10528,
-			Agreement_Booking_Setup: 10529,
-			Agreement_Invoice_Date: 10530,
-			Agreement_Invoice_Product: 10531,
-			Agreement_Invoice_Setup: 10532,
+			Agreement: 10524,
+			Agreement_Booking_Date: 10525,
+			Agreement_Booking_Incident: 10526,
+			Agreement_Booking_Product: 10527,
+			Agreement_Booking_Service: 10528,
+			Agreement_Booking_Service_Task: 10529,
+			Agreement_Booking_Setup: 10530,
+			Agreement_Invoice_Date: 10531,
+			Agreement_Invoice_Product: 10532,
+			Agreement_Invoice_Setup: 10533,
 			Appointment: 4201,
-			Assignment_Map: 10277,
-			Assignment_Rule: 10274,
-			Booking_Alert: 10400,
-			Booking_Alert_Status: 10401,
-			Booking_Rule: 10403,
-			Booking_Timestamp: 10535,
+			Assignment_Map: 10283,
+			Assignment_Rule: 10280,
+			Booking_Alert: 10404,
+			Booking_Alert_Status: 10405,
+			Booking_Rule: 10407,
+			Booking_Timestamp: 10536,
 			Campaign: 4400,
 			Campaign_Activity: 4402,
 			Case: 112,
@@ -417,126 +419,127 @@ var OptionSet;
 			Competitor: 123,
 			Contact: 2,
 			Contract: 1010,
-			Conversation: 10702,
-			Customer_Asset: 10128,
-			Customer_Voice_alert: 10294,
-			Customer_Voice_survey_invite: 10304,
-			Customer_Voice_survey_response: 10306,
+			Conversation: 10707,
+			Customer_Asset: 10141,
+			Customer_Voice_alert: 10313,
+			Customer_Voice_survey_invite: 10323,
+			Customer_Voice_survey_response: 10325,
 			Email: 4202,
 			Entitlement: 9700,
 			Entitlement_Channel: 9701,
 			Entitlement_Template_Channel: 9703,
 			FacilityEquipment: 4000,
 			Fax: 4204,
-			Fulfillment_Preference: 10423,
+			Fulfillment_Preference: 10427,
 			Goal: 9600,
-			Incident_Type_Characteristic: 10546,
-			Incident_Type_Product: 10547,
-			Incident_Type_Service: 10548,
-			Inventory_Adjustment: 10552,
-			Inventory_Adjustment_Product: 10553,
-			Inventory_Journal: 10554,
-			Inventory_Transfer: 10555,
+			Incident_Type_Characteristic: 10547,
+			Incident_Type_Product: 10548,
+			Incident_Type_Service: 10549,
+			Inventory_Adjustment: 10553,
+			Inventory_Adjustment_Product: 10554,
+			Inventory_Journal: 10555,
+			Inventory_Transfer: 10556,
 			Invoice: 1090,
-			IoT_Alert: 10138,
-			IoT_Device: 10139,
-			IoT_Device_Category: 10140,
-			IoT_Device_Command: 10141,
-			IoT_Device_Registration_History: 10145,
+			IoT_Alert: 10152,
+			IoT_Device: 10153,
+			IoT_Device_Category: 10154,
+			IoT_Device_Command: 10155,
+			IoT_Device_Registration_History: 10159,
 			Knowledge_Article: 9953,
 			Knowledge_Base_Record: 9930,
 			Lead: 4,
 			Letter: 4207,
 			Marketing_List: 4300,
-			Ongoing_conversation_Deprecated: 10692,
+			Ongoing_conversation_Deprecated: 10697,
 			Opportunity: 3,
-			Option: 10819,
+			Option: 10823,
 			Order: 1088,
-			Outbound_message: 10813,
-			Payment: 10560,
-			Payment_Detail: 10561,
-			Payment_Method: 10562,
-			Payment_Term: 10563,
+			Outbound_message: 10817,
+			Payment: 10561,
+			Payment_Detail: 10562,
+			Payment_Method: 10563,
+			Payment_Term: 10564,
 			Phone_Call: 4210,
 			Position: 50,
-			Postal_Code: 10564,
+			Postal_Code: 10565,
 			Price_List: 1022,
-			Process_Notes: 10468,
+			Process_Notes: 10472,
 			Process_Session: 4710,
 			Product: 1024,
-			Product_Inventory: 10565,
-			Profile_Album: 10289,
-			Project: 10469,
-			Project_Service_Approval: 10430,
-			Project_Team_Member: 10477,
-			Purchase_Order: 10566,
-			Purchase_Order_Bill: 10567,
-			Purchase_Order_Product: 10568,
-			Purchase_Order_Receipt: 10569,
-			Purchase_Order_Receipt_Product: 10570,
-			Purchase_Order_SubStatus: 10571,
+			Product_Inventory: 10566,
+			Profile_Album: 10308,
+			Project: 10473,
+			Project_Service_Approval: 10434,
+			Project_Team_Member: 10481,
+			Purchase_Order: 10567,
+			Purchase_Order_Bill: 10568,
+			Purchase_Order_Product: 10569,
+			Purchase_Order_Receipt: 10570,
+			Purchase_Order_Receipt_Product: 10571,
+			Purchase_Order_SubStatus: 10572,
 			Quote: 1084,
-			Quote_Booking_Incident: 10572,
-			Quote_Booking_Product: 10573,
-			Quote_Booking_Service: 10574,
-			Quote_Booking_Service_Task: 10575,
+			Quote_Booking_Incident: 10573,
+			Quote_Booking_Product: 10574,
+			Quote_Booking_Service: 10575,
+			Quote_Booking_Service_Task: 10576,
 			Recurring_Appointment: 4251,
 			Resource_Group: 4007,
-			Resource_Restriction_Deprecated: 10600,
-			Resource_Territory: 10419,
-			RMA: 10580,
-			RMA_Product: 10581,
-			RMA_Receipt: 10582,
-			RMA_Receipt_Product: 10583,
-			RMA_SubStatus: 10584,
-			RTV: 10585,
-			RTV_Product: 10586,
-			RTV_Substatus: 10587,
+			Resource_Restriction_Deprecated: 10601,
+			Resource_Territory: 10423,
+			RMA: 10581,
+			RMA_Product: 10582,
+			RMA_Receipt: 10583,
+			RMA_Receipt_Product: 10584,
+			RMA_SubStatus: 10585,
+			RTV: 10586,
+			RTV_Product: 10587,
+			RTV_Substatus: 10588,
 			Scheduling_Group: 4005,
-			Sequence: 10268,
-			Sequence_Target: 10270,
+			Sequence: 10273,
+			Sequence_Target: 10275,
 			Service_Activity: 4214,
-			Session: 10717,
-			Ship_Via: 10589,
+			Session: 10721,
+			Ship_Via: 10590,
 			Social_Activity: 4216,
 			Social_Profile: 99,
-			System_User_Scheduler_Setting: 10422,
+			Suggestion: 10289,
+			System_User_Scheduler_Setting: 10426,
 			Task: 4212,
-			Tax_Code: 10590,
+			Tax_Code: 10591,
 			Team: 9,
 			Territory: 2013,
-			Time_Group_Detail: 10424,
-			Time_Off_Request: 10592,
-			Toolbar_Button: 10842,
+			Time_Group_Detail: 10428,
+			Time_Off_Request: 10593,
+			Toolbar_Button: 10846,
 			User: 8,
-			Warehouse: 10594,
-			Work_Order: 10595,
-			Work_Order_Characteristic_Deprecated: 10596,
-			Work_Order_Incident: 10598,
-			Work_Order_Product: 10599,
-			Work_Order_Service: 10601,
-			Work_Order_Service_Task: 10602
+			Warehouse: 10595,
+			Work_Order: 10596,
+			Work_Order_Characteristic_Deprecated: 10597,
+			Work_Order_Incident: 10599,
+			Work_Order_Product: 10600,
+			Work_Order_Service: 10602,
+			Work_Order_Service_Task: 10603
 		},
 		Record2ObjectTypeCode : {
 			Account: 1,
 			Activity: 4200,
-			Agreement: 10523,
-			Agreement_Booking_Date: 10524,
-			Agreement_Booking_Incident: 10525,
-			Agreement_Booking_Product: 10526,
-			Agreement_Booking_Service: 10527,
-			Agreement_Booking_Service_Task: 10528,
-			Agreement_Booking_Setup: 10529,
-			Agreement_Invoice_Date: 10530,
-			Agreement_Invoice_Product: 10531,
-			Agreement_Invoice_Setup: 10532,
+			Agreement: 10524,
+			Agreement_Booking_Date: 10525,
+			Agreement_Booking_Incident: 10526,
+			Agreement_Booking_Product: 10527,
+			Agreement_Booking_Service: 10528,
+			Agreement_Booking_Service_Task: 10529,
+			Agreement_Booking_Setup: 10530,
+			Agreement_Invoice_Date: 10531,
+			Agreement_Invoice_Product: 10532,
+			Agreement_Invoice_Setup: 10533,
 			Appointment: 4201,
-			Assignment_Map: 10277,
-			Assignment_Rule: 10274,
-			Booking_Alert: 10400,
-			Booking_Alert_Status: 10401,
-			Booking_Rule: 10403,
-			Booking_Timestamp: 10535,
+			Assignment_Map: 10283,
+			Assignment_Rule: 10280,
+			Booking_Alert: 10404,
+			Booking_Alert_Status: 10405,
+			Booking_Rule: 10407,
+			Booking_Timestamp: 10536,
 			Campaign: 4400,
 			Campaign_Activity: 4402,
 			Case: 112,
@@ -544,105 +547,106 @@ var OptionSet;
 			Competitor: 123,
 			Contact: 2,
 			Contract: 1010,
-			Conversation: 10702,
-			Customer_Asset: 10128,
-			Customer_Voice_alert: 10294,
-			Customer_Voice_survey_invite: 10304,
-			Customer_Voice_survey_response: 10306,
+			Conversation: 10707,
+			Customer_Asset: 10141,
+			Customer_Voice_alert: 10313,
+			Customer_Voice_survey_invite: 10323,
+			Customer_Voice_survey_response: 10325,
 			Email: 4202,
 			Entitlement: 9700,
 			Entitlement_Channel: 9701,
 			Entitlement_Template_Channel: 9703,
 			FacilityEquipment: 4000,
 			Fax: 4204,
-			Fulfillment_Preference: 10423,
+			Fulfillment_Preference: 10427,
 			Goal: 9600,
-			Incident_Type_Characteristic: 10546,
-			Incident_Type_Product: 10547,
-			Incident_Type_Service: 10548,
-			Inventory_Adjustment: 10552,
-			Inventory_Adjustment_Product: 10553,
-			Inventory_Journal: 10554,
-			Inventory_Transfer: 10555,
+			Incident_Type_Characteristic: 10547,
+			Incident_Type_Product: 10548,
+			Incident_Type_Service: 10549,
+			Inventory_Adjustment: 10553,
+			Inventory_Adjustment_Product: 10554,
+			Inventory_Journal: 10555,
+			Inventory_Transfer: 10556,
 			Invoice: 1090,
-			IoT_Alert: 10138,
-			IoT_Device: 10139,
-			IoT_Device_Category: 10140,
-			IoT_Device_Command: 10141,
-			IoT_Device_Registration_History: 10145,
+			IoT_Alert: 10152,
+			IoT_Device: 10153,
+			IoT_Device_Category: 10154,
+			IoT_Device_Command: 10155,
+			IoT_Device_Registration_History: 10159,
 			Knowledge_Article: 9953,
 			Knowledge_Base_Record: 9930,
 			Lead: 4,
 			Letter: 4207,
 			Marketing_List: 4300,
-			Ongoing_conversation_Deprecated: 10692,
+			Ongoing_conversation_Deprecated: 10697,
 			Opportunity: 3,
-			Option: 10819,
+			Option: 10823,
 			Order: 1088,
-			Outbound_message: 10813,
-			Payment: 10560,
-			Payment_Detail: 10561,
-			Payment_Method: 10562,
-			Payment_Term: 10563,
+			Outbound_message: 10817,
+			Payment: 10561,
+			Payment_Detail: 10562,
+			Payment_Method: 10563,
+			Payment_Term: 10564,
 			Phone_Call: 4210,
 			Position: 50,
-			Postal_Code: 10564,
+			Postal_Code: 10565,
 			Price_List: 1022,
-			Process_Notes: 10468,
+			Process_Notes: 10472,
 			Process_Session: 4710,
 			Product: 1024,
-			Product_Inventory: 10565,
-			Profile_Album: 10289,
-			Project: 10469,
-			Project_Service_Approval: 10430,
-			Project_Team_Member: 10477,
-			Purchase_Order: 10566,
-			Purchase_Order_Bill: 10567,
-			Purchase_Order_Product: 10568,
-			Purchase_Order_Receipt: 10569,
-			Purchase_Order_Receipt_Product: 10570,
-			Purchase_Order_SubStatus: 10571,
+			Product_Inventory: 10566,
+			Profile_Album: 10308,
+			Project: 10473,
+			Project_Service_Approval: 10434,
+			Project_Team_Member: 10481,
+			Purchase_Order: 10567,
+			Purchase_Order_Bill: 10568,
+			Purchase_Order_Product: 10569,
+			Purchase_Order_Receipt: 10570,
+			Purchase_Order_Receipt_Product: 10571,
+			Purchase_Order_SubStatus: 10572,
 			Quote: 1084,
-			Quote_Booking_Incident: 10572,
-			Quote_Booking_Product: 10573,
-			Quote_Booking_Service: 10574,
-			Quote_Booking_Service_Task: 10575,
+			Quote_Booking_Incident: 10573,
+			Quote_Booking_Product: 10574,
+			Quote_Booking_Service: 10575,
+			Quote_Booking_Service_Task: 10576,
 			Recurring_Appointment: 4251,
 			Resource_Group: 4007,
-			Resource_Restriction_Deprecated: 10600,
-			Resource_Territory: 10419,
-			RMA: 10580,
-			RMA_Product: 10581,
-			RMA_Receipt: 10582,
-			RMA_Receipt_Product: 10583,
-			RMA_SubStatus: 10584,
-			RTV: 10585,
-			RTV_Product: 10586,
-			RTV_Substatus: 10587,
+			Resource_Restriction_Deprecated: 10601,
+			Resource_Territory: 10423,
+			RMA: 10581,
+			RMA_Product: 10582,
+			RMA_Receipt: 10583,
+			RMA_Receipt_Product: 10584,
+			RMA_SubStatus: 10585,
+			RTV: 10586,
+			RTV_Product: 10587,
+			RTV_Substatus: 10588,
 			Scheduling_Group: 4005,
-			Sequence: 10268,
-			Sequence_Target: 10270,
+			Sequence: 10273,
+			Sequence_Target: 10275,
 			Service_Activity: 4214,
-			Session: 10717,
-			Ship_Via: 10589,
+			Session: 10721,
+			Ship_Via: 10590,
 			Social_Activity: 4216,
 			Social_Profile: 99,
-			System_User_Scheduler_Setting: 10422,
+			Suggestion: 10289,
+			System_User_Scheduler_Setting: 10426,
 			Task: 4212,
-			Tax_Code: 10590,
+			Tax_Code: 10591,
 			Team: 9,
 			Territory: 2013,
-			Time_Group_Detail: 10424,
-			Time_Off_Request: 10592,
-			Toolbar_Button: 10842,
+			Time_Group_Detail: 10428,
+			Time_Off_Request: 10593,
+			Toolbar_Button: 10846,
 			User: 8,
-			Warehouse: 10594,
-			Work_Order: 10595,
-			Work_Order_Characteristic_Deprecated: 10596,
-			Work_Order_Incident: 10598,
-			Work_Order_Product: 10599,
-			Work_Order_Service: 10601,
-			Work_Order_Service_Task: 10602
+			Warehouse: 10595,
+			Work_Order: 10596,
+			Work_Order_Characteristic_Deprecated: 10597,
+			Work_Order_Incident: 10599,
+			Work_Order_Product: 10600,
+			Work_Order_Service: 10602,
+			Work_Order_Service_Task: 10603
 		},
 		StateCode : {
 			Active: 0,

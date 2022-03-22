@@ -87,8 +87,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -96,75 +98,75 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Shows the sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Shows who last updated the record on behalf of another user. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Work Order this product is allocated to */
-		msdyn_AllocatedToWorkOrder: DevKit.WebApi.LookupValue;
+		msdyn_AllocatedToWorkOrder: string;
 		/** For internal use only. */
-		msdyn_InternalFlags: DevKit.WebApi.StringValue;
+		msdyn_InternalFlags: string;
 		/** The Inventory Adjustment Product record related to this journal */
-		msdyn_InventoryAdjustmentProduct: DevKit.WebApi.LookupValue;
+		msdyn_InventoryAdjustmentProduct: string;
 		/** Shows the entity instances. */
-		msdyn_inventoryjournalId: DevKit.WebApi.GuidValue;
+		msdyn_inventoryjournalId: string;
 		/** Shows the transaction type of this journal. */
-		msdyn_JournalType: DevKit.WebApi.OptionSetValue;
+		msdyn_JournalType: OptionSet.msdyn_inventoryjournal.msdyn_JournalType;
 		/** Enter the name of the custom entity. */
-		msdyn_name: DevKit.WebApi.StringValue;
+		msdyn_name: string;
 		/** Indicates the Journal reversed by this journal record */
-		msdyn_OriginatingJournal: DevKit.WebApi.LookupValue;
+		msdyn_OriginatingJournal: string;
 		/** Product this journal relates to */
-		msdyn_Product: DevKit.WebApi.LookupValue;
+		msdyn_Product: string;
 		/** The Purchase Order Product record related to this journal */
-		msdyn_PurchaseOrderProduct: DevKit.WebApi.LookupValue;
+		msdyn_PurchaseOrderProduct: string;
 		/** Unique identifier for Purchase Order Receipt Product associated with Inventory Journal. */
-		msdyn_PurchaseOrderReceiptProduct: DevKit.WebApi.LookupValue;
+		msdyn_PurchaseOrderReceiptProduct: string;
 		/** Enter the quantity affected. A positive quantity indicates the receipt of this product into the specified warehouse, whereas a negative indicates a withdrawal. */
-		msdyn_Quantity: DevKit.WebApi.DoubleValue;
+		msdyn_Quantity: number;
 		/** Indicates if this Journal reverses a previous journal record */
-		msdyn_Reversal: DevKit.WebApi.BooleanValue;
+		msdyn_Reversal: boolean;
 		/** The RMA Receipt Product record related to this journal */
-		msdyn_RMAReceiptProduct: DevKit.WebApi.LookupValue;
+		msdyn_RMAReceiptProduct: string;
 		/** Shows the transaction type of this journal. */
-		msdyn_TransactionType: DevKit.WebApi.OptionSetValue;
+		msdyn_TransactionType: OptionSet.msdyn_inventoryjournal.msdyn_TransactionType;
 		/** Unit of product used */
-		msdyn_Unit: DevKit.WebApi.LookupValue;
+		msdyn_Unit: string;
 		/** Warehouse affected by this transaction */
-		msdyn_Warehouse: DevKit.WebApi.LookupValue;
+		msdyn_Warehouse: string;
 		/** The Work Order Product record related to this journal */
-		msdyn_WorkOrderProduct: DevKit.WebApi.LookupValue;
+		msdyn_WorkOrderProduct: string;
 		/** Shows the date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Status of the Inventory Journal */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.msdyn_inventoryjournal.statecode;
 		/** Reason for the status of the Inventory Journal */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.msdyn_inventoryjournal.statuscode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Shows the time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -223,4 +225,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

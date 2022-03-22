@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,32 +30,32 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
-		ExchangeEntryId: DevKit.WebApi.StringValue;
-		ExchangeSyncIdmappingId: DevKit.WebApi.GuidValue;
-		FromCrmChangeType: DevKit.WebApi.IntegerValue;
-		IsDeletedInExchange: DevKit.WebApi.BooleanValue;
-		IsUnlinkedInCRM: DevKit.WebApi.BooleanValue;
-		ItemSubject: DevKit.WebApi.StringValue;
-		LastSyncError: DevKit.WebApi.StringValue;
-		LastSyncErrorCode: DevKit.WebApi.IntegerValue;
+		readonly CreatedOn_UtcDateAndTime: Date;
+		ExchangeEntryId: string;
+		ExchangeSyncIdmappingId: string;
+		FromCrmChangeType: number;
+		IsDeletedInExchange: boolean;
+		IsUnlinkedInCRM: boolean;
+		ItemSubject: string;
+		LastSyncError: string;
+		LastSyncErrorCode: number;
 		/** Last Sync Error Time */
-		LastSyncErrorOccurredOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		LastSyncErrorOccurredOn_UtcDateAndTime: Date;
 		/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
-		ObjectId: DevKit.WebApi.GuidValue;
-		ObjectTypeCode: DevKit.WebApi.IntegerValue;
+		readonly ModifiedOn_UtcDateAndTime: Date;
+		ObjectId: string;
+		ObjectTypeCode: number;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
-		Retries: DevKit.WebApi.IntegerValue;
-		ToCrmChangeType: DevKit.WebApi.IntegerValue;
-		UserDecision: DevKit.WebApi.IntegerValue;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		OwnerId_team: string;
+		readonly OwningBusinessUnit: string;
+		readonly OwningTeam: string;
+		readonly OwningUser: string;
+		Retries: number;
+		ToCrmChangeType: number;
+		UserDecision: number;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -76,4 +78,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

@@ -45,64 +45,66 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
 		EntityCollectionName: string;
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
-		AadApplicationId: DevKit.WebApi.StringValue;
-		BlobPartitionBy: DevKit.WebApi.OptionSetValue;
-		CanSyncAllMetadata: DevKit.WebApi.BooleanValue;
+		AadApplicationId: string;
+		BlobPartitionBy: OptionSet.organizationdatasyncsubscription.BlobPartitionBy;
+		CanSyncAllMetadata: boolean;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
-		DataEndpointPostingType: DevKit.WebApi.OptionSetValue;
-		DataProcessingType: DevKit.WebApi.OptionSetValue;
-		EndpointSettings: DevKit.WebApi.StringValue;
-		EntityFilters: DevKit.WebApi.StringValue;
-		EntitySettings: DevKit.WebApi.StringValue;
-		FullSyncOnly: DevKit.WebApi.BooleanValue;
+		readonly CreatedOnBehalfBy: string;
+		DataEndpointPostingType: OptionSet.organizationdatasyncsubscription.DataEndpointPostingType;
+		DataProcessingType: OptionSet.organizationdatasyncsubscription.DataProcessingType;
+		EndpointSettings: string;
+		EntityFilters: string;
+		EntitySettings: string;
+		FullSyncOnly: boolean;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
-		IsOutOfBoxSubscription: DevKit.WebApi.BooleanValue;
-		MigrationState: DevKit.WebApi.OptionSetValue;
+		ImportSequenceNumber: number;
+		IsOutOfBoxSubscription: boolean;
+		MigrationState: OptionSet.organizationdatasyncsubscription.MigrationState;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** The name of the custom entity. */
-		name: DevKit.WebApi.StringValue;
-		NeedCopyAttachmentsToBlob: DevKit.WebApi.BooleanValue;
-		NeedToCopyFilesToBlob: DevKit.WebApi.BooleanValue;
-		NewEntities: DevKit.WebApi.StringValue;
+		name: string;
+		NeedCopyAttachmentsToBlob: boolean;
+		NeedToCopyFilesToBlob: boolean;
+		NewEntities: string;
 		/** Unique identifier for entity instances */
-		organizationdatasyncsubscriptionId: DevKit.WebApi.GuidValue;
+		organizationdatasyncsubscriptionId: string;
 		/** Unique identifier for the organization */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
-		PartnerPrefix: DevKit.WebApi.StringValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
+		PartnerPrefix: string;
 		/** Status of the OrganizationDataSyncSubscription */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.organizationdatasyncsubscription.statecode;
 		/** Reason for the status of the OrganizationDataSyncSubscription */
-		statuscode: DevKit.WebApi.OptionSetValue;
-		SubscriptionEndpointStatus: DevKit.WebApi.IntegerValue;
-		SubscriptionEntities: DevKit.WebApi.StringValue;
+		statuscode: OptionSet.organizationdatasyncsubscription.statuscode;
+		SubscriptionEndpointStatus: number;
+		SubscriptionEntities: string;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
-		UnsubscribedEntities: DevKit.WebApi.StringValue;
+		TimeZoneRuleVersionNumber: number;
+		UnsubscribedEntities: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version number of OrganizationDataSyncSubscription. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -177,4 +179,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

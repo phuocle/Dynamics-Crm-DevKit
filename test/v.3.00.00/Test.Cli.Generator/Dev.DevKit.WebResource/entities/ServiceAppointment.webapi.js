@@ -4,20 +4,18 @@ var DevKit;
 (function (DevKit) {
 	'use strict';
 	DevKit.ServiceAppointmentApi = function (e) {
-		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
 			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-			var property = {};
 			var getFormattedValue = function () {
 				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-					return EMPTY_STRING;
+					return '';
 				}
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
 					if (entity[logicalName + l] === entityLogicalName) {
 						return entity[logicalName + f];
 					}
-					return EMPTY_STRING;
+					return '';
 				}
 				if (isMultiOptionSet) {
 					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -42,30 +40,29 @@ var DevKit;
 			var setValue = function (value) {
 				if (isMultiOptionSet) value = value.join(',');
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+					value = value.replace('{', '').replace('}', '');
 					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
 				} else {
 					upsertEntity[logicalName] = value;
 				}
 				entity[logicalName] = value;
 			};
-			Object.defineProperty(property, 'FormattedValue', {
+			Object.defineProperty(obj.FormattedValue, field, {
 				get: getFormattedValue
 			});
 			if (readOnly) {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue
 				});
 			}
 			else {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue,
 					set: setValue
 				});
 			}
-			return property;
 		}
-		var serviceappointment = {
+		var _serviceappointment = {
 			ActivityAdditionalParams: { a: 'activityadditionalparams' },
 			ActivityId: { a: 'activityid' },
 			ActualDurationMinutes: { a: 'actualdurationminutes' },
@@ -173,6 +170,7 @@ var DevKit;
 			regardingobjectid_msdyn_rtv_serviceappointment: { b: 'regardingobjectid_msdyn_rtv_serviceappointment', a: '_regardingobjectid_value', c: 'msdyn_rtvs', d: 'msdyn_rtv' },
 			regardingobjectid_msdyn_rtvproduct_serviceappointment: { b: 'regardingobjectid_msdyn_rtvproduct_serviceappointment', a: '_regardingobjectid_value', c: 'msdyn_rtvproducts', d: 'msdyn_rtvproduct' },
 			regardingobjectid_msdyn_rtvsubstatus_serviceappointment: { b: 'regardingobjectid_msdyn_rtvsubstatus_serviceappointment', a: '_regardingobjectid_value', c: 'msdyn_rtvsubstatuses', d: 'msdyn_rtvsubstatus' },
+			regardingobjectid_msdyn_salessuggestion_serviceappointment: { b: 'regardingobjectid_msdyn_salessuggestion_serviceappointment', a: '_regardingobjectid_value', c: 'msdyn_salessuggestions', d: 'msdyn_salessuggestion' },
 			regardingobjectid_msdyn_shipvia_serviceappointment: { b: 'regardingobjectid_msdyn_shipvia_serviceappointment', a: '_regardingobjectid_value', c: 'msdyn_shipvias', d: 'msdyn_shipvia' },
 			regardingobjectid_msdyn_systemuserschedulersetting_serviceappointment: { b: 'regardingobjectid_msdyn_systemuserschedulersetting_serviceappointment', a: '_regardingobjectid_value', c: 'msdyn_systemuserschedulersettings', d: 'msdyn_systemuserschedulersetting' },
 			regardingobjectid_msdyn_timegroup_serviceappointment: { b: 'regardingobjectid_msdyn_timegroup_serviceappointment', a: '_regardingobjectid_value', c: 'msdyn_timegroups', d: 'msdyn_timegroup' },
@@ -223,14 +221,17 @@ var DevKit;
 		};
 		if (e === undefined) e = {};
 		var u = {};
-		for (var field in serviceappointment) {
-			var a = serviceappointment[field].a;
-			var b = serviceappointment[field].b;
-			var c = serviceappointment[field].c;
-			var d = serviceappointment[field].d;
-			var g = serviceappointment[field].g;
-			var r = serviceappointment[field].r;
-			serviceappointment[field] = webApiField(e, a, b, c, d, r, u, g);
+		var serviceappointment = {};
+		serviceappointment.ODataEntity = e;
+		serviceappointment.FormattedValue = {};
+		for (var field in _serviceappointment) {
+			var a = _serviceappointment[field].a;
+			var b = _serviceappointment[field].b;
+			var c = _serviceappointment[field].c;
+			var d = _serviceappointment[field].d;
+			var g = _serviceappointment[field].g;
+			var r = _serviceappointment[field].r;
+			webApiField(serviceappointment, field, e, a, b, c, d, r, u, g);
 		}
 		Object.defineProperty(serviceappointment, 'ActivityParties', {
 			get: function () { return e['serviceappointment_activity_parties']; },
@@ -243,7 +244,7 @@ var DevKit;
 		serviceappointment.EntityName = 'serviceappointment';
 		serviceappointment.EntityCollectionName = 'serviceappointments';
 		serviceappointment['@odata.etag'] = e['@odata.etag'];
-		serviceappointment.getAliasedValue = function (alias, isMultiOptionSet) {
+		serviceappointment.getAliasedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias] === undefined || e[alias] === null) {
 				return null;
 			}
@@ -252,7 +253,7 @@ var DevKit;
 			}
 			return e[alias];
 		}
-		serviceappointment.getAliasedFormattedValue = function (alias, isMultiOptionSet) {
+		serviceappointment.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
 				return EMPTY_STRING;
 			}
@@ -269,28 +270,29 @@ var OptionSet;
 (function (OptionSet) {
 	OptionSet.ServiceAppointment = {
 		ActivityTypeCode : {
+			Activity_record_for_the_Teams_chat: 10086,
 			Appointment: 4201,
-			Booking_Alert: 10400,
+			Booking_Alert: 10404,
 			Campaign_Activity: 4402,
 			Campaign_Response: 4401,
 			Case_Resolution: 4206,
-			Conversation: 10702,
-			Customer_Voice_alert: 10294,
-			Customer_Voice_survey_invite: 10304,
-			Customer_Voice_survey_response: 10306,
+			Conversation: 10707,
+			Customer_Voice_alert: 10313,
+			Customer_Voice_survey_invite: 10323,
+			Customer_Voice_survey_response: 10325,
 			Email: 4202,
 			Fax: 4204,
 			Letter: 4207,
 			Opportunity_Close: 4208,
 			Order_Close: 4209,
-			Outbound_message: 10813,
+			Outbound_message: 10817,
 			Phone_Call: 4210,
-			Project_Service_Approval: 10430,
+			Project_Service_Approval: 10434,
 			Quick_Campaign: 4406,
 			Quote_Close: 4211,
 			Recurring_Appointment: 4251,
 			Service_Activity: 4214,
-			Session: 10717,
+			Session: 10721,
 			Task: 4212
 		},
 		Community : {

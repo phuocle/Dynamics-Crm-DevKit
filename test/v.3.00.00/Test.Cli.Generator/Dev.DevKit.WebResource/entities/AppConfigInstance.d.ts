@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,52 +30,52 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** System-calculated App Configuration unique identifier. */
-		AppConfigId: DevKit.WebApi.LookupValue;
+		AppConfigId: string;
 		/** Enter the App Configuration unique identifier of AppConfig entity for which this customization belongs. */
-		AppConfigIdUnique: DevKit.WebApi.GuidValue;
+		AppConfigIdUnique: string;
 		/** System-Populated App Configuration instance identifier. */
-		AppConfigInstanceId: DevKit.WebApi.GuidValueReadonly;
+		readonly AppConfigInstanceId: string;
 		/** System-populated App Configuration Instance unique identifier. */
-		AppConfigInstanceIdUnique: DevKit.WebApi.GuidValue;
+		AppConfigInstanceIdUnique: string;
 		/** System-calculated App Configuration Master identifier. */
-		AppConfigMasterId: DevKit.WebApi.LookupValue;
+		AppConfigMasterId: string;
 		/** System-Populated Published or UnPublished state of App Configuration Instance. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.AppConfigInstance.ComponentState;
 		/** ComponentType */
-		ComponentType: DevKit.WebApi.StringValue;
+		ComponentType: string;
 		/** Shows who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics CRM options. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalfÂ of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** For internal use only. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValueReadonly;
+		readonly ImportSequenceNumber: number;
 		/** Shows the version in which the App Configuration Instance is introduced. */
-		IntroducedVersion: DevKit.WebApi.StringValue;
+		IntroducedVersion: string;
 		/** Is Managed */
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsManaged: boolean;
 		/** Shows who last updated the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics CRM options. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Shows who last updated the record on behalf of another user. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** ObjectId */
-		ObjectId: DevKit.WebApi.GuidValue;
+		ObjectId: string;
 		/** System-calculated field for Organization identifier. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Shows the date and time when the record was migrated. The date and time are displayed in the time zone selected in Microsoft Dynamics CRM options. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Shows the last overwrite time for the App Configuration Instance. */
-		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly OverwriteTime_UtcDateOnly: Date;
 		/** Set the solution idenfitier for associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** Set the supporting solution idenfitier for associated solution. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SupportingSolutionId: string;
 		/** Enter a value for the customization property that is valid as per the validator XML specified in the app configuration master record. */
-		Value: DevKit.WebApi.StringValue;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		Value: string;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -106,4 +108,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

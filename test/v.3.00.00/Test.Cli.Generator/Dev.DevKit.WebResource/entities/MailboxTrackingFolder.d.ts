@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,1588 +30,1638 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the entry was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Folder Id for a folder in Exchange */
-		ExchangeFolderId: DevKit.WebApi.StringValue;
+		ExchangeFolderId: string;
 		/** Exchange Folder Name */
-		ExchangeFolderName: DevKit.WebApi.StringValue;
+		ExchangeFolderName: string;
 		/** Information to indicate whether the folder has been on boarded for auto tracking */
-		FolderOnboardingStatus: DevKit.WebApi.IntegerValue;
+		FolderOnboardingStatus: number;
 		/** Mailbox id associated with this record. */
-		MailboxId: DevKit.WebApi.LookupValue;
-		MailboxTrackingFolderId: DevKit.WebApi.GuidValueReadonly;
+		MailboxId: string;
+		readonly MailboxTrackingFolderId: string;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the entry was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Unique identifier of the organization associated with the record. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier of the business unit that owns the folder mapping. */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier of the team who owns the folder mapping. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_account: DevKit.WebApi.LookupValue;
+		regardingobjectid_account: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_accountleads: DevKit.WebApi.LookupValue;
+		regardingobjectid_accountleads: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_activityfileattachment: DevKit.WebApi.LookupValue;
+		regardingobjectid_activityfileattachment: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_activitymonitor: DevKit.WebApi.LookupValue;
+		regardingobjectid_activitymonitor: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_adminsettingsentity: DevKit.WebApi.LookupValue;
+		regardingobjectid_adminsettingsentity: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_appaction: DevKit.WebApi.LookupValue;
+		regardingobjectid_appaction: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_appelement: DevKit.WebApi.LookupValue;
+		regardingobjectid_appelement: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_applicationuser: DevKit.WebApi.LookupValue;
+		regardingobjectid_applicationuser: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_appmodulecomponentedge: DevKit.WebApi.LookupValue;
+		regardingobjectid_appmodulecomponentedge: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_appmodulecomponentnode: DevKit.WebApi.LookupValue;
+		regardingobjectid_appmodulecomponentnode: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_appsetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_appsetting: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_appusersetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_appusersetting: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_asyncoperation: DevKit.WebApi.LookupValue;
+		regardingobjectid_asyncoperation: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_attributeimageconfig: DevKit.WebApi.LookupValue;
+		regardingobjectid_attributeimageconfig: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_bookableresource: DevKit.WebApi.LookupValue;
+		regardingobjectid_bookableresource: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_bookableresourcebooking: DevKit.WebApi.LookupValue;
+		regardingobjectid_bookableresourcebooking: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_bookableresourcebookingexchangesyncidmapping: DevKit.WebApi.LookupValue;
+		regardingobjectid_bookableresourcebookingexchangesyncidmapping: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_bookableresourcebookingheader: DevKit.WebApi.LookupValue;
+		regardingobjectid_bookableresourcebookingheader: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_bookableresourcecategory: DevKit.WebApi.LookupValue;
+		regardingobjectid_bookableresourcecategory: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_bookableresourcecategoryassn: DevKit.WebApi.LookupValue;
+		regardingobjectid_bookableresourcecategoryassn: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_bookableresourcecharacteristic: DevKit.WebApi.LookupValue;
+		regardingobjectid_bookableresourcecharacteristic: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_bookableresourcegroup: DevKit.WebApi.LookupValue;
+		regardingobjectid_bookableresourcegroup: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_bookingstatus: DevKit.WebApi.LookupValue;
+		regardingobjectid_bookingstatus: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_bot: DevKit.WebApi.LookupValue;
+		regardingobjectid_bot: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_botcomponent: DevKit.WebApi.LookupValue;
+		regardingobjectid_botcomponent: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_bulkoperation: DevKit.WebApi.LookupValue;
+		regardingobjectid_bulkoperation: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_bulkoperationlog: DevKit.WebApi.LookupValue;
+		regardingobjectid_bulkoperationlog: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_campaign: DevKit.WebApi.LookupValue;
+		regardingobjectid_campaign: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_campaignactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_campaignactivity: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_campaignactivityitem: DevKit.WebApi.LookupValue;
+		regardingobjectid_campaignactivityitem: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_campaignitem: DevKit.WebApi.LookupValue;
+		regardingobjectid_campaignitem: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_campaignresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_campaignresponse: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_canvasappextendedmetadata: DevKit.WebApi.LookupValue;
+		regardingobjectid_canvasappextendedmetadata: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_cascadegrantrevokeaccessrecordstracker: DevKit.WebApi.LookupValue;
+		regardingobjectid_cascadegrantrevokeaccessrecordstracker: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_cascadegrantrevokeaccessversiontracker: DevKit.WebApi.LookupValue;
+		regardingobjectid_cascadegrantrevokeaccessversiontracker: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_catalog: DevKit.WebApi.LookupValue;
+		regardingobjectid_catalog: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_catalogassignment: DevKit.WebApi.LookupValue;
+		regardingobjectid_catalogassignment: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_characteristic: DevKit.WebApi.LookupValue;
+		regardingobjectid_characteristic: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_childincidentcount: DevKit.WebApi.LookupValue;
+		regardingobjectid_chat: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_comment: DevKit.WebApi.LookupValue;
+		regardingobjectid_childincidentcount: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_commitment: DevKit.WebApi.LookupValue;
+		regardingobjectid_comment: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_competitor: DevKit.WebApi.LookupValue;
+		regardingobjectid_commitment: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_competitoraddress: DevKit.WebApi.LookupValue;
+		regardingobjectid_competitor: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_competitorproduct: DevKit.WebApi.LookupValue;
+		regardingobjectid_competitoraddress: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_competitorsalesliterature: DevKit.WebApi.LookupValue;
+		regardingobjectid_competitorproduct: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_connectionreference: DevKit.WebApi.LookupValue;
+		regardingobjectid_competitorsalesliterature: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_connector: DevKit.WebApi.LookupValue;
+		regardingobjectid_connectionreference: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_constraintbasedgroup: DevKit.WebApi.LookupValue;
+		regardingobjectid_connector: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_contact: DevKit.WebApi.LookupValue;
+		regardingobjectid_constraintbasedgroup: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_contactinvoices: DevKit.WebApi.LookupValue;
+		regardingobjectid_contact: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_contactleads: DevKit.WebApi.LookupValue;
+		regardingobjectid_contactinvoices: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_contactorders: DevKit.WebApi.LookupValue;
+		regardingobjectid_contactleads: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_contactquotes: DevKit.WebApi.LookupValue;
+		regardingobjectid_contactorders: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_contract: DevKit.WebApi.LookupValue;
+		regardingobjectid_contactquotes: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_contractdetail: DevKit.WebApi.LookupValue;
+		regardingobjectid_contract: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_contracttemplate: DevKit.WebApi.LookupValue;
+		regardingobjectid_contractdetail: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_conversationtranscript: DevKit.WebApi.LookupValue;
+		regardingobjectid_contracttemplate: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_customapi: DevKit.WebApi.LookupValue;
+		regardingobjectid_conversationtranscript: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_customapirequestparameter: DevKit.WebApi.LookupValue;
+		regardingobjectid_customapi: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_customapiresponseproperty: DevKit.WebApi.LookupValue;
+		regardingobjectid_customapirequestparameter: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_customeropportunityrole: DevKit.WebApi.LookupValue;
+		regardingobjectid_customapiresponseproperty: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_datalakefolder: DevKit.WebApi.LookupValue;
+		regardingobjectid_customeropportunityrole: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_datalakefolderpermission: DevKit.WebApi.LookupValue;
+		regardingobjectid_datalakefolder: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_datalakeworkspace: DevKit.WebApi.LookupValue;
+		regardingobjectid_datalakefolderpermission: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_datalakeworkspacepermission: DevKit.WebApi.LookupValue;
+		regardingobjectid_datalakeworkspace: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_datasyncstate: DevKit.WebApi.LookupValue;
+		regardingobjectid_datalakeworkspacepermission: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_discount: DevKit.WebApi.LookupValue;
+		regardingobjectid_dataprocessingconfiguration: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_discounttype: DevKit.WebApi.LookupValue;
+		regardingobjectid_datasyncstate: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_dynamicproperty: DevKit.WebApi.LookupValue;
+		regardingobjectid_discount: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_dynamicpropertyassociation: DevKit.WebApi.LookupValue;
+		regardingobjectid_discounttype: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_dynamicpropertyinstance: DevKit.WebApi.LookupValue;
+		regardingobjectid_dynamicproperty: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_dynamicpropertyoptionsetitem: DevKit.WebApi.LookupValue;
+		regardingobjectid_dynamicpropertyassociation: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_entitlement: DevKit.WebApi.LookupValue;
+		regardingobjectid_dynamicpropertyinstance: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_entitlementchannel: DevKit.WebApi.LookupValue;
+		regardingobjectid_dynamicpropertyoptionsetitem: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_entitlementcontacts: DevKit.WebApi.LookupValue;
+		regardingobjectid_entitlement: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_entitlemententityallocationtypemapping: DevKit.WebApi.LookupValue;
+		regardingobjectid_entitlementchannel: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_entitlementproducts: DevKit.WebApi.LookupValue;
+		regardingobjectid_entitlementcontacts: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_entitlementtemplate: DevKit.WebApi.LookupValue;
+		regardingobjectid_entitlemententityallocationtypemapping: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_entitlementtemplatechannel: DevKit.WebApi.LookupValue;
+		regardingobjectid_entitlementproducts: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_entitlementtemplateproducts: DevKit.WebApi.LookupValue;
+		regardingobjectid_entitlementtemplate: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_entityanalyticsconfig: DevKit.WebApi.LookupValue;
+		regardingobjectid_entitlementtemplatechannel: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_entityimageconfig: DevKit.WebApi.LookupValue;
+		regardingobjectid_entitlementtemplateproducts: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_entityindex: DevKit.WebApi.LookupValue;
+		regardingobjectid_entityanalyticsconfig: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_environmentvariabledefinition: DevKit.WebApi.LookupValue;
+		regardingobjectid_entityimageconfig: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_environmentvariablevalue: DevKit.WebApi.LookupValue;
+		regardingobjectid_entityindex: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_equipment: DevKit.WebApi.LookupValue;
+		regardingobjectid_environmentvariabledefinition: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_exportsolutionupload: DevKit.WebApi.LookupValue;
+		regardingobjectid_environmentvariablevalue: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_featurecontrolsetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_equipment: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_flowmachine: DevKit.WebApi.LookupValue;
+		regardingobjectid_exportsolutionupload: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_flowmachinegroup: DevKit.WebApi.LookupValue;
+		regardingobjectid_featurecontrolsetting: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_flowsession: DevKit.WebApi.LookupValue;
+		regardingobjectid_flowmachine: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_holidaywrapper: DevKit.WebApi.LookupValue;
+		regardingobjectid_flowmachinegroup: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_incident: DevKit.WebApi.LookupValue;
+		regardingobjectid_flowsession: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_incidentknowledgebaserecord: DevKit.WebApi.LookupValue;
+		regardingobjectid_holidaywrapper: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_incidentresolution: DevKit.WebApi.LookupValue;
+		regardingobjectid_incident: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_indexattributes: DevKit.WebApi.LookupValue;
+		regardingobjectid_incidentknowledgebaserecord: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_internalcatalogassignment: DevKit.WebApi.LookupValue;
+		regardingobjectid_incidentresolution: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_invoice: DevKit.WebApi.LookupValue;
+		regardingobjectid_indexattributes: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_invoicedetail: DevKit.WebApi.LookupValue;
+		regardingobjectid_internalcatalogassignment: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_keyvaultreference: DevKit.WebApi.LookupValue;
+		regardingobjectid_invoice: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_knowledgearticleincident: DevKit.WebApi.LookupValue;
+		regardingobjectid_invoicedetail: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_lead: DevKit.WebApi.LookupValue;
+		regardingobjectid_keyvaultreference: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_leadaddress: DevKit.WebApi.LookupValue;
+		regardingobjectid_knowledgearticleincident: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_leadcompetitors: DevKit.WebApi.LookupValue;
+		regardingobjectid_lead: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_leadproduct: DevKit.WebApi.LookupValue;
+		regardingobjectid_leadaddress: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_leadtoopportunitysalesprocess: DevKit.WebApi.LookupValue;
+		regardingobjectid_leadcompetitors: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_list: DevKit.WebApi.LookupValue;
+		regardingobjectid_leadproduct: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_listmember: DevKit.WebApi.LookupValue;
+		regardingobjectid_leadtoopportunitysalesprocess: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_listoperation: DevKit.WebApi.LookupValue;
+		regardingobjectid_list: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_managedidentity: DevKit.WebApi.LookupValue;
+		regardingobjectid_listmember: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_marketingformdisplayattributes: DevKit.WebApi.LookupValue;
+		regardingobjectid_listoperation: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdynce_botcontent: DevKit.WebApi.LookupValue;
+		regardingobjectid_managedidentity: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdynsm_marketingsitemap: DevKit.WebApi.LookupValue;
+		regardingobjectid_marketingformdisplayattributes: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdynsm_salessitemap: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdynce_botcontent: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdynsm_servicessitemap: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdynsm_marketingsitemap: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdynsm_settingssitemap: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdynsm_salessitemap: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_3dmodel: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdynsm_servicessitemap: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_accountpricelist: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdynsm_settingssitemap: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_actioncardregarding: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_3dmodel: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_actioncardrolesetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_accountpricelist: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_actual: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_actioncardregarding: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_adaptivecardconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_actioncardrolesetting: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_adminappstate: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_actual: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_agentstatushistory: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_adaptivecardconfiguration: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_agreement: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_adminappstate: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_agreementbookingdate: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agentstatushistory: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_agreementbookingincident: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreement: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_agreementbookingproduct: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingdate: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_agreementbookingservice: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingincident: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_agreementbookingservicetask: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingproduct: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_agreementbookingsetup: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingservice: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_agreementinvoicedate: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingservicetask: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_agreementinvoiceproduct: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingsetup: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_agreementinvoicesetup: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementinvoicedate: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_agreementsubstatus: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementinvoiceproduct: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_aibdataset: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementinvoicesetup: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_aibdatasetfile: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementsubstatus: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_aibdatasetrecord: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_aibdataset: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_aibdatasetscontainer: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_aibdatasetfile: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_aibfile: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_aibdatasetrecord: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_aibfileattacheddata: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_aibdatasetscontainer: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_aiconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_aibfeedbackloop: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_aicontactsuggestion: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_aibfile: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_aifptrainingdocument: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_aibfileattacheddata: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_aimodel: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_aiconfiguration: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_aiodimage: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_aicontactsuggestion: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_aiodlabel: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_aifptrainingdocument: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_aiodtrainingboundingbox: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_aimodel: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_aiodtrainingimage: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_aiodimage: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_aitemplate: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_aiodlabel: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_analysiscomponent: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_aiodtrainingboundingbox: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_analysisjob: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_aiodtrainingimage: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_analysisresult: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_aitemplate: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_analysisresultdetail: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_analysiscomponent: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_analytics: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_analysisjob: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_analyticsadminsettings: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_analysisresult: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_analyticsforcs: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_analysisresultdetail: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_appconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_analytics: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_applicationextension: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_analyticsadminsettings: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_applicationtabtemplate: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_analyticsforcs: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_approval: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_appconfiguration: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_approvalset: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_applicationextension: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_assetcategorytemplateassociation: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_applicationtabtemplate: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_assetsuggestionssetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_approval: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_assettemplateassociation: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_approvalset: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_assignmentconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_assetcategorytemplateassociation: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_assignmentconfigurationstep: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_assetsuggestionssetting: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_assignmentmap: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_assettemplateassociation: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_assignmentrule: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_assignmentconfiguration: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_attribute: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_assignmentconfigurationstep: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_attributevalue: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_assignmentmap: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_authenticationsettings: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_assignmentrule: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_autocapturerule: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_attribute: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_autocapturesettings: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_attributevalue: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_batchjob: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_authenticationsettings: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_bookableresourceassociation: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_autocapturerule: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_bookableresourcebookingquicknote: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_autocapturesettings: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_bookableresourcecapacityprofile: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_batchjob: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_bookingalert: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bookableresourceassociation: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_bookingalertstatus: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bookableresourcebookingquicknote: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_bookingchange: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bookableresourcecapacityprofile: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_bookingjournal: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bookingalert: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_bookingrule: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bookingalertstatus: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_bookingsetupmetadata: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bookingchange: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_bookingtimestamp: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bookingjournal: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_bpf_2c5fe86acc8b414b8322ae571000c799: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bookingrule: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_bpf_477c16f59170487b8b4dc895c5dcd09b: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bookingsetupmetadata: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_bpf_665e73aa18c247d886bfc50499c73b82: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bookingtimestamp: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_bpf_989e9b1857e24af18787d5143b67523b: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bpf_2c5fe86acc8b414b8322ae571000c799: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_bpf_baa0a411a239410cb8bded8b5fdd88e3: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bpf_477c16f59170487b8b4dc895c5dcd09b: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_bpf_d3d97bac8c294105840e99e37a9d1c39: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bpf_665e73aa18c247d886bfc50499c73b82: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_bpf_d8f9dc7f099f44db9d641dd81fbd470d: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bpf_989e9b1857e24af18787d5143b67523b: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_businessclosure: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bpf_baa0a411a239410cb8bded8b5fdd88e3: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_callablecontext: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bpf_d3d97bac8c294105840e99e37a9d1c39: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_cannedmessage: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bpf_d8f9dc7f099f44db9d641dd81fbd470d: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_capacityprofile: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_businessclosure: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_caseenrichment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_callablecontext: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_casesuggestionrequestpayload: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_cannedmessage: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_casetopic: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_capacityprofile: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_casetopicsetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_caseenrichment: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_casetopicsummary: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_casesuggestionrequestpayload: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_casetopic_incident: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_casetopic: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_cdsentityengagementctx: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_casetopicsetting: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_channel: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_casetopicsummary: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_channelcapability: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_casetopic_incident: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_channelprovider: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_cdsentityengagementctx: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_characteristicreqforteammember: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_channel: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_chatansweroption: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_channelcapability: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_chatquestionnaireresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_channelprovider: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_chatquestionnaireresponseitem: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_characteristicreqforteammember: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_chatwidgetlanguage: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_chatansweroption: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_ciprovider: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_chatquestionnaireresponse: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_clientextension: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_chatquestionnaireresponseitem: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_collabgraphresource: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_chatwidgetlanguage: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_configuration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ciprovider: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_consoleapplicationnotificationfield: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_clientextension: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_consoleapplicationnotificationtemplate: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_collabgraphresource: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_consoleapplicationsessiontemplate: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_configuration: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_consoleapplicationtemplate: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_consoleapplicationnotificationfield: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_consoleapplicationtemplateparameter: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_consoleapplicationnotificationtemplate: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_consoleapplicationtype: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_consoleapplicationsessiontemplate: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_consoleappparameterdefinition: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_consoleapplicationtemplate: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_contactpricelist: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_consoleapplicationtemplateparameter: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_contactsuggestionrule: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_consoleapplicationtype: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_contactsuggestionruleset: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_consoleappparameterdefinition: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_contractlinedetailperformance: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_contactpricelist: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_contractlineinvoiceschedule: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_contactsuggestionrule: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_contractlinescheduleofvalue: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_contactsuggestionruleset: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_contractperformance: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_contractlinedetailperformance: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_conversationaction: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_contractlineinvoiceschedule: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_conversationactionlocale: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_contractlinescheduleofvalue: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_conversationdata: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_contractperformance: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_conversationinsight: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_conversationaction: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_conversationsuggestionrequestpayload: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_conversationactionlocale: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_conversationtopic: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_conversationdata: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_conversationtopicsetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_conversationinsight: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_conversationtopicsummary: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_conversationsuggestionrequestpayload: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_conversationtopic_conversation: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_conversationtopic: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_customengagementctx: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_conversationtopicsetting: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_customerasset: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_conversationtopicsummary: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_customerassetattachment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_conversationtopic_conversation: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_customerassetcategory: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_customengagementctx: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_dataanalyticsreport: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_customerasset: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_dataanalyticsreport_csrmanager: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_customerassetattachment: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_dataanalyticsreport_fs: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_customerassetcategory: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_dataanalyticsreport_fspredictrs: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_dataanalyticsreport: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_dataanalyticsreport_fspredictwhd: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_dataanalyticsreport_csrmanager: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_dataanalyticsreport_ksinsights: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_dataanalyticsreport_fs: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_dataanalyticsreport_oc: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_dataanalyticsreport_fspredictrs: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_dataanalyticsreport_ocvoice: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_dataanalyticsreport_fspredictwhd: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_databaseversion: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_dataanalyticsreport_ksinsights: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_dataexport: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_dataanalyticsreport_oc: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_dataflow: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_dataanalyticsreport_ocvoice: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_datainsightsandanalyticsfeature: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_dataanalyticsreport_sutreporting: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_dealmanageraccess: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_databaseversion: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_dealmanagersettings: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_dataexport: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_decisioncontract: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_dataflow: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_decisionruleset: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_dataflowrefreshhistory: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_delegation: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_datainsightsandanalyticsfeature: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_dimension: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_dealmanageraccess: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_dimensionfieldname: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_dealmanagersettings: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_effortpredictionresult: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_decisioncontract: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_entitlementapplication: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_decisionruleset: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_entityconfig: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_delegation: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_entityconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_dimension: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_entitylinkchatconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_dimensionfieldname: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_entityrankingrule: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_duplicatedetectionpluginrun: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_entityroutingconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_duplicateleadmapping: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_estimate: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_effortpredictionresult: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_estimateline: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_entitlementapplication: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_expense: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_entityconfig: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_expensecategory: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_entityconfiguration: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_expensereceipt: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_entitylinkchatconfiguration: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_extendedusersetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_entityrankingrule: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_facebookengagementctx: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_entityrefreshhistory: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_fact: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_entityroutingconfiguration: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_federatedarticle: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_estimate: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_federatedarticleincident: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_estimateline: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_fieldcomputation: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_expense: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_fieldservicepricelistitem: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_expensecategory: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_fieldservicesetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_expensereceipt: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_fieldserviceslaconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_extendedusersetting: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_fieldservicesystemjob: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_facebookengagementctx: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_findworkevent: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_fact: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_flowcardtype: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_federatedarticle: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_forecastconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_federatedarticleincident: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_forecastdefinition: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_fieldcomputation: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_forecastinstance: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_fieldservicepricelistitem: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_forecastrecurrence: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_fieldservicesetting: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_functionallocation: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_fieldserviceslaconfiguration: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_gdprdata: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_fieldservicesystemjob: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_geofence: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_findworkevent: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_geofenceevent: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_flowcardtype: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_geofencingsettings: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_forecastconfiguration: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_geolocationsettings: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_forecastdefinition: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_geolocationtracking: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_forecastinstance: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_helppage: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_forecastrecurrence: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_icebreakersconfig: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_functionallocation: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_iermlmodel: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_gdprdata: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_iermltraining: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_geofence: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_incidenttype: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_geofenceevent: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_incidenttypecharacteristic: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_geofencingsettings: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_incidenttypeproduct: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_geolocationsettings: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_incidenttyperecommendationresult: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_geolocationtracking: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_incidenttyperecommendationrunhistory: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_helppage: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_incidenttyperesolution: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_icebreakersconfig: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_incidenttypeservice: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_iermlmodel: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_incidenttypeservicetask: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_iermltraining: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_incidenttypessetup: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_incidenttype: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_incidenttype_requirementgroup: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_incidenttypecharacteristic: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_inspection: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_incidenttypeproduct: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_inspectionattachment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_incidenttyperecommendationresult: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_inspectiondefinition: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_incidenttyperecommendationrunhistory: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_inspectioninstance: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_incidenttyperesolution: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_inspectionresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_incidenttypeservice: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_integrationjob: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_incidenttypeservicetask: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_integrationjobdetail: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_incidenttypessetup: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_inventoryadjustment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_incidenttype_requirementgroup: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_inventoryadjustmentproduct: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_inspection: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_inventoryjournal: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_inspectionattachment: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_inventorytransfer: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_inspectiondefinition: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_invoicefrequency: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_inspectioninstance: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_invoicefrequencydetail: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_inspectionresponse: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_invoicelinetransaction: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_integrationjob: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_iotalert: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_integrationjobdetail: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_iotdevice: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_inventoryadjustment: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_iotdevicecategory: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_inventoryadjustmentproduct: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_iotdevicecommand: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_inventoryjournal: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_iotdevicecommanddefinition: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_inventorytransfer: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_iotdevicedatahistory: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_invoicefrequency: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_iotdeviceproperty: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_invoicefrequencydetail: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_iotdeviceregistrationhistory: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_invoicelinetransaction: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_iotdevicevisualizationconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_iotalert: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_iotfieldmapping: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_iotdevice: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_iotpropertydefinition: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_iotdevicecategory: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_iotprovider: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_iotdevicecommand: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_iotproviderinstance: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_iotdevicecommanddefinition: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_iotsettings: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_iotdevicedatahistory: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_iottocaseprocess: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_iotdeviceproperty: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_journal: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_iotdeviceregistrationhistory: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_journalline: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_iotdevicevisualizationconfiguration: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_kalanguagesetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_iotfieldmapping: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_kbattachment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_iotpropertydefinition: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_kbenrichment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_iotprovider: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_kbkeywordsdescsuggestionsetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_iotproviderinstance: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_kmfederatedsearchconfig: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_iotsettings: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_kmpersonalizationsetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_iottocaseprocess: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_knowledgearticleimage: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_journal: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_knowledgearticletemplate: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_journalline: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_knowledgeinteractioninsight: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_kalanguagesetting: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_knowledgepersonalfilter: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_kbattachment: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_knowledgesearchfilter: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_kbenrichment: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_knowledgesearchinsight: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_kbkeywordsdescsuggestionsetting: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_kpieventdata: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_kmfederatedsearchconfig: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_kpieventdefinition: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_kmpersonalizationsetting: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_leadmodelconfig: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_knowledgearticleimage: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_lineengagementctx: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_knowledgearticletemplate: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_livechatconfig: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_knowledgeinteractioninsight: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_livechatengagementctx: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_knowledgemanagementsetting: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_livechatwidgetlocation: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_knowledgepersonalfilter: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_liveconversation: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_knowledgesearchfilter: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_liveworkitemevent: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_knowledgesearchinsight: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_liveworkstream: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_kpieventdata: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_liveworkstreamcapacityprofile: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_kpieventdefinition: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_localizedsurveyquestion: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_leadhygienesetting: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_macrosession: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_leadmodelconfig: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_maskingrule: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_lineengagementctx: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_masterentityroutingconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_livechatconfig: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_migrationtracker: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_livechatengagementctx: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_mlresultcache: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_livechatwidgetlocation: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_modelpreviewstatus: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_liveconversation: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_msteamssetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_liveworkitemevent: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_msteamssettingsv2: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_liveworkstream: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_notesanalysisconfig: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_liveworkstreamcapacityprofile: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_notificationfield: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_localizedsurveyquestion: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_notificationtemplate: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_macrosession: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_ocautoblockrule: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_maskingrule: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_ocbotchannelregistration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_masterentityroutingconfiguration: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_occarrier: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_migrationtracker: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_occhannelconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_mlresultcache: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_occhannelstateconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_modelpreviewstatus: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_occommunicationprovidersetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_msteamssetting: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_occommunicationprovidersettingentry: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_msteamssettingsv2: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_occustommessagingchannel: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_notesanalysisconfig: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_ocfbapplication: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_notificationfield: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_ocfbpage: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_notificationtemplate: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_ocflaggedspam: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocautoblockrule: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_oclanguage: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocbotchannelregistration: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_oclinechannelconfig: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_occarrier: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_ocliveworkitem: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_occhannelapiconversationprivilege: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_ocliveworkitemcapacityprofile: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_occhannelapimessageprivilege: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_ocliveworkitemcharacteristic: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_occhannelapimethodmapping: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_ocliveworkitemcontextitem: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_occhannelconfiguration: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_ocliveworkitemparticipant: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_occhannelstateconfiguration: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_ocliveworkitemsentiment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_occommunicationprovidersetting: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_ocliveworkstreamcontextvariable: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_occommunicationprovidersettingentry: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_oclocalizationdata: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_occustommessagingchannel: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_ocoutboundconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocfbapplication: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_ocoutboundmessage: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocfbpage: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_ocphonenumber: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocflaggedspam: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_ocprovisioningstate: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_oclanguage: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_ocrecording: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_oclinechannelconfig: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_ocrequest: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocliveworkitem: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_ocruleitem: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocliveworkitemcapacityprofile: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_ocsentimentdailytopic: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocliveworkitemcharacteristic: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_ocsentimentdailytopickeyword: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocliveworkitemcontextitem: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_ocsentimentdailytopictrending: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocliveworkitemparticipant: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_ocsession: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocliveworkitemsentiment: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_ocsessioncharacteristic: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocliveworkstreamcontextvariable: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_ocsessionparticipantevent: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_oclocalizationdata: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_ocsessionsentiment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocoutboundconfiguration: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_ocsimltraining: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocoutboundmessage: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_ocsitdimportconfig: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocphonenumber: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_ocsitdskill: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocprovisioningstate: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_ocsitrainingdata: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocrecording: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_ocskillidentmlmodel: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocrequest: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_ocsmschannelsetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocruleitem: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_ocsystemmessage: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocsentimentdailytopic: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_octag: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocsentimentdailytopickeyword: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_octeamschannelconfig: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocsentimentdailytopictrending: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_octwitterapplication: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocsession: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_octwitterhandle: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocsessioncharacteristic: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_ocwechatchannelconfig: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocsessionparticipantevent: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_ocwhatsappchannelaccount: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocsessionsentiment: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_ocwhatsappchannelnumber: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocsimltraining: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_oc_geolocationprovider: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocsitdimportconfig: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_omnichannelconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocsitdskill: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_omnichannelpersonalization: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocsitrainingdata: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_omnichannelqueue: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocskillidentmlmodel: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_omnichannelsyncconfig: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocsmschannelsetting: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_operatinghour: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocsystemmessage: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_opportunitylineresourcecategory: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_octag: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_opportunitylinetransaction: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_octeamschannelconfig: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_opportunitylinetransactioncategory: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_octwitterapplication: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_opportunitylinetransactionclassificatio: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_octwitterhandle: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_opportunitymodelconfig: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocwechatchannelconfig: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_opportunitypricelist: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocwhatsappchannelaccount: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_orderinvoicingdate: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocwhatsappchannelnumber: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_orderinvoicingproduct: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_oc_geolocationprovider: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_orderinvoicingsetup: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_omnichannelconfiguration: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_orderinvoicingsetupdate: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_omnichannelpersonalization: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_orderlineresourcecategory: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_omnichannelqueue: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_orderlinetransaction: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_omnichannelsyncconfig: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_orderlinetransactioncategory: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_operatinghour: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_orderlinetransactionclassification: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_opportunitylineresourcecategory: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_orderpricelist: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_opportunitylinetransaction: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_organizationalunit: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_opportunitylinetransactioncategory: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_overflowactionconfig: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_opportunitylinetransactionclassificatio: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_paneconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_opportunitymodelconfig: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_panetabconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_opportunitypricelist: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_panetoolconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_orderinvoicingdate: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_payment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_orderinvoicingproduct: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_paymentdetail: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_orderinvoicingsetup: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_paymentmethod: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_orderinvoicingsetupdate: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_paymentterm: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_orderlineresourcecategory: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_personalmessage: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_orderlinetransaction: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_personalsoundsetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_orderlinetransactioncategory: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_personasecurityrolemapping: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_orderlinetransactionclassification: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_playbookactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_orderpricelist: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_playbookactivityattribute: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_organizationalunit: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_playbookcategory: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_overflowactionconfig: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_playbookinstance: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_paneconfiguration: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_playbooktemplate: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_panetabconfiguration: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_pminferredtask: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_panetoolconfiguration: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_pmrecording: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_payment: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_postalbum: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_paymentdetail: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_postalcode: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_paymentmethod: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_postconfig: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_paymentterm: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_postruleconfig: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_personalmessage: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_predictivemodelscore: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_personalsoundsetting: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_predictivescore: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_personasecurityrolemapping: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_predictworkhourdurationsetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_playbookactivity: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_presence: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_playbookactivityattribute: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_priority: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_playbookcategory: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_problematicasset: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_playbookinstance: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_problematicassetfeedback: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_playbooktemplate: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_processnotes: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_pminferredtask: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_productinventory: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_pmrecording: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_productivityactioninputparameter: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_postalbum: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_productivityactionoutputparameter: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_postalcode: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_productivityagentscript: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_postconfig: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_productivityagentscriptstep: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_postruleconfig: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_productivitymacroactiontemplate: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_predictivemodelscore: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_productivitymacroconnector: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_predictivescore: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_productivitymacrosolutionconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_predictworkhourdurationsetting: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_productivityparameterdefinition: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_presence: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_project: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_priority: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_projectapproval: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_problematicasset: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_projectparameter: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_problematicassetfeedback: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_projectparameterpricelist: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_processnotes: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_projectpricelist: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_productinventory: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_projecttask: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_productivityactioninputparameter: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_projecttaskdependency: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_productivityactionoutputparameter: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_projecttaskstatususer: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_productivityagentscript: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_projectteam: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_productivityagentscriptstep: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_projectteammembersignup: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_productivitymacroactiontemplate: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_projecttransactioncategory: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_productivitymacroconnector: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_property: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_productivitymacrosolutionconfiguration: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_propertyassetassociation: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_productivityparameterdefinition: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_propertylog: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_project: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_propertytemplateassociation: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_projectapproval: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_provider: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_projectparameter: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_purchaseorder: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_projectparameterpricelist: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_purchaseorderbill: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_projectpricelist: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_purchaseorderproduct: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_projecttask: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_purchaseorderreceipt: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_projecttaskdependency: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_purchaseorderreceiptproduct: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_projecttaskstatususer: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_purchaseordersubstatus: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_projectteam: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_questionsequence: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_projectteammembersignup: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_quotebookingincident: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_projecttransactioncategory: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_quotebookingproduct: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_property: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_quotebookingservice: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_propertyassetassociation: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_quotebookingservicetask: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_propertylog: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_quotebookingsetup: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_propertytemplateassociation: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_quoteinvoicingproduct: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_provider: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_quoteinvoicingsetup: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseorder: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_quotelineanalyticsbreakdown: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseorderbill: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_quotelineinvoiceschedule: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseorderproduct: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_quotelineresourcecategory: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseorderreceipt: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_quotelinescheduleofvalue: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseorderreceiptproduct: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_quotelinetransaction: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseordersubstatus: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_quotelinetransactioncategory: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_questionsequence: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_quotelinetransactionclassification: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotebookingincident: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_quotepricelist: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotebookingproduct: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_recording: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotebookingservice: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_relationshipinsightsunifiedconfig: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotebookingservicetask: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_requirementcharacteristic: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotebookingsetup: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_requirementdependency: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quoteinvoicingproduct: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_requirementgroup: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quoteinvoicingsetup: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_requirementorganizationunit: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotelineanalyticsbreakdown: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_requirementrelationship: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotelineinvoiceschedule: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_requirementresourcecategory: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotelineresourcecategory: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_requirementresourcepreference: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotelinescheduleofvalue: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_requirementstatus: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotelinetransaction: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_resolution: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotelinetransactioncategory: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_resourceassignment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotelinetransactionclassification: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_resourceassignmentdetail: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotepricelist: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_resourcecategorymarkuppricelevel: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_recording: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_resourcecategorypricelevel: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_relationshipinsightsunifiedconfig: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_resourcepaytype: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_requirementcharacteristic: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_resourcerequest: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_requirementdependency: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_resourcerequirement: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_requirementgroup: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_resourcerequirementdetail: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_requirementorganizationunit: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_resourceterritory: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_requirementrelationship: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_richtextfile: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_requirementresourcecategory: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_rma: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_requirementresourcepreference: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_rmaproduct: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_requirementstatus: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_rmareceipt: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_resolution: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_rmareceiptproduct: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_resourceassignment: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_rmasubstatus: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_resourceassignmentdetail: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_rolecompetencyrequirement: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_resourcecategorymarkuppricelevel: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_roleutilization: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_resourcecategorypricelevel: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_routingconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_resourcepaytype: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_routingconfigurationstep: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_resourcerequest: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_routingrequest: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_resourcerequirement: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_routingrulesetsetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_resourcerequirementdetail: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_rtv: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_resourceterritory: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_rtvproduct: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_richtextfile: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_rtvsubstatus: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rma: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_rulesetdependencymapping: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rmaproduct: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_salesaccelerationsettings: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rmareceipt: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_salesassignmentsetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rmareceiptproduct: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_salesinsightssettings: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rmasubstatus: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_salesroutingrun: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rolecompetencyrequirement: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_salestag: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_roleutilization: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_scenario: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_routingconfiguration: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_scheduleboardsetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_routingconfigurationstep: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_schedulingfeatureflag: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_routingrequest: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_schedulingparameter: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_routingrulesetsetting: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_searchconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rtv: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_segment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rtvproduct: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_segmentcatalogue: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rtvsubstatus: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_sentimentanalysis: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rulesetdependencymapping: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_sequence: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_salesaccelerationsettings: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_sequencestat: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_salesassignmentsetting: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_sequencetarget: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_salesinsightssettings: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_sequencetargetstep: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_salesroutingrun: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_serviceconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_salessuggestion: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_servicetasktype: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_salestag: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_sessiondata: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_scenario: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_sessionevent: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_scheduleboardsetting: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_sessionparticipant: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_schedulingfeatureflag: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_sessionparticipantdata: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_schedulingparameter: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_sessiontemplate: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_searchconfiguration: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_shipvia: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_segment: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_siconfig: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_segmentcatalogue: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_sikeyvalueconfig: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_sentimentanalysis: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_skillattachmentruleitem: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_sequence: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_skillattachmenttarget: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_sequencestat: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_slakpi: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_sequencetarget: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_smartassistconfig: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_sequencetargetstep: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_smsengagementctx: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_sequencetemplate: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_smsnumber: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_serviceconfiguration: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_solutionhealthrule: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_servicetasktype: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_solutionhealthruleargument: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_sessiondata: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_solutionhealthruleset: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_sessionevent: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_soundfile: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_sessionparticipant: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_soundnotificationsetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_sessionparticipantdata: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_suggestioninteraction: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_sessiontemplate: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_suggestionrequestpayload: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_shipvia: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_suggestionsmodelsummary: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_siconfig: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_suggestionssetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_sikeyvalueconfig: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_surveyquestion: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_skillattachmentruleitem: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_systemuserschedulersetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_skillattachmenttarget: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_taxcode: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_slakpi: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_taxcodedetail: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_smartassistconfig: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_teamschannelengagementctx: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_smsengagementctx: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_teamschatassociation: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_smsnumber: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_teamschatsuggestion: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_solutionhealthrule: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_teamscollaboration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_solutionhealthruleargument: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_teamsdialeradminsettings: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_solutionhealthruleset: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_teamsengagementctx: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_soundfile: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_templateforproperties: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_soundnotificationsetting: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_templateparameter: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_suggestioninteraction: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_templatetags: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_suggestionrequestpayload: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_timeentry: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_suggestionsmodelsummary: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_timeentrysetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_suggestionssetting: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_timegroup: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_surveyquestion: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_timegroupdetail: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_systemuserschedulersetting: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_timeoffcalendar: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_taxcode: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_timeoffrequest: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_taxcodedetail: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_tour: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_teamschannelengagementctx: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_transactioncategory: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_teamschatassociation: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_transactioncategoryclassification: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_teamschatsuggestion: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_transactioncategoryhierarchyelement: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_teamscollaboration: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_transactioncategorypricelevel: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_teamsdialeradminsettings: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_transactionconnection: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_teamsengagementctx: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_transactionorigin: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_templateforproperties: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_transactiontype: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_templateparameter: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_transcript: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_templatetags: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_twitterengagementctx: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_timeentry: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_unifiedroutingdiagnostic: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_timeentrysetting: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_unifiedroutingrun: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_timegroup: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_unifiedroutingsetuptracker: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_timegroupdetail: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_uniquenumber: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_timeoffcalendar: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_untrackedappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_timeoffrequest: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_upgraderun: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_tour: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_upgradestep: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_transactioncategory: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_upgradeversion: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_transactioncategoryclassification: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_urnotificationtemplate: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_transactioncategoryhierarchyelement: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_urnotificationtemplatemapping: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_transactioncategorypricelevel: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_usersetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_transactionconnection: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_userworkhistory: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_transactionorigin: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_visitorjourney: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_transactiontype: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_wallsavedquery: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_transcript: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_wallsavedqueryusersettings: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_twitterengagementctx: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_warehouse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_unifiedroutingdiagnostic: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_wechatengagementctx: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_unifiedroutingrun: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_whatsappengagementctx: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_unifiedroutingsetuptracker: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_workhourtemplate: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_uniquenumber: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_workorder: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_untrackedappointment: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_workordercharacteristic: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_upgraderun: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_workorderdetailsgenerationqueue: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_upgradestep: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_workorderincident: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_upgradeversion: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_workorderproduct: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_urnotificationtemplate: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_workorderresolution: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_urnotificationtemplatemapping: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_workorderresourcerestriction: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_usagemetric: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_workorderservice: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_usersetting: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_workorderservicetask: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_userworkhistory: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_workordersubstatus: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_visitorjourney: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_workordertype: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_wallsavedquery: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_workqueuestate: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_wallsavedqueryusersettings: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_workqueueusersetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_warehouse: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyusd_actioncallworkflow: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_wechatengagementctx: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyusd_agentscriptaction: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_whatsappengagementctx: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyusd_agentscripttaskcategory: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workhourtemplate: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyusd_answer: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_worklistviewconfiguration: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyusd_auditanddiagnosticssetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorder: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyusd_configuration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workordercharacteristic: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyusd_customizationfiles: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderdetailsgenerationqueue: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyusd_entityassignment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderincident: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyusd_entitysearch: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderproduct: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyusd_form: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderresolution: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyusd_languagemodule: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderresourcerestriction: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyusd_scriptlet: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderservice: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyusd_scripttasktrigger: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderservicetask: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyusd_search: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workordersubstatus: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyusd_sessioninformation: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workordertype: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyusd_sessiontransfer: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workqueuestate: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyusd_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workqueueusersetting: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyusd_toolbarbutton: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyusd_actioncallworkflow: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyusd_toolbarstrip: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyusd_agentscriptaction: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyusd_tracesourcesetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyusd_agentscripttaskcategory: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyusd_ucisettings: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyusd_answer: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyusd_uiievent: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyusd_auditanddiagnosticssetting: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyusd_usersettings: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyusd_configuration: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyusd_windowroute: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyusd_customizationfiles: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msfp_alert: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyusd_entityassignment: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msfp_alertrule: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyusd_entitysearch: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msfp_emailtemplate: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyusd_form: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msfp_fileresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyusd_languagemodule: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msfp_localizedemailtemplate: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyusd_scriptlet: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msfp_project: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyusd_scripttasktrigger: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msfp_question: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyusd_search: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msfp_questionresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyusd_sessioninformation: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msfp_satisfactionmetric: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyusd_sessiontransfer: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msfp_survey: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyusd_task: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msfp_surveyinvite: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyusd_toolbarbutton: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msfp_surveyreminder: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyusd_toolbarstrip: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyusd_tracesourcesetting: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msfp_unsubscribedrecipient: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyusd_ucisettings: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_opportunity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyusd_uiievent: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_opportunityclose: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyusd_usersettings: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_opportunitycompetitors: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyusd_windowroute: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_opportunityproduct: DevKit.WebApi.LookupValue;
+		regardingobjectid_msfp_alert: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_opportunitysalesprocess: DevKit.WebApi.LookupValue;
+		regardingobjectid_msfp_alertrule: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_orderclose: DevKit.WebApi.LookupValue;
+		regardingobjectid_msfp_emailtemplate: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_organizationdatasyncsubscription: DevKit.WebApi.LookupValue;
+		regardingobjectid_msfp_fileresponse: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_organizationdatasyncsubscriptionentity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msfp_localizedemailtemplate: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_organizationsetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msfp_project: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_package: DevKit.WebApi.LookupValue;
+		regardingobjectid_msfp_question: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_pdfsetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msfp_questionresponse: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_phonetocaseprocess: DevKit.WebApi.LookupValue;
+		regardingobjectid_msfp_satisfactionmetric: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_pluginpackage: DevKit.WebApi.LookupValue;
+		regardingobjectid_msfp_survey: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_pricelevel: DevKit.WebApi.LookupValue;
+		regardingobjectid_msfp_surveyinvite: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_privilegesremovalsetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msfp_surveyreminder: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_processstageparameter: DevKit.WebApi.LookupValue;
+		regardingobjectid_msfp_surveyresponse: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_product: DevKit.WebApi.LookupValue;
+		regardingobjectid_msfp_unsubscribedrecipient: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_productassociation: DevKit.WebApi.LookupValue;
+		regardingobjectid_opportunity: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_productpricelevel: DevKit.WebApi.LookupValue;
+		regardingobjectid_opportunityclose: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_productsalesliterature: DevKit.WebApi.LookupValue;
+		regardingobjectid_opportunitycompetitors: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_productsubstitute: DevKit.WebApi.LookupValue;
+		regardingobjectid_opportunityproduct: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_provisionlanguageforuser: DevKit.WebApi.LookupValue;
+		regardingobjectid_opportunitysalesprocess: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_quote: DevKit.WebApi.LookupValue;
+		regardingobjectid_orderclose: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_quoteclose: DevKit.WebApi.LookupValue;
+		regardingobjectid_organizationdatasyncstate: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_quotedetail: DevKit.WebApi.LookupValue;
+		regardingobjectid_organizationdatasyncsubscription: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_ratingmodel: DevKit.WebApi.LookupValue;
+		regardingobjectid_organizationdatasyncsubscriptionentity: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_ratingvalue: DevKit.WebApi.LookupValue;
+		regardingobjectid_organizationsetting: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_relationshipattribute: DevKit.WebApi.LookupValue;
+		regardingobjectid_package: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_resource: DevKit.WebApi.LookupValue;
+		regardingobjectid_pdfsetting: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_resourcegroup: DevKit.WebApi.LookupValue;
+		regardingobjectid_phonetocaseprocess: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_resourcegroupexpansion: DevKit.WebApi.LookupValue;
+		regardingobjectid_pluginpackage: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_resourcespec: DevKit.WebApi.LookupValue;
+		regardingobjectid_pricelevel: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_revokeinheritedaccessrecordstracker: DevKit.WebApi.LookupValue;
+		regardingobjectid_privilegesremovalsetting: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_salesliterature: DevKit.WebApi.LookupValue;
+		regardingobjectid_processstageparameter: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_salesliteratureitem: DevKit.WebApi.LookupValue;
+		regardingobjectid_product: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_salesorder: DevKit.WebApi.LookupValue;
+		regardingobjectid_productassociation: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_salesorderdetail: DevKit.WebApi.LookupValue;
+		regardingobjectid_productpricelevel: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_salesprocessinstance: DevKit.WebApi.LookupValue;
+		regardingobjectid_productsalesliterature: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_service: DevKit.WebApi.LookupValue;
+		regardingobjectid_productsubstitute: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_provisionlanguageforuser: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_servicecontractcontacts: DevKit.WebApi.LookupValue;
+		regardingobjectid_quote: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_serviceplan: DevKit.WebApi.LookupValue;
+		regardingobjectid_quoteclose: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_serviceplanmapping: DevKit.WebApi.LookupValue;
+		regardingobjectid_quotedetail: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_settingdefinition: DevKit.WebApi.LookupValue;
+		regardingobjectid_ratingmodel: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_site: DevKit.WebApi.LookupValue;
+		regardingobjectid_ratingvalue: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_solutioncomponentattributeconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_relationshipattribute: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_solutioncomponentbatchconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_resource: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_solutioncomponentconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_resourcegroup: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_solutioncomponentrelationshipconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_resourcegroupexpansion: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_stagesolutionupload: DevKit.WebApi.LookupValue;
+		regardingobjectid_resourcespec: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_systemuserauthorizationchangetracker: DevKit.WebApi.LookupValue;
+		regardingobjectid_revokeinheritedaccessrecordstracker: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_teammobileofflineprofilemembership: DevKit.WebApi.LookupValue;
+		regardingobjectid_salesliterature: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_territory: DevKit.WebApi.LookupValue;
+		regardingobjectid_salesliteratureitem: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_topic: DevKit.WebApi.LookupValue;
+		regardingobjectid_salesorder: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_topichistory: DevKit.WebApi.LookupValue;
+		regardingobjectid_salesorderdetail: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_topicmodel: DevKit.WebApi.LookupValue;
+		regardingobjectid_salesprocessinstance: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_topicmodelconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_service: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_topicmodelexecutionhistory: DevKit.WebApi.LookupValue;
+		regardingobjectid_serviceappointment: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_uii_action: DevKit.WebApi.LookupValue;
+		regardingobjectid_servicecontractcontacts: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_uii_audit: DevKit.WebApi.LookupValue;
+		regardingobjectid_serviceplan: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_uii_context: DevKit.WebApi.LookupValue;
+		regardingobjectid_serviceplanmapping: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_uii_hostedapplication: DevKit.WebApi.LookupValue;
+		regardingobjectid_settingdefinition: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_uii_nonhostedapplication: DevKit.WebApi.LookupValue;
+		regardingobjectid_sharedlinksetting: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_uii_option: DevKit.WebApi.LookupValue;
+		regardingobjectid_site: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_uii_savedsession: DevKit.WebApi.LookupValue;
+		regardingobjectid_solutioncomponentattributeconfiguration: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_uii_sessiontransfer: DevKit.WebApi.LookupValue;
+		regardingobjectid_solutioncomponentbatchconfiguration: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_uii_workflow: DevKit.WebApi.LookupValue;
+		regardingobjectid_solutioncomponentconfiguration: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_uii_workflowstep: DevKit.WebApi.LookupValue;
+		regardingobjectid_solutioncomponentrelationshipconfiguration: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_uii_workflow_workflowstep_mapping: DevKit.WebApi.LookupValue;
+		regardingobjectid_stagesolutionupload: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_uom: DevKit.WebApi.LookupValue;
+		regardingobjectid_synapsedatabase: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_uomschedule: DevKit.WebApi.LookupValue;
+		regardingobjectid_synapselinkexternaltablestate: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_usermobileofflineprofilemembership: DevKit.WebApi.LookupValue;
+		regardingobjectid_synapselinkprofile: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_virtualentitymetadata: DevKit.WebApi.LookupValue;
+		regardingobjectid_synapselinkprofileentity: string;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_workflowbinary: DevKit.WebApi.LookupValue;
+		regardingobjectid_synapselinkprofileentitystate: string;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_synapselinkschedule: string;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_systemuserauthorizationchangetracker: string;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_teammobileofflineprofilemembership: string;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_territory: string;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_topic: string;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_topichistory: string;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_topicmodel: string;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_topicmodelconfiguration: string;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_topicmodelexecutionhistory: string;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_uii_action: string;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_uii_audit: string;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_uii_context: string;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_uii_hostedapplication: string;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_uii_nonhostedapplication: string;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_uii_option: string;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_uii_savedsession: string;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_uii_sessiontransfer: string;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_uii_workflow: string;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_uii_workflowstep: string;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_uii_workflow_workflowstep_mapping: string;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_uom: string;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_uomschedule: string;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_usermobileofflineprofilemembership: string;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_virtualentitymetadata: string;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_workflowbinary: string;
 		/** Version number of the mailbox tracking folder. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -1632,4 +1684,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

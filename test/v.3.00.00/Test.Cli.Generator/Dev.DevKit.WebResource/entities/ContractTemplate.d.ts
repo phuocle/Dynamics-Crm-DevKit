@@ -59,8 +59,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -68,63 +70,63 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Abbreviation of the contract template name. */
-		Abbreviation: DevKit.WebApi.StringValue;
+		Abbreviation: string;
 		/** Criteria for the contracts based on the template, such as number of cases, time, or coverage dates. */
-		AllotmentTypeCode: DevKit.WebApi.OptionSetValue;
+		AllotmentTypeCode: OptionSet.ContractTemplate.AllotmentTypeCode;
 		/** How often the customer or account is to be billed in contracts that are based on the template. */
-		BillingFrequencyCode: DevKit.WebApi.OptionSetValue;
+		BillingFrequencyCode: OptionSet.ContractTemplate.BillingFrequencyCode;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.ContractTemplate.ComponentState;
 		/** Unique identifier of the level of service specified in contracts that are based on the template. */
-		ContractServiceLevelCode: DevKit.WebApi.OptionSetValue;
+		ContractServiceLevelCode: OptionSet.ContractTemplate.ContractServiceLevelCode;
 		/** Unique identifier of the contract template. */
-		ContractTemplateId: DevKit.WebApi.GuidValue;
+		ContractTemplateId: string;
 		/** For internal use only. */
-		ContractTemplateIdUnique: DevKit.WebApi.GuidValueReadonly;
+		readonly ContractTemplateIdUnique: string;
 		/** Unique identifier of the user who created the contract template. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the contract template was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the contracttemplate. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Description of the contract template. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Days of the week and times for which contracts based on the template are effective. */
-		EffectivityCalendar: DevKit.WebApi.StringValue;
+		EffectivityCalendar: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Version in which the form is introduced. */
-		IntroducedVersion: DevKit.WebApi.StringValue;
+		IntroducedVersion: string;
 		/** Information that specifies whether this component can be customized. */
-		IsCustomizable: DevKit.WebApi.ManagedPropertyValue;
+		IsCustomizable: string;
 		/** Indicates whether the solution component is part of a managed solution. */
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsManaged: boolean;
 		/** Unique identifier of the user who last modified the contract template. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the contract template was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the contracttemplate. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Name of the contract template. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Unique identifier for the organization */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** For internal use only. */
-		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly OverwriteTime_UtcDateOnly: Date;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** For internal use only. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SupportingSolutionId: string;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Specifies whether the discount is a percentage or a monetary amount in contracts based on the template. */
-		UseDiscountAsPercentage: DevKit.WebApi.BooleanValue;
+		UseDiscountAsPercentage: boolean;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -185,4 +187,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

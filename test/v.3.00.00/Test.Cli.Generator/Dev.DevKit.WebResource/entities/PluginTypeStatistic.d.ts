@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,45 +30,45 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** The average execution time (in milliseconds) for the plug-in type. */
-		AverageExecuteTimeInMilliseconds: DevKit.WebApi.IntegerValueReadonly;
+		readonly AverageExecuteTimeInMilliseconds: number;
 		/** The plug-in type percentage contribution to crashes. */
-		CrashContributionPercent: DevKit.WebApi.IntegerValueReadonly;
+		readonly CrashContributionPercent: number;
 		/** Number of times the plug-in type has crashed. */
-		CrashCount: DevKit.WebApi.IntegerValueReadonly;
+		readonly CrashCount: number;
 		/** Percentage of crashes for the plug-in type. */
-		CrashPercent: DevKit.WebApi.IntegerValueReadonly;
+		readonly CrashPercent: number;
 		/** Unique identifier of the user who created the plug-in type statistic. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the plug-in type statistic was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the plug-in type statistic. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Number of times the plug-in type has been executed. */
-		ExecuteCount: DevKit.WebApi.IntegerValueReadonly;
+		readonly ExecuteCount: number;
 		/** Number of times the plug-in type has failed. */
-		FailureCount: DevKit.WebApi.IntegerValueReadonly;
+		readonly FailureCount: number;
 		/** Percentage of failures for the plug-in type. */
-		FailurePercent: DevKit.WebApi.IntegerValueReadonly;
+		readonly FailurePercent: number;
 		/** Unique identifier of the user who last modified the plug-in type statistic. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the plug-in type statistic was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the plug-in type statistic. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Unique identifier of the organization with which the plug-in type statistic is associated. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Unique identifier of the plug-in type associated with this plug-in type statistic. */
-		PluginTypeId: DevKit.WebApi.LookupValueReadonly;
+		readonly PluginTypeId: string;
 		/** Unique identifier of the plug-in type statistic. */
-		PluginTypeStatisticId: DevKit.WebApi.GuidValueReadonly;
+		readonly PluginTypeStatisticId: string;
 		/** The plug-in type percentage contribution to Worker process termination due to excessive CPU usage. */
-		TerminateCpuContributionPercent: DevKit.WebApi.IntegerValueReadonly;
+		readonly TerminateCpuContributionPercent: number;
 		/** The plug-in type percentage contribution to Worker process termination due to excessive handle usage. */
-		TerminateHandlesContributionPercent: DevKit.WebApi.IntegerValueReadonly;
+		readonly TerminateHandlesContributionPercent: number;
 		/** The plug-in type percentage contribution to Worker process termination due to excessive memory usage. */
-		TerminateMemoryContributionPercent: DevKit.WebApi.IntegerValueReadonly;
+		readonly TerminateMemoryContributionPercent: number;
 		/** The plug-in type percentage contribution to Worker process termination due to unknown reasons. */
-		TerminateOtherContributionPercent: DevKit.WebApi.IntegerValueReadonly;
+		readonly TerminateOtherContributionPercent: number;
 	}
 }
 declare namespace OptionSet {
@@ -89,4 +91,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

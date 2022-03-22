@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,25 +30,25 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.RibbonCustomization.ComponentState;
 		/** Specifies which entity's ribbons this customization applies to. If null, then the customizations apply to the global ribbons. */
-		Entity1: DevKit.WebApi.StringValue;
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		Entity1: string;
+		readonly IsManaged: boolean;
 		/** Unique identifier of the organization. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** For internal use only. */
-		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
-		PublishedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly OverwriteTime_UtcDateOnly: Date;
+		readonly PublishedOn_UtcDateAndTime: Date;
 		/** Unique identifier. */
-		RibbonCustomizationId: DevKit.WebApi.GuidValue;
+		RibbonCustomizationId: string;
 		/** Unique identifier for this row. */
-		RibbonCustomizationUniqueId: DevKit.WebApi.GuidValueReadonly;
+		readonly RibbonCustomizationUniqueId: string;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** For internal use only. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SupportingSolutionId: string;
 		/** Represents a version of customizations to be synchronized with the Microsoft Dynamics 365 client for Outlook. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -79,4 +81,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

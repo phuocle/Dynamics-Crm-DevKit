@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,27 +30,27 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Tells whether the role privilege can be deleted. */
-		CanBeDeleted: DevKit.WebApi.ManagedPropertyValue;
+		CanBeDeleted: string;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		readonly ComponentState: OptionSet.RolePrivileges.ComponentState;
+		readonly IsManaged: boolean;
 		/** For internal use only. */
-		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly OverwriteTime_UtcDateOnly: Date;
 		/** System-generated attribute that stores the privileges associated with the role. */
-		PrivilegeDepthMask: DevKit.WebApi.IntegerValue;
+		PrivilegeDepthMask: number;
 		/** Unique identifier of the privilege associated with the role. */
-		PrivilegeId: DevKit.WebApi.GuidValueReadonly;
+		readonly PrivilegeId: string;
 		/** Unique identifier of the role that is associated with the role privilege. */
-		RoleId: DevKit.WebApi.GuidValueReadonly;
+		readonly RoleId: string;
 		/** Unique identifier of the role privilege. */
-		RolePrivilegeId: DevKit.WebApi.GuidValue;
+		RolePrivilegeId: string;
 		/** For internal use only. */
-		RolePrivilegeIdUnique: DevKit.WebApi.GuidValueReadonly;
+		readonly RolePrivilegeIdUnique: string;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** For internal use only. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly SupportingSolutionId: string;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -81,4 +83,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

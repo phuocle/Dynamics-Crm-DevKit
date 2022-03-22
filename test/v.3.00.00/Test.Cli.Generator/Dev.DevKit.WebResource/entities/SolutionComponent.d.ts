@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,32 +30,32 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** The object type code of the component. */
-		ComponentType: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentType: OptionSet.SolutionComponent.ComponentType;
 		/** Unique identifier of the user who created the solution */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the solution was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the solution. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Indicates whether this component is metadata or data. */
-		IsMetadata: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsMetadata: boolean;
 		/** Unique identifier of the user who last modified the solution. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the solution was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the solution. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Unique identifier of the object with which the component is associated. */
-		ObjectId: DevKit.WebApi.GuidValueReadonly;
+		readonly ObjectId: string;
 		/** Indicates the include behavior of the root component. */
-		RootComponentBehavior: DevKit.WebApi.OptionSetValueReadonly;
+		readonly RootComponentBehavior: OptionSet.SolutionComponent.RootComponentBehavior;
 		/** The parent ID of the subcomponent, which will be a root */
-		RootSolutionComponentId: DevKit.WebApi.GuidValueReadonly;
+		readonly RootSolutionComponentId: string;
 		/** Unique identifier of the solution component. */
-		SolutionComponentId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionComponentId: string;
 		/** Unique identifier of the solution. */
-		SolutionId: DevKit.WebApi.LookupValueReadonly;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly SolutionId: string;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -266,4 +268,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

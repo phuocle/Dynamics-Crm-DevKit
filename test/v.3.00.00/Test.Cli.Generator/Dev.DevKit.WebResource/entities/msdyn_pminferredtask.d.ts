@@ -47,8 +47,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -56,82 +58,82 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** For internal use only. */
-		ComponentIdUnique: DevKit.WebApi.GuidValueReadonly;
+		readonly ComponentIdUnique: string;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.msdyn_pminferredtask.ComponentState;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** For internal use only. */
-		IsCustomizable: DevKit.WebApi.ManagedPropertyValue;
+		IsCustomizable: string;
 		/** Indicates whether the solution component is part of a managed solution. */
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsManaged: boolean;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Computed data to drive automation for this task. */
-		msdyn_automationdata: DevKit.WebApi.StringValue;
+		msdyn_automationdata: string;
 		/** The status of automation for this task. */
-		msdyn_automationstatus: DevKit.WebApi.OptionSetValue;
-		msdyn_description: DevKit.WebApi.StringValue;
+		msdyn_automationstatus: OptionSet.msdyn_pminferredtask.msdyn_automationstatus;
+		msdyn_description: string;
 		/** Location of the data used as input for Task Analysis. */
-		msdyn_inputdatabinding: DevKit.WebApi.StringValue;
+		msdyn_inputdatabinding: string;
 		/** Surfaces whether the analysis report is currently available. */
-		msdyn_isreportavailable: DevKit.WebApi.BooleanValue;
+		msdyn_isreportavailable: boolean;
 		/** Identifies uniquely the last successful processing of the task. */
-		msdyn_iterationid: DevKit.WebApi.StringValue;
-		msdyn_lasterrors: DevKit.WebApi.StringValue;
-		msdyn_lasterrorsreport: DevKit.WebApi.StringValueReadonly;
+		msdyn_iterationid: string;
+		msdyn_lasterrors: string;
+		readonly msdyn_lasterrorsreport: string;
 		/** Date and time when the corresponding report was last refreshed. */
-		msdyn_lastreportrefreshdate_TimezoneDateAndTime: DevKit.WebApi.TimezoneDateAndTimeValue;
+		msdyn_lastreportrefreshdate_TimezoneDateAndTime: Date;
 		/** The name of the custom entity. */
-		msdyn_name: DevKit.WebApi.StringValue;
-		msdyn_outputdata: DevKit.WebApi.StringValue;
+		msdyn_name: string;
+		msdyn_outputdata: string;
 		/** Unique identifier for entity instances */
-		msdyn_pminferredtaskId: DevKit.WebApi.GuidValue;
+		msdyn_pminferredtaskId: string;
 		/** Data related to the report for this task. */
-		msdyn_reportdata: DevKit.WebApi.StringValue;
+		msdyn_reportdata: string;
 		/** The current status of the provisioning operation for the report associated to this task. */
-		msdyn_reportprovisioningstatus: DevKit.WebApi.OptionSetValue;
-		msdyn_sharedrecordingmetadata: DevKit.WebApi.StringValue;
+		msdyn_reportprovisioningstatus: OptionSet.msdyn_pminferredtask.msdyn_reportprovisioningstatus;
+		msdyn_sharedrecordingmetadata: string;
 		/** The data source of this Pm Inferred Task. */
-		msdyn_source: DevKit.WebApi.OptionSetValue;
+		msdyn_source: OptionSet.msdyn_pminferredtask.msdyn_source;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** For internal use only. */
-		OverwriteTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly OverwriteTime_UtcDateAndTime: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** Status of the PM Inferred Task */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.msdyn_pminferredtask.statecode;
 		/** Reason for the status of the PM Inferred Task */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.msdyn_pminferredtask.statuscode;
 		/** For internal use only. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SupportingSolutionId: string;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -216,4 +218,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

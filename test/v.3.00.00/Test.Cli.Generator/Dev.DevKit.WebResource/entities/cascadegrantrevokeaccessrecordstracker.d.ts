@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,30 +30,30 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier for entity instances */
-		cascadegrantrevokeaccessrecordstrackerId: DevKit.WebApi.GuidValue;
+		cascadegrantrevokeaccessrecordstrackerId: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** The name of the custom entity. */
-		name: DevKit.WebApi.StringValue;
+		name: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
-		ProcessedRecords: DevKit.WebApi.IntegerValue;
-		RecordsAttachment: DevKit.WebApi.StringValueReadonly;
-		RecordsJson: DevKit.WebApi.StringValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
+		ProcessedRecords: number;
+		readonly RecordsAttachment: string;
+		RecordsJson: string;
 		/** Status of the CascadeGrantRevokeAccessRecordsTracker */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.cascadegrantrevokeaccessrecordstracker.statecode;
 		/** Reason for the status of the CascadeGrantRevokeAccessRecordsTracker */
-		statuscode: DevKit.WebApi.OptionSetValue;
-		SyncTrackerId: DevKit.WebApi.LookupValue;
+		statuscode: OptionSet.cascadegrantrevokeaccessrecordstracker.statuscode;
+		SyncTrackerId: string;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
-		TotalRecords: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
+		TotalRecords: number;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 	}
 }
 declare namespace OptionSet {
@@ -86,4 +88,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

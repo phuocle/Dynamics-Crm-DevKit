@@ -45,25 +45,27 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
 		EntityCollectionName: string;
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
-		msdyn_additionalcontext: DevKit.WebApi.StringValue;
+		msdyn_additionalcontext: string;
 		/** Unique identifier for entity instances */
-		msdyn_casesuggestionId: DevKit.WebApi.GuidValue;
-		msdyn_confidencescore: DevKit.WebApi.DecimalValue;
-		msdyn_keyphrases: DevKit.WebApi.StringValue;
+		msdyn_casesuggestionId: string;
+		msdyn_confidencescore: number;
+		msdyn_keyphrases: string;
 		/** The name of the custom entity. */
-		msdyn_name: DevKit.WebApi.StringValue;
-		msdyn_rank: DevKit.WebApi.IntegerValue;
-		msdyn_suggestedentity: DevKit.WebApi.LookupValue;
-		msdyn_suggestionforentitylogicalname: DevKit.WebApi.StringValue;
-		msdyn_suggestionforid: DevKit.WebApi.StringValue;
+		msdyn_name: string;
+		msdyn_rank: number;
+		msdyn_suggestedentity: string;
+		msdyn_suggestionforentitylogicalname: string;
+		msdyn_suggestionforid: string;
 	}
 }
 declare namespace OptionSet {
@@ -86,4 +88,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

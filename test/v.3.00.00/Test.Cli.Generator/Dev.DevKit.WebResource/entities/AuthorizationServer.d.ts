@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,47 +30,47 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier for entity instances */
-		AuthorizationServerId: DevKit.WebApi.GuidValue;
+		AuthorizationServerId: string;
 		/**  The type of the Authorization Server  */
-		AuthorizationServerType: DevKit.WebApi.OptionSetValue;
+		AuthorizationServerType: OptionSet.AuthorizationServer.AuthorizationServerType;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Contains the metadata for the authorization server. */
-		Metadata: DevKit.WebApi.StringValue;
+		Metadata: string;
 		/** Shows the date and time when the metadata was refreshed from the authorization server. */
-		MetadataRefreshedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly MetadataRefreshedOn_UtcDateAndTime: Date;
 		/** Contains the URL for the metadata. */
-		MetadataUrl: DevKit.WebApi.StringValue;
+		MetadataUrl: string;
 		/** Shows who last updated the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Shows who last updated the record on behalf of another user. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Type the name of the authorization server. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Unique identifier for the organization */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Contains the issuer ID of the authorization server. */
-		PrincipalId: DevKit.WebApi.StringValue;
+		PrincipalId: string;
 		/** Indicates the realm. */
-		Realm: DevKit.WebApi.StringValue;
+		Realm: string;
 		/** Shows whether the authorization server is active or inactive. */
-		StateCode: DevKit.WebApi.OptionSetValueReadonly;
+		readonly StateCode: OptionSet.AuthorizationServer.StateCode;
 		/** Select the authorization server's status. */
-		StatusCode: DevKit.WebApi.OptionSetValue;
+		StatusCode: OptionSet.AuthorizationServer.StatusCode;
 		/** Shows the tenant ID. */
-		TenantId: DevKit.WebApi.GuidValue;
+		TenantId: string;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version number of the authorization server. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -109,4 +111,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

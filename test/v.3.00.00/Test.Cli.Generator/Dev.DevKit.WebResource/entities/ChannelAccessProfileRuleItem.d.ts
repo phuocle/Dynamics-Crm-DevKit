@@ -66,8 +66,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -75,58 +77,58 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Choose the channel access profile that the item is assigned to. */
-		AssociatedChannelAccessProfile: DevKit.WebApi.LookupValue;
+		AssociatedChannelAccessProfile: string;
 		/** Shows the channel access profile rule associated with this channel access profile rule item. */
-		ChannelAccessProfileRuleId: DevKit.WebApi.LookupValue;
+		ChannelAccessProfileRuleId: string;
 		/** Unique identifier for entity instances */
-		ChannelAccessProfileRuleItemId: DevKit.WebApi.GuidValue;
+		ChannelAccessProfileRuleItemId: string;
 		/** Unique identifier of the channel access profile rule item. */
-		ChannelAccessProfileRuleItemIdUnique: DevKit.WebApi.GuidValueReadonly;
+		readonly ChannelAccessProfileRuleItemIdUnique: string;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.ChannelAccessProfileRuleItem.ComponentState;
 		/** Condition for Rule item */
-		ConditionXml: DevKit.WebApi.StringValue;
+		ConditionXml: string;
 		/** Shows who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Type additional information to describe the channel access profile rule item. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Exchange rate for the currency associated with the channel access profile rule item with respect to the base currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Version in which the channel access profile rule item is introduced. */
-		IntroducedVersion: DevKit.WebApi.StringValue;
+		IntroducedVersion: string;
 		/** Is Managed */
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsManaged: boolean;
 		/** Shows who last updated the record */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Shows who last updated the record on behalf of another user. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Type a descriptive name for the channel access profile rule item. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Date and time when the record was created. */
-		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly OverwriteTime_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Sequence number of the Channel access profile rule item */
-		SequenceNumber: DevKit.WebApi.IntegerValue;
+		SequenceNumber: number;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** For internal use only. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SupportingSolutionId: string;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Exchange rate for the currency associated with the channel access profile rule item with respect to the base currency. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		UTCConversionTimeZoneCode: number;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -159,4 +161,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

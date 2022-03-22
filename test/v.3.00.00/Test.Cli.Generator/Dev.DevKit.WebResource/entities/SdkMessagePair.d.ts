@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,48 +30,48 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.SdkMessagePair.ComponentState;
 		/** Unique identifier of the user who created the SDK message pair. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the SDK message pair was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the sdkmessagepair. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Customization level of the SDK message filter. */
-		CustomizationLevel: DevKit.WebApi.IntegerValueReadonly;
+		readonly CustomizationLevel: number;
 		/** Version in which the component is deprecated. */
-		DeprecatedVersion: DevKit.WebApi.StringValue;
+		DeprecatedVersion: string;
 		/** Endpoint that the message pair is associated with. */
-		Endpoint: DevKit.WebApi.StringValue;
+		Endpoint: string;
 		/** Version in which the component is introduced. */
-		IntroducedVersion: DevKit.WebApi.StringValue;
+		IntroducedVersion: string;
 		/** Information that specifies whether this component is managed. */
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsManaged: boolean;
 		/** Unique identifier of the user who last modified the SDK message pair. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the SDK message pair was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the sdkmessagepair. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Namespace that the message pair is associated with. */
-		Namespace: DevKit.WebApi.StringValue;
+		Namespace: string;
 		/** Unique identifier of the organization with which the SDK message pair is associated. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** For internal use only. */
-		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
-		SdkMessageBindingInformation: DevKit.WebApi.StringValue;
+		readonly OverwriteTime_UtcDateOnly: Date;
+		SdkMessageBindingInformation: string;
 		/** Unique identifier of the message with which the SDK message pair is associated. */
-		SdkMessageId: DevKit.WebApi.LookupValueReadonly;
+		readonly SdkMessageId: string;
 		/** Unique identifier of the SDK message pair entity. */
-		SdkMessagePairId: DevKit.WebApi.GuidValue;
+		SdkMessagePairId: string;
 		/** Unique identifier of the SDK message pair. */
-		SdkMessagePairIdUnique: DevKit.WebApi.GuidValueReadonly;
+		readonly SdkMessagePairIdUnique: string;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** For internal use only. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SupportingSolutionId: string;
 		/** For internal use only. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -102,4 +104,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

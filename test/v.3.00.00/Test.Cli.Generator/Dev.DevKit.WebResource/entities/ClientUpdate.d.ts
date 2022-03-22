@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,18 +30,18 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the client update. */
-		ClientUpdateId: DevKit.WebApi.GuidValue;
+		ClientUpdateId: string;
 		/** For internal use only. Date and time when the ClientUpdate script was created on server. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Description of the client update. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Contents of the client update. */
-		SqlScript: DevKit.WebApi.StringValue;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		SqlScript: string;
+		readonly VersionNumber: number;
 		/** For internal use only. Should be set by client to 1 after action was executed. */
-		WasExecuted: DevKit.WebApi.BooleanValue;
+		WasExecuted: boolean;
 		/** For internal use only. Values are: 1 - Before SchemaChanges; 2 - After SchemaChanges but before Download data; 3 - After download data. */
-		WhenExecute: DevKit.WebApi.OptionSetValue;
+		WhenExecute: OptionSet.ClientUpdate.WhenExecute;
 	}
 }
 declare namespace OptionSet {
@@ -70,4 +72,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

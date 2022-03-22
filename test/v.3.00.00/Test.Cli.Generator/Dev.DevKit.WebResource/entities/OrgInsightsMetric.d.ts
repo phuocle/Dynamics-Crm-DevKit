@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,16 +30,16 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Date and time when the organization insights metric was created */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Name of the metric which is used for retrieving the data */
-		InternalName: DevKit.WebApi.StringValue;
+		InternalName: string;
 		/** Type of the metric */
-		MetricType: DevKit.WebApi.OptionSetValue;
+		MetricType: OptionSet.OrgInsightsMetric.MetricType;
 		/** Legend Name used while displaying the metric */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Unique identifier of the organization associated with the record */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
-		OrgInsightsMetricId: DevKit.WebApi.GuidValue;
+		readonly OrganizationId: string;
+		OrgInsightsMetricId: string;
 	}
 }
 declare namespace OptionSet {
@@ -66,4 +68,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

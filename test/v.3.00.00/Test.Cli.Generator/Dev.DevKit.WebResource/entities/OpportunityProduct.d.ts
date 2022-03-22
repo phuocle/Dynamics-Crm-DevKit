@@ -358,8 +358,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -367,136 +369,136 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Shows the total price of the opportunity product, based on the price per unit, volume discount, and quantity. */
-		BaseAmount: DevKit.WebApi.MoneyValue;
+		BaseAmount: number;
 		/** Value of the Amount in base currency. */
-		BaseAmount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly BaseAmount_Base: number;
 		/** Shows who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Type additional information to describe the opportunity product, such as manufacturing details. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** The default image for the entity. */
-		EntityImage: DevKit.WebApi.StringValue;
-		EntityImage_Timestamp: DevKit.WebApi.BigIntValueReadonly;
-		EntityImage_URL: DevKit.WebApi.StringValueReadonly;
-		EntityImageId: DevKit.WebApi.GuidValueReadonly;
+		EntityImage: string;
+		EntityImage_Timestamp: number;
+		EntityImage_URL: string;
+		readonly EntityImageId: string;
 		/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Shows the total amount due for the opportunity product, calculated on the Amount value minus the Manual Discount amount. */
-		ExtendedAmount: DevKit.WebApi.MoneyValue;
+		ExtendedAmount: number;
 		/** Value of the Extended Amount in base currency. */
-		ExtendedAmount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly ExtendedAmount_Base: number;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Select whether the pricing on the opportunity product reflects an override of the product catalog pricing. */
-		IsPriceOverridden: DevKit.WebApi.BooleanValue;
+		IsPriceOverridden: boolean;
 		/** For system use only. */
-		IsProductOverridden: DevKit.WebApi.BooleanValue;
+		IsProductOverridden: boolean;
 		/** Type the line item number for the opportunity product to easily identify the product in the opportunity documents and make sure it's listed in the correct order. */
-		LineItemNumber: DevKit.WebApi.IntegerValue;
+		LineItemNumber: number;
 		/** Type the manual discount amount for the opportunity product to deduct any negotiated or other savings from the product total. */
-		ManualDiscountAmount: DevKit.WebApi.MoneyValue;
+		ManualDiscountAmount: number;
 		/** Value of the Manual Discount Amount in base currency. */
-		ManualDiscountAmount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly ManualDiscountAmount_Base: number;
 		/** Shows who last updated the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the opportunityproduct. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Billing method for the project opportunity line. Valid values are Time and Material and Fixed Price */
-		msdyn_BillingMethod: DevKit.WebApi.OptionSetValue;
+		msdyn_BillingMethod: OptionSet.OpportunityProduct.msdyn_BillingMethod;
 		/** Enter the customer budget amount for this opportunity line. */
-		msdyn_BudgetAmount: DevKit.WebApi.MoneyValue;
+		msdyn_BudgetAmount: number;
 		/** Value of the Budget Amount in base currency. */
-		msdyn_budgetamount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_budgetamount_Base: number;
 		/** Shows the total cost price of the product based on the cost price per unit and quantity. */
-		msdyn_CostAmount: DevKit.WebApi.MoneyValue;
+		msdyn_CostAmount: number;
 		/** Value of the Cost Amount in base currency. */
-		msdyn_costamount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_costamount_Base: number;
 		/** Cost price per unit of the product. The default is the cost price of the product. */
-		msdyn_CostPricePerUnit: DevKit.WebApi.MoneyValue;
+		msdyn_CostPricePerUnit: number;
 		/** Value of the Cost Price Per Unit in base currency. */
-		msdyn_costpriceperunit_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_costpriceperunit_Base: number;
 		/** Enter the duration of the agreement */
-		msdyn_Duration: DevKit.WebApi.IntegerValue;
+		msdyn_Duration: number;
 		/** Enter the end date of the agreement */
-		msdyn_enddate_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		msdyn_enddate_UtcDateOnly: Date;
 		/** The field to distinguish the order lines to be of project service or field service */
-		msdyn_LineType: DevKit.WebApi.OptionSetValue;
+		msdyn_LineType: OptionSet.OpportunityProduct.msdyn_LineType;
 		/** Select a price list for the opportunity line */
-		msdyn_pricelist: DevKit.WebApi.LookupValue;
+		msdyn_pricelist: string;
 		/** Select the project for this opportunity line. */
-		msdyn_Project: DevKit.WebApi.LookupValue;
+		msdyn_Project: string;
 		/** Select the service account for the opportunity line */
-		msdyn_serviceaccount: DevKit.WebApi.LookupValue;
+		msdyn_serviceaccount: string;
 		/** Start date of the Agreement */
-		msdyn_startdate_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		msdyn_startdate_UtcDateOnly: Date;
 		/** Unique identifier of the opportunity with which the opportunity product is associated. */
-		OpportunityId: DevKit.WebApi.LookupValue;
+		OpportunityId: string;
 		/** Unique identifier of the opportunity product. */
-		OpportunityProductId: DevKit.WebApi.GuidValue;
+		OpportunityProductId: string;
 		/** Opportunity Product Name. Added for 1:n referential relationship (internal purposes only) */
-		OpportunityProductName: DevKit.WebApi.StringValue;
+		OpportunityProductName: string;
 		/** Select the status of the opportunity product. */
-		OpportunityStateCode: DevKit.WebApi.OptionSetValueReadonly;
+		readonly OpportunityStateCode: OptionSet.OpportunityProduct.OpportunityStateCode;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValueReadonly;
+		readonly OwnerId_team: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Choose the parent bundle associated with this product */
-		ParentBundleId: DevKit.WebApi.GuidValue;
+		ParentBundleId: string;
 		/** Choose the parent bundle associated with this product */
-		ParentBundleIdRef: DevKit.WebApi.LookupValue;
+		ParentBundleIdRef: string;
 		/** Shows the price per unit of the opportunity product, based on the price list specified on the parent opportunity. */
-		PricePerUnit: DevKit.WebApi.MoneyValue;
+		PricePerUnit: number;
 		/** Value of the Price Per Unit in base currency. */
-		PricePerUnit_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly PricePerUnit_Base: number;
 		/** Select the pricing error for the opportunity product. */
-		PricingErrorCode: DevKit.WebApi.OptionSetValue;
+		PricingErrorCode: OptionSet.OpportunityProduct.PricingErrorCode;
 		/** Unique identifier of the product line item association with bundle in the opportunity */
-		ProductAssociationId: DevKit.WebApi.GuidValue;
+		ProductAssociationId: string;
 		/** Type a detailed product description or additional notes about the opportunity product, such as talking points or product updates, that will assist the sales team when they discuss the product with the customer. */
-		ProductDescription: DevKit.WebApi.StringValue;
+		ProductDescription: string;
 		/** Choose the product to include on the opportunity to link the product's pricing and other information to the opportunity. */
-		ProductId: DevKit.WebApi.LookupValue;
+		ProductId: string;
 		/** Calculated field that will be populated by name and description of the product. */
-		ProductName: DevKit.WebApi.StringValue;
+		ProductName: string;
 		/** Product Type */
-		ProductTypeCode: DevKit.WebApi.OptionSetValue;
+		ProductTypeCode: OptionSet.OpportunityProduct.ProductTypeCode;
 		/** Status of the property configuration. */
-		PropertyConfigurationStatus: DevKit.WebApi.OptionSetValue;
+		PropertyConfigurationStatus: OptionSet.OpportunityProduct.PropertyConfigurationStatus;
 		/** Type the amount or quantity of the product the customer would like to purchase. */
-		Quantity: DevKit.WebApi.DecimalValue;
+		Quantity: number;
 		/** Shows the ID of the data that maintains the sequence. */
-		SequenceNumber: DevKit.WebApi.IntegerValue;
+		SequenceNumber: number;
 		/** Skip price calculation */
-		SkipPriceCalculation: DevKit.WebApi.OptionSetValue;
+		SkipPriceCalculation: OptionSet.OpportunityProduct.SkipPriceCalculation;
 		/** Type the tax amount to be applied on the opportunity product. */
-		Tax: DevKit.WebApi.MoneyValue;
+		Tax: number;
 		/** Value of the Tax in base currency. */
-		Tax_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly Tax_Base: number;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** Choose the unit of measurement for the base unit quantity for this purchase, such as each or dozen. */
-		UoMId: DevKit.WebApi.LookupValue;
+		UoMId: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 		/** Shows the discount amount per unit if a specified volume is purchased. Configure volume discounts in the Product Catalog in the Settings area. */
-		VolumeDiscountAmount: DevKit.WebApi.MoneyValueReadonly;
+		readonly VolumeDiscountAmount: number;
 		/** Value of the Volume Discount in base currency. */
-		VolumeDiscountAmount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly VolumeDiscountAmount_Base: number;
 	}
 }
 declare namespace OptionSet {
@@ -641,4 +643,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

@@ -4,20 +4,18 @@ var DevKit;
 (function (DevKit) {
 	'use strict';
 	DevKit.RoleTemplatePrivilegesApi = function (e) {
-		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
 			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-			var property = {};
 			var getFormattedValue = function () {
 				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-					return EMPTY_STRING;
+					return '';
 				}
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
 					if (entity[logicalName + l] === entityLogicalName) {
 						return entity[logicalName + f];
 					}
-					return EMPTY_STRING;
+					return '';
 				}
 				if (isMultiOptionSet) {
 					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -42,30 +40,29 @@ var DevKit;
 			var setValue = function (value) {
 				if (isMultiOptionSet) value = value.join(',');
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+					value = value.replace('{', '').replace('}', '');
 					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
 				} else {
 					upsertEntity[logicalName] = value;
 				}
 				entity[logicalName] = value;
 			};
-			Object.defineProperty(property, 'FormattedValue', {
+			Object.defineProperty(obj.FormattedValue, field, {
 				get: getFormattedValue
 			});
 			if (readOnly) {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue
 				});
 			}
 			else {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue,
 					set: setValue
 				});
 			}
-			return property;
 		}
-		var roletemplateprivileges = {
+		var _roletemplateprivileges = {
 			IsBasic: { a: 'isbasic' },
 			IsDeep: { a: 'isdeep' },
 			IsGlobal: { a: 'isglobal' },
@@ -77,20 +74,23 @@ var DevKit;
 		};
 		if (e === undefined) e = {};
 		var u = {};
-		for (var field in roletemplateprivileges) {
-			var a = roletemplateprivileges[field].a;
-			var b = roletemplateprivileges[field].b;
-			var c = roletemplateprivileges[field].c;
-			var d = roletemplateprivileges[field].d;
-			var g = roletemplateprivileges[field].g;
-			var r = roletemplateprivileges[field].r;
-			roletemplateprivileges[field] = webApiField(e, a, b, c, d, r, u, g);
+		var roletemplateprivileges = {};
+		roletemplateprivileges.ODataEntity = e;
+		roletemplateprivileges.FormattedValue = {};
+		for (var field in _roletemplateprivileges) {
+			var a = _roletemplateprivileges[field].a;
+			var b = _roletemplateprivileges[field].b;
+			var c = _roletemplateprivileges[field].c;
+			var d = _roletemplateprivileges[field].d;
+			var g = _roletemplateprivileges[field].g;
+			var r = _roletemplateprivileges[field].r;
+			webApiField(roletemplateprivileges, field, e, a, b, c, d, r, u, g);
 		}
 		roletemplateprivileges.Entity = u;
 		roletemplateprivileges.EntityName = 'roletemplateprivileges';
 		roletemplateprivileges.EntityCollectionName = '';
 		roletemplateprivileges['@odata.etag'] = e['@odata.etag'];
-		roletemplateprivileges.getAliasedValue = function (alias, isMultiOptionSet) {
+		roletemplateprivileges.getAliasedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias] === undefined || e[alias] === null) {
 				return null;
 			}
@@ -99,7 +99,7 @@ var DevKit;
 			}
 			return e[alias];
 		}
-		roletemplateprivileges.getAliasedFormattedValue = function (alias, isMultiOptionSet) {
+		roletemplateprivileges.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
 				return EMPTY_STRING;
 			}

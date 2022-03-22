@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,25 +30,25 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Actions the user can perform that cause a change */
-		Action: DevKit.WebApi.OptionSetValueReadonly;
+		readonly Action: OptionSet.Audit.Action;
 		/** Contains a CSV of the ColumnNumber metadata property of attributes */
-		AttributeMask: DevKit.WebApi.StringValueReadonly;
+		readonly AttributeMask: string;
 		/** Unique identifier of the auditing instance */
-		AuditId: DevKit.WebApi.GuidValueReadonly;
+		readonly AuditId: string;
 		/** Unique identifier of the calling user in case of an impersonated call */
-		CallingUserId: DevKit.WebApi.LookupValueReadonly;
+		readonly CallingUserId: string;
 		/** Contains a CSV of old values of all the attributes whose IsAuditEnabled property is True and are being changed */
-		ChangeData: DevKit.WebApi.StringValueReadonly;
+		readonly ChangeData: string;
 		/** Date and time when the audit record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** The action that causes the audit--it will be create, delete, or update */
-		Operation: DevKit.WebApi.OptionSetValueReadonly;
+		readonly Operation: OptionSet.Audit.Operation;
 		/** Unique identifier for multiple changes that are part of a single operation; this field contains the same GUID for all the audit rows generated in a single transaction */
-		TransactionId: DevKit.WebApi.GuidValueReadonly;
+		readonly TransactionId: string;
 		/** Additional information associated to the user who caused the change. */
-		UserAdditionalInfo: DevKit.WebApi.StringValue;
+		UserAdditionalInfo: string;
 		/** Unique identifier of the user who caused a change */
-		userid: DevKit.WebApi.LookupValueReadonly;
+		readonly userid: string;
 	}
 }
 declare namespace OptionSet {
@@ -229,4 +231,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

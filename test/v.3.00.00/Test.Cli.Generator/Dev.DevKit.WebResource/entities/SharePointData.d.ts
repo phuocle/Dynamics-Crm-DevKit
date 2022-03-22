@@ -44,8 +44,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -53,38 +55,38 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the SharePoint Data. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the SharePoint Data was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the SharePoint Data. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** SharePoint Data Serialized */
-		Data: DevKit.WebApi.StringValue;
+		Data: string;
 		/** Is valid */
-		IsValid: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsValid: boolean;
 		/** Unique identifier of the user who created the SharePoint Data. */
-		Location: DevKit.WebApi.LookupValueReadonly;
+		readonly Location: string;
 		/** Unique identifier of the user who last modified the SharePoint Data. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the Sharepoint Data was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the SharePoint Data. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Next Page Token of the SharePoint document. */
-		NextPageToken: DevKit.WebApi.StringValueReadonly;
+		readonly NextPageToken: string;
 		/** Unique identifier of the organization associated with the SharePoint Data. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** For internal use only. */
-		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
-		PageNumber: DevKit.WebApi.IntegerValueReadonly;
+		readonly OverwriteTime_UtcDateOnly: Date;
+		readonly PageNumber: number;
 		/** Previous Page Token of the SharePoint document. */
-		PreviousPageToken: DevKit.WebApi.StringValueReadonly;
+		readonly PreviousPageToken: string;
 		/** Regarding Object Id. */
-		RegardingObjectId: DevKit.WebApi.StringValueReadonly;
+		readonly RegardingObjectId: string;
 		/** Unique identifier of the SharePoint data record. */
-		SharePointDataId: DevKit.WebApi.GuidValue;
+		SharePointDataId: string;
 		/** Unique identifier of the user who created the SharePoint data. */
-		UserId: DevKit.WebApi.LookupValueReadonly;
+		readonly UserId: string;
 	}
 }
 declare namespace OptionSet {
@@ -107,4 +109,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

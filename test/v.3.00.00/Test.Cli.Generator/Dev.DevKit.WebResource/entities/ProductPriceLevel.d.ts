@@ -142,8 +142,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -151,71 +153,71 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Monetary amount for the price list. */
-		Amount: DevKit.WebApi.MoneyValue;
+		Amount: number;
 		/** Value of the Amount in base currency. */
-		Amount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly Amount_Base: number;
 		/** Unique identifier of the user who created the price list. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the price list was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Unique identifier of the discount list associated with the price list. */
-		DiscountTypeId: DevKit.WebApi.LookupValue;
+		DiscountTypeId: string;
 		/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the user who last modified the price list. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the price list was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Shows who last updated the record on behalf of another user. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Unique identifier of the organization associated with the price list. */
-		OrganizationId: DevKit.WebApi.GuidValueReadonly;
+		readonly OrganizationId: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Percentage for the price list. */
-		Percentage: DevKit.WebApi.DecimalValue;
+		Percentage: number;
 		/** Unique identifier of the price level associated with this price list. */
-		PriceLevelId: DevKit.WebApi.LookupValue;
+		PriceLevelId: string;
 		/** Pricing method applied to the price list. */
-		PricingMethodCode: DevKit.WebApi.OptionSetValue;
+		PricingMethodCode: OptionSet.ProductPriceLevel.PricingMethodCode;
 		/** Contains the id of the process associated with the entity. */
-		ProcessId: DevKit.WebApi.GuidValue;
+		ProcessId: string;
 		/** Product associated with the price list. */
-		ProductId: DevKit.WebApi.LookupValue;
+		ProductId: string;
 		/** User-defined product number. */
-		ProductNumber: DevKit.WebApi.StringValueReadonly;
+		readonly ProductNumber: string;
 		/** Unique identifier of the price list. */
-		ProductPriceLevelId: DevKit.WebApi.GuidValue;
+		ProductPriceLevelId: string;
 		/** Quantity of the product that must be sold for a given price level. */
-		QuantitySellingCode: DevKit.WebApi.OptionSetValue;
+		QuantitySellingCode: OptionSet.ProductPriceLevel.QuantitySellingCode;
 		/** Rounding option amount for the price list. */
-		RoundingOptionAmount: DevKit.WebApi.MoneyValue;
+		RoundingOptionAmount: number;
 		/** Value of the Rounding Amount in base currency. */
-		RoundingOptionAmount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly RoundingOptionAmount_Base: number;
 		/** Option for rounding the price list. */
-		RoundingOptionCode: DevKit.WebApi.OptionSetValue;
+		RoundingOptionCode: OptionSet.ProductPriceLevel.RoundingOptionCode;
 		/** Policy for rounding the price list. */
-		RoundingPolicyCode: DevKit.WebApi.OptionSetValue;
+		RoundingPolicyCode: OptionSet.ProductPriceLevel.RoundingPolicyCode;
 		/** Contains the id of the stage where the entity is located. */
-		StageId: DevKit.WebApi.GuidValue;
+		StageId: string;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** A comma separated list of string values representing the unique identifiers of stages in a Business Process Flow Instance in the order that they occur. */
-		TraversedPath: DevKit.WebApi.StringValue;
+		TraversedPath: string;
 		/** Unique identifier of the unit for the price list. */
-		UoMId: DevKit.WebApi.LookupValue;
+		UoMId: string;
 		/** Unique identifier of the unit schedule for the price list. */
-		UoMScheduleId: DevKit.WebApi.LookupValue;
+		UoMScheduleId: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -276,4 +278,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

@@ -62,8 +62,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -71,70 +73,70 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was connected to the sequence. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
-		msdyn_appliedsequenceinstance: DevKit.WebApi.LookupValue;
+		readonly ModifiedOnBehalfBy: string;
+		msdyn_appliedsequenceinstance: string;
 		/** The current step count for the connected sequence. */
-		msdyn_currentstepcount: DevKit.WebApi.IntegerValue;
+		msdyn_currentstepcount: number;
 		/** The current step name of the Sequence Target Step entity. */
-		msdyn_currentstepname: DevKit.WebApi.StringValue;
+		msdyn_currentstepname: string;
 		/** Shows the sub type of sequence target step */
-		msdyn_currentstepsubtype: DevKit.WebApi.OptionSetValue;
-		msdyn_currentsteptype: DevKit.WebApi.OptionSetValue;
+		msdyn_currentstepsubtype: OptionSet.msdyn_sequencetarget.msdyn_currentstepsubtype;
+		msdyn_currentsteptype: OptionSet.msdyn_sequencetarget.msdyn_currentsteptype;
 		/** Reason for deactivation of sequence target */
-		msdyn_deactivatereason: DevKit.WebApi.OptionSetValue;
+		msdyn_deactivatereason: OptionSet.msdyn_sequencetarget.msdyn_deactivatereason;
 		/** MS Flow Run Identifier */
-		msdyn_msflowrunid: DevKit.WebApi.StringValue;
+		msdyn_msflowrunid: string;
 		/** The name of the custom entity. */
-		msdyn_name: DevKit.WebApi.StringValue;
-		msdyn_parentsequence: DevKit.WebApi.LookupValue;
+		msdyn_name: string;
+		msdyn_parentsequence: string;
 		/** Version of the sequence */
-		msdyn_ParentSequenceVersion: DevKit.WebApi.IntegerValue;
+		msdyn_ParentSequenceVersion: number;
 		/** The information about record to which this sequence instance is related */
-		msdyn_regarding: DevKit.WebApi.StringValue;
+		msdyn_regarding: string;
 		/** Unique identifier for Segment associated with Sequence Target. */
-		msdyn_segment: DevKit.WebApi.LookupValue;
+		msdyn_segment: string;
 		/** Unique identifier for entity instances */
-		msdyn_sequencetargetId: DevKit.WebApi.GuidValue;
+		msdyn_sequencetargetId: string;
 		/** It stores unique key for each record. */
-		msdyn_sequencetargetuniquekey: DevKit.WebApi.StringValue;
+		msdyn_sequencetargetuniquekey: string;
 		/** Target Record */
-		msdyn_target: DevKit.WebApi.LookupValue;
+		msdyn_target: string;
 		/** The total step count for the connected sequence. */
-		msdyn_totalstepcount: DevKit.WebApi.IntegerValue;
+		msdyn_totalstepcount: number;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Status of the Sequence Target */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.msdyn_sequencetarget.statecode;
 		/** Reason for the status of the Sequence Target */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.msdyn_sequencetarget.statuscode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -215,4 +217,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

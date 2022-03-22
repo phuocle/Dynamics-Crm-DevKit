@@ -53,8 +53,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -62,49 +64,49 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the business unit with which the resource specification is associated. */
-		BusinessUnitId: DevKit.WebApi.LookupValue;
+		BusinessUnitId: string;
 		/** Additional constraints, specified as expressions, which are used to filter a set of valid resources. */
-		Constraints: DevKit.WebApi.StringValue;
+		Constraints: string;
 		/** Unique identifier of the user who created the resource specification. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the resource specification was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the resourcespec. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Selection rule that allows the scheduling engine to select a number of resources from a pool of resources. The rules can be associated with a service. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Number that specifies the minimal effort required from resources. */
-		EffortRequired: DevKit.WebApi.DoubleValue;
+		EffortRequired: number;
 		/** Unique identifier of the scheduling group with which the resource specification is associated. */
-		GroupObjectId: DevKit.WebApi.GuidValue;
+		GroupObjectId: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the user who last modified the resource specification. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the resource specification was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the resourcespec. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Name of the resource specification. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Search strategy to use for the resource specification. */
-		ObjectiveExpression: DevKit.WebApi.StringValue;
+		ObjectiveExpression: string;
 		/** Unique identifier of the organization with which the resource specification is associated. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Required number of resources that must be available. Use -1 to indicate all resources. */
-		RequiredCount: DevKit.WebApi.IntegerValue;
+		RequiredCount: number;
 		/** Unique identifier of the resource specification. */
-		ResourceSpecId: DevKit.WebApi.GuidValue;
+		ResourceSpecId: string;
 		/** Value that specifies that all valid and available resources must be in the same site. */
-		SameSite: DevKit.WebApi.BooleanValue;
+		SameSite: boolean;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -131,4 +133,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

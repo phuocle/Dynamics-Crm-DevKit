@@ -223,8 +223,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -232,133 +234,133 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Exchange rate for the currency associated with the entity with respect to the base currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Select the customer who this contract belongs to.  */
-		msdyn_AccountCustomer: DevKit.WebApi.LookupValue;
-		msdyn_AccountingDate_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
-		msdyn_AccountVendor: DevKit.WebApi.LookupValue;
+		msdyn_AccountCustomer: string;
+		msdyn_AccountingDate_UtcDateOnly: Date;
+		msdyn_AccountVendor: string;
 		/** Enter the amount on the project contract line estimate. */
-		msdyn_Amount: DevKit.WebApi.MoneyValue;
-		msdyn_amount_after_tax: DevKit.WebApi.MoneyValueReadonly;
+		msdyn_Amount: number;
+		readonly msdyn_amount_after_tax: number;
 		/** Value of the amount_after_tax in base currency. */
-		msdyn_amount_after_tax_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_amount_after_tax_Base: number;
 		/** Value of the Amount in base currency. */
-		msdyn_amount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_amount_Base: number;
 		/** Select the amount calculation method used for this project contract estimate line. Valid values are: 
 0: Multiply Quantity By Price
 1: Fixed Price
 2: Multiply Basis Quantity By Price
 3: Multiply Basis Amount By Percent  */
-		msdyn_AmountMethod: DevKit.WebApi.OptionSetValue;
-		msdyn_BasisAmount: DevKit.WebApi.MoneyValue;
+		msdyn_AmountMethod: OptionSet.msdyn_orderlinetransaction.msdyn_AmountMethod;
+		msdyn_BasisAmount: number;
 		/** Value of the Basis Amount in base currency. */
-		msdyn_basisamount_Base: DevKit.WebApi.MoneyValueReadonly;
-		msdyn_BasisPrice: DevKit.WebApi.MoneyValue;
+		readonly msdyn_basisamount_Base: number;
+		msdyn_BasisPrice: number;
 		/** Value of the Basis Price in base currency. */
-		msdyn_basisprice_Base: DevKit.WebApi.MoneyValueReadonly;
-		msdyn_BasisQuantity: DevKit.WebApi.DecimalValue;
+		readonly msdyn_basisprice_Base: number;
+		msdyn_BasisQuantity: number;
 		/** Select whether this project contract line estimate will be charged to the customer or not. Only chargeable project contract line estimates will add to the invoice total */
-		msdyn_BillingType: DevKit.WebApi.OptionSetValue;
+		msdyn_BillingType: OptionSet.msdyn_orderlinetransaction.msdyn_BillingType;
 		/** Shows the resource. */
-		msdyn_bookableresource: DevKit.WebApi.LookupValue;
+		msdyn_bookableresource: string;
 		/** Select the customer contact of this Project Contract. */
-		msdyn_ContactCustomer: DevKit.WebApi.LookupValue;
-		msdyn_ContactVendor: DevKit.WebApi.LookupValue;
+		msdyn_ContactCustomer: string;
+		msdyn_ContactVendor: string;
 		/** Select whether the customer was a account or a contact */
-		msdyn_CustomerType: DevKit.WebApi.OptionSetValue;
+		msdyn_CustomerType: OptionSet.msdyn_orderlinetransaction.msdyn_CustomerType;
 		/** Type a description of the project contract line estimate */
-		msdyn_description: DevKit.WebApi.StringValue;
+		msdyn_description: string;
 		/** Enter the document date. */
-		msdyn_DocumentDate_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		msdyn_DocumentDate_UtcDateOnly: Date;
 		/** Enter the end date on the project contract line estimate. */
-		msdyn_EndDateTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
-		msdyn_ExchangeRateDate_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		msdyn_EndDateTime_UtcDateOnly: Date;
+		msdyn_ExchangeRateDate_UtcDateOnly: Date;
 		/** Shows the project contract line that this estimate line belongs to. */
-		msdyn_orderlinetransactionId: DevKit.WebApi.GuidValue;
+		msdyn_orderlinetransactionId: string;
 		/** Foreign key to the detail line that originated this entry. For example, revenue line points to it's related cost line. */
-		msdyn_Origin: DevKit.WebApi.LookupValue;
+		msdyn_Origin: string;
 		/** Relevant when amount calculation method on the Project Contract line transactions is "Multiply basis amount by percent" */
-		msdyn_Percent: DevKit.WebApi.DecimalValue;
+		msdyn_Percent: number;
 		/** Enter the price on the project contract line estimate. */
-		msdyn_Price: DevKit.WebApi.MoneyValue;
+		msdyn_Price: number;
 		/** Value of the Price in base currency. */
-		msdyn_price_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_price_Base: number;
 		/** Select the price list used for defaulting price on this project contract line estimate. */
-		msdyn_PriceList: DevKit.WebApi.LookupValue;
+		msdyn_PriceList: string;
 		/** Select the product on this project contract line estimate. */
-		msdyn_Product: DevKit.WebApi.LookupValue;
+		msdyn_Product: string;
 		/** Select the name of the project on the project contract estimate line. */
-		msdyn_Project: DevKit.WebApi.LookupValue;
+		msdyn_Project: string;
 		/** Enter the quantity of the project contract line estimate. */
-		msdyn_Quantity: DevKit.WebApi.DecimalValue;
+		msdyn_Quantity: number;
 		/** Unique identifier for Quote Line Detail that Order Line Detail is created from. */
-		msdyn_QuoteLineTransactionId: DevKit.WebApi.LookupValue;
+		msdyn_QuoteLineTransactionId: string;
 		/** Select the name of the role that is estimated to perform this work. */
-		msdyn_ResourceCategory: DevKit.WebApi.LookupValue;
+		msdyn_ResourceCategory: string;
 		/** Select the organizational unit of the resource who is estimated to perform the work. */
-		msdyn_ResourceOrganizationalUnitId: DevKit.WebApi.LookupValue;
+		msdyn_ResourceOrganizationalUnitId: string;
 		/** Select the project contract that this estimate line is for. */
-		msdyn_SalesContract: DevKit.WebApi.LookupValue;
+		msdyn_SalesContract: string;
 		/** (Deprecated) Shows the project contract line that this project contract line estimate will be mapped to for operating margin calculations. */
-		msdyn_SalesContractLine: DevKit.WebApi.StringValue;
+		msdyn_SalesContractLine: string;
 		/** Unique identifier for Project Contract Line associated with Project Contract Line Detail. */
-		msdyn_SalesContractLineId: DevKit.WebApi.LookupValue;
+		msdyn_SalesContractLineId: string;
 		/** Enter the estimate start date of the portion of work that is being estimated on the project contract estimate line. */
-		msdyn_StartDateTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		msdyn_StartDateTime_UtcDateOnly: Date;
 		/** Select the name of the work breakdown structure (WBS) task on the project contract line estimate. */
-		msdyn_Task: DevKit.WebApi.LookupValue;
-		msdyn_tax: DevKit.WebApi.MoneyValue;
+		msdyn_Task: string;
+		msdyn_tax: number;
 		/** Value of the tax in base currency. */
-		msdyn_tax_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_tax_Base: number;
 		/** Select the transaction category on the project contract line estimate. */
-		msdyn_TransactionCategory: DevKit.WebApi.LookupValue;
+		msdyn_TransactionCategory: string;
 		/** Transaction classification of the Project Contract line transaction */
-		msdyn_TransactionClassification: DevKit.WebApi.OptionSetValue;
+		msdyn_TransactionClassification: OptionSet.msdyn_orderlinetransaction.msdyn_TransactionClassification;
 		/** Transaction type of the Project Contract line transaction */
-		msdyn_TransactionTypeCode: DevKit.WebApi.OptionSetValue;
+		msdyn_TransactionTypeCode: OptionSet.msdyn_orderlinetransaction.msdyn_TransactionTypeCode;
 		/** Select the unit on the project contract line estimate. */
-		msdyn_Unit: DevKit.WebApi.LookupValue;
+		msdyn_Unit: string;
 		/** Select the unit schedule of the project contract line estimate. */
-		msdyn_UnitSchedule: DevKit.WebApi.LookupValue;
-		msdyn_VendorType: DevKit.WebApi.OptionSetValue;
+		msdyn_UnitSchedule: string;
+		msdyn_VendorType: OptionSet.msdyn_orderlinetransaction.msdyn_VendorType;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Status of the Estimate Details */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.msdyn_orderlinetransaction.statecode;
 		/** Reason for the status of the Estimate Details */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.msdyn_orderlinetransaction.statuscode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Shows the currency associated with the entity. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -459,4 +461,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,1912 +30,1962 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Common end date */
-		CommonEnd_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		CommonEnd_UtcDateAndTime: Date;
 		/** Common start date */
-		CommonStart_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		CommonStart_UtcDateAndTime: Date;
 		/** Due Date */
-		DueDate_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		DueDate_UtcDateAndTime: Date;
 		/** Flag due by */
-		FlagDueBy_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		FlagDueBy_UtcDateAndTime: Date;
 		/** Flag request */
-		FlagRequest: DevKit.WebApi.StringValue;
+		FlagRequest: string;
 		/** Flag status. */
-		FlagStatus: DevKit.WebApi.IntegerValue;
+		FlagStatus: number;
 		/** Unique identifier of the source record. */
-		objectid_account: DevKit.WebApi.LookupValue;
+		objectid_account: string;
 		/** Unique identifier of the source record. */
-		objectid_accountleads: DevKit.WebApi.LookupValue;
+		objectid_accountleads: string;
 		/** Unique identifier of the source record. */
-		objectid_activityfileattachment: DevKit.WebApi.LookupValue;
+		objectid_activityfileattachment: string;
 		/** Unique identifier of the source record. */
-		objectid_activitymimeattachment: DevKit.WebApi.LookupValue;
+		objectid_activitymimeattachment: string;
 		/** Unique identifier of the source record. */
-		objectid_activitymonitor: DevKit.WebApi.LookupValue;
+		objectid_activitymonitor: string;
 		/** Unique identifier of the source record. */
-		objectid_activityparty: DevKit.WebApi.LookupValue;
+		objectid_activityparty: string;
 		/** Unique identifier of the source record. */
-		objectid_adminsettingsentity: DevKit.WebApi.LookupValue;
+		objectid_adminsettingsentity: string;
 		/** Unique identifier of the source record. */
-		objectid_annotation: DevKit.WebApi.LookupValue;
+		objectid_annotation: string;
 		/** Unique identifier of the source record. */
-		objectid_appaction: DevKit.WebApi.LookupValue;
+		objectid_appaction: string;
 		/** Unique identifier of the source record. */
-		objectid_appelement: DevKit.WebApi.LookupValue;
+		objectid_appelement: string;
 		/** Unique identifier of the source record. */
-		objectid_applicationuser: DevKit.WebApi.LookupValue;
+		objectid_applicationuser: string;
 		/** Unique identifier of the source record. */
-		objectid_appmodulecomponentedge: DevKit.WebApi.LookupValue;
+		objectid_appmodulecomponentedge: string;
 		/** Unique identifier of the source record. */
-		objectid_appmodulecomponentnode: DevKit.WebApi.LookupValue;
+		objectid_appmodulecomponentnode: string;
 		/** Unique identifier of the source record. */
-		objectid_appointment: DevKit.WebApi.LookupValue;
+		objectid_appointment: string;
 		/** Unique identifier of the source record. */
-		objectid_appsetting: DevKit.WebApi.LookupValue;
+		objectid_appsetting: string;
 		/** Unique identifier of the source record. */
-		objectid_appusersetting: DevKit.WebApi.LookupValue;
+		objectid_appusersetting: string;
 		/** Unique identifier of the source record. */
-		objectid_asyncoperation: DevKit.WebApi.LookupValue;
+		objectid_asyncoperation: string;
 		/** Unique identifier of the source record. */
-		objectid_attachment: DevKit.WebApi.LookupValue;
+		objectid_attachment: string;
 		/** Unique identifier of the source record. */
-		objectid_attributeimageconfig: DevKit.WebApi.LookupValue;
+		objectid_attributeimageconfig: string;
 		/** Unique identifier of the source record. */
-		objectid_attributemap: DevKit.WebApi.LookupValue;
+		objectid_attributemap: string;
 		/** Unique identifier of the source record. */
-		objectid_audit: DevKit.WebApi.LookupValue;
+		objectid_audit: string;
 		/** Unique identifier of the source record. */
-		objectid_bookableresource: DevKit.WebApi.LookupValue;
+		objectid_bookableresource: string;
 		/** Unique identifier of the source record. */
-		objectid_bookableresourcebooking: DevKit.WebApi.LookupValue;
+		objectid_bookableresourcebooking: string;
 		/** Unique identifier of the source record. */
-		objectid_bookableresourcebookingexchangesyncidmapping: DevKit.WebApi.LookupValue;
+		objectid_bookableresourcebookingexchangesyncidmapping: string;
 		/** Unique identifier of the source record. */
-		objectid_bookableresourcebookingheader: DevKit.WebApi.LookupValue;
+		objectid_bookableresourcebookingheader: string;
 		/** Unique identifier of the source record. */
-		objectid_bookableresourcecategory: DevKit.WebApi.LookupValue;
+		objectid_bookableresourcecategory: string;
 		/** Unique identifier of the source record. */
-		objectid_bookableresourcecategoryassn: DevKit.WebApi.LookupValue;
+		objectid_bookableresourcecategoryassn: string;
 		/** Unique identifier of the source record. */
-		objectid_bookableresourcecharacteristic: DevKit.WebApi.LookupValue;
+		objectid_bookableresourcecharacteristic: string;
 		/** Unique identifier of the source record. */
-		objectid_bookableresourcegroup: DevKit.WebApi.LookupValue;
+		objectid_bookableresourcegroup: string;
 		/** Unique identifier of the source record. */
-		objectid_bookingstatus: DevKit.WebApi.LookupValue;
+		objectid_bookingstatus: string;
 		/** Unique identifier of the source record. */
-		objectid_bot: DevKit.WebApi.LookupValue;
+		objectid_bot: string;
 		/** Unique identifier of the source record. */
-		objectid_botcomponent: DevKit.WebApi.LookupValue;
+		objectid_botcomponent: string;
 		/** Unique identifier of the source record. */
-		objectid_bulkdeletefailure: DevKit.WebApi.LookupValue;
+		objectid_bulkdeletefailure: string;
 		/** Unique identifier of the source record. */
-		objectid_bulkdeleteoperation: DevKit.WebApi.LookupValue;
+		objectid_bulkdeleteoperation: string;
 		/** Unique identifier of the source record. */
-		objectid_bulkoperation: DevKit.WebApi.LookupValue;
+		objectid_bulkoperation: string;
 		/** Unique identifier of the source record. */
-		objectid_bulkoperationlog: DevKit.WebApi.LookupValue;
+		objectid_bulkoperationlog: string;
 		/** Unique identifier of the source record. */
-		objectid_businessunitmap: DevKit.WebApi.LookupValue;
+		objectid_businessunitmap: string;
 		/** Unique identifier of the source record. */
-		objectid_businessunitnewsarticle: DevKit.WebApi.LookupValue;
+		objectid_businessunitnewsarticle: string;
 		/** Unique identifier of the source record. */
-		objectid_calendar: DevKit.WebApi.LookupValue;
+		objectid_calendar: string;
 		/** Unique identifier of the source record. */
-		objectid_calendarrule: DevKit.WebApi.LookupValue;
+		objectid_calendarrule: string;
 		/** Unique identifier of the source record. */
-		objectid_campaign: DevKit.WebApi.LookupValue;
+		objectid_campaign: string;
 		/** Unique identifier of the source record. */
-		objectid_campaignactivity: DevKit.WebApi.LookupValue;
+		objectid_campaignactivity: string;
 		/** Unique identifier of the source record. */
-		objectid_campaignactivityitem: DevKit.WebApi.LookupValue;
+		objectid_campaignactivityitem: string;
 		/** Unique identifier of the source record. */
-		objectid_campaignitem: DevKit.WebApi.LookupValue;
+		objectid_campaignitem: string;
 		/** Unique identifier of the source record. */
-		objectid_campaignresponse: DevKit.WebApi.LookupValue;
+		objectid_campaignresponse: string;
 		/** Unique identifier of the source record. */
-		objectid_canvasappextendedmetadata: DevKit.WebApi.LookupValue;
+		objectid_canvasappextendedmetadata: string;
 		/** Unique identifier of the source record. */
-		objectid_cascadegrantrevokeaccessrecordstracker: DevKit.WebApi.LookupValue;
+		objectid_cascadegrantrevokeaccessrecordstracker: string;
 		/** Unique identifier of the source record. */
-		objectid_cascadegrantrevokeaccessversiontracker: DevKit.WebApi.LookupValue;
+		objectid_cascadegrantrevokeaccessversiontracker: string;
 		/** Unique identifier of the source record. */
-		objectid_catalog: DevKit.WebApi.LookupValue;
+		objectid_catalog: string;
 		/** Unique identifier of the source record. */
-		objectid_catalogassignment: DevKit.WebApi.LookupValue;
+		objectid_catalogassignment: string;
 		/** Unique identifier of the source record. */
-		channelaccessprofile_userentityinstancedatas: DevKit.WebApi.LookupValue;
+		channelaccessprofile_userentityinstancedatas: string;
 		/** Unique identifier of the source record. */
-		channelaccessprofileruleid: DevKit.WebApi.LookupValue;
+		channelaccessprofileruleid: string;
 		/** Unique identifier of the source record. */
-		objectid_characteristic: DevKit.WebApi.LookupValue;
+		objectid_characteristic: string;
 		/** Unique identifier of the source record. */
-		objectid_childincidentcount: DevKit.WebApi.LookupValue;
+		objectid_chat: string;
 		/** Unique identifier of the source record. */
-		objectid_clientupdate: DevKit.WebApi.LookupValue;
+		objectid_childincidentcount: string;
 		/** Unique identifier of the source record. */
-		objectid_columnmapping: DevKit.WebApi.LookupValue;
+		objectid_clientupdate: string;
 		/** Unique identifier of the source record. */
-		objectid_comment: DevKit.WebApi.LookupValue;
+		objectid_columnmapping: string;
 		/** Unique identifier of the source record. */
-		objectid_commitment: DevKit.WebApi.LookupValue;
+		objectid_comment: string;
 		/** Unique identifier of the source record. */
-		objectid_competitor: DevKit.WebApi.LookupValue;
+		objectid_commitment: string;
 		/** Unique identifier of the source record. */
-		objectid_competitoraddress: DevKit.WebApi.LookupValue;
+		objectid_competitor: string;
 		/** Unique identifier of the source record. */
-		objectid_competitorproduct: DevKit.WebApi.LookupValue;
+		objectid_competitoraddress: string;
 		/** Unique identifier of the source record. */
-		objectid_competitorsalesliterature: DevKit.WebApi.LookupValue;
+		objectid_competitorproduct: string;
 		/** Unique identifier of the source record. */
-		objectid_connection: DevKit.WebApi.LookupValue;
+		objectid_competitorsalesliterature: string;
 		/** Unique identifier of the source record. */
-		objectid_connectionreference: DevKit.WebApi.LookupValue;
+		objectid_connection: string;
 		/** Unique identifier of the source record. */
-		objectid_connectionrole: DevKit.WebApi.LookupValue;
+		objectid_connectionreference: string;
 		/** Unique identifier of the source record. */
-		objectid_connectionroleassociation: DevKit.WebApi.LookupValue;
+		objectid_connectionrole: string;
 		/** Unique identifier of the source record. */
-		objectid_connectionroleobjecttypecode: DevKit.WebApi.LookupValue;
+		objectid_connectionroleassociation: string;
 		/** Unique identifier of the source record. */
-		objectid_connector: DevKit.WebApi.LookupValue;
+		objectid_connectionroleobjecttypecode: string;
 		/** Unique identifier of the source record. */
-		objectid_constraintbasedgroup: DevKit.WebApi.LookupValue;
+		objectid_connector: string;
 		/** Unique identifier of the source record. */
-		objectid_contact: DevKit.WebApi.LookupValue;
+		objectid_constraintbasedgroup: string;
 		/** Unique identifier of the source record. */
-		objectid_contactinvoices: DevKit.WebApi.LookupValue;
+		objectid_contact: string;
 		/** Unique identifier of the source record. */
-		objectid_contactleads: DevKit.WebApi.LookupValue;
+		objectid_contactinvoices: string;
 		/** Unique identifier of the source record. */
-		objectid_contactorders: DevKit.WebApi.LookupValue;
+		objectid_contactleads: string;
 		/** Unique identifier of the source record. */
-		objectid_contactquotes: DevKit.WebApi.LookupValue;
+		objectid_contactorders: string;
 		/** Unique identifier of the source record. */
-		objectid_contract: DevKit.WebApi.LookupValue;
+		objectid_contactquotes: string;
 		/** Unique identifier of the source record. */
-		objectid_contractdetail: DevKit.WebApi.LookupValue;
+		objectid_contract: string;
 		/** Unique identifier of the source record. */
-		objectid_contracttemplate: DevKit.WebApi.LookupValue;
+		objectid_contractdetail: string;
 		/** Unique identifier of the source record. */
-		objectid_conversationtranscript: DevKit.WebApi.LookupValue;
+		objectid_contracttemplate: string;
 		/** Unique identifier of the source record. */
-		objectid_convertrule: DevKit.WebApi.LookupValue;
+		objectid_conversationtranscript: string;
 		/** Unique identifier of the source record. */
-		objectid_customapi: DevKit.WebApi.LookupValue;
+		objectid_convertrule: string;
 		/** Unique identifier of the source record. */
-		objectid_customapirequestparameter: DevKit.WebApi.LookupValue;
+		objectid_customapi: string;
 		/** Unique identifier of the source record. */
-		objectid_customapiresponseproperty: DevKit.WebApi.LookupValue;
+		objectid_customapirequestparameter: string;
 		/** Unique identifier of the source record. */
-		objectid_customeraddress: DevKit.WebApi.LookupValue;
+		objectid_customapiresponseproperty: string;
 		/** Unique identifier of the source record. */
-		objectid_customeropportunityrole: DevKit.WebApi.LookupValue;
+		objectid_customeraddress: string;
 		/** Unique identifier of the source record. */
-		objectid_customerrelationship: DevKit.WebApi.LookupValue;
+		objectid_customeropportunityrole: string;
 		/** Unique identifier of the source record. */
-		objectid_datalakefolder: DevKit.WebApi.LookupValue;
+		objectid_customerrelationship: string;
 		/** Unique identifier of the source record. */
-		objectid_datalakefolderpermission: DevKit.WebApi.LookupValue;
+		objectid_datalakefolder: string;
 		/** Unique identifier of the source record. */
-		objectid_datalakeworkspace: DevKit.WebApi.LookupValue;
+		objectid_datalakefolderpermission: string;
 		/** Unique identifier of the source record. */
-		objectid_datalakeworkspacepermission: DevKit.WebApi.LookupValue;
+		objectid_datalakeworkspace: string;
 		/** Unique identifier of the source record. */
-		objectid_datasyncstate: DevKit.WebApi.LookupValue;
+		objectid_datalakeworkspacepermission: string;
 		/** Unique identifier of the source record. */
-		objectid_dependency: DevKit.WebApi.LookupValue;
+		objectid_dataprocessingconfiguration: string;
 		/** Unique identifier of the source record. */
-		objectid_dependencynode: DevKit.WebApi.LookupValue;
+		objectid_datasyncstate: string;
 		/** Unique identifier of the source record. */
-		objectid_discount: DevKit.WebApi.LookupValue;
+		objectid_dependency: string;
 		/** Unique identifier of the source record. */
-		objectid_discounttype: DevKit.WebApi.LookupValue;
+		objectid_dependencynode: string;
 		/** Unique identifier of the source record. */
-		objectid_displaystring: DevKit.WebApi.LookupValue;
+		objectid_discount: string;
 		/** Unique identifier of the source record. */
-		objectid_displaystringmap: DevKit.WebApi.LookupValue;
+		objectid_discounttype: string;
 		/** Unique identifier of the source record. */
-		objectid_documentindex: DevKit.WebApi.LookupValue;
+		objectid_displaystring: string;
 		/** Unique identifier of the source record. */
-		objectid_duplicaterecord: DevKit.WebApi.LookupValue;
+		objectid_displaystringmap: string;
 		/** Unique identifier of the source record. */
-		objectid_duplicaterule: DevKit.WebApi.LookupValue;
+		objectid_documentindex: string;
 		/** Unique identifier of the source record. */
-		objectid_duplicaterulecondition: DevKit.WebApi.LookupValue;
+		objectid_duplicaterecord: string;
 		/** Unique identifier of the source record. */
-		objectid_dynamicproperty: DevKit.WebApi.LookupValue;
+		objectid_duplicaterule: string;
 		/** Unique identifier of the source record. */
-		objectid_dynamicpropertyassociation: DevKit.WebApi.LookupValue;
+		objectid_duplicaterulecondition: string;
 		/** Unique identifier of the source record. */
-		objectid_dynamicpropertyinstance: DevKit.WebApi.LookupValue;
+		objectid_dynamicproperty: string;
 		/** Unique identifier of the source record. */
-		objectid_dynamicpropertyoptionsetitem: DevKit.WebApi.LookupValue;
+		objectid_dynamicpropertyassociation: string;
 		/** Unique identifier of the source record. */
-		objectid_email: DevKit.WebApi.LookupValue;
+		objectid_dynamicpropertyinstance: string;
 		/** Unique identifier of the source record. */
-		objectid_emailhash: DevKit.WebApi.LookupValue;
+		objectid_dynamicpropertyoptionsetitem: string;
 		/** Unique identifier of the source record. */
-		objectid_emailsearch: DevKit.WebApi.LookupValue;
+		objectid_email: string;
 		/** Unique identifier of the source record. */
-		objectid_entitlement: DevKit.WebApi.LookupValue;
+		objectid_emailhash: string;
 		/** Unique identifier of the source record. */
-		objectid_entitlementchannel: DevKit.WebApi.LookupValue;
+		objectid_emailsearch: string;
 		/** Unique identifier of the source record. */
-		objectid_entitlementcontacts: DevKit.WebApi.LookupValue;
+		objectid_entitlement: string;
 		/** Unique identifier of the source record. */
-		objectid_entitlemententityallocationtypemapping: DevKit.WebApi.LookupValue;
+		objectid_entitlementchannel: string;
 		/** Unique identifier of the source record. */
-		objectid_entitlementproducts: DevKit.WebApi.LookupValue;
+		objectid_entitlementcontacts: string;
 		/** Unique identifier of the source record. */
-		objectid_entitlementtemplate: DevKit.WebApi.LookupValue;
+		objectid_entitlemententityallocationtypemapping: string;
 		/** Unique identifier of the source record. */
-		objectid_entitlementtemplatechannel: DevKit.WebApi.LookupValue;
+		objectid_entitlementproducts: string;
 		/** Unique identifier of the source record. */
-		objectid_entitlementtemplateproducts: DevKit.WebApi.LookupValue;
+		objectid_entitlementtemplate: string;
 		/** Unique identifier of the source record. */
-		objectid_entityanalyticsconfig: DevKit.WebApi.LookupValue;
+		objectid_entitlementtemplatechannel: string;
 		/** Unique identifier of the source record. */
-		objectid_entityimageconfig: DevKit.WebApi.LookupValue;
+		objectid_entitlementtemplateproducts: string;
 		/** Unique identifier of the source record. */
-		objectid_entityindex: DevKit.WebApi.LookupValue;
+		objectid_entityanalyticsconfig: string;
 		/** Unique identifier of the source record. */
-		objectid_entitymap: DevKit.WebApi.LookupValue;
+		objectid_entityimageconfig: string;
 		/** Unique identifier of the source record. */
-		objectid_environmentvariabledefinition: DevKit.WebApi.LookupValue;
+		objectid_entityindex: string;
 		/** Unique identifier of the source record. */
-		objectid_environmentvariablevalue: DevKit.WebApi.LookupValue;
+		objectid_entitymap: string;
 		/** Unique identifier of the source record. */
-		objectid_equipment: DevKit.WebApi.LookupValue;
+		objectid_environmentvariabledefinition: string;
 		/** Unique identifier of the source record. */
-		objectid_exportsolutionupload: DevKit.WebApi.LookupValue;
+		objectid_environmentvariablevalue: string;
 		/** Unique identifier of the source record. */
-		externalparty_userentityinstancedatas: DevKit.WebApi.LookupValue;
+		objectid_equipment: string;
 		/** Unique identifier of the source record. */
-		objectid_fax: DevKit.WebApi.LookupValue;
+		objectid_exportsolutionupload: string;
 		/** Unique identifier of the source record. */
-		objectid_featurecontrolsetting: DevKit.WebApi.LookupValue;
+		externalparty_userentityinstancedatas: string;
 		/** Unique identifier of the source record. */
-		objectid_fieldpermission: DevKit.WebApi.LookupValue;
+		objectid_fax: string;
 		/** Unique identifier of the source record. */
-		objectid_fieldsecurityprofile: DevKit.WebApi.LookupValue;
+		objectid_featurecontrolsetting: string;
 		/** Unique identifier of the source record. */
-		objectid_fileattachment: DevKit.WebApi.LookupValue;
+		objectid_fieldpermission: string;
 		/** Unique identifier of the source record. */
-		objectid_filtertemplate: DevKit.WebApi.LookupValue;
+		objectid_fieldsecurityprofile: string;
 		/** Unique identifier of the source record. */
-		objectid_flowmachine: DevKit.WebApi.LookupValue;
+		objectid_fileattachment: string;
 		/** Unique identifier of the source record. */
-		objectid_flowmachinegroup: DevKit.WebApi.LookupValue;
+		objectid_filtertemplate: string;
 		/** Unique identifier of the source record. */
-		objectid_flowsession: DevKit.WebApi.LookupValue;
+		objectid_flowmachine: string;
 		/** Unique identifier of the source record. */
-		objectid_goal: DevKit.WebApi.LookupValue;
+		objectid_flowmachinegroup: string;
 		/** Unique identifier of the source record. */
-		objectid_goalrollupquery: DevKit.WebApi.LookupValue;
+		objectid_flowsession: string;
 		/** Unique identifier of the source record. */
-		objectid_holidaywrapper: DevKit.WebApi.LookupValue;
+		objectid_goal: string;
 		/** Unique identifier of the source record. */
-		objectid_import: DevKit.WebApi.LookupValue;
+		objectid_goalrollupquery: string;
 		/** Unique identifier of the source record. */
-		objectid_importdata: DevKit.WebApi.LookupValue;
+		objectid_holidaywrapper: string;
 		/** Unique identifier of the source record. */
-		objectid_importentitymapping: DevKit.WebApi.LookupValue;
+		objectid_import: string;
 		/** Unique identifier of the source record. */
-		objectid_importfile: DevKit.WebApi.LookupValue;
+		objectid_importdata: string;
 		/** Unique identifier of the source record. */
-		objectid_importjob: DevKit.WebApi.LookupValue;
+		objectid_importentitymapping: string;
 		/** Unique identifier of the source record. */
-		objectid_importlog: DevKit.WebApi.LookupValue;
+		objectid_importfile: string;
 		/** Unique identifier of the source record. */
-		objectid_importmap: DevKit.WebApi.LookupValue;
+		objectid_importjob: string;
 		/** Unique identifier of the source record. */
-		objectid_incident: DevKit.WebApi.LookupValue;
+		objectid_importlog: string;
 		/** Unique identifier of the source record. */
-		objectid_incidentknowledgebaserecord: DevKit.WebApi.LookupValue;
+		objectid_importmap: string;
 		/** Unique identifier of the source record. */
-		objectid_incidentresolution: DevKit.WebApi.LookupValue;
+		objectid_incident: string;
 		/** Unique identifier of the source record. */
-		objectid_indexattributes: DevKit.WebApi.LookupValue;
+		objectid_incidentknowledgebaserecord: string;
 		/** Unique identifier of the source record. */
-		objectid_internaladdress: DevKit.WebApi.LookupValue;
+		objectid_incidentresolution: string;
 		/** Unique identifier of the source record. */
-		objectid_internalcatalogassignment: DevKit.WebApi.LookupValue;
+		objectid_indexattributes: string;
 		/** Unique identifier of the source record. */
-		objectid_invaliddependency: DevKit.WebApi.LookupValue;
+		objectid_internaladdress: string;
 		/** Unique identifier of the source record. */
-		objectid_invoice: DevKit.WebApi.LookupValue;
+		objectid_internalcatalogassignment: string;
 		/** Unique identifier of the source record. */
-		objectid_invoicedetail: DevKit.WebApi.LookupValue;
+		objectid_invaliddependency: string;
 		/** Unique identifier of the source record. */
-		objectid_isvconfig: DevKit.WebApi.LookupValue;
+		objectid_invoice: string;
 		/** Unique identifier of the source record. */
-		objectid_kbarticle: DevKit.WebApi.LookupValue;
+		objectid_invoicedetail: string;
 		/** Unique identifier of the source record. */
-		objectid_kbarticlecomment: DevKit.WebApi.LookupValue;
+		objectid_isvconfig: string;
 		/** Unique identifier of the source record. */
-		objectid_kbarticletemplate: DevKit.WebApi.LookupValue;
+		objectid_kbarticle: string;
 		/** Unique identifier of the source record. */
-		objectid_keyvaultreference: DevKit.WebApi.LookupValue;
+		objectid_kbarticlecomment: string;
 		/** Unique identifier of the source record. */
-		objectid_knowledgearticle: DevKit.WebApi.LookupValue;
+		objectid_kbarticletemplate: string;
 		/** Unique identifier of the source record. */
-		objectid_knowledgearticleincident: DevKit.WebApi.LookupValue;
+		objectid_keyvaultreference: string;
 		/** Unique identifier of the source record. */
-		objectid_knowledgebaserecord: DevKit.WebApi.LookupValue;
+		objectid_knowledgearticle: string;
 		/** Unique identifier of the source record. */
-		objectid_lead: DevKit.WebApi.LookupValue;
+		objectid_knowledgearticleincident: string;
 		/** Unique identifier of the source record. */
-		objectid_leadaddress: DevKit.WebApi.LookupValue;
+		objectid_knowledgebaserecord: string;
 		/** Unique identifier of the source record. */
-		objectid_leadcompetitors: DevKit.WebApi.LookupValue;
+		objectid_lead: string;
 		/** Unique identifier of the source record. */
-		objectid_leadproduct: DevKit.WebApi.LookupValue;
+		objectid_leadaddress: string;
 		/** Unique identifier of the source record. */
-		objectid_leadtoopportunitysalesprocess: DevKit.WebApi.LookupValue;
+		objectid_leadcompetitors: string;
 		/** Unique identifier of the source record. */
-		objectid_letter: DevKit.WebApi.LookupValue;
+		objectid_leadproduct: string;
 		/** Unique identifier of the source record. */
-		objectid_license: DevKit.WebApi.LookupValue;
+		objectid_leadtoopportunitysalesprocess: string;
 		/** Unique identifier of the source record. */
-		objectid_list: DevKit.WebApi.LookupValue;
+		objectid_letter: string;
 		/** Unique identifier of the source record. */
-		objectid_listmember: DevKit.WebApi.LookupValue;
+		objectid_license: string;
 		/** Unique identifier of the source record. */
-		objectid_listoperation: DevKit.WebApi.LookupValue;
+		objectid_list: string;
 		/** Unique identifier of the source record. */
-		objectid_lookupmapping: DevKit.WebApi.LookupValue;
+		objectid_listmember: string;
 		/** Unique identifier of the source record. */
-		objectid_mailbox: DevKit.WebApi.LookupValue;
+		objectid_listoperation: string;
 		/** Unique identifier of the source record. */
-		objectid_mailmergetemplate: DevKit.WebApi.LookupValue;
+		objectid_lookupmapping: string;
 		/** Unique identifier of the source record. */
-		objectid_managedidentity: DevKit.WebApi.LookupValue;
+		objectid_mailbox: string;
 		/** Unique identifier of the source record. */
-		objectid_marketingformdisplayattributes: DevKit.WebApi.LookupValue;
+		objectid_mailmergetemplate: string;
 		/** Unique identifier of the source record. */
-		objectid_metric: DevKit.WebApi.LookupValue;
+		objectid_managedidentity: string;
 		/** Unique identifier of the source record. */
-		objectid_msdynce_botcontent: DevKit.WebApi.LookupValue;
+		objectid_marketingformdisplayattributes: string;
 		/** Unique identifier of the source record. */
-		objectid_msdynsm_marketingsitemap: DevKit.WebApi.LookupValue;
+		objectid_metric: string;
 		/** Unique identifier of the source record. */
-		objectid_msdynsm_salessitemap: DevKit.WebApi.LookupValue;
+		objectid_msdynce_botcontent: string;
 		/** Unique identifier of the source record. */
-		objectid_msdynsm_servicessitemap: DevKit.WebApi.LookupValue;
+		objectid_msdynsm_marketingsitemap: string;
 		/** Unique identifier of the source record. */
-		objectid_msdynsm_settingssitemap: DevKit.WebApi.LookupValue;
+		objectid_msdynsm_salessitemap: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_3dmodel: DevKit.WebApi.LookupValue;
+		objectid_msdynsm_servicessitemap: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_accountpricelist: DevKit.WebApi.LookupValue;
+		objectid_msdynsm_settingssitemap: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_actioncardregarding: DevKit.WebApi.LookupValue;
+		objectid_msdyn_3dmodel: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_actioncardrolesetting: DevKit.WebApi.LookupValue;
+		objectid_msdyn_accountpricelist: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_actual: DevKit.WebApi.LookupValue;
+		objectid_msdyn_actioncardregarding: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_adaptivecardconfiguration: DevKit.WebApi.LookupValue;
+		objectid_msdyn_actioncardrolesetting: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_adminappstate: DevKit.WebApi.LookupValue;
+		objectid_msdyn_actual: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_agentstatushistory: DevKit.WebApi.LookupValue;
+		objectid_msdyn_adaptivecardconfiguration: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_agreement: DevKit.WebApi.LookupValue;
+		objectid_msdyn_adminappstate: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_agreementbookingdate: DevKit.WebApi.LookupValue;
+		objectid_msdyn_agentstatushistory: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_agreementbookingincident: DevKit.WebApi.LookupValue;
+		objectid_msdyn_agreement: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_agreementbookingproduct: DevKit.WebApi.LookupValue;
+		objectid_msdyn_agreementbookingdate: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_agreementbookingservice: DevKit.WebApi.LookupValue;
+		objectid_msdyn_agreementbookingincident: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_agreementbookingservicetask: DevKit.WebApi.LookupValue;
+		objectid_msdyn_agreementbookingproduct: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_agreementbookingsetup: DevKit.WebApi.LookupValue;
+		objectid_msdyn_agreementbookingservice: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_agreementinvoicedate: DevKit.WebApi.LookupValue;
+		objectid_msdyn_agreementbookingservicetask: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_agreementinvoiceproduct: DevKit.WebApi.LookupValue;
+		objectid_msdyn_agreementbookingsetup: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_agreementinvoicesetup: DevKit.WebApi.LookupValue;
+		objectid_msdyn_agreementinvoicedate: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_agreementsubstatus: DevKit.WebApi.LookupValue;
+		objectid_msdyn_agreementinvoiceproduct: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_aibdataset: DevKit.WebApi.LookupValue;
+		objectid_msdyn_agreementinvoicesetup: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_aibdatasetfile: DevKit.WebApi.LookupValue;
+		objectid_msdyn_agreementsubstatus: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_aibdatasetrecord: DevKit.WebApi.LookupValue;
+		objectid_msdyn_aibdataset: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_aibdatasetscontainer: DevKit.WebApi.LookupValue;
+		objectid_msdyn_aibdatasetfile: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_aibfile: DevKit.WebApi.LookupValue;
+		objectid_msdyn_aibdatasetrecord: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_aibfileattacheddata: DevKit.WebApi.LookupValue;
+		objectid_msdyn_aibdatasetscontainer: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_aiconfiguration: DevKit.WebApi.LookupValue;
+		objectid_msdyn_aibfeedbackloop: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_aicontactsuggestion: DevKit.WebApi.LookupValue;
+		objectid_msdyn_aibfile: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_aifptrainingdocument: DevKit.WebApi.LookupValue;
+		objectid_msdyn_aibfileattacheddata: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_aimodel: DevKit.WebApi.LookupValue;
+		objectid_msdyn_aiconfiguration: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_aiodimage: DevKit.WebApi.LookupValue;
+		objectid_msdyn_aicontactsuggestion: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_aiodlabel: DevKit.WebApi.LookupValue;
+		objectid_msdyn_aifptrainingdocument: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_aiodtrainingboundingbox: DevKit.WebApi.LookupValue;
+		objectid_msdyn_aimodel: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_aiodtrainingimage: DevKit.WebApi.LookupValue;
+		objectid_msdyn_aiodimage: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_aitemplate: DevKit.WebApi.LookupValue;
+		objectid_msdyn_aiodlabel: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_analysiscomponent: DevKit.WebApi.LookupValue;
+		objectid_msdyn_aiodtrainingboundingbox: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_analysisjob: DevKit.WebApi.LookupValue;
+		objectid_msdyn_aiodtrainingimage: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_analysisresult: DevKit.WebApi.LookupValue;
+		objectid_msdyn_aitemplate: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_analysisresultdetail: DevKit.WebApi.LookupValue;
+		objectid_msdyn_analysiscomponent: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_analytics: DevKit.WebApi.LookupValue;
+		objectid_msdyn_analysisjob: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_analyticsadminsettings: DevKit.WebApi.LookupValue;
+		objectid_msdyn_analysisresult: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_analyticsforcs: DevKit.WebApi.LookupValue;
+		objectid_msdyn_analysisresultdetail: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_appconfiguration: DevKit.WebApi.LookupValue;
+		objectid_msdyn_analytics: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_applicationextension: DevKit.WebApi.LookupValue;
+		objectid_msdyn_analyticsadminsettings: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_applicationtabtemplate: DevKit.WebApi.LookupValue;
+		objectid_msdyn_analyticsforcs: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_approval: DevKit.WebApi.LookupValue;
+		objectid_msdyn_appconfiguration: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_approvalset: DevKit.WebApi.LookupValue;
+		objectid_msdyn_applicationextension: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_assetcategorytemplateassociation: DevKit.WebApi.LookupValue;
+		objectid_msdyn_applicationtabtemplate: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_assetsuggestionssetting: DevKit.WebApi.LookupValue;
+		objectid_msdyn_approval: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_assettemplateassociation: DevKit.WebApi.LookupValue;
+		objectid_msdyn_approvalset: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_assignmentconfiguration: DevKit.WebApi.LookupValue;
+		objectid_msdyn_assetcategorytemplateassociation: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_assignmentconfigurationstep: DevKit.WebApi.LookupValue;
+		objectid_msdyn_assetsuggestionssetting: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_assignmentmap: DevKit.WebApi.LookupValue;
+		objectid_msdyn_assettemplateassociation: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_assignmentrule: DevKit.WebApi.LookupValue;
+		objectid_msdyn_assignmentconfiguration: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_attribute: DevKit.WebApi.LookupValue;
+		objectid_msdyn_assignmentconfigurationstep: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_attributevalue: DevKit.WebApi.LookupValue;
+		objectid_msdyn_assignmentmap: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_authenticationsettings: DevKit.WebApi.LookupValue;
+		objectid_msdyn_assignmentrule: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_autocapturerule: DevKit.WebApi.LookupValue;
+		objectid_msdyn_attribute: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_autocapturesettings: DevKit.WebApi.LookupValue;
+		objectid_msdyn_attributevalue: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_batchjob: DevKit.WebApi.LookupValue;
+		objectid_msdyn_authenticationsettings: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_bookableresourceassociation: DevKit.WebApi.LookupValue;
+		objectid_msdyn_autocapturerule: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_bookableresourcebookingquicknote: DevKit.WebApi.LookupValue;
+		objectid_msdyn_autocapturesettings: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_bookableresourcecapacityprofile: DevKit.WebApi.LookupValue;
+		objectid_msdyn_batchjob: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_bookingalert: DevKit.WebApi.LookupValue;
+		objectid_msdyn_bookableresourceassociation: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_bookingalertstatus: DevKit.WebApi.LookupValue;
+		objectid_msdyn_bookableresourcebookingquicknote: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_bookingchange: DevKit.WebApi.LookupValue;
+		objectid_msdyn_bookableresourcecapacityprofile: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_bookingjournal: DevKit.WebApi.LookupValue;
+		objectid_msdyn_bookingalert: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_bookingrule: DevKit.WebApi.LookupValue;
+		objectid_msdyn_bookingalertstatus: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_bookingsetupmetadata: DevKit.WebApi.LookupValue;
+		objectid_msdyn_bookingchange: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_bookingtimestamp: DevKit.WebApi.LookupValue;
+		objectid_msdyn_bookingjournal: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_bpf_2c5fe86acc8b414b8322ae571000c799: DevKit.WebApi.LookupValue;
+		objectid_msdyn_bookingrule: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_bpf_477c16f59170487b8b4dc895c5dcd09b: DevKit.WebApi.LookupValue;
+		objectid_msdyn_bookingsetupmetadata: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_bpf_665e73aa18c247d886bfc50499c73b82: DevKit.WebApi.LookupValue;
+		objectid_msdyn_bookingtimestamp: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_bpf_989e9b1857e24af18787d5143b67523b: DevKit.WebApi.LookupValue;
+		objectid_msdyn_bpf_2c5fe86acc8b414b8322ae571000c799: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_bpf_baa0a411a239410cb8bded8b5fdd88e3: DevKit.WebApi.LookupValue;
+		objectid_msdyn_bpf_477c16f59170487b8b4dc895c5dcd09b: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_bpf_d3d97bac8c294105840e99e37a9d1c39: DevKit.WebApi.LookupValue;
+		objectid_msdyn_bpf_665e73aa18c247d886bfc50499c73b82: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_bpf_d8f9dc7f099f44db9d641dd81fbd470d: DevKit.WebApi.LookupValue;
+		objectid_msdyn_bpf_989e9b1857e24af18787d5143b67523b: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_businessclosure: DevKit.WebApi.LookupValue;
+		objectid_msdyn_bpf_baa0a411a239410cb8bded8b5fdd88e3: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_callablecontext: DevKit.WebApi.LookupValue;
+		objectid_msdyn_bpf_d3d97bac8c294105840e99e37a9d1c39: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_cannedmessage: DevKit.WebApi.LookupValue;
+		objectid_msdyn_bpf_d8f9dc7f099f44db9d641dd81fbd470d: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_capacityprofile: DevKit.WebApi.LookupValue;
+		objectid_msdyn_businessclosure: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_caseenrichment: DevKit.WebApi.LookupValue;
+		objectid_msdyn_callablecontext: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_casesuggestionrequestpayload: DevKit.WebApi.LookupValue;
+		objectid_msdyn_cannedmessage: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_casetopic: DevKit.WebApi.LookupValue;
+		objectid_msdyn_capacityprofile: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_casetopicsetting: DevKit.WebApi.LookupValue;
+		objectid_msdyn_caseenrichment: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_casetopicsummary: DevKit.WebApi.LookupValue;
+		objectid_msdyn_casesuggestionrequestpayload: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_casetopic_incident: DevKit.WebApi.LookupValue;
+		objectid_msdyn_casetopic: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_cdsentityengagementctx: DevKit.WebApi.LookupValue;
+		objectid_msdyn_casetopicsetting: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_channel: DevKit.WebApi.LookupValue;
+		objectid_msdyn_casetopicsummary: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_channelcapability: DevKit.WebApi.LookupValue;
+		objectid_msdyn_casetopic_incident: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_channelprovider: DevKit.WebApi.LookupValue;
+		objectid_msdyn_cdsentityengagementctx: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_characteristicreqforteammember: DevKit.WebApi.LookupValue;
+		objectid_msdyn_channel: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_chatansweroption: DevKit.WebApi.LookupValue;
+		objectid_msdyn_channelcapability: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_chatquestionnaireresponse: DevKit.WebApi.LookupValue;
+		objectid_msdyn_channelprovider: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_chatquestionnaireresponseitem: DevKit.WebApi.LookupValue;
+		objectid_msdyn_characteristicreqforteammember: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_chatwidgetlanguage: DevKit.WebApi.LookupValue;
+		objectid_msdyn_chatansweroption: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_ciprovider: DevKit.WebApi.LookupValue;
+		objectid_msdyn_chatquestionnaireresponse: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_clientextension: DevKit.WebApi.LookupValue;
+		objectid_msdyn_chatquestionnaireresponseitem: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_collabgraphresource: DevKit.WebApi.LookupValue;
+		objectid_msdyn_chatwidgetlanguage: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_configuration: DevKit.WebApi.LookupValue;
+		objectid_msdyn_ciprovider: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_consoleapplicationnotificationfield: DevKit.WebApi.LookupValue;
+		objectid_msdyn_clientextension: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_consoleapplicationnotificationtemplate: DevKit.WebApi.LookupValue;
+		objectid_msdyn_collabgraphresource: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_consoleapplicationsessiontemplate: DevKit.WebApi.LookupValue;
+		objectid_msdyn_configuration: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_consoleapplicationtemplate: DevKit.WebApi.LookupValue;
+		objectid_msdyn_consoleapplicationnotificationfield: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_consoleapplicationtemplateparameter: DevKit.WebApi.LookupValue;
+		objectid_msdyn_consoleapplicationnotificationtemplate: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_consoleapplicationtype: DevKit.WebApi.LookupValue;
+		objectid_msdyn_consoleapplicationsessiontemplate: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_consoleappparameterdefinition: DevKit.WebApi.LookupValue;
+		objectid_msdyn_consoleapplicationtemplate: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_contactpricelist: DevKit.WebApi.LookupValue;
+		objectid_msdyn_consoleapplicationtemplateparameter: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_contactsuggestionrule: DevKit.WebApi.LookupValue;
+		objectid_msdyn_consoleapplicationtype: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_contactsuggestionruleset: DevKit.WebApi.LookupValue;
+		objectid_msdyn_consoleappparameterdefinition: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_contractlinedetailperformance: DevKit.WebApi.LookupValue;
+		objectid_msdyn_contactpricelist: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_contractlineinvoiceschedule: DevKit.WebApi.LookupValue;
+		objectid_msdyn_contactsuggestionrule: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_contractlinescheduleofvalue: DevKit.WebApi.LookupValue;
+		objectid_msdyn_contactsuggestionruleset: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_contractperformance: DevKit.WebApi.LookupValue;
+		objectid_msdyn_contractlinedetailperformance: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_conversationaction: DevKit.WebApi.LookupValue;
+		objectid_msdyn_contractlineinvoiceschedule: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_conversationactionlocale: DevKit.WebApi.LookupValue;
+		objectid_msdyn_contractlinescheduleofvalue: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_conversationdata: DevKit.WebApi.LookupValue;
+		objectid_msdyn_contractperformance: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_conversationinsight: DevKit.WebApi.LookupValue;
+		objectid_msdyn_conversationaction: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_conversationsuggestionrequestpayload: DevKit.WebApi.LookupValue;
+		objectid_msdyn_conversationactionlocale: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_conversationtopic: DevKit.WebApi.LookupValue;
+		objectid_msdyn_conversationdata: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_conversationtopicsetting: DevKit.WebApi.LookupValue;
+		objectid_msdyn_conversationinsight: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_conversationtopicsummary: DevKit.WebApi.LookupValue;
+		objectid_msdyn_conversationsuggestionrequestpayload: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_conversationtopic_conversation: DevKit.WebApi.LookupValue;
+		objectid_msdyn_conversationtopic: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_customengagementctx: DevKit.WebApi.LookupValue;
+		objectid_msdyn_conversationtopicsetting: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_customerasset: DevKit.WebApi.LookupValue;
+		objectid_msdyn_conversationtopicsummary: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_customerassetattachment: DevKit.WebApi.LookupValue;
+		objectid_msdyn_conversationtopic_conversation: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_customerassetcategory: DevKit.WebApi.LookupValue;
+		objectid_msdyn_customengagementctx: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_dataanalyticsreport: DevKit.WebApi.LookupValue;
+		objectid_msdyn_customerasset: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_dataanalyticsreport_csrmanager: DevKit.WebApi.LookupValue;
+		objectid_msdyn_customerassetattachment: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_dataanalyticsreport_fs: DevKit.WebApi.LookupValue;
+		objectid_msdyn_customerassetcategory: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_dataanalyticsreport_fspredictrs: DevKit.WebApi.LookupValue;
+		objectid_msdyn_dataanalyticsreport: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_dataanalyticsreport_fspredictwhd: DevKit.WebApi.LookupValue;
+		objectid_msdyn_dataanalyticsreport_csrmanager: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_dataanalyticsreport_ksinsights: DevKit.WebApi.LookupValue;
+		objectid_msdyn_dataanalyticsreport_fs: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_dataanalyticsreport_oc: DevKit.WebApi.LookupValue;
+		objectid_msdyn_dataanalyticsreport_fspredictrs: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_dataanalyticsreport_ocvoice: DevKit.WebApi.LookupValue;
+		objectid_msdyn_dataanalyticsreport_fspredictwhd: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_databaseversion: DevKit.WebApi.LookupValue;
+		objectid_msdyn_dataanalyticsreport_ksinsights: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_dataexport: DevKit.WebApi.LookupValue;
+		objectid_msdyn_dataanalyticsreport_oc: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_dataflow: DevKit.WebApi.LookupValue;
+		objectid_msdyn_dataanalyticsreport_ocvoice: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_datainsightsandanalyticsfeature: DevKit.WebApi.LookupValue;
+		objectid_msdyn_dataanalyticsreport_sutreporting: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_dealmanageraccess: DevKit.WebApi.LookupValue;
+		objectid_msdyn_databaseversion: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_dealmanagersettings: DevKit.WebApi.LookupValue;
+		objectid_msdyn_dataexport: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_decisioncontract: DevKit.WebApi.LookupValue;
+		objectid_msdyn_dataflow: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_decisionruleset: DevKit.WebApi.LookupValue;
+		objectid_msdyn_dataflowrefreshhistory: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_delegation: DevKit.WebApi.LookupValue;
+		objectid_msdyn_datainsightsandanalyticsfeature: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_dimension: DevKit.WebApi.LookupValue;
+		objectid_msdyn_dealmanageraccess: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_dimensionfieldname: DevKit.WebApi.LookupValue;
+		objectid_msdyn_dealmanagersettings: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_effortpredictionresult: DevKit.WebApi.LookupValue;
+		objectid_msdyn_decisioncontract: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_entitlementapplication: DevKit.WebApi.LookupValue;
+		objectid_msdyn_decisionruleset: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_entityconfig: DevKit.WebApi.LookupValue;
+		objectid_msdyn_delegation: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_entityconfiguration: DevKit.WebApi.LookupValue;
+		objectid_msdyn_dimension: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_entitylinkchatconfiguration: DevKit.WebApi.LookupValue;
+		objectid_msdyn_dimensionfieldname: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_entityrankingrule: DevKit.WebApi.LookupValue;
+		objectid_msdyn_duplicatedetectionpluginrun: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_entityroutingconfiguration: DevKit.WebApi.LookupValue;
+		objectid_msdyn_duplicateleadmapping: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_estimate: DevKit.WebApi.LookupValue;
+		objectid_msdyn_effortpredictionresult: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_estimateline: DevKit.WebApi.LookupValue;
+		objectid_msdyn_entitlementapplication: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_expense: DevKit.WebApi.LookupValue;
+		objectid_msdyn_entityconfig: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_expensecategory: DevKit.WebApi.LookupValue;
+		objectid_msdyn_entityconfiguration: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_expensereceipt: DevKit.WebApi.LookupValue;
+		objectid_msdyn_entitylinkchatconfiguration: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_extendedusersetting: DevKit.WebApi.LookupValue;
+		objectid_msdyn_entityrankingrule: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_facebookengagementctx: DevKit.WebApi.LookupValue;
+		objectid_msdyn_entityrefreshhistory: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_fact: DevKit.WebApi.LookupValue;
+		objectid_msdyn_entityroutingconfiguration: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_federatedarticle: DevKit.WebApi.LookupValue;
+		objectid_msdyn_estimate: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_federatedarticleincident: DevKit.WebApi.LookupValue;
+		objectid_msdyn_estimateline: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_fieldcomputation: DevKit.WebApi.LookupValue;
+		objectid_msdyn_expense: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_fieldservicepricelistitem: DevKit.WebApi.LookupValue;
+		objectid_msdyn_expensecategory: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_fieldservicesetting: DevKit.WebApi.LookupValue;
+		objectid_msdyn_expensereceipt: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_fieldserviceslaconfiguration: DevKit.WebApi.LookupValue;
+		objectid_msdyn_extendedusersetting: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_fieldservicesystemjob: DevKit.WebApi.LookupValue;
+		objectid_msdyn_facebookengagementctx: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_findworkevent: DevKit.WebApi.LookupValue;
+		objectid_msdyn_fact: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_flowcardtype: DevKit.WebApi.LookupValue;
+		objectid_msdyn_federatedarticle: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_forecastconfiguration: DevKit.WebApi.LookupValue;
+		objectid_msdyn_federatedarticleincident: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_forecastdefinition: DevKit.WebApi.LookupValue;
+		objectid_msdyn_fieldcomputation: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_forecastinstance: DevKit.WebApi.LookupValue;
+		objectid_msdyn_fieldservicepricelistitem: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_forecastrecurrence: DevKit.WebApi.LookupValue;
+		objectid_msdyn_fieldservicesetting: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_functionallocation: DevKit.WebApi.LookupValue;
+		objectid_msdyn_fieldserviceslaconfiguration: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_gdprdata: DevKit.WebApi.LookupValue;
+		objectid_msdyn_fieldservicesystemjob: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_geofence: DevKit.WebApi.LookupValue;
+		objectid_msdyn_findworkevent: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_geofenceevent: DevKit.WebApi.LookupValue;
+		objectid_msdyn_flowcardtype: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_geofencingsettings: DevKit.WebApi.LookupValue;
+		objectid_msdyn_forecastconfiguration: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_geolocationsettings: DevKit.WebApi.LookupValue;
+		objectid_msdyn_forecastdefinition: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_geolocationtracking: DevKit.WebApi.LookupValue;
+		objectid_msdyn_forecastinstance: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_helppage: DevKit.WebApi.LookupValue;
+		objectid_msdyn_forecastrecurrence: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_icebreakersconfig: DevKit.WebApi.LookupValue;
+		objectid_msdyn_functionallocation: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_iermlmodel: DevKit.WebApi.LookupValue;
+		objectid_msdyn_gdprdata: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_iermltraining: DevKit.WebApi.LookupValue;
+		objectid_msdyn_geofence: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_incidenttype: DevKit.WebApi.LookupValue;
+		objectid_msdyn_geofenceevent: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_incidenttypecharacteristic: DevKit.WebApi.LookupValue;
+		objectid_msdyn_geofencingsettings: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_incidenttypeproduct: DevKit.WebApi.LookupValue;
+		objectid_msdyn_geolocationsettings: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_incidenttyperecommendationresult: DevKit.WebApi.LookupValue;
+		objectid_msdyn_geolocationtracking: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_incidenttyperecommendationrunhistory: DevKit.WebApi.LookupValue;
+		objectid_msdyn_helppage: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_incidenttyperesolution: DevKit.WebApi.LookupValue;
+		objectid_msdyn_icebreakersconfig: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_incidenttypeservice: DevKit.WebApi.LookupValue;
+		objectid_msdyn_iermlmodel: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_incidenttypeservicetask: DevKit.WebApi.LookupValue;
+		objectid_msdyn_iermltraining: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_incidenttypessetup: DevKit.WebApi.LookupValue;
+		objectid_msdyn_incidenttype: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_incidenttype_requirementgroup: DevKit.WebApi.LookupValue;
+		objectid_msdyn_incidenttypecharacteristic: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_inspection: DevKit.WebApi.LookupValue;
+		objectid_msdyn_incidenttypeproduct: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_inspectionattachment: DevKit.WebApi.LookupValue;
+		objectid_msdyn_incidenttyperecommendationresult: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_inspectiondefinition: DevKit.WebApi.LookupValue;
+		objectid_msdyn_incidenttyperecommendationrunhistory: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_inspectioninstance: DevKit.WebApi.LookupValue;
+		objectid_msdyn_incidenttyperesolution: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_inspectionresponse: DevKit.WebApi.LookupValue;
+		objectid_msdyn_incidenttypeservice: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_integrationjob: DevKit.WebApi.LookupValue;
+		objectid_msdyn_incidenttypeservicetask: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_integrationjobdetail: DevKit.WebApi.LookupValue;
+		objectid_msdyn_incidenttypessetup: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_inventoryadjustment: DevKit.WebApi.LookupValue;
+		objectid_msdyn_incidenttype_requirementgroup: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_inventoryadjustmentproduct: DevKit.WebApi.LookupValue;
+		objectid_msdyn_inspection: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_inventoryjournal: DevKit.WebApi.LookupValue;
+		objectid_msdyn_inspectionattachment: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_inventorytransfer: DevKit.WebApi.LookupValue;
+		objectid_msdyn_inspectiondefinition: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_invoicefrequency: DevKit.WebApi.LookupValue;
+		objectid_msdyn_inspectioninstance: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_invoicefrequencydetail: DevKit.WebApi.LookupValue;
+		objectid_msdyn_inspectionresponse: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_invoicelinetransaction: DevKit.WebApi.LookupValue;
+		objectid_msdyn_integrationjob: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_iotalert: DevKit.WebApi.LookupValue;
+		objectid_msdyn_integrationjobdetail: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_iotdevice: DevKit.WebApi.LookupValue;
+		objectid_msdyn_inventoryadjustment: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_iotdevicecategory: DevKit.WebApi.LookupValue;
+		objectid_msdyn_inventoryadjustmentproduct: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_iotdevicecommand: DevKit.WebApi.LookupValue;
+		objectid_msdyn_inventoryjournal: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_iotdevicecommanddefinition: DevKit.WebApi.LookupValue;
+		objectid_msdyn_inventorytransfer: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_iotdevicedatahistory: DevKit.WebApi.LookupValue;
+		objectid_msdyn_invoicefrequency: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_iotdeviceproperty: DevKit.WebApi.LookupValue;
+		objectid_msdyn_invoicefrequencydetail: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_iotdeviceregistrationhistory: DevKit.WebApi.LookupValue;
+		objectid_msdyn_invoicelinetransaction: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_iotdevicevisualizationconfiguration: DevKit.WebApi.LookupValue;
+		objectid_msdyn_iotalert: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_iotfieldmapping: DevKit.WebApi.LookupValue;
+		objectid_msdyn_iotdevice: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_iotpropertydefinition: DevKit.WebApi.LookupValue;
+		objectid_msdyn_iotdevicecategory: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_iotprovider: DevKit.WebApi.LookupValue;
+		objectid_msdyn_iotdevicecommand: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_iotproviderinstance: DevKit.WebApi.LookupValue;
+		objectid_msdyn_iotdevicecommanddefinition: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_iotsettings: DevKit.WebApi.LookupValue;
+		objectid_msdyn_iotdevicedatahistory: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_iottocaseprocess: DevKit.WebApi.LookupValue;
+		objectid_msdyn_iotdeviceproperty: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_journal: DevKit.WebApi.LookupValue;
+		objectid_msdyn_iotdeviceregistrationhistory: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_journalline: DevKit.WebApi.LookupValue;
+		objectid_msdyn_iotdevicevisualizationconfiguration: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_kalanguagesetting: DevKit.WebApi.LookupValue;
+		objectid_msdyn_iotfieldmapping: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_kbattachment: DevKit.WebApi.LookupValue;
+		objectid_msdyn_iotpropertydefinition: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_kbenrichment: DevKit.WebApi.LookupValue;
+		objectid_msdyn_iotprovider: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_kbkeywordsdescsuggestionsetting: DevKit.WebApi.LookupValue;
+		objectid_msdyn_iotproviderinstance: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_kmfederatedsearchconfig: DevKit.WebApi.LookupValue;
+		objectid_msdyn_iotsettings: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_kmpersonalizationsetting: DevKit.WebApi.LookupValue;
+		objectid_msdyn_iottocaseprocess: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_knowledgearticleimage: DevKit.WebApi.LookupValue;
+		objectid_msdyn_journal: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_knowledgearticletemplate: DevKit.WebApi.LookupValue;
+		objectid_msdyn_journalline: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_knowledgeinteractioninsight: DevKit.WebApi.LookupValue;
+		objectid_msdyn_kalanguagesetting: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_knowledgepersonalfilter: DevKit.WebApi.LookupValue;
+		objectid_msdyn_kbattachment: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_knowledgesearchfilter: DevKit.WebApi.LookupValue;
+		objectid_msdyn_kbenrichment: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_knowledgesearchinsight: DevKit.WebApi.LookupValue;
+		objectid_msdyn_kbkeywordsdescsuggestionsetting: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_kpieventdata: DevKit.WebApi.LookupValue;
+		objectid_msdyn_kmfederatedsearchconfig: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_kpieventdefinition: DevKit.WebApi.LookupValue;
+		objectid_msdyn_kmpersonalizationsetting: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_leadmodelconfig: DevKit.WebApi.LookupValue;
+		objectid_msdyn_knowledgearticleimage: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_lineengagementctx: DevKit.WebApi.LookupValue;
+		objectid_msdyn_knowledgearticletemplate: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_livechatconfig: DevKit.WebApi.LookupValue;
+		objectid_msdyn_knowledgeinteractioninsight: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_livechatengagementctx: DevKit.WebApi.LookupValue;
+		objectid_msdyn_knowledgemanagementsetting: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_livechatwidgetlocation: DevKit.WebApi.LookupValue;
+		objectid_msdyn_knowledgepersonalfilter: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_liveconversation: DevKit.WebApi.LookupValue;
+		objectid_msdyn_knowledgesearchfilter: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_liveworkitemevent: DevKit.WebApi.LookupValue;
+		objectid_msdyn_knowledgesearchinsight: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_liveworkstream: DevKit.WebApi.LookupValue;
+		objectid_msdyn_kpieventdata: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_liveworkstreamcapacityprofile: DevKit.WebApi.LookupValue;
+		objectid_msdyn_kpieventdefinition: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_localizedsurveyquestion: DevKit.WebApi.LookupValue;
+		objectid_msdyn_leadhygienesetting: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_macrosession: DevKit.WebApi.LookupValue;
+		objectid_msdyn_leadmodelconfig: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_maskingrule: DevKit.WebApi.LookupValue;
+		objectid_msdyn_lineengagementctx: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_masterentityroutingconfiguration: DevKit.WebApi.LookupValue;
+		objectid_msdyn_livechatconfig: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_migrationtracker: DevKit.WebApi.LookupValue;
+		objectid_msdyn_livechatengagementctx: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_mlresultcache: DevKit.WebApi.LookupValue;
+		objectid_msdyn_livechatwidgetlocation: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_modelpreviewstatus: DevKit.WebApi.LookupValue;
+		objectid_msdyn_liveconversation: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_msteamssetting: DevKit.WebApi.LookupValue;
+		objectid_msdyn_liveworkitemevent: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_msteamssettingsv2: DevKit.WebApi.LookupValue;
+		objectid_msdyn_liveworkstream: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_notesanalysisconfig: DevKit.WebApi.LookupValue;
+		objectid_msdyn_liveworkstreamcapacityprofile: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_notificationfield: DevKit.WebApi.LookupValue;
+		objectid_msdyn_localizedsurveyquestion: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_notificationtemplate: DevKit.WebApi.LookupValue;
+		objectid_msdyn_macrosession: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_ocautoblockrule: DevKit.WebApi.LookupValue;
+		objectid_msdyn_maskingrule: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_ocbotchannelregistration: DevKit.WebApi.LookupValue;
+		objectid_msdyn_masterentityroutingconfiguration: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_occarrier: DevKit.WebApi.LookupValue;
+		objectid_msdyn_migrationtracker: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_occhannelconfiguration: DevKit.WebApi.LookupValue;
+		objectid_msdyn_mlresultcache: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_occhannelstateconfiguration: DevKit.WebApi.LookupValue;
+		objectid_msdyn_modelpreviewstatus: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_occommunicationprovidersetting: DevKit.WebApi.LookupValue;
+		objectid_msdyn_msteamssetting: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_occommunicationprovidersettingentry: DevKit.WebApi.LookupValue;
+		objectid_msdyn_msteamssettingsv2: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_occustommessagingchannel: DevKit.WebApi.LookupValue;
+		objectid_msdyn_notesanalysisconfig: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_ocfbapplication: DevKit.WebApi.LookupValue;
+		objectid_msdyn_notificationfield: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_ocfbpage: DevKit.WebApi.LookupValue;
+		objectid_msdyn_notificationtemplate: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_ocflaggedspam: DevKit.WebApi.LookupValue;
+		objectid_msdyn_ocautoblockrule: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_oclanguage: DevKit.WebApi.LookupValue;
+		objectid_msdyn_ocbotchannelregistration: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_oclinechannelconfig: DevKit.WebApi.LookupValue;
+		objectid_msdyn_occarrier: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_ocliveworkitem: DevKit.WebApi.LookupValue;
+		objectid_msdyn_occhannelapiconversationprivilege: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_ocliveworkitemcapacityprofile: DevKit.WebApi.LookupValue;
+		objectid_msdyn_occhannelapimessageprivilege: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_ocliveworkitemcharacteristic: DevKit.WebApi.LookupValue;
+		objectid_msdyn_occhannelapimethodmapping: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_ocliveworkitemcontextitem: DevKit.WebApi.LookupValue;
+		objectid_msdyn_occhannelconfiguration: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_ocliveworkitemparticipant: DevKit.WebApi.LookupValue;
+		objectid_msdyn_occhannelstateconfiguration: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_ocliveworkitemsentiment: DevKit.WebApi.LookupValue;
+		objectid_msdyn_occommunicationprovidersetting: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_ocliveworkstreamcontextvariable: DevKit.WebApi.LookupValue;
+		objectid_msdyn_occommunicationprovidersettingentry: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_oclocalizationdata: DevKit.WebApi.LookupValue;
+		objectid_msdyn_occustommessagingchannel: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_ocoutboundconfiguration: DevKit.WebApi.LookupValue;
+		objectid_msdyn_ocfbapplication: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_ocoutboundmessage: DevKit.WebApi.LookupValue;
+		objectid_msdyn_ocfbpage: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_ocphonenumber: DevKit.WebApi.LookupValue;
+		objectid_msdyn_ocflaggedspam: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_ocprovisioningstate: DevKit.WebApi.LookupValue;
+		objectid_msdyn_oclanguage: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_ocrecording: DevKit.WebApi.LookupValue;
+		objectid_msdyn_oclinechannelconfig: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_ocrequest: DevKit.WebApi.LookupValue;
+		objectid_msdyn_ocliveworkitem: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_ocruleitem: DevKit.WebApi.LookupValue;
+		objectid_msdyn_ocliveworkitemcapacityprofile: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_ocsentimentdailytopic: DevKit.WebApi.LookupValue;
+		objectid_msdyn_ocliveworkitemcharacteristic: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_ocsentimentdailytopickeyword: DevKit.WebApi.LookupValue;
+		objectid_msdyn_ocliveworkitemcontextitem: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_ocsentimentdailytopictrending: DevKit.WebApi.LookupValue;
+		objectid_msdyn_ocliveworkitemparticipant: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_ocsession: DevKit.WebApi.LookupValue;
+		objectid_msdyn_ocliveworkitemsentiment: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_ocsessioncharacteristic: DevKit.WebApi.LookupValue;
+		objectid_msdyn_ocliveworkstreamcontextvariable: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_ocsessionparticipantevent: DevKit.WebApi.LookupValue;
+		objectid_msdyn_oclocalizationdata: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_ocsessionsentiment: DevKit.WebApi.LookupValue;
+		objectid_msdyn_ocoutboundconfiguration: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_ocsimltraining: DevKit.WebApi.LookupValue;
+		objectid_msdyn_ocoutboundmessage: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_ocsitdimportconfig: DevKit.WebApi.LookupValue;
+		objectid_msdyn_ocphonenumber: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_ocsitdskill: DevKit.WebApi.LookupValue;
+		objectid_msdyn_ocprovisioningstate: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_ocsitrainingdata: DevKit.WebApi.LookupValue;
+		objectid_msdyn_ocrecording: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_ocskillidentmlmodel: DevKit.WebApi.LookupValue;
+		objectid_msdyn_ocrequest: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_ocsmschannelsetting: DevKit.WebApi.LookupValue;
+		objectid_msdyn_ocruleitem: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_ocsystemmessage: DevKit.WebApi.LookupValue;
+		objectid_msdyn_ocsentimentdailytopic: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_octag: DevKit.WebApi.LookupValue;
+		objectid_msdyn_ocsentimentdailytopickeyword: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_octeamschannelconfig: DevKit.WebApi.LookupValue;
+		objectid_msdyn_ocsentimentdailytopictrending: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_octwitterapplication: DevKit.WebApi.LookupValue;
+		objectid_msdyn_ocsession: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_octwitterhandle: DevKit.WebApi.LookupValue;
+		objectid_msdyn_ocsessioncharacteristic: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_ocwechatchannelconfig: DevKit.WebApi.LookupValue;
+		objectid_msdyn_ocsessionparticipantevent: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_ocwhatsappchannelaccount: DevKit.WebApi.LookupValue;
+		objectid_msdyn_ocsessionsentiment: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_ocwhatsappchannelnumber: DevKit.WebApi.LookupValue;
+		objectid_msdyn_ocsimltraining: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_oc_geolocationprovider: DevKit.WebApi.LookupValue;
+		objectid_msdyn_ocsitdimportconfig: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_omnichannelconfiguration: DevKit.WebApi.LookupValue;
+		objectid_msdyn_ocsitdskill: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_omnichannelpersonalization: DevKit.WebApi.LookupValue;
+		objectid_msdyn_ocsitrainingdata: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_omnichannelqueue: DevKit.WebApi.LookupValue;
+		objectid_msdyn_ocskillidentmlmodel: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_omnichannelsyncconfig: DevKit.WebApi.LookupValue;
+		objectid_msdyn_ocsmschannelsetting: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_operatinghour: DevKit.WebApi.LookupValue;
+		objectid_msdyn_ocsystemmessage: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_opportunitylineresourcecategory: DevKit.WebApi.LookupValue;
+		objectid_msdyn_octag: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_opportunitylinetransaction: DevKit.WebApi.LookupValue;
+		objectid_msdyn_octeamschannelconfig: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_opportunitylinetransactioncategory: DevKit.WebApi.LookupValue;
+		objectid_msdyn_octwitterapplication: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_opportunitylinetransactionclassificatio: DevKit.WebApi.LookupValue;
+		objectid_msdyn_octwitterhandle: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_opportunitymodelconfig: DevKit.WebApi.LookupValue;
+		objectid_msdyn_ocwechatchannelconfig: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_opportunitypricelist: DevKit.WebApi.LookupValue;
+		objectid_msdyn_ocwhatsappchannelaccount: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_orderinvoicingdate: DevKit.WebApi.LookupValue;
+		objectid_msdyn_ocwhatsappchannelnumber: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_orderinvoicingproduct: DevKit.WebApi.LookupValue;
+		objectid_msdyn_oc_geolocationprovider: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_orderinvoicingsetup: DevKit.WebApi.LookupValue;
+		objectid_msdyn_omnichannelconfiguration: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_orderinvoicingsetupdate: DevKit.WebApi.LookupValue;
+		objectid_msdyn_omnichannelpersonalization: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_orderlineresourcecategory: DevKit.WebApi.LookupValue;
+		objectid_msdyn_omnichannelqueue: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_orderlinetransaction: DevKit.WebApi.LookupValue;
+		objectid_msdyn_omnichannelsyncconfig: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_orderlinetransactioncategory: DevKit.WebApi.LookupValue;
+		objectid_msdyn_operatinghour: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_orderlinetransactionclassification: DevKit.WebApi.LookupValue;
+		objectid_msdyn_opportunitylineresourcecategory: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_orderpricelist: DevKit.WebApi.LookupValue;
+		objectid_msdyn_opportunitylinetransaction: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_organizationalunit: DevKit.WebApi.LookupValue;
+		objectid_msdyn_opportunitylinetransactioncategory: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_overflowactionconfig: DevKit.WebApi.LookupValue;
+		objectid_msdyn_opportunitylinetransactionclassificatio: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_paneconfiguration: DevKit.WebApi.LookupValue;
+		objectid_msdyn_opportunitymodelconfig: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_panetabconfiguration: DevKit.WebApi.LookupValue;
+		objectid_msdyn_opportunitypricelist: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_panetoolconfiguration: DevKit.WebApi.LookupValue;
+		objectid_msdyn_orderinvoicingdate: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_payment: DevKit.WebApi.LookupValue;
+		objectid_msdyn_orderinvoicingproduct: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_paymentdetail: DevKit.WebApi.LookupValue;
+		objectid_msdyn_orderinvoicingsetup: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_paymentmethod: DevKit.WebApi.LookupValue;
+		objectid_msdyn_orderinvoicingsetupdate: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_paymentterm: DevKit.WebApi.LookupValue;
+		objectid_msdyn_orderlineresourcecategory: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_personalmessage: DevKit.WebApi.LookupValue;
+		objectid_msdyn_orderlinetransaction: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_personalsoundsetting: DevKit.WebApi.LookupValue;
+		objectid_msdyn_orderlinetransactioncategory: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_personasecurityrolemapping: DevKit.WebApi.LookupValue;
+		objectid_msdyn_orderlinetransactionclassification: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_playbookactivity: DevKit.WebApi.LookupValue;
+		objectid_msdyn_orderpricelist: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_playbookactivityattribute: DevKit.WebApi.LookupValue;
+		objectid_msdyn_organizationalunit: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_playbookcategory: DevKit.WebApi.LookupValue;
+		objectid_msdyn_overflowactionconfig: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_playbookinstance: DevKit.WebApi.LookupValue;
+		objectid_msdyn_paneconfiguration: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_playbooktemplate: DevKit.WebApi.LookupValue;
+		objectid_msdyn_panetabconfiguration: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_pminferredtask: DevKit.WebApi.LookupValue;
+		objectid_msdyn_panetoolconfiguration: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_pmrecording: DevKit.WebApi.LookupValue;
+		objectid_msdyn_payment: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_postalbum: DevKit.WebApi.LookupValue;
+		objectid_msdyn_paymentdetail: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_postalcode: DevKit.WebApi.LookupValue;
+		objectid_msdyn_paymentmethod: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_postconfig: DevKit.WebApi.LookupValue;
+		objectid_msdyn_paymentterm: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_postruleconfig: DevKit.WebApi.LookupValue;
+		objectid_msdyn_personalmessage: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_predictivemodelscore: DevKit.WebApi.LookupValue;
+		objectid_msdyn_personalsoundsetting: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_predictivescore: DevKit.WebApi.LookupValue;
+		objectid_msdyn_personasecurityrolemapping: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_predictworkhourdurationsetting: DevKit.WebApi.LookupValue;
+		objectid_msdyn_playbookactivity: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_presence: DevKit.WebApi.LookupValue;
+		objectid_msdyn_playbookactivityattribute: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_priority: DevKit.WebApi.LookupValue;
+		objectid_msdyn_playbookcategory: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_problematicasset: DevKit.WebApi.LookupValue;
+		objectid_msdyn_playbookinstance: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_problematicassetfeedback: DevKit.WebApi.LookupValue;
+		objectid_msdyn_playbooktemplate: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_processnotes: DevKit.WebApi.LookupValue;
+		objectid_msdyn_pminferredtask: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_productinventory: DevKit.WebApi.LookupValue;
+		objectid_msdyn_pmrecording: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_productivityactioninputparameter: DevKit.WebApi.LookupValue;
+		objectid_msdyn_postalbum: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_productivityactionoutputparameter: DevKit.WebApi.LookupValue;
+		objectid_msdyn_postalcode: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_productivityagentscript: DevKit.WebApi.LookupValue;
+		objectid_msdyn_postconfig: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_productivityagentscriptstep: DevKit.WebApi.LookupValue;
+		objectid_msdyn_postruleconfig: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_productivitymacroactiontemplate: DevKit.WebApi.LookupValue;
+		objectid_msdyn_predictivemodelscore: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_productivitymacroconnector: DevKit.WebApi.LookupValue;
+		objectid_msdyn_predictivescore: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_productivitymacrosolutionconfiguration: DevKit.WebApi.LookupValue;
+		objectid_msdyn_predictworkhourdurationsetting: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_productivityparameterdefinition: DevKit.WebApi.LookupValue;
+		objectid_msdyn_presence: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_project: DevKit.WebApi.LookupValue;
+		objectid_msdyn_priority: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_projectapproval: DevKit.WebApi.LookupValue;
+		objectid_msdyn_problematicasset: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_projectparameter: DevKit.WebApi.LookupValue;
+		objectid_msdyn_problematicassetfeedback: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_projectparameterpricelist: DevKit.WebApi.LookupValue;
+		objectid_msdyn_processnotes: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_projectpricelist: DevKit.WebApi.LookupValue;
+		objectid_msdyn_productinventory: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_projecttask: DevKit.WebApi.LookupValue;
+		objectid_msdyn_productivityactioninputparameter: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_projecttaskdependency: DevKit.WebApi.LookupValue;
+		objectid_msdyn_productivityactionoutputparameter: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_projecttaskstatususer: DevKit.WebApi.LookupValue;
+		objectid_msdyn_productivityagentscript: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_projectteam: DevKit.WebApi.LookupValue;
+		objectid_msdyn_productivityagentscriptstep: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_projectteammembersignup: DevKit.WebApi.LookupValue;
+		objectid_msdyn_productivitymacroactiontemplate: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_projecttransactioncategory: DevKit.WebApi.LookupValue;
+		objectid_msdyn_productivitymacroconnector: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_property: DevKit.WebApi.LookupValue;
+		objectid_msdyn_productivitymacrosolutionconfiguration: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_propertyassetassociation: DevKit.WebApi.LookupValue;
+		objectid_msdyn_productivityparameterdefinition: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_propertylog: DevKit.WebApi.LookupValue;
+		objectid_msdyn_project: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_propertytemplateassociation: DevKit.WebApi.LookupValue;
+		objectid_msdyn_projectapproval: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_provider: DevKit.WebApi.LookupValue;
+		objectid_msdyn_projectparameter: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_purchaseorder: DevKit.WebApi.LookupValue;
+		objectid_msdyn_projectparameterpricelist: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_purchaseorderbill: DevKit.WebApi.LookupValue;
+		objectid_msdyn_projectpricelist: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_purchaseorderproduct: DevKit.WebApi.LookupValue;
+		objectid_msdyn_projecttask: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_purchaseorderreceipt: DevKit.WebApi.LookupValue;
+		objectid_msdyn_projecttaskdependency: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_purchaseorderreceiptproduct: DevKit.WebApi.LookupValue;
+		objectid_msdyn_projecttaskstatususer: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_purchaseordersubstatus: DevKit.WebApi.LookupValue;
+		objectid_msdyn_projectteam: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_questionsequence: DevKit.WebApi.LookupValue;
+		objectid_msdyn_projectteammembersignup: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_quotebookingincident: DevKit.WebApi.LookupValue;
+		objectid_msdyn_projecttransactioncategory: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_quotebookingproduct: DevKit.WebApi.LookupValue;
+		objectid_msdyn_property: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_quotebookingservice: DevKit.WebApi.LookupValue;
+		objectid_msdyn_propertyassetassociation: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_quotebookingservicetask: DevKit.WebApi.LookupValue;
+		objectid_msdyn_propertylog: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_quotebookingsetup: DevKit.WebApi.LookupValue;
+		objectid_msdyn_propertytemplateassociation: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_quoteinvoicingproduct: DevKit.WebApi.LookupValue;
+		objectid_msdyn_provider: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_quoteinvoicingsetup: DevKit.WebApi.LookupValue;
+		objectid_msdyn_purchaseorder: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_quotelineanalyticsbreakdown: DevKit.WebApi.LookupValue;
+		objectid_msdyn_purchaseorderbill: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_quotelineinvoiceschedule: DevKit.WebApi.LookupValue;
+		objectid_msdyn_purchaseorderproduct: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_quotelineresourcecategory: DevKit.WebApi.LookupValue;
+		objectid_msdyn_purchaseorderreceipt: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_quotelinescheduleofvalue: DevKit.WebApi.LookupValue;
+		objectid_msdyn_purchaseorderreceiptproduct: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_quotelinetransaction: DevKit.WebApi.LookupValue;
+		objectid_msdyn_purchaseordersubstatus: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_quotelinetransactioncategory: DevKit.WebApi.LookupValue;
+		objectid_msdyn_questionsequence: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_quotelinetransactionclassification: DevKit.WebApi.LookupValue;
+		objectid_msdyn_quotebookingincident: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_quotepricelist: DevKit.WebApi.LookupValue;
+		objectid_msdyn_quotebookingproduct: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_recording: DevKit.WebApi.LookupValue;
+		objectid_msdyn_quotebookingservice: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_relationshipinsightsunifiedconfig: DevKit.WebApi.LookupValue;
+		objectid_msdyn_quotebookingservicetask: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_requirementcharacteristic: DevKit.WebApi.LookupValue;
+		objectid_msdyn_quotebookingsetup: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_requirementdependency: DevKit.WebApi.LookupValue;
+		objectid_msdyn_quoteinvoicingproduct: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_requirementgroup: DevKit.WebApi.LookupValue;
+		objectid_msdyn_quoteinvoicingsetup: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_requirementorganizationunit: DevKit.WebApi.LookupValue;
+		objectid_msdyn_quotelineanalyticsbreakdown: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_requirementrelationship: DevKit.WebApi.LookupValue;
+		objectid_msdyn_quotelineinvoiceschedule: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_requirementresourcecategory: DevKit.WebApi.LookupValue;
+		objectid_msdyn_quotelineresourcecategory: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_requirementresourcepreference: DevKit.WebApi.LookupValue;
+		objectid_msdyn_quotelinescheduleofvalue: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_requirementstatus: DevKit.WebApi.LookupValue;
+		objectid_msdyn_quotelinetransaction: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_resolution: DevKit.WebApi.LookupValue;
+		objectid_msdyn_quotelinetransactioncategory: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_resourceassignment: DevKit.WebApi.LookupValue;
+		objectid_msdyn_quotelinetransactionclassification: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_resourceassignmentdetail: DevKit.WebApi.LookupValue;
+		objectid_msdyn_quotepricelist: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_resourcecategorymarkuppricelevel: DevKit.WebApi.LookupValue;
+		objectid_msdyn_recording: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_resourcecategorypricelevel: DevKit.WebApi.LookupValue;
+		objectid_msdyn_relationshipinsightsunifiedconfig: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_resourcepaytype: DevKit.WebApi.LookupValue;
+		objectid_msdyn_requirementcharacteristic: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_resourcerequest: DevKit.WebApi.LookupValue;
+		objectid_msdyn_requirementdependency: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_resourcerequirement: DevKit.WebApi.LookupValue;
+		objectid_msdyn_requirementgroup: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_resourcerequirementdetail: DevKit.WebApi.LookupValue;
+		objectid_msdyn_requirementorganizationunit: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_resourceterritory: DevKit.WebApi.LookupValue;
+		objectid_msdyn_requirementrelationship: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_richtextfile: DevKit.WebApi.LookupValue;
+		objectid_msdyn_requirementresourcecategory: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_rma: DevKit.WebApi.LookupValue;
+		objectid_msdyn_requirementresourcepreference: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_rmaproduct: DevKit.WebApi.LookupValue;
+		objectid_msdyn_requirementstatus: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_rmareceipt: DevKit.WebApi.LookupValue;
+		objectid_msdyn_resolution: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_rmareceiptproduct: DevKit.WebApi.LookupValue;
+		objectid_msdyn_resourceassignment: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_rmasubstatus: DevKit.WebApi.LookupValue;
+		objectid_msdyn_resourceassignmentdetail: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_rolecompetencyrequirement: DevKit.WebApi.LookupValue;
+		objectid_msdyn_resourcecategorymarkuppricelevel: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_roleutilization: DevKit.WebApi.LookupValue;
+		objectid_msdyn_resourcecategorypricelevel: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_routingconfiguration: DevKit.WebApi.LookupValue;
+		objectid_msdyn_resourcepaytype: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_routingconfigurationstep: DevKit.WebApi.LookupValue;
+		objectid_msdyn_resourcerequest: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_routingrequest: DevKit.WebApi.LookupValue;
+		objectid_msdyn_resourcerequirement: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_routingrulesetsetting: DevKit.WebApi.LookupValue;
+		objectid_msdyn_resourcerequirementdetail: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_rtv: DevKit.WebApi.LookupValue;
+		objectid_msdyn_resourceterritory: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_rtvproduct: DevKit.WebApi.LookupValue;
+		objectid_msdyn_richtextfile: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_rtvsubstatus: DevKit.WebApi.LookupValue;
+		objectid_msdyn_rma: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_rulesetdependencymapping: DevKit.WebApi.LookupValue;
+		objectid_msdyn_rmaproduct: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_salesaccelerationsettings: DevKit.WebApi.LookupValue;
+		objectid_msdyn_rmareceipt: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_salesassignmentsetting: DevKit.WebApi.LookupValue;
+		objectid_msdyn_rmareceiptproduct: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_salesinsightssettings: DevKit.WebApi.LookupValue;
+		objectid_msdyn_rmasubstatus: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_salesroutingrun: DevKit.WebApi.LookupValue;
+		objectid_msdyn_rolecompetencyrequirement: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_salestag: DevKit.WebApi.LookupValue;
+		objectid_msdyn_roleutilization: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_scenario: DevKit.WebApi.LookupValue;
+		objectid_msdyn_routingconfiguration: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_scheduleboardsetting: DevKit.WebApi.LookupValue;
+		objectid_msdyn_routingconfigurationstep: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_schedulingfeatureflag: DevKit.WebApi.LookupValue;
+		objectid_msdyn_routingrequest: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_schedulingparameter: DevKit.WebApi.LookupValue;
+		objectid_msdyn_routingrulesetsetting: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_searchconfiguration: DevKit.WebApi.LookupValue;
+		objectid_msdyn_rtv: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_segment: DevKit.WebApi.LookupValue;
+		objectid_msdyn_rtvproduct: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_segmentcatalogue: DevKit.WebApi.LookupValue;
+		objectid_msdyn_rtvsubstatus: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_sentimentanalysis: DevKit.WebApi.LookupValue;
+		objectid_msdyn_rulesetdependencymapping: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_sequence: DevKit.WebApi.LookupValue;
+		objectid_msdyn_salesaccelerationsettings: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_sequencestat: DevKit.WebApi.LookupValue;
+		objectid_msdyn_salesassignmentsetting: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_sequencetarget: DevKit.WebApi.LookupValue;
+		objectid_msdyn_salesinsightssettings: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_sequencetargetstep: DevKit.WebApi.LookupValue;
+		objectid_msdyn_salesroutingrun: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_serviceconfiguration: DevKit.WebApi.LookupValue;
+		objectid_msdyn_salessuggestion: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_servicetasktype: DevKit.WebApi.LookupValue;
+		objectid_msdyn_salestag: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_sessiondata: DevKit.WebApi.LookupValue;
+		objectid_msdyn_scenario: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_sessionevent: DevKit.WebApi.LookupValue;
+		objectid_msdyn_scheduleboardsetting: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_sessionparticipant: DevKit.WebApi.LookupValue;
+		objectid_msdyn_schedulingfeatureflag: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_sessionparticipantdata: DevKit.WebApi.LookupValue;
+		objectid_msdyn_schedulingparameter: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_sessiontemplate: DevKit.WebApi.LookupValue;
+		objectid_msdyn_searchconfiguration: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_shipvia: DevKit.WebApi.LookupValue;
+		objectid_msdyn_segment: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_siconfig: DevKit.WebApi.LookupValue;
+		objectid_msdyn_segmentcatalogue: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_sikeyvalueconfig: DevKit.WebApi.LookupValue;
+		objectid_msdyn_sentimentanalysis: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_skillattachmentruleitem: DevKit.WebApi.LookupValue;
+		objectid_msdyn_sequence: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_skillattachmenttarget: DevKit.WebApi.LookupValue;
+		objectid_msdyn_sequencestat: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_slakpi: DevKit.WebApi.LookupValue;
+		objectid_msdyn_sequencetarget: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_smartassistconfig: DevKit.WebApi.LookupValue;
+		objectid_msdyn_sequencetargetstep: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_smsengagementctx: DevKit.WebApi.LookupValue;
+		objectid_msdyn_sequencetemplate: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_smsnumber: DevKit.WebApi.LookupValue;
+		objectid_msdyn_serviceconfiguration: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_solutionhealthrule: DevKit.WebApi.LookupValue;
+		objectid_msdyn_servicetasktype: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_solutionhealthruleargument: DevKit.WebApi.LookupValue;
+		objectid_msdyn_sessiondata: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_solutionhealthruleset: DevKit.WebApi.LookupValue;
+		objectid_msdyn_sessionevent: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_soundfile: DevKit.WebApi.LookupValue;
+		objectid_msdyn_sessionparticipant: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_soundnotificationsetting: DevKit.WebApi.LookupValue;
+		objectid_msdyn_sessionparticipantdata: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_suggestioninteraction: DevKit.WebApi.LookupValue;
+		objectid_msdyn_sessiontemplate: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_suggestionrequestpayload: DevKit.WebApi.LookupValue;
+		objectid_msdyn_shipvia: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_suggestionsmodelsummary: DevKit.WebApi.LookupValue;
+		objectid_msdyn_siconfig: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_suggestionssetting: DevKit.WebApi.LookupValue;
+		objectid_msdyn_sikeyvalueconfig: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_surveyquestion: DevKit.WebApi.LookupValue;
+		objectid_msdyn_skillattachmentruleitem: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_systemuserschedulersetting: DevKit.WebApi.LookupValue;
+		objectid_msdyn_skillattachmenttarget: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_taxcode: DevKit.WebApi.LookupValue;
+		objectid_msdyn_slakpi: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_taxcodedetail: DevKit.WebApi.LookupValue;
+		objectid_msdyn_smartassistconfig: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_teamschannelengagementctx: DevKit.WebApi.LookupValue;
+		objectid_msdyn_smsengagementctx: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_teamschatassociation: DevKit.WebApi.LookupValue;
+		objectid_msdyn_smsnumber: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_teamschatsuggestion: DevKit.WebApi.LookupValue;
+		objectid_msdyn_solutionhealthrule: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_teamscollaboration: DevKit.WebApi.LookupValue;
+		objectid_msdyn_solutionhealthruleargument: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_teamsdialeradminsettings: DevKit.WebApi.LookupValue;
+		objectid_msdyn_solutionhealthruleset: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_teamsengagementctx: DevKit.WebApi.LookupValue;
+		objectid_msdyn_soundfile: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_templateforproperties: DevKit.WebApi.LookupValue;
+		objectid_msdyn_soundnotificationsetting: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_templateparameter: DevKit.WebApi.LookupValue;
+		objectid_msdyn_suggestioninteraction: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_templatetags: DevKit.WebApi.LookupValue;
+		objectid_msdyn_suggestionrequestpayload: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_timeentry: DevKit.WebApi.LookupValue;
+		objectid_msdyn_suggestionsmodelsummary: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_timeentrysetting: DevKit.WebApi.LookupValue;
+		objectid_msdyn_suggestionssetting: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_timegroup: DevKit.WebApi.LookupValue;
+		objectid_msdyn_surveyquestion: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_timegroupdetail: DevKit.WebApi.LookupValue;
+		objectid_msdyn_systemuserschedulersetting: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_timeoffcalendar: DevKit.WebApi.LookupValue;
+		objectid_msdyn_taxcode: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_timeoffrequest: DevKit.WebApi.LookupValue;
+		objectid_msdyn_taxcodedetail: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_tour: DevKit.WebApi.LookupValue;
+		objectid_msdyn_teamschannelengagementctx: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_transactioncategory: DevKit.WebApi.LookupValue;
+		objectid_msdyn_teamschatassociation: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_transactioncategoryclassification: DevKit.WebApi.LookupValue;
+		objectid_msdyn_teamschatsuggestion: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_transactioncategoryhierarchyelement: DevKit.WebApi.LookupValue;
+		objectid_msdyn_teamscollaboration: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_transactioncategorypricelevel: DevKit.WebApi.LookupValue;
+		objectid_msdyn_teamsdialeradminsettings: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_transactionconnection: DevKit.WebApi.LookupValue;
+		objectid_msdyn_teamsengagementctx: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_transactionorigin: DevKit.WebApi.LookupValue;
+		objectid_msdyn_templateforproperties: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_transactiontype: DevKit.WebApi.LookupValue;
+		objectid_msdyn_templateparameter: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_transcript: DevKit.WebApi.LookupValue;
+		objectid_msdyn_templatetags: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_twitterengagementctx: DevKit.WebApi.LookupValue;
+		objectid_msdyn_timeentry: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_unifiedroutingdiagnostic: DevKit.WebApi.LookupValue;
+		objectid_msdyn_timeentrysetting: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_unifiedroutingrun: DevKit.WebApi.LookupValue;
+		objectid_msdyn_timegroup: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_unifiedroutingsetuptracker: DevKit.WebApi.LookupValue;
+		objectid_msdyn_timegroupdetail: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_uniquenumber: DevKit.WebApi.LookupValue;
+		objectid_msdyn_timeoffcalendar: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_untrackedappointment: DevKit.WebApi.LookupValue;
+		objectid_msdyn_timeoffrequest: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_upgraderun: DevKit.WebApi.LookupValue;
+		objectid_msdyn_tour: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_upgradestep: DevKit.WebApi.LookupValue;
+		objectid_msdyn_transactioncategory: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_upgradeversion: DevKit.WebApi.LookupValue;
+		objectid_msdyn_transactioncategoryclassification: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_urnotificationtemplate: DevKit.WebApi.LookupValue;
+		objectid_msdyn_transactioncategoryhierarchyelement: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_urnotificationtemplatemapping: DevKit.WebApi.LookupValue;
+		objectid_msdyn_transactioncategorypricelevel: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_usersetting: DevKit.WebApi.LookupValue;
+		objectid_msdyn_transactionconnection: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_userworkhistory: DevKit.WebApi.LookupValue;
+		objectid_msdyn_transactionorigin: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_visitorjourney: DevKit.WebApi.LookupValue;
+		objectid_msdyn_transactiontype: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_wallsavedquery: DevKit.WebApi.LookupValue;
+		objectid_msdyn_transcript: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_wallsavedqueryusersettings: DevKit.WebApi.LookupValue;
+		objectid_msdyn_twitterengagementctx: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_warehouse: DevKit.WebApi.LookupValue;
+		objectid_msdyn_unifiedroutingdiagnostic: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_wechatengagementctx: DevKit.WebApi.LookupValue;
+		objectid_msdyn_unifiedroutingrun: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_whatsappengagementctx: DevKit.WebApi.LookupValue;
+		objectid_msdyn_unifiedroutingsetuptracker: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_workhourtemplate: DevKit.WebApi.LookupValue;
+		objectid_msdyn_uniquenumber: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_workorder: DevKit.WebApi.LookupValue;
+		objectid_msdyn_untrackedappointment: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_workordercharacteristic: DevKit.WebApi.LookupValue;
+		objectid_msdyn_upgraderun: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_workorderdetailsgenerationqueue: DevKit.WebApi.LookupValue;
+		objectid_msdyn_upgradestep: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_workorderincident: DevKit.WebApi.LookupValue;
+		objectid_msdyn_upgradeversion: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_workorderproduct: DevKit.WebApi.LookupValue;
+		objectid_msdyn_urnotificationtemplate: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_workorderresolution: DevKit.WebApi.LookupValue;
+		objectid_msdyn_urnotificationtemplatemapping: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_workorderresourcerestriction: DevKit.WebApi.LookupValue;
+		objectid_msdyn_usagemetric: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_workorderservice: DevKit.WebApi.LookupValue;
+		objectid_msdyn_usersetting: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_workorderservicetask: DevKit.WebApi.LookupValue;
+		objectid_msdyn_userworkhistory: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_workordersubstatus: DevKit.WebApi.LookupValue;
+		objectid_msdyn_visitorjourney: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_workordertype: DevKit.WebApi.LookupValue;
+		objectid_msdyn_wallsavedquery: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_workqueuestate: DevKit.WebApi.LookupValue;
+		objectid_msdyn_wallsavedqueryusersettings: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_workqueueusersetting: DevKit.WebApi.LookupValue;
+		objectid_msdyn_warehouse: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyusd_actioncallworkflow: DevKit.WebApi.LookupValue;
+		objectid_msdyn_wechatengagementctx: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyusd_agentscriptaction: DevKit.WebApi.LookupValue;
+		objectid_msdyn_whatsappengagementctx: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyusd_agentscripttaskcategory: DevKit.WebApi.LookupValue;
+		objectid_msdyn_workhourtemplate: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyusd_answer: DevKit.WebApi.LookupValue;
+		objectid_msdyn_worklistviewconfiguration: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyusd_auditanddiagnosticssetting: DevKit.WebApi.LookupValue;
+		objectid_msdyn_workorder: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyusd_configuration: DevKit.WebApi.LookupValue;
+		objectid_msdyn_workordercharacteristic: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyusd_customizationfiles: DevKit.WebApi.LookupValue;
+		objectid_msdyn_workorderdetailsgenerationqueue: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyusd_entityassignment: DevKit.WebApi.LookupValue;
+		objectid_msdyn_workorderincident: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyusd_entitysearch: DevKit.WebApi.LookupValue;
+		objectid_msdyn_workorderproduct: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyusd_form: DevKit.WebApi.LookupValue;
+		objectid_msdyn_workorderresolution: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyusd_languagemodule: DevKit.WebApi.LookupValue;
+		objectid_msdyn_workorderresourcerestriction: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyusd_scriptlet: DevKit.WebApi.LookupValue;
+		objectid_msdyn_workorderservice: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyusd_scripttasktrigger: DevKit.WebApi.LookupValue;
+		objectid_msdyn_workorderservicetask: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyusd_search: DevKit.WebApi.LookupValue;
+		objectid_msdyn_workordersubstatus: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyusd_sessioninformation: DevKit.WebApi.LookupValue;
+		objectid_msdyn_workordertype: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyusd_sessiontransfer: DevKit.WebApi.LookupValue;
+		objectid_msdyn_workqueuestate: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyusd_task: DevKit.WebApi.LookupValue;
+		objectid_msdyn_workqueueusersetting: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyusd_toolbarbutton: DevKit.WebApi.LookupValue;
+		objectid_msdyusd_actioncallworkflow: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyusd_toolbarstrip: DevKit.WebApi.LookupValue;
+		objectid_msdyusd_agentscriptaction: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyusd_tracesourcesetting: DevKit.WebApi.LookupValue;
+		objectid_msdyusd_agentscripttaskcategory: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyusd_ucisettings: DevKit.WebApi.LookupValue;
+		objectid_msdyusd_answer: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyusd_uiievent: DevKit.WebApi.LookupValue;
+		objectid_msdyusd_auditanddiagnosticssetting: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyusd_usersettings: DevKit.WebApi.LookupValue;
+		objectid_msdyusd_configuration: string;
 		/** Unique identifier of the source record. */
-		objectid_msdyusd_windowroute: DevKit.WebApi.LookupValue;
+		objectid_msdyusd_customizationfiles: string;
 		/** Unique identifier of the source record. */
-		objectid_msfp_alert: DevKit.WebApi.LookupValue;
+		objectid_msdyusd_entityassignment: string;
 		/** Unique identifier of the source record. */
-		objectid_msfp_alertrule: DevKit.WebApi.LookupValue;
+		objectid_msdyusd_entitysearch: string;
 		/** Unique identifier of the source record. */
-		objectid_msfp_emailtemplate: DevKit.WebApi.LookupValue;
+		objectid_msdyusd_form: string;
 		/** Unique identifier of the source record. */
-		objectid_msfp_fileresponse: DevKit.WebApi.LookupValue;
+		objectid_msdyusd_languagemodule: string;
 		/** Unique identifier of the source record. */
-		objectid_msfp_localizedemailtemplate: DevKit.WebApi.LookupValue;
+		objectid_msdyusd_scriptlet: string;
 		/** Unique identifier of the source record. */
-		objectid_msfp_project: DevKit.WebApi.LookupValue;
+		objectid_msdyusd_scripttasktrigger: string;
 		/** Unique identifier of the source record. */
-		objectid_msfp_question: DevKit.WebApi.LookupValue;
+		objectid_msdyusd_search: string;
 		/** Unique identifier of the source record. */
-		objectid_msfp_questionresponse: DevKit.WebApi.LookupValue;
+		objectid_msdyusd_sessioninformation: string;
 		/** Unique identifier of the source record. */
-		objectid_msfp_satisfactionmetric: DevKit.WebApi.LookupValue;
+		objectid_msdyusd_sessiontransfer: string;
 		/** Unique identifier of the source record. */
-		objectid_msfp_survey: DevKit.WebApi.LookupValue;
+		objectid_msdyusd_task: string;
 		/** Unique identifier of the source record. */
-		objectid_msfp_surveyinvite: DevKit.WebApi.LookupValue;
+		objectid_msdyusd_toolbarbutton: string;
 		/** Unique identifier of the source record. */
-		objectid_msfp_surveyreminder: DevKit.WebApi.LookupValue;
+		objectid_msdyusd_toolbarstrip: string;
 		/** Unique identifier of the source record. */
-		objectid_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		objectid_msdyusd_tracesourcesetting: string;
 		/** Unique identifier of the source record. */
-		objectid_msfp_unsubscribedrecipient: DevKit.WebApi.LookupValue;
+		objectid_msdyusd_ucisettings: string;
 		/** Unique identifier of the source record. */
-		objectid_notification: DevKit.WebApi.LookupValue;
+		objectid_msdyusd_uiievent: string;
 		/** Unique identifier of the source record. */
-		objectid_opportunity: DevKit.WebApi.LookupValue;
+		objectid_msdyusd_usersettings: string;
 		/** Unique identifier of the source record. */
-		objectid_opportunityclose: DevKit.WebApi.LookupValue;
+		objectid_msdyusd_windowroute: string;
 		/** Unique identifier of the source record. */
-		objectid_opportunitycompetitors: DevKit.WebApi.LookupValue;
+		objectid_msfp_alert: string;
 		/** Unique identifier of the source record. */
-		objectid_opportunityproduct: DevKit.WebApi.LookupValue;
+		objectid_msfp_alertrule: string;
 		/** Unique identifier of the source record. */
-		objectid_opportunitysalesprocess: DevKit.WebApi.LookupValue;
+		objectid_msfp_emailtemplate: string;
 		/** Unique identifier of the source record. */
-		objectid_orderclose: DevKit.WebApi.LookupValue;
+		objectid_msfp_fileresponse: string;
 		/** Unique identifier of the source record. */
-		objectid_organization: DevKit.WebApi.LookupValue;
+		objectid_msfp_localizedemailtemplate: string;
 		/** Unique identifier of the source record. */
-		objectid_organizationdatasyncsubscription: DevKit.WebApi.LookupValue;
+		objectid_msfp_project: string;
 		/** Unique identifier of the source record. */
-		objectid_organizationdatasyncsubscriptionentity: DevKit.WebApi.LookupValue;
+		objectid_msfp_question: string;
 		/** Unique identifier of the source record. */
-		objectid_organizationsetting: DevKit.WebApi.LookupValue;
+		objectid_msfp_questionresponse: string;
 		/** Unique identifier of the source record. */
-		objectid_organizationstatistic: DevKit.WebApi.LookupValue;
+		objectid_msfp_satisfactionmetric: string;
 		/** Unique identifier of the source record. */
-		objectid_ownermapping: DevKit.WebApi.LookupValue;
+		objectid_msfp_survey: string;
 		/** Unique identifier of the source record. */
-		objectid_package: DevKit.WebApi.LookupValue;
+		objectid_msfp_surveyinvite: string;
 		/** Unique identifier of the source record. */
-		objectid_pdfsetting: DevKit.WebApi.LookupValue;
+		objectid_msfp_surveyreminder: string;
 		/** Unique identifier of the source record. */
-		objectid_phonecall: DevKit.WebApi.LookupValue;
+		objectid_msfp_surveyresponse: string;
 		/** Unique identifier of the source record. */
-		objectid_phonetocaseprocess: DevKit.WebApi.LookupValue;
+		objectid_msfp_unsubscribedrecipient: string;
 		/** Unique identifier of the source record. */
-		objectid_picklistmapping: DevKit.WebApi.LookupValue;
+		objectid_notification: string;
 		/** Unique identifier of the source record. */
-		objectid_pluginassembly: DevKit.WebApi.LookupValue;
+		objectid_opportunity: string;
 		/** Unique identifier of the source record. */
-		objectid_pluginpackage: DevKit.WebApi.LookupValue;
+		objectid_opportunityclose: string;
 		/** Unique identifier of the source record. */
-		objectid_plugintype: DevKit.WebApi.LookupValue;
+		objectid_opportunitycompetitors: string;
 		/** Unique identifier of the source record. */
-		objectid_plugintypestatistic: DevKit.WebApi.LookupValue;
+		objectid_opportunityproduct: string;
 		/** Unique identifier of the source record. */
-		objectid_pricelevel: DevKit.WebApi.LookupValue;
+		objectid_opportunitysalesprocess: string;
 		/** Unique identifier of the source record. */
-		objectid_principalattributeaccessmap: DevKit.WebApi.LookupValue;
+		objectid_orderclose: string;
 		/** Unique identifier of the source record. */
-		objectid_principalentitymap: DevKit.WebApi.LookupValue;
+		objectid_organization: string;
 		/** Unique identifier of the source record. */
-		objectid_principalobjectaccess: DevKit.WebApi.LookupValue;
+		objectid_organizationdatasyncstate: string;
 		/** Unique identifier of the source record. */
-		objectid_principalobjectattributeaccess: DevKit.WebApi.LookupValue;
+		objectid_organizationdatasyncsubscription: string;
 		/** Unique identifier of the source record. */
-		objectid_privilege: DevKit.WebApi.LookupValue;
+		objectid_organizationdatasyncsubscriptionentity: string;
 		/** Unique identifier of the source record. */
-		objectid_privilegesremovalsetting: DevKit.WebApi.LookupValue;
+		objectid_organizationsetting: string;
 		/** Unique identifier of the source record. */
-		objectid_processsession: DevKit.WebApi.LookupValue;
+		objectid_organizationstatistic: string;
 		/** Unique identifier of the source record. */
-		objectid_processstageparameter: DevKit.WebApi.LookupValue;
+		objectid_ownermapping: string;
 		/** Unique identifier of the source record. */
-		objectid_product: DevKit.WebApi.LookupValue;
+		objectid_package: string;
 		/** Unique identifier of the source record. */
-		objectid_productassociation: DevKit.WebApi.LookupValue;
+		objectid_pdfsetting: string;
 		/** Unique identifier of the source record. */
-		objectid_productpricelevel: DevKit.WebApi.LookupValue;
+		objectid_phonecall: string;
 		/** Unique identifier of the source record. */
-		objectid_productsalesliterature: DevKit.WebApi.LookupValue;
+		objectid_phonetocaseprocess: string;
 		/** Unique identifier of the source record. */
-		objectid_productsubstitute: DevKit.WebApi.LookupValue;
+		objectid_picklistmapping: string;
 		/** Unique identifier of the source record. */
-		objectid_provisionlanguageforuser: DevKit.WebApi.LookupValue;
+		objectid_pluginassembly: string;
 		/** Unique identifier of the source record. */
-		objectid_publisher: DevKit.WebApi.LookupValue;
+		objectid_pluginpackage: string;
 		/** Unique identifier of the source record. */
-		objectid_publisheraddress: DevKit.WebApi.LookupValue;
+		objectid_plugintype: string;
 		/** Unique identifier of the source record. */
-		objectid_queue: DevKit.WebApi.LookupValue;
+		objectid_plugintypestatistic: string;
 		/** Unique identifier of the source record. */
-		objectid_queueitem: DevKit.WebApi.LookupValue;
+		objectid_pricelevel: string;
 		/** Unique identifier of the source record. */
-		objectid_quote: DevKit.WebApi.LookupValue;
+		objectid_principalattributeaccessmap: string;
 		/** Unique identifier of the source record. */
-		objectid_quoteclose: DevKit.WebApi.LookupValue;
+		objectid_principalentitymap: string;
 		/** Unique identifier of the source record. */
-		objectid_quotedetail: DevKit.WebApi.LookupValue;
+		objectid_principalobjectaccess: string;
 		/** Unique identifier of the source record. */
-		objectid_ratingmodel: DevKit.WebApi.LookupValue;
+		objectid_principalobjectattributeaccess: string;
 		/** Unique identifier of the source record. */
-		objectid_ratingvalue: DevKit.WebApi.LookupValue;
+		objectid_privilege: string;
 		/** Unique identifier of the source record. */
-		objectid_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		objectid_privilegesremovalsetting: string;
 		/** Unique identifier of the source record. */
-		objectid_relationshipattribute: DevKit.WebApi.LookupValue;
+		objectid_processsession: string;
 		/** Unique identifier of the source record. */
-		objectid_relationshiprole: DevKit.WebApi.LookupValue;
+		objectid_processstageparameter: string;
 		/** Unique identifier of the source record. */
-		objectid_relationshiprolemap: DevKit.WebApi.LookupValue;
+		objectid_product: string;
 		/** Unique identifier of the source record. */
-		objectid_report: DevKit.WebApi.LookupValue;
+		objectid_productassociation: string;
 		/** Unique identifier of the source record. */
-		objectid_reportcategory: DevKit.WebApi.LookupValue;
+		objectid_productpricelevel: string;
 		/** Unique identifier of the source record. */
-		objectid_reportentity: DevKit.WebApi.LookupValue;
+		objectid_productsalesliterature: string;
 		/** Unique identifier of the source record. */
-		objectid_reportlink: DevKit.WebApi.LookupValue;
+		objectid_productsubstitute: string;
 		/** Unique identifier of the source record. */
-		objectid_reportvisibility: DevKit.WebApi.LookupValue;
+		objectid_provisionlanguageforuser: string;
 		/** Unique identifier of the source record. */
-		objectid_resource: DevKit.WebApi.LookupValue;
+		objectid_publisher: string;
 		/** Unique identifier of the source record. */
-		objectid_resourcegroup: DevKit.WebApi.LookupValue;
+		objectid_publisheraddress: string;
 		/** Unique identifier of the source record. */
-		objectid_resourcegroupexpansion: DevKit.WebApi.LookupValue;
+		objectid_queue: string;
 		/** Unique identifier of the source record. */
-		objectid_resourcespec: DevKit.WebApi.LookupValue;
+		objectid_queueitem: string;
 		/** Unique identifier of the source record. */
-		objectid_revokeinheritedaccessrecordstracker: DevKit.WebApi.LookupValue;
+		objectid_quote: string;
 		/** Unique identifier of the source record. */
-		objectid_ribboncommand: DevKit.WebApi.LookupValue;
+		objectid_quoteclose: string;
 		/** Unique identifier of the source record. */
-		objectid_ribboncontextgroup: DevKit.WebApi.LookupValue;
+		objectid_quotedetail: string;
 		/** Unique identifier of the source record. */
-		objectid_ribboncustomization: DevKit.WebApi.LookupValue;
+		objectid_ratingmodel: string;
 		/** Unique identifier of the source record. */
-		objectid_ribbondiff: DevKit.WebApi.LookupValue;
+		objectid_ratingvalue: string;
 		/** Unique identifier of the source record. */
-		objectid_ribbonrule: DevKit.WebApi.LookupValue;
+		objectid_recurringappointmentmaster: string;
 		/** Unique identifier of the source record. */
-		objectid_ribbontabtocommandmap: DevKit.WebApi.LookupValue;
+		objectid_relationshipattribute: string;
 		/** Unique identifier of the source record. */
-		objectid_role: DevKit.WebApi.LookupValue;
+		objectid_relationshiprole: string;
 		/** Unique identifier of the source record. */
-		objectid_roletemplate: DevKit.WebApi.LookupValue;
+		objectid_relationshiprolemap: string;
 		/** Unique identifier of the source record. */
-		objectid_rollupfield: DevKit.WebApi.LookupValue;
+		objectid_report: string;
 		/** Unique identifier of the source record. */
-		objectid_routingrule: DevKit.WebApi.LookupValue;
+		objectid_reportcategory: string;
 		/** Unique identifier of the source record. */
-		objectid_routingruleitem: DevKit.WebApi.LookupValue;
+		objectid_reportentity: string;
 		/** Unique identifier of the source record. */
-		objectid_salesliterature: DevKit.WebApi.LookupValue;
+		objectid_reportlink: string;
 		/** Unique identifier of the source record. */
-		objectid_salesliteratureitem: DevKit.WebApi.LookupValue;
+		objectid_reportvisibility: string;
 		/** Unique identifier of the source record. */
-		objectid_salesorder: DevKit.WebApi.LookupValue;
+		objectid_resource: string;
 		/** Unique identifier of the source record. */
-		objectid_salesorderdetail: DevKit.WebApi.LookupValue;
+		objectid_resourcegroup: string;
 		/** Unique identifier of the source record. */
-		objectid_salesprocessinstance: DevKit.WebApi.LookupValue;
+		objectid_resourcegroupexpansion: string;
 		/** Unique identifier of the source record. */
-		objectid_savedquery: DevKit.WebApi.LookupValue;
+		objectid_resourcespec: string;
 		/** Unique identifier of the source record. */
-		objectid_savedqueryvisualization: DevKit.WebApi.LookupValue;
+		objectid_revokeinheritedaccessrecordstracker: string;
 		/** Unique identifier of the source record. */
-		objectid_sdkmessage: DevKit.WebApi.LookupValue;
+		objectid_ribboncommand: string;
 		/** Unique identifier of the source record. */
-		objectid_sdkmessagefilter: DevKit.WebApi.LookupValue;
+		objectid_ribboncontextgroup: string;
 		/** Unique identifier of the source record. */
-		objectid_sdkmessagepair: DevKit.WebApi.LookupValue;
+		objectid_ribboncustomization: string;
 		/** Unique identifier of the source record. */
-		objectid_sdkmessageprocessingstep: DevKit.WebApi.LookupValue;
+		objectid_ribbondiff: string;
 		/** Unique identifier of the source record. */
-		objectid_sdkmessageprocessingstepimage: DevKit.WebApi.LookupValue;
+		objectid_ribbonrule: string;
 		/** Unique identifier of the source record. */
-		objectid_sdkmessageprocessingstepsecureconfig: DevKit.WebApi.LookupValue;
+		objectid_ribbontabtocommandmap: string;
 		/** Unique identifier of the source record. */
-		objectid_sdkmessagerequest: DevKit.WebApi.LookupValue;
+		objectid_role: string;
 		/** Unique identifier of the source record. */
-		objectid_sdkmessagerequestfield: DevKit.WebApi.LookupValue;
+		objectid_roletemplate: string;
 		/** Unique identifier of the source record. */
-		objectid_sdkmessageresponse: DevKit.WebApi.LookupValue;
+		objectid_rollupfield: string;
 		/** Unique identifier of the source record. */
-		objectid_sdkmessageresponsefield: DevKit.WebApi.LookupValue;
+		objectid_routingrule: string;
 		/** Unique identifier of the source record. */
-		objectid_service: DevKit.WebApi.LookupValue;
+		objectid_routingruleitem: string;
 		/** Unique identifier of the source record. */
-		objectid_serviceappointment: DevKit.WebApi.LookupValue;
+		objectid_salesliterature: string;
 		/** Unique identifier of the source record. */
-		objectid_servicecontractcontacts: DevKit.WebApi.LookupValue;
+		objectid_salesliteratureitem: string;
 		/** Unique identifier of the source record. */
-		objectid_serviceendpoint: DevKit.WebApi.LookupValue;
+		objectid_salesorder: string;
 		/** Unique identifier of the source record. */
-		objectid_serviceplan: DevKit.WebApi.LookupValue;
+		objectid_salesorderdetail: string;
 		/** Unique identifier of the source record. */
-		objectid_serviceplanmapping: DevKit.WebApi.LookupValue;
+		objectid_salesprocessinstance: string;
 		/** Unique identifier of the source record. */
-		objectid_settingdefinition: DevKit.WebApi.LookupValue;
+		objectid_savedquery: string;
 		/** Unique identifier of the source record. */
-		objectid_sharepointdocumentlocation: DevKit.WebApi.LookupValue;
+		objectid_savedqueryvisualization: string;
 		/** Unique identifier of the source record. */
-		objectid_sharepointsite: DevKit.WebApi.LookupValue;
+		objectid_sdkmessage: string;
 		/** Unique identifier of the source record. */
-		objectid_site: DevKit.WebApi.LookupValue;
+		objectid_sdkmessagefilter: string;
 		/** Unique identifier of the source record. */
-		objectid_sitemap: DevKit.WebApi.LookupValue;
+		objectid_sdkmessagepair: string;
 		/** Unique identifier of the source record. */
-		objectid_sla: DevKit.WebApi.LookupValue;
+		objectid_sdkmessageprocessingstep: string;
 		/** Unique identifier of the source record. */
-		objectid_socialactivity: DevKit.WebApi.LookupValue;
+		objectid_sdkmessageprocessingstepimage: string;
 		/** Unique identifier of the source record. */
-		objectid_solution: DevKit.WebApi.LookupValue;
+		objectid_sdkmessageprocessingstepsecureconfig: string;
 		/** Unique identifier of the source record. */
-		objectid_solutioncomponent: DevKit.WebApi.LookupValue;
+		objectid_sdkmessagerequest: string;
 		/** Unique identifier of the source record. */
-		objectid_solutioncomponentattributeconfiguration: DevKit.WebApi.LookupValue;
+		objectid_sdkmessagerequestfield: string;
 		/** Unique identifier of the source record. */
-		objectid_solutioncomponentbatchconfiguration: DevKit.WebApi.LookupValue;
+		objectid_sdkmessageresponse: string;
 		/** Unique identifier of the source record. */
-		objectid_solutioncomponentconfiguration: DevKit.WebApi.LookupValue;
+		objectid_sdkmessageresponsefield: string;
 		/** Unique identifier of the source record. */
-		objectid_solutioncomponentrelationshipconfiguration: DevKit.WebApi.LookupValue;
+		objectid_service: string;
 		/** Unique identifier of the source record. */
-		objectid_stagesolutionupload: DevKit.WebApi.LookupValue;
+		objectid_serviceappointment: string;
 		/** Unique identifier of the source record. */
-		objectid_statusmap: DevKit.WebApi.LookupValue;
+		objectid_servicecontractcontacts: string;
 		/** Unique identifier of the source record. */
-		objectid_stringmap: DevKit.WebApi.LookupValue;
+		objectid_serviceendpoint: string;
 		/** Unique identifier of the source record. */
-		objectid_subject: DevKit.WebApi.LookupValue;
+		objectid_serviceplan: string;
 		/** Unique identifier of the source record. */
-		objectid_subscription: DevKit.WebApi.LookupValue;
+		objectid_serviceplanmapping: string;
 		/** Unique identifier of the source record. */
-		objectid_subscriptionmanuallytrackedobject: DevKit.WebApi.LookupValue;
+		objectid_settingdefinition: string;
 		/** Unique identifier of the source record. */
-		objectid_subscriptionsyncinfo: DevKit.WebApi.LookupValue;
+		objectid_sharedlinksetting: string;
 		/** Unique identifier of the source record. */
-		objectid_systemuser: DevKit.WebApi.LookupValue;
+		objectid_sharepointdocumentlocation: string;
 		/** Unique identifier of the source record. */
-		objectid_systemuserauthorizationchangetracker: DevKit.WebApi.LookupValue;
+		objectid_sharepointsite: string;
 		/** Unique identifier of the source record. */
-		objectid_systemuserbusinessunitentitymap: DevKit.WebApi.LookupValue;
+		objectid_site: string;
 		/** Unique identifier of the source record. */
-		objectid_task: DevKit.WebApi.LookupValue;
+		objectid_sitemap: string;
 		/** Unique identifier of the source record. */
-		objectid_team: DevKit.WebApi.LookupValue;
+		objectid_sla: string;
 		/** Unique identifier of the source record. */
-		objectid_teammembership: DevKit.WebApi.LookupValue;
+		objectid_socialactivity: string;
 		/** Unique identifier of the source record. */
-		objectid_teammobileofflineprofilemembership: DevKit.WebApi.LookupValue;
+		objectid_solution: string;
 		/** Unique identifier of the source record. */
-		objectid_template: DevKit.WebApi.LookupValue;
+		objectid_solutioncomponent: string;
 		/** Unique identifier of the source record. */
-		objectid_territory: DevKit.WebApi.LookupValue;
+		objectid_solutioncomponentattributeconfiguration: string;
 		/** Unique identifier of the source record. */
-		objectid_theme: DevKit.WebApi.LookupValue;
+		objectid_solutioncomponentbatchconfiguration: string;
 		/** Unique identifier of the source record. */
-		objectid_timezonedefinition: DevKit.WebApi.LookupValue;
+		objectid_solutioncomponentconfiguration: string;
 		/** Unique identifier of the source record. */
-		objectid_timezonelocalizedname: DevKit.WebApi.LookupValue;
+		objectid_solutioncomponentrelationshipconfiguration: string;
 		/** Unique identifier of the source record. */
-		objectid_timezonerule: DevKit.WebApi.LookupValue;
+		objectid_stagesolutionupload: string;
 		/** Unique identifier of the source record. */
-		objectid_topic: DevKit.WebApi.LookupValue;
+		objectid_statusmap: string;
 		/** Unique identifier of the source record. */
-		objectid_topichistory: DevKit.WebApi.LookupValue;
+		objectid_stringmap: string;
 		/** Unique identifier of the source record. */
-		objectid_topicmodel: DevKit.WebApi.LookupValue;
+		objectid_subject: string;
 		/** Unique identifier of the source record. */
-		objectid_topicmodelconfiguration: DevKit.WebApi.LookupValue;
+		objectid_subscription: string;
 		/** Unique identifier of the source record. */
-		objectid_topicmodelexecutionhistory: DevKit.WebApi.LookupValue;
+		objectid_subscriptionmanuallytrackedobject: string;
 		/** Unique identifier of the source record. */
-		objectid_transactioncurrency: DevKit.WebApi.LookupValue;
+		objectid_subscriptionsyncinfo: string;
 		/** Unique identifier of the source record. */
-		objectid_transformationmapping: DevKit.WebApi.LookupValue;
+		objectid_synapsedatabase: string;
 		/** Unique identifier of the source record. */
-		objectid_transformationparametermapping: DevKit.WebApi.LookupValue;
+		objectid_synapselinkexternaltablestate: string;
 		/** Unique identifier of the source record. */
-		objectid_uii_action: DevKit.WebApi.LookupValue;
+		objectid_synapselinkprofile: string;
 		/** Unique identifier of the source record. */
-		objectid_uii_audit: DevKit.WebApi.LookupValue;
+		objectid_synapselinkprofileentity: string;
 		/** Unique identifier of the source record. */
-		objectid_uii_context: DevKit.WebApi.LookupValue;
+		objectid_synapselinkprofileentitystate: string;
 		/** Unique identifier of the source record. */
-		objectid_uii_hostedapplication: DevKit.WebApi.LookupValue;
+		objectid_synapselinkschedule: string;
 		/** Unique identifier of the source record. */
-		objectid_uii_nonhostedapplication: DevKit.WebApi.LookupValue;
+		objectid_systemuser: string;
 		/** Unique identifier of the source record. */
-		objectid_uii_option: DevKit.WebApi.LookupValue;
+		objectid_systemuserauthorizationchangetracker: string;
 		/** Unique identifier of the source record. */
-		objectid_uii_savedsession: DevKit.WebApi.LookupValue;
+		objectid_systemuserbusinessunitentitymap: string;
 		/** Unique identifier of the source record. */
-		objectid_uii_sessiontransfer: DevKit.WebApi.LookupValue;
+		objectid_task: string;
 		/** Unique identifier of the source record. */
-		objectid_uii_workflow: DevKit.WebApi.LookupValue;
+		objectid_team: string;
 		/** Unique identifier of the source record. */
-		objectid_uii_workflowstep: DevKit.WebApi.LookupValue;
+		objectid_teammembership: string;
 		/** Unique identifier of the source record. */
-		objectid_uii_workflow_workflowstep_mapping: DevKit.WebApi.LookupValue;
+		objectid_teammobileofflineprofilemembership: string;
 		/** Unique identifier of the source record. */
-		objectid_unresolvedaddress: DevKit.WebApi.LookupValue;
+		objectid_template: string;
 		/** Unique identifier of the source record. */
-		objectid_uom: DevKit.WebApi.LookupValue;
+		objectid_territory: string;
 		/** Unique identifier of the source record. */
-		objectid_uomschedule: DevKit.WebApi.LookupValue;
+		objectid_theme: string;
 		/** Unique identifier of the source record. */
-		objectid_userentityuisettings: DevKit.WebApi.LookupValue;
+		objectid_timezonedefinition: string;
 		/** Unique identifier of the source record. */
-		objectid_userfiscalcalendar: DevKit.WebApi.LookupValue;
+		objectid_timezonelocalizedname: string;
 		/** Unique identifier of the source record. */
-		objectid_userform: DevKit.WebApi.LookupValue;
+		objectid_timezonerule: string;
 		/** Unique identifier of the source record. */
-		objectid_usermapping: DevKit.WebApi.LookupValue;
+		objectid_topic: string;
 		/** Unique identifier of the source record. */
-		objectid_usermobileofflineprofilemembership: DevKit.WebApi.LookupValue;
+		objectid_topichistory: string;
 		/** Unique identifier of the source record. */
-		objectid_userquery: DevKit.WebApi.LookupValue;
+		objectid_topicmodel: string;
 		/** Unique identifier of the source record. */
-		objectid_userqueryvisualization: DevKit.WebApi.LookupValue;
+		objectid_topicmodelconfiguration: string;
 		/** Unique identifier of the source record. */
-		objectid_virtualentitymetadata: DevKit.WebApi.LookupValue;
+		objectid_topicmodelexecutionhistory: string;
 		/** Unique identifier of the source record. */
-		objectid_webresource: DevKit.WebApi.LookupValue;
+		objectid_transactioncurrency: string;
 		/** Unique identifier of the source record. */
-		objectid_webwizard: DevKit.WebApi.LookupValue;
+		objectid_transformationmapping: string;
 		/** Unique identifier of the source record. */
-		objectid_wizardaccessprivilege: DevKit.WebApi.LookupValue;
+		objectid_transformationparametermapping: string;
 		/** Unique identifier of the source record. */
-		objectid_wizardpage: DevKit.WebApi.LookupValue;
+		objectid_uii_action: string;
 		/** Unique identifier of the source record. */
-		objectid_workflow: DevKit.WebApi.LookupValue;
+		objectid_uii_audit: string;
 		/** Unique identifier of the source record. */
-		objectid_workflowbinary: DevKit.WebApi.LookupValue;
+		objectid_uii_context: string;
 		/** Unique identifier of the source record. */
-		objectid_workflowdependency: DevKit.WebApi.LookupValue;
+		objectid_uii_hostedapplication: string;
 		/** Unique identifier of the source record. */
-		objectid_workflowlog: DevKit.WebApi.LookupValue;
+		objectid_uii_nonhostedapplication: string;
 		/** Unique identifier of the source record. */
-		objectid_workflowwaitsubscription: DevKit.WebApi.LookupValue;
+		objectid_uii_option: string;
+		/** Unique identifier of the source record. */
+		objectid_uii_savedsession: string;
+		/** Unique identifier of the source record. */
+		objectid_uii_sessiontransfer: string;
+		/** Unique identifier of the source record. */
+		objectid_uii_workflow: string;
+		/** Unique identifier of the source record. */
+		objectid_uii_workflowstep: string;
+		/** Unique identifier of the source record. */
+		objectid_uii_workflow_workflowstep_mapping: string;
+		/** Unique identifier of the source record. */
+		objectid_unresolvedaddress: string;
+		/** Unique identifier of the source record. */
+		objectid_uom: string;
+		/** Unique identifier of the source record. */
+		objectid_uomschedule: string;
+		/** Unique identifier of the source record. */
+		objectid_userentityuisettings: string;
+		/** Unique identifier of the source record. */
+		objectid_userfiscalcalendar: string;
+		/** Unique identifier of the source record. */
+		objectid_userform: string;
+		/** Unique identifier of the source record. */
+		objectid_usermapping: string;
+		/** Unique identifier of the source record. */
+		objectid_usermobileofflineprofilemembership: string;
+		/** Unique identifier of the source record. */
+		objectid_userquery: string;
+		/** Unique identifier of the source record. */
+		objectid_userqueryvisualization: string;
+		/** Unique identifier of the source record. */
+		objectid_virtualentitymetadata: string;
+		/** Unique identifier of the source record. */
+		objectid_webresource: string;
+		/** Unique identifier of the source record. */
+		objectid_webwizard: string;
+		/** Unique identifier of the source record. */
+		objectid_wizardaccessprivilege: string;
+		/** Unique identifier of the source record. */
+		objectid_wizardpage: string;
+		/** Unique identifier of the source record. */
+		objectid_workflow: string;
+		/** Unique identifier of the source record. */
+		objectid_workflowbinary: string;
+		/** Unique identifier of the source record. */
+		objectid_workflowdependency: string;
+		/** Unique identifier of the source record. */
+		objectid_workflowlog: string;
+		/** Unique identifier of the source record. */
+		objectid_workflowwaitsubscription: string;
 		/** Object Type Code */
-		ObjectTypeCode: DevKit.WebApi.IntegerValue;
+		ObjectTypeCode: number;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier of the business unit that owns this. */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier of the team who owns this object. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier of the user who owns this object. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Personal categories */
-		PersonalCategories: DevKit.WebApi.StringValue;
+		PersonalCategories: string;
 		/** Indicates whether a reminder is set on this object. */
-		ReminderSet: DevKit.WebApi.BooleanValue;
+		ReminderSet: boolean;
 		/** Reminder time */
-		ReminderTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		ReminderTime_UtcDateAndTime: Date;
 		/** Start Time */
-		StartTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		StartTime_UtcDateAndTime: Date;
 		/** To Do item flags. */
-		ToDoItemFlags: DevKit.WebApi.IntegerValue;
+		ToDoItemFlags: number;
 		/** For internal use only. */
-		ToDoOrdinalDate_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		ToDoOrdinalDate_UtcDateAndTime: Date;
 		/** For internal use only. */
-		ToDoSubOrdinal: DevKit.WebApi.StringValue;
+		ToDoSubOrdinal: string;
 		/** For internal use only. */
-		ToDoTitle: DevKit.WebApi.StringValue;
+		ToDoTitle: string;
 		/** Unique identifier user entity */
-		UserEntityInstanceDataId: DevKit.WebApi.GuidValue;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		UserEntityInstanceDataId: string;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -1956,4 +2008,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

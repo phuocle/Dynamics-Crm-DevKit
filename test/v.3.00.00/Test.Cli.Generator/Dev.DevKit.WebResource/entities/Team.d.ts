@@ -192,8 +192,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -201,71 +203,71 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user primary responsible for the team. */
-		AdministratorId: DevKit.WebApi.LookupValue;
+		AdministratorId: string;
 		/** The Azure active directory object Id for a group. */
-		AzureActiveDirectoryObjectId: DevKit.WebApi.GuidValue;
+		AzureActiveDirectoryObjectId: string;
 		/** Unique identifier of the business unit with which the team is associated. */
-		BusinessUnitId: DevKit.WebApi.LookupValue;
+		BusinessUnitId: string;
 		/** Unique identifier of the user who created the team. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the team was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the team. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Description of the team. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Email address for the team. */
-		EMailAddress: DevKit.WebApi.StringValue;
+		EMailAddress: string;
 		/** Exchange rate for the currency associated with the team with respect to the base currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Unique identifier of the data import or data migration that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Information about whether the team is a default business unit team. */
-		IsDefault: DevKit.WebApi.BooleanValueReadonly;
-		IsSasTokenSet: DevKit.WebApi.BooleanValueReadonly;
-		MembershipType: DevKit.WebApi.OptionSetValue;
+		readonly IsDefault: boolean;
+		readonly IsSasTokenSet: boolean;
+		MembershipType: OptionSet.Team.MembershipType;
 		/** Unique identifier of the user who last modified the team. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the team was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the team. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Name of the team. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Unique identifier of the organization associated with the team. */
-		OrganizationId: DevKit.WebApi.GuidValueReadonly;
+		readonly OrganizationId: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Shows the ID of the process. */
-		ProcessId: DevKit.WebApi.GuidValue;
+		ProcessId: string;
 		/** Unique identifier of the default queue for the team. */
-		QueueId: DevKit.WebApi.LookupValue;
+		QueueId: string;
 		/** Choose the record that the team relates to. */
-		regardingobjectid_knowledgearticle: DevKit.WebApi.LookupValue;
+		regardingobjectid_knowledgearticle: string;
 		/** Choose the record that the team relates to. */
-		regardingobjectid_opportunity: DevKit.WebApi.LookupValue;
+		regardingobjectid_opportunity: string;
 		/** Sas Token for Team. */
-		SasToken: DevKit.WebApi.StringValueReadonly;
+		readonly SasToken: string;
 		/** For internal use only. */
-		ShareLinkQualifier: DevKit.WebApi.StringValueReadonly;
+		readonly ShareLinkQualifier: string;
 		/** Shows the ID of the stage. */
-		StageId: DevKit.WebApi.GuidValue;
+		StageId: string;
 		/** Select whether the team will be managed by the system. */
-		SystemManaged: DevKit.WebApi.BooleanValueReadonly;
+		readonly SystemManaged: boolean;
 		/** Unique identifier for the team. */
-		TeamId: DevKit.WebApi.GuidValue;
+		TeamId: string;
 		/** Shows the team template that is associated with the team. */
-		TeamTemplateId: DevKit.WebApi.LookupValue;
+		TeamTemplateId: string;
 		/** Select the team type. */
-		TeamType: DevKit.WebApi.OptionSetValue;
+		TeamType: OptionSet.Team.TeamType;
 		/** Unique identifier of the currency associated with the team. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** For internal use only. */
-		TraversedPath: DevKit.WebApi.StringValue;
+		TraversedPath: string;
 		/** Version number of the team. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 		/** Pronunciation of the full name of the team, written in phonetic hiragana or katakana characters. */
-		YomiName: DevKit.WebApi.StringValue;
+		YomiName: string;
 	}
 }
 declare namespace OptionSet {
@@ -308,4 +310,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

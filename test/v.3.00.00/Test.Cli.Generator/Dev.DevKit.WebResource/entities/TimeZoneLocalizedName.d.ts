@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,32 +30,32 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the timezonelocalizedname. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Unique identifier of the culture that the UI names are encoded in. */
-		CultureId: DevKit.WebApi.IntegerValue;
+		CultureId: number;
 		/** Name of the time zone for the daylight time. */
-		DaylightName: DevKit.WebApi.StringValue;
+		DaylightName: string;
 		/** Unique identifier of the user who last modified the time zone localized name. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the timezonelocalizedname. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Unique identifier of the organization associated with the time zone localized name. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Name of the time zone for the standard time. */
-		StandardName: DevKit.WebApi.StringValue;
+		StandardName: string;
 		/** Unique identifier of time zone definition entity instances. */
-		TimeZoneDefinitionId: DevKit.WebApi.LookupValue;
+		TimeZoneDefinitionId: string;
 		/** Unique identifier of entity instances. */
-		TimeZoneLocalizedNameId: DevKit.WebApi.GuidValue;
+		TimeZoneLocalizedNameId: string;
 		/** Unique display name for the time zone in the Microsoft Windows registry. */
-		UserInterfaceName: DevKit.WebApi.StringValue;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		UserInterfaceName: string;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -76,4 +78,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

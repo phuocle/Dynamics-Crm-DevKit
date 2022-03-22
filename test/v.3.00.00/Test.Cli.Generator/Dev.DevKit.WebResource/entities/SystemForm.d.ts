@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,59 +30,59 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the parent form. */
-		AncestorFormId: DevKit.WebApi.LookupValue;
+		AncestorFormId: string;
 		/** Information that specifies whether this component can be deleted. */
-		CanBeDeleted: DevKit.WebApi.ManagedPropertyValue;
+		CanBeDeleted: string;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.SystemForm.ComponentState;
 		/** Description of the form or dashboard. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Specifies the state of the form. */
-		FormActivationState: DevKit.WebApi.OptionSetValue;
+		FormActivationState: OptionSet.SystemForm.FormActivationState;
 		/** Unique identifier of the record type form. */
-		FormId: DevKit.WebApi.GuidValue;
+		FormId: string;
 		/** Unique identifier of the form used when synchronizing customizations for the Microsoft Dynamics 365 client for Outlook. */
-		FormIdUnique: DevKit.WebApi.GuidValueReadonly;
+		readonly FormIdUnique: string;
 		/** Json representation of the form layout. */
-		FormJson: DevKit.WebApi.StringValue;
+		FormJson: string;
 		/** Specifies whether this form is in the updated UI layout in Microsoft Dynamics CRM 2015 or Microsoft Dynamics CRM Online 2015 Update. */
-		FormPresentation: DevKit.WebApi.OptionSetValue;
+		FormPresentation: OptionSet.SystemForm.FormPresentation;
 		/** XML representation of the form layout. */
-		FormXml: DevKit.WebApi.StringValue;
+		FormXml: string;
 		/** formXml diff as in a managed solution. for internal use only */
-		FormXmlManaged: DevKit.WebApi.StringValueReadonly;
+		readonly FormXmlManaged: string;
 		/** Version in which the form is introduced. */
-		IntroducedVersion: DevKit.WebApi.StringValue;
+		IntroducedVersion: string;
 		/** Specifies whether this form is merged with the updated UI layout in Microsoft Dynamics CRM 2015 or Microsoft Dynamics CRM Online 2015 Update. */
-		IsAIRMerged: DevKit.WebApi.BooleanValue;
+		IsAIRMerged: boolean;
 		/** Information that specifies whether this component can be customized. */
-		IsCustomizable: DevKit.WebApi.ManagedPropertyValue;
+		IsCustomizable: string;
 		/** Information that specifies whether the form or the dashboard is the system default. */
-		IsDefault: DevKit.WebApi.BooleanValue;
+		IsDefault: boolean;
 		/** Information that specifies whether the dashboard is enabled for desktop. */
-		IsDesktopEnabled: DevKit.WebApi.BooleanValue;
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		IsDesktopEnabled: boolean;
+		readonly IsManaged: boolean;
 		/** Information that specifies whether the dashboard is enabled for tablet. */
-		IsTabletEnabled: DevKit.WebApi.BooleanValue;
+		IsTabletEnabled: boolean;
 		/** Name of the form. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Unique identifier of the organization. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** For internal use only. */
-		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
-		PublishedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly OverwriteTime_UtcDateOnly: Date;
+		readonly PublishedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** For internal use only. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SupportingSolutionId: string;
 		/** Type of the form, for example, Dashboard or Preview. */
-		Type: DevKit.WebApi.OptionSetValue;
+		Type: OptionSet.SystemForm.Type;
 		/** Unique Name */
-		UniqueName: DevKit.WebApi.StringValue;
+		UniqueName: string;
 		/** For internal use only. */
-		Version: DevKit.WebApi.IntegerValue;
+		Version: number;
 		/** Represents a version of customizations to be synchronized with the Microsoft Dynamics 365 client for Outlook. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -165,4 +167,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

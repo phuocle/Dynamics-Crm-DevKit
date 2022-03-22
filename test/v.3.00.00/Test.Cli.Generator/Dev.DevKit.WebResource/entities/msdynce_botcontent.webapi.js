@@ -4,20 +4,18 @@ var DevKit;
 (function (DevKit) {
 	'use strict';
 	DevKit.msdynce_botcontentApi = function (e) {
-		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
 			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-			var property = {};
 			var getFormattedValue = function () {
 				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-					return EMPTY_STRING;
+					return '';
 				}
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
 					if (entity[logicalName + l] === entityLogicalName) {
 						return entity[logicalName + f];
 					}
-					return EMPTY_STRING;
+					return '';
 				}
 				if (isMultiOptionSet) {
 					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -42,30 +40,29 @@ var DevKit;
 			var setValue = function (value) {
 				if (isMultiOptionSet) value = value.join(',');
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+					value = value.replace('{', '').replace('}', '');
 					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
 				} else {
 					upsertEntity[logicalName] = value;
 				}
 				entity[logicalName] = value;
 			};
-			Object.defineProperty(property, 'FormattedValue', {
+			Object.defineProperty(obj.FormattedValue, field, {
 				get: getFormattedValue
 			});
 			if (readOnly) {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue
 				});
 			}
 			else {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue,
 					set: setValue
 				});
 			}
-			return property;
 		}
-		var msdynce_botcontent = {
+		var _msdynce_botcontent = {
 			CreatedBy: { b: 'createdby', a: '_createdby_value', c: 'systemusers', d: 'systemuser', r: true },
 			CreatedOn_UtcDateAndTime: { a: 'createdon', r: true },
 			CreatedOnBehalfBy: { b: 'createdonbehalfby', a: '_createdonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
@@ -91,20 +88,23 @@ var DevKit;
 		};
 		if (e === undefined) e = {};
 		var u = {};
-		for (var field in msdynce_botcontent) {
-			var a = msdynce_botcontent[field].a;
-			var b = msdynce_botcontent[field].b;
-			var c = msdynce_botcontent[field].c;
-			var d = msdynce_botcontent[field].d;
-			var g = msdynce_botcontent[field].g;
-			var r = msdynce_botcontent[field].r;
-			msdynce_botcontent[field] = webApiField(e, a, b, c, d, r, u, g);
+		var msdynce_botcontent = {};
+		msdynce_botcontent.ODataEntity = e;
+		msdynce_botcontent.FormattedValue = {};
+		for (var field in _msdynce_botcontent) {
+			var a = _msdynce_botcontent[field].a;
+			var b = _msdynce_botcontent[field].b;
+			var c = _msdynce_botcontent[field].c;
+			var d = _msdynce_botcontent[field].d;
+			var g = _msdynce_botcontent[field].g;
+			var r = _msdynce_botcontent[field].r;
+			webApiField(msdynce_botcontent, field, e, a, b, c, d, r, u, g);
 		}
 		msdynce_botcontent.Entity = u;
 		msdynce_botcontent.EntityName = 'msdynce_botcontent';
 		msdynce_botcontent.EntityCollectionName = 'msdynce_botcontents';
 		msdynce_botcontent['@odata.etag'] = e['@odata.etag'];
-		msdynce_botcontent.getAliasedValue = function (alias, isMultiOptionSet) {
+		msdynce_botcontent.getAliasedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias] === undefined || e[alias] === null) {
 				return null;
 			}
@@ -113,7 +113,7 @@ var DevKit;
 			}
 			return e[alias];
 		}
-		msdynce_botcontent.getAliasedFormattedValue = function (alias, isMultiOptionSet) {
+		msdynce_botcontent.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
 				return EMPTY_STRING;
 			}

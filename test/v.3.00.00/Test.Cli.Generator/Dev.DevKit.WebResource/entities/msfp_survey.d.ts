@@ -67,8 +67,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -76,83 +78,83 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Unique identifier for Inspection Template associated with Survey. */
-		msdyn_Inspection: DevKit.WebApi.LookupValue;
+		msdyn_Inspection: string;
 		/** Specifies if responses can be accepted from anonymous respondents. */
-		msfp_acceptanonymousresponses: DevKit.WebApi.BooleanValue;
+		msfp_acceptanonymousresponses: boolean;
 		/** Link to the anonymous survey response. */
-		msfp_anonymousurl: DevKit.WebApi.StringValue;
+		msfp_anonymousurl: string;
 		/** Description of the survey. */
-		msfp_description: DevKit.WebApi.StringValue;
+		msfp_description: string;
 		/** Embed code for the survey */
-		msfp_embedcode: DevKit.WebApi.StringValue;
+		msfp_embedcode: string;
 		/** End date and time of the survey, if configured. */
-		msfp_enddate_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		msfp_enddate_UtcDateAndTime: Date;
 		/** Friendly name of the survey. */
-		msfp_friendlyname: DevKit.WebApi.StringValue;
+		msfp_friendlyname: string;
 		/** The name of the custom entity. */
-		msfp_name: DevKit.WebApi.StringValue;
+		msfp_name: string;
 		/** Other survey properties in JSON format. */
-		msfp_otherproperties: DevKit.WebApi.StringValue;
+		msfp_otherproperties: string;
 		/** Permanent ID is auto-generated for a new survey. For a copied survey, the ID is carried over from the original survey. */
-		msfp_PermanentID: DevKit.WebApi.StringValue;
+		msfp_PermanentID: string;
 		/** Project associated with the survey. */
-		msfp_project: DevKit.WebApi.LookupValue;
+		msfp_project: string;
 		/** User who published the survey. */
-		msfp_publishedby: DevKit.WebApi.LookupValue;
+		msfp_publishedby: string;
 		/** Date and time on which the survey was published. */
-		msfp_publishedon_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		msfp_publishedon_UtcDateAndTime: Date;
 		/** Unique identifier for the survey in the source application. */
-		msfp_sourcesurveyidentifier: DevKit.WebApi.StringValue;
+		msfp_sourcesurveyidentifier: string;
 		/** Date when a survey is modified in source. */
-		msfp_sourcesurveymodifieddate_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		msfp_sourcesurveymodifieddate_UtcDateOnly: Date;
 		/** Version number of the survey. */
-		msfp_sourcesurveyversion: DevKit.WebApi.StringValue;
+		msfp_sourcesurveyversion: string;
 		/** Start date and time of the survey, if configured. */
-		msfp_startdate_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		msfp_startdate_UtcDateAndTime: Date;
 		/** Unique identifier for entity instances */
-		msfp_surveyId: DevKit.WebApi.GuidValue;
+		msfp_surveyId: string;
 		/** Source through which the survey was created. */
-		msfp_surveysource: DevKit.WebApi.StringValue;
+		msfp_surveysource: string;
 		/** Link to the survey in Customer Voice. */
-		msfp_surveyurl: DevKit.WebApi.StringValue;
+		msfp_surveyurl: string;
 		/** Stores survey variables and their default values in JSON format. */
-		msfp_variables: DevKit.WebApi.StringValue;
+		msfp_variables: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Status of the Survey */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.msfp_survey.statecode;
 		/** Reason for the status of the Survey */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.msfp_survey.statuscode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -193,4 +195,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

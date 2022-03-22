@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,62 +30,62 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Base time bias of the time zone rule. */
-		Bias: DevKit.WebApi.IntegerValue;
+		Bias: number;
 		/** Unique identifier of the user who created the time zone rule. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the time zone rule was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the timezonerule. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Time bias in addition to the base bias for daylight savings time. */
-		DaylightBias: DevKit.WebApi.IntegerValue;
+		DaylightBias: number;
 		/** Day of the month when daylight savings time starts. */
-		DaylightDay: DevKit.WebApi.IntegerValue;
+		DaylightDay: number;
 		/** Day of the week when daylight savings time starts. */
-		DaylightDayOfWeek: DevKit.WebApi.IntegerValue;
+		DaylightDayOfWeek: number;
 		/** Hour of the day when daylight savings time starts */
-		DaylightHour: DevKit.WebApi.IntegerValue;
+		DaylightHour: number;
 		/** Minute of the hour when daylight savings time starts. */
-		DaylightMinute: DevKit.WebApi.IntegerValue;
+		DaylightMinute: number;
 		/** Month when daylight savings time starts. */
-		DaylightMonth: DevKit.WebApi.IntegerValue;
+		DaylightMonth: number;
 		/** Second of the minute when daylight savings time starts */
-		DaylightSecond: DevKit.WebApi.IntegerValue;
+		DaylightSecond: number;
 		/** Year when daylight savings times starts. */
-		DaylightYear: DevKit.WebApi.IntegerValue;
+		DaylightYear: number;
 		/** Time that this rule takes effect, in local time. */
-		EffectiveDateTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		EffectiveDateTime_UtcDateOnly: Date;
 		/** Unique identifier of the user who last modified the time zone rule. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the time zone rule was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the timezonerule. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Unique identifier of the organization associated with the time zone rule. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Time bias in addition to the base bias for standard time. */
-		StandardBias: DevKit.WebApi.IntegerValue;
+		StandardBias: number;
 		/** Day of the month when standard time starts. */
-		StandardDay: DevKit.WebApi.IntegerValue;
+		StandardDay: number;
 		/** Day of the week when standard time starts. */
-		StandardDayOfWeek: DevKit.WebApi.IntegerValue;
+		StandardDayOfWeek: number;
 		/** Hour of the day when standard time starts. */
-		StandardHour: DevKit.WebApi.IntegerValue;
+		StandardHour: number;
 		/** Minute of the hour when standard time starts. */
-		StandardMinute: DevKit.WebApi.IntegerValue;
+		StandardMinute: number;
 		/** Month when standard time starts. */
-		StandardMonth: DevKit.WebApi.IntegerValue;
+		StandardMonth: number;
 		/** Second of the Minute when standard time starts. */
-		StandardSecond: DevKit.WebApi.IntegerValue;
+		StandardSecond: number;
 		/** Year when standard time starts. */
-		StandardYear: DevKit.WebApi.IntegerValue;
+		StandardYear: number;
 		/** Unique identifier of the time zone definition. */
-		TimeZoneDefinitionId: DevKit.WebApi.LookupValue;
+		TimeZoneDefinitionId: string;
 		/** Unique identifier of the time zone rule. */
-		TimeZoneRuleId: DevKit.WebApi.GuidValue;
+		TimeZoneRuleId: string;
 		/** For internal use only */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		TimeZoneRuleVersionNumber: number;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -106,4 +108,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

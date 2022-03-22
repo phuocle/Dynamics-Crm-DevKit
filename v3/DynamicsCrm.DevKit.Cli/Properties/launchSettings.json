@@ -78,7 +78,7 @@
     "generator-webapi2": {
       "commandName": "Project",
       "commandLineArgs": "/sdklogin:\"yes\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"JS-WEBAPI\"",
-      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.00.00\\Test..WebResource.WebApi\\Dev.DevKit.WebResource\\entities"
+      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.00.00\\Test.Cli.Generator\\Dev.DevKit.WebResource\\entities"
     }
   }
 }

@@ -61,8 +61,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -70,77 +72,77 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Shows the incident related to this suggestion result. */
-		msdyn_IncidentType: DevKit.WebApi.LookupValue;
+		msdyn_IncidentType: string;
 		/** Shows the incident (for merge) related to this suggestion result. */
-		msdyn_IncidentTypeForMerge: DevKit.WebApi.LookupValue;
+		msdyn_IncidentTypeForMerge: string;
 		/** Shows unique identifier of an incident type. */
-		msdyn_IncidentTypeId: DevKit.WebApi.StringValue;
+		msdyn_IncidentTypeId: string;
 		/** Shows unique identifier of an incident (for merge). */
-		msdyn_IncidentTypeIdForMerge: DevKit.WebApi.StringValue;
+		msdyn_IncidentTypeIdForMerge: string;
 		/** Unique identifier for entity instances */
-		msdyn_incidenttyperecommendationresultId: DevKit.WebApi.GuidValue;
+		msdyn_incidenttyperecommendationresultId: string;
 		/** The name of the custom entity. */
-		msdyn_name: DevKit.WebApi.StringValue;
+		msdyn_name: string;
 		/** Shows the occurrence times of the related incident type. */
-		msdyn_OccurrenceTimes: DevKit.WebApi.IntegerValue;
+		msdyn_OccurrenceTimes: number;
 		/** Shows the product related to this suggestion result. */
-		msdyn_ProductService: DevKit.WebApi.LookupValue;
+		msdyn_ProductService: string;
 		/** Shows unique identifier of a product. */
-		msdyn_ProductServiceId: DevKit.WebApi.StringValue;
+		msdyn_ProductServiceId: string;
 		/** Shows the suggestion description. */
-		msdyn_RecommendationDescription: DevKit.WebApi.StringValue;
+		msdyn_RecommendationDescription: string;
 		/** Shows the type of incident type suggestion. */
-		msdyn_RecommendationType: DevKit.WebApi.OptionSetValue;
+		msdyn_RecommendationType: OptionSet.msdyn_incidenttyperecommendationresult.msdyn_RecommendationType;
 		/** Id of Incident Type Suggestion Run History */
-		msdyn_RunHistoryId: DevKit.WebApi.LookupValue;
+		msdyn_RunHistoryId: string;
 		/** Shows unique identifier of the related run job. */
-		msdyn_RunId: DevKit.WebApi.StringValue;
+		msdyn_RunId: string;
 		/** Shows the score ranking of the result. */
-		msdyn_ScoreRanking: DevKit.WebApi.IntegerValue;
+		msdyn_ScoreRanking: number;
 		/** Shows the suggested value of product quantity or service duration. */
-		msdyn_SuggestedValue: DevKit.WebApi.IntegerValue;
+		msdyn_SuggestedValue: number;
 		/** Shows the total occurrence times of the related incident type. */
-		msdyn_TotalOccurrenceTimes: DevKit.WebApi.IntegerValue;
+		msdyn_TotalOccurrenceTimes: number;
 		/** The unit that determines the pricing and final quantity for this product or service. */
-		msdyn_Unit: DevKit.WebApi.LookupValue;
+		msdyn_Unit: string;
 		/** Shows unique identifier of the unit. */
-		msdyn_UnitId: DevKit.WebApi.StringValue;
+		msdyn_UnitId: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Status of the Incident Type Suggestion Result */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.msdyn_incidenttyperecommendationresult.statecode;
 		/** Reason for the status of the Incident Type Suggestion Result */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.msdyn_incidenttyperecommendationresult.statuscode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -187,4 +189,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

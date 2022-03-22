@@ -47,8 +47,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -56,58 +58,58 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
-		msdyn_eventduration: DevKit.WebApi.DecimalValue;
+		readonly ModifiedOnBehalfBy: string;
+		msdyn_eventduration: number;
 		/** Event end time */
-		msdyn_eventendtime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		msdyn_eventendtime_UtcDateAndTime: Date;
 		/** Event reason */
-		msdyn_eventreason: DevKit.WebApi.OptionSetValue;
+		msdyn_eventreason: OptionSet.msdyn_ocsessionparticipantevent.msdyn_eventreason;
 		/** Event start time */
-		msdyn_eventstarttime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		msdyn_eventstarttime_UtcDateAndTime: Date;
 		/** Session participant event type */
-		msdyn_eventtype: DevKit.WebApi.OptionSetValue;
+		msdyn_eventtype: OptionSet.msdyn_ocsessionparticipantevent.msdyn_eventtype;
 		/** The name of the custom entity. */
-		msdyn_name: DevKit.WebApi.StringValue;
+		msdyn_name: string;
 		/** Unique identifier for entity instances */
-		msdyn_ocsessionparticipanteventId: DevKit.WebApi.GuidValue;
+		msdyn_ocsessionparticipanteventId: string;
 		/** Session associated to the event */
-		msdyn_sessionid: DevKit.WebApi.LookupValue;
+		msdyn_sessionid: string;
 		/** Session participant associated to the event */
-		msdyn_sessionparticipantid: DevKit.WebApi.LookupValue;
+		msdyn_sessionparticipantid: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Status of the Session Participant Event */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.msdyn_ocsessionparticipantevent.statecode;
 		/** Reason for the status of the Session Participant Event */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.msdyn_ocsessionparticipantevent.statuscode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -154,4 +156,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

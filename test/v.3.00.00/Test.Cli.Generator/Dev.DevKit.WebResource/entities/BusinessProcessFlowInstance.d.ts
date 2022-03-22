@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,47 +30,47 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Date and time when the active stage was started. */
-		ActiveStageStartedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ActiveStageStartedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the business process flow instance. */
-		BusinessProcessFlowInstanceId: DevKit.WebApi.GuidValue;
+		BusinessProcessFlowInstanceId: string;
 		/** Date and time when the process completed. */
-		CompletedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CompletedOn_UtcDateAndTime: Date;
 		/** Shows who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Unique identifier of the first entity instance. */
-		Entity1Id: DevKit.WebApi.GuidValue;
+		Entity1Id: string;
 		/** Unique identifier of the second entity instance. */
-		Entity2Id: DevKit.WebApi.GuidValue;
+		Entity2Id: string;
 		/** Unique identifier of the third entity instance. */
-		Entity3Id: DevKit.WebApi.GuidValue;
+		Entity3Id: string;
 		/** Unique identifier of the fourth entity instance. */
-		Entity4Id: DevKit.WebApi.GuidValue;
+		Entity4Id: string;
 		/** Unique identifier of the fifth entity instance. */
-		Entity5Id: DevKit.WebApi.GuidValue;
+		Entity5Id: string;
 		/** Shows who last updated the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Type a descriptive name for the instance. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Unique identifier of the business process flow. */
-		ProcessId: DevKit.WebApi.LookupValue;
+		ProcessId: string;
 		/** Unique identifier of active stage in the business process flow instance. */
-		ProcessStageId: DevKit.WebApi.GuidValue;
+		ProcessStageId: string;
 		/** Shows whether the business process flow instance is active or inactive. */
-		StateCode: DevKit.WebApi.OptionSetValue;
+		StateCode: OptionSet.BusinessProcessFlowInstance.StateCode;
 		/** Business process flow instance's status. */
-		StatusCode: DevKit.WebApi.OptionSetValue;
+		StatusCode: OptionSet.BusinessProcessFlowInstance.StatusCode;
 		/** For internal use only. */
-		TraversedPath: DevKit.WebApi.StringValue;
+		TraversedPath: string;
 		/** Version number of the business process flow instance. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -105,4 +107,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

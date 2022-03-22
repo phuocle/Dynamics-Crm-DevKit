@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,57 +30,57 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Tells whether the saved query visualization can be deleted. */
-		CanBeDeleted: DevKit.WebApi.ManagedPropertyValue;
+		CanBeDeleted: string;
 		/** Indicates the library used to render the visualization. */
-		ChartType: DevKit.WebApi.OptionSetValue;
+		ChartType: OptionSet.SavedQueryVisualization.ChartType;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.SavedQueryVisualization.ComponentState;
 		/** Unique identifier of the user who created the system chart. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the system chart was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the system chart. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** XML string used to define the underlying data for the system chart. */
-		DataDescription: DevKit.WebApi.StringValue;
+		DataDescription: string;
 		/** Description of the system chart. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Version in which the form is introduced. */
-		IntroducedVersion: DevKit.WebApi.StringValue;
+		IntroducedVersion: string;
 		/** Information that specifies whether this component can be customized. */
-		IsCustomizable: DevKit.WebApi.ManagedPropertyValue;
+		IsCustomizable: string;
 		/** Indicates whether the system chart is the default chart for the entity. */
-		IsDefault: DevKit.WebApi.BooleanValue;
+		IsDefault: boolean;
 		/** Indicates whether the solution component is part of a managed solution. */
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsManaged: boolean;
 		/** Unique identifier of the user who last modified the system chart. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the system chart was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the system chart. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Name of the system chart. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Unique identifier of the organization associated with the system chart. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** For internal use only. */
-		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly OverwriteTime_UtcDateOnly: Date;
 		/** XML string used to define the presentation properties of the system chart. */
-		PresentationDescription: DevKit.WebApi.StringValue;
+		PresentationDescription: string;
 		/** Unique identifier of the system chart. */
-		SavedQueryVisualizationId: DevKit.WebApi.GuidValue;
+		SavedQueryVisualizationId: string;
 		/** For internal use only. */
-		SavedQueryVisualizationIdUnique: DevKit.WebApi.GuidValueReadonly;
+		readonly SavedQueryVisualizationIdUnique: string;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** For internal use only. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SupportingSolutionId: string;
 		/** Specifies where the chart will be used, 0 for data centric as well as interaction centric and 1 for just interaction centric */
-		Type: DevKit.WebApi.OptionSetValue;
+		Type: OptionSet.SavedQueryVisualization.Type;
 		/** Version number of the system chart. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 		/** Unique identifier of the Web resource that will be displayed in the system chart. */
-		WebResourceId: DevKit.WebApi.LookupValue;
+		WebResourceId: string;
 	}
 }
 declare namespace OptionSet {
@@ -123,4 +125,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

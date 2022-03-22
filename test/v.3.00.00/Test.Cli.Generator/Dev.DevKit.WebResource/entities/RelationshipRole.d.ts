@@ -53,8 +53,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -62,32 +64,32 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique Identifier of the user who created the relationship role. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the relationship role was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the relationshiprole. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Description of the relationship role. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Unique identifier of the data import or data migration that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the user who last modified the relationship role. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the relationship role was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the relationshiprole. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Name of the relationship role. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Unique Identifier of the organization that this relationship role belongs to. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Unique identifier of the relationship role. */
-		RelationshipRoleId: DevKit.WebApi.GuidValue;
+		RelationshipRoleId: string;
 		/** Status of the relationship role. */
-		StateCode: DevKit.WebApi.OptionSetValue;
+		StateCode: OptionSet.RelationshipRole.StateCode;
 		/** Reason for the status of the relationship role. */
-		StatusCode: DevKit.WebApi.OptionSetValue;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		StatusCode: OptionSet.RelationshipRole.StatusCode;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -122,4 +124,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

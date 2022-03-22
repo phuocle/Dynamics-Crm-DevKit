@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,65 +30,65 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Information about whether the SDK message is automatically transacted. */
-		AutoTransact: DevKit.WebApi.BooleanValue;
+		AutoTransact: boolean;
 		/** Identifies where a method will be exposed. 0 - Server, 1 - Client, 2 - both. */
-		Availability: DevKit.WebApi.IntegerValue;
+		Availability: number;
 		/** If this is a categorized method, this is the name, otherwise None. */
-		CategoryName: DevKit.WebApi.StringValue;
+		CategoryName: string;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.SdkMessage.ComponentState;
 		/** Unique identifier of the user who created the SDK message. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the SDK message was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the sdkmessage. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Customization level of the SDK message. */
-		CustomizationLevel: DevKit.WebApi.IntegerValueReadonly;
+		readonly CustomizationLevel: number;
 		/** Name of the privilege that allows execution of the SDK message */
-		ExecutePrivilegeName: DevKit.WebApi.StringValue;
+		ExecutePrivilegeName: string;
 		/** Indicates whether the SDK message should have its requests expanded per primary entity defined in its filters. */
-		Expand: DevKit.WebApi.BooleanValue;
+		Expand: boolean;
 		/** Version in which the component is introduced. */
-		IntroducedVersion: DevKit.WebApi.StringValue;
+		IntroducedVersion: string;
 		/** Information about whether the SDK message is active. */
-		IsActive: DevKit.WebApi.BooleanValue;
+		IsActive: boolean;
 		/** Information that specifies whether this component is managed. */
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsManaged: boolean;
 		/** Indicates whether the SDK message is private. */
-		IsPrivate: DevKit.WebApi.BooleanValue;
+		IsPrivate: boolean;
 		/** Identifies whether an SDK message will be ReadOnly or Read Write. false - ReadWrite, true - ReadOnly . */
-		IsReadOnly: DevKit.WebApi.BooleanValue;
+		IsReadOnly: boolean;
 		/** For internal use only. */
-		IsValidForExecuteAsync: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsValidForExecuteAsync: boolean;
 		/** Unique identifier of the user who last modified the SDK message. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the SDK message was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the sdkmessage. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Name of the SDK message. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Unique identifier of the organization with which the SDK message is associated. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** For internal use only. */
-		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly OverwriteTime_UtcDateOnly: Date;
 		/** Unique identifier of the SDK message entity. */
-		SdkMessageId: DevKit.WebApi.GuidValue;
+		SdkMessageId: string;
 		/** Unique identifier of the SDK message. */
-		SdkMessageIdUnique: DevKit.WebApi.GuidValueReadonly;
+		readonly SdkMessageIdUnique: string;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** For internal use only. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SupportingSolutionId: string;
 		/** Indicates whether the SDK message is a template. */
-		Template: DevKit.WebApi.BooleanValue;
+		Template: boolean;
 		/** For internal use only. */
-		ThrottleSettings: DevKit.WebApi.StringValueReadonly;
+		readonly ThrottleSettings: string;
 		/** Number that identifies a specific revision of the SDK message.  */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 		/** Whether or not the SDK message can be called from a workflow. */
-		WorkflowSdkStepEnabled: DevKit.WebApi.BooleanValueReadonly;
+		readonly WorkflowSdkStepEnabled: boolean;
 	}
 }
 declare namespace OptionSet {
@@ -119,4 +121,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

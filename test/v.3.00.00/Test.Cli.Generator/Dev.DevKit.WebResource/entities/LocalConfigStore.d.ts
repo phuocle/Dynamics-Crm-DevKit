@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,16 +30,16 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Assembly Name */
-		AssemblyName: DevKit.WebApi.StringValueReadonly;
+		readonly AssemblyName: string;
 		/** Unique identifier of LocalConfigStore entry. */
-		Id1: DevKit.WebApi.GuidValue;
-		IsValueSet: DevKit.WebApi.BooleanValueReadonly;
+		Id1: string;
+		readonly IsValueSet: boolean;
 		/** Key Name */
-		KeyName: DevKit.WebApi.StringValueReadonly;
+		readonly KeyName: string;
 		/** Assembly Public Token */
-		PublicToken: DevKit.WebApi.StringValueReadonly;
+		readonly PublicToken: string;
 		/** Value */
-		Value: DevKit.WebApi.StringValueReadonly;
+		readonly Value: string;
 	}
 }
 declare namespace OptionSet {
@@ -60,4 +62,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

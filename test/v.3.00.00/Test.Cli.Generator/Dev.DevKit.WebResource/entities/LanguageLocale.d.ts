@@ -53,8 +53,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -62,24 +64,24 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Code */
-		Code: DevKit.WebApi.StringValueReadonly;
+		readonly Code: string;
 		/** Language */
-		Language: DevKit.WebApi.StringValueReadonly;
+		readonly Language: string;
 		/** LanguageLocaleId */
-		LanguageLocaleId: DevKit.WebApi.GuidValue;
+		LanguageLocaleId: string;
 		/** Locale ID */
-		LocaleId: DevKit.WebApi.IntegerValue;
+		LocaleId: number;
 		/** Name */
-		Name: DevKit.WebApi.StringValueReadonly;
+		readonly Name: string;
 		/** Unique identifier of the organization associated with the language locale. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Region */
-		Region: DevKit.WebApi.StringValueReadonly;
+		readonly Region: string;
 		/** State Code */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.LanguageLocale.statecode;
 		/** Language Status Code */
-		statuscode: DevKit.WebApi.OptionSetValue;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		statuscode: OptionSet.LanguageLocale.statuscode;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -114,4 +116,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

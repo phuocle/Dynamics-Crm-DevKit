@@ -181,8 +181,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -190,77 +192,77 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Shows the exchange rate for the currency associated with the entity with respect to the base currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Shows the sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Shows who last updated the record on behalf of another user. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Unique identifier for Agreement associated with Agreement Booking Service. */
-		msdyn_Agreement: DevKit.WebApi.LookupValue;
+		msdyn_Agreement: string;
 		/** The Agreement Booking Incident related to this service */
-		msdyn_AgreementBookingIncident: DevKit.WebApi.LookupValue;
+		msdyn_AgreementBookingIncident: string;
 		/** Shows the entity instances. */
-		msdyn_agreementbookingserviceId: DevKit.WebApi.GuidValue;
+		msdyn_agreementbookingserviceId: string;
 		/** Unique identifier for Agreement Booking Setup associated with Agreement Booking Service. */
-		msdyn_AgreementBookingSetup: DevKit.WebApi.LookupValue;
-		msdyn_Currency: DevKit.WebApi.MoneyValue;
+		msdyn_AgreementBookingSetup: string;
+		msdyn_Currency: number;
 		/** Shows the value of the currency in the base currency. */
-		msdyn_currency_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_currency_Base: number;
 		/** Customer Asset related to this Service */
-		msdyn_CustomerAsset: DevKit.WebApi.LookupValue;
+		msdyn_CustomerAsset: string;
 		/** Shows the actual duration of service. */
-		msdyn_Duration: DevKit.WebApi.IntegerValue;
+		msdyn_Duration: number;
 		/** Enter the duration you want to bill the customer for. By default, this will default to the same value as the "Duration" field. */
-		msdyn_DurationToBill: DevKit.WebApi.IntegerValue;
-		msdyn_IsCopied: DevKit.WebApi.BooleanValue;
+		msdyn_DurationToBill: number;
+		msdyn_IsCopied: boolean;
 		/** Shows the order of this service within the agreement services. */
-		msdyn_LineOrder: DevKit.WebApi.IntegerValue;
+		msdyn_LineOrder: number;
 		/** Enter the name of the custom entity. */
-		msdyn_name: DevKit.WebApi.StringValue;
+		msdyn_name: string;
 		/** Optionally set Price List that will determine the pricing for this service on the Work Order */
-		msdyn_PriceList: DevKit.WebApi.LookupValue;
+		msdyn_PriceList: string;
 		/** Unique identifier for Product/Service associated with Agreement Booking Service. */
-		msdyn_Service: DevKit.WebApi.LookupValue;
+		msdyn_Service: string;
 		/** The unit that determines the pricing for this service when Price List is set */
-		msdyn_Unit: DevKit.WebApi.LookupValue;
+		msdyn_Unit: string;
 		/** Enter the amount you wish to charge the customer per unit. This field is optional. */
-		msdyn_UnitAmount: DevKit.WebApi.MoneyValue;
+		msdyn_UnitAmount: number;
 		/** Shows the value of the unit amount in the base currency. */
-		msdyn_unitamount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_unitamount_Base: number;
 		/** Shows the date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Status of the Agreement Booking Service */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.msdyn_agreementbookingservice.statecode;
 		/** Reason for the status of the Agreement Booking Service */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.msdyn_agreementbookingservice.statuscode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Unique identifier of the currency associated with the entity. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** Shows the time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -295,4 +297,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

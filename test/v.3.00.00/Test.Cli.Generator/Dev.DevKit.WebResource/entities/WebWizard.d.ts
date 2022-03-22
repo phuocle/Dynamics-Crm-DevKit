@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,50 +30,50 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Privileges required to use this wizard, separated with commas (,). */
-		AccessPrivileges: DevKit.WebApi.StringValue;
+		AccessPrivileges: string;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.WebWizard.ComponentState;
 		/** Unique identifier of the user who created the wizard definition. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the wizard definition was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the webwizard. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Version in which the component is introduced. */
-		IntroducedVersion: DevKit.WebApi.StringValue;
+		IntroducedVersion: string;
 		/** Information that specifies whether this component is managed. */
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsManaged: boolean;
 		/** Information about whether all pages for this wizard are statically defined. */
-		IsStaticPageSequence: DevKit.WebApi.BooleanValue;
+		IsStaticPageSequence: boolean;
 		/** Unique identifier of the user who last modified the wizard definition. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the wizard definition was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the webwizard. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Name of the wizard */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Unique identifier of the organization. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** For internal use only. */
-		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly OverwriteTime_UtcDateOnly: Date;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** Sequence number of the first page of this wizard. */
-		StartPageSequenceNumber: DevKit.WebApi.IntegerValue;
+		StartPageSequenceNumber: number;
 		/** For internal use only. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SupportingSolutionId: string;
 		/** Title of the wizard. */
-		TitleResourceString: DevKit.WebApi.StringValue;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		TitleResourceString: string;
+		readonly VersionNumber: number;
 		/** Unique identifier of the wizard. */
-		WebWizardId: DevKit.WebApi.GuidValue;
+		WebWizardId: string;
 		/** Unique identifier of the Web Wizard. */
-		WebWizardIdUnique: DevKit.WebApi.GuidValueReadonly;
+		readonly WebWizardIdUnique: string;
 		/** Window height for the wizard. */
-		WizardPageHeight: DevKit.WebApi.IntegerValue;
+		WizardPageHeight: number;
 		/** Window width for the wizard. */
-		WizardPageWidth: DevKit.WebApi.IntegerValue;
+		WizardPageWidth: number;
 	}
 }
 declare namespace OptionSet {
@@ -104,4 +106,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

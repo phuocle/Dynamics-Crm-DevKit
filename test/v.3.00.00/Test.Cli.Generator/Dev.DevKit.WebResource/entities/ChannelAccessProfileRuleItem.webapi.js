@@ -4,20 +4,18 @@ var DevKit;
 (function (DevKit) {
 	'use strict';
 	DevKit.ChannelAccessProfileRuleItemApi = function (e) {
-		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
 			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-			var property = {};
 			var getFormattedValue = function () {
 				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-					return EMPTY_STRING;
+					return '';
 				}
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
 					if (entity[logicalName + l] === entityLogicalName) {
 						return entity[logicalName + f];
 					}
-					return EMPTY_STRING;
+					return '';
 				}
 				if (isMultiOptionSet) {
 					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -42,30 +40,29 @@ var DevKit;
 			var setValue = function (value) {
 				if (isMultiOptionSet) value = value.join(',');
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+					value = value.replace('{', '').replace('}', '');
 					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
 				} else {
 					upsertEntity[logicalName] = value;
 				}
 				entity[logicalName] = value;
 			};
-			Object.defineProperty(property, 'FormattedValue', {
+			Object.defineProperty(obj.FormattedValue, field, {
 				get: getFormattedValue
 			});
 			if (readOnly) {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue
 				});
 			}
 			else {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue,
 					set: setValue
 				});
 			}
-			return property;
 		}
-		var channelaccessprofileruleitem = {
+		var _channelaccessprofileruleitem = {
 			AssociatedChannelAccessProfile: { b: 'associatedchannelaccessprofile', a: '_associatedchannelaccessprofile_value', c: 'channelaccessprofiles', d: 'channelaccessprofile' },
 			ChannelAccessProfileRuleId: { b: 'channelaccessprofileruleid', a: '_channelaccessprofileruleid_value', c: 'channelaccessprofilerules', d: 'channelaccessprofilerule' },
 			ChannelAccessProfileRuleItemId: { a: 'channelaccessprofileruleitemid' },
@@ -96,20 +93,23 @@ var DevKit;
 		};
 		if (e === undefined) e = {};
 		var u = {};
-		for (var field in channelaccessprofileruleitem) {
-			var a = channelaccessprofileruleitem[field].a;
-			var b = channelaccessprofileruleitem[field].b;
-			var c = channelaccessprofileruleitem[field].c;
-			var d = channelaccessprofileruleitem[field].d;
-			var g = channelaccessprofileruleitem[field].g;
-			var r = channelaccessprofileruleitem[field].r;
-			channelaccessprofileruleitem[field] = webApiField(e, a, b, c, d, r, u, g);
+		var channelaccessprofileruleitem = {};
+		channelaccessprofileruleitem.ODataEntity = e;
+		channelaccessprofileruleitem.FormattedValue = {};
+		for (var field in _channelaccessprofileruleitem) {
+			var a = _channelaccessprofileruleitem[field].a;
+			var b = _channelaccessprofileruleitem[field].b;
+			var c = _channelaccessprofileruleitem[field].c;
+			var d = _channelaccessprofileruleitem[field].d;
+			var g = _channelaccessprofileruleitem[field].g;
+			var r = _channelaccessprofileruleitem[field].r;
+			webApiField(channelaccessprofileruleitem, field, e, a, b, c, d, r, u, g);
 		}
 		channelaccessprofileruleitem.Entity = u;
 		channelaccessprofileruleitem.EntityName = 'channelaccessprofileruleitem';
 		channelaccessprofileruleitem.EntityCollectionName = 'channelaccessprofileruleitems';
 		channelaccessprofileruleitem['@odata.etag'] = e['@odata.etag'];
-		channelaccessprofileruleitem.getAliasedValue = function (alias, isMultiOptionSet) {
+		channelaccessprofileruleitem.getAliasedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias] === undefined || e[alias] === null) {
 				return null;
 			}
@@ -118,7 +118,7 @@ var DevKit;
 			}
 			return e[alias];
 		}
-		channelaccessprofileruleitem.getAliasedFormattedValue = function (alias, isMultiOptionSet) {
+		channelaccessprofileruleitem.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
 				return EMPTY_STRING;
 			}

@@ -4,20 +4,18 @@ var DevKit;
 (function (DevKit) {
 	'use strict';
 	DevKit.msdynsm_servicessitemapApi = function (e) {
-		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
 			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-			var property = {};
 			var getFormattedValue = function () {
 				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-					return EMPTY_STRING;
+					return '';
 				}
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
 					if (entity[logicalName + l] === entityLogicalName) {
 						return entity[logicalName + f];
 					}
-					return EMPTY_STRING;
+					return '';
 				}
 				if (isMultiOptionSet) {
 					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -42,30 +40,29 @@ var DevKit;
 			var setValue = function (value) {
 				if (isMultiOptionSet) value = value.join(',');
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+					value = value.replace('{', '').replace('}', '');
 					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
 				} else {
 					upsertEntity[logicalName] = value;
 				}
 				entity[logicalName] = value;
 			};
-			Object.defineProperty(property, 'FormattedValue', {
+			Object.defineProperty(obj.FormattedValue, field, {
 				get: getFormattedValue
 			});
 			if (readOnly) {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue
 				});
 			}
 			else {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue,
 					set: setValue
 				});
 			}
-			return property;
 		}
-		var msdynsm_servicessitemap = {
+		var _msdynsm_servicessitemap = {
 			CreatedBy: { b: 'createdby', a: '_createdby_value', c: 'systemusers', d: 'systemuser', r: true },
 			CreatedOn_UtcDateAndTime: { a: 'createdon', r: true },
 			CreatedOnBehalfBy: { b: 'createdonbehalfby', a: '_createdonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
@@ -85,20 +82,23 @@ var DevKit;
 		};
 		if (e === undefined) e = {};
 		var u = {};
-		for (var field in msdynsm_servicessitemap) {
-			var a = msdynsm_servicessitemap[field].a;
-			var b = msdynsm_servicessitemap[field].b;
-			var c = msdynsm_servicessitemap[field].c;
-			var d = msdynsm_servicessitemap[field].d;
-			var g = msdynsm_servicessitemap[field].g;
-			var r = msdynsm_servicessitemap[field].r;
-			msdynsm_servicessitemap[field] = webApiField(e, a, b, c, d, r, u, g);
+		var msdynsm_servicessitemap = {};
+		msdynsm_servicessitemap.ODataEntity = e;
+		msdynsm_servicessitemap.FormattedValue = {};
+		for (var field in _msdynsm_servicessitemap) {
+			var a = _msdynsm_servicessitemap[field].a;
+			var b = _msdynsm_servicessitemap[field].b;
+			var c = _msdynsm_servicessitemap[field].c;
+			var d = _msdynsm_servicessitemap[field].d;
+			var g = _msdynsm_servicessitemap[field].g;
+			var r = _msdynsm_servicessitemap[field].r;
+			webApiField(msdynsm_servicessitemap, field, e, a, b, c, d, r, u, g);
 		}
 		msdynsm_servicessitemap.Entity = u;
 		msdynsm_servicessitemap.EntityName = 'msdynsm_servicessitemap';
 		msdynsm_servicessitemap.EntityCollectionName = 'msdynsm_servicessitemaps';
 		msdynsm_servicessitemap['@odata.etag'] = e['@odata.etag'];
-		msdynsm_servicessitemap.getAliasedValue = function (alias, isMultiOptionSet) {
+		msdynsm_servicessitemap.getAliasedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias] === undefined || e[alias] === null) {
 				return null;
 			}
@@ -107,7 +107,7 @@ var DevKit;
 			}
 			return e[alias];
 		}
-		msdynsm_servicessitemap.getAliasedFormattedValue = function (alias, isMultiOptionSet) {
+		msdynsm_servicessitemap.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
 				return EMPTY_STRING;
 			}

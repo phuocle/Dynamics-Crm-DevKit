@@ -116,8 +116,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -125,67 +127,67 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** This value will be used to specify the command name when sending device commands. Default property value is "CommandName" when this field is unspecified. */
-		msdyn_CommandNameProperty: DevKit.WebApi.StringValue;
+		msdyn_CommandNameProperty: string;
 		/** This value will be used to specify the command parameters when sending device commands. Default property value is "Parameters" when this field is unspecified. */
-		msdyn_CommandParametersProperty: DevKit.WebApi.StringValue;
+		msdyn_CommandParametersProperty: string;
 		/** The IoT Provider Instance to which IoT Devices should belong by default. */
-		msdyn_DefaultIoTProviderInstance: DevKit.WebApi.LookupValue;
+		msdyn_DefaultIoTProviderInstance: string;
 		/** This field is used to know the source of IoT for this organization. Example : IoT Suite or IoT Central or Others. */
-		msdyn_defaultiotsource: DevKit.WebApi.OptionSetValue;
-		msdyn_DeploymentAppURL: DevKit.WebApi.StringValue;
+		msdyn_defaultiotsource: OptionSet.msdyn_iotsettings.msdyn_defaultiotsource;
+		msdyn_DeploymentAppURL: string;
 		/** To specify the interval of scheduled device data pulls */
-		msdyn_devicedatapullfrequency: DevKit.WebApi.IntegerValue;
+		msdyn_devicedatapullfrequency: number;
 		/** IoT suggestions provide you insights on priority level and incident type associated with an alert. */
-		msdyn_EnableIoTSuggestions: DevKit.WebApi.BooleanValue;
+		msdyn_EnableIoTSuggestions: boolean;
 		/** When this option is enabled, all Connected Field Service background processes will be processed through flows instead of the historic Connected Field Service workflows. */
-		msdyn_EnhancedBackgroundProcessing: DevKit.WebApi.BooleanValue;
+		msdyn_EnhancedBackgroundProcessing: boolean;
 		/** Select the columns that will be used to determine the aggregation of similar IoT alerts. */
-		msdyn_IoTAlertAggregationRule: DevKit.WebApi.StringValue;
+		msdyn_IoTAlertAggregationRule: string;
 		/** Unique identifier for entity instances */
-		msdyn_iotsettingsId: DevKit.WebApi.GuidValue;
+		msdyn_iotsettingsId: string;
 		/** The name of the custom entity. */
-		msdyn_name: DevKit.WebApi.StringValue;
+		msdyn_name: string;
 		/** The next scheduled running time for device data pull */
-		msdyn_NextDeviceDataPullTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		msdyn_NextDeviceDataPullTime_UtcDateAndTime: Date;
 		/** To turn on/off scheduled device data pulls, default is off */
-		msdyn_ScheduledDeviceDataPull: DevKit.WebApi.BooleanValue;
-		msdyn_ShowWelcome: DevKit.WebApi.BooleanValue;
+		msdyn_ScheduledDeviceDataPull: boolean;
+		msdyn_ShowWelcome: boolean;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Status of the IoTSettings */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.msdyn_iotsettings.statecode;
 		/** Reason for the status of the IoTSettings */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.msdyn_iotsettings.statuscode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -228,4 +230,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

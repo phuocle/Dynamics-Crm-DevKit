@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,56 +30,56 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Common language runtime (CLR)-based parser for the SDK message request field. */
-		ClrParser: DevKit.WebApi.StringValue;
+		ClrParser: string;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.SdkMessageRequestField.ComponentState;
 		/** Unique identifier of the user who created the SDK message request field. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the SDK message request field was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the sdkmessagerequestfield. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Customization level of the SDK message request field. */
-		CustomizationLevel: DevKit.WebApi.IntegerValueReadonly;
+		readonly CustomizationLevel: number;
 		/** Indicates how field contents are used during message processing. 1 - Primary entity, 2- Secondary entity */
-		FieldMask: DevKit.WebApi.IntegerValueReadonly;
+		readonly FieldMask: number;
 		/** Version in which the component is introduced. */
-		IntroducedVersion: DevKit.WebApi.StringValue;
+		IntroducedVersion: string;
 		/** Information that specifies whether this component is managed. */
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsManaged: boolean;
 		/** Unique identifier of the user who last modified the SDK message request field. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the SDK message request field was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the sdkmessagerequestfield. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Name of the SDK message request field. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Information about whether SDK message request field is optional. */
-		Optional: DevKit.WebApi.BooleanValue;
+		Optional: boolean;
 		/** Unique identifier of the organization with which the SDK message request field is associated. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** For internal use only. */
-		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
-		ParameterBindingInformation: DevKit.WebApi.StringValue;
+		readonly OverwriteTime_UtcDateOnly: Date;
+		ParameterBindingInformation: string;
 		/** Parser for the SDK message request field. */
-		Parser: DevKit.WebApi.StringValue;
+		Parser: string;
 		/** Position of the Sdk message request field */
-		Position: DevKit.WebApi.IntegerValueReadonly;
+		readonly Position: number;
 		/** Public name of the SDK message request field. */
-		PublicName: DevKit.WebApi.StringValue;
+		PublicName: string;
 		/** Unique identifier of the SDK message request field entity. */
-		SdkMessageRequestFieldId: DevKit.WebApi.GuidValue;
+		SdkMessageRequestFieldId: string;
 		/** Entity identifier of the SDK message request field. */
-		SdkMessageRequestFieldIdUnique: DevKit.WebApi.GuidValueReadonly;
+		readonly SdkMessageRequestFieldIdUnique: string;
 		/** Unique identifier of the message request with which the SDK message request field is associated. */
-		SdkMessageRequestId: DevKit.WebApi.LookupValueReadonly;
+		readonly SdkMessageRequestId: string;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** For internal use only. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SupportingSolutionId: string;
 		/** For internal use only. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -110,4 +112,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

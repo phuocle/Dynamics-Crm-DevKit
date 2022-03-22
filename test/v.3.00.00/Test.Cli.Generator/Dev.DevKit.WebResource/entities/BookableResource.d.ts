@@ -312,8 +312,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -321,115 +323,115 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Select the account that represents this resource. */
-		AccountId: DevKit.WebApi.LookupValue;
+		AccountId: string;
 		/** Unique identifier of the resource. */
-		BookableResourceId: DevKit.WebApi.GuidValue;
+		BookableResourceId: string;
 		/** Specifies the working days and hours of the resource. */
-		CalendarId: DevKit.WebApi.LookupValue;
+		CalendarId: string;
 		/** Select the contact that represents this resource. */
-		ContactId: DevKit.WebApi.LookupValue;
+		ContactId: string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Exchange rate for the currency associated with the bookableresource with respect to the base currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** The number of bookings to drip on the Mobile . This field is disabled/enabled based on Enable Drip Scheduling field */
-		msdyn_BookingsToDrip: DevKit.WebApi.IntegerValue;
+		msdyn_BookingsToDrip: number;
 		/** Crew Strategy */
-		msdyn_CrewStrategy: DevKit.WebApi.OptionSetValue;
-		msdyn_DeriveCapacity: DevKit.WebApi.BooleanValue;
+		msdyn_CrewStrategy: OptionSet.BookableResource.msdyn_CrewStrategy;
+		msdyn_DeriveCapacity: boolean;
 		/** Specify if this resource should be enabled for availablity search. */
-		msdyn_DisplayOnScheduleAssistant: DevKit.WebApi.BooleanValue;
+		msdyn_DisplayOnScheduleAssistant: boolean;
 		/** Specify if this resource should be displayed on the schedule board. */
-		msdyn_DisplayOnScheduleBoard: DevKit.WebApi.BooleanValue;
+		msdyn_DisplayOnScheduleBoard: boolean;
 		/** Enable appointments to display on the new schedule board and be considered in availability search for resources. */
-		msdyn_EnableAppointments: DevKit.WebApi.OptionSetValue;
+		msdyn_EnableAppointments: OptionSet.BookableResource.msdyn_EnableAppointments;
 		/** Set this field to Yes if this resource requires access to the legacy Field Service Mobile application. */
-		msdyn_EnabledForFieldServiceMobile: DevKit.WebApi.BooleanValue;
+		msdyn_EnabledForFieldServiceMobile: boolean;
 		/** Enables drip scheduling on the mobile app. */
-		msdyn_EnableDripScheduling: DevKit.WebApi.BooleanValue;
+		msdyn_EnableDripScheduling: boolean;
 		/** This only applies when directly calling the API. It does not apply when the Book button is clicked on the Schedule Board or on any schedulable entity. */
-		msdyn_EnableOutlookSchedules: DevKit.WebApi.OptionSetValue;
+		msdyn_EnableOutlookSchedules: OptionSet.BookableResource.msdyn_EnableOutlookSchedules;
 		/** Shows the default ending location type when booking daily schedules for this resource. */
-		msdyn_EndLocation: DevKit.WebApi.OptionSetValue;
+		msdyn_EndLocation: OptionSet.BookableResource.msdyn_EndLocation;
 		/** Unique identifier for Facility Equipment */
-		msdyn_facilityequipmentid: DevKit.WebApi.LookupValue;
-		msdyn_GenericType: DevKit.WebApi.OptionSetValue;
-		msdyn_HourlyRate: DevKit.WebApi.MoneyValue;
+		msdyn_facilityequipmentid: string;
+		msdyn_GenericType: OptionSet.BookableResource.msdyn_GenericType;
+		msdyn_HourlyRate: number;
 		/** Value of the Hourly Rate in base currency. */
-		msdyn_hourlyrate_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_hourlyrate_Base: number;
 		/** For internal use only. */
-		msdyn_InternalFlags: DevKit.WebApi.StringValue;
+		msdyn_InternalFlags: string;
 		/** Is Default */
-		msdyn_isgenericresourceprojectscoped: DevKit.WebApi.BooleanValue;
+		msdyn_isgenericresourceprojectscoped: boolean;
 		/** The location latitude. */
-		msdyn_Latitude: DevKit.WebApi.DoubleValue;
+		msdyn_Latitude: number;
 		/** The location timestamp. */
-		msdyn_locationtimestamp_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		msdyn_locationtimestamp_UtcDateAndTime: Date;
 		/** The location longitude. */
-		msdyn_Longitude: DevKit.WebApi.DoubleValue;
+		msdyn_Longitude: number;
 		/** Organizational Unit that resource belong to */
-		msdyn_organizationalunit: DevKit.WebApi.LookupValue;
+		msdyn_organizationalunit: string;
 		/** Select whether the pool is an account, contact, user, equipment or a facility of resources. */
-		msdyn_PoolType: DevKit.WebApi.MultiOptionSetValue;
-		msdyn_PrimaryEMail: DevKit.WebApi.StringValue;
+		msdyn_PoolType: Array<OptionSet.BookableResource.msdyn_PoolType>;
+		msdyn_PrimaryEMail: string;
 		/** Shows the default starting location type when booking daily schedules for this resource. */
-		msdyn_StartLocation: DevKit.WebApi.OptionSetValue;
+		msdyn_StartLocation: OptionSet.BookableResource.msdyn_StartLocation;
 		/** Shows the target utilization for the resource. */
-		msdyn_targetutilization: DevKit.WebApi.IntegerValue;
+		msdyn_targetutilization: number;
 		/** Specifies if approval required for Time Off Requests. */
-		msdyn_TimeOffApprovalRequired: DevKit.WebApi.BooleanValue;
+		msdyn_TimeOffApprovalRequired: boolean;
 		/** Default Warehouse for this resource. */
-		msdyn_Warehouse: DevKit.WebApi.LookupValue;
+		msdyn_Warehouse: string;
 		/** Type the name of the resource. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Contains the id of the process associated with the entity. */
-		ProcessId: DevKit.WebApi.GuidValue;
+		ProcessId: string;
 		/** Select whether the resource is a user, equipment, contact, account, generic resource or a group of resources. */
-		ResourceType: DevKit.WebApi.OptionSetValue;
+		ResourceType: OptionSet.BookableResource.ResourceType;
 		/** Contains the id of the stage where the entity is located. */
-		StageId: DevKit.WebApi.GuidValue;
+		StageId: string;
 		/** Status of the Bookable Resource */
-		StateCode: DevKit.WebApi.OptionSetValue;
+		StateCode: OptionSet.BookableResource.StateCode;
 		/** Reason for the status of the Bookable Resource */
-		StatusCode: DevKit.WebApi.OptionSetValue;
+		StatusCode: OptionSet.BookableResource.StatusCode;
 		/** Specifies the timezone for the resource's working hours. */
-		TimeZone: DevKit.WebApi.IntegerValue;
+		TimeZone: number;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Exchange rate for the currency associated with the BookableResource with respect to the base currency. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** A comma separated list of string values representing the unique identifiers of stages in a Business Process Flow Instance in the order that they occur. */
-		TraversedPath: DevKit.WebApi.StringValue;
+		TraversedPath: string;
 		/** Select the user who represents this resource. */
-		UserId: DevKit.WebApi.LookupValue;
+		UserId: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -534,4 +536,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

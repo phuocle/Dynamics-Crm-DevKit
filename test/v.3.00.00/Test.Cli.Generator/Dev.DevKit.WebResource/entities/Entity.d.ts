@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,45 +30,45 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** The address table name of this entity. */
-		AddressTableName: DevKit.WebApi.StringValue;
+		AddressTableName: string;
 		/** The base table name of this entity. */
-		BaseTableName: DevKit.WebApi.StringValue;
+		BaseTableName: string;
 		/** The collection name of this entity. */
-		CollectionName: DevKit.WebApi.StringValue;
+		CollectionName: string;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.Entity.ComponentState;
 		/** Unique identifier of the entity. */
-		EntityId: DevKit.WebApi.GuidValue;
+		EntityId: string;
 		/** The entity set name of this entity. */
-		EntitySetName: DevKit.WebApi.StringValue;
+		EntitySetName: string;
 		/** The extension table name of this entity. */
-		ExtensionTableName: DevKit.WebApi.StringValue;
+		ExtensionTableName: string;
 		/** The external collection name of this entity. */
-		ExternalCollectionName: DevKit.WebApi.StringValue;
+		ExternalCollectionName: string;
 		/** The external name of this entity. */
-		ExternalName: DevKit.WebApi.StringValue;
+		ExternalName: string;
 		/** The logical collection name of this entity. */
-		LogicalCollectionName: DevKit.WebApi.StringValue;
+		LogicalCollectionName: string;
 		/** The logical name of this entity. */
-		LogicalName: DevKit.WebApi.StringValue;
+		LogicalName: string;
 		/** The name of this Entity. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** The original localized collection name of this entity. */
-		OriginalLocalizedCollectionName: DevKit.WebApi.StringValue;
+		OriginalLocalizedCollectionName: string;
 		/** The original localized name of this entity. */
-		OriginalLocalizedName: DevKit.WebApi.StringValue;
+		OriginalLocalizedName: string;
 		/** For internal use only. */
-		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly OverwriteTime_UtcDateOnly: Date;
 		/** The parent controlling attribute name of this entity. */
-		ParentControllingAttributeName: DevKit.WebApi.StringValue;
+		ParentControllingAttributeName: string;
 		/** The physical name of this entity. */
-		PhysicalName: DevKit.WebApi.StringValue;
+		PhysicalName: string;
 		/** The Report view name of this entity. */
-		ReportViewName: DevKit.WebApi.StringValue;
+		ReportViewName: string;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** The version number of this entity. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -99,4 +101,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

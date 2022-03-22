@@ -55,8 +55,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -64,45 +66,45 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Shows who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Shows the date and time when the import was initiated. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Type the email address that the import completion notification must be sent to. */
-		EMailAddress: DevKit.WebApi.StringValue;
+		EMailAddress: string;
 		/** Unique identifier of the import job. */
-		ImportId: DevKit.WebApi.GuidValue;
+		ImportId: string;
 		/** Information about whether the source of this import job is data import or data migration. */
-		IsImport: DevKit.WebApi.BooleanValue;
+		IsImport: boolean;
 		/** Select whether to create or update records in Microsoft Dynamics 365 during the import job. */
-		ModeCode: DevKit.WebApi.OptionSetValue;
+		ModeCode: OptionSet.Import.ModeCode;
 		/** Shows who last updated the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Shows the name of the import job, based on the import file and the entity being imported. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Business unit that owns the import job. */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier of the team who owns the import. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier of the user who owns the import. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Select whether to send a notification email message to a selected user after the import is completed. */
-		SendNotification: DevKit.WebApi.BooleanValue;
+		SendNotification: boolean;
 		/** Order in which the import was created. */
-		Sequence: DevKit.WebApi.IntegerValueReadonly;
+		readonly Sequence: number;
 		/** Shows the status of the import job. By default, import jobs are active and can't be deactivated. */
-		StateCode: DevKit.WebApi.OptionSetValueReadonly;
+		readonly StateCode: OptionSet.Import.StateCode;
 		/** Shows the reason code that explains the import job's status to identify the job's stage of the import processes, from transforming the data to completed. */
-		StatusCode: DevKit.WebApi.OptionSetValue;
+		StatusCode: OptionSet.Import.StatusCode;
 	}
 }
 declare namespace OptionSet {
@@ -149,4 +151,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

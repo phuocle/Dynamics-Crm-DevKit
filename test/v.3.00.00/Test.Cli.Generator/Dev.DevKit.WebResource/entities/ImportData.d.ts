@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,45 +30,45 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the import data. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the import data was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the importdata. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Data row of the import file. */
-		Data: DevKit.WebApi.StringValue;
+		Data: string;
 		/** Type of the import error. */
-		ErrorType: DevKit.WebApi.OptionSetValue;
+		ErrorType: OptionSet.ImportData.ErrorType;
 		/** Information about whether this import data has an error. */
-		HasError: DevKit.WebApi.BooleanValue;
+		HasError: boolean;
 		/** Unique identifier of the import data. */
-		ImportDataId: DevKit.WebApi.GuidValue;
+		ImportDataId: string;
 		/** Unique identifier of the import file for this import data. */
-		ImportFileId: DevKit.WebApi.LookupValue;
+		ImportFileId: string;
 		/** Original line number of the data present in the file. */
-		LineNumber: DevKit.WebApi.IntegerValue;
+		LineNumber: number;
 		/** Unique identifier of the user who last modified the import data. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the import data was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the importdata. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Business unit that owns the import data. */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier of the team who owns the import data. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier of the user who owns the import data. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Unique identifier of the record. */
-		RecordId: DevKit.WebApi.GuidValue;
+		RecordId: string;
 		/** Status of the import data. */
-		StateCode: DevKit.WebApi.OptionSetValueReadonly;
+		readonly StateCode: OptionSet.ImportData.StateCode;
 		/** Reason for the status of the import data. */
-		StatusCode: DevKit.WebApi.OptionSetValue;
+		StatusCode: OptionSet.ImportData.StatusCode;
 	}
 }
 declare namespace OptionSet {
@@ -103,4 +105,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

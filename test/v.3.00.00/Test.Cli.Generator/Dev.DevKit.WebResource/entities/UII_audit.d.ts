@@ -93,8 +93,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -102,73 +104,73 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Status of the UII Audit */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.UII_audit.statecode;
 		/** Reason for the status of the UII Audit */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.UII_audit.statuscode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Action Data */
-		Uii_ActionData: DevKit.WebApi.StringValue;
+		Uii_ActionData: string;
 		/** Name of the Action. */
-		UII_ActionName: DevKit.WebApi.StringValue;
+		UII_ActionName: string;
 		/** Audit log assigned activity Id. */
-		UII_ActivityID: DevKit.WebApi.IntegerValue;
+		UII_ActivityID: number;
 		/** Presence information of an Agent. */
-		UII_AgentState: DevKit.WebApi.StringValue;
+		UII_AgentState: string;
 		/** Application Id. */
-		uii_applicationid: DevKit.WebApi.LookupValue;
+		uii_applicationid: string;
 		/** Unique identifier for entity instances */
-		UII_auditId: DevKit.WebApi.GuidValue;
+		UII_auditId: string;
 		/** Client time zone detail. */
-		UII_ClientTimeZone: DevKit.WebApi.IntegerValue;
+		UII_ClientTimeZone: number;
 		/** Context Guid. */
-		UII_ContextID: DevKit.WebApi.StringValue;
+		UII_ContextID: string;
 		/** Current time. */
-		UII_CurrentTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		UII_CurrentTime_UtcDateAndTime: Date;
 		/** Account or Contact Guid. */
-		UII_CustomerID: DevKit.WebApi.StringValue;
+		UII_CustomerID: string;
 		/** Agent's Machine name. */
-		UII_MachineName: DevKit.WebApi.StringValue;
+		UII_MachineName: string;
 		/** This attribute is a general Name which is not used for Log Data. */
-		UII_name: DevKit.WebApi.StringValue;
+		UII_name: string;
 		/** Target Hosted Application. */
-		UII_TargetApplication: DevKit.WebApi.StringValue;
+		UII_TargetApplication: string;
 		/** Workflow Active Step Id. */
-		uii_workflowactivestepid: DevKit.WebApi.LookupValue;
+		uii_workflowactivestepid: string;
 		/** Workflow Id. */
-		uii_workflowid: DevKit.WebApi.LookupValue;
+		uii_workflowid: string;
 		/** Status of the Workflow */
-		UII_WorkflowStatus: DevKit.WebApi.StringValue;
+		UII_WorkflowStatus: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -203,4 +205,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

@@ -71,8 +71,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -80,36 +82,36 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Client data regarding this document template. */
-		ClientData: DevKit.WebApi.StringValue;
+		ClientData: string;
 		/** Bytes of the document template. */
-		Content: DevKit.WebApi.StringValue;
+		Content: string;
 		/** Unique identifier of the user who created the document template. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the document template was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the document template. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Additional information to describe the Document Template */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Unique identifier of the document template. */
-		DocumentTemplateId: DevKit.WebApi.GuidValue;
+		DocumentTemplateId: string;
 		/** Option set for selecting the type of the document template */
-		DocumentType: DevKit.WebApi.OptionSetValue;
+		DocumentType: OptionSet.DocumentTemplate.DocumentType;
 		/** Language of Document Template. */
-		LanguageCode: DevKit.WebApi.IntegerValue;
+		LanguageCode: number;
 		/** Unique identifier of the user who last modified the document template. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the document template was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the document template. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Name of the document template. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Unique identifier of the organization associated with the web resource. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Information about whether the document template is active. */
-		Status: DevKit.WebApi.BooleanValue;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		Status: boolean;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -138,4 +140,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

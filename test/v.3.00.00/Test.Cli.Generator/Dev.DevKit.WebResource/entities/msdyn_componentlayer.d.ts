@@ -45,27 +45,29 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
 		EntityCollectionName: string;
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
-		msdyn_changes: DevKit.WebApi.StringValue;
-		msdyn_children: DevKit.WebApi.StringValue;
-		msdyn_componentid: DevKit.WebApi.StringValue;
-		msdyn_componentjson: DevKit.WebApi.StringValue;
+		msdyn_changes: string;
+		msdyn_children: string;
+		msdyn_componentid: string;
+		msdyn_componentjson: string;
 		/** Unique identifier for entity instances */
-		msdyn_componentlayerId: DevKit.WebApi.GuidValue;
-		msdyn_endtime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		msdyn_componentlayerId: string;
+		msdyn_endtime_UtcDateAndTime: Date;
 		/** The name of the component. */
-		msdyn_name: DevKit.WebApi.StringValue;
-		msdyn_order: DevKit.WebApi.IntegerValue;
-		msdyn_publishername: DevKit.WebApi.StringValue;
-		msdyn_solutioncomponentname: DevKit.WebApi.StringValue;
-		msdyn_solutionname: DevKit.WebApi.StringValue;
+		msdyn_name: string;
+		msdyn_order: number;
+		msdyn_publishername: string;
+		msdyn_solutioncomponentname: string;
+		msdyn_solutionname: string;
 	}
 }
 declare namespace OptionSet {
@@ -88,4 +90,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

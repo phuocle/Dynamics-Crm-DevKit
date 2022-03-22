@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,26 +30,26 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
-		GlobalSearchConfigurationId: DevKit.WebApi.GuidValue;
+		readonly ComponentState: OptionSet.GlobalSearchConfiguration.ComponentState;
+		GlobalSearchConfigurationId: string;
 		/** For internal use only. */
-		GlobalSearchConfigurationidUnique: DevKit.WebApi.GuidValueReadonly;
+		readonly GlobalSearchConfigurationidUnique: string;
 		/** Information that specifies whether the specified search is enabled. */
-		IsEnabled: DevKit.WebApi.BooleanValue;
+		IsEnabled: boolean;
 		/** Information that specifies whether the search logical name is localized. */
-		IsLocalized: DevKit.WebApi.BooleanValue;
+		IsLocalized: boolean;
 		/** Indicates whether the solution component is part of a managed solution. */
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsManaged: boolean;
 		/** Information that specifies whether the Search Box is visible. */
-		IsSearchBoxVisible: DevKit.WebApi.BooleanValue;
+		IsSearchBoxVisible: boolean;
 		/** For internal use only. */
-		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
-		SearchProviderName: DevKit.WebApi.StringValue;
-		SearchProviderResultsPage: DevKit.WebApi.StringValue;
+		readonly OverwriteTime_UtcDateOnly: Date;
+		SearchProviderName: string;
+		SearchProviderResultsPage: string;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** For internal use only. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SupportingSolutionId: string;
 	}
 }
 declare namespace OptionSet {
@@ -80,4 +82,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

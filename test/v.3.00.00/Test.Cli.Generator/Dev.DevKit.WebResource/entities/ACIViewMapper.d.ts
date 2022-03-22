@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,31 +30,31 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier for entity instances */
-		ACIViewMapperId: DevKit.WebApi.GuidValue;
+		ACIViewMapperId: string;
 		/** Unique identifier of the user who created the display string. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the display string was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the displaystring. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Unique identifier of the user who last modified the display string. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the display string was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the displaystring. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Unique identifier of the organization associated with the display string. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Status of the ACIViewMapper */
-		statecode: DevKit.WebApi.OptionSetValueReadonly;
+		readonly statecode: OptionSet.ACIViewMapper.statecode;
 		/** Reason for the status of the Unit Group. */
-		StatusCode: DevKit.WebApi.OptionSetValue;
+		StatusCode: OptionSet.ACIViewMapper.StatusCode;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
-		ViewName: DevKit.WebApi.StringValue;
+		UTCConversionTimeZoneCode: number;
+		readonly VersionNumber: number;
+		ViewName: string;
 		/** End point of web application */
-		WebApplicationEndPoint: DevKit.WebApi.StringValue;
+		WebApplicationEndPoint: string;
 	}
 }
 declare namespace OptionSet {
@@ -87,4 +89,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

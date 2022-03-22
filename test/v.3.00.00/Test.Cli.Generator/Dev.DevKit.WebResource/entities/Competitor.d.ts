@@ -220,8 +220,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -229,170 +231,170 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier for address 1. */
-		Address1_AddressId: DevKit.WebApi.GuidValue;
+		Address1_AddressId: string;
 		/** Select the primary address type. */
-		Address1_AddressTypeCode: DevKit.WebApi.OptionSetValue;
+		Address1_AddressTypeCode: OptionSet.Competitor.Address1_AddressTypeCode;
 		/** Type the city for the primary address. */
-		Address1_City: DevKit.WebApi.StringValue;
+		Address1_City: string;
 		/** Shows the complete primary address. */
-		Address1_Composite: DevKit.WebApi.StringValueReadonly;
+		readonly Address1_Composite: string;
 		/** Type the country or region for the primary address. */
-		Address1_Country: DevKit.WebApi.StringValue;
+		Address1_Country: string;
 		/** Type the county for the primary address. */
-		Address1_County: DevKit.WebApi.StringValue;
+		Address1_County: string;
 		/** Type the fax number associated with the primary address. */
-		Address1_Fax: DevKit.WebApi.StringValue;
+		Address1_Fax: string;
 		/** Type the latitude value for the primary address for use in mapping and other applications. */
-		Address1_Latitude: DevKit.WebApi.DoubleValue;
+		Address1_Latitude: number;
 		/** Type the first line of the primary address. */
-		Address1_Line1: DevKit.WebApi.StringValue;
+		Address1_Line1: string;
 		/** Type the second line of the primary address. */
-		Address1_Line2: DevKit.WebApi.StringValue;
+		Address1_Line2: string;
 		/** Type the third line of the primary address. */
-		Address1_Line3: DevKit.WebApi.StringValue;
+		Address1_Line3: string;
 		/** Type the longitude value for the primary address for use in mapping and other applications. */
-		Address1_Longitude: DevKit.WebApi.DoubleValue;
+		Address1_Longitude: number;
 		/** Type a descriptive name for the primary address, such as Corporate Headquarters. */
-		Address1_Name: DevKit.WebApi.StringValue;
+		Address1_Name: string;
 		/** Type the ZIP Code or postal code for the primary address. */
-		Address1_PostalCode: DevKit.WebApi.StringValue;
+		Address1_PostalCode: string;
 		/** Type the post office box number of the primary address. */
-		Address1_PostOfficeBox: DevKit.WebApi.StringValue;
+		Address1_PostOfficeBox: string;
 		/** Select a shipping method for deliveries sent to this address. */
-		Address1_ShippingMethodCode: DevKit.WebApi.OptionSetValue;
+		Address1_ShippingMethodCode: OptionSet.Competitor.Address1_ShippingMethodCode;
 		/** Type the state or province of the primary address. */
-		Address1_StateOrProvince: DevKit.WebApi.StringValue;
+		Address1_StateOrProvince: string;
 		/** Type the main phone number associated with the primary address. */
-		Address1_Telephone1: DevKit.WebApi.StringValue;
+		Address1_Telephone1: string;
 		/** Type a second phone number associated with the primary address. */
-		Address1_Telephone2: DevKit.WebApi.StringValue;
+		Address1_Telephone2: string;
 		/** Type a third phone number associated with the primary address. */
-		Address1_Telephone3: DevKit.WebApi.StringValue;
+		Address1_Telephone3: string;
 		/** Type the UPS zone of the primary address to make sure shipping charges are calculated correctly and deliveries are made promptly, if shipped by UPS. */
-		Address1_UPSZone: DevKit.WebApi.StringValue;
+		Address1_UPSZone: string;
 		/** Select the time zone, or UTC offset, for this address so that other people can reference it when they contact someone at this address. */
-		Address1_UTCOffset: DevKit.WebApi.IntegerValue;
+		Address1_UTCOffset: number;
 		/** Unique identifier for address 2. */
-		Address2_AddressId: DevKit.WebApi.GuidValue;
+		Address2_AddressId: string;
 		/** Select the secondary address type. */
-		Address2_AddressTypeCode: DevKit.WebApi.OptionSetValue;
+		Address2_AddressTypeCode: OptionSet.Competitor.Address2_AddressTypeCode;
 		/** Type the city for the secondary address. */
-		Address2_City: DevKit.WebApi.StringValue;
+		Address2_City: string;
 		/** Shows the complete secondary address. */
-		Address2_Composite: DevKit.WebApi.StringValueReadonly;
+		readonly Address2_Composite: string;
 		/** Type the country or region for the secondary address. */
-		Address2_Country: DevKit.WebApi.StringValue;
+		Address2_Country: string;
 		/** Type the county for the secondary address. */
-		Address2_County: DevKit.WebApi.StringValue;
+		Address2_County: string;
 		/** Type the fax number associated with the secondary address. */
-		Address2_Fax: DevKit.WebApi.StringValue;
+		Address2_Fax: string;
 		/** Type the latitude value for the secondary address for use in mapping and other applications. */
-		Address2_Latitude: DevKit.WebApi.DoubleValue;
+		Address2_Latitude: number;
 		/** Type the first line of the secondary address. */
-		Address2_Line1: DevKit.WebApi.StringValue;
+		Address2_Line1: string;
 		/** Type the second line of the secondary address. */
-		Address2_Line2: DevKit.WebApi.StringValue;
+		Address2_Line2: string;
 		/** Type the third line of the secondary address. */
-		Address2_Line3: DevKit.WebApi.StringValue;
+		Address2_Line3: string;
 		/** Type the longitude value for the secondary address for use in mapping and other applications. */
-		Address2_Longitude: DevKit.WebApi.DoubleValue;
+		Address2_Longitude: number;
 		/** Type a descriptive name for the secondary address, such as Corporate Headquarters. */
-		Address2_Name: DevKit.WebApi.StringValue;
+		Address2_Name: string;
 		/** Type the ZIP Code or postal code for the secondary address. */
-		Address2_PostalCode: DevKit.WebApi.StringValue;
+		Address2_PostalCode: string;
 		/** Type the post office box number of the secondary address. */
-		Address2_PostOfficeBox: DevKit.WebApi.StringValue;
+		Address2_PostOfficeBox: string;
 		/** Select a shipping method for deliveries sent to this address. */
-		Address2_ShippingMethodCode: DevKit.WebApi.OptionSetValue;
+		Address2_ShippingMethodCode: OptionSet.Competitor.Address2_ShippingMethodCode;
 		/** Type the state or province of the secondary address. */
-		Address2_StateOrProvince: DevKit.WebApi.StringValue;
+		Address2_StateOrProvince: string;
 		/** Type the main phone number associated with the secondary address. */
-		Address2_Telephone1: DevKit.WebApi.StringValue;
+		Address2_Telephone1: string;
 		/** Type a second phone number associated with the secondary address. */
-		Address2_Telephone2: DevKit.WebApi.StringValue;
+		Address2_Telephone2: string;
 		/** Type a third phone number associated with the secondary address. */
-		Address2_Telephone3: DevKit.WebApi.StringValue;
+		Address2_Telephone3: string;
 		/** Type the UPS zone of the secondary address to make sure shipping charges are calculated correctly and deliveries are made promptly , if shipped by UPS. */
-		Address2_UPSZone: DevKit.WebApi.StringValue;
+		Address2_UPSZone: string;
 		/** Select the time zone, or UTC offset, for this address so that other people can reference it when they contact someone at this address. */
-		Address2_UTCOffset: DevKit.WebApi.IntegerValue;
+		Address2_UTCOffset: number;
 		/** Unique identifier of the competitor. */
-		CompetitorId: DevKit.WebApi.GuidValue;
+		CompetitorId: string;
 		/** Shows who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Shows the default image for the record. */
-		EntityImage: DevKit.WebApi.StringValue;
-		EntityImage_Timestamp: DevKit.WebApi.BigIntValueReadonly;
-		EntityImage_URL: DevKit.WebApi.StringValueReadonly;
-		EntityImageId: DevKit.WebApi.GuidValueReadonly;
+		EntityImage: string;
+		EntityImage_Timestamp: number;
+		EntityImage_URL: string;
+		readonly EntityImageId: string;
 		/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Type the competitor's primary product, service, or specialty. */
-		KeyProduct: DevKit.WebApi.StringValue;
+		KeyProduct: string;
 		/** Shows who last updated the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Shows who last updated the record on behalf of another user. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Describes whether competitor is opted out or not */
-		msdyn_gdproptout: DevKit.WebApi.BooleanValue;
+		msdyn_gdproptout: boolean;
 		/** Type the company or business name used to identify the competitor in data views and related records. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Type notes or other information about the competitive opportunities or selling points you can make. */
-		Opportunities: DevKit.WebApi.StringValue;
+		Opportunities: string;
 		/** Unique identifier for the organization */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Type notes or other information about the competitor's business, such as location, revenue, or distribution channel. */
-		Overview: DevKit.WebApi.StringValue;
+		Overview: string;
 		/** Contains the id of the process associated with the entity. */
-		ProcessId: DevKit.WebApi.GuidValue;
+		ProcessId: string;
 		/** Type the URL for the website used to obtain reference information about the competitor. */
-		ReferenceInfoUrl: DevKit.WebApi.StringValue;
+		ReferenceInfoUrl: string;
 		/** Type the amount of revenue reported in the competitor's annual report or other source. */
-		ReportedRevenue: DevKit.WebApi.MoneyValue;
+		ReportedRevenue: number;
 		/** Value of the Reported Revenue in base currency. */
-		ReportedRevenue_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly ReportedRevenue_Base: number;
 		/** Type the quarter number during which the competitor's reported revenue was recorded or announced for use in reporting and analysis. */
-		ReportingQuarter: DevKit.WebApi.IntegerValue;
+		ReportingQuarter: number;
 		/** Type the fiscal year during which the competitor's reported revenue was announced for use in reporting and analysis. */
-		ReportingYear: DevKit.WebApi.IntegerValue;
+		ReportingYear: number;
 		/** Contains the id of the stage where the entity is located. */
-		StageId: DevKit.WebApi.GuidValue;
+		StageId: string;
 		/** Type the stock exchange at which the competitor is listed to track their stock and financial performance of the company. */
-		StockExchange: DevKit.WebApi.StringValue;
+		StockExchange: string;
 		/** Type notes or other information about the competitor's strengths, such as top-selling products and targeted industries or markets. */
-		Strengths: DevKit.WebApi.StringValue;
+		Strengths: string;
 		/** Type notes or other information about the competitor's threats to your organization when you sell to the same prospect or customer. */
-		Threats: DevKit.WebApi.StringValue;
+		Threats: string;
 		/** Type the stock exchange symbol for the competitor to track financial performance of the company. You can click the code entered in this field to access the latest trading information from MSN Money. */
-		TickerSymbol: DevKit.WebApi.StringValue;
+		TickerSymbol: string;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** A comma separated list of string values representing the unique identifiers of stages in a Business Process Flow Instance in the order that they occur. */
-		TraversedPath: DevKit.WebApi.StringValue;
+		TraversedPath: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 		/** Type notes or other information about the competitor's weaknesses or areas in which your organization outperforms the competitor. */
-		Weaknesses: DevKit.WebApi.StringValue;
+		Weaknesses: string;
 		/** Type the website URL for the competitor. */
-		WebSiteUrl: DevKit.WebApi.StringValue;
+		WebSiteUrl: string;
 		/** Type the percentage of your organization's lost opportunities that are won by the competitor to identify your strongest competitors. */
-		WinPercentage: DevKit.WebApi.DoubleValue;
+		WinPercentage: number;
 		/** Type the phonetic spelling of the competitor's name, if specified in Japanese, to make sure the name is pronounced correctly in phone calls and other communications. */
-		YomiName: DevKit.WebApi.StringValue;
+		YomiName: string;
 	}
 }
 declare namespace OptionSet {
@@ -431,4 +433,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

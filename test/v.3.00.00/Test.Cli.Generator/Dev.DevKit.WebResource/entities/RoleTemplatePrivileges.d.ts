@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,20 +30,20 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Information about whether the role in the template applies to the user, the user's team, or objects shared by the user. */
-		IsBasic: DevKit.WebApi.BooleanValue;
+		IsBasic: boolean;
 		/** Information about whether the role in the template applies to child business units of the business unit associated with the user. */
-		IsDeep: DevKit.WebApi.BooleanValue;
+		IsDeep: boolean;
 		/** Information about whether the role in the template applies to the entire organization. */
-		IsGlobal: DevKit.WebApi.BooleanValue;
+		IsGlobal: boolean;
 		/** Information about whether the role in the template applies to the user's business unit. */
-		IsLocal: DevKit.WebApi.BooleanValue;
+		IsLocal: boolean;
 		/** Unique identifier of the privilege assigned to the role template. */
-		PrivilegeId: DevKit.WebApi.GuidValueReadonly;
+		readonly PrivilegeId: string;
 		/** Unique identifier of the role template that is associated with the role privilege. */
-		RoleTemplateId: DevKit.WebApi.GuidValueReadonly;
+		readonly RoleTemplateId: string;
 		/** Unique identifier of the role template privileges. */
-		RoleTemplatePrivilegeId: DevKit.WebApi.GuidValue;
-		Upgrading: DevKit.WebApi.BooleanValueReadonly;
+		RoleTemplatePrivilegeId: string;
+		readonly Upgrading: boolean;
 	}
 }
 declare namespace OptionSet {
@@ -64,4 +66,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

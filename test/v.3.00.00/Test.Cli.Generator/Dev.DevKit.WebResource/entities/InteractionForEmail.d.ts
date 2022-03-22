@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,72 +30,72 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Email Activity Id. */
-		EmailActivityId: DevKit.WebApi.GuidValueReadonly;
+		readonly EmailActivityId: string;
 		/** For internal use only. */
-		EmailAddress: DevKit.WebApi.StringValue;
+		EmailAddress: string;
 		/** Email Activity Id. */
-		EmailInteractionReplyId: DevKit.WebApi.GuidValueReadonly;
+		readonly EmailInteractionReplyId: string;
 		/** Shows the Interaction date and time of the an email. */
-		EmailInteractionTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly EmailInteractionTime_UtcDateAndTime: Date;
 		/** Exchange rate for the currency associated with the InteractionForEmail with respect to the base currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** For internal use only. */
-		InteractedComponentText: DevKit.WebApi.StringValue;
+		InteractedComponentText: string;
 		/** Unique identifier for entity instances */
-		InteractionForEmailId: DevKit.WebApi.GuidValue;
+		InteractionForEmailId: string;
 		/** Shows the location for an Interaction */
-		InteractionLocation: DevKit.WebApi.StringValue;
+		InteractionLocation: string;
 		/** For internal use only. */
-		InteractionPartyId: DevKit.WebApi.GuidValueReadonly;
+		readonly InteractionPartyId: string;
 		/** For internal use only */
-		InteractionPartyTypecode: DevKit.WebApi.IntegerValueReadonly;
+		readonly InteractionPartyTypecode: number;
 		/** Shows the Name who replied to email if interaction is reply */
-		InteractionRepliedBy: DevKit.WebApi.StringValue;
+		InteractionRepliedBy: string;
 		/** InteractionReplyId */
-		InteractionReplyId: DevKit.WebApi.StringValue;
+		InteractionReplyId: string;
 		/** Shows the type of Interaction. */
-		InteractionType: DevKit.WebApi.OptionSetValueReadonly;
+		readonly InteractionType: OptionSet.InteractionForEmail.InteractionType;
 		/** Shows the User Agent for an Interaction if available */
-		InteractionUserAgent: DevKit.WebApi.StringValue;
+		InteractionUserAgent: string;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** The name of the custom entity. */
-		name: DevKit.WebApi.StringValue;
+		name: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Status of the Interaction for Email */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.InteractionForEmail.statecode;
 		/** Reason for the status of the Interaction for Email */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.InteractionForEmail.statuscode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Exchange rate for the currency associated with the InteractionForEmail with respect to the base currency. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		UTCConversionTimeZoneCode: number;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -138,4 +140,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

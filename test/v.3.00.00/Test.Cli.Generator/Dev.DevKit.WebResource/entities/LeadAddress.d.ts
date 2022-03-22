@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,81 +30,81 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Information about the address for the lead. */
-		AddressNumber: DevKit.WebApi.IntegerValue;
+		AddressNumber: number;
 		/** Type of address for the lead address. */
-		AddressTypeCode: DevKit.WebApi.OptionSetValue;
+		AddressTypeCode: OptionSet.LeadAddress.AddressTypeCode;
 		/** City name in the address for the lead. */
-		City: DevKit.WebApi.StringValue;
+		City: string;
 		/** Shows the complete address. */
-		Composite: DevKit.WebApi.StringValueReadonly;
+		readonly Composite: string;
 		/** Country/region name in the address for the lead. */
-		Country: DevKit.WebApi.StringValue;
+		Country: string;
 		/** County name in the address for the lead. */
-		County: DevKit.WebApi.StringValue;
+		County: string;
 		/** Unique identifier of the user who created the lead address. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the lead address was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the leadaddress. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Exchange rate for the currency associated with the leadaddress with respect to the base currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Fax number for the address for the lead. */
-		Fax: DevKit.WebApi.StringValue;
+		Fax: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Latitude for the address for the lead. */
-		Latitude: DevKit.WebApi.DoubleValue;
+		Latitude: number;
 		/** Unique identifier of the lead address. */
-		LeadAddressId: DevKit.WebApi.GuidValue;
+		LeadAddressId: string;
 		/** First line for entering address information. */
-		Line1: DevKit.WebApi.StringValue;
+		Line1: string;
 		/** Second line for entering address information. */
-		Line2: DevKit.WebApi.StringValue;
+		Line2: string;
 		/** Third line for entering address information. */
-		Line3: DevKit.WebApi.StringValue;
+		Line3: string;
 		/** Longitude for the address for the lead. */
-		Longitude: DevKit.WebApi.DoubleValue;
+		Longitude: number;
 		/** Unique identifier of the user who last modified the lead address. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the lead address was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the leadaddress. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Name used to identify the lead address. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
-		OwnerId: DevKit.WebApi.GuidValueReadonly;
-		OwningBusinessUnit: DevKit.WebApi.GuidValueReadonly;
+		OverriddenCreatedOn_UtcDateOnly: Date;
+		readonly OwnerId: string;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier of the parent object with which the lead address is associated. */
-		ParentId: DevKit.WebApi.LookupValue;
+		ParentId: string;
 		/** ZIP Code or postal code in the address for the lead. */
-		PostalCode: DevKit.WebApi.StringValue;
+		PostalCode: string;
 		/** Post office box number in the address for the lead. */
-		PostOfficeBox: DevKit.WebApi.StringValue;
+		PostOfficeBox: string;
 		/** Method of shipment for the lead. */
-		ShippingMethodCode: DevKit.WebApi.OptionSetValue;
+		ShippingMethodCode: OptionSet.LeadAddress.ShippingMethodCode;
 		/** State or province in the address for the lead. */
-		StateOrProvince: DevKit.WebApi.StringValue;
+		StateOrProvince: string;
 		/** First telephone number for the lead address. */
-		Telephone1: DevKit.WebApi.StringValue;
+		Telephone1: string;
 		/** Second telephone number for the lead address. */
-		Telephone2: DevKit.WebApi.StringValue;
+		Telephone2: string;
 		/** Third telephone number for the lead address. */
-		Telephone3: DevKit.WebApi.StringValue;
+		Telephone3: string;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Unique identifier of the currency associated with the leadaddress. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** United Parcel Service (UPS) zone for the address of the lead. */
-		UPSZone: DevKit.WebApi.StringValue;
+		UPSZone: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** UTC offset for the lead address. This is the difference between local time and standard Coordinated Universal Time. */
-		UTCOffset: DevKit.WebApi.IntegerValue;
+		UTCOffset: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -125,4 +127,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

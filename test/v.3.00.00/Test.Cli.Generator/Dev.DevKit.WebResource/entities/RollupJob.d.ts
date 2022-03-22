@@ -19,23 +19,25 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
 		EntityCollectionName: string;
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
-		DepthProcessed: DevKit.WebApi.IntegerValueReadonly;
-		PostponeUntil_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
-		RecordCreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
-		RetryCount: DevKit.WebApi.IntegerValueReadonly;
-		RollupJobId1: DevKit.WebApi.BigIntValueReadonly;
-		RollupPropertiesId: DevKit.WebApi.LookupValueReadonly;
-		SourceEntityTypeCode: DevKit.WebApi.IntegerValueReadonly;
-		StateCode: DevKit.WebApi.OptionSetValueReadonly;
-		StatusCode: DevKit.WebApi.OptionSetValueReadonly;
+		readonly DepthProcessed: number;
+		readonly PostponeUntil_UtcDateAndTime: Date;
+		readonly RecordCreatedOn_UtcDateAndTime: Date;
+		readonly RetryCount: number;
+		readonly RollupJobId1: number;
+		readonly RollupPropertiesId: string;
+		readonly SourceEntityTypeCode: number;
+		readonly StateCode: OptionSet.RollupJob.StateCode;
+		readonly StatusCode: OptionSet.RollupJob.StatusCode;
 	}
 }
 declare namespace OptionSet {
@@ -86,4 +88,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

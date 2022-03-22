@@ -97,8 +97,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -106,65 +108,65 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.ConvertRuleItem.ComponentState;
 		/** Identifies the step of the associated workflow */
-		ConditionId: DevKit.WebApi.LookupValue;
+		ConditionId: string;
 		/** Condition for convert rule item */
-		ConditionXml: DevKit.WebApi.StringValue;
+		ConditionXml: string;
 		/** Unique identifier of the convert rule associated with the convert rule item. */
-		ConvertRuleId: DevKit.WebApi.LookupValue;
+		ConvertRuleId: string;
 		/** Unique identifier for entity instances */
-		ConvertRuleItemId: DevKit.WebApi.GuidValue;
+		ConvertRuleItemId: string;
 		/** For internal use only. */
-		ConvertRuleItemIdUnique: DevKit.WebApi.GuidValueReadonly;
+		readonly ConvertRuleItemIdUnique: string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Type additional information to describe the rule item for automatic record creation. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Exchange rate for the currency associated with the queue with respect to the base currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** For internal use only. */
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsManaged: boolean;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Type a name or title of the rule item that is used for automatic record creation and update. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** For internal use only. */
-		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly OverwriteTime_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Shows the business unit that the convert rule item owner belongs to. */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier of the user who owns the Convert Rule Item. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Primary create entity for a rule item */
-		PrimaryCreateEntityLogicalName: DevKit.WebApi.StringValue;
+		PrimaryCreateEntityLogicalName: string;
 		/** Set properties xml for convert rule item */
-		PropertiesXml: DevKit.WebApi.StringValue;
+		PropertiesXml: string;
 		/** Choose the queue that the rule is assigned to. */
-		QueueId: DevKit.WebApi.LookupValue;
+		QueueId: string;
 		/** Sequence number of the convert rule item */
-		SequenceNumber: DevKit.WebApi.IntegerValue;
+		SequenceNumber: number;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** For internal use only. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SupportingSolutionId: string;
 		/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValueReadonly;
+		readonly TransactionCurrencyId: string;
 		/** Version number of the Covert Rule Item. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 		/** Workflow associated with the Convert Rule Item. */
-		WorkflowId: DevKit.WebApi.LookupValue;
+		WorkflowId: string;
 	}
 }
 declare namespace OptionSet {
@@ -197,4 +199,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

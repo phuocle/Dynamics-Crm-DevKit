@@ -83,8 +83,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -92,93 +94,93 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Shows the number of the address, to indicate whether the address is the primary, secondary, or other address for the customer. */
-		AddressNumber: DevKit.WebApi.IntegerValue;
+		AddressNumber: number;
 		/** Select the address type, such as primary or billing. */
-		AddressTypeCode: DevKit.WebApi.OptionSetValue;
+		AddressTypeCode: OptionSet.CustomerAddress.AddressTypeCode;
 		/** Type the city for the customer's address to help identify the location. */
-		City: DevKit.WebApi.StringValue;
+		City: string;
 		/** Shows the complete address. */
-		Composite: DevKit.WebApi.StringValueReadonly;
+		readonly Composite: string;
 		/** Type the country or region for the customer's address. */
-		Country: DevKit.WebApi.StringValue;
+		Country: string;
 		/** Type the county for the customer's address. */
-		County: DevKit.WebApi.StringValue;
+		County: string;
 		/** Shows who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Unique identifier of the customer address. */
-		CustomerAddressId: DevKit.WebApi.GuidValue;
+		CustomerAddressId: string;
 		/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Type the fax number associated with the customer's address. */
-		Fax: DevKit.WebApi.StringValue;
+		Fax: string;
 		/** Select the freight terms to make sure shipping charges are processed correctly. */
-		FreightTermsCode: DevKit.WebApi.OptionSetValue;
+		FreightTermsCode: OptionSet.CustomerAddress.FreightTermsCode;
 		/** Unique identifier of the data import or data migration that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Type the latitude value for the customer's address, for use in mapping and other applications. */
-		Latitude: DevKit.WebApi.DoubleValue;
+		Latitude: number;
 		/** Type the first line of the customer's address to help identify the location. */
-		Line1: DevKit.WebApi.StringValue;
+		Line1: string;
 		/** Type the second line of the customer's address. */
-		Line2: DevKit.WebApi.StringValue;
+		Line2: string;
 		/** Type the third line of the customer's address. */
-		Line3: DevKit.WebApi.StringValue;
+		Line3: string;
 		/** Type the longitude value for the customer's address, for use in mapping and other applications. */
-		Longitude: DevKit.WebApi.DoubleValue;
+		Longitude: number;
 		/** Shows who last updated the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Shows who last updated the record on behalf of another user. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Type a descriptive name for the customer's address, such as Corporate Headquarters. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValueReadonly;
+		readonly OwnerId_team: string;
 		/** Shows the business unit that the record owner belongs to. */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier of the user who owns the customer address. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Choose the customer's address. */
-		parentid_account: DevKit.WebApi.LookupValue;
+		parentid_account: string;
 		/** Choose the customer's address. */
-		parentid_contact: DevKit.WebApi.LookupValue;
+		parentid_contact: string;
 		/** Type the ZIP Code or postal code for the address. */
-		PostalCode: DevKit.WebApi.StringValue;
+		PostalCode: string;
 		/** Type the post office box number of the customer's address. */
-		PostOfficeBox: DevKit.WebApi.StringValue;
+		PostOfficeBox: string;
 		/** Type the name of the primary contact person for the customer's address. */
-		PrimaryContactName: DevKit.WebApi.StringValue;
+		PrimaryContactName: string;
 		/** Select a shipping method for deliveries sent to this address. */
-		ShippingMethodCode: DevKit.WebApi.OptionSetValue;
+		ShippingMethodCode: OptionSet.CustomerAddress.ShippingMethodCode;
 		/** Type the state or province of the customer's address. */
-		StateOrProvince: DevKit.WebApi.StringValue;
+		StateOrProvince: string;
 		/** Type the primary phone number for the customer's address. */
-		Telephone1: DevKit.WebApi.StringValue;
+		Telephone1: string;
 		/** Type a second phone number for the customer's address. */
-		Telephone2: DevKit.WebApi.StringValue;
+		Telephone2: string;
 		/** Type a third phone number for the customer's address. */
-		Telephone3: DevKit.WebApi.StringValue;
+		Telephone3: string;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** Type the UPS zone of the customer's address to make sure shipping charges are calculated correctly and deliveries are made promptly, if shipped by UPS. */
-		UPSZone: DevKit.WebApi.StringValue;
+		UPSZone: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Select the time zone for the address. */
-		UTCOffset: DevKit.WebApi.IntegerValue;
+		UTCOffset: number;
 		/** Version number of the customer address. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -239,4 +241,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

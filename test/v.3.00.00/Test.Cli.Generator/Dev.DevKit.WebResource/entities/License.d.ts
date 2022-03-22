@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,19 +30,19 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Date and time when the license was installed. */
-		InstalledOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		InstalledOn_UtcDateOnly: Date;
 		/** Unique identifier of the license. */
-		LicenseId: DevKit.WebApi.GuidValue;
+		LicenseId: string;
 		/** Key for the license. */
-		LicenseKey: DevKit.WebApi.StringValue;
+		LicenseKey: string;
 		/** Type of license, such as Professional, Standard, or Suite. */
-		LicenseType: DevKit.WebApi.GuidValue;
+		LicenseType: string;
 		/** Unique identifier of the organization associated with the license. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 	}
 }
 declare namespace OptionSet {
@@ -63,4 +65,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

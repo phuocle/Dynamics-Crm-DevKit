@@ -304,8 +304,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -313,158 +315,158 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Shows the exchange rate for the currency associated with the entity with respect to the base currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Shows the sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Shows who last updated the record on behalf of another user. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Enter any additional costs associated with this service. The values are manually entered. Note: additional cost is not unit dependent. */
-		msdyn_AdditionalCost: DevKit.WebApi.MoneyValue;
+		msdyn_AdditionalCost: number;
 		/** Shows the value of the additional cost in the base currency. */
-		msdyn_additionalcost_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_additionalcost_Base: number;
 		/** Agreement Booking Service linked to this Work Order Service */
-		msdyn_AgreementBookingService: DevKit.WebApi.LookupValue;
+		msdyn_AgreementBookingService: string;
 		/** Shows the resource booking detail where this product was added. */
-		msdyn_Booking: DevKit.WebApi.LookupValue;
+		msdyn_Booking: string;
 		/** Shows the sale amount per unit calculated by the system considering the minimum charge, if applicable. */
-		msdyn_CalculatedUnitAmount: DevKit.WebApi.MoneyValue;
+		msdyn_CalculatedUnitAmount: number;
 		/** Shows the value of the calculated unit amount in the base currency. */
-		msdyn_calculatedunitamount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_calculatedunitamount_Base: number;
 		/** Enter the commission costs associated with this service. The value is manually specified and isn't automatically calculated. */
-		msdyn_CommissionCosts: DevKit.WebApi.MoneyValue;
+		msdyn_CommissionCosts: number;
 		/** Shows the value of the commission costs in the base currency. */
-		msdyn_commissioncosts_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_commissioncosts_Base: number;
 		/** Unique identifier for Customer Asset associated with Work Order Service. */
-		msdyn_CustomerAsset: DevKit.WebApi.LookupValue;
+		msdyn_CustomerAsset: string;
 		/** Enter the description of the service as presented to the customer. The value defaults to the description defined on the service. */
-		msdyn_Description: DevKit.WebApi.StringValue;
+		msdyn_Description: string;
 		/** Choose whether to disable entitlement selection for this work order service. */
-		msdyn_DisableEntitlement: DevKit.WebApi.BooleanValue;
+		msdyn_DisableEntitlement: boolean;
 		/** Specify any discount amount on this service. Note: If you enter a discount amount you cannot enter a discount % */
-		msdyn_DiscountAmount: DevKit.WebApi.MoneyValue;
+		msdyn_DiscountAmount: number;
 		/** Shows the value of the discount Amount in the base currency. */
-		msdyn_discountamount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_discountamount_Base: number;
 		/** Specify any discount % on this service. Note: If you enter a discount % it will overwrite the discount $ */
-		msdyn_DiscountPercent: DevKit.WebApi.DoubleValue;
+		msdyn_DiscountPercent: number;
 		/** Shows the actual duration of service. */
-		msdyn_Duration: DevKit.WebApi.IntegerValue;
+		msdyn_Duration: number;
 		/** Enter the quantity you wish to bill the customer for. By default, this will default to the same value as "Quantity." */
-		msdyn_DurationToBill: DevKit.WebApi.IntegerValue;
+		msdyn_DurationToBill: number;
 		/** Entitlement to apply to the Work Order Service. */
-		msdyn_Entitlement: DevKit.WebApi.LookupValue;
+		msdyn_Entitlement: string;
 		/** Shows the estimated sale amount per unit calculated by the system considering the initial charge (if applicable). */
-		msdyn_EstimateCalculatedUnitAmount: DevKit.WebApi.MoneyValue;
+		msdyn_EstimateCalculatedUnitAmount: number;
 		/** Shows the value of the estimate calculated unit amount in the base currency. */
-		msdyn_estimatecalculatedunitamount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_estimatecalculatedunitamount_Base: number;
 		/** Enter a discount amount on the subtotal amount. Note: If you enter a discount amount you cannot enter a discount % */
-		msdyn_EstimateDiscountAmount: DevKit.WebApi.MoneyValue;
+		msdyn_EstimateDiscountAmount: number;
 		/** Shows the value of the estimate discount amount in the base currency. */
-		msdyn_estimatediscountamount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_estimatediscountamount_Base: number;
 		/** Enter a discount % on the subtotal amount. Note: If you enter a discount % it will overwrite the discount $ */
-		msdyn_EstimateDiscountPercent: DevKit.WebApi.DoubleValue;
+		msdyn_EstimateDiscountPercent: number;
 		/** Enter the estimated duration of this service. */
-		msdyn_EstimateDuration: DevKit.WebApi.IntegerValue;
+		msdyn_EstimateDuration: number;
 		/** Shows the total amount for this service, excluding discounts. */
-		msdyn_EstimateSubtotal: DevKit.WebApi.MoneyValue;
+		msdyn_EstimateSubtotal: number;
 		/** Shows the value of the estimate subtotal in the base currency. */
-		msdyn_estimatesubtotal_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_estimatesubtotal_Base: number;
 		/** Shows the estimated total amount of this service, including discounts. */
-		msdyn_EstimateTotalAmount: DevKit.WebApi.MoneyValue;
+		msdyn_EstimateTotalAmount: number;
 		/** Shows the value of the estimate total amount in the base currency. */
-		msdyn_estimatetotalamount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_estimatetotalamount_Base: number;
 		/** Shows the estimated total cost of this service. */
-		msdyn_EstimateTotalCost: DevKit.WebApi.MoneyValue;
+		msdyn_EstimateTotalCost: number;
 		/** Shows the value of the estimate total cost in the base currency. */
-		msdyn_estimatetotalcost_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_estimatetotalcost_Base: number;
 		/** Shows the estimated sale amount per unit. */
-		msdyn_EstimateUnitAmount: DevKit.WebApi.MoneyValue;
+		msdyn_EstimateUnitAmount: number;
 		/** Shows the value of the estimate unit amount in the base currency. */
-		msdyn_estimateunitamount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_estimateunitamount_Base: number;
 		/** Shows the estimated cost amount per unit. */
-		msdyn_EstimateUnitCost: DevKit.WebApi.MoneyValue;
+		msdyn_EstimateUnitCost: number;
 		/** Shows the value of the estimate unit cost in the base currency. */
-		msdyn_estimateunitcost_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_estimateunitcost_Base: number;
 		/** Enter any internal notes you want to track on this service. */
-		msdyn_InternalDescription: DevKit.WebApi.StringValue;
-		msdyn_InternalFlags: DevKit.WebApi.StringValue;
-		msdyn_LineOrder: DevKit.WebApi.IntegerValue;
+		msdyn_InternalDescription: string;
+		msdyn_InternalFlags: string;
+		msdyn_LineOrder: number;
 		/** Enter the current status of the line, estimate or used. */
-		msdyn_LineStatus: DevKit.WebApi.OptionSetValue;
+		msdyn_LineStatus: OptionSet.msdyn_workorderservice.msdyn_LineStatus;
 		/** Enter the amount charged as a minimum charge. */
-		msdyn_MinimumChargeAmount: DevKit.WebApi.MoneyValue;
+		msdyn_MinimumChargeAmount: number;
 		/** Shows the value of the minimum charge amount in the base currency. */
-		msdyn_minimumchargeamount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_minimumchargeamount_Base: number;
 		/** Enter the duration of up to how long the minimum charge applies. */
-		msdyn_MinimumChargeDuration: DevKit.WebApi.IntegerValue;
+		msdyn_MinimumChargeDuration: number;
 		/** Enter the name of the custom entity. */
-		msdyn_name: DevKit.WebApi.StringValue;
+		msdyn_name: string;
 		/** Price List that determines the pricing for this service */
-		msdyn_PriceList: DevKit.WebApi.LookupValue;
+		msdyn_PriceList: string;
 		/** Service proposed or used for this work order */
-		msdyn_Service: DevKit.WebApi.LookupValue;
+		msdyn_Service: string;
 		/** Enter the total amount excluding discounts. */
-		msdyn_Subtotal: DevKit.WebApi.MoneyValue;
+		msdyn_Subtotal: number;
 		/** Shows the value of the subtotal in the base currency. */
-		msdyn_subtotal_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_subtotal_Base: number;
 		/** Specify if service is taxable. If you do not wish to charge tax set this field to No. */
-		msdyn_Taxable: DevKit.WebApi.BooleanValue;
-		msdyn_TotalAmount: DevKit.WebApi.MoneyValue;
+		msdyn_Taxable: boolean;
+		msdyn_TotalAmount: number;
 		/** Shows the value of the total amount in the base currency. */
-		msdyn_totalamount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_totalamount_Base: number;
 		/** Shows the total cost of this service. This is calculated by (Unit Cost * Units) + Additional Cost + Commission Costs. */
-		msdyn_TotalCost: DevKit.WebApi.MoneyValue;
+		msdyn_TotalCost: number;
 		/** Shows the value of the total cost in the base currency. */
-		msdyn_totalcost_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_totalcost_Base: number;
 		/** The unit that determines the final quantity for this service */
-		msdyn_Unit: DevKit.WebApi.LookupValue;
+		msdyn_Unit: string;
 		/** Enter the amount you want to charge the customer per unit. By default, this is calculated based on the selected price list. The amount can be changed. */
-		msdyn_UnitAmount: DevKit.WebApi.MoneyValue;
+		msdyn_UnitAmount: number;
 		/** Shows the value of the unit amount in the base currency. */
-		msdyn_unitamount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_unitamount_Base: number;
 		/** Shows the actual cost per unit. */
-		msdyn_UnitCost: DevKit.WebApi.MoneyValue;
+		msdyn_UnitCost: number;
 		/** Shows the value of the unit cost in the base currency. */
-		msdyn_unitcost_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_unitcost_Base: number;
 		/** The work order this service relates to */
-		msdyn_WorkOrder: DevKit.WebApi.LookupValue;
+		msdyn_WorkOrder: string;
 		/** The Incident related to this product */
-		msdyn_WorkOrderIncident: DevKit.WebApi.LookupValue;
+		msdyn_WorkOrderIncident: string;
 		/** Shows the entity instances. */
-		msdyn_workorderserviceId: DevKit.WebApi.GuidValue;
+		msdyn_workorderserviceId: string;
 		/** Shows the date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Status of the Work Order Service */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.msdyn_workorderservice.statecode;
 		/** Reason for the status of the Work Order Service */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.msdyn_workorderservice.statuscode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Unique identifier of the currency associated with the entity. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** Shows the time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -505,4 +507,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

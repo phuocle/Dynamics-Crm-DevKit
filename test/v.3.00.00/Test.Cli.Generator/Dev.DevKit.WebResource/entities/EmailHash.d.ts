@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,22 +30,24 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the activity with which the hash is associated. */
-		ActivityId: DevKit.WebApi.LookupValue;
+		ActivityId: string;
+		/** Shows the date and time when the record was created. */
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the email hash. */
-		EmailHashId: DevKit.WebApi.GuidValue;
+		EmailHashId: string;
 		/** Hash value. */
-		Hash: DevKit.WebApi.IntegerValue;
+		Hash: number;
 		/** Hash type. */
-		HashType: DevKit.WebApi.IntegerValue;
+		HashType: number;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValueReadonly;
+		readonly OwnerId_team: string;
 		/** Unique identifier of the business unit that owns the email hash. */
-		OwningBusinessUnit: DevKit.WebApi.GuidValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier of the user who owns the email hash. */
-		OwningUser: DevKit.WebApi.GuidValueReadonly;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly OwningUser: string;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -66,4 +70,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,27 +30,27 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Shows the date and time when the ribbon entity record has finished processing. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		CompletedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CompletedOn_UtcDateAndTime: Date;
 		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Entity Logical Name */
-		EntityName1: DevKit.WebApi.StringValue;
+		EntityName1: string;
 		/** Exception message */
-		ExceptionMessage: DevKit.WebApi.StringValue;
+		ExceptionMessage: string;
 		/** Is entity created via Db Update */
-		IsDbUpdate: DevKit.WebApi.IntegerValue;
+		IsDbUpdate: number;
 		/** Shows the date and time when the record was processed. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		ProcessedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ProcessedOn_UtcDateAndTime: Date;
 		/** Retry Count */
-		RetryCount: DevKit.WebApi.IntegerValue;
+		RetryCount: number;
 		/** Unique identifier for Ribbon Metadata Instance To Process */
-		RibbonMetadataRowId: DevKit.WebApi.GuidValue;
+		RibbonMetadataRowId: string;
 		/** Solution Id */
-		SolutionId: DevKit.WebApi.GuidValue;
+		SolutionId: string;
 		/** Solution Name of the ribbon entity */
-		SolutionName: DevKit.WebApi.StringValue;
+		SolutionName: string;
 		/** Status */
-		Status: DevKit.WebApi.IntegerValue;
+		Status: number;
 	}
 }
 declare namespace OptionSet {
@@ -71,4 +73,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

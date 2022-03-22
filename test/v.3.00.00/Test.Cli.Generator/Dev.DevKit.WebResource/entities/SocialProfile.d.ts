@@ -171,8 +171,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -180,79 +182,79 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Identifies if the social profile has been blocked. */
-		Blocked: DevKit.WebApi.BooleanValue;
+		Blocked: boolean;
 		/** Identifies where the social profile originated from, such as Twitter, or Facebook. */
-		Community: DevKit.WebApi.OptionSetValue;
+		Community: OptionSet.SocialProfile.Community;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Shows the customer that this social profile belongs to. */
-		customerid_account: DevKit.WebApi.LookupValue;
+		customerid_account: string;
 		/** Shows the customer that this social profile belongs to. */
-		customerid_contact: DevKit.WebApi.LookupValue;
+		customerid_contact: string;
 		/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Unique identifier of the data import or data migration that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Shows the score that determines the online social influence of the social profile. */
-		InfluenceScore: DevKit.WebApi.DoubleValue;
+		InfluenceScore: number;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Flag specifying whether Customer has opted out of getting messages using this SP. */
-		msdyn_customeroptout: DevKit.WebApi.BooleanValue;
+		msdyn_customeroptout: boolean;
 		/** Customer's Followers on the Social channel. */
-		msdyn_ocfollowercount: DevKit.WebApi.IntegerValue;
+		msdyn_ocfollowercount: number;
 		/** Customer's followings on the Social channel */
-		msdyn_ocfollowingcount: DevKit.WebApi.IntegerValue;
+		msdyn_ocfollowingcount: number;
 		/** Customer's Friend count on the Social Channel */
-		msdyn_ocfriendcount: DevKit.WebApi.IntegerValue;
+		msdyn_ocfriendcount: number;
 		/** Lookup for Twitter Handle entity. */
-		msdyn_octwitterhandleid: DevKit.WebApi.LookupValue;
+		msdyn_octwitterhandleid: string;
 		/** The phone number of the social profile. */
-		msdyn_phonenumber: DevKit.WebApi.StringValue;
+		msdyn_phonenumber: string;
 		/** Link to the Customer's Social Channel Profile image. */
-		msdyn_profileimagelink: DevKit.WebApi.StringValue;
+		msdyn_profileimagelink: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier of the team who owns the contact. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier of the user who owns the contact. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Shows the display name of the customer on this social profile. */
-		ProfileFullName: DevKit.WebApi.StringValue;
+		ProfileFullName: string;
 		/** Shows the customer that this social profile belongs to. */
-		ProfileLink: DevKit.WebApi.StringValue;
+		ProfileLink: string;
 		/** Shows the name of the social profile on the corresponding social channel. */
-		ProfileName: DevKit.WebApi.StringValue;
+		ProfileName: string;
 		/** Unique Identifier of the social profile name. */
-		SocialProfileId: DevKit.WebApi.GuidValue;
+		SocialProfileId: string;
 		/** Status of the Social Profile */
-		StateCode: DevKit.WebApi.OptionSetValue;
+		StateCode: OptionSet.SocialProfile.StateCode;
 		/** Reason for the status of the Social Profile */
-		StatusCode: DevKit.WebApi.OptionSetValue;
+		StatusCode: OptionSet.SocialProfile.StatusCode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** Unique ID of the Profile ID */
-		UniqueProfileID: DevKit.WebApi.StringValue;
+		UniqueProfileID: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version number of the social profile. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -321,4 +323,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

@@ -44,8 +44,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -53,62 +55,62 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Type the URL where the recommended document is located. */
-		AbsoluteUrl: DevKit.WebApi.StringValueReadonly;
+		readonly AbsoluteUrl: string;
 		/** Shows the associated record name of the recommended document. */
-		AssociatedRecordName: DevKit.WebApi.StringValue;
+		AssociatedRecordName: string;
 		/** Shows the name of the author of the recommended document. */
-		Author: DevKit.WebApi.StringValue;
+		Author: string;
 		/** Select the document content type. */
-		ContentType: DevKit.WebApi.StringValueReadonly;
+		readonly ContentType: string;
 		/** Shows the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Shows the Edit URL of the recommended document. */
-		EditUrl: DevKit.WebApi.StringValueReadonly;
+		readonly EditUrl: string;
 		/** Shows the exchange rate for the currency associated with the recommended document with respect to the base currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Shows the external document. */
-		ExternalDocumentId: DevKit.WebApi.StringValue;
+		ExternalDocumentId: string;
 		/** Shows who last updated the document record. */
-		ExternalModifiedBy: DevKit.WebApi.StringValue;
+		ExternalModifiedBy: string;
 		/** Shows the file size. */
-		FileSize: DevKit.WebApi.IntegerValueReadonly;
+		readonly FileSize: number;
 		/** Shows the file type. */
-		FileType: DevKit.WebApi.StringValueReadonly;
+		readonly FileType: string;
 		/** Shows the full name of the recommended document. */
-		FullName: DevKit.WebApi.StringValueReadonly;
+		readonly FullName: string;
 		/** Stores the Icon Class name of the recommended document. */
-		IconClassName: DevKit.WebApi.StringValueReadonly;
+		readonly IconClassName: string;
 		/** Shows the location of the recommended document. */
-		Location: DevKit.WebApi.StringValueReadonly;
+		readonly Location: string;
 		/** Shows who last updated the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Shows who last updated the record on behalf of another user. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Shows the organization. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Shows the Read URL of the recommended document. */
-		ReadUrl: DevKit.WebApi.StringValueReadonly;
+		readonly ReadUrl: string;
 		/** Shows the recommended document record. */
-		RecommendedDocumentId: DevKit.WebApi.GuidValue;
+		RecommendedDocumentId: string;
 		/** Shows the source storage of the recommended document. */
-		Source: DevKit.WebApi.StringValue;
+		Source: string;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Type a title for the entity. */
-		Title: DevKit.WebApi.StringValue;
+		Title: string;
 		/** Shows the exchange rate for the currency associated with the recommended document with respect to the base currency. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** Shows the time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Shows the recommended document version. */
-		Version: DevKit.WebApi.StringValueReadonly;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly Version: string;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -131,4 +133,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

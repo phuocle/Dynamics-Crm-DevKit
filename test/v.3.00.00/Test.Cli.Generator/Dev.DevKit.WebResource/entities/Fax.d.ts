@@ -82,8 +82,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -91,299 +93,303 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the fax activity. */
-		ActivityId: DevKit.WebApi.GuidValue;
+		ActivityId: string;
 		/** Type the number of minutes spent creating and sending the fax. The duration is used in reporting. */
-		ActualDurationMinutes: DevKit.WebApi.IntegerValue;
+		ActualDurationMinutes: number;
 		/** Enter the actual end date and time of the fax. By default, it displays the date and time when the activity was completed or canceled, but can be edited to capture the actual time to create and send the fax. */
-		ActualEnd_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		ActualEnd_UtcDateOnly: Date;
 		/** Enter the actual start date and time for the fax. By default, it displays the date and time when the activity was created, but can be edited to capture the actual time to create and send the fax. */
-		ActualStart_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		ActualStart_UtcDateOnly: Date;
 		/** Type the billing code for the fax to make sure the fax is charged to the correct sender or customer account. */
-		BillingCode: DevKit.WebApi.StringValue;
+		BillingCode: string;
 		/** Type a category to identify the fax type, such as sales offer or press release, to tie the fax to a business group or function. */
-		Category: DevKit.WebApi.StringValue;
+		Category: string;
 		/** Type the name of the cover page to use when sending the fax. */
-		CoverPageName: DevKit.WebApi.StringValue;
+		CoverPageName: string;
 		/** Shows who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Type additional information to describe the fax, such as the primary message or the products and services featured. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Select the direction of the fax as incoming or outbound. */
-		DirectionCode: DevKit.WebApi.BooleanValue;
+		DirectionCode: boolean;
 		/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Type the recipient's fax number. */
-		FaxNumber: DevKit.WebApi.StringValue;
+		FaxNumber: string;
 		/** Unique identifier of the data import or data migration that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Information regarding whether the fax activity was billed as part of resolving a case. */
-		IsBilled: DevKit.WebApi.BooleanValue;
+		IsBilled: boolean;
 		/** Information regarding whether the activity is a regular activity type or event type. */
-		IsRegularActivity: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsRegularActivity: boolean;
 		/** Indication of whether the fax activity was created by a workflow rule. */
-		IsWorkflowCreated: DevKit.WebApi.BooleanValue;
+		IsWorkflowCreated: boolean;
 		/** Contains the date and time stamp of the last on hold time. */
-		LastOnHoldTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		LastOnHoldTime_UtcDateAndTime: Date;
 		/** Shows who last updated the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Shows who last updated the record on behalf of another user. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Type the number of pages included in the fax. */
-		NumberOfPages: DevKit.WebApi.IntegerValue;
+		NumberOfPages: number;
 		/** Shows how long, in minutes, that the record was on hold. */
-		OnHoldTime: DevKit.WebApi.IntegerValueReadonly;
+		readonly OnHoldTime: number;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier of the business unit that owns the fax activity. */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier of the team that owns the fax activity. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier of the user that owns the fax activity. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Select the priority so that preferred customers or critical issues are handled quickly. */
-		PriorityCode: DevKit.WebApi.OptionSetValue;
+		PriorityCode: OptionSet.Fax.PriorityCode;
 		/** Shows the ID of the process. */
-		ProcessId: DevKit.WebApi.GuidValue;
+		ProcessId: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_account_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_account_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_bookableresourcebooking_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_bookableresourcebooking_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_bookableresourcebookingheader_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_bookableresourcebookingheader_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_bulkoperation_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_bulkoperation_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_campaign_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_campaign_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_campaignactivity_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_campaignactivity_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_contact_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_contact_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_contract_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_contract_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_entitlement_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_entitlement_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_entitlementtemplate_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_entitlementtemplate_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_incident_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_incident_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_invoice_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_invoice_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_knowledgearticle_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_knowledgearticle_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_knowledgebaserecord_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_knowledgebaserecord_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_lead_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_lead_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_agreement_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreement_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_agreementbookingdate_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingdate_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_agreementbookingincident_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingincident_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_agreementbookingproduct_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingproduct_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_agreementbookingservice_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingservice_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_agreementbookingservicetask_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingservicetask_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_agreementbookingsetup_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingsetup_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_agreementinvoicedate_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementinvoicedate_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_agreementinvoiceproduct_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementinvoiceproduct_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_agreementinvoicesetup_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementinvoicesetup_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_bookingalertstatus_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bookingalertstatus_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_bookingrule_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bookingrule_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_bookingtimestamp_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bookingtimestamp_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_customerasset_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_customerasset_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_fieldservicesetting_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_fieldservicesetting_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_incidenttypecharacteristic_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_incidenttypecharacteristic_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_incidenttypeproduct_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_incidenttypeproduct_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_incidenttypeservice_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_incidenttypeservice_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_inventoryadjustment_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_inventoryadjustment_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_inventoryadjustmentproduct_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_inventoryadjustmentproduct_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_inventoryjournal_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_inventoryjournal_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_inventorytransfer_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_inventorytransfer_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_payment_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_payment_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_paymentdetail_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_paymentdetail_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_paymentmethod_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_paymentmethod_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_paymentterm_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_paymentterm_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_playbookinstance_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_playbookinstance_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_postalbum_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_postalbum_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_postalcode_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_postalcode_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_processnotes_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_processnotes_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_productinventory_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_productinventory_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_projectteam_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_projectteam_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_purchaseorder_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseorder_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_purchaseorderbill_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseorderbill_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_purchaseorderproduct_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseorderproduct_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_purchaseorderreceipt_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseorderreceipt_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_purchaseorderreceiptproduct_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseorderreceiptproduct_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_purchaseordersubstatus_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseordersubstatus_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_quotebookingincident_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotebookingincident_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_quotebookingproduct_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotebookingproduct_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_quotebookingservice_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotebookingservice_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_quotebookingservicetask_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotebookingservicetask_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_resourceterritory_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_resourceterritory_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_rma_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rma_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_rmaproduct_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rmaproduct_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_rmareceipt_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rmareceipt_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_rmareceiptproduct_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rmareceiptproduct_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_rmasubstatus_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rmasubstatus_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_rtv_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rtv_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_rtvproduct_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rtvproduct_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_rtvsubstatus_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rtvsubstatus_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_shipvia_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_salessuggestion_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_systemuserschedulersetting_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_shipvia_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_timegroup_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_systemuserschedulersetting_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_timegroupdetail_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_timegroup_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_timeoffrequest_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_timegroupdetail_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_warehouse_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_timeoffrequest_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_workorder_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_warehouse_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_workordercharacteristic_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorder_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_workorderincident_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workordercharacteristic_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_workorderproduct_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderincident_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_workorderresourcerestriction_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderproduct_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_workorderservice_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderresourcerestriction_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_msdyn_workorderservicetask_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderservice_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_opportunity_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderservicetask_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_quote_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_opportunity_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_salesorder_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_quote_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_site_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_salesorder_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_uii_action_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_site_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_uii_hostedapplication_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_uii_action_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_uii_nonhostedapplication_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_uii_hostedapplication_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_uii_option_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_uii_nonhostedapplication_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_uii_savedsession_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_uii_option_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_uii_workflow_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_uii_savedsession_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_uii_workflowstep_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_uii_workflow_fax: string;
 		/** Unique identifier of the object with which the fax activity is associated. */
-		regardingobjectid_uii_workflow_workflowstep_mapping_fax: DevKit.WebApi.LookupValue;
+		regardingobjectid_uii_workflowstep_fax: string;
+		/** Unique identifier of the object with which the fax activity is associated. */
+		regardingobjectid_uii_workflow_workflowstep_mapping_fax: string;
 		/** Shows the expected duration of the fax activity, in minutes. */
-		ScheduledDurationMinutes: DevKit.WebApi.IntegerValueReadonly;
+		readonly ScheduledDurationMinutes: number;
 		/** Enter the expected due date and time. */
-		ScheduledEnd_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		ScheduledEnd_UtcDateAndTime: Date;
 		/** Enter the expected due date and time. */
-		ScheduledStart_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		ScheduledStart_UtcDateAndTime: Date;
 		/** Unique identifier for an associated service. */
-		ServiceId: DevKit.WebApi.LookupValue;
+		ServiceId: string;
 		/** Choose the service level agreement (SLA) that you want to apply to the fax record. */
-		SLAId: DevKit.WebApi.LookupValue;
+		SLAId: string;
 		/** Last SLA that was applied to this fax. This field is for internal use only. */
-		SLAInvokedId: DevKit.WebApi.LookupValueReadonly;
+		readonly SLAInvokedId: string;
 		/** Shows the date and time by which the activities are sorted. */
-		SortDate_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		SortDate_UtcDateAndTime: Date;
 		/** Shows the ID of the stage. */
-		StageId: DevKit.WebApi.GuidValue;
+		StageId: string;
 		/** Shows whether the fax activity is open, completed, or canceled. Completed and canceled fax activities are read-only and can't be edited. */
-		StateCode: DevKit.WebApi.OptionSetValue;
+		StateCode: OptionSet.Fax.StateCode;
 		/** Select the fax's status. */
-		StatusCode: DevKit.WebApi.OptionSetValue;
+		StatusCode: OptionSet.Fax.StatusCode;
 		/** Type a subcategory to identify the fax type to relate the activity to a specific product, sales region, business group, or other function. */
-		Subcategory: DevKit.WebApi.StringValue;
+		Subcategory: string;
 		/** Type a short description about the objective or primary topic of the fax. */
-		Subject: DevKit.WebApi.StringValue;
+		Subject: string;
 		/** For internal use only. */
-		SubscriptionId: DevKit.WebApi.GuidValue;
+		SubscriptionId: string;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** For internal use only. */
-		TraversedPath: DevKit.WebApi.StringValue;
+		TraversedPath: string;
 		/** Type the Transmitting Subscriber ID (TSID) associated with a send action. This is typically a combination of the recipient's fax or phone number and company name. */
-		Tsid: DevKit.WebApi.StringValue;
+		Tsid: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version number of the fax. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 		/** The array of object that can cast object to ActivityPartyApi class */
-		ActivityParties: Array<any>;
+		ActivityParties: Array<unknown>;
 	}
 }
 declare namespace OptionSet {
 	namespace Fax {
 		enum ActivityTypeCode {
+			/** 10086 */
+			Activity_record_for_the_Teams_chat,
 			/** 4201 */
 			Appointment,
-			/** 10400 */
+			/** 10404 */
 			Booking_Alert,
 			/** 4402 */
 			Campaign_Activity,
@@ -391,13 +397,13 @@ declare namespace OptionSet {
 			Campaign_Response,
 			/** 4206 */
 			Case_Resolution,
-			/** 10702 */
+			/** 10707 */
 			Conversation,
-			/** 10294 */
+			/** 10313 */
 			Customer_Voice_alert,
-			/** 10304 */
+			/** 10323 */
 			Customer_Voice_survey_invite,
-			/** 10306 */
+			/** 10325 */
 			Customer_Voice_survey_response,
 			/** 4202 */
 			Email,
@@ -409,11 +415,11 @@ declare namespace OptionSet {
 			Opportunity_Close,
 			/** 4209 */
 			Order_Close,
-			/** 10813 */
+			/** 10817 */
 			Outbound_message,
 			/** 4210 */
 			Phone_Call,
-			/** 10430 */
+			/** 10434 */
 			Project_Service_Approval,
 			/** 4406 */
 			Quick_Campaign,
@@ -423,7 +429,7 @@ declare namespace OptionSet {
 			Recurring_Appointment,
 			/** 4214 */
 			Service_Activity,
-			/** 10717 */
+			/** 10721 */
 			Session,
 			/** 4212 */
 			Task
@@ -474,4 +480,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

@@ -165,8 +165,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -174,175 +176,175 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Shows the actual value (Decimal type) achieved towards the target as of the last rolled-up date. This field appears when the metric type of the goal is Amount and the amount data type is Decimal. */
-		ActualDecimal: DevKit.WebApi.DecimalValue;
+		ActualDecimal: number;
 		/** Shows the actual value (integer) achieved towards the target as of the last rolled-up date. This field appears when the metric type of the goal is Amount or Count and the amount data type is Integer. */
-		ActualInteger: DevKit.WebApi.IntegerValue;
+		ActualInteger: number;
 		/** Shows the actual value (Money type) achieved towards the target as of the last rolled-up date. This field appears when the metric type of the goal is Amount and the amount data type is Money. */
-		ActualMoney: DevKit.WebApi.MoneyValue;
+		ActualMoney: number;
 		/** Shows the actual value (money type) in base currency to track goal results against the target. */
-		ActualMoney_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly ActualMoney_Base: number;
 		/** Actual Value of the goal. */
-		ActualString: DevKit.WebApi.StringValueReadonly;
+		readonly ActualString: string;
 		/** Data type of the amount. */
-		AmountDataType: DevKit.WebApi.OptionSetValue;
+		AmountDataType: OptionSet.Goal.AmountDataType;
 		/** Shows the expected amount for actual value (decimal type) against the target goal. */
-		ComputedTargetAsOfTodayDecimal: DevKit.WebApi.DecimalValueReadonly;
+		readonly ComputedTargetAsOfTodayDecimal: number;
 		/** Shows the expected amount for actual value (integer type) against the target goal as of the current date. */
-		ComputedTargetAsOfTodayInteger: DevKit.WebApi.IntegerValueReadonly;
+		readonly ComputedTargetAsOfTodayInteger: number;
 		/** Shows the expected amount for actual value (money type) against the target goal as of the current date. */
-		ComputedTargetAsOfTodayMoney: DevKit.WebApi.MoneyValueReadonly;
+		readonly ComputedTargetAsOfTodayMoney: number;
 		/** Shows the expected amount in base currency for actual value (money type) against the target goal as of the current date. */
-		ComputedTargetAsOfTodayMoney_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly ComputedTargetAsOfTodayMoney_Base: number;
 		/** Shows the expected value for percentage achieved against the target goal as of the current date. */
-		ComputedTargetAsOfTodayPercentageAchieved: DevKit.WebApi.DecimalValueReadonly;
+		readonly ComputedTargetAsOfTodayPercentageAchieved: number;
 		/** Select whether only the goal owner's records, or all records, should be rolled up for goal results. */
-		ConsiderOnlyGoalOwnersRecords: DevKit.WebApi.BooleanValue;
+		ConsiderOnlyGoalOwnersRecords: boolean;
 		/** Shows who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Indicates a placeholder rollup field for a decimal value to track a third category of results other than actuals and in-progress results. */
-		CustomRollupFieldDecimal: DevKit.WebApi.DecimalValue;
+		CustomRollupFieldDecimal: number;
 		/** Indicates a placeholder rollup field for an integer value to track a third category of results other than actuals and in-progress results. */
-		CustomRollupFieldInteger: DevKit.WebApi.IntegerValue;
+		CustomRollupFieldInteger: number;
 		/** Indicates a placeholder rollup field for a money value to track a third category of results other than actuals and in-progress results. */
-		CustomRollupFieldMoney: DevKit.WebApi.MoneyValue;
+		CustomRollupFieldMoney: number;
 		/** Indicates a placeholder rollup field for a money value in base currency to track a third category of results other than actuals and in-progress results. */
-		CustomRollupFieldMoney_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly CustomRollupFieldMoney_Base: number;
 		/** Placeholder rollup field for the goal. */
-		CustomRollupFieldString: DevKit.WebApi.StringValueReadonly;
+		readonly CustomRollupFieldString: string;
 		/** Depth of the goal in the tree. */
-		Depth: DevKit.WebApi.IntegerValueReadonly;
+		readonly Depth: number;
 		/** The default image for the entity. */
-		EntityImage: DevKit.WebApi.StringValue;
-		EntityImage_Timestamp: DevKit.WebApi.BigIntValueReadonly;
-		EntityImage_URL: DevKit.WebApi.StringValueReadonly;
+		EntityImage: string;
+		EntityImage_Timestamp: number;
+		EntityImage_URL: string;
 		/** For internal use only. */
-		EntityImageId: DevKit.WebApi.GuidValueReadonly;
+		readonly EntityImageId: string;
 		/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Select the fiscal period for the goal. */
-		FiscalPeriod: DevKit.WebApi.OptionSetValue;
+		FiscalPeriod: OptionSet.Goal.FiscalPeriod;
 		/** Select the fiscal year for the goal that's being tracked. */
-		FiscalYear: DevKit.WebApi.OptionSetValue;
+		FiscalYear: OptionSet.Goal.FiscalYear;
 		/** Enter the date when the goal ends. */
-		GoalEndDate_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		GoalEndDate_UtcDateOnly: Date;
 		/** Unique identifier of the goal. */
-		GoalId: DevKit.WebApi.GuidValue;
+		GoalId: string;
 		/** Choose the user or team responsible for meeting the goal. */
-		goalownerid_systemuser: DevKit.WebApi.LookupValue;
+		goalownerid_systemuser: string;
 		/** Choose the user or team responsible for meeting the goal. */
-		goalownerid_team: DevKit.WebApi.LookupValue;
+		goalownerid_team: string;
 		/** Enter the date and time when the period for tracking the goal begins. */
-		GoalStartDate_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		GoalStartDate_UtcDateOnly: Date;
 		/** Unique identifier of the goal that caused an error in the rollup of the goal hierarchy. */
-		GoalWithErrorId: DevKit.WebApi.LookupValue;
+		GoalWithErrorId: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Shows the in-progress value (decimal) against the target. This value could contribute to a goal, but is not counted yet as actual. */
-		InProgressDecimal: DevKit.WebApi.DecimalValue;
+		InProgressDecimal: number;
 		/** Shows the in-progress value (integer) against the target. This value could contribute to a goal, but is not counted yet as actual. */
-		InProgressInteger: DevKit.WebApi.IntegerValue;
+		InProgressInteger: number;
 		/** Shows the in-progress value (money) against the target. This value could contribute to a goal, but is not counted yet as actual. */
-		InProgressMoney: DevKit.WebApi.MoneyValue;
+		InProgressMoney: number;
 		/** Shows the in-progress value (money) in base currency to track goal results against the target. */
-		InProgressMoney_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly InProgressMoney_Base: number;
 		/** In-progress value of the goal. */
-		InProgressString: DevKit.WebApi.StringValueReadonly;
+		readonly InProgressString: string;
 		/** Indicates whether the metric type is Count or Amount. */
-		IsAmount: DevKit.WebApi.BooleanValue;
+		IsAmount: boolean;
 		/** Select whether the goal period is a fiscal period or custom period. */
-		IsFiscalPeriodGoal: DevKit.WebApi.BooleanValue;
+		IsFiscalPeriodGoal: boolean;
 		/** Select whether the system rollup fields are updated. If set to Yes, the next system rollup will not update the values of the rollup fields with the system calculated values. */
-		IsOverridden: DevKit.WebApi.BooleanValue;
+		IsOverridden: boolean;
 		/** Indicates whether the values of system rollup fields can be updated. */
-		IsOverride: DevKit.WebApi.BooleanValue;
+		IsOverride: boolean;
 		/** Shows the date and time when the goal was last rolled up. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		LastRolledupDate_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		LastRolledupDate_UtcDateAndTime: Date;
 		/** Choose the metric for the goal. This metric determines how the goal is tracked. */
-		MetricId: DevKit.WebApi.LookupValue;
+		MetricId: string;
 		/** Shows who last updated the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Shows who last updated the record on behalf of another user. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record. */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier of the team who owns the goal. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user who owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Choose a parent goal if the current goal is a child goal. This sets up a parent-child relationship for reporting and analytics. */
-		ParentGoalId: DevKit.WebApi.LookupValue;
+		ParentGoalId: string;
 		/** Shows the percentage achieved against the target goal. */
-		Percentage: DevKit.WebApi.DecimalValue;
+		Percentage: number;
 		/** Error code associated with rollup. */
-		RollupErrorCode: DevKit.WebApi.IntegerValue;
+		RollupErrorCode: number;
 		/** Select whether the data should be rolled up only from the child goals. */
-		RollupOnlyFromChildGoals: DevKit.WebApi.BooleanValue;
+		RollupOnlyFromChildGoals: boolean;
 		/** Choose the query that will be used to calculate the actual data for the goal (decimal). */
-		RollUpQueryActualDecimalId: DevKit.WebApi.LookupValue;
+		RollUpQueryActualDecimalId: string;
 		/** Choose the query that will be used to calculate the actual data for the goal (integer). */
-		RollupQueryActualIntegerId: DevKit.WebApi.LookupValue;
+		RollupQueryActualIntegerId: string;
 		/** Choose the query that will be used to calculate the actual data for the goal (money). */
-		RollUpQueryActualMoneyId: DevKit.WebApi.LookupValue;
+		RollUpQueryActualMoneyId: string;
 		/** Choose the query that will be used to calculate data for the custom rollup field (decimal). */
-		RollUpQueryCustomDecimalId: DevKit.WebApi.LookupValue;
+		RollUpQueryCustomDecimalId: string;
 		/** Choose the query that will be used to calculate data for the custom rollup field (integer). */
-		RollUpQueryCustomIntegerId: DevKit.WebApi.LookupValue;
+		RollUpQueryCustomIntegerId: string;
 		/** Choose the query that will be used to calculate data for the custom rollup field (money). */
-		RollUpQueryCustomMoneyId: DevKit.WebApi.LookupValue;
+		RollUpQueryCustomMoneyId: string;
 		/** Choose the query that will be used to calculate data for the in-progress rollup field (decimal). */
-		RollUpQueryInprogressDecimalId: DevKit.WebApi.LookupValue;
+		RollUpQueryInprogressDecimalId: string;
 		/** Choose the query that will be used to calculate data for the in-progress rollup field (integer). */
-		RollUpQueryInprogressIntegerId: DevKit.WebApi.LookupValue;
+		RollUpQueryInprogressIntegerId: string;
 		/** Choose the query that will be used to calculate data for the in-progress rollup field (money). */
-		RollUpQueryInprogressMoneyId: DevKit.WebApi.LookupValue;
+		RollUpQueryInprogressMoneyId: string;
 		/** Shows whether the goal is open, completed, or canceled. Completed and canceled goals are read-only and can't be edited. */
-		StateCode: DevKit.WebApi.OptionSetValue;
+		StateCode: OptionSet.Goal.StateCode;
 		/** Select the goal's status. */
-		StatusCode: DevKit.WebApi.OptionSetValue;
+		StatusCode: OptionSet.Goal.StatusCode;
 		/** Select a stretch target (decimal) of the goal to define a higher or difficult level of goal than the usual ones. */
-		StretchTargetDecimal: DevKit.WebApi.DecimalValue;
+		StretchTargetDecimal: number;
 		/** Select the stretch target (integer) of the goal to define a higher or difficult level of goal than the usual ones. */
-		StretchTargetInteger: DevKit.WebApi.IntegerValue;
+		StretchTargetInteger: number;
 		/** Select stretch target (money) of the goal to define a higher or difficult level of goal than the usual ones. */
-		StretchTargetMoney: DevKit.WebApi.MoneyValue;
+		StretchTargetMoney: number;
 		/** Shows the stretch target (money) in base currency to indicate a higher or difficult level of goal than the usual ones. */
-		StretchTargetMoney_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly StretchTargetMoney_Base: number;
 		/** Stretch target value for all data types. */
-		StretchTargetString: DevKit.WebApi.StringValueReadonly;
+		readonly StretchTargetString: string;
 		/** Select a goal target of the decimal type to use for tracking data that include partial numbers, such as pounds sold of a product sold by weight. */
-		TargetDecimal: DevKit.WebApi.DecimalValue;
+		TargetDecimal: number;
 		/** Select a goal target of the integer type to use for tracking anything countable in whole numbers, such as units sold. */
-		TargetInteger: DevKit.WebApi.IntegerValue;
+		TargetInteger: number;
 		/** Select a goal target (money) to track a monetary amount such as revenue from a product. */
-		TargetMoney: DevKit.WebApi.MoneyValue;
+		TargetMoney: number;
 		/** Shows the goal target of the money type in base currency. */
-		TargetMoney_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly TargetMoney_Base: number;
 		/** Target value of the goal. */
-		TargetString: DevKit.WebApi.StringValueReadonly;
+		readonly TargetString: string;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Type a title or name that describes the goal. */
-		Title: DevKit.WebApi.StringValue;
+		Title: string;
 		/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValueReadonly;
+		readonly TransactionCurrencyId: string;
 		/** Unique identifier of the goal tree. */
-		TreeId: DevKit.WebApi.GuidValueReadonly;
+		readonly TreeId: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version number of the goal. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -593,4 +595,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,204 +30,206 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Normal polling frequency used for address book synchronization in Microsoft Office Outlook. */
-		AddressBookSyncInterval: DevKit.WebApi.IntegerValue;
+		AddressBookSyncInterval: number;
 		/** Default mode, such as simple or detailed, for advanced find. */
-		AdvancedFindStartupMode: DevKit.WebApi.IntegerValue;
+		AdvancedFindStartupMode: number;
 		/** This attribute is no longer used. The data is now in the Mailbox.AllowEmailConnectorToUseCredentials attribute. */
-		AllowEmailCredentials: DevKit.WebApi.BooleanValueReadonly;
+		readonly AllowEmailCredentials: boolean;
 		/** AM designator to use in Microsoft Dynamics 365. */
-		AMDesignator: DevKit.WebApi.StringValue;
+		AMDesignator: string;
 		/** Set user status for ADC Suggestions */
-		AutoCaptureUserStatus: DevKit.WebApi.IntegerValue;
+		AutoCaptureUserStatus: number;
 		/** Auto-create contact on client promote */
-		AutoCreateContactOnPromote: DevKit.WebApi.IntegerValue;
+		AutoCreateContactOnPromote: number;
 		/** Unique identifier of the business unit with which the user is associated. */
-		BusinessUnitId: DevKit.WebApi.GuidValue;
+		BusinessUnitId: string;
 		/** Calendar type for the system. Set to Gregorian US by default. */
-		CalendarType: DevKit.WebApi.IntegerValue;
+		CalendarType: number;
 		/** Unique identifier of the user who created the user settings. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the user settings object was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the usersettings. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Number of decimal places that can be used for currency. */
-		CurrencyDecimalPrecision: DevKit.WebApi.IntegerValue;
+		CurrencyDecimalPrecision: number;
 		/** Information about how currency symbols are placed in Microsoft Dynamics 365. */
-		CurrencyFormatCode: DevKit.WebApi.IntegerValue;
+		CurrencyFormatCode: number;
 		/** Symbol used for currency in Microsoft Dynamics 365. */
-		CurrencySymbol: DevKit.WebApi.StringValue;
+		CurrencySymbol: string;
 		/** Information that specifies the level of data validation in excel worksheets exported in a format suitable for import. */
-		DataValidationModeForExportToExcel: DevKit.WebApi.OptionSetValue;
+		DataValidationModeForExportToExcel: OptionSet.UserSettings.DataValidationModeForExportToExcel;
 		/** Information about how the date is displayed in Microsoft Dynamics 365. */
-		DateFormatCode: DevKit.WebApi.IntegerValue;
+		DateFormatCode: number;
 		/** String showing how the date is displayed throughout Microsoft 365. */
-		DateFormatString: DevKit.WebApi.StringValue;
+		DateFormatString: string;
 		/** Character used to separate the month, the day, and the year in dates in Microsoft Dynamics 365. */
-		DateSeparator: DevKit.WebApi.StringValue;
+		DateSeparator: string;
 		/** Symbol used for decimal in Microsoft Dynamics 365. */
-		DecimalSymbol: DevKit.WebApi.StringValue;
+		DecimalSymbol: string;
 		/** Default calendar view for the user. */
-		DefaultCalendarView: DevKit.WebApi.IntegerValue;
+		DefaultCalendarView: number;
 		/** Text area to enter default country code. */
-		DefaultCountryCode: DevKit.WebApi.StringValue;
+		DefaultCountryCode: string;
 		/** Unique identifier of the default dashboard. */
-		DefaultDashboardId: DevKit.WebApi.GuidValue;
+		DefaultDashboardId: string;
 		/** Default search experience for the user. */
-		DefaultSearchExperience: DevKit.WebApi.OptionSetValue;
+		DefaultSearchExperience: OptionSet.UserSettings.DefaultSearchExperience;
 		/** This attribute is no longer used. The data is now in the Mailbox.Password attribute. */
-		EmailPassword: DevKit.WebApi.StringValueReadonly;
+		readonly EmailPassword: string;
 		/** This attribute is no longer used. The data is now in the Mailbox.UserName attribute. */
-		EmailUsername: DevKit.WebApi.StringValueReadonly;
+		readonly EmailUsername: string;
 		/** Indicates the form mode to be used. */
-		EntityFormMode: DevKit.WebApi.OptionSetValue;
+		EntityFormMode: OptionSet.UserSettings.EntityFormMode;
 		/** Order in which names are to be displayed in Microsoft Dynamics 365. */
-		FullNameConventionCode: DevKit.WebApi.IntegerValue;
+		FullNameConventionCode: number;
 		/** Information that specifies whether the Get Started pane in lists is enabled. */
-		GetStartedPaneContentEnabled: DevKit.WebApi.BooleanValue;
+		GetStartedPaneContentEnabled: boolean;
 		/** Unique identifier of the Help language. */
-		HelpLanguageId: DevKit.WebApi.IntegerValue;
+		HelpLanguageId: number;
 		/** Web site home page for the user. */
-		HomepageArea: DevKit.WebApi.StringValue;
+		HomepageArea: string;
 		/** Configuration of the home page layout. */
-		HomepageLayout: DevKit.WebApi.StringValue;
+		HomepageLayout: string;
 		/** Web site page for the user. */
-		HomepageSubarea: DevKit.WebApi.StringValue;
+		HomepageSubarea: string;
 		/** Information that specifies whether a user account is to ignore unsolicited email (deprecated). */
-		IgnoreUnsolicitedEmail: DevKit.WebApi.BooleanValue;
+		IgnoreUnsolicitedEmail: boolean;
 		/** Incoming email filtering method. */
-		IncomingEmailFilteringMethod: DevKit.WebApi.OptionSetValue;
+		IncomingEmailFilteringMethod: OptionSet.UserSettings.IncomingEmailFilteringMethod;
 		/** Show or dismiss alert for Apps for 365. */
-		IsAppsForCrmAlertDismissed: DevKit.WebApi.BooleanValue;
+		IsAppsForCrmAlertDismissed: boolean;
 		/** Indicates whether to use the Auto Capture feature enabled or not. */
-		IsAutoDataCaptureEnabled: DevKit.WebApi.BooleanValue;
+		IsAutoDataCaptureEnabled: boolean;
 		/** Enable or disable country code selection . */
-		IsDefaultCountryCodeCheckEnabled: DevKit.WebApi.BooleanValue;
+		IsDefaultCountryCodeCheckEnabled: boolean;
 		/** Indicates if duplicate detection is enabled when going online. */
-		IsDuplicateDetectionEnabledWhenGoingOnline: DevKit.WebApi.BooleanValue;
+		IsDuplicateDetectionEnabledWhenGoingOnline: boolean;
 		/** Enable or disable email conversation view on timeline wall selection. */
-		IsEmailConversationViewEnabled: DevKit.WebApi.BooleanValue;
+		IsEmailConversationViewEnabled: boolean;
 		/** Enable or disable guided help. */
-		IsGuidedHelpEnabled: DevKit.WebApi.BooleanValue;
+		IsGuidedHelpEnabled: boolean;
 		/** Indicates if the synchronization of user resource booking with Exchange is enabled at user level. */
-		IsResourceBookingExchangeSyncEnabled: DevKit.WebApi.BooleanValue;
+		IsResourceBookingExchangeSyncEnabled: boolean;
 		/** Indicates if send as other user privilege is enabled or not. */
-		IsSendAsAllowed: DevKit.WebApi.BooleanValue;
+		IsSendAsAllowed: boolean;
 		/** Shows the last time when the traces were read from the database. */
-		LastAlertsViewedTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		LastAlertsViewedTime_UtcDateAndTime: Date;
+		/** Stores the timestamp for when the ViewPersonalizationSettings attribute was updated for this user in the UserEntityUISettings table. */
+		LastModifiedTimeForViewPersonalizationSettings_UtcDateAndTime: Date;
 		/** Unique identifier of the user locale. */
-		LocaleId: DevKit.WebApi.IntegerValue;
+		LocaleId: number;
 		/** Information that specifies how Long Date is displayed throughout Microsoft 365. */
-		LongDateFormatCode: DevKit.WebApi.IntegerValue;
+		LongDateFormatCode: number;
 		/** Unique identifier of the user who last modified the user settings. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the user settings object was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the usersettings. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Information that specifies how negative currency numbers are displayed in Microsoft Dynamics 365. */
-		NegativeCurrencyFormatCode: DevKit.WebApi.IntegerValue;
+		NegativeCurrencyFormatCode: number;
 		/** Information that specifies how negative numbers are displayed in Microsoft Dynamics 365. */
-		NegativeFormatCode: DevKit.WebApi.IntegerValue;
+		NegativeFormatCode: number;
 		/** Next tracking number. */
-		NextTrackingNumber: DevKit.WebApi.IntegerValue;
+		NextTrackingNumber: number;
 		/** Information that specifies how numbers are grouped in Microsoft Dynamics 365. */
-		NumberGroupFormat: DevKit.WebApi.StringValue;
+		NumberGroupFormat: string;
 		/** Symbol used for number separation in Microsoft Dynamics 365. */
-		NumberSeparator: DevKit.WebApi.StringValue;
+		NumberSeparator: string;
 		/** Normal polling frequency used for background offline synchronization in Microsoft Office Outlook. */
-		OfflineSyncInterval: DevKit.WebApi.IntegerValue;
+		OfflineSyncInterval: number;
 		/** Normal polling frequency used for record synchronization in Microsoft Office Outlook. */
-		OutlookSyncInterval: DevKit.WebApi.IntegerValue;
+		OutlookSyncInterval: number;
 		/** Information that specifies how many items to list on a page in list views. */
-		PagingLimit: DevKit.WebApi.IntegerValue;
+		PagingLimit: number;
 		/** For internal use only. */
-		PersonalizationSettings: DevKit.WebApi.StringValue;
+		PersonalizationSettings: string;
 		/** PM designator to use in Microsoft Dynamics 365. */
-		PMDesignator: DevKit.WebApi.StringValue;
+		PMDesignator: string;
 		/** Number of decimal places that can be used for prices. */
-		PricingDecimalPrecision: DevKit.WebApi.IntegerValue;
+		PricingDecimalPrecision: number;
 		/** Picklist for selecting the user preference for reporting scripting errors. */
-		ReportScriptErrors: DevKit.WebApi.OptionSetValue;
+		ReportScriptErrors: OptionSet.UserSettings.ReportScriptErrors;
 		/** The version number for resource booking synchronization with Exchange. */
-		ResourceBookingExchangeSyncVersion: DevKit.WebApi.BigIntValue;
+		ResourceBookingExchangeSyncVersion: number;
 		/** Store selected customer service hub dashboard saved filter id. */
-		SelectedGlobalFilterId: DevKit.WebApi.GuidValue;
+		SelectedGlobalFilterId: string;
 		/** Information that specifies whether to display the week number in calendar displays in Microsoft Dynamics 365. */
-		ShowWeekNumber: DevKit.WebApi.BooleanValue;
+		ShowWeekNumber: boolean;
 		/** For Internal use only */
-		SplitViewState: DevKit.WebApi.BooleanValue;
+		SplitViewState: boolean;
 		/** Indicates if the company field in Microsoft Office Outlook items are set during Outlook synchronization. */
-		SyncContactCompany: DevKit.WebApi.BooleanValue;
+		SyncContactCompany: boolean;
 		/** Unique identifier of the user. */
-		SystemUserId: DevKit.WebApi.GuidValue;
+		SystemUserId: string;
 		/** Information that specifies how the time is displayed in Microsoft Dynamics 365. */
-		TimeFormatCode: DevKit.WebApi.IntegerValue;
+		TimeFormatCode: number;
 		/** Text for how time is displayed in Microsoft Dynamics 365. */
-		TimeFormatString: DevKit.WebApi.StringValue;
+		TimeFormatString: string;
 		/** Text for how time is displayed in Microsoft Dynamics 365. */
-		TimeSeparator: DevKit.WebApi.StringValue;
+		TimeSeparator: string;
 		/** Local time zone adjustment for the user. System calculated based on the time zone selected. */
-		TimeZoneBias: DevKit.WebApi.IntegerValue;
+		TimeZoneBias: number;
 		/** Local time zone for the user. */
-		TimeZoneCode: DevKit.WebApi.IntegerValue;
+		TimeZoneCode: number;
 		/** Local time zone daylight adjustment for the user. System calculated based on the time zone selected. */
-		TimeZoneDaylightBias: DevKit.WebApi.IntegerValue;
+		TimeZoneDaylightBias: number;
 		/** Local time zone daylight day for the user. System calculated based on the time zone selected. */
-		TimeZoneDaylightDay: DevKit.WebApi.IntegerValue;
+		TimeZoneDaylightDay: number;
 		/** Local time zone daylight day of week for the user. System calculated based on the time zone selected in Options. */
-		TimeZoneDaylightDayOfWeek: DevKit.WebApi.IntegerValue;
+		TimeZoneDaylightDayOfWeek: number;
 		/** Local time zone daylight hour for the user. System calculated based on the time zone selected. */
-		TimeZoneDaylightHour: DevKit.WebApi.IntegerValue;
+		TimeZoneDaylightHour: number;
 		/** Local time zone daylight minute for the user. System calculated based on the time zone selected. */
-		TimeZoneDaylightMinute: DevKit.WebApi.IntegerValue;
+		TimeZoneDaylightMinute: number;
 		/** Local time zone daylight month for the user. System calculated based on the time zone selected. */
-		TimeZoneDaylightMonth: DevKit.WebApi.IntegerValue;
+		TimeZoneDaylightMonth: number;
 		/** Local time zone daylight second for the user. System calculated based on the time zone selected. */
-		TimeZoneDaylightSecond: DevKit.WebApi.IntegerValue;
+		TimeZoneDaylightSecond: number;
 		/** Local time zone daylight year for the user. System calculated based on the time zone selected. */
-		TimeZoneDaylightYear: DevKit.WebApi.IntegerValue;
+		TimeZoneDaylightYear: number;
 		/** Local time zone standard time bias for the user. System calculated based on the time zone selected. */
-		TimeZoneStandardBias: DevKit.WebApi.IntegerValue;
+		TimeZoneStandardBias: number;
 		/** Local time zone standard day for the user. System calculated based on the time zone selected. */
-		TimeZoneStandardDay: DevKit.WebApi.IntegerValue;
+		TimeZoneStandardDay: number;
 		/** Local time zone standard day of week for the user. System calculated based on the time zone selected. */
-		TimeZoneStandardDayOfWeek: DevKit.WebApi.IntegerValue;
+		TimeZoneStandardDayOfWeek: number;
 		/** Local time zone standard hour for the user. System calculated based on the time zone selected. */
-		TimeZoneStandardHour: DevKit.WebApi.IntegerValue;
+		TimeZoneStandardHour: number;
 		/** Local time zone standard minute for the user. System calculated based on the time zone selected. */
-		TimeZoneStandardMinute: DevKit.WebApi.IntegerValue;
+		TimeZoneStandardMinute: number;
 		/** Local time zone standard month for the user. System calculated based on the time zone selected. */
-		TimeZoneStandardMonth: DevKit.WebApi.IntegerValue;
+		TimeZoneStandardMonth: number;
 		/** Local time zone standard second for the user. System calculated based on the time zone selected. */
-		TimeZoneStandardSecond: DevKit.WebApi.IntegerValue;
+		TimeZoneStandardSecond: number;
 		/** Local time zone standard year for the user. System calculated based on the time zone selected. */
-		TimeZoneStandardYear: DevKit.WebApi.IntegerValue;
+		TimeZoneStandardYear: number;
 		/** Tracking token ID. */
-		TrackingTokenId: DevKit.WebApi.IntegerValue;
+		TrackingTokenId: number;
 		/** Unique identifier of the default currency of the user. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** Unique identifier of the language in which to view the user interface (UI). */
-		UILanguageId: DevKit.WebApi.IntegerValue;
+		UILanguageId: number;
 		/** Indicates whether to use the Microsoft Dynamics 365 appointment form within Microsoft Office Outlook for creating new appointments. */
-		UseCrmFormForAppointment: DevKit.WebApi.BooleanValue;
+		UseCrmFormForAppointment: boolean;
 		/** Indicates whether to use the Microsoft Dynamics 365 contact form within Microsoft Office Outlook for creating new contacts. */
-		UseCrmFormForContact: DevKit.WebApi.BooleanValue;
+		UseCrmFormForContact: boolean;
 		/** Indicates whether to use the Microsoft Dynamics 365 email form within Microsoft Office Outlook for creating new emails. */
-		UseCrmFormForEmail: DevKit.WebApi.BooleanValue;
+		UseCrmFormForEmail: boolean;
 		/** Indicates whether to use the Microsoft Dynamics 365 task form within Microsoft Office Outlook for creating new tasks. */
-		UseCrmFormForTask: DevKit.WebApi.BooleanValue;
+		UseCrmFormForTask: boolean;
 		/** Indicates whether image strips are used to render images. */
-		UseImageStrips: DevKit.WebApi.BooleanValue;
+		UseImageStrips: boolean;
 		/** Specifies user profile ids in comma separated list. */
-		UserProfile: DevKit.WebApi.StringValue;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		UserProfile: string;
+		readonly VersionNumber: number;
 		/** The layout of the visualization pane. */
-		VisualizationPaneLayout: DevKit.WebApi.OptionSetValue;
+		VisualizationPaneLayout: OptionSet.UserSettings.VisualizationPaneLayout;
 		/** Workday start time for the user. */
-		WorkdayStartTime: DevKit.WebApi.StringValue;
+		WorkdayStartTime: string;
 		/** Workday stop time for the user. */
-		WorkdayStopTime: DevKit.WebApi.StringValue;
+		WorkdayStopTime: string;
 	}
 }
 declare namespace OptionSet {
@@ -298,4 +302,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

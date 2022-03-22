@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,79 +30,79 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Specifies mode of authentication with web sources like WebApp */
-		AuthType: DevKit.WebApi.OptionSetValue;
+		AuthType: OptionSet.PluginAssembly.AuthType;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.PluginAssembly.ComponentState;
 		/** Bytes of the assembly, in Base64 format. */
-		Content: DevKit.WebApi.StringValue;
+		Content: string;
 		/** Unique identifier of the user who created the plug-in assembly. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the plug-in assembly was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the pluginassembly. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Culture code for the plug-in assembly. */
-		Culture: DevKit.WebApi.StringValue;
+		Culture: string;
 		/** Customization Level. */
-		CustomizationLevel: DevKit.WebApi.IntegerValueReadonly;
+		readonly CustomizationLevel: number;
 		/** Description of the plug-in assembly. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Version in which the form is introduced. */
-		IntroducedVersion: DevKit.WebApi.StringValue;
+		IntroducedVersion: string;
 		/** Information that specifies whether this component can be customized. */
-		IsCustomizable: DevKit.WebApi.ManagedPropertyValue;
+		IsCustomizable: string;
 		/** Information that specifies whether this component should be hidden. */
-		IsHidden: DevKit.WebApi.ManagedPropertyValue;
+		IsHidden: string;
 		/** Information that specifies whether this component is managed. */
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsManaged: boolean;
 		/** Information about how the plugin assembly is to be isolated at execution time; None / Sandboxed. */
-		IsolationMode: DevKit.WebApi.OptionSetValue;
-		IsPasswordSet: DevKit.WebApi.BooleanValueReadonly;
+		IsolationMode: OptionSet.PluginAssembly.IsolationMode;
+		readonly IsPasswordSet: boolean;
 		/** Major of the assembly version. */
-		Major: DevKit.WebApi.IntegerValueReadonly;
+		readonly Major: number;
 		/** Unique identifier for managedidentity associated with pluginassembly. */
-		ManagedIdentityId: DevKit.WebApi.LookupValue;
+		ManagedIdentityId: string;
 		/** Minor of the assembly version. */
-		Minor: DevKit.WebApi.IntegerValueReadonly;
+		readonly Minor: number;
 		/** Unique identifier of the user who last modified the plug-in assembly. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the plug-in assembly was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the pluginassembly. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Name of the plug-in assembly. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Unique identifier of the organization with which the plug-in assembly is associated. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** For internal use only. */
-		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly OverwriteTime_UtcDateOnly: Date;
 		/** Unique identifier for Plugin Package associated with Plug-in Assembly. */
-		PackageId: DevKit.WebApi.LookupValue;
+		PackageId: string;
 		/** User Password */
-		Password: DevKit.WebApi.StringValue;
+		Password: string;
 		/** File name of the plug-in assembly. Used when the source type is set to 1. */
-		Path: DevKit.WebApi.StringValue;
+		Path: string;
 		/** Unique identifier of the plug-in assembly. */
-		PluginAssemblyId: DevKit.WebApi.GuidValue;
+		PluginAssemblyId: string;
 		/** Unique identifier of the plug-in assembly. */
-		PluginAssemblyIdUnique: DevKit.WebApi.GuidValueReadonly;
+		readonly PluginAssemblyIdUnique: string;
 		/** Public key token of the assembly. This value can be obtained from the assembly by using reflection. */
-		PublicKeyToken: DevKit.WebApi.StringValue;
+		PublicKeyToken: string;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** Hash of the source of the assembly. */
-		SourceHash: DevKit.WebApi.StringValue;
+		SourceHash: string;
 		/** Location of the assembly, for example 0=database, 1=on-disk. */
-		SourceType: DevKit.WebApi.OptionSetValue;
+		SourceType: OptionSet.PluginAssembly.SourceType;
 		/** For internal use only. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SupportingSolutionId: string;
 		/** Web Url */
-		Url: DevKit.WebApi.StringValue;
+		Url: string;
 		/** User Name */
-		UserName: DevKit.WebApi.StringValue;
+		UserName: string;
 		/** Version number of the assembly. The value can be obtained from the assembly through reflection. */
-		Version: DevKit.WebApi.StringValue;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		Version: string;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -157,4 +159,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

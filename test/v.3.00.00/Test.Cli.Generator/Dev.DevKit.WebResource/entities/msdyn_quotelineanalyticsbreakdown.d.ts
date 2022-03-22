@@ -47,8 +47,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -56,77 +58,77 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Exchange rate for the currency associated with the entity with respect to the base currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Enter the amount on the quote line estimate. */
-		msdyn_Amount: DevKit.WebApi.MoneyValue;
+		msdyn_Amount: number;
 		/** Value of the Amount in base currency. */
-		msdyn_amount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_amount_Base: number;
 		/** Select whether the quote line estimate will be charged to the customer. Valid values are Chargeable, Non-chargeable and Complimentary. Only chargeable transactions will affect the invoice totals. */
-		msdyn_BillingType: DevKit.WebApi.OptionSetValue;
+		msdyn_BillingType: OptionSet.msdyn_quotelineanalyticsbreakdown.msdyn_BillingType;
 		/** Enter the estimated end date of the quote line estimate. */
-		msdyn_EndDateTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		msdyn_EndDateTime_UtcDateOnly: Date;
 		/** Type a description of the entity breakdown. */
-		msdyn_name: DevKit.WebApi.StringValue;
+		msdyn_name: string;
 		/** Enter the unit price on the quote line estimate. */
-		msdyn_Price: DevKit.WebApi.MoneyValue;
+		msdyn_Price: number;
 		/** Value of the Price in base currency. */
-		msdyn_price_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_price_Base: number;
 		/** Select the quote that this quote line estimate belongs to. */
-		msdyn_Quote: DevKit.WebApi.LookupValue;
+		msdyn_Quote: string;
 		/** Unique identifier for entity instances */
-		msdyn_quotelineanalyticsbreakdownId: DevKit.WebApi.GuidValue;
+		msdyn_quotelineanalyticsbreakdownId: string;
 		/** Select the quote line estimate. */
-		msdyn_QuoteLineDetail: DevKit.WebApi.LookupValue;
+		msdyn_QuoteLineDetail: string;
 		/** Shows the billing milestone for the quote line. */
-		msdyn_QuoteLineScheduleOfValue: DevKit.WebApi.LookupValue;
+		msdyn_QuoteLineScheduleOfValue: string;
 		/** Select the role that is estimated on the quote line. */
-		msdyn_ResourceCategory: DevKit.WebApi.LookupValue;
+		msdyn_ResourceCategory: string;
 		/** Enter the estimated start date of the quote line estimate. */
-		msdyn_StartDateTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		msdyn_StartDateTime_UtcDateOnly: Date;
 		/** Select the category identified on the quote line estimate. */
-		msdyn_TransactionCategory: DevKit.WebApi.LookupValue;
+		msdyn_TransactionCategory: string;
 		/** Transaction classification of  Project quote analytics */
-		msdyn_TransactionClassification: DevKit.WebApi.OptionSetValue;
+		msdyn_TransactionClassification: OptionSet.msdyn_quotelineanalyticsbreakdown.msdyn_TransactionClassification;
 		/** Transaction type of the Project quote analytics */
-		msdyn_TransactionTypeCode: DevKit.WebApi.OptionSetValue;
+		msdyn_TransactionTypeCode: OptionSet.msdyn_quotelineanalyticsbreakdown.msdyn_TransactionTypeCode;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Status of the Quote Line Analytics Breakdown */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.msdyn_quotelineanalyticsbreakdown.statecode;
 		/** Reason for the status of the Quote Line Analytics Breakdown */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.msdyn_quotelineanalyticsbreakdown.statuscode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Shows the currency associated with the entity. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -203,4 +205,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

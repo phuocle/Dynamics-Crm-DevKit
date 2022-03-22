@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,120 +30,120 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the canvas app. */
-		AADCreatedById: DevKit.WebApi.StringValue;
+		AADCreatedById: string;
 		/** Unique identifier of the user who last modified the application. */
-		AADLastModifiedById: DevKit.WebApi.StringValue;
+		AADLastModifiedById: string;
 		/** Unique identifier of the user who last published the application. */
-		AADLastPublishedById: DevKit.WebApi.StringValue;
+		AADLastPublishedById: string;
 		/** Indicates whether the canvas app was marked for bypass consent by an admin. */
-		AdminControlBypassConsent: DevKit.WebApi.BooleanValue;
+		AdminControlBypassConsent: boolean;
 		/** The app component dependencies. */
-		AppComponentDependencies: DevKit.WebApi.StringValue;
+		AppComponentDependencies: string;
 		/** The app components. */
-		AppComponents: DevKit.WebApi.StringValue;
+		AppComponents: string;
 		/** The app open URI. */
-		AppOpenUri: DevKit.WebApi.StringValue;
+		AppOpenUri: string;
 		/** The application version. */
-		AppVersion: DevKit.WebApi.StringValue;
+		AppVersion: string;
 		/** Assets for Canvas Apps. */
-		Assets: DevKit.WebApi.StringValueReadonly;
+		readonly Assets: string;
 		/** The authorization references of the application. */
-		AuthorizationReferences: DevKit.WebApi.StringValue;
+		AuthorizationReferences: string;
 		/** The background image color. */
-		BackgroundColor: DevKit.WebApi.StringValue;
+		BackgroundColor: string;
 		/** Background image for Canvas Apps. */
-		BackgroundImage: DevKit.WebApi.StringValueReadonly;
+		readonly BackgroundImage: string;
 		/** Indicates whether the canvas app should bypass consent from consumers. */
-		BypassConsent: DevKit.WebApi.BooleanValue;
+		BypassConsent: boolean;
 		/** The type of the canvas app. */
-		CanConsumeAppPass: DevKit.WebApi.BooleanValue;
+		CanConsumeAppPass: boolean;
 		/** For internal use only. */
-		CanvasAppId: DevKit.WebApi.GuidValue;
+		CanvasAppId: string;
 		/** For internal use only. */
-		CanvasAppRowId: DevKit.WebApi.GuidValueReadonly;
+		readonly CanvasAppRowId: string;
 		/** The type of the canvas app. */
-		CanvasAppType: DevKit.WebApi.OptionSetValue;
+		CanvasAppType: OptionSet.CanvasApp.CanvasAppType;
 		/** Internal use. The app dependency details. */
-		CdsDependencies: DevKit.WebApi.StringValue;
+		CdsDependencies: string;
 		/** The commit message of the app. */
-		CommitMessage: DevKit.WebApi.StringValue;
+		CommitMessage: string;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.CanvasApp.ComponentState;
 		/** The connection references of the application. */
-		ConnectionReferences: DevKit.WebApi.StringValue;
+		ConnectionReferences: string;
 		/** The version of the client that was used to author the application. */
-		CreatedByClientVersion: DevKit.WebApi.StringValue;
+		CreatedByClientVersion: string;
 		/** Date and time when the application was created. */
-		CreatedTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		CreatedTime_UtcDateAndTime: Date;
 		/** The database references of the application. */
-		DatabaseReferences: DevKit.WebApi.StringValue;
+		DatabaseReferences: string;
 		/** The description of the app. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** The display name of the app. */
-		DisplayName: DevKit.WebApi.StringValue;
+		DisplayName: string;
 		/** Document for Canvas Apps. */
-		Document: DevKit.WebApi.StringValueReadonly;
+		readonly Document: string;
 		/** Internal use. The embedded app information. */
-		EmbeddedApp: DevKit.WebApi.StringValue;
+		EmbeddedApp: string;
 		/** The gallery item identifier. */
-		GalleryItemId: DevKit.WebApi.StringValue;
+		GalleryItemId: string;
 		/** Version in which the canvas app is introduced. */
-		IntroducedVersion: DevKit.WebApi.StringValue;
+		IntroducedVersion: string;
 		/** Indicates whether the canvas app contains CDS 1.0 references. */
-		IsCdsUpgraded: DevKit.WebApi.BooleanValue;
+		IsCdsUpgraded: boolean;
 		/** Information that specifies whether this component can be customized. */
-		IsCustomizable: DevKit.WebApi.ManagedPropertyValue;
+		IsCustomizable: string;
 		/** Indicates whether the canvas app is a featured app. */
-		IsFeaturedApp: DevKit.WebApi.BooleanValue;
+		IsFeaturedApp: boolean;
 		/** Indicates whether the canvas app is a hero app. */
-		IsHeroApp: DevKit.WebApi.BooleanValue;
+		IsHeroApp: boolean;
 		/** Indicates whether the canvas app is hidden from a user's list. */
-		IsHidden: DevKit.WebApi.BooleanValue;
+		IsHidden: boolean;
 		/** Indicates whether the solution component is part of a managed solution. */
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsManaged: boolean;
 		/** Large icon for Canvas Apps. */
-		LargeIcon: DevKit.WebApi.StringValueReadonly;
+		readonly LargeIcon: string;
 		/** Date and time when the application was last modified. */
-		LastModifiedTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		LastModifiedTime_UtcDateAndTime: Date;
 		/** Date and time when the application was last published. */
-		LastPublishTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		LastPublishTime_UtcDateAndTime: Date;
 		/** Medium icon for Canvas Apps. */
-		MediumIcon: DevKit.WebApi.StringValueReadonly;
+		readonly MediumIcon: string;
 		/** The version of the client that was used to author the application. */
-		MinClientVersion: DevKit.WebApi.StringValue;
+		MinClientVersion: string;
 		/** Name of the CanvasApp */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** For internal use only. */
-		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly OverwriteTime_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier of the business unit that owns the process. */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier of the team who owns the process. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier of the user who owns the process. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** The publisher of the app. */
-		Publisher: DevKit.WebApi.StringValue;
+		Publisher: string;
 		/** Small icon for Canvas Apps. */
-		SmallIcon: DevKit.WebApi.StringValueReadonly;
+		readonly SmallIcon: string;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** A value indicating whether the application is ready for consumption. */
-		Status: DevKit.WebApi.StringValue;
+		Status: string;
 		/** For internal use only. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SupportingSolutionId: string;
 		/** The metadata tags of the application. */
-		Tags: DevKit.WebApi.StringValue;
+		Tags: string;
 		/** Teams icon for Canvas Apps. */
-		TeamsIcon: DevKit.WebApi.StringValueReadonly;
+		readonly TeamsIcon: string;
 		/** The globally unique canvas app id */
-		UniqueCanvasAppId: DevKit.WebApi.StringValue;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		UniqueCanvasAppId: string;
+		readonly VersionNumber: number;
 		/** Wide icon for Canvas Apps. */
-		WideIcon: DevKit.WebApi.StringValueReadonly;
+		readonly WideIcon: string;
 	}
 }
 declare namespace OptionSet {
@@ -184,4 +186,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

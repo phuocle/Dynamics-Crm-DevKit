@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,57 +30,57 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the callback registration. */
-		CallbackRegistrationId: DevKit.WebApi.GuidValue;
+		CallbackRegistrationId: string;
 		/** Shows who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the callback registration was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalfÂ of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Entity Name. */
-		EntityName1: DevKit.WebApi.StringValue;
+		EntityName1: string;
 		/** condition represented with OData $filter syntax */
-		FilterExpression: DevKit.WebApi.StringValue;
+		FilterExpression: string;
 		/** Comma-separated list of attributes. If at least one of these attributes is modified, the callback url should be called. */
-		FilteringAttributes: DevKit.WebApi.StringValue;
+		FilteringAttributes: string;
 		/** For internal use only. Holds hard delete information. */
-		HardDelete: DevKit.WebApi.BooleanValue;
+		HardDelete: boolean;
 		/** Specifies the message type */
-		Message: DevKit.WebApi.OptionSetValue;
+		Message: OptionSet.CallbackRegistration.Message;
 		/** Shows who last updated the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the callback registration was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Shows who last updated the record on behalf of another user. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Name of callback registration. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier of the business unit that owns the callback registration. */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier of the team who owns the callback registration. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier of the user who owns the callback registration. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** delay represented with OData expression */
-		PostponeUntil: DevKit.WebApi.StringValue;
+		PostponeUntil: string;
 		/** Specifies the user context under which the callback will run */
-		RunAs: DevKit.WebApi.OptionSetValue;
+		RunAs: OptionSet.CallbackRegistration.RunAs;
 		/** For internal use only. Holds miscellaneous properties related to runtime integration. */
-		RuntimeIntegrationProperties: DevKit.WebApi.StringValue;
+		RuntimeIntegrationProperties: string;
 		/** Specifies the Scope */
-		Scope: DevKit.WebApi.OptionSetValue;
+		Scope: OptionSet.CallbackRegistration.Scope;
 		/** Name of the SDK message the subscriber is interested in */
-		SdkMessageName: DevKit.WebApi.StringValue;
+		SdkMessageName: string;
 		/** For internal use only. Holds soft delete information. */
-		SoftDeleteStatus: DevKit.WebApi.IntegerValue;
+		SoftDeleteStatus: number;
 		/** Full callback registration Url. */
-		Url: DevKit.WebApi.StringValue;
+		Url: string;
 		/** Specifies the Callback registration version type */
-		Version: DevKit.WebApi.OptionSetValue;
+		Version: OptionSet.CallbackRegistration.Version;
 	}
 }
 declare namespace OptionSet {
@@ -143,4 +145,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

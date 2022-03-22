@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,28 +30,28 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier for entity instances */
-		cascadegrantrevokeaccessversiontrackerId: DevKit.WebApi.GuidValue;
+		cascadegrantrevokeaccessversiontrackerId: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
-		MessageName: DevKit.WebApi.StringValue;
+		ImportSequenceNumber: number;
+		MessageName: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** The name of the custom entity. */
-		name: DevKit.WebApi.StringValue;
+		name: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
-		ParentEntityId: DevKit.WebApi.StringValue;
-		ParentObjectTypeCode: DevKit.WebApi.IntegerValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
+		ParentEntityId: string;
+		ParentObjectTypeCode: number;
 		/** Status of the CascadeGrantRevokeAccessVersionTracker */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.cascadegrantrevokeaccessversiontracker.statecode;
 		/** Reason for the status of the CascadeGrantRevokeAccessVersionTracker */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.cascadegrantrevokeaccessversiontracker.statuscode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 	}
 }
 declare namespace OptionSet {
@@ -84,4 +86,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

@@ -219,8 +219,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -228,129 +230,129 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Exchange rate for the currency associated with the entity with respect to the base currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Select the name of the customer account. */
-		msdyn_AccountCustomer: DevKit.WebApi.LookupValue;
-		msdyn_AccountingDate_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
-		msdyn_AccountVendor: DevKit.WebApi.LookupValue;
+		msdyn_AccountCustomer: string;
+		msdyn_AccountingDate_UtcDateOnly: Date;
+		msdyn_AccountVendor: string;
 		/** Enter the amount on the quote line estimate. */
-		msdyn_Amount: DevKit.WebApi.MoneyValue;
-		msdyn_amount_after_tax: DevKit.WebApi.MoneyValueReadonly;
+		msdyn_Amount: number;
+		readonly msdyn_amount_after_tax: number;
 		/** Value of the amount_after_tax in base currency. */
-		msdyn_amount_after_tax_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_amount_after_tax_Base: number;
 		/** Value of the Amount in base currency. */
-		msdyn_amount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_amount_Base: number;
 		/** Select the calculation method used for the amount on the estimate line. Valid methods are: Multiply Quantity By Price, Fixed Price, Multiply Basis Quantity By Price, Multiply Basis Amount By Percent */
-		msdyn_AmountMethod: DevKit.WebApi.OptionSetValue;
-		msdyn_BasisAmount: DevKit.WebApi.MoneyValue;
+		msdyn_AmountMethod: OptionSet.msdyn_quotelinetransaction.msdyn_AmountMethod;
+		msdyn_BasisAmount: number;
 		/** Value of the Basis Amount in base currency. */
-		msdyn_basisamount_Base: DevKit.WebApi.MoneyValueReadonly;
-		msdyn_BasisPrice: DevKit.WebApi.MoneyValue;
+		readonly msdyn_basisamount_Base: number;
+		msdyn_BasisPrice: number;
 		/** Value of the Basis Price in base currency. */
-		msdyn_basisprice_Base: DevKit.WebApi.MoneyValueReadonly;
-		msdyn_BasisQuantity: DevKit.WebApi.DecimalValue;
+		readonly msdyn_basisprice_Base: number;
+		msdyn_BasisQuantity: number;
 		/** Select whether this quote line estimate will be charged to the customer or not. Only chargeable transactions will add to the invoice total */
-		msdyn_BillingType: DevKit.WebApi.OptionSetValue;
+		msdyn_BillingType: OptionSet.msdyn_quotelinetransaction.msdyn_BillingType;
 		/** Shows the resource. */
-		msdyn_bookableresource: DevKit.WebApi.LookupValue;
+		msdyn_bookableresource: string;
 		/** Select the contact customer on the quote. */
-		msdyn_ContactCustomer: DevKit.WebApi.LookupValue;
-		msdyn_ContactVendor: DevKit.WebApi.LookupValue;
+		msdyn_ContactCustomer: string;
+		msdyn_ContactVendor: string;
 		/** Select whether the customer is an account or a contact  */
-		msdyn_CustomerType: DevKit.WebApi.OptionSetValue;
+		msdyn_CustomerType: OptionSet.msdyn_quotelinetransaction.msdyn_CustomerType;
 		/** Type the name of the custom entity. */
-		msdyn_description: DevKit.WebApi.StringValue;
+		msdyn_description: string;
 		/** Enter the date that the invoice is sent to the customer. Only relevant on invoice and invoice line transactions */
-		msdyn_DocumentDate_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		msdyn_DocumentDate_UtcDateOnly: Date;
 		/** Enter the end date of the work being estimated on the quote line estimate. */
-		msdyn_EndDateTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
-		msdyn_ExchangeRateDate_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		msdyn_EndDateTime_UtcDateOnly: Date;
+		msdyn_ExchangeRateDate_UtcDateOnly: Date;
 		/** Indicates if this record was created via import. It's purpose is to support data import. */
-		msdyn_isdataimport: DevKit.WebApi.BooleanValue;
+		msdyn_isdataimport: boolean;
 		/** Points to the quote line detail that originated an entry. For example, a revenue entry points to its related cost entry. */
-		msdyn_Origin: DevKit.WebApi.LookupValue;
+		msdyn_Origin: string;
 		/** Enter the amount, in percent, to multiply the basis by. This field is relevant when the amount calculation method is "Multiply basis amount by percent." */
-		msdyn_Percent: DevKit.WebApi.DecimalValue;
+		msdyn_Percent: number;
 		/** Enter the price on the quote line estimate. */
-		msdyn_Price: DevKit.WebApi.MoneyValue;
+		msdyn_Price: number;
 		/** Value of the Price in base currency. */
-		msdyn_price_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_price_Base: number;
 		/** Select the price List used to default price on the estimate line. */
-		msdyn_PriceList: DevKit.WebApi.LookupValue;
+		msdyn_PriceList: string;
 		/** Select the product on the quote line estimate. */
-		msdyn_Product: DevKit.WebApi.LookupValue;
+		msdyn_Product: string;
 		/** Select the project being referenced by the quote line estimate. */
-		msdyn_Project: DevKit.WebApi.LookupValue;
+		msdyn_Project: string;
 		/** Enter the quantity on the quote line estimate. */
-		msdyn_Quantity: DevKit.WebApi.DecimalValue;
+		msdyn_Quantity: number;
 		/** Select the denormalized reference to the quote. This is used for performance improvements and to allow the use of Power BI on a quote. */
-		msdyn_QuoteId: DevKit.WebApi.LookupValue;
+		msdyn_QuoteId: string;
 		/** (Deprecated) Type the quote line to which this estimate line belongs to. */
-		msdyn_QuoteLine: DevKit.WebApi.StringValue;
+		msdyn_QuoteLine: string;
 		/** Unique identifier for Quote Line to which this estimate line belongs to. */
-		msdyn_quotelineid: DevKit.WebApi.LookupValue;
+		msdyn_quotelineid: string;
 		/** Unique identifier for entity instances */
-		msdyn_quotelinetransactionId: DevKit.WebApi.GuidValue;
+		msdyn_quotelinetransactionId: string;
 		/** Select the role on the quote line estimate. */
-		msdyn_ResourceCategory: DevKit.WebApi.LookupValue;
+		msdyn_ResourceCategory: string;
 		/** Select the organizational unit of the resource who should perform the work. */
-		msdyn_ResourceOrganizationalUnitId: DevKit.WebApi.LookupValue;
+		msdyn_ResourceOrganizationalUnitId: string;
 		/** Enter the estimated start of the work being estimated on the quote line estimate. */
-		msdyn_StartDateTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		msdyn_StartDateTime_UtcDateOnly: Date;
 		/** Select the project work breakdown structure (WBS) task referenced by the quote line estimate. */
-		msdyn_Task: DevKit.WebApi.LookupValue;
-		msdyn_tax: DevKit.WebApi.MoneyValue;
+		msdyn_Task: string;
+		msdyn_tax: number;
 		/** Value of the tax in base currency. */
-		msdyn_tax_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_tax_Base: number;
 		/** Select the category on the quote line estimate. */
-		msdyn_TransactionCategory: DevKit.WebApi.LookupValue;
+		msdyn_TransactionCategory: string;
 		/** Transaction classification for the quote line */
-		msdyn_TransactionClassification: DevKit.WebApi.OptionSetValue;
+		msdyn_TransactionClassification: OptionSet.msdyn_quotelinetransaction.msdyn_TransactionClassification;
 		/** Shows the transaction type for this quote line. */
-		msdyn_TransactionTypeCode: DevKit.WebApi.OptionSetValue;
+		msdyn_TransactionTypeCode: OptionSet.msdyn_quotelinetransaction.msdyn_TransactionTypeCode;
 		/** Select the unit that the quantity is estimated in on this quote line estimate. */
-		msdyn_Unit: DevKit.WebApi.LookupValue;
+		msdyn_Unit: string;
 		/** Select the unit schedule associated with the estimate line. */
-		msdyn_UnitSchedule: DevKit.WebApi.LookupValue;
-		msdyn_VendorType: DevKit.WebApi.OptionSetValue;
+		msdyn_UnitSchedule: string;
+		msdyn_VendorType: OptionSet.msdyn_quotelinetransaction.msdyn_VendorType;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Status of the Quote Line Detail */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.msdyn_quotelinetransaction.statecode;
 		/** Reason for the status of the Quote Line Detail */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.msdyn_quotelinetransaction.statuscode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Shows the currency associated with the entity. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -451,4 +453,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

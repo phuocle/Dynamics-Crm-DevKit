@@ -13,6 +13,7 @@ declare namespace DevKit {
 		interface tab_members_Sections {
 			listoperationssection: DevKit.Controls.Section;
 			members: DevKit.Controls.Section;
+			ucimembers: DevKit.Controls.Section;
 		}
 		interface tab_notes_Sections {
 			notes: DevKit.Controls.Section;
@@ -225,8 +226,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -234,85 +237,85 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Type the cost of obtaining the marketing list. */
-		Cost: DevKit.WebApi.MoneyValue;
+		Cost: number;
 		/** Value of the Cost in base currency. */
-		Cost_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly Cost_Base: number;
 		/** Shows who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Select the type of members that this marketing list will contain: accounts, contacts, or leads. Each list can have only one member type and this value can't be changed after the marketing list is created. */
-		CreatedFromCode: DevKit.WebApi.OptionSetValue;
+		CreatedFromCode: OptionSet.List.CreatedFromCode;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Type additional information to describe the marketing list, such as the intended use or date of the last update. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Select whether to override the opt-out settings on leads, contacts, and accounts for the members of the target marketing lists of the campaign activity. If No is selected, those who have chosen to opt out won't be excluded from the list. This means they will receive marketing materials. */
-		DoNotSendOnOptOut: DevKit.WebApi.BooleanValue;
+		DoNotSendOnOptOut: boolean;
 		/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Select whether inactive accounts, contacts, or leads should be excluded from the campaign activity distribution when the marketing list is included in a campaign. */
-		IgnoreInactiveListMembers: DevKit.WebApi.BooleanValue;
+		IgnoreInactiveListMembers: boolean;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Shows the date and time when the marketing list was last used in a campaign or in the creation of activities or opportunities. */
-		LastUsedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		LastUsedOn_UtcDateOnly: Date;
 		/** Unique identifier of the marketing list. */
-		ListId: DevKit.WebApi.GuidValue;
+		ListId: string;
 		/** Type a name for the marketing list so that it is identified correctly in lists. */
-		ListName: DevKit.WebApi.StringValue;
+		ListName: string;
 		/** Select whether the marketing list is locked. If Yes is selected, no additional members can be added to the marketing list. */
-		LockStatus: DevKit.WebApi.BooleanValue;
+		LockStatus: boolean;
 		/** Shows the sum of all members in the marketing list. */
-		MemberCount: DevKit.WebApi.IntegerValue;
+		MemberCount: number;
 		/** Type of the members that can be stored in the marketing list. Please do not remove from form! */
-		MemberType: DevKit.WebApi.IntegerValue;
+		MemberType: number;
 		/** Shows who last updated the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Shows who last updated the record on behalf of another user. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
-		processedMemberCount: DevKit.WebApi.IntegerValue;
-		processFetchXML: DevKit.WebApi.StringValue;
+		readonly OwningUser: string;
+		processedMemberCount: number;
+		processFetchXML: string;
 		/** Contains the id of the process associated with the entity. */
-		ProcessId: DevKit.WebApi.GuidValue;
+		ProcessId: string;
 		/** Type the intended use of the marketing list to identify its key segments, target offers, or business group. */
-		Purpose: DevKit.WebApi.StringValue;
+		Purpose: string;
 		/** Query used for retrieving members of marketing list. */
-		Query: DevKit.WebApi.StringValue;
+		Query: string;
 		/** Type the source of the marketing list, such as a third-party supplier or internal database. */
-		Source: DevKit.WebApi.StringValue;
+		Source: string;
 		/** Contains the id of the stage where the entity is located. */
-		StageId: DevKit.WebApi.GuidValue;
+		StageId: string;
 		/** Shows whether the marketing list is active or inactive. Inactive marketing lists are read-only and can't be edited unless they are reactivated. */
-		StateCode: DevKit.WebApi.OptionSetValue;
+		StateCode: OptionSet.List.StateCode;
 		/** Select the marketing list's status. */
-		StatusCode: DevKit.WebApi.OptionSetValue;
+		StatusCode: OptionSet.List.StatusCode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** A comma separated list of string values representing the unique identifiers of stages in a Business Process Flow Instance in the order that they occur. */
-		TraversedPath: DevKit.WebApi.StringValue;
+		TraversedPath: string;
 		/** Select whether you want the marketing list to be static or dynamic. The members in a static marketing list are unchanging. A dynamic marketing list is based on a dynamic query that retrieves the updated list of members */
-		Type: DevKit.WebApi.BooleanValue;
+		Type: boolean;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -355,4 +358,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

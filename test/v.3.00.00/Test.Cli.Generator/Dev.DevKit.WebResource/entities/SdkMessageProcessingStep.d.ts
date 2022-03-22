@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,89 +30,89 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Indicates whether the asynchronous system job is automatically deleted on completion. */
-		AsyncAutoDelete: DevKit.WebApi.BooleanValue;
+		AsyncAutoDelete: boolean;
 		/** Identifies whether a SDK Message Processing Step type will be ReadOnly or Read Write. false - ReadWrite, true - ReadOnly  */
-		CanUseReadOnlyConnection: DevKit.WebApi.BooleanValue;
+		CanUseReadOnlyConnection: boolean;
 		/** For internal use only. */
-		Category: DevKit.WebApi.StringValue;
+		Category: string;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.SdkMessageProcessingStep.ComponentState;
 		/** Step-specific configuration for the plug-in type. Passed to the plug-in constructor at run time. */
-		Configuration: DevKit.WebApi.StringValue;
+		Configuration: string;
 		/** Unique identifier of the user who created the SDK message processing step. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the SDK message processing step was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the sdkmessageprocessingstep. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Customization level of the SDK message processing step. */
-		CustomizationLevel: DevKit.WebApi.IntegerValueReadonly;
+		readonly CustomizationLevel: number;
 		/** Description of the SDK message processing step. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Configuration for sending pipeline events to the Event Expander service. */
-		EventExpander: DevKit.WebApi.StringValue;
+		EventExpander: string;
 		/** Unique identifier of the associated event handler. */
-		eventhandler_plugintype: DevKit.WebApi.LookupValue;
+		eventhandler_plugintype: string;
 		/** Unique identifier of the associated event handler. */
-		eventhandler_serviceendpoint: DevKit.WebApi.LookupValue;
+		eventhandler_serviceendpoint: string;
 		/** Comma-separated list of attributes. If at least one of these attributes is modified, the plug-in should execute. */
-		FilteringAttributes: DevKit.WebApi.StringValue;
+		FilteringAttributes: string;
 		/** Unique identifier of the user to impersonate context when step is executed. */
-		ImpersonatingUserId: DevKit.WebApi.LookupValue;
+		ImpersonatingUserId: string;
 		/** Version in which the form is introduced. */
-		IntroducedVersion: DevKit.WebApi.StringValue;
+		IntroducedVersion: string;
 		/** Identifies if a plug-in should be executed from a parent pipeline, a child pipeline, or both. */
-		InvocationSource: DevKit.WebApi.OptionSetValue;
+		InvocationSource: OptionSet.SdkMessageProcessingStep.InvocationSource;
 		/** Information that specifies whether this component can be customized. */
-		IsCustomizable: DevKit.WebApi.ManagedPropertyValue;
+		IsCustomizable: string;
 		/** Information that specifies whether this component should be hidden. */
-		IsHidden: DevKit.WebApi.ManagedPropertyValue;
+		IsHidden: string;
 		/** Information that specifies whether this component is managed. */
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsManaged: boolean;
 		/** Run-time mode of execution, for example, synchronous or asynchronous. */
-		Mode: DevKit.WebApi.OptionSetValue;
+		Mode: OptionSet.SdkMessageProcessingStep.Mode;
 		/** Unique identifier of the user who last modified the SDK message processing step. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the SDK message processing step was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the sdkmessageprocessingstep. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Name of SdkMessage processing step. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Unique identifier of the organization with which the SDK message processing step is associated. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** For internal use only. */
-		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly OverwriteTime_UtcDateOnly: Date;
 		/** Unique identifier of the plug-in type associated with the step. */
-		PluginTypeId: DevKit.WebApi.LookupValue;
+		PluginTypeId: string;
 		/** Processing order within the stage. */
-		Rank: DevKit.WebApi.IntegerValue;
+		Rank: number;
 		/** For internal use only. Holds miscellaneous properties related to runtime integration. */
-		RuntimeIntegrationProperties: DevKit.WebApi.StringValue;
+		RuntimeIntegrationProperties: string;
 		/** Unique identifier of the SDK message filter. */
-		SdkMessageFilterId: DevKit.WebApi.LookupValue;
+		SdkMessageFilterId: string;
 		/** Unique identifier of the SDK message. */
-		SdkMessageId: DevKit.WebApi.LookupValue;
+		SdkMessageId: string;
 		/** Unique identifier of the SDK message processing step entity. */
-		SdkMessageProcessingStepId: DevKit.WebApi.GuidValue;
+		SdkMessageProcessingStepId: string;
 		/** Unique identifier of the SDK message processing step. */
-		SdkMessageProcessingStepIdUnique: DevKit.WebApi.GuidValueReadonly;
+		readonly SdkMessageProcessingStepIdUnique: string;
 		/** Unique identifier of the Sdk message processing step secure configuration. */
-		SdkMessageProcessingStepSecureConfigId: DevKit.WebApi.LookupValue;
+		SdkMessageProcessingStepSecureConfigId: string;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** Stage in the execution pipeline that the SDK message processing step is in. */
-		Stage: DevKit.WebApi.OptionSetValue;
+		Stage: OptionSet.SdkMessageProcessingStep.Stage;
 		/** Status of the SDK message processing step. */
-		StateCode: DevKit.WebApi.OptionSetValue;
+		StateCode: OptionSet.SdkMessageProcessingStep.StateCode;
 		/** Reason for the status of the SDK message processing step. */
-		StatusCode: DevKit.WebApi.OptionSetValue;
+		StatusCode: OptionSet.SdkMessageProcessingStep.StatusCode;
 		/** Deployment that the SDK message processing step should be executed on; server, client, or both. */
-		SupportedDeployment: DevKit.WebApi.OptionSetValue;
+		SupportedDeployment: OptionSet.SdkMessageProcessingStep.SupportedDeployment;
 		/** For internal use only. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SupportingSolutionId: string;
 		/** Number that identifies a specific revision of the SDK message processing step.  */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -203,4 +205,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

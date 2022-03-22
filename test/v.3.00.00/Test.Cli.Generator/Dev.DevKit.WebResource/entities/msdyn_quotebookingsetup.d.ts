@@ -195,8 +195,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -204,132 +206,132 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Exchange rate for the currency associated with the entity with respect to the base currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Enable if the system should automatically generate Order Bookings for the Booking Dates of this Booking Setup */
-		msdyn_autogeneratebooking: DevKit.WebApi.BooleanValue;
+		msdyn_autogeneratebooking: boolean;
 		/** Enable if the system should automatically generate Work Orders for the Booking Dates of this Booking Setup */
-		msdyn_autogenerateworkorder: DevKit.WebApi.BooleanValue;
+		msdyn_autogenerateworkorder: boolean;
 		/** Type a description of this booking setup. */
-		msdyn_description: DevKit.WebApi.StringValue;
-		msdyn_EstimatedCost: DevKit.WebApi.MoneyValue;
+		msdyn_description: string;
+		msdyn_EstimatedCost: number;
 		/** Value of the Estimated Cost in base currency. */
-		msdyn_estimatedcost_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_estimatedcost_Base: number;
 		/** Shows the duration of the booking. */
-		msdyn_estimatedduration: DevKit.WebApi.IntegerValue;
+		msdyn_estimatedduration: number;
 		/** The estimated margin for this Quote Booking Setup */
-		msdyn_EstimatedMargin: DevKit.WebApi.DecimalValue;
-		msdyn_EstimatedMarginPerWO: DevKit.WebApi.DecimalValue;
+		msdyn_EstimatedMargin: number;
+		msdyn_EstimatedMarginPerWO: number;
 		/** Estimated Costs of all Products that are associated to this Quote Booking Setup */
-		msdyn_EstimatedProductCost: DevKit.WebApi.MoneyValue;
+		msdyn_EstimatedProductCost: number;
 		/** Value of the EstimatedProductCost in base currency. */
-		msdyn_estimatedproductcost_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_estimatedproductcost_Base: number;
 		/** The sum of estimated revenue of all products that are associated to this quote booking setup */
-		msdyn_EstimatedProductRevenue: DevKit.WebApi.MoneyValue;
+		msdyn_EstimatedProductRevenue: number;
 		/** Value of the EstimatedProductRevenue in base currency. */
-		msdyn_estimatedproductrevenue_Base: DevKit.WebApi.MoneyValueReadonly;
-		msdyn_EstimatedRevenue: DevKit.WebApi.MoneyValue;
+		readonly msdyn_estimatedproductrevenue_Base: number;
+		msdyn_EstimatedRevenue: number;
 		/** Value of the Estimated Revenue in base currency. */
-		msdyn_estimatedrevenue_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_estimatedrevenue_Base: number;
 		/** The Estimated Revenue per Work Order */
-		msdyn_EstimatedRevenuePerWO: DevKit.WebApi.MoneyValue;
+		msdyn_EstimatedRevenuePerWO: number;
 		/** Value of the EstimatedRevenuePerWO in base currency. */
-		msdyn_estimatedrevenueperwo_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_estimatedrevenueperwo_Base: number;
 		/** The sum of the estimated costs of all quote booking services that are associated to this quote booking setup */
-		msdyn_EstimatedServiceCost: DevKit.WebApi.MoneyValue;
+		msdyn_EstimatedServiceCost: number;
 		/** Value of the EstimatedServiceCost in base currency. */
-		msdyn_estimatedservicecost_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_estimatedservicecost_Base: number;
 		/** The sum of estimated revenue of all services that are associated to this quote booking setup */
-		msdyn_EstimatedServiceRevenue: DevKit.WebApi.MoneyValue;
+		msdyn_EstimatedServiceRevenue: number;
 		/** Value of the EstimatedServiceRevenue in base currency. */
-		msdyn_estimatedservicerevenue_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_estimatedservicerevenue_Base: number;
 		/** Specify how many days in advance of the Booking Date the system should automatically generate a Work Order */
-		msdyn_generateworkorderdaysinadvance: DevKit.WebApi.IntegerValue;
+		msdyn_generateworkorderdaysinadvance: number;
 		/** For internal use only. */
-		msdyn_Internalflags: DevKit.WebApi.StringValue;
+		msdyn_Internalflags: string;
 		/** Only used when Work Location is a Facility. Latitude is used when trying to locate nearby facilities. */
-		msdyn_Latitude: DevKit.WebApi.DoubleValue;
+		msdyn_Latitude: number;
 		/** Only used when Work Location is a Facility. Longitude is used when trying to locate nearby facilities. */
-		msdyn_Longitude: DevKit.WebApi.DoubleValue;
-		msdyn_Margin: DevKit.WebApi.DecimalValue;
+		msdyn_Longitude: number;
+		msdyn_Margin: number;
 		/** The name of the custom entity. */
-		msdyn_name: DevKit.WebApi.StringValue;
-		msdyn_NumberOfWO: DevKit.WebApi.IntegerValue;
+		msdyn_name: string;
+		msdyn_NumberOfWO: number;
 		/** Shows the flexibility of days after the booking date. */
-		msdyn_postbookingflexibility: DevKit.WebApi.IntegerValue;
+		msdyn_postbookingflexibility: number;
 		/** Shows the date until which Work Order generation can be postponed. Intended for internal use. Manipulating values in this field is not supported and can lead to unexpected system behavior. */
-		msdyn_postponegenerationuntil_TimezoneDateAndTime: DevKit.WebApi.TimezoneDateAndTimeValue;
+		msdyn_postponegenerationuntil_TimezoneDateAndTime: Date;
 		/** Shows the flexibility of days prior to the booking date. */
-		msdyn_prebookingflexibility: DevKit.WebApi.IntegerValue;
+		msdyn_prebookingflexibility: number;
 		/** Preferred Resource to booked */
-		msdyn_preferredresource: DevKit.WebApi.LookupValue;
+		msdyn_preferredresource: string;
 		/** Shows the preferred time to booking. */
-		msdyn_preferredstarttime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		msdyn_preferredstarttime_UtcDateOnly: Date;
 		/** Booking Priority */
-		msdyn_priority: DevKit.WebApi.LookupValue;
+		msdyn_priority: string;
 		/** Quote this Booking Setup relates to */
-		msdyn_quote: DevKit.WebApi.LookupValue;
+		msdyn_quote: string;
 		/** Unique identifier for entity instances */
-		msdyn_quotebookingsetupId: DevKit.WebApi.GuidValue;
+		msdyn_quotebookingsetupId: string;
 		/** Relationship between Quote Detail and Quote Booking Setup */
-		msdyn_quotedetail: DevKit.WebApi.LookupValue;
-		msdyn_QuoteDetailId: DevKit.WebApi.StringValue;
+		msdyn_quotedetail: string;
+		msdyn_QuoteDetailId: string;
 		/** Stores the booking recurrence settings. */
-		msdyn_recurrencesettings: DevKit.WebApi.StringValue;
+		msdyn_recurrencesettings: string;
 		/** For internal use only. */
-		msdyn_revision: DevKit.WebApi.IntegerValue;
+		msdyn_revision: number;
 		/** Shows the time window up until when this can be booked. */
-		msdyn_timewindowend_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		msdyn_timewindowend_UtcDateOnly: Date;
 		/** Shows the time window from when this can be booked. */
-		msdyn_timewindowstart_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
-		msdyn_WorkLocation: DevKit.WebApi.OptionSetValue;
+		msdyn_timewindowstart_UtcDateOnly: Date;
+		msdyn_WorkLocation: OptionSet.msdyn_quotebookingsetup.msdyn_WorkLocation;
 		/** Shows the work order summary to be set on the work orders generated. */
-		msdyn_workordersummary: DevKit.WebApi.StringValue;
+		msdyn_workordersummary: string;
 		/** Work Order Type to be used on generated Work Orders */
-		msdyn_workordertype: DevKit.WebApi.LookupValue;
+		msdyn_workordertype: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Contains the id of the process associated with the entity. */
-		processid: DevKit.WebApi.GuidValue;
+		processid: string;
 		/** Contains the id of the stage where the entity is located. */
-		stageid: DevKit.WebApi.GuidValue;
+		stageid: string;
 		/** Status of the Quote Booking Setup */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.msdyn_quotebookingsetup.statecode;
 		/** Reason for the status of the Quote Booking Setup */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.msdyn_quotebookingsetup.statuscode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Unique identifier of the currency associated with the entity. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** A comma separated list of string values representing the unique identifiers of stages in a Business Process Flow Instance in the order that they occur. */
-		traversedpath: DevKit.WebApi.StringValue;
+		traversedpath: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -372,4 +374,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

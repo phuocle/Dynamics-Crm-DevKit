@@ -4,20 +4,18 @@ var DevKit;
 (function (DevKit) {
 	'use strict';
 	DevKit.OrganizationApi = function (e) {
-		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
 			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-			var property = {};
 			var getFormattedValue = function () {
 				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-					return EMPTY_STRING;
+					return '';
 				}
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
 					if (entity[logicalName + l] === entityLogicalName) {
 						return entity[logicalName + f];
 					}
-					return EMPTY_STRING;
+					return '';
 				}
 				if (isMultiOptionSet) {
 					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -42,32 +40,32 @@ var DevKit;
 			var setValue = function (value) {
 				if (isMultiOptionSet) value = value.join(',');
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+					value = value.replace('{', '').replace('}', '');
 					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
 				} else {
 					upsertEntity[logicalName] = value;
 				}
 				entity[logicalName] = value;
 			};
-			Object.defineProperty(property, 'FormattedValue', {
+			Object.defineProperty(obj.FormattedValue, field, {
 				get: getFormattedValue
 			});
 			if (readOnly) {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue
 				});
 			}
 			else {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue,
 					set: setValue
 				});
 			}
-			return property;
 		}
-		var organization = {
+		var _organization = {
 			ACIWebEndpointUrl: { a: 'aciwebendpointurl' },
 			AcknowledgementTemplateId: { b: 'acknowledgementtemplateid', a: '_acknowledgementtemplateid_value', c: 'templates', d: 'template' },
+			ActivityTypeFilter: { a: 'activitytypefilter' },
 			AdvancedColumnEditorEnabled: { a: 'advancedcolumneditorenabled' },
 			AdvancedColumnFilteringEnabled: { a: 'advancedcolumnfilteringenabled' },
 			AdvancedFilteringEnabled: { a: 'advancedfilteringenabled' },
@@ -92,6 +90,7 @@ var DevKit;
 			AMDesignator: { a: 'amdesignator' },
 			AppDesignerExperienceEnabled: { a: 'appdesignerexperienceenabled' },
 			AppointmentRichEditorExperience: { a: 'appointmentricheditorexperience' },
+			AppointmentWithTeamsMeeting: { a: 'appointmentwithteamsmeeting' },
 			AuditRetentionPeriod: { a: 'auditretentionperiod' },
 			AuditRetentionPeriodV2: { a: 'auditretentionperiodv2' },
 			AutoApplyDefaultonCaseCreate: { a: 'autoapplydefaultoncasecreate' },
@@ -116,6 +115,7 @@ var DevKit;
 			CategoryPrefix: { a: 'categoryprefix' },
 			ClientFeatureSet: { a: 'clientfeatureset' },
 			ContentSecurityPolicyConfiguration: { a: 'contentsecuritypolicyconfiguration' },
+			ContentSecurityPolicyConfigurationForCanvas: { a: 'contentsecuritypolicyconfigurationforcanvas' },
 			ContractPrefix: { a: 'contractprefix' },
 			CopresenceRefreshRate: { a: 'copresencerefreshrate' },
 			CortanaProactiveExperienceEnabled: { a: 'cortanaproactiveexperienceenabled' },
@@ -160,8 +160,10 @@ var DevKit;
 			EmailConnectionChannel: { a: 'emailconnectionchannel' },
 			EmailCorrelationEnabled: { a: 'emailcorrelationenabled' },
 			EmailSendPollingPeriod: { a: 'emailsendpollingperiod' },
+			EmailTemplateDefaultView: { a: 'emailtemplatedefaultview' },
 			EnableAsyncMergeAPIForUCI: { a: 'enableasyncmergeapiforuci' },
 			EnableBingMapsIntegration: { a: 'enablebingmapsintegration' },
+			EnableCanvasAppsInSolutionsByDefault: { a: 'enablecanvasappsinsolutionsbydefault' },
 			EnableImmersiveSkypeIntegration: { a: 'enableimmersiveskypeintegration' },
 			EnableLivePersonaCardUCI: { a: 'enablelivepersonacarduci' },
 			EnableLivePersonCardIntegrationInOffice: { a: 'enablelivepersoncardintegrationinoffice' },
@@ -237,6 +239,7 @@ var DevKit;
 			IsConflictDetectionEnabledForMobileClient: { a: 'isconflictdetectionenabledformobileclient' },
 			IsContactMailingAddressSyncEnabled: { a: 'iscontactmailingaddresssyncenabled' },
 			IsContentSecurityPolicyEnabled: { a: 'iscontentsecuritypolicyenabled' },
+			IsContentSecurityPolicyEnabledForCanvas: { a: 'iscontentsecuritypolicyenabledforcanvas' },
 			IsContextualEmailEnabled: { a: 'iscontextualemailenabled' },
 			IsContextualHelpEnabled: { a: 'iscontextualhelpenabled' },
 			IsCustomControlsInCanvasAppsEnabled: { a: 'iscustomcontrolsincanvasappsenabled' },
@@ -468,20 +471,23 @@ var DevKit;
 		};
 		if (e === undefined) e = {};
 		var u = {};
-		for (var field in organization) {
-			var a = organization[field].a;
-			var b = organization[field].b;
-			var c = organization[field].c;
-			var d = organization[field].d;
-			var g = organization[field].g;
-			var r = organization[field].r;
-			organization[field] = webApiField(e, a, b, c, d, r, u, g);
+		var organization = {};
+		organization.ODataEntity = e;
+		organization.FormattedValue = {};
+		for (var field in _organization) {
+			var a = _organization[field].a;
+			var b = _organization[field].b;
+			var c = _organization[field].c;
+			var d = _organization[field].d;
+			var g = _organization[field].g;
+			var r = _organization[field].r;
+			webApiField(organization, field, e, a, b, c, d, r, u, g);
 		}
 		organization.Entity = u;
 		organization.EntityName = 'organization';
 		organization.EntityCollectionName = 'organizations';
 		organization['@odata.etag'] = e['@odata.etag'];
-		organization.getAliasedValue = function (alias, isMultiOptionSet) {
+		organization.getAliasedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias] === undefined || e[alias] === null) {
 				return null;
 			}
@@ -490,7 +496,7 @@ var DevKit;
 			}
 			return e[alias];
 		}
-		organization.getAliasedFormattedValue = function (alias, isMultiOptionSet) {
+		organization.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
 				return EMPTY_STRING;
 			}
@@ -528,6 +534,11 @@ var OptionSet;
 		EmailConnectionChannel : {
 			Microsoft_Dynamics_365_Email_Router: 1,
 			Server_Side_Synchronization: 0
+		},
+		EmailTemplateDefaultView : {
+			Grid_View: 2,
+			List_View: 3,
+			Tiles_View: 1
 		},
 		FiscalPeriodFormatPeriod : {
 			M0: 5,

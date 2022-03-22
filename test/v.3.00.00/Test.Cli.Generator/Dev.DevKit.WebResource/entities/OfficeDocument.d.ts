@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,38 +30,38 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Client data regarding this office document. */
-		ClientData: DevKit.WebApi.StringValue;
+		ClientData: string;
 		/** Bytes of the office document. */
-		Content: DevKit.WebApi.StringValue;
+		Content: string;
 		/** Unique identifier of the user who created the office document. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the office document was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the office document. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Option set for selecting the type of the office document */
-		DocumentType: DevKit.WebApi.OptionSetValue;
+		DocumentType: OptionSet.OfficeDocument.DocumentType;
 		/** Lock state of file. */
-		FileLockState: DevKit.WebApi.IntegerValue;
+		FileLockState: number;
 		/** File Size. */
-		FileSize: DevKit.WebApi.IntegerValue;
+		FileSize: number;
 		/** Unique identifier of the user who last modified the office document. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the office document was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the office document. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Name of the office document. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Unique identifier of the office document. */
-		OfficeDocumentId: DevKit.WebApi.GuidValue;
+		OfficeDocumentId: string;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Stores the SHA256 Hash key value. */
-		SHA256: DevKit.WebApi.StringValue;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		SHA256: string;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -88,4 +90,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

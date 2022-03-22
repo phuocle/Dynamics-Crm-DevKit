@@ -70,8 +70,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -79,51 +81,51 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier for AzureServiceConnection associated with KnowledgeSearchModel. */
-		AzureServiceConnectionId: DevKit.WebApi.LookupValue;
+		AzureServiceConnectionId: string;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.KnowledgeSearchModel.ComponentState;
 		/** Unique identifier of the user who created the Knowledge Search Model. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the Knowledge Search Model was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the knowledge search Model. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Enter a description for the search configuration */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** entity */
-		Entity1: DevKit.WebApi.StringValue;
+		Entity1: string;
 		/** FetchXml. */
-		FetchXmlList: DevKit.WebApi.StringValue;
+		FetchXmlList: string;
 		/** Is Manageed */
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsManaged: boolean;
 		/** Unique identifier for entity instances */
-		KnowledgeSearchModelId: DevKit.WebApi.GuidValue;
+		KnowledgeSearchModelId: string;
 		/** Unique identifier of the Knowledge Search Model used when synchronizing customizations for the Microsoft Dynamics 365 client for Outlook */
-		KnowledgeSearchModelIdUnique: DevKit.WebApi.GuidValueReadonly;
+		readonly KnowledgeSearchModelIdUnique: string;
 		/** Enter the maximum number of keywords or key phrases to be determined using text analytics. */
-		MaxKeyWords: DevKit.WebApi.IntegerValue;
+		MaxKeyWords: number;
 		/** Unique identifier of the user who modified the Knowledge Search Model. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the Knowledge Search model was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the knowledge search model. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Type a logical name for the search configuration. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Enter the maximum number of key phrase words to use in a topic. */
-		NgramSize: DevKit.WebApi.IntegerValue;
+		NgramSize: number;
 		/** Unique identifier of the organization associated with the Knowledge Search Model entity. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Date and time when the record was created. */
-		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly OverwriteTime_UtcDateOnly: Date;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** Status of the Knowledge Search Model */
-		StateCode: DevKit.WebApi.OptionSetValue;
+		StateCode: OptionSet.KnowledgeSearchModel.StateCode;
 		/** Reason for the status of the Knowledge Search Model */
-		StatusCode: DevKit.WebApi.OptionSetValue;
+		StatusCode: OptionSet.KnowledgeSearchModel.StatusCode;
 		/** For internal use only. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SupportingSolutionId: string;
 	}
 }
 declare namespace OptionSet {
@@ -172,4 +174,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

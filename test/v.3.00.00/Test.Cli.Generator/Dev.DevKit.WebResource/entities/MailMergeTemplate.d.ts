@@ -66,8 +66,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -75,83 +77,83 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Body text of the mail merge template. */
-		Body: DevKit.WebApi.StringValue;
+		Body: string;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.MailMergeTemplate.ComponentState;
 		/** Unique identifier of the user who created the mail merge template. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the mail merge template was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the mailmergetemplate. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Default data fields associated with the mail merge template. */
-		DefaultFilter: DevKit.WebApi.StringValue;
+		DefaultFilter: string;
 		/** Description of the mail merge template. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Version of the Microsoft Office Word XML format used by the template. */
-		DocumentFormat: DevKit.WebApi.OptionSetValue;
+		DocumentFormat: OptionSet.MailMergeTemplate.DocumentFormat;
 		/** Exchange rate for the currency associated with the mailmergetemplate with respect to the base currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** File name of the mail merge template. */
-		FileName: DevKit.WebApi.StringValue;
+		FileName: string;
 		/** File size of the mail merge template. */
-		FileSize: DevKit.WebApi.IntegerValueReadonly;
+		readonly FileSize: number;
 		/** Version in which the form is introduced. */
-		IntroducedVersion: DevKit.WebApi.StringValue;
+		IntroducedVersion: string;
 		/** Information that specifies whether this component can be customized. */
-		IsCustomizable: DevKit.WebApi.ManagedPropertyValue;
+		IsCustomizable: string;
 		/** Indicates whether the solution component is part of a managed solution. */
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsManaged: boolean;
 		/** Information about whether the mail merge template is personal or is available to all users. */
-		IsPersonal: DevKit.WebApi.BooleanValue;
+		IsPersonal: boolean;
 		/** Language of the mail merge template. */
-		LanguageCode: DevKit.WebApi.IntegerValue;
+		LanguageCode: number;
 		/** Unique identifier of the mail merge template. */
-		MailMergeTemplateId: DevKit.WebApi.GuidValue;
+		MailMergeTemplateId: string;
 		/** For internal use only. */
-		MailMergeTemplateIdUnique: DevKit.WebApi.GuidValueReadonly;
+		readonly MailMergeTemplateIdUnique: string;
 		/** Drop-down list for selecting the type of the mail merge. */
-		MailMergeType: DevKit.WebApi.OptionSetValue;
+		MailMergeType: OptionSet.MailMergeTemplate.MailMergeType;
 		/** MIME type of the mail merge template. */
-		MimeType: DevKit.WebApi.StringValue;
+		MimeType: string;
 		/** Unique identifier of the user who last modified the mail merge template. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the mail merge template was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the mailmergetemplate. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Name of the mail merge template. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** For internal use only. */
-		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly OverwriteTime_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier of the business unit that owns the mail merge template. */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier of the team who owns the mail merge template. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier of the user who owns the mail merge template. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Parameter Xml. */
-		ParameterXml: DevKit.WebApi.StringValueReadonly;
+		readonly ParameterXml: string;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** Status of the mail merge template. */
-		StateCode: DevKit.WebApi.OptionSetValue;
+		StateCode: OptionSet.MailMergeTemplate.StateCode;
 		/** Reason for the status of the mail merge template. */
-		StatusCode: DevKit.WebApi.OptionSetValue;
+		StatusCode: OptionSet.MailMergeTemplate.StatusCode;
 		/** For internal use only. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SupportingSolutionId: string;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Unique identifier of the currency associated with the mailmergetemplate. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version number of the mail merge template. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -220,4 +222,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

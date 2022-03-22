@@ -67,43 +67,45 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
 		EntityCollectionName: string;
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
-		msdyn_activityid: DevKit.WebApi.StringValue;
-		msdyn_correlationid: DevKit.WebApi.StringValue;
-		msdyn_endtime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
-		msdyn_errorcode: DevKit.WebApi.StringValue;
-		msdyn_exceptionmessage: DevKit.WebApi.StringValue;
-		msdyn_exceptionstack: DevKit.WebApi.StringValue;
-		msdyn_ismanaged: DevKit.WebApi.BooleanValue;
-		msdyn_isoverwritecustomizations: DevKit.WebApi.BooleanValue;
-		msdyn_ispatch: DevKit.WebApi.BooleanValue;
+		msdyn_activityid: string;
+		msdyn_correlationid: string;
+		msdyn_endtime_UtcDateAndTime: Date;
+		msdyn_errorcode: string;
+		msdyn_exceptionmessage: string;
+		msdyn_exceptionstack: string;
+		msdyn_ismanaged: boolean;
+		msdyn_isoverwritecustomizations: boolean;
+		msdyn_ispatch: boolean;
 		/** Maximum number of retries. */
-		msdyn_maxretries: DevKit.WebApi.IntegerValue;
+		msdyn_maxretries: number;
 		/** The name of the custom entity. */
-		msdyn_name: DevKit.WebApi.StringValue;
-		msdyn_operation: DevKit.WebApi.OptionSetValue;
-		msdyn_packagename: DevKit.WebApi.StringValue;
-		msdyn_packageversion: DevKit.WebApi.StringValue;
-		msdyn_publisherid: DevKit.WebApi.StringValue;
-		msdyn_publishername: DevKit.WebApi.StringValue;
-		msdyn_result: DevKit.WebApi.BooleanValue;
+		msdyn_name: string;
+		msdyn_operation: OptionSet.msdyn_solutionhistory.msdyn_operation;
+		msdyn_packagename: string;
+		msdyn_packageversion: string;
+		msdyn_publisherid: string;
+		msdyn_publishername: string;
+		msdyn_result: boolean;
 		/** Retry count */
-		msdyn_retrycount: DevKit.WebApi.IntegerValue;
+		msdyn_retrycount: number;
 		/** Unique identifier for entity instances */
-		msdyn_solutionhistoryId: DevKit.WebApi.GuidValue;
-		msdyn_solutionid: DevKit.WebApi.StringValue;
-		msdyn_solutionversion: DevKit.WebApi.StringValue;
-		msdyn_starttime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
-		msdyn_status: DevKit.WebApi.OptionSetValue;
-		msdyn_suboperation: DevKit.WebApi.OptionSetValue;
-		msdyn_totaltime: DevKit.WebApi.IntegerValue;
+		msdyn_solutionhistoryId: string;
+		msdyn_solutionid: string;
+		msdyn_solutionversion: string;
+		msdyn_starttime_UtcDateAndTime: Date;
+		msdyn_status: OptionSet.msdyn_solutionhistory.msdyn_status;
+		msdyn_suboperation: OptionSet.msdyn_solutionhistory.msdyn_suboperation;
+		msdyn_totaltime: number;
 	}
 }
 declare namespace OptionSet {
@@ -166,4 +168,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

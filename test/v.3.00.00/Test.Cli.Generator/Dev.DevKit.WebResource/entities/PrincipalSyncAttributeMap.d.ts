@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,33 +30,33 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Specifies allowed sync directions. */
-		AllowedSyncDirection: DevKit.WebApi.IntegerValue;
+		AllowedSyncDirection: number;
 		/** CRM Attribute Display Name. */
-		AttributeCRMDisplayName: DevKit.WebApi.StringValue;
+		AttributeCRMDisplayName: string;
 		/** CRM Attribute Name. */
-		AttributeCRMName: DevKit.WebApi.StringValue;
+		AttributeCRMName: string;
 		/** Exchange Attribute Display Name. */
-		AttributeExchangeDisplayName: DevKit.WebApi.StringValue;
+		AttributeExchangeDisplayName: string;
 		/** Exchange Attribute Name. */
-		AttributeExchangeName: DevKit.WebApi.StringValue;
+		AttributeExchangeName: string;
 		/** Computed Properties. */
-		ComputedProperties: DevKit.WebApi.StringValue;
+		ComputedProperties: string;
 		/** Default Sync Direction */
-		DefaultSyncDirection: DevKit.WebApi.OptionSetValue;
+		DefaultSyncDirection: OptionSet.PrincipalSyncAttributeMap.DefaultSyncDirection;
 		/** Indicates whether the mapping is a computed property */
-		IsComputed: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsComputed: boolean;
 		/** Mapping Name. */
-		MappingName: DevKit.WebApi.StringValue;
+		MappingName: string;
 		/** Unique identifier of the associated organization. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Parent Sync-Attribute Mapping to which this mapping belongs */
-		ParentPrincipalSyncAttributeMappingId: DevKit.WebApi.LookupValue;
-		PrincipalId: DevKit.WebApi.GuidValue;
+		ParentPrincipalSyncAttributeMappingId: string;
+		PrincipalId: string;
 		/** Unique identifier of the principal sync attribute mapping. */
-		PrincipalSyncAttributeMapId: DevKit.WebApi.GuidValue;
+		PrincipalSyncAttributeMapId: string;
 		/** Sync Direction */
-		SyncDirection: DevKit.WebApi.OptionSetValue;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		SyncDirection: OptionSet.PrincipalSyncAttributeMap.SyncDirection;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -97,4 +99,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

@@ -78,8 +78,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -87,61 +89,61 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** The anchor tab for this session. */
-		msdyn_AnchorTab: DevKit.WebApi.LookupValue;
+		msdyn_AnchorTab: string;
 		/** Unique identifier for entity instances. */
-		msdyn_consoleapplicationsessiontemplateId: DevKit.WebApi.GuidValue;
+		msdyn_consoleapplicationsessiontemplateId: string;
 		/** Description of the field */
-		msdyn_description: DevKit.WebApi.StringValue;
+		msdyn_description: string;
 		/** Display icon for the session. */
-		msdyn_icon: DevKit.WebApi.StringValue;
+		msdyn_icon: string;
 		/** Whether to render the sidepanel for this session */
-		msdyn_IsPanelHidden: DevKit.WebApi.BooleanValue;
+		msdyn_IsPanelHidden: boolean;
 		/** Name of the session. */
-		msdyn_name: DevKit.WebApi.StringValue;
+		msdyn_name: string;
 		/** Panel mode when a session is opened. */
-		msdyn_PanelState: DevKit.WebApi.OptionSetValue;
+		msdyn_PanelState: OptionSet.msdyn_consoleapplicationsessiontemplate.msdyn_PanelState;
 		/** Whether this session should be pinned. */
-		msdyn_Pinned: DevKit.WebApi.BooleanValue;
+		msdyn_Pinned: boolean;
 		/** The relative order of all session templates. */
-		msdyn_RenderingOrder: DevKit.WebApi.IntegerValue;
+		msdyn_RenderingOrder: number;
 		/** Title of the session displayed in the session panel. */
-		msdyn_Title: DevKit.WebApi.StringValue;
+		msdyn_Title: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Status of the Session template */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.msdyn_consoleapplicationsessiontemplate.statecode;
 		/** Reason for the status of the ConsoleApplicationSessionTemplate */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.msdyn_consoleapplicationsessiontemplate.statuscode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -184,4 +186,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

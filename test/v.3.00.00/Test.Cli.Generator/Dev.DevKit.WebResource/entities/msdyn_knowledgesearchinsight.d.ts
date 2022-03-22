@@ -47,8 +47,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -56,73 +58,73 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** The name of the application where the knowledge search is performed. */
-		msdyn_ApplicationName: DevKit.WebApi.StringValue;
+		msdyn_ApplicationName: string;
 		/** Designed for federation search. Used to correlate the search that triggered different search records from different search providers. */
-		msdyn_CorrelationId: DevKit.WebApi.StringValue;
+		msdyn_CorrelationId: string;
 		/** The ID of control knowledge search where the search is performed. */
-		msdyn_CustomControlId: DevKit.WebApi.StringValue;
+		msdyn_CustomControlId: string;
 		/** Entity Record ID of the Entity Type */
-		msdyn_EntityRecordId: DevKit.WebApi.StringValue;
+		msdyn_EntityRecordId: string;
 		/** Which kind of entity context the knowledge search performed */
-		msdyn_EntityType: DevKit.WebApi.StringValue;
+		msdyn_EntityType: string;
 		/** The filters selected when performing the search. */
-		msdyn_Filters: DevKit.WebApi.StringValue;
+		msdyn_Filters: string;
 		/** Whether the search is initiated by the system automatically or manually initiated by the user. */
-		msdyn_InitiatedBy: DevKit.WebApi.StringValue;
+		msdyn_InitiatedBy: string;
 		/** Unique identifier for entity instances */
-		msdyn_knowledgesearchinsightId: DevKit.WebApi.GuidValue;
+		msdyn_knowledgesearchinsightId: string;
 		/** The time to return search results. */
-		msdyn_ResponseTime: DevKit.WebApi.IntegerValue;
+		msdyn_ResponseTime: number;
 		/** The total count of knowledge articles returned */
-		msdyn_ResultCount: DevKit.WebApi.IntegerValue;
+		msdyn_ResultCount: number;
 		/** Designed for federation search. The ID of the federated search provider. */
-		msdyn_SearchProviderId: DevKit.WebApi.StringValue;
+		msdyn_SearchProviderId: string;
 		/** Designed for federation search. The name of the federated search provider. */
-		msdyn_SearchProviderName: DevKit.WebApi.StringValue;
+		msdyn_SearchProviderName: string;
 		/** The string typed in the search field */
-		msdyn_SearchTerm: DevKit.WebApi.StringValue;
+		msdyn_SearchTerm: string;
 		/** The type of search run, like full text search, relevance search, etc. */
-		msdyn_SearchType: DevKit.WebApi.StringValue;
+		msdyn_SearchType: string;
 		/** The sort selected when performing the search. */
-		msdyn_SortBy: DevKit.WebApi.StringValue;
+		msdyn_SortBy: string;
 		/** Date and time when the search is performed */
-		msdyn_TimeStamp_TimezoneDateAndTime: DevKit.WebApi.TimezoneDateAndTimeValue;
+		msdyn_TimeStamp_TimezoneDateAndTime: Date;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Status of the Knowledge Search Insight */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.msdyn_knowledgesearchinsight.statecode;
 		/** Reason for the status of the Knowledge Search Insight */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.msdyn_knowledgesearchinsight.statuscode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -157,4 +159,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

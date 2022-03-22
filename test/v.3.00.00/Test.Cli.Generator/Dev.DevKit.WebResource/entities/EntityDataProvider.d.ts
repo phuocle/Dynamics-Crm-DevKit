@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,53 +30,53 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.EntityDataProvider.ComponentState;
 		/** Contains the createmultipleplugin id that should be run when CreateMultiple is invoked */
-		CreateMultiplePlugin: DevKit.WebApi.GuidValue;
+		CreateMultiplePlugin: string;
 		/** Create Plugin */
-		CreatePlugin: DevKit.WebApi.GuidValue;
+		CreatePlugin: string;
 		/** When creating a Data Provider, the end user must select the name of the Data Source entity that will be created for the provider. */
-		DataSourceLogicalName: DevKit.WebApi.StringValue;
+		DataSourceLogicalName: string;
 		/** Contains the deletemultipleplugin id that should be run when DeleteMultiple is invoked */
-		DeleteMultiplePlugin: DevKit.WebApi.GuidValue;
+		DeleteMultiplePlugin: string;
 		/** Delete Plugin */
-		DeletePlugin: DevKit.WebApi.GuidValue;
+		DeletePlugin: string;
 		/** What is this Data Provider used for and data store technologies does it target? */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Unique identifier of the data provider. */
-		EntityDataProviderId: DevKit.WebApi.GuidValue;
+		EntityDataProviderId: string;
 		/** For internal use only. */
-		EntityDataProviderIdUnique: DevKit.WebApi.GuidValueReadonly;
+		readonly EntityDataProviderIdUnique: string;
 		/** Version in which the form is introduced. */
-		IntroducedVersion: DevKit.WebApi.StringValue;
+		IntroducedVersion: string;
 		/** Information that specifies whether this component can be customized. */
-		IsCustomizable: DevKit.WebApi.ManagedPropertyValue;
+		IsCustomizable: string;
 		/** Indicates whether the solution component is part of a managed solution. */
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsManaged: boolean;
 		/** The name of this Data Provider. This is the name that appears in the dropdown when creating a new entity. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Unique identifier for the organization. */
-		OrganizationId: DevKit.WebApi.GuidValueReadonly;
+		readonly OrganizationId: string;
 		/** For internal use only. */
-		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly OverwriteTime_UtcDateOnly: Date;
 		/** Contains the retrieveentitychangesplugin id that should be run when RetrieveEntityChanges is invoked */
-		RetrieveEntityChangesPlugin: DevKit.WebApi.GuidValue;
+		RetrieveEntityChangesPlugin: string;
 		/** MultipleRetrieve Plugin */
-		RetrieveMultiplePlugin: DevKit.WebApi.GuidValue;
+		RetrieveMultiplePlugin: string;
 		/** Retrieve Plugin */
-		RetrievePlugin: DevKit.WebApi.GuidValue;
+		RetrievePlugin: string;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** For internal use only. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SupportingSolutionId: string;
 		/** Contains the updatemultipleplugin id that should be run when UpdateMultiple is invoked */
-		UpdateMultiplePlugin: DevKit.WebApi.GuidValue;
+		UpdateMultiplePlugin: string;
 		/** Update Plugin */
-		UpdatePlugin: DevKit.WebApi.GuidValue;
+		UpdatePlugin: string;
 		/** Contains the upsertmultipleplugin id that should be run when UpsertMultiple is invoked */
-		UpsertMultiplePlugin: DevKit.WebApi.GuidValue;
+		UpsertMultiplePlugin: string;
 		/** Contains the upsertplugin id that should be run when Upsert is invoked */
-		UpsertPlugin: DevKit.WebApi.GuidValue;
+		UpsertPlugin: string;
 	}
 }
 declare namespace OptionSet {
@@ -107,4 +109,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

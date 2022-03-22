@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,43 +30,43 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the attribute map. */
-		AttributeMapId: DevKit.WebApi.GuidValue;
+		AttributeMapId: string;
 		/** For internal use only. */
-		AttributeMapIdUnique: DevKit.WebApi.GuidValueReadonly;
+		readonly AttributeMapIdUnique: string;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.AttributeMap.ComponentState;
 		/** Unique identifier of the user who created the attribute map. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the attribute map was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the attributemap. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Unique identifier of the entity map with which the attribute map is associated. */
-		EntityMapId: DevKit.WebApi.LookupValue;
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		EntityMapId: string;
+		readonly IsManaged: boolean;
 		/** Information about whether this attribute map is user-defined or system-defined. */
-		IsSystem: DevKit.WebApi.BooleanValue;
+		IsSystem: boolean;
 		/** Unique identifier of the user who last modified the attribute map. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the attribute map was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the attributemap. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Unique identifier of the organization with which the attribute map is associated. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** For internal use only. */
-		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly OverwriteTime_UtcDateOnly: Date;
 		/** Unique identifier of the parent attribute map. */
-		ParentAttributeMapId: DevKit.WebApi.LookupValue;
+		ParentAttributeMapId: string;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** Name of the source attribute for the mapping. */
-		SourceAttributeName: DevKit.WebApi.StringValue;
+		SourceAttributeName: string;
 		/** For internal use only. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SupportingSolutionId: string;
 		/** Name of the target attribute for the mapping. */
-		TargetAttributeName: DevKit.WebApi.StringValue;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		TargetAttributeName: string;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -97,4 +99,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

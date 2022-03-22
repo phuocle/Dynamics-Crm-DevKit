@@ -530,8 +530,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -539,264 +541,264 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the account with which the quote is associated. */
-		AccountId: DevKit.WebApi.LookupValueReadonly;
+		readonly AccountId: string;
 		/** Unique identifier of the billing address. */
-		BillTo_AddressId: DevKit.WebApi.GuidValue;
+		BillTo_AddressId: string;
 		/** Type the city for the customer's billing address. */
-		BillTo_City: DevKit.WebApi.StringValue;
+		BillTo_City: string;
 		/** Shows the complete Bill To address. */
-		BillTo_Composite: DevKit.WebApi.StringValueReadonly;
+		readonly BillTo_Composite: string;
 		/** Type the primary contact name at the customer's billing address. */
-		BillTo_ContactName: DevKit.WebApi.StringValue;
+		BillTo_ContactName: string;
 		/** Type the country or region for the customer's billing address. */
-		BillTo_Country: DevKit.WebApi.StringValue;
+		BillTo_Country: string;
 		/** Type the fax number for the customer's billing address. */
-		BillTo_Fax: DevKit.WebApi.StringValue;
+		BillTo_Fax: string;
 		/** Type the first line of the customer's billing address. */
-		BillTo_Line1: DevKit.WebApi.StringValue;
+		BillTo_Line1: string;
 		/** Type the second line of the customer's billing address. */
-		BillTo_Line2: DevKit.WebApi.StringValue;
+		BillTo_Line2: string;
 		/** Type the third line of the billing address. */
-		BillTo_Line3: DevKit.WebApi.StringValue;
+		BillTo_Line3: string;
 		/** Type a name for the customer's billing address, such as "Headquarters" or "Field office", to identify the address. */
-		BillTo_Name: DevKit.WebApi.StringValue;
+		BillTo_Name: string;
 		/** Type the ZIP Code or postal code for the billing address. */
-		BillTo_PostalCode: DevKit.WebApi.StringValue;
+		BillTo_PostalCode: string;
 		/** Type the state or province for the billing address. */
-		BillTo_StateOrProvince: DevKit.WebApi.StringValue;
+		BillTo_StateOrProvince: string;
 		/** Type the phone number for the customer's billing address. */
-		BillTo_Telephone: DevKit.WebApi.StringValue;
+		BillTo_Telephone: string;
 		/** Shows the campaign that the order was created from. */
-		CampaignId: DevKit.WebApi.LookupValue;
+		CampaignId: string;
 		/** Enter the date when the quote was closed to indicate the expiration, revision, or cancellation date. */
-		ClosedOn_DateOnly: DevKit.WebApi.DateOnlyValue;
+		ClosedOn_DateOnly: Date;
 		/** Unique identifier of the contact associated with the quote. */
-		ContactId: DevKit.WebApi.LookupValueReadonly;
+		readonly ContactId: string;
 		/** Shows who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
-		customerid_account: DevKit.WebApi.LookupValue;
+		customerid_account: string;
 		/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
-		customerid_contact: DevKit.WebApi.LookupValue;
+		customerid_contact: string;
 		/** Type additional information to describe the quote, such as the products or services offered or details about the customer's product preferences. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Type the discount amount for the quote if the customer is eligible for special savings. */
-		DiscountAmount: DevKit.WebApi.MoneyValue;
+		DiscountAmount: number;
 		/** Value of the Quote Discount Amount in base currency. */
-		DiscountAmount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly DiscountAmount_Base: number;
 		/** Type the discount rate that should be applied to the Detail Amount field to include additional savings for the customer in the quote. */
-		DiscountPercentage: DevKit.WebApi.DecimalValue;
+		DiscountPercentage: number;
 		/** Enter the date when the quote pricing is effective or was first communicated to the customer. */
-		EffectiveFrom_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		EffectiveFrom_UtcDateOnly: Date;
 		/** Enter the expiration date or last day the quote pricing is effective for the customer. */
-		EffectiveTo_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		EffectiveTo_UtcDateOnly: Date;
 		/** The primary email address for the entity. */
-		EmailAddress: DevKit.WebApi.StringValue;
+		EmailAddress: string;
 		/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Enter the date a decision or order is due from the customer to indicate the expiration date of the quote. */
-		ExpiresOn_DateOnly: DevKit.WebApi.DateOnlyValue;
+		ExpiresOn_DateOnly: Date;
 		/** Type the cost of freight or shipping for the products included in the quote for use in calculating the Total Amount field. */
-		FreightAmount: DevKit.WebApi.MoneyValue;
+		FreightAmount: number;
 		/** Value of the Freight Amount in base currency. */
-		FreightAmount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly FreightAmount_Base: number;
 		/** Select the freight terms to make sure shipping charges are processed correctly. */
-		FreightTermsCode: DevKit.WebApi.OptionSetValue;
+		FreightTermsCode: OptionSet.Quote.FreightTermsCode;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Contains the date time stamp of the last on hold time. */
-		LastOnHoldTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		LastOnHoldTime_UtcDateAndTime: Date;
 		/** Shows who last updated the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Shows who last updated the record on behalf of another user. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Customer Account associated with this Quote */
-		msdyn_Account: DevKit.WebApi.LookupValue;
+		msdyn_Account: string;
 		/** Account manager responsible for the quote. */
-		msdyn_AccountManagerId: DevKit.WebApi.LookupValue;
+		msdyn_AccountManagerId: string;
 		/** Shows the estimated gross margin after accounting for non-chargeable components. */
-		msdyn_AdjustedGrossMargin: DevKit.WebApi.DecimalValueReadonly;
+		readonly msdyn_AdjustedGrossMargin: number;
 		/** Shows how the quote estimation of sales value and schedule compare to customer expectations on those parameters. Possible values are 1: Within Customer expectations, 2: Not Within Customer expectations, and 0: Customer expectations Not Available. */
-		msdyn_Competitive: DevKit.WebApi.OptionSetValueReadonly;
+		readonly msdyn_Competitive: OptionSet.Quote.msdyn_Competitive;
 		/** The organizational unit in charge of the contract. */
-		msdyn_ContractOrganizationalUnitId: DevKit.WebApi.LookupValue;
+		msdyn_ContractOrganizationalUnitId: string;
 		/** Shows the total customer budget for the quote, computed from all the quote lines. */
-		msdyn_CustomerBudgetRollUp: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_CustomerBudgetRollUp: number;
 		/** Shows the value of the customer budget in the base currency. */
-		msdyn_customerbudgetrollup_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_customerbudgetrollup_Base: number;
 		/** Last Updated time of rollup field Customer Budget. */
-		msdyn_CustomerBudgetRollUp_Date_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly msdyn_CustomerBudgetRollUp_Date_UtcDateAndTime: Date;
 		/** State of rollup field Customer Budget. */
-		msdyn_CustomerBudgetRollUp_State: DevKit.WebApi.IntegerValueReadonly;
+		readonly msdyn_CustomerBudgetRollUp_State: number;
 		/** Shows how the estimated sales value on the quote compares to customer budgets. Possible values are 1: Within Customer Budget, 2: Exceeds Customer Budget, 0: Budget Estimate Not Available */
-		msdyn_EstimatedBudget: DevKit.WebApi.OptionSetValueReadonly;
+		readonly msdyn_EstimatedBudget: OptionSet.Quote.msdyn_EstimatedBudget;
 		/** Estimated completion date, computed from the details of each quote line. */
-		msdyn_EstimatedCompletionRollUp_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly msdyn_EstimatedCompletionRollUp_UtcDateOnly: Date;
 		/** Last Updated time of rollup field Estimated Completion. */
-		msdyn_EstimatedCompletionRollUp_Date_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly msdyn_EstimatedCompletionRollUp_Date_UtcDateAndTime: Date;
 		/** State of rollup field Estimated Completion. */
-		msdyn_EstimatedCompletionRollUp_State: DevKit.WebApi.IntegerValueReadonly;
+		readonly msdyn_EstimatedCompletionRollUp_State: number;
 		/** The estimated cost of this quote */
-		msdyn_EstimatedCost: DevKit.WebApi.MoneyValue;
+		msdyn_EstimatedCost: number;
 		/** Value of the Estimated Cost in base currency. */
-		msdyn_estimatedcost_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_estimatedcost_Base: number;
 		/** Estimated Margin of this quote */
-		msdyn_EstimatedQuoteMargin: DevKit.WebApi.DecimalValueReadonly;
+		readonly msdyn_EstimatedQuoteMargin: number;
 		/** Shows how the estimated schedule on the quote compares to customer expectations. Possible values are 1: Estimated To Finish Early, 2: Estimated To Finish Late, 3: Estimated To Finish On Schedule, and 0: Schedule Not Available. */
-		msdyn_EstimatedSchedule: DevKit.WebApi.OptionSetValueReadonly;
+		readonly msdyn_EstimatedSchedule: OptionSet.Quote.msdyn_EstimatedSchedule;
 		/** Shows how the quote estimation compares to project estimation. Possible values are 0: Feasibility Not Available, 1: Feasible, and 2: Not Feasible. */
-		msdyn_feasible: DevKit.WebApi.OptionSetValue;
+		msdyn_feasible: OptionSet.Quote.msdyn_feasible;
 		/** Shows the estimated gross margin without accounting for non-chargeable components. */
-		msdyn_GrossMargin: DevKit.WebApi.DecimalValueReadonly;
+		readonly msdyn_GrossMargin: number;
 		/** The totals of all assigned Invoice Setups */
-		msdyn_InvoiceSetupTotals: DevKit.WebApi.MoneyValue;
+		msdyn_InvoiceSetupTotals: number;
 		/** Value of the Invoice Setup Totals in base currency. */
-		msdyn_invoicesetuptotals_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_invoicesetuptotals_Base: number;
 		/** Internal use only. */
-		msdyn_OrderType: DevKit.WebApi.OptionSetValue;
+		msdyn_OrderType: OptionSet.Quote.msdyn_OrderType;
 		/** Shows the estimated profitability of the quote. Possible values are Profitable, Not Profitable, and Profitability not available. */
-		msdyn_Profitability: DevKit.WebApi.OptionSetValueReadonly;
+		readonly msdyn_Profitability: OptionSet.Quote.msdyn_Profitability;
 		/** The latest end date of all associated quote lines */
-		msdyn_QuoteLineEndDate_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		msdyn_QuoteLineEndDate_UtcDateOnly: Date;
 		/** The earliest Start Date of all Quote Lines that are associated to this quote */
-		msdyn_QuoteLineStartDate_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
-		msdyn_TotalAmount: DevKit.WebApi.MoneyValueReadonly;
+		msdyn_QuoteLineStartDate_UtcDateOnly: Date;
+		readonly msdyn_TotalAmount: number;
 		/** Value of the TotalAmount in base currency. */
-		msdyn_totalamount_Base: DevKit.WebApi.MoneyValueReadonly;
-		msdyn_TotalChargeableCostRollup: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_totalamount_Base: number;
+		readonly msdyn_TotalChargeableCostRollup: number;
 		/** Value of the Total Chargeable Cost in base currency. */
-		msdyn_totalchargeablecostrollup_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_totalchargeablecostrollup_Base: number;
 		/** Last Updated time of rollup field Total Chargeable Cost. */
-		msdyn_TotalChargeableCostRollup_Date_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly msdyn_TotalChargeableCostRollup_Date_UtcDateAndTime: Date;
 		/** State of rollup field Total Chargeable Cost. */
-		msdyn_TotalChargeableCostRollup_State: DevKit.WebApi.IntegerValueReadonly;
-		msdyn_TotalNonchargeableCostRollup: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_TotalChargeableCostRollup_State: number;
+		readonly msdyn_TotalNonchargeableCostRollup: number;
 		/** Value of the Total Non-chargeable Cost in base currency. */
-		msdyn_totalnonchargeablecostrollup_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_totalnonchargeablecostrollup_Base: number;
 		/** Last Updated time of rollup field Total Non-chargeable Cost. */
-		msdyn_TotalNonchargeableCostRollup_Date_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly msdyn_TotalNonchargeableCostRollup_Date_UtcDateAndTime: Date;
 		/** State of rollup field Total Non-chargeable Cost. */
-		msdyn_TotalNonchargeableCostRollup_State: DevKit.WebApi.IntegerValueReadonly;
+		readonly msdyn_TotalNonchargeableCostRollup_State: number;
 		/** Type a descriptive name for the quote. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Shows the duration in minutes for which the quote was on hold. */
-		OnHoldTime: DevKit.WebApi.IntegerValueReadonly;
+		readonly OnHoldTime: number;
 		/** Choose the opportunity that the quote is related to for reporting and analytics. */
-		OpportunityId: DevKit.WebApi.LookupValue;
+		OpportunityId: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Select the payment terms to indicate when the customer needs to pay the total amount. */
-		PaymentTermsCode: DevKit.WebApi.OptionSetValue;
+		PaymentTermsCode: OptionSet.Quote.PaymentTermsCode;
 		/** Choose the price list associated with this record to make sure the products associated with the campaign are offered at the correct prices. */
-		PriceLevelId: DevKit.WebApi.LookupValue;
+		PriceLevelId: string;
 		/** Pricing error for the quote. */
-		PricingErrorCode: DevKit.WebApi.OptionSetValue;
+		PricingErrorCode: OptionSet.Quote.PricingErrorCode;
 		/** Contains the id of the process associated with the entity. */
-		ProcessId: DevKit.WebApi.GuidValue;
+		ProcessId: string;
 		/** Unique identifier of the quote. */
-		QuoteId: DevKit.WebApi.GuidValue;
+		QuoteId: string;
 		/** Shows the quote number for customer reference and searching capabilities. The number cannot be modified. */
-		QuoteNumber: DevKit.WebApi.StringValue;
+		QuoteNumber: string;
 		/** Enter the delivery date requested by the customer for all products in the quote. */
-		RequestDeliveryBy_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		RequestDeliveryBy_UtcDateOnly: Date;
 		/** Shows the version number of the quote for revision history tracking. */
-		RevisionNumber: DevKit.WebApi.IntegerValueReadonly;
+		readonly RevisionNumber: number;
 		/** Select a shipping method for deliveries sent to this address. */
-		ShippingMethodCode: DevKit.WebApi.OptionSetValue;
+		ShippingMethodCode: OptionSet.Quote.ShippingMethodCode;
 		/** Unique identifier of the shipping address. */
-		ShipTo_AddressId: DevKit.WebApi.GuidValue;
+		ShipTo_AddressId: string;
 		/** Type the city for the customer's shipping address. */
-		ShipTo_City: DevKit.WebApi.StringValue;
+		ShipTo_City: string;
 		/** Shows the complete Ship To address. */
-		ShipTo_Composite: DevKit.WebApi.StringValueReadonly;
+		readonly ShipTo_Composite: string;
 		/** Type the primary contact name at the customer's shipping address. */
-		ShipTo_ContactName: DevKit.WebApi.StringValue;
+		ShipTo_ContactName: string;
 		/** Type the country or region for the customer's shipping address. */
-		ShipTo_Country: DevKit.WebApi.StringValue;
+		ShipTo_Country: string;
 		/** Type the fax number for the customer's shipping address. */
-		ShipTo_Fax: DevKit.WebApi.StringValue;
+		ShipTo_Fax: string;
 		/** Select the freight terms to make sure shipping orders are processed correctly. */
-		ShipTo_FreightTermsCode: DevKit.WebApi.OptionSetValue;
+		ShipTo_FreightTermsCode: OptionSet.Quote.ShipTo_FreightTermsCode;
 		/** Type the first line of the customer's shipping address. */
-		ShipTo_Line1: DevKit.WebApi.StringValue;
+		ShipTo_Line1: string;
 		/** Type the second line of the customer's shipping address. */
-		ShipTo_Line2: DevKit.WebApi.StringValue;
+		ShipTo_Line2: string;
 		/** Type the third line of the shipping address. */
-		ShipTo_Line3: DevKit.WebApi.StringValue;
+		ShipTo_Line3: string;
 		/** Type a name for the customer's shipping address, such as "Headquarters" or "Field office",  to identify the address. */
-		ShipTo_Name: DevKit.WebApi.StringValue;
+		ShipTo_Name: string;
 		/** Type the ZIP Code or postal code for the shipping address. */
-		ShipTo_PostalCode: DevKit.WebApi.StringValue;
+		ShipTo_PostalCode: string;
 		/** Type the state or province for the shipping address. */
-		ShipTo_StateOrProvince: DevKit.WebApi.StringValue;
+		ShipTo_StateOrProvince: string;
 		/** Type the phone number for the customer's shipping address. */
-		ShipTo_Telephone: DevKit.WebApi.StringValue;
+		ShipTo_Telephone: string;
 		/** Skip Price Calculation (For Internal use) */
-		SkipPriceCalculation: DevKit.WebApi.OptionSetValue;
+		SkipPriceCalculation: OptionSet.Quote.SkipPriceCalculation;
 		/** Choose the service level agreement (SLA) that you want to apply to the quote record. */
-		SLAId: DevKit.WebApi.LookupValue;
+		SLAId: string;
 		/** Last SLA that was applied to this quote. This field is for internal use only. */
-		SLAInvokedId: DevKit.WebApi.LookupValueReadonly;
+		readonly SLAInvokedId: string;
 		/** Contains the id of the stage where the entity is located. */
-		StageId: DevKit.WebApi.GuidValue;
+		StageId: string;
 		/** Shows whether the quote is draft, active, won, or closed. Only draft quotes can be edited. */
-		StateCode: DevKit.WebApi.OptionSetValue;
+		StateCode: OptionSet.Quote.StateCode;
 		/** Select the quote's status. */
-		StatusCode: DevKit.WebApi.OptionSetValue;
+		StatusCode: OptionSet.Quote.StatusCode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Shows the total amount due, calculated as the sum of the products, discounts, freight, and taxes for the quote. */
-		TotalAmount: DevKit.WebApi.MoneyValue;
+		TotalAmount: number;
 		/** Value of the Total Amount in base currency. */
-		TotalAmount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly TotalAmount_Base: number;
 		/** Shows the total product amount for the quote, minus any discounts. This value is added to freight and tax amounts in the calculation for the total amount due for the quote. */
-		TotalAmountLessFreight: DevKit.WebApi.MoneyValue;
+		TotalAmountLessFreight: number;
 		/** Value of the Total Pre-Freight Amount in base currency. */
-		TotalAmountLessFreight_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly TotalAmountLessFreight_Base: number;
 		/** Shows the total discount amount, based on the discount price and rate entered on the quote. */
-		TotalDiscountAmount: DevKit.WebApi.MoneyValue;
+		TotalDiscountAmount: number;
 		/** Value of the Total Discount Amount in base currency. */
-		TotalDiscountAmount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly TotalDiscountAmount_Base: number;
 		/** Shows the sum of all existing and write-in products included on the quote, based on the specified price list and quantities. */
-		TotalLineItemAmount: DevKit.WebApi.MoneyValue;
+		TotalLineItemAmount: number;
 		/** Value of the Total Detail Amount in base currency. */
-		TotalLineItemAmount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly TotalLineItemAmount_Base: number;
 		/** Shows the total of the Manual Discount amounts specified on all products included in the quote. This value is reflected in the Detail Amount field on the quote and is added to any discount amount or rate specified on the quote */
-		TotalLineItemDiscountAmount: DevKit.WebApi.MoneyValue;
+		TotalLineItemDiscountAmount: number;
 		/** Value of the Total Line Item Discount Amount in base currency. */
-		TotalLineItemDiscountAmount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly TotalLineItemDiscountAmount_Base: number;
 		/** Shows the total of the Tax amounts specified on all products included in the quote, included in the Total Amount due calculation for the quote. */
-		TotalTax: DevKit.WebApi.MoneyValue;
+		TotalTax: number;
 		/** Value of the Total Tax in base currency. */
-		TotalTax_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly TotalTax_Base: number;
 		/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** A comma separated list of string values representing the unique identifiers of stages in a Business Process Flow Instance in the order that they occur. */
-		TraversedPath: DevKit.WebApi.StringValue;
+		TraversedPath: string;
 		/** For internal use only. */
-		UniqueDscId: DevKit.WebApi.GuidValueReadonly;
+		readonly UniqueDscId: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 		/** Select whether the products included in the quote should be shipped to the specified address or held until the customer calls with further pick up or delivery instructions. */
-		WillCall: DevKit.WebApi.BooleanValue;
+		WillCall: boolean;
 	}
 }
 declare namespace OptionSet {
@@ -1017,4 +1019,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

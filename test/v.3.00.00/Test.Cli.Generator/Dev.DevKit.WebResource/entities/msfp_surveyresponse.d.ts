@@ -114,8 +114,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -123,354 +125,360 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Additional information provided by the external application as JSON. For internal use only. */
-		ActivityAdditionalParams: DevKit.WebApi.StringValue;
+		ActivityAdditionalParams: string;
 		/** Unique identifier of the activity. */
-		ActivityId: DevKit.WebApi.GuidValue;
+		ActivityId: string;
 		/** Actual duration of the activity in minutes. */
-		ActualDurationMinutes: DevKit.WebApi.IntegerValue;
+		ActualDurationMinutes: number;
 		/** Actual end time of the activity. */
-		ActualEnd_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		ActualEnd_UtcDateAndTime: Date;
 		/** Actual start time of the activity. */
-		ActualStart_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		ActualStart_UtcDateAndTime: Date;
 		/** Shows how contact about the social activity originated, such as from Twitter or Facebook. This field is read-only. */
-		Community: DevKit.WebApi.OptionSetValue;
+		Community: OptionSet.msfp_surveyresponse.Community;
 		/** Unique identifier of the user who created the activity. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the activity was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the activitypointer. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Date and time when the delivery of the activity was last attempted. */
-		DeliveryLastAttemptedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly DeliveryLastAttemptedOn_UtcDateAndTime: Date;
 		/** Priority of delivery of the activity to the email server. */
-		DeliveryPriorityCode: DevKit.WebApi.OptionSetValue;
+		DeliveryPriorityCode: OptionSet.msfp_surveyresponse.DeliveryPriorityCode;
 		/** Description of the activity. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** The message id of activity which is returned from Exchange Server. */
-		ExchangeItemId: DevKit.WebApi.StringValue;
+		ExchangeItemId: string;
 		/** Exchange rate for the currency associated with the activitypointer with respect to the base currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Shows the web link of Activity of type email. */
-		ExchangeWebLink: DevKit.WebApi.StringValue;
+		ExchangeWebLink: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Type of instance of a recurring series. */
-		InstanceTypeCode: DevKit.WebApi.OptionSetValueReadonly;
+		readonly InstanceTypeCode: OptionSet.msfp_surveyresponse.InstanceTypeCode;
 		/** Information regarding whether the activity was billed as part of resolving a case. */
-		IsBilled: DevKit.WebApi.BooleanValue;
+		IsBilled: boolean;
 		/** For internal use only. */
-		IsMapiPrivate: DevKit.WebApi.BooleanValue;
+		IsMapiPrivate: boolean;
 		/** Information regarding whether the activity is a regular activity type or event type. */
-		IsRegularActivity: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsRegularActivity: boolean;
 		/** Information regarding whether the activity was created from a workflow rule. */
-		IsWorkflowCreated: DevKit.WebApi.BooleanValue;
+		IsWorkflowCreated: boolean;
 		/** Contains the date and time stamp of the last on hold time. */
-		LastOnHoldTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		LastOnHoldTime_UtcDateAndTime: Date;
 		/** Left the voice mail */
-		LeftVoiceMail: DevKit.WebApi.BooleanValue;
+		LeftVoiceMail: boolean;
 		/** Unique identifier of user who last modified the activity. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when activity was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the activitypointer. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Context data for the survey response. */
-		msfp_embedcontextparameters: DevKit.WebApi.StringValue;
+		msfp_embedcontextparameters: string;
 		/** Specifies if individual question response records are generated. */
-		msfp_isquestionresponsegenerated: DevKit.WebApi.BooleanValue;
+		msfp_isquestionresponsegenerated: boolean;
 		/** (Deprecated) Specifies if individual question response records are generated. */
-		msfp_isquestionresponsesgenerated: DevKit.WebApi.BooleanValue;
+		msfp_isquestionresponsesgenerated: boolean;
 		/** Shows the language of the respondent. */
-		msfp_language: DevKit.WebApi.StringValue;
+		msfp_language: string;
 		/** Shows the locale of the respondent. */
-		msfp_locale: DevKit.WebApi.StringValue;
+		msfp_locale: string;
 		/** The survey response name. */
-		msfp_name: DevKit.WebApi.StringValue;
+		msfp_name: string;
 		/** Net Promoter Score of the response. */
-		msfp_npsscore: DevKit.WebApi.IntegerValue;
+		msfp_npsscore: number;
 		/** Other survey response properties in JSON format. */
-		msfp_otherproperties: DevKit.WebApi.StringValue;
-		msfp_parent_survey_response_new: DevKit.WebApi.LookupValue;
+		msfp_otherproperties: string;
+		msfp_parent_survey_response_new: string;
+		/** Parent survey response for the chained survey */
+		msfp_parentsurveyresponse: string;
 		/** List of question responses in JSON format. */
-		msfp_questionresponseslist: DevKit.WebApi.StringValue;
+		msfp_questionresponseslist: string;
 		/** Name of the respondent. */
-		msfp_respondent: DevKit.WebApi.StringValue;
+		msfp_respondent: string;
 		/** Email address of the respondent. */
-		msfp_respondentemailaddress: DevKit.WebApi.StringValue;
-		msfp_responsetype: DevKit.WebApi.StringValue;
-		msfp_satisfactionmetriccalculated: DevKit.WebApi.BooleanValue;
+		msfp_respondentemailaddress: string;
+		msfp_responsetype: string;
+		msfp_satisfactionmetriccalculated: boolean;
 		/** Satisfaction metric values for the survey response. */
-		msfp_satisfactionmetricvalue: DevKit.WebApi.StringValue;
+		msfp_satisfactionmetricvalue: string;
 		/** Sentiment of the response. */
-		msfp_sentiment: DevKit.WebApi.OptionSetValue;
+		msfp_sentiment: OptionSet.msfp_surveyresponse.msfp_sentiment;
 		/** Unique identifier for the response in the source application. */
-		msfp_sourceresponseidentifier: DevKit.WebApi.StringValue;
+		msfp_sourceresponseidentifier: string;
 		/** Unique identifier for the survey in the source application. */
-		msfp_sourcesurveyidentifier: DevKit.WebApi.StringValue;
+		msfp_sourcesurveyidentifier: string;
 		/** Stores the date when a response was submitted. */
-		msfp_Startdate_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		msfp_Startdate_UtcDateOnly: Date;
 		/** Stores the date when a response was submitted. */
-		msfp_submitdate_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		msfp_submitdate_UtcDateOnly: Date;
 		/** Specifies the survey associated with the survey response. */
-		msfp_surveyid: DevKit.WebApi.LookupValue;
+		msfp_surveyid: string;
 		/** Specifies survey invitation associated with the survey response */
-		msfp_surveyinviteid: DevKit.WebApi.LookupValue;
+		msfp_surveyinviteid: string;
 		/** Response to the survey. */
-		msfp_surveyresponse1: DevKit.WebApi.StringValue;
+		msfp_surveyresponse1: string;
 		/** Link to the survey response in Customer Voice. */
-		msfp_surveyresponseurl: DevKit.WebApi.StringValue;
+		msfp_surveyresponseurl: string;
 		/** Shows how long, in minutes, that the record was on hold. */
-		OnHoldTime: DevKit.WebApi.IntegerValueReadonly;
+		readonly OnHoldTime: number;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier of the business unit that owns the activity. */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier of the team that owns the activity. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier of the user that owns the activity. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** For internal use only. */
-		PostponeActivityProcessingUntil_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly PostponeActivityProcessingUntil_UtcDateAndTime: Date;
 		/** Priority of the activity. */
-		PriorityCode: DevKit.WebApi.OptionSetValue;
+		PriorityCode: OptionSet.msfp_surveyresponse.PriorityCode;
 		/** Unique identifier of the Process. */
-		ProcessId: DevKit.WebApi.GuidValue;
+		ProcessId: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_account_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_account_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_bookableresourcebooking_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_bookableresourcebooking_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_bookableresourcebookingheader_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_bookableresourcebookingheader_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_bulkoperation_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_bulkoperation_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_campaign_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_campaign_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_campaignactivity_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_campaignactivity_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_contact_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_contact_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_contract_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_contract_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_entitlement_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_entitlement_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_entitlementtemplate_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_entitlementtemplate_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_incident_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_incident_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_new_interactionforemail_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_new_interactionforemail_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_invoice_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_invoice_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_knowledgearticle_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_knowledgearticle_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_knowledgebaserecord_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_knowledgebaserecord_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_lead_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_lead_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_agreement_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreement_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_agreementbookingdate_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingdate_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_agreementbookingincident_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingincident_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_agreementbookingproduct_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingproduct_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_agreementbookingservice_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingservice_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_agreementbookingservicetask_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingservicetask_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_agreementbookingsetup_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingsetup_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_agreementinvoicedate_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementinvoicedate_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_agreementinvoiceproduct_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementinvoiceproduct_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_agreementinvoicesetup_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementinvoicesetup_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_bookingalertstatus_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bookingalertstatus_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_bookingrule_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bookingrule_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_bookingtimestamp_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bookingtimestamp_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_customerasset_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_customerasset_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_fieldservicesetting_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_fieldservicesetting_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_incidenttypecharacteristic_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_incidenttypecharacteristic_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_incidenttypeproduct_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_incidenttypeproduct_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_incidenttypeservice_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_incidenttypeservice_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_inventoryadjustment_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_inventoryadjustment_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_inventoryadjustmentproduct_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_inventoryadjustmentproduct_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_inventoryjournal_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_inventoryjournal_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_inventorytransfer_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_inventorytransfer_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_payment_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_payment_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_paymentdetail_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_paymentdetail_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_paymentmethod_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_paymentmethod_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_paymentterm_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_paymentterm_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_playbookinstance_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_playbookinstance_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_postalbum_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_postalbum_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_postalcode_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_postalcode_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_processnotes_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_processnotes_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_productinventory_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_productinventory_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_projectteam_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_projectteam_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_purchaseorder_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseorder_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_purchaseorderbill_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseorderbill_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_purchaseorderproduct_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseorderproduct_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_purchaseorderreceipt_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseorderreceipt_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_purchaseorderreceiptproduct_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseorderreceiptproduct_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_purchaseordersubstatus_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseordersubstatus_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_quotebookingincident_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotebookingincident_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_quotebookingproduct_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotebookingproduct_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_quotebookingservice_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotebookingservice_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_quotebookingservicetask_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotebookingservicetask_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_resourceterritory_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_resourceterritory_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_rma_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rma_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_rmaproduct_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rmaproduct_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_rmareceipt_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rmareceipt_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_rmareceiptproduct_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rmareceiptproduct_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_rmasubstatus_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rmasubstatus_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_rtv_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rtv_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_rtvproduct_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rtvproduct_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_rtvsubstatus_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rtvsubstatus_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_shipvia_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_salessuggestion_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_systemuserschedulersetting_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_shipvia_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_timegroup_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_systemuserschedulersetting_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_timegroupdetail_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_timegroup_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_timeoffrequest_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_timegroupdetail_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_warehouse_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_timeoffrequest_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_workorder_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_warehouse_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_workordercharacteristic_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorder_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_workorderincident_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workordercharacteristic_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_workorderproduct_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderincident_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_workorderresourcerestriction_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderproduct_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_workorderservice_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderresourcerestriction_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_msdyn_workorderservicetask_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderservice_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_opportunity_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderservicetask_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_quote_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_opportunity_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_salesorder_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_quote_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_site_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_salesorder_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_uii_action_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_site_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_uii_hostedapplication_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_uii_action_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_uii_nonhostedapplication_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_uii_hostedapplication_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_uii_option_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_uii_nonhostedapplication_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_uii_savedsession_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_uii_option_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_uii_workflow_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_uii_savedsession_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_uii_workflowstep_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_uii_workflow_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_uii_workflow_workflowstep_mapping_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_uii_workflowstep_msfp_surveyresponse: string;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_uii_workflow_workflowstep_mapping_msfp_surveyresponse: string;
 		/** Scheduled duration of the activity, specified in minutes. */
-		ScheduledDurationMinutes: DevKit.WebApi.IntegerValue;
+		ScheduledDurationMinutes: number;
 		/** Scheduled end time of the activity. */
-		ScheduledEnd_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		ScheduledEnd_UtcDateAndTime: Date;
 		/** Scheduled start time of the activity. */
-		ScheduledStart_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		ScheduledStart_UtcDateAndTime: Date;
 		/** Unique identifier of the mailbox associated with the sender of the email message. */
-		SenderMailboxId: DevKit.WebApi.LookupValueReadonly;
+		readonly SenderMailboxId: string;
 		/** Date and time when the activity was sent. */
-		SentOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly SentOn_UtcDateAndTime: Date;
 		/** Uniqueidentifier specifying the id of recurring series of an instance. */
-		SeriesId: DevKit.WebApi.GuidValueReadonly;
+		readonly SeriesId: string;
 		/** Unique identifier of an associated service. */
-		ServiceId: DevKit.WebApi.LookupValue;
+		ServiceId: string;
 		/** Choose the service level agreement (SLA) that you want to apply to the case record. */
-		SLAId: DevKit.WebApi.LookupValue;
+		SLAId: string;
 		/** Last SLA that was applied to this case. This field is for internal use only. */
-		SLAInvokedId: DevKit.WebApi.LookupValueReadonly;
+		readonly SLAInvokedId: string;
 		/** Shows the date and time by which the activities are sorted. */
-		SortDate_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		SortDate_UtcDateAndTime: Date;
 		/** Unique identifier of the Stage. */
-		StageId: DevKit.WebApi.GuidValue;
+		StageId: string;
 		/** Status of the activity. */
-		StateCode: DevKit.WebApi.OptionSetValue;
+		StateCode: OptionSet.msfp_surveyresponse.StateCode;
 		/** Reason for the status of the activity. */
-		StatusCode: DevKit.WebApi.OptionSetValue;
+		StatusCode: OptionSet.msfp_surveyresponse.StatusCode;
 		/** Subject associated with the activity. */
-		Subject: DevKit.WebApi.StringValue;
+		Subject: string;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Unique identifier of the currency associated with the activitypointer. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** For internal use only. */
-		TraversedPath: DevKit.WebApi.StringValue;
+		TraversedPath: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version number of the activity. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 		/** The array of object that can cast object to ActivityPartyApi class */
-		ActivityParties: Array<any>;
+		ActivityParties: Array<unknown>;
 	}
 }
 declare namespace OptionSet {
 	namespace msfp_surveyresponse {
 		enum ActivityTypeCode {
+			/** 10086 */
+			Activity_record_for_the_Teams_chat,
 			/** 4201 */
 			Appointment,
-			/** 10400 */
+			/** 10404 */
 			Booking_Alert,
 			/** 4402 */
 			Campaign_Activity,
@@ -478,13 +486,13 @@ declare namespace OptionSet {
 			Campaign_Response,
 			/** 4206 */
 			Case_Resolution,
-			/** 10702 */
+			/** 10707 */
 			Conversation,
-			/** 10294 */
+			/** 10313 */
 			Customer_Voice_alert,
-			/** 10304 */
+			/** 10323 */
 			Customer_Voice_survey_invite,
-			/** 10306 */
+			/** 10325 */
 			Customer_Voice_survey_response,
 			/** 4202 */
 			Email,
@@ -496,11 +504,11 @@ declare namespace OptionSet {
 			Opportunity_Close,
 			/** 4209 */
 			Order_Close,
-			/** 10813 */
+			/** 10817 */
 			Outbound_message,
 			/** 4210 */
 			Phone_Call,
-			/** 10430 */
+			/** 10434 */
 			Project_Service_Approval,
 			/** 4406 */
 			Quick_Campaign,
@@ -510,7 +518,7 @@ declare namespace OptionSet {
 			Recurring_Appointment,
 			/** 4214 */
 			Service_Activity,
-			/** 10717 */
+			/** 10721 */
 			Session,
 			/** 4212 */
 			Task
@@ -623,4 +631,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

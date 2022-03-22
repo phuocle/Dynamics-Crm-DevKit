@@ -47,98 +47,116 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
 		EntityCollectionName: string;
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
+		/** Capability of a connector, i.e. "gateway" means the connector can connect to on-prem gateway */
+		Capabilities: Array<OptionSet.connector.Capabilities>;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.connector.ComponentState;
 		/** Connection parameters of the Connector */
-		ConnectionParameters: DevKit.WebApi.StringValue;
+		ConnectionParameters: string;
 		/** Unique identifier for entity instances */
-		connectorId: DevKit.WebApi.GuidValue;
+		connectorId: string;
 		/** For internal use only. */
-		ConnectorIdUnique: DevKit.WebApi.GuidValueReadonly;
+		readonly ConnectorIdUnique: string;
 		/** Internal Connector Id */
-		ConnectorInternalId: DevKit.WebApi.StringValue;
+		ConnectorInternalId: string;
 		/** Connector Type */
-		ConnectorType: DevKit.WebApi.OptionSetValue;
+		ConnectorType: OptionSet.connector.ConnectorType;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Description of the Connector */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Display Name of the Connector */
-		DisplayName: DevKit.WebApi.StringValue;
+		DisplayName: string;
 		/** Icon for the Connector */
-		EntityImage: DevKit.WebApi.StringValue;
-		EntityImage_Timestamp: DevKit.WebApi.BigIntValueReadonly;
-		EntityImage_URL: DevKit.WebApi.StringValueReadonly;
-		IconBlob: DevKit.WebApi.StringValue;
-		IconBlob_Timestamp: DevKit.WebApi.BigIntValueReadonly;
-		IconBlob_URL: DevKit.WebApi.StringValueReadonly;
-		IconBlobId: DevKit.WebApi.GuidValueReadonly;
+		EntityImage: string;
+		EntityImage_Timestamp: number;
+		EntityImage_URL: string;
+		IconBlob: string;
+		IconBlob_Timestamp: number;
+		IconBlob_URL: string;
+		readonly IconBlobId: string;
 		/** Connector Icon Branding Color */
-		IconBrandColor: DevKit.WebApi.StringValue;
+		IconBrandColor: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Version in which the form is introduced. */
-		IntroducedVersion: DevKit.WebApi.StringValue;
+		IntroducedVersion: string;
 		/** Tells whether the component can be customized. */
-		IsCustomizable: DevKit.WebApi.ManagedPropertyValue;
+		IsCustomizable: string;
 		/** Indicates whether the solution component is part of a managed solution. */
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsManaged: boolean;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Required logical name of the Connector */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** OpenApi Definition supported by Connector */
-		OpenApiDefinition: DevKit.WebApi.StringValue;
+		OpenApiDefinition: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** For internal use only. */
-		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly OverwriteTime_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Apim Policy Template Instances */
-		PolicyTemplateInstances: DevKit.WebApi.StringValue;
+		PolicyTemplateInstances: string;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** Status of the Connector */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.connector.statecode;
 		/** Reason for the status of the Connector */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.connector.statuscode;
 		/** For internal use only. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SupportingSolutionId: string;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
 	namespace connector {
+		enum Capabilities {
+			/** 118690005 */
+			actions,
+			/** 118690002 */
+			blob,
+			/** 118690004 */
+			cloud,
+			/** 118690000 */
+			composite,
+			/** 118690003 */
+			gateway,
+			/** 118690001 */
+			tabular
+		}
 		enum ComponentState {
 			/** 2 */
 			Deleted,
@@ -185,4 +203,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

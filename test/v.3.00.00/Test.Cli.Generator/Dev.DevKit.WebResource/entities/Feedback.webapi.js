@@ -4,20 +4,18 @@ var DevKit;
 (function (DevKit) {
 	'use strict';
 	DevKit.FeedbackApi = function (e) {
-		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
 			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-			var property = {};
 			var getFormattedValue = function () {
 				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-					return EMPTY_STRING;
+					return '';
 				}
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
 					if (entity[logicalName + l] === entityLogicalName) {
 						return entity[logicalName + f];
 					}
-					return EMPTY_STRING;
+					return '';
 				}
 				if (isMultiOptionSet) {
 					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -42,30 +40,29 @@ var DevKit;
 			var setValue = function (value) {
 				if (isMultiOptionSet) value = value.join(',');
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+					value = value.replace('{', '').replace('}', '');
 					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
 				} else {
 					upsertEntity[logicalName] = value;
 				}
 				entity[logicalName] = value;
 			};
-			Object.defineProperty(property, 'FormattedValue', {
+			Object.defineProperty(obj.FormattedValue, field, {
 				get: getFormattedValue
 			});
 			if (readOnly) {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue
 				});
 			}
 			else {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue,
 					set: setValue
 				});
 			}
-			return property;
 		}
-		var feedback = {
+		var _feedback = {
 			ClosedBy: { b: 'closedby', a: '_closedby_value', c: 'systemusers', d: 'systemuser', r: true },
 			ClosedOn_UtcDateAndTime: { a: 'closedon', r: true },
 			Comments: { a: 'comments' },
@@ -111,20 +108,23 @@ var DevKit;
 		};
 		if (e === undefined) e = {};
 		var u = {};
-		for (var field in feedback) {
-			var a = feedback[field].a;
-			var b = feedback[field].b;
-			var c = feedback[field].c;
-			var d = feedback[field].d;
-			var g = feedback[field].g;
-			var r = feedback[field].r;
-			feedback[field] = webApiField(e, a, b, c, d, r, u, g);
+		var feedback = {};
+		feedback.ODataEntity = e;
+		feedback.FormattedValue = {};
+		for (var field in _feedback) {
+			var a = _feedback[field].a;
+			var b = _feedback[field].b;
+			var c = _feedback[field].c;
+			var d = _feedback[field].d;
+			var g = _feedback[field].g;
+			var r = _feedback[field].r;
+			webApiField(feedback, field, e, a, b, c, d, r, u, g);
 		}
 		feedback.Entity = u;
 		feedback.EntityName = 'feedback';
 		feedback.EntityCollectionName = 'feedback';
 		feedback['@odata.etag'] = e['@odata.etag'];
-		feedback.getAliasedValue = function (alias, isMultiOptionSet) {
+		feedback.getAliasedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias] === undefined || e[alias] === null) {
 				return null;
 			}
@@ -133,7 +133,7 @@ var DevKit;
 			}
 			return e[alias];
 		}
-		feedback.getAliasedFormattedValue = function (alias, isMultiOptionSet) {
+		feedback.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
 				return EMPTY_STRING;
 			}

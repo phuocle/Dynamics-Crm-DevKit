@@ -125,8 +125,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -134,98 +136,98 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Select whether activity tracking should be enabled or not. */
-		msdyusd_ATEnabled: DevKit.WebApi.BooleanValue;
+		msdyusd_ATEnabled: boolean;
 		/** Select whether activity tracking for action calls should be enabled or not. */
-		msdyusd_ATforActionCalls: DevKit.WebApi.BooleanValue;
+		msdyusd_ATforActionCalls: boolean;
 		/** Select whether activity tracking for agent login should be enabled or not. */
-		msdyusd_ATforAgentLogin: DevKit.WebApi.BooleanValue;
+		msdyusd_ATforAgentLogin: boolean;
 		/** Select whether activity tracking for agent scripts should be enabled or not. */
-		msdyusd_ATforAgentScripts: DevKit.WebApi.BooleanValue;
+		msdyusd_ATforAgentScripts: boolean;
 		/** Select whether activity tracking for customer session should be enabled or not. */
-		msdyusd_ATforCustomerSession: DevKit.WebApi.BooleanValue;
+		msdyusd_ATforCustomerSession: boolean;
 		/** Select whether activity tracking for events should be enabled or not. */
-		msdyusd_ATforEvents: DevKit.WebApi.BooleanValue;
+		msdyusd_ATforEvents: boolean;
 		/** Select whether activity tracking for hosted controls should be enabled or not. */
-		msdyusd_ATforHostedControl: DevKit.WebApi.BooleanValue;
+		msdyusd_ATforHostedControl: boolean;
 		/** Select whether activity tracking for sub action calls should be enabled or not. */
-		msdyusd_ATforSubActionCalls: DevKit.WebApi.BooleanValue;
+		msdyusd_ATforSubActionCalls: boolean;
 		/** Select whether activity tracking for UII Action should be enabled or not. */
-		msdyusd_ATforUIIAction: DevKit.WebApi.BooleanValue;
+		msdyusd_ATforUIIAction: boolean;
 		/** Select whether activity tracking for window navigation rules should be enabled or not. */
-		msdyusd_ATforWindowsNavRules: DevKit.WebApi.BooleanValue;
+		msdyusd_ATforWindowsNavRules: boolean;
 		/** Unique identifier for entity instances */
-		msdyusd_auditanddiagnosticssettingId: DevKit.WebApi.GuidValue;
+		msdyusd_auditanddiagnosticssettingId: string;
 		/** Cache Size Audit & Diagnostics Setting. */
-		msdyusd_CacheSize: DevKit.WebApi.IntegerValue;
+		msdyusd_CacheSize: number;
 		/** Choose whether to generate a memory dump for unhandled exceptions. */
-		msdyusd_CrashDumpEnabled: DevKit.WebApi.BooleanValue;
+		msdyusd_CrashDumpEnabled: boolean;
 		/** Select whether diagnostic tracking should be enabled or not. */
-		msdyusd_DGTEnabled: DevKit.WebApi.BooleanValue;
+		msdyusd_DGTEnabled: boolean;
 		/** Select the verbosity level for diagnostics. */
-		msdyusd_DGTVerbosityLevel: DevKit.WebApi.OptionSetValue;
+		msdyusd_DGTVerbosityLevel: OptionSet.msdyusd_auditanddiagnosticssetting.msdyusd_DGTVerbosityLevel;
 		/** Select whether Enable Caching for UII Action should be enabled or not. */
-		msdyusd_EnableCaching: DevKit.WebApi.BooleanValue;
+		msdyusd_EnableCaching: boolean;
 		/** Choose whether to collect a diagnostics report when the application closes unexpectedly. */
-		msdyusd_ExitMonitoringEnabled: DevKit.WebApi.BooleanValue;
-		msdyusd_IsDefault: DevKit.WebApi.BooleanValue;
+		msdyusd_ExitMonitoringEnabled: boolean;
+		msdyusd_IsDefault: boolean;
 		/** Enter the folder name where diagnostics logs are stored. */
-		msdyusd_LogsDirectory: DevKit.WebApi.StringValue;
+		msdyusd_LogsDirectory: string;
 		/** Enter the maximum size in megabytes (MB) of the folder where diagnostics logs are stored. */
-		msdyusd_MaxDiagnosticLogsSizeInMB: DevKit.WebApi.IntegerValue;
+		msdyusd_MaxDiagnosticLogsSizeInMB: number;
 		/** Enter the name of the Audit & Diagnostics Setting. */
-		msdyusd_name: DevKit.WebApi.StringValue;
+		msdyusd_name: string;
 		/** Enter the shortcut key combination for on demand diagnostics report collection. */
-		msdyusd_ODDShortcut: DevKit.WebApi.StringValue;
+		msdyusd_ODDShortcut: string;
 		/** Shortcut to begin performance marker logs at runtime */
-		msdyusd_ODPerfBeginShortcut: DevKit.WebApi.StringValue;
+		msdyusd_ODPerfBeginShortcut: string;
 		/** Shortcut to end performance marker logs at runtime */
-		msdyusd_ODPerfEndShortcut: DevKit.WebApi.StringValue;
+		msdyusd_ODPerfEndShortcut: string;
 		/** User Schema Settings */
-		msdyusd_userschemasettings: DevKit.WebApi.StringValue;
+		msdyusd_userschemasettings: string;
 		/** Choose whether to enable Windows Error Reporting. */
-		msdyusd_WEREnabled: DevKit.WebApi.BooleanValue;
+		msdyusd_WEREnabled: boolean;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Contains the id of the process associated with the entity. */
-		processid: DevKit.WebApi.GuidValue;
+		processid: string;
 		/** Contains the id of the stage where the entity is located. */
-		stageid: DevKit.WebApi.GuidValue;
+		stageid: string;
 		/** Status of the Audit & Diagnostics Setting. */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.msdyusd_auditanddiagnosticssetting.statecode;
 		/** Status Reason of the Audit & Diagnostics Setting. */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.msdyusd_auditanddiagnosticssetting.statuscode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** A comma separated list of string values representing the unique identifiers of stages in a Business Process Flow Instance in the order that they occur. */
-		traversedpath: DevKit.WebApi.StringValue;
+		traversedpath: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -270,4 +272,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

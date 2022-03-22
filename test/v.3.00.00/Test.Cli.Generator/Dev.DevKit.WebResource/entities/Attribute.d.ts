@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,35 +30,35 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the attribute. */
-		AttributeId: DevKit.WebApi.GuidValue;
+		AttributeId: string;
 		/** Attribute Of */
-		AttributeOf: DevKit.WebApi.GuidValueReadonly;
+		readonly AttributeOf: string;
 		/** Attribute Type Id */
-		AttributeTypeId: DevKit.WebApi.GuidValueReadonly;
+		readonly AttributeTypeId: string;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.Attribute.ComponentState;
 		/** The external name of this attribute. */
-		ExternalName: DevKit.WebApi.StringValue;
+		ExternalName: string;
 		/** The logical name of this attribute. */
-		LogicalName: DevKit.WebApi.StringValue;
+		LogicalName: string;
 		/** The managed property logical name of this attribute. */
-		ManagedPropertyLogicalName: DevKit.WebApi.StringValue;
+		ManagedPropertyLogicalName: string;
 		/** The managed property parent attribute name of this attribute. */
-		ManagedPropertyParentAttributeName: DevKit.WebApi.StringValue;
+		ManagedPropertyParentAttributeName: string;
 		/** The name of this Attribute. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** For internal use only. */
-		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly OverwriteTime_UtcDateOnly: Date;
 		/** The physical name of this attribute. */
-		PhysicalName: DevKit.WebApi.StringValue;
+		PhysicalName: string;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** The table column name of this attribute. */
-		TableColumnName: DevKit.WebApi.StringValue;
+		TableColumnName: string;
 		/** Valid For Read API */
-		ValidForReadAPI: DevKit.WebApi.BooleanValueReadonly;
+		readonly ValidForReadAPI: boolean;
 		/** The version number of this attribute. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -89,4 +91,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

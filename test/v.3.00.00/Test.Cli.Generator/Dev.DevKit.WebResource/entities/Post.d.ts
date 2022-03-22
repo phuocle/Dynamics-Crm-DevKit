@@ -57,8 +57,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -66,47 +68,47 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Shows who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Shows the text of a post. */
-		LargeText: DevKit.WebApi.StringValue;
+		LargeText: string;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Unique identifier of the organization associated with the solution. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Unique identifier for entity instances */
-		PostId: DevKit.WebApi.GuidValue;
+		PostId: string;
 		/** Unique identifier of the post regarding with which the post is associated. */
-		PostRegardingId: DevKit.WebApi.LookupValueReadonly;
+		readonly PostRegardingId: string;
 		/** Internal use only. */
-		PostToYammer: DevKit.WebApi.BooleanValueReadonly;
+		readonly PostToYammer: boolean;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValueReadonly;
+		readonly OwnerId_team: string;
 		/** Unique identifier of the business unit that owns the regarding object. */
-		RegardingObjectOwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly RegardingObjectOwningBusinessUnit: string;
 		/** Select whether the post was created manually or automatically. */
-		Source: DevKit.WebApi.OptionSetValue;
+		Source: OptionSet.Post.Source;
 		/** Shows the text of a post. If this is a manual post, it appears in plain text. If this is an auto post, it appears in XML. */
-		Text: DevKit.WebApi.StringValue;
+		Text: string;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Select the post type. */
-		Type: DevKit.WebApi.OptionSetValue;
+		Type: OptionSet.Post.Type;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Internal use only. */
-		YammerPostState: DevKit.WebApi.IntegerValueReadonly;
+		readonly YammerPostState: number;
 		/** Internal use only. */
-		YammerRetryCount: DevKit.WebApi.IntegerValueReadonly;
+		readonly YammerRetryCount: number;
 	}
 }
 declare namespace OptionSet {
@@ -153,4 +155,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

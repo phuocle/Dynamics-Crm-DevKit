@@ -4,20 +4,18 @@ var DevKit;
 (function (DevKit) {
 	'use strict';
 	DevKit.ConstraintBasedGroupApi = function (e) {
-		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
 			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-			var property = {};
 			var getFormattedValue = function () {
 				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-					return EMPTY_STRING;
+					return '';
 				}
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
 					if (entity[logicalName + l] === entityLogicalName) {
 						return entity[logicalName + f];
 					}
-					return EMPTY_STRING;
+					return '';
 				}
 				if (isMultiOptionSet) {
 					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -42,30 +40,29 @@ var DevKit;
 			var setValue = function (value) {
 				if (isMultiOptionSet) value = value.join(',');
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+					value = value.replace('{', '').replace('}', '');
 					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
 				} else {
 					upsertEntity[logicalName] = value;
 				}
 				entity[logicalName] = value;
 			};
-			Object.defineProperty(property, 'FormattedValue', {
+			Object.defineProperty(obj.FormattedValue, field, {
 				get: getFormattedValue
 			});
 			if (readOnly) {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue
 				});
 			}
 			else {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue,
 					set: setValue
 				});
 			}
-			return property;
 		}
-		var constraintbasedgroup = {
+		var _constraintbasedgroup = {
 			BusinessUnitId: { b: 'businessunitid', a: '_businessunitid_value', c: 'businessunits', d: 'businessunit' },
 			ConstraintBasedGroupId: { a: 'constraintbasedgroupid' },
 			Constraints: { a: 'constraints' },
@@ -87,20 +84,23 @@ var DevKit;
 		};
 		if (e === undefined) e = {};
 		var u = {};
-		for (var field in constraintbasedgroup) {
-			var a = constraintbasedgroup[field].a;
-			var b = constraintbasedgroup[field].b;
-			var c = constraintbasedgroup[field].c;
-			var d = constraintbasedgroup[field].d;
-			var g = constraintbasedgroup[field].g;
-			var r = constraintbasedgroup[field].r;
-			constraintbasedgroup[field] = webApiField(e, a, b, c, d, r, u, g);
+		var constraintbasedgroup = {};
+		constraintbasedgroup.ODataEntity = e;
+		constraintbasedgroup.FormattedValue = {};
+		for (var field in _constraintbasedgroup) {
+			var a = _constraintbasedgroup[field].a;
+			var b = _constraintbasedgroup[field].b;
+			var c = _constraintbasedgroup[field].c;
+			var d = _constraintbasedgroup[field].d;
+			var g = _constraintbasedgroup[field].g;
+			var r = _constraintbasedgroup[field].r;
+			webApiField(constraintbasedgroup, field, e, a, b, c, d, r, u, g);
 		}
 		constraintbasedgroup.Entity = u;
 		constraintbasedgroup.EntityName = 'constraintbasedgroup';
 		constraintbasedgroup.EntityCollectionName = 'constraintbasedgroups';
 		constraintbasedgroup['@odata.etag'] = e['@odata.etag'];
-		constraintbasedgroup.getAliasedValue = function (alias, isMultiOptionSet) {
+		constraintbasedgroup.getAliasedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias] === undefined || e[alias] === null) {
 				return null;
 			}
@@ -109,7 +109,7 @@ var DevKit;
 			}
 			return e[alias];
 		}
-		constraintbasedgroup.getAliasedFormattedValue = function (alias, isMultiOptionSet) {
+		constraintbasedgroup.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
 				return EMPTY_STRING;
 			}

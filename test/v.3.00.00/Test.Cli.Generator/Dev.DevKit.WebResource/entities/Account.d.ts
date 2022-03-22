@@ -704,7 +704,6 @@ declare namespace DevKit {
 			ACCOUNT_INFORMATION: DevKit.Controls.Section;
 			ADDRESS: DevKit.Controls.Section;
 			MapSection: DevKit.Controls.Section;
-			SOCIAL_PANE_TAB: DevKit.Controls.Section;
 			Summary_CadenceWidget: DevKit.Controls.Section;
 			Summary_section_6: DevKit.Controls.Section;
 			SUMMARY_TAB_section_6: DevKit.Controls.Section;
@@ -980,8 +979,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -989,350 +990,352 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Select a category to indicate whether the customer account is standard or preferred. */
-		AccountCategoryCode: DevKit.WebApi.OptionSetValue;
+		AccountCategoryCode: OptionSet.Account.AccountCategoryCode;
 		/** Select a classification code to indicate the potential value of the customer account based on the projected return on investment, cooperation level, sales cycle length or other criteria. */
-		AccountClassificationCode: DevKit.WebApi.OptionSetValue;
+		AccountClassificationCode: OptionSet.Account.AccountClassificationCode;
 		/** Unique identifier of the account. */
-		AccountId: DevKit.WebApi.GuidValue;
+		AccountId: string;
 		/** Type an ID number or code for the account to quickly search and identify the account in system views. */
-		AccountNumber: DevKit.WebApi.StringValue;
+		AccountNumber: string;
 		/** Select a rating to indicate the value of the customer account. */
-		AccountRatingCode: DevKit.WebApi.OptionSetValue;
+		AccountRatingCode: OptionSet.Account.AccountRatingCode;
 		/** Unique identifier for address 1. */
-		Address1_AddressId: DevKit.WebApi.GuidValue;
+		Address1_AddressId: string;
 		/** Select the primary address type. */
-		Address1_AddressTypeCode: DevKit.WebApi.OptionSetValue;
+		Address1_AddressTypeCode: OptionSet.Account.Address1_AddressTypeCode;
 		/** Type the city for the primary address. */
-		Address1_City: DevKit.WebApi.StringValue;
+		Address1_City: string;
 		/** Shows the complete primary address. */
-		Address1_Composite: DevKit.WebApi.StringValueReadonly;
+		readonly Address1_Composite: string;
 		/** Type the country or region for the primary address. */
-		Address1_Country: DevKit.WebApi.StringValue;
+		Address1_Country: string;
 		/** Type the county for the primary address. */
-		Address1_County: DevKit.WebApi.StringValue;
+		Address1_County: string;
 		/** Type the fax number associated with the primary address. */
-		Address1_Fax: DevKit.WebApi.StringValue;
+		Address1_Fax: string;
 		/** Select the freight terms for the primary address to make sure shipping orders are processed correctly. */
-		Address1_FreightTermsCode: DevKit.WebApi.OptionSetValue;
+		Address1_FreightTermsCode: OptionSet.Account.Address1_FreightTermsCode;
 		/** Type the latitude value for the primary address for use in mapping and other applications. */
-		Address1_Latitude: DevKit.WebApi.DoubleValue;
+		Address1_Latitude: number;
 		/** Type the first line of the primary address. */
-		Address1_Line1: DevKit.WebApi.StringValue;
+		Address1_Line1: string;
 		/** Type the second line of the primary address. */
-		Address1_Line2: DevKit.WebApi.StringValue;
+		Address1_Line2: string;
 		/** Type the third line of the primary address. */
-		Address1_Line3: DevKit.WebApi.StringValue;
+		Address1_Line3: string;
 		/** Type the longitude value for the primary address for use in mapping and other applications. */
-		Address1_Longitude: DevKit.WebApi.DoubleValue;
+		Address1_Longitude: number;
 		/** Type a descriptive name for the primary address, such as Corporate Headquarters. */
-		Address1_Name: DevKit.WebApi.StringValue;
+		Address1_Name: string;
 		/** Type the ZIP Code or postal code for the primary address. */
-		Address1_PostalCode: DevKit.WebApi.StringValue;
+		Address1_PostalCode: string;
 		/** Type the post office box number of the primary address. */
-		Address1_PostOfficeBox: DevKit.WebApi.StringValue;
+		Address1_PostOfficeBox: string;
 		/** Type the name of the main contact at the account's primary address. */
-		Address1_PrimaryContactName: DevKit.WebApi.StringValue;
+		Address1_PrimaryContactName: string;
 		/** Select a shipping method for deliveries sent to this address. */
-		Address1_ShippingMethodCode: DevKit.WebApi.OptionSetValue;
+		Address1_ShippingMethodCode: OptionSet.Account.Address1_ShippingMethodCode;
 		/** Type the state or province of the primary address. */
-		Address1_StateOrProvince: DevKit.WebApi.StringValue;
+		Address1_StateOrProvince: string;
 		/** Type the main phone number associated with the primary address. */
-		Address1_Telephone1: DevKit.WebApi.StringValue;
+		Address1_Telephone1: string;
 		/** Type a second phone number associated with the primary address. */
-		Address1_Telephone2: DevKit.WebApi.StringValue;
+		Address1_Telephone2: string;
 		/** Type a third phone number associated with the primary address. */
-		Address1_Telephone3: DevKit.WebApi.StringValue;
+		Address1_Telephone3: string;
 		/** Type the UPS zone of the primary address to make sure shipping charges are calculated correctly and deliveries are made promptly, if shipped by UPS. */
-		Address1_UPSZone: DevKit.WebApi.StringValue;
+		Address1_UPSZone: string;
 		/** Select the time zone, or UTC offset, for this address so that other people can reference it when they contact someone at this address. */
-		Address1_UTCOffset: DevKit.WebApi.IntegerValue;
+		Address1_UTCOffset: number;
 		/** Unique identifier for address 2. */
-		Address2_AddressId: DevKit.WebApi.GuidValue;
+		Address2_AddressId: string;
 		/** Select the secondary address type. */
-		Address2_AddressTypeCode: DevKit.WebApi.OptionSetValue;
+		Address2_AddressTypeCode: OptionSet.Account.Address2_AddressTypeCode;
 		/** Type the city for the secondary address. */
-		Address2_City: DevKit.WebApi.StringValue;
+		Address2_City: string;
 		/** Shows the complete secondary address. */
-		Address2_Composite: DevKit.WebApi.StringValueReadonly;
+		readonly Address2_Composite: string;
 		/** Type the country or region for the secondary address. */
-		Address2_Country: DevKit.WebApi.StringValue;
+		Address2_Country: string;
 		/** Type the county for the secondary address. */
-		Address2_County: DevKit.WebApi.StringValue;
+		Address2_County: string;
 		/** Type the fax number associated with the secondary address. */
-		Address2_Fax: DevKit.WebApi.StringValue;
+		Address2_Fax: string;
 		/** Select the freight terms for the secondary address to make sure shipping orders are processed correctly. */
-		Address2_FreightTermsCode: DevKit.WebApi.OptionSetValue;
+		Address2_FreightTermsCode: OptionSet.Account.Address2_FreightTermsCode;
 		/** Type the latitude value for the secondary address for use in mapping and other applications. */
-		Address2_Latitude: DevKit.WebApi.DoubleValue;
+		Address2_Latitude: number;
 		/** Type the first line of the secondary address. */
-		Address2_Line1: DevKit.WebApi.StringValue;
+		Address2_Line1: string;
 		/** Type the second line of the secondary address. */
-		Address2_Line2: DevKit.WebApi.StringValue;
+		Address2_Line2: string;
 		/** Type the third line of the secondary address. */
-		Address2_Line3: DevKit.WebApi.StringValue;
+		Address2_Line3: string;
 		/** Type the longitude value for the secondary address for use in mapping and other applications. */
-		Address2_Longitude: DevKit.WebApi.DoubleValue;
+		Address2_Longitude: number;
 		/** Type a descriptive name for the secondary address, such as Corporate Headquarters. */
-		Address2_Name: DevKit.WebApi.StringValue;
+		Address2_Name: string;
 		/** Type the ZIP Code or postal code for the secondary address. */
-		Address2_PostalCode: DevKit.WebApi.StringValue;
+		Address2_PostalCode: string;
 		/** Type the post office box number of the secondary address. */
-		Address2_PostOfficeBox: DevKit.WebApi.StringValue;
+		Address2_PostOfficeBox: string;
 		/** Type the name of the main contact at the account's secondary address. */
-		Address2_PrimaryContactName: DevKit.WebApi.StringValue;
+		Address2_PrimaryContactName: string;
 		/** Select a shipping method for deliveries sent to this address. */
-		Address2_ShippingMethodCode: DevKit.WebApi.OptionSetValue;
+		Address2_ShippingMethodCode: OptionSet.Account.Address2_ShippingMethodCode;
 		/** Type the state or province of the secondary address. */
-		Address2_StateOrProvince: DevKit.WebApi.StringValue;
+		Address2_StateOrProvince: string;
 		/** Type the main phone number associated with the secondary address. */
-		Address2_Telephone1: DevKit.WebApi.StringValue;
+		Address2_Telephone1: string;
 		/** Type a second phone number associated with the secondary address. */
-		Address2_Telephone2: DevKit.WebApi.StringValue;
+		Address2_Telephone2: string;
 		/** Type a third phone number associated with the secondary address. */
-		Address2_Telephone3: DevKit.WebApi.StringValue;
+		Address2_Telephone3: string;
 		/** Type the UPS zone of the secondary address to make sure shipping charges are calculated correctly and deliveries are made promptly, if shipped by UPS. */
-		Address2_UPSZone: DevKit.WebApi.StringValue;
+		Address2_UPSZone: string;
 		/** Select the time zone, or UTC offset, for this address so that other people can reference it when they contact someone at this address. */
-		Address2_UTCOffset: DevKit.WebApi.IntegerValue;
+		Address2_UTCOffset: number;
 		/** For system use only. */
-		Aging30: DevKit.WebApi.MoneyValueReadonly;
+		readonly Aging30: number;
 		/** The base currency equivalent of the aging 30 field. */
-		Aging30_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly Aging30_Base: number;
 		/** For system use only. */
-		Aging60: DevKit.WebApi.MoneyValueReadonly;
+		readonly Aging60: number;
 		/** The base currency equivalent of the aging 60 field. */
-		Aging60_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly Aging60_Base: number;
 		/** For system use only. */
-		Aging90: DevKit.WebApi.MoneyValueReadonly;
+		readonly Aging90: number;
 		/** The base currency equivalent of the aging 90 field. */
-		Aging90_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly Aging90_Base: number;
 		/** Select the legal designation or other business type of the account for contracts or reporting purposes. */
-		BusinessTypeCode: DevKit.WebApi.OptionSetValue;
+		BusinessTypeCode: OptionSet.Account.BusinessTypeCode;
 		/** Shows who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Shows the external party who created the record. */
-		CreatedByExternalParty: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedByExternalParty: string;
 		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Type the credit limit of the account. This is a useful reference when you address invoice and accounting issues with the customer. */
-		CreditLimit: DevKit.WebApi.MoneyValue;
+		CreditLimit: number;
 		/** Shows the credit limit converted to the system's default base currency for reporting purposes. */
-		CreditLimit_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly CreditLimit_Base: number;
 		/** Select whether the credit for the account is on hold. This is a useful reference while addressing the invoice and accounting issues with the customer. */
-		CreditOnHold: DevKit.WebApi.BooleanValue;
+		CreditOnHold: boolean;
 		/** Select the size category or range of the account for segmentation and reporting purposes. */
-		CustomerSizeCode: DevKit.WebApi.OptionSetValue;
+		CustomerSizeCode: OptionSet.Account.CustomerSizeCode;
 		/** Select the category that best describes the relationship between the account and your organization. */
-		CustomerTypeCode: DevKit.WebApi.OptionSetValue;
+		CustomerTypeCode: OptionSet.Account.CustomerTypeCode;
 		/** Choose the default price list associated with the account to make sure the correct product prices for this customer are applied in sales opportunities, quotes, and orders. */
-		DefaultPriceLevelId: DevKit.WebApi.LookupValue;
+		DefaultPriceLevelId: string;
 		/** Type additional information to describe the account, such as an excerpt from the company's website. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Select whether the account allows bulk email sent through campaigns. If Do Not Allow is selected, the account can be added to marketing lists, but is excluded from email. */
-		DoNotBulkEMail: DevKit.WebApi.BooleanValue;
+		DoNotBulkEMail: boolean;
 		/** Select whether the account allows bulk postal mail sent through marketing campaigns or quick campaigns. If Do Not Allow is selected, the account can be added to marketing lists, but will be excluded from the postal mail. */
-		DoNotBulkPostalMail: DevKit.WebApi.BooleanValue;
+		DoNotBulkPostalMail: boolean;
 		/** Select whether the account allows direct email sent from Microsoft Dynamics 365. */
-		DoNotEMail: DevKit.WebApi.BooleanValue;
+		DoNotEMail: boolean;
 		/** Select whether the account allows faxes. If Do Not Allow is selected, the account will be excluded from fax activities distributed in marketing campaigns. */
-		DoNotFax: DevKit.WebApi.BooleanValue;
+		DoNotFax: boolean;
 		/** Select whether the account allows phone calls. If Do Not Allow is selected, the account will be excluded from phone call activities distributed in marketing campaigns. */
-		DoNotPhone: DevKit.WebApi.BooleanValue;
+		DoNotPhone: boolean;
 		/** Select whether the account allows direct mail. If Do Not Allow is selected, the account will be excluded from letter activities distributed in marketing campaigns. */
-		DoNotPostalMail: DevKit.WebApi.BooleanValue;
+		DoNotPostalMail: boolean;
 		/** Select whether the account accepts marketing materials, such as brochures or catalogs. */
-		DoNotSendMM: DevKit.WebApi.BooleanValue;
+		DoNotSendMM: boolean;
 		/** Type the primary email address for the account. */
-		EMailAddress1: DevKit.WebApi.StringValue;
+		EMailAddress1: string;
 		/** Type the secondary email address for the account. */
-		EMailAddress2: DevKit.WebApi.StringValue;
+		EMailAddress2: string;
 		/** Type an alternate email address for the account. */
-		EMailAddress3: DevKit.WebApi.StringValue;
+		EMailAddress3: string;
 		/** Shows the default image for the record. */
-		EntityImage: DevKit.WebApi.StringValue;
-		EntityImage_Timestamp: DevKit.WebApi.BigIntValueReadonly;
-		EntityImage_URL: DevKit.WebApi.StringValueReadonly;
+		EntityImage: string;
+		EntityImage_Timestamp: number;
+		EntityImage_URL: string;
 		/** For internal use only. */
-		EntityImageId: DevKit.WebApi.GuidValueReadonly;
+		readonly EntityImageId: string;
 		/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Type the fax number for the account. */
-		Fax: DevKit.WebApi.StringValue;
+		Fax: string;
 		/** Information about whether to allow following email activity like opens, attachment views and link clicks for emails sent to the account. */
-		FollowEmail: DevKit.WebApi.BooleanValue;
+		FollowEmail: boolean;
 		/** Type the URL for the account's FTP site to enable users to access data and share documents. */
-		FtpSiteURL: DevKit.WebApi.StringValue;
+		FtpSiteURL: string;
 		/** Unique identifier of the data import or data migration that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Select the account's primary industry for use in marketing segmentation and demographic analysis. */
-		IndustryCode: DevKit.WebApi.OptionSetValue;
-		IsPrivate: DevKit.WebApi.BooleanValueReadonly;
+		IndustryCode: OptionSet.Account.IndustryCode;
+		readonly IsPrivate: boolean;
 		/** Contains the date and time stamp of the last on hold time. */
-		LastOnHoldTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		LastOnHoldTime_UtcDateAndTime: Date;
 		/** Shows the date when the account was last included in a marketing campaign or quick campaign. */
-		LastUsedInCampaign_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		LastUsedInCampaign_UtcDateOnly: Date;
 		/** Type the market capitalization of the account to identify the company's equity, used as an indicator in financial performance analysis. */
-		MarketCap: DevKit.WebApi.MoneyValue;
+		MarketCap: number;
 		/** Shows the market capitalization converted to the system's default base currency. */
-		MarketCap_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly MarketCap_Base: number;
 		/** Whether is only for marketing */
-		MarketingOnly: DevKit.WebApi.BooleanValue;
+		MarketingOnly: boolean;
 		/** Shows the master account that the account was merged with. */
-		MasterId: DevKit.WebApi.LookupValueReadonly;
+		readonly MasterId: string;
 		/** Shows whether the account has been merged with another account. */
-		Merged: DevKit.WebApi.BooleanValueReadonly;
+		readonly Merged: boolean;
 		/** Shows who last updated the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Shows the external party who modified the record. */
-		ModifiedByExternalParty: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedByExternalParty: string;
 		/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Reference to an other account to be used for billing (only to be used if billing account differs) */
-		msdyn_BillingAccount: DevKit.WebApi.LookupValue;
+		msdyn_BillingAccount: string;
 		/** External Account ID from other systems. */
-		msdyn_externalaccountid: DevKit.WebApi.StringValue;
+		msdyn_externalaccountid: string;
 		/** Describes whether account is opted out or not */
-		msdyn_gdproptout: DevKit.WebApi.BooleanValue;
-		msdyn_PreferredResource: DevKit.WebApi.LookupValue;
+		msdyn_gdproptout: boolean;
+		msdyn_PreferredResource: string;
 		/** Default Sales Tax Code */
-		msdyn_SalesTaxCode: DevKit.WebApi.LookupValue;
+		msdyn_SalesTaxCode: string;
+		/** Unique identifier for Segment associated with account. */
+		msdyn_segmentid: string;
 		/** The Service Territory this account belongs to. This is used to optimize scheduling and routing */
-		msdyn_ServiceTerritory: DevKit.WebApi.LookupValue;
+		msdyn_ServiceTerritory: string;
 		/** Select whether the account is tax exempt. */
-		msdyn_TaxExempt: DevKit.WebApi.BooleanValue;
+		msdyn_TaxExempt: boolean;
 		/** Shows the government tax exempt number. */
-		msdyn_TaxExemptNumber: DevKit.WebApi.StringValue;
+		msdyn_TaxExemptNumber: string;
 		/** Enter the travel charge to include on work orders. This value will be multiplied by the travel charge type. */
-		msdyn_TravelCharge: DevKit.WebApi.MoneyValue;
+		msdyn_TravelCharge: number;
 		/** Value of the Travel Charge in base currency. */
-		msdyn_travelcharge_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_travelcharge_Base: number;
 		/** Specify how travel is charged for this account. */
-		msdyn_TravelChargeType: DevKit.WebApi.OptionSetValue;
-		msdyn_workhourtemplate: DevKit.WebApi.LookupValue;
+		msdyn_TravelChargeType: OptionSet.Account.msdyn_TravelChargeType;
+		msdyn_workhourtemplate: string;
 		/** Shows the default instructions to show on new work orders. */
-		msdyn_WorkOrderInstructions: DevKit.WebApi.StringValue;
+		msdyn_WorkOrderInstructions: string;
 		/** Captures the facebook id */
-		msdyusd_Facebook: DevKit.WebApi.StringValue;
+		msdyusd_Facebook: string;
 		/** Capture the twitter id */
-		msdyusd_Twitter: DevKit.WebApi.StringValue;
+		msdyusd_Twitter: string;
 		/** Type the company or business name. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Type the number of employees that work at the account for use in marketing segmentation and demographic analysis. */
-		NumberOfEmployees: DevKit.WebApi.IntegerValue;
+		NumberOfEmployees: number;
 		/** Shows how long, in minutes, that the record was on hold. */
-		OnHoldTime: DevKit.WebApi.IntegerValueReadonly;
+		readonly OnHoldTime: number;
 		/** Number of open opportunities against an account and its child accounts. */
-		OpenDeals: DevKit.WebApi.IntegerValueReadonly;
+		readonly OpenDeals: number;
 		/** Last Updated time of rollup field Open Deals. */
-		OpenDeals_Date_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly OpenDeals_Date_UtcDateAndTime: Date;
 		/** State of rollup field Open Deals. */
-		OpenDeals_State: DevKit.WebApi.IntegerValueReadonly;
+		readonly OpenDeals_State: number;
 		/** Sum of open revenue against an account and its child accounts. */
-		OpenRevenue: DevKit.WebApi.MoneyValueReadonly;
+		readonly OpenRevenue: number;
 		/** Value of the Open Revenue in base currency. */
-		OpenRevenue_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly OpenRevenue_Base: number;
 		/** Last Updated time of rollup field Open Revenue. */
-		OpenRevenue_Date_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly OpenRevenue_Date_UtcDateAndTime: Date;
 		/** State of rollup field Open Revenue. */
-		OpenRevenue_State: DevKit.WebApi.IntegerValueReadonly;
+		readonly OpenRevenue_State: number;
 		/** Shows the lead that the account was created from if the account was created by converting a lead in Microsoft Dynamics 365. This is used to relate the account to data on the originating lead for use in reporting and analytics. */
-		OriginatingLeadId: DevKit.WebApi.LookupValue;
+		OriginatingLeadId: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Select the account's ownership structure, such as public or private. */
-		OwnershipCode: DevKit.WebApi.OptionSetValue;
+		OwnershipCode: OptionSet.Account.OwnershipCode;
 		/** Shows the business unit that the record owner belongs to. */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier of the team who owns the account. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier of the user who owns the account. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Choose the parent account associated with this account to show parent and child businesses in reporting and analytics. */
-		ParentAccountId: DevKit.WebApi.LookupValue;
+		ParentAccountId: string;
 		/** For system use only. Legacy Microsoft Dynamics CRM 3.0 workflow data. */
-		ParticipatesInWorkflow: DevKit.WebApi.BooleanValue;
+		ParticipatesInWorkflow: boolean;
 		/** Select the payment terms to indicate when the customer needs to pay the total amount. */
-		PaymentTermsCode: DevKit.WebApi.OptionSetValue;
+		PaymentTermsCode: OptionSet.Account.PaymentTermsCode;
 		/** Select the preferred day of the week for service appointments. */
-		PreferredAppointmentDayCode: DevKit.WebApi.OptionSetValue;
+		PreferredAppointmentDayCode: OptionSet.Account.PreferredAppointmentDayCode;
 		/** Select the preferred time of day for service appointments. */
-		PreferredAppointmentTimeCode: DevKit.WebApi.OptionSetValue;
+		PreferredAppointmentTimeCode: OptionSet.Account.PreferredAppointmentTimeCode;
 		/** Select the preferred method of contact. */
-		PreferredContactMethodCode: DevKit.WebApi.OptionSetValue;
+		PreferredContactMethodCode: OptionSet.Account.PreferredContactMethodCode;
 		/** Choose the account's preferred service facility or equipment to make sure services are scheduled correctly for the customer. */
-		PreferredEquipmentId: DevKit.WebApi.LookupValue;
+		PreferredEquipmentId: string;
 		/** Choose the account's preferred service for reference when you schedule service activities. */
-		PreferredServiceId: DevKit.WebApi.LookupValue;
+		PreferredServiceId: string;
 		/** Choose the preferred service representative for reference when you schedule service activities for the account. */
-		PreferredSystemUserId: DevKit.WebApi.LookupValue;
+		PreferredSystemUserId: string;
 		/** Choose the primary contact for the account to provide quick access to contact details. */
-		PrimaryContactId: DevKit.WebApi.LookupValue;
+		PrimaryContactId: string;
 		/** Primary Satori ID for Account */
-		PrimarySatoriId: DevKit.WebApi.StringValue;
+		PrimarySatoriId: string;
 		/** Primary Twitter ID for Account */
-		PrimaryTwitterId: DevKit.WebApi.StringValue;
+		PrimaryTwitterId: string;
 		/** Shows the ID of the process. */
-		ProcessId: DevKit.WebApi.GuidValue;
+		ProcessId: string;
 		/** Type the annual revenue for the account, used as an indicator in financial performance analysis. */
-		Revenue: DevKit.WebApi.MoneyValue;
+		Revenue: number;
 		/** Shows the annual revenue converted to the system's default base currency. The calculations use the exchange rate specified in the Currencies area. */
-		Revenue_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly Revenue_Base: number;
 		/** Type the number of shares available to the public for the account. This number is used as an indicator in financial performance analysis. */
-		SharesOutstanding: DevKit.WebApi.IntegerValue;
+		SharesOutstanding: number;
 		/** Select a shipping method for deliveries sent to the account's address to designate the preferred carrier or other delivery option. */
-		ShippingMethodCode: DevKit.WebApi.OptionSetValue;
+		ShippingMethodCode: OptionSet.Account.ShippingMethodCode;
 		/** Type the Standard Industrial Classification (SIC) code that indicates the account's primary industry of business, for use in marketing segmentation and demographic analysis. */
-		SIC: DevKit.WebApi.StringValue;
+		SIC: string;
 		/** Choose the service level agreement (SLA) that you want to apply to the Account record. */
-		SLAId: DevKit.WebApi.LookupValue;
+		SLAId: string;
 		/** Last SLA that was applied to this case. This field is for internal use only. */
-		SLAInvokedId: DevKit.WebApi.LookupValueReadonly;
+		readonly SLAInvokedId: string;
 		/** Shows the ID of the stage. */
-		StageId: DevKit.WebApi.GuidValue;
+		StageId: string;
 		/** Shows whether the account is active or inactive. Inactive accounts are read-only and can't be edited unless they are reactivated. */
-		StateCode: DevKit.WebApi.OptionSetValue;
+		StateCode: OptionSet.Account.StateCode;
 		/** Select the account's status. */
-		StatusCode: DevKit.WebApi.OptionSetValue;
+		StatusCode: OptionSet.Account.StatusCode;
 		/** Type the stock exchange at which the account is listed to track their stock and financial performance of the company. */
-		StockExchange: DevKit.WebApi.StringValue;
+		StockExchange: string;
 		/** Number of users or conversations followed the record */
-		TeamsFollowed: DevKit.WebApi.IntegerValue;
+		TeamsFollowed: number;
 		/** Type the main phone number for this account. */
-		Telephone1: DevKit.WebApi.StringValue;
+		Telephone1: string;
 		/** Type a second phone number for this account. */
-		Telephone2: DevKit.WebApi.StringValue;
+		Telephone2: string;
 		/** Type a third phone number for this account. */
-		Telephone3: DevKit.WebApi.StringValue;
+		Telephone3: string;
 		/** Select a region or territory for the account for use in segmentation and analysis. */
-		TerritoryCode: DevKit.WebApi.OptionSetValue;
+		TerritoryCode: OptionSet.Account.TerritoryCode;
 		/** Choose the sales region or territory for the account to make sure the account is assigned to the correct representative and for use in segmentation and analysis. */
-		TerritoryId: DevKit.WebApi.LookupValue;
+		TerritoryId: string;
 		/** Type the stock exchange symbol for the account to track financial performance of the company. You can click the code entered in this field to access the latest trading information from MSN Money. */
-		TickerSymbol: DevKit.WebApi.StringValue;
+		TickerSymbol: string;
 		/** Total time spent for emails (read and write) and meetings by me in relation to account record. */
-		TimeSpentByMeOnEmailAndMeetings: DevKit.WebApi.StringValueReadonly;
+		readonly TimeSpentByMeOnEmailAndMeetings: string;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** For internal use only. */
-		TraversedPath: DevKit.WebApi.StringValue;
+		TraversedPath: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version number of the account. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 		/** Type the account's website URL to get quick details about the company profile. */
-		WebSiteURL: DevKit.WebApi.StringValue;
+		WebSiteURL: string;
 		/** Type the phonetic spelling of the company name, if specified in Japanese, to make sure the name is pronounced correctly in phone calls and other communications. */
-		YomiName: DevKit.WebApi.StringValue;
+		YomiName: string;
 	}
 }
 declare namespace OptionSet {
@@ -1601,4 +1604,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

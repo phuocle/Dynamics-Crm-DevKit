@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,105 +30,105 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Binary report contents (base-64 encoded). */
-		BodyBinary: DevKit.WebApi.StringValue;
+		BodyBinary: string;
 		/** Text contents of the RDL file for a Reporting Services report. */
-		BodyText: DevKit.WebApi.StringValue;
+		BodyText: string;
 		/** URL for a linked report. */
-		BodyUrl: DevKit.WebApi.StringValue;
+		BodyUrl: string;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.Report.ComponentState;
 		/** Unique identifier of the user who created the report. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Major version number of Crm, used to identify the version of Crm in which report is created. */
-		CreatedInMajorVersion: DevKit.WebApi.IntegerValue;
+		CreatedInMajorVersion: number;
 		/** Date and time when the report was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the report. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** XML used to define a custom report. */
-		CustomReportXml: DevKit.WebApi.StringValueReadonly;
+		readonly CustomReportXml: string;
 		/** Default filter for the report. */
-		DefaultFilter: DevKit.WebApi.StringValue;
+		DefaultFilter: string;
 		/** Description of the report. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** File name of the report. */
-		FileName: DevKit.WebApi.StringValue;
+		FileName: string;
 		/** File size of the report. */
-		FileSize: DevKit.WebApi.IntegerValueReadonly;
+		readonly FileSize: number;
 		/** Version in which the report is introduced. */
-		IntroducedVersion: DevKit.WebApi.StringValue;
+		IntroducedVersion: string;
 		/** Information that specifies whether this component can be customized. */
-		IsCustomizable: DevKit.WebApi.ManagedPropertyValue;
+		IsCustomizable: string;
 		/** Information about whether the report is a custom report. */
-		IsCustomReport: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsCustomReport: boolean;
 		/** Indicates whether the solution component is part of a managed solution. */
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsManaged: boolean;
 		/** Information about whether the report is personal or is available to all users. */
-		IsPersonal: DevKit.WebApi.BooleanValue;
+		IsPersonal: boolean;
 		/** Information about whether the report is a scheduled report. */
-		IsScheduledReport: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsScheduledReport: boolean;
 		/** Language in which the report will be displayed. */
-		LanguageCode: DevKit.WebApi.IntegerValue;
+		LanguageCode: number;
 		/** MIME type of the report. */
-		MimeType: DevKit.WebApi.StringValue;
+		MimeType: string;
 		/** Unique identifier of the user who last modified the report. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the report was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the report. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Name of the report. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Original Text contents of the RDL file for a Reporting Services report. */
-		OriginalBodyText: DevKit.WebApi.StringValueReadonly;
+		readonly OriginalBodyText: string;
 		/** For internal use only. */
-		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly OverwriteTime_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier of the business unit that owns the report. */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier of the team who owns the report. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier of the user who owns the report. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Unique identifier of the parent report. */
-		ParentReportId: DevKit.WebApi.LookupValue;
+		ParentReportId: string;
 		/** For internal use only. */
-		QueryInfo: DevKit.WebApi.StringValueReadonly;
+		readonly QueryInfo: string;
 		/** Hash value of the body text of the report. */
-		RdlHash: DevKit.WebApi.IntegerValueReadonly;
+		readonly RdlHash: number;
 		/** Unique identifier of the report. */
-		ReportId: DevKit.WebApi.GuidValue;
+		ReportId: string;
 		/** For internal use only. */
-		ReportIdUnique: DevKit.WebApi.GuidValueReadonly;
+		readonly ReportIdUnique: string;
 		/** Name of the report on SRS. */
-		ReportNameOnSRS: DevKit.WebApi.StringValueReadonly;
+		readonly ReportNameOnSRS: string;
 		/** Type of the report. */
-		ReportTypeCode: DevKit.WebApi.OptionSetValue;
+		ReportTypeCode: OptionSet.Report.ReportTypeCode;
 		/** XML used for defining the report schedule. */
-		ScheduleXml: DevKit.WebApi.StringValueReadonly;
+		readonly ScheduleXml: string;
 		/** Report signature date, used to identify a report for upgrades and hotfixes. */
-		SignatureDate_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		SignatureDate_UtcDateOnly: Date;
 		/** Unique identifier of the report signature used to identify a report for upgrades and hotfixes. */
-		SignatureId: DevKit.WebApi.GuidValue;
+		SignatureId: string;
 		/** Report signature language code used to identify a report for upgrades and hotfixes. */
-		SignatureLcid: DevKit.WebApi.IntegerValue;
+		SignatureLcid: number;
 		/** Report signature major version, used to identify a report for upgrades and hotfixes. */
-		SignatureMajorVersion: DevKit.WebApi.IntegerValue;
+		SignatureMajorVersion: number;
 		/** Report signature minor version, used to identify a report for upgrades and hotfixes. */
-		SignatureMinorVersion: DevKit.WebApi.IntegerValue;
+		SignatureMinorVersion: number;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** For internal use only. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SupportingSolutionId: string;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version number of the report. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -167,4 +169,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

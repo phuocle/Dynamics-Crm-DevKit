@@ -582,8 +582,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -591,185 +593,185 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Shows the total price of the order product, based on the price per unit, volume discount, and quantity. */
-		BaseAmount: DevKit.WebApi.MoneyValue;
+		BaseAmount: number;
 		/** Value of the Amount in base currency. */
-		BaseAmount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly BaseAmount_Base: number;
 		/** Shows who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Type additional information to describe the order product, such as manufacturing details or acceptable substitutions. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Shows the total amount due for the order product, based on the sum of the unit price, quantity, discounts, and tax. */
-		ExtendedAmount: DevKit.WebApi.MoneyValue;
+		ExtendedAmount: number;
 		/** Value of the Extended Amount in base currency. */
-		ExtendedAmount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly ExtendedAmount_Base: number;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Select whether the invoice line item is copied from another item or data source. */
-		IsCopied: DevKit.WebApi.BooleanValue;
+		IsCopied: boolean;
 		/** Select whether the price per unit is fixed at the value in the specified price list or can be overridden by users who have edit rights to the order product. */
-		IsPriceOverridden: DevKit.WebApi.BooleanValue;
+		IsPriceOverridden: boolean;
 		/** Select whether the product exists in the Microsoft Dynamics 365 product catalog or is a write-in product specific to the order. */
-		IsProductOverridden: DevKit.WebApi.BooleanValue;
+		IsProductOverridden: boolean;
 		/** Type the line item number for the order product to easily identify the product in the order and make sure it's listed in the correct sequence. */
-		LineItemNumber: DevKit.WebApi.IntegerValue;
+		LineItemNumber: number;
 		/** Type the manual discount amount for the order product to deduct any negotiated or other savings from the product total on the order. */
-		ManualDiscountAmount: DevKit.WebApi.MoneyValue;
+		ManualDiscountAmount: number;
 		/** Value of the Manual Discount in base currency. */
-		ManualDiscountAmount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly ManualDiscountAmount_Base: number;
 		/** Shows who last updated the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Shows who last updated the record on behalf of another user. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Select a Agreement for this order line */
-		msdyn_agreement: DevKit.WebApi.LookupValue;
+		msdyn_agreement: string;
 		/** Billing method for the project contract line. Valid values are Time and Material and Fixed Price */
-		msdyn_BillingMethod: DevKit.WebApi.OptionSetValue;
+		msdyn_BillingMethod: OptionSet.SalesOrderDetail.msdyn_BillingMethod;
 		/** Select the billing start date for the project contract line. */
-		msdyn_BillingStartDate_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		msdyn_BillingStartDate_UtcDateOnly: Date;
 		/** Select the billing status for the project contract line. */
-		msdyn_BillingStatus: DevKit.WebApi.OptionSetValue;
+		msdyn_BillingStatus: OptionSet.SalesOrderDetail.msdyn_BillingStatus;
 		/** Enter the amount the customer has set aside or is willing to pay for the project contract component. */
-		msdyn_BudgetAmount: DevKit.WebApi.MoneyValue;
+		msdyn_BudgetAmount: number;
 		/** Value of the Budget Amount in base currency. */
-		msdyn_budgetamount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_budgetamount_Base: number;
 		/** Shows the total cost price of the product based on the cost price per unit and quantity. */
-		msdyn_CostAmount: DevKit.WebApi.MoneyValue;
+		msdyn_CostAmount: number;
 		/** Value of the Cost Amount in base currency. */
-		msdyn_costamount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_costamount_Base: number;
 		/** Cost per unit of the product. The default is the cost price of the product. */
-		msdyn_CostPricePerUnit: DevKit.WebApi.MoneyValue;
+		msdyn_CostPricePerUnit: number;
 		/** Value of the Cost Price Per Unit in base currency. */
-		msdyn_costpriceperunit_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_costpriceperunit_Base: number;
 		/** Select whether to include expenses in the project contract line. */
-		msdyn_IncludeExpense: DevKit.WebApi.BooleanValue;
+		msdyn_IncludeExpense: boolean;
 		/** Select whether to include fees in the project contract line. */
-		msdyn_IncludeFee: DevKit.WebApi.BooleanValue;
+		msdyn_IncludeFee: boolean;
 		/** Select whether to include materials in the project contract line. */
-		msdyn_IncludeMaterial: DevKit.WebApi.BooleanValue;
+		msdyn_IncludeMaterial: boolean;
 		/** Select whether to include time transactions in the project contract line. */
-		msdyn_IncludeTime: DevKit.WebApi.BooleanValue;
+		msdyn_IncludeTime: boolean;
 		/** Select the frequency for the automatic invoice creation job to create the invoice. */
-		msdyn_invoicefrequency: DevKit.WebApi.LookupValue;
+		msdyn_invoicefrequency: string;
 		/** The field to distinguish the order lines to be of project service or field service */
-		msdyn_LineType: DevKit.WebApi.OptionSetValue;
+		msdyn_LineType: OptionSet.SalesOrderDetail.msdyn_LineType;
 		/** Select the project of the project contract line. */
-		msdyn_Project: DevKit.WebApi.LookupValue;
+		msdyn_Project: string;
 		/** (Deprecated) Shows the quote line related to the project contract line. */
-		msdyn_QuoteLine: DevKit.WebApi.StringValue;
+		msdyn_QuoteLine: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValueReadonly;
+		readonly OwnerId_team: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Choose the parent bundle associated with this product */
-		ParentBundleId: DevKit.WebApi.GuidValue;
+		ParentBundleId: string;
 		/** Choose the parent bundle associated with this product */
-		ParentBundleIdRef: DevKit.WebApi.LookupValue;
+		ParentBundleIdRef: string;
 		/** Type the price per unit of the order product. The default is the value in the price list specified on the order for existing products. */
-		PricePerUnit: DevKit.WebApi.MoneyValue;
+		PricePerUnit: number;
 		/** Value of the Price Per Unit in base currency. */
-		PricePerUnit_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly PricePerUnit_Base: number;
 		/** Select the type of pricing error, such as a missing or invalid product, or missing quantity. */
-		PricingErrorCode: DevKit.WebApi.OptionSetValue;
+		PricingErrorCode: OptionSet.SalesOrderDetail.PricingErrorCode;
 		/** Unique identifier of the product line item association with bundle in the sales order */
-		ProductAssociationId: DevKit.WebApi.GuidValue;
+		ProductAssociationId: string;
 		/** Type a name or description to identify the type of write-in product included in the order. */
-		ProductDescription: DevKit.WebApi.StringValue;
+		ProductDescription: string;
 		/** Choose the product to include on the order to link the product's pricing and other information to the parent order. */
-		ProductId: DevKit.WebApi.LookupValue;
+		ProductId: string;
 		/** Calculated field that will be populated by name and description of the product. */
-		ProductName: DevKit.WebApi.StringValue;
+		ProductName: string;
 		/** User-defined product ID. */
-		ProductNumber: DevKit.WebApi.StringValueReadonly;
+		readonly ProductNumber: string;
 		/** Product Type */
-		ProductTypeCode: DevKit.WebApi.OptionSetValue;
+		ProductTypeCode: OptionSet.SalesOrderDetail.ProductTypeCode;
 		/** Status of the property configuration. */
-		PropertyConfigurationStatus: DevKit.WebApi.OptionSetValue;
+		PropertyConfigurationStatus: OptionSet.SalesOrderDetail.PropertyConfigurationStatus;
 		/** Type the amount or quantity of the product ordered by the customer. */
-		Quantity: DevKit.WebApi.DecimalValue;
+		Quantity: number;
 		/** Type the amount or quantity of the product that is back ordered for the order. */
-		QuantityBackordered: DevKit.WebApi.DecimalValue;
+		QuantityBackordered: number;
 		/** Type the amount or quantity of the product that was canceled. */
-		QuantityCancelled: DevKit.WebApi.DecimalValue;
+		QuantityCancelled: number;
 		/** Type the amount or quantity of the product that was shipped for the order. */
-		QuantityShipped: DevKit.WebApi.DecimalValue;
+		QuantityShipped: number;
 		/** Unique identifier for Quote Line associated with Order Line. */
-		QuoteDetailId: DevKit.WebApi.LookupValue;
+		QuoteDetailId: string;
 		/** Enter the delivery date requested by the customer for the order product. */
-		RequestDeliveryBy_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		RequestDeliveryBy_UtcDateOnly: Date;
 		/** Unique identifier of the product specified in the order. */
-		SalesOrderDetailId: DevKit.WebApi.GuidValue;
+		SalesOrderDetailId: string;
 		/** Sales Order Detail Name. Added for 1:n referential relationship (internal purposes only) */
-		SalesOrderDetailName: DevKit.WebApi.StringValue;
+		SalesOrderDetailName: string;
 		/** Shows the order for the product. The ID is used to link product pricing and other details to the total amounts and other information on the order. */
-		SalesOrderId: DevKit.WebApi.LookupValue;
+		SalesOrderId: string;
 		/** Tells whether product pricing is locked for the order. */
-		SalesOrderIsPriceLocked: DevKit.WebApi.BooleanValueReadonly;
+		readonly SalesOrderIsPriceLocked: boolean;
 		/** Shows the status of the order that the order detail is associated with. */
-		SalesOrderStateCode: DevKit.WebApi.OptionSetValueReadonly;
+		readonly SalesOrderStateCode: OptionSet.SalesOrderDetail.SalesOrderStateCode;
 		/** Choose the user responsible for the sale of the order product. */
-		SalesRepId: DevKit.WebApi.LookupValue;
+		SalesRepId: string;
 		/** Shows the ID of the data that maintains the sequence. */
-		SequenceNumber: DevKit.WebApi.IntegerValue;
+		SequenceNumber: number;
 		/** Unique identifier of the shipping address. */
-		ShipTo_AddressId: DevKit.WebApi.GuidValue;
+		ShipTo_AddressId: string;
 		/** Type the city for the customer's shipping address. */
-		ShipTo_City: DevKit.WebApi.StringValue;
+		ShipTo_City: string;
 		/** Type the primary contact name at the customer's shipping address. */
-		ShipTo_ContactName: DevKit.WebApi.StringValue;
+		ShipTo_ContactName: string;
 		/** Type the country or region for the customer's shipping address. */
-		ShipTo_Country: DevKit.WebApi.StringValue;
+		ShipTo_Country: string;
 		/** Type the fax number for the customer's shipping address. */
-		ShipTo_Fax: DevKit.WebApi.StringValue;
+		ShipTo_Fax: string;
 		/** Select the freight terms to make sure shipping orders are processed correctly. */
-		ShipTo_FreightTermsCode: DevKit.WebApi.OptionSetValue;
+		ShipTo_FreightTermsCode: OptionSet.SalesOrderDetail.ShipTo_FreightTermsCode;
 		/** Type the first line of the customer's shipping address. */
-		ShipTo_Line1: DevKit.WebApi.StringValue;
+		ShipTo_Line1: string;
 		/** Type the second line of the customer's shipping address. */
-		ShipTo_Line2: DevKit.WebApi.StringValue;
+		ShipTo_Line2: string;
 		/** Type the third line of the shipping address. */
-		ShipTo_Line3: DevKit.WebApi.StringValue;
+		ShipTo_Line3: string;
 		/** Type a name for the customer's shipping address, such as "Headquarters" or "Field office",  to identify the address. */
-		ShipTo_Name: DevKit.WebApi.StringValue;
+		ShipTo_Name: string;
 		/** Type the ZIP Code or postal code for the shipping address. */
-		ShipTo_PostalCode: DevKit.WebApi.StringValue;
+		ShipTo_PostalCode: string;
 		/** Type the state or province for the shipping address. */
-		ShipTo_StateOrProvince: DevKit.WebApi.StringValue;
+		ShipTo_StateOrProvince: string;
 		/** Type the phone number for the customer's shipping address. */
-		ShipTo_Telephone: DevKit.WebApi.StringValue;
+		ShipTo_Telephone: string;
 		/** Skip the price calculation */
-		SkipPriceCalculation: DevKit.WebApi.OptionSetValue;
+		SkipPriceCalculation: OptionSet.SalesOrderDetail.SkipPriceCalculation;
 		/** Type the tax amount for the order product. */
-		Tax: DevKit.WebApi.MoneyValue;
+		Tax: number;
 		/** Value of the Tax in base currency. */
-		Tax_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly Tax_Base: number;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** Choose the unit of measurement for the base unit quantity for this purchase, such as each or dozen. */
-		UoMId: DevKit.WebApi.LookupValue;
+		UoMId: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 		/** Shows the discount amount per unit if a specified volume is purchased. Configure volume discounts in the Product Catalog in the Settings area. */
-		VolumeDiscountAmount: DevKit.WebApi.MoneyValueReadonly;
+		readonly VolumeDiscountAmount: number;
 		/** Value of the Volume Discount in base currency. */
-		VolumeDiscountAmount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly VolumeDiscountAmount_Base: number;
 		/** Select whether the order product should be shipped to the specified address or held until the customer calls with further pick up or delivery instructions. */
-		WillCall: DevKit.WebApi.BooleanValue;
+		WillCall: boolean;
 	}
 }
 declare namespace OptionSet {
@@ -934,4 +936,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

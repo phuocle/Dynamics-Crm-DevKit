@@ -59,8 +59,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -68,63 +70,63 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.MobileOfflineProfileItemAssociation.ComponentState;
 		/** Shows who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Version in which the Mobile offline Profile Item Association is introduced. */
-		IntroducedVersion: DevKit.WebApi.StringValue;
+		IntroducedVersion: string;
 		/** For internal use only. */
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsManaged: boolean;
 		/** Information about whether profile item association is validated or not */
-		IsValidated: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsValidated: boolean;
 		/** Unique identifier of the mobile offline profile item associaition. */
-		MobileOfflineProfileItemAssociationId: DevKit.WebApi.GuidValue;
+		MobileOfflineProfileItemAssociationId: string;
 		/** For Internal Use Only */
-		MobileOfflineProfileItemAssociationIdUnique: DevKit.WebApi.GuidValueReadonly;
+		readonly MobileOfflineProfileItemAssociationIdUnique: string;
 		/** Id of the parent profile item. */
-		MobileOfflineProfileItemId: DevKit.WebApi.LookupValue;
+		MobileOfflineProfileItemId: string;
 		/** Shows who last updated the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Shows who updated the record on behalf of another user. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Enter the name of the mobile offline profile item association. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Unique identifier of the organization associated with the Mobile Offline Profile Item Association. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** For internal use only. */
-		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly OverwriteTime_UtcDateOnly: Date;
 		/** Shows the ID of the process. */
-		ProcessId: DevKit.WebApi.GuidValue;
+		ProcessId: string;
 		/** Profile item association entity filter criteria. */
-		ProfileItemAssociationEntityFilter: DevKit.WebApi.StringValue;
+		ProfileItemAssociationEntityFilter: string;
 		/** Displays the last published date time. */
-		PublishedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly PublishedOn_UtcDateAndTime: Date;
 		/** Internal Use Only */
-		RelationshipData: DevKit.WebApi.StringValue;
+		RelationshipData: string;
 		/** Entity relationship schema name */
-		RelationshipDisplayName: DevKit.WebApi.StringValue;
+		RelationshipDisplayName: string;
 		/** Shows the relationship */
-		RelationshipId: DevKit.WebApi.GuidValue;
+		RelationshipId: string;
 		/** Display name of entity relationship */
-		RelationshipName: DevKit.WebApi.StringValueReadonly;
+		readonly RelationshipName: string;
 		/** List of relationships of entity selected in parent profile item */
-		SelectedRelationShipsSchema: DevKit.WebApi.OptionSetValue;
+		SelectedRelationShipsSchema: OptionSet.MobileOfflineProfileItemAssociation.SelectedRelationShipsSchema;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** Shows the ID of the stage. */
-		StageId: DevKit.WebApi.GuidValue;
+		StageId: string;
 		/** For internal use only. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SupportingSolutionId: string;
 		/** For internal use only. */
-		TraversedPath: DevKit.WebApi.StringValue;
+		TraversedPath: string;
 		/** Version number of the Mobile Offline profileitemassociation. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -157,4 +159,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

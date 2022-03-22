@@ -16,6 +16,7 @@ declare namespace DevKit {
 			general_information: DevKit.Controls.Section;
 			phone_call_description: DevKit.Controls.Section;
 			phone_call_details: DevKit.Controls.Section;
+			tab_2_section_2: DevKit.Controls.Section;
 		}
 		interface tab_tab_call_summary_Sections {
 			tab_ci_section_call_summary: DevKit.Controls.Section;
@@ -47,8 +48,6 @@ declare namespace DevKit {
 			DirectionCode: DevKit.Controls.Boolean;
 			/** Enter the account, contact, lead, or user who made the phone call. */
 			from: DevKit.Controls.Lookup;
-			msdyn_ci_call_summary_control_field: DevKit.Controls.Integer;
-			msdyn_ci_url: DevKit.Controls.String;
 			notescontrol: DevKit.Controls.Note;
 			/** Type the phone number. */
 			PhoneNumber: DevKit.Controls.String;
@@ -56,6 +55,8 @@ declare namespace DevKit {
 			RegardingObjectId: DevKit.Controls.Lookup;
 			/** Type a short description about the objective or primary topic of the phone call. */
 			Subject: DevKit.Controls.String;
+			/** Type a short description about the objective or primary topic of the phone call. */
+			Subject1: DevKit.Controls.String;
 			/** Enter the account, contact, lead, or user recipients of the phone call. */
 			to: DevKit.Controls.Lookup;
 		}
@@ -212,8 +213,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -221,305 +224,299 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** For internal use only. */
-		ActivityAdditionalParams: DevKit.WebApi.StringValue;
+		ActivityAdditionalParams: string;
 		/** Unique identifier of the phone call activity. */
-		ActivityId: DevKit.WebApi.GuidValue;
+		ActivityId: string;
 		/** Type the number of minutes spent on the phone call. The duration is used in reporting. */
-		ActualDurationMinutes: DevKit.WebApi.IntegerValue;
+		ActualDurationMinutes: number;
 		/** Enter the actual end date and time of the phone call. By default, it displays the date and time when the activity was completed or canceled, but can be edited to capture the actual duration of the phone call. */
-		ActualEnd_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		ActualEnd_UtcDateOnly: Date;
 		/** Enter the actual start date and time for the phone call. By default, it displays the date and time when the activity was created, but can be edited to capture the actual duration of the phone call. */
-		ActualStart_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		ActualStart_UtcDateOnly: Date;
 		/** Type a category to identify the phone call type, such as lead gathering or customer follow-up, to tie the phone call to a business group or function. */
-		Category: DevKit.WebApi.StringValue;
+		Category: string;
 		/** Shows who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Type additional information to describe the phone call, such as the primary message or the products and services discussed. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Select the direction of the phone call as incoming or outbound. */
-		DirectionCode: DevKit.WebApi.BooleanValue;
+		DirectionCode: boolean;
 		/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Unique identifier of the data import or data migration that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Information which specifies whether the phone call activity was billed as part of resolving a case. */
-		IsBilled: DevKit.WebApi.BooleanValue;
+		IsBilled: boolean;
 		/** Information regarding whether the activity is a regular activity type or event type. */
-		IsRegularActivity: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsRegularActivity: boolean;
 		/** Indication which specifies if the phone call activity was created by a workflow rule. */
-		IsWorkflowCreated: DevKit.WebApi.BooleanValue;
+		IsWorkflowCreated: boolean;
 		/** Contains the date and time stamp of the last on hold time. */
-		LastOnHoldTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		LastOnHoldTime_UtcDateAndTime: Date;
 		/** Select whether a voice mail was left for the person. */
-		LeftVoiceMail: DevKit.WebApi.BooleanValue;
+		LeftVoiceMail: boolean;
 		/** Shows who last updated the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Shows who last updated the record on behalf of another user. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
-		msdyn_ci_call_summary_control_field: DevKit.WebApi.IntegerValue;
-		msdyn_ci_id: DevKit.WebApi.StringValue;
-		msdyn_ci_insights_json: DevKit.WebApi.StringValue;
-		msdyn_ci_keywords: DevKit.WebApi.StringValue;
-		msdyn_ci_media_reference_id: DevKit.WebApi.StringValue;
-		msdyn_ci_transcript: DevKit.WebApi.StringValue;
-		msdyn_ci_transcript_json: DevKit.WebApi.StringValue;
-		msdyn_ci_translated_transcript: DevKit.WebApi.StringValue;
-		msdyn_ci_translated_transcript_json: DevKit.WebApi.StringValue;
-		msdyn_ci_url: DevKit.WebApi.StringValue;
+		readonly ModifiedOnBehalfBy: string;
 		/** Shows how long, in minutes, that the record was on hold. */
-		OnHoldTime: DevKit.WebApi.IntegerValueReadonly;
+		readonly OnHoldTime: number;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier of the business unit that owns the phone call activity. */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier of the team that owns the phone call activity. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier of the user that owns the phone call activity. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Type the phone number. */
-		PhoneNumber: DevKit.WebApi.StringValue;
+		PhoneNumber: string;
 		/** Select the priority so that preferred customers or critical issues are handled quickly. */
-		PriorityCode: DevKit.WebApi.OptionSetValue;
+		PriorityCode: OptionSet.PhoneCall.PriorityCode;
 		/** Shows the ID of the process. */
-		ProcessId: DevKit.WebApi.GuidValue;
+		ProcessId: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_account_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_account_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_bookableresourcebooking_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_bookableresourcebooking_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_bookableresourcebookingheader_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_bookableresourcebookingheader_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_bulkoperation_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_bulkoperation_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_campaign_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_campaign_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_campaignactivity_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_campaignactivity_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_contact_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_contact_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_contract_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_contract_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_entitlement_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_entitlement_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_entitlementtemplate_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_entitlementtemplate_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_incident_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_incident_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_invoice_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_invoice_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_knowledgearticle_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_knowledgearticle_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_knowledgebaserecord_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_knowledgebaserecord_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_lead_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_lead_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_agreement_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreement_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_agreementbookingdate_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingdate_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_agreementbookingincident_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingincident_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_agreementbookingproduct_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingproduct_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_agreementbookingservice_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingservice_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_agreementbookingservicetask_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingservicetask_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_agreementbookingsetup_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingsetup_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_agreementinvoicedate_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementinvoicedate_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_agreementinvoiceproduct_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementinvoiceproduct_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_agreementinvoicesetup_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementinvoicesetup_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_bookingalertstatus_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bookingalertstatus_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_bookingrule_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bookingrule_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_bookingtimestamp_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bookingtimestamp_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_customerasset_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_customerasset_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_fieldservicesetting_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_fieldservicesetting_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_incidenttypecharacteristic_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_incidenttypecharacteristic_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_incidenttypeproduct_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_incidenttypeproduct_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_incidenttypeservice_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_incidenttypeservice_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_inventoryadjustment_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_inventoryadjustment_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_inventoryadjustmentproduct_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_inventoryadjustmentproduct_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_inventoryjournal_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_inventoryjournal_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_inventorytransfer_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_inventorytransfer_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_payment_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_payment_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_paymentdetail_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_paymentdetail_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_paymentmethod_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_paymentmethod_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_paymentterm_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_paymentterm_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_playbookinstance_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_playbookinstance_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_postalbum_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_postalbum_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_postalcode_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_postalcode_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_processnotes_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_processnotes_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_productinventory_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_productinventory_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_projectteam_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_projectteam_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_purchaseorder_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseorder_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_purchaseorderbill_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseorderbill_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_purchaseorderproduct_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseorderproduct_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_purchaseorderreceipt_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseorderreceipt_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_purchaseorderreceiptproduct_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseorderreceiptproduct_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_purchaseordersubstatus_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseordersubstatus_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_quotebookingincident_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotebookingincident_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_quotebookingproduct_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotebookingproduct_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_quotebookingservice_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotebookingservice_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_quotebookingservicetask_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotebookingservicetask_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_resourceterritory_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_resourceterritory_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_rma_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rma_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_rmaproduct_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rmaproduct_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_rmareceipt_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rmareceipt_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_rmareceiptproduct_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rmareceiptproduct_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_rmasubstatus_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rmasubstatus_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_rtv_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rtv_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_rtvproduct_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rtvproduct_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_rtvsubstatus_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rtvsubstatus_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_shipvia_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_salessuggestion_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_systemuserschedulersetting_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_shipvia_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_timegroup_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_systemuserschedulersetting_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_timegroupdetail_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_timegroup_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_timeoffrequest_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_timegroupdetail_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_warehouse_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_timeoffrequest_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_workorder_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_warehouse_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_workordercharacteristic_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorder_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_workorderincident_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workordercharacteristic_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_workorderproduct_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderincident_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_workorderresourcerestriction_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderproduct_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_workorderservice_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderresourcerestriction_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_msdyn_workorderservicetask_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderservice_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_opportunity_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderservicetask_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_quote_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_opportunity_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_salesorder_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_quote_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_site_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_salesorder_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_uii_action_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_site_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_uii_hostedapplication_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_uii_action_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_uii_nonhostedapplication_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_uii_hostedapplication_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_uii_option_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_uii_nonhostedapplication_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_uii_savedsession_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_uii_option_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_uii_workflow_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_uii_savedsession_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_uii_workflowstep_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_uii_workflow_phonecall: string;
 		/** Unique identifier of the object with which the phone call activity is associated. */
-		regardingobjectid_uii_workflow_workflowstep_mapping_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_uii_workflowstep_phonecall: string;
+		/** Unique identifier of the object with which the phone call activity is associated. */
+		regardingobjectid_uii_workflow_workflowstep_mapping_phonecall: string;
 		/** Scheduled duration of the phone call activity, specified in minutes. */
-		ScheduledDurationMinutes: DevKit.WebApi.IntegerValueReadonly;
+		readonly ScheduledDurationMinutes: number;
 		/** Enter the expected due date and time. */
-		ScheduledEnd_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		ScheduledEnd_UtcDateAndTime: Date;
 		/** Enter the expected due date and time. */
-		ScheduledStart_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		ScheduledStart_UtcDateAndTime: Date;
 		/** Unique identifier for an associated service. */
-		ServiceId: DevKit.WebApi.LookupValue;
+		ServiceId: string;
 		/** Choose the service level agreement (SLA) that you want to apply to the Phone Call record. */
-		SLAId: DevKit.WebApi.LookupValue;
+		SLAId: string;
 		/** Last SLA that was applied to this Phone Call. This field is for internal use only. */
-		SLAInvokedId: DevKit.WebApi.LookupValueReadonly;
+		readonly SLAInvokedId: string;
 		/** Shows the date and time by which the activities are sorted. */
-		SortDate_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		SortDate_UtcDateAndTime: Date;
 		/** Shows the ID of the stage. */
-		StageId: DevKit.WebApi.GuidValue;
+		StageId: string;
 		/** Shows whether the phone call is open, completed, or canceled. Completed and canceled phone calls are read-only and can't be edited. */
-		StateCode: DevKit.WebApi.OptionSetValue;
+		StateCode: OptionSet.PhoneCall.StateCode;
 		/** Select the phone call's status. */
-		StatusCode: DevKit.WebApi.OptionSetValue;
+		StatusCode: OptionSet.PhoneCall.StatusCode;
 		/** Type a subcategory to identify the phone call type and relate the activity to a specific product, sales region, business group, or other function. */
-		Subcategory: DevKit.WebApi.StringValue;
+		Subcategory: string;
 		/** Type a short description about the objective or primary topic of the phone call. */
-		Subject: DevKit.WebApi.StringValue;
+		Subject: string;
 		/** For internal use only. */
-		SubscriptionId: DevKit.WebApi.GuidValue;
+		SubscriptionId: string;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** For internal use only. */
-		TraversedPath: DevKit.WebApi.StringValue;
+		TraversedPath: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version number of the phone call activity. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 		/** The array of object that can cast object to ActivityPartyApi class */
-		ActivityParties: Array<any>;
+		ActivityParties: Array<unknown>;
 	}
 }
 declare namespace OptionSet {
 	namespace PhoneCall {
 		enum ActivityTypeCode {
+			/** 10086 */
+			Activity_record_for_the_Teams_chat,
 			/** 4201 */
 			Appointment,
-			/** 10400 */
+			/** 10404 */
 			Booking_Alert,
 			/** 4402 */
 			Campaign_Activity,
@@ -527,13 +524,13 @@ declare namespace OptionSet {
 			Campaign_Response,
 			/** 4206 */
 			Case_Resolution,
-			/** 10702 */
+			/** 10707 */
 			Conversation,
-			/** 10294 */
+			/** 10313 */
 			Customer_Voice_alert,
-			/** 10304 */
+			/** 10323 */
 			Customer_Voice_survey_invite,
-			/** 10306 */
+			/** 10325 */
 			Customer_Voice_survey_response,
 			/** 4202 */
 			Email,
@@ -545,11 +542,11 @@ declare namespace OptionSet {
 			Opportunity_Close,
 			/** 4209 */
 			Order_Close,
-			/** 10813 */
+			/** 10817 */
 			Outbound_message,
 			/** 4210 */
 			Phone_Call,
-			/** 10430 */
+			/** 10434 */
 			Project_Service_Approval,
 			/** 4406 */
 			Quick_Campaign,
@@ -559,7 +556,7 @@ declare namespace OptionSet {
 			Recurring_Appointment,
 			/** 4214 */
 			Service_Activity,
-			/** 10717 */
+			/** 10721 */
 			Session,
 			/** 4212 */
 			Task
@@ -608,4 +605,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

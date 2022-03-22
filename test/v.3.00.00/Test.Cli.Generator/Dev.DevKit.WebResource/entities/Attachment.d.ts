@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,25 +30,25 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the attachment. */
-		AttachmentId: DevKit.WebApi.GuidValue;
+		AttachmentId: string;
 		/** Contents of the attachment. */
-		Body: DevKit.WebApi.StringValue;
+		Body: string;
 		/** File name of the attachment. */
-		FileName: DevKit.WebApi.StringValue;
+		FileName: string;
 		/** File pointer of the attachment. */
-		FilePointer: DevKit.WebApi.StringValueReadonly;
+		readonly FilePointer: string;
 		/** File size of the attachment. */
-		FileSize: DevKit.WebApi.IntegerValueReadonly;
+		readonly FileSize: number;
 		/** MIME type of the attachment. */
-		MimeType: DevKit.WebApi.StringValue;
+		MimeType: string;
 		/** Prefix of the file pointer in blob storage. */
-		Prefix: DevKit.WebApi.StringValueReadonly;
+		readonly Prefix: string;
 		/** Storage pointer. */
-		StoragePointer: DevKit.WebApi.StringValueReadonly;
+		readonly StoragePointer: string;
 		/** Subject associated with the attachment. */
-		Subject: DevKit.WebApi.StringValue;
+		Subject: string;
 		/** Version number of the attachment. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -69,4 +71,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

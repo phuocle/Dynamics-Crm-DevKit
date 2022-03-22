@@ -4,20 +4,18 @@ var DevKit;
 (function (DevKit) {
 	'use strict';
 	DevKit.ProcessStageApi = function (e) {
-		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
 			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-			var property = {};
 			var getFormattedValue = function () {
 				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-					return EMPTY_STRING;
+					return '';
 				}
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
 					if (entity[logicalName + l] === entityLogicalName) {
 						return entity[logicalName + f];
 					}
-					return EMPTY_STRING;
+					return '';
 				}
 				if (isMultiOptionSet) {
 					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -42,30 +40,29 @@ var DevKit;
 			var setValue = function (value) {
 				if (isMultiOptionSet) value = value.join(',');
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+					value = value.replace('{', '').replace('}', '');
 					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
 				} else {
 					upsertEntity[logicalName] = value;
 				}
 				entity[logicalName] = value;
 			};
-			Object.defineProperty(property, 'FormattedValue', {
+			Object.defineProperty(obj.FormattedValue, field, {
 				get: getFormattedValue
 			});
 			if (readOnly) {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue
 				});
 			}
 			else {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue,
 					set: setValue
 				});
 			}
-			return property;
 		}
-		var processstage = {
+		var _processstage = {
 			ClientData: { a: 'clientdata', r: true },
 			Connector: { a: 'connector' },
 			IsTrigger: { a: 'istrigger' },
@@ -83,20 +80,23 @@ var DevKit;
 		};
 		if (e === undefined) e = {};
 		var u = {};
-		for (var field in processstage) {
-			var a = processstage[field].a;
-			var b = processstage[field].b;
-			var c = processstage[field].c;
-			var d = processstage[field].d;
-			var g = processstage[field].g;
-			var r = processstage[field].r;
-			processstage[field] = webApiField(e, a, b, c, d, r, u, g);
+		var processstage = {};
+		processstage.ODataEntity = e;
+		processstage.FormattedValue = {};
+		for (var field in _processstage) {
+			var a = _processstage[field].a;
+			var b = _processstage[field].b;
+			var c = _processstage[field].c;
+			var d = _processstage[field].d;
+			var g = _processstage[field].g;
+			var r = _processstage[field].r;
+			webApiField(processstage, field, e, a, b, c, d, r, u, g);
 		}
 		processstage.Entity = u;
 		processstage.EntityName = 'processstage';
 		processstage.EntityCollectionName = 'processstages';
 		processstage['@odata.etag'] = e['@odata.etag'];
-		processstage.getAliasedValue = function (alias, isMultiOptionSet) {
+		processstage.getAliasedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias] === undefined || e[alias] === null) {
 				return null;
 			}
@@ -105,7 +105,7 @@ var DevKit;
 			}
 			return e[alias];
 		}
-		processstage.getAliasedFormattedValue = function (alias, isMultiOptionSet) {
+		processstage.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
 				return EMPTY_STRING;
 			}

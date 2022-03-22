@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,59 +30,59 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the topic model execution history. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the topic model execution history. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Detailed error message for the Topic Analysis process */
-		ErrorDetails: DevKit.WebApi.StringValue;
+		ErrorDetails: string;
 		/** Fetch Xml */
-		FetchXmlList: DevKit.WebApi.StringValue;
+		FetchXmlList: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Allow model to check is test executed. */
-		IsTestExecution: DevKit.WebApi.BooleanValue;
+		IsTestExecution: boolean;
 		/** Maximum number of Topics. */
-		MaxTopics: DevKit.WebApi.IntegerValue;
+		MaxTopics: number;
 		/** Unique identifier of the user who modified the topic model execution history. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the topic model execution history. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** name */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Number of Topics Identified */
-		NumberOfTopicsFound: DevKit.WebApi.IntegerValue;
+		NumberOfTopicsFound: number;
 		/** Unique identifier for the organization */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Record Correlation Id. */
-		RecordCorrelationId: DevKit.WebApi.StringValue;
+		RecordCorrelationId: string;
 		/** Number of Records Synchronized */
-		RecordsProcessed: DevKit.WebApi.IntegerValue;
+		RecordsProcessed: number;
 		/** StartTime */
-		StartTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		StartTime_UtcDateAndTime: Date;
 		/** Status */
-		Status: DevKit.WebApi.OptionSetValue;
+		Status: OptionSet.TopicModelExecutionHistory.Status;
 		/** StatusReason */
-		StatusReason: DevKit.WebApi.OptionSetValue;
+		StatusReason: OptionSet.TopicModelExecutionHistory.StatusReason;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Unique identifier for Model associated with Topic Model Execution History. */
-		TopicModelConfigurationId: DevKit.WebApi.LookupValue;
+		TopicModelConfigurationId: string;
 		/** Unique identifier for entity instances */
-		TopicModelExecutionHistoryId: DevKit.WebApi.GuidValue;
+		TopicModelExecutionHistoryId: string;
 		/** Unique identifier for Model associated with Topic Model Execution History. */
-		TopicModelId: DevKit.WebApi.LookupValue;
+		TopicModelId: string;
 		/** Duration (in mins) */
-		TotalTime: DevKit.WebApi.IntegerValue;
+		TotalTime: number;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -129,4 +131,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,63 +30,63 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Logical name of target attribute */
-		AggregateAttributeLogicalName: DevKit.WebApi.StringValueReadonly;
+		readonly AggregateAttributeLogicalName: string;
 		/** Logical name of target entity */
-		AggregateEntityLogicalName: DevKit.WebApi.StringValueReadonly;
+		readonly AggregateEntityLogicalName: string;
 		/** Type code of aggregate entity */
-		AggregateEntityTypeCode: DevKit.WebApi.IntegerValueReadonly;
+		readonly AggregateEntityTypeCode: number;
 		/** Filter criteria for target */
-		AggregateFilterAttributes: DevKit.WebApi.StringValueReadonly;
+		readonly AggregateFilterAttributes: string;
 		/** Relationship name of the source-target relationship. */
-		AggregateRelationshipName: DevKit.WebApi.StringValueReadonly;
+		readonly AggregateRelationshipName: string;
 		/** Type of aggregation to perform */
-		AggregateType: DevKit.WebApi.OptionSetValueReadonly;
+		readonly AggregateType: OptionSet.RollupProperties.AggregateType;
 		/** Allow source entity to be hierarchical */
-		AllowHierarchyOnSource: DevKit.WebApi.BooleanValueReadonly;
+		readonly AllowHierarchyOnSource: boolean;
 		/** Depth used for bootstrap calculations */
-		BootstrapCurrentDepth: DevKit.WebApi.IntegerValueReadonly;
+		readonly BootstrapCurrentDepth: number;
 		/** Retry count for bootstrap */
-		BootstrapRetryCount: DevKit.WebApi.IntegerValueReadonly;
+		readonly BootstrapRetryCount: number;
 		/** Unique identifier representing the mass calculate async job id. */
-		BootstrapRollupAsyncJobId: DevKit.WebApi.GuidValueReadonly;
+		readonly BootstrapRollupAsyncJobId: string;
 		/** Step number to start bootstrap execution */
-		BootstrapStepNumber: DevKit.WebApi.IntegerValueReadonly;
+		readonly BootstrapStepNumber: number;
 		/** Target pointer used for bootstrap calculations */
-		BootstrapTargetPointer: DevKit.WebApi.IntegerValueReadonly;
+		readonly BootstrapTargetPointer: number;
 		/** Rollup field data type */
-		DataType: DevKit.WebApi.StringValueReadonly;
+		readonly DataType: string;
 		/** Unique identifier representing the calculate entity async job id. */
-		IncrementalRollupAsyncJobId: DevKit.WebApi.GuidValueReadonly;
+		readonly IncrementalRollupAsyncJobId: string;
 		/** Status of initial value calculation. */
-		InitialValueCalculationStatus: DevKit.WebApi.OptionSetValueReadonly;
+		readonly InitialValueCalculationStatus: OptionSet.RollupProperties.InitialValueCalculationStatus;
 		/** Flag indicating whether Activity Party is included */
-		IsActivityPartyIncluded: DevKit.WebApi.IntegerValueReadonly;
+		readonly IsActivityPartyIncluded: number;
 		/** Last time when calculations were performed for this rollup field. */
-		LastCalculationTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly LastCalculationTime_UtcDateAndTime: Date;
 		/** Logical name of source attribute */
-		RollupAttributeLogicalName: DevKit.WebApi.StringValueReadonly;
+		readonly RollupAttributeLogicalName: string;
 		/** Base Table Name Of Rollup Entity */
-		RollupEntityBaseTableName: DevKit.WebApi.StringValueReadonly;
+		readonly RollupEntityBaseTableName: string;
 		/** Logical name of source entity */
-		RollupEntityLogicalName: DevKit.WebApi.StringValueReadonly;
+		readonly RollupEntityLogicalName: string;
 		/** Physical Name of Primary Key Of Rollup Entity */
-		RollupEntityPrimaryKeyPhysicalName: DevKit.WebApi.StringValueReadonly;
+		readonly RollupEntityPrimaryKeyPhysicalName: string;
 		/** Type code of rollup entity */
-		RollupEntityTypeCode: DevKit.WebApi.IntegerValueReadonly;
+		readonly RollupEntityTypeCode: number;
 		/** Filter criteria for source */
-		RollupFilterAttributes: DevKit.WebApi.StringValueReadonly;
+		readonly RollupFilterAttributes: string;
 		/** Unique identifier of the current record. */
-		RollupPropertiesId: DevKit.WebApi.GuidValueReadonly;
+		readonly RollupPropertiesId: string;
 		/** Physical Name of Rollup State Attribute */
-		RollupStateAttributePhysicalName: DevKit.WebApi.StringValueReadonly;
+		readonly RollupStateAttributePhysicalName: string;
 		/** Relationship name of the source hierarchical relationship */
-		SourceHierarchicalRelationshipName: DevKit.WebApi.StringValueReadonly;
+		readonly SourceHierarchicalRelationshipName: string;
 		/** Status of the Rollup. */
-		StateCode: DevKit.WebApi.OptionSetValueReadonly;
+		readonly StateCode: OptionSet.RollupProperties.StateCode;
 		/** Additional information about status of the rollup properties. */
-		StatusCode: DevKit.WebApi.OptionSetValueReadonly;
+		readonly StatusCode: OptionSet.RollupProperties.StatusCode;
 		/** Version number of rollup. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -143,4 +145,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

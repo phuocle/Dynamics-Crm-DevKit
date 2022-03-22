@@ -1,6 +1,167 @@
 ﻿//@ts-check
 ///<reference path="devkit.d.ts" />
 declare namespace DevKit {
+	namespace FormContact_AI_for_Sales {
+		interface Header extends DevKit.Controls.IHeader {
+			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
+			OwnerId: DevKit.Controls.Lookup;
+		}
+		interface tab_DETAILS_TAB_Sections {
+			billing_information: DevKit.Controls.Section;
+			CONTACT_PREFERENCES: DevKit.Controls.Section;
+			marketing_information: DevKit.Controls.Section;
+			PERSONAL_INFORMATION: DevKit.Controls.Section;
+			PERSONAL_NOTES_SECTION: DevKit.Controls.Section;
+			shipping_information: DevKit.Controls.Section;
+		}
+		interface tab_SUMMARY_TAB_Sections {
+			CONTACT_INFORMATION: DevKit.Controls.Section;
+			CUSTOMER_DETAILS_TAB: DevKit.Controls.Section;
+			MapSection: DevKit.Controls.Section;
+			Summary_CadenceWidget: DevKit.Controls.Section;
+			Summary_section_6: DevKit.Controls.Section;
+			TalkingPoints_section: DevKit.Controls.Section;
+		}
+		interface tab_DETAILS_TAB extends DevKit.Controls.ITab {
+			Section: tab_DETAILS_TAB_Sections;
+		}
+		interface tab_SUMMARY_TAB extends DevKit.Controls.ITab {
+			Section: tab_SUMMARY_TAB_Sections;
+		}
+		interface Tabs {
+			DETAILS_TAB: tab_DETAILS_TAB;
+			SUMMARY_TAB: tab_SUMMARY_TAB;
+		}
+		interface Body {
+			Tab: Tabs;
+			ActionCards: DevKit.Controls.ActionCards;
+			/** Shows the complete primary address. */
+			Address1_Composite: DevKit.Controls.String;
+			/** Select the freight terms for the primary address to make sure shipping orders are processed correctly. */
+			Address1_FreightTermsCode: DevKit.Controls.OptionSet;
+			/** Select a shipping method for deliveries sent to this address. */
+			Address1_ShippingMethodCode: DevKit.Controls.OptionSet;
+			/** Enter the date of the contact's wedding or service anniversary for use in customer gift programs or other communications. */
+			Anniversary: DevKit.Controls.Date;
+			/** Enter the contact's birthday for use in customer gift programs or other communications. */
+			BirthDate: DevKit.Controls.Date;
+			CadenceWidgetControl: DevKit.Controls.ActionCards;
+			/** Type the credit limit of the contact for reference when you address invoice and accounting issues with the customer. */
+			CreditLimit: DevKit.Controls.Money;
+			/** Select whether the contact is on a credit hold, for reference when addressing invoice and accounting issues. */
+			CreditOnHold: DevKit.Controls.Boolean;
+			/** Type additional information to describe the contact, such as an excerpt from the company's website. */
+			Description: DevKit.Controls.String;
+			/** Select whether the contact accepts bulk email sent through marketing campaigns or quick campaigns. If Do Not Allow is selected, the contact can be added to marketing lists, but will be excluded from the email. */
+			DoNotBulkEMail: DevKit.Controls.Boolean;
+			/** Select whether the contact allows direct email sent from Microsoft Dynamics 365. If Do Not Allow is selected, Microsoft Dynamics 365 will not send the email. */
+			DoNotEMail: DevKit.Controls.Boolean;
+			/** Select whether the contact allows faxes. If Do Not Allow is selected, the contact will be excluded from any fax activities distributed in marketing campaigns. */
+			DoNotFax: DevKit.Controls.Boolean;
+			/** Select whether the contact accepts phone calls. If Do Not Allow is selected, the contact will be excluded from any phone call activities distributed in marketing campaigns. */
+			DoNotPhone: DevKit.Controls.Boolean;
+			/** Select whether the contact allows direct mail. If Do Not Allow is selected, the contact will be excluded from letter activities distributed in marketing campaigns. */
+			DoNotPostalMail: DevKit.Controls.Boolean;
+			/** Select whether the contact accepts marketing materials, such as brochures or catalogs. Contacts that opt out can be excluded from marketing initiatives. */
+			DoNotSendMM: DevKit.Controls.Boolean;
+			/** Type the primary email address for the contact. */
+			EMailAddress1: DevKit.Controls.String;
+			/** Select the marital status of the contact for reference in follow-up phone calls and other communications. */
+			FamilyStatusCode: DevKit.Controls.OptionSet;
+			/** Type the fax number for the contact. */
+			Fax: DevKit.Controls.String;
+			/** Information about whether to allow following email activity like opens, attachment views and link clicks for emails sent to the contact. */
+			FollowEmail: DevKit.Controls.Boolean;
+			/** Combines and shows the contact's first and last names so that the full name can be displayed in views and reports. */
+			FullName: DevKit.Controls.String;
+			/** Select the contact's gender to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns. */
+			GenderCode: DevKit.Controls.OptionSet;
+			/** Type the job title of the contact to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns. */
+			JobTitle: DevKit.Controls.String;
+			/** Shows the date when the contact was last included in a marketing campaign or quick campaign. */
+			LastUsedInCampaign: DevKit.Controls.Date;
+			mapcontrol: DevKit.Controls.Map;
+			/** Type the mobile phone number for the contact. */
+			MobilePhone: DevKit.Controls.String;
+			notescontrol: DevKit.Controls.Note;
+			/** Shows the lead that the contact was created if the contact was created by converting a lead in Microsoft Dynamics 365. This is used to relate the contact to the data on the originating lead for use in reporting and analytics. */
+			OriginatingLeadId: DevKit.Controls.Lookup;
+			/** Select the parent account or parent contact for the contact to provide a quick link to additional details, such as financial information, activities, and opportunities. */
+			ParentCustomerId: DevKit.Controls.Lookup;
+			/** Select the parent account or parent contact for the contact to provide a quick link to additional details, such as financial information, activities, and opportunities. */
+			ParentCustomerId1: DevKit.Controls.Lookup;
+			/** Select the payment terms to indicate when the customer needs to pay the total amount. */
+			PaymentTermsCode: DevKit.Controls.OptionSet;
+			/** Select the preferred method of contact. */
+			PreferredContactMethodCode: DevKit.Controls.OptionSet;
+			/** Select the preferred method of contact. */
+			PreferredContactMethodCode1: DevKit.Controls.OptionSet;
+			/** Type the name of the contact's spouse or partner for reference during calls, events, or other communications with the contact. */
+			SpousesName: DevKit.Controls.String;
+			TalkingPoints: DevKit.Controls.ActionCards;
+			/** Type the main phone number for this contact. */
+			Telephone1: DevKit.Controls.String;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			TransactionCurrencyId: DevKit.Controls.Lookup;
+		}
+		interface Navigation {
+			navAddresses: DevKit.Controls.NavigationItem,
+			navAsyncOperations: DevKit.Controls.NavigationItem,
+			navInvoices: DevKit.Controls.NavigationItem,
+			navOrders: DevKit.Controls.NavigationItem,
+			navProcessSessions: DevKit.Controls.NavigationItem,
+			navQuotes: DevKit.Controls.NavigationItem,
+			navRelationships: DevKit.Controls.NavigationItem,
+			navSubConts: DevKit.Controls.NavigationItem
+		}
+		interface quickForm_contactquickform_Body {
+			EMailAddress1: DevKit.Controls.QuickView;
+			Telephone1: DevKit.Controls.QuickView;
+		}
+		interface quickForm_contactquickform extends DevKit.Controls.IQuickView {
+			Body: quickForm_contactquickform_Body;
+		}
+		interface QuickForm {
+			contactquickform: quickForm_contactquickform;
+		}
+		interface ProcessCase_to_Work_Order_Business_Process {
+
+		}
+		interface ProcessPhone_to_Case_Process {
+
+		}
+		interface Process extends DevKit.Controls.IProcess {
+			Case_to_Work_Order_Business_Process: ProcessCase_to_Work_Order_Business_Process;
+			Phone_to_Case_Process: ProcessPhone_to_Case_Process;
+		}
+		interface Grid {
+			contactopportunitiesgrid: DevKit.Controls.Grid;
+		}
+	}
+	class FormContact_AI_for_Sales extends DevKit.IForm {
+		/**
+		* AI for Sales [Main Form]
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form Contact_AI_for_Sales */
+		Body: DevKit.FormContact_AI_for_Sales.Body;
+		/** The Header section of form Contact_AI_for_Sales */
+		Header: DevKit.FormContact_AI_for_Sales.Header;
+		/** The Navigation of form Contact_AI_for_Sales */
+		Navigation: DevKit.FormContact_AI_for_Sales.Navigation;
+		/** The QuickForm of form Contact_AI_for_Sales */
+		QuickForm: DevKit.FormContact_AI_for_Sales.QuickForm;
+		/** The Process of form Contact_AI_for_Sales */
+		Process: DevKit.FormContact_AI_for_Sales.Process;
+		/** The Grid of form Contact_AI_for_Sales */
+		Grid: DevKit.FormContact_AI_for_Sales.Grid;
+		/** The SidePanes of form Contact_AI_for_Sales */
+		SidePanes: DevKit.SidePanes;
+	}
 	namespace FormContact {
 		interface Header extends DevKit.Controls.IHeader {
 			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
@@ -878,168 +1039,6 @@ declare namespace DevKit {
 		/** The SidePanes of form Contact_Information */
 		SidePanes: DevKit.SidePanes;
 	}
-	namespace FormContact_Sales_Insights {
-		interface Header extends DevKit.Controls.IHeader {
-			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
-			OwnerId: DevKit.Controls.Lookup;
-		}
-		interface tab_DETAILS_TAB_Sections {
-			billing_information: DevKit.Controls.Section;
-			CONTACT_PREFERENCES: DevKit.Controls.Section;
-			marketing_information: DevKit.Controls.Section;
-			PERSONAL_INFORMATION: DevKit.Controls.Section;
-			PERSONAL_NOTES_SECTION: DevKit.Controls.Section;
-			shipping_information: DevKit.Controls.Section;
-		}
-		interface tab_SUMMARY_TAB_Sections {
-			CONTACT_INFORMATION: DevKit.Controls.Section;
-			CUSTOMER_DETAILS_TAB: DevKit.Controls.Section;
-			MapSection: DevKit.Controls.Section;
-			SOCIAL_PANE_TAB: DevKit.Controls.Section;
-			Summary_CadenceWidget: DevKit.Controls.Section;
-			Summary_section_6: DevKit.Controls.Section;
-			TalkingPoints_section: DevKit.Controls.Section;
-		}
-		interface tab_DETAILS_TAB extends DevKit.Controls.ITab {
-			Section: tab_DETAILS_TAB_Sections;
-		}
-		interface tab_SUMMARY_TAB extends DevKit.Controls.ITab {
-			Section: tab_SUMMARY_TAB_Sections;
-		}
-		interface Tabs {
-			DETAILS_TAB: tab_DETAILS_TAB;
-			SUMMARY_TAB: tab_SUMMARY_TAB;
-		}
-		interface Body {
-			Tab: Tabs;
-			ActionCards: DevKit.Controls.ActionCards;
-			/** Shows the complete primary address. */
-			Address1_Composite: DevKit.Controls.String;
-			/** Select the freight terms for the primary address to make sure shipping orders are processed correctly. */
-			Address1_FreightTermsCode: DevKit.Controls.OptionSet;
-			/** Select a shipping method for deliveries sent to this address. */
-			Address1_ShippingMethodCode: DevKit.Controls.OptionSet;
-			/** Enter the date of the contact's wedding or service anniversary for use in customer gift programs or other communications. */
-			Anniversary: DevKit.Controls.Date;
-			/** Enter the contact's birthday for use in customer gift programs or other communications. */
-			BirthDate: DevKit.Controls.Date;
-			CadenceWidgetControl: DevKit.Controls.ActionCards;
-			/** Type the credit limit of the contact for reference when you address invoice and accounting issues with the customer. */
-			CreditLimit: DevKit.Controls.Money;
-			/** Select whether the contact is on a credit hold, for reference when addressing invoice and accounting issues. */
-			CreditOnHold: DevKit.Controls.Boolean;
-			/** Type additional information to describe the contact, such as an excerpt from the company's website. */
-			Description: DevKit.Controls.String;
-			/** Select whether the contact accepts bulk email sent through marketing campaigns or quick campaigns. If Do Not Allow is selected, the contact can be added to marketing lists, but will be excluded from the email. */
-			DoNotBulkEMail: DevKit.Controls.Boolean;
-			/** Select whether the contact allows direct email sent from Microsoft Dynamics 365. If Do Not Allow is selected, Microsoft Dynamics 365 will not send the email. */
-			DoNotEMail: DevKit.Controls.Boolean;
-			/** Select whether the contact allows faxes. If Do Not Allow is selected, the contact will be excluded from any fax activities distributed in marketing campaigns. */
-			DoNotFax: DevKit.Controls.Boolean;
-			/** Select whether the contact accepts phone calls. If Do Not Allow is selected, the contact will be excluded from any phone call activities distributed in marketing campaigns. */
-			DoNotPhone: DevKit.Controls.Boolean;
-			/** Select whether the contact allows direct mail. If Do Not Allow is selected, the contact will be excluded from letter activities distributed in marketing campaigns. */
-			DoNotPostalMail: DevKit.Controls.Boolean;
-			/** Select whether the contact accepts marketing materials, such as brochures or catalogs. Contacts that opt out can be excluded from marketing initiatives. */
-			DoNotSendMM: DevKit.Controls.Boolean;
-			/** Type the primary email address for the contact. */
-			EMailAddress1: DevKit.Controls.String;
-			/** Select the marital status of the contact for reference in follow-up phone calls and other communications. */
-			FamilyStatusCode: DevKit.Controls.OptionSet;
-			/** Type the fax number for the contact. */
-			Fax: DevKit.Controls.String;
-			/** Information about whether to allow following email activity like opens, attachment views and link clicks for emails sent to the contact. */
-			FollowEmail: DevKit.Controls.Boolean;
-			/** Combines and shows the contact's first and last names so that the full name can be displayed in views and reports. */
-			FullName: DevKit.Controls.String;
-			/** Select the contact's gender to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns. */
-			GenderCode: DevKit.Controls.OptionSet;
-			/** Type the job title of the contact to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns. */
-			JobTitle: DevKit.Controls.String;
-			/** Shows the date when the contact was last included in a marketing campaign or quick campaign. */
-			LastUsedInCampaign: DevKit.Controls.Date;
-			mapcontrol: DevKit.Controls.Map;
-			/** Type the mobile phone number for the contact. */
-			MobilePhone: DevKit.Controls.String;
-			notescontrol: DevKit.Controls.Note;
-			/** Shows the lead that the contact was created if the contact was created by converting a lead in Microsoft Dynamics 365. This is used to relate the contact to the data on the originating lead for use in reporting and analytics. */
-			OriginatingLeadId: DevKit.Controls.Lookup;
-			/** Select the parent account or parent contact for the contact to provide a quick link to additional details, such as financial information, activities, and opportunities. */
-			ParentCustomerId: DevKit.Controls.Lookup;
-			/** Select the parent account or parent contact for the contact to provide a quick link to additional details, such as financial information, activities, and opportunities. */
-			ParentCustomerId1: DevKit.Controls.Lookup;
-			/** Select the payment terms to indicate when the customer needs to pay the total amount. */
-			PaymentTermsCode: DevKit.Controls.OptionSet;
-			/** Select the preferred method of contact. */
-			PreferredContactMethodCode: DevKit.Controls.OptionSet;
-			/** Select the preferred method of contact. */
-			PreferredContactMethodCode1: DevKit.Controls.OptionSet;
-			/** Type the name of the contact's spouse or partner for reference during calls, events, or other communications with the contact. */
-			SpousesName: DevKit.Controls.String;
-			TalkingPoints: DevKit.Controls.ActionCards;
-			/** Type the main phone number for this contact. */
-			Telephone1: DevKit.Controls.String;
-			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
-			TransactionCurrencyId: DevKit.Controls.Lookup;
-		}
-		interface Navigation {
-			navAddresses: DevKit.Controls.NavigationItem,
-			navAsyncOperations: DevKit.Controls.NavigationItem,
-			navInvoices: DevKit.Controls.NavigationItem,
-			navOrders: DevKit.Controls.NavigationItem,
-			navProcessSessions: DevKit.Controls.NavigationItem,
-			navQuotes: DevKit.Controls.NavigationItem,
-			navRelationships: DevKit.Controls.NavigationItem,
-			navSubConts: DevKit.Controls.NavigationItem
-		}
-		interface quickForm_contactquickform_Body {
-			EMailAddress1: DevKit.Controls.QuickView;
-			Telephone1: DevKit.Controls.QuickView;
-		}
-		interface quickForm_contactquickform extends DevKit.Controls.IQuickView {
-			Body: quickForm_contactquickform_Body;
-		}
-		interface QuickForm {
-			contactquickform: quickForm_contactquickform;
-		}
-		interface ProcessCase_to_Work_Order_Business_Process {
-
-		}
-		interface ProcessPhone_to_Case_Process {
-
-		}
-		interface Process extends DevKit.Controls.IProcess {
-			Case_to_Work_Order_Business_Process: ProcessCase_to_Work_Order_Business_Process;
-			Phone_to_Case_Process: ProcessPhone_to_Case_Process;
-		}
-		interface Grid {
-			contactopportunitiesgrid: DevKit.Controls.Grid;
-		}
-	}
-	class FormContact_Sales_Insights extends DevKit.IForm {
-		/**
-		* Sales Insights [Main Form]
-		* @param executionContext the execution context
-		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
-		*/
-		constructor(executionContext: any, defaultWebResourceName?: string);
-		/** Utility functions/methods/objects for Dynamics 365 form */
-		Utility: DevKit.Utility;
-		/** The Body section of form Contact_Sales_Insights */
-		Body: DevKit.FormContact_Sales_Insights.Body;
-		/** The Header section of form Contact_Sales_Insights */
-		Header: DevKit.FormContact_Sales_Insights.Header;
-		/** The Navigation of form Contact_Sales_Insights */
-		Navigation: DevKit.FormContact_Sales_Insights.Navigation;
-		/** The QuickForm of form Contact_Sales_Insights */
-		QuickForm: DevKit.FormContact_Sales_Insights.QuickForm;
-		/** The Process of form Contact_Sales_Insights */
-		Process: DevKit.FormContact_Sales_Insights.Process;
-		/** The Grid of form Contact_Sales_Insights */
-		Grid: DevKit.FormContact_Sales_Insights.Grid;
-		/** The SidePanes of form Contact_Sales_Insights */
-		SidePanes: DevKit.SidePanes;
-	}
 	namespace FormTimelineWallControl_Contact_Main {
 		interface Header extends DevKit.Controls.IHeader {
 			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
@@ -1205,8 +1204,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -1214,413 +1215,415 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the account with which the contact is associated. */
-		AccountId: DevKit.WebApi.LookupValueReadonly;
+		readonly AccountId: string;
 		/** Select the contact's role within the company or sales process, such as decision maker, employee, or influencer. */
-		AccountRoleCode: DevKit.WebApi.OptionSetValue;
+		AccountRoleCode: OptionSet.Contact.AccountRoleCode;
 		/** Unique identifier for address 1. */
-		Address1_AddressId: DevKit.WebApi.GuidValue;
+		Address1_AddressId: string;
 		/** Select the primary address type. */
-		Address1_AddressTypeCode: DevKit.WebApi.OptionSetValue;
+		Address1_AddressTypeCode: OptionSet.Contact.Address1_AddressTypeCode;
 		/** Type the city for the primary address. */
-		Address1_City: DevKit.WebApi.StringValue;
+		Address1_City: string;
 		/** Shows the complete primary address. */
-		Address1_Composite: DevKit.WebApi.StringValueReadonly;
+		readonly Address1_Composite: string;
 		/** Type the country or region for the primary address. */
-		Address1_Country: DevKit.WebApi.StringValue;
+		Address1_Country: string;
 		/** Type the county for the primary address. */
-		Address1_County: DevKit.WebApi.StringValue;
+		Address1_County: string;
 		/** Type the fax number associated with the primary address. */
-		Address1_Fax: DevKit.WebApi.StringValue;
+		Address1_Fax: string;
 		/** Select the freight terms for the primary address to make sure shipping orders are processed correctly. */
-		Address1_FreightTermsCode: DevKit.WebApi.OptionSetValue;
+		Address1_FreightTermsCode: OptionSet.Contact.Address1_FreightTermsCode;
 		/** Type the latitude value for the primary address for use in mapping and other applications. */
-		Address1_Latitude: DevKit.WebApi.DoubleValue;
+		Address1_Latitude: number;
 		/** Type the first line of the primary address. */
-		Address1_Line1: DevKit.WebApi.StringValue;
+		Address1_Line1: string;
 		/** Type the second line of the primary address. */
-		Address1_Line2: DevKit.WebApi.StringValue;
+		Address1_Line2: string;
 		/** Type the third line of the primary address. */
-		Address1_Line3: DevKit.WebApi.StringValue;
+		Address1_Line3: string;
 		/** Type the longitude value for the primary address for use in mapping and other applications. */
-		Address1_Longitude: DevKit.WebApi.DoubleValue;
+		Address1_Longitude: number;
 		/** Type a descriptive name for the primary address, such as Corporate Headquarters. */
-		Address1_Name: DevKit.WebApi.StringValue;
+		Address1_Name: string;
 		/** Type the ZIP Code or postal code for the primary address. */
-		Address1_PostalCode: DevKit.WebApi.StringValue;
+		Address1_PostalCode: string;
 		/** Type the post office box number of the primary address. */
-		Address1_PostOfficeBox: DevKit.WebApi.StringValue;
+		Address1_PostOfficeBox: string;
 		/** Type the name of the main contact at the account's primary address. */
-		Address1_PrimaryContactName: DevKit.WebApi.StringValue;
+		Address1_PrimaryContactName: string;
 		/** Select a shipping method for deliveries sent to this address. */
-		Address1_ShippingMethodCode: DevKit.WebApi.OptionSetValue;
+		Address1_ShippingMethodCode: OptionSet.Contact.Address1_ShippingMethodCode;
 		/** Type the state or province of the primary address. */
-		Address1_StateOrProvince: DevKit.WebApi.StringValue;
+		Address1_StateOrProvince: string;
 		/** Type the main phone number associated with the primary address. */
-		Address1_Telephone1: DevKit.WebApi.StringValue;
+		Address1_Telephone1: string;
 		/** Type a second phone number associated with the primary address. */
-		Address1_Telephone2: DevKit.WebApi.StringValue;
+		Address1_Telephone2: string;
 		/** Type a third phone number associated with the primary address. */
-		Address1_Telephone3: DevKit.WebApi.StringValue;
+		Address1_Telephone3: string;
 		/** Type the UPS zone of the primary address to make sure shipping charges are calculated correctly and deliveries are made promptly, if shipped by UPS. */
-		Address1_UPSZone: DevKit.WebApi.StringValue;
+		Address1_UPSZone: string;
 		/** Select the time zone, or UTC offset, for this address so that other people can reference it when they contact someone at this address. */
-		Address1_UTCOffset: DevKit.WebApi.IntegerValue;
+		Address1_UTCOffset: number;
 		/** Unique identifier for address 2. */
-		Address2_AddressId: DevKit.WebApi.GuidValue;
+		Address2_AddressId: string;
 		/** Select the secondary address type. */
-		Address2_AddressTypeCode: DevKit.WebApi.OptionSetValue;
+		Address2_AddressTypeCode: OptionSet.Contact.Address2_AddressTypeCode;
 		/** Type the city for the secondary address. */
-		Address2_City: DevKit.WebApi.StringValue;
+		Address2_City: string;
 		/** Shows the complete secondary address. */
-		Address2_Composite: DevKit.WebApi.StringValueReadonly;
+		readonly Address2_Composite: string;
 		/** Type the country or region for the secondary address. */
-		Address2_Country: DevKit.WebApi.StringValue;
+		Address2_Country: string;
 		/** Type the county for the secondary address. */
-		Address2_County: DevKit.WebApi.StringValue;
+		Address2_County: string;
 		/** Type the fax number associated with the secondary address. */
-		Address2_Fax: DevKit.WebApi.StringValue;
+		Address2_Fax: string;
 		/** Select the freight terms for the secondary address to make sure shipping orders are processed correctly. */
-		Address2_FreightTermsCode: DevKit.WebApi.OptionSetValue;
+		Address2_FreightTermsCode: OptionSet.Contact.Address2_FreightTermsCode;
 		/** Type the latitude value for the secondary address for use in mapping and other applications. */
-		Address2_Latitude: DevKit.WebApi.DoubleValue;
+		Address2_Latitude: number;
 		/** Type the first line of the secondary address. */
-		Address2_Line1: DevKit.WebApi.StringValue;
+		Address2_Line1: string;
 		/** Type the second line of the secondary address. */
-		Address2_Line2: DevKit.WebApi.StringValue;
+		Address2_Line2: string;
 		/** Type the third line of the secondary address. */
-		Address2_Line3: DevKit.WebApi.StringValue;
+		Address2_Line3: string;
 		/** Type the longitude value for the secondary address for use in mapping and other applications. */
-		Address2_Longitude: DevKit.WebApi.DoubleValue;
+		Address2_Longitude: number;
 		/** Type a descriptive name for the secondary address, such as Corporate Headquarters. */
-		Address2_Name: DevKit.WebApi.StringValue;
+		Address2_Name: string;
 		/** Type the ZIP Code or postal code for the secondary address. */
-		Address2_PostalCode: DevKit.WebApi.StringValue;
+		Address2_PostalCode: string;
 		/** Type the post office box number of the secondary address. */
-		Address2_PostOfficeBox: DevKit.WebApi.StringValue;
+		Address2_PostOfficeBox: string;
 		/** Type the name of the main contact at the account's secondary address. */
-		Address2_PrimaryContactName: DevKit.WebApi.StringValue;
+		Address2_PrimaryContactName: string;
 		/** Select a shipping method for deliveries sent to this address. */
-		Address2_ShippingMethodCode: DevKit.WebApi.OptionSetValue;
+		Address2_ShippingMethodCode: OptionSet.Contact.Address2_ShippingMethodCode;
 		/** Type the state or province of the secondary address. */
-		Address2_StateOrProvince: DevKit.WebApi.StringValue;
+		Address2_StateOrProvince: string;
 		/** Type the main phone number associated with the secondary address. */
-		Address2_Telephone1: DevKit.WebApi.StringValue;
+		Address2_Telephone1: string;
 		/** Type a second phone number associated with the secondary address. */
-		Address2_Telephone2: DevKit.WebApi.StringValue;
+		Address2_Telephone2: string;
 		/** Type a third phone number associated with the secondary address. */
-		Address2_Telephone3: DevKit.WebApi.StringValue;
+		Address2_Telephone3: string;
 		/** Type the UPS zone of the secondary address to make sure shipping charges are calculated correctly and deliveries are made promptly, if shipped by UPS. */
-		Address2_UPSZone: DevKit.WebApi.StringValue;
+		Address2_UPSZone: string;
 		/** Select the time zone, or UTC offset, for this address so that other people can reference it when they contact someone at this address. */
-		Address2_UTCOffset: DevKit.WebApi.IntegerValue;
+		Address2_UTCOffset: number;
 		/** Unique identifier for address 3. */
-		Address3_AddressId: DevKit.WebApi.GuidValue;
+		Address3_AddressId: string;
 		/** Select the third address type. */
-		Address3_AddressTypeCode: DevKit.WebApi.OptionSetValue;
+		Address3_AddressTypeCode: OptionSet.Contact.Address3_AddressTypeCode;
 		/** Type the city for the 3rd address. */
-		Address3_City: DevKit.WebApi.StringValue;
+		Address3_City: string;
 		/** Shows the complete third address. */
-		Address3_Composite: DevKit.WebApi.StringValueReadonly;
+		readonly Address3_Composite: string;
 		/** the country or region for the 3rd address. */
-		Address3_Country: DevKit.WebApi.StringValue;
+		Address3_Country: string;
 		/** Type the county for the third address. */
-		Address3_County: DevKit.WebApi.StringValue;
+		Address3_County: string;
 		/** Type the fax number associated with the third address. */
-		Address3_Fax: DevKit.WebApi.StringValue;
+		Address3_Fax: string;
 		/** Select the freight terms for the third address to make sure shipping orders are processed correctly. */
-		Address3_FreightTermsCode: DevKit.WebApi.OptionSetValue;
+		Address3_FreightTermsCode: OptionSet.Contact.Address3_FreightTermsCode;
 		/** Type the latitude value for the third address for use in mapping and other applications. */
-		Address3_Latitude: DevKit.WebApi.DoubleValue;
+		Address3_Latitude: number;
 		/** the first line of the 3rd address. */
-		Address3_Line1: DevKit.WebApi.StringValue;
+		Address3_Line1: string;
 		/** the second line of the 3rd address. */
-		Address3_Line2: DevKit.WebApi.StringValue;
+		Address3_Line2: string;
 		/** the third line of the 3rd address. */
-		Address3_Line3: DevKit.WebApi.StringValue;
+		Address3_Line3: string;
 		/** Type the longitude value for the third address for use in mapping and other applications. */
-		Address3_Longitude: DevKit.WebApi.DoubleValue;
+		Address3_Longitude: number;
 		/** Type a descriptive name for the third address, such as Corporate Headquarters. */
-		Address3_Name: DevKit.WebApi.StringValue;
+		Address3_Name: string;
 		/** the ZIP Code or postal code for the 3rd address. */
-		Address3_PostalCode: DevKit.WebApi.StringValue;
+		Address3_PostalCode: string;
 		/** the post office box number of the 3rd address. */
-		Address3_PostOfficeBox: DevKit.WebApi.StringValue;
+		Address3_PostOfficeBox: string;
 		/** Type the name of the main contact at the account's third address. */
-		Address3_PrimaryContactName: DevKit.WebApi.StringValue;
+		Address3_PrimaryContactName: string;
 		/** Select a shipping method for deliveries sent to this address. */
-		Address3_ShippingMethodCode: DevKit.WebApi.OptionSetValue;
+		Address3_ShippingMethodCode: OptionSet.Contact.Address3_ShippingMethodCode;
 		/** the state or province of the third address. */
-		Address3_StateOrProvince: DevKit.WebApi.StringValue;
+		Address3_StateOrProvince: string;
 		/** Type the main phone number associated with the third address. */
-		Address3_Telephone1: DevKit.WebApi.StringValue;
+		Address3_Telephone1: string;
 		/** Type a second phone number associated with the third address. */
-		Address3_Telephone2: DevKit.WebApi.StringValue;
+		Address3_Telephone2: string;
 		/** Type a third phone number associated with the primary address. */
-		Address3_Telephone3: DevKit.WebApi.StringValue;
+		Address3_Telephone3: string;
 		/** Type the UPS zone of the third address to make sure shipping charges are calculated correctly and deliveries are made promptly, if shipped by UPS. */
-		Address3_UPSZone: DevKit.WebApi.StringValue;
+		Address3_UPSZone: string;
 		/** Select the time zone, or UTC offset, for this address so that other people can reference it when they contact someone at this address. */
-		Address3_UTCOffset: DevKit.WebApi.IntegerValue;
+		Address3_UTCOffset: number;
 		/** For system use only. */
-		Aging30: DevKit.WebApi.MoneyValueReadonly;
+		readonly Aging30: number;
 		/** Shows the Aging 30 field converted to the system's default base currency. The calculations use the exchange rate specified in the Currencies area. */
-		Aging30_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly Aging30_Base: number;
 		/** For system use only. */
-		Aging60: DevKit.WebApi.MoneyValueReadonly;
+		readonly Aging60: number;
 		/** Shows the Aging 60 field converted to the system's default base currency. The calculations use the exchange rate specified in the Currencies area. */
-		Aging60_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly Aging60_Base: number;
 		/** For system use only. */
-		Aging90: DevKit.WebApi.MoneyValueReadonly;
+		readonly Aging90: number;
 		/** Shows the Aging 90 field converted to the system's default base currency. The calculations use the exchange rate specified in the Currencies area. */
-		Aging90_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly Aging90_Base: number;
 		/** Enter the date of the contact's wedding or service anniversary for use in customer gift programs or other communications. */
-		Anniversary_DateOnly: DevKit.WebApi.DateOnlyValue;
+		Anniversary_DateOnly: Date;
 		/** Type the contact's annual income for use in profiling and financial analysis. */
-		AnnualIncome: DevKit.WebApi.MoneyValue;
+		AnnualIncome: number;
 		/** Shows the Annual Income field converted to the system's default base currency. The calculations use the exchange rate specified in the Currencies area. */
-		AnnualIncome_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly AnnualIncome_Base: number;
 		/** Type the name of the contact's assistant. */
-		AssistantName: DevKit.WebApi.StringValue;
+		AssistantName: string;
 		/** Type the phone number for the contact's assistant. */
-		AssistantPhone: DevKit.WebApi.StringValue;
+		AssistantPhone: string;
 		/** Enter the contact's birthday for use in customer gift programs or other communications. */
-		BirthDate_DateOnly: DevKit.WebApi.DateOnlyValue;
+		BirthDate_DateOnly: Date;
 		/** Type a second business phone number for this contact. */
-		Business2: DevKit.WebApi.StringValue;
+		Business2: string;
 		/** Stores Image of the Business Card */
-		BusinessCard: DevKit.WebApi.StringValue;
+		BusinessCard: string;
 		/** Stores Business Card Control Properties. */
-		BusinessCardAttributes: DevKit.WebApi.StringValue;
+		BusinessCardAttributes: string;
 		/** Type a callback phone number for this contact. */
-		Callback: DevKit.WebApi.StringValue;
+		Callback: string;
 		/** Type the names of the contact's children for reference in communications and client programs. */
-		ChildrensNames: DevKit.WebApi.StringValue;
+		ChildrensNames: string;
 		/** Type the company phone of the contact. */
-		Company: DevKit.WebApi.StringValue;
+		Company: string;
 		/** Unique identifier of the contact. */
-		ContactId: DevKit.WebApi.GuidValue;
+		ContactId: string;
 		/** Shows who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Shows the external party who created the record. */
-		CreatedByExternalParty: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedByExternalParty: string;
 		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Type the credit limit of the contact for reference when you address invoice and accounting issues with the customer. */
-		CreditLimit: DevKit.WebApi.MoneyValue;
+		CreditLimit: number;
 		/** Shows the Credit Limit field converted to the system's default base currency for reporting purposes. The calculations use the exchange rate specified in the Currencies area. */
-		CreditLimit_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly CreditLimit_Base: number;
 		/** Select whether the contact is on a credit hold, for reference when addressing invoice and accounting issues. */
-		CreditOnHold: DevKit.WebApi.BooleanValue;
+		CreditOnHold: boolean;
 		/** Select the size of the contact's company for segmentation and reporting purposes. */
-		CustomerSizeCode: DevKit.WebApi.OptionSetValue;
+		CustomerSizeCode: OptionSet.Contact.CustomerSizeCode;
 		/** Select the category that best describes the relationship between the contact and your organization. */
-		CustomerTypeCode: DevKit.WebApi.OptionSetValue;
+		CustomerTypeCode: OptionSet.Contact.CustomerTypeCode;
 		/** Choose the default price list associated with the contact to make sure the correct product prices for this customer are applied in sales opportunities, quotes, and orders. */
-		DefaultPriceLevelId: DevKit.WebApi.LookupValue;
+		DefaultPriceLevelId: string;
 		/** Type the department or business unit where the contact works in the parent company or business. */
-		Department: DevKit.WebApi.StringValue;
+		Department: string;
 		/** Type additional information to describe the contact, such as an excerpt from the company's website. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Select whether the contact accepts bulk email sent through marketing campaigns or quick campaigns. If Do Not Allow is selected, the contact can be added to marketing lists, but will be excluded from the email. */
-		DoNotBulkEMail: DevKit.WebApi.BooleanValue;
+		DoNotBulkEMail: boolean;
 		/** Select whether the contact accepts bulk postal mail sent through marketing campaigns or quick campaigns. If Do Not Allow is selected, the contact can be added to marketing lists, but will be excluded from the letters. */
-		DoNotBulkPostalMail: DevKit.WebApi.BooleanValue;
+		DoNotBulkPostalMail: boolean;
 		/** Select whether the contact allows direct email sent from Microsoft Dynamics 365. If Do Not Allow is selected, Microsoft Dynamics 365 will not send the email. */
-		DoNotEMail: DevKit.WebApi.BooleanValue;
+		DoNotEMail: boolean;
 		/** Select whether the contact allows faxes. If Do Not Allow is selected, the contact will be excluded from any fax activities distributed in marketing campaigns. */
-		DoNotFax: DevKit.WebApi.BooleanValue;
+		DoNotFax: boolean;
 		/** Select whether the contact accepts phone calls. If Do Not Allow is selected, the contact will be excluded from any phone call activities distributed in marketing campaigns. */
-		DoNotPhone: DevKit.WebApi.BooleanValue;
+		DoNotPhone: boolean;
 		/** Select whether the contact allows direct mail. If Do Not Allow is selected, the contact will be excluded from letter activities distributed in marketing campaigns. */
-		DoNotPostalMail: DevKit.WebApi.BooleanValue;
+		DoNotPostalMail: boolean;
 		/** Select whether the contact accepts marketing materials, such as brochures or catalogs. Contacts that opt out can be excluded from marketing initiatives. */
-		DoNotSendMM: DevKit.WebApi.BooleanValue;
+		DoNotSendMM: boolean;
 		/** Select the contact's highest level of education for use in segmentation and analysis. */
-		EducationCode: DevKit.WebApi.OptionSetValue;
+		EducationCode: OptionSet.Contact.EducationCode;
 		/** Type the primary email address for the contact. */
-		EMailAddress1: DevKit.WebApi.StringValue;
+		EMailAddress1: string;
 		/** Type the secondary email address for the contact. */
-		EMailAddress2: DevKit.WebApi.StringValue;
+		EMailAddress2: string;
 		/** Type an alternate email address for the contact. */
-		EMailAddress3: DevKit.WebApi.StringValue;
+		EMailAddress3: string;
 		/** Type the employee ID or number for the contact for reference in orders, service cases, or other communications with the contact's organization. */
-		EmployeeId: DevKit.WebApi.StringValue;
+		EmployeeId: string;
 		/** Shows the default image for the record. */
-		EntityImage: DevKit.WebApi.StringValue;
-		EntityImage_Timestamp: DevKit.WebApi.BigIntValueReadonly;
-		EntityImage_URL: DevKit.WebApi.StringValueReadonly;
+		EntityImage: string;
+		EntityImage_Timestamp: number;
+		EntityImage_URL: string;
 		/** For internal use only. */
-		EntityImageId: DevKit.WebApi.GuidValueReadonly;
+		readonly EntityImageId: string;
 		/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Identifier for an external user. */
-		ExternalUserIdentifier: DevKit.WebApi.StringValue;
+		ExternalUserIdentifier: string;
 		/** Select the marital status of the contact for reference in follow-up phone calls and other communications. */
-		FamilyStatusCode: DevKit.WebApi.OptionSetValue;
+		FamilyStatusCode: OptionSet.Contact.FamilyStatusCode;
 		/** Type the fax number for the contact. */
-		Fax: DevKit.WebApi.StringValue;
+		Fax: string;
 		/** Type the contact's first name to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns. */
-		FirstName: DevKit.WebApi.StringValue;
+		FirstName: string;
 		/** Information about whether to allow following email activity like opens, attachment views and link clicks for emails sent to the contact. */
-		FollowEmail: DevKit.WebApi.BooleanValue;
+		FollowEmail: boolean;
 		/** Type the URL for the contact's FTP site to enable users to access data and share documents. */
-		FtpSiteUrl: DevKit.WebApi.StringValue;
+		FtpSiteUrl: string;
 		/** Combines and shows the contact's first and last names so that the full name can be displayed in views and reports. */
-		FullName: DevKit.WebApi.StringValueReadonly;
+		readonly FullName: string;
 		/** Select the contact's gender to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns. */
-		GenderCode: DevKit.WebApi.OptionSetValue;
+		GenderCode: OptionSet.Contact.GenderCode;
 		/** Type the passport number or other government ID for the contact for use in documents or reports. */
-		GovernmentId: DevKit.WebApi.StringValue;
+		GovernmentId: string;
 		/** Select whether the contact has any children for reference in follow-up phone calls and other communications. */
-		HasChildrenCode: DevKit.WebApi.OptionSetValue;
+		HasChildrenCode: OptionSet.Contact.HasChildrenCode;
 		/** Type a second home phone number for this contact. */
-		Home2: DevKit.WebApi.StringValue;
+		Home2: string;
 		/** Unique identifier of the data import or data migration that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Information about whether the contact was auto-created when promoting an email or an appointment. */
-		IsAutoCreate: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsAutoCreate: boolean;
 		/** Select whether the contact exists in a separate accounting or other system, such as Microsoft Dynamics GP or another ERP database, for use in integration processes. */
-		IsBackofficeCustomer: DevKit.WebApi.BooleanValue;
-		IsPrivate: DevKit.WebApi.BooleanValueReadonly;
+		IsBackofficeCustomer: boolean;
+		readonly IsPrivate: boolean;
 		/** Type the job title of the contact to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns. */
-		JobTitle: DevKit.WebApi.StringValue;
+		JobTitle: string;
 		/** Type the contact's last name to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns. */
-		LastName: DevKit.WebApi.StringValue;
+		LastName: string;
 		/** Contains the date and time stamp of the last on hold time. */
-		LastOnHoldTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		LastOnHoldTime_UtcDateAndTime: Date;
 		/** Shows the date when the contact was last included in a marketing campaign or quick campaign. */
-		LastUsedInCampaign_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		LastUsedInCampaign_UtcDateOnly: Date;
 		/** Select the primary marketing source that directed the contact to your organization. */
-		LeadSourceCode: DevKit.WebApi.OptionSetValue;
+		LeadSourceCode: OptionSet.Contact.LeadSourceCode;
 		/** Type the name of the contact's manager for use in escalating issues or other follow-up communications with the contact. */
-		ManagerName: DevKit.WebApi.StringValue;
+		ManagerName: string;
 		/** Type the phone number for the contact's manager. */
-		ManagerPhone: DevKit.WebApi.StringValue;
+		ManagerPhone: string;
 		/** Whether is only for marketing */
-		MarketingOnly: DevKit.WebApi.BooleanValue;
+		MarketingOnly: boolean;
 		/** Unique identifier of the master contact for merge. */
-		MasterId: DevKit.WebApi.LookupValueReadonly;
+		readonly MasterId: string;
 		/** Shows whether the account has been merged with a master contact. */
-		Merged: DevKit.WebApi.BooleanValueReadonly;
+		readonly Merged: boolean;
 		/** Type the contact's middle name or initial to make sure the contact is addressed correctly. */
-		MiddleName: DevKit.WebApi.StringValue;
+		MiddleName: string;
 		/** Type the mobile phone number for the contact. */
-		MobilePhone: DevKit.WebApi.StringValue;
+		MobilePhone: string;
 		/** Shows who last updated the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Shows the external party who modified the record. */
-		ModifiedByExternalParty: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedByExternalParty: string;
 		/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Shows who last updated the record on behalf of another user. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Describes whether contact is opted out or not */
-		msdyn_gdproptout: DevKit.WebApi.BooleanValue;
+		msdyn_gdproptout: boolean;
 		/** Whether or not the contact belongs to the associated account */
-		msdyn_orgchangestatus: DevKit.WebApi.OptionSetValue;
-		msdyusd_CurrentProfile: DevKit.WebApi.StringValue;
-		msdyusd_Facebook: DevKit.WebApi.StringValue;
-		msdyusd_Twitter: DevKit.WebApi.StringValue;
+		msdyn_orgchangestatus: OptionSet.Contact.msdyn_orgchangestatus;
+		/** Unique identifier for Segment associated with contact. */
+		msdyn_segmentid: string;
+		msdyusd_CurrentProfile: string;
+		msdyusd_Facebook: string;
+		msdyusd_Twitter: string;
 		/** Type the contact's nickname. */
-		NickName: DevKit.WebApi.StringValue;
+		NickName: string;
 		/** Type the number of children the contact has for reference in follow-up phone calls and other communications. */
-		NumberOfChildren: DevKit.WebApi.IntegerValue;
+		NumberOfChildren: number;
 		/** Shows how long, in minutes, that the record was on hold. */
-		OnHoldTime: DevKit.WebApi.IntegerValueReadonly;
+		readonly OnHoldTime: number;
 		/** Shows the lead that the contact was created if the contact was created by converting a lead in Microsoft Dynamics 365. This is used to relate the contact to the data on the originating lead for use in reporting and analytics. */
-		OriginatingLeadId: DevKit.WebApi.LookupValue;
+		OriginatingLeadId: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier of the business unit that owns the contact. */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier of the team who owns the contact. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier of the user who owns the contact. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Type the pager number for the contact. */
-		Pager: DevKit.WebApi.StringValue;
+		Pager: string;
 		/** Unique identifier of the parent contact. */
-		ParentContactId: DevKit.WebApi.LookupValueReadonly;
+		readonly ParentContactId: string;
 		/** Select the parent account or parent contact for the contact to provide a quick link to additional details, such as financial information, activities, and opportunities. */
-		parentcustomerid_account: DevKit.WebApi.LookupValue;
+		parentcustomerid_account: string;
 		/** Select the parent account or parent contact for the contact to provide a quick link to additional details, such as financial information, activities, and opportunities. */
-		parentcustomerid_contact: DevKit.WebApi.LookupValue;
+		parentcustomerid_contact: string;
 		/** Shows whether the contact participates in workflow rules. */
-		ParticipatesInWorkflow: DevKit.WebApi.BooleanValue;
+		ParticipatesInWorkflow: boolean;
 		/** Select the payment terms to indicate when the customer needs to pay the total amount. */
-		PaymentTermsCode: DevKit.WebApi.OptionSetValue;
+		PaymentTermsCode: OptionSet.Contact.PaymentTermsCode;
 		/** Select the preferred day of the week for service appointments. */
-		PreferredAppointmentDayCode: DevKit.WebApi.OptionSetValue;
+		PreferredAppointmentDayCode: OptionSet.Contact.PreferredAppointmentDayCode;
 		/** Select the preferred time of day for service appointments. */
-		PreferredAppointmentTimeCode: DevKit.WebApi.OptionSetValue;
+		PreferredAppointmentTimeCode: OptionSet.Contact.PreferredAppointmentTimeCode;
 		/** Select the preferred method of contact. */
-		PreferredContactMethodCode: DevKit.WebApi.OptionSetValue;
+		PreferredContactMethodCode: OptionSet.Contact.PreferredContactMethodCode;
 		/** Choose the contact's preferred service facility or equipment to make sure services are scheduled correctly for the customer. */
-		PreferredEquipmentId: DevKit.WebApi.LookupValue;
+		PreferredEquipmentId: string;
 		/** Choose the contact's preferred service to make sure services are scheduled correctly for the customer. */
-		PreferredServiceId: DevKit.WebApi.LookupValue;
+		PreferredServiceId: string;
 		/** Choose the regular or preferred customer service representative for reference when scheduling service activities for the contact. */
-		PreferredSystemUserId: DevKit.WebApi.LookupValue;
+		PreferredSystemUserId: string;
 		/** Shows the ID of the process. */
-		ProcessId: DevKit.WebApi.GuidValue;
+		ProcessId: string;
 		/** Type the salutation of the contact to make sure the contact is addressed correctly in sales calls, email messages, and marketing campaigns. */
-		Salutation: DevKit.WebApi.StringValue;
+		Salutation: string;
 		/** Select a shipping method for deliveries sent to this address. */
-		ShippingMethodCode: DevKit.WebApi.OptionSetValue;
+		ShippingMethodCode: OptionSet.Contact.ShippingMethodCode;
 		/** Choose the service level agreement (SLA) that you want to apply to the Contact record. */
-		SLAId: DevKit.WebApi.LookupValue;
+		SLAId: string;
 		/** Last SLA that was applied to this case. This field is for internal use only. */
-		SLAInvokedId: DevKit.WebApi.LookupValueReadonly;
+		readonly SLAInvokedId: string;
 		/** Type the name of the contact's spouse or partner for reference during calls, events, or other communications with the contact. */
-		SpousesName: DevKit.WebApi.StringValue;
+		SpousesName: string;
 		/** Shows the ID of the stage. */
-		StageId: DevKit.WebApi.GuidValue;
+		StageId: string;
 		/** Shows whether the contact is active or inactive. Inactive contacts are read-only and can't be edited unless they are reactivated. */
-		StateCode: DevKit.WebApi.OptionSetValue;
+		StateCode: OptionSet.Contact.StateCode;
 		/** Select the contact's status. */
-		StatusCode: DevKit.WebApi.OptionSetValue;
+		StatusCode: OptionSet.Contact.StatusCode;
 		/** For internal use only. */
-		SubscriptionId: DevKit.WebApi.GuidValue;
+		SubscriptionId: string;
 		/** Type the suffix used in the contact's name, such as Jr. or Sr. to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns. */
-		Suffix: DevKit.WebApi.StringValue;
+		Suffix: string;
 		/** Number of users or conversations followed the record */
-		TeamsFollowed: DevKit.WebApi.IntegerValue;
+		TeamsFollowed: number;
 		/** Type the main phone number for this contact. */
-		Telephone1: DevKit.WebApi.StringValue;
+		Telephone1: string;
 		/** Type a second phone number for this contact. */
-		Telephone2: DevKit.WebApi.StringValue;
+		Telephone2: string;
 		/** Type a third phone number for this contact. */
-		Telephone3: DevKit.WebApi.StringValue;
+		Telephone3: string;
 		/** Select a region or territory for the contact for use in segmentation and analysis. */
-		TerritoryCode: DevKit.WebApi.OptionSetValue;
+		TerritoryCode: OptionSet.Contact.TerritoryCode;
 		/** Total time spent for emails (read and write) and meetings by me in relation to the contact record. */
-		TimeSpentByMeOnEmailAndMeetings: DevKit.WebApi.StringValueReadonly;
+		readonly TimeSpentByMeOnEmailAndMeetings: string;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** For internal use only. */
-		TraversedPath: DevKit.WebApi.StringValue;
+		TraversedPath: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version number of the contact. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 		/** Type the contact's professional or personal website or blog URL. */
-		WebSiteUrl: DevKit.WebApi.StringValue;
+		WebSiteUrl: string;
 		/** Type the phonetic spelling of the contact's first name, if the name is specified in Japanese, to make sure the name is pronounced correctly in phone calls with the contact. */
-		YomiFirstName: DevKit.WebApi.StringValue;
+		YomiFirstName: string;
 		/** Shows the combined Yomi first and last names of the contact so that the full phonetic name can be displayed in views and reports. */
-		YomiFullName: DevKit.WebApi.StringValueReadonly;
+		readonly YomiFullName: string;
 		/** Type the phonetic spelling of the contact's last name, if the name is specified in Japanese, to make sure the name is pronounced correctly in phone calls with the contact. */
-		YomiLastName: DevKit.WebApi.StringValue;
+		YomiLastName: string;
 		/** Type the phonetic spelling of the contact's middle name, if the name is specified in Japanese, to make sure the name is pronounced correctly in phone calls with the contact. */
-		YomiMiddleName: DevKit.WebApi.StringValue;
+		YomiMiddleName: string;
 	}
 }
 declare namespace OptionSet {
@@ -1817,4 +1820,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

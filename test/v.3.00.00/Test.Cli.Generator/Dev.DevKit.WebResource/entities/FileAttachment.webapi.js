@@ -4,20 +4,18 @@ var DevKit;
 (function (DevKit) {
 	'use strict';
 	DevKit.FileAttachmentApi = function (e) {
-		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
 			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-			var property = {};
 			var getFormattedValue = function () {
 				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-					return EMPTY_STRING;
+					return '';
 				}
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
 					if (entity[logicalName + l] === entityLogicalName) {
 						return entity[logicalName + f];
 					}
-					return EMPTY_STRING;
+					return '';
 				}
 				if (isMultiOptionSet) {
 					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -42,30 +40,29 @@ var DevKit;
 			var setValue = function (value) {
 				if (isMultiOptionSet) value = value.join(',');
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+					value = value.replace('{', '').replace('}', '');
 					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
 				} else {
 					upsertEntity[logicalName] = value;
 				}
 				entity[logicalName] = value;
 			};
-			Object.defineProperty(property, 'FormattedValue', {
+			Object.defineProperty(obj.FormattedValue, field, {
 				get: getFormattedValue
 			});
 			if (readOnly) {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue
 				});
 			}
 			else {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue,
 					set: setValue
 				});
 			}
-			return property;
 		}
-		var fileattachment = {
+		var _fileattachment = {
 			Body: { a: 'body', r: true },
 			CreatedOn_UtcDateAndTime: { a: 'createdon', r: true },
 			FileAttachmentId: { a: 'fileattachmentid' },
@@ -81,7 +78,9 @@ var DevKit;
 			objectid_exportsolutionupload: { b: 'objectid_exportsolutionupload', a: '_objectid_value', c: 'exportsolutionuploads', d: 'exportsolutionupload' },
 			objectid_flowsession: { b: 'objectid_flowsession', a: '_objectid_value', c: 'flowsessions', d: 'flowsession' },
 			objectid_imagedescriptor: { b: 'objectid_imagedescriptor', a: '_objectid_value', c: 'imagedescriptors', d: 'imagedescriptor' },
+			objectid_knowledgearticle: { b: 'objectid_knowledgearticle', a: '_objectid_value', c: 'knowledgearticles', d: 'knowledgearticle' },
 			objectid_mailbox: { b: 'objectid_mailbox', a: '_objectid_value', c: 'mailboxes', d: 'mailbox' },
+			objectid_msdyn_aibfeedbackloop: { b: 'objectid_msdyn_aibfeedbackloop', a: '_objectid_value', c: 'msdyn_aibfeedbackloops', d: 'msdyn_aibfeedbackloop' },
 			objectid_msdyn_aibfile: { b: 'objectid_msdyn_aibfile', a: '_objectid_value', c: 'msdyn_aibfiles', d: 'msdyn_aibfile' },
 			objectid_msdyn_aiconfiguration: { b: 'objectid_msdyn_aiconfiguration', a: '_objectid_value', c: 'msdyn_aiconfigurations', d: 'msdyn_aiconfiguration' },
 			objectid_msdyn_bookableresourcebookingquicknote: { b: 'objectid_msdyn_bookableresourcebookingquicknote', a: '_objectid_value', c: 'msdyn_bookableresourcebookingquicknotes', d: 'msdyn_bookableresourcebookingquicknote' },
@@ -110,20 +109,23 @@ var DevKit;
 		};
 		if (e === undefined) e = {};
 		var u = {};
-		for (var field in fileattachment) {
-			var a = fileattachment[field].a;
-			var b = fileattachment[field].b;
-			var c = fileattachment[field].c;
-			var d = fileattachment[field].d;
-			var g = fileattachment[field].g;
-			var r = fileattachment[field].r;
-			fileattachment[field] = webApiField(e, a, b, c, d, r, u, g);
+		var fileattachment = {};
+		fileattachment.ODataEntity = e;
+		fileattachment.FormattedValue = {};
+		for (var field in _fileattachment) {
+			var a = _fileattachment[field].a;
+			var b = _fileattachment[field].b;
+			var c = _fileattachment[field].c;
+			var d = _fileattachment[field].d;
+			var g = _fileattachment[field].g;
+			var r = _fileattachment[field].r;
+			webApiField(fileattachment, field, e, a, b, c, d, r, u, g);
 		}
 		fileattachment.Entity = u;
 		fileattachment.EntityName = 'fileattachment';
 		fileattachment.EntityCollectionName = 'fileattachments';
 		fileattachment['@odata.etag'] = e['@odata.etag'];
-		fileattachment.getAliasedValue = function (alias, isMultiOptionSet) {
+		fileattachment.getAliasedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias] === undefined || e[alias] === null) {
 				return null;
 			}
@@ -132,7 +134,7 @@ var DevKit;
 			}
 			return e[alias];
 		}
-		fileattachment.getAliasedFormattedValue = function (alias, isMultiOptionSet) {
+		fileattachment.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
 				return EMPTY_STRING;
 			}

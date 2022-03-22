@@ -19,18 +19,20 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
 		EntityCollectionName: string;
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
-		msdyusd_configuration_entitysearchId: DevKit.WebApi.GuidValueReadonly;
-		msdyusd_configurationid: DevKit.WebApi.GuidValueReadonly;
-		msdyusd_entitysearchid: DevKit.WebApi.GuidValueReadonly;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly msdyusd_configuration_entitysearchId: string;
+		readonly msdyusd_configurationid: string;
+		readonly msdyusd_entitysearchid: string;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -53,4 +55,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

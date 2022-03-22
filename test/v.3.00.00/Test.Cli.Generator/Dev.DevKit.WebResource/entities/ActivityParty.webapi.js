@@ -4,20 +4,18 @@ var DevKit;
 (function (DevKit) {
 	'use strict';
 	DevKit.ActivityPartyApi = function (e) {
-		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
 			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-			var property = {};
 			var getFormattedValue = function () {
 				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-					return EMPTY_STRING;
+					return '';
 				}
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
 					if (entity[logicalName + l] === entityLogicalName) {
 						return entity[logicalName + f];
 					}
-					return EMPTY_STRING;
+					return '';
 				}
 				if (isMultiOptionSet) {
 					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -42,30 +40,29 @@ var DevKit;
 			var setValue = function (value) {
 				if (isMultiOptionSet) value = value.join(',');
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+					value = value.replace('{', '').replace('}', '');
 					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
 				} else {
 					upsertEntity[logicalName] = value;
 				}
 				entity[logicalName] = value;
 			};
-			Object.defineProperty(property, 'FormattedValue', {
+			Object.defineProperty(obj.FormattedValue, field, {
 				get: getFormattedValue
 			});
 			if (readOnly) {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue
 				});
 			}
 			else {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue,
 					set: setValue
 				});
 			}
-			return property;
 		}
-		var activityparty = {
+		var _activityparty = {
 			ActivityId: { b: 'activityid', a: '_activityid_value', c: 'activitypointers', d: 'activitypointer' },
 			ActivityPartyId: { a: 'activitypartyid' },
 			AddressUsed: { a: 'addressused' },
@@ -95,6 +92,7 @@ var DevKit;
 			partyid_invoice: { b: 'partyid_invoice', a: '_partyid_value', c: 'invoices', d: 'invoice' },
 			partyid_knowledgearticle: { b: 'partyid_knowledgearticle', a: '_partyid_value', c: 'knowledgearticles', d: 'knowledgearticle' },
 			partyid_lead: { b: 'partyid_lead', a: '_partyid_value', c: 'leads', d: 'lead' },
+			partyid_msdyn_salessuggestion: { b: 'partyid_msdyn_salessuggestion', a: '_partyid_value', c: 'msdyn_salessuggestions', d: 'msdyn_salessuggestion' },
 			partyid_opportunity: { b: 'partyid_opportunity', a: '_partyid_value', c: 'opportunities', d: 'opportunity' },
 			partyid_queue: { b: 'partyid_queue', a: '_partyid_value', c: 'queues', d: 'queue' },
 			partyid_quote: { b: 'partyid_quote', a: '_partyid_value', c: 'quotes', d: 'quote' },
@@ -107,20 +105,23 @@ var DevKit;
 		};
 		if (e === undefined) e = {};
 		var u = {};
-		for (var field in activityparty) {
-			var a = activityparty[field].a;
-			var b = activityparty[field].b;
-			var c = activityparty[field].c;
-			var d = activityparty[field].d;
-			var g = activityparty[field].g;
-			var r = activityparty[field].r;
-			activityparty[field] = webApiField(e, a, b, c, d, r, u, g);
+		var activityparty = {};
+		activityparty.ODataEntity = e;
+		activityparty.FormattedValue = {};
+		for (var field in _activityparty) {
+			var a = _activityparty[field].a;
+			var b = _activityparty[field].b;
+			var c = _activityparty[field].c;
+			var d = _activityparty[field].d;
+			var g = _activityparty[field].g;
+			var r = _activityparty[field].r;
+			webApiField(activityparty, field, e, a, b, c, d, r, u, g);
 		}
 		activityparty.Entity = u;
 		activityparty.EntityName = 'activityparty';
 		activityparty.EntityCollectionName = 'activityparties';
 		activityparty['@odata.etag'] = e['@odata.etag'];
-		activityparty.getAliasedValue = function (alias, isMultiOptionSet) {
+		activityparty.getAliasedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias] === undefined || e[alias] === null) {
 				return null;
 			}
@@ -129,7 +130,7 @@ var DevKit;
 			}
 			return e[alias];
 		}
-		activityparty.getAliasedFormattedValue = function (alias, isMultiOptionSet) {
+		activityparty.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
 				return EMPTY_STRING;
 			}

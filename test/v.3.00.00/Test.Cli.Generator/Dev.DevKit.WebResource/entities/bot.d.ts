@@ -57,8 +57,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -66,81 +68,81 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Defines which users may interact with the bot. */
-		accesscontrolpolicy: DevKit.WebApi.OptionSetValue;
+		accesscontrolpolicy: OptionSet.bot.accesscontrolpolicy;
 		/** Stores information with application manifest data such as Teams application information. */
-		applicationmanifestinformation: DevKit.WebApi.StringValue;
+		applicationmanifestinformation: string;
 		/** Defines how the bot should be authenticated to the user. */
-		authenticationmode: DevKit.WebApi.OptionSetValue;
+		authenticationmode: OptionSet.bot.authenticationmode;
 		/** Defines at which point authentication for the bot should be triggered. Security can be enforced at the bot entry point, removing the need for explicit authentication nodes in the dialog flow. */
-		authenticationtrigger: DevKit.WebApi.OptionSetValue;
+		authenticationtrigger: OptionSet.bot.authenticationtrigger;
 		/** Contains a comma-delimited list of up to 20 Azure Active Directory Group IDs that are allowed to interact with the bot. This field is ignored if Access Control Policy is not set to Group membership. */
-		authorizedsecuritygroupids: DevKit.WebApi.StringValue;
+		authorizedsecuritygroupids: string;
 		/** Unique identifier of the Chatbot. */
-		botId: DevKit.WebApi.GuidValue;
+		botId: string;
 		/** For internal use only. */
-		ComponentIdUnique: DevKit.WebApi.GuidValueReadonly;
+		readonly ComponentIdUnique: string;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.bot.ComponentState;
 		/** Used to store content of bot configuration data. */
-		Configuration: DevKit.WebApi.StringValue;
+		Configuration: string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Used to visually identify your bot in channels and services. Represented in a base64 encoded string. Must be in PNG format, and no larger than 30K in size. This value can be changed at any time. */
-		iconbase64: DevKit.WebApi.StringValue;
+		iconbase64: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** For internal use only. */
-		IsCustomizable: DevKit.WebApi.ManagedPropertyValue;
+		IsCustomizable: string;
 		/** Indicates whether the solution component is part of a managed solution. */
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsManaged: boolean;
 		/** The language identifier (LCID) of this Chatbot. */
-		Language: DevKit.WebApi.OptionSetValue;
+		Language: OptionSet.bot.Language;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** The display name of the Chatbot. */
-		name: DevKit.WebApi.StringValue;
+		name: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** For internal use only. */
-		OverwriteTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly OverwriteTime_UtcDateAndTime: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Unique identifier of the user who last published the bot. */
-		publishedby: DevKit.WebApi.LookupValue;
+		publishedby: string;
 		/** Date and time when the Chatbot was last published */
-		publishedon_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		publishedon_UtcDateAndTime: Date;
 		/** Unique name identifying the Chatbot. */
-		SchemaName: DevKit.WebApi.StringValue;
+		SchemaName: string;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** Status of the Chatbot */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.bot.statecode;
 		/** Reason for the status of the Chatbot */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.bot.statuscode;
 		/** For internal use only. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SupportingSolutionId: string;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -259,4 +261,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

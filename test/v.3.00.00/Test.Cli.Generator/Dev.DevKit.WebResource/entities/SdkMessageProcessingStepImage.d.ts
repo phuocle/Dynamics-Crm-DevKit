@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,56 +30,56 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Comma-separated list of attributes that are to be passed into the SDK message processing step image. */
-		Attributes: DevKit.WebApi.StringValue;
+		Attributes: string;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.SdkMessageProcessingStepImage.ComponentState;
 		/** Unique identifier of the user who created the SDK message processing step image. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the SDK message processing step image was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the sdkmessageprocessingstepimage. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Customization level of the SDK message processing step image. */
-		CustomizationLevel: DevKit.WebApi.IntegerValueReadonly;
+		readonly CustomizationLevel: number;
 		/** Description of the SDK message processing step image. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Key name used to access the pre-image or post-image property bags in a step. */
-		EntityAlias: DevKit.WebApi.StringValue;
+		EntityAlias: string;
 		/** Type of image requested. */
-		ImageType: DevKit.WebApi.OptionSetValue;
+		ImageType: OptionSet.SdkMessageProcessingStepImage.ImageType;
 		/** Version in which the form is introduced. */
-		IntroducedVersion: DevKit.WebApi.StringValue;
+		IntroducedVersion: string;
 		/** Information that specifies whether this component can be customized. */
-		IsCustomizable: DevKit.WebApi.ManagedPropertyValue;
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		IsCustomizable: string;
+		readonly IsManaged: boolean;
 		/** Name of the property on the Request message. */
-		MessagePropertyName: DevKit.WebApi.StringValue;
+		MessagePropertyName: string;
 		/** Unique identifier of the user who last modified the SDK message processing step. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the SDK message processing step was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the sdkmessageprocessingstepimage. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Name of SdkMessage processing step image. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Unique identifier of the organization with which the SDK message processing step is associated. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** For internal use only. */
-		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly OverwriteTime_UtcDateOnly: Date;
 		/** Name of the related entity. */
-		RelatedAttributeName: DevKit.WebApi.StringValue;
+		RelatedAttributeName: string;
 		/** Unique identifier of the SDK message processing step. */
-		SdkMessageProcessingStepId: DevKit.WebApi.LookupValue;
+		SdkMessageProcessingStepId: string;
 		/** Unique identifier of the SDK message processing step image entity. */
-		SdkMessageProcessingStepImageId: DevKit.WebApi.GuidValue;
+		SdkMessageProcessingStepImageId: string;
 		/** Unique identifier of the SDK message processing step image. */
-		SdkMessageProcessingStepImageIdUnique: DevKit.WebApi.GuidValueReadonly;
+		readonly SdkMessageProcessingStepImageIdUnique: string;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** For internal use only. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SupportingSolutionId: string;
 		/** Number that identifies a specific revision of the step image.  */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -118,4 +120,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

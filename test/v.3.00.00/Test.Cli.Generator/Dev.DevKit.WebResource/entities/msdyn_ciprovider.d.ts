@@ -73,8 +73,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -82,59 +84,59 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Select Unified Interface Apps for the Channel */
-		msdyn_AppSelector: DevKit.WebApi.StringValue;
+		msdyn_AppSelector: string;
 		/** Version of the CIF Solution */
-		msdyn_cifsolversion: DevKit.WebApi.StringValue;
+		msdyn_cifsolversion: string;
 		/** API Version */
-		msdyn_ciproviderapiversion: DevKit.WebApi.OptionSetValue;
+		msdyn_ciproviderapiversion: OptionSet.msdyn_ciprovider.msdyn_ciproviderapiversion;
 		/** Unique identifier for CIProvider records */
-		msdyn_ciproviderId: DevKit.WebApi.GuidValue;
+		msdyn_ciproviderId: string;
 		/** Enable Outbound Communication */
-		msdyn_ClickToAct: DevKit.WebApi.BooleanValue;
+		msdyn_ClickToAct: boolean;
 		/** Custom Parameters for the Widget to load */
-		msdyn_customparams: DevKit.WebApi.StringValue;
+		msdyn_customparams: string;
 		/** Enable CIF Analytics for the current provider */
-		msdyn_EnableAnalytics: DevKit.WebApi.BooleanValue;
+		msdyn_EnableAnalytics: boolean;
 		/** The label is displayed as the title on the widget */
-		msdyn_Label: DevKit.WebApi.StringValue;
+		msdyn_Label: string;
 		/** URL for the Channel provider */
-		msdyn_LandingUrl: DevKit.WebApi.StringValue;
+		msdyn_LandingUrl: string;
 		/** Name of the Channel provider */
-		msdyn_name: DevKit.WebApi.StringValue;
+		msdyn_name: string;
 		/** Select the Roles for the Channel */
-		msdyn_RoleSelector: DevKit.WebApi.StringValue;
+		msdyn_RoleSelector: string;
 		/** Select Channel Order as 0 for this Channel to take precedence over others. */
-		msdyn_SortOrder: DevKit.WebApi.IntegerValue;
+		msdyn_SortOrder: number;
 		/** Domain to be whitelisted */
-		msdyn_trusteddomain: DevKit.WebApi.StringValue;
+		msdyn_trusteddomain: string;
 		/** Unique identifier for the organization */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Status of the Channel Provider */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.msdyn_ciprovider.statecode;
 		/** Reason for the status of the Channel Provider */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.msdyn_ciprovider.statuscode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -175,4 +177,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

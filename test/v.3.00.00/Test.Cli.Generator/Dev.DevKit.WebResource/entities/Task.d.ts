@@ -172,8 +172,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -181,291 +183,295 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** For internal use only. */
-		ActivityAdditionalParams: DevKit.WebApi.StringValue;
+		ActivityAdditionalParams: string;
 		/** Unique identifier of the task. */
-		ActivityId: DevKit.WebApi.GuidValue;
+		ActivityId: string;
 		/** Type the number of minutes spent on the task. The duration is used in reporting. */
-		ActualDurationMinutes: DevKit.WebApi.IntegerValue;
+		ActualDurationMinutes: number;
 		/** Enter the actual end date and time of the task. By default, it displays when the activity was completed or canceled. */
-		ActualEnd_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		ActualEnd_UtcDateOnly: Date;
 		/** Enter the actual start date and time for the task. By default, it displays when the task was created. */
-		ActualStart_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		ActualStart_UtcDateOnly: Date;
 		/** Type a category to identify the task type, such as lead gathering or customer follow up, to tie the task to a business group or function. */
-		Category: DevKit.WebApi.StringValue;
+		Category: string;
 		/** Shows who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Assigned Task Unique Id */
-		CrmTaskAssignedUniqueId: DevKit.WebApi.GuidValue;
+		CrmTaskAssignedUniqueId: string;
 		/** Type additional information to describe the task. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Unique identifier of the data import or data migration that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Information which specifies whether the task was billed as part of resolving a case. */
-		IsBilled: DevKit.WebApi.BooleanValue;
+		IsBilled: boolean;
 		/** Information regarding whether the activity is a regular activity type or event type. */
-		IsRegularActivity: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsRegularActivity: boolean;
 		/** Information which specifies if the task was created from a workflow rule. */
-		IsWorkflowCreated: DevKit.WebApi.BooleanValue;
+		IsWorkflowCreated: boolean;
 		/** Contains the date and time stamp of the last on hold time. */
-		LastOnHoldTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		LastOnHoldTime_UtcDateAndTime: Date;
 		/** Shows who last updated the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Shows who last updated the record on behalf of another user. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Shows how long, in minutes, that the record was on hold. */
-		OnHoldTime: DevKit.WebApi.IntegerValueReadonly;
+		readonly OnHoldTime: number;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Shows the record owner's business unit. */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier of the team that owns the task. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier of the user that owns the task. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Type the percentage complete value for the task to track tasks to completion. */
-		PercentComplete: DevKit.WebApi.IntegerValue;
+		PercentComplete: number;
 		/** Select the priority so that preferred customers or critical issues are handled quickly. */
-		PriorityCode: DevKit.WebApi.OptionSetValue;
+		PriorityCode: OptionSet.Task.PriorityCode;
 		/** Shows the ID of the process. */
-		ProcessId: DevKit.WebApi.GuidValue;
+		ProcessId: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_account_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_account_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_bookableresourcebooking_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_bookableresourcebooking_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_bookableresourcebookingheader_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_bookableresourcebookingheader_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_bulkoperation_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_bulkoperation_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_campaign_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_campaign_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_campaignactivity_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_campaignactivity_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_contact_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_contact_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_contract_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_contract_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_entitlement_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_entitlement_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_entitlementtemplate_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_entitlementtemplate_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_incident_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_incident_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_invoice_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_invoice_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_knowledgearticle_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_knowledgearticle_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_knowledgebaserecord_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_knowledgebaserecord_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_lead_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_lead_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_agreement_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreement_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_agreementbookingdate_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingdate_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_agreementbookingincident_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingincident_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_agreementbookingproduct_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingproduct_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_agreementbookingservice_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingservice_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_agreementbookingservicetask_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingservicetask_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_agreementbookingsetup_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingsetup_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_agreementinvoicedate_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementinvoicedate_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_agreementinvoiceproduct_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementinvoiceproduct_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_agreementinvoicesetup_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementinvoicesetup_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_bookingalertstatus_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bookingalertstatus_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_bookingrule_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bookingrule_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_bookingtimestamp_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bookingtimestamp_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_customerasset_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_customerasset_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_fieldservicesetting_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_fieldservicesetting_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_incidenttypecharacteristic_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_incidenttypecharacteristic_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_incidenttypeproduct_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_incidenttypeproduct_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_incidenttypeservice_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_incidenttypeservice_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_inventoryadjustment_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_inventoryadjustment_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_inventoryadjustmentproduct_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_inventoryadjustmentproduct_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_inventoryjournal_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_inventoryjournal_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_inventorytransfer_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_inventorytransfer_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_payment_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_payment_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_paymentdetail_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_paymentdetail_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_paymentmethod_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_paymentmethod_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_paymentterm_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_paymentterm_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_playbookinstance_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_playbookinstance_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_postalbum_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_postalbum_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_postalcode_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_postalcode_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_processnotes_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_processnotes_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_productinventory_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_productinventory_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_projectteam_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_projectteam_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_purchaseorder_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseorder_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_purchaseorderbill_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseorderbill_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_purchaseorderproduct_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseorderproduct_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_purchaseorderreceipt_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseorderreceipt_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_purchaseorderreceiptproduct_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseorderreceiptproduct_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_purchaseordersubstatus_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseordersubstatus_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_quotebookingincident_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotebookingincident_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_quotebookingproduct_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotebookingproduct_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_quotebookingservice_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotebookingservice_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_quotebookingservicetask_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotebookingservicetask_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_resourceterritory_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_resourceterritory_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_rma_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rma_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_rmaproduct_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rmaproduct_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_rmareceipt_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rmareceipt_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_rmareceiptproduct_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rmareceiptproduct_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_rmasubstatus_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rmasubstatus_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_rtv_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rtv_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_rtvproduct_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rtvproduct_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_rtvsubstatus_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rtvsubstatus_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_shipvia_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_salessuggestion_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_systemuserschedulersetting_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_shipvia_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_timegroup_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_systemuserschedulersetting_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_timegroupdetail_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_timegroup_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_timeoffrequest_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_timegroupdetail_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_warehouse_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_timeoffrequest_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_workorder_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_warehouse_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_workordercharacteristic_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorder_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_workorderincident_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workordercharacteristic_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_workorderproduct_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderincident_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_workorderresourcerestriction_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderproduct_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_workorderservice_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderresourcerestriction_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_msdyn_workorderservicetask_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderservice_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_opportunity_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderservicetask_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_quote_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_opportunity_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_salesorder_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_quote_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_site_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_salesorder_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_uii_action_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_site_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_uii_hostedapplication_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_uii_action_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_uii_nonhostedapplication_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_uii_hostedapplication_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_uii_option_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_uii_nonhostedapplication_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_uii_savedsession_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_uii_option_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_uii_workflow_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_uii_savedsession_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_uii_workflowstep_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_uii_workflow_task: string;
 		/** Unique identifier of the object with which the task is associated. */
-		regardingobjectid_uii_workflow_workflowstep_mapping_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_uii_workflowstep_task: string;
+		/** Unique identifier of the object with which the task is associated. */
+		regardingobjectid_uii_workflow_workflowstep_mapping_task: string;
 		/** Scheduled duration of the task, specified in minutes. */
-		ScheduledDurationMinutes: DevKit.WebApi.IntegerValueReadonly;
+		readonly ScheduledDurationMinutes: number;
 		/** Enter the expected due date and time. */
-		ScheduledEnd_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		ScheduledEnd_UtcDateAndTime: Date;
 		/** Enter the expected due date and time. */
-		ScheduledStart_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		ScheduledStart_UtcDateAndTime: Date;
 		/** Choose the service that is associated with this activity. */
-		ServiceId: DevKit.WebApi.LookupValue;
+		ServiceId: string;
 		/** Choose the service level agreement (SLA) that you want to apply to the Task record. */
-		SLAId: DevKit.WebApi.LookupValue;
+		SLAId: string;
 		/** Last SLA that was applied to this Task. This field is for internal use only. */
-		SLAInvokedId: DevKit.WebApi.LookupValueReadonly;
+		readonly SLAInvokedId: string;
 		/** Shows the date and time by which the activities are sorted. */
-		SortDate_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		SortDate_UtcDateAndTime: Date;
 		/** Shows the ID of the stage. */
-		StageId: DevKit.WebApi.GuidValue;
+		StageId: string;
 		/** Shows whether the task is open, completed, or canceled. Completed and canceled tasks are read-only and can't be edited. */
-		StateCode: DevKit.WebApi.OptionSetValue;
+		StateCode: OptionSet.Task.StateCode;
 		/** Select the task's status. */
-		StatusCode: DevKit.WebApi.OptionSetValue;
+		StatusCode: OptionSet.Task.StatusCode;
 		/** Type a subcategory to identify the task type and relate the activity to a specific product, sales region, business group, or other function. */
-		Subcategory: DevKit.WebApi.StringValue;
+		Subcategory: string;
 		/** Type a short description about the objective or primary topic of the task. */
-		Subject: DevKit.WebApi.StringValue;
+		Subject: string;
 		/** For internal use only. */
-		SubscriptionId: DevKit.WebApi.GuidValue;
+		SubscriptionId: string;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** For internal use only. */
-		TraversedPath: DevKit.WebApi.StringValue;
+		TraversedPath: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version number of the task. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
 	namespace Task {
 		enum ActivityTypeCode {
+			/** 10086 */
+			Activity_record_for_the_Teams_chat,
 			/** 4201 */
 			Appointment,
-			/** 10400 */
+			/** 10404 */
 			Booking_Alert,
 			/** 4402 */
 			Campaign_Activity,
@@ -473,13 +479,13 @@ declare namespace OptionSet {
 			Campaign_Response,
 			/** 4206 */
 			Case_Resolution,
-			/** 10702 */
+			/** 10707 */
 			Conversation,
-			/** 10294 */
+			/** 10313 */
 			Customer_Voice_alert,
-			/** 10304 */
+			/** 10323 */
 			Customer_Voice_survey_invite,
-			/** 10306 */
+			/** 10325 */
 			Customer_Voice_survey_response,
 			/** 4202 */
 			Email,
@@ -491,11 +497,11 @@ declare namespace OptionSet {
 			Opportunity_Close,
 			/** 4209 */
 			Order_Close,
-			/** 10813 */
+			/** 10817 */
 			Outbound_message,
 			/** 4210 */
 			Phone_Call,
-			/** 10430 */
+			/** 10434 */
 			Project_Service_Approval,
 			/** 4406 */
 			Quick_Campaign,
@@ -505,7 +511,7 @@ declare namespace OptionSet {
 			Recurring_Appointment,
 			/** 4214 */
 			Service_Activity,
-			/** 10717 */
+			/** 10721 */
 			Session,
 			/** 4212 */
 			Task
@@ -558,4 +564,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

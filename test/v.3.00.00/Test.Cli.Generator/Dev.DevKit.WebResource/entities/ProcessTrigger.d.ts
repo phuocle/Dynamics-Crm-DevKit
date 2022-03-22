@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,58 +30,58 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.ProcessTrigger.ComponentState;
 		/** Name of the control. */
-		ControlName: DevKit.WebApi.StringValue;
+		ControlName: string;
 		/** Type of the control to which this trigger is bound */
-		ControlType: DevKit.WebApi.OptionSetValue;
+		ControlType: OptionSet.ProcessTrigger.ControlType;
 		/** Shows who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Indicates the event. */
-		Event: DevKit.WebApi.StringValue;
+		Event: string;
 		/** Unique identifier of the form associated with the trigger. */
-		FormId: DevKit.WebApi.LookupValue;
+		FormId: string;
 		/** Indicates whether this component can be customized. */
-		IsCustomizable: DevKit.WebApi.ManagedPropertyValue;
+		IsCustomizable: string;
 		/** Indicates whether the solution component is part of a managed solution. */
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsManaged: boolean;
 		/** Displays StageID to which the PBL rule belongs to */
-		MethodId: DevKit.WebApi.GuidValue;
+		MethodId: string;
 		/** Shows who last updated the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Shows who last updated the record on behalf of another user. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** For internal use only. */
-		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly OverwriteTime_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValueReadonly;
+		readonly OwnerId_team: string;
 		/** Select the business unit that owns the record. */
-		OwningBusinessUnit: DevKit.WebApi.GuidValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.GuidValueReadonly;
+		readonly OwningUser: string;
 		/** Pipeline Stage to Execute Workflow Event Plugin. */
-		PipelineStage: DevKit.WebApi.OptionSetValue;
+		PipelineStage: OptionSet.ProcessTrigger.PipelineStage;
 		/** Shows the ID of the process. */
-		ProcessId: DevKit.WebApi.LookupValue;
+		ProcessId: string;
 		/** Unique identifier of the process trigger record. */
-		ProcessTriggerId: DevKit.WebApi.GuidValue;
+		ProcessTriggerId: string;
 		/** For internal use only. */
-		ProcessTriggerIdUnique: DevKit.WebApi.GuidValueReadonly;
+		readonly ProcessTriggerIdUnique: string;
 		/** Scope level for PBL rules. */
-		Scope: DevKit.WebApi.OptionSetValue;
+		Scope: OptionSet.ProcessTrigger.Scope;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** For internal use only. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly SupportingSolutionId: string;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -132,4 +134,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

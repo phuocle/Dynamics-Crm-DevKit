@@ -4,20 +4,18 @@ var DevKit;
 (function (DevKit) {
 	'use strict';
 	DevKit.SqlEncryptionAuditApi = function (e) {
-		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
 			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-			var property = {};
 			var getFormattedValue = function () {
 				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-					return EMPTY_STRING;
+					return '';
 				}
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
 					if (entity[logicalName + l] === entityLogicalName) {
 						return entity[logicalName + f];
 					}
-					return EMPTY_STRING;
+					return '';
 				}
 				if (isMultiOptionSet) {
 					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -42,49 +40,51 @@ var DevKit;
 			var setValue = function (value) {
 				if (isMultiOptionSet) value = value.join(',');
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+					value = value.replace('{', '').replace('}', '');
 					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
 				} else {
 					upsertEntity[logicalName] = value;
 				}
 				entity[logicalName] = value;
 			};
-			Object.defineProperty(property, 'FormattedValue', {
+			Object.defineProperty(obj.FormattedValue, field, {
 				get: getFormattedValue
 			});
 			if (readOnly) {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue
 				});
 			}
 			else {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue,
 					set: setValue
 				});
 			}
-			return property;
 		}
-		var sqlencryptionaudit = {
+		var _sqlencryptionaudit = {
 			CreatedBy: { b: 'createdby', a: '_createdby_value', c: 'systemusers', d: 'systemuser', r: true },
 			CreatedOn_UtcDateOnly: { a: 'createdon', r: true }
 		};
 		if (e === undefined) e = {};
 		var u = {};
-		for (var field in sqlencryptionaudit) {
-			var a = sqlencryptionaudit[field].a;
-			var b = sqlencryptionaudit[field].b;
-			var c = sqlencryptionaudit[field].c;
-			var d = sqlencryptionaudit[field].d;
-			var g = sqlencryptionaudit[field].g;
-			var r = sqlencryptionaudit[field].r;
-			sqlencryptionaudit[field] = webApiField(e, a, b, c, d, r, u, g);
+		var sqlencryptionaudit = {};
+		sqlencryptionaudit.ODataEntity = e;
+		sqlencryptionaudit.FormattedValue = {};
+		for (var field in _sqlencryptionaudit) {
+			var a = _sqlencryptionaudit[field].a;
+			var b = _sqlencryptionaudit[field].b;
+			var c = _sqlencryptionaudit[field].c;
+			var d = _sqlencryptionaudit[field].d;
+			var g = _sqlencryptionaudit[field].g;
+			var r = _sqlencryptionaudit[field].r;
+			webApiField(sqlencryptionaudit, field, e, a, b, c, d, r, u, g);
 		}
 		sqlencryptionaudit.Entity = u;
 		sqlencryptionaudit.EntityName = 'sqlencryptionaudit';
 		sqlencryptionaudit.EntityCollectionName = 'sqlencryptionaudits';
 		sqlencryptionaudit['@odata.etag'] = e['@odata.etag'];
-		sqlencryptionaudit.getAliasedValue = function (alias, isMultiOptionSet) {
+		sqlencryptionaudit.getAliasedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias] === undefined || e[alias] === null) {
 				return null;
 			}
@@ -93,7 +93,7 @@ var DevKit;
 			}
 			return e[alias];
 		}
-		sqlencryptionaudit.getAliasedFormattedValue = function (alias, isMultiOptionSet) {
+		sqlencryptionaudit.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
 				return EMPTY_STRING;
 			}

@@ -48,8 +48,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -57,150 +59,150 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Exchange rate for the currency associated with the entity with respect to the base currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
-		msdyn_AccountCustomer: DevKit.WebApi.LookupValue;
-		msdyn_AccountVendor: DevKit.WebApi.LookupValue;
-		msdyn_ActChargeableBilledSalesAmount: DevKit.WebApi.MoneyValue;
+		readonly ModifiedOnBehalfBy: string;
+		msdyn_AccountCustomer: string;
+		msdyn_AccountVendor: string;
+		msdyn_ActChargeableBilledSalesAmount: number;
 		/** Value of the Actual Chargeable Billed Sales Amount in base currency. */
-		msdyn_actchargeablebilledsalesamount_Base: DevKit.WebApi.MoneyValueReadonly;
-		msdyn_ActChargeableBilledSalesQuantity: DevKit.WebApi.DecimalValue;
-		msdyn_ActChargeableCostAmount: DevKit.WebApi.MoneyValue;
+		readonly msdyn_actchargeablebilledsalesamount_Base: number;
+		msdyn_ActChargeableBilledSalesQuantity: number;
+		msdyn_ActChargeableCostAmount: number;
 		/** Value of the Actual Chargeable Cost Amount in base currency. */
-		msdyn_actchargeablecostamount_Base: DevKit.WebApi.MoneyValueReadonly;
-		msdyn_ActChargeableCostQuantity: DevKit.WebApi.DecimalValue;
-		msdyn_ActChargeableUnbilledSalesAmount: DevKit.WebApi.MoneyValue;
+		readonly msdyn_actchargeablecostamount_Base: number;
+		msdyn_ActChargeableCostQuantity: number;
+		msdyn_ActChargeableUnbilledSalesAmount: number;
 		/** Value of the Actual Chargeable Unbilled Sales Amount in base currency. */
-		msdyn_actchargeableunbilledsalesamount_Base: DevKit.WebApi.MoneyValueReadonly;
-		msdyn_ActChargeableUnbilledSalesQuantity: DevKit.WebApi.DecimalValue;
-		msdyn_ActNoChargeBilledSalesAmount: DevKit.WebApi.MoneyValue;
+		readonly msdyn_actchargeableunbilledsalesamount_Base: number;
+		msdyn_ActChargeableUnbilledSalesQuantity: number;
+		msdyn_ActNoChargeBilledSalesAmount: number;
 		/** Value of the Actual No Charge Billed Sales Amount in base currency. */
-		msdyn_actnochargebilledsalesamount_Base: DevKit.WebApi.MoneyValueReadonly;
-		msdyn_ActNoChargeBilledSalesQuantity: DevKit.WebApi.DecimalValue;
-		msdyn_ActNoChargeCostAmount: DevKit.WebApi.MoneyValue;
+		readonly msdyn_actnochargebilledsalesamount_Base: number;
+		msdyn_ActNoChargeBilledSalesQuantity: number;
+		msdyn_ActNoChargeCostAmount: number;
 		/** Value of the Actual No Charge Cost Amount in base currency. */
-		msdyn_actnochargecostamount_Base: DevKit.WebApi.MoneyValueReadonly;
-		msdyn_ActNoChargeCostQuantity: DevKit.WebApi.DecimalValue;
-		msdyn_ActNoChargeUnbilledSalesAmount: DevKit.WebApi.MoneyValue;
+		readonly msdyn_actnochargecostamount_Base: number;
+		msdyn_ActNoChargeCostQuantity: number;
+		msdyn_ActNoChargeUnbilledSalesAmount: number;
 		/** Value of the Actual No Charge Unbilled Sales Amount in base currency. */
-		msdyn_actnochargeunbilledsalesamount_Base: DevKit.WebApi.MoneyValueReadonly;
-		msdyn_ActNoChargeUnbilledSalesQuantity: DevKit.WebApi.DecimalValue;
-		msdyn_ActNonChargeableCostAmount: DevKit.WebApi.MoneyValue;
+		readonly msdyn_actnochargeunbilledsalesamount_Base: number;
+		msdyn_ActNoChargeUnbilledSalesQuantity: number;
+		msdyn_ActNonChargeableCostAmount: number;
 		/** Value of the Actual Non Chargeable Cost Amount in base currency. */
-		msdyn_actnonchargeablecostamount_Base: DevKit.WebApi.MoneyValueReadonly;
-		msdyn_ActNonChargeableCostQuantity: DevKit.WebApi.DecimalValue;
-		msdyn_ActNonChargeableUnbilledSalesAmount: DevKit.WebApi.MoneyValue;
+		readonly msdyn_actnonchargeablecostamount_Base: number;
+		msdyn_ActNonChargeableCostQuantity: number;
+		msdyn_ActNonChargeableUnbilledSalesAmount: number;
 		/** Value of the Actual Non Chargeable Unbilled Sales Amount in base currency. */
-		msdyn_actnonchargeableunbilledsalesamount_Base: DevKit.WebApi.MoneyValueReadonly;
-		msdyn_ActNonChargeableUnbilledSalesQuantity: DevKit.WebApi.DecimalValue;
-		msdyn_bookableresource: DevKit.WebApi.LookupValue;
-		msdyn_ContactCustomer: DevKit.WebApi.LookupValue;
-		msdyn_ContactVendor: DevKit.WebApi.LookupValue;
-		msdyn_CustomerType: DevKit.WebApi.OptionSetValue;
+		readonly msdyn_actnonchargeableunbilledsalesamount_Base: number;
+		msdyn_ActNonChargeableUnbilledSalesQuantity: number;
+		msdyn_bookableresource: string;
+		msdyn_ContactCustomer: string;
+		msdyn_ContactVendor: string;
+		msdyn_CustomerType: OptionSet.msdyn_fact.msdyn_CustomerType;
 		/** Enter the transaction date of the business event. */
-		msdyn_DocumentDate_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
-		msdyn_earnedrevenue: DevKit.WebApi.MoneyValueReadonly;
+		msdyn_DocumentDate_UtcDateOnly: Date;
+		readonly msdyn_earnedrevenue: number;
 		/** Value of the Earned Revenue in base currency. */
-		msdyn_earnedrevenue_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_earnedrevenue_Base: number;
 		/** Enter the end date for this transaction. */
-		msdyn_EndDate_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
-		msdyn_EstChargeableBilledSalesAmount: DevKit.WebApi.MoneyValue;
+		msdyn_EndDate_UtcDateOnly: Date;
+		msdyn_EstChargeableBilledSalesAmount: number;
 		/** Value of the Estimated Chargeable Billed Sales Amount in base currency. */
-		msdyn_estchargeablebilledsalesamount_Base: DevKit.WebApi.MoneyValueReadonly;
-		msdyn_EstChargeableBilledSalesQuantity: DevKit.WebApi.DecimalValue;
-		msdyn_EstChargeableCostAmount: DevKit.WebApi.MoneyValue;
+		readonly msdyn_estchargeablebilledsalesamount_Base: number;
+		msdyn_EstChargeableBilledSalesQuantity: number;
+		msdyn_EstChargeableCostAmount: number;
 		/** Value of the Estimated Chargeable Cost Amount in base currency. */
-		msdyn_estchargeablecostamount_Base: DevKit.WebApi.MoneyValueReadonly;
-		msdyn_EstChargeableCostQuantity: DevKit.WebApi.DecimalValue;
-		msdyn_EstChargeableUnbilledSalesAmount: DevKit.WebApi.MoneyValue;
+		readonly msdyn_estchargeablecostamount_Base: number;
+		msdyn_EstChargeableCostQuantity: number;
+		msdyn_EstChargeableUnbilledSalesAmount: number;
 		/** Value of the Estimated Chargeable Unbilled Sales Amount in base currency. */
-		msdyn_estchargeableunbilledsalesamount_Base: DevKit.WebApi.MoneyValueReadonly;
-		msdyn_EstChargeableUnbilledSalesQuantity: DevKit.WebApi.DecimalValue;
-		msdyn_Estimate: DevKit.WebApi.LookupValue;
-		msdyn_estimatelineid: DevKit.WebApi.LookupValue;
-		msdyn_EstNoChargeBilledSalesAmount: DevKit.WebApi.MoneyValue;
+		readonly msdyn_estchargeableunbilledsalesamount_Base: number;
+		msdyn_EstChargeableUnbilledSalesQuantity: number;
+		msdyn_Estimate: string;
+		msdyn_estimatelineid: string;
+		msdyn_EstNoChargeBilledSalesAmount: number;
 		/** Value of the Estimated No Charge Billed Sales Amount in base currency. */
-		msdyn_estnochargebilledsalesamount_Base: DevKit.WebApi.MoneyValueReadonly;
-		msdyn_EstNoChargeBilledSalesQuantity: DevKit.WebApi.DecimalValue;
-		msdyn_EstNoChargeCostAmount: DevKit.WebApi.MoneyValue;
+		readonly msdyn_estnochargebilledsalesamount_Base: number;
+		msdyn_EstNoChargeBilledSalesQuantity: number;
+		msdyn_EstNoChargeCostAmount: number;
 		/** Value of the Estimated No Charge Cost Amount in base currency. */
-		msdyn_estnochargecostamount_Base: DevKit.WebApi.MoneyValueReadonly;
-		msdyn_EstNoChargeCostQuantity: DevKit.WebApi.DecimalValue;
-		msdyn_EstNoChargeUnbilledSalesAmount: DevKit.WebApi.MoneyValue;
+		readonly msdyn_estnochargecostamount_Base: number;
+		msdyn_EstNoChargeCostQuantity: number;
+		msdyn_EstNoChargeUnbilledSalesAmount: number;
 		/** Value of the Estimated No Charge Unbilled Sales Amount in base currency. */
-		msdyn_estnochargeunbilledsalesamount_Base: DevKit.WebApi.MoneyValueReadonly;
-		msdyn_EstNoChargeUnbilledSalesQuantity: DevKit.WebApi.DecimalValue;
-		msdyn_EstNonChargeableCostAmount: DevKit.WebApi.MoneyValue;
+		readonly msdyn_estnochargeunbilledsalesamount_Base: number;
+		msdyn_EstNoChargeUnbilledSalesQuantity: number;
+		msdyn_EstNonChargeableCostAmount: number;
 		/** Value of the Estimated Non Chargeable Cost Amount in base currency. */
-		msdyn_estnonchargeablecostamount_Base: DevKit.WebApi.MoneyValueReadonly;
-		msdyn_EstNonChargeableCostQuantity: DevKit.WebApi.DecimalValue;
-		msdyn_EstNonChargeableUnbilledSalesAmount: DevKit.WebApi.MoneyValue;
+		readonly msdyn_estnonchargeablecostamount_Base: number;
+		msdyn_EstNonChargeableCostQuantity: number;
+		msdyn_EstNonChargeableUnbilledSalesAmount: number;
 		/** Value of the Estimated Non Chargeable Unbilled Sales Amount in base currency. */
-		msdyn_estnonchargeableunbilledsalesamount_Base: DevKit.WebApi.MoneyValueReadonly;
-		msdyn_EstNonChargeableUnbilledSalesQuantity: DevKit.WebApi.DecimalValue;
+		readonly msdyn_estnonchargeableunbilledsalesamount_Base: number;
+		msdyn_EstNonChargeableUnbilledSalesQuantity: number;
 		/** Unique identifier for entity instances */
-		msdyn_factId: DevKit.WebApi.GuidValue;
-		msdyn_FactType: DevKit.WebApi.OptionSetValue;
-		msdyn_grossmargin: DevKit.WebApi.MoneyValueReadonly;
+		msdyn_factId: string;
+		msdyn_FactType: OptionSet.msdyn_fact.msdyn_FactType;
+		readonly msdyn_grossmargin: number;
 		/** Value of the Gross Margin in base currency. */
-		msdyn_grossmargin_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_grossmargin_Base: number;
 		/** The name of the custom entity. */
-		msdyn_name: DevKit.WebApi.StringValue;
-		msdyn_Product: DevKit.WebApi.LookupValue;
-		msdyn_Project: DevKit.WebApi.LookupValue;
-		msdyn_ResourceCategory: DevKit.WebApi.LookupValue;
-		msdyn_SalesContract: DevKit.WebApi.LookupValue;
+		msdyn_name: string;
+		msdyn_Product: string;
+		msdyn_Project: string;
+		msdyn_ResourceCategory: string;
+		msdyn_SalesContract: string;
 		/** (Deprecated) */
-		msdyn_SalesContractLine: DevKit.WebApi.StringValue;
+		msdyn_SalesContractLine: string;
 		/** Unique identifier for Project Contract Line associated with Fact. */
-		msdyn_SalesContractLineId: DevKit.WebApi.LookupValue;
+		msdyn_SalesContractLineId: string;
 		/** Enter the start date. */
-		msdyn_StartDate_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
-		msdyn_Task: DevKit.WebApi.LookupValue;
-		msdyn_totalcost: DevKit.WebApi.MoneyValueReadonly;
+		msdyn_StartDate_UtcDateOnly: Date;
+		msdyn_Task: string;
+		readonly msdyn_totalcost: number;
 		/** Value of the Total Cost in base currency. */
-		msdyn_totalcost_Base: DevKit.WebApi.MoneyValueReadonly;
-		msdyn_totalhours: DevKit.WebApi.DecimalValueReadonly;
-		msdyn_TransactionCategory: DevKit.WebApi.LookupValue;
-		msdyn_TransactionClassification: DevKit.WebApi.OptionSetValue;
-		msdyn_VendorType: DevKit.WebApi.OptionSetValue;
+		readonly msdyn_totalcost_Base: number;
+		readonly msdyn_totalhours: number;
+		msdyn_TransactionCategory: string;
+		msdyn_TransactionClassification: OptionSet.msdyn_fact.msdyn_TransactionClassification;
+		msdyn_VendorType: OptionSet.msdyn_fact.msdyn_VendorType;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Status of the Fact */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.msdyn_fact.statecode;
 		/** Reason for the status of the Fact */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.msdyn_fact.statuscode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Shows the currency associated with the entity. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -271,4 +273,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

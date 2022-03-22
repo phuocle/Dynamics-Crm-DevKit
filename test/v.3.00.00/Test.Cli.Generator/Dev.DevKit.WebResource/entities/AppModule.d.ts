@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,82 +30,82 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier for entity instances */
-		AppModuleId: DevKit.WebApi.GuidValue;
+		AppModuleId: string;
 		/** Unique identifier of the App Module used when synchronizing customizations for the Microsoft Dynamics 365 client for Outlook */
-		AppModuleIdUnique: DevKit.WebApi.GuidValue;
+		AppModuleIdUnique: string;
 		/** App Module Version */
-		AppModuleVersion: DevKit.WebApi.StringValue;
+		AppModuleVersion: string;
 		/** App Module Xml Managed */
-		AppModuleXmlManaged: DevKit.WebApi.StringValue;
+		AppModuleXmlManaged: string;
 		/** Client Type such as Web or UCI */
-		ClientType: DevKit.WebApi.IntegerValue;
+		ClientType: number;
 		/** For internal use only */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.AppModule.ComponentState;
 		/** Contains configuration XML */
-		ConfigXML: DevKit.WebApi.StringValue;
+		ConfigXML: string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Description for entity */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** App Module Descriptor */
-		Descriptor: DevKit.WebApi.StringValueReadonly;
+		readonly Descriptor: string;
 		/** App Module Event Handlers */
-		EventHandlers: DevKit.WebApi.StringValue;
+		EventHandlers: string;
 		/** Form Factor */
-		FormFactor: DevKit.WebApi.IntegerValue;
+		FormFactor: number;
 		/** Unique identifier of the data import or data migration that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Version in which the similarity rule is introduced. */
-		IntroducedVersion: DevKit.WebApi.StringValue;
+		IntroducedVersion: string;
 		/** Is Default */
-		IsDefault: DevKit.WebApi.BooleanValue;
+		IsDefault: boolean;
 		/** Is Featured */
-		IsFeatured: DevKit.WebApi.BooleanValue;
+		IsFeatured: boolean;
 		/** Is Managed */
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsManaged: boolean;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Name of App Module */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** App navigation type */
-		NavigationType: DevKit.WebApi.OptionSetValue;
+		NavigationType: OptionSet.AppModule.NavigationType;
 		/** The client that this app is optimized for */
-		OptimizedFor: DevKit.WebApi.StringValue;
+		OptimizedFor: string;
 		/** Unique identifier of the organization associated with the app. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Internal use only */
-		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly OverwriteTime_UtcDateOnly: Date;
 		/** Date and time when the record was published. */
-		PublishedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		PublishedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the publisher. */
-		PublisherId: DevKit.WebApi.LookupValue;
+		PublisherId: string;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** Status of the Model-driven App */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.AppModule.statecode;
 		/** Reason for the status of the Model-driven App */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.AppModule.statuscode;
 		/** For internal use only. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SupportingSolutionId: string;
 		/** Unique Name of App Module */
-		UniqueName: DevKit.WebApi.StringValue;
+		UniqueName: string;
 		/** Contains URL */
-		URL: DevKit.WebApi.StringValue;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		URL: string;
+		readonly VersionNumber: number;
 		/** Unique identifier of the Web Resource */
-		WebResourceId: DevKit.WebApi.GuidValue;
+		WebResourceId: string;
 		/** Unique identifier of the Web Resource as Welcome Page Id */
-		WelcomePageId: DevKit.WebApi.GuidValue;
+		WelcomePageId: string;
 	}
 }
 declare namespace OptionSet {
@@ -156,4 +158,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

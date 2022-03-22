@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,83 +30,83 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Boolean identifier for using deleting base layers. */
-		AllowDeleteBaseSolutionRowAndFakeDelete: DevKit.WebApi.BooleanValue;
+		AllowDeleteBaseSolutionRowAndFakeDelete: boolean;
 		/** Whether this component allows Overwrite Customizations when update managed solution */
-		AllowOverwriteCustomizations: DevKit.WebApi.BooleanValue;
+		AllowOverwriteCustomizations: boolean;
 		/** Boolean identifier for a row that is marked as logically deleted in the Active solution and should be re-created back */
-		AllowRecreateForLogicallyDeletedRow: DevKit.WebApi.BooleanValue;
+		AllowRecreateForLogicallyDeletedRow: boolean;
 		/** Flag used to indicate whether this component always removes active customizations on uninstall */
-		AlwaysRemoveActiveCustomizationsOnUninstall: DevKit.WebApi.BooleanValue;
+		AlwaysRemoveActiveCustomizationsOnUninstall: boolean;
 		/** Flag indicating whether the subcomponent can be added directly to the SolutionComponents table */
-		CanBeAddedToSolutionComponents: DevKit.WebApi.BooleanValue;
+		CanBeAddedToSolutionComponents: boolean;
 		/** Whether this component is hidden using an IsHidden managed property */
-		CanBeHidden: DevKit.WebApi.BooleanValue;
+		CanBeHidden: boolean;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.SolutionComponentDefinition.ComponentState;
 		/** Path to component's XML node */
-		ComponentXPath: DevKit.WebApi.StringValue;
+		ComponentXPath: string;
 		/** Flag that indicates whether this component uses its descendent as its viewable component */
-		DescendentIsViewableComponent: DevKit.WebApi.BooleanValue;
+		DescendentIsViewableComponent: boolean;
 		/** Group Parent Component Attribute Name */
-		GroupParentComponentAttributeName: DevKit.WebApi.StringValue;
+		GroupParentComponentAttributeName: string;
 		/** Group Parent Component Type */
-		GroupParentComponentType: DevKit.WebApi.IntegerValue;
+		GroupParentComponentType: number;
 		/** Boolean that indicates if the component has a renamable attribute */
-		HasIsRenameableAttribute: DevKit.WebApi.BooleanValue;
+		HasIsRenameableAttribute: boolean;
 		/** Unique identifier of the data import or data migration that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Version in which the component is introduced. */
-		IntroducedVersion: DevKit.WebApi.StringValue;
+		IntroducedVersion: string;
 		/** Is dependency disabled for the component */
-		IsDependencyDisabled: DevKit.WebApi.BooleanValue;
+		IsDependencyDisabled: boolean;
 		/** Boolean that indicates if the component has user interface enabled */
-		IsDisplayable: DevKit.WebApi.BooleanValue;
+		IsDisplayable: boolean;
 		/** Boolean that indicates if the component is managed */
-		IsManaged: DevKit.WebApi.BooleanValue;
+		IsManaged: boolean;
 		/** Whether this component is either a mergeable component, or part of a mergeable component */
-		IsMergeable: DevKit.WebApi.BooleanValue;
+		IsMergeable: boolean;
 		/** Boolean identifier for metadata components */
-		IsMetadata: DevKit.WebApi.BooleanValue;
+		IsMetadata: boolean;
 		/** Whether this component is viewable in the SDK and UI */
-		IsViewable: DevKit.WebApi.BooleanValue;
+		IsViewable: boolean;
 		/** Label Type Code */
-		LabelTypeCode: DevKit.WebApi.IntegerValue;
+		LabelTypeCode: number;
 		/** Name */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Object Type Code */
-		ObjectTypeCode: DevKit.WebApi.IntegerValue;
+		ObjectTypeCode: number;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** For internal use only. */
-		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly OverwriteTime_UtcDateOnly: Date;
 		/** The attribute name of the parent attribute */
-		ParentAttributeName: DevKit.WebApi.StringValue;
+		ParentAttributeName: string;
 		/** Component Entity Logical Name */
-		PrimaryEntityName: DevKit.WebApi.StringValue;
+		PrimaryEntityName: string;
 		/** Remove Active Customizations Behavior. */
-		RemoveActiveCustomizationsBehavior: DevKit.WebApi.OptionSetValue;
+		RemoveActiveCustomizationsBehavior: OptionSet.SolutionComponentDefinition.RemoveActiveCustomizationsBehavior;
 		/** Root Solution Component Type Name */
-		RootAttributeName: DevKit.WebApi.StringValue;
+		RootAttributeName: string;
 		/** Root Solution Component Type */
-		RootComponent: DevKit.WebApi.IntegerValue;
+		RootComponent: number;
 		/** Unique identifier of the solution component definition */
-		SolutionComponentDefinitionId: DevKit.WebApi.GuidValue;
+		SolutionComponentDefinitionId: string;
 		/** For internal use only. */
-		SolutionComponentDefinitionIdUnique: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionComponentDefinitionIdUnique: string;
 		/** Solution Component Type */
-		SolutionComponentType: DevKit.WebApi.IntegerValue;
+		SolutionComponentType: number;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** For internal use only. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SupportingSolutionId: string;
 		/** Boolean identifier for forcing delete for solution update. */
-		UseForceDeleteForSolutionUpdate: DevKit.WebApi.BooleanValue;
+		UseForceDeleteForSolutionUpdate: boolean;
 		/** Boolean identifier for always forcing update. */
-		UseForceUpdateAlways: DevKit.WebApi.BooleanValue;
+		UseForceUpdateAlways: boolean;
 		/** Boolean identifier for using sentine rows. */
-		UseSentinelRowInBaseSolution: DevKit.WebApi.BooleanValue;
+		UseSentinelRowInBaseSolution: boolean;
 		/** The component type of the viewable descendent */
-		ViewableDescendentComponentType: DevKit.WebApi.IntegerValue;
+		ViewableDescendentComponentType: number;
 	}
 }
 declare namespace OptionSet {
@@ -145,4 +147,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

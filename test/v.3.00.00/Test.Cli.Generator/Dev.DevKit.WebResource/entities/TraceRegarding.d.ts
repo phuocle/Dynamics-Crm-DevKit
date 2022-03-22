@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,17 +30,17 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the regarding object. */
-		regardingobjectid_emailserverprofile: DevKit.WebApi.LookupValue;
+		regardingobjectid_emailserverprofile: string;
 		/** Unique identifier of the regarding object. */
-		regardingobjectid_mailbox: DevKit.WebApi.LookupValue;
+		regardingobjectid_mailbox: string;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier of the business unit that owns the regarding object. */
-		RegardingObjectOwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly RegardingObjectOwningBusinessUnit: string;
 		/** Unique identifier of the trace-regarding record. */
-		TraceRegardingId: DevKit.WebApi.GuidValue;
+		TraceRegardingId: string;
 	}
 }
 declare namespace OptionSet {
@@ -61,4 +63,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

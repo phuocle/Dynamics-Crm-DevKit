@@ -64,8 +64,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -73,49 +75,49 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the transaction currency. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the transaction currency was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the transactioncurrency. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Name of the transaction currency. */
-		CurrencyName: DevKit.WebApi.StringValue;
+		CurrencyName: string;
 		/** Number of decimal places that can be used for currency. */
-		CurrencyPrecision: DevKit.WebApi.IntegerValue;
+		CurrencyPrecision: number;
 		/** Symbol for the transaction currency. */
-		CurrencySymbol: DevKit.WebApi.StringValue;
+		CurrencySymbol: string;
 		/** The default image for the entity. */
-		EntityImage: DevKit.WebApi.StringValue;
-		EntityImage_Timestamp: DevKit.WebApi.BigIntValueReadonly;
-		EntityImage_URL: DevKit.WebApi.StringValueReadonly;
+		EntityImage: string;
+		EntityImage_Timestamp: number;
+		EntityImage_URL: string;
 		/** For internal use only. */
-		EntityImageId: DevKit.WebApi.GuidValueReadonly;
+		readonly EntityImageId: string;
 		/** Exchange rate between the transaction currency and the base currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValue;
+		ExchangeRate: number;
 		/** Unique identifier of the data import or data migration that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** ISO currency code for the transaction currency. */
-		ISOCurrencyCode: DevKit.WebApi.StringValue;
+		ISOCurrencyCode: string;
 		/** Unique identifier of the user who last modified the transaction currency. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the transaction currency was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the transactioncurrency. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Unique identifier of the organization associated with the transaction currency. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Status of the transaction currency. */
-		StateCode: DevKit.WebApi.OptionSetValue;
+		StateCode: OptionSet.TransactionCurrency.StateCode;
 		/** Reason for the status of the transaction currency. */
-		StatusCode: DevKit.WebApi.OptionSetValue;
+		StatusCode: OptionSet.TransactionCurrency.StatusCode;
 		/** Unique identifier of the transaction currency. */
-		TransactionCurrencyId: DevKit.WebApi.GuidValue;
+		TransactionCurrencyId: string;
 		/** For internal use only. */
-		UniqueDscId: DevKit.WebApi.GuidValueReadonly;
+		readonly UniqueDscId: string;
 		/** Version number of the transaction currency. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -150,4 +152,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

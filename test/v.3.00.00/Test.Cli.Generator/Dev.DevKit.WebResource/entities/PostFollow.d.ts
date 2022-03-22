@@ -55,8 +55,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -64,63 +66,63 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Shows who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record. */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier of the team who owns the follow. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user who owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Shows the ID of the post follow. */
-		PostFollowId: DevKit.WebApi.GuidValue;
+		PostFollowId: string;
 		/** Internal Use Only */
-		PostToYammer: DevKit.WebApi.BooleanValueReadonly;
+		readonly PostToYammer: boolean;
 		/** Choose the parent record for the followed post to identify the customer, opportunity, case, or other record type that the post most closely relates to. */
-		regardingobjectid_account: DevKit.WebApi.LookupValue;
+		regardingobjectid_account: string;
 		/** Choose the parent record for the followed post to identify the customer, opportunity, case, or other record type that the post most closely relates to. */
-		regardingobjectid_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_appointment: string;
 		/** Choose the parent record for the followed post to identify the customer, opportunity, case, or other record type that the post most closely relates to. */
-		regardingobjectid_competitor: DevKit.WebApi.LookupValue;
+		regardingobjectid_competitor: string;
 		/** Choose the parent record for the followed post to identify the customer, opportunity, case, or other record type that the post most closely relates to. */
-		regardingobjectid_contact: DevKit.WebApi.LookupValue;
+		regardingobjectid_contact: string;
 		/** Choose the parent record for the followed post to identify the customer, opportunity, case, or other record type that the post most closely relates to. */
-		regardingobjectid_incident: DevKit.WebApi.LookupValue;
+		regardingobjectid_incident: string;
 		/** Choose the parent record for the followed post to identify the customer, opportunity, case, or other record type that the post most closely relates to. */
-		regardingobjectid_knowledgearticle: DevKit.WebApi.LookupValue;
+		regardingobjectid_knowledgearticle: string;
 		/** Choose the parent record for the followed post to identify the customer, opportunity, case, or other record type that the post most closely relates to. */
-		regardingobjectid_lead: DevKit.WebApi.LookupValue;
+		regardingobjectid_lead: string;
 		/** Choose the parent record for the followed post to identify the customer, opportunity, case, or other record type that the post most closely relates to. */
-		regardingobjectid_opportunity: DevKit.WebApi.LookupValue;
+		regardingobjectid_opportunity: string;
 		/** Choose the parent record for the followed post to identify the customer, opportunity, case, or other record type that the post most closely relates to. */
-		regardingobjectid_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_phonecall: string;
 		/** Choose the parent record for the followed post to identify the customer, opportunity, case, or other record type that the post most closely relates to. */
-		regardingobjectid_processsession: DevKit.WebApi.LookupValue;
+		regardingobjectid_processsession: string;
 		/** Choose the parent record for the followed post to identify the customer, opportunity, case, or other record type that the post most closely relates to. */
-		regardingobjectid_queue: DevKit.WebApi.LookupValue;
+		regardingobjectid_queue: string;
 		/** Choose the parent record for the followed post to identify the customer, opportunity, case, or other record type that the post most closely relates to. */
-		regardingobjectid_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		regardingobjectid_recurringappointmentmaster: string;
 		/** Choose the parent record for the followed post to identify the customer, opportunity, case, or other record type that the post most closely relates to. */
-		regardingobjectid_systemuser: DevKit.WebApi.LookupValue;
+		regardingobjectid_systemuser: string;
 		/** Choose the parent record for the followed post to identify the customer, opportunity, case, or other record type that the post most closely relates to. */
-		regardingobjectid_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_task: string;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version number of post follow. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 		/** Internal Use Only */
-		YammerPostState: DevKit.WebApi.IntegerValueReadonly;
+		readonly YammerPostState: number;
 		/** Internal Use Only */
-		YammerRetryCount: DevKit.WebApi.IntegerValueReadonly;
+		readonly YammerRetryCount: number;
 	}
 }
 declare namespace OptionSet {
@@ -143,4 +145,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

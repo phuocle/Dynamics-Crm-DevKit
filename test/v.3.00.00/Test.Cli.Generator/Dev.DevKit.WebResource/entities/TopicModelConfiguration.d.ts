@@ -72,8 +72,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -81,51 +83,51 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.TopicModelConfiguration.ComponentState;
 		/** Specify the data filter configured to filter records. */
-		DataFilter: DevKit.WebApi.StringValue;
+		DataFilter: string;
 		/** Enter a description for the model */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Fetch Xml */
-		FetchXmlList: DevKit.WebApi.StringValue;
+		FetchXmlList: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Is Manageed */
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsManaged: boolean;
 		/** Enter the minimum relevance score of a topic. */
-		MinRelevanceScore: DevKit.WebApi.DecimalValue;
+		MinRelevanceScore: number;
 		/** Type a logical name for the model. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Enter the maximum number of key phrase words to use in a topic. */
-		NgramSize: DevKit.WebApi.IntegerValue;
+		NgramSize: number;
 		/** Unique identifier for the organization */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Date and time when the record was created. */
-		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly OverwriteTime_UtcDateOnly: Date;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** Stop words. */
-		StopWords: DevKit.WebApi.StringValue;
+		StopWords: string;
 		/** For internal use only. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SupportingSolutionId: string;
 		/** Select the time window to filter on for the last number of days or weeks. */
-		TimeFilter: DevKit.WebApi.OptionSetValue;
+		TimeFilter: OptionSet.TopicModelConfiguration.TimeFilter;
 		/** Time Filter Duration */
-		TimeFilterDuration: DevKit.WebApi.IntegerValue;
+		TimeFilterDuration: number;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Unique identifier for entity instances */
-		TopicModelConfigurationId: DevKit.WebApi.GuidValue;
+		TopicModelConfigurationId: string;
 		/** Unique identifier of the Topic Model Configuration used when synchronizing customizations for the Microsoft Dynamics 365 client for Outlook */
-		TopicModelConfigurationIdUnique: DevKit.WebApi.GuidValueReadonly;
+		readonly TopicModelConfigurationIdUnique: string;
 		/** Unique identifier for Model associated with Topic Model Configuration. */
-		TopicModelId: DevKit.WebApi.LookupValue;
+		TopicModelId: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -168,4 +170,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

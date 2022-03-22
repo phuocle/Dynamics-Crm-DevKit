@@ -86,8 +86,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -95,65 +97,65 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Shows the average number of topics found per build. */
-		AvgNumberofTopics: DevKit.WebApi.IntegerValue;
+		AvgNumberofTopics: number;
 		/** Azure Scheduler Job Name. */
-		AzureSchedulerJobName: DevKit.WebApi.StringValue;
+		AzureSchedulerJobName: string;
 		/** Azure Scheduler Job Name for build model */
-		AzureSchedulerOnDemandJobName: DevKit.WebApi.StringValue;
+		AzureSchedulerOnDemandJobName: string;
 		/** Azure Scheduler Job Name for test model */
-		AzureSchedulerTestJobName: DevKit.WebApi.StringValue;
+		AzureSchedulerTestJobName: string;
 		/** Unique identifier for AzureServiceConnection associated with TopicModel. */
-		AzureServiceConnectionId: DevKit.WebApi.LookupValue;
+		AzureServiceConnectionId: string;
 		/** Shows how frequently topic analysis is done. */
-		BuildRecurrence: DevKit.WebApi.StringValue;
+		BuildRecurrence: string;
 		/** Shows the configuration used for topic analysis. */
-		ConfigurationUsed: DevKit.WebApi.LookupValue;
+		ConfigurationUsed: string;
 		/** Unique identifier of the user who created the Topic Model. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the topic Model. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Enter a description for the model. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Shows the time when topic analysis will stop */
-		EndTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		EndTime_UtcDateAndTime: Date;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Shows the maximum number of topics found across builds. */
-		MaxNumberofTopics: DevKit.WebApi.IntegerValue;
+		MaxNumberofTopics: number;
 		/** Shows the maximum number of topics to be determined. */
-		MaxTopics: DevKit.WebApi.IntegerValue;
+		MaxTopics: number;
 		/** Unique identifier of the user who modified the Topic Model. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the Topic model. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Shows the name of the topic model. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Unique identifier for the organization */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Shows the time when topic analysis will start according to the recurrence schedule. */
-		StartTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		StartTime_UtcDateAndTime: Date;
 		/** Shows the status of the topic model build */
-		StateCode: DevKit.WebApi.OptionSetValue;
+		StateCode: OptionSet.TopicModel.StateCode;
 		/** Reason for the status of the TopicModel */
-		StatusCode: DevKit.WebApi.OptionSetValue;
+		StatusCode: OptionSet.TopicModel.StatusCode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Unique identifier for entity instances */
-		TopicModelId: DevKit.WebApi.GuidValue;
+		TopicModelId: string;
 		/** Shows when the topics were last created. */
-		TopicsLastCreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		TopicsLastCreatedOn_UtcDateAndTime: Date;
 		/** Shows the total number of topics found. */
-		TotalTopicsFound: DevKit.WebApi.IntegerValue;
+		TotalTopicsFound: number;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -192,4 +194,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

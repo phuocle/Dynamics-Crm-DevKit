@@ -201,8 +201,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -210,58 +212,58 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Type additional information to describe this OData v4 data source. What environment does this data source target and what is the purpose of this system ? */
-		msdyn_description: DevKit.WebApi.StringValue;
+		msdyn_description: string;
 		/** Parameter10 Type */
-		msdyn_isparameter10header: DevKit.WebApi.BooleanValue;
+		msdyn_isparameter10header: boolean;
 		/** Parameter1 Type */
-		msdyn_isparameter1header: DevKit.WebApi.BooleanValue;
+		msdyn_isparameter1header: boolean;
 		/** Parameter2 Type */
-		msdyn_isparameter2header: DevKit.WebApi.BooleanValue;
+		msdyn_isparameter2header: boolean;
 		/** Parameter3 Type */
-		msdyn_isparameter3header: DevKit.WebApi.BooleanValue;
+		msdyn_isparameter3header: boolean;
 		/** Parameter4 Type */
-		msdyn_isparameter4header: DevKit.WebApi.BooleanValue;
+		msdyn_isparameter4header: boolean;
 		/** Parameter5 Type */
-		msdyn_isparameter5header: DevKit.WebApi.BooleanValue;
+		msdyn_isparameter5header: boolean;
 		/** Parameter6 Type */
-		msdyn_isparameter6header: DevKit.WebApi.BooleanValue;
+		msdyn_isparameter6header: boolean;
 		/** Parameter7 Type */
-		msdyn_isparameter7header: DevKit.WebApi.BooleanValue;
+		msdyn_isparameter7header: boolean;
 		/** Parameter8 Type */
-		msdyn_isparameter8header: DevKit.WebApi.BooleanValue;
+		msdyn_isparameter8header: boolean;
 		/** Parameter9 Type */
-		msdyn_isparameter9header: DevKit.WebApi.BooleanValue;
+		msdyn_isparameter9header: boolean;
 		/** Name of the OData v4 data source. This name appears in the data source drop-down list when creating a new entity. */
-		msdyn_name: DevKit.WebApi.StringValue;
+		msdyn_name: string;
 		/** Unique identifier for entity instances */
-		msdyn_odatav4dsId: DevKit.WebApi.GuidValue;
-		msdyn_paginationmode: DevKit.WebApi.BooleanValue;
-		msdyn_paginationtype: DevKit.WebApi.OptionSetValue;
-		msdyn_parameter10name: DevKit.WebApi.StringValue;
-		msdyn_parameter10value: DevKit.WebApi.StringValue;
-		msdyn_parameter1name: DevKit.WebApi.StringValue;
-		msdyn_parameter1value: DevKit.WebApi.StringValue;
-		msdyn_parameter2name: DevKit.WebApi.StringValue;
-		msdyn_parameter2value: DevKit.WebApi.StringValue;
-		msdyn_parameter3name: DevKit.WebApi.StringValue;
-		msdyn_parameter3value: DevKit.WebApi.StringValue;
-		msdyn_parameter4name: DevKit.WebApi.StringValue;
-		msdyn_parameter4value: DevKit.WebApi.StringValue;
-		msdyn_parameter5name: DevKit.WebApi.StringValue;
-		msdyn_parameter5value: DevKit.WebApi.StringValue;
-		msdyn_parameter6name: DevKit.WebApi.StringValue;
-		msdyn_parameter6value: DevKit.WebApi.StringValue;
-		msdyn_parameter7name: DevKit.WebApi.StringValue;
-		msdyn_parameter7value: DevKit.WebApi.StringValue;
-		msdyn_parameter8name: DevKit.WebApi.StringValue;
-		msdyn_parameter8value: DevKit.WebApi.StringValue;
-		msdyn_parameter9name: DevKit.WebApi.StringValue;
-		msdyn_parameter9value: DevKit.WebApi.StringValue;
-		msdyn_returninlinecount: DevKit.WebApi.BooleanValue;
+		msdyn_odatav4dsId: string;
+		msdyn_paginationmode: boolean;
+		msdyn_paginationtype: OptionSet.msdyn_odatav4ds.msdyn_paginationtype;
+		msdyn_parameter10name: string;
+		msdyn_parameter10value: string;
+		msdyn_parameter1name: string;
+		msdyn_parameter1value: string;
+		msdyn_parameter2name: string;
+		msdyn_parameter2value: string;
+		msdyn_parameter3name: string;
+		msdyn_parameter3value: string;
+		msdyn_parameter4name: string;
+		msdyn_parameter4value: string;
+		msdyn_parameter5name: string;
+		msdyn_parameter5value: string;
+		msdyn_parameter6name: string;
+		msdyn_parameter6value: string;
+		msdyn_parameter7name: string;
+		msdyn_parameter7value: string;
+		msdyn_parameter8name: string;
+		msdyn_parameter8value: string;
+		msdyn_parameter9name: string;
+		msdyn_parameter9value: string;
+		msdyn_returninlinecount: boolean;
 		/** Amount of time to wait, in seconds, before timing out an OData v4 request. */
-		msdyn_timeout: DevKit.WebApi.IntegerValue;
+		msdyn_timeout: number;
 		/** URL of the OData v4 web service endpoint this data source will target. */
-		msdyn_uri: DevKit.WebApi.StringValue;
+		msdyn_uri: string;
 	}
 }
 declare namespace OptionSet {
@@ -290,4 +292,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

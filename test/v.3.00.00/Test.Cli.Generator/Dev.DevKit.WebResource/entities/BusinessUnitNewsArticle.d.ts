@@ -60,8 +60,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -69,44 +71,44 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Date and time for the announcement to become active. */
-		ActiveOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		ActiveOn_UtcDateOnly: Date;
 		/** Date and time of the last day the announcement is active. */
-		ActiveUntil_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		ActiveUntil_UtcDateOnly: Date;
 		/** Title of the announcement. */
-		ArticleTitle: DevKit.WebApi.StringValue;
+		ArticleTitle: string;
 		/** Type of announcement. */
-		ArticleTypeCode: DevKit.WebApi.OptionSetValue;
+		ArticleTypeCode: OptionSet.BusinessUnitNewsArticle.ArticleTypeCode;
 		/** URL for the Website on which the announcement is located. */
-		ArticleUrl: DevKit.WebApi.StringValue;
+		ArticleUrl: string;
 		/** Unique identifier of the announcement. */
-		BusinessUnitNewsArticleId: DevKit.WebApi.GuidValue;
+		BusinessUnitNewsArticleId: string;
 		/** Unique identifier of the user who created the announcement. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the announcement was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the businessunitnewsarticle. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Unique identifier of the data import or data migration that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the user who last modified the announcement. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the announcement was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the businessunitnewsarticle. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Text for the announcement. */
-		NewsArticle: DevKit.WebApi.StringValue;
+		NewsArticle: string;
 		/** Unique identifier of the organization associated with the announcement. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Information about whether to show the announcement on the Website home page. */
-		ShowOnHomepage: DevKit.WebApi.BooleanValue;
+		ShowOnHomepage: boolean;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		UTCConversionTimeZoneCode: number;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -137,4 +139,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

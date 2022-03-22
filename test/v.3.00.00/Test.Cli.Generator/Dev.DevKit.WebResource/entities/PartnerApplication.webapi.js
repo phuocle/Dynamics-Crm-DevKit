@@ -4,20 +4,18 @@ var DevKit;
 (function (DevKit) {
 	'use strict';
 	DevKit.PartnerApplicationApi = function (e) {
-		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
 			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-			var property = {};
 			var getFormattedValue = function () {
 				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-					return EMPTY_STRING;
+					return '';
 				}
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
 					if (entity[logicalName + l] === entityLogicalName) {
 						return entity[logicalName + f];
 					}
-					return EMPTY_STRING;
+					return '';
 				}
 				if (isMultiOptionSet) {
 					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -42,30 +40,29 @@ var DevKit;
 			var setValue = function (value) {
 				if (isMultiOptionSet) value = value.join(',');
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+					value = value.replace('{', '').replace('}', '');
 					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
 				} else {
 					upsertEntity[logicalName] = value;
 				}
 				entity[logicalName] = value;
 			};
-			Object.defineProperty(property, 'FormattedValue', {
+			Object.defineProperty(obj.FormattedValue, field, {
 				get: getFormattedValue
 			});
 			if (readOnly) {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue
 				});
 			}
 			else {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue,
 					set: setValue
 				});
 			}
-			return property;
 		}
-		var partnerapplication = {
+		var _partnerapplication = {
 			ApplicationRole: { a: 'applicationrole' },
 			CreatedBy: { b: 'createdby', a: '_createdby_value', c: 'systemusers', d: 'systemuser', r: true },
 			CreatedOn_UtcDateAndTime: { a: 'createdon', r: true },
@@ -89,20 +86,23 @@ var DevKit;
 		};
 		if (e === undefined) e = {};
 		var u = {};
-		for (var field in partnerapplication) {
-			var a = partnerapplication[field].a;
-			var b = partnerapplication[field].b;
-			var c = partnerapplication[field].c;
-			var d = partnerapplication[field].d;
-			var g = partnerapplication[field].g;
-			var r = partnerapplication[field].r;
-			partnerapplication[field] = webApiField(e, a, b, c, d, r, u, g);
+		var partnerapplication = {};
+		partnerapplication.ODataEntity = e;
+		partnerapplication.FormattedValue = {};
+		for (var field in _partnerapplication) {
+			var a = _partnerapplication[field].a;
+			var b = _partnerapplication[field].b;
+			var c = _partnerapplication[field].c;
+			var d = _partnerapplication[field].d;
+			var g = _partnerapplication[field].g;
+			var r = _partnerapplication[field].r;
+			webApiField(partnerapplication, field, e, a, b, c, d, r, u, g);
 		}
 		partnerapplication.Entity = u;
 		partnerapplication.EntityName = 'partnerapplication';
 		partnerapplication.EntityCollectionName = 'partnerapplications';
 		partnerapplication['@odata.etag'] = e['@odata.etag'];
-		partnerapplication.getAliasedValue = function (alias, isMultiOptionSet) {
+		partnerapplication.getAliasedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias] === undefined || e[alias] === null) {
 				return null;
 			}
@@ -111,7 +111,7 @@ var DevKit;
 			}
 			return e[alias];
 		}
-		partnerapplication.getAliasedFormattedValue = function (alias, isMultiOptionSet) {
+		partnerapplication.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
 				return EMPTY_STRING;
 			}

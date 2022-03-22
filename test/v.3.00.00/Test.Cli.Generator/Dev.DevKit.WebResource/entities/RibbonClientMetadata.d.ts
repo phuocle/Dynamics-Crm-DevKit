@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,22 +30,22 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.IntegerValueReadonly;
+		readonly ComponentState: number;
 		/** Entity logical name */
-		EntityLogicalName1: DevKit.WebApi.StringValue;
+		EntityLogicalName1: string;
 		/** Ribbon context */
-		RibbonContext: DevKit.WebApi.StringValue;
+		RibbonContext: string;
 		/** Unique identifier of a ribbon client metadata. */
-		RibbonId: DevKit.WebApi.GuidValue;
+		RibbonId: string;
 		/** Unique identifier of the Ribbon client Metadata */
-		RibbonIdUnique: DevKit.WebApi.GuidValueReadonly;
+		readonly RibbonIdUnique: string;
 		/** Ribbon representation in JSON format. */
-		RibbonJson: DevKit.WebApi.StringValue;
+		RibbonJson: string;
 		/** Reference to the Ribbon JSON file on Azure. */
-		RibbonJsonFileRef: DevKit.WebApi.StringValueReadonly;
+		readonly RibbonJsonFileRef: string;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly SolutionId: string;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -66,4 +68,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

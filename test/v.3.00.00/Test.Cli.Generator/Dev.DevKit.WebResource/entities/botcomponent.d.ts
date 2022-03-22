@@ -75,8 +75,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -84,82 +86,82 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Accent Color for this re-usable subcomponent */
-		AccentColor: DevKit.WebApi.StringValue;
+		AccentColor: string;
 		/** Unique identifier for entity instances */
-		botcomponentId: DevKit.WebApi.GuidValue;
+		botcomponentId: string;
 		/** The category of Chatbot subcomponent. */
-		Category: DevKit.WebApi.StringValue;
+		Category: string;
 		/** For internal use only. */
-		ComponentIdUnique: DevKit.WebApi.GuidValueReadonly;
+		readonly ComponentIdUnique: string;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.botcomponent.ComponentState;
 		/** The sub type of Chatbot subcomponent. */
-		ComponentType: DevKit.WebApi.OptionSetValue;
+		ComponentType: OptionSet.botcomponent.ComponentType;
 		/** The content or metadata of the Bot Component that defines its structure and properties. */
-		Content: DevKit.WebApi.StringValue;
+		Content: string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** The content of the Bot Component in OBI format */
-		Data: DevKit.WebApi.StringValue;
+		Data: string;
 		/** Contains searchable text for the bot component */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Link to learn More about this subcomponent */
-		HelpLink: DevKit.WebApi.StringValue;
+		HelpLink: string;
 		/** Icon Url for this subcomponent */
-		IconUrl: DevKit.WebApi.StringValue;
+		IconUrl: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** For internal use only. */
-		IsCustomizable: DevKit.WebApi.ManagedPropertyValue;
+		IsCustomizable: string;
 		/** Indicates whether the solution component is part of a managed solution. */
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsManaged: boolean;
 		/** Language of the chatbot subcomponent */
-		Language: DevKit.WebApi.OptionSetValue;
+		Language: OptionSet.botcomponent.Language;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** The name of the custom entity. */
-		name: DevKit.WebApi.StringValue;
+		name: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** For internal use only. */
-		OverwriteTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly OverwriteTime_UtcDateAndTime: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Unique identifier for Chatbot subcomponent associated with Chatbot subcomponent. */
-		ParentBotComponentId: DevKit.WebApi.LookupValue;
+		ParentBotComponentId: string;
 		/** Reuse Policy for the chatbot subcomponent */
-		ReusePolicy: DevKit.WebApi.OptionSetValue;
-		SchemaName: DevKit.WebApi.StringValue;
+		ReusePolicy: OptionSet.botcomponent.ReusePolicy;
+		SchemaName: string;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** Status of the BotComponent */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.botcomponent.statecode;
 		/** Reason for the status of the BotComponent */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.botcomponent.statuscode;
 		/** For internal use only. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SupportingSolutionId: string;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -187,6 +189,16 @@ declare namespace OptionSet {
 			Language_generation,
 			/** 6 */
 			Language_understanding,
+			/** 11 */
+			Object_Model_custom_entity,
+			/** 9 */
+			Object_Model_Dialog,
+			/** 12 */
+			Object_Model_global_variable,
+			/** 13 */
+			Object_Model_skill,
+			/** 10 */
+			Object_Model_Trigger,
 			/** 1 */
 			Skill,
 			/** 0 */
@@ -274,4 +286,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

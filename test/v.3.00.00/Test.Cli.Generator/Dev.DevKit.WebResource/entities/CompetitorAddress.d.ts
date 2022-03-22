@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,75 +30,75 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Information about which competitor address is applicable. */
-		AddressNumber: DevKit.WebApi.IntegerValue;
+		AddressNumber: number;
 		/** Type of address for the competitor, such as primary address. */
-		AddressTypeCode: DevKit.WebApi.OptionSetValue;
+		AddressTypeCode: OptionSet.CompetitorAddress.AddressTypeCode;
 		/** City name in the competitor address. */
-		City: DevKit.WebApi.StringValue;
+		City: string;
 		/** Unique identifier of the competitor address. */
-		CompetitorAddressId: DevKit.WebApi.GuidValue;
+		CompetitorAddressId: string;
 		/** Shows the complete address. */
-		Composite: DevKit.WebApi.StringValueReadonly;
+		readonly Composite: string;
 		/** Country/region name in the competitor address. */
-		Country: DevKit.WebApi.StringValue;
+		Country: string;
 		/** County name in the competitor address. */
-		County: DevKit.WebApi.StringValue;
+		County: string;
 		/** Unique identifier of the user who created the competitor address. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the competitor address was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the competitor address. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Fax number for the competitor address. */
-		Fax: DevKit.WebApi.StringValue;
+		Fax: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Latitude for the competitor address. */
-		Latitude: DevKit.WebApi.DoubleValue;
+		Latitude: number;
 		/** First line for entering address information. */
-		Line1: DevKit.WebApi.StringValue;
+		Line1: string;
 		/** Second line for entering address information. */
-		Line2: DevKit.WebApi.StringValue;
+		Line2: string;
 		/** Third line for entering address information. */
-		Line3: DevKit.WebApi.StringValue;
+		Line3: string;
 		/** Longitude for the address for the competitor. */
-		Longitude: DevKit.WebApi.DoubleValue;
+		Longitude: number;
 		/** Unique identifier of the user who last modified the competitor address. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the competitor address was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the competitor address. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Name used to identify the competitor address. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Unique identifier of the parent object with which the competitor address is associated. */
-		ParentId: DevKit.WebApi.LookupValue;
+		ParentId: string;
 		/** ZIP Code or postal code in the competitor address. */
-		PostalCode: DevKit.WebApi.StringValue;
+		PostalCode: string;
 		/** Post office box number in the competitor address. */
-		PostOfficeBox: DevKit.WebApi.StringValue;
+		PostOfficeBox: string;
 		/** Method of shipment for the competitor. */
-		ShippingMethodCode: DevKit.WebApi.OptionSetValue;
+		ShippingMethodCode: OptionSet.CompetitorAddress.ShippingMethodCode;
 		/** State or province in the competitor address. */
-		StateOrProvince: DevKit.WebApi.StringValue;
+		StateOrProvince: string;
 		/** First telephone number for the competitor address. */
-		Telephone1: DevKit.WebApi.StringValue;
+		Telephone1: string;
 		/** Second telephone number for the competitor address. */
-		Telephone2: DevKit.WebApi.StringValue;
+		Telephone2: string;
 		/** Third telephone number for the competitor address. */
-		Telephone3: DevKit.WebApi.StringValue;
+		Telephone3: string;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** United Parcel Service (UPS) zone for the address of the competitor. */
-		UPSZone: DevKit.WebApi.StringValue;
+		UPSZone: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** UTC offset for address 1. This is the difference between local time and standard Coordinated Universal Time. */
-		UTCOffset: DevKit.WebApi.IntegerValue;
+		UTCOffset: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -119,4 +121,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

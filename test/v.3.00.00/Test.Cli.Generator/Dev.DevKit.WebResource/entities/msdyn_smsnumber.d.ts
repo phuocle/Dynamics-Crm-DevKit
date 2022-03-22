@@ -104,8 +104,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -113,73 +115,73 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** SMS number description */
-		msdyn_Description: DevKit.WebApi.StringValue;
+		msdyn_Description: string;
 		/** Enable file attachments for agents */
-		msdyn_enablefileattachmentsforagents: DevKit.WebApi.BooleanValue;
+		msdyn_enablefileattachmentsforagents: boolean;
 		/** Enable file attachments for customers */
-		msdyn_enablefileattachmentsforcustomers: DevKit.WebApi.BooleanValue;
+		msdyn_enablefileattachmentsforcustomers: boolean;
 		/** Readable field to display SMS phone number (Deprecated) */
-		msdyn_FormattedPhoneNumber: DevKit.WebApi.StringValue;
+		msdyn_FormattedPhoneNumber: string;
 		/** Unique identifier for Work Stream associated with SMS Number. (Deprecated) */
-		msdyn_LiveWorkStreamId: DevKit.WebApi.LookupValue;
+		msdyn_LiveWorkStreamId: string;
 		/** The SMS number of the SMS entity. (Deprecated) */
-		msdyn_number: DevKit.WebApi.StringValue;
+		msdyn_number: string;
 		/** The language setting for the SMS number (Deprecated) */
-		msdyn_ocwidgetlanguage: DevKit.WebApi.LookupValue;
+		msdyn_ocwidgetlanguage: string;
 		/** Used to denote operating hours for the sms numbers record */
-		msdyn_operatinghourid: DevKit.WebApi.LookupValue;
+		msdyn_operatinghourid: string;
 		/** Phone Number */
-		msdyn_PhoneNumberId: DevKit.WebApi.LookupValue;
+		msdyn_PhoneNumberId: string;
 		/** Lookup to Dynamics 365 Customer Voice survey field */
-		msdyn_PostConversationSurvey: DevKit.WebApi.LookupValue;
+		msdyn_PostConversationSurvey: string;
 		/** To enable or disable post conversation survey */
-		msdyn_PostConversationSurveyEnable: DevKit.WebApi.BooleanValue;
+		msdyn_PostConversationSurveyEnable: boolean;
 		/** Prefix text for survey link message that will be sent to the user. */
-		msdyn_PostConversationSurveyMessageText: DevKit.WebApi.StringValue;
+		msdyn_PostConversationSurveyMessageText: string;
 		/** Mode of the survey to be sent */
-		msdyn_PostConversationSurveyMode: DevKit.WebApi.OptionSetValue;
+		msdyn_PostConversationSurveyMode: OptionSet.msdyn_smsnumber.msdyn_PostConversationSurveyMode;
 		/** SMS Provider for number */
-		msdyn_Provider: DevKit.WebApi.OptionSetValue;
+		msdyn_Provider: OptionSet.msdyn_smsnumber.msdyn_Provider;
 		/** Unique identifier for entity instances */
-		msdyn_smsnumberId: DevKit.WebApi.GuidValue;
+		msdyn_smsnumberId: string;
 		/** The SMS number type (Deprecated) */
-		msdyn_Type: DevKit.WebApi.OptionSetValue;
+		msdyn_Type: OptionSet.msdyn_smsnumber.msdyn_Type;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Status of the SMS Number */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.msdyn_smsnumber.statecode;
 		/** Reason for the status of the SMS Number */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.msdyn_smsnumber.statuscode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -232,4 +234,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

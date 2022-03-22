@@ -75,8 +75,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -84,51 +86,51 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the system job that created this record */
-		AsyncOperationId: DevKit.WebApi.LookupValueReadonly;
+		readonly AsyncOperationId: string;
 		/** Unique identifier of the bulk deletion job. */
-		BulkDeleteOperationId: DevKit.WebApi.GuidValueReadonly;
+		readonly BulkDeleteOperationId: string;
 		/** Unique identifier of the user who created the bulk deletion job. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the bulk deletion job was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the bulkdeleteoperation. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Number of records that could not be deleted by the bulk deletion job. */
-		FailureCount: DevKit.WebApi.IntegerValueReadonly;
+		readonly FailureCount: number;
 		/** Information about if recurrence is defined for the bulk deletion job. */
-		IsRecurring: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsRecurring: boolean;
 		/** Unique identifier of the user who last modified the bulk deletion job. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the bulk deletion job record was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the bulkdeleteoperation. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Name of the bulk deletion job. */
-		Name: DevKit.WebApi.StringValueReadonly;
+		readonly Name: string;
 		/** Next scheduled time for the bulk deletion job to run. */
-		NextRun_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly NextRun_UtcDateAndTime: Date;
 		/** Fetch XML of the ordered query set. */
-		OrderedQuerySetXml: DevKit.WebApi.StringValueReadonly;
+		readonly OrderedQuerySetXml: string;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValueReadonly;
+		readonly OwnerId_team: string;
 		/** Business unit that owns the bulk deletion job. */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Business user what owns the bulk delete operation. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Index of the ordered query expression that defines the deletion set. */
-		ProcessingQEIndex: DevKit.WebApi.IntegerValueReadonly;
+		readonly ProcessingQEIndex: number;
 		/** Status of the bulk deletion job. */
-		StateCode: DevKit.WebApi.OptionSetValueReadonly;
+		readonly StateCode: OptionSet.BulkDeleteOperation.StateCode;
 		/** Reason for the status of the bulk deletion job. */
-		StatusCode: DevKit.WebApi.OptionSetValueReadonly;
+		readonly StatusCode: OptionSet.BulkDeleteOperation.StatusCode;
 		/** Number of records deleted by the bulk deletion job. */
-		SuccessCount: DevKit.WebApi.IntegerValueReadonly;
+		readonly SuccessCount: number;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 	}
 }
 declare namespace OptionSet {
@@ -183,4 +185,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

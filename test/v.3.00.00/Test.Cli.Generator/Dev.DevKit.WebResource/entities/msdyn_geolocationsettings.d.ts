@@ -77,8 +77,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -86,71 +88,71 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** The Beacon configuration */
-		msdyn_BeaconConfiguration: DevKit.WebApi.StringValue;
+		msdyn_BeaconConfiguration: string;
 		/** Checks if location tracking is enabled. */
-		msdyn_EnableLocationTracking: DevKit.WebApi.BooleanValue;
+		msdyn_EnableLocationTracking: boolean;
 		/** The Friday tracking end time */
-		msdyn_fridayendtime_TimezoneDateAndTime: DevKit.WebApi.TimezoneDateAndTimeValue;
+		msdyn_fridayendtime_TimezoneDateAndTime: Date;
 		/** The Friday tracking start time */
-		msdyn_fridaystarttime_TimezoneDateAndTime: DevKit.WebApi.TimezoneDateAndTimeValue;
+		msdyn_fridaystarttime_TimezoneDateAndTime: Date;
 		/** Unique identifier for entity instances */
-		msdyn_geolocationsettingsId: DevKit.WebApi.GuidValue;
+		msdyn_geolocationsettingsId: string;
 		/** The Monday tracking end time */
-		msdyn_mondayendtime_TimezoneDateAndTime: DevKit.WebApi.TimezoneDateAndTimeValue;
+		msdyn_mondayendtime_TimezoneDateAndTime: Date;
 		/** The Monday tracking start time */
-		msdyn_mondaystarttime_TimezoneDateAndTime: DevKit.WebApi.TimezoneDateAndTimeValue;
+		msdyn_mondaystarttime_TimezoneDateAndTime: Date;
 		/** The name of the geolocation settings */
-		msdyn_name: DevKit.WebApi.StringValue;
+		msdyn_name: string;
 		/** The frequency in seconds at which location data should be uploaded from mobile clients to the server */
-		msdyn_refreshIntervalSeconds: DevKit.WebApi.IntegerValue;
+		msdyn_refreshIntervalSeconds: number;
 		/** The Saturday tracking end time */
-		msdyn_saturdayendtime_TimezoneDateAndTime: DevKit.WebApi.TimezoneDateAndTimeValue;
+		msdyn_saturdayendtime_TimezoneDateAndTime: Date;
 		/** The Saturday tracking start time */
-		msdyn_saturdaystarttime_TimezoneDateAndTime: DevKit.WebApi.TimezoneDateAndTimeValue;
+		msdyn_saturdaystarttime_TimezoneDateAndTime: Date;
 		/** The Sunday tracking end time */
-		msdyn_sundayendtime_TimezoneDateAndTime: DevKit.WebApi.TimezoneDateAndTimeValue;
+		msdyn_sundayendtime_TimezoneDateAndTime: Date;
 		/** The Sunday tracking start time */
-		msdyn_sundaystarttime_TimezoneDateAndTime: DevKit.WebApi.TimezoneDateAndTimeValue;
+		msdyn_sundaystarttime_TimezoneDateAndTime: Date;
 		/** The Thursday tracking end time */
-		msdyn_thursdayendtime_TimezoneDateAndTime: DevKit.WebApi.TimezoneDateAndTimeValue;
+		msdyn_thursdayendtime_TimezoneDateAndTime: Date;
 		/** The Thursday tracking start time */
-		msdyn_thursdaystarttime_TimezoneDateAndTime: DevKit.WebApi.TimezoneDateAndTimeValue;
+		msdyn_thursdaystarttime_TimezoneDateAndTime: Date;
 		/** The Tuesday tracking end time */
-		msdyn_tuesdayendtime_TimezoneDateAndTime: DevKit.WebApi.TimezoneDateAndTimeValue;
+		msdyn_tuesdayendtime_TimezoneDateAndTime: Date;
 		/** The Tuesday tracking start time */
-		msdyn_tuesdaystarttime_TimezoneDateAndTime: DevKit.WebApi.TimezoneDateAndTimeValue;
+		msdyn_tuesdaystarttime_TimezoneDateAndTime: Date;
 		/** The Wednesday tracking end time */
-		msdyn_wednesdayendtime_TimezoneDateAndTime: DevKit.WebApi.TimezoneDateAndTimeValue;
+		msdyn_wednesdayendtime_TimezoneDateAndTime: Date;
 		/** The Wednesday tracking start time */
-		msdyn_wednesdaystarttime_TimezoneDateAndTime: DevKit.WebApi.TimezoneDateAndTimeValue;
+		msdyn_wednesdaystarttime_TimezoneDateAndTime: Date;
 		/** Unique identifier for the organization */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Status of the GeolocationSettings */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.msdyn_geolocationsettings.statecode;
 		/** Reason for the status of the GeolocationSettings */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.msdyn_geolocationsettings.statuscode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -185,4 +187,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,78 +30,80 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the activity associated with the activity party. (A "party" is any person who is associated with an activity.) */
-		ActivityId: DevKit.WebApi.LookupValue;
+		ActivityId: string;
 		/** Unique identifier of the activity party. */
-		ActivityPartyId: DevKit.WebApi.GuidValue;
+		ActivityPartyId: string;
 		/** Email address to which an email is delivered, and which is associated with the target entity. */
-		AddressUsed: DevKit.WebApi.StringValue;
+		AddressUsed: string;
 		/** Email address column number from associated party. */
-		AddressUsedEmailColumnNumber: DevKit.WebApi.IntegerValueReadonly;
+		readonly AddressUsedEmailColumnNumber: number;
 		/** Information about whether to allow sending email to the activity party. */
-		DoNotEmail: DevKit.WebApi.BooleanValueReadonly;
+		readonly DoNotEmail: boolean;
 		/** Information about whether to allow sending faxes to the activity party. */
-		DoNotFax: DevKit.WebApi.BooleanValueReadonly;
+		readonly DoNotFax: boolean;
 		/** Information about whether to allow phone calls to the lead. */
-		DoNotPhone: DevKit.WebApi.BooleanValueReadonly;
+		readonly DoNotPhone: boolean;
 		/** Information about whether to allow sending postal mail to the lead. */
-		DoNotPostalMail: DevKit.WebApi.BooleanValueReadonly;
+		readonly DoNotPostalMail: boolean;
 		/** Amount of effort used by the resource in a service appointment activity. */
-		Effort: DevKit.WebApi.DoubleValue;
+		Effort: number;
 		/** For internal use only. */
-		ExchangeEntryId: DevKit.WebApi.StringValue;
+		ExchangeEntryId: string;
 		/** Type of instance of a recurring series. */
-		InstanceTypeCode: DevKit.WebApi.OptionSetValueReadonly;
+		readonly InstanceTypeCode: OptionSet.ActivityParty.InstanceTypeCode;
 		/** Information about whether the underlying entity record is deleted. */
-		IsPartyDeleted: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsPartyDeleted: boolean;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValueReadonly;
-		OwningBusinessUnit: DevKit.WebApi.GuidValueReadonly;
-		OwningUser: DevKit.WebApi.GuidValueReadonly;
+		readonly OwnerId_team: string;
+		readonly OwningBusinessUnit: string;
+		readonly OwningUser: string;
 		/** Role of the person in the activity, such as sender, to, cc, bcc, required, optional, organizer, regarding, or owner. */
-		ParticipationTypeMask: DevKit.WebApi.OptionSetValue;
+		ParticipationTypeMask: OptionSet.ActivityParty.ParticipationTypeMask;
 		/** Unique identifier of the party associated with the activity. */
-		partyid_account: DevKit.WebApi.LookupValue;
+		partyid_account: string;
 		/** Unique identifier of the party associated with the activity. */
-		partyid_bulkoperation: DevKit.WebApi.LookupValue;
+		partyid_bulkoperation: string;
 		/** Unique identifier of the party associated with the activity. */
-		partyid_campaign: DevKit.WebApi.LookupValue;
+		partyid_campaign: string;
 		/** Unique identifier of the party associated with the activity. */
-		partyid_campaignactivity: DevKit.WebApi.LookupValue;
+		partyid_campaignactivity: string;
 		/** Unique identifier of the party associated with the activity. */
-		partyid_contact: DevKit.WebApi.LookupValue;
+		partyid_contact: string;
 		/** Unique identifier of the party associated with the activity. */
-		partyid_contract: DevKit.WebApi.LookupValue;
+		partyid_contract: string;
 		/** Unique identifier of the party associated with the activity. */
-		partyid_entitlement: DevKit.WebApi.LookupValue;
+		partyid_entitlement: string;
 		/** Unique identifier of the party associated with the activity. */
-		partyid_equipment: DevKit.WebApi.LookupValue;
+		partyid_equipment: string;
 		/** Unique identifier of the party associated with the activity. */
-		partyid_incident: DevKit.WebApi.LookupValue;
+		partyid_incident: string;
 		/** Unique identifier of the party associated with the activity. */
-		partyid_invoice: DevKit.WebApi.LookupValue;
+		partyid_invoice: string;
 		/** Unique identifier of the party associated with the activity. */
-		partyid_knowledgearticle: DevKit.WebApi.LookupValue;
+		partyid_knowledgearticle: string;
 		/** Unique identifier of the party associated with the activity. */
-		partyid_lead: DevKit.WebApi.LookupValue;
+		partyid_lead: string;
 		/** Unique identifier of the party associated with the activity. */
-		partyid_opportunity: DevKit.WebApi.LookupValue;
+		partyid_msdyn_salessuggestion: string;
 		/** Unique identifier of the party associated with the activity. */
-		partyid_queue: DevKit.WebApi.LookupValue;
+		partyid_opportunity: string;
 		/** Unique identifier of the party associated with the activity. */
-		partyid_quote: DevKit.WebApi.LookupValue;
+		partyid_queue: string;
 		/** Unique identifier of the party associated with the activity. */
-		partyid_salesorder: DevKit.WebApi.LookupValue;
+		partyid_quote: string;
 		/** Unique identifier of the party associated with the activity. */
-		partyid_systemuser: DevKit.WebApi.LookupValue;
+		partyid_salesorder: string;
+		/** Unique identifier of the party associated with the activity. */
+		partyid_systemuser: string;
 		/** Unique identifier of the resource specification for the activity party. */
-		ResourceSpecId: DevKit.WebApi.LookupValue;
+		ResourceSpecId: string;
 		/** Scheduled end time of the activity. */
-		ScheduledEnd_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly ScheduledEnd_UtcDateOnly: Date;
 		/** Scheduled start time of the activity. */
-		ScheduledStart_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly ScheduledStart_UtcDateOnly: Date;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -158,4 +162,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

@@ -63,8 +63,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -72,67 +74,67 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Description of the rule item. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Action expression of Rule item in Omni channel */
-		msdyn_Action: DevKit.WebApi.StringValue;
+		msdyn_Action: string;
 		/** Assigned to User or Queue. */
-		msdyn_Assignedto: DevKit.WebApi.OptionSetValue;
+		msdyn_Assignedto: OptionSet.msdyn_ocruleitem.msdyn_Assignedto;
 		/** Assigned Queue Id */
-		msdyn_cdsqueueassignid: DevKit.WebApi.LookupValue;
+		msdyn_cdsqueueassignid: string;
 		/** Condition expression FetchXML of RuleItem */
-		msdyn_Condition: DevKit.WebApi.StringValue;
+		msdyn_Condition: string;
 		/** Condition expression Json of RuleItem */
-		msdyn_Expression: DevKit.WebApi.StringValue;
+		msdyn_Expression: string;
 		/** The Work stream that this Rule item belongs to */
-		msdyn_liveworkstream: DevKit.WebApi.LookupValue;
+		msdyn_liveworkstream: string;
 		/** The name of the custom entity. */
-		msdyn_name: DevKit.WebApi.StringValue;
+		msdyn_name: string;
 		/** Unique identifier for entity instances */
-		msdyn_ocruleitemId: DevKit.WebApi.GuidValue;
+		msdyn_ocruleitemId: string;
 		/** Priority of Rule item in a Work stream */
-		msdyn_priority: DevKit.WebApi.StringValue;
+		msdyn_priority: string;
 		/** Assigned Queue Id */
-		msdyn_QueueAssignId: DevKit.WebApi.LookupValue;
+		msdyn_QueueAssignId: string;
 		/** Metadata Json of RuleItem */
-		msdyn_Rulejson: DevKit.WebApi.StringValue;
+		msdyn_Rulejson: string;
 		/** Assigned User Id */
-		msdyn_UserAssignId: DevKit.WebApi.LookupValue;
+		msdyn_UserAssignId: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Status of the Rule item */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.msdyn_ocruleitem.statecode;
 		/** Reason for the status of the Rule item */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.msdyn_ocruleitem.statuscode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -173,4 +175,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

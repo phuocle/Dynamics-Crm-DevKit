@@ -47,8 +47,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -56,85 +58,85 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Browser where customer initiated chat */
-		msdyn_browser: DevKit.WebApi.StringValue;
+		msdyn_browser: string;
 		/** City where customer initiated chat */
-		msdyn_City: DevKit.WebApi.StringValue;
+		msdyn_City: string;
 		/** Country where customer initiated chat */
-		msdyn_country: DevKit.WebApi.StringValue;
+		msdyn_country: string;
 		/** Device where customer initiated chat */
-		msdyn_device: DevKit.WebApi.StringValue;
+		msdyn_device: string;
 		/** Indicates if chat is authenticated */
-		msdyn_isauthenticated: DevKit.WebApi.BooleanValue;
+		msdyn_isauthenticated: boolean;
 		/** Indicates if chat was initiated from proactive chat */
-		msdyn_isproactivechat: DevKit.WebApi.BooleanValue;
+		msdyn_isproactivechat: boolean;
 		/** Latitude where customer initiated chat */
-		msdyn_latitude: DevKit.WebApi.StringValue;
+		msdyn_latitude: string;
 		/** Unique identifier for entity instances */
-		msdyn_livechatengagementctxId: DevKit.WebApi.GuidValue;
+		msdyn_livechatengagementctxId: string;
 		/** Unique identifier for engagement context */
-		msdyn_livechatengagementid: DevKit.WebApi.StringValue;
+		msdyn_livechatengagementid: string;
 		/** Corresponding conversation identifier for the chat */
-		msdyn_liveworkitemid: DevKit.WebApi.LookupValue;
+		msdyn_liveworkitemid: string;
 		/** Locale for this chat */
-		msdyn_locale: DevKit.WebApi.StringValue;
+		msdyn_locale: string;
 		/** Longitude where customer initiated chat */
-		msdyn_longitude: DevKit.WebApi.StringValue;
+		msdyn_longitude: string;
 		/** The name of the custom entity. */
-		msdyn_name: DevKit.WebApi.StringValue;
+		msdyn_name: string;
 		/** Browser URL where customer initiated chat */
-		msdyn_originurl: DevKit.WebApi.StringValue;
+		msdyn_originurl: string;
 		/** Operating system where customer initiated chat */
-		msdyn_os: DevKit.WebApi.StringValue;
+		msdyn_os: string;
 		/** Customer portal identifier if exists */
-		msdyn_portalcontactid: DevKit.WebApi.StringValue;
+		msdyn_portalcontactid: string;
 		/** Postal code where customer initiated chat */
-		msdyn_PostalCode: DevKit.WebApi.StringValue;
+		msdyn_PostalCode: string;
 		/** State where customer initiated chat */
-		msdyn_State: DevKit.WebApi.StringValue;
+		msdyn_State: string;
 		/** Street 1 where customer initiated chat */
-		msdyn_Street1: DevKit.WebApi.StringValue;
+		msdyn_Street1: string;
 		/** Street 2 where customer initiated chat */
-		msdyn_Street2: DevKit.WebApi.StringValue;
+		msdyn_Street2: string;
 		/** Street 3 where customer initiated chat */
-		msdyn_Street3: DevKit.WebApi.StringValue;
+		msdyn_Street3: string;
 		/** Corresponding widget application identifier for the chat */
-		msdyn_widgetappid: DevKit.WebApi.StringValue;
+		msdyn_widgetappid: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Status of the Live chat context */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.msdyn_livechatengagementctx.statecode;
 		/** Reason for the status of the Live chat context */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.msdyn_livechatengagementctx.statuscode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -169,4 +171,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

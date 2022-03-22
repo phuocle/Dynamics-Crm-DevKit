@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,22 +30,22 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the object that has an invalid dependency */
-		ExistingComponentId: DevKit.WebApi.GuidValueReadonly;
+		readonly ExistingComponentId: string;
 		/** Component type of the object that has an invalid dependency */
-		ExistingComponentType: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ExistingComponentType: OptionSet.InvalidDependency.ExistingComponentType;
 		/** The dependency type of the invalid dependency. */
-		ExistingDependencyType: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ExistingDependencyType: OptionSet.InvalidDependency.ExistingDependencyType;
 		/** Unique identifier of the invalid dependency. */
-		InvalidDependencyId: DevKit.WebApi.GuidValueReadonly;
+		readonly InvalidDependencyId: string;
 		/** Indicates whether the existing node is the required component in the dependency */
-		IsExistingNodeRequiredComponent: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsExistingNodeRequiredComponent: boolean;
 		/** Unique identifier of the missing component. */
-		MissingComponentId: DevKit.WebApi.GuidValue;
-		MissingComponentInfo: DevKit.WebApi.StringValueReadonly;
+		MissingComponentId: string;
+		readonly MissingComponentInfo: string;
 		/** The lookup type of the missing component. */
-		MissingComponentLookupType: DevKit.WebApi.IntegerValueReadonly;
+		readonly MissingComponentLookupType: number;
 		/** The object type code of the missing component. */
-		MissingComponentType: DevKit.WebApi.OptionSetValueReadonly;
+		readonly MissingComponentType: OptionSet.InvalidDependency.MissingComponentType;
 	}
 }
 declare namespace OptionSet {
@@ -440,4 +442,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

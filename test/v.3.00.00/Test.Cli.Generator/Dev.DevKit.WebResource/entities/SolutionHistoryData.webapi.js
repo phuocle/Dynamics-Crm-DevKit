@@ -4,20 +4,18 @@ var DevKit;
 (function (DevKit) {
 	'use strict';
 	DevKit.SolutionHistoryDataApi = function (e) {
-		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
 			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-			var property = {};
 			var getFormattedValue = function () {
 				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-					return EMPTY_STRING;
+					return '';
 				}
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
 					if (entity[logicalName + l] === entityLogicalName) {
 						return entity[logicalName + f];
 					}
-					return EMPTY_STRING;
+					return '';
 				}
 				if (isMultiOptionSet) {
 					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -42,30 +40,29 @@ var DevKit;
 			var setValue = function (value) {
 				if (isMultiOptionSet) value = value.join(',');
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+					value = value.replace('{', '').replace('}', '');
 					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
 				} else {
 					upsertEntity[logicalName] = value;
 				}
 				entity[logicalName] = value;
 			};
-			Object.defineProperty(property, 'FormattedValue', {
+			Object.defineProperty(obj.FormattedValue, field, {
 				get: getFormattedValue
 			});
 			if (readOnly) {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue
 				});
 			}
 			else {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue,
 					set: setValue
 				});
 			}
-			return property;
 		}
-		var solutionhistorydata = {
+		var _solutionhistorydata = {
 			ActivityId: { a: 'activityid' },
 			CorrelationId: { a: 'correlationid' },
 			EndTime_UtcDateAndTime: { a: 'endtime' },
@@ -91,20 +88,23 @@ var DevKit;
 		};
 		if (e === undefined) e = {};
 		var u = {};
-		for (var field in solutionhistorydata) {
-			var a = solutionhistorydata[field].a;
-			var b = solutionhistorydata[field].b;
-			var c = solutionhistorydata[field].c;
-			var d = solutionhistorydata[field].d;
-			var g = solutionhistorydata[field].g;
-			var r = solutionhistorydata[field].r;
-			solutionhistorydata[field] = webApiField(e, a, b, c, d, r, u, g);
+		var solutionhistorydata = {};
+		solutionhistorydata.ODataEntity = e;
+		solutionhistorydata.FormattedValue = {};
+		for (var field in _solutionhistorydata) {
+			var a = _solutionhistorydata[field].a;
+			var b = _solutionhistorydata[field].b;
+			var c = _solutionhistorydata[field].c;
+			var d = _solutionhistorydata[field].d;
+			var g = _solutionhistorydata[field].g;
+			var r = _solutionhistorydata[field].r;
+			webApiField(solutionhistorydata, field, e, a, b, c, d, r, u, g);
 		}
 		solutionhistorydata.Entity = u;
 		solutionhistorydata.EntityName = 'solutionhistorydata';
 		solutionhistorydata.EntityCollectionName = 'solutionhistorydatas';
 		solutionhistorydata['@odata.etag'] = e['@odata.etag'];
-		solutionhistorydata.getAliasedValue = function (alias, isMultiOptionSet) {
+		solutionhistorydata.getAliasedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias] === undefined || e[alias] === null) {
 				return null;
 			}
@@ -113,7 +113,7 @@ var DevKit;
 			}
 			return e[alias];
 		}
-		solutionhistorydata.getAliasedFormattedValue = function (alias, isMultiOptionSet) {
+		solutionhistorydata.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
 				return EMPTY_STRING;
 			}

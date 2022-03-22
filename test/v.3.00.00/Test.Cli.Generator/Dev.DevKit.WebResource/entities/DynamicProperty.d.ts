@@ -172,8 +172,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -181,85 +183,85 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Shows the property in the product family that this property is being inherited from. */
-		BaseDynamicPropertyId: DevKit.WebApi.LookupValue;
+		BaseDynamicPropertyId: string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Select the data type of the property. */
-		DataType: DevKit.WebApi.OptionSetValue;
+		DataType: OptionSet.DynamicProperty.DataType;
 		/** Default Value */
-		DefaultAttributeValue: DevKit.WebApi.StringValue;
+		DefaultAttributeValue: string;
 		/** Shows the default value of the property for a decimal data type. */
-		DefaultValueDecimal: DevKit.WebApi.DecimalValue;
+		DefaultValueDecimal: number;
 		/** Shows the default value of the property for a double data type. */
-		DefaultValueDouble: DevKit.WebApi.DoubleValue;
+		DefaultValueDouble: number;
 		/** Shows the default value of the property for a whole number data type. */
-		DefaultValueInteger: DevKit.WebApi.IntegerValue;
+		DefaultValueInteger: number;
 		/** Shows the default value of the property. */
-		DefaultValueOptionSet: DevKit.WebApi.LookupValue;
+		DefaultValueOptionSet: string;
 		/** Shows the default value of the property for a string data type. */
-		DefaultValueString: DevKit.WebApi.StringValue;
+		DefaultValueString: string;
 		/** Type a description for the property. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Internal Use Only */
-		DMTImportState: DevKit.WebApi.IntegerValue;
+		DMTImportState: number;
 		/** Shows the unique identifier of the property. */
-		DynamicPropertyId: DevKit.WebApi.GuidValue;
+		DynamicPropertyId: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Defines whether the attribute is hidden or shown. */
-		IsHidden: DevKit.WebApi.BooleanValue;
+		IsHidden: boolean;
 		/** Defines whether the attribute is read-only or if it can be edited. */
-		IsReadOnly: DevKit.WebApi.BooleanValue;
+		IsReadOnly: boolean;
 		/** Defines whether the attribute is mandatory. */
-		IsRequired: DevKit.WebApi.BooleanValue;
+		IsRequired: boolean;
 		/** Shows the maximum allowed length of the property for a string data type. */
-		MaxLengthString: DevKit.WebApi.IntegerValue;
+		MaxLengthString: number;
 		/** Shows the maximum allowed value of the property for a decimal data type. */
-		MaxValueDecimal: DevKit.WebApi.DecimalValue;
+		MaxValueDecimal: number;
 		/** Shows the maximum allowed value of the property for a double data type. */
-		MaxValueDouble: DevKit.WebApi.DoubleValue;
+		MaxValueDouble: number;
 		/** Shows the maximum allowed value of the property for a whole number data type. */
-		MaxValueInteger: DevKit.WebApi.IntegerValue;
+		MaxValueInteger: number;
 		/** Shows the minimum allowed value of the property for a decimal data type. */
-		MinValueDecimal: DevKit.WebApi.DecimalValue;
+		MinValueDecimal: number;
 		/** Shows the minimum allowed value of the property for a double data type. */
-		MinValueDouble: DevKit.WebApi.DoubleValue;
+		MinValueDouble: number;
 		/** Shows the minimum allowed value of the property for a whole number data type. */
-		MinValueInteger: DevKit.WebApi.IntegerValue;
+		MinValueInteger: number;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Type the name of the property. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Unique identifier for the organization */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Shows the related overwritten property. */
-		OverwrittenDynamicPropertyId: DevKit.WebApi.GuidValue;
+		OverwrittenDynamicPropertyId: string;
 		/** Shows the allowed precision of the property for a whole number data type. */
-		Precision: DevKit.WebApi.IntegerValue;
+		Precision: number;
 		/** Choose the product that the property is associated with. */
-		RegardingObjectId: DevKit.WebApi.LookupValue;
+		RegardingObjectId: string;
 		/** Shows the root property that this property is derived from. */
-		RootDynamicPropertyId: DevKit.WebApi.GuidValue;
+		RootDynamicPropertyId: string;
 		/** Shows the state of the property. */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.DynamicProperty.statecode;
 		/** Shows whether the property is active or inactive. */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.DynamicProperty.statuscode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -310,4 +312,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

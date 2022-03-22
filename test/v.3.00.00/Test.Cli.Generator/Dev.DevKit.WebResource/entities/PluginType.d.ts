@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,63 +30,63 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Full path name of the plug-in assembly. */
-		AssemblyName: DevKit.WebApi.StringValueReadonly;
+		readonly AssemblyName: string;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.PluginType.ComponentState;
 		/** Unique identifier of the user who created the plug-in type. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the plug-in type was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the plugintype. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Culture code for the plug-in assembly. */
-		Culture: DevKit.WebApi.StringValueReadonly;
+		readonly Culture: string;
 		/** Customization level of the plug-in type. */
-		CustomizationLevel: DevKit.WebApi.IntegerValueReadonly;
+		readonly CustomizationLevel: number;
 		/** Serialized Custom Activity Type information, including required arguments. For more information, see SandboxCustomActivityInfo. */
-		CustomWorkflowActivityInfo: DevKit.WebApi.StringValueReadonly;
+		readonly CustomWorkflowActivityInfo: string;
 		/** Description of the plug-in type. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** User friendly name for the plug-in. */
-		FriendlyName: DevKit.WebApi.StringValue;
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		FriendlyName: string;
+		readonly IsManaged: boolean;
 		/** Indicates if the plug-in is a custom activity for workflows. */
-		IsWorkflowActivity: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsWorkflowActivity: boolean;
 		/** Major of the version number of the assembly for the plug-in type. */
-		Major: DevKit.WebApi.IntegerValueReadonly;
+		readonly Major: number;
 		/** Minor of the version number of the assembly for the plug-in type. */
-		Minor: DevKit.WebApi.IntegerValueReadonly;
+		readonly Minor: number;
 		/** Unique identifier of the user who last modified the plug-in type. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the plug-in type was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the plugintype. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Name of the plug-in type. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Unique identifier of the organization with which the plug-in type is associated. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** For internal use only. */
-		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly OverwriteTime_UtcDateOnly: Date;
 		/** Unique identifier of the plug-in assembly that contains this plug-in type. */
-		PluginAssemblyId: DevKit.WebApi.LookupValue;
+		PluginAssemblyId: string;
 		/** Unique identifier of the plug-in type. */
-		PluginTypeId: DevKit.WebApi.GuidValue;
+		PluginTypeId: string;
 		/** Unique identifier of the plug-in type. */
-		PluginTypeIdUnique: DevKit.WebApi.GuidValueReadonly;
+		readonly PluginTypeIdUnique: string;
 		/** Public key token of the assembly for the plug-in type. */
-		PublicKeyToken: DevKit.WebApi.StringValueReadonly;
+		readonly PublicKeyToken: string;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** For internal use only. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SupportingSolutionId: string;
 		/** Fully qualified type name of the plug-in type. */
-		TypeName: DevKit.WebApi.StringValue;
+		TypeName: string;
 		/** Version number of the assembly for the plug-in type. */
-		Version: DevKit.WebApi.StringValueReadonly;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly Version: string;
+		readonly VersionNumber: number;
 		/** Group name of workflow custom activity. */
-		WorkflowActivityGroupName: DevKit.WebApi.StringValue;
+		WorkflowActivityGroupName: string;
 	}
 }
 declare namespace OptionSet {
@@ -117,4 +119,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

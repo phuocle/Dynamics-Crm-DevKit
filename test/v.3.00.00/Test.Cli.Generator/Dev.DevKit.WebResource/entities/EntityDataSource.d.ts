@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,37 +30,37 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.EntityDataSource.ComponentState;
 		/** JSON data representing values from a data source entity as individual fields. */
-		ConnectionDefinition: DevKit.WebApi.StringValue;
+		ConnectionDefinition: string;
 		/** JSON data representing secrets in a data source entity as individual fields. */
-		ConnectionDefinitionSecrets: DevKit.WebApi.StringValue;
+		ConnectionDefinitionSecrets: string;
 		/** Enter additional information to describe the environment this data source targets and the purpose of this system. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Choose the entity dataprovider for the entity datasource. */
-		EntityDataProviderId: DevKit.WebApi.LookupValue;
+		EntityDataProviderId: string;
 		/** Unique identifier of the Data Source Id */
-		EntityDataSourceId: DevKit.WebApi.GuidValue;
+		EntityDataSourceId: string;
 		/** For internal use only. */
-		EntityDataSourceIdUnique: DevKit.WebApi.GuidValueReadonly;
+		readonly EntityDataSourceIdUnique: string;
 		/** Entity Logical Name */
-		EntityName1: DevKit.WebApi.StringValue;
+		EntityName1: string;
 		/** Version in which the form is introduced. */
-		IntroducedVersion: DevKit.WebApi.StringValue;
+		IntroducedVersion: string;
 		/** Information that specifies whether this component can be customized. */
-		IsCustomizable: DevKit.WebApi.ManagedPropertyValue;
+		IsCustomizable: string;
 		/** Indicates whether the solution component is part of a managed solution. */
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsManaged: boolean;
 		/** Name of this data source. This name appears in the data source drop-down when creating a new entity. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Unique identifier for the organization. */
-		OrganizationId: DevKit.WebApi.GuidValueReadonly;
+		readonly OrganizationId: string;
 		/** For internal use only. */
-		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly OverwriteTime_UtcDateOnly: Date;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** For internal use only. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SupportingSolutionId: string;
 	}
 }
 declare namespace OptionSet {
@@ -91,4 +93,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,40 +30,40 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the report link. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the report link record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the reportlink. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Unique identifier of the data import or data migration that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the linked report. */
-		LinkedReportId: DevKit.WebApi.LookupValue;
+		LinkedReportId: string;
 		/** Name of the linked report. */
-		LinkedReportName: DevKit.WebApi.StringValue;
+		LinkedReportName: string;
 		/** Link type of the report. */
-		LinkTypeCode: DevKit.WebApi.OptionSetValue;
+		LinkTypeCode: OptionSet.ReportLink.LinkTypeCode;
 		/** Unique identifier of the user who last modified the report link. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the report link was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the reportlink. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValueReadonly;
+		readonly OwnerId_team: string;
 		/** Unique identifier of the business unit that owns the report link. */
-		OwningBusinessUnit: DevKit.WebApi.GuidValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier of the user who owns the report link. */
-		OwningUser: DevKit.WebApi.GuidValueReadonly;
+		readonly OwningUser: string;
 		/** Unique identifier of the main report. */
-		ReportId: DevKit.WebApi.LookupValue;
+		ReportId: string;
 		/** Unique identifier of the report link. */
-		ReportLinkId: DevKit.WebApi.GuidValue;
+		ReportLinkId: string;
 		/** For internal use only. */
-		ReportLinkIdUnique: DevKit.WebApi.GuidValueReadonly;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly ReportLinkIdUnique: string;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -92,4 +94,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

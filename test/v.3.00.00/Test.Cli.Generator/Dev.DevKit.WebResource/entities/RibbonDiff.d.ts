@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,40 +30,40 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.RibbonDiff.ComponentState;
 		/** Unique identifier of the context group for this tab. If this ribbon definition adds a new tab, then it is a contextual tab. */
-		ContextGroupId: DevKit.WebApi.GuidValue;
+		ContextGroupId: string;
 		/** The string ID of this ribbon definition. */
-		DiffId: DevKit.WebApi.StringValue;
+		DiffId: string;
 		/** Indicates the type of ribbon definition. */
-		DiffType: DevKit.WebApi.OptionSetValueReadonly;
+		readonly DiffType: OptionSet.RibbonDiff.DiffType;
 		/** The entity this rule applies to, also the entity this rule was imported from, will be exported to. */
-		Entity1: DevKit.WebApi.StringValue;
+		Entity1: string;
 		/** Information about whether the ribbondiff is associated with app module. */
-		IsAppAware: DevKit.WebApi.BooleanValueReadonly;
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsAppAware: boolean;
+		readonly IsManaged: boolean;
 		/** Unique identifier of the organization. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** For internal use only. */
-		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly OverwriteTime_UtcDateOnly: Date;
 		/** Ribbon definition XML string that contains one change action. */
-		RDX: DevKit.WebApi.StringValue;
+		RDX: string;
 		/** Unique identifier of the ribbon customization with which the ribbon command is associated. */
-		RibbonCustomizationId: DevKit.WebApi.LookupValue;
+		RibbonCustomizationId: string;
 		/** Unique identifier. */
-		RibbonDiffId: DevKit.WebApi.GuidValue;
+		RibbonDiffId: string;
 		/** Unique identifier of the form used when synchronizing customizations for the Microsoft Dynamics 365 client for Outlook. */
-		RibbonDiffUniqueId: DevKit.WebApi.GuidValueReadonly;
+		readonly RibbonDiffUniqueId: string;
 		/** Sequence in which the definition is to be applied. */
-		Sequence: DevKit.WebApi.IntegerValue;
+		Sequence: number;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** For internal use only. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SupportingSolutionId: string;
 		/** The ID of the tab this definition applies to. */
-		TabId: DevKit.WebApi.StringValue;
+		TabId: string;
 		/** Represents a version of customizations to be synchronized with the Microsoft Dynamics 365 client for Outlook. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -104,4 +106,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

@@ -22,7 +22,6 @@ declare namespace DevKit {
 			opportunityquotes: DevKit.Controls.Section;
 		}
 		interface tab_Summary_Sections {
-			Notes_pane: DevKit.Controls.Section;
 			Opportunity_details: DevKit.Controls.Section;
 			opportunity_information: DevKit.Controls.Section;
 			PredictiveScoreSection: DevKit.Controls.Section;
@@ -936,8 +935,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -945,252 +946,252 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the account with which the opportunity is associated. */
-		AccountId: DevKit.WebApi.LookupValueReadonly;
+		readonly AccountId: string;
 		/** Shows the date and time when the opportunity was closed or canceled. */
-		ActualCloseDate_DateOnly: DevKit.WebApi.DateOnlyValue;
+		ActualCloseDate_DateOnly: Date;
 		/** Type the actual revenue amount for the opportunity for reporting and analysis of estimated versus actual sales. Field defaults to the Est. Revenue value when an opportunity is won. */
-		ActualValue: DevKit.WebApi.MoneyValue;
+		ActualValue: number;
 		/** Value of the Actual Revenue in base currency. */
-		ActualValue_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly ActualValue_Base: number;
 		/** Type a value between 0 and 1,000,000,000,000 to indicate the lead's potential available budget. */
-		BudgetAmount: DevKit.WebApi.MoneyValue;
+		BudgetAmount: number;
 		/** Value of the Budget Amount in base currency. */
-		BudgetAmount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly BudgetAmount_Base: number;
 		/** Select the likely budget status for the lead's company. This may help determine the lead rating or your sales approach. */
-		BudgetStatus: DevKit.WebApi.OptionSetValue;
+		BudgetStatus: OptionSet.Opportunity.BudgetStatus;
 		/** Shows the campaign that the opportunity was created from. The ID is used for tracking the success of the campaign. */
-		CampaignId: DevKit.WebApi.LookupValue;
+		CampaignId: string;
 		/** Choose whether the proposal feedback has been captured for the opportunity. */
-		CaptureProposalFeedback: DevKit.WebApi.BooleanValue;
+		CaptureProposalFeedback: boolean;
 		/** Type a number from 0 to 100 that represents the likelihood of closing the opportunity. This can aid the sales team in their efforts to convert the opportunity in a sale. */
-		CloseProbability: DevKit.WebApi.IntegerValue;
+		CloseProbability: number;
 		/** Select whether a final proposal has been completed for the opportunity. */
-		CompleteFinalProposal: DevKit.WebApi.BooleanValue;
+		CompleteFinalProposal: boolean;
 		/** Select whether an internal review has been completed for this opportunity. */
-		CompleteInternalReview: DevKit.WebApi.BooleanValue;
+		CompleteInternalReview: boolean;
 		/** Select whether the lead confirmed interest in your offerings. This helps in determining the lead quality and the probability of it turning into an opportunity. */
-		ConfirmInterest: DevKit.WebApi.BooleanValue;
+		ConfirmInterest: boolean;
 		/** Unique identifier of the contact associated with the opportunity. */
-		ContactId: DevKit.WebApi.LookupValueReadonly;
+		readonly ContactId: string;
 		/** Shows who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Type notes about the company or organization associated with the opportunity. */
-		CurrentSituation: DevKit.WebApi.StringValue;
+		CurrentSituation: string;
 		/** Select the customer account or contact to provide a quick link to additional customer details, such as address, phone number, activities, and orders. */
-		customerid_account: DevKit.WebApi.LookupValue;
+		customerid_account: string;
 		/** Select the customer account or contact to provide a quick link to additional customer details, such as address, phone number, activities, and orders. */
-		customerid_contact: DevKit.WebApi.LookupValue;
+		customerid_contact: string;
 		/** Type some notes about the customer's requirements, to help the sales team identify products and services that could meet their requirements. */
-		CustomerNeed: DevKit.WebApi.StringValue;
+		CustomerNeed: string;
 		/** Type notes about the customer's pain points to help the sales team identify products and services that could address these pain points. */
-		CustomerPainPoints: DevKit.WebApi.StringValue;
+		CustomerPainPoints: string;
 		/** Select whether your notes include information about who makes the purchase decisions at the lead's company. */
-		DecisionMaker: DevKit.WebApi.BooleanValue;
+		DecisionMaker: boolean;
 		/** Type additional information to describe the opportunity, such as possible products to sell or past purchases from the customer. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Select whether a proposal has been developed for the opportunity. */
-		DevelopProposal: DevKit.WebApi.BooleanValue;
+		DevelopProposal: boolean;
 		/** Type the discount amount for the opportunity if the customer is eligible for special savings. */
-		DiscountAmount: DevKit.WebApi.MoneyValue;
+		DiscountAmount: number;
 		/** Value of the Opportunity Discount Amount in base currency. */
-		DiscountAmount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly DiscountAmount_Base: number;
 		/** Type the discount rate that should be applied to the Product Totals field to include additional savings for the customer in the opportunity. */
-		DiscountPercentage: DevKit.WebApi.DecimalValue;
+		DiscountPercentage: number;
 		/** The primary email address for the entity. */
-		EmailAddress: DevKit.WebApi.StringValue;
+		EmailAddress: string;
 		/** Enter the expected closing date of the opportunity to help make accurate revenue forecasts. */
-		EstimatedCloseDate_DateOnly: DevKit.WebApi.DateOnlyValue;
+		EstimatedCloseDate_DateOnly: Date;
 		/** Type the estimated revenue amount to indicate the potential sale or value of the opportunity for revenue forecasting. This field can be either system-populated or editable based on the selection in the Revenue field. */
-		EstimatedValue: DevKit.WebApi.MoneyValue;
+		EstimatedValue: number;
 		/** Value of the Est. Revenue in base currency. */
-		EstimatedValue_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly EstimatedValue_Base: number;
 		/** Select whether the fit between the lead's requirements and your offerings was evaluated. */
-		EvaluateFit: DevKit.WebApi.BooleanValue;
+		EvaluateFit: boolean;
 		/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Choose whether the sales team has recorded detailed notes on the proposals and the account's responses. */
-		FileDebrief: DevKit.WebApi.BooleanValue;
+		FileDebrief: boolean;
 		/** Enter the date and time when the final decision of the opportunity was made. */
-		FinalDecisionDate_DateOnly: DevKit.WebApi.DateOnlyValue;
+		FinalDecisionDate_DateOnly: Date;
 		/** Type the cost of freight or shipping for the products included in the opportunity for use in calculating the Total Amount field. */
-		FreightAmount: DevKit.WebApi.MoneyValue;
+		FreightAmount: number;
 		/** Value of the Freight Amount in base currency. */
-		FreightAmount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly FreightAmount_Base: number;
 		/** Select whether information about competitors is included. */
-		IdentifyCompetitors: DevKit.WebApi.BooleanValue;
+		IdentifyCompetitors: boolean;
 		/** Select whether the customer contacts for this opportunity have been identified. */
-		IdentifyCustomerContacts: DevKit.WebApi.BooleanValue;
+		IdentifyCustomerContacts: boolean;
 		/** Choose whether you have recorded who will pursue the opportunity. */
-		IdentifyPursuitTeam: DevKit.WebApi.BooleanValue;
+		IdentifyPursuitTeam: boolean;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Choose whether someone from the sales team contacted this lead earlier. */
-		InitialCommunication: DevKit.WebApi.OptionSetValue;
+		InitialCommunication: OptionSet.Opportunity.InitialCommunication;
 		/** Shows the forecasted revenue for an Opportunity. */
-		int_Forecast: DevKit.WebApi.MoneyValue;
+		int_Forecast: number;
 		/** Value of the Forecast in base currency. */
-		int_forecast_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly int_forecast_Base: number;
 		/** Indicates whether the opportunity is private or visible to the entire organization. */
-		IsPrivate: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsPrivate: boolean;
 		/** Select whether the estimated revenue for the opportunity is calculated automatically based on the products entered or entered manually by a user. */
-		IsRevenueSystemCalculated: DevKit.WebApi.BooleanValue;
+		IsRevenueSystemCalculated: boolean;
 		/** Contains the date time stamp of the last on hold time. */
-		LastOnHoldTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		LastOnHoldTime_UtcDateAndTime: Date;
 		/** Shows who last updated the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Shows who last updated the record on behalf of another user. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** The account manager responsible for the opportunity. */
-		msdyn_AccountManagerId: DevKit.WebApi.LookupValue;
+		msdyn_AccountManagerId: string;
 		/** The organizational unit in charge of the opportunity. */
-		msdyn_ContractOrganizationalUnitId: DevKit.WebApi.LookupValue;
+		msdyn_ContractOrganizationalUnitId: string;
 		/** Categories used for forecasting. */
-		msdyn_forecastcategory: DevKit.WebApi.OptionSetValue;
+		msdyn_forecastcategory: OptionSet.Opportunity.msdyn_forecastcategory;
 		/** Describes whether opportunity is opted out or not */
-		msdyn_gdproptout: DevKit.WebApi.BooleanValue;
-		msdyn_OpportunityGrade: DevKit.WebApi.OptionSetValue;
-		msdyn_OpportunityScore: DevKit.WebApi.IntegerValue;
-		msdyn_OpportunityScoreTrend: DevKit.WebApi.OptionSetValue;
+		msdyn_gdproptout: boolean;
+		msdyn_OpportunityGrade: OptionSet.Opportunity.msdyn_OpportunityGrade;
+		msdyn_OpportunityScore: number;
+		msdyn_OpportunityScoreTrend: OptionSet.Opportunity.msdyn_OpportunityScoreTrend;
 		/** Internal use only. */
-		msdyn_OrderType: DevKit.WebApi.OptionSetValue;
+		msdyn_OrderType: OptionSet.Opportunity.msdyn_OrderType;
 		/** Predictive score */
-		msdyn_PredictiveScoreId: DevKit.WebApi.LookupValue;
-		msdyn_ScoreHistory: DevKit.WebApi.StringValue;
-		msdyn_ScoreReasons: DevKit.WebApi.StringValue;
+		msdyn_PredictiveScoreId: string;
+		msdyn_ScoreHistory: string;
+		msdyn_ScoreReasons: string;
 		/** Unique identifier for Segment associated with Opportunity. */
-		msdyn_segmentid: DevKit.WebApi.LookupValue;
+		msdyn_segmentid: string;
 		/** Unique identifier for Work Order Type associated with Opportunity. */
-		msdyn_WorkOrderType: DevKit.WebApi.LookupValue;
+		msdyn_WorkOrderType: string;
 		/** Type a subject or descriptive name, such as the expected order or company name, for the opportunity. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Choose how high the level of need is for the lead's company. */
-		Need: DevKit.WebApi.OptionSetValue;
+		Need: OptionSet.Opportunity.Need;
 		/** Shows the duration in minutes for which the opportunity was on hold. */
-		OnHoldTime: DevKit.WebApi.IntegerValueReadonly;
+		readonly OnHoldTime: number;
 		/** Unique identifier of the opportunity. */
-		OpportunityId: DevKit.WebApi.GuidValue;
+		OpportunityId: string;
 		/** Select the expected value or priority of the opportunity based on revenue, customer status, or closing probability. */
-		OpportunityRatingCode: DevKit.WebApi.OptionSetValue;
+		OpportunityRatingCode: OptionSet.Opportunity.OpportunityRatingCode;
 		/** Choose the lead that the opportunity was created from for reporting and analytics. The field is read-only after the opportunity is created and defaults to the correct lead when an opportunity is created from a converted lead. */
-		OriginatingLeadId: DevKit.WebApi.LookupValue;
+		OriginatingLeadId: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Choose an account to connect this opportunity to, so that the relationship is visible in reports and analytics, and to provide a quick link to additional details, such as financial information and activities. */
-		ParentAccountId: DevKit.WebApi.LookupValue;
+		ParentAccountId: string;
 		/** Choose a contact to connect this opportunity to, so that the relationship is visible in reports and analytics. */
-		ParentContactId: DevKit.WebApi.LookupValue;
+		ParentContactId: string;
 		/** Information about whether the opportunity participates in workflow rules. */
-		ParticipatesInWorkflow: DevKit.WebApi.BooleanValue;
+		ParticipatesInWorkflow: boolean;
 		/** Select whether the final proposal has been presented to the account. */
-		PresentFinalProposal: DevKit.WebApi.BooleanValue;
+		PresentFinalProposal: boolean;
 		/** Select whether a proposal for the opportunity has been presented to the account. */
-		PresentProposal: DevKit.WebApi.BooleanValue;
+		PresentProposal: boolean;
 		/** Choose the price list associated with this record to make sure the products associated with the campaign are offered at the correct prices. */
-		PriceLevelId: DevKit.WebApi.LookupValue;
+		PriceLevelId: string;
 		/** Pricing error for the opportunity. */
-		PricingErrorCode: DevKit.WebApi.OptionSetValue;
+		PricingErrorCode: OptionSet.Opportunity.PricingErrorCode;
 		/** Select the priority so that preferred customers or critical issues are handled quickly. */
-		PriorityCode: DevKit.WebApi.OptionSetValue;
+		PriorityCode: OptionSet.Opportunity.PriorityCode;
 		/** Contains the id of the process associated with the entity. */
-		ProcessId: DevKit.WebApi.GuidValue;
+		ProcessId: string;
 		/** Type notes about the proposed solution for the opportunity. */
-		ProposedSolution: DevKit.WebApi.StringValue;
+		ProposedSolution: string;
 		/** Choose whether an individual or a committee will be involved in the  purchase process for the lead. */
-		PurchaseProcess: DevKit.WebApi.OptionSetValue;
+		PurchaseProcess: OptionSet.Opportunity.PurchaseProcess;
 		/** Choose how long the lead will likely take to make the purchase. */
-		PurchaseTimeframe: DevKit.WebApi.OptionSetValue;
+		PurchaseTimeframe: OptionSet.Opportunity.PurchaseTimeframe;
 		/** Select whether the decision about pursuing the opportunity has been made. */
-		PursuitDecision: DevKit.WebApi.BooleanValue;
+		PursuitDecision: boolean;
 		/** Type comments about the qualification or scoring of the lead. */
-		QualificationComments: DevKit.WebApi.StringValue;
+		QualificationComments: string;
 		/** Type comments about the quotes associated with the opportunity. */
-		QuoteComments: DevKit.WebApi.StringValue;
+		QuoteComments: string;
 		/** Choose whether the proposal feedback has been captured and resolved for the opportunity. */
-		ResolveFeedback: DevKit.WebApi.BooleanValue;
+		ResolveFeedback: boolean;
 		/** Select the sales stage of this opportunity to aid the sales team in their efforts to win this opportunity. */
-		SalesStage: DevKit.WebApi.OptionSetValue;
+		SalesStage: OptionSet.Opportunity.SalesStage;
 		/** Select the sales process stage for the opportunity to indicate the probability of closing the opportunity. */
-		SalesStageCode: DevKit.WebApi.OptionSetValue;
+		SalesStageCode: OptionSet.Opportunity.SalesStageCode;
 		/** Enter the date and time of the prospecting follow-up meeting with the lead. */
-		ScheduleFollowup_Prospect_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		ScheduleFollowup_Prospect_UtcDateOnly: Date;
 		/** Enter the date and time of the qualifying follow-up meeting with the lead. */
-		ScheduleFollowup_Qualify_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		ScheduleFollowup_Qualify_UtcDateOnly: Date;
 		/** Enter the date and time of the proposal meeting for the opportunity. */
-		ScheduleProposalMeeting_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		ScheduleProposalMeeting_UtcDateOnly: Date;
 		/** Select whether a thank you note has been sent to the account for considering the proposal. */
-		SendThankYouNote: DevKit.WebApi.BooleanValue;
+		SendThankYouNote: boolean;
 		/** Skip Price Calculation (For Internal Use) */
-		SkipPriceCalculation: DevKit.WebApi.OptionSetValue;
+		SkipPriceCalculation: OptionSet.Opportunity.SkipPriceCalculation;
 		/** Choose the service level agreement (SLA) that you want to apply to the opportunity record. */
-		SLAId: DevKit.WebApi.LookupValue;
+		SLAId: string;
 		/** Last SLA that was applied to this opportunity. This field is for internal use only. */
-		SLAInvokedId: DevKit.WebApi.LookupValueReadonly;
+		readonly SLAInvokedId: string;
 		/** Contains the id of the stage where the entity is located. */
-		StageId: DevKit.WebApi.GuidValue;
+		StageId: string;
 		/** Shows whether the opportunity is open, won, or lost. Won and lost opportunities are read-only and can't be edited until they are reactivated. */
-		StateCode: DevKit.WebApi.OptionSetValue;
+		StateCode: OptionSet.Opportunity.StateCode;
 		/** Select the opportunity's status. */
-		StatusCode: DevKit.WebApi.OptionSetValue;
+		StatusCode: OptionSet.Opportunity.StatusCode;
 		/** Shows the ID of the workflow step. */
-		StepId: DevKit.WebApi.GuidValue;
+		StepId: string;
 		/** Shows the current phase in the sales pipeline for the opportunity. This is updated by a workflow. */
-		StepName: DevKit.WebApi.StringValue;
+		StepName: string;
 		/** Number of users or conversations followed the record */
-		TeamsFollowed: DevKit.WebApi.IntegerValue;
+		TeamsFollowed: number;
 		/** Select when the opportunity is likely to be closed. */
-		TimeLine: DevKit.WebApi.OptionSetValue;
+		TimeLine: OptionSet.Opportunity.TimeLine;
 		/** Total time spent for emails (read and write) and meetings by me in relation to the opportunity record. */
-		TimeSpentByMeOnEmailAndMeetings: DevKit.WebApi.StringValueReadonly;
+		readonly TimeSpentByMeOnEmailAndMeetings: string;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Shows the total amount due, calculated as the sum of the products, discounts, freight, and taxes for the opportunity. */
-		TotalAmount: DevKit.WebApi.MoneyValue;
+		TotalAmount: number;
 		/** Value of the Total Amount in base currency. */
-		TotalAmount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly TotalAmount_Base: number;
 		/** Shows the total product amount for the opportunity, minus any discounts. This value is added to freight and tax amounts in the calculation for the total amount of the opportunity. */
-		TotalAmountLessFreight: DevKit.WebApi.MoneyValue;
+		TotalAmountLessFreight: number;
 		/** Value of the Total Pre-Freight Amount in base currency. */
-		TotalAmountLessFreight_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly TotalAmountLessFreight_Base: number;
 		/** Shows the total discount amount, based on the discount price and rate entered on the opportunity. */
-		TotalDiscountAmount: DevKit.WebApi.MoneyValue;
+		TotalDiscountAmount: number;
 		/** Value of the Total Discount Amount in base currency. */
-		TotalDiscountAmount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly TotalDiscountAmount_Base: number;
 		/** Shows the sum of all existing and write-in products included on the opportunity, based on the specified price list and quantities. */
-		TotalLineItemAmount: DevKit.WebApi.MoneyValue;
+		TotalLineItemAmount: number;
 		/** Value of the Total Detail Amount in base currency. */
-		TotalLineItemAmount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly TotalLineItemAmount_Base: number;
 		/** Shows the total of the Manual Discount amounts specified on all products included in the opportunity. This value is reflected in the Total Detail Amount field on the opportunity and is added to any discount amount or rate specified on the opportunity. */
-		TotalLineItemDiscountAmount: DevKit.WebApi.MoneyValue;
+		TotalLineItemDiscountAmount: number;
 		/** Value of the Total Line Item Discount Amount in base currency. */
-		TotalLineItemDiscountAmount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly TotalLineItemDiscountAmount_Base: number;
 		/** Shows the total of the Tax amounts specified on all products included in the opportunity, included in the Total Amount field calculation for the opportunity. */
-		TotalTax: DevKit.WebApi.MoneyValue;
+		TotalTax: number;
 		/** Value of the Total Tax in base currency. */
-		TotalTax_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly TotalTax_Base: number;
 		/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** A comma separated list of string values representing the unique identifiers of stages in a Business Process Flow Instance in the order that they occur. */
-		TraversedPath: DevKit.WebApi.StringValue;
+		TraversedPath: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -1445,4 +1446,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

@@ -69,39 +69,41 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
 		EntityCollectionName: string;
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
-		msdyn_ActivityType: DevKit.WebApi.StringValue;
-		msdyn_BodyPreview: DevKit.WebApi.StringValue;
+		msdyn_ActivityType: string;
+		msdyn_BodyPreview: string;
 		/** Created Date */
-		msdyn_createddate_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
-		msdyn_duration: DevKit.WebApi.StringValue;
+		msdyn_createddate_UtcDateAndTime: Date;
+		msdyn_duration: string;
 		/** End Time */
-		msdyn_endtime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		msdyn_endtime_UtcDateAndTime: Date;
 		/** Exchange web link */
-		msdyn_exchangeweblink: DevKit.WebApi.StringValue;
-		msdyn_Importance: DevKit.WebApi.StringValue;
+		msdyn_exchangeweblink: string;
+		msdyn_Importance: string;
 		/** Location */
-		msdyn_location: DevKit.WebApi.StringValue;
+		msdyn_location: string;
 		/** Regarding Name */
-		msdyn_regardingname: DevKit.WebApi.StringValue;
+		msdyn_regardingname: string;
 		/** Sender */
-		msdyn_sender: DevKit.WebApi.StringValue;
+		msdyn_sender: string;
 		/** Sender's Name */
-		msdyn_sendername: DevKit.WebApi.StringValue;
+		msdyn_sendername: string;
 		/** Start Time */
-		msdyn_starttime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
-		msdyn_Subject: DevKit.WebApi.StringValue;
+		msdyn_starttime_UtcDateAndTime: Date;
+		msdyn_Subject: string;
 		/** Unique identifier for entity instances */
-		msdyn_suggestedactivityId: DevKit.WebApi.GuidValue;
+		msdyn_suggestedactivityId: string;
 		/** To */
-		msdyn_to: DevKit.WebApi.StringValue;
+		msdyn_to: string;
 	}
 }
 declare namespace OptionSet {
@@ -124,4 +126,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

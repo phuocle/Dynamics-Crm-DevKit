@@ -91,8 +91,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -100,98 +102,98 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics CRM options. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Shows the sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics CRM options. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Shows who last updated the record on behalf of another user. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
-		msdyn_BookBasedOn: DevKit.WebApi.BooleanValue;
-		msdyn_CustomTabName: DevKit.WebApi.StringValue;
-		msdyn_CustomTabWebResource: DevKit.WebApi.StringValue;
-		msdyn_FilterLayout: DevKit.WebApi.LookupValue;
+		readonly ModifiedOnBehalfBy: string;
+		msdyn_BookBasedOn: boolean;
+		msdyn_CustomTabName: string;
+		msdyn_CustomTabWebResource: string;
+		msdyn_FilterLayout: string;
 		/** Storing filter values as Json string. */
-		msdyn_FilterValues: DevKit.WebApi.StringValue;
-		msdyn_FullyBookedColor: DevKit.WebApi.StringValue;
-		msdyn_HideCancelled: DevKit.WebApi.BooleanValue;
-		msdyn_IsPublic: DevKit.WebApi.BooleanValue;
-		msdyn_IsSynchronizeResources: DevKit.WebApi.BooleanValue;
-		msdyn_MapViewTabPlacement: DevKit.WebApi.BooleanValue;
-		msdyn_NotBookedColor: DevKit.WebApi.StringValue;
+		msdyn_FilterValues: string;
+		msdyn_FullyBookedColor: string;
+		msdyn_HideCancelled: boolean;
+		msdyn_IsPublic: boolean;
+		msdyn_IsSynchronizeResources: boolean;
+		msdyn_MapViewTabPlacement: boolean;
+		msdyn_NotBookedColor: string;
 		/** Tab index. */
-		msdyn_OrderNumber: DevKit.WebApi.IntegerValue;
-		msdyn_OrganizationalUnitTooltipsViewId: DevKit.WebApi.StringValue;
-		msdyn_OrganizationalUnitViewId: DevKit.WebApi.StringValue;
-		msdyn_OverbookedColor: DevKit.WebApi.StringValue;
-		msdyn_PartiallyBookedColor: DevKit.WebApi.StringValue;
-		msdyn_ResourceCellTemplate: DevKit.WebApi.LookupValue;
-		msdyn_RetrieveResourcesQuery: DevKit.WebApi.LookupValue;
-		msdyn_SAAvailableColor: DevKit.WebApi.StringValue;
-		msdyn_SAAvailableIcon: DevKit.WebApi.StringValue;
+		msdyn_OrderNumber: number;
+		msdyn_OrganizationalUnitTooltipsViewId: string;
+		msdyn_OrganizationalUnitViewId: string;
+		msdyn_OverbookedColor: string;
+		msdyn_PartiallyBookedColor: string;
+		msdyn_ResourceCellTemplate: string;
+		msdyn_RetrieveResourcesQuery: string;
+		msdyn_SAAvailableColor: string;
+		msdyn_SAAvailableIcon: string;
 		/** Is available icon inheriting from default setting. */
-		msdyn_SAAvailableIconDefault: DevKit.WebApi.BooleanValue;
-		msdyn_SAPartiallyAvailableColor: DevKit.WebApi.StringValue;
-		msdyn_SAPartiallyAvailableIcon: DevKit.WebApi.StringValue;
+		msdyn_SAAvailableIconDefault: boolean;
+		msdyn_SAPartiallyAvailableColor: string;
+		msdyn_SAPartiallyAvailableIcon: string;
 		/** Is partially available icon inheriting from default setting. */
-		msdyn_SAPartiallyAvailableIconDefault: DevKit.WebApi.BooleanValue;
-		msdyn_SAUnavailableColor: DevKit.WebApi.StringValue;
-		msdyn_SAUnavailableIcon: DevKit.WebApi.StringValue;
+		msdyn_SAPartiallyAvailableIconDefault: boolean;
+		msdyn_SAUnavailableColor: string;
+		msdyn_SAUnavailableIcon: string;
 		/** Is unavailable icon inheriting from default setting. */
-		msdyn_SAUnavailableIconDefault: DevKit.WebApi.BooleanValue;
+		msdyn_SAUnavailableIconDefault: boolean;
 		/** Shows the entity instances. */
-		msdyn_scheduleboardsettingId: DevKit.WebApi.GuidValue;
-		msdyn_SchedulerAlertsView: DevKit.WebApi.StringValue;
-		msdyn_SchedulerBusinessUnitDetailsView: DevKit.WebApi.StringValue;
-		msdyn_SchedulerBusinessUnitTooltipView: DevKit.WebApi.StringValue;
-		msdyn_SchedulerCoreDetailsView: DevKit.WebApi.StringValue;
-		msdyn_SchedulerCoreSlotTextTemplate: DevKit.WebApi.StringValue;
-		msdyn_SchedulerCoreTooltipView: DevKit.WebApi.StringValue;
-		msdyn_SchedulerFieldServiceDetailsView: DevKit.WebApi.StringValue;
-		msdyn_SchedulerFieldServiceSlotTextTemplate: DevKit.WebApi.StringValue;
-		msdyn_SchedulerFieldServiceTooltipView: DevKit.WebApi.StringValue;
-		msdyn_SchedulerResourceDetailsView: DevKit.WebApi.StringValue;
-		msdyn_SchedulerResourceTooltipView: DevKit.WebApi.StringValue;
+		msdyn_scheduleboardsettingId: string;
+		msdyn_SchedulerAlertsView: string;
+		msdyn_SchedulerBusinessUnitDetailsView: string;
+		msdyn_SchedulerBusinessUnitTooltipView: string;
+		msdyn_SchedulerCoreDetailsView: string;
+		msdyn_SchedulerCoreSlotTextTemplate: string;
+		msdyn_SchedulerCoreTooltipView: string;
+		msdyn_SchedulerFieldServiceDetailsView: string;
+		msdyn_SchedulerFieldServiceSlotTextTemplate: string;
+		msdyn_SchedulerFieldServiceTooltipView: string;
+		msdyn_SchedulerResourceDetailsView: string;
+		msdyn_SchedulerResourceTooltipView: string;
 		/** Shows the settings as a JSON string. */
-		msdyn_Settings: DevKit.WebApi.StringValue;
+		msdyn_Settings: string;
 		/** Field is used to determine if Schedule Board Tab are Private, Public or Shareable */
-		msdyn_ShareType: DevKit.WebApi.OptionSetValue;
+		msdyn_ShareType: OptionSet.msdyn_scheduleboardsetting.msdyn_ShareType;
 		/** Enter the tab name. */
-		msdyn_TabName: DevKit.WebApi.StringValue;
-		msdyn_UnscheduledRequirementsViewId: DevKit.WebApi.StringValue;
-		msdyn_UnscheduledViewId: DevKit.WebApi.StringValue;
+		msdyn_TabName: string;
+		msdyn_UnscheduledRequirementsViewId: string;
+		msdyn_UnscheduledViewId: string;
 		/** Shows the number of records to be displayed per page in 'Resource Requirement' section. */
-		msdyn_UnscheduledWOPageRecCount: DevKit.WebApi.IntegerValue;
-		msdyn_UnscheduledWOTooltipsViewId: DevKit.WebApi.StringValue;
-		msdyn_WorkingHoursColor: DevKit.WebApi.StringValue;
+		msdyn_UnscheduledWOPageRecCount: number;
+		msdyn_UnscheduledWOTooltipsViewId: string;
+		msdyn_WorkingHoursColor: string;
 		/** Shows the date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Status of the Schedule Board Setting */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.msdyn_scheduleboardsetting.statecode;
 		/** Reason for the status of the Schedule Board Setting */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.msdyn_scheduleboardsetting.statuscode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Shows the time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -236,4 +238,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

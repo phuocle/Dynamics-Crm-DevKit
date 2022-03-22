@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,45 +30,45 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the business unit with which the calendar is associated. */
-		BusinessUnitId: DevKit.WebApi.LookupValueReadonly;
+		readonly BusinessUnitId: string;
 		/** Unique identifier of the user who created the semiannual fiscal calendar. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the quota for the semiannual fiscal calendar was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the semiannualfiscalcalendar. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Date and time when the semiannual fiscal calendar sales quota takes effect. */
-		EffectiveOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		EffectiveOn_UtcDateOnly: Date;
 		/** Exchange rate for the currency associated with the semiannual fiscal calendar with respect to the base currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Type of fiscal period used in the sales quota. */
-		FiscalPeriodType: DevKit.WebApi.IntegerValueReadonly;
+		readonly FiscalPeriodType: number;
 		/** Unique identifier of the data import or data migration that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the user who last modified the semiannual fiscal calendar. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the semiannual fiscal calendar was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the semiannualfiscalcalendar. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Sales quota for the first half of the fiscal year. */
-		Period1: DevKit.WebApi.MoneyValue;
+		Period1: number;
 		/** Base currency equivalent for the sales quota for the first half of the fiscal year. */
-		Period1_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly Period1_Base: number;
 		/** Sales quota for the second half of the fiscal year. */
-		Period7: DevKit.WebApi.MoneyValue;
+		Period7: number;
 		/** Base currency equivalent of the sales quota for the second half of the fiscal year. */
-		Period7_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly Period7_Base: number;
 		/** Unique identifier of the associated salesperson. */
-		SalesPersonId: DevKit.WebApi.LookupValue;
+		SalesPersonId: string;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Unique identifier of the currency associated with the semiannual fiscal calendar. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** Unique identifier for the user who created the semiannual fiscal calendar. */
-		UserFiscalCalendarId: DevKit.WebApi.GuidValue;
+		UserFiscalCalendarId: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 	}
 }
 declare namespace OptionSet {
@@ -89,4 +91,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,25 +30,25 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** CorrelationId for the search */
-		CorrelationId: DevKit.WebApi.StringValue;
+		CorrelationId: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** If customer is allow our engineer to eye on */
-		EyesOnAnalyticsAllowed: DevKit.WebApi.BooleanValue;
+		EyesOnAnalyticsAllowed: boolean;
 		/** Feedback data for the search */
-		FeedbackData: DevKit.WebApi.StringValue;
+		FeedbackData: string;
 		/** RequestId for the search */
-		RequestId: DevKit.WebApi.StringValue;
+		RequestId: string;
 		/** ScenarioName for the search, current will be one of RelevanceSearch/Marketing/Cxp */
-		ScenarioName: DevKit.WebApi.StringValue;
+		ScenarioName: string;
 		/** Unique identifier for entity instances */
-		searchtelemetryId: DevKit.WebApi.GuidValue;
+		searchtelemetryId: string;
 		/** SessionId for the search */
-		SessionId: DevKit.WebApi.StringValue;
+		SessionId: string;
 		/** Time to live in seconds. */
-		TTLInSeconds: DevKit.WebApi.IntegerValue;
+		TTLInSeconds: number;
 		/** User Query */
-		UserQuery: DevKit.WebApi.StringValue;
+		UserQuery: string;
 	}
 }
 declare namespace OptionSet {
@@ -69,4 +71,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,15 +30,15 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Additional data related to the replication backlog entry. For internal use only. */
-		Data: DevKit.WebApi.StringValueReadonly;
+		readonly Data: string;
 		/** Unique identifier of the replication backlog entry. */
-		ReplicationBacklogId: DevKit.WebApi.GuidValueReadonly;
+		readonly ReplicationBacklogId: string;
 		/** The type of replication backlog. */
-		ReplicationBacklogType: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ReplicationBacklogType: OptionSet.ReplicationBacklog.ReplicationBacklogType;
 		/** For internal use only. */
-		TargetDatacenterId: DevKit.WebApi.GuidValueReadonly;
+		readonly TargetDatacenterId: string;
 		/** Unique identifier of the target object */
-		TargetObjectId: DevKit.WebApi.LookupValueReadonly;
+		readonly TargetObjectId: string;
 	}
 }
 declare namespace OptionSet {
@@ -67,4 +69,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

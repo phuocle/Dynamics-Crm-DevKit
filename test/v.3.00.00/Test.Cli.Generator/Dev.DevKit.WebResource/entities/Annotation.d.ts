@@ -100,8 +100,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -109,558 +111,562 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the note. */
-		AnnotationId: DevKit.WebApi.GuidValue;
+		AnnotationId: string;
 		/** Unique identifier of the user who created the note. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the note was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the annotation. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Contents of the note's attachment. */
-		DocumentBody: DevKit.WebApi.StringValue;
+		DocumentBody: string;
 		/** Dummy attribute associated with the note attachment */
-		DummyFileName: DevKit.WebApi.StringValueReadonly;
+		readonly DummyFileName: string;
 		/** Dummy attribute associated with the note regarding */
-		DummyRegarding: DevKit.WebApi.StringValueReadonly;
+		readonly DummyRegarding: string;
 		/** File name of the note. */
-		FileName: DevKit.WebApi.StringValue;
+		FileName: string;
 		/** File pointer of the attachment. */
-		FilePointer: DevKit.WebApi.StringValueReadonly;
+		readonly FilePointer: string;
 		/** File size of the note. */
-		FileSize: DevKit.WebApi.IntegerValueReadonly;
+		readonly FileSize: number;
 		/** Unique identifier of the data import or data migration that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Specifies whether the note is an attachment. */
-		IsDocument: DevKit.WebApi.BooleanValue;
-		IsPrivate: DevKit.WebApi.BooleanValueReadonly;
+		IsDocument: boolean;
+		readonly IsPrivate: boolean;
 		/** Language identifier for the note. */
-		LangId: DevKit.WebApi.StringValue;
+		LangId: string;
 		/** MIME type of the note's attachment. */
-		MimeType: DevKit.WebApi.StringValue;
+		MimeType: string;
 		/** Unique identifier of the user who last modified the note. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the note was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the annotation. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Text of the note. */
-		NoteText: DevKit.WebApi.StringValue;
+		NoteText: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_account: DevKit.WebApi.LookupValue;
+		objectid_account: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_appointment: DevKit.WebApi.LookupValue;
+		objectid_appointment: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_bookableresource: DevKit.WebApi.LookupValue;
+		objectid_bookableresource: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_bookableresourcebooking: DevKit.WebApi.LookupValue;
+		objectid_bookableresourcebooking: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_bookableresourcebookingheader: DevKit.WebApi.LookupValue;
+		objectid_bookableresourcebookingheader: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_bookableresourcecategoryassn: DevKit.WebApi.LookupValue;
+		objectid_bookableresourcecategoryassn: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_bookableresourcecharacteristic: DevKit.WebApi.LookupValue;
+		objectid_bookableresourcecharacteristic: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_bookableresourcegroup: DevKit.WebApi.LookupValue;
+		objectid_bookableresourcegroup: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_bulkoperation: DevKit.WebApi.LookupValue;
+		objectid_bulkoperation: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_calendar: DevKit.WebApi.LookupValue;
+		objectid_calendar: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_campaign: DevKit.WebApi.LookupValue;
+		objectid_campaign: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_campaignactivity: DevKit.WebApi.LookupValue;
+		objectid_campaignactivity: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_campaignresponse: DevKit.WebApi.LookupValue;
+		objectid_campaignresponse: string;
 		/** Unique identifier of the object with which the note is associated. */
-		channelaccessprofile_annotations: DevKit.WebApi.LookupValue;
+		channelaccessprofile_annotations: string;
 		/** Unique identifier of the object with which the note is associated. */
-		channelaccessprofileruleid: DevKit.WebApi.LookupValue;
+		channelaccessprofileruleid: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_profileruleitem: DevKit.WebApi.LookupValue;
+		objectid_profileruleitem: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_commitment: DevKit.WebApi.LookupValue;
+		objectid_chat: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_competitor: DevKit.WebApi.LookupValue;
+		objectid_commitment: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_contact: DevKit.WebApi.LookupValue;
+		objectid_competitor: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_contract: DevKit.WebApi.LookupValue;
+		objectid_contact: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_contractdetail: DevKit.WebApi.LookupValue;
+		objectid_contract: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_convertrule: DevKit.WebApi.LookupValue;
+		objectid_contractdetail: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_duplicaterule: DevKit.WebApi.LookupValue;
+		objectid_convertrule: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_email: DevKit.WebApi.LookupValue;
+		objectid_duplicaterule: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_emailserverprofile: DevKit.WebApi.LookupValue;
+		objectid_email: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_entitlement: DevKit.WebApi.LookupValue;
+		objectid_emailserverprofile: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_entitlementchannel: DevKit.WebApi.LookupValue;
+		objectid_entitlement: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_entitlementtemplate: DevKit.WebApi.LookupValue;
+		objectid_entitlementchannel: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_equipment: DevKit.WebApi.LookupValue;
+		objectid_entitlementtemplate: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_fax: DevKit.WebApi.LookupValue;
+		objectid_equipment: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_goal: DevKit.WebApi.LookupValue;
+		objectid_fax: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_incident: DevKit.WebApi.LookupValue;
+		objectid_goal: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_incidentresolution: DevKit.WebApi.LookupValue;
+		objectid_incident: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_invoice: DevKit.WebApi.LookupValue;
+		objectid_incidentresolution: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_kbarticle: DevKit.WebApi.LookupValue;
+		objectid_invoice: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_knowledgearticle: DevKit.WebApi.LookupValue;
+		objectid_kbarticle: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_knowledgebaserecord: DevKit.WebApi.LookupValue;
+		objectid_knowledgearticle: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_lead: DevKit.WebApi.LookupValue;
+		objectid_knowledgebaserecord: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_letter: DevKit.WebApi.LookupValue;
+		objectid_lead: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_list: DevKit.WebApi.LookupValue;
+		objectid_letter: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_mailbox: DevKit.WebApi.LookupValue;
+		objectid_list: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_3dmodel: DevKit.WebApi.LookupValue;
+		objectid_mailbox: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_accountpricelist: DevKit.WebApi.LookupValue;
+		objectid_msdyn_3dmodel: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_actual: DevKit.WebApi.LookupValue;
+		objectid_msdyn_accountpricelist: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_agreement: DevKit.WebApi.LookupValue;
+		objectid_msdyn_actual: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_agreementbookingdate: DevKit.WebApi.LookupValue;
+		objectid_msdyn_agreement: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_agreementbookingincident: DevKit.WebApi.LookupValue;
+		objectid_msdyn_agreementbookingdate: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_agreementbookingproduct: DevKit.WebApi.LookupValue;
+		objectid_msdyn_agreementbookingincident: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_agreementbookingservice: DevKit.WebApi.LookupValue;
+		objectid_msdyn_agreementbookingproduct: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_agreementbookingservicetask: DevKit.WebApi.LookupValue;
+		objectid_msdyn_agreementbookingservice: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_agreementbookingsetup: DevKit.WebApi.LookupValue;
+		objectid_msdyn_agreementbookingservicetask: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_agreementinvoicedate: DevKit.WebApi.LookupValue;
+		objectid_msdyn_agreementbookingsetup: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_agreementinvoiceproduct: DevKit.WebApi.LookupValue;
+		objectid_msdyn_agreementinvoicedate: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_agreementinvoicesetup: DevKit.WebApi.LookupValue;
+		objectid_msdyn_agreementinvoiceproduct: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_agreementsubstatus: DevKit.WebApi.LookupValue;
+		objectid_msdyn_agreementinvoicesetup: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_aifptrainingdocument: DevKit.WebApi.LookupValue;
+		objectid_msdyn_agreementsubstatus: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_aimodel: DevKit.WebApi.LookupValue;
+		objectid_msdyn_aifptrainingdocument: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_aiodimage: DevKit.WebApi.LookupValue;
+		objectid_msdyn_aimodel: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_approval: DevKit.WebApi.LookupValue;
+		objectid_msdyn_aiodimage: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_approvalset: DevKit.WebApi.LookupValue;
+		objectid_msdyn_approval: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_bookingalert: DevKit.WebApi.LookupValue;
+		objectid_msdyn_approvalset: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_bookingalertstatus: DevKit.WebApi.LookupValue;
+		objectid_msdyn_bookingalert: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_bookingjournal: DevKit.WebApi.LookupValue;
+		objectid_msdyn_bookingalertstatus: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_bookingrule: DevKit.WebApi.LookupValue;
+		objectid_msdyn_bookingjournal: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_bookingtimestamp: DevKit.WebApi.LookupValue;
+		objectid_msdyn_bookingrule: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_characteristicreqforteammember: DevKit.WebApi.LookupValue;
+		objectid_msdyn_bookingtimestamp: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_contactpricelist: DevKit.WebApi.LookupValue;
+		objectid_msdyn_characteristicreqforteammember: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_customerasset: DevKit.WebApi.LookupValue;
+		objectid_msdyn_contactpricelist: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_dataexport: DevKit.WebApi.LookupValue;
+		objectid_msdyn_customerasset: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_delegation: DevKit.WebApi.LookupValue;
+		objectid_msdyn_dataexport: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_estimate: DevKit.WebApi.LookupValue;
+		objectid_msdyn_delegation: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_estimateline: DevKit.WebApi.LookupValue;
+		objectid_msdyn_estimate: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_expense: DevKit.WebApi.LookupValue;
+		objectid_msdyn_estimateline: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_expensecategory: DevKit.WebApi.LookupValue;
+		objectid_msdyn_expense: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_expensereceipt: DevKit.WebApi.LookupValue;
+		objectid_msdyn_expensecategory: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_fact: DevKit.WebApi.LookupValue;
+		objectid_msdyn_expensereceipt: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_fieldservicesetting: DevKit.WebApi.LookupValue;
+		objectid_msdyn_fact: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_findworkevent: DevKit.WebApi.LookupValue;
+		objectid_msdyn_fieldservicesetting: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_incidenttype: DevKit.WebApi.LookupValue;
+		objectid_msdyn_findworkevent: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_incidenttypecharacteristic: DevKit.WebApi.LookupValue;
+		objectid_msdyn_incidenttype: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_incidenttypeproduct: DevKit.WebApi.LookupValue;
+		objectid_msdyn_incidenttypecharacteristic: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_incidenttypeservice: DevKit.WebApi.LookupValue;
+		objectid_msdyn_incidenttypeproduct: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_incidenttypessetup: DevKit.WebApi.LookupValue;
+		objectid_msdyn_incidenttypeservice: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_inspectionattachment: DevKit.WebApi.LookupValue;
+		objectid_msdyn_incidenttypessetup: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_inventoryadjustment: DevKit.WebApi.LookupValue;
+		objectid_msdyn_inspectionattachment: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_inventoryadjustmentproduct: DevKit.WebApi.LookupValue;
+		objectid_msdyn_inventoryadjustment: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_inventoryjournal: DevKit.WebApi.LookupValue;
+		objectid_msdyn_inventoryadjustmentproduct: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_inventorytransfer: DevKit.WebApi.LookupValue;
+		objectid_msdyn_inventoryjournal: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_invoicelinetransaction: DevKit.WebApi.LookupValue;
+		objectid_msdyn_inventorytransfer: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_iotalert: DevKit.WebApi.LookupValue;
+		objectid_msdyn_invoicelinetransaction: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_iotdevice: DevKit.WebApi.LookupValue;
+		objectid_msdyn_iotalert: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_iotdevicecategory: DevKit.WebApi.LookupValue;
+		objectid_msdyn_iotdevice: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_iotdevicecommand: DevKit.WebApi.LookupValue;
+		objectid_msdyn_iotdevicecategory: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_iotdeviceregistrationhistory: DevKit.WebApi.LookupValue;
+		objectid_msdyn_iotdevicecommand: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_journal: DevKit.WebApi.LookupValue;
+		objectid_msdyn_iotdeviceregistrationhistory: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_journalline: DevKit.WebApi.LookupValue;
+		objectid_msdyn_journal: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_liveconversation: DevKit.WebApi.LookupValue;
+		objectid_msdyn_journalline: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_ocflaggedspam: DevKit.WebApi.LookupValue;
+		objectid_msdyn_liveconversation: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_ocliveworkitem: DevKit.WebApi.LookupValue;
+		objectid_msdyn_ocflaggedspam: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_ocoutboundmessage: DevKit.WebApi.LookupValue;
+		objectid_msdyn_ocliveworkitem: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_ocsession: DevKit.WebApi.LookupValue;
+		objectid_msdyn_ocoutboundmessage: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_opportunitylineresourcecategory: DevKit.WebApi.LookupValue;
+		objectid_msdyn_ocsession: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_opportunitylinetransaction: DevKit.WebApi.LookupValue;
+		objectid_msdyn_opportunitylineresourcecategory: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_opportunitylinetransactioncategory: DevKit.WebApi.LookupValue;
+		objectid_msdyn_opportunitylinetransaction: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_opportunitylinetransactionclassificatio: DevKit.WebApi.LookupValue;
+		objectid_msdyn_opportunitylinetransactioncategory: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_opportunitypricelist: DevKit.WebApi.LookupValue;
+		objectid_msdyn_opportunitylinetransactionclassificatio: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_orderlineresourcecategory: DevKit.WebApi.LookupValue;
+		objectid_msdyn_opportunitypricelist: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_orderlinetransaction: DevKit.WebApi.LookupValue;
+		objectid_msdyn_orderlineresourcecategory: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_orderlinetransactioncategory: DevKit.WebApi.LookupValue;
+		objectid_msdyn_orderlinetransaction: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_orderlinetransactionclassification: DevKit.WebApi.LookupValue;
+		objectid_msdyn_orderlinetransactioncategory: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_orderpricelist: DevKit.WebApi.LookupValue;
+		objectid_msdyn_orderlinetransactionclassification: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_organizationalunit: DevKit.WebApi.LookupValue;
+		objectid_msdyn_orderpricelist: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_overflowactionconfig: DevKit.WebApi.LookupValue;
+		objectid_msdyn_organizationalunit: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_payment: DevKit.WebApi.LookupValue;
+		objectid_msdyn_overflowactionconfig: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_paymentdetail: DevKit.WebApi.LookupValue;
+		objectid_msdyn_payment: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_paymentmethod: DevKit.WebApi.LookupValue;
+		objectid_msdyn_paymentdetail: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_paymentterm: DevKit.WebApi.LookupValue;
+		objectid_msdyn_paymentmethod: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_personalsoundsetting: DevKit.WebApi.LookupValue;
+		objectid_msdyn_paymentterm: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_playbookinstance: DevKit.WebApi.LookupValue;
+		objectid_msdyn_personalsoundsetting: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_playbooktemplate: DevKit.WebApi.LookupValue;
+		objectid_msdyn_playbookinstance: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_postalbum: DevKit.WebApi.LookupValue;
+		objectid_msdyn_playbooktemplate: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_postalcode: DevKit.WebApi.LookupValue;
+		objectid_msdyn_postalbum: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_priority: DevKit.WebApi.LookupValue;
+		objectid_msdyn_postalcode: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_processnotes: DevKit.WebApi.LookupValue;
+		objectid_msdyn_priority: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_productinventory: DevKit.WebApi.LookupValue;
+		objectid_msdyn_processnotes: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_project: DevKit.WebApi.LookupValue;
+		objectid_msdyn_productinventory: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_projectapproval: DevKit.WebApi.LookupValue;
+		objectid_msdyn_project: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_projectparameter: DevKit.WebApi.LookupValue;
+		objectid_msdyn_projectapproval: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_projectparameterpricelist: DevKit.WebApi.LookupValue;
+		objectid_msdyn_projectparameter: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_projectpricelist: DevKit.WebApi.LookupValue;
+		objectid_msdyn_projectparameterpricelist: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_projecttask: DevKit.WebApi.LookupValue;
+		objectid_msdyn_projectpricelist: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_projecttaskdependency: DevKit.WebApi.LookupValue;
+		objectid_msdyn_projecttask: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_projecttaskstatususer: DevKit.WebApi.LookupValue;
+		objectid_msdyn_projecttaskdependency: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_projectteam: DevKit.WebApi.LookupValue;
+		objectid_msdyn_projecttaskstatususer: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_projectteammembersignup: DevKit.WebApi.LookupValue;
+		objectid_msdyn_projectteam: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_projecttransactioncategory: DevKit.WebApi.LookupValue;
+		objectid_msdyn_projectteammembersignup: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_purchaseorder: DevKit.WebApi.LookupValue;
+		objectid_msdyn_projecttransactioncategory: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_purchaseorderbill: DevKit.WebApi.LookupValue;
+		objectid_msdyn_purchaseorder: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_purchaseorderproduct: DevKit.WebApi.LookupValue;
+		objectid_msdyn_purchaseorderbill: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_purchaseorderreceipt: DevKit.WebApi.LookupValue;
+		objectid_msdyn_purchaseorderproduct: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_purchaseorderreceiptproduct: DevKit.WebApi.LookupValue;
+		objectid_msdyn_purchaseorderreceipt: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_purchaseordersubstatus: DevKit.WebApi.LookupValue;
+		objectid_msdyn_purchaseorderreceiptproduct: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_quotebookingincident: DevKit.WebApi.LookupValue;
+		objectid_msdyn_purchaseordersubstatus: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_quotebookingproduct: DevKit.WebApi.LookupValue;
+		objectid_msdyn_quotebookingincident: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_quotebookingservice: DevKit.WebApi.LookupValue;
+		objectid_msdyn_quotebookingproduct: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_quotebookingservicetask: DevKit.WebApi.LookupValue;
+		objectid_msdyn_quotebookingservice: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_quotelineresourcecategory: DevKit.WebApi.LookupValue;
+		objectid_msdyn_quotebookingservicetask: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_quotelinetransaction: DevKit.WebApi.LookupValue;
+		objectid_msdyn_quotelineresourcecategory: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_quotelinetransactioncategory: DevKit.WebApi.LookupValue;
+		objectid_msdyn_quotelinetransaction: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_quotelinetransactionclassification: DevKit.WebApi.LookupValue;
+		objectid_msdyn_quotelinetransactioncategory: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_quotepricelist: DevKit.WebApi.LookupValue;
+		objectid_msdyn_quotelinetransactionclassification: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_requirementcharacteristic: DevKit.WebApi.LookupValue;
+		objectid_msdyn_quotepricelist: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_requirementresourcecategory: DevKit.WebApi.LookupValue;
+		objectid_msdyn_requirementcharacteristic: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_requirementresourcepreference: DevKit.WebApi.LookupValue;
+		objectid_msdyn_requirementresourcecategory: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_requirementstatus: DevKit.WebApi.LookupValue;
+		objectid_msdyn_requirementresourcepreference: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_resourcecategorypricelevel: DevKit.WebApi.LookupValue;
+		objectid_msdyn_requirementstatus: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_resourcepaytype: DevKit.WebApi.LookupValue;
+		objectid_msdyn_resourcecategorypricelevel: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_resourcerequest: DevKit.WebApi.LookupValue;
+		objectid_msdyn_resourcepaytype: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_resourcerequirement: DevKit.WebApi.LookupValue;
+		objectid_msdyn_resourcerequest: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_resourcerequirementdetail: DevKit.WebApi.LookupValue;
+		objectid_msdyn_resourcerequirement: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_resourceterritory: DevKit.WebApi.LookupValue;
+		objectid_msdyn_resourcerequirementdetail: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_rma: DevKit.WebApi.LookupValue;
+		objectid_msdyn_resourceterritory: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_rmaproduct: DevKit.WebApi.LookupValue;
+		objectid_msdyn_rma: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_rmareceipt: DevKit.WebApi.LookupValue;
+		objectid_msdyn_rmaproduct: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_rmareceiptproduct: DevKit.WebApi.LookupValue;
+		objectid_msdyn_rmareceipt: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_rmasubstatus: DevKit.WebApi.LookupValue;
+		objectid_msdyn_rmareceiptproduct: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_rolecompetencyrequirement: DevKit.WebApi.LookupValue;
+		objectid_msdyn_rmasubstatus: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_rtv: DevKit.WebApi.LookupValue;
+		objectid_msdyn_rolecompetencyrequirement: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_rtvproduct: DevKit.WebApi.LookupValue;
+		objectid_msdyn_rtv: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_rtvsubstatus: DevKit.WebApi.LookupValue;
+		objectid_msdyn_rtvproduct: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_servicetasktype: DevKit.WebApi.LookupValue;
+		objectid_msdyn_rtvsubstatus: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_shipvia: DevKit.WebApi.LookupValue;
+		objectid_msdyn_salessuggestion: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_soundfile: DevKit.WebApi.LookupValue;
+		objectid_msdyn_servicetasktype: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_soundnotificationsetting: DevKit.WebApi.LookupValue;
+		objectid_msdyn_shipvia: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_systemuserschedulersetting: DevKit.WebApi.LookupValue;
+		objectid_msdyn_soundfile: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_taxcode: DevKit.WebApi.LookupValue;
+		objectid_msdyn_soundnotificationsetting: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_taxcodedetail: DevKit.WebApi.LookupValue;
+		objectid_msdyn_systemuserschedulersetting: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_timeentry: DevKit.WebApi.LookupValue;
+		objectid_msdyn_taxcode: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_timegroup: DevKit.WebApi.LookupValue;
+		objectid_msdyn_taxcodedetail: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_timegroupdetail: DevKit.WebApi.LookupValue;
+		objectid_msdyn_timeentry: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_timeoffrequest: DevKit.WebApi.LookupValue;
+		objectid_msdyn_timegroup: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_transactioncategory: DevKit.WebApi.LookupValue;
+		objectid_msdyn_timegroupdetail: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_transactioncategoryclassification: DevKit.WebApi.LookupValue;
+		objectid_msdyn_timeoffrequest: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_transactioncategoryhierarchyelement: DevKit.WebApi.LookupValue;
+		objectid_msdyn_transactioncategory: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_transactioncategorypricelevel: DevKit.WebApi.LookupValue;
+		objectid_msdyn_transactioncategoryclassification: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_transactionconnection: DevKit.WebApi.LookupValue;
+		objectid_msdyn_transactioncategoryhierarchyelement: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_transactionorigin: DevKit.WebApi.LookupValue;
+		objectid_msdyn_transactioncategorypricelevel: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_transactiontype: DevKit.WebApi.LookupValue;
+		objectid_msdyn_transactionconnection: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_transcript: DevKit.WebApi.LookupValue;
+		objectid_msdyn_transactionorigin: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_warehouse: DevKit.WebApi.LookupValue;
+		objectid_msdyn_transactiontype: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_workhourtemplate: DevKit.WebApi.LookupValue;
+		objectid_msdyn_transcript: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_workorder: DevKit.WebApi.LookupValue;
+		objectid_msdyn_warehouse: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_workordercharacteristic: DevKit.WebApi.LookupValue;
+		objectid_msdyn_workhourtemplate: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_workorderincident: DevKit.WebApi.LookupValue;
+		objectid_msdyn_workorder: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_workorderproduct: DevKit.WebApi.LookupValue;
+		objectid_msdyn_workordercharacteristic: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_workorderresourcerestriction: DevKit.WebApi.LookupValue;
+		objectid_msdyn_workorderincident: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_workorderservice: DevKit.WebApi.LookupValue;
+		objectid_msdyn_workorderproduct: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_workorderservicetask: DevKit.WebApi.LookupValue;
+		objectid_msdyn_workorderresourcerestriction: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_workordersubstatus: DevKit.WebApi.LookupValue;
+		objectid_msdyn_workorderservice: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyusd_agentscriptaction: DevKit.WebApi.LookupValue;
+		objectid_msdyn_workorderservicetask: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyusd_answer: DevKit.WebApi.LookupValue;
+		objectid_msdyn_workordersubstatus: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyusd_configuration: DevKit.WebApi.LookupValue;
+		objectid_msdyusd_agentscriptaction: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyusd_customizationfiles: DevKit.WebApi.LookupValue;
+		objectid_msdyusd_answer: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyusd_entityassignment: DevKit.WebApi.LookupValue;
+		objectid_msdyusd_configuration: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyusd_entitysearch: DevKit.WebApi.LookupValue;
+		objectid_msdyusd_customizationfiles: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyusd_form: DevKit.WebApi.LookupValue;
+		objectid_msdyusd_entityassignment: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyusd_languagemodule: DevKit.WebApi.LookupValue;
+		objectid_msdyusd_entitysearch: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyusd_scriptlet: DevKit.WebApi.LookupValue;
+		objectid_msdyusd_form: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyusd_scripttasktrigger: DevKit.WebApi.LookupValue;
+		objectid_msdyusd_languagemodule: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyusd_search: DevKit.WebApi.LookupValue;
+		objectid_msdyusd_scriptlet: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyusd_sessioninformation: DevKit.WebApi.LookupValue;
+		objectid_msdyusd_scripttasktrigger: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyusd_task: DevKit.WebApi.LookupValue;
+		objectid_msdyusd_search: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyusd_toolbarbutton: DevKit.WebApi.LookupValue;
+		objectid_msdyusd_sessioninformation: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyusd_toolbarstrip: DevKit.WebApi.LookupValue;
+		objectid_msdyusd_task: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyusd_tracesourcesetting: DevKit.WebApi.LookupValue;
+		objectid_msdyusd_toolbarbutton: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyusd_uiievent: DevKit.WebApi.LookupValue;
+		objectid_msdyusd_toolbarstrip: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyusd_windowroute: DevKit.WebApi.LookupValue;
+		objectid_msdyusd_tracesourcesetting: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msfp_alert: DevKit.WebApi.LookupValue;
+		objectid_msdyusd_uiievent: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msfp_question: DevKit.WebApi.LookupValue;
+		objectid_msdyusd_windowroute: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msfp_surveyinvite: DevKit.WebApi.LookupValue;
+		objectid_msfp_alert: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		objectid_msfp_question: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_opportunity: DevKit.WebApi.LookupValue;
+		objectid_msfp_surveyinvite: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_opportunityclose: DevKit.WebApi.LookupValue;
+		objectid_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_orderclose: DevKit.WebApi.LookupValue;
+		objectid_opportunity: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_phonecall: DevKit.WebApi.LookupValue;
+		objectid_opportunityclose: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_product: DevKit.WebApi.LookupValue;
+		objectid_orderclose: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_quote: DevKit.WebApi.LookupValue;
+		objectid_phonecall: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_quoteclose: DevKit.WebApi.LookupValue;
+		objectid_product: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		objectid_quote: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_resourcespec: DevKit.WebApi.LookupValue;
+		objectid_quoteclose: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_routingrule: DevKit.WebApi.LookupValue;
+		objectid_recurringappointmentmaster: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_routingruleitem: DevKit.WebApi.LookupValue;
+		objectid_resourcespec: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_salesorder: DevKit.WebApi.LookupValue;
+		objectid_routingrule: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_service: DevKit.WebApi.LookupValue;
+		objectid_routingruleitem: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_serviceappointment: DevKit.WebApi.LookupValue;
+		objectid_salesorder: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_sharepointdocument: DevKit.WebApi.LookupValue;
+		objectid_service: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_sla: DevKit.WebApi.LookupValue;
+		objectid_serviceappointment: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_socialactivity: DevKit.WebApi.LookupValue;
+		objectid_sharepointdocument: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_task: DevKit.WebApi.LookupValue;
+		objectid_sla: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_uii_action: DevKit.WebApi.LookupValue;
+		objectid_socialactivity: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_uii_hostedapplication: DevKit.WebApi.LookupValue;
+		objectid_task: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_uii_nonhostedapplication: DevKit.WebApi.LookupValue;
+		objectid_uii_action: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_uii_option: DevKit.WebApi.LookupValue;
+		objectid_uii_hostedapplication: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_uii_workflow: DevKit.WebApi.LookupValue;
+		objectid_uii_nonhostedapplication: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_uii_workflowstep: DevKit.WebApi.LookupValue;
+		objectid_uii_option: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_uii_workflow_workflowstep_mapping: DevKit.WebApi.LookupValue;
+		objectid_uii_workflow: string;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_workflow: DevKit.WebApi.LookupValue;
+		objectid_uii_workflowstep: string;
+		/** Unique identifier of the object with which the note is associated. */
+		objectid_uii_workflow_workflowstep_mapping: string;
+		/** Unique identifier of the object with which the note is associated. */
+		objectid_workflow: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier of the business unit that owns the note. */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier of the team who owns the note. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier of the user who owns the note. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Prefix of the file pointer in blob storage. */
-		Prefix: DevKit.WebApi.StringValueReadonly;
+		readonly Prefix: string;
 		/** workflow step id associated with the note. */
-		StepId: DevKit.WebApi.StringValue;
+		StepId: string;
 		/** Storage pointer. */
-		StoragePointer: DevKit.WebApi.StringValueReadonly;
+		readonly StoragePointer: string;
 		/** Subject associated with the note. */
-		Subject: DevKit.WebApi.StringValue;
+		Subject: string;
 		/** Version number of the note. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -755,4 +761,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

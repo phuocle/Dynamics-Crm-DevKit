@@ -103,8 +103,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -112,55 +114,55 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unsecured configuration for the plug-in trace log. */
-		Configuration: DevKit.WebApi.StringValueReadonly;
+		readonly Configuration: string;
 		/** Unique identifier for tracking plug-in or custom workflow activity execution. */
-		CorrelationId: DevKit.WebApi.GuidValueReadonly;
+		readonly CorrelationId: string;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Depth of execution of the plug-in or custom workflow activity. */
-		Depth: DevKit.WebApi.IntegerValueReadonly;
+		readonly Depth: number;
 		/** Details of the exception. */
-		ExceptionDetails: DevKit.WebApi.StringValueReadonly;
+		readonly ExceptionDetails: string;
 		/** Where the event originated. Set to true if it's a system trace; otherwise, false. */
-		IsSystemCreated: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsSystemCreated: boolean;
 		/** Trace text from the plug-in. */
-		MessageBlock: DevKit.WebApi.StringValueReadonly;
+		readonly MessageBlock: string;
 		/** Name of the message that triggered this plug-in. */
-		MessageName: DevKit.WebApi.StringValueReadonly;
+		readonly MessageName: string;
 		/** Type of execution. */
-		Mode: DevKit.WebApi.OptionSetValueReadonly;
+		readonly Mode: OptionSet.PluginTraceLog.Mode;
 		/** Type of custom code. */
-		OperationType: DevKit.WebApi.OptionSetValueReadonly;
+		readonly OperationType: OptionSet.PluginTraceLog.OperationType;
 		/** Unique identifier for the organization. */
-		OrganizationId: DevKit.WebApi.GuidValueReadonly;
+		readonly OrganizationId: string;
 		/** Time, in milliseconds, to construct. */
-		PerformanceConstructorDuration: DevKit.WebApi.IntegerValueReadonly;
+		readonly PerformanceConstructorDuration: number;
 		/** Date and time when constructed. */
-		PerformanceConstructorStartTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly PerformanceConstructorStartTime_UtcDateAndTime: Date;
 		/** Time, in milliseconds, to execute the request. */
-		PerformanceExecutionDuration: DevKit.WebApi.IntegerValueReadonly;
+		readonly PerformanceExecutionDuration: number;
 		/** Time, in milliseconds, to execute the request. */
-		PerformanceExecutionStartTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly PerformanceExecutionStartTime_UtcDateAndTime: Date;
 		/** Asynchronous workflow persistence key. */
-		PersistenceKey: DevKit.WebApi.GuidValueReadonly;
+		readonly PersistenceKey: string;
 		/** ID of the plug-in registration step. */
-		PluginStepId: DevKit.WebApi.GuidValueReadonly;
+		readonly PluginStepId: string;
 		/** Unique identifier for an entity instance. */
-		PluginTraceLogId: DevKit.WebApi.GuidValueReadonly;
+		readonly PluginTraceLogId: string;
 		/** Entity, if any, that the plug-in is executed against. */
-		PrimaryEntity: DevKit.WebApi.StringValueReadonly;
+		readonly PrimaryEntity: string;
 		/** Plug-in profile formatted as serialized text. */
-		Profile: DevKit.WebApi.StringValueReadonly;
+		readonly Profile: string;
 		/** Unique identifier of the message request. */
-		RequestId: DevKit.WebApi.GuidValueReadonly;
+		readonly RequestId: string;
 		/** Secured configuration for the plug-in trace log. */
-		SecureConfiguration: DevKit.WebApi.StringValueReadonly;
+		readonly SecureConfiguration: string;
 		/** Class name of the plug-in. */
-		TypeName: DevKit.WebApi.StringValueReadonly;
+		readonly TypeName: string;
 	}
 }
 declare namespace OptionSet {
@@ -197,4 +199,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

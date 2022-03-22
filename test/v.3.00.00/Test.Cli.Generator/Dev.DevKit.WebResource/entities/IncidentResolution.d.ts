@@ -95,8 +95,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -104,164 +106,166 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Additional information provided by the external application as JSON. For internal use only. */
-		ActivityAdditionalParams: DevKit.WebApi.StringValue;
+		ActivityAdditionalParams: string;
 		/** Unique identifier of the case resolution activity. */
-		ActivityId: DevKit.WebApi.GuidValue;
+		ActivityId: string;
 		/** Actual duration of the case resolution activity in minutes. */
-		ActualDurationMinutes: DevKit.WebApi.IntegerValue;
+		ActualDurationMinutes: number;
 		/** Actual end time of the case resolution activity. */
-		ActualEnd_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		ActualEnd_UtcDateOnly: Date;
 		/** Actual start time of the case resolution activity. */
-		ActualStart_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		ActualStart_UtcDateOnly: Date;
 		/** Category for the case resolution activity. */
-		Category: DevKit.WebApi.StringValue;
+		Category: string;
 		/** Shows how contact about the social activity originated, such as from Twitter or Facebook. This field is read-only. */
-		Community: DevKit.WebApi.OptionSetValue;
+		Community: OptionSet.IncidentResolution.Community;
 		/** Unique identifier of the user who created the case resolution activity. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Shows the external party who created the record. */
-		CreatedByExternalParty: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedByExternalParty: string;
 		/** Date and time when the case resolution activity was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the incidentresolution. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Date and time when the delivery of the activity was last attempted. */
-		DeliveryLastAttemptedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly DeliveryLastAttemptedOn_UtcDateAndTime: Date;
 		/** Priority of delivery of the activity to the email server. */
-		DeliveryPriorityCode: DevKit.WebApi.OptionSetValue;
+		DeliveryPriorityCode: OptionSet.IncidentResolution.DeliveryPriorityCode;
 		/** Type additional information that describes the case resolution. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** The message id of activity which is returned from Exchange Server. */
-		ExchangeItemId: DevKit.WebApi.StringValue;
+		ExchangeItemId: string;
 		/** Exchange rate for the currency associated with the activitypointer with respect to the base currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Shows the web link of Activity of type email. */
-		ExchangeWebLink: DevKit.WebApi.StringValue;
+		ExchangeWebLink: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the case. */
-		IncidentId: DevKit.WebApi.LookupValue;
+		IncidentId: string;
 		/** Type of instance of a recurring series. */
-		InstanceTypeCode: DevKit.WebApi.OptionSetValueReadonly;
+		readonly InstanceTypeCode: OptionSet.IncidentResolution.InstanceTypeCode;
 		/** Information about whether the case resolution activity was billed as part of resolving a case. */
-		IsBilled: DevKit.WebApi.BooleanValue;
+		IsBilled: boolean;
 		/** For internal use only. */
-		IsMapiPrivate: DevKit.WebApi.BooleanValue;
+		IsMapiPrivate: boolean;
 		/** Information regarding whether the activity is a regular activity type or event type. */
-		IsRegularActivity: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsRegularActivity: boolean;
 		/** Information that specifies if the case resolution activity was created from a workflow rule. */
-		IsWorkflowCreated: DevKit.WebApi.BooleanValue;
+		IsWorkflowCreated: boolean;
 		/** Contains the date and time stamp of the last on hold time. */
-		LastOnHoldTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		LastOnHoldTime_UtcDateAndTime: Date;
 		/** Left the voice mail */
-		LeftVoiceMail: DevKit.WebApi.BooleanValue;
+		LeftVoiceMail: boolean;
 		/** Unique identifier of the user who last modified the case resolution activity. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Shows the external party who modified the record. */
-		ModifiedByExternalParty: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedByExternalParty: string;
 		/** Date and time when the case resolution activity was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the incidentresolution. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Shows how long, in minutes, that the record was on hold. */
-		OnHoldTime: DevKit.WebApi.IntegerValueReadonly;
+		readonly OnHoldTime: number;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier of the business unit that owns the activity. */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier of the team that owns the activity. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier of the user that owns the activity. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** For internal use only. */
-		PostponeActivityProcessingUntil_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly PostponeActivityProcessingUntil_UtcDateAndTime: Date;
 		/** Priority of the activity. */
-		PriorityCode: DevKit.WebApi.OptionSetValue;
+		PriorityCode: OptionSet.IncidentResolution.PriorityCode;
 		/** Unique identifier of the Process. */
-		ProcessId: DevKit.WebApi.GuidValue;
+		ProcessId: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_account_incidentresolution: DevKit.WebApi.LookupValue;
+		regardingobjectid_account_incidentresolution: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_bookableresourcebooking_incidentresolution: DevKit.WebApi.LookupValue;
+		regardingobjectid_bookableresourcebooking_incidentresolution: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_bookableresourcebookingheader_incidentresolution: DevKit.WebApi.LookupValue;
+		regardingobjectid_bookableresourcebookingheader_incidentresolution: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_bulkoperation_incidentresolution: DevKit.WebApi.LookupValue;
+		regardingobjectid_bulkoperation_incidentresolution: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_campaign_incidentresolution: DevKit.WebApi.LookupValue;
+		regardingobjectid_campaign_incidentresolution: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_campaignactivity_incidentresolution: DevKit.WebApi.LookupValue;
+		regardingobjectid_campaignactivity_incidentresolution: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_entitlement_incidentresolution: DevKit.WebApi.LookupValue;
+		regardingobjectid_entitlement_incidentresolution: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_entitlementtemplate_incidentresolution: DevKit.WebApi.LookupValue;
+		regardingobjectid_entitlementtemplate_incidentresolution: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_new_interactionforemail_incidentresolution: DevKit.WebApi.LookupValue;
+		regardingobjectid_new_interactionforemail_incidentresolution: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_knowledgearticle_incidentresolution: DevKit.WebApi.LookupValue;
+		regardingobjectid_knowledgearticle_incidentresolution: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_knowledgebaserecord_incidentresolution: DevKit.WebApi.LookupValue;
+		regardingobjectid_knowledgebaserecord_incidentresolution: string;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_lead_incidentresolution: DevKit.WebApi.LookupValue;
-		ResolutionTypeCode: DevKit.WebApi.OptionSetValue;
+		regardingobjectid_lead_incidentresolution: string;
+		ResolutionTypeCode: OptionSet.IncidentResolution.ResolutionTypeCode;
 		/** Scheduled duration of the case resolution activity, specified in minutes. */
-		ScheduledDurationMinutes: DevKit.WebApi.IntegerValueReadonly;
+		readonly ScheduledDurationMinutes: number;
 		/** Scheduled end time of the case resolution activity. */
-		ScheduledEnd_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		ScheduledEnd_UtcDateOnly: Date;
 		/** Scheduled start time of the case resolution activity. */
-		ScheduledStart_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		ScheduledStart_UtcDateOnly: Date;
 		/** Unique identifier of the mailbox associated with the sender of the email message. */
-		SenderMailboxId: DevKit.WebApi.LookupValueReadonly;
+		readonly SenderMailboxId: string;
 		/** Date and time when the activity was sent. */
-		SentOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly SentOn_UtcDateAndTime: Date;
 		/** Uniqueidentifier specifying the id of recurring series of an instance. */
-		SeriesId: DevKit.WebApi.GuidValueReadonly;
+		readonly SeriesId: string;
 		/** Unique identifier of the service with which the case resolution activity is associated. */
-		ServiceId: DevKit.WebApi.LookupValue;
+		ServiceId: string;
 		/** Choose the service level agreement (SLA) that you want to apply to the case record. */
-		SLAId: DevKit.WebApi.LookupValue;
+		SLAId: string;
 		/** Last SLA that was applied to this case. This field is for internal use only. */
-		SLAInvokedId: DevKit.WebApi.LookupValueReadonly;
+		readonly SLAInvokedId: string;
 		/** Shows the date and time by which the activities are sorted. */
-		SortDate_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		SortDate_UtcDateAndTime: Date;
 		/** Unique identifier of the Stage. */
-		StageId: DevKit.WebApi.GuidValue;
+		StageId: string;
 		/** Shows whether the case resolution is open, completed, or canceled. By default, all case resolutions are completed and the status value can't be changed. */
-		StateCode: DevKit.WebApi.OptionSetValue;
+		StateCode: OptionSet.IncidentResolution.StateCode;
 		/** Reason for the status of the case resolution activity. */
-		StatusCode: DevKit.WebApi.OptionSetValue;
+		StatusCode: OptionSet.IncidentResolution.StatusCode;
 		/** Subcategory of the case resolution activity. */
-		Subcategory: DevKit.WebApi.StringValue;
+		Subcategory: string;
 		/** Subject associated with the case resolution activity. */
-		Subject: DevKit.WebApi.StringValue;
+		Subject: string;
 		/** Time spent on the case resolution activity. */
-		TimeSpent: DevKit.WebApi.IntegerValue;
+		TimeSpent: number;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Total time spent on the case resolution activity. */
-		TotalTimeSpent: DevKit.WebApi.IntegerValue;
+		TotalTimeSpent: number;
 		/** Unique identifier of the currency associated with the activitypointer. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** For internal use only. */
-		TraversedPath: DevKit.WebApi.StringValue;
+		TraversedPath: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version number of the activity. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 		/** The array of object that can cast object to ActivityPartyApi class */
-		ActivityParties: Array<any>;
+		ActivityParties: Array<unknown>;
 	}
 }
 declare namespace OptionSet {
 	namespace IncidentResolution {
 		enum ActivityTypeCode {
+			/** 10086 */
+			Activity_record_for_the_Teams_chat,
 			/** 4201 */
 			Appointment,
-			/** 10400 */
+			/** 10404 */
 			Booking_Alert,
 			/** 4402 */
 			Campaign_Activity,
@@ -269,13 +273,13 @@ declare namespace OptionSet {
 			Campaign_Response,
 			/** 4206 */
 			Case_Resolution,
-			/** 10702 */
+			/** 10707 */
 			Conversation,
-			/** 10294 */
+			/** 10313 */
 			Customer_Voice_alert,
-			/** 10304 */
+			/** 10323 */
 			Customer_Voice_survey_invite,
-			/** 10306 */
+			/** 10325 */
 			Customer_Voice_survey_response,
 			/** 4202 */
 			Email,
@@ -287,11 +291,11 @@ declare namespace OptionSet {
 			Opportunity_Close,
 			/** 4209 */
 			Order_Close,
-			/** 10813 */
+			/** 10817 */
 			Outbound_message,
 			/** 4210 */
 			Phone_Call,
-			/** 10430 */
+			/** 10434 */
 			Project_Service_Approval,
 			/** 4406 */
 			Quick_Campaign,
@@ -301,7 +305,7 @@ declare namespace OptionSet {
 			Recurring_Appointment,
 			/** 4214 */
 			Service_Activity,
-			/** 10717 */
+			/** 10721 */
 			Session,
 			/** 4212 */
 			Task
@@ -408,4 +412,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

@@ -4,20 +4,18 @@ var DevKit;
 (function (DevKit) {
 	'use strict';
 	DevKit.UII_hostedapplicationApi = function (e) {
-		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
 			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-			var property = {};
 			var getFormattedValue = function () {
 				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-					return EMPTY_STRING;
+					return '';
 				}
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
 					if (entity[logicalName + l] === entityLogicalName) {
 						return entity[logicalName + f];
 					}
-					return EMPTY_STRING;
+					return '';
 				}
 				if (isMultiOptionSet) {
 					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -42,30 +40,29 @@ var DevKit;
 			var setValue = function (value) {
 				if (isMultiOptionSet) value = value.join(',');
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+					value = value.replace('{', '').replace('}', '');
 					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
 				} else {
 					upsertEntity[logicalName] = value;
 				}
 				entity[logicalName] = value;
 			};
-			Object.defineProperty(property, 'FormattedValue', {
+			Object.defineProperty(obj.FormattedValue, field, {
 				get: getFormattedValue
 			});
 			if (readOnly) {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue
 				});
 			}
 			else {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue,
 					set: setValue
 				});
 			}
-			return property;
 		}
-		var uii_hostedapplication = {
+		var _uii_hostedapplication = {
 			CreatedBy: { b: 'createdby', a: '_createdby_value', c: 'systemusers', d: 'systemuser', r: true },
 			CreatedOn_UtcDateAndTime: { a: 'createdon', r: true },
 			CreatedOnBehalfBy: { b: 'createdonbehalfby', a: '_createdonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
@@ -153,20 +150,23 @@ var DevKit;
 		};
 		if (e === undefined) e = {};
 		var u = {};
-		for (var field in uii_hostedapplication) {
-			var a = uii_hostedapplication[field].a;
-			var b = uii_hostedapplication[field].b;
-			var c = uii_hostedapplication[field].c;
-			var d = uii_hostedapplication[field].d;
-			var g = uii_hostedapplication[field].g;
-			var r = uii_hostedapplication[field].r;
-			uii_hostedapplication[field] = webApiField(e, a, b, c, d, r, u, g);
+		var uii_hostedapplication = {};
+		uii_hostedapplication.ODataEntity = e;
+		uii_hostedapplication.FormattedValue = {};
+		for (var field in _uii_hostedapplication) {
+			var a = _uii_hostedapplication[field].a;
+			var b = _uii_hostedapplication[field].b;
+			var c = _uii_hostedapplication[field].c;
+			var d = _uii_hostedapplication[field].d;
+			var g = _uii_hostedapplication[field].g;
+			var r = _uii_hostedapplication[field].r;
+			webApiField(uii_hostedapplication, field, e, a, b, c, d, r, u, g);
 		}
 		uii_hostedapplication.Entity = u;
 		uii_hostedapplication.EntityName = 'uii_hostedapplication';
 		uii_hostedapplication.EntityCollectionName = 'uii_hostedapplications';
 		uii_hostedapplication['@odata.etag'] = e['@odata.etag'];
-		uii_hostedapplication.getAliasedValue = function (alias, isMultiOptionSet) {
+		uii_hostedapplication.getAliasedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias] === undefined || e[alias] === null) {
 				return null;
 			}
@@ -175,7 +175,7 @@ var DevKit;
 			}
 			return e[alias];
 		}
-		uii_hostedapplication.getAliasedFormattedValue = function (alias, isMultiOptionSet) {
+		uii_hostedapplication.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
 				return EMPTY_STRING;
 			}

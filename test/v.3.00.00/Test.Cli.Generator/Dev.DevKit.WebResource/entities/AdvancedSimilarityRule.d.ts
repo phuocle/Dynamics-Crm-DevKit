@@ -74,8 +74,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -83,61 +85,61 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier for entity instances */
-		AdvancedSimilarityRuleId: DevKit.WebApi.GuidValue;
+		AdvancedSimilarityRuleId: string;
 		/** Unique identifier of the Advanced Similarity Rule used when synchronizing customizations for the Microsoft Dynamics 365 client for Outlook */
-		AdvancedSimilarityRuleIdUnique: DevKit.WebApi.GuidValueReadonly;
+		readonly AdvancedSimilarityRuleIdUnique: string;
 		/** Unique identifier for AzureServiceConnection associated with AdvancedSimilarityRule. */
-		AzureServiceConnectionId: DevKit.WebApi.LookupValue;
+		AzureServiceConnectionId: string;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.AdvancedSimilarityRule.ComponentState;
 		/** Unique identifier of the user who created the Advanced Similarity Rules. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Enter a description for the Advanced Similarity Rule */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** entity */
-		Entity1: DevKit.WebApi.StringValue;
+		Entity1: string;
 		/** For internal use only. */
-		ExactMatchList: DevKit.WebApi.StringValue;
+		ExactMatchList: string;
 		/** For internal use only. */
-		FetchXmlList: DevKit.WebApi.StringValue;
+		FetchXmlList: string;
 		/** Filter Result By Status */
-		FilterResultByStatus: DevKit.WebApi.OptionSetValue;
+		FilterResultByStatus: OptionSet.AdvancedSimilarityRule.FilterResultByStatus;
 		/** Filter Result By Status */
-		FilterResultByStatusDisplayName: DevKit.WebApi.StringValue;
+		FilterResultByStatusDisplayName: string;
 		/** Use Text Analytics for Target Match */
-		IsAzureMLRequired: DevKit.WebApi.BooleanValue;
+		IsAzureMLRequired: boolean;
 		/** Is Manageed */
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsManaged: boolean;
 		/** Enter the maximum number of keywords and key phrases to use with text analytics. */
-		MaxNumberKeyphrases: DevKit.WebApi.IntegerValue;
+		MaxNumberKeyphrases: number;
 		/** Unique identifier of the user who modified the Advanced Similarity Rules. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the advanced similarity rules. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Type a logical name for the similarity configuration */
-		name: DevKit.WebApi.StringValue;
+		name: string;
 		/** Enter the maximum number of words in a key phrase to use with text analytics. */
-		NgramSize: DevKit.WebApi.IntegerValue;
+		NgramSize: number;
 		/** Provide noise key phrases by a semicolon ( ; ). These phrases will be filtered while searching for similar cases */
-		NoiseKeyphraseslist: DevKit.WebApi.StringValue;
+		NoiseKeyphraseslist: string;
 		/** Unique identifier of the organization associated with the advanced similarity rules */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Date and time when the record was created. */
-		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly OverwriteTime_UtcDateOnly: Date;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** Status of the advanced similarity rules */
-		StateCode: DevKit.WebApi.OptionSetValue;
+		StateCode: OptionSet.AdvancedSimilarityRule.StateCode;
 		/** Reason for the status of the advanced similarity rules */
-		StatusCode: DevKit.WebApi.OptionSetValue;
+		StatusCode: OptionSet.AdvancedSimilarityRule.StatusCode;
 		/** For internal use only. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SupportingSolutionId: string;
 	}
 }
 declare namespace OptionSet {
@@ -192,4 +194,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

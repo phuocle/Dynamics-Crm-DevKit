@@ -73,8 +73,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -82,95 +84,95 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Exchange rate for the currency associated with the entity with respect to the base currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Lookup field for customer asset */
-		msdyn_Asset: DevKit.WebApi.LookupValue;
+		msdyn_Asset: string;
 		/** Unique identifier of customer asset */
-		msdyn_AssetId: DevKit.WebApi.StringValue;
+		msdyn_AssetId: string;
 		/** Value of breakfix cost for customer asset */
-		msdyn_BreakfixCost: DevKit.WebApi.MoneyValue;
+		msdyn_BreakfixCost: number;
 		/** Value of the Breakfix Cost in base currency. */
-		msdyn_breakfixcost_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_breakfixcost_Base: number;
 		/** Value of breakfix sale of customer asset */
-		msdyn_BreakfixSale: DevKit.WebApi.MoneyValue;
+		msdyn_BreakfixSale: number;
 		/** Value of the Breakfix Sale in base currency. */
-		msdyn_breakfixsale_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_breakfixsale_Base: number;
 		/** Expected break/fix work order count for customer asset */
-		msdyn_BreakfixWorkOrderCount: DevKit.WebApi.IntegerValue;
+		msdyn_BreakfixWorkOrderCount: number;
 		/** Probability of predicting customer asset to be problematic in current date */
-		msdyn_Confidence: DevKit.WebApi.DoubleValue;
+		msdyn_Confidence: number;
 		/** Flag value indicating if customer asset has higher total cost than similar assets or not */
-		msdyn_HigherTotalCost: DevKit.WebApi.OptionSetValue;
+		msdyn_HigherTotalCost: OptionSet.msdyn_problematicasset.msdyn_HigherTotalCost;
 		/** Flag value indicating if customer asset work order count is higher than similar assets or not */
-		msdyn_HigherWorkOrderCount: DevKit.WebApi.OptionSetValue;
+		msdyn_HigherWorkOrderCount: OptionSet.msdyn_problematicasset.msdyn_HigherWorkOrderCount;
 		/** Value of maintenance cost of customer asset */
-		msdyn_MaintenanceCost: DevKit.WebApi.MoneyValue;
+		msdyn_MaintenanceCost: number;
 		/** Value of the Maintenance Cost in base currency. */
-		msdyn_maintenancecost_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_maintenancecost_Base: number;
 		/** Value of maintenance sale of customer asset */
-		msdyn_MaintenanceSale: DevKit.WebApi.MoneyValue;
+		msdyn_MaintenanceSale: number;
 		/** Value of the Maintenance Sale in base currency. */
-		msdyn_maintenancesale_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_maintenancesale_Base: number;
 		/** Expected maintenance work order count from model output */
-		msdyn_MaintenanceWorkOrderCount: DevKit.WebApi.IntegerValue;
+		msdyn_MaintenanceWorkOrderCount: number;
 		/** The name of the custom entity. */
-		msdyn_Name: DevKit.WebApi.StringValue;
+		msdyn_Name: string;
 		/** The option set value indicating how many days the record is preficted from current */
-		msdyn_NumberofDays: DevKit.WebApi.OptionSetValue;
+		msdyn_NumberofDays: OptionSet.msdyn_problematicasset.msdyn_NumberofDays;
 		/** Unique identifier for entity instances */
-		msdyn_problematicassetId: DevKit.WebApi.GuidValue;
+		msdyn_problematicassetId: string;
 		/** Value of replacement cost of customer asset */
-		msdyn_ReplacementCost: DevKit.WebApi.MoneyValue;
+		msdyn_ReplacementCost: number;
 		/** Value of the Replacement Cost in base currency. */
-		msdyn_replacementcost_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_replacementcost_Base: number;
 		/** Value of replacement sale of customer asset */
-		msdyn_ReplacementSale: DevKit.WebApi.MoneyValue;
+		msdyn_ReplacementSale: number;
 		/** Value of the Replacement Sale in base currency. */
-		msdyn_replacementsale_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_replacementsale_Base: number;
 		/** Unique identifier of model run id */
-		msdyn_RunId: DevKit.WebApi.StringValue;
+		msdyn_RunId: string;
 		/** Probability of customer asset to be problematic asset */
-		msdyn_Score: DevKit.WebApi.DoubleValue;
+		msdyn_Score: number;
 		/** Optionset value of suggestions for customer asset */
-		msdyn_Suggestion: DevKit.WebApi.OptionSetValue;
+		msdyn_Suggestion: OptionSet.msdyn_problematicasset.msdyn_Suggestion;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Status of the Problematic Asset */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.msdyn_problematicasset.statecode;
 		/** Reason for the status of the Problematic Asset */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.msdyn_problematicasset.statuscode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Unique identifier of the currency associated with the entity. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -237,4 +239,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

@@ -474,8 +474,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -483,150 +485,150 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the resource booking. */
-		BookableResourceBookingId: DevKit.WebApi.GuidValue;
+		BookableResourceBookingId: string;
 		/** Select the status of the booking. */
-		BookingStatus: DevKit.WebApi.LookupValue;
+		BookingStatus: string;
 		/** Select whether the booking is solid or liquid. Solid bookings are firm and cannot be changed whereas liquid bookings can be changed. */
-		BookingType: DevKit.WebApi.OptionSetValue;
+		BookingType: OptionSet.BookableResourceBooking.BookingType;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Enter the duration of the booking. */
-		Duration: DevKit.WebApi.IntegerValue;
+		Duration: number;
 		/** Enter the end date and time of the booking. */
-		EndTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		EndTime_UtcDateAndTime: Date;
 		/** Exchange rate for the currency associated with the bookableresourcebooking with respect to the base currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Shows the reference to the booking header record that represents the summary of bookings. */
-		Header: DevKit.WebApi.LookupValue;
+		Header: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Defines whether this booking accepts changes propagated as cascading changes */
-		msdyn_AcceptCascadeCrewChanges: DevKit.WebApi.BooleanValue;
+		msdyn_AcceptCascadeCrewChanges: boolean;
 		/** Shows the time that work started. */
-		msdyn_ActualArrivalTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		msdyn_ActualArrivalTime_UtcDateAndTime: Date;
 		/** Shows the total travel duration. Calculated based on the difference between the Bookable Resource Booking's start time and actual arrival time. */
-		msdyn_ActualTravelDuration: DevKit.WebApi.IntegerValue;
+		msdyn_ActualTravelDuration: number;
 		/** Agreement Booking Date from where this Booking was generated */
-		msdyn_AgreementBookingDate: DevKit.WebApi.LookupValue;
+		msdyn_AgreementBookingDate: string;
 		/** Allow the time of this booking to be displayed on the schedule assistant as available. */
-		msdyn_AllowOverlapping: DevKit.WebApi.BooleanValue;
+		msdyn_AllowOverlapping: boolean;
 		/** Unique identifier for Appointment associated with Bookable Resource Booking. */
-		msdyn_AppointmentBookingId: DevKit.WebApi.LookupValue;
+		msdyn_AppointmentBookingId: string;
 		/** The Base travel duration indicates the travel time without traffic */
-		msdyn_BaseTravelDuration: DevKit.WebApi.IntegerValue;
+		msdyn_BaseTravelDuration: number;
 		/** Shows the method used to create this booking. */
-		msdyn_BookingMethod: DevKit.WebApi.OptionSetValue;
+		msdyn_BookingMethod: OptionSet.BookableResourceBooking.msdyn_BookingMethod;
 		/** A unique identifier for the booking setup metadata that is associated with a bookable resource booking. */
-		msdyn_BookingSetupMetadataId: DevKit.WebApi.LookupValue;
+		msdyn_BookingSetupMetadataId: string;
 		/** Defines whether changing any of the following fields (Start Time, End Time, Status) should cascade the changes to other bookings on this requirement that have the same start and end time. */
-		msdyn_CascadeCrewChanges: DevKit.WebApi.BooleanValue;
+		msdyn_CascadeCrewChanges: boolean;
 		/** This field is populated by the Field Service solution to define to which crew a booking is connected. */
-		msdyn_Crew: DevKit.WebApi.LookupValue;
+		msdyn_Crew: string;
 		/** Crew Member Type */
-		msdyn_CrewMemberType: DevKit.WebApi.OptionSetValue;
+		msdyn_CrewMemberType: OptionSet.BookableResourceBooking.msdyn_CrewMemberType;
 		/** Capacity that needs to take from resource capacity */
-		msdyn_effort: DevKit.WebApi.DecimalValue;
+		msdyn_effort: number;
 		/** Estimated Arrival Time */
-		msdyn_EstimatedArrivalTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		msdyn_EstimatedArrivalTime_UtcDateAndTime: Date;
 		/** Estimated Travel Duration */
-		msdyn_EstimatedTravelDuration: DevKit.WebApi.IntegerValue;
+		msdyn_EstimatedTravelDuration: number;
 		/** For internal use only. */
-		msdyn_InternalFlags: DevKit.WebApi.StringValue;
-		msdyn_Latitude: DevKit.WebApi.DoubleValue;
-		msdyn_Longitude: DevKit.WebApi.DoubleValue;
+		msdyn_InternalFlags: string;
+		msdyn_Latitude: number;
+		msdyn_Longitude: number;
 		/** In this field you can enter the total miles the resource drove to the job site */
-		msdyn_MilesTraveled: DevKit.WebApi.DoubleValue;
+		msdyn_MilesTraveled: number;
 		/** Internal Use. This field is used to capture the time when the Booking was updated on mobile offline. */
-		msdyn_OfflineTimestamp_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		msdyn_OfflineTimestamp_UtcDateAndTime: Date;
 		/** Prevents time stamp creation if the time stamp was already created on a mobile device. */
-		msdyn_PreventTimestampCreation: DevKit.WebApi.BooleanValue;
+		msdyn_PreventTimestampCreation: boolean;
 		/** Project of booking detail record */
-		msdyn_projectid: DevKit.WebApi.LookupValue;
+		msdyn_projectid: string;
 		/** Project team member of booking detail record */
-		msdyn_projectteamid: DevKit.WebApi.LookupValue;
+		msdyn_projectteamid: string;
 		/** Internal For Quick note pcf control actions */
-		msdyn_quickNoteAction: DevKit.WebApi.OptionSetValue;
+		msdyn_quickNoteAction: OptionSet.BookableResourceBooking.msdyn_quickNoteAction;
 		/** Requirement Group */
-		msdyn_requirementgroupid: DevKit.WebApi.LookupValue;
+		msdyn_requirementgroupid: string;
 		/** Requirement Group Set */
-		msdyn_requirementgroupset: DevKit.WebApi.StringValue;
+		msdyn_requirementgroupset: string;
 		/** Resource Category */
-		msdyn_resourcecategoryid: DevKit.WebApi.LookupValue;
+		msdyn_resourcecategoryid: string;
 		/** Unique identifier for Resource associated with Resource Booking */
-		msdyn_ResourceGroup: DevKit.WebApi.LookupValue;
+		msdyn_ResourceGroup: string;
 		/** Resource Requirement */
-		msdyn_ResourceRequirement: DevKit.WebApi.LookupValue;
+		msdyn_ResourceRequirement: string;
 		/** Unique identifier for Service Appointment associated with Resource Booking. */
-		msdyn_serviceappointment: DevKit.WebApi.LookupValue;
+		msdyn_serviceappointment: string;
 		/** This field is used for capturing signature on Mobile (using the Pen Control) */
-		msdyn_Signature: DevKit.WebApi.StringValue;
+		msdyn_Signature: string;
 		/** Shows the automatically generated text of the time slot on the schedule board. */
-		msdyn_SlotText: DevKit.WebApi.StringValue;
-		msdyn_TimeGroupDetailSelected: DevKit.WebApi.LookupValue;
+		msdyn_SlotText: string;
+		msdyn_TimeGroupDetailSelected: string;
 		/** Shows the total billable duration. If you leave this field blank the system automatically determines the billable duration by calculating the resource journal details. */
-		msdyn_TotalBillableDuration: DevKit.WebApi.IntegerValue;
+		msdyn_TotalBillableDuration: number;
 		/** Shows the total break duration. If you leave this field blank the system automatically determines the break duration by calculating the resource journal details. */
-		msdyn_TotalBreakDuration: DevKit.WebApi.IntegerValue;
+		msdyn_TotalBreakDuration: number;
 		/** Shows the total cost for this booking. */
-		msdyn_TotalCost: DevKit.WebApi.MoneyValue;
+		msdyn_TotalCost: number;
 		/** Value of the Total Cost in base currency. */
-		msdyn_totalcost_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_totalcost_Base: number;
 		/** Shows the total duration that this booking was in progress. */
-		msdyn_TotalDurationInProgress: DevKit.WebApi.IntegerValue;
+		msdyn_TotalDurationInProgress: number;
 		/** Travel Time Calculation */
-		msdyn_TravelTimeCalculationType: DevKit.WebApi.OptionSetValue;
-		msdyn_TravelTimeRescheduling: DevKit.WebApi.BooleanValue;
+		msdyn_TravelTimeCalculationType: OptionSet.BookableResourceBooking.msdyn_TravelTimeCalculationType;
+		msdyn_TravelTimeRescheduling: boolean;
 		/** For internal use only. */
-		msdyn_URSInternalFlags: DevKit.WebApi.StringValue;
-		msdyn_WorkLocation: DevKit.WebApi.OptionSetValue;
+		msdyn_URSInternalFlags: string;
+		msdyn_WorkLocation: OptionSet.BookableResourceBooking.msdyn_WorkLocation;
 		/** Unique identifier for Work Order associated with Resource Booking. */
-		msdyn_WorkOrder: DevKit.WebApi.LookupValue;
+		msdyn_WorkOrder: string;
 		/** Type a name for the booking. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Contains the id of the process associated with the entity. */
-		ProcessId: DevKit.WebApi.GuidValue;
+		ProcessId: string;
 		/** Shows the resource that is booked. */
-		Resource: DevKit.WebApi.LookupValue;
+		Resource: string;
 		/** Contains the id of the stage where the entity is located. */
-		StageId: DevKit.WebApi.GuidValue;
+		StageId: string;
 		/** Enter the start date and time of the booking. */
-		StartTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		StartTime_UtcDateAndTime: Date;
 		/** Status of the Bookable Resource Booking */
-		StateCode: DevKit.WebApi.OptionSetValue;
+		StateCode: OptionSet.BookableResourceBooking.StateCode;
 		/** Reason for the status of the Bookable Resource Booking */
-		StatusCode: DevKit.WebApi.OptionSetValue;
+		StatusCode: OptionSet.BookableResourceBooking.StatusCode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Exchange rate for the currency associated with the BookableResourceBooking with respect to the base currency. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** A comma separated list of string values representing the unique identifiers of stages in a Business Process Flow Instance in the order that they occur. */
-		TraversedPath: DevKit.WebApi.StringValue;
+		TraversedPath: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -721,4 +723,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

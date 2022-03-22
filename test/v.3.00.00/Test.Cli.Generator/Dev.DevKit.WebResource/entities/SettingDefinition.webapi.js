@@ -4,20 +4,18 @@ var DevKit;
 (function (DevKit) {
 	'use strict';
 	DevKit.SettingDefinitionApi = function (e) {
-		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
 			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-			var property = {};
 			var getFormattedValue = function () {
 				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-					return EMPTY_STRING;
+					return '';
 				}
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
 					if (entity[logicalName + l] === entityLogicalName) {
 						return entity[logicalName + f];
 					}
-					return EMPTY_STRING;
+					return '';
 				}
 				if (isMultiOptionSet) {
 					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -42,30 +40,29 @@ var DevKit;
 			var setValue = function (value) {
 				if (isMultiOptionSet) value = value.join(',');
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+					value = value.replace('{', '').replace('}', '');
 					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
 				} else {
 					upsertEntity[logicalName] = value;
 				}
 				entity[logicalName] = value;
 			};
-			Object.defineProperty(property, 'FormattedValue', {
+			Object.defineProperty(obj.FormattedValue, field, {
 				get: getFormattedValue
 			});
 			if (readOnly) {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue
 				});
 			}
 			else {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue,
 					set: setValue
 				});
 			}
-			return property;
 		}
-		var settingdefinition = {
+		var _settingdefinition = {
 			ComponentIdUnique: { a: 'componentidunique', r: true },
 			ComponentState: { a: 'componentstate', r: true },
 			CreatedBy: { b: 'createdby', a: '_createdby_value', c: 'systemusers', d: 'systemuser', r: true },
@@ -103,20 +100,23 @@ var DevKit;
 		};
 		if (e === undefined) e = {};
 		var u = {};
-		for (var field in settingdefinition) {
-			var a = settingdefinition[field].a;
-			var b = settingdefinition[field].b;
-			var c = settingdefinition[field].c;
-			var d = settingdefinition[field].d;
-			var g = settingdefinition[field].g;
-			var r = settingdefinition[field].r;
-			settingdefinition[field] = webApiField(e, a, b, c, d, r, u, g);
+		var settingdefinition = {};
+		settingdefinition.ODataEntity = e;
+		settingdefinition.FormattedValue = {};
+		for (var field in _settingdefinition) {
+			var a = _settingdefinition[field].a;
+			var b = _settingdefinition[field].b;
+			var c = _settingdefinition[field].c;
+			var d = _settingdefinition[field].d;
+			var g = _settingdefinition[field].g;
+			var r = _settingdefinition[field].r;
+			webApiField(settingdefinition, field, e, a, b, c, d, r, u, g);
 		}
 		settingdefinition.Entity = u;
 		settingdefinition.EntityName = 'settingdefinition';
 		settingdefinition.EntityCollectionName = 'settingdefinitions';
 		settingdefinition['@odata.etag'] = e['@odata.etag'];
-		settingdefinition.getAliasedValue = function (alias, isMultiOptionSet) {
+		settingdefinition.getAliasedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias] === undefined || e[alias] === null) {
 				return null;
 			}
@@ -125,7 +125,7 @@ var DevKit;
 			}
 			return e[alias];
 		}
-		settingdefinition.getAliasedFormattedValue = function (alias, isMultiOptionSet) {
+		settingdefinition.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
 				return EMPTY_STRING;
 			}

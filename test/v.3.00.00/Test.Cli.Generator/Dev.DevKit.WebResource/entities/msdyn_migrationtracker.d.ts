@@ -79,8 +79,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -88,79 +90,79 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier to distinguish each batch of migration(Deprecated) */
-		CorrelationId: DevKit.WebApi.StringValue;
+		CorrelationId: string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Unique identifier to distinguish each batch of migration */
-		msdyn_CorrelationId: DevKit.WebApi.StringValue;
+		msdyn_CorrelationId: string;
 		/** Indicates if the migration was successfully completed or not */
-		msdyn_IsMigrationComplete: DevKit.WebApi.BooleanValue;
+		msdyn_IsMigrationComplete: boolean;
 		/** Id of the legacy ARC rule to be migrated */
-		msdyn_LegacyConvertRuleId: DevKit.WebApi.LookupValue;
+		msdyn_LegacyConvertRuleId: string;
 		/** Id of the legacy ARC item to be migrated */
-		msdyn_LegacyConvertRuleItemId: DevKit.WebApi.LookupValue;
-		msdyn_LegacyRuleIdName: DevKit.WebApi.StringValueReadonly;
-		msdyn_LegacyRuleItemIdName: DevKit.WebApi.StringValueReadonly;
+		msdyn_LegacyConvertRuleItemId: string;
+		readonly msdyn_LegacyRuleIdName: string;
+		readonly msdyn_LegacyRuleItemIdName: string;
 		/** Id of the legacy SLA to be migrated */
-		msdyn_LegacySLAId: DevKit.WebApi.LookupValue;
+		msdyn_LegacySLAId: string;
 		/** Id of the legacy SLA item to be migrated */
-		msdyn_LegacySLAItemId: DevKit.WebApi.LookupValue;
+		msdyn_LegacySLAItemId: string;
 		/** The overall status of a migration process */
-		msdyn_MigrationStatus: DevKit.WebApi.OptionSetValue;
+		msdyn_MigrationStatus: OptionSet.msdyn_migrationtracker.msdyn_MigrationStatus;
 		/** The exception of a certain status */
-		msdyn_MigrationStatusException: DevKit.WebApi.StringValue;
+		msdyn_MigrationStatusException: string;
 		/** The reason of a certain status */
-		msdyn_MigrationStatusReason: DevKit.WebApi.StringValue;
+		msdyn_MigrationStatusReason: string;
 		/** Unique identifier for entity instances */
-		msdyn_migrationtrackerId: DevKit.WebApi.GuidValue;
+		msdyn_migrationtrackerId: string;
 		/** Indicates whether the request is a pre-validation check or an actual migration run */
-		msdyn_MigrationType: DevKit.WebApi.OptionSetValue;
+		msdyn_MigrationType: OptionSet.msdyn_migrationtracker.msdyn_MigrationType;
 		/** Id of the Uci ARC rule created post migration */
-		msdyn_ModernConvertRuleId: DevKit.WebApi.LookupValue;
+		msdyn_ModernConvertRuleId: string;
 		/** Id of the Uci ARC item created post migration */
-		msdyn_ModernConvertRuleItemId: DevKit.WebApi.LookupValue;
-		msdyn_ModernRuleIdName: DevKit.WebApi.StringValueReadonly;
-		msdyn_ModernRuleItemIdName: DevKit.WebApi.StringValueReadonly;
+		msdyn_ModernConvertRuleItemId: string;
+		readonly msdyn_ModernRuleIdName: string;
+		readonly msdyn_ModernRuleItemIdName: string;
 		/** Id of the Uci SLA created post migration */
-		msdyn_ModernSLAId: DevKit.WebApi.LookupValue;
+		msdyn_ModernSLAId: string;
 		/** Id of the Uci SLA item created post migration */
-		msdyn_ModernSLAItemId: DevKit.WebApi.LookupValue;
+		msdyn_ModernSLAItemId: string;
 		/** The name of the custom entity. */
-		msdyn_Name: DevKit.WebApi.StringValue;
+		msdyn_Name: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Status of the Migration tracker */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.msdyn_migrationtracker.statecode;
 		/** Reason for the status of the Migration tracker */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.msdyn_migrationtracker.statuscode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -209,4 +211,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

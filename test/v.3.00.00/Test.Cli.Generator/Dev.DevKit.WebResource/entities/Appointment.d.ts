@@ -15,6 +15,7 @@ declare namespace DevKit {
 			attachments: DevKit.Controls.Section;
 			general_information: DevKit.Controls.Section;
 			scheduling_information: DevKit.Controls.Section;
+			tab_2_section_2: DevKit.Controls.Section;
 		}
 		interface tab_tab_call_summary_Sections {
 			tab_ci_section_call_summary: DevKit.Controls.Section;
@@ -42,11 +43,11 @@ declare namespace DevKit {
 			Description: DevKit.Controls.String;
 			/** Select whether the appointment is an all-day event to make sure that the required resources are scheduled for the full day. */
 			IsAllDayEvent: DevKit.Controls.Boolean;
+			isonlinemeeting: DevKit.Controls.ActionCards;
 			/** Type the location where the appointment will take place, such as a conference room or customer office. */
 			Location: DevKit.Controls.String;
-			msdyn_ci_call_summary_control_field: DevKit.Controls.Integer;
-			msdyn_ci_url: DevKit.Controls.String;
 			notescontrol: DevKit.Controls.Note;
+			onlinemeetingjoinurl: DevKit.Controls.ActionCards;
 			/** Enter the account, contact, lead, user, or other equipment resources that are not needed at the appointment, but can optionally attend. */
 			OptionalAttendees: DevKit.Controls.Lookup;
 			/** Unique identifier of the object with which the appointment is associated. */
@@ -61,6 +62,8 @@ declare namespace DevKit {
 			ScheduledStart: DevKit.Controls.DateTime;
 			/** Type a short description about the objective or primary topic of the appointment. */
 			Subject: DevKit.Controls.String;
+			/** Type a short description about the objective or primary topic of the appointment. */
+			Subject1: DevKit.Controls.String;
 		}
 		interface Process extends DevKit.Controls.IProcess {
 		}
@@ -117,8 +120,10 @@ declare namespace DevKit {
 			Description: DevKit.Controls.String;
 			/** Select whether the appointment is an all-day event to make sure that the required resources are scheduled for the full day. */
 			IsAllDayEvent: DevKit.Controls.Boolean;
+			isonlinemeeting: DevKit.Controls.ELSE3???;//isonlinemeeting - 291D7ACA-6D5E-4D80-BD4C-A54CED7FF3AB -- FOR DEBUG 
 			/** Type the location where the appointment will take place, such as a conference room or customer office. */
 			Location: DevKit.Controls.String;
+			onlinemeetingjoinurl: DevKit.Controls.ELSE3???;//onlinemeetingjoinurl - 50DFB838-28B7-4052-A1DB-4EE7718C0D50 -- FOR DEBUG 
 			/** Enter the account, contact, lead, user, or other equipment resources that are not needed at the appointment, but can optionally attend. */
 			OptionalAttendees: DevKit.Controls.Lookup;
 			/** Unique identifier of the object with which the appointment is associated. */
@@ -188,8 +193,10 @@ declare namespace DevKit {
 			Description: DevKit.Controls.String;
 			/** Select whether the appointment is an all-day event to make sure that the required resources are scheduled for the full day. */
 			IsAllDayEvent: DevKit.Controls.Boolean;
+			isonlinemeeting: DevKit.Controls.ActionCards;
 			/** Type the location where the appointment will take place, such as a conference room or customer office. */
 			Location: DevKit.Controls.String;
+			onlinemeetingjoinurl: DevKit.Controls.ActionCards;
 			/** Enter the account, contact, lead, user, or other equipment resources that are not needed at the appointment, but can optionally attend. */
 			OptionalAttendees: DevKit.Controls.Lookup;
 			/** Unique identifier of the object with which the appointment is associated. */
@@ -251,6 +258,7 @@ declare namespace DevKit {
 			Description: DevKit.Controls.String;
 			/** Select whether the appointment is an all-day event to make sure that the required resources are scheduled for the full day. */
 			IsAllDayEvent: DevKit.Controls.Boolean;
+			isonlinemeeting: DevKit.Controls.ELSE3???;//isonlinemeeting - 291D7ACA-6D5E-4D80-BD4C-A54CED7FF3AB -- FOR DEBUG 
 			/** Type the location where the appointment will take place, such as a conference room or customer office. */
 			Location: DevKit.Controls.String;
 			/** Enter the account, contact, lead, user, or other equipment resources that are not needed at the appointment, but can optionally attend. */
@@ -303,8 +311,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -312,335 +322,329 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** For internal use only. */
-		ActivityAdditionalParams: DevKit.WebApi.StringValue;
+		ActivityAdditionalParams: string;
 		/** Unique identifier of the appointment. */
-		ActivityId: DevKit.WebApi.GuidValue;
+		ActivityId: string;
 		/** Shows the value selected in the Duration field on the appointment at the time that the appointment is closed as completed. The duration is used to report the time spent on the activity. */
-		ActualDurationMinutes: DevKit.WebApi.IntegerValue;
+		ActualDurationMinutes: number;
 		/** Enter the actual end date and time of the appointment. By default, it displays the date and time when the activity was completed or canceled, but can be edited to capture the actual duration of the appointment. */
-		ActualEnd_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		ActualEnd_UtcDateAndTime: Date;
 		/** Enter the actual start date and time for the appointment. By default, it displays the date and time when the activity was created, but can be edited to capture the actual duration of the appointment. */
-		ActualStart_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		ActualStart_UtcDateAndTime: Date;
 		/** Shows the number of attachments on the appointment. */
-		AttachmentCount: DevKit.WebApi.IntegerValueReadonly;
+		readonly AttachmentCount: number;
 		/** Select the error code to identify issues with the outlook item recipients or attachments, such as blocked attachments. */
-		AttachmentErrors: DevKit.WebApi.OptionSetValue;
+		AttachmentErrors: OptionSet.Appointment.AttachmentErrors;
 		/** Type a category to identify the appointment type, such as sales demo, prospect call, or service call, to tie the appointment to a business group or function. */
-		Category: DevKit.WebApi.StringValue;
+		Category: string;
 		/** Shows who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Type additional information to describe the purpose of the appointment. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Shows the ID of the appointment in Microsoft Office Outlook. The ID is used to synchronize the appointment between Microsoft Dynamics 365 and the correct Exchange account. */
-		GlobalObjectId: DevKit.WebApi.StringValue;
+		GlobalObjectId: string;
 		/** Unique identifier of the data import or data migration that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Type of instance of a recurring series. */
-		InstanceTypeCode: DevKit.WebApi.OptionSetValueReadonly;
+		readonly InstanceTypeCode: OptionSet.Appointment.InstanceTypeCode;
 		/** Select whether the appointment is an all-day event to make sure that the required resources are scheduled for the full day. */
-		IsAllDayEvent: DevKit.WebApi.BooleanValue;
+		IsAllDayEvent: boolean;
 		/** Information regarding whether the appointment was billed as part of resolving a case. */
-		IsBilled: DevKit.WebApi.BooleanValue;
+		IsBilled: boolean;
 		/** Information regarding whether the appointment is a draft. */
-		IsDraft: DevKit.WebApi.BooleanValue;
+		IsDraft: boolean;
 		/** For internal use only. */
-		IsMapiPrivate: DevKit.WebApi.BooleanValue;
+		IsMapiPrivate: boolean;
 		/** Displays whether or not this is an online meeting. */
-		IsOnlineMeeting: DevKit.WebApi.BooleanValue;
+		IsOnlineMeeting: boolean;
 		/** Information regarding whether the activity is a regular activity type or event type. */
-		IsRegularActivity: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsRegularActivity: boolean;
 		/** For internal use only. */
-		IsUnsafe: DevKit.WebApi.IntegerValueReadonly;
+		readonly IsUnsafe: number;
 		/** Information regarding whether the appointment was created from a workflow rule. */
-		IsWorkflowCreated: DevKit.WebApi.BooleanValue;
+		IsWorkflowCreated: boolean;
 		/** Contains the date and time stamp of the last on hold time. */
-		LastOnHoldTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		LastOnHoldTime_UtcDateAndTime: Date;
 		/** Type the location where the appointment will take place, such as a conference room or customer office. */
-		Location: DevKit.WebApi.StringValue;
+		Location: string;
 		/** Shows who last updated the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** For internal use only.  */
-		ModifiedFieldsMask: DevKit.WebApi.StringValueReadonly;
+		readonly ModifiedFieldsMask: string;
 		/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
-		msdyn_ci_call_summary_control_field: DevKit.WebApi.IntegerValue;
-		msdyn_ci_id: DevKit.WebApi.StringValue;
-		msdyn_ci_insights_json: DevKit.WebApi.StringValue;
-		msdyn_ci_keywords: DevKit.WebApi.StringValue;
-		msdyn_ci_media_reference_id: DevKit.WebApi.StringValue;
-		msdyn_ci_transcript: DevKit.WebApi.StringValue;
-		msdyn_ci_transcript_json: DevKit.WebApi.StringValue;
-		msdyn_ci_translated_transcript: DevKit.WebApi.StringValue;
-		msdyn_ci_translated_transcript_json: DevKit.WebApi.StringValue;
-		msdyn_ci_url: DevKit.WebApi.StringValue;
+		readonly ModifiedOnBehalfBy: string;
 		/** Shows how long, in minutes, that the record was on hold. */
-		OnHoldTime: DevKit.WebApi.IntegerValueReadonly;
+		readonly OnHoldTime: number;
 		/** Shows the online meeting chat id. */
-		OnlineMeetingChatId: DevKit.WebApi.StringValue;
+		OnlineMeetingChatId: string;
 		/** Shows the online meeting id. */
-		OnlineMeetingId: DevKit.WebApi.StringValue;
+		OnlineMeetingId: string;
 		/** Shows the online meeting join url. */
-		OnlineMeetingJoinUrl: DevKit.WebApi.StringValue;
+		OnlineMeetingJoinUrl: string;
 		/** Displays the online meeting type. */
-		OnlineMeetingType: DevKit.WebApi.OptionSetValue;
+		OnlineMeetingType: OptionSet.Appointment.OnlineMeetingType;
 		/** The original start date of the appointment. */
-		OriginalStartDate_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly OriginalStartDate_UtcDateAndTime: Date;
 		/** Unique identifier of the Microsoft Office Outlook appointment owner that correlates to the PR_OWNER_APPT_ID MAPI property. */
-		OutlookOwnerApptId: DevKit.WebApi.IntegerValue;
+		OutlookOwnerApptId: number;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Shows the business unit that the record owner belongs to. */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier of the team that owns the appointment. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier of the user that owns the appointment. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Select the priority so that preferred customers or critical issues are handled quickly. */
-		PriorityCode: DevKit.WebApi.OptionSetValue;
+		PriorityCode: OptionSet.Appointment.PriorityCode;
 		/** Shows the ID of the process. */
-		ProcessId: DevKit.WebApi.GuidValue;
+		ProcessId: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_account_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_account_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_bookableresourcebooking_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_bookableresourcebooking_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_bookableresourcebookingheader_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_bookableresourcebookingheader_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_bulkoperation_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_bulkoperation_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_campaign_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_campaign_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_campaignactivity_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_campaignactivity_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_contact_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_contact_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_contract_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_contract_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_entitlement_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_entitlement_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_entitlementtemplate_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_entitlementtemplate_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_incident_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_incident_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_invoice_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_invoice_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_knowledgearticle_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_knowledgearticle_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_knowledgebaserecord_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_knowledgebaserecord_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_lead_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_lead_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_agreement_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreement_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_agreementbookingdate_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingdate_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_agreementbookingincident_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingincident_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_agreementbookingproduct_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingproduct_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_agreementbookingservice_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingservice_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_agreementbookingservicetask_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingservicetask_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_agreementbookingsetup_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingsetup_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_agreementinvoicedate_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementinvoicedate_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_agreementinvoiceproduct_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementinvoiceproduct_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_agreementinvoicesetup_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementinvoicesetup_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_bookingalertstatus_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bookingalertstatus_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_bookingrule_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bookingrule_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_bookingtimestamp_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bookingtimestamp_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_customerasset_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_customerasset_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_fieldservicesetting_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_fieldservicesetting_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_incidenttypecharacteristic_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_incidenttypecharacteristic_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_incidenttypeproduct_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_incidenttypeproduct_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_incidenttypeservice_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_incidenttypeservice_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_inventoryadjustment_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_inventoryadjustment_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_inventoryadjustmentproduct_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_inventoryadjustmentproduct_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_inventoryjournal_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_inventoryjournal_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_inventorytransfer_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_inventorytransfer_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_payment_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_payment_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_paymentdetail_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_paymentdetail_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_paymentmethod_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_paymentmethod_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_paymentterm_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_paymentterm_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_playbookinstance_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_playbookinstance_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_postalbum_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_postalbum_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_postalcode_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_postalcode_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_processnotes_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_processnotes_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_productinventory_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_productinventory_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_projectteam_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_projectteam_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_purchaseorder_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseorder_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_purchaseorderbill_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseorderbill_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_purchaseorderproduct_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseorderproduct_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_purchaseorderreceipt_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseorderreceipt_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_purchaseorderreceiptproduct_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseorderreceiptproduct_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_purchaseordersubstatus_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseordersubstatus_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_quotebookingincident_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotebookingincident_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_quotebookingproduct_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotebookingproduct_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_quotebookingservice_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotebookingservice_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_quotebookingservicetask_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotebookingservicetask_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_resourceterritory_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_resourceterritory_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_rma_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rma_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_rmaproduct_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rmaproduct_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_rmareceipt_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rmareceipt_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_rmareceiptproduct_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rmareceiptproduct_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_rmasubstatus_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rmasubstatus_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_rtv_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rtv_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_rtvproduct_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rtvproduct_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_rtvsubstatus_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rtvsubstatus_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_shipvia_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_salessuggestion_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_systemuserschedulersetting_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_shipvia_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_timegroup_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_systemuserschedulersetting_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_timegroupdetail_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_timegroup_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_timeoffrequest_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_timegroupdetail_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_warehouse_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_timeoffrequest_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_workorder_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_warehouse_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_workordercharacteristic_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorder_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_workorderincident_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workordercharacteristic_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_workorderproduct_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderincident_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_workorderresourcerestriction_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderproduct_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_workorderservice_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderresourcerestriction_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_msdyn_workorderservicetask_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderservice_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_opportunity_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderservicetask_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_quote_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_opportunity_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_salesorder_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_quote_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_site_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_salesorder_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_uii_action_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_site_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_uii_hostedapplication_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_uii_action_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_uii_nonhostedapplication_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_uii_hostedapplication_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_uii_option_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_uii_nonhostedapplication_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_uii_savedsession_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_uii_option_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_uii_workflow_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_uii_savedsession_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_uii_workflowstep_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_uii_workflow_appointment: string;
 		/** Unique identifier of the object with which the appointment is associated. */
-		regardingobjectid_uii_workflow_workflowstep_mapping_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_uii_workflowstep_appointment: string;
+		/** Unique identifier of the object with which the appointment is associated. */
+		regardingobjectid_uii_workflow_workflowstep_mapping_appointment: string;
 		/** Shows the expected duration of the appointment, in minutes. */
-		ScheduledDurationMinutes: DevKit.WebApi.IntegerValue;
+		ScheduledDurationMinutes: number;
 		/** Enter the expected due date and time for the activity to be completed to provide details about the timing of the appointment. */
-		ScheduledEnd_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		ScheduledEnd_UtcDateAndTime: Date;
 		/** Enter the expected start date and time for the activity to provide details about the timing of the appointment. */
-		ScheduledStart_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		ScheduledStart_UtcDateAndTime: Date;
 		/** Shows the ID of the recurring series of an instance. */
-		SeriesId: DevKit.WebApi.GuidValueReadonly;
+		readonly SeriesId: string;
 		/** Unique identifier for an associated service. */
-		ServiceId: DevKit.WebApi.LookupValue;
+		ServiceId: string;
 		/** Choose the service level agreement (SLA) that you want to apply to the appointment record. */
-		SLAId: DevKit.WebApi.LookupValue;
+		SLAId: string;
 		/** Last SLA that was applied to this appointment. This field is for internal use only. */
-		SLAInvokedId: DevKit.WebApi.LookupValueReadonly;
+		readonly SLAInvokedId: string;
 		/** Shows the date and time by which the activities are sorted. */
-		SortDate_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		SortDate_UtcDateAndTime: Date;
 		/** Shows the ID of the stage. */
-		StageId: DevKit.WebApi.GuidValue;
+		StageId: string;
 		/** Shows whether the appointment is open, completed, or canceled. Completed and canceled appointments are read-only and can't be edited. */
-		StateCode: DevKit.WebApi.OptionSetValue;
+		StateCode: OptionSet.Appointment.StateCode;
 		/** Select the appointment's status. */
-		StatusCode: DevKit.WebApi.OptionSetValue;
+		StatusCode: OptionSet.Appointment.StatusCode;
 		/** Type a subcategory to identify the appointment type and relate the activity to a specific product, sales region, business group, or other function. */
-		Subcategory: DevKit.WebApi.StringValue;
+		Subcategory: string;
 		/** Type a short description about the objective or primary topic of the appointment. */
-		Subject: DevKit.WebApi.StringValue;
+		Subject: string;
 		/** For internal use only. */
-		SubscriptionId: DevKit.WebApi.GuidValue;
+		SubscriptionId: string;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** For internal use only. */
-		TraversedPath: DevKit.WebApi.StringValue;
+		TraversedPath: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version number of the appointment. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 		/** The array of object that can cast object to ActivityPartyApi class */
-		ActivityParties: Array<any>;
+		ActivityParties: Array<unknown>;
 	}
 }
 declare namespace OptionSet {
 	namespace Appointment {
 		enum ActivityTypeCode {
+			/** 10086 */
+			Activity_record_for_the_Teams_chat,
 			/** 4201 */
 			Appointment,
-			/** 10400 */
+			/** 10404 */
 			Booking_Alert,
 			/** 4402 */
 			Campaign_Activity,
@@ -648,13 +652,13 @@ declare namespace OptionSet {
 			Campaign_Response,
 			/** 4206 */
 			Case_Resolution,
-			/** 10702 */
+			/** 10707 */
 			Conversation,
-			/** 10294 */
+			/** 10313 */
 			Customer_Voice_alert,
-			/** 10304 */
+			/** 10323 */
 			Customer_Voice_survey_invite,
-			/** 10306 */
+			/** 10325 */
 			Customer_Voice_survey_response,
 			/** 4202 */
 			Email,
@@ -666,11 +670,11 @@ declare namespace OptionSet {
 			Opportunity_Close,
 			/** 4209 */
 			Order_Close,
-			/** 10813 */
+			/** 10817 */
 			Outbound_message,
 			/** 4210 */
 			Phone_Call,
-			/** 10430 */
+			/** 10434 */
 			Project_Service_Approval,
 			/** 4406 */
 			Quick_Campaign,
@@ -680,7 +684,7 @@ declare namespace OptionSet {
 			Recurring_Appointment,
 			/** 4214 */
 			Service_Activity,
-			/** 10717 */
+			/** 10721 */
 			Session,
 			/** 4212 */
 			Task
@@ -757,4 +761,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

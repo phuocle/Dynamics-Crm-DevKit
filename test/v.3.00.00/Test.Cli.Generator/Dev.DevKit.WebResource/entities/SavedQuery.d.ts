@@ -71,8 +71,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -80,81 +82,81 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Type the column name that will be used to group the results from the data collected across multiple records from a system view. */
-		AdvancedGroupBy: DevKit.WebApi.StringValue;
+		AdvancedGroupBy: string;
 		/** Tells whether the view can be deleted. */
-		CanBeDeleted: DevKit.WebApi.ManagedPropertyValue;
+		CanBeDeleted: string;
 		/** Contains the columns and sorting criteria for the view, stored in XML format. */
-		ColumnSetXml: DevKit.WebApi.StringValue;
+		ColumnSetXml: string;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.SavedQuery.ComponentState;
 		/** Type information about how the items in the system view are formatted. */
-		ConditionalFormatting: DevKit.WebApi.StringValue;
+		ConditionalFormatting: string;
 		/** Shows who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Type additional information to describe the view, such as the filter criteria or intended results set. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** String specifying the query in Fetch XML language. */
-		FetchXml: DevKit.WebApi.StringValue;
+		FetchXml: string;
 		/** Version in which the form is introduced. */
-		IntroducedVersion: DevKit.WebApi.StringValue;
+		IntroducedVersion: string;
 		/** Tells whether a user created the view. */
-		IsCustom: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsCustom: boolean;
 		/** Tells whether the component can be customized. */
-		IsCustomizable: DevKit.WebApi.ManagedPropertyValue;
+		IsCustomizable: string;
 		/** Tells whether the view is the default view for the specified record type (entity). */
-		IsDefault: DevKit.WebApi.BooleanValue;
+		IsDefault: boolean;
 		/** Tells whether the record is part of a managed solution. */
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsManaged: boolean;
 		/** Indicates whether or not this is viewable by the entire organization. */
-		IsPrivate: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsPrivate: boolean;
 		/** Choose whether the view is compatible with Quick Find. When users search for specific items, you define the fields that are searched in. */
-		IsQuickFindQuery: DevKit.WebApi.BooleanValue;
+		IsQuickFindQuery: boolean;
 		/** Tells whether the view was created by a user. */
-		IsUserDefined: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsUserDefined: boolean;
 		/** Layout data in JSON format. */
-		LayoutJson: DevKit.WebApi.StringValue;
+		LayoutJson: string;
 		/** For internal use only. */
-		LayoutXml: DevKit.WebApi.StringValue;
+		LayoutXml: string;
 		/** Shows who last updated the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Shows who last updated the record on behalf of another user. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Type a name for the view to describe what results the view will contain. This name is visible to users in the View list. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** String specifying the corresponding sql query for the fetch xml specified for offline use. */
-		OfflineSqlQuery: DevKit.WebApi.StringValue;
+		OfflineSqlQuery: string;
 		/** Choose the ID of the organization that the record is associated with. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** For the organization, type the tab order to determine how users navigate through the screen using only the Tab key. */
-		OrganizationTabOrder: DevKit.WebApi.IntegerValueReadonly;
+		readonly OrganizationTabOrder: number;
 		/** For internal use only. */
-		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly OverwriteTime_UtcDateOnly: Date;
 		/** For internal use only. */
-		QueryAPI: DevKit.WebApi.StringValueReadonly;
+		readonly QueryAPI: string;
 		/** For internal use only. */
-		QueryAppUsage: DevKit.WebApi.IntegerValue;
+		QueryAppUsage: number;
 		/** Shows the type of the query. */
-		QueryType: DevKit.WebApi.IntegerValue;
+		QueryType: number;
 		/** Unique identifier of the view. */
-		SavedQueryId: DevKit.WebApi.GuidValue;
+		SavedQueryId: string;
 		/** For internal use only. */
-		SavedQueryIdUnique: DevKit.WebApi.GuidValueReadonly;
+		readonly SavedQueryIdUnique: string;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** Shows the status of the view. */
-		StateCode: DevKit.WebApi.OptionSetValue;
+		StateCode: OptionSet.SavedQuery.StateCode;
 		/** Shows the reason code that explains the status of the record. */
-		StatusCode: DevKit.WebApi.OptionSetValue;
+		StatusCode: OptionSet.SavedQuery.StatusCode;
 		/** For internal use only. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SupportingSolutionId: string;
 		/** Version number of the view. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -199,4 +201,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

@@ -4,20 +4,18 @@ var DevKit;
 (function (DevKit) {
 	'use strict';
 	DevKit.EntitlementApi = function (e) {
-		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
 			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-			var property = {};
 			var getFormattedValue = function () {
 				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-					return EMPTY_STRING;
+					return '';
 				}
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
 					if (entity[logicalName + l] === entityLogicalName) {
 						return entity[logicalName + f];
 					}
-					return EMPTY_STRING;
+					return '';
 				}
 				if (isMultiOptionSet) {
 					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -42,30 +40,29 @@ var DevKit;
 			var setValue = function (value) {
 				if (isMultiOptionSet) value = value.join(',');
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+					value = value.replace('{', '').replace('}', '');
 					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
 				} else {
 					upsertEntity[logicalName] = value;
 				}
 				entity[logicalName] = value;
 			};
-			Object.defineProperty(property, 'FormattedValue', {
+			Object.defineProperty(obj.FormattedValue, field, {
 				get: getFormattedValue
 			});
 			if (readOnly) {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue
 				});
 			}
 			else {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue,
 					set: setValue
 				});
 			}
-			return property;
 		}
-		var entitlement = {
+		var _entitlement = {
 			AccountId: { b: 'accountid', a: '_accountid_value', c: 'accounts', d: 'account', r: true },
 			AllocationTypeCode: { a: 'allocationtypecode' },
 			ContactId: { b: 'contactid', a: '_contactid_value', c: 'contacts', d: 'contact', r: true },
@@ -116,20 +113,23 @@ var DevKit;
 		};
 		if (e === undefined) e = {};
 		var u = {};
-		for (var field in entitlement) {
-			var a = entitlement[field].a;
-			var b = entitlement[field].b;
-			var c = entitlement[field].c;
-			var d = entitlement[field].d;
-			var g = entitlement[field].g;
-			var r = entitlement[field].r;
-			entitlement[field] = webApiField(e, a, b, c, d, r, u, g);
+		var entitlement = {};
+		entitlement.ODataEntity = e;
+		entitlement.FormattedValue = {};
+		for (var field in _entitlement) {
+			var a = _entitlement[field].a;
+			var b = _entitlement[field].b;
+			var c = _entitlement[field].c;
+			var d = _entitlement[field].d;
+			var g = _entitlement[field].g;
+			var r = _entitlement[field].r;
+			webApiField(entitlement, field, e, a, b, c, d, r, u, g);
 		}
 		entitlement.Entity = u;
 		entitlement.EntityName = 'entitlement';
 		entitlement.EntityCollectionName = 'entitlements';
 		entitlement['@odata.etag'] = e['@odata.etag'];
-		entitlement.getAliasedValue = function (alias, isMultiOptionSet) {
+		entitlement.getAliasedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias] === undefined || e[alias] === null) {
 				return null;
 			}
@@ -138,7 +138,7 @@ var DevKit;
 			}
 			return e[alias];
 		}
-		entitlement.getAliasedFormattedValue = function (alias, isMultiOptionSet) {
+		entitlement.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
 				return EMPTY_STRING;
 			}

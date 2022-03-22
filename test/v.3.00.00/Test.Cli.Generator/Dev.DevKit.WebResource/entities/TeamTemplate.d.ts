@@ -61,8 +61,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -70,31 +72,31 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the team template. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the team template was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the team template. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Default access rights mask for the access teams associated with entity instances. */
-		DefaultAccessRightsMask: DevKit.WebApi.IntegerValue;
+		DefaultAccessRightsMask: number;
 		/** Type additional information that describes the team. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Information about whether this team template is user-defined or system-defined. */
-		IsSystem: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsSystem: boolean;
 		/** Unique identifier of the user who last modified the team template. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the team template was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the team template. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Object type code of entity which is enabled for access teams */
-		ObjectTypeCode: DevKit.WebApi.IntegerValue;
+		ObjectTypeCode: number;
 		/** Unique identifier of the team template. */
-		TeamTemplateId: DevKit.WebApi.GuidValue;
+		TeamTemplateId: string;
 		/** Type the name of the team template. */
-		TeamTemplateName: DevKit.WebApi.StringValue;
+		TeamTemplateName: string;
 		/** Version number for team template. */
-		versionnumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly versionnumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -117,4 +119,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

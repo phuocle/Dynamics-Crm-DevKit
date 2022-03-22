@@ -4,20 +4,18 @@ var DevKit;
 (function (DevKit) {
 	'use strict';
 	DevKit.AnnotationApi = function (e) {
-		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
 			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-			var property = {};
 			var getFormattedValue = function () {
 				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-					return EMPTY_STRING;
+					return '';
 				}
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
 					if (entity[logicalName + l] === entityLogicalName) {
 						return entity[logicalName + f];
 					}
-					return EMPTY_STRING;
+					return '';
 				}
 				if (isMultiOptionSet) {
 					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -42,30 +40,29 @@ var DevKit;
 			var setValue = function (value) {
 				if (isMultiOptionSet) value = value.join(',');
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+					value = value.replace('{', '').replace('}', '');
 					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
 				} else {
 					upsertEntity[logicalName] = value;
 				}
 				entity[logicalName] = value;
 			};
-			Object.defineProperty(property, 'FormattedValue', {
+			Object.defineProperty(obj.FormattedValue, field, {
 				get: getFormattedValue
 			});
 			if (readOnly) {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue
 				});
 			}
 			else {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue,
 					set: setValue
 				});
 			}
-			return property;
 		}
-		var annotation = {
+		var _annotation = {
 			AnnotationId: { a: 'annotationid' },
 			CreatedBy: { b: 'createdby', a: '_createdby_value', c: 'systemusers', d: 'systemuser', r: true },
 			CreatedOn_UtcDateAndTime: { a: 'createdon', r: true },
@@ -101,6 +98,7 @@ var DevKit;
 			channelaccessprofile_annotations: { b: 'channelaccessprofile_annotations', a: '_objectid_value', c: 'channelaccessprofiles', d: 'channelaccessprofile' },
 			channelaccessprofileruleid: { b: 'channelaccessprofileruleid', a: '_objectid_value', c: 'channelaccessprofilerules', d: 'channelaccessprofilerule' },
 			objectid_profileruleitem: { b: 'objectid_profileruleitem', a: '_objectid_value', c: 'channelaccessprofileruleitems', d: 'channelaccessprofileruleitem' },
+			objectid_chat: { b: 'objectid_chat', a: '_objectid_value', c: 'chats', d: 'chat' },
 			objectid_commitment: { b: 'objectid_commitment', a: '_objectid_value', c: 'commitments', d: 'commitment' },
 			objectid_competitor: { b: 'objectid_competitor', a: '_objectid_value', c: 'competitors', d: 'competitor' },
 			objectid_contact: { b: 'objectid_contact', a: '_objectid_value', c: 'contacts', d: 'contact' },
@@ -255,6 +253,7 @@ var DevKit;
 			objectid_msdyn_rtv: { b: 'objectid_msdyn_rtv', a: '_objectid_value', c: 'msdyn_rtvs', d: 'msdyn_rtv' },
 			objectid_msdyn_rtvproduct: { b: 'objectid_msdyn_rtvproduct', a: '_objectid_value', c: 'msdyn_rtvproducts', d: 'msdyn_rtvproduct' },
 			objectid_msdyn_rtvsubstatus: { b: 'objectid_msdyn_rtvsubstatus', a: '_objectid_value', c: 'msdyn_rtvsubstatuses', d: 'msdyn_rtvsubstatus' },
+			objectid_msdyn_salessuggestion: { b: 'objectid_msdyn_salessuggestion', a: '_objectid_value', c: 'msdyn_salessuggestions', d: 'msdyn_salessuggestion' },
 			objectid_msdyn_servicetasktype: { b: 'objectid_msdyn_servicetasktype', a: '_objectid_value', c: 'msdyn_servicetasktypes', d: 'msdyn_servicetasktype' },
 			objectid_msdyn_shipvia: { b: 'objectid_msdyn_shipvia', a: '_objectid_value', c: 'msdyn_shipvias', d: 'msdyn_shipvia' },
 			objectid_msdyn_soundfile: { b: 'objectid_msdyn_soundfile', a: '_objectid_value', c: 'msdyn_soundfiles', d: 'msdyn_soundfile' },
@@ -346,20 +345,23 @@ var DevKit;
 		};
 		if (e === undefined) e = {};
 		var u = {};
-		for (var field in annotation) {
-			var a = annotation[field].a;
-			var b = annotation[field].b;
-			var c = annotation[field].c;
-			var d = annotation[field].d;
-			var g = annotation[field].g;
-			var r = annotation[field].r;
-			annotation[field] = webApiField(e, a, b, c, d, r, u, g);
+		var annotation = {};
+		annotation.ODataEntity = e;
+		annotation.FormattedValue = {};
+		for (var field in _annotation) {
+			var a = _annotation[field].a;
+			var b = _annotation[field].b;
+			var c = _annotation[field].c;
+			var d = _annotation[field].d;
+			var g = _annotation[field].g;
+			var r = _annotation[field].r;
+			webApiField(annotation, field, e, a, b, c, d, r, u, g);
 		}
 		annotation.Entity = u;
 		annotation.EntityName = 'annotation';
 		annotation.EntityCollectionName = 'annotations';
 		annotation['@odata.etag'] = e['@odata.etag'];
-		annotation.getAliasedValue = function (alias, isMultiOptionSet) {
+		annotation.getAliasedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias] === undefined || e[alias] === null) {
 				return null;
 			}
@@ -368,7 +370,7 @@ var DevKit;
 			}
 			return e[alias];
 		}
-		annotation.getAliasedFormattedValue = function (alias, isMultiOptionSet) {
+		annotation.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
 				return EMPTY_STRING;
 			}

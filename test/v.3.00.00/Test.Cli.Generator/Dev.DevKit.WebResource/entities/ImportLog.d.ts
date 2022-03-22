@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,53 +30,53 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Additional information related to the error. */
-		AdditionalInfo: DevKit.WebApi.StringValue;
+		AdditionalInfo: string;
 		/** Value in the column. */
-		ColumnValue: DevKit.WebApi.StringValue;
+		ColumnValue: string;
 		/** Unique identifier of the user who created the import log. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the import log was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the importlog. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Description of an error. */
-		ErrorDescription: DevKit.WebApi.StringValue;
+		ErrorDescription: string;
 		/** Error code of an error. */
-		ErrorNumber: DevKit.WebApi.IntegerValue;
+		ErrorNumber: number;
 		/** Name of the column heading. */
-		HeaderColumn: DevKit.WebApi.StringValue;
+		HeaderColumn: string;
 		/** Unique identifier of the import data for this import log. */
-		ImportDataId: DevKit.WebApi.LookupValue;
+		ImportDataId: string;
 		/** Unique identifier of the import file for this import log. */
-		ImportFileId: DevKit.WebApi.LookupValue;
+		ImportFileId: string;
 		/** Unique identifier of the import log. */
-		ImportLogId: DevKit.WebApi.GuidValue;
+		ImportLogId: string;
 		/** Original line number of the data used in this log. */
-		LineNumber: DevKit.WebApi.IntegerValue;
+		LineNumber: number;
 		/** Phase for which the log is recorded. */
-		LogPhaseCode: DevKit.WebApi.OptionSetValue;
+		LogPhaseCode: OptionSet.ImportLog.LogPhaseCode;
 		/** Unique identifier of the user who last modified the import log. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the import log was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the importlog. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Business unit that owns the import log. */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier of the team who owns the import log. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier of the user who owns the import log. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Sequence number of the error in this log. */
-		SequenceNumber: DevKit.WebApi.IntegerValueReadonly;
+		readonly SequenceNumber: number;
 		/** Status of the import log. */
-		StateCode: DevKit.WebApi.OptionSetValueReadonly;
+		readonly StateCode: OptionSet.ImportLog.StateCode;
 		/** Reason for the status of the import log. */
-		StatusCode: DevKit.WebApi.OptionSetValue;
+		StatusCode: OptionSet.ImportLog.StatusCode;
 	}
 }
 declare namespace OptionSet {
@@ -115,4 +117,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

@@ -51,8 +51,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -60,61 +62,61 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier for Attribute associated with Solution Component Attribute Configuration. */
-		AttributeId: DevKit.WebApi.LookupValue;
+		AttributeId: string;
 		/** For internal use only. */
-		ComponentIdUnique: DevKit.WebApi.GuidValueReadonly;
+		readonly ComponentIdUnique: string;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.solutioncomponentattributeconfiguration.ComponentState;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
-		EncodingFormat: DevKit.WebApi.OptionSetValue;
-		FileExtension: DevKit.WebApi.StringValue;
+		readonly CreatedOnBehalfBy: string;
+		EncodingFormat: OptionSet.solutioncomponentattributeconfiguration.EncodingFormat;
+		FileExtension: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** For internal use only. */
-		IsCustomizable: DevKit.WebApi.ManagedPropertyValue;
-		IsEnabledForDependencyExtraction: DevKit.WebApi.BooleanValue;
-		IsExportDisabled: DevKit.WebApi.BooleanValue;
-		IsExportedAsFile: DevKit.WebApi.BooleanValue;
+		IsCustomizable: string;
+		IsEnabledForDependencyExtraction: boolean;
+		IsExportDisabled: boolean;
+		IsExportedAsFile: boolean;
 		/** Indicates whether the solution component is part of a managed solution. */
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
-		IsPrefixedByTemplate: DevKit.WebApi.BooleanValue;
+		readonly IsManaged: boolean;
+		IsPrefixedByTemplate: boolean;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** The name of the custom entity. */
-		name: DevKit.WebApi.StringValue;
+		name: string;
 		/** Unique identifier for the organization */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** For internal use only. */
-		OverwriteTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly OverwriteTime_UtcDateAndTime: Date;
 		/** Unique identifier for entity instances */
-		solutioncomponentattributeconfigurationId: DevKit.WebApi.GuidValue;
+		solutioncomponentattributeconfigurationId: string;
 		/** Unique identifier for the Solution Component Configuration associated with Solution Component Attribute Configuration. */
-		SolutionComponentConfigurationId: DevKit.WebApi.LookupValue;
+		SolutionComponentConfigurationId: string;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** Status of the Solution Component Attribute Configuration */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.solutioncomponentattributeconfiguration.statecode;
 		/** Reason for the status of the Solution Component Attribute Configuration */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.solutioncomponentattributeconfiguration.statuscode;
 		/** For internal use only. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SupportingSolutionId: string;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -167,4 +169,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

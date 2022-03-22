@@ -127,8 +127,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -136,111 +138,111 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Enter the date when the campaign was closed or completed. */
-		ActualEnd_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		ActualEnd_UtcDateOnly: Date;
 		/** Enter the actual start date and time for the campaign. */
-		ActualStart_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		ActualStart_UtcDateOnly: Date;
 		/** Type the amount budgeted for the campaign to define a limit for how much you can spend. */
-		BudgetedCost: DevKit.WebApi.MoneyValue;
+		BudgetedCost: number;
 		/** Value of the Budget Allocated in base currency. */
-		BudgetedCost_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly BudgetedCost_Base: number;
 		/** Unique identifier of the campaign. */
-		CampaignId: DevKit.WebApi.GuidValue;
+		CampaignId: string;
 		/** Type a number or other tracking code to identify the campaign. If no value is entered, a code will be generated automatically. */
-		CodeName: DevKit.WebApi.StringValue;
+		CodeName: string;
 		/** Shows who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Type additional information to describe the campaign, such as the products or services offered or the targeted audience. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** The primary email address for the entity. */
-		EmailAddress: DevKit.WebApi.StringValue;
+		EmailAddress: string;
 		/** The default image for the entity. */
-		EntityImage: DevKit.WebApi.StringValue;
-		EntityImage_Timestamp: DevKit.WebApi.BigIntValueReadonly;
-		EntityImage_URL: DevKit.WebApi.StringValueReadonly;
-		EntityImageId: DevKit.WebApi.GuidValueReadonly;
+		EntityImage: string;
+		EntityImage_Timestamp: number;
+		EntityImage_URL: string;
+		readonly EntityImageId: string;
 		/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Type the expected response rate for the campaign as a full number between 0 and 100. */
-		ExpectedResponse: DevKit.WebApi.IntegerValue;
+		ExpectedResponse: number;
 		/** Type the expected revenue for the campaign for return on investment projections and post-campaign reporting. */
-		ExpectedRevenue: DevKit.WebApi.MoneyValue;
+		ExpectedRevenue: number;
 		/** Value of the Estimated Revenue in base currency. */
-		ExpectedRevenue_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly ExpectedRevenue_Base: number;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Select whether the campaign is a template that can be copied when you create future campaigns. */
-		IsTemplate: DevKit.WebApi.BooleanValue;
+		IsTemplate: boolean;
 		/** Type the promotional message or marketing copy for the campaign. */
-		Message: DevKit.WebApi.StringValue;
+		Message: string;
 		/** Shows who last updated the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Describes whether campaign is opted out or not */
-		msdyn_gdproptout: DevKit.WebApi.BooleanValue;
+		msdyn_gdproptout: boolean;
 		/** Type a name for the campaign so that it is identified correctly in lists. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Type the objective of the campaign, including products, services, discounts, and pricing. */
-		Objective: DevKit.WebApi.StringValue;
+		Objective: string;
 		/** Type the sum of any miscellaneous campaign costs not included in the campaign activities to make sure the actual cost of the campaign is calculated correctly. */
-		OtherCost: DevKit.WebApi.MoneyValue;
+		OtherCost: number;
 		/** Value of the Miscellaneous Costs in base currency. */
-		OtherCost_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly OtherCost_Base: number;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Choose the price list associated with this item to make sure the products associated with the campaign are offered at the correct prices. */
-		PriceListId: DevKit.WebApi.LookupValue;
+		PriceListId: string;
 		/** Contains the id of the process associated with the entity. */
-		ProcessId: DevKit.WebApi.GuidValue;
+		ProcessId: string;
 		/** Type a promotional code to track sales related to the campaign or allow customers to redeem a discount offer. */
-		PromotionCodeName: DevKit.WebApi.StringValue;
+		PromotionCodeName: string;
 		/** Enter the date when the campaign is scheduled to end. */
-		ProposedEnd_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		ProposedEnd_UtcDateOnly: Date;
 		/** Enter the date when the campaign is scheduled to start. */
-		ProposedStart_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		ProposedStart_UtcDateOnly: Date;
 		/** Contains the id of the stage where the entity is located. */
-		StageId: DevKit.WebApi.GuidValue;
+		StageId: string;
 		/** Shows the status of the campaign. By default, campaigns are active and can't be deactivated. */
-		StateCode: DevKit.WebApi.OptionSetValue;
+		StateCode: OptionSet.Campaign.StateCode;
 		/** Select the campaign's status. */
-		StatusCode: DevKit.WebApi.OptionSetValue;
+		StatusCode: OptionSet.Campaign.StatusCode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
-		TmpRegardingObjectId: DevKit.WebApi.StringValue;
+		TimeZoneRuleVersionNumber: number;
+		TmpRegardingObjectId: string;
 		/** Shows the sum of the amounts entered in the Total Cost of Campaign Activities and Miscellaneous Costs fields. */
-		TotalActualCost: DevKit.WebApi.MoneyValueReadonly;
+		readonly TotalActualCost: number;
 		/** Value of the Total Cost of Campaign in base currency. */
-		TotalActualCost_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly TotalActualCost_Base: number;
 		/** Shows the sum of the values entered in the Actual Cost field on all campaign activities related to the campaign. */
-		TotalCampaignActivityActualCost: DevKit.WebApi.MoneyValueReadonly;
+		readonly TotalCampaignActivityActualCost: number;
 		/** Value of the Total Cost of Campaign Activities in base currency. */
-		TotalCampaignActivityActualCost_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly TotalCampaignActivityActualCost_Base: number;
 		/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** A comma separated list of string values representing the unique identifiers of stages in a Business Process Flow Instance in the order that they occur. */
-		TraversedPath: DevKit.WebApi.StringValue;
+		TraversedPath: string;
 		/** Select the type of the campaign. */
-		TypeCode: DevKit.WebApi.OptionSetValue;
+		TypeCode: OptionSet.Campaign.TypeCode;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -297,4 +299,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

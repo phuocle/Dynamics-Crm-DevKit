@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,43 +30,43 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the record */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Description of the saved organization insights configuration */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Indicates whether this saved organization insights configuration is the default config */
-		IsDefault: DevKit.WebApi.BooleanValue;
+		IsDefault: boolean;
 		/** Indicates whether this configuration indicates a drilldown chart */
-		IsDrilldown: DevKit.WebApi.BooleanValue;
+		IsDrilldown: boolean;
 		/** Metrics Data in Json format for those metrics defined in parameters */
-		JsonData: DevKit.WebApi.StringValueReadonly;
+		readonly JsonData: string;
 		/** End Time */
-		JsonDataEndTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly JsonDataEndTime_UtcDateAndTime: Date;
 		/** Start Time */
-		JsonDataStartTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly JsonDataStartTime_UtcDateAndTime: Date;
 		/** Lookback period */
-		Lookback: DevKit.WebApi.OptionSetValue;
+		Lookback: OptionSet.SavedOrgInsightsConfiguration.Lookback;
 		/** Type of the metric */
-		MetricType: DevKit.WebApi.OptionSetValue;
+		MetricType: OptionSet.SavedOrgInsightsConfiguration.MetricType;
 		/** Unique identifier of the user who modified the record */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Display name */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Unique identifier of the organization associated with the solution */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Parameters needed for data retrieval */
-		Parameters: DevKit.WebApi.StringValue;
+		Parameters: string;
 		/** Plot Option */
-		PlotOption: DevKit.WebApi.OptionSetValue;
+		PlotOption: OptionSet.SavedOrgInsightsConfiguration.PlotOption;
 		/** Shows the ID of the Saved Organization Insights Configuration */
-		SavedOrgInsightsConfigurationId: DevKit.WebApi.GuidValue;
+		SavedOrgInsightsConfigurationId: string;
 	}
 }
 declare namespace OptionSet {
@@ -127,4 +129,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

@@ -34,6 +34,9 @@ declare namespace DevKit {
 			/** Select how soon the success criteria must be met until the SLA item is considered failed and failure actions are initiated. The actual duration is based on the business hours as specified in the associated SLA record. */
 			FailureAfter1: DevKit.Controls.Integer;
 			msdyn_AdvancedPauseConfiguration: DevKit.Controls.Boolean;
+			msdyn_CustomTimeCalculation: DevKit.Controls.Boolean;
+			/** Unique identifier for Custom Time Calculation Workflow associated with SLA Item. */
+			msdyn_CustomTimeCalculationWorkflowId: DevKit.Controls.Lookup;
 			msdyn_pauseconfigurationxml: DevKit.Controls.ActionCards;
 			/** Unique identifier for SLAKPI associated with SLA Item. */
 			msdyn_slakpiid: DevKit.Controls.Lookup;
@@ -89,85 +92,90 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
 		EntityCollectionName: string;
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
-		actionflowuniquename: DevKit.WebApi.StringValue;
+		actionflowuniquename: string;
 		/** Action URL */
-		ActionURL: DevKit.WebApi.StringValue;
+		ActionURL: string;
 		/** Select whether this SLA will allow pausing and resuming during the time calculation. */
-		AllowPauseResume: DevKit.WebApi.BooleanValue;
-		ApplicableEntity: DevKit.WebApi.StringValue;
+		AllowPauseResume: boolean;
+		ApplicableEntity: string;
 		/** Condition for SLA item */
-		ApplicableWhenXml: DevKit.WebApi.StringValue;
+		ApplicableWhenXml: string;
 		/** Choose the business hours for calculating SLA item timelines. */
-		BusinessHoursId: DevKit.WebApi.LookupValue;
-		ChangedAttributeList: DevKit.WebApi.StringValue;
+		BusinessHoursId: string;
+		ChangedAttributeList: string;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.SLAItem.ComponentState;
 		/** Shows who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Type additional information to describe the SLA Item */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Exchange rate between the currency associated with the SLA Item record and the base currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Select how soon the success criteria must be met until the SLA item is considered failed and failure actions are initiated. The actual duration is based on the business hours as specified in the associated SLA record. */
-		FailureAfter: DevKit.WebApi.IntegerValue;
+		FailureAfter: number;
 		/** For internal use only. */
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsManaged: boolean;
 		/** Shows who last updated the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
-		msdyn_AdvancedPauseConfiguration: DevKit.WebApi.BooleanValue;
-		msdyn_PauseConfigurationXml: DevKit.WebApi.StringValue;
+		readonly ModifiedOnBehalfBy: string;
+		msdyn_AdvancedPauseConfiguration: boolean;
+		msdyn_CustomTimeCalculation: boolean;
+		/** Unique identifier for Custom Time Calculation Workflow associated with SLA Item. */
+		msdyn_CustomTimeCalculationWorkflowId: string;
+		msdyn_PauseConfigurationXml: string;
 		/** Unique identifier for SLAKPI associated with SLA Item. */
-		msdyn_slakpiid: DevKit.WebApi.LookupValue;
+		msdyn_slakpiid: string;
 		/** Type a descriptive name of the service level agreement (SLA) item. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** For internal use only. */
-		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly OverwriteTime_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Select the service level agreement (SLA) key performance indicator (KPI) that this SLA Item is created for. */
-		RelatedField: DevKit.WebApi.StringValue;
+		RelatedField: string;
 		/** Select the time zone, or UTC offset, for this address so that other people can reference it when they contact someone at this address. */
-		SequenceNumber: DevKit.WebApi.IntegerValue;
+		SequenceNumber: number;
 		/** Unique identifier for SLA associated with SLA Item. */
-		SLAId: DevKit.WebApi.LookupValue;
+		SLAId: string;
 		/** Unique identifier of the SLA Item. */
-		SLAItemId: DevKit.WebApi.GuidValue;
+		SLAItemId: string;
 		/** For internal use only. */
-		SLAItemIdUnique: DevKit.WebApi.GuidValueReadonly;
+		readonly SLAItemIdUnique: string;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** Condition for SLA item */
-		SuccessConditionsXml: DevKit.WebApi.StringValue;
+		SuccessConditionsXml: string;
 		/** For internal use only. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SupportingSolutionId: string;
 		/** Unique identifier of the currency associated with the SLA Item record. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValueReadonly;
+		readonly TransactionCurrencyId: string;
 		/** Version number of the SLA Item. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 		/** Select how soon the success criteria must be met before warning actions are initiated. The actual duration is based on the business hours as specified in the associated SLA record. */
-		WarnAfter: DevKit.WebApi.IntegerValue;
+		WarnAfter: number;
 		/** Workflow associated with the SLA Item. */
-		WorkflowId: DevKit.WebApi.LookupValue;
+		WorkflowId: string;
 	}
 }
 declare namespace OptionSet {
@@ -200,4 +208,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

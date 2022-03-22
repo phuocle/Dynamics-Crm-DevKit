@@ -97,8 +97,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -106,132 +108,132 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier for address 1. */
-		Address1_AddressId: DevKit.WebApi.GuidValue;
+		Address1_AddressId: string;
 		/** Type of address for address 1, such as billing, shipping, or primary address. */
-		Address1_AddressTypeCode: DevKit.WebApi.OptionSetValue;
+		Address1_AddressTypeCode: OptionSet.Publisher.Address1_AddressTypeCode;
 		/** City name for address 1. */
-		Address1_City: DevKit.WebApi.StringValue;
+		Address1_City: string;
 		/** Country/region name for address 1. */
-		Address1_Country: DevKit.WebApi.StringValue;
+		Address1_Country: string;
 		/** County name for address 1. */
-		Address1_County: DevKit.WebApi.StringValue;
+		Address1_County: string;
 		/** Fax number for address 1. */
-		Address1_Fax: DevKit.WebApi.StringValue;
+		Address1_Fax: string;
 		/** Latitude for address 1. */
-		Address1_Latitude: DevKit.WebApi.DoubleValue;
+		Address1_Latitude: number;
 		/** First line for entering address 1 information. */
-		Address1_Line1: DevKit.WebApi.StringValue;
+		Address1_Line1: string;
 		/** Second line for entering address 1 information. */
-		Address1_Line2: DevKit.WebApi.StringValue;
+		Address1_Line2: string;
 		/** Third line for entering address 1 information. */
-		Address1_Line3: DevKit.WebApi.StringValue;
+		Address1_Line3: string;
 		/** Longitude for address 1. */
-		Address1_Longitude: DevKit.WebApi.DoubleValue;
+		Address1_Longitude: number;
 		/** Name to enter for address 1. */
-		Address1_Name: DevKit.WebApi.StringValue;
+		Address1_Name: string;
 		/** ZIP Code or postal code for address 1. */
-		Address1_PostalCode: DevKit.WebApi.StringValue;
+		Address1_PostalCode: string;
 		/** Post office box number for address 1. */
-		Address1_PostOfficeBox: DevKit.WebApi.StringValue;
+		Address1_PostOfficeBox: string;
 		/** Method of shipment for address 1. */
-		Address1_ShippingMethodCode: DevKit.WebApi.OptionSetValue;
+		Address1_ShippingMethodCode: OptionSet.Publisher.Address1_ShippingMethodCode;
 		/** State or province for address 1. */
-		Address1_StateOrProvince: DevKit.WebApi.StringValue;
+		Address1_StateOrProvince: string;
 		/** First telephone number associated with address 1. */
-		Address1_Telephone1: DevKit.WebApi.StringValue;
+		Address1_Telephone1: string;
 		/** Second telephone number associated with address 1. */
-		Address1_Telephone2: DevKit.WebApi.StringValue;
+		Address1_Telephone2: string;
 		/** Third telephone number associated with address 1. */
-		Address1_Telephone3: DevKit.WebApi.StringValue;
+		Address1_Telephone3: string;
 		/** United Parcel Service (UPS) zone for address 1. */
-		Address1_UPSZone: DevKit.WebApi.StringValue;
+		Address1_UPSZone: string;
 		/** UTC offset for address 1. This is the difference between local time and standard Coordinated Universal Time. */
-		Address1_UTCOffset: DevKit.WebApi.IntegerValue;
+		Address1_UTCOffset: number;
 		/** Unique identifier for address 2. */
-		Address2_AddressId: DevKit.WebApi.GuidValue;
+		Address2_AddressId: string;
 		/** Type of address for address 2. such as billing, shipping, or primary address. */
-		Address2_AddressTypeCode: DevKit.WebApi.OptionSetValue;
+		Address2_AddressTypeCode: OptionSet.Publisher.Address2_AddressTypeCode;
 		/** City name for address 2. */
-		Address2_City: DevKit.WebApi.StringValue;
+		Address2_City: string;
 		/** Country/region name for address 2. */
-		Address2_Country: DevKit.WebApi.StringValue;
+		Address2_Country: string;
 		/** County name for address 2. */
-		Address2_County: DevKit.WebApi.StringValue;
+		Address2_County: string;
 		/** Fax number for address 2. */
-		Address2_Fax: DevKit.WebApi.StringValue;
+		Address2_Fax: string;
 		/** Latitude for address 2. */
-		Address2_Latitude: DevKit.WebApi.DoubleValue;
+		Address2_Latitude: number;
 		/** First line for entering address 2 information. */
-		Address2_Line1: DevKit.WebApi.StringValue;
+		Address2_Line1: string;
 		/** Second line for entering address 2 information. */
-		Address2_Line2: DevKit.WebApi.StringValue;
+		Address2_Line2: string;
 		/** Third line for entering address 2 information. */
-		Address2_Line3: DevKit.WebApi.StringValue;
+		Address2_Line3: string;
 		/** Longitude for address 2. */
-		Address2_Longitude: DevKit.WebApi.DoubleValue;
+		Address2_Longitude: number;
 		/** Name to enter for address 2. */
-		Address2_Name: DevKit.WebApi.StringValue;
+		Address2_Name: string;
 		/** ZIP Code or postal code for address 2. */
-		Address2_PostalCode: DevKit.WebApi.StringValue;
+		Address2_PostalCode: string;
 		/** Post office box number for address 2. */
-		Address2_PostOfficeBox: DevKit.WebApi.StringValue;
+		Address2_PostOfficeBox: string;
 		/** Method of shipment for address 2. */
-		Address2_ShippingMethodCode: DevKit.WebApi.OptionSetValue;
+		Address2_ShippingMethodCode: OptionSet.Publisher.Address2_ShippingMethodCode;
 		/** State or province for address 2. */
-		Address2_StateOrProvince: DevKit.WebApi.StringValue;
+		Address2_StateOrProvince: string;
 		/** First telephone number associated with address 2. */
-		Address2_Telephone1: DevKit.WebApi.StringValue;
+		Address2_Telephone1: string;
 		/** Second telephone number associated with address 2. */
-		Address2_Telephone2: DevKit.WebApi.StringValue;
+		Address2_Telephone2: string;
 		/** Third telephone number associated with address 2. */
-		Address2_Telephone3: DevKit.WebApi.StringValue;
+		Address2_Telephone3: string;
 		/** United Parcel Service (UPS) zone for address 2. */
-		Address2_UPSZone: DevKit.WebApi.StringValue;
+		Address2_UPSZone: string;
 		/** UTC offset for address 2. This is the difference between local time and standard Coordinated Universal Time. */
-		Address2_UTCOffset: DevKit.WebApi.IntegerValue;
+		Address2_UTCOffset: number;
 		/** Unique identifier of the user who created the publisher. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the publisher was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the publisher. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Default option value prefix used for newly created options for solutions associated with this publisher. */
-		CustomizationOptionValuePrefix: DevKit.WebApi.IntegerValue;
+		CustomizationOptionValuePrefix: number;
 		/** Prefix used for new entities, attributes, and entity relationships for solutions associated with this publisher. */
-		CustomizationPrefix: DevKit.WebApi.StringValue;
+		CustomizationPrefix: string;
 		/** Description of the solution. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Email address for the publisher. */
-		EMailAddress: DevKit.WebApi.StringValue;
+		EMailAddress: string;
 		/** Shows the default image for the record. */
-		EntityImage: DevKit.WebApi.StringValue;
-		EntityImage_Timestamp: DevKit.WebApi.BigIntValueReadonly;
-		EntityImage_URL: DevKit.WebApi.StringValueReadonly;
+		EntityImage: string;
+		EntityImage_Timestamp: number;
+		EntityImage_URL: string;
 		/** For internal use only. */
-		EntityImageId: DevKit.WebApi.GuidValueReadonly;
+		readonly EntityImageId: string;
 		/** User display name for this publisher. */
-		FriendlyName: DevKit.WebApi.StringValue;
+		FriendlyName: string;
 		/** Indicates whether the publisher was created as part of a managed solution installation. */
-		IsReadonly: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsReadonly: boolean;
 		/** Unique identifier of the user who last modified the publisher. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the publisher was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the publisher. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Unique identifier of the organization associated with the publisher. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Default locale of the publisher in Microsoft Pinpoint. */
-		PinpointPublisherDefaultLocale: DevKit.WebApi.StringValueReadonly;
+		readonly PinpointPublisherDefaultLocale: string;
 		/** Identifier of the publisher in Microsoft Pinpoint. */
-		PinpointPublisherId: DevKit.WebApi.BigIntValueReadonly;
+		readonly PinpointPublisherId: number;
 		/** Unique identifier of the publisher. */
-		PublisherId: DevKit.WebApi.GuidValue;
+		PublisherId: string;
 		/** URL for the supporting website of this publisher. */
-		SupportingWebsiteUrl: DevKit.WebApi.StringValue;
+		SupportingWebsiteUrl: string;
 		/** The unique name of this publisher. */
-		UniqueName: DevKit.WebApi.StringValue;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		UniqueName: string;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -270,4 +272,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

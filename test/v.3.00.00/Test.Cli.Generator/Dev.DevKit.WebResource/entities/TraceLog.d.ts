@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,64 +30,64 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Indicates if this trace log can be deleted. */
-		CanBeDeleted: DevKit.WebApi.BooleanValue;
+		CanBeDeleted: boolean;
 		/** Indicates the collation level */
-		CollationLevel: DevKit.WebApi.IntegerValue;
+		CollationLevel: number;
 		/** Unique identifier of the user who created the trace. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Time the error is created and logged. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the trace. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
-		ErrorDetails: DevKit.WebApi.StringValue;
-		ErrorTypeDisplay: DevKit.WebApi.StringValue;
+		readonly CreatedOnBehalfBy: string;
+		ErrorDetails: string;
+		ErrorTypeDisplay: string;
 		/** Tells if this traceLog is created uniquely(only one) for the associated entity. */
-		IsUnique: DevKit.WebApi.BooleanValue;
+		IsUnique: boolean;
 		/** Information about the trace level. */
-		Level: DevKit.WebApi.OptionSetValue;
-		MachineName: DevKit.WebApi.StringValue;
+		Level: OptionSet.TraceLog.Level;
+		MachineName: string;
 		/** Unique identifier of the user who modified the trace. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Time the error is updated and logged for the same regarding object. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the trace. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Unique identifier of the organization associated with the trace. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Indicates the parent ID of the trace log. */
-		ParentTraceLogId: DevKit.WebApi.LookupValue;
+		ParentTraceLogId: string;
 		/** Regarding mailbox or email server profile. */
-		regardingobjectid_emailserverprofile: DevKit.WebApi.LookupValue;
+		regardingobjectid_emailserverprofile: string;
 		/** Regarding mailbox or email server profile. */
-		regardingobjectid_mailbox: DevKit.WebApi.LookupValue;
+		regardingobjectid_mailbox: string;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValueReadonly;
+		readonly OwnerId_team: string;
 		/** Unique identifier of the business unit that owns the regarding object. */
-		RegardingObjectOwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly RegardingObjectOwningBusinessUnit: string;
 		/** Text of the trace. */
-		Text: DevKit.WebApi.StringValue;
+		Text: string;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** XML representation of the trace actions. */
-		TraceActionXml: DevKit.WebApi.StringValue;
+		TraceActionXml: string;
 		/** Error code. */
-		TraceCode: DevKit.WebApi.IntegerValue;
+		TraceCode: number;
 		/** XML representation of the trace details. */
-		TraceDetailXml: DevKit.WebApi.StringValue;
+		TraceDetailXml: string;
 		/** Unique identifier of the trace. */
-		TraceLogId: DevKit.WebApi.GuidValue;
+		TraceLogId: string;
 		/** Stores the hash of the entity object associated with this tracelog. Hash is computed using the object type code and its id. */
-		TraceParameterHash: DevKit.WebApi.IntegerValueReadonly;
+		readonly TraceParameterHash: number;
 		/** XML representation of the trace parameters. */
-		TraceParameterXml: DevKit.WebApi.StringValue;
+		TraceParameterXml: string;
 		/** For internal use only. */
-		TraceRegardingId: DevKit.WebApi.LookupValueReadonly;
+		readonly TraceRegardingId: string;
 		/** Status about the trace. */
-		TraceStatus: DevKit.WebApi.BooleanValue;
+		TraceStatus: boolean;
 		/** Time zone code that was in use when the trace was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 	}
 }
 declare namespace OptionSet {
@@ -116,4 +118,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

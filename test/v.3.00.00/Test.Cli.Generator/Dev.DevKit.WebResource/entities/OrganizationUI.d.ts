@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,40 +30,40 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.OrganizationUI.ComponentState;
 		/** For internal use only. */
-		FieldXml: DevKit.WebApi.StringValue;
+		FieldXml: string;
 		/** Unique identifier of the record type form. */
-		FormId: DevKit.WebApi.GuidValue;
+		FormId: string;
 		/** Unique identifier of the form used when synchronizing customizations for the Microsoft Dynamics 365 client for Outlook. */
-		FormIdUnique: DevKit.WebApi.GuidValueReadonly;
+		readonly FormIdUnique: string;
 		/** XML representation of the form layout. */
-		FormXml: DevKit.WebApi.StringValue;
+		FormXml: string;
 		/** Binary representation of the icon used in record type grid views. */
-		GridIcon: DevKit.WebApi.StringValue;
+		GridIcon: string;
 		/** Information that specifies whether this component can be customized. */
-		IsCustomizable: DevKit.WebApi.ManagedPropertyValue;
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		IsCustomizable: string;
+		readonly IsManaged: boolean;
 		/** Binary representation of the large icon used in the record type form. */
-		LargeEntityIcon: DevKit.WebApi.StringValue;
+		LargeEntityIcon: string;
 		/** Unique identifier of the organization. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Binary representation of the large icon used in the Microsoft Dynamics 365 client for Outlook for this record type. */
-		OutlookShortcutIcon: DevKit.WebApi.StringValue;
+		OutlookShortcutIcon: string;
 		/** For internal use only. */
-		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly OverwriteTime_UtcDateOnly: Date;
 		/** For internal use only. */
-		PreviewColumnsetXml: DevKit.WebApi.StringValue;
+		PreviewColumnsetXml: string;
 		/** For internal use only. */
-		PreviewXml: DevKit.WebApi.StringValue;
+		PreviewXml: string;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** For internal use only. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SupportingSolutionId: string;
 		/** For internal use only. */
-		Version: DevKit.WebApi.IntegerValue;
+		Version: number;
 		/** Represents a version of customizations to be synchronized with the Microsoft Dynamics 365 client for Outlook. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -94,4 +96,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

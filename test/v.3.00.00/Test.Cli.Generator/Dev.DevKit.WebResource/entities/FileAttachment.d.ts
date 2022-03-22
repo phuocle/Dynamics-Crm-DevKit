@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,87 +30,91 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Body */
-		Body: DevKit.WebApi.StringValueReadonly;
+		readonly Body: string;
 		/** Date and time when the attachment was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the file attachment. */
-		FileAttachmentId: DevKit.WebApi.GuidValue;
+		FileAttachmentId: string;
 		/** File name of the attachment. */
-		FileName: DevKit.WebApi.StringValue;
+		FileName: string;
 		/** File pointer of the attachment. */
-		FilePointer: DevKit.WebApi.StringValueReadonly;
+		readonly FilePointer: string;
 		/** File size of the attachment in bytes. */
-		FileSizeInBytes: DevKit.WebApi.BigIntValueReadonly;
+		readonly FileSizeInBytes: number;
 		/** IsCommitted */
-		IsCommitted: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsCommitted: boolean;
 		/** MIME type of the attachment. */
-		MimeType: DevKit.WebApi.StringValue;
+		MimeType: string;
 		/** Unique identifier of the object with which the attachment is associated. */
-		objectid_activityfileattachment: DevKit.WebApi.LookupValue;
+		objectid_activityfileattachment: string;
 		/** Unique identifier of the object with which the attachment is associated. */
-		objectid_asyncoperation: DevKit.WebApi.LookupValue;
+		objectid_asyncoperation: string;
 		/** Unique identifier of the object with which the attachment is associated. */
-		objectid_canvasapp: DevKit.WebApi.LookupValue;
+		objectid_canvasapp: string;
 		/** Unique identifier of the object with which the attachment is associated. */
-		objectid_cascadegrantrevokeaccessrecordstracker: DevKit.WebApi.LookupValue;
+		objectid_cascadegrantrevokeaccessrecordstracker: string;
 		/** Unique identifier of the object with which the attachment is associated. */
-		objectid_exportsolutionupload: DevKit.WebApi.LookupValue;
+		objectid_exportsolutionupload: string;
 		/** Unique identifier of the object with which the attachment is associated. */
-		objectid_flowsession: DevKit.WebApi.LookupValue;
+		objectid_flowsession: string;
 		/** Unique identifier of the object with which the attachment is associated. */
-		objectid_imagedescriptor: DevKit.WebApi.LookupValue;
+		objectid_imagedescriptor: string;
 		/** Unique identifier of the object with which the attachment is associated. */
-		objectid_mailbox: DevKit.WebApi.LookupValue;
+		objectid_knowledgearticle: string;
 		/** Unique identifier of the object with which the attachment is associated. */
-		objectid_msdyn_aibfile: DevKit.WebApi.LookupValue;
+		objectid_mailbox: string;
 		/** Unique identifier of the object with which the attachment is associated. */
-		objectid_msdyn_aiconfiguration: DevKit.WebApi.LookupValue;
+		objectid_msdyn_aibfeedbackloop: string;
 		/** Unique identifier of the object with which the attachment is associated. */
-		objectid_msdyn_bookableresourcebookingquicknote: DevKit.WebApi.LookupValue;
+		objectid_msdyn_aibfile: string;
 		/** Unique identifier of the object with which the attachment is associated. */
-		objectid_msdyn_conversationinsight: DevKit.WebApi.LookupValue;
+		objectid_msdyn_aiconfiguration: string;
 		/** Unique identifier of the object with which the attachment is associated. */
-		objectid_msdyn_customerassetattachment: DevKit.WebApi.LookupValue;
+		objectid_msdyn_bookableresourcebookingquicknote: string;
 		/** Unique identifier of the object with which the attachment is associated. */
-		objectid_msdyn_kbattachment: DevKit.WebApi.LookupValue;
+		objectid_msdyn_conversationinsight: string;
 		/** Unique identifier of the object with which the attachment is associated. */
-		objectid_msdyn_knowledgearticleimage: DevKit.WebApi.LookupValue;
+		objectid_msdyn_customerassetattachment: string;
 		/** Unique identifier of the object with which the attachment is associated. */
-		objectid_msdyn_ocrecording: DevKit.WebApi.LookupValue;
+		objectid_msdyn_kbattachment: string;
 		/** Unique identifier of the object with which the attachment is associated. */
-		objectid_msdyn_pminferredtask: DevKit.WebApi.LookupValue;
+		objectid_msdyn_knowledgearticleimage: string;
 		/** Unique identifier of the object with which the attachment is associated. */
-		objectid_msdyn_richtextfile: DevKit.WebApi.LookupValue;
+		objectid_msdyn_ocrecording: string;
 		/** Unique identifier of the object with which the attachment is associated. */
-		objectid_msdyn_soundfile: DevKit.WebApi.LookupValue;
+		objectid_msdyn_pminferredtask: string;
 		/** Unique identifier of the object with which the attachment is associated. */
-		objectid_msdyn_transcript: DevKit.WebApi.LookupValue;
+		objectid_msdyn_richtextfile: string;
 		/** Unique identifier of the object with which the attachment is associated. */
-		objectid_msfp_fileresponse: DevKit.WebApi.LookupValue;
+		objectid_msdyn_soundfile: string;
 		/** Unique identifier of the object with which the attachment is associated. */
-		objectid_pluginpackage: DevKit.WebApi.LookupValue;
+		objectid_msdyn_transcript: string;
 		/** Unique identifier of the object with which the attachment is associated. */
-		objectid_revokeinheritedaccessrecordstracker: DevKit.WebApi.LookupValue;
+		objectid_msfp_fileresponse: string;
 		/** Unique identifier of the object with which the attachment is associated. */
-		objectid_ribbonclientmetadata: DevKit.WebApi.LookupValue;
+		objectid_pluginpackage: string;
 		/** Unique identifier of the object with which the attachment is associated. */
-		FileAttachment_Solution: DevKit.WebApi.LookupValue;
+		objectid_revokeinheritedaccessrecordstracker: string;
 		/** Unique identifier of the object with which the attachment is associated. */
-		objectid_stagesolutionupload: DevKit.WebApi.LookupValue;
+		objectid_ribbonclientmetadata: string;
 		/** Unique identifier of the object with which the attachment is associated. */
-		objectid_webresource: DevKit.WebApi.LookupValue;
+		FileAttachment_Solution: string;
 		/** Unique identifier of the object with which the attachment is associated. */
-		objectid_workflowbinary: DevKit.WebApi.LookupValue;
+		objectid_stagesolutionupload: string;
 		/** Unique identifier of the object with which the attachment is associated. */
-		objectid_workflowlog: DevKit.WebApi.LookupValue;
+		objectid_webresource: string;
+		/** Unique identifier of the object with which the attachment is associated. */
+		objectid_workflowbinary: string;
+		/** Unique identifier of the object with which the attachment is associated. */
+		objectid_workflowlog: string;
 		/** Prefix of the file pointer in blob storage. */
-		Prefix: DevKit.WebApi.StringValueReadonly;
+		readonly Prefix: string;
 		/** Regarding attribute schema name of the attachment. */
-		RegardingFieldName: DevKit.WebApi.StringValue;
+		RegardingFieldName: string;
 		/** Storage pointer. */
-		StoragePointer: DevKit.WebApi.StringValueReadonly;
+		readonly StoragePointer: string;
 		/** Version number of the file attachment. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -135,4 +141,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

@@ -105,8 +105,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -114,58 +116,58 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Used in conjunction with granularity to describes when services can be performed in relation to midnight on a given day. */
-		AnchorOffset: DevKit.WebApi.IntegerValue;
+		AnchorOffset: number;
 		/** Unique identifier of the calendar. */
-		CalendarId: DevKit.WebApi.GuidValue;
+		CalendarId: string;
 		/** Unique identifier of the user who created the service. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the service was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the service. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Description of activity that represents work done to satisfy a customer's need. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Duration of the service. */
-		Duration: DevKit.WebApi.IntegerValue;
+		Duration: number;
 		/** Describes how often the service is performed. */
-		Granularity: DevKit.WebApi.StringValue;
+		Granularity: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Initial status reason for the service activity. */
-		InitialStatusCode: DevKit.WebApi.OptionSetValue;
+		InitialStatusCode: OptionSet.Service.InitialStatusCode;
 		/** Information about whether the service can be scheduled. */
-		IsSchedulable: DevKit.WebApi.BooleanValue;
+		IsSchedulable: boolean;
 		/** Information about whether the service is visible to users. */
-		IsVisible: DevKit.WebApi.BooleanValue;
+		IsVisible: boolean;
 		/** Unique identifier of the user who last modified the service. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the service was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the service. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Unique identifier for Requirement Group associated with Service. */
-		msdyn_RequirementGroupId: DevKit.WebApi.LookupValue;
-		msdyn_SchedulingEngine: DevKit.WebApi.OptionSetValue;
+		msdyn_RequirementGroupId: string;
+		msdyn_SchedulingEngine: OptionSet.Service.msdyn_SchedulingEngine;
 		/** Name of the service. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Unique identifier for the organization */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Unique identifier of the resource specification with which the service is associated. */
-		ResourceSpecId: DevKit.WebApi.LookupValue;
+		ResourceSpecId: string;
 		/** Unique identifier of the associated service. */
-		ServiceId: DevKit.WebApi.GuidValue;
+		ServiceId: string;
 		/** For internal use only. */
-		ShowResources: DevKit.WebApi.BooleanValue;
+		ShowResources: boolean;
 		/** Value that is taken from PluginTypeId in the Plugin Type record for the scheduling strategy. This is the ID of the scheduling strategy plug-in associated with the service. */
-		StrategyId: DevKit.WebApi.LookupValue;
+		StrategyId: string;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -214,4 +216,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

@@ -152,8 +152,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -161,151 +163,151 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Exchange rate for the currency associated with the entity with respect to the base currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Select the customer. */
-		msdyn_AccountCustomer: DevKit.WebApi.LookupValue;
-		msdyn_AccountingDate_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
-		msdyn_AccountVendor: DevKit.WebApi.LookupValue;
+		msdyn_AccountCustomer: string;
+		msdyn_AccountingDate_UtcDateOnly: Date;
+		msdyn_AccountVendor: string;
 		/** Unique identifier for entity instances */
-		msdyn_actualId: DevKit.WebApi.GuidValue;
+		msdyn_actualId: string;
 		/** Shows the adjustment status ID of the transaction. */
-		msdyn_AdjustmentStatus: DevKit.WebApi.OptionSetValue;
-		msdyn_Agreement: DevKit.WebApi.LookupValue;
+		msdyn_AdjustmentStatus: OptionSet.msdyn_actual.msdyn_AdjustmentStatus;
+		msdyn_Agreement: string;
 		/** Enter the amount in transaction currency. */
-		msdyn_Amount: DevKit.WebApi.MoneyValue;
+		msdyn_Amount: number;
 		/** Enter the value of the amount in the base (organization) currency. */
-		msdyn_amount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_amount_Base: number;
 		/** Select the method by which the amount was computed. */
-		msdyn_AmountMethod: DevKit.WebApi.OptionSetValue;
+		msdyn_AmountMethod: OptionSet.msdyn_actual.msdyn_AmountMethod;
 		/** Enter the cost amount of the sales transaction in the transaction currency. */
-		msdyn_BasisAmount: DevKit.WebApi.MoneyValue;
+		msdyn_BasisAmount: number;
 		/** Enter the cost amount of the sales transaction in the base (organization) currency. */
-		msdyn_basisamount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_basisamount_Base: number;
 		/** Enter the cost price of the sales transaction in transaction currency. */
-		msdyn_BasisPrice: DevKit.WebApi.MoneyValue;
+		msdyn_BasisPrice: number;
 		/** Enter the cost price of the sales transaction in base (organization) currency. */
-		msdyn_basisprice_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_basisprice_Base: number;
 		/** Enter the cost quantity of the sales transaction in the base (organization) currency. */
-		msdyn_BasisQuantity: DevKit.WebApi.DecimalValue;
+		msdyn_BasisQuantity: number;
 		/** Select the billing status ID. */
-		msdyn_BillingStatus: DevKit.WebApi.OptionSetValue;
+		msdyn_BillingStatus: OptionSet.msdyn_actual.msdyn_BillingStatus;
 		/** Select the billing type ID. */
-		msdyn_BillingType: DevKit.WebApi.OptionSetValue;
+		msdyn_BillingType: OptionSet.msdyn_actual.msdyn_BillingType;
 		/** Shows the bookable resource for which the actual is recorded. */
-		msdyn_bookableresource: DevKit.WebApi.LookupValue;
+		msdyn_bookableresource: string;
 		/** Select the customer contact. */
-		msdyn_ContactCustomer: DevKit.WebApi.LookupValue;
-		msdyn_ContactVendor: DevKit.WebApi.LookupValue;
+		msdyn_ContactCustomer: string;
+		msdyn_ContactVendor: string;
 		/** Select the organizational unit ID for the contract. */
-		msdyn_contractorganizationalunitid: DevKit.WebApi.LookupValue;
+		msdyn_contractorganizationalunitid: string;
 		/** Select the customer type ID. */
-		msdyn_CustomerType: DevKit.WebApi.OptionSetValue;
+		msdyn_CustomerType: OptionSet.msdyn_actual.msdyn_CustomerType;
 		/** Type the record description. */
-		msdyn_description: DevKit.WebApi.StringValue;
+		msdyn_description: string;
 		/** Enter the transaction date of the business event. */
-		msdyn_DocumentDate_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		msdyn_DocumentDate_UtcDateOnly: Date;
 		/** Enter the end date and time for this transaction. */
-		msdyn_EndDateTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		msdyn_EndDateTime_UtcDateAndTime: Date;
 		/** Enter the date of the exchange rate used for this transaction. */
-		msdyn_ExchangeRateDate_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		msdyn_ExchangeRateDate_UtcDateOnly: Date;
 		/** The external description of the business transaction. */
-		msdyn_externaldescription: DevKit.WebApi.StringValue;
+		msdyn_externaldescription: string;
 		/** Stores a date from an external system, such as a journal entry voucher date from an ERP system */
-		msdyn_ExternalReferenceDate_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		msdyn_ExternalReferenceDate_UtcDateOnly: Date;
 		/** Stores an ID from an external system, such as the journal entry voucher number from an ERP system. */
-		msdyn_ExternalReferenceID: DevKit.WebApi.StringValue;
-		msdyn_IncidentType: DevKit.WebApi.LookupValue;
+		msdyn_ExternalReferenceID: string;
+		msdyn_IncidentType: string;
 		/** The unique identifier of an invoice. */
-		msdyn_Invoice: DevKit.WebApi.LookupValue;
-		msdyn_IsJournalized: DevKit.WebApi.BooleanValue;
+		msdyn_Invoice: string;
+		msdyn_IsJournalized: boolean;
 		/** Type of journal for resource cost. */
-		msdyn_JournalType: DevKit.WebApi.OptionSetValue;
+		msdyn_JournalType: OptionSet.msdyn_actual.msdyn_JournalType;
 		/** Enter the percent. */
-		msdyn_Percent: DevKit.WebApi.DecimalValue;
+		msdyn_Percent: number;
 		/** Enter the price in the transaction currency. */
-		msdyn_Price: DevKit.WebApi.MoneyValue;
+		msdyn_Price: number;
 		/** Enter the price in the base (organization) currency. */
-		msdyn_price_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_price_Base: number;
 		/** Select the price list. */
-		msdyn_PriceList: DevKit.WebApi.LookupValue;
+		msdyn_PriceList: string;
 		/** Select the product ID. */
-		msdyn_Product: DevKit.WebApi.LookupValue;
-		msdyn_ProductType: DevKit.WebApi.OptionSetValue;
+		msdyn_Product: string;
+		msdyn_ProductType: OptionSet.msdyn_actual.msdyn_ProductType;
 		/** Select the project ID. */
-		msdyn_Project: DevKit.WebApi.LookupValue;
+		msdyn_Project: string;
 		/** Enter the quantity. */
-		msdyn_Quantity: DevKit.WebApi.DecimalValue;
+		msdyn_Quantity: number;
 		/** Select the role ID of the resource performing the work. */
-		msdyn_ResourceCategory: DevKit.WebApi.LookupValue;
+		msdyn_ResourceCategory: string;
 		/** Organizational unit at the time the actual was registered of the resource who performed the work. */
-		msdyn_ResourceOrganizationalUnitId: DevKit.WebApi.LookupValue;
+		msdyn_ResourceOrganizationalUnitId: string;
 		/** Select the project contract. */
-		msdyn_SalesContract: DevKit.WebApi.LookupValue;
+		msdyn_SalesContract: string;
 		/** (Deprecated) Type the project contract line. */
-		msdyn_SalesContractLine: DevKit.WebApi.StringValue;
+		msdyn_SalesContractLine: string;
 		/** Unique identifier for Project Contract Line associated with Actual. */
-		msdyn_SalesContractLineId: DevKit.WebApi.LookupValue;
+		msdyn_SalesContractLineId: string;
 		/** Account that was serviced */
-		msdyn_ServiceAccount: DevKit.WebApi.LookupValue;
-		msdyn_ServiceTerritory: DevKit.WebApi.LookupValue;
+		msdyn_ServiceAccount: string;
+		msdyn_ServiceTerritory: string;
 		/** Enter the start date and time. */
-		msdyn_StartDateTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		msdyn_StartDateTime_UtcDateAndTime: Date;
 		/** Select the task. */
-		msdyn_Task: DevKit.WebApi.LookupValue;
-		msdyn_TaxCode: DevKit.WebApi.LookupValue;
+		msdyn_Task: string;
+		msdyn_TaxCode: string;
 		/** Select the transaction category. */
-		msdyn_TransactionCategory: DevKit.WebApi.LookupValue;
+		msdyn_TransactionCategory: string;
 		/** Shows the transaction classification of this transaction. */
-		msdyn_TransactionClassification: DevKit.WebApi.OptionSetValue;
+		msdyn_TransactionClassification: OptionSet.msdyn_actual.msdyn_TransactionClassification;
 		/** Shows the transaction type of this transaction. */
-		msdyn_TransactionTypeCode: DevKit.WebApi.OptionSetValue;
+		msdyn_TransactionTypeCode: OptionSet.msdyn_actual.msdyn_TransactionTypeCode;
 		/** Select the unit of measure. */
-		msdyn_Unit: DevKit.WebApi.LookupValue;
+		msdyn_Unit: string;
 		/** Select the unit schedule. */
-		msdyn_UnitSchedule: DevKit.WebApi.LookupValue;
-		msdyn_VendorType: DevKit.WebApi.OptionSetValue;
-		msdyn_Warehouse: DevKit.WebApi.LookupValue;
-		msdyn_WorkLocation: DevKit.WebApi.OptionSetValue;
-		msdyn_WorkOrder: DevKit.WebApi.LookupValue;
-		msdyn_WorkOrderType: DevKit.WebApi.LookupValue;
+		msdyn_UnitSchedule: string;
+		msdyn_VendorType: OptionSet.msdyn_actual.msdyn_VendorType;
+		msdyn_Warehouse: string;
+		msdyn_WorkLocation: OptionSet.msdyn_actual.msdyn_WorkLocation;
+		msdyn_WorkOrder: string;
+		msdyn_WorkOrderType: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Status of the Actual */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.msdyn_actual.statecode;
 		/** Reason for the status of the Actual */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.msdyn_actual.statuscode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Shows the currency associated with the entity. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -456,4 +458,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,39 +30,39 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** For internal use only. */
-		AppModuleId: DevKit.WebApi.GuidValue;
+		AppModuleId: string;
 		/** For internal use only. */
-		AppModuleMetadataId: DevKit.WebApi.GuidValue;
+		AppModuleMetadataId: string;
 		/** For internal use only. */
-		ComponentId: DevKit.WebApi.GuidValue;
+		ComponentId: string;
 		/** For internal use only. */
-		ComponentIsDefault: DevKit.WebApi.BooleanValue;
+		ComponentIsDefault: boolean;
 		/** For internal use only. */
-		ComponentIsQuickFindQuery: DevKit.WebApi.BooleanValue;
+		ComponentIsQuickFindQuery: boolean;
 		/** For internal use only. */
-		ComponentIsTabletEnabled: DevKit.WebApi.BooleanValue;
+		ComponentIsTabletEnabled: boolean;
 		/** For internal use only. */
-		ComponentIsUserChart: DevKit.WebApi.BooleanValue;
+		ComponentIsUserChart: boolean;
 		/** For internal use only. */
-		ComponentIsUserForm: DevKit.WebApi.BooleanValue;
+		ComponentIsUserForm: boolean;
 		/** For internal use only. */
-		ComponentIsUserView: DevKit.WebApi.BooleanValue;
+		ComponentIsUserView: boolean;
 		/** For internal use only. */
-		ComponentStateCode: DevKit.WebApi.IntegerValue;
+		ComponentStateCode: number;
 		/** For internal use only. */
-		ComponentSubType: DevKit.WebApi.IntegerValue;
+		ComponentSubType: number;
 		/** For internal use only. */
-		ComponentType: DevKit.WebApi.IntegerValue;
+		ComponentType: number;
 		/** For internal use only. */
-		ComponentVersion: DevKit.WebApi.BigIntValue;
+		ComponentVersion: number;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** For internal use only. */
-		ParentComponentId: DevKit.WebApi.GuidValue;
+		ParentComponentId: string;
 		/** For internal use only. */
-		State: DevKit.WebApi.IntegerValue;
+		State: number;
 	}
 }
 declare namespace OptionSet {
@@ -83,4 +85,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

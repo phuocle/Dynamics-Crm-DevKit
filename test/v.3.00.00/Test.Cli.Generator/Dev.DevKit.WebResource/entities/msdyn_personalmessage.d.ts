@@ -48,8 +48,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -57,51 +59,51 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Locale */
-		msdyn_locale_field: DevKit.WebApi.OptionSetValue;
+		msdyn_locale_field: OptionSet.msdyn_personalmessage.msdyn_locale_field;
 		/** Message */
-		msdyn_message: DevKit.WebApi.StringValue;
+		msdyn_message: string;
 		/** Unique identifier for entity instances */
-		msdyn_personalmessageId: DevKit.WebApi.GuidValue;
+		msdyn_personalmessageId: string;
 		/** Dummy field to render the tags control */
-		msdyn_tagscontrolfield: DevKit.WebApi.StringValue;
+		msdyn_tagscontrolfield: string;
 		/** Name for the personal message */
-		msdyn_title: DevKit.WebApi.StringValue;
+		msdyn_title: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Status of the Personal Message */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.msdyn_personalmessage.statecode;
 		/** Reason for the status of the Personal Message */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.msdyn_personalmessage.statuscode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -109,30 +111,54 @@ declare namespace OptionSet {
 		enum msdyn_locale_field {
 			/** 1025 */
 			ar_SA,
+			/** 1026 */
+			bg_BG,
+			/** 1027 */
+			ca_ES,
 			/** 1029 */
 			cs_CZ,
 			/** 1030 */
 			da_DK,
 			/** 1031 */
 			de_DE,
+			/** 1032 */
+			el_GR,
 			/** 1033 */
 			en_US,
 			/** 3082 */
 			es_ES,
+			/** 1061 */
+			et_EE,
+			/** 1069 */
+			eu_ES,
 			/** 1035 */
 			fi_FI,
 			/** 1036 */
 			fr_FR,
+			/** 1110 */
+			gl_ES,
 			/** 1037 */
 			he_IL,
+			/** 1081 */
+			hi_IN,
+			/** 1050 */
+			hr_HR,
+			/** 1038 */
+			hu_HU,
 			/** 1057 */
 			id_ID,
 			/** 1040 */
 			it_IT,
 			/** 1041 */
 			ja_JP,
+			/** 1087 */
+			kk_KZ,
 			/** 1042 */
 			ko_KR,
+			/** 1063 */
+			lt_LT,
+			/** 1062 */
+			lv_LV,
 			/** 1044 */
 			nb_NO,
 			/** 1043 */
@@ -147,6 +173,10 @@ declare namespace OptionSet {
 			ro_RO,
 			/** 1049 */
 			ru_RU,
+			/** 1051 */
+			sk_SK,
+			/** 2074 */
+			sr_Latn_CS,
 			/** 1053 */
 			sv_SE,
 			/** 1054 */
@@ -154,7 +184,11 @@ declare namespace OptionSet {
 			/** 1055 */
 			tr_TR,
 			/** 2052 */
-			zh_CN
+			zh_CN,
+			/** 3076 */
+			zh_HK,
+			/** 1028 */
+			zh_TW
 		}
 		enum statecode {
 			/** 0 */
@@ -186,4 +220,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

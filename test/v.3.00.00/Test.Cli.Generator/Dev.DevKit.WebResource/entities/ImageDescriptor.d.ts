@@ -19,44 +19,46 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
 		EntityCollectionName: string;
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
-		ColorDepthBits: DevKit.WebApi.IntegerValue;
+		ColorDepthBits: number;
 		/** Lookup to FileAttachment */
-		FileId: DevKit.WebApi.StringValueReadonly;
-		FileLocation: DevKit.WebApi.StringValue;
-		FileName: DevKit.WebApi.StringValue;
-		FileSizeBytes: DevKit.WebApi.IntegerValue;
-		FileType: DevKit.WebApi.StringValue;
-		EntityImage: DevKit.WebApi.StringValue;
-		EntityImage_Timestamp: DevKit.WebApi.BigIntValueReadonly;
-		EntityImage_URL: DevKit.WebApi.StringValueReadonly;
-		FullImageData: DevKit.WebApi.StringValue;
-		FullImageData_Timestamp: DevKit.WebApi.BigIntValueReadonly;
-		FullImageData_URL: DevKit.WebApi.StringValueReadonly;
-		FullImageURL: DevKit.WebApi.StringValue;
-		ImageData: DevKit.WebApi.StringValue;
-		ImageData_Timestamp: DevKit.WebApi.BigIntValueReadonly;
-		ImageData_URL: DevKit.WebApi.StringValueReadonly;
-		ImageDescription: DevKit.WebApi.StringValue;
-		ImageDescriptorId: DevKit.WebApi.GuidValue;
-		ImagePixelHeight: DevKit.WebApi.IntegerValue;
-		ImagePixelWidth: DevKit.WebApi.IntegerValue;
-		ImageTags: DevKit.WebApi.StringValue;
-		ImageTimestamp: DevKit.WebApi.BigIntValueReadonly;
-		ImageURL: DevKit.WebApi.StringValueReadonly;
-		MimeType: DevKit.WebApi.StringValue;
-		ObjectId: DevKit.WebApi.GuidValueReadonly;
-		Size: DevKit.WebApi.IntegerValueReadonly;
-		Title: DevKit.WebApi.StringValue;
+		readonly FileId: string;
+		FileLocation: string;
+		FileName: string;
+		FileSizeBytes: number;
+		FileType: string;
+		EntityImage: string;
+		EntityImage_Timestamp: number;
+		EntityImage_URL: string;
+		FullImageData: string;
+		FullImageData_Timestamp: number;
+		FullImageData_URL: string;
+		FullImageURL: string;
+		ImageData: string;
+		ImageData_Timestamp: number;
+		ImageData_URL: string;
+		ImageDescription: string;
+		ImageDescriptorId: string;
+		ImagePixelHeight: number;
+		ImagePixelWidth: number;
+		ImageTags: string;
+		readonly ImageTimestamp: number;
+		readonly ImageURL: string;
+		MimeType: string;
+		readonly ObjectId: string;
+		readonly Size: number;
+		Title: string;
 		/** Version number of Image descriptor. */
-		versionnumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly versionnumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -79,4 +81,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

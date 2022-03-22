@@ -243,8 +243,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -252,155 +254,155 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Configure agent name to be displayed in the chat widget */
-		msdyn_agentDisplayName: DevKit.WebApi.OptionSetValue;
+		msdyn_agentDisplayName: OptionSet.msdyn_livechatconfig.msdyn_agentDisplayName;
 		/** Unique identifier for Authentication settings associated with Chat widget. */
-		msdyn_AuthsettingsId: DevKit.WebApi.LookupValue;
+		msdyn_AuthsettingsId: string;
 		/** Indicates if the chat widget should automatically detect user locale. */
-		msdyn_AutoDetectLanguage: DevKit.WebApi.BooleanValue;
+		msdyn_AutoDetectLanguage: boolean;
 		/** Chat logo */
-		msdyn_avatarUrl: DevKit.WebApi.StringValue;
+		msdyn_avatarUrl: string;
 		/** Indicates whether display of wait time is enabled */
-		msdyn_averagewaittime_enabled: DevKit.WebApi.BooleanValue;
+		msdyn_averagewaittime_enabled: boolean;
 		/** List of calling options available for the chat widget */
-		msdyn_callingoptions: DevKit.WebApi.OptionSetValue;
+		msdyn_callingoptions: OptionSet.msdyn_livechatconfig.msdyn_callingoptions;
 		/** Select a co-browse provider */
-		msdyn_cobrowseprovider: DevKit.WebApi.StringValue;
+		msdyn_cobrowseprovider: string;
 		/** Indicates the conversation mode of the chat widget */
-		msdyn_conversationmode: DevKit.WebApi.OptionSetValue;
+		msdyn_conversationmode: OptionSet.msdyn_livechatconfig.msdyn_conversationmode;
 		/** (Deprecated) During non-operating hours */
-		msdyn_Duringnonoperatinghours: DevKit.WebApi.StringValue;
+		msdyn_Duringnonoperatinghours: string;
 		/** Email Template */
-		msdyn_EmailTemplate: DevKit.WebApi.StringValue;
+		msdyn_EmailTemplate: string;
 		/** This will let customers reconnect to their previous session. */
-		msdyn_enablechatreconnect: DevKit.WebApi.BooleanValue;
+		msdyn_enablechatreconnect: boolean;
 		/** Allow download of transcript */
-		msdyn_Enablechattranscriptdownload: DevKit.WebApi.BooleanValue;
+		msdyn_Enablechattranscriptdownload: boolean;
 		/** Allow email of transcript */
-		msdyn_Enablechattranscriptemail: DevKit.WebApi.BooleanValue;
+		msdyn_Enablechattranscriptemail: boolean;
 		/** Co-browse allows agent and customer to interact on the same web page in real time */
-		msdyn_enablecobrowse: DevKit.WebApi.BooleanValue;
+		msdyn_enablecobrowse: boolean;
 		/** Enable file attachments for agents */
-		msdyn_Enablefileattachmentsforagents: DevKit.WebApi.BooleanValue;
+		msdyn_Enablefileattachmentsforagents: boolean;
 		/** Enable file attachments for customers */
-		msdyn_Enablefileattachmentsforcustomers: DevKit.WebApi.BooleanValue;
+		msdyn_Enablefileattachmentsforcustomers: boolean;
 		/** Enable Screen sharing */
-		msdyn_enablescreensharing: DevKit.WebApi.BooleanValue;
+		msdyn_enablescreensharing: boolean;
 		/** Display Agent Generic Name */
-		msdyn_genericagentdisplayname: DevKit.WebApi.StringValue;
+		msdyn_genericagentdisplayname: string;
 		/** Label string indicating user to save the record to add location information */
-		msdyn_infolabel: DevKit.WebApi.StringValue;
+		msdyn_infolabel: string;
 		/** Language  in which chat widget is rendered */
-		msdyn_Language: DevKit.WebApi.OptionSetValue;
+		msdyn_Language: OptionSet.msdyn_livechatconfig.msdyn_Language;
 		/** Unique identifier for entity instances */
-		msdyn_livechatconfigId: DevKit.WebApi.GuidValue;
+		msdyn_livechatconfigId: string;
 		/** Work Stream Identifier */
-		msdyn_liveworkstreamid: DevKit.WebApi.LookupValue;
+		msdyn_liveworkstreamid: string;
 		/** The mailbox where your email transcripts will be sent from. */
-		msdyn_Mailbox: DevKit.WebApi.StringValue;
+		msdyn_Mailbox: string;
 		/** The name of the custom entity. */
-		msdyn_name: DevKit.WebApi.StringValue;
+		msdyn_name: string;
 		/** Geo Location Provider API Key */
-		msdyn_oc_geolocationprovider: DevKit.WebApi.LookupValue;
+		msdyn_oc_geolocationprovider: string;
 		/** The language of the chat widget. */
-		msdyn_ocWidgetLanguage: DevKit.WebApi.LookupValue;
+		msdyn_ocWidgetLanguage: string;
 		/** Description for offline widget subtitle attribute */
-		msdyn_offlinewidgetsubtitle: DevKit.WebApi.StringValue;
+		msdyn_offlinewidgetsubtitle: string;
 		/** Description for offline widget theme color attribute */
-		msdyn_offlinewidgetthemecolor: DevKit.WebApi.OptionSetValue;
+		msdyn_offlinewidgetthemecolor: OptionSet.msdyn_livechatconfig.msdyn_offlinewidgetthemecolor;
 		/** Description for offline widget title attribute */
-		msdyn_offlinewidgettitle: DevKit.WebApi.StringValue;
+		msdyn_offlinewidgettitle: string;
 		/** Unique identifier for Operating hour associated with Chat widget. */
-		msdyn_operatinghourid: DevKit.WebApi.LookupValue;
+		msdyn_operatinghourid: string;
 		/** Provide a link to the web portal where your chat is hosted. */
-		msdyn_portalurl: DevKit.WebApi.StringValue;
+		msdyn_portalurl: string;
 		/** Enable Position In Queue feature */
-		msdyn_positioninqueue_enabled: DevKit.WebApi.BooleanValue;
+		msdyn_positioninqueue_enabled: boolean;
 		/** Enable Post-Chat (Deprecated) */
-		msdyn_postchatenabled: DevKit.WebApi.BooleanValue;
+		msdyn_postchatenabled: boolean;
 		/** Lookup to Dynamics 365 Customer Voice survey field */
-		msdyn_PostConversationSurvey: DevKit.WebApi.LookupValue;
+		msdyn_PostConversationSurvey: string;
 		/** Enable or disable bot survey */
-		msdyn_PostConversationSurveyBotSurvey: DevKit.WebApi.BooleanValue;
+		msdyn_PostConversationSurveyBotSurvey: boolean;
 		/** To enable or disable post conversation survey */
-		msdyn_PostConversationSurveyEnable: DevKit.WebApi.BooleanValue;
+		msdyn_PostConversationSurveyEnable: boolean;
 		/** Prefix text for survey link message that will be sent to the user. */
-		msdyn_PostConversationSurveyMessageText: DevKit.WebApi.StringValue;
+		msdyn_PostConversationSurveyMessageText: string;
 		/** Mode of the survey to be sent */
-		msdyn_PostConversationSurveyMode: DevKit.WebApi.OptionSetValue;
+		msdyn_PostConversationSurveyMode: OptionSet.msdyn_livechatconfig.msdyn_PostConversationSurveyMode;
 		/** Enable Pre-chat survey feature */
-		msdyn_PrechatEnabled: DevKit.WebApi.BooleanValue;
+		msdyn_PrechatEnabled: boolean;
 		/** Prechat Question set for authenticated users */
-		msdyn_PreChatQuestionnaireAuthenticated: DevKit.WebApi.LookupValue;
+		msdyn_PreChatQuestionnaireAuthenticated: string;
 		/** Prechat Question set for unauthenticated users */
-		msdyn_PreChatQuestionnaireUnauthenticated: DevKit.WebApi.LookupValue;
+		msdyn_PreChatQuestionnaireUnauthenticated: string;
 		/** Enable Proactive chat for this chat widget */
-		msdyn_proactivechatenabled: DevKit.WebApi.BooleanValue;
+		msdyn_proactivechatenabled: boolean;
 		/** We'll redirect customers to this webpage. */
-		msdyn_redirectionurl: DevKit.WebApi.StringValue;
+		msdyn_redirectionurl: string;
 		/** Enable Visitor Location Feature */
-		msdyn_requestvisitorlocation: DevKit.WebApi.BooleanValue;
+		msdyn_requestvisitorlocation: boolean;
 		/** Select a screen sharing provider */
-		msdyn_screensharingprovider: DevKit.WebApi.StringValue;
+		msdyn_screensharingprovider: string;
 		/** Agent Display Name configuration for the chat widget */
-		msdyn_showagentname: DevKit.WebApi.BooleanValue;
+		msdyn_showagentname: boolean;
 		/** Description for show/hide offline widget attribute */
-		msdyn_Showwidgetduringofflinehours: DevKit.WebApi.BooleanValue;
+		msdyn_Showwidgetduringofflinehours: boolean;
 		/** The previous agent's capacity will be held for this time period. */
-		msdyn_timetoreconnectwithpreviousagent: DevKit.WebApi.IntegerValue;
+		msdyn_timetoreconnectwithpreviousagent: number;
 		/** Widget App Identifier used to identify the chat widget */
-		msdyn_widgetAppId: DevKit.WebApi.StringValue;
+		msdyn_widgetAppId: string;
 		/** The language of the chat widget. */
-		msdyn_WidgetLocale: DevKit.WebApi.LookupValue;
+		msdyn_WidgetLocale: string;
 		/** Chat position relative to the page */
-		msdyn_widgetPosition: DevKit.WebApi.OptionSetValue;
+		msdyn_widgetPosition: OptionSet.msdyn_livechatconfig.msdyn_widgetPosition;
 		/** Javascript snippet which can be embedded in a webpage */
-		msdyn_WidgetSnippet: DevKit.WebApi.StringValue;
+		msdyn_WidgetSnippet: string;
 		/** Enable sound notifications for new incoming messages */
-		msdyn_widgetsoundnotification: DevKit.WebApi.BooleanValue;
+		msdyn_widgetsoundnotification: boolean;
 		/** Subtitle for the chat widget */
-		msdyn_widgetSubtitle: DevKit.WebApi.StringValue;
+		msdyn_widgetSubtitle: string;
 		/** Theme color for the chat widget */
-		msdyn_widgetThemeColor: DevKit.WebApi.OptionSetValue;
+		msdyn_widgetThemeColor: OptionSet.msdyn_livechatconfig.msdyn_widgetThemeColor;
 		/** Title for the chat widget */
-		msdyn_widgetTitle: DevKit.WebApi.StringValue;
+		msdyn_widgetTitle: string;
 		/** Enable visual indicators for unread messages */
-		msdyn_widgetvisualnotification: DevKit.WebApi.BooleanValue;
+		msdyn_widgetvisualnotification: boolean;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Status of the Chat widget */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.msdyn_livechatconfig.statecode;
 		/** Reason for the status of the Chat widget */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.msdyn_livechatconfig.statuscode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -529,4 +531,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

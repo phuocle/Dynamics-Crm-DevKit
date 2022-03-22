@@ -44,8 +44,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -53,171 +55,171 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Type the URL where the SharePoint document is located. */
-		AbsoluteUrl: DevKit.WebApi.StringValueReadonly;
+		readonly AbsoluteUrl: string;
 		/** Name of the person who created the application. */
-		AppCreatedBy: DevKit.WebApi.StringValueReadonly;
+		readonly AppCreatedBy: string;
 		/** Name of the person who last modified the application. */
-		AppModifiedBy: DevKit.WebApi.StringValueReadonly;
+		readonly AppModifiedBy: string;
 		/** Name of the author of the SharePoint document. */
-		Author: DevKit.WebApi.StringValue;
+		Author: string;
 		/** Shows the business unit that the record is associated with. */
-		BusinessUnitId: DevKit.WebApi.LookupValue;
+		BusinessUnitId: string;
 		/** Shows who the SharePoint document is checked out to. */
-		CheckedOutTo: DevKit.WebApi.StringValueReadonly;
+		readonly CheckedOutTo: string;
 		/** Type a comment about the document that is being checked in. */
-		CheckInComment: DevKit.WebApi.StringValueReadonly;
+		readonly CheckInComment: string;
 		/** Shows the number of child folders. */
-		ChildFolderCount: DevKit.WebApi.IntegerValueReadonly;
+		readonly ChildFolderCount: number;
 		/** Shows how many child items there are. */
-		ChildItemCount: DevKit.WebApi.IntegerValueReadonly;
+		readonly ChildItemCount: number;
 		/** The content type of the document. */
-		ContentType: DevKit.WebApi.StringValueReadonly;
+		readonly ContentType: string;
 		/** Shows the unique identifier of the content type. */
-		ContentTypeId: DevKit.WebApi.IntegerValueReadonly;
+		readonly ContentTypeId: number;
 		/** SharePoint source item URL */
-		CopySource: DevKit.WebApi.StringValueReadonly;
+		readonly CopySource: string;
 		/** Shows who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Unique identifier of a SharePoint document in document library. */
-		DocumentId: DevKit.WebApi.IntegerValueReadonly;
+		readonly DocumentId: number;
 		/** Location type of the SharePoint document location. */
-		DocumentLocationType: DevKit.WebApi.OptionSetValueReadonly;
+		readonly DocumentLocationType: OptionSet.SharePointDocument.DocumentLocationType;
 		/** Edit Url of the Sharepoint Form */
-		Edit: DevKit.WebApi.StringValueReadonly;
+		readonly Edit: string;
 		/** Shows the edit URL of the SharePoint document. */
-		EditUrl: DevKit.WebApi.StringValueReadonly;
+		readonly EditUrl: string;
 		/** Shows the exchange rate between the currency associated with the SharePoint document record and the base currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Shows the file size. */
-		FileSize: DevKit.WebApi.IntegerValueReadonly;
+		readonly FileSize: number;
 		/** Shows the file type. */
-		FileType: DevKit.WebApi.StringValueReadonly;
+		readonly FileType: string;
 		/** Shows the full name of the SharePoint document. */
-		FullName: DevKit.WebApi.StringValueReadonly;
+		readonly FullName: string;
 		/** Stores the Icon Class name of the SharePoint document. */
-		IconClassName: DevKit.WebApi.StringValueReadonly;
+		readonly IconClassName: string;
 		/** Shows whether the file is checked out. */
-		IsCheckedOut: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsCheckedOut: boolean;
 		/** Shows whether the file is a folder. */
-		IsFolder: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsFolder: boolean;
 		/** Shows whether to fetch data recursively from the given folder location. */
-		IsRecursiveFetch: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsRecursiveFetch: boolean;
 		/** Unique identifier of the associated document location. */
-		LocationId: DevKit.WebApi.StringValueReadonly;
+		readonly LocationId: string;
 		/** Name of the associated document location. */
-		LocationName: DevKit.WebApi.StringValueReadonly;
+		readonly LocationName: string;
 		/** Shows the date and time when the SharePoint document was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		Modified_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly Modified_UtcDateAndTime: Date;
 		/** Shows who last updated the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Shows who modified the record on behalf of another user. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Unique identifier of the organization associated with the SharePoint document. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Shows the business unit that the record owner belongs to. */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Shows the Read URL of the SharePoint document. */
-		ReadUrl: DevKit.WebApi.StringValueReadonly;
+		readonly ReadUrl: string;
 		/** Choose the parent record that the SharePoint document record is associated with. */
-		regardingobjectid_account: DevKit.WebApi.LookupValue;
+		regardingobjectid_account: string;
 		/** Choose the parent record that the SharePoint document record is associated with. */
-		regardingobjectid_opportunity: DevKit.WebApi.LookupValue;
+		regardingobjectid_opportunity: string;
 		/** Choose the parent record that the SharePoint document record is associated with. */
-		regardingobjectid_kbarticle: DevKit.WebApi.LookupValue;
+		regardingobjectid_kbarticle: string;
 		/** Choose the parent record that the SharePoint document record is associated with. */
-		regardingobjectid_knowledgearticle: DevKit.WebApi.LookupValue;
+		regardingobjectid_knowledgearticle: string;
 		/** Choose the parent record that the SharePoint document record is associated with. */
-		regardingobjectid_lead: DevKit.WebApi.LookupValue;
+		regardingobjectid_lead: string;
 		/** Choose the parent record that the SharePoint document record is associated with. */
-		regardingobjectid_msdyn_agreement: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreement: string;
 		/** Choose the parent record that the SharePoint document record is associated with. */
-		regardingobjectid_msdyn_agreementbookingdate: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingdate: string;
 		/** Choose the parent record that the SharePoint document record is associated with. */
-		regardingobjectid_msdyn_agreementbookingsetup: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingsetup: string;
 		/** Choose the parent record that the SharePoint document record is associated with. */
-		regardingobjectid_msdyn_agreementinvoicedate: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementinvoicedate: string;
 		/** Choose the parent record that the SharePoint document record is associated with. */
-		regardingobjectid_msdyn_agreementinvoicesetup: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementinvoicesetup: string;
 		/** Choose the parent record that the SharePoint document record is associated with. */
-		regardingobjectid_msdyn_bookingtimestamp: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bookingtimestamp: string;
 		/** Choose the parent record that the SharePoint document record is associated with. */
-		regardingobjectid_msdyn_expense: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_expense: string;
 		/** Choose the parent record that the SharePoint document record is associated with. */
-		regardingobjectid_msdyn_incidenttypeproduct: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_incidenttypeproduct: string;
 		/** Choose the parent record that the SharePoint document record is associated with. */
-		regardingobjectid_msdyn_inventoryadjustment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_inventoryadjustment: string;
 		/** Choose the parent record that the SharePoint document record is associated with. */
-		regardingobjectid_msdyn_inventoryadjustmentproduct: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_inventoryadjustmentproduct: string;
 		/** Choose the parent record that the SharePoint document record is associated with. */
-		regardingobjectid_msdyn_inventorytransfer: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_inventorytransfer: string;
 		/** Choose the parent record that the SharePoint document record is associated with. */
-		regardingobjectid_msdyn_knowledgearticletemplate: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_knowledgearticletemplate: string;
 		/** Choose the parent record that the SharePoint document record is associated with. */
-		regardingobjectid_msdyn_playbookactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_playbookactivity: string;
 		/** Choose the parent record that the SharePoint document record is associated with. */
-		regardingobjectid_msdyn_project: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_project: string;
 		/** Choose the parent record that the SharePoint document record is associated with. */
-		regardingobjectid_msdyn_purchaseorder: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseorder: string;
 		/** Choose the parent record that the SharePoint document record is associated with. */
-		regardingobjectid_msdyn_purchaseorderproduct: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseorderproduct: string;
 		/** Choose the parent record that the SharePoint document record is associated with. */
-		regardingobjectid_msdyn_purchaseorderreceipt: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseorderreceipt: string;
 		/** Choose the parent record that the SharePoint document record is associated with. */
-		regardingobjectid_msdyn_resourceterritory: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_resourceterritory: string;
 		/** Choose the parent record that the SharePoint document record is associated with. */
-		regardingobjectid_msdyn_rma: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rma: string;
 		/** Choose the parent record that the SharePoint document record is associated with. */
-		regardingobjectid_msdyn_rmareceipt: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rmareceipt: string;
 		/** Choose the parent record that the SharePoint document record is associated with. */
-		regardingobjectid_msdyn_rtv: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rtv: string;
 		/** Choose the parent record that the SharePoint document record is associated with. */
-		regardingobjectid_msdyn_timegroup: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_timegroup: string;
 		/** Choose the parent record that the SharePoint document record is associated with. */
-		regardingobjectid_msdyn_timegroupdetail: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_timegroupdetail: string;
 		/** Choose the parent record that the SharePoint document record is associated with. */
-		regardingobjectid_msdyn_warehouse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_warehouse: string;
 		/** Choose the parent record that the SharePoint document record is associated with. */
-		regardingobjectid_msdyn_workorder: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorder: string;
 		/** Choose the parent record that the SharePoint document record is associated with. */
-		regardingobjectid_msdyn_workorderincident: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderincident: string;
 		/** Choose the parent record that the SharePoint document record is associated with. */
-		regardingobjectid_msdyn_workorderproduct: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderproduct: string;
 		/** Choose the parent record that the SharePoint document record is associated with. */
-		regardingobjectid_msdyn_workorderservice: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderservice: string;
 		/** Choose the parent record that the SharePoint document record is associated with. */
-		regardingobjectid_msdyn_workorderservicetask: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderservicetask: string;
 		/** Choose the parent record that the SharePoint document record is associated with. */
-		regardingobjectid_product: DevKit.WebApi.LookupValue;
+		regardingobjectid_product: string;
 		/** Choose the parent record that the SharePoint document record is associated with. */
-		regardingobjectid_quote: DevKit.WebApi.LookupValue;
+		regardingobjectid_quote: string;
 		/** Choose the parent record that the SharePoint document record is associated with. */
-		regardingobjectid_salesliterature: DevKit.WebApi.LookupValue;
+		regardingobjectid_salesliterature: string;
 		/** Relative location of Sharepoint Document */
-		RelativeLocation: DevKit.WebApi.StringValueReadonly;
+		readonly RelativeLocation: string;
 		/** Shows the service type of the SharePoint site. */
-		ServiceType: DevKit.WebApi.OptionSetValue;
+		ServiceType: OptionSet.SharePointDocument.ServiceType;
 		/** Shows the date and time when the SharePoint document record was created. */
-		SharePointCreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly SharePointCreatedOn_UtcDateAndTime: Date;
 		/** Shows the unique identifier of the SharePoint document record. */
-		SharePointDocumentId: DevKit.WebApi.GuidValue;
+		SharePointDocumentId: string;
 		/** Shows who last updated the document record. */
-		SharePointModifiedBy: DevKit.WebApi.StringValueReadonly;
+		readonly SharePointModifiedBy: string;
 		/** Shows the title or name that describes the SharePoint document. */
-		Title: DevKit.WebApi.StringValueReadonly;
+		readonly Title: string;
 		/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValueReadonly;
+		readonly TransactionCurrencyId: string;
 		/** Shows the SharePoint document version */
-		Version: DevKit.WebApi.StringValueReadonly;
+		readonly Version: string;
 	}
 }
 declare namespace OptionSet {
@@ -256,4 +258,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

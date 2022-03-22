@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,50 +30,50 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the process dependency. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the process dependency was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the process dependency. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Name of the entity used in the process. */
-		CustomEntityName: DevKit.WebApi.StringValue;
+		CustomEntityName: string;
 		/** Name of the attribute used in the process. */
-		DependentAttributeName: DevKit.WebApi.StringValue;
+		DependentAttributeName: string;
 		/** Name of the entity used in the process. */
-		DependentEntityName: DevKit.WebApi.StringValue;
+		DependentEntityName: string;
 		/** Comma-separated list of attributes that will be passed to process instance. */
-		EntityAttributes: DevKit.WebApi.StringValue;
+		EntityAttributes: string;
 		/** Unique identifier of the user who last modified the process dependency. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the process dependency was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the process dependency. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValueReadonly;
+		readonly OwnerId_team: string;
 		/** Unique identifier of the business unit that owns the process dependency. */
-		OwningBusinessUnit: DevKit.WebApi.GuidValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier of the user who owns the process dependency. */
-		OwningUser: DevKit.WebApi.GuidValueReadonly;
+		readonly OwningUser: string;
 		/** Name of the process parameter. */
-		ParameterName: DevKit.WebApi.StringValue;
+		ParameterName: string;
 		/** Fully qualified name of the CLR type of the local parameter. */
-		ParameterType: DevKit.WebApi.StringValue;
+		ParameterType: string;
 		/** Attribute of the primary entity that specifies related entity. */
-		RelatedAttributeName: DevKit.WebApi.StringValue;
+		RelatedAttributeName: string;
 		/** Name of the related entity. */
-		RelatedEntityName: DevKit.WebApi.StringValue;
+		RelatedEntityName: string;
 		/** Unique identifier of the SDK message. */
-		SdkMessageId: DevKit.WebApi.LookupValue;
+		SdkMessageId: string;
 		/** Type of the process dependency. */
-		Type: DevKit.WebApi.OptionSetValue;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		Type: OptionSet.WorkflowDependency.Type;
+		readonly VersionNumber: number;
 		/** Unique identifier of the process dependency. */
-		WorkflowDependencyId: DevKit.WebApi.GuidValue;
+		WorkflowDependencyId: string;
 		/** Unique identifier of the process with which the dependency is associated. */
-		WorkflowId: DevKit.WebApi.LookupValue;
+		WorkflowId: string;
 	}
 }
 declare namespace OptionSet {
@@ -114,4 +116,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

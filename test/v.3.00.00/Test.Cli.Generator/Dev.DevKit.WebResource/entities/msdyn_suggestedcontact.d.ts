@@ -69,8 +69,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -78,27 +80,27 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Account Name */
-		msdyn_accountidname: DevKit.WebApi.StringValue;
-		msdyn_accountname: DevKit.WebApi.StringValue;
-		msdyn_addresscity: DevKit.WebApi.StringValue;
-		msdyn_addressline1: DevKit.WebApi.StringValue;
-		msdyn_addressline2: DevKit.WebApi.StringValue;
-		msdyn_addresspostalcode: DevKit.WebApi.StringValue;
-		msdyn_companyname: DevKit.WebApi.StringValue;
+		msdyn_accountidname: string;
+		msdyn_accountname: string;
+		msdyn_addresscity: string;
+		msdyn_addressline1: string;
+		msdyn_addressline2: string;
+		msdyn_addresspostalcode: string;
+		msdyn_companyname: string;
 		/** Date and time when the record was created. */
-		msdyn_createdon_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
-		msdyn_description: DevKit.WebApi.StringValue;
-		msdyn_email: DevKit.WebApi.StringValue;
+		msdyn_createdon_UtcDateAndTime: Date;
+		msdyn_description: string;
+		msdyn_email: string;
 		/** first name */
-		msdyn_firstname: DevKit.WebApi.StringValue;
-		msdyn_fullname: DevKit.WebApi.StringValue;
-		msdyn_jobtitle: DevKit.WebApi.StringValue;
-		msdyn_lastname: DevKit.WebApi.StringValue;
-		msdyn_mobilephone: DevKit.WebApi.StringValue;
-		msdyn_preferredcontactmethodcode: DevKit.WebApi.StringValue;
+		msdyn_firstname: string;
+		msdyn_fullname: string;
+		msdyn_jobtitle: string;
+		msdyn_lastname: string;
+		msdyn_mobilephone: string;
+		msdyn_preferredcontactmethodcode: string;
 		/** Unique identifier for entity instances */
-		msdyn_suggestedcontactId: DevKit.WebApi.GuidValue;
-		msdyn_telephone: DevKit.WebApi.StringValue;
+		msdyn_suggestedcontactId: string;
+		msdyn_telephone: string;
 	}
 }
 declare namespace OptionSet {
@@ -121,4 +123,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

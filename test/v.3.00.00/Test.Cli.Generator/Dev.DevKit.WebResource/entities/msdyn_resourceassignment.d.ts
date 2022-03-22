@@ -47,8 +47,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -56,85 +58,85 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Exchange rate for the currency associated with the entity with respect to the base currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Shows the resource. */
-		msdyn_bookableresourceid: DevKit.WebApi.LookupValue;
+		msdyn_bookableresourceid: string;
 		/** Booking Status */
-		msdyn_bookingstatusid: DevKit.WebApi.LookupValue;
+		msdyn_bookingstatusid: string;
 		/** Select the commitment type of the assignment (hard or soft). */
-		msdyn_CommitType: DevKit.WebApi.OptionSetValue;
+		msdyn_CommitType: OptionSet.msdyn_resourceassignment.msdyn_CommitType;
 		/** Enter the date a resource is assigned from. */
-		msdyn_fromdate_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		msdyn_fromdate_UtcDateOnly: Date;
 		/** Enter the number of hours for which a resource is assigned. */
-		msdyn_hours: DevKit.WebApi.DecimalValue;
+		msdyn_hours: number;
 		/** id for resource assignment in ms project */
-		msdyn_msprojectclientid: DevKit.WebApi.StringValue;
+		msdyn_msprojectclientid: string;
 		/** Type the name of the custom entity. */
-		msdyn_name: DevKit.WebApi.StringValue;
+		msdyn_name: string;
 		/** Planned Cost Amount */
-		msdyn_plannedcost: DevKit.WebApi.MoneyValue;
+		msdyn_plannedcost: number;
 		/** Value of the Planned Cost in base currency. */
-		msdyn_plannedcost_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_plannedcost_Base: number;
 		/** Serialized planned cost contour */
-		msdyn_plannedcostcontour: DevKit.WebApi.StringValue;
+		msdyn_plannedcostcontour: string;
 		/** Planned Sales Amount */
-		msdyn_plannedsales: DevKit.WebApi.MoneyValue;
+		msdyn_plannedsales: number;
 		/** Value of the Planned Sales in base currency. */
-		msdyn_plannedsales_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_plannedsales_Base: number;
 		/** Serialized planned sales contour */
-		msdyn_plannedsalescontour: DevKit.WebApi.StringValue;
+		msdyn_plannedsalescontour: string;
 		/** Serialized planned work schedule for assigned resource */
-		msdyn_plannedwork: DevKit.WebApi.StringValue;
+		msdyn_plannedwork: string;
 		/** Select the project for which the resource is assigned. */
-		msdyn_projectid: DevKit.WebApi.LookupValue;
+		msdyn_projectid: string;
 		/** Unique identifier for Project Team Member associated with Resource Assignment. */
-		msdyn_projectteamid: DevKit.WebApi.LookupValue;
+		msdyn_projectteamid: string;
 		/** Unique identifier for entity instances */
-		msdyn_resourceassignmentId: DevKit.WebApi.GuidValue;
+		msdyn_resourceassignmentId: string;
 		/** Select the task for which the resource is assigned to. */
-		msdyn_taskid: DevKit.WebApi.LookupValue;
+		msdyn_taskid: string;
 		/** Enter the end date until which a resource is assigned. */
-		msdyn_todate_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		msdyn_todate_UtcDateOnly: Date;
 		/** Select the user whose capacity is assigned. */
-		msdyn_userresourceid: DevKit.WebApi.LookupValue;
+		msdyn_userresourceid: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Status of the Resource Assignment */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.msdyn_resourceassignment.statecode;
 		/** Reason for the status of the Resource Assignment */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.msdyn_resourceassignment.statuscode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Unique identifier of the currency associated with the entity. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -181,4 +183,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

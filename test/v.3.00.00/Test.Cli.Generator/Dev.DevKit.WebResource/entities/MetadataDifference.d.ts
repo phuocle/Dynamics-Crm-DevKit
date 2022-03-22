@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,19 +30,19 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Date and time when the metadata difference was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Difference Xml */
-		DifferenceXml: DevKit.WebApi.StringValue;
+		DifferenceXml: string;
 		/** Introduced Version */
-		IntroducedVersion: DevKit.WebApi.DoubleValue;
+		IntroducedVersion: number;
 		/** Version in which the differences were introduced. */
-		IntroducedVersionString: DevKit.WebApi.StringValue;
+		IntroducedVersionString: string;
 		/** Unique identifier of the metadata difference. */
-		MetadataDifferenceId: DevKit.WebApi.GuidValue;
+		MetadataDifferenceId: string;
 		/** Date and time when the metadata difference was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 	}
 }
 declare namespace OptionSet {
@@ -63,4 +65,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

@@ -58,8 +58,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -67,47 +69,47 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Advanced Similarity RuleId associated with entity mapping. */
-		AdvancedSimilarityRuleId: DevKit.WebApi.LookupValue;
+		AdvancedSimilarityRuleId: string;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.TextAnalyticsEntityMapping.ComponentState;
 		/** Entity */
-		Entity1: DevKit.WebApi.StringValue;
+		Entity1: string;
 		/** Entity Display Name */
-		EntityDisplayName: DevKit.WebApi.StringValue;
+		EntityDisplayName: string;
 		/** Select Entity */
-		EntityPickList: DevKit.WebApi.OptionSetValue;
+		EntityPickList: OptionSet.TextAnalyticsEntityMapping.EntityPickList;
 		/** Field */
-		Field: DevKit.WebApi.StringValue;
+		Field: string;
 		/** Field Display Name */
-		FieldDisplayName: DevKit.WebApi.StringValue;
+		FieldDisplayName: string;
 		/** Select Field */
-		FieldPickList: DevKit.WebApi.OptionSetValue;
+		FieldPickList: OptionSet.TextAnalyticsEntityMapping.FieldPickList;
 		/** Is Manageed */
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsManaged: boolean;
 		/** Specify if the mapping is for text match or exact match */
-		IsTextMatchMapping: DevKit.WebApi.BooleanValue;
+		IsTextMatchMapping: boolean;
 		/** Knowledge Search Model associated with entity mapping. */
-		KnowledgeSearchModelId: DevKit.WebApi.LookupValue;
+		KnowledgeSearchModelId: string;
 		/** Model Type. */
-		ModelType: DevKit.WebApi.IntegerValue;
+		ModelType: number;
 		/** Unique identifier of the organization associated with the Text Analytics Entity Mapping. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Date and time when the record was created. */
-		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly OverwriteTime_UtcDateOnly: Date;
 		/** Relationship Name */
-		RelationshipName: DevKit.WebApi.StringValue;
+		RelationshipName: string;
 		/** Similarity Rule associated with entity mapping. */
-		SimilarityRuleId: DevKit.WebApi.LookupValue;
+		SimilarityRuleId: string;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** For internal use only. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SupportingSolutionId: string;
 		/** Unique identifier for entity instances */
-		TextAnalyticsEntityMappingId: DevKit.WebApi.GuidValue;
+		TextAnalyticsEntityMappingId: string;
 		/** Unique identifier of the Text Analytics Entity Mapping */
-		TextAnalyticsEntityMappingIdUnique: DevKit.WebApi.GuidValueReadonly;
+		readonly TextAnalyticsEntityMappingIdUnique: string;
 		/** Topic Model Configuration associated with entity mapping. */
-		TopicModelConfigurationId: DevKit.WebApi.LookupValue;
+		TopicModelConfigurationId: string;
 	}
 }
 declare namespace OptionSet {
@@ -152,4 +154,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

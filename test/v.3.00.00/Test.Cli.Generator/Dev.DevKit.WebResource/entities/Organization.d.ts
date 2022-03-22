@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,796 +30,808 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** ACI Web Endpoint URL. */
-		ACIWebEndpointUrl: DevKit.WebApi.StringValue;
+		ACIWebEndpointUrl: string;
 		/** Unique identifier of the template to be used for acknowledgement when a user unsubscribes. */
-		AcknowledgementTemplateId: DevKit.WebApi.LookupValue;
+		AcknowledgementTemplateId: string;
+		/** Information on whether filtering activity based on entity in app. */
+		ActivityTypeFilter: boolean;
 		/** Flag to indicate if the display column options on a view in model-driven apps is enabled */
-		AdvancedColumnEditorEnabled: DevKit.WebApi.BooleanValue;
+		AdvancedColumnEditorEnabled: boolean;
 		/** Flag to indicate if the advanced column filtering in a view in model-driven apps is enabled */
-		AdvancedColumnFilteringEnabled: DevKit.WebApi.BooleanValue;
+		AdvancedColumnFilteringEnabled: boolean;
 		/** Flag to indicate if the advanced filtering on all tables in a model-driven app is enabled */
-		AdvancedFilteringEnabled: DevKit.WebApi.BooleanValue;
+		AdvancedFilteringEnabled: boolean;
 		/** Flag to indicate if the Advanced Lookup feature is enabled for lookup controls */
-		AdvancedLookupEnabled: DevKit.WebApi.BooleanValue;
+		AdvancedLookupEnabled: boolean;
 		/** Indicates whether background address book synchronization in Microsoft Office Outlook is allowed. */
-		AllowAddressBookSyncs: DevKit.WebApi.BooleanValue;
+		AllowAddressBookSyncs: boolean;
 		/** Indicates whether automatic response creation is allowed. */
-		AllowAutoResponseCreation: DevKit.WebApi.BooleanValue;
+		AllowAutoResponseCreation: boolean;
 		/** Indicates whether automatic unsubscribe is allowed. */
-		AllowAutoUnsubscribe: DevKit.WebApi.BooleanValue;
+		AllowAutoUnsubscribe: boolean;
 		/** Indicates whether automatic unsubscribe acknowledgement email is allowed to send. */
-		AllowAutoUnsubscribeAcknowledgement: DevKit.WebApi.BooleanValue;
+		AllowAutoUnsubscribeAcknowledgement: boolean;
 		/** Indicates whether Outlook Client message bar advertisement is allowed. */
-		AllowClientMessageBarAd: DevKit.WebApi.BooleanValue;
+		AllowClientMessageBarAd: boolean;
 		/** Indicates whether auditing of changes to entity is allowed when no attributes have changed. */
-		AllowEntityOnlyAudit: DevKit.WebApi.BooleanValue;
+		AllowEntityOnlyAudit: boolean;
 		/** Enable access to legacy web client UI */
-		AllowLegacyClientExperience: DevKit.WebApi.BooleanValue;
+		AllowLegacyClientExperience: boolean;
 		/** Enable embedding of certain legacy dialogs in Unified Interface browser client */
-		AllowLegacyDialogsEmbedding: DevKit.WebApi.BooleanValue;
+		AllowLegacyDialogsEmbedding: boolean;
 		/** Indicates whether marketing emails execution is allowed. */
-		AllowMarketingEmailExecution: DevKit.WebApi.BooleanValue;
+		AllowMarketingEmailExecution: boolean;
 		/** Indicates whether background offline synchronization in Microsoft Office Outlook is allowed. */
-		AllowOfflineScheduledSyncs: DevKit.WebApi.BooleanValue;
+		AllowOfflineScheduledSyncs: boolean;
 		/** Indicates whether scheduled synchronizations to Outlook are allowed. */
-		AllowOutlookScheduledSyncs: DevKit.WebApi.BooleanValue;
+		AllowOutlookScheduledSyncs: boolean;
 		/** Control whether the organization Allow Redirect Legacy Admin Settings To Modern UI */
-		AllowRedirectAdminSettingsToModernUI: DevKit.WebApi.BooleanValue;
+		AllowRedirectAdminSettingsToModernUI: boolean;
 		/** Indicates whether users are allowed to send email to unresolved parties (parties must still have an email address). */
-		AllowUnresolvedPartiesOnEmailSend: DevKit.WebApi.BooleanValue;
+		AllowUnresolvedPartiesOnEmailSend: boolean;
 		/** Indicates whether individuals can select their form mode preference in their personal options. */
-		AllowUserFormModePreference: DevKit.WebApi.BooleanValue;
+		AllowUserFormModePreference: boolean;
 		/** Flag to indicate if allow end users to hide system views in model-driven apps is enabled */
-		AllowUsersHidingSystemViews: DevKit.WebApi.BooleanValue;
+		AllowUsersHidingSystemViews: boolean;
 		/** Indicates whether the showing tablet application notification bars in a browser is allowed. */
-		AllowUsersSeeAppdownloadMessage: DevKit.WebApi.BooleanValue;
+		AllowUsersSeeAppdownloadMessage: boolean;
 		/** Indicates whether Web-based export of grids to Microsoft Office Excel is allowed. */
-		AllowWebExcelExport: DevKit.WebApi.BooleanValue;
+		AllowWebExcelExport: boolean;
 		/** AM designator to use throughout Microsoft Dynamics CRM. */
-		AMDesignator: DevKit.WebApi.StringValue;
+		AMDesignator: string;
 		/** Indicates whether the appDesignerExperience is enabled for the organization. */
-		AppDesignerExperienceEnabled: DevKit.WebApi.BooleanValue;
+		AppDesignerExperienceEnabled: boolean;
 		/** Information on whether rich editing experience for Appointment is enabled. */
-		AppointmentRichEditorExperience: DevKit.WebApi.BooleanValue;
+		AppointmentRichEditorExperience: boolean;
+		/** Information on whether Teams meeting experience for Appointment is enabled. */
+		AppointmentWithTeamsMeeting: boolean;
 		/** Audit Retention Period settings stored in Organization Database. */
-		AuditRetentionPeriod: DevKit.WebApi.IntegerValue;
+		AuditRetentionPeriod: number;
 		/** Audit Retention Period settings stored in Organization Database. */
-		AuditRetentionPeriodV2: DevKit.WebApi.IntegerValue;
+		AuditRetentionPeriodV2: number;
 		/** Select whether to auto apply the default customer entitlement on case creation. */
-		AutoApplyDefaultonCaseCreate: DevKit.WebApi.BooleanValue;
+		AutoApplyDefaultonCaseCreate: boolean;
 		/** Select whether to auto apply the default customer entitlement on case update. */
-		AutoApplyDefaultonCaseUpdate: DevKit.WebApi.BooleanValue;
+		AutoApplyDefaultonCaseUpdate: boolean;
 		/** Indicates whether to Auto-apply SLA on case record update after SLA was manually applied. */
-		AutoApplySLA: DevKit.WebApi.BooleanValue;
+		AutoApplySLA: boolean;
 		/** For internal use only. */
-		AzureSchedulerJobCollectionName: DevKit.WebApi.StringValue;
+		AzureSchedulerJobCollectionName: string;
 		/** Unique identifier of the base currency of the organization. */
-		BaseCurrencyId: DevKit.WebApi.LookupValue;
+		BaseCurrencyId: string;
 		/** Number of decimal places that can be used for the base currency. */
-		BaseCurrencyPrecision: DevKit.WebApi.IntegerValueReadonly;
+		readonly BaseCurrencyPrecision: number;
 		/** Symbol used for the base currency. */
-		BaseCurrencySymbol: DevKit.WebApi.StringValueReadonly;
-		BaseISOCurrencyCode: DevKit.WebApi.StringValueReadonly;
+		readonly BaseCurrencySymbol: string;
+		readonly BaseISOCurrencyCode: string;
 		/** Api Key to be used in requests to Bing Maps services. */
-		BingMapsApiKey: DevKit.WebApi.StringValue;
+		BingMapsApiKey: string;
 		/** Prevent upload or download of certain attachment types that are considered dangerous. */
-		BlockedAttachments: DevKit.WebApi.StringValue;
+		BlockedAttachments: string;
 		/** Display cards in expanded state for interactive dashboard */
-		BoundDashboardDefaultCardExpanded: DevKit.WebApi.BooleanValue;
+		BoundDashboardDefaultCardExpanded: boolean;
 		/** Prefix used for bulk operation numbering. */
-		BulkOperationPrefix: DevKit.WebApi.StringValue;
+		BulkOperationPrefix: string;
 		/** BusinessCardOptions */
-		BusinessCardOptions: DevKit.WebApi.StringValue;
+		BusinessCardOptions: string;
 		/** Unique identifier of the business closure calendar of organization. */
-		BusinessClosureCalendarId: DevKit.WebApi.GuidValue;
+		BusinessClosureCalendarId: string;
 		/** Calendar type for the system. Set to Gregorian US by default. */
-		CalendarType: DevKit.WebApi.IntegerValue;
+		CalendarType: number;
 		/** Prefix used for campaign numbering. */
-		CampaignPrefix: DevKit.WebApi.StringValue;
+		CampaignPrefix: string;
 		/** Indicates whether the organization can opt out of the new Relevance search experience (released in Oct 2020) */
-		CanOptOutNewSearchExperience: DevKit.WebApi.BooleanValue;
+		CanOptOutNewSearchExperience: boolean;
 		/** Flag to cascade Update on incident. */
-		CascadeStatusUpdate: DevKit.WebApi.BooleanValue;
+		CascadeStatusUpdate: boolean;
 		/** Prefix to use for all cases throughout Microsoft Dynamics 365. */
-		CasePrefix: DevKit.WebApi.StringValue;
+		CasePrefix: string;
 		/** Type the prefix to use for all categories in Microsoft Dynamics 365. */
-		CategoryPrefix: DevKit.WebApi.StringValue;
+		CategoryPrefix: string;
 		/** Client Features to be enabled as an XML BLOB. */
-		ClientFeatureSet: DevKit.WebApi.StringValue;
+		ClientFeatureSet: string;
 		/** Policy configuration for CSP */
-		ContentSecurityPolicyConfiguration: DevKit.WebApi.StringValue;
+		ContentSecurityPolicyConfiguration: string;
+		/** CSP Policy configuration for Canvas apps. */
+		ContentSecurityPolicyConfigurationForCanvas: string;
 		/** Prefix to use for all contracts throughout Microsoft Dynamics 365. */
-		ContractPrefix: DevKit.WebApi.StringValue;
+		ContractPrefix: string;
 		/** Refresh rate for copresence data in seconds. */
-		CopresenceRefreshRate: DevKit.WebApi.IntegerValue;
+		CopresenceRefreshRate: number;
 		/** Indicates whether the feature CortanaProactiveExperience Flow processes should be enabled for the organization. */
-		CortanaProactiveExperienceEnabled: DevKit.WebApi.BooleanValue;
+		CortanaProactiveExperienceEnabled: boolean;
 		/** Unique identifier of the user who created the organization. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the organization was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the organization. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Enable Initial state of newly created products to be Active instead of Draft */
-		CreateProductsWithoutParentInActiveState: DevKit.WebApi.BooleanValue;
+		CreateProductsWithoutParentInActiveState: boolean;
 		/** Number of decimal places that can be used for currency. */
-		CurrencyDecimalPrecision: DevKit.WebApi.IntegerValue;
+		CurrencyDecimalPrecision: number;
 		/** Indicates whether to display money fields with currency code or currency symbol. */
-		CurrencyDisplayOption: DevKit.WebApi.OptionSetValue;
+		CurrencyDisplayOption: OptionSet.Organization.CurrencyDisplayOption;
 		/** Information about how currency symbols are placed throughout Microsoft Dynamics CRM. */
-		CurrencyFormatCode: DevKit.WebApi.OptionSetValue;
+		CurrencyFormatCode: OptionSet.Organization.CurrencyFormatCode;
 		/** Symbol used for currency throughout Microsoft Dynamics 365. */
-		CurrencySymbol: DevKit.WebApi.StringValue;
+		CurrencySymbol: string;
 		/** Current bulk operation number. Deprecated. Use SetAutoNumberSeed message. */
-		CurrentBulkOperationNumber: DevKit.WebApi.IntegerValue;
+		CurrentBulkOperationNumber: number;
 		/** Current campaign number. Deprecated. Use SetAutoNumberSeed message. */
-		CurrentCampaignNumber: DevKit.WebApi.IntegerValue;
+		CurrentCampaignNumber: number;
 		/** First case number to use. Deprecated. Use SetAutoNumberSeed message. */
-		CurrentCaseNumber: DevKit.WebApi.IntegerValue;
+		CurrentCaseNumber: number;
 		/** Enter the first number to use for Categories. Deprecated. Use SetAutoNumberSeed message. */
-		CurrentCategoryNumber: DevKit.WebApi.IntegerValue;
+		CurrentCategoryNumber: number;
 		/** First contract number to use. Deprecated. Use SetAutoNumberSeed message. */
-		CurrentContractNumber: DevKit.WebApi.IntegerValue;
+		CurrentContractNumber: number;
 		/** Import sequence to use. */
-		CurrentImportSequenceNumber: DevKit.WebApi.IntegerValueReadonly;
+		readonly CurrentImportSequenceNumber: number;
 		/** First invoice number to use. Deprecated. Use SetAutoNumberSeed message. */
-		CurrentInvoiceNumber: DevKit.WebApi.IntegerValue;
+		CurrentInvoiceNumber: number;
 		/** Enter the first number to use for knowledge articles. Deprecated. Use SetAutoNumberSeed message. */
-		CurrentKaNumber: DevKit.WebApi.IntegerValue;
+		CurrentKaNumber: number;
 		/** First article number to use. Deprecated. Use SetAutoNumberSeed message. */
-		CurrentKbNumber: DevKit.WebApi.IntegerValue;
+		CurrentKbNumber: number;
 		/** First order number to use. Deprecated. Use SetAutoNumberSeed message. */
-		CurrentOrderNumber: DevKit.WebApi.IntegerValue;
+		CurrentOrderNumber: number;
 		/** First parsed table number to use. */
-		CurrentParsedTableNumber: DevKit.WebApi.IntegerValueReadonly;
+		readonly CurrentParsedTableNumber: number;
 		/** First quote number to use. Deprecated. Use SetAutoNumberSeed message. */
-		CurrentQuoteNumber: DevKit.WebApi.IntegerValue;
+		CurrentQuoteNumber: number;
 		/** Information about how the date is displayed throughout Microsoft CRM. */
-		DateFormatCode: DevKit.WebApi.OptionSetValue;
+		DateFormatCode: OptionSet.Organization.DateFormatCode;
 		/** String showing how the date is displayed throughout Microsoft CRM. */
-		DateFormatString: DevKit.WebApi.StringValue;
+		DateFormatString: string;
 		/** Character used to separate the month, the day, and the year in dates throughout Microsoft Dynamics 365. */
-		DateSeparator: DevKit.WebApi.StringValue;
+		DateSeparator: string;
 		/** The maximum value for the Mobile Offline setting Days since record last modified */
-		DaysSinceRecordLastModifiedMaxValue: DevKit.WebApi.IntegerValueReadonly;
+		readonly DaysSinceRecordLastModifiedMaxValue: number;
 		/** Symbol used for decimal in Microsoft Dynamics 365. */
-		DecimalSymbol: DevKit.WebApi.StringValue;
+		DecimalSymbol: string;
 		/** Text area to enter default country code. */
-		DefaultCountryCode: DevKit.WebApi.StringValue;
+		DefaultCountryCode: string;
 		/** Name of the default crm custom. */
-		DefaultCrmCustomName: DevKit.WebApi.StringValue;
+		DefaultCrmCustomName: string;
 		/** Unique identifier of the default email server profile. */
-		DefaultEmailServerProfileId: DevKit.WebApi.LookupValue;
+		DefaultEmailServerProfileId: string;
 		/** XML string containing the default email settings that are applied when a user or queue is created. */
-		DefaultEmailSettings: DevKit.WebApi.StringValue;
+		DefaultEmailSettings: string;
 		/** Unique identifier of the default mobile offline profile. */
-		DefaultMobileOfflineProfileId: DevKit.WebApi.LookupValue;
+		DefaultMobileOfflineProfileId: string;
 		/** Type of default recurrence end range date. */
-		DefaultRecurrenceEndRangeType: DevKit.WebApi.OptionSetValue;
+		DefaultRecurrenceEndRangeType: OptionSet.Organization.DefaultRecurrenceEndRangeType;
 		/** Indicates whether the default teams linked chat title is the record name */
-		DefaultTeamsChatTitleRecordName: DevKit.WebApi.BooleanValue;
+		DefaultTeamsChatTitleRecordName: boolean;
 		/** Default theme data for the organization. */
-		DefaultThemeData: DevKit.WebApi.StringValue;
+		DefaultThemeData: string;
 		/** Unique identifier of the delegated admin user for the organization. */
-		DelegatedAdminUserId: DevKit.WebApi.GuidValue;
+		DelegatedAdminUserId: string;
 		/** Reason for disabling the organization. */
-		DisabledReason: DevKit.WebApi.StringValueReadonly;
+		readonly DisabledReason: string;
 		/** Indicates whether Social Care is disabled. */
-		DisableSocialCare: DevKit.WebApi.BooleanValue;
+		DisableSocialCare: boolean;
 		/** Discount calculation method for the QOOI product. */
-		DiscountCalculationMethod: DevKit.WebApi.OptionSetValue;
+		DiscountCalculationMethod: OptionSet.Organization.DiscountCalculationMethod;
 		/** Indicates whether or not navigation tour is displayed. */
-		DisplayNavigationTour: DevKit.WebApi.BooleanValue;
+		DisplayNavigationTour: boolean;
 		/** Select if you want to use the Email Router or server-side synchronization for email processing. */
-		EmailConnectionChannel: DevKit.WebApi.OptionSetValue;
+		EmailConnectionChannel: OptionSet.Organization.EmailConnectionChannel;
 		/** Flag to turn email correlation on or off. */
-		EmailCorrelationEnabled: DevKit.WebApi.BooleanValue;
+		EmailCorrelationEnabled: boolean;
 		/** Normal polling frequency used for sending email in Microsoft Office Outlook. */
-		EmailSendPollingPeriod: DevKit.WebApi.IntegerValue;
+		EmailSendPollingPeriod: number;
+		/** Indicates the selected default view in the enhanced insert e-mail template experience.. */
+		EmailTemplateDefaultView: OptionSet.Organization.EmailTemplateDefaultView;
 		/** Determines whether records merged through the merge dialog in UCI are merged asynchronously */
-		EnableAsyncMergeAPIForUCI: DevKit.WebApi.BooleanValue;
+		EnableAsyncMergeAPIForUCI: boolean;
 		/** Enable Integration with Bing Maps */
-		EnableBingMapsIntegration: DevKit.WebApi.BooleanValue;
+		EnableBingMapsIntegration: boolean;
+		/** Note: By enabling this feature, you will also enable the automatic creation of enviornment variables when adding data sources for your apps. */
+		EnableCanvasAppsInSolutionsByDefault: boolean;
 		/** Enable Integration with Immersive Skype */
-		EnableImmersiveSkypeIntegration: DevKit.WebApi.BooleanValue;
+		EnableImmersiveSkypeIntegration: boolean;
 		/** Indicates whether the user has enabled or disabled Live Persona Card feature in UCI. */
-		EnableLivePersonaCardUCI: DevKit.WebApi.BooleanValue;
+		EnableLivePersonaCardUCI: boolean;
 		/** Indicates whether the user has enabled or disabled LivePersonCardIntegration in Office. */
-		EnableLivePersonCardIntegrationInOffice: DevKit.WebApi.BooleanValue;
+		EnableLivePersonCardIntegrationInOffice: boolean;
 		/** Select to enable learning path auhtoring. */
-		EnableLPAuthoring: DevKit.WebApi.BooleanValue;
+		EnableLPAuthoring: boolean;
 		/** Control whether the organization Switch Maker Portal to Classic */
-		EnableMakerSwitchToClassic: DevKit.WebApi.BooleanValue;
+		EnableMakerSwitchToClassic: boolean;
 		/** Enable Integration with Microsoft Flow */
-		EnableMicrosoftFlowIntegration: DevKit.WebApi.BooleanValue;
+		EnableMicrosoftFlowIntegration: boolean;
 		/** Enable pricing calculations on a Create call. */
-		EnablePricingOnCreate: DevKit.WebApi.BooleanValue;
+		EnablePricingOnCreate: boolean;
 		/** Indicates whether privacy and sensitivity attributes for new team creation has been enabled */
-		EnableSensitivityLabelsForTeamsCollab: DevKit.WebApi.BooleanValue;
+		EnableSensitivityLabelsForTeamsCollab: boolean;
 		/** Use Smart Matching. */
-		EnableSmartMatching: DevKit.WebApi.BooleanValue;
+		EnableSmartMatching: boolean;
 		/** Enable site map and commanding update */
-		EnableUnifiedInterfaceShellRefresh: DevKit.WebApi.BooleanValue;
+		EnableUnifiedInterfaceShellRefresh: boolean;
 		/** Organization setting to enforce read only plugins. */
-		EnforceReadOnlyPlugins: DevKit.WebApi.BooleanValue;
+		EnforceReadOnlyPlugins: boolean;
 		/** JSON string containing settings for enhanced add products experience in Sales */
-		EnhancedOQOIAddProductsSettings: DevKit.WebApi.StringValue;
+		EnhancedOQOIAddProductsSettings: string;
 		/** The default image for the entity. */
-		EntityImage: DevKit.WebApi.StringValue;
-		EntityImage_Timestamp: DevKit.WebApi.BigIntValueReadonly;
-		EntityImage_URL: DevKit.WebApi.StringValueReadonly;
+		EntityImage: string;
+		EntityImage_Timestamp: number;
+		EntityImage_URL: string;
 		/** For internal use only. */
-		EntityImageId: DevKit.WebApi.GuidValueReadonly;
+		readonly EntityImageId: string;
 		/** Maximum number of days to keep change tracking deleted records */
-		ExpireChangeTrackingInDays: DevKit.WebApi.IntegerValue;
+		ExpireChangeTrackingInDays: number;
 		/** Maximum number of days before deleting inactive subscriptions. */
-		ExpireSubscriptionsInDays: DevKit.WebApi.IntegerValue;
+		ExpireSubscriptionsInDays: number;
 		/** Specify the base URL to use to look for external document suggestions. */
-		ExternalBaseUrl: DevKit.WebApi.StringValue;
+		ExternalBaseUrl: string;
 		/** XML string containing the ExternalPartyEnabled entities correlation keys for association of existing External Party instance entities to newly created IsExternalPartyEnabled entities.For internal use only */
-		ExternalPartyCorrelationKeys: DevKit.WebApi.StringValue;
+		ExternalPartyCorrelationKeys: string;
 		/** XML string containing the ExternalPartyEnabled entities settings. */
-		ExternalPartyEntitySettings: DevKit.WebApi.StringValue;
+		ExternalPartyEntitySettings: string;
 		/** Features to be enabled as an XML BLOB. */
-		FeatureSet: DevKit.WebApi.StringValue;
+		FeatureSet: string;
 		/** Start date for the fiscal period that is to be used throughout Microsoft CRM. */
-		FiscalCalendarStart_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		FiscalCalendarStart_UtcDateOnly: Date;
 		/** Information that specifies how the name of the fiscal period is displayed throughout Microsoft CRM. */
-		FiscalPeriodFormat: DevKit.WebApi.StringValue;
+		FiscalPeriodFormat: string;
 		/** Format in which the fiscal period will be displayed. */
-		FiscalPeriodFormatPeriod: DevKit.WebApi.OptionSetValue;
+		FiscalPeriodFormatPeriod: OptionSet.Organization.FiscalPeriodFormatPeriod;
 		/** Type of fiscal period used throughout Microsoft CRM. */
-		FiscalPeriodType: DevKit.WebApi.IntegerValue;
+		FiscalPeriodType: number;
 		/** Information that specifies whether the fiscal settings have been updated. */
-		FiscalSettingsUpdated: DevKit.WebApi.BooleanValueReadonly;
+		readonly FiscalSettingsUpdated: boolean;
 		/** Information that specifies whether the fiscal year should be displayed based on the start date or the end date of the fiscal year. */
-		FiscalYearDisplayCode: DevKit.WebApi.IntegerValue;
+		FiscalYearDisplayCode: number;
 		/** Information that specifies how the name of the fiscal year is displayed throughout Microsoft CRM. */
-		FiscalYearFormat: DevKit.WebApi.StringValue;
+		FiscalYearFormat: string;
 		/** Prefix for the display of the fiscal year. */
-		FiscalYearFormatPrefix: DevKit.WebApi.OptionSetValue;
+		FiscalYearFormatPrefix: OptionSet.Organization.FiscalYearFormatPrefix;
 		/** Suffix for the display of the fiscal year. */
-		FiscalYearFormatSuffix: DevKit.WebApi.OptionSetValue;
+		FiscalYearFormatSuffix: OptionSet.Organization.FiscalYearFormatSuffix;
 		/** Format for the year. */
-		FiscalYearFormatYear: DevKit.WebApi.OptionSetValue;
+		FiscalYearFormatYear: OptionSet.Organization.FiscalYearFormatYear;
 		/** Information that specifies how the names of the fiscal year and the fiscal period should be connected when displayed together. */
-		FiscalYearPeriodConnect: DevKit.WebApi.StringValue;
+		FiscalYearPeriodConnect: string;
 		/** Order in which names are to be displayed throughout Microsoft CRM. */
-		FullNameConventionCode: DevKit.WebApi.OptionSetValue;
+		FullNameConventionCode: OptionSet.Organization.FullNameConventionCode;
 		/** Specifies the maximum number of months in future for which the recurring activities can be created. */
-		FutureExpansionWindow: DevKit.WebApi.IntegerValue;
+		FutureExpansionWindow: number;
 		/** Indicates whether alerts will be generated for errors. */
-		GenerateAlertsForErrors: DevKit.WebApi.BooleanValue;
+		GenerateAlertsForErrors: boolean;
 		/** Indicates whether alerts will be generated for information. */
-		GenerateAlertsForInformation: DevKit.WebApi.BooleanValue;
+		GenerateAlertsForInformation: boolean;
 		/** Indicates whether alerts will be generated for warnings. */
-		GenerateAlertsForWarnings: DevKit.WebApi.BooleanValue;
+		GenerateAlertsForWarnings: boolean;
 		/** Indicates whether Get Started content is enabled for this organization. */
-		GetStartedPaneContentEnabled: DevKit.WebApi.BooleanValue;
+		GetStartedPaneContentEnabled: boolean;
 		/** Indicates whether the append URL parameters is enabled. */
-		GlobalAppendUrlParametersEnabled: DevKit.WebApi.BooleanValue;
+		GlobalAppendUrlParametersEnabled: boolean;
 		/** URL for the web page global help. */
-		GlobalHelpUrl: DevKit.WebApi.StringValue;
+		GlobalHelpUrl: string;
 		/** Indicates whether the customizable global help is enabled. */
-		GlobalHelpUrlEnabled: DevKit.WebApi.BooleanValue;
+		GlobalHelpUrlEnabled: boolean;
 		/** Number of days after the goal's end date after which the rollup of the goal stops automatically. */
-		GoalRollupExpiryTime: DevKit.WebApi.IntegerValue;
+		GoalRollupExpiryTime: number;
 		/** Number of hours between automatic rollup jobs . */
-		GoalRollupFrequency: DevKit.WebApi.IntegerValue;
+		GoalRollupFrequency: number;
 		/** For internal use only. */
-		GrantAccessToNetworkService: DevKit.WebApi.BooleanValue;
+		GrantAccessToNetworkService: boolean;
 		/** Maximum difference allowed between subject keywords count of the email messaged to be correlated */
-		HashDeltaSubjectCount: DevKit.WebApi.IntegerValue;
+		HashDeltaSubjectCount: number;
 		/** Filter Subject Keywords */
-		HashFilterKeywords: DevKit.WebApi.StringValue;
+		HashFilterKeywords: string;
 		/** Maximum number of subject keywords or recipients used for correlation */
-		HashMaxCount: DevKit.WebApi.IntegerValue;
+		HashMaxCount: number;
 		/** Minimum number of recipients required to match for email messaged to be correlated */
-		HashMinAddressCount: DevKit.WebApi.IntegerValue;
+		HashMinAddressCount: number;
 		/** High contrast theme data for the organization. */
-		HighContrastThemeData: DevKit.WebApi.StringValue;
+		HighContrastThemeData: string;
 		/** Indicates whether incoming email sent by internal Microsoft Dynamics 365 users or queues should be tracked. */
-		IgnoreInternalEmail: DevKit.WebApi.BooleanValue;
+		IgnoreInternalEmail: boolean;
 		/** Indicates whether an organization has consented to sharing search query data to help improve search results */
-		ImproveSearchLoggingEnabled: DevKit.WebApi.BooleanValue;
+		ImproveSearchLoggingEnabled: boolean;
 		/** Information that specifies whether Inactivity timeout is enabled */
-		InactivityTimeoutEnabled: DevKit.WebApi.BooleanValue;
+		InactivityTimeoutEnabled: boolean;
 		/** Inactivity timeout in minutes */
-		InactivityTimeoutInMins: DevKit.WebApi.IntegerValue;
+		InactivityTimeoutInMins: number;
 		/** Inactivity timeout reminder in minutes */
-		InactivityTimeoutReminderInMins: DevKit.WebApi.IntegerValue;
+		InactivityTimeoutReminderInMins: number;
 		/** Setting for the Async Service Mailbox Queue. Defines the retrieval batch size of exchange server. */
-		IncomingEmailExchangeEmailRetrievalBatchSize: DevKit.WebApi.IntegerValue;
+		IncomingEmailExchangeEmailRetrievalBatchSize: number;
 		/** Initial version of the organization. */
-		InitialVersion: DevKit.WebApi.StringValue;
+		InitialVersion: string;
 		/** Unique identifier of the integration user for the organization. */
-		IntegrationUserId: DevKit.WebApi.GuidValue;
+		IntegrationUserId: string;
 		/** Prefix to use for all invoice numbers throughout Microsoft Dynamics 365. */
-		InvoicePrefix: DevKit.WebApi.StringValue;
+		InvoicePrefix: string;
 		/** Indicates whether the feature Action Card should be enabled for the organization. */
-		IsActionCardEnabled: DevKit.WebApi.BooleanValue;
+		IsActionCardEnabled: boolean;
 		/** Information that specifies whether Action Support Feature is enabled */
-		IsActionSupportFeatureEnabled: DevKit.WebApi.BooleanValue;
+		IsActionSupportFeatureEnabled: boolean;
 		/** Indicates whether the feature Relationship Analytics should be enabled for the organization. */
-		IsActivityAnalysisEnabled: DevKit.WebApi.BooleanValue;
+		IsActivityAnalysisEnabled: boolean;
 		/** Indicates whether all money attributes are converted to decimal. */
-		IsAllMoneyDecimal: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsAllMoneyDecimal: boolean;
 		/** Indicates whether loading of Microsoft Dynamics 365 in a browser window that does not have address, tool, and menu bars is enabled. */
-		IsAppMode: DevKit.WebApi.BooleanValue;
+		IsAppMode: boolean;
 		/** Enable or disable attachments sync for outlook and exchange. */
-		IsAppointmentAttachmentSyncEnabled: DevKit.WebApi.BooleanValue;
+		IsAppointmentAttachmentSyncEnabled: boolean;
 		/** Enable or disable assigned tasks sync for outlook and exchange. */
-		IsAssignedTasksSyncEnabled: DevKit.WebApi.BooleanValue;
+		IsAssignedTasksSyncEnabled: boolean;
 		/** Enable or disable auditing of changes. */
-		IsAuditEnabled: DevKit.WebApi.BooleanValue;
+		IsAuditEnabled: boolean;
 		/** Indicates whether the feature Auto Capture should be enabled for the organization. */
-		IsAutoDataCaptureEnabled: DevKit.WebApi.BooleanValue;
+		IsAutoDataCaptureEnabled: boolean;
 		/** Indicates whether the V2 feature of Auto Capture should be enabled for the organization. */
-		IsAutoDataCaptureV2Enabled: DevKit.WebApi.BooleanValue;
+		IsAutoDataCaptureV2Enabled: boolean;
 		/** Information on whether auto save is enabled. */
-		IsAutoSaveEnabled: DevKit.WebApi.BooleanValue;
+		IsAutoSaveEnabled: boolean;
 		/** Information that specifies whether BPF Entity Customization Feature is enabled */
-		IsBPFEntityCustomizationFeatureEnabled: DevKit.WebApi.BooleanValue;
-		IsCollaborationExperienceEnabled: DevKit.WebApi.BooleanValue;
+		IsBPFEntityCustomizationFeatureEnabled: boolean;
+		IsCollaborationExperienceEnabled: boolean;
 		/** Information that specifies whether conflict detection for mobile client is enabled. */
-		IsConflictDetectionEnabledForMobileClient: DevKit.WebApi.BooleanValue;
+		IsConflictDetectionEnabledForMobileClient: boolean;
 		/** Enable or disable mailing address sync for outlook and exchange. */
-		IsContactMailingAddressSyncEnabled: DevKit.WebApi.BooleanValue;
+		IsContactMailingAddressSyncEnabled: boolean;
 		/** Indicates whether Content Security Policy has been enabled for the organization. */
-		IsContentSecurityPolicyEnabled: DevKit.WebApi.BooleanValue;
+		IsContentSecurityPolicyEnabled: boolean;
+		/** Indicates whether Content Security Policy has been enabled for this organization's Canvas apps. */
+		IsContentSecurityPolicyEnabledForCanvas: boolean;
 		/** Indicates whether Contextual email experience is enabled on this organization */
-		IsContextualEmailEnabled: DevKit.WebApi.BooleanValue;
+		IsContextualEmailEnabled: boolean;
 		/** Select to enable Contextual Help in UCI. */
-		IsContextualHelpEnabled: DevKit.WebApi.BooleanValue;
+		IsContextualHelpEnabled: boolean;
 		/** Indicates whether Custom Controls in canvas PowerApps feature has been enabled for the organization. */
-		IsCustomControlsInCanvasAppsEnabled: DevKit.WebApi.BooleanValue;
+		IsCustomControlsInCanvasAppsEnabled: boolean;
 		/** Enable or disable country code selection. */
-		IsDefaultCountryCodeCheckEnabled: DevKit.WebApi.BooleanValue;
+		IsDefaultCountryCodeCheckEnabled: boolean;
 		/** Enable Delegation Access content */
-		IsDelegateAccessEnabled: DevKit.WebApi.BooleanValue;
+		IsDelegateAccessEnabled: boolean;
 		/** Indicates whether the feature Action Hub should be enabled for the organization. */
-		IsDelveActionHubIntegrationEnabled: DevKit.WebApi.BooleanValue;
+		IsDelveActionHubIntegrationEnabled: boolean;
 		/** Information that specifies whether the organization is disabled. */
-		IsDisabled: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsDisabled: boolean;
 		/** Indicates whether duplicate detection of records is enabled. */
-		IsDuplicateDetectionEnabled: DevKit.WebApi.BooleanValue;
+		IsDuplicateDetectionEnabled: boolean;
 		/** Indicates whether duplicate detection of records during import is enabled. */
-		IsDuplicateDetectionEnabledForImport: DevKit.WebApi.BooleanValue;
+		IsDuplicateDetectionEnabledForImport: boolean;
 		/** Indicates whether duplicate detection of records during offline synchronization is enabled. */
-		IsDuplicateDetectionEnabledForOfflineSync: DevKit.WebApi.BooleanValue;
+		IsDuplicateDetectionEnabledForOfflineSync: boolean;
 		/** Indicates whether duplicate detection during online create or update is enabled. */
-		IsDuplicateDetectionEnabledForOnlineCreateUpdate: DevKit.WebApi.BooleanValue;
+		IsDuplicateDetectionEnabledForOnlineCreateUpdate: boolean;
 		/** Allow tracking recipient activity on sent emails. */
-		IsEmailMonitoringAllowed: DevKit.WebApi.BooleanValue;
+		IsEmailMonitoringAllowed: boolean;
 		/** Enable Email Server Profile content filtering */
-		IsEmailServerProfileContentFilteringEnabled: DevKit.WebApi.BooleanValue;
+		IsEmailServerProfileContentFilteringEnabled: boolean;
 		/** Indicates whether embed Teams collaboration has been enabled for the organization */
-		IsEmbedTeamsCollabEnabled: DevKit.WebApi.BooleanValue;
+		IsEmbedTeamsCollabEnabled: boolean;
 		/** Indicates whether appmodule is enabled for all roles */
-		IsEnabledForAllRoles: DevKit.WebApi.BooleanValue;
+		IsEnabledForAllRoles: boolean;
 		/** Indicates whether the organization's files are being stored in Azure. */
-		IsExternalFileStorageEnabled: DevKit.WebApi.BooleanValue;
+		IsExternalFileStorageEnabled: boolean;
 		/** Select whether data can be synchronized with an external search index. */
-		IsExternalSearchIndexEnabled: DevKit.WebApi.BooleanValue;
+		IsExternalSearchIndexEnabled: boolean;
 		/** Indicates whether the fiscal period is displayed as the month number. */
-		IsFiscalPeriodMonthBased: DevKit.WebApi.BooleanValue;
+		IsFiscalPeriodMonthBased: boolean;
 		/** Select whether folders should be automatically created on SharePoint. */
-		IsFolderAutoCreatedonSP: DevKit.WebApi.BooleanValue;
+		IsFolderAutoCreatedonSP: boolean;
 		/** Enable or disable folder based tracking for Server Side Sync. */
-		IsFolderBasedTrackingEnabled: DevKit.WebApi.BooleanValue;
+		IsFolderBasedTrackingEnabled: boolean;
 		/** Indicates whether full-text search for Quick Find entities should be enabled for the organization. */
-		IsFullTextSearchEnabled: DevKit.WebApi.BooleanValue;
+		IsFullTextSearchEnabled: boolean;
 		/** Indicates whether geospatial capabilities leveraging Azure Maps are enabled. */
-		IsGeospatialAzureMapsIntegrationEnabled: DevKit.WebApi.BooleanValue;
+		IsGeospatialAzureMapsIntegrationEnabled: boolean;
 		/** Enable Hierarchical Security Model */
-		IsHierarchicalSecurityModelEnabled: DevKit.WebApi.BooleanValue;
+		IsHierarchicalSecurityModelEnabled: boolean;
 		/** Give Consent to use LUIS in Dynamics 365 Bot */
-		IsLUISEnabledforD365Bot: DevKit.WebApi.BooleanValue;
+		IsLUISEnabledforD365Bot: boolean;
 		/** Enable or disable forced unlocking for Server Side Sync mailboxes. */
-		IsMailboxForcedUnlockingEnabled: DevKit.WebApi.BooleanValue;
+		IsMailboxForcedUnlockingEnabled: boolean;
 		/** Enable or disable mailbox keep alive for Server Side Sync. */
-		IsMailboxInactiveBackoffEnabled: DevKit.WebApi.BooleanValue;
+		IsMailboxInactiveBackoffEnabled: boolean;
 		/** Indicates whether Manual Sales Forecasting feature has been enabled for the organization. */
-		IsManualSalesForecastingEnabled: DevKit.WebApi.BooleanValue;
+		IsManualSalesForecastingEnabled: boolean;
 		/** Information that specifies whether mobile client on demand sync is enabled. */
-		IsMobileClientOnDemandSyncEnabled: DevKit.WebApi.BooleanValue;
+		IsMobileClientOnDemandSyncEnabled: boolean;
 		/** Indicates whether the feature MobileOffline should be enabled for the organization. */
-		IsMobileOfflineEnabled: DevKit.WebApi.BooleanValue;
+		IsMobileOfflineEnabled: boolean;
 		/** Indicates whether Model Apps can be embedded within Microsoft Teams. This is a tenant admin controlled preview/experimental feature. */
-		IsModelDrivenAppsInMSTeamsEnabled: DevKit.WebApi.BooleanValue;
+		IsModelDrivenAppsInMSTeamsEnabled: boolean;
 		/** Indicates whether Microsoft Teams Collaboration feature has been enabled for the organization. */
-		IsMSTeamsCollaborationEnabled: DevKit.WebApi.BooleanValue;
+		IsMSTeamsCollaborationEnabled: boolean;
 		/** Indicates whether Microsoft Teams integration has been enabled for the organization. */
-		IsMSTeamsEnabled: DevKit.WebApi.BooleanValue;
+		IsMSTeamsEnabled: boolean;
 		/** Indicates whether the user has enabled or disabled Microsoft Teams integration. */
-		IsMSTeamsSettingChangedByUser: DevKit.WebApi.BooleanValue;
+		IsMSTeamsSettingChangedByUser: boolean;
 		/** Indicates whether Microsoft Teams User Sync feature has been enabled for the organization. */
-		IsMSTeamsUserSyncEnabled: DevKit.WebApi.BooleanValue;
+		IsMSTeamsUserSyncEnabled: boolean;
 		/** Indicates whether new add product experience is enabled. */
-		IsNewAddProductExperienceEnabled: DevKit.WebApi.BooleanValue;
+		IsNewAddProductExperienceEnabled: boolean;
 		/** Indicates whether the feature Notes Analysis should be enabled for the organization. */
-		IsNotesAnalysisEnabled: DevKit.WebApi.BooleanValue;
+		IsNotesAnalysisEnabled: boolean;
 		/** Indicates whether the feature OfficeGraph should be enabled for the organization. */
-		IsOfficeGraphEnabled: DevKit.WebApi.BooleanValue;
+		IsOfficeGraphEnabled: boolean;
 		/** Indicates whether the feature One Drive should be enabled for the organization. */
-		IsOneDriveEnabled: DevKit.WebApi.BooleanValue;
+		IsOneDriveEnabled: boolean;
 		/** Indicates whether PAI feature has been enabled for the organization. */
-		IsPAIEnabled: DevKit.WebApi.BooleanValue;
+		IsPAIEnabled: boolean;
 		/** Indicates whether PDF Generation feature has been enabled for the organization. */
-		IsPDFGenerationEnabled: DevKit.WebApi.StringValue;
+		IsPDFGenerationEnabled: string;
 		/** Indicates whether playbook feature has been enabled for the organization. */
-		IsPlaybookEnabled: DevKit.WebApi.BooleanValue;
+		IsPlaybookEnabled: boolean;
 		/** Information on whether IM presence is enabled. */
-		IsPresenceEnabled: DevKit.WebApi.BooleanValue;
+		IsPresenceEnabled: boolean;
 		/** Indicates whether the Preview feature for Action Card should be enabled for the organization. */
-		IsPreviewEnabledForActionCard: DevKit.WebApi.BooleanValue;
+		IsPreviewEnabledForActionCard: boolean;
 		/** Indicates whether the feature Auto Capture should be enabled for the organization at Preview Settings. */
-		IsPreviewForAutoCaptureEnabled: DevKit.WebApi.BooleanValue;
+		IsPreviewForAutoCaptureEnabled: boolean;
 		/** Is Preview For Email Monitoring Allowed. */
-		IsPreviewForEmailMonitoringAllowed: DevKit.WebApi.BooleanValue;
+		IsPreviewForEmailMonitoringAllowed: boolean;
 		/** Indicates whether PriceList is mandatory for adding existing products to sales entities. */
-		IsPriceListMandatory: DevKit.WebApi.BooleanValue;
+		IsPriceListMandatory: boolean;
 		/** Select whether to use the standard Out-of-box Opportunity Close experience or opt to for a customized experience. */
-		IsQuickCreateEnabledForOpportunityClose: DevKit.WebApi.BooleanValue;
+		IsQuickCreateEnabledForOpportunityClose: boolean;
 		/** Enable or disable auditing of read operations. */
-		IsReadAuditEnabled: DevKit.WebApi.BooleanValue;
+		IsReadAuditEnabled: boolean;
 		/** Indicates whether the feature Relationship Insights should be enabled for the organization. */
-		IsRelationshipInsightsEnabled: DevKit.WebApi.BooleanValue;
+		IsRelationshipInsightsEnabled: boolean;
 		/** Indicates if the synchronization of user resource booking with Exchange is enabled at organization level. */
-		IsResourceBookingExchangeSyncEnabled: DevKit.WebApi.BooleanValue;
+		IsResourceBookingExchangeSyncEnabled: boolean;
 		/** Indicates whether rich text editor for notes experience is enabled on this organization */
-		IsRichTextNotesEnabled: DevKit.WebApi.BooleanValue;
+		IsRichTextNotesEnabled: boolean;
 		/** Indicates whether Sales Assistant mobile app has been enabled for the organization. */
-		IsSalesAssistantEnabled: DevKit.WebApi.BooleanValue;
+		IsSalesAssistantEnabled: boolean;
 		/** Indicates whether Sales Mobile Preview has been enabled for the organization */
-		IsSalesMobilePreviewEnabled: DevKit.WebApi.BooleanValue;
-		IsSharingInOrgAllowed: DevKit.WebApi.BooleanValue;
+		IsSalesMobilePreviewEnabled: boolean;
+		IsSharingInOrgAllowed: boolean;
 		/** Enable sales order processing integration. */
-		IsSOPIntegrationEnabled: DevKit.WebApi.BooleanValue;
+		IsSOPIntegrationEnabled: boolean;
 		/** Information on whether text wrap is enabled. */
-		IsTextWrapEnabled: DevKit.WebApi.BooleanValue;
+		IsTextWrapEnabled: boolean;
 		/** Enable or disable auditing of user access. */
-		IsUserAccessAuditEnabled: DevKit.WebApi.BooleanValue;
+		IsUserAccessAuditEnabled: boolean;
 		/** Indicates whether loading of Microsoft Dynamics 365 in a browser window that does not have address, tool, and menu bars is enabled. */
-		ISVIntegrationCode: DevKit.WebApi.OptionSetValue;
+		ISVIntegrationCode: OptionSet.Organization.ISVIntegrationCode;
 		/** Indicates whether Write-in Products can be added to Opportunity/Quote/Order/Invoice or not. */
-		IsWriteInProductsAllowed: DevKit.WebApi.BooleanValue;
+		IsWriteInProductsAllowed: boolean;
 		/** Type the prefix to use for all knowledge articles in Microsoft Dynamics 365. */
-		KaPrefix: DevKit.WebApi.StringValue;
+		KaPrefix: string;
 		/** Prefix to use for all articles in Microsoft Dynamics 365. */
-		KbPrefix: DevKit.WebApi.StringValue;
+		KbPrefix: string;
 		/** XML string containing the Knowledge Management settings that are applied in Knowledge Management Wizard. */
-		KMSettings: DevKit.WebApi.StringValue;
+		KMSettings: string;
 		/** Preferred language for the organization. */
-		LanguageCode: DevKit.WebApi.IntegerValue;
+		LanguageCode: number;
 		/** Unique identifier of the locale of the organization. */
-		LocaleId: DevKit.WebApi.IntegerValue;
+		LocaleId: number;
 		/** Information that specifies how the Long Date format is displayed in Microsoft Dynamics 365. */
-		LongDateFormatCode: DevKit.WebApi.IntegerValue;
+		LongDateFormatCode: number;
 		/** Minimum number of characters that should be entered in the lookup control before resolving for suggestions */
-		LookupCharacterCountBeforeResolve: DevKit.WebApi.IntegerValue;
+		LookupCharacterCountBeforeResolve: number;
 		/** Minimum delay (in milliseconds) between consecutive inputs in a lookup control that will trigger a search for suggestions */
-		LookupResolveDelayMS: DevKit.WebApi.IntegerValue;
+		LookupResolveDelayMS: number;
 		/** Lower Threshold For Mailbox Intermittent Issue. */
-		MailboxIntermittentIssueMinRange: DevKit.WebApi.IntegerValue;
+		MailboxIntermittentIssueMinRange: number;
 		/** Lower Threshold For Mailbox Permanent Issue. */
-		MailboxPermanentIssueMinRange: DevKit.WebApi.IntegerValue;
+		MailboxPermanentIssueMinRange: number;
 		/** Maximum number of actionsteps allowed in a BPF */
-		MaxActionStepsInBPF: DevKit.WebApi.IntegerValue;
+		MaxActionStepsInBPF: number;
 		/** Maximum Allowed Pending Rollup Job Count */
-		MaxAllowedPendingRollupJobCount: DevKit.WebApi.IntegerValue;
+		MaxAllowedPendingRollupJobCount: number;
 		/** Percentage Of Entity Table Size For Kicking Off Bootstrap Job */
-		MaxAllowedPendingRollupJobPercentage: DevKit.WebApi.IntegerValue;
+		MaxAllowedPendingRollupJobPercentage: number;
 		/** Maximum number of days an appointment can last. */
-		MaxAppointmentDurationDays: DevKit.WebApi.IntegerValue;
+		MaxAppointmentDurationDays: number;
 		/** Maximum number of conditions allowed for mobile offline filters */
-		MaxConditionsForMobileOfflineFilters: DevKit.WebApi.IntegerValue;
+		MaxConditionsForMobileOfflineFilters: number;
 		/** Maximum depth for hierarchy security propagation. */
-		MaxDepthForHierarchicalSecurityModel: DevKit.WebApi.IntegerValue;
+		MaxDepthForHierarchicalSecurityModel: number;
 		/** Maximum number of Folder Based Tracking mappings user can add */
-		MaxFolderBasedTrackingMappings: DevKit.WebApi.IntegerValue;
+		MaxFolderBasedTrackingMappings: number;
 		/** Maximum number of active business process flows allowed per entity */
-		MaximumActiveBusinessProcessFlowsAllowedPerEntity: DevKit.WebApi.IntegerValue;
+		MaximumActiveBusinessProcessFlowsAllowedPerEntity: number;
 		/** Restrict the maximum number of product properties for a product family/bundle */
-		MaximumDynamicPropertiesAllowed: DevKit.WebApi.IntegerValue;
+		MaximumDynamicPropertiesAllowed: number;
 		/** Maximum number of active SLA allowed per entity in online */
-		MaximumEntitiesWithActiveSLA: DevKit.WebApi.IntegerValue;
+		MaximumEntitiesWithActiveSLA: number;
 		/** Maximum number of SLA KPI per active SLA allowed for entity in online */
-		MaximumSLAKPIPerEntityWithActiveSLA: DevKit.WebApi.IntegerValue;
+		MaximumSLAKPIPerEntityWithActiveSLA: number;
 		/** Maximum tracking number before recycling takes place. */
-		MaximumTrackingNumber: DevKit.WebApi.IntegerValue;
+		MaximumTrackingNumber: number;
 		/** Restrict the maximum no of items in a bundle */
-		MaxProductsInBundle: DevKit.WebApi.IntegerValue;
+		MaxProductsInBundle: number;
 		/** Maximum number of records that will be exported to a static Microsoft Office Excel worksheet when exporting from the grid. */
-		MaxRecordsForExportToExcel: DevKit.WebApi.IntegerValue;
+		MaxRecordsForExportToExcel: number;
 		/** Maximum number of lookup and picklist records that can be selected by user for filtering. */
-		MaxRecordsForLookupFilters: DevKit.WebApi.IntegerValue;
+		MaxRecordsForLookupFilters: number;
 		/** Maximum Rollup Fields Per Entity */
-		MaxRollupFieldsPerEntity: DevKit.WebApi.IntegerValue;
+		MaxRollupFieldsPerEntity: number;
 		/** Maximum Rollup Fields Per Organization */
-		MaxRollupFieldsPerOrg: DevKit.WebApi.IntegerValue;
-		MaxSLAItemsPerSLA: DevKit.WebApi.IntegerValue;
+		MaxRollupFieldsPerOrg: number;
+		MaxSLAItemsPerSLA: number;
 		/** The maximum version of IE to run browser emulation for in Outlook client */
-		MaxSupportedInternetExplorerVersion: DevKit.WebApi.IntegerValueReadonly;
+		readonly MaxSupportedInternetExplorerVersion: number;
 		/** Maximum allowed size of an attachment. */
-		MaxUploadFileSize: DevKit.WebApi.IntegerValue;
+		MaxUploadFileSize: number;
 		/** Maximum number of mailboxes that can be toggled for verbose logging */
-		MaxVerboseLoggingMailbox: DevKit.WebApi.IntegerValueReadonly;
+		readonly MaxVerboseLoggingMailbox: number;
 		/** Maximum number of sync cycles for which verbose logging will be enabled by default */
-		MaxVerboseLoggingSyncCycles: DevKit.WebApi.IntegerValueReadonly;
+		readonly MaxVerboseLoggingSyncCycles: number;
 		/** What is the last date/time where there are metadata tracking deleted objects that have never been outside of the expiration period. */
-		MetadataSyncLastTimeOfNeverExpiredDeletedObjects_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly MetadataSyncLastTimeOfNeverExpiredDeletedObjects_UtcDateAndTime: Date;
 		/** Contains the maximum version number for attributes used by metadata synchronization that have changed. */
-		MetadataSyncTimestamp: DevKit.WebApi.BigIntValueReadonly;
+		readonly MetadataSyncTimestamp: number;
 		/** (Deprecated) Environment selected for Integration with Microsoft Flow */
-		MicrosoftFlowEnvironment: DevKit.WebApi.StringValue;
+		MicrosoftFlowEnvironment: string;
 		/** Normal polling frequency used for address book synchronization in Microsoft Office Outlook. */
-		MinAddressBookSyncInterval: DevKit.WebApi.IntegerValue;
+		MinAddressBookSyncInterval: number;
 		/** Normal polling frequency used for background offline synchronization in Microsoft Office Outlook. */
-		MinOfflineSyncInterval: DevKit.WebApi.IntegerValue;
+		MinOfflineSyncInterval: number;
 		/** Minimum allowed time between scheduled Outlook synchronizations. */
-		MinOutlookSyncInterval: DevKit.WebApi.IntegerValue;
+		MinOutlookSyncInterval: number;
 		/** Minimum number of user license required for mobile offline service by production/preview organization */
-		MobileOfflineMinLicenseProd: DevKit.WebApi.IntegerValueReadonly;
+		readonly MobileOfflineMinLicenseProd: number;
 		/** Minimum number of user license required for mobile offline service by trial organization */
-		MobileOfflineMinLicenseTrial: DevKit.WebApi.IntegerValueReadonly;
+		readonly MobileOfflineMinLicenseTrial: number;
 		/** Sync interval for mobile offline. */
-		MobileOfflineSyncInterval: DevKit.WebApi.IntegerValue;
+		MobileOfflineSyncInterval: number;
 		/** Flag to indicate if the modern advanced find filtering on all tables in a model-driven app is enabled */
-		ModernAdvancedFindFiltering: DevKit.WebApi.BooleanValue;
+		ModernAdvancedFindFiltering: boolean;
 		/** Unique identifier of the user who last modified the organization. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the organization was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the organization. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Name of the organization. The name is set when Microsoft CRM is installed and should not be changed. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Information that specifies how negative currency numbers are displayed throughout Microsoft Dynamics 365. */
-		NegativeCurrencyFormatCode: DevKit.WebApi.IntegerValue;
+		NegativeCurrencyFormatCode: number;
 		/** Information that specifies how negative numbers are displayed throughout Microsoft CRM. */
-		NegativeFormatCode: DevKit.WebApi.OptionSetValue;
+		NegativeFormatCode: OptionSet.Organization.NegativeFormatCode;
 		/** Indicates whether an organization has enabled the new Relevance search experience (released in Oct 2020) for the organization */
-		NewSearchExperienceEnabled: DevKit.WebApi.BooleanValue;
+		NewSearchExperienceEnabled: boolean;
 		/** Next entity type code to use for custom entities. */
-		NextCustomObjectTypeCode: DevKit.WebApi.IntegerValueReadonly;
+		readonly NextCustomObjectTypeCode: number;
 		/** Next token to be placed on the subject line of an email message. */
-		NextTrackingNumber: DevKit.WebApi.IntegerValue;
+		NextTrackingNumber: number;
 		/** Indicates whether mailbox owners will be notified of email server profile level alerts. */
-		NotifyMailboxOwnerOfEmailServerLevelAlerts: DevKit.WebApi.BooleanValue;
+		NotifyMailboxOwnerOfEmailServerLevelAlerts: boolean;
 		/** Specification of how numbers are displayed throughout Microsoft CRM. */
-		NumberFormat: DevKit.WebApi.StringValue;
+		NumberFormat: string;
 		/** Specifies how numbers are grouped in Microsoft Dynamics 365. */
-		NumberGroupFormat: DevKit.WebApi.StringValue;
+		NumberGroupFormat: string;
 		/** Symbol used for number separation in Microsoft Dynamics 365. */
-		NumberSeparator: DevKit.WebApi.StringValue;
+		NumberSeparator: string;
 		/** Indicates whether the Office Apps auto deployment is enabled for the organization. */
-		OfficeAppsAutoDeploymentEnabled: DevKit.WebApi.BooleanValue;
+		OfficeAppsAutoDeploymentEnabled: boolean;
 		/** The url to open the Delve for the organization. */
-		OfficeGraphDelveUrl: DevKit.WebApi.StringValue;
+		OfficeGraphDelveUrl: string;
 		/** Enable OOB pricing calculation logic for Opportunity, Quote, Order and Invoice entities. */
-		OOBPriceCalculationEnabled: DevKit.WebApi.BooleanValue;
+		OOBPriceCalculationEnabled: boolean;
 		/** Prefix to use for all orders throughout Microsoft Dynamics 365. */
-		OrderPrefix: DevKit.WebApi.StringValue;
+		OrderPrefix: string;
 		/** Unique identifier of the organization. */
-		OrganizationId: DevKit.WebApi.GuidValueReadonly;
+		readonly OrganizationId: string;
 		/** Indicates the organization lifecycle state */
-		OrganizationState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly OrganizationState: OptionSet.Organization.OrganizationState;
 		/** Organization settings stored in Organization Database. */
-		OrgDbOrgSettings: DevKit.WebApi.StringValue;
+		OrgDbOrgSettings: string;
 		/** Select whether to turn on OrgInsights for the organization. */
-		OrgInsightsEnabled: DevKit.WebApi.BooleanValue;
+		OrgInsightsEnabled: boolean;
 		/** Indicates whether Preview feature has been enabled for the organization. */
-		PaiPreviewScenarioEnabled: DevKit.WebApi.BooleanValue;
+		PaiPreviewScenarioEnabled: boolean;
 		/** Prefix used for parsed table columns. */
-		ParsedTableColumnPrefix: DevKit.WebApi.StringValueReadonly;
+		readonly ParsedTableColumnPrefix: string;
 		/** Prefix used for parsed tables. */
-		ParsedTablePrefix: DevKit.WebApi.StringValueReadonly;
+		readonly ParsedTablePrefix: string;
 		/** Specifies the maximum number of months in past for which the recurring activities can be created. */
-		PastExpansionWindow: DevKit.WebApi.IntegerValue;
+		PastExpansionWindow: number;
 		/** Leave empty to use default setting. Set to on/off to enable/disable replacement of default grids with modern ones in model-driven apps. */
-		PcfDatasetGridEnabled: DevKit.WebApi.StringValue;
+		PcfDatasetGridEnabled: string;
 		/** For internal use only. */
-		Picture: DevKit.WebApi.StringValue;
-		PinpointLanguageCode: DevKit.WebApi.IntegerValue;
+		Picture: string;
+		PinpointLanguageCode: number;
 		/** Plug-in Trace Log Setting for the Organization. */
-		PluginTraceLogSetting: DevKit.WebApi.OptionSetValue;
+		PluginTraceLogSetting: OptionSet.Organization.PluginTraceLogSetting;
 		/** PM designator to use throughout Microsoft Dynamics 365. */
-		PMDesignator: DevKit.WebApi.StringValue;
+		PMDesignator: string;
 		/** For internal use only. */
-		PostMessageWhitelistDomains: DevKit.WebApi.StringValue;
+		PostMessageWhitelistDomains: string;
 		/** Indicates whether the Power BI feature should be enabled for the organization. */
-		PowerBiFeatureEnabled: DevKit.WebApi.BooleanValue;
+		PowerBiFeatureEnabled: boolean;
 		/** Number of decimal places that can be used for prices. */
-		PricingDecimalPrecision: DevKit.WebApi.IntegerValue;
+		PricingDecimalPrecision: number;
 		/** Privacy Statement URL */
-		PrivacyStatementUrl: DevKit.WebApi.StringValue;
+		PrivacyStatementUrl: string;
 		/** Unique identifier of the default privilege for users in the organization. */
-		PrivilegeUserGroupId: DevKit.WebApi.GuidValue;
+		PrivilegeUserGroupId: string;
 		/** For internal use only. */
-		PrivReportingGroupId: DevKit.WebApi.GuidValue;
+		PrivReportingGroupId: string;
 		/** For internal use only. */
-		PrivReportingGroupName: DevKit.WebApi.StringValue;
+		PrivReportingGroupName: string;
 		/** Select whether to turn on product recommendations for the organization. */
-		ProductRecommendationsEnabled: DevKit.WebApi.BooleanValue;
+		ProductRecommendationsEnabled: boolean;
 		/** Indicates whether prompt should be shown for new Qualify Lead Experience */
-		QualifyLeadAdditionalOptions: DevKit.WebApi.StringValue;
+		QualifyLeadAdditionalOptions: string;
 		/** Flag to indicate if the feature to use quick action to open records in search side pane is enabled */
-		QuickActionToOpenRecordsInSidePaneEnabled: DevKit.WebApi.BooleanValue;
+		QuickActionToOpenRecordsInSidePaneEnabled: boolean;
 		/** Indicates whether a quick find record limit should be enabled for this organization (allows for faster Quick Find queries but prevents overly broad searches). */
-		QuickFindRecordLimitEnabled: DevKit.WebApi.BooleanValue;
+		QuickFindRecordLimitEnabled: boolean;
 		/** Prefix to use for all quotes throughout Microsoft Dynamics 365. */
-		QuotePrefix: DevKit.WebApi.StringValue;
+		QuotePrefix: string;
 		/** Indicates whether SLA Recalculation has been enabled for the organization */
-		RecalculateSLA: DevKit.WebApi.BooleanValue;
+		RecalculateSLA: boolean;
 		/** Specifies the default value for number of occurrences field in the recurrence dialog. */
-		RecurrenceDefaultNumberOfOccurrences: DevKit.WebApi.IntegerValue;
+		RecurrenceDefaultNumberOfOccurrences: number;
 		/** Specifies the interval (in seconds) for pausing expansion job. */
-		RecurrenceExpansionJobBatchInterval: DevKit.WebApi.IntegerValue;
+		RecurrenceExpansionJobBatchInterval: number;
 		/** Specifies the value for number of instances created in on demand job in one shot. */
-		RecurrenceExpansionJobBatchSize: DevKit.WebApi.IntegerValue;
+		RecurrenceExpansionJobBatchSize: number;
 		/** Specifies the maximum number of instances to be created synchronously after creating a recurring appointment. */
-		RecurrenceExpansionSynchCreateMax: DevKit.WebApi.IntegerValue;
+		RecurrenceExpansionSynchCreateMax: number;
 		/** XML string that defines the navigation structure for the application. This is the site map from the previously upgraded build and is used in a 3-way merge during upgrade. */
-		ReferenceSiteMapXml: DevKit.WebApi.StringValue;
+		ReferenceSiteMapXml: string;
 		/** Release Wave Applied to Environment. */
-		ReleaseWaveName: DevKit.WebApi.StringValue;
+		ReleaseWaveName: string;
 		/** Indicates whether relevance search was enabled for the environment as part of Dataverse's relevance search on-by-default sweep */
-		RelevanceSearchEnabledByPlatform: DevKit.WebApi.BooleanValue;
+		RelevanceSearchEnabledByPlatform: boolean;
 		/** This setting contains the last modified date for relevance search setting that appears as a toggle in PPAC. */
-		RelevanceSearchModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		RelevanceSearchModifiedOn_UtcDateAndTime: Date;
 		/** Flag to render the body of email in the Web form in an IFRAME with the security='restricted' attribute set. This is additional security but can cause a credentials prompt. */
-		RenderSecureIFrameForEmail: DevKit.WebApi.BooleanValue;
+		RenderSecureIFrameForEmail: boolean;
 		/** For internal use only. */
-		ReportingGroupId: DevKit.WebApi.GuidValue;
+		ReportingGroupId: string;
 		/** For internal use only. */
-		ReportingGroupName: DevKit.WebApi.StringValue;
+		ReportingGroupName: string;
 		/** Picklist for selecting the organization preference for reporting scripting errors. */
-		ReportScriptErrors: DevKit.WebApi.OptionSetValue;
+		ReportScriptErrors: OptionSet.Organization.ReportScriptErrors;
 		/** Indicates whether Send As Other User privilege is enabled. */
-		RequireApprovalForQueueEmail: DevKit.WebApi.BooleanValue;
+		RequireApprovalForQueueEmail: boolean;
 		/** Indicates whether Send As Other User privilege is enabled. */
-		RequireApprovalForUserEmail: DevKit.WebApi.BooleanValue;
+		RequireApprovalForUserEmail: boolean;
 		/** Apply same email address to all unresolved matches when you manually resolve it for one */
-		ResolveSimilarUnresolvedEmailAddress: DevKit.WebApi.BooleanValue;
+		ResolveSimilarUnresolvedEmailAddress: boolean;
 		/** Flag to restrict Update on incident. */
-		RestrictStatusUpdate: DevKit.WebApi.BooleanValue;
+		RestrictStatusUpdate: boolean;
 		/** Error status of Relationship Insights provisioning. */
-		RiErrorStatus: DevKit.WebApi.IntegerValue;
+		RiErrorStatus: number;
 		/** Unique identifier of the sample data import job. */
-		SampleDataImportId: DevKit.WebApi.GuidValue;
+		SampleDataImportId: string;
 		/** Scheduling engine for Appointments and Service Activities */
-		SchedulingEngine: DevKit.WebApi.OptionSetValue;
+		SchedulingEngine: OptionSet.Organization.SchedulingEngine;
 		/** Prefix used for custom entities and attributes. */
-		SchemaNamePrefix: DevKit.WebApi.StringValue;
+		SchemaNamePrefix: string;
 		/** Indicates whether Send Bulk Email in UCI is enabled for the org. */
-		SendBulkEmailInUCI: DevKit.WebApi.BooleanValue;
+		SendBulkEmailInUCI: boolean;
 		/** Serve Static Content From CDN */
-		ServeStaticResourcesFromAzureCDN: DevKit.WebApi.BooleanValue;
+		ServeStaticResourcesFromAzureCDN: boolean;
 		/** Enable the session recording feature to record user sessions in UCI */
-		SessionRecordingEnabled: DevKit.WebApi.BooleanValue;
+		SessionRecordingEnabled: boolean;
 		/** Information that specifies whether session timeout is enabled */
-		SessionTimeoutEnabled: DevKit.WebApi.BooleanValue;
+		SessionTimeoutEnabled: boolean;
 		/** Session timeout in minutes */
-		SessionTimeoutInMins: DevKit.WebApi.IntegerValue;
+		SessionTimeoutInMins: number;
 		/** Session timeout reminder in minutes */
-		SessionTimeoutReminderInMins: DevKit.WebApi.IntegerValue;
+		SessionTimeoutReminderInMins: number;
 		/** Indicates which SharePoint deployment type is configured for Server to Server. (Online or On-Premises) */
-		SharePointDeploymentType: DevKit.WebApi.OptionSetValue;
+		SharePointDeploymentType: OptionSet.Organization.SharePointDeploymentType;
 		/** Information that specifies whether to share to previous owner on assign. */
-		ShareToPreviousOwnerOnAssign: DevKit.WebApi.BooleanValue;
+		ShareToPreviousOwnerOnAssign: boolean;
 		/** Select whether to display a KB article deprecation notification to the user. */
-		ShowKBArticleDeprecationNotification: DevKit.WebApi.BooleanValue;
+		ShowKBArticleDeprecationNotification: boolean;
 		/** Information that specifies whether to display the week number in calendar displays throughout Microsoft CRM. */
-		ShowWeekNumber: DevKit.WebApi.BooleanValue;
+		ShowWeekNumber: boolean;
 		/** CRM for Outlook Download URL */
-		SignupOutlookDownloadFWLink: DevKit.WebApi.StringValue;
+		SignupOutlookDownloadFWLink: string;
 		/** XML string that defines the navigation structure for the application. */
-		SiteMapXml: DevKit.WebApi.StringValue;
+		SiteMapXml: string;
 		/** Contains the on hold case status values. */
-		SlaPauseStates: DevKit.WebApi.StringValue;
+		SlaPauseStates: string;
 		/** Flag for whether the organization is using Social Insights. */
-		SocialInsightsEnabled: DevKit.WebApi.BooleanValue;
+		SocialInsightsEnabled: boolean;
 		/** Identifier for the Social Insights instance for the organization. */
-		SocialInsightsInstance: DevKit.WebApi.StringValue;
+		SocialInsightsInstance: string;
 		/** Flag for whether the organization has accepted the Social Insights terms of use. */
-		SocialInsightsTermsAccepted: DevKit.WebApi.BooleanValue;
+		SocialInsightsTermsAccepted: boolean;
 		/** For internal use only. */
-		SortId: DevKit.WebApi.IntegerValue;
+		SortId: number;
 		/** For internal use only. */
-		SqlAccessGroupId: DevKit.WebApi.GuidValue;
+		SqlAccessGroupId: string;
 		/** For internal use only. */
-		SqlAccessGroupName: DevKit.WebApi.StringValue;
+		SqlAccessGroupName: string;
 		/** Setting for SQM data collection, 0 no, 1 yes enabled */
-		SQMEnabled: DevKit.WebApi.BooleanValue;
+		SQMEnabled: boolean;
 		/** Unique identifier of the support user for the organization. */
-		SupportUserId: DevKit.WebApi.GuidValue;
+		SupportUserId: string;
 		/** Indicates whether SLA is suppressed. */
-		SuppressSLA: DevKit.WebApi.BooleanValue;
+		SuppressSLA: boolean;
 		/** Number of records to update per operation in Sync Bulk Pause/Resume/Cancel */
-		SyncBulkOperationBatchSize: DevKit.WebApi.IntegerValue;
+		SyncBulkOperationBatchSize: number;
 		/** Max total number of records to update in database for Sync Bulk Pause/Resume/Cancel */
-		SyncBulkOperationMaxLimit: DevKit.WebApi.IntegerValue;
+		SyncBulkOperationMaxLimit: number;
 		/** Indicates the selection to use the dynamics 365 azure sync framework or server side sync. */
-		SyncOptInSelection: DevKit.WebApi.BooleanValue;
+		SyncOptInSelection: boolean;
 		/** Indicates the status of the opt-in or opt-out operation for dynamics 365 azure sync. */
-		SyncOptInSelectionStatus: DevKit.WebApi.OptionSetValue;
+		SyncOptInSelectionStatus: OptionSet.Organization.SyncOptInSelectionStatus;
 		/** Unique identifier of the system user for the organization. */
-		SystemUserId: DevKit.WebApi.GuidValue;
+		SystemUserId: string;
 		/** Maximum number of aggressive polling cycles executed for email auto-tagging when a new email is received. */
-		TagMaxAggressiveCycles: DevKit.WebApi.IntegerValue;
+		TagMaxAggressiveCycles: number;
 		/** Normal polling frequency used for email receive auto-tagging in outlook. */
-		TagPollingPeriod: DevKit.WebApi.IntegerValue;
+		TagPollingPeriod: number;
 		/** Select whether to turn on task flows for the organization. */
-		TaskBasedFlowEnabled: DevKit.WebApi.BooleanValue;
+		TaskBasedFlowEnabled: boolean;
 		/** Instrumentation key for Application Insights used to log plugins telemetry. */
-		TelemetryInstrumentationKey: DevKit.WebApi.StringValue;
+		TelemetryInstrumentationKey: string;
 		/** Select whether to turn on text analytics for the organization. */
-		TextAnalyticsEnabled: DevKit.WebApi.BooleanValue;
+		TextAnalyticsEnabled: boolean;
 		/** Information that specifies how the time is displayed throughout Microsoft CRM. */
-		TimeFormatCode: DevKit.WebApi.OptionSetValue;
+		TimeFormatCode: OptionSet.Organization.TimeFormatCode;
 		/** Text for how time is displayed in Microsoft Dynamics 365. */
-		TimeFormatString: DevKit.WebApi.StringValue;
+		TimeFormatString: string;
 		/** Text for how the time separator is displayed throughout Microsoft Dynamics 365. */
-		TimeSeparator: DevKit.WebApi.StringValue;
+		TimeSeparator: string;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Duration used for token expiration. */
-		TokenExpiry: DevKit.WebApi.IntegerValue;
+		TokenExpiry: number;
 		/** Token key. */
-		TokenKey: DevKit.WebApi.StringValue;
+		TokenKey: string;
 		/** Tracelog record maximum age in days */
-		TraceLogMaximumAgeInDays: DevKit.WebApi.IntegerValue;
+		TraceLogMaximumAgeInDays: number;
 		/** History list of tracking token prefixes. */
-		TrackingPrefix: DevKit.WebApi.StringValue;
+		TrackingPrefix: string;
 		/** Base number used to provide separate tracking token identifiers to users belonging to different deployments. */
-		TrackingTokenIdBase: DevKit.WebApi.IntegerValue;
+		TrackingTokenIdBase: number;
 		/** Number of digits used to represent a tracking token identifier. */
-		TrackingTokenIdDigits: DevKit.WebApi.IntegerValue;
+		TrackingTokenIdDigits: number;
 		/** Number of characters appended to invoice, quote, and order numbers. */
-		UniqueSpecifierLength: DevKit.WebApi.IntegerValue;
+		UniqueSpecifierLength: number;
 		/** Indicates whether email address should be unresolved if multiple matches are found */
-		UnresolveEmailAddressIfMultipleMatch: DevKit.WebApi.BooleanValue;
+		UnresolveEmailAddressIfMultipleMatch: boolean;
 		/** Flag indicates whether to Use Inbuilt Rule For DefaultPricelist. */
-		UseInbuiltRuleForDefaultPricelistSelection: DevKit.WebApi.BooleanValue;
+		UseInbuiltRuleForDefaultPricelistSelection: boolean;
 		/** Select whether to use legacy form rendering. */
-		UseLegacyRendering: DevKit.WebApi.BooleanValue;
+		UseLegacyRendering: boolean;
 		/** Use position hierarchy */
-		UsePositionHierarchy: DevKit.WebApi.BooleanValue;
+		UsePositionHierarchy: boolean;
 		/** Indicates whether searching in a grid should use the Quick Find view for the entity. */
-		UseQuickFindViewForGridSearch: DevKit.WebApi.BooleanValue;
+		UseQuickFindViewForGridSearch: boolean;
 		/** The interval at which user access is checked for auditing. */
-		UserAccessAuditingInterval: DevKit.WebApi.IntegerValue;
+		UserAccessAuditingInterval: number;
 		/** Indicates whether the read-optimized form should be enabled for this organization. */
-		UseReadForm: DevKit.WebApi.BooleanValue;
+		UseReadForm: boolean;
 		/** Unique identifier of the default group of users in the organization. */
-		UserGroupId: DevKit.WebApi.GuidValue;
+		UserGroupId: string;
 		/** Enable the user rating feature to show the NSAT score and comment to maker */
-		UserRatingEnabled: DevKit.WebApi.BooleanValue;
+		UserRatingEnabled: boolean;
 		/** Indicates default protocol selected for organization. */
-		UseSkypeProtocol: DevKit.WebApi.BooleanValue;
+		UseSkypeProtocol: boolean;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Hash of the V3 callout configuration file. */
-		V3CalloutConfigHash: DevKit.WebApi.StringValueReadonly;
+		readonly V3CalloutConfigHash: string;
 		/** Version number of the organization. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 		/** Hash value of web resources. */
-		WebResourceHash: DevKit.WebApi.StringValue;
+		WebResourceHash: string;
 		/** Designated first day of the week throughout Microsoft Dynamics 365. */
-		WeekStartDayCode: DevKit.WebApi.OptionSetValue;
+		WeekStartDayCode: OptionSet.Organization.WeekStartDayCode;
 		/** For Internal use only. */
-		WidgetProperties: DevKit.WebApi.StringValue;
+		WidgetProperties: string;
 		/** Denotes the Yammer group ID */
-		YammerGroupId: DevKit.WebApi.IntegerValue;
+		YammerGroupId: number;
 		/** Denotes the Yammer network permalink */
-		YammerNetworkPermalink: DevKit.WebApi.StringValue;
+		YammerNetworkPermalink: string;
 		/** Denotes whether the OAuth access token for Yammer network has expired */
-		YammerOAuthAccessTokenExpired: DevKit.WebApi.BooleanValue;
+		YammerOAuthAccessTokenExpired: boolean;
 		/** Internal Use Only */
-		YammerPostMethod: DevKit.WebApi.OptionSetValue;
+		YammerPostMethod: OptionSet.Organization.YammerPostMethod;
 		/** Information that specifies how the first week of the year is specified in Microsoft Dynamics 365. */
-		YearStartWeekCode: DevKit.WebApi.IntegerValue;
+		YearStartWeekCode: number;
 	}
 }
 declare namespace OptionSet {
@@ -857,6 +871,14 @@ declare namespace OptionSet {
 			Microsoft_Dynamics_365_Email_Router,
 			/** 0 */
 			Server_Side_Synchronization
+		}
+		enum EmailTemplateDefaultView {
+			/** 2 */
+			Grid_View,
+			/** 3 */
+			List_View,
+			/** 1 */
+			Tiles_View
 		}
 		enum FiscalPeriodFormatPeriod {
 			/** 5 */
@@ -1012,4 +1034,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

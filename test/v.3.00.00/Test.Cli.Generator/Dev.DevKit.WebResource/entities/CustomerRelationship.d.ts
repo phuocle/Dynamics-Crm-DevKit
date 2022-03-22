@@ -63,8 +63,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -72,54 +74,54 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the converse relationship of the customer relationship. */
-		ConverseRelationshipId: DevKit.WebApi.LookupValue;
+		ConverseRelationshipId: string;
 		/** Shows who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Shows the date and time when the customer relationship was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Select the primary account or contact involved in the customer relationship. */
-		customerid_account: DevKit.WebApi.LookupValue;
+		customerid_account: string;
 		/** Select the primary account or contact involved in the customer relationship. */
-		customerid_contact: DevKit.WebApi.LookupValue;
+		customerid_contact: string;
 		/** Unique identifier of the customer relationship. */
-		CustomerRelationshipId: DevKit.WebApi.GuidValue;
+		CustomerRelationshipId: string;
 		/** Type additional information about the primary party's role in the customer relationship, such as the length or quality of the relationship. */
-		CustomerRoleDescription: DevKit.WebApi.StringValue;
+		CustomerRoleDescription: string;
 		/** Choose the primary party's role or nature of the relationship the customer has with the second party. The field is read-only until both parties have been selected. Administrators can configure role values under Business Management in the Settings area. */
-		CustomerRoleId: DevKit.WebApi.LookupValue;
+		CustomerRoleId: string;
 		/** Unique identifier of the data import or data migration that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Shows who last updated the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier of the business unit that owns the customer relationship. */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier of the team who owns the customer relationship. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier of the user who owns the customer relationship. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Select the secondary account or contact involved in the customer relationship. */
-		partnerid_account: DevKit.WebApi.LookupValue;
+		partnerid_account: string;
 		/** Select the secondary account or contact involved in the customer relationship. */
-		partnerid_contact: DevKit.WebApi.LookupValue;
+		partnerid_contact: string;
 		/** Type additional information about the secondary party's role in the customer relationship, such as the length or quality of the relationship. */
-		PartnerRoleDescription: DevKit.WebApi.StringValue;
+		PartnerRoleDescription: string;
 		/** Choose the secondary party's role or nature of the relationship the customer has with the primary party. The field is read-only until both parties have been selected. Administrators can configure role values under Business Management in the Settings area. */
-		PartnerRoleId: DevKit.WebApi.LookupValue;
+		PartnerRoleId: string;
 		/** For internal use only. */
-		UniqueDscId: DevKit.WebApi.GuidValueReadonly;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly UniqueDscId: string;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -142,4 +144,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

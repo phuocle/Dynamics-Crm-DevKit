@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,74 +30,74 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Specifies which publisher address is applicable. */
-		AddressNumber: DevKit.WebApi.IntegerValue;
+		AddressNumber: number;
 		/** Type of address for the publisher, such as billing, shipping, or primary address. */
-		AddressTypeCode: DevKit.WebApi.OptionSetValue;
+		AddressTypeCode: OptionSet.PublisherAddress.AddressTypeCode;
 		/** City name in the publisher address. */
-		City: DevKit.WebApi.StringValue;
+		City: string;
 		/** Country/region name in the publisher address. */
-		Country: DevKit.WebApi.StringValue;
+		Country: string;
 		/** County name in the publisher address. */
-		County: DevKit.WebApi.StringValue;
+		County: string;
 		/** Unique identifier of the user who created the publisher address. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the publisher address was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the publisher address. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Fax number for the publisher address. */
-		Fax: DevKit.WebApi.StringValue;
+		Fax: string;
 		/** Freight terms for the publisher address. */
-		FreightTermsCode: DevKit.WebApi.OptionSetValue;
+		FreightTermsCode: OptionSet.PublisherAddress.FreightTermsCode;
 		/** Unique identifier of the data import or data migration that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Latitude for the publisher address. */
-		Latitude: DevKit.WebApi.DoubleValue;
+		Latitude: number;
 		/** First line for entering address information. */
-		Line1: DevKit.WebApi.StringValue;
+		Line1: string;
 		/** Second line for entering address information. */
-		Line2: DevKit.WebApi.StringValue;
+		Line2: string;
 		/** Third line for entering address information. */
-		Line3: DevKit.WebApi.StringValue;
+		Line3: string;
 		/** Longitude for the publisher address. */
-		Longitude: DevKit.WebApi.DoubleValue;
+		Longitude: number;
 		/** Unique identifier of the user who last modified the publisher address. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the publisher address was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the publisher address. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Name used to identify the publisher address. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Unique identifier of the parent object with which the publisher address is associated. */
-		ParentId: DevKit.WebApi.LookupValue;
+		ParentId: string;
 		/** ZIP Code or postal code in the publisher address. */
-		PostalCode: DevKit.WebApi.StringValue;
+		PostalCode: string;
 		/** Post office box number in the publisher address. */
-		PostOfficeBox: DevKit.WebApi.StringValue;
+		PostOfficeBox: string;
 		/** Name of the primary contact at the publisher address. */
-		PrimaryContactName: DevKit.WebApi.StringValue;
+		PrimaryContactName: string;
 		/** Unique identifier of the publisher address. */
-		PublisherAddressId: DevKit.WebApi.GuidValue;
+		PublisherAddressId: string;
 		/** Method of shipment for the publisher address. */
-		ShippingMethodCode: DevKit.WebApi.OptionSetValue;
+		ShippingMethodCode: OptionSet.PublisherAddress.ShippingMethodCode;
 		/** State or province in the publisher address. */
-		StateOrProvince: DevKit.WebApi.StringValue;
+		StateOrProvince: string;
 		/** First telephone number for the publisher address. */
-		Telephone1: DevKit.WebApi.StringValue;
+		Telephone1: string;
 		/** Second telephone number for the publisher address. */
-		Telephone2: DevKit.WebApi.StringValue;
+		Telephone2: string;
 		/** Third telephone number for the publisher address. */
-		Telephone3: DevKit.WebApi.StringValue;
+		Telephone3: string;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** United Parcel Service (UPS) zone for the address of the publisher. */
-		UPSZone: DevKit.WebApi.StringValue;
+		UPSZone: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** UTC offset for the address. This is the difference between local time and standard Coordinated Universal Time. */
-		UTCOffset: DevKit.WebApi.IntegerValue;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		UTCOffset: number;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -138,4 +140,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

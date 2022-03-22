@@ -186,8 +186,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -195,147 +197,149 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Additional information provided by the external application as JSON. For internal use only. */
-		ActivityAdditionalParams: DevKit.WebApi.StringValue;
+		ActivityAdditionalParams: string;
 		/** Unique identifier of the bulk operation. */
-		ActivityId: DevKit.WebApi.GuidValue;
+		ActivityId: string;
 		/** Actual duration of the bulk operation in minutes. */
-		ActualDurationMinutes: DevKit.WebApi.IntegerValueReadonly;
+		readonly ActualDurationMinutes: number;
 		/** Shows the date and time when the quick campaign was completed or canceled. */
-		ActualEnd_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		ActualEnd_UtcDateAndTime: Date;
 		/** Shows the date and time when the activity was started or created. */
-		ActualStart_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ActualStart_UtcDateAndTime: Date;
 		/** Shows the number for the quick campaign record, used to identify the quick campaign. */
-		BulkOperationNumber: DevKit.WebApi.StringValueReadonly;
+		readonly BulkOperationNumber: string;
 		/** Shows how contact about the social activity originated, such as from Twitter or Facebook. This field is read-only. */
-		Community: DevKit.WebApi.OptionSetValue;
+		Community: OptionSet.BulkOperation.Community;
 		/** Shows who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the bulk operation. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Choose the activity to create that determines how target prospects or customers in this quick campaign are contacted. */
-		CreatedRecordTypeCode: DevKit.WebApi.OptionSetValue;
+		CreatedRecordTypeCode: OptionSet.BulkOperation.CreatedRecordTypeCode;
 		/** Date and time when the delivery of the activity was last attempted. */
-		DeliveryLastAttemptedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly DeliveryLastAttemptedOn_UtcDateAndTime: Date;
 		/** Priority of delivery of the activity to the email server. */
-		DeliveryPriorityCode: DevKit.WebApi.OptionSetValue;
+		DeliveryPriorityCode: OptionSet.BulkOperation.DeliveryPriorityCode;
 		/** Type additional information to describe the quick campaign, such as the products or services offered. */
-		Description: DevKit.WebApi.StringValueReadonly;
+		readonly Description: string;
 		/** Shows the error code that is used to troubleshoot issues in the quick campaign. */
-		ErrorNumber: DevKit.WebApi.IntegerValue;
+		ErrorNumber: number;
 		/** The message id of activity which is returned from Exchange Server. */
-		ExchangeItemId: DevKit.WebApi.StringValue;
+		ExchangeItemId: string;
 		/** Exchange rate for the currency associated with the activitypointer with respect to the base currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Shows the web link of Activity of type email. */
-		ExchangeWebLink: DevKit.WebApi.StringValue;
+		ExchangeWebLink: string;
 		/** Number of records which failed in the bulk operation. */
-		FailureCount: DevKit.WebApi.IntegerValue;
+		FailureCount: number;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Type of instance of a recurring series. */
-		InstanceTypeCode: DevKit.WebApi.OptionSetValueReadonly;
+		readonly InstanceTypeCode: OptionSet.BulkOperation.InstanceTypeCode;
 		/** For internal use only. */
-		IsBilled: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsBilled: boolean;
 		/** For internal use only. */
-		IsMapiPrivate: DevKit.WebApi.BooleanValue;
+		IsMapiPrivate: boolean;
 		/** Information regarding whether the activity is a regular activity type or event type. */
-		IsRegularActivity: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsRegularActivity: boolean;
 		/** Specifies if the bulk operation was created from a workflow rule. */
-		IsWorkflowCreated: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsWorkflowCreated: boolean;
 		/** Contains the date and time stamp of the last on hold time. */
-		LastOnHoldTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		LastOnHoldTime_UtcDateAndTime: Date;
 		/** Left the voice mail */
-		LeftVoiceMail: DevKit.WebApi.BooleanValue;
+		LeftVoiceMail: boolean;
 		/** Shows who last updated the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the bulk operation was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the bulk operation. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Shows how long, in minutes, that the record was on hold. */
-		OnHoldTime: DevKit.WebApi.IntegerValueReadonly;
+		readonly OnHoldTime: number;
 		/** Select the type of bulk operation process, such as quick campaign or campaign activity distribution. */
-		OperationTypeCode: DevKit.WebApi.OptionSetValue;
+		OperationTypeCode: OptionSet.BulkOperation.OperationTypeCode;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier of the business unit that owns the activity. */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier of the team that owns the activity. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier of the user that owns the activity. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** XML string that contains the parameters to the bulk operation. */
-		Parameters: DevKit.WebApi.StringValue;
+		Parameters: string;
 		/** For internal use only. */
-		PostponeActivityProcessingUntil_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly PostponeActivityProcessingUntil_UtcDateAndTime: Date;
 		/** Priority of the activity. */
-		PriorityCode: DevKit.WebApi.OptionSetValue;
+		PriorityCode: OptionSet.BulkOperation.PriorityCode;
 		/** Unique identifier of the Process. */
-		ProcessId: DevKit.WebApi.GuidValue;
+		ProcessId: string;
 		/** Choose the campaign from which the campaign activities were bulk-distributed. */
-		regardingobjectid_campaignactivity_bulkoperation: DevKit.WebApi.LookupValue;
+		regardingobjectid_campaignactivity_bulkoperation: string;
 		/** Choose the campaign from which the campaign activities were bulk-distributed. */
-		regardingobjectid_list: DevKit.WebApi.LookupValue;
+		regardingobjectid_list: string;
 		/** Scheduled duration of the bulk operation, specified in minutes. */
-		ScheduledDurationMinutes: DevKit.WebApi.IntegerValueReadonly;
+		readonly ScheduledDurationMinutes: number;
 		/** Scheduled end date and time of the bulk operation. */
-		ScheduledEnd_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly ScheduledEnd_UtcDateOnly: Date;
 		/** Scheduled start date and time of the bulk operation. */
-		ScheduledStart_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly ScheduledStart_UtcDateOnly: Date;
 		/** Unique identifier of the mailbox associated with the sender of the email message. */
-		SenderMailboxId: DevKit.WebApi.LookupValueReadonly;
+		readonly SenderMailboxId: string;
 		/** Date and time when the activity was sent. */
-		SentOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly SentOn_UtcDateAndTime: Date;
 		/** Uniqueidentifier specifying the id of recurring series of an instance. */
-		SeriesId: DevKit.WebApi.GuidValueReadonly;
+		readonly SeriesId: string;
 		/** Choose the service level agreement (SLA) that you want to apply to the case record. */
-		SLAId: DevKit.WebApi.LookupValue;
+		SLAId: string;
 		/** Last SLA that was applied to this case. This field is for internal use only. */
-		SLAInvokedId: DevKit.WebApi.LookupValueReadonly;
+		readonly SLAInvokedId: string;
 		/** Shows the date and time by which the activities are sorted. */
-		SortDate_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		SortDate_UtcDateAndTime: Date;
 		/** Unique identifier of the Stage. */
-		StageId: DevKit.WebApi.GuidValue;
+		StageId: string;
 		/** Shows whether the quick campaign is open, closed, or canceled.  Closed or canceled quick campaigns are read-only and can't be edited. */
-		StateCode: DevKit.WebApi.OptionSetValueReadonly;
+		readonly StateCode: OptionSet.BulkOperation.StateCode;
 		/** Select the quick campaign's status. */
-		StatusCode: DevKit.WebApi.OptionSetValue;
+		StatusCode: OptionSet.BulkOperation.StatusCode;
 		/** Type a short description about the objective or primary topic of the quick campaign. */
-		Subject: DevKit.WebApi.StringValue;
+		Subject: string;
 		/** Number of records which succeeded in the bulk operation. */
-		SuccessCount: DevKit.WebApi.IntegerValue;
+		SuccessCount: number;
 		/** Select the type of records targeted in the quick campaign to identify the target audience. */
-		TargetedRecordTypeCode: DevKit.WebApi.OptionSetValue;
+		TargetedRecordTypeCode: OptionSet.BulkOperation.TargetedRecordTypeCode;
 		/** Number of members to target. */
-		TargetMembersCount: DevKit.WebApi.IntegerValue;
+		TargetMembersCount: number;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Unique identifier of the currency associated with the activitypointer. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** For internal use only. */
-		TraversedPath: DevKit.WebApi.StringValue;
+		TraversedPath: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version number of the activity. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 		/** Information for bulk operation workflow. */
-		WorkflowInfo: DevKit.WebApi.StringValue;
+		WorkflowInfo: string;
 		/** The array of object that can cast object to ActivityPartyApi class */
-		ActivityParties: Array<any>;
+		ActivityParties: Array<unknown>;
 	}
 }
 declare namespace OptionSet {
 	namespace BulkOperation {
 		enum ActivityTypeCode {
+			/** 10086 */
+			Activity_record_for_the_Teams_chat,
 			/** 4201 */
 			Appointment,
-			/** 10400 */
+			/** 10404 */
 			Booking_Alert,
 			/** 4402 */
 			Campaign_Activity,
@@ -343,13 +347,13 @@ declare namespace OptionSet {
 			Campaign_Response,
 			/** 4206 */
 			Case_Resolution,
-			/** 10702 */
+			/** 10707 */
 			Conversation,
-			/** 10294 */
+			/** 10313 */
 			Customer_Voice_alert,
-			/** 10304 */
+			/** 10323 */
 			Customer_Voice_survey_invite,
-			/** 10306 */
+			/** 10325 */
 			Customer_Voice_survey_response,
 			/** 4202 */
 			Email,
@@ -361,11 +365,11 @@ declare namespace OptionSet {
 			Opportunity_Close,
 			/** 4209 */
 			Order_Close,
-			/** 10813 */
+			/** 10817 */
 			Outbound_message,
 			/** 4210 */
 			Phone_Call,
-			/** 10430 */
+			/** 10434 */
 			Project_Service_Approval,
 			/** 4406 */
 			Quick_Campaign,
@@ -375,7 +379,7 @@ declare namespace OptionSet {
 			Recurring_Appointment,
 			/** 4214 */
 			Service_Activity,
-			/** 10717 */
+			/** 10721 */
 			Session,
 			/** 4212 */
 			Task
@@ -516,4 +520,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

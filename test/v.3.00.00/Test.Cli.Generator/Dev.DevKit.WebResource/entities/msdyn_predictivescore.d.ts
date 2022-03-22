@@ -45,8 +45,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -54,55 +56,55 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Contributing prediction IDs. */
-		msdyn_ContributingPredictionIDs: DevKit.WebApi.StringValue;
+		msdyn_ContributingPredictionIDs: string;
 		/** Entity ID of primary entity. */
-		msdyn_EntityId: DevKit.WebApi.StringValue;
+		msdyn_EntityId: string;
 		/** Entity type of primary entity. */
-		msdyn_EntityType: DevKit.WebApi.StringValue;
+		msdyn_EntityType: string;
 		/** Grade of prediction score. */
-		msdyn_Grade: DevKit.WebApi.OptionSetValue;
+		msdyn_Grade: OptionSet.msdyn_predictivescore.msdyn_Grade;
 		/** The name of the custom entity. */
-		msdyn_name: DevKit.WebApi.StringValue;
+		msdyn_name: string;
 		/** Unique identifier for entity instances. */
-		msdyn_predictivescoreId: DevKit.WebApi.GuidValue;
+		msdyn_predictivescoreId: string;
 		/** Prediction score. */
-		msdyn_Score: DevKit.WebApi.IntegerValue;
+		msdyn_Score: number;
 		/** Scored on. */
-		msdyn_ScoredOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		msdyn_ScoredOn_UtcDateOnly: Date;
 		/** Score reasons. */
-		msdyn_ScoreReasons: DevKit.WebApi.StringValue;
+		msdyn_ScoreReasons: string;
 		/** Score trend. */
-		msdyn_ScoreTrend: DevKit.WebApi.OptionSetValue;
+		msdyn_ScoreTrend: OptionSet.msdyn_predictivescore.msdyn_ScoreTrend;
 		/** Similar Opportunities data */
-		msdyn_similaropportunities: DevKit.WebApi.StringValue;
+		msdyn_similaropportunities: string;
 		/** Unique identifier for the organization. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Status of the Predictive Score. */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.msdyn_predictivescore.statecode;
 		/** Reason for the status of the Predictive Score. */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.msdyn_predictivescore.statuscode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Unique identifier of the user who created the record. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -157,4 +159,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

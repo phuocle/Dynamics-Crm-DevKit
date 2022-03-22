@@ -44,25 +44,27 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
 		EntityCollectionName: string;
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
-		msdyn_componentlogicalname: DevKit.WebApi.StringValue;
-		msdyn_componenttype: DevKit.WebApi.DecimalValue;
+		msdyn_componentlogicalname: string;
+		msdyn_componenttype: number;
 		/** The name of the custom entity. */
-		msdyn_name: DevKit.WebApi.StringValue;
-		msdyn_primaryentityname: DevKit.WebApi.StringValue;
+		msdyn_name: string;
+		msdyn_primaryentityname: string;
 		/** Unique identifier for entity instances */
-		msdyn_solutioncomponentcountsummaryId: DevKit.WebApi.GuidValue;
-		msdyn_solutionid: DevKit.WebApi.StringValue;
-		msdyn_subtype: DevKit.WebApi.StringValue;
-		msdyn_total: DevKit.WebApi.DecimalValue;
-		msdyn_workflowcategory: DevKit.WebApi.StringValue;
+		msdyn_solutioncomponentcountsummaryId: string;
+		msdyn_solutionid: string;
+		msdyn_subtype: string;
+		msdyn_total: number;
+		msdyn_workflowcategory: string;
 	}
 }
 declare namespace OptionSet {
@@ -85,4 +87,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

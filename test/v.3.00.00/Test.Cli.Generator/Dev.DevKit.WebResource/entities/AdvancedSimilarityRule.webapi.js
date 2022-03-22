@@ -4,20 +4,18 @@ var DevKit;
 (function (DevKit) {
 	'use strict';
 	DevKit.AdvancedSimilarityRuleApi = function (e) {
-		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
 			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-			var property = {};
 			var getFormattedValue = function () {
 				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-					return EMPTY_STRING;
+					return '';
 				}
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
 					if (entity[logicalName + l] === entityLogicalName) {
 						return entity[logicalName + f];
 					}
-					return EMPTY_STRING;
+					return '';
 				}
 				if (isMultiOptionSet) {
 					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -42,30 +40,29 @@ var DevKit;
 			var setValue = function (value) {
 				if (isMultiOptionSet) value = value.join(',');
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+					value = value.replace('{', '').replace('}', '');
 					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
 				} else {
 					upsertEntity[logicalName] = value;
 				}
 				entity[logicalName] = value;
 			};
-			Object.defineProperty(property, 'FormattedValue', {
+			Object.defineProperty(obj.FormattedValue, field, {
 				get: getFormattedValue
 			});
 			if (readOnly) {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue
 				});
 			}
 			else {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue,
 					set: setValue
 				});
 			}
-			return property;
 		}
-		var advancedsimilarityrule = {
+		var _advancedsimilarityrule = {
 			AdvancedSimilarityRuleId: { a: 'advancedsimilarityruleid' },
 			AdvancedSimilarityRuleIdUnique: { a: 'advancedsimilarityruleidunique', r: true },
 			AzureServiceConnectionId: { b: 'azureserviceconnectionid', a: '_azureserviceconnectionid_value', c: 'azureserviceconnections', d: 'azureserviceconnection' },
@@ -97,20 +94,23 @@ var DevKit;
 		};
 		if (e === undefined) e = {};
 		var u = {};
-		for (var field in advancedsimilarityrule) {
-			var a = advancedsimilarityrule[field].a;
-			var b = advancedsimilarityrule[field].b;
-			var c = advancedsimilarityrule[field].c;
-			var d = advancedsimilarityrule[field].d;
-			var g = advancedsimilarityrule[field].g;
-			var r = advancedsimilarityrule[field].r;
-			advancedsimilarityrule[field] = webApiField(e, a, b, c, d, r, u, g);
+		var advancedsimilarityrule = {};
+		advancedsimilarityrule.ODataEntity = e;
+		advancedsimilarityrule.FormattedValue = {};
+		for (var field in _advancedsimilarityrule) {
+			var a = _advancedsimilarityrule[field].a;
+			var b = _advancedsimilarityrule[field].b;
+			var c = _advancedsimilarityrule[field].c;
+			var d = _advancedsimilarityrule[field].d;
+			var g = _advancedsimilarityrule[field].g;
+			var r = _advancedsimilarityrule[field].r;
+			webApiField(advancedsimilarityrule, field, e, a, b, c, d, r, u, g);
 		}
 		advancedsimilarityrule.Entity = u;
 		advancedsimilarityrule.EntityName = 'advancedsimilarityrule';
 		advancedsimilarityrule.EntityCollectionName = 'advancedsimilarityrules';
 		advancedsimilarityrule['@odata.etag'] = e['@odata.etag'];
-		advancedsimilarityrule.getAliasedValue = function (alias, isMultiOptionSet) {
+		advancedsimilarityrule.getAliasedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias] === undefined || e[alias] === null) {
 				return null;
 			}
@@ -119,7 +119,7 @@ var DevKit;
 			}
 			return e[alias];
 		}
-		advancedsimilarityrule.getAliasedFormattedValue = function (alias, isMultiOptionSet) {
+		advancedsimilarityrule.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
 				return EMPTY_STRING;
 			}

@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,31 +30,31 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the asynchronous operation with which the subscription is associated. */
-		AsyncOperationId: DevKit.WebApi.LookupValue;
+		AsyncOperationId: string;
 		/** Unstructured data associated with the subscription. */
-		Data: DevKit.WebApi.StringValue;
+		Data: string;
 		/** Id of entity to which workflow instance subscribes. */
-		EntityId: DevKit.WebApi.GuidValue;
+		EntityId: string;
 		/** Name of entity to which workflow instance subscribes. */
-		EntityName1: DevKit.WebApi.StringValue;
+		EntityName1: string;
 		/** Indicates whether the entity to which workflow instance subscribes is deleted after the subscription is created. */
-		IsDeleted: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsDeleted: boolean;
 		/** Indicates whether the entity to which workflow instance subscribes is modified after the subscription is created. */
-		IsModified: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsModified: boolean;
 		/** Date and time when the entity was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValueReadonly;
+		readonly OwnerId_team: string;
 		/** Unique identifier of the business unit that owns the parent workflow instance. */
-		OwningBusinessUnit: DevKit.WebApi.GuidValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier of the user who owns the parent workflow instance. */
-		OwningUser: DevKit.WebApi.GuidValueReadonly;
+		readonly OwningUser: string;
 		/** Attributes on which the subscription is waiting to change. */
-		WaitOnAttributeList: DevKit.WebApi.StringValue;
+		WaitOnAttributeList: string;
 		/** Unique identifier of the subscription. */
-		WorkflowWaitSubscriptionId: DevKit.WebApi.GuidValue;
+		WorkflowWaitSubscriptionId: string;
 	}
 }
 declare namespace OptionSet {
@@ -75,4 +77,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

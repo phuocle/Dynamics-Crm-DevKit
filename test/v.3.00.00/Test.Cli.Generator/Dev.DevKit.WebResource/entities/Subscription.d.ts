@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,31 +30,31 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Client Version. */
-		ClientVersion: DevKit.WebApi.StringValueReadonly;
+		readonly ClientVersion: string;
 		/** UTC time when the last successfully completed synchronization was started. This is the difference between local time and standard Coordinated Universal Time. */
-		CompletedSyncStartedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly CompletedSyncStartedOn_UtcDateOnly: Date;
 		/** Database time stamp at the start time of the last successfully completed synchronization. */
-		CompletedSyncVersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly CompletedSyncVersionNumber: number;
 		/** For internal use only. */
-		LastSyncStartedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly LastSyncStartedOn_UtcDateOnly: Date;
 		/** For internal use only. */
-		MachineName: DevKit.WebApi.StringValue;
+		MachineName: string;
 		/** Database time stamp at the start time of the last successfully completed synchronization. */
-		ReInitialize: DevKit.WebApi.BooleanValue;
+		ReInitialize: boolean;
 		/** For internal use only. */
-		ResetForCreate: DevKit.WebApi.BooleanValue;
+		ResetForCreate: boolean;
 		/** For internal use only. */
-		SubscriptionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SubscriptionId: string;
 		/** For internal use only. */
-		SubscriptionType: DevKit.WebApi.IntegerValue;
+		SubscriptionType: number;
 		/** For internal use only. */
-		SyncEntryTableName: DevKit.WebApi.StringValueReadonly;
+		readonly SyncEntryTableName: string;
 		/** For internal use only. */
-		SystemUserId: DevKit.WebApi.GuidValueReadonly;
+		readonly SystemUserId: string;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 	}
 }
 declare namespace OptionSet {
@@ -75,4 +77,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

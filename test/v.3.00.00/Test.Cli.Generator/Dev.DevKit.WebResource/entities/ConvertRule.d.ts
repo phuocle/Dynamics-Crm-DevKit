@@ -187,8 +187,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -196,85 +198,85 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Choose whether items from unknown senders should be converted to records. */
-		AllowUnknownSender: DevKit.WebApi.BooleanValue;
+		AllowUnknownSender: boolean;
 		/** channel property group associated with the convert rule. */
-		ChannelPropertyGroupId: DevKit.WebApi.LookupValue;
+		ChannelPropertyGroupId: string;
 		/** Choose whether cases should be created for customers with active entitlements. */
-		CheckActiveEntitlement: DevKit.WebApi.BooleanValue;
+		CheckActiveEntitlement: boolean;
 		/** Information whether record needs to be created for black listed social profiles. */
-		CheckBlockedSocialProfile: DevKit.WebApi.BooleanValue;
+		CheckBlockedSocialProfile: boolean;
 		/** Information whether record needs to be created for direct messages. */
-		CheckDirectMessages: DevKit.WebApi.BooleanValue;
+		CheckDirectMessages: boolean;
 		/** Choose whether an item related to a resolved case should be converted to a case. */
-		CheckIfResolved: DevKit.WebApi.BooleanValue;
+		CheckIfResolved: boolean;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.ConvertRule.ComponentState;
 		/** Unique identifier for entity instances */
-		ConvertRuleId: DevKit.WebApi.GuidValue;
+		ConvertRuleId: string;
 		/** For internal use only. */
-		ConvertRuleIdUnique: DevKit.WebApi.GuidValueReadonly;
+		readonly ConvertRuleIdUnique: string;
 		/** Choose whether an ARC rule is modern or legacy. */
-		ConvertRuleType: DevKit.WebApi.BooleanValue;
+		ConvertRuleType: boolean;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Type additional information to describe the rule for creating records automatically. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Exchange rate for the currency associated with the queue with respect to the base currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** For internal use only. */
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsManaged: boolean;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Type a title or name of the queue for which the setting is defined. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** For internal use only. */
-		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly OverwriteTime_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Shows the business unit that the convert rule owner belongs to. */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValue;
+		OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValue;
+		OwningUser: string;
 		/** Choose the queue that the rule is assigned to. */
-		QueueId: DevKit.WebApi.LookupValue;
+		QueueId: string;
 		/** Record Version */
-		RecordVersion: DevKit.WebApi.StringValueReadonly;
+		readonly RecordVersion: string;
 		/** If you want to create a new case for an item associated with a resolved case, type how long a case must remain resolved before a new case is created for the associated item. */
-		ResolvedSince: DevKit.WebApi.IntegerValue;
+		ResolvedSince: number;
 		/** Choose the email template to use to create an automatic response to the customer. */
-		ResponseTemplateId: DevKit.WebApi.LookupValue;
+		ResponseTemplateId: string;
 		/** Choose whether to send an automatic email response to the customer after a record is created. */
-		SendAutomaticResponse: DevKit.WebApi.BooleanValue;
+		SendAutomaticResponse: boolean;
 		/** Choose whether an ARC rule should resolve email sender manually or automatically. */
-		SenderResolutionOption: DevKit.WebApi.OptionSetValue;
+		SenderResolutionOption: OptionSet.ConvertRule.SenderResolutionOption;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** Source of the record. */
-		SourceTypeCode: DevKit.WebApi.OptionSetValue;
+		SourceTypeCode: OptionSet.ConvertRule.SourceTypeCode;
 		/** Status of the Convert Rule */
-		StateCode: DevKit.WebApi.OptionSetValue;
+		StateCode: OptionSet.ConvertRule.StateCode;
 		/** Reason for the status of the Convert Rule */
-		StatusCode: DevKit.WebApi.OptionSetValue;
+		StatusCode: OptionSet.ConvertRule.StatusCode;
 		/** For internal use only. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SupportingSolutionId: string;
 		/** Unique identifier of the currency associated with the queue. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** Version number of the convert rule. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 		/** Shows the workflow for this rule. */
-		WorkflowId: DevKit.WebApi.LookupValue;
+		WorkflowId: string;
 	}
 }
 declare namespace OptionSet {
@@ -296,29 +298,31 @@ declare namespace OptionSet {
 			Mapping_in_Power_Automate_manually
 		}
 		enum SourceChannelTypeCode {
+			/** 10086 */
+			Activity_record_for_the_Teams_chat,
 			/** 4201 */
 			Appointment,
-			/** 10400 */
+			/** 10404 */
 			Booking_Alert,
-			/** 10702 */
+			/** 10707 */
 			Conversation,
-			/** 10294 */
+			/** 10313 */
 			Customer_Voice_alert,
-			/** 10304 */
+			/** 10323 */
 			Customer_Voice_survey_invite,
-			/** 10306 */
+			/** 10325 */
 			Customer_Voice_survey_response,
 			/** 4202 */
 			Email,
-			/** 10813 */
+			/** 10817 */
 			Outbound_message,
 			/** 4210 */
 			Phone_Call,
-			/** 10430 */
+			/** 10434 */
 			Project_Service_Approval,
 			/** 4214 */
 			Service_Activity,
-			/** 10717 */
+			/** 10721 */
 			Session,
 			/** 4216 */
 			Social_Activity,
@@ -361,4 +365,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

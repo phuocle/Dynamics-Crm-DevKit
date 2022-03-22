@@ -88,8 +88,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -97,569 +99,573 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the connection. */
-		ConnectionId: DevKit.WebApi.GuidValue;
+		ConnectionId: string;
 		/** Shows who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Type additional information to describe the connection, such as the length or quality of the relationship. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Enter the end date of the connection. */
-		EffectiveEnd_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		EffectiveEnd_UtcDateOnly: Date;
 		/** Enter the start date of the connection. */
-		EffectiveStart_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		EffectiveStart_UtcDateOnly: Date;
 		/** The default image for the entity. */
-		EntityImage: DevKit.WebApi.StringValue;
-		EntityImage_Timestamp: DevKit.WebApi.BigIntValueReadonly;
-		EntityImage_URL: DevKit.WebApi.StringValueReadonly;
+		EntityImage: string;
+		EntityImage_Timestamp: number;
+		EntityImage_URL: string;
 		/** For internal use only. */
-		EntityImageId: DevKit.WebApi.GuidValueReadonly;
+		readonly EntityImageId: string;
 		/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Unique identifier of the data import or data migration that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Indicates that this is the master record. */
-		IsMaster: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsMaster: boolean;
 		/** Shows who last updated the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Shows who last updated the record on behalf of another user. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Name of the connection. */
-		Name: DevKit.WebApi.StringValueReadonly;
+		readonly Name: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Shows the business unit that the record owner belongs to. */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier of the team who owns the connection. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier of the user who owns the connection. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Unique identifier of the source record. */
-		record1id_account: DevKit.WebApi.LookupValue;
+		record1id_account: string;
 		/** Unique identifier of the source record. */
-		record1id_activitypointer: DevKit.WebApi.LookupValue;
+		record1id_activitypointer: string;
 		/** Unique identifier of the source record. */
-		record1id_appointment: DevKit.WebApi.LookupValue;
+		record1id_appointment: string;
 		/** Unique identifier of the source record. */
-		record1id_campaign: DevKit.WebApi.LookupValue;
+		record1id_campaign: string;
 		/** Unique identifier of the source record. */
-		record1id_campaignactivity: DevKit.WebApi.LookupValue;
+		record1id_campaignactivity: string;
 		/** Unique identifier of the source record. */
-		profileruleid1: DevKit.WebApi.LookupValue;
+		profileruleid1: string;
 		/** Unique identifier of the source record. */
-		record1id_competitor: DevKit.WebApi.LookupValue;
+		record1id_competitor: string;
 		/** Unique identifier of the source record. */
-		record1id_constraintbasedgroup: DevKit.WebApi.LookupValue;
+		record1id_constraintbasedgroup: string;
 		/** Unique identifier of the source record. */
-		record1id_contact: DevKit.WebApi.LookupValue;
+		record1id_contact: string;
 		/** Unique identifier of the source record. */
-		record1id_contract: DevKit.WebApi.LookupValue;
+		record1id_contract: string;
 		/** Unique identifier of the source record. */
-		record1id_email: DevKit.WebApi.LookupValue;
+		record1id_email: string;
 		/** Unique identifier of the source record. */
-		record1id_entitlement: DevKit.WebApi.LookupValue;
+		record1id_entitlement: string;
 		/** Unique identifier of the source record. */
-		record1id_entitlementchannel: DevKit.WebApi.LookupValue;
+		record1id_entitlementchannel: string;
 		/** Unique identifier of the source record. */
-		record1id_entitlementtemplatechannel: DevKit.WebApi.LookupValue;
+		record1id_entitlementtemplatechannel: string;
 		/** Unique identifier of the source record. */
-		record1id_equipment: DevKit.WebApi.LookupValue;
+		record1id_equipment: string;
 		/** Unique identifier of the source record. */
-		record1id_fax: DevKit.WebApi.LookupValue;
+		record1id_fax: string;
 		/** Unique identifier of the source record. */
-		record1id_goal: DevKit.WebApi.LookupValue;
+		record1id_goal: string;
 		/** Unique identifier of the source record. */
-		record1id_incident: DevKit.WebApi.LookupValue;
+		record1id_incident: string;
 		/** Unique identifier of the source record. */
-		record1id_invoice: DevKit.WebApi.LookupValue;
+		record1id_invoice: string;
 		/** Unique identifier of the source record. */
-		record1id_knowledgearticle: DevKit.WebApi.LookupValue;
+		record1id_knowledgearticle: string;
 		/** Unique identifier of the source record. */
-		record1id_knowledgebaserecord: DevKit.WebApi.LookupValue;
+		record1id_knowledgebaserecord: string;
 		/** Unique identifier of the source record. */
-		record1id_lead: DevKit.WebApi.LookupValue;
+		record1id_lead: string;
 		/** Unique identifier of the source record. */
-		record1id_letter: DevKit.WebApi.LookupValue;
+		record1id_letter: string;
 		/** Unique identifier of the source record. */
-		record1id_list: DevKit.WebApi.LookupValue;
+		record1id_list: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_agreement: DevKit.WebApi.LookupValue;
+		record1id_msdyn_agreement: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_agreementbookingdate: DevKit.WebApi.LookupValue;
+		record1id_msdyn_agreementbookingdate: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_agreementbookingincident: DevKit.WebApi.LookupValue;
+		record1id_msdyn_agreementbookingincident: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_agreementbookingproduct: DevKit.WebApi.LookupValue;
+		record1id_msdyn_agreementbookingproduct: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_agreementbookingservice: DevKit.WebApi.LookupValue;
+		record1id_msdyn_agreementbookingservice: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_agreementbookingservicetask: DevKit.WebApi.LookupValue;
+		record1id_msdyn_agreementbookingservicetask: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_agreementbookingsetup: DevKit.WebApi.LookupValue;
+		record1id_msdyn_agreementbookingsetup: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_agreementinvoicedate: DevKit.WebApi.LookupValue;
+		record1id_msdyn_agreementinvoicedate: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_agreementinvoiceproduct: DevKit.WebApi.LookupValue;
+		record1id_msdyn_agreementinvoiceproduct: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_agreementinvoicesetup: DevKit.WebApi.LookupValue;
+		record1id_msdyn_agreementinvoicesetup: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_approval: DevKit.WebApi.LookupValue;
+		record1id_msdyn_approval: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_assignmentmap: DevKit.WebApi.LookupValue;
+		record1id_msdyn_assignmentmap: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_assignmentrule: DevKit.WebApi.LookupValue;
+		record1id_msdyn_assignmentrule: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_bookingalert: DevKit.WebApi.LookupValue;
+		record1id_msdyn_bookingalert: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_bookingalertstatus: DevKit.WebApi.LookupValue;
+		record1id_msdyn_bookingalertstatus: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_bookingrule: DevKit.WebApi.LookupValue;
+		record1id_msdyn_bookingrule: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_bookingtimestamp: DevKit.WebApi.LookupValue;
+		record1id_msdyn_bookingtimestamp: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_customerasset: DevKit.WebApi.LookupValue;
+		record1id_msdyn_customerasset: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_incidenttypecharacteristic: DevKit.WebApi.LookupValue;
+		record1id_msdyn_incidenttypecharacteristic: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_incidenttypeproduct: DevKit.WebApi.LookupValue;
+		record1id_msdyn_incidenttypeproduct: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_incidenttypeservice: DevKit.WebApi.LookupValue;
+		record1id_msdyn_incidenttypeservice: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_inventoryadjustment: DevKit.WebApi.LookupValue;
+		record1id_msdyn_inventoryadjustment: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_inventoryadjustmentproduct: DevKit.WebApi.LookupValue;
+		record1id_msdyn_inventoryadjustmentproduct: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_inventoryjournal: DevKit.WebApi.LookupValue;
+		record1id_msdyn_inventoryjournal: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_inventorytransfer: DevKit.WebApi.LookupValue;
+		record1id_msdyn_inventorytransfer: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_iotalert: DevKit.WebApi.LookupValue;
+		record1id_msdyn_iotalert: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_iotdevice: DevKit.WebApi.LookupValue;
+		record1id_msdyn_iotdevice: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_iotdevicecategory: DevKit.WebApi.LookupValue;
+		record1id_msdyn_iotdevicecategory: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_iotdevicecommand: DevKit.WebApi.LookupValue;
+		record1id_msdyn_iotdevicecommand: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_iotdeviceregistrationhistory: DevKit.WebApi.LookupValue;
+		record1id_msdyn_iotdeviceregistrationhistory: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_liveconversation: DevKit.WebApi.LookupValue;
+		record1id_msdyn_liveconversation: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_ocliveworkitem: DevKit.WebApi.LookupValue;
+		record1id_msdyn_ocliveworkitem: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_ocoutboundmessage: DevKit.WebApi.LookupValue;
+		record1id_msdyn_ocoutboundmessage: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_ocsession: DevKit.WebApi.LookupValue;
+		record1id_msdyn_ocsession: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_payment: DevKit.WebApi.LookupValue;
+		record1id_msdyn_payment: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_paymentdetail: DevKit.WebApi.LookupValue;
+		record1id_msdyn_paymentdetail: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_paymentmethod: DevKit.WebApi.LookupValue;
+		record1id_msdyn_paymentmethod: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_paymentterm: DevKit.WebApi.LookupValue;
+		record1id_msdyn_paymentterm: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_postalbum: DevKit.WebApi.LookupValue;
+		record1id_msdyn_postalbum: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_postalcode: DevKit.WebApi.LookupValue;
+		record1id_msdyn_postalcode: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_processnotes: DevKit.WebApi.LookupValue;
+		record1id_msdyn_processnotes: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_productinventory: DevKit.WebApi.LookupValue;
+		record1id_msdyn_productinventory: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_project: DevKit.WebApi.LookupValue;
+		record1id_msdyn_project: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_projectteam: DevKit.WebApi.LookupValue;
+		record1id_msdyn_projectteam: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_purchaseorder: DevKit.WebApi.LookupValue;
+		record1id_msdyn_purchaseorder: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_purchaseorderbill: DevKit.WebApi.LookupValue;
+		record1id_msdyn_purchaseorderbill: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_purchaseorderproduct: DevKit.WebApi.LookupValue;
+		record1id_msdyn_purchaseorderproduct: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_purchaseorderreceipt: DevKit.WebApi.LookupValue;
+		record1id_msdyn_purchaseorderreceipt: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_purchaseorderreceiptproduct: DevKit.WebApi.LookupValue;
+		record1id_msdyn_purchaseorderreceiptproduct: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_purchaseordersubstatus: DevKit.WebApi.LookupValue;
+		record1id_msdyn_purchaseordersubstatus: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_quotebookingincident: DevKit.WebApi.LookupValue;
+		record1id_msdyn_quotebookingincident: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_quotebookingproduct: DevKit.WebApi.LookupValue;
+		record1id_msdyn_quotebookingproduct: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_quotebookingservice: DevKit.WebApi.LookupValue;
+		record1id_msdyn_quotebookingservice: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_quotebookingservicetask: DevKit.WebApi.LookupValue;
+		record1id_msdyn_quotebookingservicetask: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_resourceterritory: DevKit.WebApi.LookupValue;
+		record1id_msdyn_resourceterritory: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_rma: DevKit.WebApi.LookupValue;
+		record1id_msdyn_rma: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_rmaproduct: DevKit.WebApi.LookupValue;
+		record1id_msdyn_rmaproduct: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_rmareceipt: DevKit.WebApi.LookupValue;
+		record1id_msdyn_rmareceipt: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_rmareceiptproduct: DevKit.WebApi.LookupValue;
+		record1id_msdyn_rmareceiptproduct: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_rmasubstatus: DevKit.WebApi.LookupValue;
+		record1id_msdyn_rmasubstatus: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_rtv: DevKit.WebApi.LookupValue;
+		record1id_msdyn_rtv: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_rtvproduct: DevKit.WebApi.LookupValue;
+		record1id_msdyn_rtvproduct: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_rtvsubstatus: DevKit.WebApi.LookupValue;
+		record1id_msdyn_rtvsubstatus: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_sequence: DevKit.WebApi.LookupValue;
+		record1id_msdyn_salessuggestion: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_sequencetarget: DevKit.WebApi.LookupValue;
+		record1id_msdyn_sequence: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_shipvia: DevKit.WebApi.LookupValue;
+		record1id_msdyn_sequencetarget: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_systemuserschedulersetting: DevKit.WebApi.LookupValue;
+		record1id_msdyn_shipvia: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_taxcode: DevKit.WebApi.LookupValue;
+		record1id_msdyn_systemuserschedulersetting: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_timegroup: DevKit.WebApi.LookupValue;
+		record1id_msdyn_taxcode: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_timegroupdetail: DevKit.WebApi.LookupValue;
+		record1id_msdyn_timegroup: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_timeoffrequest: DevKit.WebApi.LookupValue;
+		record1id_msdyn_timegroupdetail: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_warehouse: DevKit.WebApi.LookupValue;
+		record1id_msdyn_timeoffrequest: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_workorder: DevKit.WebApi.LookupValue;
+		record1id_msdyn_warehouse: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_workordercharacteristic: DevKit.WebApi.LookupValue;
+		record1id_msdyn_workorder: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_workorderincident: DevKit.WebApi.LookupValue;
+		record1id_msdyn_workordercharacteristic: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_workorderproduct: DevKit.WebApi.LookupValue;
+		record1id_msdyn_workorderincident: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_workorderresourcerestriction: DevKit.WebApi.LookupValue;
+		record1id_msdyn_workorderproduct: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_workorderservice: DevKit.WebApi.LookupValue;
+		record1id_msdyn_workorderresourcerestriction: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyn_workorderservicetask: DevKit.WebApi.LookupValue;
+		record1id_msdyn_workorderservice: string;
 		/** Unique identifier of the source record. */
-		record1id_msdyusd_toolbarbutton: DevKit.WebApi.LookupValue;
+		record1id_msdyn_workorderservicetask: string;
 		/** Unique identifier of the source record. */
-		record1id_msfp_alert: DevKit.WebApi.LookupValue;
+		record1id_msdyusd_toolbarbutton: string;
 		/** Unique identifier of the source record. */
-		record1id_msfp_surveyinvite: DevKit.WebApi.LookupValue;
+		record1id_msfp_alert: string;
 		/** Unique identifier of the source record. */
-		record1id_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		record1id_msfp_surveyinvite: string;
 		/** Unique identifier of the source record. */
-		record1id_opportunity: DevKit.WebApi.LookupValue;
+		record1id_msfp_surveyresponse: string;
 		/** Unique identifier of the source record. */
-		record1id_phonecall: DevKit.WebApi.LookupValue;
+		record1id_opportunity: string;
 		/** Unique identifier of the source record. */
-		record1id_position: DevKit.WebApi.LookupValue;
+		record1id_phonecall: string;
 		/** Unique identifier of the source record. */
-		record1id_pricelevel: DevKit.WebApi.LookupValue;
+		record1id_position: string;
 		/** Unique identifier of the source record. */
-		record1id_processsession: DevKit.WebApi.LookupValue;
+		record1id_pricelevel: string;
 		/** Unique identifier of the source record. */
-		record1id_product: DevKit.WebApi.LookupValue;
+		record1id_processsession: string;
 		/** Unique identifier of the source record. */
-		record1id_quote: DevKit.WebApi.LookupValue;
+		record1id_product: string;
 		/** Unique identifier of the source record. */
-		record1id_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		record1id_quote: string;
 		/** Unique identifier of the source record. */
-		record1id_resourcegroup: DevKit.WebApi.LookupValue;
+		record1id_recurringappointmentmaster: string;
 		/** Unique identifier of the source record. */
-		record1id_salesorder: DevKit.WebApi.LookupValue;
+		record1id_resourcegroup: string;
 		/** Unique identifier of the source record. */
-		record1id_serviceappointment: DevKit.WebApi.LookupValue;
+		record1id_salesorder: string;
 		/** Unique identifier of the source record. */
-		record1id_socialactivity: DevKit.WebApi.LookupValue;
+		record1id_serviceappointment: string;
 		/** Unique identifier of the source record. */
-		record1id_socialprofile: DevKit.WebApi.LookupValue;
+		record1id_socialactivity: string;
 		/** Unique identifier of the source record. */
-		record1id_systemuser: DevKit.WebApi.LookupValue;
+		record1id_socialprofile: string;
 		/** Unique identifier of the source record. */
-		record1id_task: DevKit.WebApi.LookupValue;
+		record1id_systemuser: string;
 		/** Unique identifier of the source record. */
-		record1id_team: DevKit.WebApi.LookupValue;
+		record1id_task: string;
 		/** Unique identifier of the source record. */
-		record1id_territory: DevKit.WebApi.LookupValue;
+		record1id_team: string;
 		/** Unique identifier of the source record. */
-		record1id_uii_option: DevKit.WebApi.LookupValue;
+		record1id_territory: string;
+		/** Unique identifier of the source record. */
+		record1id_uii_option: string;
 		/** Shows the record type of the source record. */
-		Record1ObjectTypeCode: DevKit.WebApi.OptionSetValueReadonly;
+		readonly Record1ObjectTypeCode: OptionSet.Connection.Record1ObjectTypeCode;
 		/** Choose the primary party's role or relationship with the second party. */
-		Record1RoleId: DevKit.WebApi.LookupValue;
+		Record1RoleId: string;
 		/** Unique identifier of the target record. */
-		record2id_account: DevKit.WebApi.LookupValue;
+		record2id_account: string;
 		/** Unique identifier of the target record. */
-		record2id_activitypointer: DevKit.WebApi.LookupValue;
+		record2id_activitypointer: string;
 		/** Unique identifier of the target record. */
-		record2id_appointment: DevKit.WebApi.LookupValue;
+		record2id_appointment: string;
 		/** Unique identifier of the target record. */
-		record2id_campaign: DevKit.WebApi.LookupValue;
+		record2id_campaign: string;
 		/** Unique identifier of the target record. */
-		record2id_campaignactivity: DevKit.WebApi.LookupValue;
+		record2id_campaignactivity: string;
 		/** Unique identifier of the target record. */
-		channelaccessprofileruleid: DevKit.WebApi.LookupValue;
+		channelaccessprofileruleid: string;
 		/** Unique identifier of the target record. */
-		record2id_competitor: DevKit.WebApi.LookupValue;
+		record2id_competitor: string;
 		/** Unique identifier of the target record. */
-		record2id_constraintbasedgroup: DevKit.WebApi.LookupValue;
+		record2id_constraintbasedgroup: string;
 		/** Unique identifier of the target record. */
-		record2id_contact: DevKit.WebApi.LookupValue;
+		record2id_contact: string;
 		/** Unique identifier of the target record. */
-		record2id_contract: DevKit.WebApi.LookupValue;
+		record2id_contract: string;
 		/** Unique identifier of the target record. */
-		record2id_email: DevKit.WebApi.LookupValue;
+		record2id_email: string;
 		/** Unique identifier of the target record. */
-		record2id_entitlement: DevKit.WebApi.LookupValue;
+		record2id_entitlement: string;
 		/** Unique identifier of the target record. */
-		record2id_entitlementchannel: DevKit.WebApi.LookupValue;
+		record2id_entitlementchannel: string;
 		/** Unique identifier of the target record. */
-		record2id_entitlementtemplatechannel: DevKit.WebApi.LookupValue;
+		record2id_entitlementtemplatechannel: string;
 		/** Unique identifier of the target record. */
-		record2id_equipment: DevKit.WebApi.LookupValue;
+		record2id_equipment: string;
 		/** Unique identifier of the target record. */
-		record2id_fax: DevKit.WebApi.LookupValue;
+		record2id_fax: string;
 		/** Unique identifier of the target record. */
-		record2id_goal: DevKit.WebApi.LookupValue;
+		record2id_goal: string;
 		/** Unique identifier of the target record. */
-		record2id_incident: DevKit.WebApi.LookupValue;
+		record2id_incident: string;
 		/** Unique identifier of the target record. */
-		record2id_invoice: DevKit.WebApi.LookupValue;
+		record2id_invoice: string;
 		/** Unique identifier of the target record. */
-		record2id_knowledgearticle: DevKit.WebApi.LookupValue;
+		record2id_knowledgearticle: string;
 		/** Unique identifier of the target record. */
-		record2id_knowledgebaserecord: DevKit.WebApi.LookupValue;
+		record2id_knowledgebaserecord: string;
 		/** Unique identifier of the target record. */
-		record2id_lead: DevKit.WebApi.LookupValue;
+		record2id_lead: string;
 		/** Unique identifier of the target record. */
-		record2id_letter: DevKit.WebApi.LookupValue;
+		record2id_letter: string;
 		/** Unique identifier of the target record. */
-		record2id_list: DevKit.WebApi.LookupValue;
+		record2id_list: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_agreement: DevKit.WebApi.LookupValue;
+		record2id_msdyn_agreement: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_agreementbookingdate: DevKit.WebApi.LookupValue;
+		record2id_msdyn_agreementbookingdate: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_agreementbookingincident: DevKit.WebApi.LookupValue;
+		record2id_msdyn_agreementbookingincident: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_agreementbookingproduct: DevKit.WebApi.LookupValue;
+		record2id_msdyn_agreementbookingproduct: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_agreementbookingservice: DevKit.WebApi.LookupValue;
+		record2id_msdyn_agreementbookingservice: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_agreementbookingservicetask: DevKit.WebApi.LookupValue;
+		record2id_msdyn_agreementbookingservicetask: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_agreementbookingsetup: DevKit.WebApi.LookupValue;
+		record2id_msdyn_agreementbookingsetup: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_agreementinvoicedate: DevKit.WebApi.LookupValue;
+		record2id_msdyn_agreementinvoicedate: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_agreementinvoiceproduct: DevKit.WebApi.LookupValue;
+		record2id_msdyn_agreementinvoiceproduct: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_agreementinvoicesetup: DevKit.WebApi.LookupValue;
+		record2id_msdyn_agreementinvoicesetup: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_approval: DevKit.WebApi.LookupValue;
+		record2id_msdyn_approval: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_assignmentmap: DevKit.WebApi.LookupValue;
+		record2id_msdyn_assignmentmap: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_assignmentrule: DevKit.WebApi.LookupValue;
+		record2id_msdyn_assignmentrule: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_bookingalert: DevKit.WebApi.LookupValue;
+		record2id_msdyn_bookingalert: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_bookingalertstatus: DevKit.WebApi.LookupValue;
+		record2id_msdyn_bookingalertstatus: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_bookingrule: DevKit.WebApi.LookupValue;
+		record2id_msdyn_bookingrule: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_bookingtimestamp: DevKit.WebApi.LookupValue;
+		record2id_msdyn_bookingtimestamp: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_customerasset: DevKit.WebApi.LookupValue;
+		record2id_msdyn_customerasset: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_incidenttypecharacteristic: DevKit.WebApi.LookupValue;
+		record2id_msdyn_incidenttypecharacteristic: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_incidenttypeproduct: DevKit.WebApi.LookupValue;
+		record2id_msdyn_incidenttypeproduct: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_incidenttypeservice: DevKit.WebApi.LookupValue;
+		record2id_msdyn_incidenttypeservice: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_inventoryadjustment: DevKit.WebApi.LookupValue;
+		record2id_msdyn_inventoryadjustment: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_inventoryadjustmentproduct: DevKit.WebApi.LookupValue;
+		record2id_msdyn_inventoryadjustmentproduct: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_inventoryjournal: DevKit.WebApi.LookupValue;
+		record2id_msdyn_inventoryjournal: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_inventorytransfer: DevKit.WebApi.LookupValue;
+		record2id_msdyn_inventorytransfer: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_iotalert: DevKit.WebApi.LookupValue;
+		record2id_msdyn_iotalert: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_iotdevice: DevKit.WebApi.LookupValue;
+		record2id_msdyn_iotdevice: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_iotdevicecategory: DevKit.WebApi.LookupValue;
+		record2id_msdyn_iotdevicecategory: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_iotdevicecommand: DevKit.WebApi.LookupValue;
+		record2id_msdyn_iotdevicecommand: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_iotdeviceregistrationhistory: DevKit.WebApi.LookupValue;
+		record2id_msdyn_iotdeviceregistrationhistory: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_liveconversation: DevKit.WebApi.LookupValue;
+		record2id_msdyn_liveconversation: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_ocliveworkitem: DevKit.WebApi.LookupValue;
+		record2id_msdyn_ocliveworkitem: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_ocoutboundmessage: DevKit.WebApi.LookupValue;
+		record2id_msdyn_ocoutboundmessage: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_ocsession: DevKit.WebApi.LookupValue;
+		record2id_msdyn_ocsession: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_payment: DevKit.WebApi.LookupValue;
+		record2id_msdyn_payment: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_paymentdetail: DevKit.WebApi.LookupValue;
+		record2id_msdyn_paymentdetail: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_paymentmethod: DevKit.WebApi.LookupValue;
+		record2id_msdyn_paymentmethod: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_paymentterm: DevKit.WebApi.LookupValue;
+		record2id_msdyn_paymentterm: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_postalbum: DevKit.WebApi.LookupValue;
+		record2id_msdyn_postalbum: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_postalcode: DevKit.WebApi.LookupValue;
+		record2id_msdyn_postalcode: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_processnotes: DevKit.WebApi.LookupValue;
+		record2id_msdyn_processnotes: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_productinventory: DevKit.WebApi.LookupValue;
+		record2id_msdyn_productinventory: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_project: DevKit.WebApi.LookupValue;
+		record2id_msdyn_project: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_projectteam: DevKit.WebApi.LookupValue;
+		record2id_msdyn_projectteam: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_purchaseorder: DevKit.WebApi.LookupValue;
+		record2id_msdyn_purchaseorder: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_purchaseorderbill: DevKit.WebApi.LookupValue;
+		record2id_msdyn_purchaseorderbill: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_purchaseorderproduct: DevKit.WebApi.LookupValue;
+		record2id_msdyn_purchaseorderproduct: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_purchaseorderreceipt: DevKit.WebApi.LookupValue;
+		record2id_msdyn_purchaseorderreceipt: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_purchaseorderreceiptproduct: DevKit.WebApi.LookupValue;
+		record2id_msdyn_purchaseorderreceiptproduct: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_purchaseordersubstatus: DevKit.WebApi.LookupValue;
+		record2id_msdyn_purchaseordersubstatus: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_quotebookingincident: DevKit.WebApi.LookupValue;
+		record2id_msdyn_quotebookingincident: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_quotebookingproduct: DevKit.WebApi.LookupValue;
+		record2id_msdyn_quotebookingproduct: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_quotebookingservice: DevKit.WebApi.LookupValue;
+		record2id_msdyn_quotebookingservice: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_quotebookingservicetask: DevKit.WebApi.LookupValue;
+		record2id_msdyn_quotebookingservicetask: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_resourceterritory: DevKit.WebApi.LookupValue;
+		record2id_msdyn_resourceterritory: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_rma: DevKit.WebApi.LookupValue;
+		record2id_msdyn_rma: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_rmaproduct: DevKit.WebApi.LookupValue;
+		record2id_msdyn_rmaproduct: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_rmareceipt: DevKit.WebApi.LookupValue;
+		record2id_msdyn_rmareceipt: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_rmareceiptproduct: DevKit.WebApi.LookupValue;
+		record2id_msdyn_rmareceiptproduct: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_rmasubstatus: DevKit.WebApi.LookupValue;
+		record2id_msdyn_rmasubstatus: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_rtv: DevKit.WebApi.LookupValue;
+		record2id_msdyn_rtv: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_rtvproduct: DevKit.WebApi.LookupValue;
+		record2id_msdyn_rtvproduct: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_rtvsubstatus: DevKit.WebApi.LookupValue;
+		record2id_msdyn_rtvsubstatus: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_sequence: DevKit.WebApi.LookupValue;
+		record2id_msdyn_salessuggestion: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_sequencetarget: DevKit.WebApi.LookupValue;
+		record2id_msdyn_sequence: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_shipvia: DevKit.WebApi.LookupValue;
+		record2id_msdyn_sequencetarget: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_systemuserschedulersetting: DevKit.WebApi.LookupValue;
+		record2id_msdyn_shipvia: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_taxcode: DevKit.WebApi.LookupValue;
+		record2id_msdyn_systemuserschedulersetting: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_timegroup: DevKit.WebApi.LookupValue;
+		record2id_msdyn_taxcode: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_timegroupdetail: DevKit.WebApi.LookupValue;
+		record2id_msdyn_timegroup: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_timeoffrequest: DevKit.WebApi.LookupValue;
+		record2id_msdyn_timegroupdetail: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_warehouse: DevKit.WebApi.LookupValue;
+		record2id_msdyn_timeoffrequest: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_workorder: DevKit.WebApi.LookupValue;
+		record2id_msdyn_warehouse: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_workordercharacteristic: DevKit.WebApi.LookupValue;
+		record2id_msdyn_workorder: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_workorderincident: DevKit.WebApi.LookupValue;
+		record2id_msdyn_workordercharacteristic: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_workorderproduct: DevKit.WebApi.LookupValue;
+		record2id_msdyn_workorderincident: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_workorderresourcerestriction: DevKit.WebApi.LookupValue;
+		record2id_msdyn_workorderproduct: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_workorderservice: DevKit.WebApi.LookupValue;
+		record2id_msdyn_workorderresourcerestriction: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyn_workorderservicetask: DevKit.WebApi.LookupValue;
+		record2id_msdyn_workorderservice: string;
 		/** Unique identifier of the target record. */
-		record2id_msdyusd_toolbarbutton: DevKit.WebApi.LookupValue;
+		record2id_msdyn_workorderservicetask: string;
 		/** Unique identifier of the target record. */
-		record2id_msfp_alert: DevKit.WebApi.LookupValue;
+		record2id_msdyusd_toolbarbutton: string;
 		/** Unique identifier of the target record. */
-		record2id_msfp_surveyinvite: DevKit.WebApi.LookupValue;
+		record2id_msfp_alert: string;
 		/** Unique identifier of the target record. */
-		record2id_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		record2id_msfp_surveyinvite: string;
 		/** Unique identifier of the target record. */
-		record2id_opportunity: DevKit.WebApi.LookupValue;
+		record2id_msfp_surveyresponse: string;
 		/** Unique identifier of the target record. */
-		record2id_phonecall: DevKit.WebApi.LookupValue;
+		record2id_opportunity: string;
 		/** Unique identifier of the target record. */
-		record2id_position: DevKit.WebApi.LookupValue;
+		record2id_phonecall: string;
 		/** Unique identifier of the target record. */
-		record2id_pricelevel: DevKit.WebApi.LookupValue;
+		record2id_position: string;
 		/** Unique identifier of the target record. */
-		record2id_processsession: DevKit.WebApi.LookupValue;
+		record2id_pricelevel: string;
 		/** Unique identifier of the target record. */
-		record2id_product: DevKit.WebApi.LookupValue;
+		record2id_processsession: string;
 		/** Unique identifier of the target record. */
-		record2id_quote: DevKit.WebApi.LookupValue;
+		record2id_product: string;
 		/** Unique identifier of the target record. */
-		record2id_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		record2id_quote: string;
 		/** Unique identifier of the target record. */
-		record2id_resourcegroup: DevKit.WebApi.LookupValue;
+		record2id_recurringappointmentmaster: string;
 		/** Unique identifier of the target record. */
-		record2id_salesorder: DevKit.WebApi.LookupValue;
+		record2id_resourcegroup: string;
 		/** Unique identifier of the target record. */
-		record2id_serviceappointment: DevKit.WebApi.LookupValue;
+		record2id_salesorder: string;
 		/** Unique identifier of the target record. */
-		record2id_socialactivity: DevKit.WebApi.LookupValue;
+		record2id_serviceappointment: string;
 		/** Unique identifier of the target record. */
-		record2id_socialprofile: DevKit.WebApi.LookupValue;
+		record2id_socialactivity: string;
 		/** Unique identifier of the target record. */
-		record2id_systemuser: DevKit.WebApi.LookupValue;
+		record2id_socialprofile: string;
 		/** Unique identifier of the target record. */
-		record2id_task: DevKit.WebApi.LookupValue;
+		record2id_systemuser: string;
 		/** Unique identifier of the target record. */
-		record2id_team: DevKit.WebApi.LookupValue;
+		record2id_task: string;
 		/** Unique identifier of the target record. */
-		record2id_territory: DevKit.WebApi.LookupValue;
+		record2id_team: string;
 		/** Unique identifier of the target record. */
-		record2id_uii_option: DevKit.WebApi.LookupValue;
+		record2id_territory: string;
+		/** Unique identifier of the target record. */
+		record2id_uii_option: string;
 		/** Shows the record type of the target record. */
-		Record2ObjectTypeCode: DevKit.WebApi.OptionSetValueReadonly;
+		readonly Record2ObjectTypeCode: OptionSet.Connection.Record2ObjectTypeCode;
 		/** Choose the secondary party's role or relationship with the primary party. */
-		Record2RoleId: DevKit.WebApi.LookupValue;
+		Record2RoleId: string;
 		/** Unique identifier for the reciprocal connection record. */
-		RelatedConnectionId: DevKit.WebApi.LookupValueReadonly;
+		readonly RelatedConnectionId: string;
 		/** Shows whether the connection is active or inactive. Inactive connections are read-only and can't be edited unless they are reactivated. */
-		StateCode: DevKit.WebApi.OptionSetValue;
+		StateCode: OptionSet.Connection.StateCode;
 		/** Reason for the status of the connection. */
-		StatusCode: DevKit.WebApi.OptionSetValue;
+		StatusCode: OptionSet.Connection.StatusCode;
 		/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** Version number of the connection. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -669,39 +675,39 @@ declare namespace OptionSet {
 			Account,
 			/** 4200 */
 			Activity,
-			/** 10523 */
-			Agreement,
 			/** 10524 */
-			Agreement_Booking_Date,
+			Agreement,
 			/** 10525 */
-			Agreement_Booking_Incident,
+			Agreement_Booking_Date,
 			/** 10526 */
-			Agreement_Booking_Product,
+			Agreement_Booking_Incident,
 			/** 10527 */
-			Agreement_Booking_Service,
+			Agreement_Booking_Product,
 			/** 10528 */
-			Agreement_Booking_Service_Task,
+			Agreement_Booking_Service,
 			/** 10529 */
-			Agreement_Booking_Setup,
+			Agreement_Booking_Service_Task,
 			/** 10530 */
-			Agreement_Invoice_Date,
+			Agreement_Booking_Setup,
 			/** 10531 */
-			Agreement_Invoice_Product,
+			Agreement_Invoice_Date,
 			/** 10532 */
+			Agreement_Invoice_Product,
+			/** 10533 */
 			Agreement_Invoice_Setup,
 			/** 4201 */
 			Appointment,
-			/** 10277 */
+			/** 10283 */
 			Assignment_Map,
-			/** 10274 */
+			/** 10280 */
 			Assignment_Rule,
-			/** 10400 */
+			/** 10404 */
 			Booking_Alert,
-			/** 10401 */
+			/** 10405 */
 			Booking_Alert_Status,
-			/** 10403 */
+			/** 10407 */
 			Booking_Rule,
-			/** 10535 */
+			/** 10536 */
 			Booking_Timestamp,
 			/** 4400 */
 			Campaign,
@@ -717,15 +723,15 @@ declare namespace OptionSet {
 			Contact,
 			/** 1010 */
 			Contract,
-			/** 10702 */
+			/** 10707 */
 			Conversation,
-			/** 10128 */
+			/** 10141 */
 			Customer_Asset,
-			/** 10294 */
+			/** 10313 */
 			Customer_Voice_alert,
-			/** 10304 */
+			/** 10323 */
 			Customer_Voice_survey_invite,
-			/** 10306 */
+			/** 10325 */
 			Customer_Voice_survey_response,
 			/** 4202 */
 			Email,
@@ -739,35 +745,35 @@ declare namespace OptionSet {
 			FacilityEquipment,
 			/** 4204 */
 			Fax,
-			/** 10423 */
+			/** 10427 */
 			Fulfillment_Preference,
 			/** 9600 */
 			Goal,
-			/** 10546 */
-			Incident_Type_Characteristic,
 			/** 10547 */
-			Incident_Type_Product,
+			Incident_Type_Characteristic,
 			/** 10548 */
+			Incident_Type_Product,
+			/** 10549 */
 			Incident_Type_Service,
-			/** 10552 */
-			Inventory_Adjustment,
 			/** 10553 */
-			Inventory_Adjustment_Product,
+			Inventory_Adjustment,
 			/** 10554 */
-			Inventory_Journal,
+			Inventory_Adjustment_Product,
 			/** 10555 */
+			Inventory_Journal,
+			/** 10556 */
 			Inventory_Transfer,
 			/** 1090 */
 			Invoice,
-			/** 10138 */
+			/** 10152 */
 			IoT_Alert,
-			/** 10139 */
+			/** 10153 */
 			IoT_Device,
-			/** 10140 */
+			/** 10154 */
 			IoT_Device_Category,
-			/** 10141 */
+			/** 10155 */
 			IoT_Device_Command,
-			/** 10145 */
+			/** 10159 */
 			IoT_Device_Registration_History,
 			/** 9953 */
 			Knowledge_Article,
@@ -779,141 +785,143 @@ declare namespace OptionSet {
 			Letter,
 			/** 4300 */
 			Marketing_List,
-			/** 10692 */
+			/** 10697 */
 			Ongoing_conversation_Deprecated,
 			/** 3 */
 			Opportunity,
-			/** 10819 */
+			/** 10823 */
 			Option,
 			/** 1088 */
 			Order,
-			/** 10813 */
+			/** 10817 */
 			Outbound_message,
-			/** 10560 */
-			Payment,
 			/** 10561 */
-			Payment_Detail,
+			Payment,
 			/** 10562 */
-			Payment_Method,
+			Payment_Detail,
 			/** 10563 */
+			Payment_Method,
+			/** 10564 */
 			Payment_Term,
 			/** 4210 */
 			Phone_Call,
 			/** 50 */
 			Position,
-			/** 10564 */
+			/** 10565 */
 			Postal_Code,
 			/** 1022 */
 			Price_List,
-			/** 10468 */
+			/** 10472 */
 			Process_Notes,
 			/** 4710 */
 			Process_Session,
 			/** 1024 */
 			Product,
-			/** 10565 */
-			Product_Inventory,
-			/** 10289 */
-			Profile_Album,
-			/** 10469 */
-			Project,
-			/** 10430 */
-			Project_Service_Approval,
-			/** 10477 */
-			Project_Team_Member,
 			/** 10566 */
-			Purchase_Order,
+			Product_Inventory,
+			/** 10308 */
+			Profile_Album,
+			/** 10473 */
+			Project,
+			/** 10434 */
+			Project_Service_Approval,
+			/** 10481 */
+			Project_Team_Member,
 			/** 10567 */
-			Purchase_Order_Bill,
+			Purchase_Order,
 			/** 10568 */
-			Purchase_Order_Product,
+			Purchase_Order_Bill,
 			/** 10569 */
-			Purchase_Order_Receipt,
+			Purchase_Order_Product,
 			/** 10570 */
-			Purchase_Order_Receipt_Product,
+			Purchase_Order_Receipt,
 			/** 10571 */
+			Purchase_Order_Receipt_Product,
+			/** 10572 */
 			Purchase_Order_SubStatus,
 			/** 1084 */
 			Quote,
-			/** 10572 */
-			Quote_Booking_Incident,
 			/** 10573 */
-			Quote_Booking_Product,
+			Quote_Booking_Incident,
 			/** 10574 */
-			Quote_Booking_Service,
+			Quote_Booking_Product,
 			/** 10575 */
+			Quote_Booking_Service,
+			/** 10576 */
 			Quote_Booking_Service_Task,
 			/** 4251 */
 			Recurring_Appointment,
 			/** 4007 */
 			Resource_Group,
-			/** 10600 */
+			/** 10601 */
 			Resource_Restriction_Deprecated,
-			/** 10419 */
+			/** 10423 */
 			Resource_Territory,
-			/** 10580 */
-			RMA,
 			/** 10581 */
-			RMA_Product,
+			RMA,
 			/** 10582 */
-			RMA_Receipt,
+			RMA_Product,
 			/** 10583 */
-			RMA_Receipt_Product,
+			RMA_Receipt,
 			/** 10584 */
-			RMA_SubStatus,
+			RMA_Receipt_Product,
 			/** 10585 */
-			RTV,
+			RMA_SubStatus,
 			/** 10586 */
-			RTV_Product,
+			RTV,
 			/** 10587 */
+			RTV_Product,
+			/** 10588 */
 			RTV_Substatus,
 			/** 4005 */
 			Scheduling_Group,
-			/** 10268 */
+			/** 10273 */
 			Sequence,
-			/** 10270 */
+			/** 10275 */
 			Sequence_Target,
 			/** 4214 */
 			Service_Activity,
-			/** 10717 */
+			/** 10721 */
 			Session,
-			/** 10589 */
+			/** 10590 */
 			Ship_Via,
 			/** 4216 */
 			Social_Activity,
 			/** 99 */
 			Social_Profile,
-			/** 10422 */
+			/** 10289 */
+			Suggestion,
+			/** 10426 */
 			System_User_Scheduler_Setting,
 			/** 4212 */
 			Task,
-			/** 10590 */
+			/** 10591 */
 			Tax_Code,
 			/** 9 */
 			Team,
 			/** 2013 */
 			Territory,
-			/** 10424 */
+			/** 10428 */
 			Time_Group_Detail,
-			/** 10592 */
+			/** 10593 */
 			Time_Off_Request,
-			/** 10842 */
+			/** 10846 */
 			Toolbar_Button,
 			/** 8 */
 			User,
-			/** 10594 */
-			Warehouse,
 			/** 10595 */
-			Work_Order,
+			Warehouse,
 			/** 10596 */
+			Work_Order,
+			/** 10597 */
 			Work_Order_Characteristic_Deprecated,
-			/** 10598 */
-			Work_Order_Incident,
 			/** 10599 */
+			Work_Order_Incident,
+			/** 10600 */
 			Work_Order_Product,
-			/** 10601 */
-			Work_Order_Service,
 			/** 10602 */
+			Work_Order_Service,
+			/** 10603 */
 			Work_Order_Service_Task
 		}
 		enum Record2ObjectTypeCode {
@@ -921,39 +929,39 @@ declare namespace OptionSet {
 			Account,
 			/** 4200 */
 			Activity,
-			/** 10523 */
-			Agreement,
 			/** 10524 */
-			Agreement_Booking_Date,
+			Agreement,
 			/** 10525 */
-			Agreement_Booking_Incident,
+			Agreement_Booking_Date,
 			/** 10526 */
-			Agreement_Booking_Product,
+			Agreement_Booking_Incident,
 			/** 10527 */
-			Agreement_Booking_Service,
+			Agreement_Booking_Product,
 			/** 10528 */
-			Agreement_Booking_Service_Task,
+			Agreement_Booking_Service,
 			/** 10529 */
-			Agreement_Booking_Setup,
+			Agreement_Booking_Service_Task,
 			/** 10530 */
-			Agreement_Invoice_Date,
+			Agreement_Booking_Setup,
 			/** 10531 */
-			Agreement_Invoice_Product,
+			Agreement_Invoice_Date,
 			/** 10532 */
+			Agreement_Invoice_Product,
+			/** 10533 */
 			Agreement_Invoice_Setup,
 			/** 4201 */
 			Appointment,
-			/** 10277 */
+			/** 10283 */
 			Assignment_Map,
-			/** 10274 */
+			/** 10280 */
 			Assignment_Rule,
-			/** 10400 */
+			/** 10404 */
 			Booking_Alert,
-			/** 10401 */
+			/** 10405 */
 			Booking_Alert_Status,
-			/** 10403 */
+			/** 10407 */
 			Booking_Rule,
-			/** 10535 */
+			/** 10536 */
 			Booking_Timestamp,
 			/** 4400 */
 			Campaign,
@@ -969,15 +977,15 @@ declare namespace OptionSet {
 			Contact,
 			/** 1010 */
 			Contract,
-			/** 10702 */
+			/** 10707 */
 			Conversation,
-			/** 10128 */
+			/** 10141 */
 			Customer_Asset,
-			/** 10294 */
+			/** 10313 */
 			Customer_Voice_alert,
-			/** 10304 */
+			/** 10323 */
 			Customer_Voice_survey_invite,
-			/** 10306 */
+			/** 10325 */
 			Customer_Voice_survey_response,
 			/** 4202 */
 			Email,
@@ -991,35 +999,35 @@ declare namespace OptionSet {
 			FacilityEquipment,
 			/** 4204 */
 			Fax,
-			/** 10423 */
+			/** 10427 */
 			Fulfillment_Preference,
 			/** 9600 */
 			Goal,
-			/** 10546 */
-			Incident_Type_Characteristic,
 			/** 10547 */
-			Incident_Type_Product,
+			Incident_Type_Characteristic,
 			/** 10548 */
+			Incident_Type_Product,
+			/** 10549 */
 			Incident_Type_Service,
-			/** 10552 */
-			Inventory_Adjustment,
 			/** 10553 */
-			Inventory_Adjustment_Product,
+			Inventory_Adjustment,
 			/** 10554 */
-			Inventory_Journal,
+			Inventory_Adjustment_Product,
 			/** 10555 */
+			Inventory_Journal,
+			/** 10556 */
 			Inventory_Transfer,
 			/** 1090 */
 			Invoice,
-			/** 10138 */
+			/** 10152 */
 			IoT_Alert,
-			/** 10139 */
+			/** 10153 */
 			IoT_Device,
-			/** 10140 */
+			/** 10154 */
 			IoT_Device_Category,
-			/** 10141 */
+			/** 10155 */
 			IoT_Device_Command,
-			/** 10145 */
+			/** 10159 */
 			IoT_Device_Registration_History,
 			/** 9953 */
 			Knowledge_Article,
@@ -1031,141 +1039,143 @@ declare namespace OptionSet {
 			Letter,
 			/** 4300 */
 			Marketing_List,
-			/** 10692 */
+			/** 10697 */
 			Ongoing_conversation_Deprecated,
 			/** 3 */
 			Opportunity,
-			/** 10819 */
+			/** 10823 */
 			Option,
 			/** 1088 */
 			Order,
-			/** 10813 */
+			/** 10817 */
 			Outbound_message,
-			/** 10560 */
-			Payment,
 			/** 10561 */
-			Payment_Detail,
+			Payment,
 			/** 10562 */
-			Payment_Method,
+			Payment_Detail,
 			/** 10563 */
+			Payment_Method,
+			/** 10564 */
 			Payment_Term,
 			/** 4210 */
 			Phone_Call,
 			/** 50 */
 			Position,
-			/** 10564 */
+			/** 10565 */
 			Postal_Code,
 			/** 1022 */
 			Price_List,
-			/** 10468 */
+			/** 10472 */
 			Process_Notes,
 			/** 4710 */
 			Process_Session,
 			/** 1024 */
 			Product,
-			/** 10565 */
-			Product_Inventory,
-			/** 10289 */
-			Profile_Album,
-			/** 10469 */
-			Project,
-			/** 10430 */
-			Project_Service_Approval,
-			/** 10477 */
-			Project_Team_Member,
 			/** 10566 */
-			Purchase_Order,
+			Product_Inventory,
+			/** 10308 */
+			Profile_Album,
+			/** 10473 */
+			Project,
+			/** 10434 */
+			Project_Service_Approval,
+			/** 10481 */
+			Project_Team_Member,
 			/** 10567 */
-			Purchase_Order_Bill,
+			Purchase_Order,
 			/** 10568 */
-			Purchase_Order_Product,
+			Purchase_Order_Bill,
 			/** 10569 */
-			Purchase_Order_Receipt,
+			Purchase_Order_Product,
 			/** 10570 */
-			Purchase_Order_Receipt_Product,
+			Purchase_Order_Receipt,
 			/** 10571 */
+			Purchase_Order_Receipt_Product,
+			/** 10572 */
 			Purchase_Order_SubStatus,
 			/** 1084 */
 			Quote,
-			/** 10572 */
-			Quote_Booking_Incident,
 			/** 10573 */
-			Quote_Booking_Product,
+			Quote_Booking_Incident,
 			/** 10574 */
-			Quote_Booking_Service,
+			Quote_Booking_Product,
 			/** 10575 */
+			Quote_Booking_Service,
+			/** 10576 */
 			Quote_Booking_Service_Task,
 			/** 4251 */
 			Recurring_Appointment,
 			/** 4007 */
 			Resource_Group,
-			/** 10600 */
+			/** 10601 */
 			Resource_Restriction_Deprecated,
-			/** 10419 */
+			/** 10423 */
 			Resource_Territory,
-			/** 10580 */
-			RMA,
 			/** 10581 */
-			RMA_Product,
+			RMA,
 			/** 10582 */
-			RMA_Receipt,
+			RMA_Product,
 			/** 10583 */
-			RMA_Receipt_Product,
+			RMA_Receipt,
 			/** 10584 */
-			RMA_SubStatus,
+			RMA_Receipt_Product,
 			/** 10585 */
-			RTV,
+			RMA_SubStatus,
 			/** 10586 */
-			RTV_Product,
+			RTV,
 			/** 10587 */
+			RTV_Product,
+			/** 10588 */
 			RTV_Substatus,
 			/** 4005 */
 			Scheduling_Group,
-			/** 10268 */
+			/** 10273 */
 			Sequence,
-			/** 10270 */
+			/** 10275 */
 			Sequence_Target,
 			/** 4214 */
 			Service_Activity,
-			/** 10717 */
+			/** 10721 */
 			Session,
-			/** 10589 */
+			/** 10590 */
 			Ship_Via,
 			/** 4216 */
 			Social_Activity,
 			/** 99 */
 			Social_Profile,
-			/** 10422 */
+			/** 10289 */
+			Suggestion,
+			/** 10426 */
 			System_User_Scheduler_Setting,
 			/** 4212 */
 			Task,
-			/** 10590 */
+			/** 10591 */
 			Tax_Code,
 			/** 9 */
 			Team,
 			/** 2013 */
 			Territory,
-			/** 10424 */
+			/** 10428 */
 			Time_Group_Detail,
-			/** 10592 */
+			/** 10593 */
 			Time_Off_Request,
-			/** 10842 */
+			/** 10846 */
 			Toolbar_Button,
 			/** 8 */
 			User,
-			/** 10594 */
-			Warehouse,
 			/** 10595 */
-			Work_Order,
+			Warehouse,
 			/** 10596 */
+			Work_Order,
+			/** 10597 */
 			Work_Order_Characteristic_Deprecated,
-			/** 10598 */
-			Work_Order_Incident,
 			/** 10599 */
+			Work_Order_Incident,
+			/** 10600 */
 			Work_Order_Product,
-			/** 10601 */
-			Work_Order_Service,
 			/** 10602 */
+			Work_Order_Service,
+			/** 10603 */
 			Work_Order_Service_Task
 		}
 		enum StateCode {
@@ -1198,4 +1208,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

@@ -71,8 +71,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -80,87 +82,87 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** For internal use only. */
-		ComponentIdUnique: DevKit.WebApi.GuidValueReadonly;
+		readonly ComponentIdUnique: string;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.msdyn_productivitymacroactiontemplate.ComponentState;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** For internal use only. */
-		IsCustomizable: DevKit.WebApi.ManagedPropertyValue;
+		IsCustomizable: string;
 		/** Indicates whether the solution component is part of a managed solution. */
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsManaged: boolean;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** The description of this macro action. */
-		msdyn_actionDescription: DevKit.WebApi.StringValue;
+		msdyn_actionDescription: string;
 		/** Unique value to set the brand color */
-		msdyn_brandcolor: DevKit.WebApi.StringValue;
+		msdyn_brandcolor: string;
 		/** Unique value to set the display name */
-		msdyn_displayname: DevKit.WebApi.StringValue;
+		msdyn_displayname: string;
 		/** Unique value to set the icon */
-		msdyn_icon: DevKit.WebApi.StringValue;
+		msdyn_icon: string;
 		/** Input parameters for the macro action template */
-		msdyn_inputparameters: DevKit.WebApi.StringValue;
+		msdyn_inputparameters: string;
 		/** Kind is either 'TRIGGERS' or 'ACTIONS' */
-		msdyn_kind: DevKit.WebApi.StringValue;
+		msdyn_kind: string;
 		/** Sets the value of macro connector */
-		msdyn_macroconnector: DevKit.WebApi.LookupValue;
+		msdyn_macroconnector: string;
 		/** The name of the custom entity. */
-		msdyn_name: DevKit.WebApi.StringValue;
+		msdyn_name: string;
 		/** Output parameters for macro action template entity */
-		msdyn_outputparameters: DevKit.WebApi.StringValue;
+		msdyn_outputparameters: string;
 		/** Unique identifier for entity instances */
-		msdyn_productivitymacroactiontemplateId: DevKit.WebApi.GuidValue;
+		msdyn_productivitymacroactiontemplateId: string;
 		/** Function to be executed at runtime */
-		msdyn_runtimeapi: DevKit.WebApi.StringValue;
+		msdyn_runtimeapi: string;
 		/** Unique value to set the subtitle value */
-		msdyn_subtitle: DevKit.WebApi.StringValue;
+		msdyn_subtitle: string;
 		/** Unique value to set the summary */
-		msdyn_summary: DevKit.WebApi.StringValue;
+		msdyn_summary: string;
 		/** The title of this macro action. */
-		msdyn_title: DevKit.WebApi.StringValue;
+		msdyn_title: string;
 		/** Unique Name for the entity. */
-		msdyn_UniqueName: DevKit.WebApi.StringValue;
+		msdyn_UniqueName: string;
 		/** Unique value to set the visibility value */
-		msdyn_visibility: DevKit.WebApi.StringValue;
+		msdyn_visibility: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** For internal use only. */
-		OverwriteTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly OverwriteTime_UtcDateAndTime: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** Status of the Macro Action Template */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.msdyn_productivitymacroactiontemplate.statecode;
 		/** Reason for the status of the Macro Action Template */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.msdyn_productivitymacroactiontemplate.statuscode;
 		/** For internal use only. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SupportingSolutionId: string;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -205,4 +207,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

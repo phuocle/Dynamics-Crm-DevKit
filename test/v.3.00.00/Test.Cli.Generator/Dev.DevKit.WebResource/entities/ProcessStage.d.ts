@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,33 +30,33 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Step metadata for process stage */
-		ClientData: DevKit.WebApi.StringValueReadonly;
+		readonly ClientData: string;
 		/** The connector associated with the stage. */
-		Connector: DevKit.WebApi.StringValue;
+		Connector: string;
 		/** Whether the stage is a trigger */
-		IsTrigger: DevKit.WebApi.BooleanValue;
+		IsTrigger: boolean;
 		/** The operation id of the stage */
-		OperationId: DevKit.WebApi.StringValue;
+		OperationId: string;
 		/** The operation kind */
-		OperationKind: DevKit.WebApi.OptionSetValue;
+		OperationKind: OptionSet.ProcessStage.OperationKind;
 		/** The type of the operation */
-		OperationType: DevKit.WebApi.OptionSetValue;
+		OperationType: OptionSet.ProcessStage.OperationType;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValueReadonly;
+		readonly OwnerId_team: string;
 		/** Select the business unit that owns the record. */
-		OwningBusinessUnit: DevKit.WebApi.GuidValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Shows the ID of the process. */
-		ProcessId: DevKit.WebApi.LookupValue;
+		ProcessId: string;
 		/** Shows the ID of the process stage record. */
-		ProcessStageId: DevKit.WebApi.GuidValue;
+		ProcessStageId: string;
 		/** Select the category of the sales process. */
-		StageCategory: DevKit.WebApi.OptionSetValue;
+		StageCategory: OptionSet.ProcessStage.StageCategory;
 		/** Type a name for the process stage. */
-		StageName: DevKit.WebApi.StringValue;
+		StageName: string;
 		/** Version number of the process stage. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -255,4 +257,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

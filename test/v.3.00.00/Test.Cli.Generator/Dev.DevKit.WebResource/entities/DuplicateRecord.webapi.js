@@ -4,20 +4,18 @@ var DevKit;
 (function (DevKit) {
 	'use strict';
 	DevKit.DuplicateRecordApi = function (e) {
-		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
 			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-			var property = {};
 			var getFormattedValue = function () {
 				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-					return EMPTY_STRING;
+					return '';
 				}
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
 					if (entity[logicalName + l] === entityLogicalName) {
 						return entity[logicalName + f];
 					}
-					return EMPTY_STRING;
+					return '';
 				}
 				if (isMultiOptionSet) {
 					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -42,30 +40,29 @@ var DevKit;
 			var setValue = function (value) {
 				if (isMultiOptionSet) value = value.join(',');
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+					value = value.replace('{', '').replace('}', '');
 					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
 				} else {
 					upsertEntity[logicalName] = value;
 				}
 				entity[logicalName] = value;
 			};
-			Object.defineProperty(property, 'FormattedValue', {
+			Object.defineProperty(obj.FormattedValue, field, {
 				get: getFormattedValue
 			});
 			if (readOnly) {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue
 				});
 			}
 			else {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue,
 					set: setValue
 				});
 			}
-			return property;
 		}
-		var duplicaterecord = {
+		var _duplicaterecord = {
 			AsyncOperationId: { b: 'asyncoperationid', a: '_asyncoperationid_value', c: 'asyncoperations', d: 'asyncoperation', r: true },
 			baserecordid_account: { b: 'baserecordid_account', a: '_baserecordid_value', c: 'accounts', d: 'account', r: true },
 			baserecordid_activityfileattachment: { b: 'baserecordid_activityfileattachment', a: '_baserecordid_value', c: 'activityfileattachments', d: 'activityfileattachment', r: true },
@@ -89,6 +86,7 @@ var DevKit;
 			baserecordid_catalogassignment: { b: 'baserecordid_catalogassignment', a: '_baserecordid_value', c: 'catalogassignments', d: 'catalogassignment', r: true },
 			channelaccessprofile_duplicatebaserecord: { b: 'channelaccessprofile_duplicatebaserecord', a: '_baserecordid_value', c: 'channelaccessprofiles', d: 'channelaccessprofile', r: true },
 			baserecordid_characteristic: { b: 'baserecordid_characteristic', a: '_baserecordid_value', c: 'characteristics', d: 'characteristic', r: true },
+			baserecordid_chat: { b: 'baserecordid_chat', a: '_baserecordid_value', c: 'chats', d: 'chat', r: true },
 			baserecordid_competitor: { b: 'baserecordid_competitor', a: '_baserecordid_value', c: 'competitors', d: 'competitor', r: true },
 			baserecordid_connector: { b: 'baserecordid_connector', a: '_baserecordid_value', c: 'connectors', d: 'connector', r: true },
 			baserecordid_contact: { b: 'baserecordid_contact', a: '_baserecordid_value', c: 'contacts', d: 'contact', r: true },
@@ -98,6 +96,7 @@ var DevKit;
 			baserecordid_datalakefolderpermission: { b: 'baserecordid_datalakefolderpermission', a: '_baserecordid_value', c: 'datalakefolderpermissions', d: 'datalakefolderpermission', r: true },
 			baserecordid_datalakeworkspace: { b: 'baserecordid_datalakeworkspace', a: '_baserecordid_value', c: 'datalakeworkspaces', d: 'datalakeworkspace', r: true },
 			baserecordid_datalakeworkspacepermission: { b: 'baserecordid_datalakeworkspacepermission', a: '_baserecordid_value', c: 'datalakeworkspacepermissions', d: 'datalakeworkspacepermission', r: true },
+			baserecordid_dataprocessingconfiguration: { b: 'baserecordid_dataprocessingconfiguration', a: '_baserecordid_value', c: 'dataprocessingconfigurations', d: 'dataprocessingconfiguration', r: true },
 			baserecordid_datasyncstate: { b: 'baserecordid_datasyncstate', a: '_baserecordid_value', c: 'datasyncstates', d: 'datasyncstate', r: true },
 			baserecordid_email: { b: 'baserecordid_email', a: '_baserecordid_value', c: 'emails', d: 'email', r: true },
 			baserecordid_emailserverprofile: { b: 'baserecordid_emailserverprofile', a: '_baserecordid_value', c: 'emailserverprofiles', d: 'emailserverprofile', r: true },
@@ -144,6 +143,7 @@ var DevKit;
 			baserecordid_msdyn_aibdatasetfile: { b: 'baserecordid_msdyn_aibdatasetfile', a: '_baserecordid_value', c: 'msdyn_aibdatasetfiles', d: 'msdyn_aibdatasetfile', r: true },
 			baserecordid_msdyn_aibdatasetrecord: { b: 'baserecordid_msdyn_aibdatasetrecord', a: '_baserecordid_value', c: 'msdyn_aibdatasetrecords', d: 'msdyn_aibdatasetrecord', r: true },
 			baserecordid_msdyn_aibdatasetscontainer: { b: 'baserecordid_msdyn_aibdatasetscontainer', a: '_baserecordid_value', c: 'msdyn_aibdatasetscontainers', d: 'msdyn_aibdatasetscontainer', r: true },
+			baserecordid_msdyn_aibfeedbackloop: { b: 'baserecordid_msdyn_aibfeedbackloop', a: '_baserecordid_value', c: 'msdyn_aibfeedbackloops', d: 'msdyn_aibfeedbackloop', r: true },
 			baserecordid_msdyn_aibfile: { b: 'baserecordid_msdyn_aibfile', a: '_baserecordid_value', c: 'msdyn_aibfiles', d: 'msdyn_aibfile', r: true },
 			baserecordid_msdyn_aibfileattacheddata: { b: 'baserecordid_msdyn_aibfileattacheddata', a: '_baserecordid_value', c: 'msdyn_aibfileattacheddatas', d: 'msdyn_aibfileattacheddata', r: true },
 			baserecordid_msdyn_aiodimage: { b: 'baserecordid_msdyn_aiodimage', a: '_baserecordid_value', c: 'msdyn_aiodimages', d: 'msdyn_aiodimage', r: true },
@@ -209,6 +209,7 @@ var DevKit;
 			baserecordid_msdyn_dataanalyticsreport_fspredictwhd: { b: 'baserecordid_msdyn_dataanalyticsreport_fspredictwhd', a: '_baserecordid_value', c: 'msdyn_dataanalyticsreport_fspredictwhds', d: 'msdyn_dataanalyticsreport_fspredictwhd', r: true },
 			baserecordid_msdyn_dataexport: { b: 'baserecordid_msdyn_dataexport', a: '_baserecordid_value', c: 'msdyn_dataexports', d: 'msdyn_dataexport', r: true },
 			baserecordid_msdyn_dataflow: { b: 'baserecordid_msdyn_dataflow', a: '_baserecordid_value', c: 'msdyn_dataflows', d: 'msdyn_dataflow', r: true },
+			baserecordid_msdyn_dataflowrefreshhistory: { b: 'baserecordid_msdyn_dataflowrefreshhistory', a: '_baserecordid_value', c: 'msdyn_dataflowrefreshhistories', d: 'msdyn_dataflowrefreshhistory', r: true },
 			baserecordid_msdyn_dealmanageraccess: { b: 'baserecordid_msdyn_dealmanageraccess', a: '_baserecordid_value', c: 'msdyn_dealmanageraccesses', d: 'msdyn_dealmanageraccess', r: true },
 			baserecordid_msdyn_dealmanagersettings: { b: 'baserecordid_msdyn_dealmanagersettings', a: '_baserecordid_value', c: 'msdyn_dealmanagersettingses', d: 'msdyn_dealmanagersettings', r: true },
 			baserecordid_msdyn_decisioncontract: { b: 'baserecordid_msdyn_decisioncontract', a: '_baserecordid_value', c: 'msdyn_decisioncontracts', d: 'msdyn_decisioncontract', r: true },
@@ -216,10 +217,13 @@ var DevKit;
 			baserecordid_msdyn_delegation: { b: 'baserecordid_msdyn_delegation', a: '_baserecordid_value', c: 'msdyn_delegations', d: 'msdyn_delegation', r: true },
 			baserecordid_msdyn_dimension: { b: 'baserecordid_msdyn_dimension', a: '_baserecordid_value', c: 'msdyn_dimensions', d: 'msdyn_dimension', r: true },
 			baserecordid_msdyn_dimensionfieldname: { b: 'baserecordid_msdyn_dimensionfieldname', a: '_baserecordid_value', c: 'msdyn_dimensionfieldnames', d: 'msdyn_dimensionfieldname', r: true },
+			baserecordid_msdyn_duplicatedetectionpluginrun: { b: 'baserecordid_msdyn_duplicatedetectionpluginrun', a: '_baserecordid_value', c: 'msdyn_duplicatedetectionpluginruns', d: 'msdyn_duplicatedetectionpluginrun', r: true },
+			baserecordid_msdyn_duplicateleadmapping: { b: 'baserecordid_msdyn_duplicateleadmapping', a: '_baserecordid_value', c: 'msdyn_duplicateleadmappings', d: 'msdyn_duplicateleadmapping', r: true },
 			baserecordid_msdyn_effortpredictionresult: { b: 'baserecordid_msdyn_effortpredictionresult', a: '_baserecordid_value', c: 'msdyn_effortpredictionresults', d: 'msdyn_effortpredictionresult', r: true },
 			baserecordid_msdyn_entitlementapplication: { b: 'baserecordid_msdyn_entitlementapplication', a: '_baserecordid_value', c: 'msdyn_entitlementapplications', d: 'msdyn_entitlementapplication', r: true },
 			baserecordid_msdyn_entityconfiguration: { b: 'baserecordid_msdyn_entityconfiguration', a: '_baserecordid_value', c: 'msdyn_entityconfigurations', d: 'msdyn_entityconfiguration', r: true },
 			baserecordid_msdyn_entitylinkchatconfiguration: { b: 'baserecordid_msdyn_entitylinkchatconfiguration', a: '_baserecordid_value', c: 'msdyn_entitylinkchatconfigurations', d: 'msdyn_entitylinkchatconfiguration', r: true },
+			baserecordid_msdyn_entityrefreshhistory: { b: 'baserecordid_msdyn_entityrefreshhistory', a: '_baserecordid_value', c: 'msdyn_entityrefreshhistories', d: 'msdyn_entityrefreshhistory', r: true },
 			baserecordid_msdyn_estimate: { b: 'baserecordid_msdyn_estimate', a: '_baserecordid_value', c: 'msdyn_estimates', d: 'msdyn_estimate', r: true },
 			baserecordid_msdyn_estimateline: { b: 'baserecordid_msdyn_estimateline', a: '_baserecordid_value', c: 'msdyn_estimatelines', d: 'msdyn_estimateline', r: true },
 			baserecordid_msdyn_expense: { b: 'baserecordid_msdyn_expense', a: '_baserecordid_value', c: 'msdyn_expenses', d: 'msdyn_expense', r: true },
@@ -286,11 +290,13 @@ var DevKit;
 			baserecordid_msdyn_knowledgearticleimage: { b: 'baserecordid_msdyn_knowledgearticleimage', a: '_baserecordid_value', c: 'msdyn_knowledgearticleimages', d: 'msdyn_knowledgearticleimage', r: true },
 			baserecordid_msdyn_knowledgearticletemplate: { b: 'baserecordid_msdyn_knowledgearticletemplate', a: '_baserecordid_value', c: 'msdyn_knowledgearticletemplates', d: 'msdyn_knowledgearticletemplate', r: true },
 			baserecordid_msdyn_knowledgeinteractioninsight: { b: 'baserecordid_msdyn_knowledgeinteractioninsight', a: '_baserecordid_value', c: 'msdyn_knowledgeinteractioninsights', d: 'msdyn_knowledgeinteractioninsight', r: true },
+			baserecordid_msdyn_knowledgemanagementsetting: { b: 'baserecordid_msdyn_knowledgemanagementsetting', a: '_baserecordid_value', c: 'msdyn_knowledgemanagementsettings', d: 'msdyn_knowledgemanagementsetting', r: true },
 			baserecordid_msdyn_knowledgepersonalfilter: { b: 'baserecordid_msdyn_knowledgepersonalfilter', a: '_baserecordid_value', c: 'msdyn_knowledgepersonalfilters', d: 'msdyn_knowledgepersonalfilter', r: true },
 			baserecordid_msdyn_knowledgesearchfilter: { b: 'baserecordid_msdyn_knowledgesearchfilter', a: '_baserecordid_value', c: 'msdyn_knowledgesearchfilters', d: 'msdyn_knowledgesearchfilter', r: true },
 			baserecordid_msdyn_knowledgesearchinsight: { b: 'baserecordid_msdyn_knowledgesearchinsight', a: '_baserecordid_value', c: 'msdyn_knowledgesearchinsights', d: 'msdyn_knowledgesearchinsight', r: true },
 			baserecordid_msdyn_kpieventdata: { b: 'baserecordid_msdyn_kpieventdata', a: '_baserecordid_value', c: 'msdyn_kpieventdatas', d: 'msdyn_kpieventdata', r: true },
 			baserecordid_msdyn_kpieventdefinition: { b: 'baserecordid_msdyn_kpieventdefinition', a: '_baserecordid_value', c: 'msdyn_kpieventdefinitions', d: 'msdyn_kpieventdefinition', r: true },
+			baserecordid_msdyn_leadhygienesetting: { b: 'baserecordid_msdyn_leadhygienesetting', a: '_baserecordid_value', c: 'msdyn_leadhygienesettings', d: 'msdyn_leadhygienesetting', r: true },
 			baserecordid_msdyn_leadmodelconfig: { b: 'baserecordid_msdyn_leadmodelconfig', a: '_baserecordid_value', c: 'msdyn_leadmodelconfigs', d: 'msdyn_leadmodelconfig', r: true },
 			baserecordid_msdyn_liveworkitemevent: { b: 'baserecordid_msdyn_liveworkitemevent', a: '_baserecordid_value', c: 'msdyn_liveworkitemevents', d: 'msdyn_liveworkitemevent', r: true },
 			baserecordid_msdyn_liveworkstreamcapacityprofile: { b: 'baserecordid_msdyn_liveworkstreamcapacityprofile', a: '_baserecordid_value', c: 'msdyn_liveworkstreamcapacityprofiles', d: 'msdyn_liveworkstreamcapacityprofile', r: true },
@@ -305,6 +311,9 @@ var DevKit;
 			baserecordid_msdyn_ocautoblockrule: { b: 'baserecordid_msdyn_ocautoblockrule', a: '_baserecordid_value', c: 'msdyn_ocautoblockrules', d: 'msdyn_ocautoblockrule', r: true },
 			baserecordid_msdyn_ocbotchannelregistration: { b: 'baserecordid_msdyn_ocbotchannelregistration', a: '_baserecordid_value', c: 'msdyn_ocbotchannelregistrations', d: 'msdyn_ocbotchannelregistration', r: true },
 			baserecordid_msdyn_occarrier: { b: 'baserecordid_msdyn_occarrier', a: '_baserecordid_value', c: 'msdyn_occarriers', d: 'msdyn_occarrier', r: true },
+			baserecordid_msdyn_occhannelapiconversationprivilege: { b: 'baserecordid_msdyn_occhannelapiconversationprivilege', a: '_baserecordid_value', c: 'msdyn_occhannelapiconversationprivileges', d: 'msdyn_occhannelapiconversationprivilege', r: true },
+			baserecordid_msdyn_occhannelapimessageprivilege: { b: 'baserecordid_msdyn_occhannelapimessageprivilege', a: '_baserecordid_value', c: 'msdyn_occhannelapimessageprivileges', d: 'msdyn_occhannelapimessageprivilege', r: true },
+			baserecordid_msdyn_occhannelapimethodmapping: { b: 'baserecordid_msdyn_occhannelapimethodmapping', a: '_baserecordid_value', c: 'msdyn_occhannelapimethodmappings', d: 'msdyn_occhannelapimethodmapping', r: true },
 			baserecordid_msdyn_occhannelconfiguration: { b: 'baserecordid_msdyn_occhannelconfiguration', a: '_baserecordid_value', c: 'msdyn_occhannelconfigurations', d: 'msdyn_occhannelconfiguration', r: true },
 			baserecordid_msdyn_occhannelstateconfiguration: { b: 'baserecordid_msdyn_occhannelstateconfiguration', a: '_baserecordid_value', c: 'msdyn_occhannelstateconfigurations', d: 'msdyn_occhannelstateconfiguration', r: true },
 			baserecordid_msdyn_occommunicationprovidersetting: { b: 'baserecordid_msdyn_occommunicationprovidersetting', a: '_baserecordid_value', c: 'msdyn_occommunicationprovidersettings', d: 'msdyn_occommunicationprovidersetting', r: true },
@@ -468,6 +477,7 @@ var DevKit;
 			baserecordid_msdyn_salesaccelerationsettings: { b: 'baserecordid_msdyn_salesaccelerationsettings', a: '_baserecordid_value', c: 'msdyn_salesaccelerationsettingses', d: 'msdyn_salesaccelerationsettings', r: true },
 			baserecordid_msdyn_salesinsightssettings: { b: 'baserecordid_msdyn_salesinsightssettings', a: '_baserecordid_value', c: 'msdyn_salesinsightssettingses', d: 'msdyn_salesinsightssettings', r: true },
 			baserecordid_msdyn_salesroutingrun: { b: 'baserecordid_msdyn_salesroutingrun', a: '_baserecordid_value', c: 'msdyn_salesroutingruns', d: 'msdyn_salesroutingrun', r: true },
+			baserecordid_msdyn_salessuggestion: { b: 'baserecordid_msdyn_salessuggestion', a: '_baserecordid_value', c: 'msdyn_salessuggestions', d: 'msdyn_salessuggestion', r: true },
 			baserecordid_msdyn_salestag: { b: 'baserecordid_msdyn_salestag', a: '_baserecordid_value', c: 'msdyn_salestags', d: 'msdyn_salestag', r: true },
 			baserecordid_msdyn_scenario: { b: 'baserecordid_msdyn_scenario', a: '_baserecordid_value', c: 'msdyn_scenarios', d: 'msdyn_scenario', r: true },
 			baserecordid_msdyn_scheduleboardsetting: { b: 'baserecordid_msdyn_scheduleboardsetting', a: '_baserecordid_value', c: 'msdyn_scheduleboardsettings', d: 'msdyn_scheduleboardsetting', r: true },
@@ -525,6 +535,7 @@ var DevKit;
 			baserecordid_msdyn_userworkhistory: { b: 'baserecordid_msdyn_userworkhistory', a: '_baserecordid_value', c: 'msdyn_userworkhistories', d: 'msdyn_userworkhistory', r: true },
 			baserecordid_msdyn_warehouse: { b: 'baserecordid_msdyn_warehouse', a: '_baserecordid_value', c: 'msdyn_warehouses', d: 'msdyn_warehouse', r: true },
 			baserecordid_msdyn_workhourtemplate: { b: 'baserecordid_msdyn_workhourtemplate', a: '_baserecordid_value', c: 'msdyn_workhourtemplates', d: 'msdyn_workhourtemplate', r: true },
+			baserecordid_msdyn_worklistviewconfiguration: { b: 'baserecordid_msdyn_worklistviewconfiguration', a: '_baserecordid_value', c: 'msdyn_worklistviewconfigurations', d: 'msdyn_worklistviewconfiguration', r: true },
 			baserecordid_msdyn_workorder: { b: 'baserecordid_msdyn_workorder', a: '_baserecordid_value', c: 'msdyn_workorders', d: 'msdyn_workorder', r: true },
 			baserecordid_msdyn_workordercharacteristic: { b: 'baserecordid_msdyn_workordercharacteristic', a: '_baserecordid_value', c: 'msdyn_workordercharacteristics', d: 'msdyn_workordercharacteristic', r: true },
 			baserecordid_msdyn_workorderdetailsgenerationqueue: { b: 'baserecordid_msdyn_workorderdetailsgenerationqueue', a: '_baserecordid_value', c: 'msdyn_workorderdetailsgenerationqueues', d: 'msdyn_workorderdetailsgenerationqueue', r: true },
@@ -558,6 +569,7 @@ var DevKit;
 			baserecordid_msfp_fileresponse: { b: 'baserecordid_msfp_fileresponse', a: '_baserecordid_value', c: 'msfp_fileresponses', d: 'msfp_fileresponse', r: true },
 			baserecordid_msfp_surveyreminder: { b: 'baserecordid_msfp_surveyreminder', a: '_baserecordid_value', c: 'msfp_surveyreminders', d: 'msfp_surveyreminder', r: true },
 			baserecordid_opportunity: { b: 'baserecordid_opportunity', a: '_baserecordid_value', c: 'opportunities', d: 'opportunity', r: true },
+			baserecordid_organizationdatasyncstate: { b: 'baserecordid_organizationdatasyncstate', a: '_baserecordid_value', c: 'organizationdatasyncstates', d: 'organizationdatasyncstate', r: true },
 			baserecordid_organizationdatasyncsubscription: { b: 'baserecordid_organizationdatasyncsubscription', a: '_baserecordid_value', c: 'organizationdatasyncsubscriptions', d: 'organizationdatasyncsubscription', r: true },
 			baserecordid_organizationdatasyncsubscriptionentity: { b: 'baserecordid_organizationdatasyncsubscriptionentity', a: '_baserecordid_value', c: 'organizationdatasyncsubscriptionentities', d: 'organizationdatasyncsubscriptionentity', r: true },
 			baserecordid_package: { b: 'baserecordid_package', a: '_baserecordid_value', c: 'packages', d: 'package', r: true },
@@ -574,6 +586,7 @@ var DevKit;
 			baserecordid_service: { b: 'baserecordid_service', a: '_baserecordid_value', c: 'services', d: 'service', r: true },
 			baserecordid_serviceplan: { b: 'baserecordid_serviceplan', a: '_baserecordid_value', c: 'serviceplans', d: 'serviceplan', r: true },
 			baserecordid_serviceplanmapping: { b: 'baserecordid_serviceplanmapping', a: '_baserecordid_value', c: 'serviceplanmappings', d: 'serviceplanmapping', r: true },
+			baserecordid_sharedlinksetting: { b: 'baserecordid_sharedlinksetting', a: '_baserecordid_value', c: 'sharedlinksettings', d: 'sharedlinksetting', r: true },
 			baserecordid_sharepointdocumentlocation: { b: 'baserecordid_sharepointdocumentlocation', a: '_baserecordid_value', c: 'sharePointdocumentlocations', d: 'sharepointdocumentlocation', r: true },
 			baserecordid_sharepointsite: { b: 'baserecordid_sharepointsite', a: '_baserecordid_value', c: 'sharepointsites', d: 'sharepointsite', r: true },
 			baserecordid_socialactivity: { b: 'baserecordid_socialactivity', a: '_baserecordid_value', c: 'socialactivities', d: 'socialactivity', r: true },
@@ -583,6 +596,12 @@ var DevKit;
 			baserecordid_solutioncomponentconfiguration: { b: 'baserecordid_solutioncomponentconfiguration', a: '_baserecordid_value', c: 'solutioncomponentconfigurations', d: 'solutioncomponentconfiguration', r: true },
 			baserecordid_solutioncomponentrelationshipconfiguration: { b: 'baserecordid_solutioncomponentrelationshipconfiguration', a: '_baserecordid_value', c: 'solutioncomponentrelationshipconfigurations', d: 'solutioncomponentrelationshipconfiguration', r: true },
 			baserecordid_stagesolutionupload: { b: 'baserecordid_stagesolutionupload', a: '_baserecordid_value', c: 'stagesolutionuploads', d: 'stagesolutionupload', r: true },
+			baserecordid_synapsedatabase: { b: 'baserecordid_synapsedatabase', a: '_baserecordid_value', c: 'synapsedatabases', d: 'synapsedatabase', r: true },
+			baserecordid_synapselinkexternaltablestate: { b: 'baserecordid_synapselinkexternaltablestate', a: '_baserecordid_value', c: 'synapselinkexternaltablestates', d: 'synapselinkexternaltablestate', r: true },
+			baserecordid_synapselinkprofile: { b: 'baserecordid_synapselinkprofile', a: '_baserecordid_value', c: 'synapselinkprofiles', d: 'synapselinkprofile', r: true },
+			baserecordid_synapselinkprofileentity: { b: 'baserecordid_synapselinkprofileentity', a: '_baserecordid_value', c: 'synapselinkprofileentities', d: 'synapselinkprofileentity', r: true },
+			baserecordid_synapselinkprofileentitystate: { b: 'baserecordid_synapselinkprofileentitystate', a: '_baserecordid_value', c: 'synapselinkprofileentitystates', d: 'synapselinkprofileentitystate', r: true },
+			baserecordid_synapselinkschedule: { b: 'baserecordid_synapselinkschedule', a: '_baserecordid_value', c: 'synapselinkschedules', d: 'synapselinkschedule', r: true },
 			baserecordid_systemuser: { b: 'baserecordid_systemuser', a: '_baserecordid_value', c: 'systemusers', d: 'systemuser', r: true },
 			baserecordid_task: { b: 'baserecordid_task', a: '_baserecordid_value', c: 'tasks', d: 'task', r: true },
 			baserecordid_team: { b: 'baserecordid_team', a: '_baserecordid_value', c: 'teams', d: 'team', r: true },
@@ -622,6 +641,7 @@ var DevKit;
 			duplicaterecordid_catalogassignment: { b: 'duplicaterecordid_catalogassignment', a: '_duplicaterecordid_value', c: 'catalogassignments', d: 'catalogassignment', r: true },
 			channelaccessprofile_duplicatematchingrecord: { b: 'channelaccessprofile_duplicatematchingrecord', a: '_duplicaterecordid_value', c: 'channelaccessprofiles', d: 'channelaccessprofile', r: true },
 			duplicaterecordid_characteristic: { b: 'duplicaterecordid_characteristic', a: '_duplicaterecordid_value', c: 'characteristics', d: 'characteristic', r: true },
+			duplicaterecordid_chat: { b: 'duplicaterecordid_chat', a: '_duplicaterecordid_value', c: 'chats', d: 'chat', r: true },
 			duplicaterecordid_competitor: { b: 'duplicaterecordid_competitor', a: '_duplicaterecordid_value', c: 'competitors', d: 'competitor', r: true },
 			duplicaterecordid_connector: { b: 'duplicaterecordid_connector', a: '_duplicaterecordid_value', c: 'connectors', d: 'connector', r: true },
 			duplicaterecordid_contact: { b: 'duplicaterecordid_contact', a: '_duplicaterecordid_value', c: 'contacts', d: 'contact', r: true },
@@ -631,6 +651,7 @@ var DevKit;
 			duplicaterecordid_datalakefolderpermission: { b: 'duplicaterecordid_datalakefolderpermission', a: '_duplicaterecordid_value', c: 'datalakefolderpermissions', d: 'datalakefolderpermission', r: true },
 			duplicaterecordid_datalakeworkspace: { b: 'duplicaterecordid_datalakeworkspace', a: '_duplicaterecordid_value', c: 'datalakeworkspaces', d: 'datalakeworkspace', r: true },
 			duplicaterecordid_datalakeworkspacepermission: { b: 'duplicaterecordid_datalakeworkspacepermission', a: '_duplicaterecordid_value', c: 'datalakeworkspacepermissions', d: 'datalakeworkspacepermission', r: true },
+			duplicaterecordid_dataprocessingconfiguration: { b: 'duplicaterecordid_dataprocessingconfiguration', a: '_duplicaterecordid_value', c: 'dataprocessingconfigurations', d: 'dataprocessingconfiguration', r: true },
 			duplicaterecordid_datasyncstate: { b: 'duplicaterecordid_datasyncstate', a: '_duplicaterecordid_value', c: 'datasyncstates', d: 'datasyncstate', r: true },
 			duplicaterecordid_email: { b: 'duplicaterecordid_email', a: '_duplicaterecordid_value', c: 'emails', d: 'email', r: true },
 			duplicaterecordid_emailserverprofile: { b: 'duplicaterecordid_emailserverprofile', a: '_duplicaterecordid_value', c: 'emailserverprofiles', d: 'emailserverprofile', r: true },
@@ -677,6 +698,7 @@ var DevKit;
 			duplicaterecordid_msdyn_aibdatasetfile: { b: 'duplicaterecordid_msdyn_aibdatasetfile', a: '_duplicaterecordid_value', c: 'msdyn_aibdatasetfiles', d: 'msdyn_aibdatasetfile', r: true },
 			duplicaterecordid_msdyn_aibdatasetrecord: { b: 'duplicaterecordid_msdyn_aibdatasetrecord', a: '_duplicaterecordid_value', c: 'msdyn_aibdatasetrecords', d: 'msdyn_aibdatasetrecord', r: true },
 			duplicaterecordid_msdyn_aibdatasetscontainer: { b: 'duplicaterecordid_msdyn_aibdatasetscontainer', a: '_duplicaterecordid_value', c: 'msdyn_aibdatasetscontainers', d: 'msdyn_aibdatasetscontainer', r: true },
+			duplicaterecordid_msdyn_aibfeedbackloop: { b: 'duplicaterecordid_msdyn_aibfeedbackloop', a: '_duplicaterecordid_value', c: 'msdyn_aibfeedbackloops', d: 'msdyn_aibfeedbackloop', r: true },
 			duplicaterecordid_msdyn_aibfile: { b: 'duplicaterecordid_msdyn_aibfile', a: '_duplicaterecordid_value', c: 'msdyn_aibfiles', d: 'msdyn_aibfile', r: true },
 			duplicaterecordid_msdyn_aibfileattacheddata: { b: 'duplicaterecordid_msdyn_aibfileattacheddata', a: '_duplicaterecordid_value', c: 'msdyn_aibfileattacheddatas', d: 'msdyn_aibfileattacheddata', r: true },
 			duplicaterecordid_msdyn_aiodimage: { b: 'duplicaterecordid_msdyn_aiodimage', a: '_duplicaterecordid_value', c: 'msdyn_aiodimages', d: 'msdyn_aiodimage', r: true },
@@ -742,6 +764,7 @@ var DevKit;
 			duplicaterecordid_msdyn_dataanalyticsreport_fspredictwhd: { b: 'duplicaterecordid_msdyn_dataanalyticsreport_fspredictwhd', a: '_duplicaterecordid_value', c: 'msdyn_dataanalyticsreport_fspredictwhds', d: 'msdyn_dataanalyticsreport_fspredictwhd', r: true },
 			duplicaterecordid_msdyn_dataexport: { b: 'duplicaterecordid_msdyn_dataexport', a: '_duplicaterecordid_value', c: 'msdyn_dataexports', d: 'msdyn_dataexport', r: true },
 			duplicaterecordid_msdyn_dataflow: { b: 'duplicaterecordid_msdyn_dataflow', a: '_duplicaterecordid_value', c: 'msdyn_dataflows', d: 'msdyn_dataflow', r: true },
+			duplicaterecordid_msdyn_dataflowrefreshhistory: { b: 'duplicaterecordid_msdyn_dataflowrefreshhistory', a: '_duplicaterecordid_value', c: 'msdyn_dataflowrefreshhistories', d: 'msdyn_dataflowrefreshhistory', r: true },
 			duplicaterecordid_msdyn_dealmanageraccess: { b: 'duplicaterecordid_msdyn_dealmanageraccess', a: '_duplicaterecordid_value', c: 'msdyn_dealmanageraccesses', d: 'msdyn_dealmanageraccess', r: true },
 			duplicaterecordid_msdyn_dealmanagersettings: { b: 'duplicaterecordid_msdyn_dealmanagersettings', a: '_duplicaterecordid_value', c: 'msdyn_dealmanagersettingses', d: 'msdyn_dealmanagersettings', r: true },
 			duplicaterecordid_msdyn_decisioncontract: { b: 'duplicaterecordid_msdyn_decisioncontract', a: '_duplicaterecordid_value', c: 'msdyn_decisioncontracts', d: 'msdyn_decisioncontract', r: true },
@@ -749,10 +772,13 @@ var DevKit;
 			duplicaterecordid_msdyn_delegation: { b: 'duplicaterecordid_msdyn_delegation', a: '_duplicaterecordid_value', c: 'msdyn_delegations', d: 'msdyn_delegation', r: true },
 			duplicaterecordid_msdyn_dimension: { b: 'duplicaterecordid_msdyn_dimension', a: '_duplicaterecordid_value', c: 'msdyn_dimensions', d: 'msdyn_dimension', r: true },
 			duplicaterecordid_msdyn_dimensionfieldname: { b: 'duplicaterecordid_msdyn_dimensionfieldname', a: '_duplicaterecordid_value', c: 'msdyn_dimensionfieldnames', d: 'msdyn_dimensionfieldname', r: true },
+			duplicaterecordid_msdyn_duplicatedetectionpluginrun: { b: 'duplicaterecordid_msdyn_duplicatedetectionpluginrun', a: '_duplicaterecordid_value', c: 'msdyn_duplicatedetectionpluginruns', d: 'msdyn_duplicatedetectionpluginrun', r: true },
+			duplicaterecordid_msdyn_duplicateleadmapping: { b: 'duplicaterecordid_msdyn_duplicateleadmapping', a: '_duplicaterecordid_value', c: 'msdyn_duplicateleadmappings', d: 'msdyn_duplicateleadmapping', r: true },
 			duplicaterecordid_msdyn_effortpredictionresult: { b: 'duplicaterecordid_msdyn_effortpredictionresult', a: '_duplicaterecordid_value', c: 'msdyn_effortpredictionresults', d: 'msdyn_effortpredictionresult', r: true },
 			duplicaterecordid_msdyn_entitlementapplication: { b: 'duplicaterecordid_msdyn_entitlementapplication', a: '_duplicaterecordid_value', c: 'msdyn_entitlementapplications', d: 'msdyn_entitlementapplication', r: true },
 			duplicaterecordid_msdyn_entityconfiguration: { b: 'duplicaterecordid_msdyn_entityconfiguration', a: '_duplicaterecordid_value', c: 'msdyn_entityconfigurations', d: 'msdyn_entityconfiguration', r: true },
 			duplicaterecordid_msdyn_entitylinkchatconfiguration: { b: 'duplicaterecordid_msdyn_entitylinkchatconfiguration', a: '_duplicaterecordid_value', c: 'msdyn_entitylinkchatconfigurations', d: 'msdyn_entitylinkchatconfiguration', r: true },
+			duplicaterecordid_msdyn_entityrefreshhistory: { b: 'duplicaterecordid_msdyn_entityrefreshhistory', a: '_duplicaterecordid_value', c: 'msdyn_entityrefreshhistories', d: 'msdyn_entityrefreshhistory', r: true },
 			duplicaterecordid_msdyn_estimate: { b: 'duplicaterecordid_msdyn_estimate', a: '_duplicaterecordid_value', c: 'msdyn_estimates', d: 'msdyn_estimate', r: true },
 			duplicaterecordid_msdyn_estimateline: { b: 'duplicaterecordid_msdyn_estimateline', a: '_duplicaterecordid_value', c: 'msdyn_estimatelines', d: 'msdyn_estimateline', r: true },
 			duplicaterecordid_msdyn_expense: { b: 'duplicaterecordid_msdyn_expense', a: '_duplicaterecordid_value', c: 'msdyn_expenses', d: 'msdyn_expense', r: true },
@@ -819,11 +845,13 @@ var DevKit;
 			duplicaterecordid_msdyn_knowledgearticleimage: { b: 'duplicaterecordid_msdyn_knowledgearticleimage', a: '_duplicaterecordid_value', c: 'msdyn_knowledgearticleimages', d: 'msdyn_knowledgearticleimage', r: true },
 			duplicaterecordid_msdyn_knowledgearticletemplate: { b: 'duplicaterecordid_msdyn_knowledgearticletemplate', a: '_duplicaterecordid_value', c: 'msdyn_knowledgearticletemplates', d: 'msdyn_knowledgearticletemplate', r: true },
 			duplicaterecordid_msdyn_knowledgeinteractioninsight: { b: 'duplicaterecordid_msdyn_knowledgeinteractioninsight', a: '_duplicaterecordid_value', c: 'msdyn_knowledgeinteractioninsights', d: 'msdyn_knowledgeinteractioninsight', r: true },
+			duplicaterecordid_msdyn_knowledgemanagementsetting: { b: 'duplicaterecordid_msdyn_knowledgemanagementsetting', a: '_duplicaterecordid_value', c: 'msdyn_knowledgemanagementsettings', d: 'msdyn_knowledgemanagementsetting', r: true },
 			duplicaterecordid_msdyn_knowledgepersonalfilter: { b: 'duplicaterecordid_msdyn_knowledgepersonalfilter', a: '_duplicaterecordid_value', c: 'msdyn_knowledgepersonalfilters', d: 'msdyn_knowledgepersonalfilter', r: true },
 			duplicaterecordid_msdyn_knowledgesearchfilter: { b: 'duplicaterecordid_msdyn_knowledgesearchfilter', a: '_duplicaterecordid_value', c: 'msdyn_knowledgesearchfilters', d: 'msdyn_knowledgesearchfilter', r: true },
 			duplicaterecordid_msdyn_knowledgesearchinsight: { b: 'duplicaterecordid_msdyn_knowledgesearchinsight', a: '_duplicaterecordid_value', c: 'msdyn_knowledgesearchinsights', d: 'msdyn_knowledgesearchinsight', r: true },
 			duplicaterecordid_msdyn_kpieventdata: { b: 'duplicaterecordid_msdyn_kpieventdata', a: '_duplicaterecordid_value', c: 'msdyn_kpieventdatas', d: 'msdyn_kpieventdata', r: true },
 			duplicaterecordid_msdyn_kpieventdefinition: { b: 'duplicaterecordid_msdyn_kpieventdefinition', a: '_duplicaterecordid_value', c: 'msdyn_kpieventdefinitions', d: 'msdyn_kpieventdefinition', r: true },
+			duplicaterecordid_msdyn_leadhygienesetting: { b: 'duplicaterecordid_msdyn_leadhygienesetting', a: '_duplicaterecordid_value', c: 'msdyn_leadhygienesettings', d: 'msdyn_leadhygienesetting', r: true },
 			duplicaterecordid_msdyn_leadmodelconfig: { b: 'duplicaterecordid_msdyn_leadmodelconfig', a: '_duplicaterecordid_value', c: 'msdyn_leadmodelconfigs', d: 'msdyn_leadmodelconfig', r: true },
 			duplicaterecordid_msdyn_liveworkitemevent: { b: 'duplicaterecordid_msdyn_liveworkitemevent', a: '_duplicaterecordid_value', c: 'msdyn_liveworkitemevents', d: 'msdyn_liveworkitemevent', r: true },
 			duplicaterecordid_msdyn_liveworkstreamcapacityprofile: { b: 'duplicaterecordid_msdyn_liveworkstreamcapacityprofile', a: '_duplicaterecordid_value', c: 'msdyn_liveworkstreamcapacityprofiles', d: 'msdyn_liveworkstreamcapacityprofile', r: true },
@@ -838,6 +866,9 @@ var DevKit;
 			duplicaterecordid_msdyn_ocautoblockrule: { b: 'duplicaterecordid_msdyn_ocautoblockrule', a: '_duplicaterecordid_value', c: 'msdyn_ocautoblockrules', d: 'msdyn_ocautoblockrule', r: true },
 			duplicaterecordid_msdyn_ocbotchannelregistration: { b: 'duplicaterecordid_msdyn_ocbotchannelregistration', a: '_duplicaterecordid_value', c: 'msdyn_ocbotchannelregistrations', d: 'msdyn_ocbotchannelregistration', r: true },
 			duplicaterecordid_msdyn_occarrier: { b: 'duplicaterecordid_msdyn_occarrier', a: '_duplicaterecordid_value', c: 'msdyn_occarriers', d: 'msdyn_occarrier', r: true },
+			duplicaterecordid_msdyn_occhannelapiconversationprivilege: { b: 'duplicaterecordid_msdyn_occhannelapiconversationprivilege', a: '_duplicaterecordid_value', c: 'msdyn_occhannelapiconversationprivileges', d: 'msdyn_occhannelapiconversationprivilege', r: true },
+			duplicaterecordid_msdyn_occhannelapimessageprivilege: { b: 'duplicaterecordid_msdyn_occhannelapimessageprivilege', a: '_duplicaterecordid_value', c: 'msdyn_occhannelapimessageprivileges', d: 'msdyn_occhannelapimessageprivilege', r: true },
+			duplicaterecordid_msdyn_occhannelapimethodmapping: { b: 'duplicaterecordid_msdyn_occhannelapimethodmapping', a: '_duplicaterecordid_value', c: 'msdyn_occhannelapimethodmappings', d: 'msdyn_occhannelapimethodmapping', r: true },
 			duplicaterecordid_msdyn_occhannelconfiguration: { b: 'duplicaterecordid_msdyn_occhannelconfiguration', a: '_duplicaterecordid_value', c: 'msdyn_occhannelconfigurations', d: 'msdyn_occhannelconfiguration', r: true },
 			duplicaterecordid_msdyn_occhannelstateconfiguration: { b: 'duplicaterecordid_msdyn_occhannelstateconfiguration', a: '_duplicaterecordid_value', c: 'msdyn_occhannelstateconfigurations', d: 'msdyn_occhannelstateconfiguration', r: true },
 			duplicaterecordid_msdyn_occommunicationprovidersetting: { b: 'duplicaterecordid_msdyn_occommunicationprovidersetting', a: '_duplicaterecordid_value', c: 'msdyn_occommunicationprovidersettings', d: 'msdyn_occommunicationprovidersetting', r: true },
@@ -1001,6 +1032,7 @@ var DevKit;
 			duplicaterecordid_msdyn_salesaccelerationsettings: { b: 'duplicaterecordid_msdyn_salesaccelerationsettings', a: '_duplicaterecordid_value', c: 'msdyn_salesaccelerationsettingses', d: 'msdyn_salesaccelerationsettings', r: true },
 			duplicaterecordid_msdyn_salesinsightssettings: { b: 'duplicaterecordid_msdyn_salesinsightssettings', a: '_duplicaterecordid_value', c: 'msdyn_salesinsightssettingses', d: 'msdyn_salesinsightssettings', r: true },
 			duplicaterecordid_msdyn_salesroutingrun: { b: 'duplicaterecordid_msdyn_salesroutingrun', a: '_duplicaterecordid_value', c: 'msdyn_salesroutingruns', d: 'msdyn_salesroutingrun', r: true },
+			duplicaterecordid_msdyn_salessuggestion: { b: 'duplicaterecordid_msdyn_salessuggestion', a: '_duplicaterecordid_value', c: 'msdyn_salessuggestions', d: 'msdyn_salessuggestion', r: true },
 			duplicaterecordid_msdyn_salestag: { b: 'duplicaterecordid_msdyn_salestag', a: '_duplicaterecordid_value', c: 'msdyn_salestags', d: 'msdyn_salestag', r: true },
 			duplicaterecordid_msdyn_scenario: { b: 'duplicaterecordid_msdyn_scenario', a: '_duplicaterecordid_value', c: 'msdyn_scenarios', d: 'msdyn_scenario', r: true },
 			duplicaterecordid_msdyn_scheduleboardsetting: { b: 'duplicaterecordid_msdyn_scheduleboardsetting', a: '_duplicaterecordid_value', c: 'msdyn_scheduleboardsettings', d: 'msdyn_scheduleboardsetting', r: true },
@@ -1058,6 +1090,7 @@ var DevKit;
 			duplicaterecordid_msdyn_userworkhistory: { b: 'duplicaterecordid_msdyn_userworkhistory', a: '_duplicaterecordid_value', c: 'msdyn_userworkhistories', d: 'msdyn_userworkhistory', r: true },
 			duplicaterecordid_msdyn_warehouse: { b: 'duplicaterecordid_msdyn_warehouse', a: '_duplicaterecordid_value', c: 'msdyn_warehouses', d: 'msdyn_warehouse', r: true },
 			duplicaterecordid_msdyn_workhourtemplate: { b: 'duplicaterecordid_msdyn_workhourtemplate', a: '_duplicaterecordid_value', c: 'msdyn_workhourtemplates', d: 'msdyn_workhourtemplate', r: true },
+			duplicaterecordid_msdyn_worklistviewconfiguration: { b: 'duplicaterecordid_msdyn_worklistviewconfiguration', a: '_duplicaterecordid_value', c: 'msdyn_worklistviewconfigurations', d: 'msdyn_worklistviewconfiguration', r: true },
 			duplicaterecordid_msdyn_workorder: { b: 'duplicaterecordid_msdyn_workorder', a: '_duplicaterecordid_value', c: 'msdyn_workorders', d: 'msdyn_workorder', r: true },
 			duplicaterecordid_msdyn_workordercharacteristic: { b: 'duplicaterecordid_msdyn_workordercharacteristic', a: '_duplicaterecordid_value', c: 'msdyn_workordercharacteristics', d: 'msdyn_workordercharacteristic', r: true },
 			duplicaterecordid_msdyn_workorderdetailsgenerationqueue: { b: 'duplicaterecordid_msdyn_workorderdetailsgenerationqueue', a: '_duplicaterecordid_value', c: 'msdyn_workorderdetailsgenerationqueues', d: 'msdyn_workorderdetailsgenerationqueue', r: true },
@@ -1091,6 +1124,7 @@ var DevKit;
 			duplicaterecordid_msfp_fileresponse: { b: 'duplicaterecordid_msfp_fileresponse', a: '_duplicaterecordid_value', c: 'msfp_fileresponses', d: 'msfp_fileresponse', r: true },
 			duplicaterecordid_msfp_surveyreminder: { b: 'duplicaterecordid_msfp_surveyreminder', a: '_duplicaterecordid_value', c: 'msfp_surveyreminders', d: 'msfp_surveyreminder', r: true },
 			duplicaterecordid_opportunity: { b: 'duplicaterecordid_opportunity', a: '_duplicaterecordid_value', c: 'opportunities', d: 'opportunity', r: true },
+			duplicaterecordid_organizationdatasyncstate: { b: 'duplicaterecordid_organizationdatasyncstate', a: '_duplicaterecordid_value', c: 'organizationdatasyncstates', d: 'organizationdatasyncstate', r: true },
 			duplicaterecordid_organizationdatasyncsubscription: { b: 'duplicaterecordid_organizationdatasyncsubscription', a: '_duplicaterecordid_value', c: 'organizationdatasyncsubscriptions', d: 'organizationdatasyncsubscription', r: true },
 			duplicaterecordid_organizationdatasyncsubscriptionentity: { b: 'duplicaterecordid_organizationdatasyncsubscriptionentity', a: '_duplicaterecordid_value', c: 'organizationdatasyncsubscriptionentities', d: 'organizationdatasyncsubscriptionentity', r: true },
 			duplicaterecordid_package: { b: 'duplicaterecordid_package', a: '_duplicaterecordid_value', c: 'packages', d: 'package', r: true },
@@ -1107,6 +1141,7 @@ var DevKit;
 			duplicaterecordid_service: { b: 'duplicaterecordid_service', a: '_duplicaterecordid_value', c: 'services', d: 'service', r: true },
 			duplicaterecordid_serviceplan: { b: 'duplicaterecordid_serviceplan', a: '_duplicaterecordid_value', c: 'serviceplans', d: 'serviceplan', r: true },
 			duplicaterecordid_serviceplanmapping: { b: 'duplicaterecordid_serviceplanmapping', a: '_duplicaterecordid_value', c: 'serviceplanmappings', d: 'serviceplanmapping', r: true },
+			duplicaterecordid_sharedlinksetting: { b: 'duplicaterecordid_sharedlinksetting', a: '_duplicaterecordid_value', c: 'sharedlinksettings', d: 'sharedlinksetting', r: true },
 			duplicaterecordid_sharepointdocumentlocation: { b: 'duplicaterecordid_sharepointdocumentlocation', a: '_duplicaterecordid_value', c: 'sharePointdocumentlocations', d: 'sharepointdocumentlocation', r: true },
 			duplicaterecordid_sharepointsite: { b: 'duplicaterecordid_sharepointsite', a: '_duplicaterecordid_value', c: 'sharepointsites', d: 'sharepointsite', r: true },
 			duplicaterecordid_socialactivity: { b: 'duplicaterecordid_socialactivity', a: '_duplicaterecordid_value', c: 'socialactivities', d: 'socialactivity', r: true },
@@ -1116,6 +1151,12 @@ var DevKit;
 			duplicaterecordid_solutioncomponentconfiguration: { b: 'duplicaterecordid_solutioncomponentconfiguration', a: '_duplicaterecordid_value', c: 'solutioncomponentconfigurations', d: 'solutioncomponentconfiguration', r: true },
 			duplicaterecordid_solutioncomponentrelationshipconfiguration: { b: 'duplicaterecordid_solutioncomponentrelationshipconfiguration', a: '_duplicaterecordid_value', c: 'solutioncomponentrelationshipconfigurations', d: 'solutioncomponentrelationshipconfiguration', r: true },
 			duplicaterecordid_stagesolutionupload: { b: 'duplicaterecordid_stagesolutionupload', a: '_duplicaterecordid_value', c: 'stagesolutionuploads', d: 'stagesolutionupload', r: true },
+			duplicaterecordid_synapsedatabase: { b: 'duplicaterecordid_synapsedatabase', a: '_duplicaterecordid_value', c: 'synapsedatabases', d: 'synapsedatabase', r: true },
+			duplicaterecordid_synapselinkexternaltablestate: { b: 'duplicaterecordid_synapselinkexternaltablestate', a: '_duplicaterecordid_value', c: 'synapselinkexternaltablestates', d: 'synapselinkexternaltablestate', r: true },
+			duplicaterecordid_synapselinkprofile: { b: 'duplicaterecordid_synapselinkprofile', a: '_duplicaterecordid_value', c: 'synapselinkprofiles', d: 'synapselinkprofile', r: true },
+			duplicaterecordid_synapselinkprofileentity: { b: 'duplicaterecordid_synapselinkprofileentity', a: '_duplicaterecordid_value', c: 'synapselinkprofileentities', d: 'synapselinkprofileentity', r: true },
+			duplicaterecordid_synapselinkprofileentitystate: { b: 'duplicaterecordid_synapselinkprofileentitystate', a: '_duplicaterecordid_value', c: 'synapselinkprofileentitystates', d: 'synapselinkprofileentitystate', r: true },
+			duplicaterecordid_synapselinkschedule: { b: 'duplicaterecordid_synapselinkschedule', a: '_duplicaterecordid_value', c: 'synapselinkschedules', d: 'synapselinkschedule', r: true },
 			duplicaterecordid_systemuser: { b: 'duplicaterecordid_systemuser', a: '_duplicaterecordid_value', c: 'systemusers', d: 'systemuser', r: true },
 			duplicaterecordid_task: { b: 'duplicaterecordid_task', a: '_duplicaterecordid_value', c: 'tasks', d: 'task', r: true },
 			duplicaterecordid_team: { b: 'duplicaterecordid_team', a: '_duplicaterecordid_value', c: 'teams', d: 'team', r: true },
@@ -1139,20 +1180,23 @@ var DevKit;
 		};
 		if (e === undefined) e = {};
 		var u = {};
-		for (var field in duplicaterecord) {
-			var a = duplicaterecord[field].a;
-			var b = duplicaterecord[field].b;
-			var c = duplicaterecord[field].c;
-			var d = duplicaterecord[field].d;
-			var g = duplicaterecord[field].g;
-			var r = duplicaterecord[field].r;
-			duplicaterecord[field] = webApiField(e, a, b, c, d, r, u, g);
+		var duplicaterecord = {};
+		duplicaterecord.ODataEntity = e;
+		duplicaterecord.FormattedValue = {};
+		for (var field in _duplicaterecord) {
+			var a = _duplicaterecord[field].a;
+			var b = _duplicaterecord[field].b;
+			var c = _duplicaterecord[field].c;
+			var d = _duplicaterecord[field].d;
+			var g = _duplicaterecord[field].g;
+			var r = _duplicaterecord[field].r;
+			webApiField(duplicaterecord, field, e, a, b, c, d, r, u, g);
 		}
 		duplicaterecord.Entity = u;
 		duplicaterecord.EntityName = 'duplicaterecord';
 		duplicaterecord.EntityCollectionName = 'duplicaterecords';
 		duplicaterecord['@odata.etag'] = e['@odata.etag'];
-		duplicaterecord.getAliasedValue = function (alias, isMultiOptionSet) {
+		duplicaterecord.getAliasedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias] === undefined || e[alias] === null) {
 				return null;
 			}
@@ -1161,7 +1205,7 @@ var DevKit;
 			}
 			return e[alias];
 		}
-		duplicaterecord.getAliasedFormattedValue = function (alias, isMultiOptionSet) {
+		duplicaterecord.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
 				return EMPTY_STRING;
 			}

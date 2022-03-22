@@ -19,24 +19,26 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
 		EntityCollectionName: string;
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
-		AsyncOperationId: DevKit.WebApi.GuidValue;
-		Lcid: DevKit.WebApi.IntegerValue;
+		AsyncOperationId: string;
+		Lcid: number;
 		/** The name of the custom entity. */
-		Name: DevKit.WebApi.StringValue;
-		OperationStatus: DevKit.WebApi.OptionSetValue;
+		Name: string;
+		OperationStatus: OptionSet.ProvisionLanguageForUser.OperationStatus;
 		/** Unique identifier for the organization */
-		OrganizationId: DevKit.WebApi.GuidValueReadonly;
+		readonly OrganizationId: string;
 		/** Unique identifier for entity instances */
-		ProvisionLanguageForUserId: DevKit.WebApi.GuidValue;
-		UserId: DevKit.WebApi.GuidValue;
+		ProvisionLanguageForUserId: string;
+		UserId: string;
 	}
 }
 declare namespace OptionSet {
@@ -69,4 +71,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

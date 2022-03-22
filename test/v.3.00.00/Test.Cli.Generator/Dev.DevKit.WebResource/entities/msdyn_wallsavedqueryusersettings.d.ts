@@ -59,8 +59,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -68,73 +70,73 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** XML blob that stores personalization data for the user. */
-		msdyn_data: DevKit.WebApi.StringValue;
+		msdyn_data: string;
 		/** Indicates that view is selected by default if value is greater than 0. Also contains information which specific filter is applied. */
-		msdyn_default: DevKit.WebApi.IntegerValue;
+		msdyn_default: number;
 		/** Display name of the entity to which the corresponding views belong. */
-		msdyn_entitydisplayname: DevKit.WebApi.StringValue;
+		msdyn_entitydisplayname: string;
 		/** Name of the entity to which the corresponding views belong. */
-		msdyn_entityname: DevKit.WebApi.StringValue;
+		msdyn_entityname: string;
 		/** Indicates that wall should be included in response to avoid roundtrips to server */
-		msdyn_includewallinresponse: DevKit.WebApi.BooleanValue;
+		msdyn_includewallinresponse: boolean;
 		/** Indicates that corresponding view is following view */
-		msdyn_isfollowing: DevKit.WebApi.BooleanValue;
+		msdyn_isfollowing: boolean;
 		/** Indicates that the record is virtual */
-		msdyn_IsVirtual: DevKit.WebApi.BooleanValue;
+		msdyn_IsVirtual: boolean;
 		/** Information that indicates whether the corresponding view should be displayed on the personal wall for this user. */
-		msdyn_isvisible: DevKit.WebApi.BooleanValue;
+		msdyn_isvisible: boolean;
 		/** For internal use only. */
-		msdyn_isvisiblebit: DevKit.WebApi.IntegerValue;
+		msdyn_isvisiblebit: number;
 		/** Virtual column which contains entity type code for the entities returned by corresponding savedquery */
-		msdyn_otc: DevKit.WebApi.IntegerValue;
+		msdyn_otc: number;
 		/** Name of the corresponding view. */
-		msdyn_savedqueryname: DevKit.WebApi.StringValue;
+		msdyn_savedqueryname: string;
 		/** Sort order to be used when displaying the filter on the user’s personal wall. */
-		msdyn_sortorder: DevKit.WebApi.IntegerValue;
+		msdyn_sortorder: number;
 		/** Reserved to support different view types. Currently not used. */
-		msdyn_type: DevKit.WebApi.IntegerValue;
+		msdyn_type: number;
 		/** Unique identifier for User associated with Wall View User Setting. */
-		msdyn_userid: DevKit.WebApi.LookupValue;
+		msdyn_userid: string;
 		/** Unique identifier for Wall View associated with Wall View User Setting. */
-		msdyn_wallsavedqueryid: DevKit.WebApi.LookupValue;
+		msdyn_wallsavedqueryid: string;
 		/** Unique identifier for entity instances */
-		msdyn_wallsavedqueryusersettingsId: DevKit.WebApi.GuidValue;
+		msdyn_wallsavedqueryusersettingsId: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Status of the Wall View User Setting */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.msdyn_wallsavedqueryusersettings.statecode;
 		/** Reason for the status of the Wall View User Setting */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.msdyn_wallsavedqueryusersettings.statuscode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -169,4 +171,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

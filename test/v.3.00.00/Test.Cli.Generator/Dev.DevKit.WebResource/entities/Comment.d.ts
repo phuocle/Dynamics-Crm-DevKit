@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,70 +30,70 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Anchor context for the record within the maker artifact */
-		Anchor: DevKit.WebApi.StringValue;
+		Anchor: string;
 		/** Unique identifier of the maker artifact */
-		ArtifactId: DevKit.WebApi.StringValue;
+		ArtifactId: string;
 		/** Type of the maker artifact */
-		ArtifactType: DevKit.WebApi.OptionSetValue;
+		ArtifactType: OptionSet.Comment.ArtifactType;
 		/** Body content for the record */
-		Body: DevKit.WebApi.StringValue;
+		Body: string;
 		/** Unique identifier for entity instances */
-		CommentId: DevKit.WebApi.GuidValue;
+		CommentId: string;
 		/** Unique identifier for the container of this record */
-		Container: DevKit.WebApi.LookupValue;
+		Container: string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Kind of record */
-		Kind: DevKit.WebApi.OptionSetValue;
+		Kind: OptionSet.Comment.Kind;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Required name field */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Unique identifier for the parent of this record */
-		AppModule: DevKit.WebApi.LookupValue;
+		AppModule: string;
 		/** Unique identifier for the parent of this record */
-		Bot: DevKit.WebApi.LookupValue;
+		Bot: string;
 		/** Unique identifier for the parent of this record */
-		BotComponent: DevKit.WebApi.LookupValue;
+		BotComponent: string;
 		/** Unique identifier for the parent of this record */
-		CanvasApp: DevKit.WebApi.LookupValue;
+		CanvasApp: string;
 		/** Unique identifier for the parent of this record */
-		Parent: DevKit.WebApi.LookupValue;
+		Parent: string;
 		/** Unique identifier for the parent of this record */
-		Workflow: DevKit.WebApi.LookupValue;
-		State: DevKit.WebApi.OptionSetValue;
+		Workflow: string;
+		State: OptionSet.Comment.State;
 		/** Status of the Comment */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.Comment.statecode;
 		/** Reason for the status of the Comment */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.Comment.statuscode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -152,4 +154,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

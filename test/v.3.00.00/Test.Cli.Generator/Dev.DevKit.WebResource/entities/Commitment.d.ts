@@ -19,38 +19,40 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
 		EntityCollectionName: string;
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
-		ActivityId: DevKit.WebApi.GuidValueReadonly;
-		CommitmentId: DevKit.WebApi.GuidValueReadonly;
-		Effort: DevKit.WebApi.DoubleValueReadonly;
+		readonly ActivityId: string;
+		readonly CommitmentId: string;
+		readonly Effort: number;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** name */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
-		ParticipationTypeMask: DevKit.WebApi.IntegerValueReadonly;
-		PartyId: DevKit.WebApi.GuidValueReadonly;
-		ResourceSpecId: DevKit.WebApi.GuidValueReadonly;
-		ScheduledEnd_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
-		ScheduledStart_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
-		ServiceId: DevKit.WebApi.LookupValueReadonly;
-		StateCode: DevKit.WebApi.OptionSetValueReadonly;
-		StatusCode: DevKit.WebApi.OptionSetValueReadonly;
-		Subject: DevKit.WebApi.StringValueReadonly;
+		OverriddenCreatedOn_UtcDateOnly: Date;
+		readonly ParticipationTypeMask: number;
+		readonly PartyId: string;
+		readonly ResourceSpecId: string;
+		readonly ScheduledEnd_UtcDateOnly: Date;
+		readonly ScheduledStart_UtcDateOnly: Date;
+		readonly ServiceId: string;
+		readonly StateCode: OptionSet.Commitment.StateCode;
+		readonly StatusCode: OptionSet.Commitment.StatusCode;
+		readonly Subject: string;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -73,4 +75,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

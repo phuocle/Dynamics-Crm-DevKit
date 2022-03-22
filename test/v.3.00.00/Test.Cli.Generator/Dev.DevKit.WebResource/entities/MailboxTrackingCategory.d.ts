@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,28 +30,28 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Information to indicate whether the category has been created in Exchange or not. */
-		CategoryOnboardingStatus: DevKit.WebApi.IntegerValue;
+		CategoryOnboardingStatus: number;
 		/** Date and time when the entry was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Color for category in Exchange. */
-		ExchangeCategoryColor: DevKit.WebApi.IntegerValue;
+		ExchangeCategoryColor: number;
 		/** Category Id for a category in Exchange */
-		ExchangeCategoryId: DevKit.WebApi.GuidValue;
+		ExchangeCategoryId: string;
 		/** Exchange Category Name */
-		ExchangeCategoryName: DevKit.WebApi.StringValue;
+		ExchangeCategoryName: string;
 		/** Mailbox id associated with this record. */
-		MailboxId: DevKit.WebApi.LookupValue;
-		MailboxTrackingCategoryId: DevKit.WebApi.GuidValueReadonly;
+		MailboxId: string;
+		readonly MailboxTrackingCategoryId: string;
 		/** Date and time when the entry was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier of the business unit that owns the category. */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier of the team who owns the category. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 	}
 }
 declare namespace OptionSet {
@@ -72,4 +74,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

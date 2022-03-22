@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,43 +30,43 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.HierarchyRule.ComponentState;
 		/** Description of the hierarchy rule. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Unique identifier of the record type hierarchy rule. */
-		HierarchyRuleID: DevKit.WebApi.GuidValue;
+		HierarchyRuleID: string;
 		/** Unique identifier of the hierarchy rule used when synchronizing customizations for the Microsoft Dynamics 365 client for Outlook */
-		HierarchyRuleIDUnique: DevKit.WebApi.GuidValueReadonly;
+		readonly HierarchyRuleIDUnique: string;
 		/** Version in which the hierarchy rule is introduced. */
-		IntroducedVersion: DevKit.WebApi.StringValue;
+		IntroducedVersion: string;
 		/** Information that specifies whether this component can be customized. */
-		IsCustomizable: DevKit.WebApi.ManagedPropertyValue;
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		IsCustomizable: string;
+		readonly IsManaged: boolean;
 		/** Name of the hierarchy rule. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Unique identifier of the organization. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Date and time when the record was created. */
-		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly OverwriteTime_UtcDateOnly: Date;
 		/** Form Id for the Primary Entity */
-		PrimaryEntityFormID: DevKit.WebApi.GuidValue;
+		PrimaryEntityFormID: string;
 		/** Logical Name for the Primary entity. */
-		PrimaryEntityLogicalName: DevKit.WebApi.StringValue;
-		PublishedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		PrimaryEntityLogicalName: string;
+		readonly PublishedOn_UtcDateAndTime: Date;
 		/** Form Id for the Related Entity. */
-		RelatedEntityFormId: DevKit.WebApi.GuidValueReadonly;
+		readonly RelatedEntityFormId: string;
 		/** Logical Name for the Related entity. */
-		RelatedEntityLogicalName: DevKit.WebApi.StringValueReadonly;
+		readonly RelatedEntityLogicalName: string;
 		/** To show disabled records or not. */
-		ShowDisabled: DevKit.WebApi.BooleanValue;
+		ShowDisabled: boolean;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** columns to sort in the primary entity */
-		SortBy: DevKit.WebApi.GuidValueReadonly;
+		readonly SortBy: string;
 		/** For internal use only. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SupportingSolutionId: string;
 		/** Version number of the Hierarchy rule. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -97,4 +99,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

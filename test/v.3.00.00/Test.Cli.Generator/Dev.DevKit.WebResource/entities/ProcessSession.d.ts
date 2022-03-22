@@ -117,8 +117,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -126,1617 +128,1667 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Name of the activity that is being executed. */
-		ActivityName: DevKit.WebApi.StringValue;
+		ActivityName: string;
 		/** Unique identifier of the user who canceled the dialog session. */
-		CanceledBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CanceledBy: string;
 		/** Date and time when the dialog session was canceled. */
-		CanceledOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		CanceledOn_UtcDateAndTime: Date;
 		/** User comments. */
-		Comments: DevKit.WebApi.StringValue;
+		Comments: string;
 		/** Unique identifier of the user who completed the dialog session. */
-		CompletedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CompletedBy: string;
 		/** Date and time when the dialog session was completed. */
-		CompletedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		CompletedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the user who started the dialog session. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the dialog session was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the dialog session. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Error code related to the dialog session. */
-		ErrorCode: DevKit.WebApi.IntegerValue;
+		ErrorCode: number;
 		/** Unique identifier of the user who ran the dialog process. */
-		ExecutedBy: DevKit.WebApi.LookupValue;
+		ExecutedBy: string;
 		/** Date and time when the dialog process was run. */
-		ExecutedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ExecutedOn_UtcDateAndTime: Date;
 		/** Input arguments for the child dialog process. */
-		InputArguments: DevKit.WebApi.StringValue;
+		InputArguments: string;
 		/** Unique identifier of the user who last modified the dialog session. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the dialog session was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the dialog session. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Name of the dialog session. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Unique identifier of the succeeding linked dialog session. */
-		NextLinkedSessionId: DevKit.WebApi.LookupValue;
+		NextLinkedSessionId: string;
 		/** Unique identifier of the originating dialog session. */
-		OriginatingSessionId: DevKit.WebApi.LookupValue;
+		OriginatingSessionId: string;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier of the business unit that owns the dialog session. */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier of the team who owns the dialog session. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier of the user who owns the dialog session. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Unique identifier of the preceding linked dialog session. */
-		PreviousLinkedSessionId: DevKit.WebApi.LookupValue;
+		PreviousLinkedSessionId: string;
 		/** Select the process activation record that is related to the dialog session. */
-		ProcessId: DevKit.WebApi.LookupValue;
+		ProcessId: string;
 		/** Unique identifier of the dialog session. */
-		ProcessSessionId: DevKit.WebApi.GuidValue;
+		ProcessSessionId: string;
 		/** Name of the dialog stage. */
-		ProcessStageName: DevKit.WebApi.StringValue;
+		ProcessStageName: string;
 		/** State of the dialog process. */
-		ProcessState: DevKit.WebApi.StringValue;
+		ProcessState: string;
 		/** For internal use only. */
-		ProtectionKey: DevKit.WebApi.StringValueReadonly;
+		readonly ProtectionKey: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_account: DevKit.WebApi.LookupValue;
+		regardingobjectid_account: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_activityfileattachment: DevKit.WebApi.LookupValue;
+		regardingobjectid_activityfileattachment: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_activitymonitor: DevKit.WebApi.LookupValue;
+		regardingobjectid_activitymonitor: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_adminsettingsentity: DevKit.WebApi.LookupValue;
+		regardingobjectid_adminsettingsentity: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_annotation: DevKit.WebApi.LookupValue;
+		regardingobjectid_annotation: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_appaction: DevKit.WebApi.LookupValue;
+		regardingobjectid_appaction: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_appelement: DevKit.WebApi.LookupValue;
+		regardingobjectid_appelement: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_applicationuser: DevKit.WebApi.LookupValue;
+		regardingobjectid_applicationuser: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_appmodulecomponentedge: DevKit.WebApi.LookupValue;
+		regardingobjectid_appmodulecomponentedge: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_appmodulecomponentnode: DevKit.WebApi.LookupValue;
+		regardingobjectid_appmodulecomponentnode: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_appointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_appointment: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_appsetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_appsetting: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_appusersetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_appusersetting: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_bookableresource: DevKit.WebApi.LookupValue;
+		regardingobjectid_bookableresource: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_bookableresourcebooking: DevKit.WebApi.LookupValue;
+		regardingobjectid_bookableresourcebooking: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_bookableresourcebookingheader: DevKit.WebApi.LookupValue;
+		regardingobjectid_bookableresourcebookingheader: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_bookableresourcecategory: DevKit.WebApi.LookupValue;
+		regardingobjectid_bookableresourcecategory: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_bookableresourcecategoryassn: DevKit.WebApi.LookupValue;
+		regardingobjectid_bookableresourcecategoryassn: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_bookableresourcecharacteristic: DevKit.WebApi.LookupValue;
+		regardingobjectid_bookableresourcecharacteristic: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_bookableresourcegroup: DevKit.WebApi.LookupValue;
+		regardingobjectid_bookableresourcegroup: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_bookingstatus: DevKit.WebApi.LookupValue;
+		regardingobjectid_bookingstatus: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_bot: DevKit.WebApi.LookupValue;
+		regardingobjectid_bot: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_botcomponent: DevKit.WebApi.LookupValue;
+		regardingobjectid_botcomponent: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_businessunit: DevKit.WebApi.LookupValue;
+		regardingobjectid_businessunit: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_businessunitnewsarticle: DevKit.WebApi.LookupValue;
+		regardingobjectid_businessunitnewsarticle: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_campaign: DevKit.WebApi.LookupValue;
+		regardingobjectid_campaign: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_campaignactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_campaignactivity: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_campaignresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_campaignresponse: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_canvasappextendedmetadata: DevKit.WebApi.LookupValue;
+		regardingobjectid_canvasappextendedmetadata: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_cascadegrantrevokeaccessrecordstracker: DevKit.WebApi.LookupValue;
+		regardingobjectid_cascadegrantrevokeaccessrecordstracker: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_cascadegrantrevokeaccessversiontracker: DevKit.WebApi.LookupValue;
+		regardingobjectid_cascadegrantrevokeaccessversiontracker: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_catalog: DevKit.WebApi.LookupValue;
+		regardingobjectid_catalog: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_catalogassignment: DevKit.WebApi.LookupValue;
+		regardingobjectid_catalogassignment: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		channelaccessprofile_processsession: DevKit.WebApi.LookupValue;
+		channelaccessprofile_processsession: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		profileid: DevKit.WebApi.LookupValue;
+		profileid: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_characteristic: DevKit.WebApi.LookupValue;
+		regardingobjectid_characteristic: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_comment: DevKit.WebApi.LookupValue;
+		regardingobjectid_chat: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_competitor: DevKit.WebApi.LookupValue;
+		regardingobjectid_comment: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_connection: DevKit.WebApi.LookupValue;
+		regardingobjectid_competitor: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_connectionreference: DevKit.WebApi.LookupValue;
+		regardingobjectid_connection: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_connectionrole: DevKit.WebApi.LookupValue;
+		regardingobjectid_connectionreference: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_connector: DevKit.WebApi.LookupValue;
+		regardingobjectid_connectionrole: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_constraintbasedgroup: DevKit.WebApi.LookupValue;
+		regardingobjectid_connector: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_contact: DevKit.WebApi.LookupValue;
+		regardingobjectid_constraintbasedgroup: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_contract: DevKit.WebApi.LookupValue;
+		regardingobjectid_contact: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_contractdetail: DevKit.WebApi.LookupValue;
+		regardingobjectid_contract: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_contracttemplate: DevKit.WebApi.LookupValue;
+		regardingobjectid_contractdetail: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_conversationtranscript: DevKit.WebApi.LookupValue;
+		regardingobjectid_contracttemplate: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_convertrule: DevKit.WebApi.LookupValue;
+		regardingobjectid_conversationtranscript: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_customapi: DevKit.WebApi.LookupValue;
+		regardingobjectid_convertrule: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_customapirequestparameter: DevKit.WebApi.LookupValue;
+		regardingobjectid_customapi: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_customapiresponseproperty: DevKit.WebApi.LookupValue;
+		regardingobjectid_customapirequestparameter: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_customeraddress: DevKit.WebApi.LookupValue;
+		regardingobjectid_customapiresponseproperty: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_customeropportunityrole: DevKit.WebApi.LookupValue;
+		regardingobjectid_customeraddress: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_customerrelationship: DevKit.WebApi.LookupValue;
+		regardingobjectid_customeropportunityrole: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_datalakefolder: DevKit.WebApi.LookupValue;
+		regardingobjectid_customerrelationship: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_datalakefolderpermission: DevKit.WebApi.LookupValue;
+		regardingobjectid_datalakefolder: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_datalakeworkspace: DevKit.WebApi.LookupValue;
+		regardingobjectid_datalakefolderpermission: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_datalakeworkspacepermission: DevKit.WebApi.LookupValue;
+		regardingobjectid_datalakeworkspace: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_datasyncstate: DevKit.WebApi.LookupValue;
+		regardingobjectid_datalakeworkspacepermission: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_discount: DevKit.WebApi.LookupValue;
+		regardingobjectid_dataprocessingconfiguration: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_discounttype: DevKit.WebApi.LookupValue;
+		regardingobjectid_datasyncstate: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_email: DevKit.WebApi.LookupValue;
+		regardingobjectid_discount: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_entitlement: DevKit.WebApi.LookupValue;
+		regardingobjectid_discounttype: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_entitlementchannel: DevKit.WebApi.LookupValue;
+		regardingobjectid_email: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_entitlemententityallocationtypemapping: DevKit.WebApi.LookupValue;
+		regardingobjectid_entitlement: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_entitlementtemplate: DevKit.WebApi.LookupValue;
+		regardingobjectid_entitlementchannel: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_environmentvariabledefinition: DevKit.WebApi.LookupValue;
+		regardingobjectid_entitlemententityallocationtypemapping: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_environmentvariablevalue: DevKit.WebApi.LookupValue;
+		regardingobjectid_entitlementtemplate: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_equipment: DevKit.WebApi.LookupValue;
+		regardingobjectid_environmentvariabledefinition: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_expiredprocess: DevKit.WebApi.LookupValue;
+		regardingobjectid_environmentvariablevalue: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_exportsolutionupload: DevKit.WebApi.LookupValue;
+		regardingobjectid_equipment: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		externalparty_processsession: DevKit.WebApi.LookupValue;
+		regardingobjectid_expiredprocess: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		externalpartyitem_processsession: DevKit.WebApi.LookupValue;
+		regardingobjectid_exportsolutionupload: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_fax: DevKit.WebApi.LookupValue;
+		externalparty_processsession: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_featurecontrolsetting: DevKit.WebApi.LookupValue;
+		externalpartyitem_processsession: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_flowmachine: DevKit.WebApi.LookupValue;
+		regardingobjectid_fax: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_flowmachinegroup: DevKit.WebApi.LookupValue;
+		regardingobjectid_featurecontrolsetting: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_goal: DevKit.WebApi.LookupValue;
+		regardingobjectid_flowmachine: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_goalrollupquery: DevKit.WebApi.LookupValue;
+		regardingobjectid_flowmachinegroup: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_holidaywrapper: DevKit.WebApi.LookupValue;
+		regardingobjectid_goal: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_incident: DevKit.WebApi.LookupValue;
+		regardingobjectid_goalrollupquery: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_internalcatalogassignment: DevKit.WebApi.LookupValue;
+		regardingobjectid_holidaywrapper: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_invoice: DevKit.WebApi.LookupValue;
+		regardingobjectid_incident: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_invoicedetail: DevKit.WebApi.LookupValue;
+		regardingobjectid_internalcatalogassignment: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_kbarticle: DevKit.WebApi.LookupValue;
+		regardingobjectid_invoice: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_kbarticlecomment: DevKit.WebApi.LookupValue;
+		regardingobjectid_invoicedetail: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_kbarticletemplate: DevKit.WebApi.LookupValue;
+		regardingobjectid_kbarticle: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_keyvaultreference: DevKit.WebApi.LookupValue;
+		regardingobjectid_kbarticlecomment: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_knowledgearticle: DevKit.WebApi.LookupValue;
+		regardingobjectid_kbarticletemplate: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_knowledgearticleincident: DevKit.WebApi.LookupValue;
+		regardingobjectid_keyvaultreference: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_knowledgebaserecord: DevKit.WebApi.LookupValue;
+		regardingobjectid_knowledgearticle: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_lead: DevKit.WebApi.LookupValue;
+		regardingobjectid_knowledgearticleincident: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_leadtoopportunitysalesprocess: DevKit.WebApi.LookupValue;
+		regardingobjectid_knowledgebaserecord: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_letter: DevKit.WebApi.LookupValue;
+		regardingobjectid_lead: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_list: DevKit.WebApi.LookupValue;
+		regardingobjectid_leadtoopportunitysalesprocess: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_listoperation: DevKit.WebApi.LookupValue;
+		regardingobjectid_letter: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_mailbox: DevKit.WebApi.LookupValue;
+		regardingobjectid_list: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_mailmergetemplate: DevKit.WebApi.LookupValue;
+		regardingobjectid_listoperation: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_managedidentity: DevKit.WebApi.LookupValue;
+		regardingobjectid_mailbox: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_marketingformdisplayattributes: DevKit.WebApi.LookupValue;
+		regardingobjectid_mailmergetemplate: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_metric: DevKit.WebApi.LookupValue;
+		regardingobjectid_managedidentity: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdynce_botcontent: DevKit.WebApi.LookupValue;
+		regardingobjectid_marketingformdisplayattributes: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdynsm_marketingsitemap: DevKit.WebApi.LookupValue;
+		regardingobjectid_metric: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdynsm_salessitemap: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdynce_botcontent: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdynsm_servicessitemap: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdynsm_marketingsitemap: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdynsm_settingssitemap: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdynsm_salessitemap: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_3dmodel: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdynsm_servicessitemap: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_accountpricelist: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdynsm_settingssitemap: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_actioncardregarding: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_3dmodel: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_actioncardrolesetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_accountpricelist: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_actual: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_actioncardregarding: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_adaptivecardconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_actioncardrolesetting: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_adminappstate: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_actual: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_agentstatushistory: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_adaptivecardconfiguration: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_agreement: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_adminappstate: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_agreementbookingdate: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agentstatushistory: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_agreementbookingincident: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreement: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_agreementbookingproduct: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingdate: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_agreementbookingservice: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingincident: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_agreementbookingservicetask: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingproduct: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_agreementbookingsetup: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingservice: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_agreementinvoicedate: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingservicetask: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_agreementinvoiceproduct: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingsetup: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_agreementinvoicesetup: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementinvoicedate: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_agreementsubstatus: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementinvoiceproduct: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_aibdataset: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementinvoicesetup: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_aibdatasetfile: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementsubstatus: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_aibdatasetrecord: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_aibdataset: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_aibdatasetscontainer: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_aibdatasetfile: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_aibfile: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_aibdatasetrecord: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_aibfileattacheddata: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_aibdatasetscontainer: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_aiconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_aibfeedbackloop: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_aicontactsuggestion: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_aibfile: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_aifptrainingdocument: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_aibfileattacheddata: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_aimodel: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_aiconfiguration: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_aiodimage: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_aicontactsuggestion: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_aiodlabel: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_aifptrainingdocument: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_aiodtrainingboundingbox: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_aimodel: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_aiodtrainingimage: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_aiodimage: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_aitemplate: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_aiodlabel: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_analysiscomponent: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_aiodtrainingboundingbox: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_analysisjob: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_aiodtrainingimage: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_analysisresult: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_aitemplate: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_analysisresultdetail: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_analysiscomponent: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_analytics: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_analysisjob: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_analyticsadminsettings: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_analysisresult: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_analyticsforcs: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_analysisresultdetail: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_appconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_analytics: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_applicationextension: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_analyticsadminsettings: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_applicationtabtemplate: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_analyticsforcs: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_approval: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_appconfiguration: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_approvalset: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_applicationextension: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_assetcategorytemplateassociation: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_applicationtabtemplate: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_assetsuggestionssetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_approval: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_assettemplateassociation: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_approvalset: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_assignmentconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_assetcategorytemplateassociation: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_assignmentconfigurationstep: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_assetsuggestionssetting: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_assignmentmap: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_assettemplateassociation: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_assignmentrule: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_assignmentconfiguration: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_attribute: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_assignmentconfigurationstep: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_attributevalue: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_assignmentmap: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_authenticationsettings: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_assignmentrule: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_autocapturerule: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_attribute: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_autocapturesettings: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_attributevalue: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_batchjob: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_authenticationsettings: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_bookableresourceassociation: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_autocapturerule: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_bookableresourcebookingquicknote: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_autocapturesettings: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_bookableresourcecapacityprofile: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_batchjob: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_bookingalert: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bookableresourceassociation: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_bookingalertstatus: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bookableresourcebookingquicknote: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_bookingchange: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bookableresourcecapacityprofile: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_bookingjournal: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bookingalert: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_bookingrule: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bookingalertstatus: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_bookingsetupmetadata: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bookingchange: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_bookingtimestamp: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bookingjournal: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_bpf_2c5fe86acc8b414b8322ae571000c799: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bookingrule: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_bpf_477c16f59170487b8b4dc895c5dcd09b: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bookingsetupmetadata: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_bpf_665e73aa18c247d886bfc50499c73b82: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bookingtimestamp: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_bpf_989e9b1857e24af18787d5143b67523b: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bpf_2c5fe86acc8b414b8322ae571000c799: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_bpf_baa0a411a239410cb8bded8b5fdd88e3: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bpf_477c16f59170487b8b4dc895c5dcd09b: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_bpf_d3d97bac8c294105840e99e37a9d1c39: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bpf_665e73aa18c247d886bfc50499c73b82: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_bpf_d8f9dc7f099f44db9d641dd81fbd470d: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bpf_989e9b1857e24af18787d5143b67523b: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_businessclosure: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bpf_baa0a411a239410cb8bded8b5fdd88e3: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_callablecontext: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bpf_d3d97bac8c294105840e99e37a9d1c39: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_cannedmessage: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bpf_d8f9dc7f099f44db9d641dd81fbd470d: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_capacityprofile: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_businessclosure: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_caseenrichment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_callablecontext: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_casesuggestionrequestpayload: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_cannedmessage: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_casetopic: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_capacityprofile: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_casetopicsetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_caseenrichment: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_casetopicsummary: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_casesuggestionrequestpayload: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_casetopic_incident: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_casetopic: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_cdsentityengagementctx: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_casetopicsetting: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_channel: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_casetopicsummary: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_channelcapability: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_casetopic_incident: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_channelprovider: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_cdsentityengagementctx: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_characteristicreqforteammember: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_channel: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_chatansweroption: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_channelcapability: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_chatquestionnaireresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_channelprovider: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_chatquestionnaireresponseitem: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_characteristicreqforteammember: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_chatwidgetlanguage: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_chatansweroption: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_ciprovider: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_chatquestionnaireresponse: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_clientextension: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_chatquestionnaireresponseitem: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_collabgraphresource: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_chatwidgetlanguage: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_configuration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ciprovider: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_consoleapplicationnotificationfield: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_clientextension: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_consoleapplicationnotificationtemplate: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_collabgraphresource: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_consoleapplicationsessiontemplate: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_configuration: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_consoleapplicationtemplate: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_consoleapplicationnotificationfield: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_consoleapplicationtemplateparameter: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_consoleapplicationnotificationtemplate: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_consoleapplicationtype: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_consoleapplicationsessiontemplate: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_consoleappparameterdefinition: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_consoleapplicationtemplate: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_contactpricelist: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_consoleapplicationtemplateparameter: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_contactsuggestionrule: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_consoleapplicationtype: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_contactsuggestionruleset: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_consoleappparameterdefinition: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_contractlinedetailperformance: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_contactpricelist: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_contractlineinvoiceschedule: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_contactsuggestionrule: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_contractlinescheduleofvalue: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_contactsuggestionruleset: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_contractperformance: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_contractlinedetailperformance: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_conversationaction: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_contractlineinvoiceschedule: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_conversationactionlocale: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_contractlinescheduleofvalue: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_conversationdata: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_contractperformance: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_conversationinsight: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_conversationaction: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_conversationsuggestionrequestpayload: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_conversationactionlocale: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_conversationtopic: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_conversationdata: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_conversationtopicsetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_conversationinsight: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_conversationtopicsummary: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_conversationsuggestionrequestpayload: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_conversationtopic_conversation: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_conversationtopic: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_customengagementctx: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_conversationtopicsetting: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_customerasset: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_conversationtopicsummary: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_customerassetattachment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_conversationtopic_conversation: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_customerassetcategory: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_customengagementctx: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_dataanalyticsreport: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_customerasset: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_dataanalyticsreport_csrmanager: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_customerassetattachment: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_dataanalyticsreport_fs: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_customerassetcategory: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_dataanalyticsreport_fspredictrs: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_dataanalyticsreport: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_dataanalyticsreport_fspredictwhd: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_dataanalyticsreport_csrmanager: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_dataanalyticsreport_ksinsights: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_dataanalyticsreport_fs: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_dataanalyticsreport_oc: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_dataanalyticsreport_fspredictrs: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_dataanalyticsreport_ocvoice: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_dataanalyticsreport_fspredictwhd: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_databaseversion: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_dataanalyticsreport_ksinsights: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_dataexport: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_dataanalyticsreport_oc: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_dataflow: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_dataanalyticsreport_ocvoice: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_datainsightsandanalyticsfeature: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_dataanalyticsreport_sutreporting: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_dealmanageraccess: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_databaseversion: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_dealmanagersettings: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_dataexport: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_decisioncontract: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_dataflow: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_decisionruleset: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_dataflowrefreshhistory: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_delegation: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_datainsightsandanalyticsfeature: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_dimension: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_dealmanageraccess: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_dimensionfieldname: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_dealmanagersettings: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_effortpredictionresult: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_decisioncontract: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_entitlementapplication: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_decisionruleset: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_entityconfig: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_delegation: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_entityconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_dimension: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_entitylinkchatconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_dimensionfieldname: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_entityrankingrule: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_duplicatedetectionpluginrun: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_entityroutingconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_duplicateleadmapping: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_estimate: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_effortpredictionresult: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_estimateline: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_entitlementapplication: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_expense: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_entityconfig: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_expensecategory: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_entityconfiguration: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_expensereceipt: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_entitylinkchatconfiguration: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_extendedusersetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_entityrankingrule: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_facebookengagementctx: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_entityrefreshhistory: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_fact: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_entityroutingconfiguration: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_federatedarticle: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_estimate: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_federatedarticleincident: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_estimateline: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_fieldcomputation: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_expense: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_fieldservicepricelistitem: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_expensecategory: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_fieldservicesetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_expensereceipt: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_fieldserviceslaconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_extendedusersetting: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_fieldservicesystemjob: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_facebookengagementctx: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_findworkevent: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_fact: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_flowcardtype: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_federatedarticle: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_forecastconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_federatedarticleincident: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_forecastdefinition: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_fieldcomputation: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_forecastinstance: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_fieldservicepricelistitem: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_forecastrecurrence: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_fieldservicesetting: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_functionallocation: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_fieldserviceslaconfiguration: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_gdprdata: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_fieldservicesystemjob: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_geofence: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_findworkevent: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_geofenceevent: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_flowcardtype: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_geofencingsettings: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_forecastconfiguration: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_geolocationsettings: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_forecastdefinition: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_geolocationtracking: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_forecastinstance: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_helppage: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_forecastrecurrence: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_icebreakersconfig: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_functionallocation: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_iermlmodel: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_gdprdata: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_iermltraining: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_geofence: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_incidenttype: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_geofenceevent: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_incidenttypecharacteristic: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_geofencingsettings: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_incidenttypeproduct: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_geolocationsettings: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_incidenttyperecommendationresult: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_geolocationtracking: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_incidenttyperecommendationrunhistory: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_helppage: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_incidenttyperesolution: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_icebreakersconfig: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_incidenttypeservice: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_iermlmodel: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_incidenttypeservicetask: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_iermltraining: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_incidenttypessetup: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_incidenttype: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_incidenttype_requirementgroup: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_incidenttypecharacteristic: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_inspection: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_incidenttypeproduct: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_inspectionattachment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_incidenttyperecommendationresult: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_inspectiondefinition: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_incidenttyperecommendationrunhistory: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_inspectioninstance: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_incidenttyperesolution: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_inspectionresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_incidenttypeservice: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_integrationjob: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_incidenttypeservicetask: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_integrationjobdetail: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_incidenttypessetup: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_inventoryadjustment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_incidenttype_requirementgroup: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_inventoryadjustmentproduct: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_inspection: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_inventoryjournal: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_inspectionattachment: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_inventorytransfer: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_inspectiondefinition: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_invoicefrequency: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_inspectioninstance: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_invoicefrequencydetail: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_inspectionresponse: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_invoicelinetransaction: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_integrationjob: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_iotalert: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_integrationjobdetail: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_iotdevice: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_inventoryadjustment: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_iotdevicecategory: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_inventoryadjustmentproduct: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_iotdevicecommand: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_inventoryjournal: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_iotdevicecommanddefinition: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_inventorytransfer: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_iotdevicedatahistory: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_invoicefrequency: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_iotdeviceproperty: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_invoicefrequencydetail: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_iotdeviceregistrationhistory: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_invoicelinetransaction: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_iotdevicevisualizationconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_iotalert: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_iotfieldmapping: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_iotdevice: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_iotpropertydefinition: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_iotdevicecategory: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_iotprovider: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_iotdevicecommand: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_iotproviderinstance: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_iotdevicecommanddefinition: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_iotsettings: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_iotdevicedatahistory: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_iottocaseprocess: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_iotdeviceproperty: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_journal: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_iotdeviceregistrationhistory: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_journalline: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_iotdevicevisualizationconfiguration: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_kalanguagesetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_iotfieldmapping: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_kbattachment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_iotpropertydefinition: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_kbenrichment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_iotprovider: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_kbkeywordsdescsuggestionsetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_iotproviderinstance: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_kmfederatedsearchconfig: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_iotsettings: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_kmpersonalizationsetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_iottocaseprocess: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_knowledgearticleimage: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_journal: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_knowledgearticletemplate: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_journalline: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_knowledgeinteractioninsight: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_kalanguagesetting: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_knowledgepersonalfilter: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_kbattachment: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_knowledgesearchfilter: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_kbenrichment: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_knowledgesearchinsight: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_kbkeywordsdescsuggestionsetting: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_kpieventdata: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_kmfederatedsearchconfig: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_kpieventdefinition: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_kmpersonalizationsetting: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_leadmodelconfig: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_knowledgearticleimage: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_lineengagementctx: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_knowledgearticletemplate: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_livechatconfig: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_knowledgeinteractioninsight: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_livechatengagementctx: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_knowledgemanagementsetting: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_livechatwidgetlocation: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_knowledgepersonalfilter: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_liveconversation: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_knowledgesearchfilter: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_liveworkitemevent: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_knowledgesearchinsight: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_liveworkstream: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_kpieventdata: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_liveworkstreamcapacityprofile: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_kpieventdefinition: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_localizedsurveyquestion: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_leadhygienesetting: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_macrosession: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_leadmodelconfig: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_maskingrule: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_lineengagementctx: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_masterentityroutingconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_livechatconfig: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_migrationtracker: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_livechatengagementctx: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_mlresultcache: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_livechatwidgetlocation: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_modelpreviewstatus: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_liveconversation: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_msteamssetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_liveworkitemevent: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_msteamssettingsv2: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_liveworkstream: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_notesanalysisconfig: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_liveworkstreamcapacityprofile: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_notificationfield: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_localizedsurveyquestion: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_notificationtemplate: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_macrosession: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_ocautoblockrule: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_maskingrule: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_ocbotchannelregistration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_masterentityroutingconfiguration: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_occarrier: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_migrationtracker: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_occhannelconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_mlresultcache: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_occhannelstateconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_modelpreviewstatus: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_occommunicationprovidersetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_msteamssetting: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_occommunicationprovidersettingentry: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_msteamssettingsv2: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_occustommessagingchannel: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_notesanalysisconfig: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_ocfbapplication: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_notificationfield: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_ocfbpage: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_notificationtemplate: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_ocflaggedspam: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocautoblockrule: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_oclanguage: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocbotchannelregistration: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_oclinechannelconfig: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_occarrier: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_ocliveworkitem: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_occhannelapiconversationprivilege: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_ocliveworkitemcapacityprofile: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_occhannelapimessageprivilege: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_ocliveworkitemcharacteristic: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_occhannelapimethodmapping: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_ocliveworkitemcontextitem: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_occhannelconfiguration: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_ocliveworkitemparticipant: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_occhannelstateconfiguration: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_ocliveworkitemsentiment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_occommunicationprovidersetting: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_ocliveworkstreamcontextvariable: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_occommunicationprovidersettingentry: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_oclocalizationdata: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_occustommessagingchannel: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_ocoutboundconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocfbapplication: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_ocoutboundmessage: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocfbpage: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_ocphonenumber: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocflaggedspam: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_ocprovisioningstate: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_oclanguage: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_ocrecording: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_oclinechannelconfig: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_ocrequest: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocliveworkitem: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_ocruleitem: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocliveworkitemcapacityprofile: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_ocsentimentdailytopic: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocliveworkitemcharacteristic: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_ocsentimentdailytopickeyword: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocliveworkitemcontextitem: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_ocsentimentdailytopictrending: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocliveworkitemparticipant: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_ocsession: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocliveworkitemsentiment: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_ocsessioncharacteristic: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocliveworkstreamcontextvariable: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_ocsessionparticipantevent: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_oclocalizationdata: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_ocsessionsentiment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocoutboundconfiguration: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_ocsimltraining: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocoutboundmessage: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_ocsitdimportconfig: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocphonenumber: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_ocsitdskill: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocprovisioningstate: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_ocsitrainingdata: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocrecording: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_ocskillidentmlmodel: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocrequest: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_ocsmschannelsetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocruleitem: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_ocsystemmessage: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocsentimentdailytopic: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_octag: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocsentimentdailytopickeyword: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_octeamschannelconfig: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocsentimentdailytopictrending: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_octwitterapplication: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocsession: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_octwitterhandle: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocsessioncharacteristic: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_ocwechatchannelconfig: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocsessionparticipantevent: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_ocwhatsappchannelaccount: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocsessionsentiment: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_ocwhatsappchannelnumber: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocsimltraining: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_oc_geolocationprovider: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocsitdimportconfig: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_omnichannelconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocsitdskill: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_omnichannelpersonalization: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocsitrainingdata: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_omnichannelqueue: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocskillidentmlmodel: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_omnichannelsyncconfig: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocsmschannelsetting: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_operatinghour: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocsystemmessage: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_opportunitylineresourcecategory: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_octag: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_opportunitylinetransaction: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_octeamschannelconfig: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_opportunitylinetransactioncategory: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_octwitterapplication: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_opportunitylinetransactionclassificatio: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_octwitterhandle: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_opportunitymodelconfig: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocwechatchannelconfig: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_opportunitypricelist: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocwhatsappchannelaccount: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_orderinvoicingdate: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_ocwhatsappchannelnumber: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_orderinvoicingproduct: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_oc_geolocationprovider: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_orderinvoicingsetup: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_omnichannelconfiguration: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_orderinvoicingsetupdate: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_omnichannelpersonalization: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_orderlineresourcecategory: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_omnichannelqueue: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_orderlinetransaction: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_omnichannelsyncconfig: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_orderlinetransactioncategory: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_operatinghour: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_orderlinetransactionclassification: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_opportunitylineresourcecategory: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_orderpricelist: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_opportunitylinetransaction: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_organizationalunit: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_opportunitylinetransactioncategory: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_overflowactionconfig: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_opportunitylinetransactionclassificatio: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_paneconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_opportunitymodelconfig: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_panetabconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_opportunitypricelist: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_panetoolconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_orderinvoicingdate: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_payment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_orderinvoicingproduct: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_paymentdetail: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_orderinvoicingsetup: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_paymentmethod: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_orderinvoicingsetupdate: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_paymentterm: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_orderlineresourcecategory: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_personalmessage: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_orderlinetransaction: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_personalsoundsetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_orderlinetransactioncategory: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_personasecurityrolemapping: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_orderlinetransactionclassification: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_playbookactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_orderpricelist: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_playbookactivityattribute: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_organizationalunit: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_playbookcategory: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_overflowactionconfig: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_playbookinstance: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_paneconfiguration: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_playbooktemplate: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_panetabconfiguration: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_pminferredtask: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_panetoolconfiguration: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_pmrecording: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_payment: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_postalbum: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_paymentdetail: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_postalcode: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_paymentmethod: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_postconfig: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_paymentterm: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_postruleconfig: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_personalmessage: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_predictivemodelscore: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_personalsoundsetting: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_predictivescore: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_personasecurityrolemapping: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_predictworkhourdurationsetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_playbookactivity: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_presence: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_playbookactivityattribute: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_priority: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_playbookcategory: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_problematicasset: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_playbookinstance: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_problematicassetfeedback: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_playbooktemplate: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_processnotes: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_pminferredtask: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_productinventory: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_pmrecording: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_productivityactioninputparameter: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_postalbum: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_productivityactionoutputparameter: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_postalcode: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_productivityagentscript: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_postconfig: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_productivityagentscriptstep: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_postruleconfig: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_productivitymacroactiontemplate: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_predictivemodelscore: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_productivitymacroconnector: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_predictivescore: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_productivitymacrosolutionconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_predictworkhourdurationsetting: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_productivityparameterdefinition: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_presence: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_project: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_priority: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_projectapproval: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_problematicasset: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_projectparameter: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_problematicassetfeedback: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_projectparameterpricelist: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_processnotes: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_projectpricelist: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_productinventory: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_projecttask: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_productivityactioninputparameter: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_projecttaskdependency: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_productivityactionoutputparameter: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_projecttaskstatususer: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_productivityagentscript: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_projectteam: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_productivityagentscriptstep: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_projectteammembersignup: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_productivitymacroactiontemplate: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_projecttransactioncategory: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_productivitymacroconnector: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_property: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_productivitymacrosolutionconfiguration: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_propertyassetassociation: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_productivityparameterdefinition: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_propertylog: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_project: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_propertytemplateassociation: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_projectapproval: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_provider: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_projectparameter: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_purchaseorder: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_projectparameterpricelist: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_purchaseorderbill: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_projectpricelist: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_purchaseorderproduct: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_projecttask: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_purchaseorderreceipt: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_projecttaskdependency: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_purchaseorderreceiptproduct: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_projecttaskstatususer: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_purchaseordersubstatus: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_projectteam: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_questionsequence: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_projectteammembersignup: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_quotebookingincident: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_projecttransactioncategory: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_quotebookingproduct: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_property: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_quotebookingservice: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_propertyassetassociation: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_quotebookingservicetask: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_propertylog: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_quotebookingsetup: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_propertytemplateassociation: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_quoteinvoicingproduct: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_provider: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_quoteinvoicingsetup: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseorder: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_quotelineanalyticsbreakdown: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseorderbill: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_quotelineinvoiceschedule: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseorderproduct: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_quotelineresourcecategory: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseorderreceipt: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_quotelinescheduleofvalue: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseorderreceiptproduct: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_quotelinetransaction: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseordersubstatus: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_quotelinetransactioncategory: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_questionsequence: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_quotelinetransactionclassification: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotebookingincident: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_quotepricelist: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotebookingproduct: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_recording: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotebookingservice: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_relationshipinsightsunifiedconfig: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotebookingservicetask: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_requirementcharacteristic: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotebookingsetup: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_requirementdependency: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quoteinvoicingproduct: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_requirementgroup: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quoteinvoicingsetup: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_requirementorganizationunit: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotelineanalyticsbreakdown: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_requirementrelationship: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotelineinvoiceschedule: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_requirementresourcecategory: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotelineresourcecategory: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_requirementresourcepreference: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotelinescheduleofvalue: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_requirementstatus: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotelinetransaction: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_resolution: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotelinetransactioncategory: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_resourceassignment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotelinetransactionclassification: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_resourceassignmentdetail: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotepricelist: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_resourcecategorymarkuppricelevel: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_recording: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_resourcecategorypricelevel: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_relationshipinsightsunifiedconfig: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_resourcepaytype: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_requirementcharacteristic: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_resourcerequest: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_requirementdependency: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_resourcerequirement: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_requirementgroup: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_resourcerequirementdetail: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_requirementorganizationunit: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_resourceterritory: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_requirementrelationship: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_richtextfile: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_requirementresourcecategory: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_rma: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_requirementresourcepreference: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_rmaproduct: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_requirementstatus: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_rmareceipt: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_resolution: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_rmareceiptproduct: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_resourceassignment: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_rmasubstatus: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_resourceassignmentdetail: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_rolecompetencyrequirement: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_resourcecategorymarkuppricelevel: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_roleutilization: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_resourcecategorypricelevel: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_routingconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_resourcepaytype: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_routingconfigurationstep: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_resourcerequest: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_routingrequest: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_resourcerequirement: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_routingrulesetsetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_resourcerequirementdetail: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_rtv: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_resourceterritory: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_rtvproduct: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_richtextfile: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_rtvsubstatus: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rma: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_rulesetdependencymapping: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rmaproduct: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_salesaccelerationsettings: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rmareceipt: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_salesassignmentsetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rmareceiptproduct: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_salesinsightssettings: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rmasubstatus: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_salesroutingrun: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rolecompetencyrequirement: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_salestag: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_roleutilization: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_scenario: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_routingconfiguration: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_scheduleboardsetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_routingconfigurationstep: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_schedulingfeatureflag: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_routingrequest: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_schedulingparameter: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_routingrulesetsetting: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_searchconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rtv: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_segment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rtvproduct: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_segmentcatalogue: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rtvsubstatus: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_sentimentanalysis: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rulesetdependencymapping: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_sequence: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_salesaccelerationsettings: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_sequencestat: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_salesassignmentsetting: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_sequencetarget: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_salesinsightssettings: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_sequencetargetstep: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_salesroutingrun: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_serviceconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_salessuggestion: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_servicetasktype: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_salestag: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_sessiondata: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_scenario: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_sessionevent: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_scheduleboardsetting: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_sessionparticipant: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_schedulingfeatureflag: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_sessionparticipantdata: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_schedulingparameter: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_sessiontemplate: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_searchconfiguration: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_shipvia: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_segment: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_siconfig: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_segmentcatalogue: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_sikeyvalueconfig: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_sentimentanalysis: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_skillattachmentruleitem: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_sequence: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_skillattachmenttarget: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_sequencestat: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_slakpi: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_sequencetarget: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_smartassistconfig: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_sequencetargetstep: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_smsengagementctx: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_sequencetemplate: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_smsnumber: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_serviceconfiguration: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_solutionhealthrule: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_servicetasktype: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_solutionhealthruleargument: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_sessiondata: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_solutionhealthruleset: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_sessionevent: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_soundfile: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_sessionparticipant: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_soundnotificationsetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_sessionparticipantdata: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_suggestioninteraction: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_sessiontemplate: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_suggestionrequestpayload: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_shipvia: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_suggestionsmodelsummary: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_siconfig: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_suggestionssetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_sikeyvalueconfig: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_surveyquestion: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_skillattachmentruleitem: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_systemuserschedulersetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_skillattachmenttarget: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_taxcode: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_slakpi: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_taxcodedetail: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_smartassistconfig: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_teamschannelengagementctx: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_smsengagementctx: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_teamschatassociation: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_smsnumber: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_teamschatsuggestion: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_solutionhealthrule: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_teamscollaboration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_solutionhealthruleargument: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_teamsdialeradminsettings: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_solutionhealthruleset: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_teamsengagementctx: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_soundfile: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_templateforproperties: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_soundnotificationsetting: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_templateparameter: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_suggestioninteraction: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_templatetags: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_suggestionrequestpayload: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_timeentry: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_suggestionsmodelsummary: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_timeentrysetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_suggestionssetting: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_timegroup: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_surveyquestion: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_timegroupdetail: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_systemuserschedulersetting: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_timeoffcalendar: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_taxcode: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_timeoffrequest: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_taxcodedetail: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_tour: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_teamschannelengagementctx: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_transactioncategory: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_teamschatassociation: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_transactioncategoryclassification: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_teamschatsuggestion: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_transactioncategoryhierarchyelement: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_teamscollaboration: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_transactioncategorypricelevel: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_teamsdialeradminsettings: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_transactionconnection: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_teamsengagementctx: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_transactionorigin: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_templateforproperties: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_transactiontype: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_templateparameter: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_transcript: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_templatetags: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_twitterengagementctx: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_timeentry: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_unifiedroutingdiagnostic: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_timeentrysetting: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_unifiedroutingrun: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_timegroup: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_unifiedroutingsetuptracker: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_timegroupdetail: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_uniquenumber: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_timeoffcalendar: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_untrackedappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_timeoffrequest: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_upgraderun: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_tour: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_upgradestep: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_transactioncategory: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_upgradeversion: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_transactioncategoryclassification: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_urnotificationtemplate: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_transactioncategoryhierarchyelement: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_urnotificationtemplatemapping: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_transactioncategorypricelevel: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_usersetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_transactionconnection: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_userworkhistory: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_transactionorigin: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_visitorjourney: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_transactiontype: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_wallsavedquery: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_transcript: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_wallsavedqueryusersettings: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_twitterengagementctx: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_warehouse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_unifiedroutingdiagnostic: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_wechatengagementctx: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_unifiedroutingrun: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_whatsappengagementctx: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_unifiedroutingsetuptracker: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_workhourtemplate: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_uniquenumber: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_workorder: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_untrackedappointment: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_workordercharacteristic: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_upgraderun: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_workorderdetailsgenerationqueue: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_upgradestep: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_workorderincident: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_upgradeversion: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_workorderproduct: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_urnotificationtemplate: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_workorderresolution: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_urnotificationtemplatemapping: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_workorderresourcerestriction: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_usagemetric: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_workorderservice: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_usersetting: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_workorderservicetask: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_userworkhistory: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_workordersubstatus: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_visitorjourney: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_workordertype: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_wallsavedquery: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_workqueuestate: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_wallsavedqueryusersettings: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyn_workqueueusersetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_warehouse: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyusd_actioncallworkflow: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_wechatengagementctx: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyusd_agentscriptaction: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_whatsappengagementctx: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyusd_agentscripttaskcategory: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workhourtemplate: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyusd_answer: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_worklistviewconfiguration: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyusd_auditanddiagnosticssetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorder: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyusd_configuration: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workordercharacteristic: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyusd_customizationfiles: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderdetailsgenerationqueue: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyusd_entityassignment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderincident: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyusd_entitysearch: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderproduct: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyusd_form: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderresolution: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyusd_languagemodule: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderresourcerestriction: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyusd_scriptlet: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderservice: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyusd_scripttasktrigger: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderservicetask: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyusd_search: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workordersubstatus: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyusd_sessioninformation: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workordertype: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyusd_sessiontransfer: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workqueuestate: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyusd_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workqueueusersetting: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyusd_toolbarbutton: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyusd_actioncallworkflow: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyusd_toolbarstrip: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyusd_agentscriptaction: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyusd_tracesourcesetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyusd_agentscripttaskcategory: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyusd_ucisettings: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyusd_answer: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyusd_uiievent: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyusd_auditanddiagnosticssetting: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyusd_usersettings: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyusd_configuration: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msdyusd_windowroute: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyusd_customizationfiles: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msfp_alert: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyusd_entityassignment: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msfp_alertrule: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyusd_entitysearch: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msfp_emailtemplate: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyusd_form: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msfp_fileresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyusd_languagemodule: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msfp_localizedemailtemplate: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyusd_scriptlet: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msfp_project: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyusd_scripttasktrigger: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msfp_question: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyusd_search: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msfp_questionresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyusd_sessioninformation: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msfp_satisfactionmetric: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyusd_sessiontransfer: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msfp_survey: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyusd_task: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msfp_surveyinvite: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyusd_toolbarbutton: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msfp_surveyreminder: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyusd_toolbarstrip: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyusd_tracesourcesetting: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_msfp_unsubscribedrecipient: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyusd_ucisettings: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_newprocess: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyusd_uiievent: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_opportunity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyusd_usersettings: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_opportunityproduct: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyusd_windowroute: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_opportunitysalesprocess: DevKit.WebApi.LookupValue;
+		regardingobjectid_msfp_alert: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_organizationdatasyncsubscription: DevKit.WebApi.LookupValue;
+		regardingobjectid_msfp_alertrule: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_organizationdatasyncsubscriptionentity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msfp_emailtemplate: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_organizationsetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msfp_fileresponse: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_package: DevKit.WebApi.LookupValue;
+		regardingobjectid_msfp_localizedemailtemplate: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_pdfsetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msfp_project: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_phonecall: DevKit.WebApi.LookupValue;
+		regardingobjectid_msfp_question: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_phonetocaseprocess: DevKit.WebApi.LookupValue;
+		regardingobjectid_msfp_questionresponse: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_position: DevKit.WebApi.LookupValue;
+		regardingobjectid_msfp_satisfactionmetric: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_pricelevel: DevKit.WebApi.LookupValue;
+		regardingobjectid_msfp_survey: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_privilegesremovalsetting: DevKit.WebApi.LookupValue;
+		regardingobjectid_msfp_surveyinvite: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_processstageparameter: DevKit.WebApi.LookupValue;
+		regardingobjectid_msfp_surveyreminder: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_product: DevKit.WebApi.LookupValue;
+		regardingobjectid_msfp_surveyresponse: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_productassociation: DevKit.WebApi.LookupValue;
+		regardingobjectid_msfp_unsubscribedrecipient: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_productpricelevel: DevKit.WebApi.LookupValue;
+		regardingobjectid_newprocess: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_productsubstitute: DevKit.WebApi.LookupValue;
+		regardingobjectid_opportunity: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_provisionlanguageforuser: DevKit.WebApi.LookupValue;
+		regardingobjectid_opportunityproduct: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_queue: DevKit.WebApi.LookupValue;
+		regardingobjectid_opportunitysalesprocess: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_queueitem: DevKit.WebApi.LookupValue;
+		regardingobjectid_organizationdatasyncstate: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_quote: DevKit.WebApi.LookupValue;
+		regardingobjectid_organizationdatasyncsubscription: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_quotedetail: DevKit.WebApi.LookupValue;
+		regardingobjectid_organizationdatasyncsubscriptionentity: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_ratingmodel: DevKit.WebApi.LookupValue;
+		regardingobjectid_organizationsetting: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_ratingvalue: DevKit.WebApi.LookupValue;
+		regardingobjectid_package: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		regardingobjectid_pdfsetting: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_relationshiprole: DevKit.WebApi.LookupValue;
+		regardingobjectid_phonecall: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_report: DevKit.WebApi.LookupValue;
+		regardingobjectid_phonetocaseprocess: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_revokeinheritedaccessrecordstracker: DevKit.WebApi.LookupValue;
+		regardingobjectid_position: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_rollupfield: DevKit.WebApi.LookupValue;
+		regardingobjectid_pricelevel: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_routingrule: DevKit.WebApi.LookupValue;
+		regardingobjectid_privilegesremovalsetting: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_routingruleitem: DevKit.WebApi.LookupValue;
+		regardingobjectid_processstageparameter: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_salesliterature: DevKit.WebApi.LookupValue;
+		regardingobjectid_product: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_salesliteratureitem: DevKit.WebApi.LookupValue;
+		regardingobjectid_productassociation: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_salesorder: DevKit.WebApi.LookupValue;
+		regardingobjectid_productpricelevel: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_salesorderdetail: DevKit.WebApi.LookupValue;
+		regardingobjectid_productsubstitute: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_service: DevKit.WebApi.LookupValue;
+		regardingobjectid_provisionlanguageforuser: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_queue: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_serviceplan: DevKit.WebApi.LookupValue;
+		regardingobjectid_queueitem: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_serviceplanmapping: DevKit.WebApi.LookupValue;
+		regardingobjectid_quote: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_settingdefinition: DevKit.WebApi.LookupValue;
+		regardingobjectid_quotedetail: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_sharepointdocumentlocation: DevKit.WebApi.LookupValue;
+		regardingobjectid_ratingmodel: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_sharepointsite: DevKit.WebApi.LookupValue;
+		regardingobjectid_ratingvalue: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_site: DevKit.WebApi.LookupValue;
+		regardingobjectid_recurringappointmentmaster: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_sla: DevKit.WebApi.LookupValue;
+		regardingobjectid_relationshiprole: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_report: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_socialprofile: DevKit.WebApi.LookupValue;
+		regardingobjectid_revokeinheritedaccessrecordstracker: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_solutioncomponentattributeconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_rollupfield: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_solutioncomponentbatchconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_routingrule: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_solutioncomponentconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_routingruleitem: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_solutioncomponentrelationshipconfiguration: DevKit.WebApi.LookupValue;
+		regardingobjectid_salesliterature: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_stagesolutionupload: DevKit.WebApi.LookupValue;
+		regardingobjectid_salesliteratureitem: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_subject: DevKit.WebApi.LookupValue;
+		regardingobjectid_salesorder: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_systemuser: DevKit.WebApi.LookupValue;
+		regardingobjectid_salesorderdetail: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_systemuserauthorizationchangetracker: DevKit.WebApi.LookupValue;
+		regardingobjectid_service: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_task: DevKit.WebApi.LookupValue;
+		regardingobjectid_serviceappointment: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_team: DevKit.WebApi.LookupValue;
+		regardingobjectid_serviceplan: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_teammobileofflineprofilemembership: DevKit.WebApi.LookupValue;
+		regardingobjectid_serviceplanmapping: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_template: DevKit.WebApi.LookupValue;
+		regardingobjectid_settingdefinition: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_territory: DevKit.WebApi.LookupValue;
+		regardingobjectid_sharedlinksetting: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_theme: DevKit.WebApi.LookupValue;
+		regardingobjectid_sharepointdocumentlocation: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_transactioncurrency: DevKit.WebApi.LookupValue;
+		regardingobjectid_sharepointsite: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_translationprocess: DevKit.WebApi.LookupValue;
+		regardingobjectid_site: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_uii_action: DevKit.WebApi.LookupValue;
+		regardingobjectid_sla: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_uii_audit: DevKit.WebApi.LookupValue;
+		regardingobjectid_socialactivity: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_uii_context: DevKit.WebApi.LookupValue;
+		regardingobjectid_socialprofile: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_uii_hostedapplication: DevKit.WebApi.LookupValue;
+		regardingobjectid_solutioncomponentattributeconfiguration: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_uii_nonhostedapplication: DevKit.WebApi.LookupValue;
+		regardingobjectid_solutioncomponentbatchconfiguration: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_uii_option: DevKit.WebApi.LookupValue;
+		regardingobjectid_solutioncomponentconfiguration: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_uii_savedsession: DevKit.WebApi.LookupValue;
+		regardingobjectid_solutioncomponentrelationshipconfiguration: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_uii_sessiontransfer: DevKit.WebApi.LookupValue;
+		regardingobjectid_stagesolutionupload: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_uii_workflow: DevKit.WebApi.LookupValue;
+		regardingobjectid_subject: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_uii_workflowstep: DevKit.WebApi.LookupValue;
+		regardingobjectid_synapsedatabase: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_uii_workflow_workflowstep_mapping: DevKit.WebApi.LookupValue;
+		regardingobjectid_synapselinkexternaltablestate: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_usermapping: DevKit.WebApi.LookupValue;
+		regardingobjectid_synapselinkprofile: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_usermobileofflineprofilemembership: DevKit.WebApi.LookupValue;
+		regardingobjectid_synapselinkprofileentity: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_virtualentitymetadata: DevKit.WebApi.LookupValue;
+		regardingobjectid_synapselinkprofileentitystate: string;
 		/** Unique identifier of the object with which the dialog session is associated. */
-		regardingobjectid_workflowbinary: DevKit.WebApi.LookupValue;
+		regardingobjectid_synapselinkschedule: string;
+		/** Unique identifier of the object with which the dialog session is associated. */
+		regardingobjectid_systemuser: string;
+		/** Unique identifier of the object with which the dialog session is associated. */
+		regardingobjectid_systemuserauthorizationchangetracker: string;
+		/** Unique identifier of the object with which the dialog session is associated. */
+		regardingobjectid_task: string;
+		/** Unique identifier of the object with which the dialog session is associated. */
+		regardingobjectid_team: string;
+		/** Unique identifier of the object with which the dialog session is associated. */
+		regardingobjectid_teammobileofflineprofilemembership: string;
+		/** Unique identifier of the object with which the dialog session is associated. */
+		regardingobjectid_template: string;
+		/** Unique identifier of the object with which the dialog session is associated. */
+		regardingobjectid_territory: string;
+		/** Unique identifier of the object with which the dialog session is associated. */
+		regardingobjectid_theme: string;
+		/** Unique identifier of the object with which the dialog session is associated. */
+		regardingobjectid_transactioncurrency: string;
+		/** Unique identifier of the object with which the dialog session is associated. */
+		regardingobjectid_translationprocess: string;
+		/** Unique identifier of the object with which the dialog session is associated. */
+		regardingobjectid_uii_action: string;
+		/** Unique identifier of the object with which the dialog session is associated. */
+		regardingobjectid_uii_audit: string;
+		/** Unique identifier of the object with which the dialog session is associated. */
+		regardingobjectid_uii_context: string;
+		/** Unique identifier of the object with which the dialog session is associated. */
+		regardingobjectid_uii_hostedapplication: string;
+		/** Unique identifier of the object with which the dialog session is associated. */
+		regardingobjectid_uii_nonhostedapplication: string;
+		/** Unique identifier of the object with which the dialog session is associated. */
+		regardingobjectid_uii_option: string;
+		/** Unique identifier of the object with which the dialog session is associated. */
+		regardingobjectid_uii_savedsession: string;
+		/** Unique identifier of the object with which the dialog session is associated. */
+		regardingobjectid_uii_sessiontransfer: string;
+		/** Unique identifier of the object with which the dialog session is associated. */
+		regardingobjectid_uii_workflow: string;
+		/** Unique identifier of the object with which the dialog session is associated. */
+		regardingobjectid_uii_workflowstep: string;
+		/** Unique identifier of the object with which the dialog session is associated. */
+		regardingobjectid_uii_workflow_workflowstep_mapping: string;
+		/** Unique identifier of the object with which the dialog session is associated. */
+		regardingobjectid_usermapping: string;
+		/** Unique identifier of the object with which the dialog session is associated. */
+		regardingobjectid_usermobileofflineprofilemembership: string;
+		/** Unique identifier of the object with which the dialog session is associated. */
+		regardingobjectid_virtualentitymetadata: string;
+		/** Unique identifier of the object with which the dialog session is associated. */
+		regardingobjectid_workflowbinary: string;
 		/** Unique identifier of the user who started the dialog session. */
-		StartedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly StartedBy: string;
 		/** Date and time when the dialog session was started. */
-		StartedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		StartedOn_UtcDateAndTime: Date;
 		/** Status of the dialog session. */
-		StateCode: DevKit.WebApi.OptionSetValue;
+		StateCode: OptionSet.ProcessSession.StateCode;
 		/** Reason for the status of the dialog session. */
-		StatusCode: DevKit.WebApi.OptionSetValue;
+		StatusCode: OptionSet.ProcessSession.StatusCode;
 		/** Name of the dialog step. */
-		StepName: DevKit.WebApi.StringValue;
+		StepName: string;
 	}
 }
 declare namespace OptionSet {
@@ -1779,4 +1831,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

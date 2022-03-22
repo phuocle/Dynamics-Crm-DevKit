@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,39 +30,39 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Allowed Sync Directions */
-		AllowedSyncDirection: DevKit.WebApi.IntegerValue;
+		AllowedSyncDirection: number;
 		/** CRM Attribute Name. */
-		AttributeCRMName: DevKit.WebApi.StringValue;
+		AttributeCRMName: string;
 		/** Exchange Attribute Name. */
-		AttributeExchangeName: DevKit.WebApi.StringValue;
+		AttributeExchangeName: string;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.SyncAttributeMapping.ComponentState;
 		/** Computed Properties. */
-		ComputedProperties: DevKit.WebApi.StringValue;
+		ComputedProperties: string;
 		/** Default Sync Direction */
-		DefaultSyncDirection: DevKit.WebApi.OptionSetValue;
+		DefaultSyncDirection: OptionSet.SyncAttributeMapping.DefaultSyncDirection;
 		/** Indicates whether the mapping is a computed property */
-		IsComputed: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsComputed: boolean;
 		/** Indicates whether the solution component is part of a managed solution. */
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsManaged: boolean;
 		/** Attribute Name. */
-		MappingName: DevKit.WebApi.StringValue;
+		MappingName: string;
 		/** For internal use only. */
-		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly OverwriteTime_UtcDateOnly: Date;
 		/** Parent Sync-Attribute Mapping to which this mapping belongs */
-		ParentSyncAttributeMappingId: DevKit.WebApi.LookupValue;
+		ParentSyncAttributeMappingId: string;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** For internal use only. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SupportingSolutionId: string;
 		/** Unique identifier of the Sync-Attribute Mapping. */
-		SyncAttributeMappingId: DevKit.WebApi.GuidValue;
+		SyncAttributeMappingId: string;
 		/** For internal use only. */
-		SyncAttributeMappingIdUnique: DevKit.WebApi.GuidValueReadonly;
+		readonly SyncAttributeMappingIdUnique: string;
 		/** Unique identifier of profile to which this mapping belongs. */
-		SyncAttributeMappingProfileId: DevKit.WebApi.LookupValue;
+		SyncAttributeMappingProfileId: string;
 		/** Sync Direction */
-		SyncDirection: DevKit.WebApi.OptionSetValue;
+		SyncDirection: OptionSet.SyncAttributeMapping.SyncDirection;
 	}
 }
 declare namespace OptionSet {
@@ -113,4 +115,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

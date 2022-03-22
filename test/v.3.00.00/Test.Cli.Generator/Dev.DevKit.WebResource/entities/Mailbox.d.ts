@@ -103,8 +103,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -112,206 +114,206 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Choose the delivery method for the mailbox for appointments, contacts, and tasks. */
-		ACTDeliveryMethod: DevKit.WebApi.OptionSetValue;
+		ACTDeliveryMethod: OptionSet.Mailbox.ACTDeliveryMethod;
 		/** Status of the Appointments, Contacts, and Tasks. */
-		ACTStatus: DevKit.WebApi.OptionSetValue;
+		ACTStatus: OptionSet.Mailbox.ACTStatus;
 		/** Choose whether to allow the email connector to use credentials. */
-		AllowEmailConnectorToUseCredentials: DevKit.WebApi.BooleanValue;
+		AllowEmailConnectorToUseCredentials: boolean;
 		/** Mailbox Total Duration in Average */
-		AverageTotalDuration: DevKit.WebApi.IntegerValueReadonly;
+		readonly AverageTotalDuration: number;
 		/** Shows who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Type the email address of the mailbox. */
-		EmailAddress: DevKit.WebApi.StringValue;
+		EmailAddress: string;
 		/** Shows the status of the email address. */
-		EmailRouterAccessApproval: DevKit.WebApi.OptionSetValue;
+		EmailRouterAccessApproval: OptionSet.Mailbox.EmailRouterAccessApproval;
 		/** Select the email server profile of the mailbox. */
-		EmailServerProfile: DevKit.WebApi.LookupValue;
+		EmailServerProfile: string;
 		/** Indicates whether the mailbox is enabled for Appointments, Contacts, and Tasks. */
-		EnabledForACT: DevKit.WebApi.BooleanValue;
+		EnabledForACT: boolean;
 		/** Choose whether the mailbox is enabled for receiving email. */
-		EnabledForIncomingEmail: DevKit.WebApi.BooleanValue;
+		EnabledForIncomingEmail: boolean;
 		/** Choose whether the mailbox is enabled for sending email. */
-		EnabledForOutgoingEmail: DevKit.WebApi.BooleanValue;
+		EnabledForOutgoingEmail: boolean;
 		/** The default image for the entity. */
-		EntityImage: DevKit.WebApi.StringValue;
-		EntityImage_Timestamp: DevKit.WebApi.BigIntValueReadonly;
-		EntityImage_URL: DevKit.WebApi.StringValueReadonly;
+		EntityImage: string;
+		EntityImage_Timestamp: number;
+		EntityImage_URL: string;
 		/** For internal use only. */
-		EntityImageId: DevKit.WebApi.GuidValueReadonly;
+		readonly EntityImageId: string;
 		/** Exchange web services endpoint URL for the mailbox. */
-		EWSURL: DevKit.WebApi.StringValue;
+		EWSURL: string;
 		/** Date and time when the exchange contacts import was last completed for a mailbox record. */
-		ExchangeContactsImportCompletedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ExchangeContactsImportCompletedOn_UtcDateAndTime: Date;
 		/** Indicates the exchange contacts import status for a mailbox record. */
-		ExchangeContactsImportStatus: DevKit.WebApi.OptionSetValue;
+		ExchangeContactsImportStatus: OptionSet.Mailbox.ExchangeContactsImportStatus;
 		/** Contains the exchange synchronization state in XML format. */
-		ExchangeSyncStateXml: DevKit.WebApi.StringValue;
+		ExchangeSyncStateXml: string;
 		/** Reference to the ExchangeSyncStateXml file on Azure. */
-		ExchangeSyncStateXmlFileRef: DevKit.WebApi.StringValueReadonly;
+		readonly ExchangeSyncStateXmlFileRef: string;
 		/** Holds the hierarchy of folders under inbox in XML format. */
-		FolderHierarchy: DevKit.WebApi.StringValue;
+		FolderHierarchy: string;
 		/** For internal use only */
-		ForcedUnlockCount: DevKit.WebApi.IntegerValueReadonly;
+		readonly ForcedUnlockCount: number;
 		/** Unique identifier of the async host that is processing this mailbox. */
-		HostId: DevKit.WebApi.StringValueReadonly;
+		readonly HostId: string;
 		/** Select how incoming email will be delivered to the mailbox. */
-		IncomingEmailDeliveryMethod: DevKit.WebApi.OptionSetValue;
+		IncomingEmailDeliveryMethod: OptionSet.Mailbox.IncomingEmailDeliveryMethod;
 		/** Select the status that will be assigned to incoming email messages. */
-		IncomingEmailStatus: DevKit.WebApi.OptionSetValue;
+		IncomingEmailStatus: OptionSet.Mailbox.IncomingEmailStatus;
 		/** Set the current organization as the synchronization organization. */
-		IsACTSyncOrgFlagSet: DevKit.WebApi.BooleanValue;
+		IsACTSyncOrgFlagSet: boolean;
 		/** Shows the status of approval of the email address by O365 Admin. */
-		IsEmailAddressApprovedByO365Admin: DevKit.WebApi.BooleanValue;
+		IsEmailAddressApprovedByO365Admin: boolean;
 		/** Is Exchange Contacts Import Scheduled. */
-		IsExchangeContactsImportScheduled: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsExchangeContactsImportScheduled: boolean;
 		/** Select whether the mailbox is a forward mailbox. */
-		IsForwardMailbox: DevKit.WebApi.BooleanValueReadonly;
-		IsOauthAccessTokenSet: DevKit.WebApi.BooleanValueReadonly;
-		IsOauthRefreshTokenSet: DevKit.WebApi.BooleanValueReadonly;
-		IsPasswordSet: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsForwardMailbox: boolean;
+		readonly IsOauthAccessTokenSet: boolean;
+		readonly IsOauthRefreshTokenSet: boolean;
+		readonly IsPasswordSet: boolean;
 		/** Select whether the mailbox corresponds to one for the service account. */
-		IsServiceAccount: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsServiceAccount: boolean;
 		/** For internal use only. */
-		ItemsFailedForLastSync: DevKit.WebApi.IntegerValue;
+		ItemsFailedForLastSync: number;
 		/** For internal use only. */
-		ItemsProcessedForLastSync: DevKit.WebApi.IntegerValue;
+		ItemsProcessedForLastSync: number;
 		/** For internal use only. */
-		LastActiveOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly LastActiveOn_UtcDateAndTime: Date;
 		/** Shows the date and time when the Exchange web services URL was last discovered using the AutoDiscover service. */
-		LastAutoDiscoveredOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		LastAutoDiscoveredOn_UtcDateAndTime: Date;
 		/** Last Duration for the mailbox */
-		LastDuration: DevKit.WebApi.IntegerValueReadonly;
+		readonly LastDuration: number;
 		/** For internal use only. */
-		LastMailboxForcedUnlockOccurredOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly LastMailboxForcedUnlockOccurredOn_UtcDateAndTime: Date;
 		/** Unique identifier of the last message. */
-		LastMessageId: DevKit.WebApi.StringValueReadonly;
+		readonly LastMessageId: string;
 		/** Last Successful Sync Time */
-		LastSuccessfulSyncCompletedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		LastSuccessfulSyncCompletedOn_UtcDateAndTime: Date;
 		/** For internal use only. */
-		LastSyncError: DevKit.WebApi.StringValue;
+		LastSyncError: string;
 		/** For internal use only. */
-		LastSyncErrorCode: DevKit.WebApi.IntegerValue;
+		LastSyncErrorCode: number;
 		/** For internal use only */
-		LastSyncErrorCount: DevKit.WebApi.IntegerValue;
+		LastSyncErrorCount: number;
 		/** For internal use only. */
-		LastSyncErrorMachineName: DevKit.WebApi.StringValue;
+		LastSyncErrorMachineName: string;
 		/** For internal use only. */
-		LastSyncErrorOccurredOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		LastSyncErrorOccurredOn_UtcDateAndTime: Date;
 		/** Last Sync Start Time */
-		LastSyncStartedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly LastSyncStartedOn_UtcDateAndTime: Date;
 		/** Identifies the last MessageId that has been processed for tagging in the remote system. */
-		LastTaggedMessageId: DevKit.WebApi.StringValue;
+		LastTaggedMessageId: string;
 		/** Unique identifier of the mailbox. */
-		MailboxId: DevKit.WebApi.GuidValue;
+		MailboxId: string;
 		/** For internal use only. */
-		MailboxProcessingContext: DevKit.WebApi.IntegerValue;
+		MailboxProcessingContext: number;
 		/** Last Sync Status for Outgoing, Incoming and ACT as a whole. */
-		MailboxStatus: DevKit.WebApi.OptionSetValueReadonly;
+		readonly MailboxStatus: OptionSet.Mailbox.MailboxStatus;
 		/** Shows who last updated the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Shows who last updated the record on behalf of another user. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Type the name of the mailbox. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** The next scheduled ACT sync delay, in seconds, to apply to the mailbox. */
-		NextScheduledACTSyncInSeconds: DevKit.WebApi.IntegerValueReadonly;
+		readonly NextScheduledACTSyncInSeconds: number;
 		/** For internal use only. */
-		NoACTCount: DevKit.WebApi.IntegerValueReadonly;
+		readonly NoACTCount: number;
 		/** For internal use only. */
-		NoEmailCount: DevKit.WebApi.IntegerValueReadonly;
+		readonly NoEmailCount: number;
 		/** Type the Oauth access token for the mailbox. */
-		OauthAccessToken: DevKit.WebApi.StringValue;
+		OauthAccessToken: string;
 		/** Type the Oauth refresh token for the mailbox. */
-		OauthRefreshToken: DevKit.WebApi.StringValue;
+		OauthRefreshToken: string;
 		/** Date and time when the Oauth token will expire */
-		OauthTokenExpiresOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		OauthTokenExpiresOn_UtcDateAndTime: Date;
 		/** Date and time when the last office apps deployment was completed for a mailbox record. */
-		OfficeAppsDeploymentCompleteOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly OfficeAppsDeploymentCompleteOn_UtcDateAndTime: Date;
 		/** The Office Apps deployment error. */
-		OfficeAppsDeploymentError: DevKit.WebApi.StringValueReadonly;
+		readonly OfficeAppsDeploymentError: string;
 		/** Indicates if the office apps deployment has been scheduled for a mailbox record. */
-		OfficeAppsDeploymentScheduled: DevKit.WebApi.BooleanValue;
+		OfficeAppsDeploymentScheduled: boolean;
 		/** Indicates the office apps deployment type for a mailbox record. */
-		OfficeAppsDeploymentStatus: DevKit.WebApi.OptionSetValue;
+		OfficeAppsDeploymentStatus: OptionSet.Mailbox.OfficeAppsDeploymentStatus;
 		/** Unique identifier of the organization associated with the record. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Indicates if the crm org is to be marked as primary syncing org for the mailbox record. */
-		OrgMarkedAsPrimaryForExchangeSync: DevKit.WebApi.BooleanValue;
+		OrgMarkedAsPrimaryForExchangeSync: boolean;
 		/** Select how outgoing email will be sent from the mailbox. */
-		OutgoingEmailDeliveryMethod: DevKit.WebApi.OptionSetValue;
+		OutgoingEmailDeliveryMethod: OptionSet.Mailbox.OutgoingEmailDeliveryMethod;
 		/** Select the status of outgoing email messages. */
-		OutgoingEmailStatus: DevKit.WebApi.OptionSetValue;
+		OutgoingEmailStatus: OptionSet.Mailbox.OutgoingEmailStatus;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Select the business unit that owns the record. */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Type the password for the mailbox. */
-		Password: DevKit.WebApi.StringValue;
+		Password: string;
 		/** Shows the date and time when processing will begin on this mailbox. */
-		PostponeMailboxProcessingUntil_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		PostponeMailboxProcessingUntil_UtcDateOnly: Date;
 		/** Shows the date and time when the next outlook mail app install will be run for a mailbox record. */
-		PostponeOfficeAppsDeploymentUntil_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		PostponeOfficeAppsDeploymentUntil_UtcDateAndTime: Date;
 		/** Shows the date and time when the mailbox can start sending emails. */
-		PostponeSendingUntil_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		PostponeSendingUntil_UtcDateOnly: Date;
 		/** Shows the date and time when the next email configuration test will be run for a mailbox record. */
-		PostponeTestEmailConfigurationUntil_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		PostponeTestEmailConfigurationUntil_UtcDateAndTime: Date;
 		/** Select whether to delete emails from the mailbox after processing. */
-		ProcessAndDeleteEmails: DevKit.WebApi.BooleanValue;
+		ProcessAndDeleteEmails: boolean;
 		/** The number of times mailbox has processed */
-		ProcessedTimes: DevKit.WebApi.IntegerValueReadonly;
+		readonly ProcessedTimes: number;
 		/** Shows the date and time to start processing email received by the mailbox. */
-		ProcessEmailReceivedAfter_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		ProcessEmailReceivedAfter_UtcDateOnly: Date;
 		/** Date and time when the processing of the mailbox was last attempted. */
-		ProcessingLastAttemptedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ProcessingLastAttemptedOn_UtcDateAndTime: Date;
 		/** Information that indicates whether email will be processed for this mailbox */
-		ProcessingStateCode: DevKit.WebApi.IntegerValueReadonly;
+		readonly ProcessingStateCode: number;
 		/** For internal use only. */
-		ReceivingPostponedUntil_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly ReceivingPostponedUntil_UtcDateOnly: Date;
 		/** For internal use only. */
-		ReceivingPostponedUntilForACT_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly ReceivingPostponedUntilForACT_UtcDateOnly: Date;
 		/** Choose the user associated to the mailbox. */
-		regardingobjectid_queue: DevKit.WebApi.LookupValueReadonly;
+		readonly regardingobjectid_queue: string;
 		/** Choose the user associated to the mailbox. */
-		regardingobjectid: DevKit.WebApi.LookupValueReadonly;
+		readonly regardingobjectid: string;
 		/** Shows whether the mailbox is active or inactive. */
-		StateCode: DevKit.WebApi.OptionSetValue;
+		StateCode: OptionSet.Mailbox.StateCode;
 		/** Select the mailbox's status. */
-		StatusCode: DevKit.WebApi.OptionSetValue;
+		StatusCode: OptionSet.Mailbox.StatusCode;
 		/** Identifies the timestamp after for which emails should be tagged in the remote system. */
-		TagEmailsAfter_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		TagEmailsAfter_UtcDateOnly: Date;
 		/** Shows the number of times an email configuration test has been performed. */
-		TestEmailConfigurationRetryCount: DevKit.WebApi.IntegerValue;
+		TestEmailConfigurationRetryCount: number;
 		/** Indicates if the email configuration test has been scheduled for a mailbox record. */
-		TestEmailConfigurationScheduled: DevKit.WebApi.BooleanValue;
+		TestEmailConfigurationScheduled: boolean;
 		/** Date and time when the last email configuration test was completed for a mailbox record. */
-		TestMailboxAccessCompletedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		TestMailboxAccessCompletedOn_UtcDateAndTime: Date;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Concatenation of transient failure counts of all mailbox operations. */
-		TransientFailureCount: DevKit.WebApi.IntegerValueReadonly;
+		readonly TransientFailureCount: number;
 		/** Shows the ID of the Undeliverable folder in the mailbox managed by Microsoft Exchange. */
-		UndeliverableFolder: DevKit.WebApi.StringValue;
+		UndeliverableFolder: string;
 		/** Type a user name used for mailbox authentication. */
-		Username: DevKit.WebApi.StringValue;
+		Username: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Indicates if verbose tracing needs to be enabled for this mailbox. */
-		VerboseLoggingEnabled: DevKit.WebApi.IntegerValue;
+		VerboseLoggingEnabled: number;
 		/** Version number of the mailbox. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -434,4 +436,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

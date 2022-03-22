@@ -147,8 +147,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -156,317 +158,321 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** For internal use only. */
-		ActivityAdditionalParams: DevKit.WebApi.StringValue;
+		ActivityAdditionalParams: string;
 		/** Unique identifier of the activity. */
-		ActivityId: DevKit.WebApi.GuidValue;
+		ActivityId: string;
 		/** Actual duration of the activity in minutes. */
-		ActualDurationMinutes: DevKit.WebApi.IntegerValue;
+		ActualDurationMinutes: number;
 		/** Actual end time of the activity. */
-		ActualEnd_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		ActualEnd_UtcDateAndTime: Date;
 		/** Actual start time of the activity. */
-		ActualStart_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		ActualStart_UtcDateAndTime: Date;
 		/** Shows how contact about the social activity originated, such as from Twitter or Facebook. This field is read-only. */
-		Community: DevKit.WebApi.OptionSetValue;
+		Community: OptionSet.SocialActivity.Community;
 		/** Unique identifier of the user who created the activity. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the activity was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the activitypointer. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Shows information about the social post content. This field is read-only. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Select the direction of the post as incoming or outbound. */
-		DirectionCode: DevKit.WebApi.BooleanValue;
+		DirectionCode: boolean;
 		/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier for the responses to a post. For internal use only. */
-		InResponseTo: DevKit.WebApi.StringValue;
+		InResponseTo: string;
 		/** Information regarding whether the activity was billed as part of resolving a case. */
-		IsBilled: DevKit.WebApi.BooleanValue;
+		IsBilled: boolean;
 		/** Information regarding whether the activity is a regular activity type or event type. */
-		IsRegularActivity: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsRegularActivity: boolean;
 		/** Information regarding whether the activity was created from a workflow rule. */
-		IsWorkflowCreated: DevKit.WebApi.BooleanValue;
+		IsWorkflowCreated: boolean;
 		/** Contains the date and time stamp of the last on hold time. */
-		LastOnHoldTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		LastOnHoldTime_UtcDateAndTime: Date;
 		/** For internal use only. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** For internal use only. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Shows how long, in minutes, that the record was on hold. */
-		OnHoldTime: DevKit.WebApi.IntegerValueReadonly;
+		readonly OnHoldTime: number;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier of the business unit that owns the activity. */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier of the team that owns the activity. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier of the user who owns the Activity. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Shows the contact or account that authored the post. */
-		postauthor_account: DevKit.WebApi.LookupValue;
+		postauthor_account: string;
 		/** Shows the contact or account that authored the post. */
-		postauthor_contact: DevKit.WebApi.LookupValue;
+		postauthor_contact: string;
 		/** Shows the parent account of the author of the post. */
-		postauthoraccount_account: DevKit.WebApi.LookupValue;
+		postauthoraccount_account: string;
 		/** Shows the parent account of the author of the post. */
-		postauthoraccount_contact: DevKit.WebApi.LookupValue;
+		postauthoraccount_contact: string;
 		/** For internal use only. */
-		PostedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		PostedOn_UtcDateAndTime: Date;
 		/** Shows the author of the post on the corresponding social channel. */
-		PostFromProfileId: DevKit.WebApi.LookupValue;
+		PostFromProfileId: string;
 		/** Unique identifier of the post. For internal use only. */
-		PostId: DevKit.WebApi.StringValue;
+		PostId: string;
 		/** Shows if the social post originated as a private or public message. */
-		PostMessageType: DevKit.WebApi.OptionSetValue;
+		PostMessageType: OptionSet.SocialActivity.PostMessageType;
 		/** Shows the recipients of the social post. */
-		PostToProfileId: DevKit.WebApi.StringValue;
+		PostToProfileId: string;
 		/** Shows the URL of the post. */
-		PostURL: DevKit.WebApi.StringValue;
+		PostURL: string;
 		/** Shows the priority so that preferred customers or critical issues are handled quickly. */
-		PriorityCode: DevKit.WebApi.OptionSetValue;
+		PriorityCode: OptionSet.SocialActivity.PriorityCode;
 		/** Unique identifier of the Process. */
-		ProcessId: DevKit.WebApi.GuidValue;
+		ProcessId: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_account_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_account_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_asyncoperation: DevKit.WebApi.LookupValue;
+		regardingobjectid_asyncoperation: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_bookableresourcebooking_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_bookableresourcebooking_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_bookableresourcebookingheader_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_bookableresourcebookingheader_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_bulkoperation_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_bulkoperation_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_campaign_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_campaign_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_campaignactivity_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_campaignactivity_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_contact_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_contact_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_contract_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_contract_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_entitlement_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_entitlement_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_entitlementtemplate_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_entitlementtemplate_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_incident_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_incident_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_invoice_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_invoice_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_knowledgearticle_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_knowledgearticle_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_knowledgebaserecord_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_knowledgebaserecord_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_lead_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_lead_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_agreement_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreement_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_agreementbookingdate_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingdate_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_agreementbookingincident_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingincident_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_agreementbookingproduct_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingproduct_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_agreementbookingservice_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingservice_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_agreementbookingservicetask_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingservicetask_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_agreementbookingsetup_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingsetup_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_agreementinvoicedate_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementinvoicedate_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_agreementinvoiceproduct_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementinvoiceproduct_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_agreementinvoicesetup_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementinvoicesetup_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_bookingalertstatus_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bookingalertstatus_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_bookingrule_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bookingrule_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_bookingtimestamp_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bookingtimestamp_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_customerasset_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_customerasset_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_fieldservicesetting_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_fieldservicesetting_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_incidenttypecharacteristic_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_incidenttypecharacteristic_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_incidenttypeproduct_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_incidenttypeproduct_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_incidenttypeservice_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_incidenttypeservice_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_inventoryadjustment_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_inventoryadjustment_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_inventoryadjustmentproduct_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_inventoryadjustmentproduct_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_inventoryjournal_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_inventoryjournal_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_inventorytransfer_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_inventorytransfer_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_payment_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_payment_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_paymentdetail_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_paymentdetail_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_paymentmethod_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_paymentmethod_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_paymentterm_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_paymentterm_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_playbookinstance_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_playbookinstance_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_postalbum_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_postalbum_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_postalcode_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_postalcode_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_processnotes_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_processnotes_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_productinventory_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_productinventory_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_projectteam_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_projectteam_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_purchaseorder_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseorder_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_purchaseorderbill_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseorderbill_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_purchaseorderproduct_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseorderproduct_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_purchaseorderreceipt_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseorderreceipt_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_purchaseorderreceiptproduct_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseorderreceiptproduct_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_purchaseordersubstatus_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseordersubstatus_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_quotebookingincident_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotebookingincident_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_quotebookingproduct_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotebookingproduct_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_quotebookingservice_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotebookingservice_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_quotebookingservicetask_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotebookingservicetask_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_resourceterritory_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_resourceterritory_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_rma_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rma_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_rmaproduct_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rmaproduct_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_rmareceipt_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rmareceipt_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_rmareceiptproduct_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rmareceiptproduct_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_rmasubstatus_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rmasubstatus_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_rtv_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rtv_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_rtvproduct_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rtvproduct_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_rtvsubstatus_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rtvsubstatus_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_shipvia_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_salessuggestion_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_systemuserschedulersetting_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_shipvia_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_timegroup_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_systemuserschedulersetting_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_timegroupdetail_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_timegroup_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_timeoffrequest_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_timegroupdetail_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_warehouse_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_timeoffrequest_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_workorder_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_warehouse_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_workordercharacteristic_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorder_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_workorderincident_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workordercharacteristic_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_workorderproduct_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderincident_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_workorderresourcerestriction_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderproduct_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_workorderservice_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderresourcerestriction_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_msdyn_workorderservicetask_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderservice_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_opportunity_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderservicetask_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_quote_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_opportunity_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_salesorder_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_quote_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_site_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_salesorder_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_uii_action_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_site_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_uii_hostedapplication_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_uii_action_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_uii_nonhostedapplication_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_uii_hostedapplication_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_uii_option_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_uii_nonhostedapplication_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_uii_savedsession_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_uii_option_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_uii_workflow_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_uii_savedsession_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_uii_workflowstep_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_uii_workflow_socialactivity: string;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_uii_workflow_workflowstep_mapping_socialactivity: DevKit.WebApi.LookupValue;
+		regardingobjectid_uii_workflowstep_socialactivity: string;
+		/** Shows the record that the social activity relates to. */
+		regardingobjectid_uii_workflow_workflowstep_mapping_socialactivity: string;
 		/** Scheduled duration of the activity, specified in minutes. */
-		ScheduledDurationMinutes: DevKit.WebApi.IntegerValue;
+		ScheduledDurationMinutes: number;
 		/** Scheduled end time of the activity. */
-		ScheduledEnd_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		ScheduledEnd_UtcDateAndTime: Date;
 		/** Scheduled start time of the activity. */
-		ScheduledStart_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		ScheduledStart_UtcDateAndTime: Date;
 		/** Value derived after assessing words commonly associated with a negative, neutral, or positive sentiment that occurs in a social post. Sentiment information can also be reported as numeric values. */
-		SentimentValue: DevKit.WebApi.DoubleValue;
+		SentimentValue: number;
 		/** Unique identifier for the associated service. */
-		ServiceId: DevKit.WebApi.LookupValue;
+		ServiceId: string;
 		/** Choose the service level agreement (SLA) that you want to apply to the Social Activity record. */
-		SLAId: DevKit.WebApi.LookupValue;
+		SLAId: string;
 		/** Last SLA that was applied to this Social Activity. This field is for internal use only. */
-		SLAInvokedId: DevKit.WebApi.LookupValueReadonly;
+		readonly SLAInvokedId: string;
 		/** For internal use only. */
-		SocialAdditionalParams: DevKit.WebApi.StringValue;
+		SocialAdditionalParams: string;
 		/** Shows the date and time by which the activities are sorted. */
-		SortDate_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		SortDate_UtcDateAndTime: Date;
 		/** Unique identifier of the Stage. */
-		StageId: DevKit.WebApi.GuidValue;
+		StageId: string;
 		/** Shows whether the social activity completed. This field is read-only. */
-		StateCode: DevKit.WebApi.OptionSetValue;
+		StateCode: OptionSet.SocialActivity.StateCode;
 		/** Shows whether the social activity is completed, failed, or processing. This field is read-only. */
-		StatusCode: DevKit.WebApi.OptionSetValue;
+		StatusCode: OptionSet.SocialActivity.StatusCode;
 		/** Subject associated with the activity. */
-		Subject: DevKit.WebApi.StringValue;
+		Subject: string;
 		/** Unique identifier of the social conversation. For internal use only. */
-		ThreadId: DevKit.WebApi.StringValue;
+		ThreadId: string;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** For internal use only. */
-		TraversedPath: DevKit.WebApi.StringValue;
+		TraversedPath: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version number of the social activity. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 		/** The array of object that can cast object to ActivityPartyApi class */
-		ActivityParties: Array<any>;
+		ActivityParties: Array<unknown>;
 	}
 }
 declare namespace OptionSet {
 	namespace SocialActivity {
 		enum ActivityTypeCode {
+			/** 10086 */
+			Activity_record_for_the_Teams_chat,
 			/** 4201 */
 			Appointment,
-			/** 10400 */
+			/** 10404 */
 			Booking_Alert,
 			/** 4402 */
 			Campaign_Activity,
@@ -474,13 +480,13 @@ declare namespace OptionSet {
 			Campaign_Response,
 			/** 4206 */
 			Case_Resolution,
-			/** 10702 */
+			/** 10707 */
 			Conversation,
-			/** 10294 */
+			/** 10313 */
 			Customer_Voice_alert,
-			/** 10304 */
+			/** 10323 */
 			Customer_Voice_survey_invite,
-			/** 10306 */
+			/** 10325 */
 			Customer_Voice_survey_response,
 			/** 4202 */
 			Email,
@@ -492,11 +498,11 @@ declare namespace OptionSet {
 			Opportunity_Close,
 			/** 4209 */
 			Order_Close,
-			/** 10813 */
+			/** 10817 */
 			Outbound_message,
 			/** 4210 */
 			Phone_Call,
-			/** 10430 */
+			/** 10434 */
 			Project_Service_Approval,
 			/** 4406 */
 			Quick_Campaign,
@@ -506,7 +512,7 @@ declare namespace OptionSet {
 			Recurring_Appointment,
 			/** 4214 */
 			Service_Activity,
-			/** 10717 */
+			/** 10721 */
 			Session,
 			/** 4212 */
 			Task
@@ -597,4 +603,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

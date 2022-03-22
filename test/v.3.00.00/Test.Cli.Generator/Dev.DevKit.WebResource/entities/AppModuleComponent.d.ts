@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,46 +30,46 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier for entity instances */
-		AppModuleComponentId: DevKit.WebApi.GuidValue;
+		AppModuleComponentId: string;
 		/** Unique identifier of the Application Component used when synchronizing customizations for the Microsoft Dynamics 365 client for Outlook */
-		AppModuleComponentIdUnique: DevKit.WebApi.GuidValue;
+		AppModuleComponentIdUnique: string;
 		/** The App Module Id Unique */
-		AppModuleIdUnique: DevKit.WebApi.LookupValue;
+		AppModuleIdUnique: string;
 		/** The object type code of the component. */
-		ComponentType: DevKit.WebApi.OptionSetValue;
+		ComponentType: OptionSet.AppModuleComponent.ComponentType;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Exchange rate for the currency associated with the Application Component with respect to the base currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Version in which the application component record is introduced. */
-		IntroducedVersion: DevKit.WebApi.StringValue;
+		IntroducedVersion: string;
 		/** Is Default */
-		IsDefault: DevKit.WebApi.BooleanValue;
+		IsDefault: boolean;
 		/** Is Metadata */
-		IsMetadata: DevKit.WebApi.BooleanValue;
+		IsMetadata: boolean;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Object Id */
-		ObjectId: DevKit.WebApi.GuidValue;
+		ObjectId: string;
 		/** Date and time when the record was created. */
-		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly OverwriteTime_UtcDateOnly: Date;
 		/** The parent ID of the subcomponent, which will be a root */
-		RootAppModuleComponentId: DevKit.WebApi.GuidValue;
+		RootAppModuleComponentId: string;
 		/** Indicates the include behavior of the root component. */
-		RootComponentBehavior: DevKit.WebApi.OptionSetValue;
+		RootComponentBehavior: OptionSet.AppModuleComponent.RootComponentBehavior;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		UTCConversionTimeZoneCode: number;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -114,4 +116,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

@@ -102,8 +102,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -111,93 +113,93 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Shows the exchange rate for the currency associated with the entity with respect to the base currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Shows the sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Shows who last updated the record on behalf of another user. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Account where ownership of associated asset should be transferred to (if Product Action is Change Asset Ownership) */
-		msdyn_Changeownership: DevKit.WebApi.LookupValue;
+		msdyn_Changeownership: string;
 		/** Specify if credit invoice should be generated for this product when returned */
-		msdyn_CredittoAccount: DevKit.WebApi.BooleanValue;
+		msdyn_CredittoAccount: boolean;
 		/** Asset this line item relates to */
-		msdyn_CustomerAsset: DevKit.WebApi.LookupValue;
+		msdyn_CustomerAsset: string;
 		/** Type a description of the product. */
-		msdyn_Description: DevKit.WebApi.StringValue;
-		msdyn_InternalFlags: DevKit.WebApi.StringValue;
+		msdyn_Description: string;
+		msdyn_InternalFlags: string;
 		/** Enter the current status of this product. */
-		msdyn_ItemStatus: DevKit.WebApi.OptionSetValue;
+		msdyn_ItemStatus: OptionSet.msdyn_rmaproduct.msdyn_ItemStatus;
 		/** Shows the order of this product within the RMA. */
-		msdyn_LineOrder: DevKit.WebApi.IntegerValue;
+		msdyn_LineOrder: number;
 		/** Enter the name of the custom entity. */
-		msdyn_name: DevKit.WebApi.StringValue;
+		msdyn_name: string;
 		/** Price List that determines the pricing for this product */
-		msdyn_PriceList: DevKit.WebApi.LookupValue;
+		msdyn_PriceList: string;
 		/** Shows the action to be performed by the system once the product is received (either create RTV, return to warehouse, or change asset ownership). */
-		msdyn_ProcessingAction: DevKit.WebApi.OptionSetValue;
+		msdyn_ProcessingAction: OptionSet.msdyn_rmaproduct.msdyn_ProcessingAction;
 		/** Product to return */
-		msdyn_Product: DevKit.WebApi.LookupValue;
+		msdyn_Product: string;
 		/** Shows the quantity processed as per the processing action. */
-		msdyn_QtyProcessed: DevKit.WebApi.DoubleValue;
+		msdyn_QtyProcessed: number;
 		/** Enter the quantity currently received. */
-		msdyn_QtyReceived: DevKit.WebApi.DoubleValue;
+		msdyn_QtyReceived: number;
 		/** Enter the quantity to return. */
-		msdyn_Quantitytoreturn: DevKit.WebApi.DoubleValue;
+		msdyn_Quantitytoreturn: number;
 		/** Vendor to where this product should be returned (if Product Action is RTV) */
-		msdyn_ReturntoVendor: DevKit.WebApi.LookupValue;
+		msdyn_ReturntoVendor: string;
 		/** Warehouse to which this product should be returned to (if Product Action is Warehouse) */
-		msdyn_ReturntoWarehouse: DevKit.WebApi.LookupValue;
+		msdyn_ReturntoWarehouse: string;
 		/** RMA this line item relates to */
-		msdyn_RMA: DevKit.WebApi.LookupValue;
+		msdyn_RMA: string;
 		/** Shows the entity instances. */
-		msdyn_rmaproductId: DevKit.WebApi.GuidValue;
+		msdyn_rmaproductId: string;
 		/** Specify if product is taxable */
-		msdyn_Taxable: DevKit.WebApi.BooleanValue;
-		msdyn_TotalAmount: DevKit.WebApi.MoneyValue;
+		msdyn_Taxable: boolean;
+		msdyn_TotalAmount: number;
 		/** Shows the value of the total amount in the base currency. */
-		msdyn_totalamount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_totalamount_Base: number;
 		/** Unit for this product */
-		msdyn_Unit: DevKit.WebApi.LookupValue;
+		msdyn_Unit: string;
 		/** Shows the unit amount to be credited to the customer */
-		msdyn_UnitAmount: DevKit.WebApi.MoneyValue;
+		msdyn_UnitAmount: number;
 		/** Shows the value of the unit amount in the base currency. */
-		msdyn_unitamount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_unitamount_Base: number;
 		/** Work Order Product to be returned */
-		msdyn_WOProduct: DevKit.WebApi.LookupValue;
+		msdyn_WOProduct: string;
 		/** Shows the date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Status of the RMA Product */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.msdyn_rmaproduct.statecode;
 		/** Reason for the status of the RMA Product */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.msdyn_rmaproduct.statuscode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Unique identifier of the currency associated with the entity. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** Shows the time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -248,4 +250,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

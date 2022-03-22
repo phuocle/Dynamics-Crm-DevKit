@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,39 +30,40 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Field that is being compared. */
-		BaseAttributeName: DevKit.WebApi.StringValue;
+		BaseAttributeName: string;
 		/** Unique identifier of the user who created the condition. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the condition was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the duplicate rule condition. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Unique identifier of the condition. */
-		DuplicateRuleConditionId: DevKit.WebApi.GuidValue;
+		DuplicateRuleConditionId: string;
 		/** Determines whether to consider blank values as non-duplicate values */
-		IgnoreBlankValues: DevKit.WebApi.BooleanValue;
+		IgnoreBlankValues: boolean;
 		/** Field that is being compared with the base field. */
-		MatchingAttributeName: DevKit.WebApi.StringValue;
+		MatchingAttributeName: string;
 		/** Unique identifier of the user who last modified the condition. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the condition was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the duplicate rule condition. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Operator for this rule condition. */
-		OperatorCode: DevKit.WebApi.OptionSetValue;
+		OperatorCode: OptionSet.DuplicateRuleCondition.OperatorCode;
 		/** Parameter value of N if the operator is Same First Characters or Same Last Characters. */
-		OperatorParam: DevKit.WebApi.IntegerValue;
+		OperatorParam: number;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValueReadonly;
+		readonly OwnerId_team: string;
 		/** Unique identifier of the business unit that owns the condition. */
-		OwningBusinessUnit: DevKit.WebApi.GuidValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier of the user who owns the condition. */
-		OwningUser: DevKit.WebApi.GuidValueReadonly;
+		readonly OwningUser: string;
 		/** Unique identifier of the object with which the condition is associated. */
-		RegardingObjectId: DevKit.WebApi.LookupValue;
+		RegardingObjectId: string;
+		UniqueRuleName: string;
 	}
 }
 declare namespace OptionSet {
@@ -99,4 +102,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

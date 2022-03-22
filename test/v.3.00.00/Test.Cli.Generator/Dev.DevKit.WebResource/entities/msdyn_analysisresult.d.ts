@@ -76,8 +76,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -85,73 +87,73 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** The associated Analysis Component that contains the issue described by the Analysis Result. */
-		msdyn_AnalysisComponentId: DevKit.WebApi.LookupValue;
-		msdyn_AnalysisComponentType: DevKit.WebApi.OptionSetValue;
+		msdyn_AnalysisComponentId: string;
+		msdyn_AnalysisComponentType: OptionSet.msdyn_analysisresult.msdyn_AnalysisComponentType;
 		/** The parent Analysis Job that produced the Analysis Result */
-		msdyn_AnalysisJobId: DevKit.WebApi.LookupValue;
+		msdyn_AnalysisJobId: string;
 		/** Unique identifier for entity instances */
-		msdyn_analysisresultId: DevKit.WebApi.GuidValue;
-		msdyn_Category: DevKit.WebApi.OptionSetValue;
-		msdyn_ComponentType: DevKit.WebApi.OptionSetValue;
-		msdyn_EntityName: DevKit.WebApi.StringValue;
-		msdyn_FileUri: DevKit.WebApi.StringValue;
-		msdyn_HasResolution: DevKit.WebApi.BooleanValue;
-		msdyn_helplink: DevKit.WebApi.StringValue;
-		msdyn_Level: DevKit.WebApi.OptionSetValue;
-		msdyn_Line: DevKit.WebApi.IntegerValue;
-		msdyn_Member: DevKit.WebApi.StringValue;
-		msdyn_Message: DevKit.WebApi.StringValue;
-		msdyn_MessageArguments: DevKit.WebApi.StringValue;
-		msdyn_MessageId: DevKit.WebApi.StringValue;
-		msdyn_Module: DevKit.WebApi.StringValue;
+		msdyn_analysisresultId: string;
+		msdyn_Category: OptionSet.msdyn_analysisresult.msdyn_Category;
+		msdyn_ComponentType: OptionSet.msdyn_analysisresult.msdyn_ComponentType;
+		msdyn_EntityName: string;
+		msdyn_FileUri: string;
+		msdyn_HasResolution: boolean;
+		msdyn_helplink: string;
+		msdyn_Level: OptionSet.msdyn_analysisresult.msdyn_Level;
+		msdyn_Line: number;
+		msdyn_Member: string;
+		msdyn_Message: string;
+		msdyn_MessageArguments: string;
+		msdyn_MessageId: string;
+		msdyn_Module: string;
 		/** The name of the custom entity. */
-		msdyn_name: DevKit.WebApi.StringValue;
+		msdyn_name: string;
 		/** Type of issue that needs to be repaired. Same as IssueType Input Parameter for Solution Health Rule. */
-		msdyn_RepairIssueType: DevKit.WebApi.StringValue;
+		msdyn_RepairIssueType: string;
 		/** The return status of a rule run: pass, fail, or configuration error */
-		msdyn_ReturnStatus: DevKit.WebApi.OptionSetValue;
-		msdyn_RuleId: DevKit.WebApi.StringValue;
-		msdyn_RuleReferenceUri: DevKit.WebApi.StringValue;
-		msdyn_Severity: DevKit.WebApi.OptionSetValue;
-		msdyn_Snippet: DevKit.WebApi.StringValue;
-		msdyn_SolutionHealthMessage: DevKit.WebApi.StringValue;
-		msdyn_Type: DevKit.WebApi.StringValue;
+		msdyn_ReturnStatus: OptionSet.msdyn_analysisresult.msdyn_ReturnStatus;
+		msdyn_RuleId: string;
+		msdyn_RuleReferenceUri: string;
+		msdyn_Severity: OptionSet.msdyn_analysisresult.msdyn_Severity;
+		msdyn_Snippet: string;
+		msdyn_SolutionHealthMessage: string;
+		msdyn_Type: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Status of the Analysis Result */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.msdyn_analysisresult.statecode;
 		/** Reason for the status of the Analysis Result */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.msdyn_analysisresult.statuscode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -252,4 +254,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

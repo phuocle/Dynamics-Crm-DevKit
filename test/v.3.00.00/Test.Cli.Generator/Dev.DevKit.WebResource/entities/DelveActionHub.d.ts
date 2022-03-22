@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,62 +30,62 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Shows the type of the message. */
-		CardType: DevKit.WebApi.OptionSetValueReadonly;
+		readonly CardType: OptionSet.DelveActionHub.CardType;
 		/** Shows who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		CreatedTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedTime_UtcDateAndTime: Date;
 		/** Shows the entity instances. */
-		DelveActionHubId: DevKit.WebApi.GuidValue;
+		DelveActionHubId: string;
 		/** For internal use only. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Shows the exchange rate for the currency associated with the Delve action hub with respect to the base currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Stores the Icon Class name of the Delve ActionHub Card. */
-		IconClassName: DevKit.WebApi.StringValueReadonly;
+		readonly IconClassName: string;
 		/** Shows the mail web link. */
-		MailWebLink: DevKit.WebApi.StringValue;
+		MailWebLink: string;
 		/** Shows the email message. This information is used only for email that is received. */
-		MessageId: DevKit.WebApi.StringValue;
+		MessageId: string;
 		/** Shows the date and time when the email message is received. */
-		MessageTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly MessageTime_UtcDateAndTime: Date;
 		/** Shows who last updated the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Shows who last updated the record on behalf of another user. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		ModifiedTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedTime_UtcDateAndTime: Date;
 		/** Shows the organization that the record belongs to. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** For internal use only. */
-		RelatedMailIds: DevKit.WebApi.StringValue;
+		RelatedMailIds: string;
 		/** Enter the sender of the email. */
-		Sender: DevKit.WebApi.StringValue;
+		Sender: string;
 		/** Record ID of the sender entity. */
-		SenderEntityId: DevKit.WebApi.GuidValue;
+		SenderEntityId: string;
 		/** Object Type code of the sender entity. */
-		SenderEntityObjectTypeCode: DevKit.WebApi.IntegerValueReadonly;
+		readonly SenderEntityObjectTypeCode: number;
 		/** Image of the sender. */
-		SenderImageUrl: DevKit.WebApi.StringValue;
+		SenderImageUrl: string;
 		/** Shows whether the Delve action record is pending, completed, or tracking. */
-		StateCode: DevKit.WebApi.OptionSetValue;
+		StateCode: OptionSet.DelveActionHub.StateCode;
 		/** Select the delve action record status. */
-		StatusCode: DevKit.WebApi.OptionSetValue;
+		StatusCode: OptionSet.DelveActionHub.StatusCode;
 		/** Type a short description about the objective or primary topic of the email. */
-		Subject: DevKit.WebApi.StringValue;
+		Subject: string;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Shows the exchange rate for the currency associated with the Delve action hub with respect to the base currency. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** Shows the time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		UTCConversionTimeZoneCode: number;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -132,4 +134,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

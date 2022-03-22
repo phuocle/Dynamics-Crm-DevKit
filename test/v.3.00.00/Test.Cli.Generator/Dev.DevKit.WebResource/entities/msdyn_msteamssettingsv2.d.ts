@@ -71,8 +71,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -80,44 +82,46 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValue;
+		CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Indicates whether the default title for linked chat is the record name */
-		msdyn_DefaultTeamsChatTitleEnabled: DevKit.WebApi.BooleanValue;
+		msdyn_DefaultTeamsChatTitleEnabled: boolean;
 		/** URL for embeded collaboration MSteams service */
-		msdyn_EmbedCollabServiceUrl: DevKit.WebApi.StringValue;
-		/** Indicates whether embed-collab Teams integration is enabled */
-		msdyn_EmbedCollabTeamsIntegrationEnabled: DevKit.WebApi.BooleanValue;
+		msdyn_EmbedCollabServiceUrl: string;
+		/** Indicates whether embed-collab teams integration is enabled */
+		msdyn_EmbedCollabTeamsIntegrationEnabled: boolean;
 		/** MSTeams settingsv2 name */
-		msdyn_MSTeamsSettingsName: DevKit.WebApi.StringValue;
+		msdyn_MSTeamsSettingsName: string;
 		/** Unique identifier for entity instances */
-		msdyn_msteamssettingsv2Id: DevKit.WebApi.GuidValue;
-		msdyn_TabServiceUrl: DevKit.WebApi.StringValue;
-		/** Indicates whether Teams meeting integration is enabled */
-		msdyn_TeamsMeetingIntegrationEnabled: DevKit.WebApi.BooleanValue;
+		msdyn_msteamssettingsv2Id: string;
+		/** Indicates whether sensitivity label setting for new team creation has been enabled */
+		msdyn_SensitivityLabelSettingEnabled: boolean;
+		msdyn_TabServiceUrl: string;
+		/** Indicates whether teams meeting integration is enabled */
+		msdyn_TeamsMeetingIntegrationEnabled: boolean;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Status of the msdyn_msteamssettingsv2 */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.msdyn_msteamssettingsv2.statecode;
 		/** Reason for the status of the msdyn_msteamssettingsv2 */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.msdyn_msteamssettingsv2.statuscode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -152,4 +156,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

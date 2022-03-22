@@ -135,8 +135,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -144,150 +146,150 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** AAD ResourceId used for OAuth athentication scheme */
-		AadResourceId: DevKit.WebApi.StringValue;
+		AadResourceId: string;
 		/** Shows who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Type the default location of the server. */
-		DefaultServerLocation: DevKit.WebApi.StringValue;
+		DefaultServerLocation: string;
 		/** Type additional information that describes the email server profile. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Unique identifier of the email server profile. */
-		EmailServerProfileId: DevKit.WebApi.GuidValue;
+		EmailServerProfileId: string;
 		/** Email Server Type Name */
-		EmailServerTypeName: DevKit.WebApi.StringValueReadonly;
+		readonly EmailServerTypeName: string;
 		/** Indicates the code page to use when encoding email content. */
-		EncodingCodePage: DevKit.WebApi.StringValue;
+		EncodingCodePage: string;
 		/** The default image for the entity. */
-		EntityImage: DevKit.WebApi.StringValue;
-		EntityImage_Timestamp: DevKit.WebApi.BigIntValueReadonly;
-		EntityImage_URL: DevKit.WebApi.StringValueReadonly;
+		EntityImage: string;
+		EntityImage_Timestamp: number;
+		EntityImage_URL: string;
 		/** For internal use only. */
-		EntityImageId: DevKit.WebApi.GuidValueReadonly;
+		readonly EntityImageId: string;
 		/** Type the tenant ID of Exchange Online. */
-		ExchangeOnlineTenantId: DevKit.WebApi.StringValue;
+		ExchangeOnlineTenantId: string;
 		/** Select the version of Exchange that is on the email server. */
-		ExchangeVersion: DevKit.WebApi.OptionSetValue;
+		ExchangeVersion: OptionSet.EmailServerProfile.ExchangeVersion;
 		/** Select the incoming email authentication protocol that is used for connecting to the email server. */
-		IncomingAuthenticationProtocol: DevKit.WebApi.OptionSetValue;
+		IncomingAuthenticationProtocol: OptionSet.EmailServerProfile.IncomingAuthenticationProtocol;
 		/** Select how credentials will be retrieved for incoming email. */
-		IncomingCredentialRetrieval: DevKit.WebApi.OptionSetValue;
+		IncomingCredentialRetrieval: OptionSet.EmailServerProfile.IncomingCredentialRetrieval;
 		/** Indicates the incoming partner application. */
-		IncomingPartnerApplication: DevKit.WebApi.LookupValueReadonly;
+		readonly IncomingPartnerApplication: string;
 		/** Type the password for incoming email. */
-		IncomingPassword: DevKit.WebApi.StringValue;
+		IncomingPassword: string;
 		/** Type the Exchange port number for incoming mail. */
-		IncomingPortNumber: DevKit.WebApi.IntegerValue;
+		IncomingPortNumber: number;
 		/** Type the location of the server for incoming email. */
-		IncomingServerLocation: DevKit.WebApi.StringValue;
+		IncomingServerLocation: string;
 		/** Select whether to use impersonation to access the mailbox to process incoming emails. */
-		IncomingUseImpersonation: DevKit.WebApi.BooleanValue;
+		IncomingUseImpersonation: boolean;
 		/** Type the user name for incoming email. */
-		IncomingUserName: DevKit.WebApi.StringValue;
+		IncomingUserName: string;
 		/** Select whether to use the Secure Sockets Layer (SSL) protocol for incoming email. */
-		IncomingUseSSL: DevKit.WebApi.BooleanValue;
-		IsIncomingPasswordSet: DevKit.WebApi.BooleanValueReadonly;
-		IsOauthClientSecretSet: DevKit.WebApi.BooleanValueReadonly;
-		IsOutgoingPasswordSet: DevKit.WebApi.BooleanValueReadonly;
+		IncomingUseSSL: boolean;
+		readonly IsIncomingPasswordSet: boolean;
+		readonly IsOauthClientSecretSet: boolean;
+		readonly IsOutgoingPasswordSet: boolean;
 		/** The Azure Key Vault reference id */
-		keyvaultreferenceid: DevKit.WebApi.LookupValue;
+		keyvaultreferenceid: string;
 		/** Shows the last test authorization status of email server profile */
-		LastAuthorizationStatus: DevKit.WebApi.OptionSetValue;
+		LastAuthorizationStatus: OptionSet.EmailServerProfile.LastAuthorizationStatus;
 		/** Shows the Dynamics 365 message obtained during the Last Test */
-		LastCrmMessage: DevKit.WebApi.StringValue;
+		LastCrmMessage: string;
 		/** Shows the last test Execution status of email server profile */
-		LastTestExecutionStatus: DevKit.WebApi.OptionSetValue;
+		LastTestExecutionStatus: OptionSet.EmailServerProfile.LastTestExecutionStatus;
 		/** Shows the EWS Request created during the Last Test */
-		LastTestRequest: DevKit.WebApi.StringValue;
+		LastTestRequest: string;
 		/** Shows the EWS Response obtained during the Last Test */
-		LastTestResponse: DevKit.WebApi.StringValue;
+		LastTestResponse: string;
 		/** Shows the Last Test Start date and time */
-		LastTestStartTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		LastTestStartTime_UtcDateAndTime: Date;
 		/** Shows the Time taken while running the last test */
-		LastTestTotalExecutionTime: DevKit.WebApi.BigIntValue;
+		LastTestTotalExecutionTime: number;
 		/** Shows the last test Validation status of email server profile */
-		LastTestValidationStatus: DevKit.WebApi.OptionSetValue;
+		LastTestValidationStatus: OptionSet.EmailServerProfile.LastTestValidationStatus;
 		/** The managed identity id */
-		managedidentityid: DevKit.WebApi.LookupValue;
+		managedidentityid: string;
 		/** Maximum number of concurrent connections allowed to the email server per authenticated user. */
-		MaxConcurrentConnections: DevKit.WebApi.IntegerValue;
+		MaxConcurrentConnections: number;
 		/** Minimum polling interval, in minutes, for mailboxes that are associated with this email server profile. */
-		MinPollingIntervalInMinutes: DevKit.WebApi.IntegerValue;
+		MinPollingIntervalInMinutes: number;
 		/** Shows who last updated the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Shows who last updated the record on behalf of another user. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Indicates whether to move undelivered incoming emails to the Undeliverable folder in Microsoft Exchange. */
-		MoveUndeliveredEmails: DevKit.WebApi.BooleanValue;
+		MoveUndeliveredEmails: boolean;
 		/** Type a meaningful name for the email server profile. This name is displayed when you need to select an email server profile. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** ClientId used for OAuth athentication scheme */
-		OauthClientId: DevKit.WebApi.StringValue;
+		OauthClientId: string;
 		/** Client secret used for the OAuth authentication scheme */
-		OauthClientSecret: DevKit.WebApi.StringValue;
+		OauthClientSecret: string;
 		/** Unique identifier of the organization associated with the record. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Select the outgoing email authentication protocol that is used for connecting to the email server. */
-		OutgoingAuthenticationProtocol: DevKit.WebApi.OptionSetValue;
+		OutgoingAuthenticationProtocol: OptionSet.EmailServerProfile.OutgoingAuthenticationProtocol;
 		/** Indicates whether the email connector will grant delegate access permissions to the accessing user when required while processing outgoing emails. */
-		OutgoingAutoGrantDelegateAccess: DevKit.WebApi.BooleanValue;
+		OutgoingAutoGrantDelegateAccess: boolean;
 		/** Select how credentials will be retrieved for outgoing email. */
-		OutgoingCredentialRetrieval: DevKit.WebApi.OptionSetValue;
+		OutgoingCredentialRetrieval: OptionSet.EmailServerProfile.OutgoingCredentialRetrieval;
 		/** Indicates the outgoing partner application. */
-		OutgoingPartnerApplication: DevKit.WebApi.LookupValueReadonly;
+		readonly OutgoingPartnerApplication: string;
 		/** Type the password for outgoing email. */
-		OutgoingPassword: DevKit.WebApi.StringValue;
+		OutgoingPassword: string;
 		/** Type the Exchange port number for outgoing mail. */
-		OutgoingPortNumber: DevKit.WebApi.IntegerValue;
+		OutgoingPortNumber: number;
 		/** Type the location of the server for outgoing email. */
-		OutgoingServerLocation: DevKit.WebApi.StringValue;
+		OutgoingServerLocation: string;
 		/** Select whether to use impersonation for accessing the mailbox to process outgoing emails. */
-		OutgoingUseImpersonation: DevKit.WebApi.BooleanValue;
+		OutgoingUseImpersonation: boolean;
 		/** Type the user name for outgoing email. */
-		OutgoingUsername: DevKit.WebApi.StringValue;
+		OutgoingUsername: string;
 		/** Select whether to use the Secure Sockets Layer (SSL) protocol for outgoing email. */
-		OutgoingUseSSL: DevKit.WebApi.BooleanValue;
+		OutgoingUseSSL: boolean;
 		/** Email Server Profile Owner's email address */
-		OwnerEmailAddress: DevKit.WebApi.StringValue;
+		OwnerEmailAddress: string;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Select the business unit that owns the record. */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Shows the date and time after which email messages that are received will be processed for mailboxes associated with the email server profile. */
-		ProcessEmailsReceivedAfter_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		ProcessEmailsReceivedAfter_UtcDateAndTime: Date;
 		/** Select whether to send an email alert if more than 50% of the mailboxes in this email server profile failed to synchronize in an hour period. */
-		SendEmailAlert: DevKit.WebApi.BooleanValue;
+		SendEmailAlert: boolean;
 		/** Select the profile's email server type. */
-		ServerType: DevKit.WebApi.OptionSetValue;
+		ServerType: OptionSet.EmailServerProfile.ServerType;
 		/** Shows whether the email server profile is active or inactive. */
-		StateCode: DevKit.WebApi.OptionSetValue;
+		StateCode: OptionSet.EmailServerProfile.StateCode;
 		/** Select the email server profile's status. */
-		StatusCode: DevKit.WebApi.OptionSetValue;
+		StatusCode: OptionSet.EmailServerProfile.StatusCode;
 		/** Select whether to timeout a single mailbox. */
-		TimeoutMailboxConnection: DevKit.WebApi.BooleanValue;
+		TimeoutMailboxConnection: boolean;
 		/** Type the number of milliseconds to timeout a single mailbox. The upper limit is 100 seconds. */
-		TimeoutMailboxConnectionAfterAmount: DevKit.WebApi.IntegerValue;
+		TimeoutMailboxConnectionAfterAmount: number;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Select whether to automatically discover the server location */
-		UseAutoDiscover: DevKit.WebApi.BooleanValue;
+		UseAutoDiscover: boolean;
 		/** Select whether to use the Exchange Online Tenant ID obtained from running Microsoft Azure PowerShell cmdlets (highly recommended). If you select No, you can edit this field manually */
-		UseDefaultTenantId: DevKit.WebApi.BooleanValue;
+		UseDefaultTenantId: boolean;
 		/** Select whether to use the same settings for incoming and outgoing connections. */
-		UseSameSettingsForOutgoingConnections: DevKit.WebApi.BooleanValue;
+		UseSameSettingsForOutgoingConnections: boolean;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version number of the email server profile. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -428,4 +430,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

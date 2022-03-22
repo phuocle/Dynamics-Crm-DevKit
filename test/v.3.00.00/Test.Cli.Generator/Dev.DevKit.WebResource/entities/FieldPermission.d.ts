@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,30 +30,30 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Attribute Name. */
-		AttributeLogicalName: DevKit.WebApi.StringValue;
+		AttributeLogicalName: string;
 		/** Can this Profile create the attribute */
-		CanCreate: DevKit.WebApi.OptionSetValue;
+		CanCreate: OptionSet.FieldPermission.CanCreate;
 		/** Can this Profile read the attribute */
-		CanRead: DevKit.WebApi.OptionSetValue;
+		CanRead: OptionSet.FieldPermission.CanRead;
 		/** Can this Profile update the attribute */
-		CanUpdate: DevKit.WebApi.OptionSetValue;
+		CanUpdate: OptionSet.FieldPermission.CanUpdate;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.FieldPermission.ComponentState;
 		/** Unique identifier of the Field Permission. */
-		FieldPermissionId: DevKit.WebApi.GuidValue;
+		FieldPermissionId: string;
 		/** For internal use only. */
-		FieldPermissionIdUnique: DevKit.WebApi.GuidValueReadonly;
+		readonly FieldPermissionIdUnique: string;
 		/** Unique identifier of profile to which this privilege belongs. */
-		FieldSecurityProfileId: DevKit.WebApi.LookupValue;
+		FieldSecurityProfileId: string;
 		/** Indicates whether the solution component is part of a managed solution. */
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsManaged: boolean;
 		/** For internal use only. */
-		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly OverwriteTime_UtcDateOnly: Date;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** For internal use only. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly SupportingSolutionId: string;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -102,4 +104,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

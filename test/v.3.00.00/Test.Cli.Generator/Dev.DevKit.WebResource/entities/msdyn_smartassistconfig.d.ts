@@ -67,8 +67,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -76,75 +78,75 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** For internal use only. */
-		ComponentIdUnique: DevKit.WebApi.GuidValueReadonly;
+		readonly ComponentIdUnique: string;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.msdyn_smartassistconfig.ComponentState;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** For internal use only. */
-		IsCustomizable: DevKit.WebApi.ManagedPropertyValue;
+		IsCustomizable: string;
 		/** Indicates whether the solution component is part of a managed solution. */
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsManaged: boolean;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Icon for the suggestion group container */
-		msdyn_IconURL: DevKit.WebApi.StringValue;
+		msdyn_IconURL: string;
 		/** This field denotes whether config is default. */
-		msdyn_isDefault: DevKit.WebApi.BooleanValue;
+		msdyn_isDefault: boolean;
 		/** This number denotes the maximum number of suggestions that can be displayed in smart assist control */
-		msdyn_maxsuggestioncount: DevKit.WebApi.IntegerValue;
+		msdyn_maxsuggestioncount: number;
 		/** The name of the custom entity. */
-		msdyn_name: DevKit.WebApi.StringValue;
+		msdyn_name: string;
 		/** Order in which the entities are grouped in smart assist. */
-		msdyn_Order: DevKit.WebApi.IntegerValue;
+		msdyn_Order: number;
 		/** Unique identifier for entity instances */
-		msdyn_smartassistconfigId: DevKit.WebApi.GuidValue;
+		msdyn_smartassistconfigId: string;
 		/** Suggestion source entity logical name. */
-		msdyn_SourceEntityName: DevKit.WebApi.StringValue;
+		msdyn_SourceEntityName: string;
 		/** This will be used as a title for entity suggestion panel */
-		msdyn_Suggestioncontainertitle: DevKit.WebApi.StringValue;
+		msdyn_Suggestioncontainertitle: string;
 		/** Unique name of the suggestion control configuration entity. if suggestion type is adaptive card, then it should refer to the associated adaptive configuration. */
-		msdyn_SuggestionControlConfigUniquename: DevKit.WebApi.StringValue;
+		msdyn_SuggestionControlConfigUniquename: string;
 		/** Denotes the control type for suggestions, (e.g) Adaptive card */
-		msdyn_Suggestioncontroltype: DevKit.WebApi.OptionSetValue;
+		msdyn_Suggestioncontroltype: OptionSet.msdyn_smartassistconfig.msdyn_Suggestioncontroltype;
 		/** Provide the class name of Suggestion provider */
-		msdyn_SuggestionProvider: DevKit.WebApi.StringValue;
+		msdyn_SuggestionProvider: string;
 		/** Denotes the type of suggestions like Similar case or KB article suggestion */
-		msdyn_Suggestiontype: DevKit.WebApi.OptionSetValue;
+		msdyn_Suggestiontype: OptionSet.msdyn_smartassistconfig.msdyn_Suggestiontype;
 		/** Suggestion Webresource which brings smart assist actions or api to retrieve suggestions */
-		msdyn_SuggestionWebresourceURL: DevKit.WebApi.StringValue;
+		msdyn_SuggestionWebresourceURL: string;
 		/** Unique Name for the entity. */
-		msdyn_UniqueName: DevKit.WebApi.StringValue;
+		msdyn_UniqueName: string;
 		/** Unique identifier for the organization */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** For internal use only. */
-		OverwriteTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly OverwriteTime_UtcDateAndTime: Date;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** Status of the Smartassist configuration */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.msdyn_smartassistconfig.statecode;
 		/** Reason for the status of the Smartassist configuration */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.msdyn_smartassistconfig.statuscode;
 		/** For internal use only. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SupportingSolutionId: string;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -201,4 +203,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

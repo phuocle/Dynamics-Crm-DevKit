@@ -180,7 +180,6 @@ declare namespace DevKit {
 			MapSection: DevKit.Controls.Section;
 			PredictiveScoreSection: DevKit.Controls.Section;
 			RELATED_TAB: DevKit.Controls.Section;
-			SOCIAL_PANE: DevKit.Controls.Section;
 			Summary_CadenceWidget: DevKit.Controls.Section;
 			Summary_section_6: DevKit.Controls.Section;
 		}
@@ -374,8 +373,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -383,327 +384,327 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the account with which the lead is associated. */
-		AccountId: DevKit.WebApi.LookupValueReadonly;
+		readonly AccountId: string;
 		/** Unique identifier for address 1. */
-		Address1_AddressId: DevKit.WebApi.GuidValue;
+		Address1_AddressId: string;
 		/** Select the primary address type. */
-		Address1_AddressTypeCode: DevKit.WebApi.OptionSetValue;
+		Address1_AddressTypeCode: OptionSet.Lead.Address1_AddressTypeCode;
 		/** Type the city for the primary address. */
-		Address1_City: DevKit.WebApi.StringValue;
+		Address1_City: string;
 		/** Shows the complete primary address. */
-		Address1_Composite: DevKit.WebApi.StringValueReadonly;
+		readonly Address1_Composite: string;
 		/** Type the country or region for the primary address. */
-		Address1_Country: DevKit.WebApi.StringValue;
+		Address1_Country: string;
 		/** Type the county for the primary address. */
-		Address1_County: DevKit.WebApi.StringValue;
+		Address1_County: string;
 		/** Type the fax number associated with the primary address. */
-		Address1_Fax: DevKit.WebApi.StringValue;
+		Address1_Fax: string;
 		/** Type the latitude value for the primary address for use in mapping and other applications. */
-		Address1_Latitude: DevKit.WebApi.DoubleValue;
+		Address1_Latitude: number;
 		/** Type the first line of the primary address. */
-		Address1_Line1: DevKit.WebApi.StringValue;
+		Address1_Line1: string;
 		/** Type the second line of the primary address. */
-		Address1_Line2: DevKit.WebApi.StringValue;
+		Address1_Line2: string;
 		/** Type the third line of the primary address. */
-		Address1_Line3: DevKit.WebApi.StringValue;
+		Address1_Line3: string;
 		/** Type the longitude value for the primary address for use in mapping and other applications. */
-		Address1_Longitude: DevKit.WebApi.DoubleValue;
+		Address1_Longitude: number;
 		/** Type a descriptive name for the primary address, such as Corporate Headquarters. */
-		Address1_Name: DevKit.WebApi.StringValue;
+		Address1_Name: string;
 		/** Type the ZIP Code or postal code for the primary address. */
-		Address1_PostalCode: DevKit.WebApi.StringValue;
+		Address1_PostalCode: string;
 		/** Type the post office box number of the primary address. */
-		Address1_PostOfficeBox: DevKit.WebApi.StringValue;
+		Address1_PostOfficeBox: string;
 		/** Select a shipping method for deliveries sent to this address. */
-		Address1_ShippingMethodCode: DevKit.WebApi.OptionSetValue;
+		Address1_ShippingMethodCode: OptionSet.Lead.Address1_ShippingMethodCode;
 		/** Type the state or province of the primary address. */
-		Address1_StateOrProvince: DevKit.WebApi.StringValue;
+		Address1_StateOrProvince: string;
 		/** Type the main phone number associated with the primary address. */
-		Address1_Telephone1: DevKit.WebApi.StringValue;
+		Address1_Telephone1: string;
 		/** Type a second phone number associated with the primary address. */
-		Address1_Telephone2: DevKit.WebApi.StringValue;
+		Address1_Telephone2: string;
 		/** Type a third phone number associated with the primary address. */
-		Address1_Telephone3: DevKit.WebApi.StringValue;
+		Address1_Telephone3: string;
 		/** Type the UPS zone of the primary address to make sure shipping charges are calculated correctly and deliveries are made promptly, if shipped by UPS. */
-		Address1_UPSZone: DevKit.WebApi.StringValue;
+		Address1_UPSZone: string;
 		/** Select the time zone, or UTC offset, for this address so that other people can reference it when they contact someone at this address. */
-		Address1_UTCOffset: DevKit.WebApi.IntegerValue;
+		Address1_UTCOffset: number;
 		/** Unique identifier for address 2. */
-		Address2_AddressId: DevKit.WebApi.GuidValue;
+		Address2_AddressId: string;
 		/** Select the secondary address type. */
-		Address2_AddressTypeCode: DevKit.WebApi.OptionSetValue;
+		Address2_AddressTypeCode: OptionSet.Lead.Address2_AddressTypeCode;
 		/** Type the city for the secondary address. */
-		Address2_City: DevKit.WebApi.StringValue;
+		Address2_City: string;
 		/** Shows the complete secondary address. */
-		Address2_Composite: DevKit.WebApi.StringValueReadonly;
+		readonly Address2_Composite: string;
 		/** Type the country or region for the secondary address. */
-		Address2_Country: DevKit.WebApi.StringValue;
+		Address2_Country: string;
 		/** Type the county for the secondary address. */
-		Address2_County: DevKit.WebApi.StringValue;
+		Address2_County: string;
 		/** Type the fax number associated with the secondary address. */
-		Address2_Fax: DevKit.WebApi.StringValue;
+		Address2_Fax: string;
 		/** Type the latitude value for the secondary address for use in mapping and other applications. */
-		Address2_Latitude: DevKit.WebApi.DoubleValue;
+		Address2_Latitude: number;
 		/** Type the first line of the secondary address. */
-		Address2_Line1: DevKit.WebApi.StringValue;
+		Address2_Line1: string;
 		/** Type the second line of the secondary address. */
-		Address2_Line2: DevKit.WebApi.StringValue;
+		Address2_Line2: string;
 		/** Type the third line of the secondary address. */
-		Address2_Line3: DevKit.WebApi.StringValue;
+		Address2_Line3: string;
 		/** Type the longitude value for the secondary address for use in mapping and other applications. */
-		Address2_Longitude: DevKit.WebApi.DoubleValue;
+		Address2_Longitude: number;
 		/** Type a descriptive name for the secondary address, such as Corporate Headquarters. */
-		Address2_Name: DevKit.WebApi.StringValue;
+		Address2_Name: string;
 		/** Type the ZIP Code or postal code for the secondary address. */
-		Address2_PostalCode: DevKit.WebApi.StringValue;
+		Address2_PostalCode: string;
 		/** Type the post office box number of the secondary address. */
-		Address2_PostOfficeBox: DevKit.WebApi.StringValue;
+		Address2_PostOfficeBox: string;
 		/** Select a shipping method for deliveries sent to this address. */
-		Address2_ShippingMethodCode: DevKit.WebApi.OptionSetValue;
+		Address2_ShippingMethodCode: OptionSet.Lead.Address2_ShippingMethodCode;
 		/** Type the state or province of the secondary address. */
-		Address2_StateOrProvince: DevKit.WebApi.StringValue;
+		Address2_StateOrProvince: string;
 		/** Type the main phone number associated with the secondary address. */
-		Address2_Telephone1: DevKit.WebApi.StringValue;
+		Address2_Telephone1: string;
 		/** Type a second phone number associated with the secondary address. */
-		Address2_Telephone2: DevKit.WebApi.StringValue;
+		Address2_Telephone2: string;
 		/** Type a third phone number associated with the secondary address. */
-		Address2_Telephone3: DevKit.WebApi.StringValue;
+		Address2_Telephone3: string;
 		/** Type the UPS zone of the secondary address to make sure shipping charges are calculated correctly and deliveries are made promptly, if shipped by UPS. */
-		Address2_UPSZone: DevKit.WebApi.StringValue;
+		Address2_UPSZone: string;
 		/** Select the time zone, or UTC offset, for this address so that other people can reference it when they contact someone at this address. */
-		Address2_UTCOffset: DevKit.WebApi.IntegerValue;
+		Address2_UTCOffset: number;
 		/** Information about the budget amount of the lead's company or organization. */
-		BudgetAmount: DevKit.WebApi.MoneyValue;
+		BudgetAmount: number;
 		/** Value of the Budget Amount in base currency. */
-		BudgetAmount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly BudgetAmount_Base: number;
 		/** Information about the budget status of the lead's company or organization. */
-		BudgetStatus: DevKit.WebApi.OptionSetValue;
+		BudgetStatus: OptionSet.Lead.BudgetStatus;
 		/** Stores Image of the Business Card */
-		BusinessCard: DevKit.WebApi.StringValue;
+		BusinessCard: string;
 		/** Stores Business Card Control Properties. */
-		BusinessCardAttributes: DevKit.WebApi.StringValue;
+		BusinessCardAttributes: string;
 		/** Choose the campaign that the lead was generated from to track the effectiveness of marketing campaigns and identify  communications received by the lead. */
-		CampaignId: DevKit.WebApi.LookupValue;
+		CampaignId: string;
 		/** Type the name of the company associated with the lead. This becomes the account name when the lead is qualified and converted to a customer account. */
-		CompanyName: DevKit.WebApi.StringValue;
+		CompanyName: string;
 		/** Select whether the lead confirmed interest in your offerings. This helps in determining the lead quality. */
-		ConfirmInterest: DevKit.WebApi.BooleanValue;
+		ConfirmInterest: boolean;
 		/** Unique identifier of the contact with which the lead is associated. */
-		ContactId: DevKit.WebApi.LookupValueReadonly;
+		readonly ContactId: string;
 		/** Shows who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
-		customerid_account: DevKit.WebApi.LookupValue;
+		customerid_account: string;
 		/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
-		customerid_contact: DevKit.WebApi.LookupValue;
+		customerid_contact: string;
 		/** Select whether your notes include information about who makes the purchase decisions at the lead's company. */
-		DecisionMaker: DevKit.WebApi.BooleanValue;
+		DecisionMaker: boolean;
 		/** Type additional information to describe the lead, such as an excerpt from the company's website. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Select whether the lead accepts bulk email sent through marketing campaigns or quick campaigns. If Do Not Allow is selected, the lead can be added to marketing lists, but will be excluded from the email. */
-		DoNotBulkEMail: DevKit.WebApi.BooleanValue;
+		DoNotBulkEMail: boolean;
 		/** Select whether the lead allows direct email sent from Microsoft Dynamics 365. */
-		DoNotEMail: DevKit.WebApi.BooleanValue;
+		DoNotEMail: boolean;
 		/** Select whether the lead allows faxes. */
-		DoNotFax: DevKit.WebApi.BooleanValue;
+		DoNotFax: boolean;
 		/** Select whether the lead allows phone calls. */
-		DoNotPhone: DevKit.WebApi.BooleanValue;
+		DoNotPhone: boolean;
 		/** Select whether the lead allows direct mail. */
-		DoNotPostalMail: DevKit.WebApi.BooleanValue;
+		DoNotPostalMail: boolean;
 		/** Select whether the lead accepts marketing materials, such as brochures or catalogs. Leads that opt out can be excluded from marketing initiatives. */
-		DoNotSendMM: DevKit.WebApi.BooleanValue;
+		DoNotSendMM: boolean;
 		/** Type the primary email address for the lead. */
-		EMailAddress1: DevKit.WebApi.StringValue;
+		EMailAddress1: string;
 		/** Type the secondary email address for the lead. */
-		EMailAddress2: DevKit.WebApi.StringValue;
+		EMailAddress2: string;
 		/** Type a third email address for the lead. */
-		EMailAddress3: DevKit.WebApi.StringValue;
+		EMailAddress3: string;
 		/** Shows the default image for the record. */
-		EntityImage: DevKit.WebApi.StringValue;
-		EntityImage_Timestamp: DevKit.WebApi.BigIntValueReadonly;
-		EntityImage_URL: DevKit.WebApi.StringValueReadonly;
-		EntityImageId: DevKit.WebApi.GuidValueReadonly;
+		EntityImage: string;
+		EntityImage_Timestamp: number;
+		EntityImage_URL: string;
+		readonly EntityImageId: string;
 		/** Type the estimated revenue value that this lead will generate to assist in sales forecasting and planning. */
-		EstimatedAmount: DevKit.WebApi.MoneyValue;
+		EstimatedAmount: number;
 		/** Value of the Est. Value in base currency. */
-		EstimatedAmount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly EstimatedAmount_Base: number;
 		/** Enter the expected close date for the lead, so that the sales team can schedule timely follow-up meetings to move the prospect to the next sales stage. */
-		EstimatedCloseDate_DateOnly: DevKit.WebApi.DateOnlyValue;
+		EstimatedCloseDate_DateOnly: Date;
 		/** Type a numeric value of the lead's estimated value, such as a product quantity, if no revenue amount can be specified in the Est. Value field. This can be used for sales forecasting and planning. */
-		EstimatedValue: DevKit.WebApi.DoubleValue;
+		EstimatedValue: number;
 		/** Select whether the fit between the lead's requirements and your offerings was evaluated. */
-		EvaluateFit: DevKit.WebApi.BooleanValue;
+		EvaluateFit: boolean;
 		/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Type the fax number for the primary contact for the lead. */
-		Fax: DevKit.WebApi.StringValue;
+		Fax: string;
 		/** Type the first name of the primary contact for the lead to make sure the prospect is addressed correctly in sales calls, email, and marketing campaigns. */
-		FirstName: DevKit.WebApi.StringValue;
+		FirstName: string;
 		/** Information about whether to allow following email activity like opens, attachment views and link clicks for emails sent to the lead. */
-		FollowEmail: DevKit.WebApi.BooleanValue;
+		FollowEmail: boolean;
 		/** Combines and shows the lead's first and last names so the full name can be displayed in views and reports. */
-		FullName: DevKit.WebApi.StringValueReadonly;
+		readonly FullName: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Select the primary industry in which the lead's business is focused, for use in marketing segmentation and demographic analysis. */
-		IndustryCode: DevKit.WebApi.OptionSetValue;
+		IndustryCode: OptionSet.Lead.IndustryCode;
 		/** Choose whether someone from the sales team contacted this lead earlier. */
-		InitialCommunication: DevKit.WebApi.OptionSetValue;
+		InitialCommunication: OptionSet.Lead.InitialCommunication;
 		/** Information about whether the contact was auto-created when promoting an email or an appointment. */
-		IsAutoCreate: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsAutoCreate: boolean;
 		/** Indicates whether the lead is private or visible to the entire organization. */
-		IsPrivate: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsPrivate: boolean;
 		/** Type the job title of the primary contact for this lead to make sure the prospect is addressed correctly in sales calls, email, and marketing campaigns. */
-		JobTitle: DevKit.WebApi.StringValue;
+		JobTitle: string;
 		/** Type the last name of the primary contact for the lead to make sure the prospect is addressed correctly in sales calls, email, and marketing campaigns. */
-		LastName: DevKit.WebApi.StringValue;
+		LastName: string;
 		/** Contains the date and time stamp of the last on hold time. */
-		LastOnHoldTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		LastOnHoldTime_UtcDateAndTime: Date;
 		/** Shows the date when the lead was last included in a marketing campaign or quick campaign. */
-		LastUsedInCampaign_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		LastUsedInCampaign_UtcDateOnly: Date;
 		/** Unique identifier of the lead. */
-		LeadId: DevKit.WebApi.GuidValue;
+		LeadId: string;
 		/** Select a rating value to indicate the lead's potential to become a customer. */
-		LeadQualityCode: DevKit.WebApi.OptionSetValue;
+		LeadQualityCode: OptionSet.Lead.LeadQualityCode;
 		/** Select the primary marketing source that prompted the lead to contact you. */
-		LeadSourceCode: DevKit.WebApi.OptionSetValue;
+		LeadSourceCode: OptionSet.Lead.LeadSourceCode;
 		/** Unique identifier of the master lead for merge. */
-		MasterId: DevKit.WebApi.LookupValueReadonly;
+		readonly MasterId: string;
 		/** Tells whether the lead has been merged with another lead. */
-		Merged: DevKit.WebApi.BooleanValueReadonly;
+		readonly Merged: boolean;
 		/** Type the middle name or initial of the primary contact for the lead to make sure the prospect is addressed correctly. */
-		MiddleName: DevKit.WebApi.StringValue;
+		MiddleName: string;
 		/** Type the mobile phone number for the primary contact for the lead. */
-		MobilePhone: DevKit.WebApi.StringValue;
+		MobilePhone: string;
 		/** Shows who last updated the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Shows who last updated the record on behalf of another user. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Describes whether lead is opted out or not */
-		msdyn_gdproptout: DevKit.WebApi.BooleanValue;
-		msdyn_LeadGrade: DevKit.WebApi.OptionSetValue;
-		msdyn_LeadScore: DevKit.WebApi.IntegerValue;
-		msdyn_LeadScoreTrend: DevKit.WebApi.OptionSetValue;
+		msdyn_gdproptout: boolean;
+		msdyn_LeadGrade: OptionSet.Lead.msdyn_LeadGrade;
+		msdyn_LeadScore: number;
+		msdyn_LeadScoreTrend: OptionSet.Lead.msdyn_LeadScoreTrend;
 		/** Whether the Opportunity created when qualifying this Lead is for an Item- based or a Work-based sale */
-		msdyn_ordertype: DevKit.WebApi.OptionSetValue;
+		msdyn_ordertype: OptionSet.Lead.msdyn_ordertype;
 		/** Predictive score */
-		msdyn_PredictiveScoreId: DevKit.WebApi.LookupValue;
+		msdyn_PredictiveScoreId: string;
 		/** Result of the assignment rule process */
-		msdyn_salesassignmentresult: DevKit.WebApi.OptionSetValue;
-		msdyn_ScoreHistory: DevKit.WebApi.StringValue;
-		msdyn_ScoreReasons: DevKit.WebApi.StringValue;
+		msdyn_salesassignmentresult: OptionSet.Lead.msdyn_salesassignmentresult;
+		msdyn_ScoreHistory: string;
+		msdyn_ScoreReasons: string;
 		/** Unique identifier for Segment associated with Lead. */
-		msdyn_segmentid: DevKit.WebApi.LookupValue;
+		msdyn_segmentid: string;
 		/** Choose how high the level of need is for the lead's company. */
-		Need: DevKit.WebApi.OptionSetValue;
+		Need: OptionSet.Lead.Need;
 		/** Type the number of employees that work at the company associated with the lead, for use in marketing segmentation and demographic analysis. */
-		NumberOfEmployees: DevKit.WebApi.IntegerValue;
+		NumberOfEmployees: number;
 		/** Shows how long, in minutes, that the record was on hold. */
-		OnHoldTime: DevKit.WebApi.IntegerValueReadonly;
+		readonly OnHoldTime: number;
 		/** This attribute is used for Sample Service Business Processes. */
-		OriginatingCaseId: DevKit.WebApi.LookupValue;
+		OriginatingCaseId: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Type the pager number for the primary contact for the lead. */
-		Pager: DevKit.WebApi.StringValue;
+		Pager: string;
 		/** Choose an account to connect this lead to, so that the relationship is visible in reports and analytics. */
-		ParentAccountId: DevKit.WebApi.LookupValue;
+		ParentAccountId: string;
 		/** Choose a contact to connect this lead to, so that the relationship is visible in reports and analytics. */
-		ParentContactId: DevKit.WebApi.LookupValue;
+		ParentContactId: string;
 		/** Shows whether the lead participates in workflow rules. */
-		ParticipatesInWorkflow: DevKit.WebApi.BooleanValue;
+		ParticipatesInWorkflow: boolean;
 		/** Select the preferred method of contact. */
-		PreferredContactMethodCode: DevKit.WebApi.OptionSetValue;
+		PreferredContactMethodCode: OptionSet.Lead.PreferredContactMethodCode;
 		/** Select the priority so that preferred customers or critical issues are handled quickly. */
-		PriorityCode: DevKit.WebApi.OptionSetValue;
+		PriorityCode: OptionSet.Lead.PriorityCode;
 		/** Contains the id of the process associated with the entity. */
-		ProcessId: DevKit.WebApi.GuidValue;
+		ProcessId: string;
 		/** Choose whether an individual or a committee will be involved in the  purchase process for the lead. */
-		PurchaseProcess: DevKit.WebApi.OptionSetValue;
+		PurchaseProcess: OptionSet.Lead.PurchaseProcess;
 		/** Choose how long the lead will likely take to make the purchase, so the sales team will be aware. */
-		PurchaseTimeFrame: DevKit.WebApi.OptionSetValue;
+		PurchaseTimeFrame: OptionSet.Lead.PurchaseTimeFrame;
 		/** Type comments about the qualification or scoring of the lead. */
-		QualificationComments: DevKit.WebApi.StringValue;
+		QualificationComments: string;
 		/** Choose the opportunity that the lead was qualified on and then converted to. */
-		QualifyingOpportunityId: DevKit.WebApi.LookupValue;
+		QualifyingOpportunityId: string;
 		/** Related Campaign Response. */
-		RelatedObjectId: DevKit.WebApi.LookupValue;
+		RelatedObjectId: string;
 		/** Type the annual revenue of the company associated with the lead to provide an understanding of the prospect's business. */
-		Revenue: DevKit.WebApi.MoneyValue;
+		Revenue: number;
 		/** Value of the Annual Revenue in base currency. */
-		Revenue_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly Revenue_Base: number;
 		/** Select the sales stage of this lead to aid the sales team in their efforts to convert this lead to an opportunity. */
-		SalesStage: DevKit.WebApi.OptionSetValue;
+		SalesStage: OptionSet.Lead.SalesStage;
 		/** Select the sales process stage for the lead to help determine the probability of the lead converting to an opportunity. */
-		SalesStageCode: DevKit.WebApi.OptionSetValue;
+		SalesStageCode: OptionSet.Lead.SalesStageCode;
 		/** Type the salutation of the primary contact for this lead to make sure the prospect is addressed correctly in sales calls, email messages, and marketing campaigns. */
-		Salutation: DevKit.WebApi.StringValue;
+		Salutation: string;
 		/** Enter the date and time of the prospecting follow-up meeting with the lead. */
-		ScheduleFollowUp_Prospect_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		ScheduleFollowUp_Prospect_UtcDateOnly: Date;
 		/** Enter the date and time of the qualifying follow-up meeting with the lead. */
-		ScheduleFollowUp_Qualify_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		ScheduleFollowUp_Qualify_UtcDateOnly: Date;
 		/** Type the Standard Industrial Classification (SIC) code that indicates the lead's primary industry of business for use in marketing segmentation and demographic analysis. */
-		SIC: DevKit.WebApi.StringValue;
+		SIC: string;
 		/** Choose the service level agreement (SLA) that you want to apply to the Lead record. */
-		SLAId: DevKit.WebApi.LookupValue;
+		SLAId: string;
 		/** Last SLA that was applied to this case. This field is for internal use only. */
-		SLAInvokedId: DevKit.WebApi.LookupValueReadonly;
+		readonly SLAInvokedId: string;
 		/** Contains the id of the stage where the entity is located. */
-		StageId: DevKit.WebApi.GuidValue;
+		StageId: string;
 		/** Shows whether the lead is open, qualified, or disqualified. Qualified and disqualified leads are read-only and can't be edited unless they are reactivated. */
-		StateCode: DevKit.WebApi.OptionSetValue;
+		StateCode: OptionSet.Lead.StateCode;
 		/** Select the lead's status. */
-		StatusCode: DevKit.WebApi.OptionSetValue;
+		StatusCode: OptionSet.Lead.StatusCode;
 		/** Type a subject or descriptive name, such as the expected order, company name, or marketing source list, to identify the lead. */
-		Subject: DevKit.WebApi.StringValue;
+		Subject: string;
 		/** Number of users or conversations followed the record */
-		TeamsFollowed: DevKit.WebApi.IntegerValue;
+		TeamsFollowed: number;
 		/** Type the work phone number for the primary contact for the lead. */
-		Telephone1: DevKit.WebApi.StringValue;
+		Telephone1: string;
 		/** Type the home phone number for the primary contact for the lead. */
-		Telephone2: DevKit.WebApi.StringValue;
+		Telephone2: string;
 		/** Type an alternate phone number for the primary contact for the lead. */
-		Telephone3: DevKit.WebApi.StringValue;
+		Telephone3: string;
 		/** Total time spent for emails (read and write) and meetings by me in relation to the lead record. */
-		TimeSpentByMeOnEmailAndMeetings: DevKit.WebApi.StringValueReadonly;
+		readonly TimeSpentByMeOnEmailAndMeetings: string;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** A comma separated list of string values representing the unique identifiers of stages in a Business Process Flow Instance in the order that they occur. */
-		TraversedPath: DevKit.WebApi.StringValue;
+		TraversedPath: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 		/** Type the website URL for the company associated with this lead. */
-		WebSiteUrl: DevKit.WebApi.StringValue;
+		WebSiteUrl: string;
 		/** Type the phonetic spelling of the lead's company name, if the name is specified in Japanese, to make sure the name is pronounced correctly in phone calls with the prospect. */
-		YomiCompanyName: DevKit.WebApi.StringValue;
+		YomiCompanyName: string;
 		/** Type the phonetic spelling of the lead's first name, if the name is specified in Japanese, to make sure the name is pronounced correctly in phone calls with the prospect. */
-		YomiFirstName: DevKit.WebApi.StringValue;
+		YomiFirstName: string;
 		/** Combines and shows the lead's Yomi first and last names so the full phonetic name can be displayed in views and reports. */
-		YomiFullName: DevKit.WebApi.StringValueReadonly;
+		readonly YomiFullName: string;
 		/** Type the phonetic spelling of the lead's last name, if the name is specified in Japanese, to make sure the name is pronounced correctly in phone calls with the prospect. */
-		YomiLastName: DevKit.WebApi.StringValue;
+		YomiLastName: string;
 		/** Type the phonetic spelling of the lead's middle name, if the name is specified in Japanese, to make sure the name is pronounced correctly in phone calls with the prospect. */
-		YomiMiddleName: DevKit.WebApi.StringValue;
+		YomiMiddleName: string;
 	}
 }
 declare namespace OptionSet {
@@ -968,4 +969,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

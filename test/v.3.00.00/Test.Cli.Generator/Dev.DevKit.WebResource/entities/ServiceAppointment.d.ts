@@ -115,8 +115,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -124,323 +126,327 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** For internal use only. */
-		ActivityAdditionalParams: DevKit.WebApi.StringValue;
+		ActivityAdditionalParams: string;
 		/** Unique identifier of the service activity. */
-		ActivityId: DevKit.WebApi.GuidValue;
+		ActivityId: string;
 		/** Shows the value selected in the Duration field on the service activity at the time the service activity is closed as completed. The duration is used to report the time spent on the activity. */
-		ActualDurationMinutes: DevKit.WebApi.IntegerValue;
+		ActualDurationMinutes: number;
 		/** Enter the actual end date and time of the service activity. By default, it displays when the activity was closed or canceled. */
-		ActualEnd_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		ActualEnd_UtcDateAndTime: Date;
 		/** Enter the actual start date and time for the service activity. By default, it displays when the activity was created. */
-		ActualStart_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		ActualStart_UtcDateAndTime: Date;
 		/** Type a category to identify the service activity type, such as routine maintenance or service call, to tie the service activity to a business group or function. */
-		Category: DevKit.WebApi.StringValue;
+		Category: string;
 		/** Shows how contact about the social activity originated, such as from Twitter or Facebook. This field is read-only. */
-		Community: DevKit.WebApi.OptionSetValue;
+		Community: OptionSet.ServiceAppointment.Community;
 		/** Unique identifier of the user who created the activity. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the activity was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the activitypointer. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Date and time when the delivery of the activity was last attempted. */
-		DeliveryLastAttemptedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly DeliveryLastAttemptedOn_UtcDateAndTime: Date;
 		/** Priority of delivery of the activity to the email server. */
-		DeliveryPriorityCode: DevKit.WebApi.OptionSetValue;
+		DeliveryPriorityCode: OptionSet.ServiceAppointment.DeliveryPriorityCode;
 		/** Type additional information to describe the service activity, such as key talking points or objectives. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** The message id of activity which is returned from Exchange Server. */
-		ExchangeItemId: DevKit.WebApi.StringValue;
+		ExchangeItemId: string;
 		/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Shows the web link of Activity of type email. */
-		ExchangeWebLink: DevKit.WebApi.StringValue;
+		ExchangeWebLink: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Type of instance of a recurring series. */
-		InstanceTypeCode: DevKit.WebApi.OptionSetValueReadonly;
+		readonly InstanceTypeCode: OptionSet.ServiceAppointment.InstanceTypeCode;
 		/** Select whether the service activity is an all-day event to make sure the required resources are scheduled for the full day. */
-		IsAllDayEvent: DevKit.WebApi.BooleanValue;
+		IsAllDayEvent: boolean;
 		/** Information which specifies whether the service activity was billed as part of resolving a case. */
-		IsBilled: DevKit.WebApi.BooleanValue;
+		IsBilled: boolean;
 		/** For internal use only. */
-		IsMapiPrivate: DevKit.WebApi.BooleanValue;
+		IsMapiPrivate: boolean;
 		/** Information regarding whether the activity is a regular activity type or event type. */
-		IsRegularActivity: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsRegularActivity: boolean;
 		/** Information which specifies if the service activity was created from a workflow rule. */
-		IsWorkflowCreated: DevKit.WebApi.BooleanValue;
+		IsWorkflowCreated: boolean;
 		/** Contains the date and time stamp of the last on hold time. */
-		LastOnHoldTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		LastOnHoldTime_UtcDateAndTime: Date;
 		/** Left the voice mail */
-		LeftVoiceMail: DevKit.WebApi.BooleanValue;
+		LeftVoiceMail: boolean;
 		/** Type the location where the service activity will take place, such as a conference room, customer office, or other venue. */
-		Location: DevKit.WebApi.StringValue;
+		Location: string;
 		/** Unique identifier of user who last modified the activity. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when activity was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the activitypointer. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** OrganizationalUnit ServiceAppointment Id */
-		msdyn_OrganizationalUnitId: DevKit.WebApi.LookupValue;
+		msdyn_OrganizationalUnitId: string;
 		/** Shows how long, in minutes, that the record was on hold. */
-		OnHoldTime: DevKit.WebApi.IntegerValueReadonly;
+		readonly OnHoldTime: number;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier of the business unit that owns the activity. */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier of the team that owns the activity. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier of the user that owns the activity. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** For internal use only. */
-		PostponeActivityProcessingUntil_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly PostponeActivityProcessingUntil_UtcDateAndTime: Date;
 		/** Select the priority so that preferred customers or critical issues are handled quickly. */
-		PriorityCode: DevKit.WebApi.OptionSetValue;
+		PriorityCode: OptionSet.ServiceAppointment.PriorityCode;
 		/** Unique identifier of the Process. */
-		ProcessId: DevKit.WebApi.GuidValue;
+		ProcessId: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_account_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_account_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_bookableresourcebooking_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_bookableresourcebooking_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_bookableresourcebookingheader_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_bookableresourcebookingheader_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_bulkoperation_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_bulkoperation_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_campaign_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_campaign_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_campaignactivity_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_campaignactivity_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_contact_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_contact_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_contract_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_contract_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_entitlement_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_entitlement_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_entitlementtemplate_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_entitlementtemplate_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_incident_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_incident_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_new_interactionforemail_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_new_interactionforemail_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_invoice_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_invoice_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_knowledgearticle_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_knowledgearticle_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_knowledgebaserecord_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_knowledgebaserecord_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_lead_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_lead_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_agreement_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreement_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_agreementbookingdate_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingdate_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_agreementbookingincident_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingincident_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_agreementbookingproduct_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingproduct_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_agreementbookingservice_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingservice_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_agreementbookingservicetask_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingservicetask_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_agreementbookingsetup_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementbookingsetup_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_agreementinvoicedate_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementinvoicedate_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_agreementinvoiceproduct_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementinvoiceproduct_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_agreementinvoicesetup_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_agreementinvoicesetup_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_bookingalertstatus_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bookingalertstatus_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_bookingrule_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bookingrule_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_bookingtimestamp_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_bookingtimestamp_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_customerasset_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_customerasset_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_fieldservicesetting_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_fieldservicesetting_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_incidenttypecharacteristic_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_incidenttypecharacteristic_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_incidenttypeproduct_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_incidenttypeproduct_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_incidenttypeservice_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_incidenttypeservice_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_inventoryadjustment_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_inventoryadjustment_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_inventoryadjustmentproduct_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_inventoryadjustmentproduct_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_inventoryjournal_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_inventoryjournal_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_inventorytransfer_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_inventorytransfer_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_payment_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_payment_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_paymentdetail_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_paymentdetail_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_paymentmethod_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_paymentmethod_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_paymentterm_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_paymentterm_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_playbookinstance_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_playbookinstance_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_postalbum_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_postalbum_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_postalcode_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_postalcode_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_processnotes_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_processnotes_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_productinventory_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_productinventory_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_projectteam_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_projectteam_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_purchaseorder_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseorder_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_purchaseorderbill_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseorderbill_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_purchaseorderproduct_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseorderproduct_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_purchaseorderreceipt_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseorderreceipt_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_purchaseorderreceiptproduct_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseorderreceiptproduct_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_purchaseordersubstatus_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_purchaseordersubstatus_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_quotebookingincident_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotebookingincident_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_quotebookingproduct_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotebookingproduct_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_quotebookingservice_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotebookingservice_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_quotebookingservicetask_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_quotebookingservicetask_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_resourceterritory_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_resourceterritory_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_rma_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rma_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_rmaproduct_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rmaproduct_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_rmareceipt_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rmareceipt_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_rmareceiptproduct_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rmareceiptproduct_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_rmasubstatus_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rmasubstatus_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_rtv_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rtv_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_rtvproduct_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rtvproduct_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_rtvsubstatus_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_rtvsubstatus_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_shipvia_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_salessuggestion_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_systemuserschedulersetting_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_shipvia_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_timegroup_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_systemuserschedulersetting_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_timegroupdetail_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_timegroup_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_timeoffrequest_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_timegroupdetail_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_warehouse_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_timeoffrequest_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_workorder_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_warehouse_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_workordercharacteristic_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorder_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_workorderincident_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workordercharacteristic_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_workorderproduct_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderincident_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_workorderresourcerestriction_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderproduct_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_workorderservice_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderresourcerestriction_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_msdyn_workorderservicetask_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderservice_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_opportunity_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_msdyn_workorderservicetask_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_quote_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_opportunity_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_salesorder_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_quote_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_site_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_salesorder_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_uii_action_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_site_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_uii_hostedapplication_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_uii_action_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_uii_nonhostedapplication_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_uii_hostedapplication_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_uii_option_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_uii_nonhostedapplication_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_uii_savedsession_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_uii_option_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_uii_workflow_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_uii_savedsession_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_uii_workflowstep_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_uii_workflow_serviceappointment: string;
 		/** Unique identifier of the object with which the service activity is associated. */
-		regardingobjectid_uii_workflow_workflowstep_mapping_serviceappointment: DevKit.WebApi.LookupValue;
+		regardingobjectid_uii_workflowstep_serviceappointment: string;
+		/** Unique identifier of the object with which the service activity is associated. */
+		regardingobjectid_uii_workflow_workflowstep_mapping_serviceappointment: string;
 		/** Shows the expected duration of the service activity, in minutes. */
-		ScheduledDurationMinutes: DevKit.WebApi.IntegerValue;
+		ScheduledDurationMinutes: number;
 		/** Enter the expected due date and time. */
-		ScheduledEnd_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		ScheduledEnd_UtcDateAndTime: Date;
 		/** Enter the expected due date and time. */
-		ScheduledStart_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		ScheduledStart_UtcDateAndTime: Date;
 		/** Unique identifier of the mailbox associated with the sender of the email message. */
-		SenderMailboxId: DevKit.WebApi.LookupValueReadonly;
+		readonly SenderMailboxId: string;
 		/** Date and time when the activity was sent. */
-		SentOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly SentOn_UtcDateAndTime: Date;
 		/** Uniqueidentifier specifying the id of recurring series of an instance. */
-		SeriesId: DevKit.WebApi.GuidValueReadonly;
+		readonly SeriesId: string;
 		/** Choose the service scheduled to be performed during the service activity. */
-		ServiceId: DevKit.WebApi.LookupValue;
+		ServiceId: string;
 		/** Choose the site or location where the service activity will be performed. */
-		SiteId: DevKit.WebApi.LookupValue;
+		SiteId: string;
 		/** Choose the service level agreement (SLA) that you want to apply to the service appointment record. */
-		SLAId: DevKit.WebApi.LookupValue;
+		SLAId: string;
 		/** Last SLA that was applied to this email. This field is for internal use only. */
-		SLAInvokedId: DevKit.WebApi.LookupValueReadonly;
+		readonly SLAInvokedId: string;
 		/** Shows the date and time by which the activities are sorted. */
-		SortDate_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		SortDate_UtcDateAndTime: Date;
 		/** Unique identifier of the Stage. */
-		StageId: DevKit.WebApi.GuidValue;
+		StageId: string;
 		/** Shows whether the service activity is open, completed, or canceled. Completed and canceled service activities are read-only and can't be edited. */
-		StateCode: DevKit.WebApi.OptionSetValue;
+		StateCode: OptionSet.ServiceAppointment.StateCode;
 		/** Select the service activity's status. */
-		StatusCode: DevKit.WebApi.OptionSetValue;
+		StatusCode: OptionSet.ServiceAppointment.StatusCode;
 		/** Type a subcategory to identify the service activity type and relate the activity to a specific product, service region, business group, or other function. */
-		Subcategory: DevKit.WebApi.StringValue;
+		Subcategory: string;
 		/** Type a short description about the objective or primary topic of the service activity. */
-		Subject: DevKit.WebApi.StringValue;
+		Subject: string;
 		/** For internal use only. */
-		SubscriptionId: DevKit.WebApi.GuidValue;
+		SubscriptionId: string;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** For internal use only. */
-		TraversedPath: DevKit.WebApi.StringValue;
+		TraversedPath: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version number of the activity. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 		/** The array of object that can cast object to ActivityPartyApi class */
-		ActivityParties: Array<any>;
+		ActivityParties: Array<unknown>;
 	}
 }
 declare namespace OptionSet {
 	namespace ServiceAppointment {
 		enum ActivityTypeCode {
+			/** 10086 */
+			Activity_record_for_the_Teams_chat,
 			/** 4201 */
 			Appointment,
-			/** 10400 */
+			/** 10404 */
 			Booking_Alert,
 			/** 4402 */
 			Campaign_Activity,
@@ -448,13 +454,13 @@ declare namespace OptionSet {
 			Campaign_Response,
 			/** 4206 */
 			Case_Resolution,
-			/** 10702 */
+			/** 10707 */
 			Conversation,
-			/** 10294 */
+			/** 10313 */
 			Customer_Voice_alert,
-			/** 10304 */
+			/** 10323 */
 			Customer_Voice_survey_invite,
-			/** 10306 */
+			/** 10325 */
 			Customer_Voice_survey_response,
 			/** 4202 */
 			Email,
@@ -466,11 +472,11 @@ declare namespace OptionSet {
 			Opportunity_Close,
 			/** 4209 */
 			Order_Close,
-			/** 10813 */
+			/** 10817 */
 			Outbound_message,
 			/** 4210 */
 			Phone_Call,
-			/** 10430 */
+			/** 10434 */
 			Project_Service_Approval,
 			/** 4406 */
 			Quick_Campaign,
@@ -480,7 +486,7 @@ declare namespace OptionSet {
 			Recurring_Appointment,
 			/** 4214 */
 			Service_Activity,
-			/** 10717 */
+			/** 10721 */
 			Session,
 			/** 4212 */
 			Task
@@ -595,4 +601,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

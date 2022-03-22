@@ -402,8 +402,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -411,131 +413,135 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Shows the automatically generated ID exposed to customers, partners, and other external users to reference and look up articles. */
-		ArticlePublicNumber: DevKit.WebApi.StringValue;
+		ArticlePublicNumber: string;
 		/** Shows the body of the article stored in HTML format. */
-		Content: DevKit.WebApi.StringValue;
+		Content: string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** A short overview of the article, primarily used in search results and for search engine optimization. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Exchange rate for the currency associated with the KnowledgeArticle with respect to the base currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Enter an expiration date for the article. Leave this field blank for no expiration date. */
-		ExpirationDate_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		ExpirationDate_UtcDateAndTime: Date;
 		/** Contains the id of the expiration state of the entity. */
-		ExpirationStateId: DevKit.WebApi.IntegerValue;
+		ExpirationStateId: number;
 		/** Contains the id of the expiration status of the entity. */
-		ExpirationStatusId: DevKit.WebApi.IntegerValue;
+		ExpirationStatusId: number;
 		/** Expired Review Options */
-		ExpiredReviewOptions: DevKit.WebApi.OptionSetValue;
+		ExpiredReviewOptions: OptionSet.KnowledgeArticle.ExpiredReviewOptions;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Shows whether this article is only visible internally. */
-		IsInternal: DevKit.WebApi.BooleanValue;
+		IsInternal: boolean;
 		/** Shows which version of the knowledge article is the latest version. */
-		IsLatestVersion: DevKit.WebApi.BooleanValue;
+		IsLatestVersion: boolean;
 		/** Select whether the article is the primary article. */
-		IsPrimary: DevKit.WebApi.BooleanValue;
+		IsPrimary: boolean;
 		/** Select whether the article is the root article. */
-		IsRootArticle: DevKit.WebApi.BooleanValue;
+		IsRootArticle: boolean;
 		/** Type keywords to be used for searches in knowledge base articles. Separate keywords by using commas. */
-		Keywords: DevKit.WebApi.StringValue;
+		Keywords: string;
 		/** Unique identifier for entity instances */
-		knowledgearticleId: DevKit.WebApi.GuidValue;
+		knowledgearticleId: string;
 		/** Shows the total number of article views. */
-		KnowledgeArticleViews: DevKit.WebApi.IntegerValueReadonly;
+		readonly KnowledgeArticleViews: number;
 		/** The date time for Knowledge Article View. */
-		KnowledgeArticleViews_Date_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly KnowledgeArticleViews_Date_UtcDateAndTime: Date;
 		/** State of Knowledge Article View. */
-		KnowledgeArticleViews_State: DevKit.WebApi.IntegerValueReadonly;
+		readonly KnowledgeArticleViews_State: number;
 		/** Select the language that the article's content is in. */
-		LanguageLocaleId: DevKit.WebApi.LookupValue;
+		LanguageLocaleId: string;
 		/** Shows the major version number of this article's content. */
-		MajorVersionNumber: DevKit.WebApi.IntegerValue;
+		MajorVersionNumber: number;
 		/** Shows the minor version number of this article's content. */
-		MinorVersionNumber: DevKit.WebApi.IntegerValue;
+		MinorVersionNumber: number;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
+		/** Field to hold reference to content file attachment */
+		readonly msdyn_contentstore: string;
 		/** Ingested article URL */
-		msdyn_ingestedarticleurl: DevKit.WebApi.StringValue;
+		msdyn_ingestedarticleurl: string;
+		/** Whether article content is synced to file store */
+		msdyn_iscontentsyncedtostore: boolean;
 		/** Value is true for all Ingested articles */
-		msdyn_isingestedarticle: DevKit.WebApi.BooleanValue;
-		msdyn_keywordsdescsuggestioncontrol: DevKit.WebApi.BooleanValue;
+		msdyn_isingestedarticle: boolean;
+		msdyn_keywordsdescsuggestioncontrol: boolean;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Contains the id of the parent article content associated with the entity. */
-		ParentArticleContentId: DevKit.WebApi.LookupValue;
+		ParentArticleContentId: string;
 		/** Shows the version that the current article was restored from. */
-		PreviousArticleContentId: DevKit.WebApi.LookupValue;
+		PreviousArticleContentId: string;
 		/** Contains the id of the primary author associated with the article. */
-		primaryauthorid: DevKit.WebApi.LookupValue;
+		primaryauthorid: string;
 		/** Contains the id of the process associated with the entity. */
-		processid: DevKit.WebApi.GuidValue;
+		processid: string;
 		/** Date and time when the record was published. */
-		PublishOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		PublishOn_UtcDateAndTime: Date;
 		/** Publish Status of the Article. */
-		PublishStatusId: DevKit.WebApi.IntegerValue;
+		PublishStatusId: number;
 		/** Information which specifies how helpful the related record was. */
-		Rating: DevKit.WebApi.DecimalValueReadonly;
+		readonly Rating: number;
 		/** Rating Count */
-		Rating_Count: DevKit.WebApi.IntegerValueReadonly;
+		readonly Rating_Count: number;
 		/** The date time for Rating. */
-		Rating_Date_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly Rating_Date_UtcDateAndTime: Date;
 		/** State of Rating */
-		Rating_State: DevKit.WebApi.IntegerValueReadonly;
+		readonly Rating_State: number;
 		/** Total sum of Rating */
-		Rating_Sum: DevKit.WebApi.DecimalValueReadonly;
+		readonly Rating_Sum: number;
 		/** Ready For Review */
-		ReadyForReview: DevKit.WebApi.BooleanValue;
+		ReadyForReview: boolean;
 		/** Review */
-		Review: DevKit.WebApi.OptionSetValue;
+		Review: OptionSet.KnowledgeArticle.Review;
 		/** Contains the id of the root article. */
-		RootArticleId: DevKit.WebApi.LookupValue;
+		RootArticleId: string;
 		/** Contains the id of the scheduled status of the entity. */
-		ScheduledStatusId: DevKit.WebApi.IntegerValue;
+		ScheduledStatusId: number;
 		/** Shows whether category associations have been set */
-		SetCategoryAssociations: DevKit.WebApi.BooleanValue;
+		SetCategoryAssociations: boolean;
 		/** Set Product Associations */
-		SetProductAssociations: DevKit.WebApi.BooleanValue;
+		SetProductAssociations: boolean;
 		/** Contains the id of the stage where the entity is located. */
-		stageid: DevKit.WebApi.GuidValue;
+		stageid: string;
 		/** Shows whether the article is a draft or is published, archived, or discarded. Draft articles aren't available externally and can be edited. Published articles are available externally, based on applicable permissions, but can't be edited. All metadata changes are reflected in the published version. Archived and discarded articles aren't available externally and can't be edited. */
-		StateCode: DevKit.WebApi.OptionSetValue;
+		StateCode: OptionSet.KnowledgeArticle.StateCode;
 		/** Select the article's status. */
-		StatusCode: DevKit.WebApi.OptionSetValue;
+		StatusCode: OptionSet.KnowledgeArticle.StatusCode;
 		/** Choose the subject of the article to assist with article searches. You can configure subjects under Business Management in the Settings area. */
-		SubjectId: DevKit.WebApi.LookupValue;
+		SubjectId: string;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Type a title for the article. */
-		Title: DevKit.WebApi.StringValue;
+		Title: string;
 		/** Exchange rate for the currency associated with the KnowledgeArticle with respect to the base currency. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** A comma separated list of string values representing the unique identifiers of stages in a Business Process Flow Instance in the order that they occur. */
-		traversedpath: DevKit.WebApi.StringValue;
+		traversedpath: string;
 		/** Update Content */
-		UpdateContent: DevKit.WebApi.BooleanValue;
+		UpdateContent: boolean;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		UTCConversionTimeZoneCode: number;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -618,4 +624,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

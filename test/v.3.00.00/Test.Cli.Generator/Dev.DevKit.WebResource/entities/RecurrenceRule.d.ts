@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,70 +30,70 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the recurrence rule. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the recurrence rule was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the recurrence rule. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** The day of the month on which the recurring appointment or task occurs. */
-		DayOfMonth: DevKit.WebApi.IntegerValue;
+		DayOfMonth: number;
 		/** Bitmask representing the days of the week on which the recurring appointment or task occurs. */
-		DaysOfWeekMask: DevKit.WebApi.IntegerValue;
+		DaysOfWeekMask: number;
 		/** Duration of the recurrence pattern in minutes. */
-		Duration: DevKit.WebApi.IntegerValue;
+		Duration: number;
 		/** The actual end date for expansion of the recurrence pattern. */
-		EffectiveEndDate_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		EffectiveEndDate_UtcDateAndTime: Date;
 		/** The actual start date for expansion of the recurrence pattern. */
-		EffectiveStartDate_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		EffectiveStartDate_UtcDateOnly: Date;
 		/** End time of the associated activity. */
-		EndTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		EndTime_UtcDateAndTime: Date;
 		/** First day Of week for the recurrence pattern. */
-		FirstDayOfWeek: DevKit.WebApi.IntegerValue;
+		FirstDayOfWeek: number;
 		/** Specifies the count for which the recurrence pattern is valid for a given interval. */
-		Instance: DevKit.WebApi.OptionSetValue;
+		Instance: OptionSet.RecurrenceRule.Instance;
 		/** Number of units of a given recurrence type between occurrences. */
-		Interval: DevKit.WebApi.IntegerValue;
+		Interval: number;
 		/** Specifies whether the monthly recurrence pattern is Nth monthly, valid only for monthly recurrence. */
-		IsNthMonthly: DevKit.WebApi.BooleanValue;
+		IsNthMonthly: boolean;
 		/** Specifies whether the yearly recurrence pattern is Nth yearly, valid only for yearly recurrence. */
-		IsNthYearly: DevKit.WebApi.BooleanValue;
+		IsNthYearly: boolean;
 		/** Valid only for task type recurrence,indicates whether task should be regenerated. */
-		IsRegenerate: DevKit.WebApi.BooleanValue;
+		IsRegenerate: boolean;
 		/** Specifies whether the weekly recurrence pattern is actually a daily every weekday pattern, valid only for weekly recurrence. */
-		IsWeekDayPattern: DevKit.WebApi.BooleanValue;
+		IsWeekDayPattern: boolean;
 		/** Unique identifier of the user who last modified the recurrence rule. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the recurrence rule was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the recurrence rule. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Specifies the month of the year valid for the recurrence pattern. */
-		MonthOfYear: DevKit.WebApi.OptionSetValue;
+		MonthOfYear: OptionSet.RecurrenceRule.MonthOfYear;
 		/** Unique identifier of the object with which the recurrence rule is associated. */
-		ObjectId: DevKit.WebApi.LookupValue;
+		ObjectId: string;
 		/** Number of occurrences of the recurrence pattern. */
-		Occurrences: DevKit.WebApi.IntegerValue;
+		Occurrences: number;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier of the business unit that owns the recurrence rule. */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
+		readonly OwningTeam: string;
+		readonly OwningUser: string;
 		/** End date of the Recurrence Range. */
-		PatternEndDate_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		PatternEndDate_UtcDateAndTime: Date;
 		/** Pattern End Type of a recurring series. */
-		PatternEndType: DevKit.WebApi.OptionSetValue;
+		PatternEndType: OptionSet.RecurrenceRule.PatternEndType;
 		/** Start date of the Recurrence Range. */
-		PatternStartDate_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		PatternStartDate_UtcDateAndTime: Date;
 		/** Type of Recurrence. */
-		RecurrencePatternType: DevKit.WebApi.OptionSetValue;
+		RecurrencePatternType: OptionSet.RecurrenceRule.RecurrencePatternType;
 		/** Unique identifier of the entity associated with recurrence rule. */
-		RuleId: DevKit.WebApi.GuidValue;
+		RuleId: string;
 		/** Start time of the recurring activity. */
-		StartTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		StartTime_UtcDateAndTime: Date;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -172,4 +174,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

@@ -1216,8 +1216,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -1225,173 +1227,173 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Shows the exchange rate for the currency associated with the entity with respect to the base currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Shows the sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Shows who last updated the record on behalf of another user. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
-		msdyn_Address1: DevKit.WebApi.StringValue;
-		msdyn_Address2: DevKit.WebApi.StringValue;
-		msdyn_Address3: DevKit.WebApi.StringValue;
-		msdyn_AddressName: DevKit.WebApi.StringValue;
+		readonly ModifiedOnBehalfBy: string;
+		msdyn_Address1: string;
+		msdyn_Address2: string;
+		msdyn_Address3: string;
+		msdyn_AddressName: string;
 		/** Shows the agreement linked to this work order. */
-		msdyn_Agreement: DevKit.WebApi.LookupValue;
+		msdyn_Agreement: string;
 		/** Internal field used to generate the next name upon entity creation. It is optionally copied to the msdyn_name field. */
-		msdyn_AutoNumbering: DevKit.WebApi.StringValue;
+		msdyn_AutoNumbering: string;
 		/** Account to be billed. If a billing account has been set on service account it will be populated by default. Otherwise, the billing account will be the same as the service account. */
-		msdyn_BillingAccount: DevKit.WebApi.LookupValue;
+		msdyn_BillingAccount: string;
 		/** For internal use only. */
-		msdyn_BookingSummary: DevKit.WebApi.StringValue;
-		msdyn_ChildIndex: DevKit.WebApi.IntegerValue;
-		msdyn_City: DevKit.WebApi.StringValue;
+		msdyn_BookingSummary: string;
+		msdyn_ChildIndex: number;
+		msdyn_City: string;
 		/** The user that last closed this work order */
-		msdyn_ClosedBy: DevKit.WebApi.LookupValue;
+		msdyn_ClosedBy: string;
 		/** When Bookings are used on a Work Order, this field is auto-populated based on the latest End Time from the related Bookings. Otherwise, this field is populated based on the change of System Status. */
-		msdyn_completedon_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
-		msdyn_Country: DevKit.WebApi.StringValue;
+		msdyn_completedon_UtcDateAndTime: Date;
+		msdyn_Country: string;
 		/** Customer Asset related to this incident reported */
-		msdyn_CustomerAsset: DevKit.WebApi.LookupValue;
-		msdyn_DateWindowEnd_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
-		msdyn_DateWindowStart_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		msdyn_CustomerAsset: string;
+		msdyn_DateWindowEnd_UtcDateOnly: Date;
+		msdyn_DateWindowStart_UtcDateOnly: Date;
 		/** Enter the summary of total estimated billing amount for this work order */
-		msdyn_EstimateSubtotalAmount: DevKit.WebApi.MoneyValue;
+		msdyn_EstimateSubtotalAmount: number;
 		/** Shows the value of the estimate subtotal amount in the base currency. */
-		msdyn_estimatesubtotalamount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_estimatesubtotalamount_Base: number;
 		/** When Bookings are used on a Work Order, this field is auto-populated based on the earliest Actual Arrival Time from the related Bookings. */
-		msdyn_firstarrivedon_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		msdyn_firstarrivedon_UtcDateAndTime: Date;
 		/** Indicate the details of the follow up work */
-		msdyn_FollowUpNote: DevKit.WebApi.StringValue;
+		msdyn_FollowUpNote: string;
 		/** Allows indication if follow up work is required for a work order. */
-		msdyn_FollowUpRequired: DevKit.WebApi.BooleanValue;
+		msdyn_FollowUpRequired: boolean;
 		/** Workorder's functional location */
-		msdyn_FunctionalLocation: DevKit.WebApi.LookupValue;
+		msdyn_FunctionalLocation: string;
 		/** Shows instructions for booked resources. By default, this information is taken from the work order instructions field on the service account. */
-		msdyn_Instructions: DevKit.WebApi.StringValue;
+		msdyn_Instructions: string;
 		/** For internal use only. */
-		msdyn_InternalFlags: DevKit.WebApi.StringValue;
+		msdyn_InternalFlags: string;
 		/** The iot alert which initiated this work order. */
-		msdyn_IoTAlert: DevKit.WebApi.LookupValue;
-		msdyn_IsFollowUp: DevKit.WebApi.BooleanValue;
-		msdyn_IsMobile: DevKit.WebApi.BooleanValue;
-		msdyn_Latitude: DevKit.WebApi.DoubleValue;
-		msdyn_Longitude: DevKit.WebApi.DoubleValue;
-		msdyn_mapcontrol: DevKit.WebApi.StringValueReadonly;
+		msdyn_IoTAlert: string;
+		msdyn_IsFollowUp: boolean;
+		msdyn_IsMobile: boolean;
+		msdyn_Latitude: number;
+		msdyn_Longitude: number;
+		readonly msdyn_mapcontrol: string;
 		/** Enter the name of the custom entity. */
-		msdyn_name: DevKit.WebApi.StringValue;
+		msdyn_name: string;
 		/** Unique identifier for Opportunity associated with Work Order. */
-		msdyn_OpportunityId: DevKit.WebApi.LookupValue;
+		msdyn_OpportunityId: string;
 		/** Unique identifier for Work Order associated with Work Order. */
-		msdyn_ParentWorkOrder: DevKit.WebApi.LookupValue;
-		msdyn_PostalCode: DevKit.WebApi.StringValue;
+		msdyn_ParentWorkOrder: string;
+		msdyn_PostalCode: string;
 		/** The customer Preferred Resource to work on this job. Should be taken into consideration while scheduling resources */
-		msdyn_PreferredResource: DevKit.WebApi.LookupValue;
+		msdyn_PreferredResource: string;
 		/** Price List that controls pricing for products / services added to this work order. By default the system will use the Price List specified on the account */
-		msdyn_PriceList: DevKit.WebApi.LookupValue;
+		msdyn_PriceList: string;
 		/** Incident description */
-		msdyn_PrimaryIncidentDescription: DevKit.WebApi.StringValue;
+		msdyn_PrimaryIncidentDescription: string;
 		/** Shows the time estimated to resolve this incident. */
-		msdyn_PrimaryIncidentEstimatedDuration: DevKit.WebApi.IntegerValue;
+		msdyn_PrimaryIncidentEstimatedDuration: number;
 		/** Primary incident type reported */
-		msdyn_PrimaryIncidentType: DevKit.WebApi.LookupValue;
-		msdyn_PrimaryResolution: DevKit.WebApi.LookupValue;
+		msdyn_PrimaryIncidentType: string;
+		msdyn_PrimaryResolution: string;
 		/** Priority of the Work Order. To be taken into consideration while scheduling resources */
-		msdyn_Priority: DevKit.WebApi.LookupValue;
+		msdyn_Priority: string;
 		/** The contact that reported this Work Order */
-		msdyn_ReportedByContact: DevKit.WebApi.LookupValue;
+		msdyn_ReportedByContact: string;
 		/** Account to be serviced */
-		msdyn_ServiceAccount: DevKit.WebApi.LookupValue;
+		msdyn_ServiceAccount: string;
 		/** Case of which this work order originates from */
-		msdyn_ServiceRequest: DevKit.WebApi.LookupValue;
+		msdyn_ServiceRequest: string;
 		/** The service territory this work order relates to. By default this will be set to the Service Territory defined on the service account */
-		msdyn_ServiceTerritory: DevKit.WebApi.LookupValue;
-		msdyn_StateOrProvince: DevKit.WebApi.StringValue;
+		msdyn_ServiceTerritory: string;
+		msdyn_StateOrProvince: string;
 		/** Work Order subsstatus */
-		msdyn_SubStatus: DevKit.WebApi.LookupValue;
+		msdyn_SubStatus: string;
 		/** Enter the summary of subtotal billing amount excluding tax for this work order. */
-		msdyn_SubtotalAmount: DevKit.WebApi.MoneyValue;
+		msdyn_SubtotalAmount: number;
 		/** Shows the value of the subtotal amount in the base currency. */
-		msdyn_subtotalamount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_subtotalamount_Base: number;
 		/** A support contact can be specified so that the individual working on the work order has someone to contact for assistance. */
-		msdyn_SupportContact: DevKit.WebApi.LookupValue;
+		msdyn_SupportContact: string;
 		/** Tracks the current system status. */
-		msdyn_SystemStatus: DevKit.WebApi.OptionSetValue;
+		msdyn_SystemStatus: OptionSet.msdyn_workorder.msdyn_SystemStatus;
 		/** Shows whether sales tax is to be charged for this work order. */
-		msdyn_Taxable: DevKit.WebApi.BooleanValue;
+		msdyn_Taxable: boolean;
 		/** Tax Code to be used to calculate tax when Work Order is taxable. By default the system will use the tax code specified on the service account */
-		msdyn_TaxCode: DevKit.WebApi.LookupValue;
+		msdyn_TaxCode: string;
 		/** Enter the time this work order was last closed. */
-		msdyn_TimeClosed_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		msdyn_TimeClosed_UtcDateAndTime: Date;
 		/** Enter the starting range of the time promised to the account that incidents will be resolved. */
-		msdyn_TimeFromPromised_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
-		msdyn_TimeGroup: DevKit.WebApi.LookupValue;
-		msdyn_TimeGroupDetailSelected: DevKit.WebApi.LookupValue;
+		msdyn_TimeFromPromised_UtcDateAndTime: Date;
+		msdyn_TimeGroup: string;
+		msdyn_TimeGroupDetailSelected: string;
 		/** Enter the ending range of the time promised to the account that incidents will be resolved. */
-		msdyn_TimeToPromised_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
-		msdyn_TimeWindowEnd_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
-		msdyn_TimeWindowStart_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		msdyn_TimeToPromised_UtcDateAndTime: Date;
+		msdyn_TimeWindowEnd_UtcDateAndTime: Date;
+		msdyn_TimeWindowStart_UtcDateAndTime: Date;
 		/** Enter the summary of total billing amount for this work order. */
-		msdyn_TotalAmount: DevKit.WebApi.MoneyValue;
+		msdyn_TotalAmount: number;
 		/** Shows the value of the total amount in the base currency. */
-		msdyn_totalamount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_totalamount_Base: number;
 		/** Calculated from the estimated duration of Work Order Incidents and Work Order Service Tasks not related to a Work Order Incident on the Work Order. Intended to be read-only. */
-		msdyn_totalestimatedduration: DevKit.WebApi.IntegerValue;
+		msdyn_totalestimatedduration: number;
 		/** Enter the summary of total sales tax charged for this work order. */
-		msdyn_TotalSalesTax: DevKit.WebApi.MoneyValue;
+		msdyn_TotalSalesTax: number;
 		/** Shows the value of the total sales tax in the base currency. */
-		msdyn_totalsalestax_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_totalsalestax_Base: number;
 		/** The working hours for a requirement. */
-		msdyn_workhourtemplate: DevKit.WebApi.LookupValue;
-		msdyn_WorkLocation: DevKit.WebApi.OptionSetValue;
+		msdyn_workhourtemplate: string;
+		msdyn_WorkLocation: OptionSet.msdyn_workorder.msdyn_WorkLocation;
 		/** For internal use only. */
-		msdyn_workorderarrivaltimekpiid: DevKit.WebApi.LookupValue;
+		msdyn_workorderarrivaltimekpiid: string;
 		/** Shows the entity instances. */
-		msdyn_workorderId: DevKit.WebApi.GuidValue;
+		msdyn_workorderId: string;
 		/** For internal use only. */
-		msdyn_workorderresolutionkpiid: DevKit.WebApi.LookupValue;
+		msdyn_workorderresolutionkpiid: string;
 		/** Type a summary description of the job. */
-		msdyn_WorkOrderSummary: DevKit.WebApi.StringValue;
+		msdyn_WorkOrderSummary: string;
 		/** Work Order Type */
-		msdyn_WorkOrderType: DevKit.WebApi.LookupValue;
+		msdyn_WorkOrderType: string;
 		/** Shows the date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Shows the ID of the process associated with the entity. */
-		processid: DevKit.WebApi.GuidValue;
+		processid: string;
 		/** Shows the ID of the stage where the entity is located. */
-		stageid: DevKit.WebApi.GuidValue;
+		stageid: string;
 		/** Status of the Work Order */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.msdyn_workorder.statecode;
 		/** Reason for the status of the Work Order */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.msdyn_workorder.statuscode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Unique identifier of the currency associated with the entity. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** Shows a comma-separated list of string values representing the unique identifiers of stages in a business process flow instance in the order that they occur. */
-		traversedpath: DevKit.WebApi.StringValue;
+		traversedpath: string;
 		/** Shows the time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -1448,4 +1450,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

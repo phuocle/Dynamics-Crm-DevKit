@@ -47,8 +47,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -56,61 +58,61 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Text value of comments for other feedback */
-		msdyn_AdditionalFeedback: DevKit.WebApi.StringValue;
+		msdyn_AdditionalFeedback: string;
 		/** Unique identifier for customer asset */
-		msdyn_AssetId: DevKit.WebApi.StringValue;
+		msdyn_AssetId: string;
 		/** The name of the problematic asset feedback. */
-		msdyn_name: DevKit.WebApi.StringValue;
+		msdyn_name: string;
 		/** Optionset value of future days from current */
-		msdyn_NumberOfDays: DevKit.WebApi.OptionSetValue;
+		msdyn_NumberOfDays: OptionSet.msdyn_problematicassetfeedback.msdyn_NumberOfDays;
 		/** Flag value indicating if user like or dislike the asset suggestion for other reasons */
-		msdyn_OtherFeedback: DevKit.WebApi.OptionSetValue;
+		msdyn_OtherFeedback: OptionSet.msdyn_problematicassetfeedback.msdyn_OtherFeedback;
 		/** Flag value indicating user like/dislike the asset to be predicted as problematic asset */
-		msdyn_ProblematicAssetFeedback1: DevKit.WebApi.OptionSetValue;
+		msdyn_ProblematicAssetFeedback1: OptionSet.msdyn_problematicassetfeedback.msdyn_ProblematicAssetFeedback1;
 		/** Unique identifier for entity instances */
-		msdyn_problematicassetfeedbackId: DevKit.WebApi.GuidValue;
+		msdyn_problematicassetfeedbackId: string;
 		/** Unique identifier for problematic asset */
-		msdyn_ProblematicAssetId: DevKit.WebApi.StringValue;
+		msdyn_ProblematicAssetId: string;
 		/** Optionset value of suggestion for customer asset */
-		msdyn_Suggestion: DevKit.WebApi.OptionSetValue;
+		msdyn_Suggestion: OptionSet.msdyn_problematicassetfeedback.msdyn_Suggestion;
 		/** Flag value indicating if user like/dislike the suggestion for problematic asset */
-		msdyn_SuggestionFeedback: DevKit.WebApi.OptionSetValue;
+		msdyn_SuggestionFeedback: OptionSet.msdyn_problematicassetfeedback.msdyn_SuggestionFeedback;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Status of the Problematic Asset Feedback */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.msdyn_problematicassetfeedback.statecode;
 		/** Reason for the status of the Problematic Asset Feedback */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.msdyn_problematicassetfeedback.statuscode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -183,4 +185,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

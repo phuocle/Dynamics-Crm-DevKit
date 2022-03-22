@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,22 +30,22 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the solution */
-		BaseSolutionId: DevKit.WebApi.LookupValueReadonly;
+		readonly BaseSolutionId: string;
 		/** The type code of the component. */
-		ComponentType: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentType: OptionSet.DependencyNode.ComponentType;
 		/** Unique identifier of the dependency node. */
-		DependencyNodeId: DevKit.WebApi.GuidValueReadonly;
+		readonly DependencyNodeId: string;
 		/** Introduced version for the component */
-		IntroducedVersion: DevKit.WebApi.DoubleValue;
+		IntroducedVersion: number;
 		/** Whether this component is shared by two solutions with the same publisher. */
-		IsSharedComponent: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsSharedComponent: boolean;
 		/** Unique identifier of the object with which the node is associated. */
-		ObjectId: DevKit.WebApi.GuidValue;
+		ObjectId: string;
 		/** Unique identifier of the parent entity. */
-		ParentId: DevKit.WebApi.GuidValueReadonly;
+		readonly ParentId: string;
 		/** Unique identifier of the top solution. */
-		TopSolutionId: DevKit.WebApi.LookupValueReadonly;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly TopSolutionId: string;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -248,4 +250,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

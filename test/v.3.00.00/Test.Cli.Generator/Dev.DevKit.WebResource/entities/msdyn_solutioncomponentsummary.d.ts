@@ -44,75 +44,77 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
 		EntityCollectionName: string;
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
-		msdyn_canvasappuniqueid: DevKit.WebApi.StringValue;
-		msdyn_componentlogicalname: DevKit.WebApi.StringValue;
-		msdyn_componenttype: DevKit.WebApi.DecimalValue;
-		msdyn_componenttypename: DevKit.WebApi.StringValue;
-		msdyn_connectorinternalid: DevKit.WebApi.StringValue;
-		msdyn_createdon: DevKit.WebApi.StringValue;
-		msdyn_culture: DevKit.WebApi.StringValue;
-		msdyn_deployment: DevKit.WebApi.StringValue;
-		msdyn_description: DevKit.WebApi.StringValue;
-		msdyn_displayname: DevKit.WebApi.StringValue;
-		msdyn_eventhandler: DevKit.WebApi.StringValue;
-		msdyn_executionorder: DevKit.WebApi.StringValue;
-		msdyn_executionstage: DevKit.WebApi.StringValue;
-		msdyn_fieldsecurity: DevKit.WebApi.StringValue;
-		msdyn_fieldtype: DevKit.WebApi.StringValue;
-		msdyn_isappaware: DevKit.WebApi.StringValue;
-		msdyn_isappawarename: DevKit.WebApi.StringValue;
-		msdyn_isauditenabled: DevKit.WebApi.StringValue;
-		msdyn_isauditenabledname: DevKit.WebApi.StringValue;
-		msdyn_iscustom: DevKit.WebApi.StringValue;
-		msdyn_iscustomizable: DevKit.WebApi.StringValue;
-		msdyn_iscustomizablename: DevKit.WebApi.StringValue;
-		msdyn_iscustomname: DevKit.WebApi.StringValue;
-		msdyn_isdefault: DevKit.WebApi.StringValue;
-		msdyn_isdefaultname: DevKit.WebApi.StringValue;
-		msdyn_ismanaged: DevKit.WebApi.StringValue;
-		msdyn_ismanagedname: DevKit.WebApi.StringValue;
-		msdyn_isolationmode: DevKit.WebApi.StringValue;
-		msdyn_istableenabled: DevKit.WebApi.StringValue;
-		msdyn_logicalcollectionname: DevKit.WebApi.StringValue;
-		msdyn_modifiedon: DevKit.WebApi.StringValue;
+		msdyn_canvasappuniqueid: string;
+		msdyn_componentlogicalname: string;
+		msdyn_componenttype: number;
+		msdyn_componenttypename: string;
+		msdyn_connectorinternalid: string;
+		msdyn_createdon: string;
+		msdyn_culture: string;
+		msdyn_deployment: string;
+		msdyn_description: string;
+		msdyn_displayname: string;
+		msdyn_eventhandler: string;
+		msdyn_executionorder: string;
+		msdyn_executionstage: string;
+		msdyn_fieldsecurity: string;
+		msdyn_fieldtype: string;
+		msdyn_isappaware: string;
+		msdyn_isappawarename: string;
+		msdyn_isauditenabled: string;
+		msdyn_isauditenabledname: string;
+		msdyn_iscustom: string;
+		msdyn_iscustomizable: string;
+		msdyn_iscustomizablename: string;
+		msdyn_iscustomname: string;
+		msdyn_isdefault: string;
+		msdyn_isdefaultname: string;
+		msdyn_ismanaged: string;
+		msdyn_ismanagedname: string;
+		msdyn_isolationmode: string;
+		msdyn_istableenabled: string;
+		msdyn_logicalcollectionname: string;
+		msdyn_modifiedon: string;
 		/** The name of the custom entity. */
-		msdyn_name: DevKit.WebApi.StringValue;
-		msdyn_objectid: DevKit.WebApi.StringValue;
-		msdyn_objecttypecode: DevKit.WebApi.StringValue;
-		msdyn_owner: DevKit.WebApi.StringValue;
-		msdyn_owningbusinessunit: DevKit.WebApi.StringValue;
-		msdyn_primaryentityname: DevKit.WebApi.StringValue;
-		msdyn_primaryidattribute: DevKit.WebApi.StringValue;
-		msdyn_publickeytoken: DevKit.WebApi.StringValue;
-		msdyn_relatedentity: DevKit.WebApi.StringValue;
-		msdyn_relatedentityattribute: DevKit.WebApi.StringValue;
-		msdyn_schemaname: DevKit.WebApi.StringValue;
-		msdyn_sdkmessagename: DevKit.WebApi.StringValue;
+		msdyn_name: string;
+		msdyn_objectid: string;
+		msdyn_objecttypecode: string;
+		msdyn_owner: string;
+		msdyn_owningbusinessunit: string;
+		msdyn_primaryentityname: string;
+		msdyn_primaryidattribute: string;
+		msdyn_publickeytoken: string;
+		msdyn_relatedentity: string;
+		msdyn_relatedentityattribute: string;
+		msdyn_schemaname: string;
+		msdyn_sdkmessagename: string;
 		/** Unique identifier for entity instances */
-		msdyn_solutioncomponentsummaryId: DevKit.WebApi.GuidValue;
-		msdyn_solutionid: DevKit.WebApi.StringValue;
-		msdyn_standardstatus: DevKit.WebApi.StringValue;
-		msdyn_status: DevKit.WebApi.StringValue;
-		msdyn_statusname: DevKit.WebApi.StringValue;
-		msdyn_subtype: DevKit.WebApi.StringValue;
-		msdyn_synctoexternalsearchindex: DevKit.WebApi.StringValue;
-		msdyn_total: DevKit.WebApi.DecimalValue;
-		msdyn_typename: DevKit.WebApi.StringValue;
-		msdyn_uniquename: DevKit.WebApi.StringValue;
-		msdyn_version: DevKit.WebApi.StringValue;
-		msdyn_workflowcategory: DevKit.WebApi.StringValue;
-		msdyn_workflowcategoryname: DevKit.WebApi.StringValue;
-		msdyn_workflowidunique: DevKit.WebApi.StringValue;
+		msdyn_solutioncomponentsummaryId: string;
+		msdyn_solutionid: string;
+		msdyn_standardstatus: string;
+		msdyn_status: string;
+		msdyn_statusname: string;
+		msdyn_subtype: string;
+		msdyn_synctoexternalsearchindex: string;
+		msdyn_total: number;
+		msdyn_typename: string;
+		msdyn_uniquename: string;
+		msdyn_version: string;
+		msdyn_workflowcategory: string;
+		msdyn_workflowcategoryname: string;
+		msdyn_workflowidunique: string;
 		/** Unique identifier for the organization */
-		OrganizationId: DevKit.WebApi.GuidValueReadonly;
+		readonly OrganizationId: string;
 	}
 }
 declare namespace OptionSet {
@@ -135,4 +137,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

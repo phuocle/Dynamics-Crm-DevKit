@@ -55,8 +55,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -64,70 +66,70 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the business unit with which the calendar rule is associated. */
-		BusinessUnitId: DevKit.WebApi.GuidValueReadonly;
+		readonly BusinessUnitId: string;
 		/** Unique identifier of the calendar with which the calendar rule is associated. */
-		CalendarId: DevKit.WebApi.LookupValue;
+		CalendarId: string;
 		/** Unique identifier of the calendar rule. */
-		CalendarRuleId: DevKit.WebApi.GuidValue;
+		CalendarRuleId: string;
 		/** Unique identifier of the user who created the calendar rule. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the calendar rule was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the calendarrule. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Defines free/busy times for a service and for resources or resource groups, such as working, non-working, vacation, and blocked. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Duration of the calendar rule in minutes. */
-		Duration: DevKit.WebApi.IntegerValue;
+		Duration: number;
 		/** Effective interval end of the calendar rule. */
-		EffectiveIntervalEnd_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		EffectiveIntervalEnd_UtcDateOnly: Date;
 		/** Effective interval start of the calendar rule. */
-		EffectiveIntervalStart_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		EffectiveIntervalStart_UtcDateOnly: Date;
 		/** Effort available for a resource during the time described by the calendar rule. */
-		Effort: DevKit.WebApi.DoubleValue;
+		Effort: number;
 		/** For internal use only. */
-		EndTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		EndTime_UtcDateAndTime: Date;
 		/** Extent of the calendar rule. */
-		ExtentCode: DevKit.WebApi.IntegerValue;
+		ExtentCode: number;
 		/** Unique identifier of the group. */
-		GroupDesignator: DevKit.WebApi.StringValue;
+		GroupDesignator: string;
 		/** Unique identifier of the inner calendar for non-leaf calendar rules. */
-		InnerCalendarId: DevKit.WebApi.LookupValue;
+		InnerCalendarId: string;
 		/** For internal use only. */
-		IsModified: DevKit.WebApi.BooleanValue;
+		IsModified: boolean;
 		/** Flag used in vary-by-day calendar rules. */
-		IsSelected: DevKit.WebApi.BooleanValue;
+		IsSelected: boolean;
 		/** Flag used in vary-by-day calendar rules. */
-		IsSimple: DevKit.WebApi.BooleanValue;
+		IsSimple: boolean;
 		/** Flag used in leaf nonrecurring rules. */
-		IsVaried: DevKit.WebApi.BooleanValue;
+		IsVaried: boolean;
 		/** Unique identifier of the user who last modified the calendar rule. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the calendar rule was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the calendarrule. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Name of the calendar rule. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Start offset for leaf nonrecurring rules. */
-		Offset: DevKit.WebApi.IntegerValue;
+		Offset: number;
 		/** Unique identifier of the organization with which the calendar rule is associated. */
-		OrganizationId: DevKit.WebApi.GuidValueReadonly;
+		readonly OrganizationId: string;
 		/** Pattern of the rule recurrence. */
-		Pattern: DevKit.WebApi.StringValue;
+		Pattern: string;
 		/** Rank of the calendar rule. */
-		Rank: DevKit.WebApi.IntegerValue;
+		Rank: number;
 		/** Unique identifier of the service with which the calendar rule is associated. */
-		ServiceId: DevKit.WebApi.LookupValue;
+		ServiceId: string;
 		/** Start time for the rule. */
-		StartTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		StartTime_UtcDateAndTime: Date;
 		/** Sub-type of calendar rule. */
-		SubCode: DevKit.WebApi.IntegerValue;
+		SubCode: number;
 		/** Type of calendar rule such as working hours, break, holiday, or time off. */
-		TimeCode: DevKit.WebApi.IntegerValue;
+		TimeCode: number;
 		/** Local time zone for the calendar rule. */
-		TimeZoneCode: DevKit.WebApi.IntegerValue;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		TimeZoneCode: number;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -150,4 +152,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

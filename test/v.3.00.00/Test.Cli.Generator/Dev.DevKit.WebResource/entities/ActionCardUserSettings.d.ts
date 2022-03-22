@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,30 +30,30 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier user entity */
-		ActionCardUserSettingsId: DevKit.WebApi.GuidValue;
+		ActionCardUserSettingsId: string;
 		/** Bolean option for a cardtype. */
-		BoolCardOption: DevKit.WebApi.BooleanValue;
+		BoolCardOption: boolean;
 		/** The CardType ENUM value. */
-		CardType: DevKit.WebApi.IntegerValue;
+		CardType: number;
 		/** card type attribute */
-		CardTypeId: DevKit.WebApi.LookupValue;
+		CardTypeId: string;
 		/** Any int option for a cardtype. */
-		IntCardOption: DevKit.WebApi.IntegerValue;
+		IntCardOption: number;
 		/** Select whether the card is enabled for user or not. */
-		IsEnabled: DevKit.WebApi.BooleanValue;
+		IsEnabled: boolean;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier of the business unit that owns this. */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier of the team who owns this saved view. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier of the user who owns this saved view. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Any string option for a cardtype. */
-		StringCardOption: DevKit.WebApi.StringValue;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		StringCardOption: string;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -74,4 +76,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

@@ -4,20 +4,18 @@ var DevKit;
 (function (DevKit) {
 	'use strict';
 	DevKit.msdyn_customerassetApi = function (e) {
-		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
 			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-			var property = {};
 			var getFormattedValue = function () {
 				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-					return EMPTY_STRING;
+					return '';
 				}
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
 					if (entity[logicalName + l] === entityLogicalName) {
 						return entity[logicalName + f];
 					}
-					return EMPTY_STRING;
+					return '';
 				}
 				if (isMultiOptionSet) {
 					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -42,30 +40,29 @@ var DevKit;
 			var setValue = function (value) {
 				if (isMultiOptionSet) value = value.join(',');
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+					value = value.replace('{', '').replace('}', '');
 					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
 				} else {
 					upsertEntity[logicalName] = value;
 				}
 				entity[logicalName] = value;
 			};
-			Object.defineProperty(property, 'FormattedValue', {
+			Object.defineProperty(obj.FormattedValue, field, {
 				get: getFormattedValue
 			});
 			if (readOnly) {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue
 				});
 			}
 			else {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue,
 					set: setValue
 				});
 			}
-			return property;
 		}
-		var msdyn_customerasset = {
+		var _msdyn_customerasset = {
 			CreatedBy: { b: 'createdby', a: '_createdby_value', c: 'systemusers', d: 'systemuser', r: true },
 			CreatedOn_UtcDateAndTime: { a: 'createdon', r: true },
 			CreatedOnBehalfBy: { b: 'createdonbehalfby', a: '_createdonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
@@ -109,20 +106,23 @@ var DevKit;
 		};
 		if (e === undefined) e = {};
 		var u = {};
-		for (var field in msdyn_customerasset) {
-			var a = msdyn_customerasset[field].a;
-			var b = msdyn_customerasset[field].b;
-			var c = msdyn_customerasset[field].c;
-			var d = msdyn_customerasset[field].d;
-			var g = msdyn_customerasset[field].g;
-			var r = msdyn_customerasset[field].r;
-			msdyn_customerasset[field] = webApiField(e, a, b, c, d, r, u, g);
+		var msdyn_customerasset = {};
+		msdyn_customerasset.ODataEntity = e;
+		msdyn_customerasset.FormattedValue = {};
+		for (var field in _msdyn_customerasset) {
+			var a = _msdyn_customerasset[field].a;
+			var b = _msdyn_customerasset[field].b;
+			var c = _msdyn_customerasset[field].c;
+			var d = _msdyn_customerasset[field].d;
+			var g = _msdyn_customerasset[field].g;
+			var r = _msdyn_customerasset[field].r;
+			webApiField(msdyn_customerasset, field, e, a, b, c, d, r, u, g);
 		}
 		msdyn_customerasset.Entity = u;
 		msdyn_customerasset.EntityName = 'msdyn_customerasset';
 		msdyn_customerasset.EntityCollectionName = 'msdyn_customerassets';
 		msdyn_customerasset['@odata.etag'] = e['@odata.etag'];
-		msdyn_customerasset.getAliasedValue = function (alias, isMultiOptionSet) {
+		msdyn_customerasset.getAliasedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias] === undefined || e[alias] === null) {
 				return null;
 			}
@@ -131,7 +131,7 @@ var DevKit;
 			}
 			return e[alias];
 		}
-		msdyn_customerasset.getAliasedFormattedValue = function (alias, isMultiOptionSet) {
+		msdyn_customerasset.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
 				return EMPTY_STRING;
 			}

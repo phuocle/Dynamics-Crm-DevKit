@@ -4,20 +4,18 @@ var DevKit;
 (function (DevKit) {
 	'use strict';
 	DevKit.ContactApi = function (e) {
-		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
 			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-			var property = {};
 			var getFormattedValue = function () {
 				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-					return EMPTY_STRING;
+					return '';
 				}
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
 					if (entity[logicalName + l] === entityLogicalName) {
 						return entity[logicalName + f];
 					}
-					return EMPTY_STRING;
+					return '';
 				}
 				if (isMultiOptionSet) {
 					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -42,30 +40,29 @@ var DevKit;
 			var setValue = function (value) {
 				if (isMultiOptionSet) value = value.join(',');
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+					value = value.replace('{', '').replace('}', '');
 					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
 				} else {
 					upsertEntity[logicalName] = value;
 				}
 				entity[logicalName] = value;
 			};
-			Object.defineProperty(property, 'FormattedValue', {
+			Object.defineProperty(obj.FormattedValue, field, {
 				get: getFormattedValue
 			});
 			if (readOnly) {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue
 				});
 			}
 			else {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue,
 					set: setValue
 				});
 			}
-			return property;
 		}
-		var contact = {
+		var _contact = {
 			AccountId: { b: 'accountid', a: '_accountid_value', c: 'accounts', d: 'account', r: true },
 			AccountRoleCode: { a: 'accountrolecode' },
 			Address1_AddressId: { a: 'address1_addressid' },
@@ -221,6 +218,7 @@ var DevKit;
 			ModifiedOnBehalfBy: { b: 'modifiedonbehalfby', a: '_modifiedonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
 			msdyn_gdproptout: { a: 'msdyn_gdproptout' },
 			msdyn_orgchangestatus: { a: 'msdyn_orgchangestatus' },
+			msdyn_segmentid: { b: 'msdyn_segmentid', a: '_msdyn_segmentid_value', c: 'msdyn_segments', d: 'msdyn_segment' },
 			msdyusd_CurrentProfile: { a: 'msdyusd_currentprofile' },
 			msdyusd_Facebook: { a: 'msdyusd_facebook' },
 			msdyusd_Twitter: { a: 'msdyusd_twitter' },
@@ -276,20 +274,23 @@ var DevKit;
 		};
 		if (e === undefined) e = {};
 		var u = {};
-		for (var field in contact) {
-			var a = contact[field].a;
-			var b = contact[field].b;
-			var c = contact[field].c;
-			var d = contact[field].d;
-			var g = contact[field].g;
-			var r = contact[field].r;
-			contact[field] = webApiField(e, a, b, c, d, r, u, g);
+		var contact = {};
+		contact.ODataEntity = e;
+		contact.FormattedValue = {};
+		for (var field in _contact) {
+			var a = _contact[field].a;
+			var b = _contact[field].b;
+			var c = _contact[field].c;
+			var d = _contact[field].d;
+			var g = _contact[field].g;
+			var r = _contact[field].r;
+			webApiField(contact, field, e, a, b, c, d, r, u, g);
 		}
 		contact.Entity = u;
 		contact.EntityName = 'contact';
 		contact.EntityCollectionName = 'contacts';
 		contact['@odata.etag'] = e['@odata.etag'];
-		contact.getAliasedValue = function (alias, isMultiOptionSet) {
+		contact.getAliasedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias] === undefined || e[alias] === null) {
 				return null;
 			}
@@ -298,7 +299,7 @@ var DevKit;
 			}
 			return e[alias];
 		}
-		contact.getAliasedFormattedValue = function (alias, isMultiOptionSet) {
+		contact.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
 				return EMPTY_STRING;
 			}

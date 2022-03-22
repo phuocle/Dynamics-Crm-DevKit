@@ -45,8 +45,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -54,57 +56,63 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
+		/** Display Attributes */
+		msdyn_displayattributes: string;
 		/** Next activity or Sequence step due time */
-		msdyn_duetime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		msdyn_duetime_UtcDateAndTime: Date;
 		/** Activity End time */
-		msdyn_endtime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		msdyn_endtime_UtcDateAndTime: Date;
 		/** Set Name of Entity. */
-		msdyn_entitysetname: DevKit.WebApi.StringValue;
+		msdyn_entitysetname: string;
 		/** Entity Type code for this entity. */
-		msdyn_entitytypecode: DevKit.WebApi.IntegerValue;
+		msdyn_entitytypecode: number;
 		/** Display Name of Entity Type. */
-		msdyn_entitytypedisplayname: DevKit.WebApi.StringValue;
+		msdyn_entitytypedisplayname: string;
 		/** Logical Name of Entity Type. */
-		msdyn_entitytypelogicalname: DevKit.WebApi.StringValue;
+		msdyn_entitytypelogicalname: string;
+		/** Fields added for performing client side custom filtering. */
+		msdyn_filterattributes: string;
+		/** Unique identifier of the activity linked to the sequence step */
+		msdyn_linkedactivityid: string;
 		/** Next action error state for this record. */
-		msdyn_nextactionerrorstate: DevKit.WebApi.IntegerValue;
+		msdyn_nextactionerrorstate: number;
 		/** GUID for next action id. */
-		msdyn_nextactionid: DevKit.WebApi.GuidValue;
+		msdyn_nextactionid: string;
 		/** Next action name from Sequence/Activity. */
-		msdyn_nextactionname: DevKit.WebApi.StringValue;
+		msdyn_nextactionname: string;
 		/** Source name for action from Sequence or Activity. */
-		msdyn_nextactionsource: DevKit.WebApi.StringValue;
+		msdyn_nextactionsource: string;
 		/** Display Name for Next Action Sub Type. */
-		msdyn_nextactionsubtype: DevKit.WebApi.StringValue;
+		msdyn_nextactionsubtype: string;
 		/** Activity Name or Sequence step like Email, Phone Call, Task etc. */
-		msdyn_nextactiontype: DevKit.WebApi.StringValue;
+		msdyn_nextactiontype: string;
 		/** Display Name for Next Action Type. */
-		msdyn_nextactiontypedisplayname: DevKit.WebApi.StringValue;
+		msdyn_nextactiontypedisplayname: string;
 		/** Next action wait state for this record. */
-		msdyn_nextactionwaitstate: DevKit.WebApi.IntegerValue;
+		msdyn_nextactionwaitstate: number;
 		/** Sequence Operation Parameter. */
-		msdyn_operationparameter: DevKit.WebApi.StringValue;
+		msdyn_operationparameter: string;
 		/** Unique ID for entity record. */
-		msdyn_primaryentityid: DevKit.WebApi.GuidValue;
+		msdyn_primaryentityid: string;
 		/** Name of the entity for the related workqueue record. */
-		msdyn_primaryname: DevKit.WebApi.StringValue;
+		msdyn_primaryname: string;
 		/** Priority grade for primary entity. */
-		msdyn_prioritygrade: DevKit.WebApi.StringValue;
+		msdyn_prioritygrade: string;
 		/** Priority score for primary entity. */
-		msdyn_priorityscore: DevKit.WebApi.DecimalValue;
+		msdyn_priorityscore: number;
 		/** GUID of sequence id. */
-		msdyn_sequenceid: DevKit.WebApi.GuidValue;
+		msdyn_sequenceid: string;
 		/** Name of the Sequence */
-		msdyn_sequencename: DevKit.WebApi.StringValue;
+		msdyn_sequencename: string;
 		/** GUID of sequence step id. */
-		msdyn_sequencestepid: DevKit.WebApi.GuidValue;
+		msdyn_sequencestepid: string;
 		/** Unique identifier for entity instances. */
-		msdyn_workqueuerecordId: DevKit.WebApi.GuidValue;
+		msdyn_workqueuerecordId: string;
 	}
 }
 declare namespace OptionSet {
@@ -127,4 +135,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

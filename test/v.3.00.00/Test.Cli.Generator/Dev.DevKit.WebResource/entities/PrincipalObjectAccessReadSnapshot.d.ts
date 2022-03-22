@@ -19,25 +19,27 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
 		EntityCollectionName: string;
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
-		ChildUserPrincipalsCount: DevKit.WebApi.BigIntValueReadonly;
-		Count: DevKit.WebApi.BigIntValueReadonly;
-		CountPercentOfTotalRows: DevKit.WebApi.IntegerValueReadonly;
-		ObjectTypeCode: DevKit.WebApi.IntegerValueReadonly;
-		PrincipalId: DevKit.WebApi.GuidValueReadonly;
-		PrincipalObjectAccessReadSnapshotId: DevKit.WebApi.GuidValueReadonly;
-		RecordCountForOwnerID: DevKit.WebApi.BigIntValueReadonly;
-		RecordCountForOwnerIDPercentOfTotalRows: DevKit.WebApi.IntegerValueReadonly;
-		RecordCountForOwningBU: DevKit.WebApi.BigIntValueReadonly;
-		RecordCountForOwningBUPercentOfTotalRows: DevKit.WebApi.IntegerValueReadonly;
-		TeamPrincipalsCount: DevKit.WebApi.BigIntValueReadonly;
+		readonly ChildUserPrincipalsCount: number;
+		readonly Count: number;
+		readonly CountPercentOfTotalRows: number;
+		readonly ObjectTypeCode: number;
+		readonly PrincipalId: string;
+		readonly PrincipalObjectAccessReadSnapshotId: string;
+		readonly RecordCountForOwnerID: number;
+		readonly RecordCountForOwnerIDPercentOfTotalRows: number;
+		readonly RecordCountForOwningBU: number;
+		readonly RecordCountForOwningBUPercentOfTotalRows: number;
+		readonly TeamPrincipalsCount: number;
 	}
 }
 declare namespace OptionSet {
@@ -60,4 +62,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

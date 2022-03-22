@@ -4,20 +4,18 @@ var DevKit;
 (function (DevKit) {
 	'use strict';
 	DevKit.msdyn_personalmessageApi = function (e) {
-		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
 			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-			var property = {};
 			var getFormattedValue = function () {
 				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-					return EMPTY_STRING;
+					return '';
 				}
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
 					if (entity[logicalName + l] === entityLogicalName) {
 						return entity[logicalName + f];
 					}
-					return EMPTY_STRING;
+					return '';
 				}
 				if (isMultiOptionSet) {
 					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -42,30 +40,29 @@ var DevKit;
 			var setValue = function (value) {
 				if (isMultiOptionSet) value = value.join(',');
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+					value = value.replace('{', '').replace('}', '');
 					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
 				} else {
 					upsertEntity[logicalName] = value;
 				}
 				entity[logicalName] = value;
 			};
-			Object.defineProperty(property, 'FormattedValue', {
+			Object.defineProperty(obj.FormattedValue, field, {
 				get: getFormattedValue
 			});
 			if (readOnly) {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue
 				});
 			}
 			else {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue,
 					set: setValue
 				});
 			}
-			return property;
 		}
-		var msdyn_personalmessage = {
+		var _msdyn_personalmessage = {
 			CreatedBy: { b: 'createdby', a: '_createdby_value', c: 'systemusers', d: 'systemuser', r: true },
 			CreatedOn_UtcDateAndTime: { a: 'createdon', r: true },
 			CreatedOnBehalfBy: { b: 'createdonbehalfby', a: '_createdonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
@@ -92,20 +89,23 @@ var DevKit;
 		};
 		if (e === undefined) e = {};
 		var u = {};
-		for (var field in msdyn_personalmessage) {
-			var a = msdyn_personalmessage[field].a;
-			var b = msdyn_personalmessage[field].b;
-			var c = msdyn_personalmessage[field].c;
-			var d = msdyn_personalmessage[field].d;
-			var g = msdyn_personalmessage[field].g;
-			var r = msdyn_personalmessage[field].r;
-			msdyn_personalmessage[field] = webApiField(e, a, b, c, d, r, u, g);
+		var msdyn_personalmessage = {};
+		msdyn_personalmessage.ODataEntity = e;
+		msdyn_personalmessage.FormattedValue = {};
+		for (var field in _msdyn_personalmessage) {
+			var a = _msdyn_personalmessage[field].a;
+			var b = _msdyn_personalmessage[field].b;
+			var c = _msdyn_personalmessage[field].c;
+			var d = _msdyn_personalmessage[field].d;
+			var g = _msdyn_personalmessage[field].g;
+			var r = _msdyn_personalmessage[field].r;
+			webApiField(msdyn_personalmessage, field, e, a, b, c, d, r, u, g);
 		}
 		msdyn_personalmessage.Entity = u;
 		msdyn_personalmessage.EntityName = 'msdyn_personalmessage';
 		msdyn_personalmessage.EntityCollectionName = 'msdyn_personalmessages';
 		msdyn_personalmessage['@odata.etag'] = e['@odata.etag'];
-		msdyn_personalmessage.getAliasedValue = function (alias, isMultiOptionSet) {
+		msdyn_personalmessage.getAliasedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias] === undefined || e[alias] === null) {
 				return null;
 			}
@@ -114,7 +114,7 @@ var DevKit;
 			}
 			return e[alias];
 		}
-		msdyn_personalmessage.getAliasedFormattedValue = function (alias, isMultiOptionSet) {
+		msdyn_personalmessage.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
 				return EMPTY_STRING;
 			}
@@ -132,18 +132,30 @@ var OptionSet;
 	OptionSet.msdyn_personalmessage = {
 		msdyn_locale_field : {
 			ar_SA: 1025,
+			bg_BG: 1026,
+			ca_ES: 1027,
 			cs_CZ: 1029,
 			da_DK: 1030,
 			de_DE: 1031,
+			el_GR: 1032,
 			en_US: 1033,
 			es_ES: 3082,
+			et_EE: 1061,
+			eu_ES: 1069,
 			fi_FI: 1035,
 			fr_FR: 1036,
+			gl_ES: 1110,
 			he_IL: 1037,
+			hi_IN: 1081,
+			hr_HR: 1050,
+			hu_HU: 1038,
 			id_ID: 1057,
 			it_IT: 1040,
 			ja_JP: 1041,
+			kk_KZ: 1087,
 			ko_KR: 1042,
+			lt_LT: 1063,
+			lv_LV: 1062,
 			nb_NO: 1044,
 			nl_NL: 1043,
 			pl_PL: 1045,
@@ -151,10 +163,14 @@ var OptionSet;
 			pt_PT: 2070,
 			ro_RO: 1048,
 			ru_RU: 1049,
+			sk_SK: 1051,
+			sr_Latn_CS: 2074,
 			sv_SE: 1053,
 			th_TH: 1054,
 			tr_TR: 1055,
-			zh_CN: 2052
+			zh_CN: 2052,
+			zh_HK: 3076,
+			zh_TW: 1028
 		},
 		statecode : {
 			Active: 0,

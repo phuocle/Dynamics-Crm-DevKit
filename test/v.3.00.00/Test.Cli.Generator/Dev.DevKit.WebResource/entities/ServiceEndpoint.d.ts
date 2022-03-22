@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,82 +30,82 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Specifies mode of authentication with SB */
-		AuthType: DevKit.WebApi.OptionSetValue;
+		AuthType: OptionSet.ServiceEndpoint.AuthType;
 		/** Authentication Value */
-		AuthValue: DevKit.WebApi.StringValue;
+		AuthValue: string;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.ServiceEndpoint.ComponentState;
 		/** Connection mode to contact the service endpoint. */
-		ConnectionMode: DevKit.WebApi.OptionSetValue;
+		ConnectionMode: OptionSet.ServiceEndpoint.ConnectionMode;
 		/** Type of the endpoint contract. */
-		Contract: DevKit.WebApi.OptionSetValue;
+		Contract: OptionSet.ServiceEndpoint.Contract;
 		/** Unique identifier of the user who created the service endpoint. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the service endpoint was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the service endpoint. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Description of the service endpoint. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Version in which the form is introduced. */
-		IntroducedVersion: DevKit.WebApi.StringValue;
-		IsAuthValueSet: DevKit.WebApi.BooleanValueReadonly;
+		IntroducedVersion: string;
+		readonly IsAuthValueSet: boolean;
 		/** Information that specifies whether this component can be customized. */
-		IsCustomizable: DevKit.WebApi.ManagedPropertyValue;
+		IsCustomizable: string;
 		/** Information that specifies whether this component is managed. */
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
-		IsSASKeySet: DevKit.WebApi.BooleanValueReadonly;
-		IsSASTokenSet: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsManaged: boolean;
+		readonly IsSASKeySet: boolean;
+		readonly IsSASTokenSet: boolean;
 		/** Unique identifier for keyvaultreference associated with serviceendpoint. */
-		KeyVaultReferenceId: DevKit.WebApi.LookupValue;
+		KeyVaultReferenceId: string;
 		/** Specifies the character encoding for message content */
-		MessageCharset: DevKit.WebApi.OptionSetValue;
+		MessageCharset: OptionSet.ServiceEndpoint.MessageCharset;
 		/** Content type of the message */
-		MessageFormat: DevKit.WebApi.OptionSetValue;
+		MessageFormat: OptionSet.ServiceEndpoint.MessageFormat;
 		/** Unique identifier of the user who last modified the service endpoint. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the service endpoint was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the service endpoint. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Name of Service end point. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Full service endpoint address. */
-		NamespaceAddress: DevKit.WebApi.StringValue;
+		NamespaceAddress: string;
 		/** Format of Service Bus Namespace */
-		NamespaceFormat: DevKit.WebApi.OptionSetValue;
+		NamespaceFormat: OptionSet.ServiceEndpoint.NamespaceFormat;
 		/** Unique identifier of the organization with which the service endpoint is associated. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** For internal use only. */
-		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly OverwriteTime_UtcDateOnly: Date;
 		/** Path to the service endpoint. */
-		Path: DevKit.WebApi.StringValue;
+		Path: string;
 		/** For internal use only. Holds miscellaneous properties related to runtime integration. */
-		RuntimeIntegrationProperties: DevKit.WebApi.StringValue;
+		RuntimeIntegrationProperties: string;
 		/** Shared Access Key */
-		SASKey: DevKit.WebApi.StringValue;
+		SASKey: string;
 		/** Shared Access Key Name */
-		SASKeyName: DevKit.WebApi.StringValue;
+		SASKeyName: string;
 		/** Shared Access Token */
-		SASToken: DevKit.WebApi.StringValue;
+		SASToken: string;
 		/** Specifies schema type for event grid events */
-		SchemaType: DevKit.WebApi.OptionSetValue;
+		SchemaType: OptionSet.ServiceEndpoint.SchemaType;
 		/** Unique identifier of the service endpoint. */
-		ServiceEndpointId: DevKit.WebApi.GuidValue;
+		ServiceEndpointId: string;
 		/** Unique identifier of the service endpoint. */
-		ServiceEndpointIdUnique: DevKit.WebApi.GuidValueReadonly;
+		readonly ServiceEndpointIdUnique: string;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** Namespace of the App Fabric solution. */
-		SolutionNamespace: DevKit.WebApi.StringValue;
+		SolutionNamespace: string;
 		/** For internal use only. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SupportingSolutionId: string;
 		/** Full service endpoint Url. */
-		Url: DevKit.WebApi.StringValue;
+		Url: string;
 		/** Use Auth Information in KeyVault */
-		UseKeyVaultConfiguration: DevKit.WebApi.BooleanValue;
+		UseKeyVaultConfiguration: boolean;
 		/** Additional user claim value type. */
-		UserClaim: DevKit.WebApi.OptionSetValue;
+		UserClaim: OptionSet.ServiceEndpoint.UserClaim;
 	}
 }
 declare namespace OptionSet {
@@ -214,4 +216,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

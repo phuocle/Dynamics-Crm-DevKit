@@ -71,8 +71,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -80,79 +82,79 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Specifies whether records of this entity can be followed. */
-		CanBeFollowed: DevKit.WebApi.BooleanValue;
+		CanBeFollowed: boolean;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.MobileOfflineProfileItem.ComponentState;
 		/** Shows who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Internal Use Only */
-		EntityObjectTypeCode: DevKit.WebApi.IntegerValueReadonly;
+		readonly EntityObjectTypeCode: number;
 		/** Specify whether records related to this entity will be made available for offline access. */
-		GetRelatedEntityRecords: DevKit.WebApi.BooleanValue;
+		GetRelatedEntityRecords: boolean;
 		/** Version in which the Mobile offline Profile Item is introduced. */
-		IntroducedVersion: DevKit.WebApi.StringValue;
+		IntroducedVersion: string;
 		/** For internal use only. */
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsManaged: boolean;
 		/** Information about whether profile item is validated or not */
-		IsValidated: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsValidated: boolean;
 		/** Information about whether the mobile offline profile item is visible in the Profile Item subgrid. */
-		IsVisibleInGrid: DevKit.WebApi.BooleanValue;
+		IsVisibleInGrid: boolean;
 		/** Unique identifier of the mobile offline profile item. */
-		MobileOfflineProfileItemId: DevKit.WebApi.GuidValue;
+		MobileOfflineProfileItemId: string;
 		/** For Internal Use Only */
-		MobileOfflineProfileItemIdUnique: DevKit.WebApi.GuidValueReadonly;
+		readonly MobileOfflineProfileItemIdUnique: string;
 		/** Shows who last updated the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Shows who updated the record on behalf of another user. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Enter the name of the mobile offline profile item. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Unique identifier of the organization associated with the Mobile Offline Profile Item. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** For internal use only. */
-		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly OverwriteTime_UtcDateOnly: Date;
 		/** Shows the ID of the process. */
-		ProcessId: DevKit.WebApi.GuidValue;
+		ProcessId: string;
 		/** Profile item entity filter criteria */
-		ProfileItemEntityFilter: DevKit.WebApi.StringValue;
+		ProfileItemEntityFilter: string;
 		/** Saved Query associated with the Mobile offline profile item rule. */
-		ProfileItemRule: DevKit.WebApi.LookupValue;
+		ProfileItemRule: string;
 		/** Displays the last published date time. */
-		PublishedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly PublishedOn_UtcDateAndTime: Date;
 		/** Specify data download filter for selected entity */
-		RecordDistributionCriteria: DevKit.WebApi.OptionSetValue;
+		RecordDistributionCriteria: OptionSet.MobileOfflineProfileItem.RecordDistributionCriteria;
 		/** Download my records */
-		RecordsOwnedByMe: DevKit.WebApi.BooleanValue;
+		RecordsOwnedByMe: boolean;
 		/** Download my business unit's records */
-		RecordsOwnedByMyBusinessUnit: DevKit.WebApi.BooleanValue;
+		RecordsOwnedByMyBusinessUnit: boolean;
 		/** Download my team's records */
-		RecordsOwnedByMyTeam: DevKit.WebApi.BooleanValue;
+		RecordsOwnedByMyTeam: boolean;
 		/** Items contained with a particular Profile. */
-		RegardingObjectId: DevKit.WebApi.LookupValue;
+		RegardingObjectId: string;
 		/** Internal Use Only */
-		RelationshipData: DevKit.WebApi.StringValue;
+		RelationshipData: string;
 		/** Internal Use Only */
-		SelectedEntityMetadata: DevKit.WebApi.StringValueReadonly;
+		readonly SelectedEntityMetadata: string;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** Shows the ID of the stage. */
-		StageId: DevKit.WebApi.GuidValue;
+		StageId: string;
 		/** For internal use only. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SupportingSolutionId: string;
 		/** How often to sync data offline. */
-		SyncIntervalInMinutes: DevKit.WebApi.IntegerValue;
+		SyncIntervalInMinutes: number;
 		/** For internal use only. */
-		TraversedPath: DevKit.WebApi.StringValue;
+		TraversedPath: string;
 		/** Version number of the Mobile Offline Profile Item. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 		/** Contains converted sql of the referenced view. */
-		ViewQuery: DevKit.WebApi.StringValue;
+		ViewQuery: string;
 	}
 }
 declare namespace OptionSet {
@@ -182,15 +184,15 @@ declare namespace OptionSet {
 			Account,
 			/** 16 */
 			AccountLeads,
-			/** 10074 */
+			/** 10085 */
 			Activity_File_Attachment,
-			/** 10538 */
+			/** 10539 */
 			Agreement_Business_Process,
 			/** 4201 */
 			Appointment,
-			/** 10126 */
+			/** 10139 */
 			Asset_Category_Template_Association,
-			/** 10127 */
+			/** 10140 */
 			Asset_Template_Association,
 			/** 1001 */
 			Attachment,
@@ -198,17 +200,17 @@ declare namespace OptionSet {
 			Bookable_Resource,
 			/** 1145 */
 			Bookable_Resource_Booking,
-			/** 10622 */
+			/** 10623 */
 			Bookable_Resource_Booking_Quick_Note,
 			/** 1152 */
 			Booking_Status,
-			/** 10535 */
+			/** 10536 */
 			Booking_Timestamp,
 			/** 112 */
 			Case,
-			/** 10537 */
+			/** 10538 */
 			Case_to_Work_Order_Business_Process,
-			/** 10634 */
+			/** 10635 */
 			CFS_IoT_Alert_Process_Flow,
 			/** 123 */
 			Competitor,
@@ -226,9 +228,9 @@ declare namespace OptionSet {
 			ContactLeads,
 			/** 9105 */
 			Currency,
-			/** 10128 */
+			/** 10141 */
 			Customer_Asset,
-			/** 10130 */
+			/** 10143 */
 			Customer_Asset_Category,
 			/** 4202 */
 			Email,
@@ -240,75 +242,75 @@ declare namespace OptionSet {
 			Entitlement_Product,
 			/** 4545 */
 			Entitlement_Template_Product,
-			/** 10541 */
-			Field_Service_Price_List_Item,
 			/** 10542 */
+			Field_Service_Price_List_Item,
+			/** 10543 */
 			Field_Service_Setting,
-			/** 10131 */
+			/** 10144 */
 			Functional_Location,
-			/** 10635 */
+			/** 10636 */
 			Geolocation_Settings,
 			/** 1007 */
 			Image_Descriptor,
 			/** 9931 */
 			Incident_KnowledgeBaseRecord,
-			/** 10545 */
+			/** 10546 */
 			Incident_Type,
-			/** 10547 */
-			Incident_Type_Product,
-			/** 10627 */
-			Incident_Type_Resolution,
 			/** 10548 */
-			Incident_Type_Service,
+			Incident_Type_Product,
+			/** 10628 */
+			Incident_Type_Resolution,
 			/** 10549 */
-			Incident_Type_Service_Task,
+			Incident_Type_Service,
 			/** 10550 */
+			Incident_Type_Service_Task,
+			/** 10551 */
 			Incident_Types_Setup,
-			/** 10519 */
-			Inspection_Attachment,
-			/** 10522 */
-			Inspection_Response,
-			/** 10518 */
-			Inspection_Template,
 			/** 10520 */
+			Inspection_Attachment,
+			/** 10523 */
+			Inspection_Response,
+			/** 10519 */
+			Inspection_Template,
+			/** 10521 */
 			Inspection_Template_Version,
 			/** 1090 */
 			Invoice,
 			/** 1091 */
 			Invoice_Line,
-			/** 10433 */
+			/** 10437 */
 			Invoice_Process,
-			/** 10138 */
+			/** 10152 */
 			IoT_Alert,
-			/** 10154 */
+			/** 10168 */
 			IoT_Alert_to_Case_Process,
-			/** 10139 */
+			/** 10153 */
 			IoT_Device,
-			/** 10140 */
+			/** 10154 */
 			IoT_Device_Category,
-			/** 10141 */
+			/** 10155 */
 			IoT_Device_Command,
-			/** 10142 */
+			/** 10156 */
 			IoT_Device_Command_Definition,
-			/** 10143 */
+			/** 10157 */
 			IoT_Device_Data_History,
-			/** 10144 */
+			/** 10158 */
 			IoT_Device_Property,
-			/** 10145 */
+			/** 10159 */
 			IoT_Device_Registration_History,
-			/** 10148 */
+			/** 10162 */
 			IoT_Property_Definition,
-			/** 10149 */
+			/** 10163 */
 			IoT_Provider,
-			/** 10150 */
+			/** 10164 */
 			IoT_Provider_Instance,
-			/** 10151 */
+			/** 10165 */
 			IoT_Settings,
 			/** 9953 */
 			Knowledge_Article,
-			/** 10084 */
+			/** 10096 */
 			Knowledge_Article_Attachment,
-			/** 10080 */
+			/** 10092 */
 			Knowledge_Article_Image,
 			/** 9955 */
 			Knowledge_Article_Views,
@@ -334,6 +336,8 @@ declare namespace OptionSet {
 			Order,
 			/** 1089 */
 			Order_Line,
+			/** 10880 */
+			OrganizationDataSyncState,
 			/** 4210 */
 			Phone_Call,
 			/** 952 */
@@ -342,33 +346,33 @@ declare namespace OptionSet {
 			Price_List,
 			/** 1026 */
 			Price_List_Item,
-			/** 10409 */
+			/** 10413 */
 			Priority,
 			/** 1024 */
 			Product,
-			/** 10565 */
+			/** 10566 */
 			Product_Inventory,
 			/** 1028 */
 			Product_Relationship,
-			/** 10432 */
+			/** 10436 */
 			Project_Stages,
 			/** 1048 */
 			Property,
-			/** 10133 */
+			/** 10146 */
 			Property_Asset_Association,
 			/** 1235 */
 			Property_Association,
-			/** 10132 */
+			/** 10145 */
 			Property_Definition,
 			/** 1333 */
 			Property_Instance,
-			/** 10134 */
+			/** 10147 */
 			Property_Log,
 			/** 1049 */
 			Property_Option_Set_Item,
-			/** 10135 */
+			/** 10148 */
 			Property_Template_Association,
-			/** 10536 */
+			/** 10537 */
 			Purchase_Order_Business_Process,
 			/** 2020 */
 			Queue,
@@ -378,29 +382,29 @@ declare namespace OptionSet {
 			Quote,
 			/** 1085 */
 			Quote_Line,
-			/** 10630 */
+			/** 10631 */
 			Resolution,
-			/** 10421 */
+			/** 10425 */
 			Scheduling_Parameter,
-			/** 10588 */
+			/** 10589 */
 			Service_Task_Type,
 			/** 9752 */
 			SLA_KPI_Instance,
 			/** 4212 */
 			Task,
-			/** 10590 */
+			/** 10591 */
 			Tax_Code,
 			/** 9 */
 			Team,
-			/** 10136 */
+			/** 10149 */
 			Template_For_Properties,
 			/** 2013 */
 			Territory,
-			/** 10495 */
+			/** 10499 */
 			Time_Entry,
-			/** 10592 */
+			/** 10593 */
 			Time_Off_Request,
-			/** 10510 */
+			/** 10514 */
 			Time_Source,
 			/** 1055 */
 			Unit,
@@ -408,25 +412,25 @@ declare namespace OptionSet {
 			Unit_Group,
 			/** 8 */
 			User,
-			/** 10594 */
-			Warehouse,
 			/** 10595 */
+			Warehouse,
+			/** 10596 */
 			Work_Order,
-			/** 10539 */
+			/** 10540 */
 			Work_Order_Business_Process,
-			/** 10598 */
-			Work_Order_Incident,
 			/** 10599 */
+			Work_Order_Incident,
+			/** 10600 */
 			Work_Order_Product,
-			/** 10633 */
+			/** 10634 */
 			Work_Order_Resolution,
-			/** 10601 */
-			Work_Order_Service,
 			/** 10602 */
-			Work_Order_Service_Task,
+			Work_Order_Service,
 			/** 10603 */
-			Work_Order_Substatus,
+			Work_Order_Service_Task,
 			/** 10604 */
+			Work_Order_Substatus,
+			/** 10605 */
 			Work_Order_Type
 		}
 		enum RollupState {
@@ -447,4 +451,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

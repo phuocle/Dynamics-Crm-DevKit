@@ -44,8 +44,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -53,64 +55,64 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Shows Author Names of Office Graph Document. */
-		AuthorNames: DevKit.WebApi.StringValueReadonly;
+		readonly AuthorNames: string;
 		/** Shows Created By of Office Graph Document. */
-		CreatedBy: DevKit.WebApi.StringValueReadonly;
+		readonly CreatedBy: string;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Date and time when the record was created. */
-		CreatedTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedTime_UtcDateAndTime: Date;
 		/** Document Id. */
-		DocumentId: DevKit.WebApi.StringValue;
+		DocumentId: string;
 		/** Document Last Modified By */
-		DocumentLastModifiedBy: DevKit.WebApi.StringValueReadonly;
+		readonly DocumentLastModifiedBy: string;
 		/** Document Last Modified On */
-		DocumentLastModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly DocumentLastModifiedOn_UtcDateAndTime: Date;
 		/** document preview metadata */
-		DocumentPreviewMetadata: DevKit.WebApi.StringValueReadonly;
+		readonly DocumentPreviewMetadata: string;
 		/** Exchange rate for the currency associated with the Office Graph Document with respect to the base currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** File Extension of Office Graph Document. */
-		FileExtension: DevKit.WebApi.StringValueReadonly;
+		readonly FileExtension: string;
 		/** Shows the File Type of Office Graph Document. */
-		FileType: DevKit.WebApi.StringValueReadonly;
+		readonly FileType: string;
 		/** Shows modified by of Office Graph Document. */
-		ModifiedBy: DevKit.WebApi.StringValueReadonly;
+		readonly ModifiedBy: string;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedTime_UtcDateAndTime: Date;
 		/** Unique identifier for entity instances */
-		OfficeGraphDocumentId: DevKit.WebApi.GuidValue;
+		OfficeGraphDocumentId: string;
 		/** Unique identifier for the organization */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Shows the Preview Image Url Office Graph Document. */
-		PreviewImageUrl: DevKit.WebApi.StringValueReadonly;
+		readonly PreviewImageUrl: string;
 		/** Shows Query Type of child folders */
-		QueryType: DevKit.WebApi.IntegerValueReadonly;
+		readonly QueryType: number;
 		/** The relevancy rank of the document retrieved */
-		Rank: DevKit.WebApi.IntegerValueReadonly;
+		readonly Rank: number;
 		/** The online read url */
-		ReadUrl: DevKit.WebApi.StringValueReadonly;
+		readonly ReadUrl: string;
 		/** Secondary File Extension of Office Graph Document. */
-		SecondaryFileExtension: DevKit.WebApi.StringValueReadonly;
+		readonly SecondaryFileExtension: string;
 		/** The title of the parent document site */
-		SiteTitle: DevKit.WebApi.StringValueReadonly;
+		readonly SiteTitle: string;
 		/** The site url for the parent document site */
-		SiteUrl: DevKit.WebApi.StringValueReadonly;
+		readonly SiteUrl: string;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** The title of the entity. */
-		Title: DevKit.WebApi.StringValue;
+		Title: string;
 		/** Exchange rate for the currency associated with the Office Graph Document with respect to the base currency. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		UTCConversionTimeZoneCode: number;
+		readonly VersionNumber: number;
 		/** Shows View Count of child folders. */
-		ViewCount: DevKit.WebApi.IntegerValueReadonly;
+		readonly ViewCount: number;
 		/** Shows the Web Location Url of Office Graph Document. */
-		WebLocationUrl: DevKit.WebApi.StringValueReadonly;
+		readonly WebLocationUrl: string;
 	}
 }
 declare namespace OptionSet {
@@ -133,4 +135,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

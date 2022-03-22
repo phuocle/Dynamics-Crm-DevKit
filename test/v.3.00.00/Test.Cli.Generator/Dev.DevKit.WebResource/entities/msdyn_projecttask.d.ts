@@ -142,8 +142,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -151,175 +153,175 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the project task was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Shows the exchange rate for the currency associated with the entity with respect to the base currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of user who last modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Enter the value of the actual cost consumed based on work reported to be completed on the task.  */
-		msdyn_Actualcost: DevKit.WebApi.MoneyValue;
+		msdyn_Actualcost: number;
 		/** Value of the Actual Cost in base currency. */
-		msdyn_actualcost_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_actualcost_Base: number;
 		/** Shows the actual duration of the project task in days */
-		msdyn_actualdurationminutes: DevKit.WebApi.IntegerValue;
+		msdyn_actualdurationminutes: number;
 		/** Shows the hours submitted against the task. */
-		msdyn_ActualEffort: DevKit.WebApi.DoubleValue;
+		msdyn_ActualEffort: number;
 		/** Enter the actual end time of the project task. */
-		msdyn_actualend_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		msdyn_actualend_UtcDateAndTime: Date;
 		/** Actual Sales Amount */
-		msdyn_ActualSales: DevKit.WebApi.MoneyValue;
+		msdyn_ActualSales: number;
 		/** Shows the value of the actual sales in the base currency. */
-		msdyn_actualsales_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_actualsales_Base: number;
 		/** Enter the actual start time of the project task. */
-		msdyn_actualstart_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		msdyn_actualstart_UtcDateAndTime: Date;
 		/** Shows whether the aggregation is happening upstream or downstream. */
-		msdyn_AggregationDirection: DevKit.WebApi.OptionSetValue;
+		msdyn_AggregationDirection: OptionSet.msdyn_projecttask.msdyn_AggregationDirection;
 		/** Type the project team members that are assigned to task. */
-		msdyn_AssignedResources: DevKit.WebApi.StringValue;
+		msdyn_AssignedResources: string;
 		/** Select the project team member that has been assigned to a task. */
-		msdyn_AssignedTeamMembers: DevKit.WebApi.LookupValue;
+		msdyn_AssignedTeamMembers: string;
 		/** Shows whether auto scheduling was used for this task. */
-		msdyn_autoscheduling: DevKit.WebApi.BooleanValue;
+		msdyn_autoscheduling: boolean;
 		/** Enter the forecast of the total cost to complete the task. */
-		msdyn_CostAtCompleteEstimate: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_CostAtCompleteEstimate: number;
 		/** Value of the Cost estimate at complete (EAC) in base currency. */
-		msdyn_costatcompleteestimate_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_costatcompleteestimate_Base: number;
 		/** Enter the consumption of the total cost in percentage. */
-		msdyn_CostConsumptionPercentage: DevKit.WebApi.DecimalValueReadonly;
+		readonly msdyn_CostConsumptionPercentage: number;
 		/** The cost estimate contour for the task */
-		msdyn_CostEstimateContour: DevKit.WebApi.StringValue;
+		msdyn_CostEstimateContour: string;
 		/** Enter a description of the project task. */
-		msdyn_description: DevKit.WebApi.StringValue;
+		msdyn_description: string;
 		/** Shows the duration in days for the task. */
-		msdyn_duration: DevKit.WebApi.DoubleValue;
+		msdyn_duration: number;
 		/** Shows the effort hours required for the task. */
-		msdyn_Effort: DevKit.WebApi.DoubleValue;
+		msdyn_Effort: number;
 		/** The effort distribution */
-		msdyn_EffortContour: DevKit.WebApi.StringValue;
+		msdyn_EffortContour: string;
 		/** Shows the forecast of total effort to complete the task. */
-		msdyn_EffortEstimateAtComplete: DevKit.WebApi.DoubleValue;
+		msdyn_EffortEstimateAtComplete: number;
 		/** Shows whether the task is a line task */
-		msdyn_IsLineTask: DevKit.WebApi.BooleanValue;
+		msdyn_IsLineTask: boolean;
 		/** Show whether this task is a milestone. */
-		msdyn_IsMilestone: DevKit.WebApi.BooleanValue;
+		msdyn_IsMilestone: boolean;
 		/** The id of the project task in MS Project Client. */
-		msdyn_MSProjectClientId: DevKit.WebApi.StringValue;
+		msdyn_MSProjectClientId: string;
 		/** Shows the number of resources that are estimated for the task. This is not the number of resources assigned to the task. */
-		msdyn_numberofresources: DevKit.WebApi.IntegerValue;
+		msdyn_numberofresources: number;
 		/** Select the organizational unit of the resource who should perform the work. */
-		msdyn_OrganizationalUnitPricingDimension: DevKit.WebApi.LookupValue;
+		msdyn_OrganizationalUnitPricingDimension: string;
 		/** Select the summary or parent task in the hierarchy that contains a child task. */
-		msdyn_parenttask: DevKit.WebApi.LookupValue;
+		msdyn_parenttask: string;
 		/** Enter the value of the cost the service provider will incur based on the estimated work and cost rates in the pricelist. */
-		msdyn_plannedCost: DevKit.WebApi.MoneyValue;
+		msdyn_plannedCost: number;
 		/** Enter the value of cost estimated in base currency. */
-		msdyn_plannedcost_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_plannedcost_Base: number;
 		/** Planned Sales Amount */
-		msdyn_PlannedSales: DevKit.WebApi.MoneyValue;
+		msdyn_PlannedSales: number;
 		/** Shows the value of the planned sales in the base currency. */
-		msdyn_plannedsales_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_plannedsales_Base: number;
 		/** Processing data for the plugin pipeline */
-		msdyn_PluginProcessingData: DevKit.WebApi.IntegerValue;
+		msdyn_PluginProcessingData: number;
 		/** Enter the percentage indicating work completed. */
-		msdyn_Progress: DevKit.WebApi.DecimalValue;
+		msdyn_Progress: number;
 		/** Select the project name. */
-		msdyn_project: DevKit.WebApi.LookupValue;
+		msdyn_project: string;
 		/** Shows the entity instances. */
-		msdyn_projecttaskId: DevKit.WebApi.GuidValue;
+		msdyn_projecttaskId: string;
 		/** Enter the cost left over that can be consumed for future work. */
-		msdyn_RemainingCost: DevKit.WebApi.MoneyValue;
+		msdyn_RemainingCost: number;
 		/** Shows the value of the remaining cost in the  base currency. */
-		msdyn_remainingcost_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_remainingcost_Base: number;
 		/** Shows the hours remaining to complete the task. */
-		msdyn_RemainingHours: DevKit.WebApi.DoubleValue;
+		msdyn_RemainingHours: number;
 		/** Remaining Sales Amount */
-		msdyn_RemainingSales: DevKit.WebApi.MoneyValue;
+		msdyn_RemainingSales: number;
 		/** Shows the value of the remaining sales in the base currency. */
-		msdyn_remainingsales_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_remainingsales_Base: number;
 		/** Shows the hours assigned by generic resource. */
-		msdyn_RequestedHours: DevKit.WebApi.DoubleValue;
+		msdyn_RequestedHours: number;
 		/** Select the resource role for the task. */
-		msdyn_resourcecategory: DevKit.WebApi.LookupValue;
+		msdyn_resourcecategory: string;
 		/** Select the resource role for the task. */
-		msdyn_ResourceCategoryPricingDimension: DevKit.WebApi.LookupValue;
+		msdyn_ResourceCategoryPricingDimension: string;
 		/** Select the organizational unit of the resource who should perform the work. */
-		msdyn_ResourceOrganizationalUnitId: DevKit.WebApi.LookupValue;
+		msdyn_ResourceOrganizationalUnitId: string;
 		/** Shows the utilization units for a resource that is assigned to a project task */
-		msdyn_ResourceUtilization: DevKit.WebApi.DecimalValue;
+		msdyn_ResourceUtilization: number;
 		/** Shows the sales consumption percentage for this task. */
-		msdyn_SalesConsumptionPercentage: DevKit.WebApi.DecimalValueReadonly;
+		readonly msdyn_SalesConsumptionPercentage: number;
 		/** Shows the sales estimate at the completion of this task. */
-		msdyn_SalesEstimateAtComplete: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_SalesEstimateAtComplete: number;
 		/** Value of the Sales Estimate At Complete (EAC) in base currency. */
-		msdyn_salesestimateatcomplete_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_salesestimateatcomplete_Base: number;
 		/** The sales estimate contour */
-		msdyn_SalesEstimateContour: DevKit.WebApi.StringValue;
+		msdyn_SalesEstimateContour: string;
 		/** Shows the sales variance for this task. */
-		msdyn_SalesVariance: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_SalesVariance: number;
 		/** Shows the value of the sales variance in the base currency. */
-		msdyn_salesvariance_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_salesvariance_Base: number;
 		/** Shows the scheduled duration of the project task, specified in minutes. */
-		msdyn_scheduleddurationminutes: DevKit.WebApi.IntegerValue;
+		msdyn_scheduleddurationminutes: number;
 		/** Enter the scheduled end time of the project. */
-		msdyn_scheduledend_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		msdyn_scheduledend_UtcDateOnly: Date;
 		/** Shows the scheduled hours for the task. */
-		msdyn_ScheduledHours: DevKit.WebApi.DoubleValue;
+		msdyn_ScheduledHours: number;
 		/** Enter the scheduled start time of the project task. */
-		msdyn_scheduledstart_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		msdyn_scheduledstart_UtcDateOnly: Date;
 		/** Shows the variance between the estimated work and the forecasted work based on the estimate at completion (EAC). */
-		msdyn_ScheduleVariance: DevKit.WebApi.DoubleValue;
+		msdyn_ScheduleVariance: number;
 		/** Internal flag to avoid the update process on the estimate lines of the project task (Deprecated in v3.0) */
-		msdyn_skipupdateestimateline: DevKit.WebApi.BooleanValue;
+		msdyn_skipupdateestimateline: boolean;
 		/** Type the name of the custom entity. */
-		msdyn_subject: DevKit.WebApi.StringValue;
+		msdyn_subject: string;
 		/** Select the transaction category for the task. */
-		msdyn_transactioncategory: DevKit.WebApi.LookupValue;
+		msdyn_transactioncategory: string;
 		/** Enter the variance between the estimated cost and the forecasted cost based on the estimate at completion (EAC). */
-		msdyn_VarianceOfCost: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_VarianceOfCost: number;
 		/** Shows the value of the cost variance in the base currency. */
-		msdyn_varianceofcost_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_varianceofcost_Base: number;
 		/** Shows the ID of the task in the work breakdown structure (WBS). */
-		msdyn_WBSID: DevKit.WebApi.StringValue;
+		msdyn_WBSID: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Contains the id of the process associated with the entity. */
-		processid: DevKit.WebApi.GuidValue;
+		processid: string;
 		/** Unique identifier of the Stage. */
-		StageId: DevKit.WebApi.GuidValue;
+		StageId: string;
 		/** Status of the Project Task */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.msdyn_projecttask.statecode;
 		/** Reason for the status of the Project Task */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.msdyn_projecttask.statuscode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Shows the currency associated with the entity. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** A comma separated list of string values representing the unique identifiers of stages in a Business Process Flow Instance in the order that they occur. */
-		traversedpath: DevKit.WebApi.StringValue;
+		traversedpath: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -362,4 +364,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

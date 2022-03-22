@@ -57,8 +57,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -66,36 +68,36 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the business unit with which the calendar is associated. */
-		BusinessUnitId: DevKit.WebApi.LookupValue;
+		BusinessUnitId: string;
 		/** Unique identifier of the calendar. */
-		CalendarId: DevKit.WebApi.GuidValue;
+		CalendarId: string;
 		/** Unique identifier of the user who created the calendar. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the calendar was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the calendar. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Calendar used by the scheduling system to define when an appointment or activity is to occur. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Holiday Schedule CalendarId */
-		HolidayScheduleCalendarId: DevKit.WebApi.LookupValue;
+		HolidayScheduleCalendarId: string;
 		/** Calendar is shared by other calendars, such as the organization calendar. */
-		IsShared: DevKit.WebApi.BooleanValue;
+		IsShared: boolean;
 		/** Unique identifier of the user who last modified the calendar. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the calendar was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the calendar. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Name of the calendar. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Unique identifier of the organization with which the calendar is associated. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Unique identifier of the primary user of this calendar. */
-		PrimaryUserId: DevKit.WebApi.GuidValue;
+		PrimaryUserId: string;
 		/** Calendar type, such as User work hour calendar, or Customer service hour calendar. */
-		Type: DevKit.WebApi.OptionSetValue;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		Type: OptionSet.Calendar.Type;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -126,4 +128,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

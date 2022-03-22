@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,2145 +30,2233 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the system job that created this record. */
-		AsyncOperationId: DevKit.WebApi.LookupValueReadonly;
+		readonly AsyncOperationId: string;
 		/** Unique identifier of the base record. */
-		baserecordid_account: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_account: string;
 		/** Unique identifier of the base record. */
-		baserecordid_activityfileattachment: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_activityfileattachment: string;
 		/** Unique identifier of the base record. */
-		baserecordid_activitymonitor: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_activitymonitor: string;
 		/** Unique identifier of the base record. */
-		baserecordid_adminsettingsentity: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_adminsettingsentity: string;
 		/** Unique identifier of the base record. */
-		baserecordid_applicationuser: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_applicationuser: string;
 		/** Unique identifier of the base record. */
-		baserecordid_appointment: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_appointment: string;
 		/** Unique identifier of the base record. */
-		baserecordid_bookableresource: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_bookableresource: string;
 		/** Unique identifier of the base record. */
-		baserecordid_bookableresourcebooking: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_bookableresourcebooking: string;
 		/** Unique identifier of the base record. */
-		baserecordid_bookableresourcebookingheader: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_bookableresourcebookingheader: string;
 		/** Unique identifier of the base record. */
-		baserecordid_bookableresourcecategory: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_bookableresourcecategory: string;
 		/** Unique identifier of the base record. */
-		baserecordid_bookableresourcecategoryassn: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_bookableresourcecategoryassn: string;
 		/** Unique identifier of the base record. */
-		baserecordid_bookableresourcecharacteristic: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_bookableresourcecharacteristic: string;
 		/** Unique identifier of the base record. */
-		baserecordid_bookableresourcegroup: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_bookableresourcegroup: string;
 		/** Unique identifier of the base record. */
-		baserecordid_bookingstatus: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_bookingstatus: string;
 		/** Unique identifier of the base record. */
-		baserecordid_campaign: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_campaign: string;
 		/** Unique identifier of the base record. */
-		baserecordid_campaignresponse: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_campaignresponse: string;
 		/** Unique identifier of the base record. */
-		baserecordid_canvasappextendedmetadata: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_canvasappextendedmetadata: string;
 		/** Unique identifier of the base record. */
-		baserecordid_cascadegrantrevokeaccessrecordstracker: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_cascadegrantrevokeaccessrecordstracker: string;
 		/** Unique identifier of the base record. */
-		baserecordid_cascadegrantrevokeaccessversiontracker: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_cascadegrantrevokeaccessversiontracker: string;
 		/** Unique identifier of the base record. */
-		baserecordid_catalogassignment: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_catalogassignment: string;
 		/** Unique identifier of the base record. */
-		channelaccessprofile_duplicatebaserecord: DevKit.WebApi.LookupValueReadonly;
+		readonly channelaccessprofile_duplicatebaserecord: string;
 		/** Unique identifier of the base record. */
-		baserecordid_characteristic: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_characteristic: string;
 		/** Unique identifier of the base record. */
-		baserecordid_competitor: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_chat: string;
 		/** Unique identifier of the base record. */
-		baserecordid_connector: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_competitor: string;
 		/** Unique identifier of the base record. */
-		baserecordid_contact: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_connector: string;
 		/** Unique identifier of the base record. */
-		baserecordid_contract: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_contact: string;
 		/** Unique identifier of the base record. */
-		baserecordid_conversationtranscript: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_contract: string;
 		/** Unique identifier of the base record. */
-		baserecordid_datalakefolder: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_conversationtranscript: string;
 		/** Unique identifier of the base record. */
-		baserecordid_datalakefolderpermission: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_datalakefolder: string;
 		/** Unique identifier of the base record. */
-		baserecordid_datalakeworkspace: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_datalakefolderpermission: string;
 		/** Unique identifier of the base record. */
-		baserecordid_datalakeworkspacepermission: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_datalakeworkspace: string;
 		/** Unique identifier of the base record. */
-		baserecordid_datasyncstate: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_datalakeworkspacepermission: string;
 		/** Unique identifier of the base record. */
-		baserecordid_email: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_dataprocessingconfiguration: string;
 		/** Unique identifier of the base record. */
-		baserecordid_emailserverprofile: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_datasyncstate: string;
 		/** Unique identifier of the base record. */
-		baserecordid_entitlement: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_email: string;
 		/** Unique identifier of the base record. */
-		baserecordid_entitlementchannel: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_emailserverprofile: string;
 		/** Unique identifier of the base record. */
-		baserecordid_entitlemententityallocationtypemapping: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_entitlement: string;
 		/** Unique identifier of the base record. */
-		baserecordid_entitlementtemplate: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_entitlementchannel: string;
 		/** Unique identifier of the base record. */
-		baserecordid_environmentvariabledefinition: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_entitlemententityallocationtypemapping: string;
 		/** Unique identifier of the base record. */
-		baserecordid_environmentvariablevalue: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_entitlementtemplate: string;
 		/** Unique identifier of the base record. */
-		baserecordid_equipment: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_environmentvariabledefinition: string;
 		/** Unique identifier of the base record. */
-		baserecordid_exportsolutionupload: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_environmentvariablevalue: string;
 		/** Unique identifier of the base record. */
-		baserecordid_fax: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_equipment: string;
 		/** Unique identifier of the base record. */
-		baserecordid_featurecontrolsetting: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_exportsolutionupload: string;
 		/** Unique identifier of the base record. */
-		baserecordid_feedback: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_fax: string;
 		/** Unique identifier of the base record. */
-		baserecordid_flowmachinegroup: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_featurecontrolsetting: string;
 		/** Unique identifier of the base record. */
-		baserecordid_goal: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_feedback: string;
 		/** Unique identifier of the base record. */
-		baserecordid_goalrollupquery: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_flowmachinegroup: string;
 		/** Unique identifier of the base record. */
-		baserecordid_incident: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_goal: string;
 		/** Unique identifier of the base record. */
-		baserecordid_kbarticle: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_goalrollupquery: string;
 		/** Unique identifier of the base record. */
-		baserecordid_keyvaultreference: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_incident: string;
 		/** Unique identifier of the base record. */
-		baserecordid_knowledgearticle: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_kbarticle: string;
 		/** Unique identifier of the base record. */
-		baserecordid_knowledgebaserecord: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_keyvaultreference: string;
 		/** Unique identifier of the base record. */
-		baserecordid_lead: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_knowledgearticle: string;
 		/** Unique identifier of the base record. */
-		baserecordid_letter: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_knowledgebaserecord: string;
 		/** Unique identifier of the base record. */
-		baserecordid_list: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_lead: string;
 		/** Unique identifier of the base record. */
-		baserecordid_managedidentity: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_letter: string;
 		/** Unique identifier of the base record. */
-		baserecordid_marketingformdisplayattributes: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_list: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_accountpricelist: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_managedidentity: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_actioncardregarding: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_marketingformdisplayattributes: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_actual: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_accountpricelist: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_agentstatushistory: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_actioncardregarding: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_agreement: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_actual: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_agreementbookingdate: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_agentstatushistory: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_agreementbookingincident: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_agreement: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_agreementbookingproduct: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_agreementbookingdate: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_agreementbookingservice: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_agreementbookingincident: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_agreementbookingservicetask: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_agreementbookingproduct: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_agreementbookingsetup: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_agreementbookingservice: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_agreementinvoicedate: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_agreementbookingservicetask: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_agreementinvoiceproduct: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_agreementbookingsetup: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_agreementinvoicesetup: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_agreementinvoicedate: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_agreementsubstatus: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_agreementinvoiceproduct: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_aibdataset: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_agreementinvoicesetup: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_aibdatasetfile: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_agreementsubstatus: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_aibdatasetrecord: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_aibdataset: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_aibdatasetscontainer: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_aibdatasetfile: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_aibfile: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_aibdatasetrecord: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_aibfileattacheddata: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_aibdatasetscontainer: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_aiodimage: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_aibfeedbackloop: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_aiodlabel: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_aibfile: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_aiodtrainingboundingbox: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_aibfileattacheddata: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_aiodtrainingimage: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_aiodimage: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_analysiscomponent: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_aiodlabel: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_analysisjob: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_aiodtrainingboundingbox: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_analysisresult: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_aiodtrainingimage: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_analysisresultdetail: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_analysiscomponent: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_analytics: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_analysisjob: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_appconfiguration: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_analysisresult: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_applicationextension: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_analysisresultdetail: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_applicationtabtemplate: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_analytics: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_approval: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_appconfiguration: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_approvalset: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_applicationextension: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_assignmentconfiguration: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_applicationtabtemplate: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_assignmentconfigurationstep: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_approval: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_attribute: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_approvalset: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_attributevalue: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_assignmentconfiguration: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_autocapturerule: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_assignmentconfigurationstep: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_autocapturesettings: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_attribute: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_batchjob: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_attributevalue: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_bookableresourceassociation: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_autocapturerule: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_bookableresourcebookingquicknote: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_autocapturesettings: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_bookableresourcecapacityprofile: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_batchjob: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_bookingalert: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_bookableresourceassociation: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_bookingalertstatus: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_bookableresourcebookingquicknote: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_bookingrule: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_bookableresourcecapacityprofile: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_bookingtimestamp: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_bookingalert: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_callablecontext: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_bookingalertstatus: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_cannedmessage: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_bookingrule: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_capacityprofile: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_bookingtimestamp: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_channel: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_callablecontext: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_channelcapability: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_cannedmessage: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_channelprovider: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_capacityprofile: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_characteristicreqforteammember: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_channel: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_chatwidgetlanguage: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_channelcapability: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_ciprovider: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_channelprovider: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_clientextension: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_characteristicreqforteammember: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_consoleapplicationnotificationfield: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_chatwidgetlanguage: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_consoleapplicationnotificationtemplate: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_ciprovider: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_consoleapplicationsessiontemplate: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_clientextension: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_consoleapplicationtemplate: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_consoleapplicationnotificationfield: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_consoleapplicationtemplateparameter: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_consoleapplicationnotificationtemplate: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_consoleapplicationtype: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_consoleapplicationsessiontemplate: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_contactpricelist: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_consoleapplicationtemplate: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_contactsuggestionrule: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_consoleapplicationtemplateparameter: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_contactsuggestionruleset: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_consoleapplicationtype: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_contractlinedetailperformance: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_contactpricelist: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_contractlineinvoiceschedule: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_contactsuggestionrule: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_contractlinescheduleofvalue: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_contactsuggestionruleset: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_conversationaction: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_contractlinedetailperformance: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_conversationactionlocale: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_contractlineinvoiceschedule: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_conversationdata: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_contractlinescheduleofvalue: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_conversationsuggestionrequestpayload: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_conversationaction: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_customengagementctx: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_conversationactionlocale: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_customerasset: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_conversationdata: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_customerassetattachment: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_conversationsuggestionrequestpayload: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_customerassetcategory: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_customengagementctx: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_dataanalyticsreport_fs: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_customerasset: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_dataanalyticsreport_fspredictrs: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_customerassetattachment: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_dataanalyticsreport_fspredictwhd: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_customerassetcategory: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_dataexport: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_dataanalyticsreport_fs: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_dataflow: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_dataanalyticsreport_fspredictrs: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_dealmanageraccess: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_dataanalyticsreport_fspredictwhd: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_dealmanagersettings: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_dataexport: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_decisioncontract: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_dataflow: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_decisionruleset: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_dataflowrefreshhistory: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_delegation: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_dealmanageraccess: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_dimension: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_dealmanagersettings: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_dimensionfieldname: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_decisioncontract: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_effortpredictionresult: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_decisionruleset: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_entitlementapplication: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_delegation: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_entityconfiguration: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_dimension: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_entitylinkchatconfiguration: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_dimensionfieldname: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_estimate: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_duplicatedetectionpluginrun: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_estimateline: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_duplicateleadmapping: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_expense: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_effortpredictionresult: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_expensecategory: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_entitlementapplication: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_fact: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_entityconfiguration: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_federatedarticle: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_entitylinkchatconfiguration: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_federatedarticleincident: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_entityrefreshhistory: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_fieldcomputation: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_estimate: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_fieldservicepricelistitem: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_estimateline: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_findworkevent: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_expense: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_flowcardtype: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_expensecategory: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_forecastconfiguration: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_fact: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_forecastdefinition: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_federatedarticle: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_forecastinstance: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_federatedarticleincident: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_forecastrecurrence: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_fieldcomputation: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_geofence: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_fieldservicepricelistitem: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_geofenceevent: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_findworkevent: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_geofencingsettings: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_flowcardtype: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_geolocationsettings: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_forecastconfiguration: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_geolocationtracking: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_forecastdefinition: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_icebreakersconfig: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_forecastinstance: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_iermlmodel: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_forecastrecurrence: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_iermltraining: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_geofence: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_incidenttype: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_geofenceevent: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_incidenttypecharacteristic: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_geofencingsettings: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_incidenttypeproduct: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_geolocationsettings: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_incidenttyperecommendationresult: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_geolocationtracking: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_incidenttyperecommendationrunhistory: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_icebreakersconfig: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_incidenttyperesolution: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_iermlmodel: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_incidenttypeservice: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_iermltraining: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_incidenttypeservicetask: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_incidenttype: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_incidenttypessetup: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_incidenttypecharacteristic: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_incidenttype_requirementgroup: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_incidenttypeproduct: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_inspection: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_incidenttyperecommendationresult: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_inspectionattachment: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_incidenttyperecommendationrunhistory: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_inspectiondefinition: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_incidenttyperesolution: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_inspectioninstance: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_incidenttypeservice: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_inspectionresponse: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_incidenttypeservicetask: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_inventoryadjustment: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_incidenttypessetup: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_inventoryadjustmentproduct: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_incidenttype_requirementgroup: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_inventoryjournal: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_inspection: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_inventorytransfer: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_inspectionattachment: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_invoicefrequency: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_inspectiondefinition: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_invoicefrequencydetail: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_inspectioninstance: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_invoicelinetransaction: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_inspectionresponse: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_iotdevice: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_inventoryadjustment: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_iotdevicecategory: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_inventoryadjustmentproduct: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_iotdevicecommand: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_inventoryjournal: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_iotdevicecommanddefinition: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_inventorytransfer: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_iotdevicedatahistory: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_invoicefrequency: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_iotdeviceproperty: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_invoicefrequencydetail: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_iotdeviceregistrationhistory: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_invoicelinetransaction: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_iotdevicevisualizationconfiguration: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_iotdevice: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_iotfieldmapping: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_iotdevicecategory: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_iotpropertydefinition: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_iotdevicecommand: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_iotprovider: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_iotdevicecommanddefinition: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_iotproviderinstance: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_iotdevicedatahistory: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_iotsettings: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_iotdeviceproperty: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_journal: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_iotdeviceregistrationhistory: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_journalline: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_iotdevicevisualizationconfiguration: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_kalanguagesetting: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_iotfieldmapping: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_kbattachment: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_iotpropertydefinition: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_kmfederatedsearchconfig: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_iotprovider: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_knowledgearticleimage: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_iotproviderinstance: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_knowledgearticletemplate: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_iotsettings: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_knowledgeinteractioninsight: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_journal: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_knowledgepersonalfilter: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_journalline: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_knowledgesearchfilter: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_kalanguagesetting: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_knowledgesearchinsight: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_kbattachment: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_kpieventdata: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_kmfederatedsearchconfig: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_kpieventdefinition: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_knowledgearticleimage: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_leadmodelconfig: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_knowledgearticletemplate: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_liveworkitemevent: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_knowledgeinteractioninsight: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_liveworkstreamcapacityprofile: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_knowledgemanagementsetting: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_localizedsurveyquestion: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_knowledgepersonalfilter: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_macrosession: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_knowledgesearchfilter: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_maskingrule: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_knowledgesearchinsight: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_masterentityroutingconfiguration: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_kpieventdata: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_migrationtracker: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_kpieventdefinition: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_modelpreviewstatus: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_leadhygienesetting: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_notificationfield: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_leadmodelconfig: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_notificationtemplate: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_liveworkitemevent: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_ocautoblockrule: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_liveworkstreamcapacityprofile: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_ocbotchannelregistration: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_localizedsurveyquestion: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_occarrier: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_macrosession: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_occhannelconfiguration: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_maskingrule: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_occhannelstateconfiguration: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_masterentityroutingconfiguration: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_occommunicationprovidersetting: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_migrationtracker: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_occommunicationprovidersettingentry: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_modelpreviewstatus: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_occustommessagingchannel: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_notificationfield: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_ocfbapplication: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_notificationtemplate: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_ocfbpage: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_ocautoblockrule: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_ocflaggedspam: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_ocbotchannelregistration: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_oclanguage: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_occarrier: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_oclinechannelconfig: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_occhannelapiconversationprivilege: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_ocliveworkitemcapacityprofile: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_occhannelapimessageprivilege: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_ocliveworkitemcharacteristic: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_occhannelapimethodmapping: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_ocliveworkitemcontextitem: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_occhannelconfiguration: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_ocliveworkitemparticipant: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_occhannelstateconfiguration: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_ocliveworkstreamcontextvariable: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_occommunicationprovidersetting: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_oclocalizationdata: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_occommunicationprovidersettingentry: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_ocoutboundconfiguration: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_occustommessagingchannel: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_ocoutboundmessage: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_ocfbapplication: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_ocphonenumber: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_ocfbpage: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_ocprovisioningstate: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_ocflaggedspam: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_ocrecording: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_oclanguage: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_ocrequest: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_oclinechannelconfig: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_ocsentimentdailytopic: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_ocliveworkitemcapacityprofile: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_ocsentimentdailytopickeyword: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_ocliveworkitemcharacteristic: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_ocsentimentdailytopictrending: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_ocliveworkitemcontextitem: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_ocsession: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_ocliveworkitemparticipant: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_ocsessioncharacteristic: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_ocliveworkstreamcontextvariable: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_ocsessionparticipantevent: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_oclocalizationdata: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_ocsimltraining: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_ocoutboundconfiguration: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_ocsitdimportconfig: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_ocoutboundmessage: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_ocsitdskill: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_ocphonenumber: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_ocsitrainingdata: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_ocprovisioningstate: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_ocskillidentmlmodel: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_ocrecording: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_ocsmschannelsetting: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_ocrequest: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_ocsystemmessage: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_ocsentimentdailytopic: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_octeamschannelconfig: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_ocsentimentdailytopickeyword: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_octwitterapplication: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_ocsentimentdailytopictrending: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_octwitterhandle: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_ocsession: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_ocwechatchannelconfig: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_ocsessioncharacteristic: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_ocwhatsappchannelaccount: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_ocsessionparticipantevent: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_ocwhatsappchannelnumber: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_ocsimltraining: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_oc_geolocationprovider: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_ocsitdimportconfig: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_omnichannelconfiguration: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_ocsitdskill: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_omnichannelsyncconfig: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_ocsitrainingdata: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_opportunitylineresourcecategory: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_ocskillidentmlmodel: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_opportunitylinetransaction: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_ocsmschannelsetting: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_opportunitylinetransactioncategory: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_ocsystemmessage: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_opportunitylinetransactionclassificatio: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_octeamschannelconfig: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_opportunitymodelconfig: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_octwitterapplication: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_opportunitypricelist: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_octwitterhandle: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_orderinvoicingdate: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_ocwechatchannelconfig: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_orderinvoicingproduct: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_ocwhatsappchannelaccount: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_orderinvoicingsetup: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_ocwhatsappchannelnumber: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_orderinvoicingsetupdate: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_oc_geolocationprovider: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_orderlineresourcecategory: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_omnichannelconfiguration: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_orderlinetransaction: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_omnichannelsyncconfig: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_orderlinetransactioncategory: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_opportunitylineresourcecategory: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_orderlinetransactionclassification: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_opportunitylinetransaction: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_orderpricelist: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_opportunitylinetransactioncategory: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_organizationalunit: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_opportunitylinetransactionclassificatio: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_overflowactionconfig: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_opportunitymodelconfig: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_paneconfiguration: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_opportunitypricelist: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_panetabconfiguration: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_orderinvoicingdate: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_panetoolconfiguration: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_orderinvoicingproduct: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_payment: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_orderinvoicingsetup: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_paymentdetail: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_orderinvoicingsetupdate: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_paymentmethod: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_orderlineresourcecategory: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_paymentterm: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_orderlinetransaction: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_personalmessage: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_orderlinetransactioncategory: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_personalsoundsetting: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_orderlinetransactionclassification: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_personasecurityrolemapping: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_orderpricelist: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_playbookactivity: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_organizationalunit: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_playbookactivityattribute: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_overflowactionconfig: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_playbookcategory: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_paneconfiguration: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_playbookinstance: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_panetabconfiguration: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_playbooktemplate: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_panetoolconfiguration: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_pminferredtask: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_payment: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_pmrecording: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_paymentdetail: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_postalbum: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_paymentmethod: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_postalcode: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_paymentterm: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_predictivemodelscore: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_personalmessage: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_predictivescore: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_personalsoundsetting: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_presence: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_personasecurityrolemapping: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_priority: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_playbookactivity: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_problematicasset: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_playbookactivityattribute: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_problematicassetfeedback: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_playbookcategory: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_processnotes: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_playbookinstance: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_productinventory: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_playbooktemplate: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_productivityactioninputparameter: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_pminferredtask: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_productivityactionoutputparameter: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_pmrecording: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_productivityagentscript: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_postalbum: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_productivityagentscriptstep: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_postalcode: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_productivitymacroactiontemplate: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_predictivemodelscore: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_productivitymacroconnector: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_predictivescore: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_productivitymacrosolutionconfiguration: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_presence: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_productivityparameterdefinition: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_priority: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_project: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_problematicasset: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_projectapproval: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_problematicassetfeedback: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_projectparameter: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_processnotes: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_projectparameterpricelist: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_productinventory: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_projectpricelist: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_productivityactioninputparameter: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_projecttask: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_productivityactionoutputparameter: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_projecttaskdependency: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_productivityagentscript: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_projecttaskstatususer: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_productivityagentscriptstep: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_projectteam: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_productivitymacroactiontemplate: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_projectteammembersignup: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_productivitymacroconnector: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_projecttransactioncategory: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_productivitymacrosolutionconfiguration: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_provider: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_productivityparameterdefinition: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_purchaseorder: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_project: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_purchaseorderbill: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_projectapproval: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_purchaseorderreceipt: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_projectparameter: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_purchaseorderreceiptproduct: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_projectparameterpricelist: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_purchaseordersubstatus: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_projectpricelist: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_quotebookingincident: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_projecttask: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_quotebookingproduct: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_projecttaskdependency: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_quotebookingservice: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_projecttaskstatususer: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_quotebookingservicetask: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_projectteam: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_quotebookingsetup: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_projectteammembersignup: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_quoteinvoicingproduct: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_projecttransactioncategory: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_quoteinvoicingsetup: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_provider: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_quotelineanalyticsbreakdown: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_purchaseorder: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_quotelineinvoiceschedule: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_purchaseorderbill: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_quotelineresourcecategory: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_purchaseorderreceipt: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_quotelinescheduleofvalue: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_purchaseorderreceiptproduct: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_quotelinetransaction: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_purchaseordersubstatus: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_quotelinetransactioncategory: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_quotebookingincident: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_quotelinetransactionclassification: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_quotebookingproduct: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_quotepricelist: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_quotebookingservice: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_recording: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_quotebookingservicetask: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_relationshipinsightsunifiedconfig: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_quotebookingsetup: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_requirementcharacteristic: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_quoteinvoicingproduct: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_requirementdependency: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_quoteinvoicingsetup: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_requirementgroup: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_quotelineanalyticsbreakdown: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_requirementorganizationunit: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_quotelineinvoiceschedule: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_requirementrelationship: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_quotelineresourcecategory: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_requirementresourcecategory: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_quotelinescheduleofvalue: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_requirementresourcepreference: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_quotelinetransaction: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_requirementstatus: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_quotelinetransactioncategory: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_resolution: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_quotelinetransactionclassification: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_resourceassignmentdetail: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_quotepricelist: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_resourcecategorymarkuppricelevel: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_recording: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_resourcecategorypricelevel: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_relationshipinsightsunifiedconfig: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_resourcerequest: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_requirementcharacteristic: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_resourcerequirement: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_requirementdependency: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_resourcerequirementdetail: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_requirementgroup: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_resourceterritory: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_requirementorganizationunit: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_rma: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_requirementrelationship: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_rmareceipt: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_requirementresourcecategory: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_rmareceiptproduct: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_requirementresourcepreference: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_rmasubstatus: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_requirementstatus: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_rolecompetencyrequirement: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_resolution: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_roleutilization: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_resourceassignmentdetail: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_routingconfiguration: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_resourcecategorymarkuppricelevel: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_routingconfigurationstep: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_resourcecategorypricelevel: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_routingrequest: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_resourcerequest: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_routingrulesetsetting: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_resourcerequirement: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_rtv: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_resourcerequirementdetail: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_rtvproduct: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_resourceterritory: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_rtvsubstatus: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_rma: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_rulesetdependencymapping: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_rmareceipt: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_salesaccelerationsettings: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_rmareceiptproduct: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_salesinsightssettings: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_rmasubstatus: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_salesroutingrun: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_rolecompetencyrequirement: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_salestag: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_roleutilization: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_scenario: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_routingconfiguration: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_scheduleboardsetting: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_routingconfigurationstep: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_schedulingfeatureflag: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_routingrequest: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_segment: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_routingrulesetsetting: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_sentimentanalysis: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_rtv: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_sequence: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_rtvproduct: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_sequencetarget: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_rtvsubstatus: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_serviceconfiguration: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_rulesetdependencymapping: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_servicetasktype: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_salesaccelerationsettings: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_sessiondata: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_salesinsightssettings: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_sessionevent: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_salesroutingrun: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_sessionparticipant: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_salessuggestion: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_sessionparticipantdata: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_salestag: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_sessiontemplate: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_scenario: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_shipvia: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_scheduleboardsetting: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_siconfig: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_schedulingfeatureflag: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_skillattachmentruleitem: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_segment: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_skillattachmenttarget: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_sentimentanalysis: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_slakpi: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_sequence: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_smartassistconfig: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_sequencetarget: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_smsnumber: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_serviceconfiguration: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_solutionhealthrule: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_servicetasktype: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_solutionhealthruleargument: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_sessiondata: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_solutionhealthruleset: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_sessionevent: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_soundfile: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_sessionparticipant: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_soundnotificationsetting: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_sessionparticipantdata: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_systemuserschedulersetting: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_sessiontemplate: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_taxcode: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_shipvia: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_taxcodedetail: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_siconfig: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_teamschannelengagementctx: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_skillattachmentruleitem: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_teamsdialeradminsettings: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_skillattachmenttarget: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_teamsengagementctx: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_slakpi: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_templateparameter: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_smartassistconfig: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_templatetags: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_smsnumber: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_timeentrysetting: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_solutionhealthrule: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_timegroup: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_solutionhealthruleargument: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_timegroupdetail: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_solutionhealthruleset: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_timeoffcalendar: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_soundfile: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_timeoffrequest: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_soundnotificationsetting: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_transactioncategory: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_systemuserschedulersetting: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_transactioncategoryclassification: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_taxcode: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_transactioncategoryhierarchyelement: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_taxcodedetail: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_transactioncategorypricelevel: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_teamschannelengagementctx: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_transactionconnection: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_teamsdialeradminsettings: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_transactionorigin: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_teamsengagementctx: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_transactiontype: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_templateparameter: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_twitterengagementctx: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_templatetags: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_unifiedroutingdiagnostic: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_timeentrysetting: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_unifiedroutingrun: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_timegroup: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_unifiedroutingsetuptracker: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_timegroupdetail: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_untrackedappointment: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_timeoffcalendar: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_urnotificationtemplate: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_timeoffrequest: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_urnotificationtemplatemapping: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_transactioncategory: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_userworkhistory: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_transactioncategoryclassification: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_warehouse: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_transactioncategoryhierarchyelement: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_workhourtemplate: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_transactioncategorypricelevel: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_workorder: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_transactionconnection: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_workordercharacteristic: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_transactionorigin: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_workorderdetailsgenerationqueue: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_transactiontype: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_workorderincident: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_twitterengagementctx: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_workorderresolution: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_unifiedroutingdiagnostic: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_workorderresourcerestriction: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_unifiedroutingrun: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_workorderservice: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_unifiedroutingsetuptracker: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_workorderservicetask: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_untrackedappointment: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_workordersubstatus: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_urnotificationtemplate: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_workordertype: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_urnotificationtemplatemapping: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_workqueuestate: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_userworkhistory: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyn_workqueueusersetting: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_warehouse: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyusd_agentscriptaction: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_workhourtemplate: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyusd_agentscripttaskcategory: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_worklistviewconfiguration: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyusd_configuration: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_workorder: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyusd_customizationfiles: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_workordercharacteristic: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyusd_entityassignment: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_workorderdetailsgenerationqueue: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyusd_entitysearch: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_workorderincident: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyusd_form: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_workorderresolution: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyusd_languagemodule: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_workorderresourcerestriction: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyusd_scriptlet: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_workorderservice: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyusd_search: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_workorderservicetask: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyusd_sessioninformation: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_workordersubstatus: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyusd_toolbarbutton: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_workordertype: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyusd_toolbarstrip: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_workqueuestate: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyusd_tracesourcesetting: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyn_workqueueusersetting: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyusd_ucisettings: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyusd_agentscriptaction: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msdyusd_uiievent: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyusd_agentscripttaskcategory: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msfp_alert: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyusd_configuration: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msfp_alertrule: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyusd_customizationfiles: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msfp_fileresponse: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyusd_entityassignment: string;
 		/** Unique identifier of the base record. */
-		baserecordid_msfp_surveyreminder: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyusd_entitysearch: string;
 		/** Unique identifier of the base record. */
-		baserecordid_opportunity: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyusd_form: string;
 		/** Unique identifier of the base record. */
-		baserecordid_organizationdatasyncsubscription: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyusd_languagemodule: string;
 		/** Unique identifier of the base record. */
-		baserecordid_organizationdatasyncsubscriptionentity: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyusd_scriptlet: string;
 		/** Unique identifier of the base record. */
-		baserecordid_package: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyusd_search: string;
 		/** Unique identifier of the base record. */
-		baserecordid_phonecall: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyusd_sessioninformation: string;
 		/** Unique identifier of the base record. */
-		baserecordid_privilegesremovalsetting: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyusd_toolbarbutton: string;
 		/** Unique identifier of the base record. */
-		baserecordid_publisher: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyusd_toolbarstrip: string;
 		/** Unique identifier of the base record. */
-		baserecordid_queue: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyusd_tracesourcesetting: string;
 		/** Unique identifier of the base record. */
-		baserecordid_quote: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyusd_ucisettings: string;
 		/** Unique identifier of the base record. */
-		baserecordid_ratingmodel: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msdyusd_uiievent: string;
 		/** Unique identifier of the base record. */
-		baserecordid_ratingvalue: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msfp_alert: string;
 		/** Unique identifier of the base record. */
-		baserecordid_recurringappointmentmaster: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msfp_alertrule: string;
 		/** Unique identifier of the base record. */
-		baserecordid_resourcegroup: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msfp_fileresponse: string;
 		/** Unique identifier of the base record. */
-		baserecordid_revokeinheritedaccessrecordstracker: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_msfp_surveyreminder: string;
 		/** Unique identifier of the base record. */
-		baserecordid_service: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_opportunity: string;
 		/** Unique identifier of the base record. */
-		baserecordid_serviceplan: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_organizationdatasyncstate: string;
 		/** Unique identifier of the base record. */
-		baserecordid_serviceplanmapping: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_organizationdatasyncsubscription: string;
 		/** Unique identifier of the base record. */
-		baserecordid_sharepointdocumentlocation: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_organizationdatasyncsubscriptionentity: string;
 		/** Unique identifier of the base record. */
-		baserecordid_sharepointsite: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_package: string;
 		/** Unique identifier of the base record. */
-		baserecordid_socialactivity: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_phonecall: string;
 		/** Unique identifier of the base record. */
-		baserecordid_socialprofile: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_privilegesremovalsetting: string;
 		/** Unique identifier of the base record. */
-		baserecordid_solutioncomponentattributeconfiguration: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_publisher: string;
 		/** Unique identifier of the base record. */
-		baserecordid_solutioncomponentbatchconfiguration: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_queue: string;
 		/** Unique identifier of the base record. */
-		baserecordid_solutioncomponentconfiguration: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_quote: string;
 		/** Unique identifier of the base record. */
-		baserecordid_solutioncomponentrelationshipconfiguration: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_ratingmodel: string;
 		/** Unique identifier of the base record. */
-		baserecordid_stagesolutionupload: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_ratingvalue: string;
 		/** Unique identifier of the base record. */
-		baserecordid_systemuser: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_recurringappointmentmaster: string;
 		/** Unique identifier of the base record. */
-		baserecordid_task: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_resourcegroup: string;
 		/** Unique identifier of the base record. */
-		baserecordid_team: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_revokeinheritedaccessrecordstracker: string;
 		/** Unique identifier of the base record. */
-		baserecordid_territory: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_service: string;
 		/** Unique identifier of the base record. */
-		baserecordid_transactioncurrency: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_serviceplan: string;
 		/** Unique identifier of the base record. */
-		baserecordid_uii_action: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_serviceplanmapping: string;
 		/** Unique identifier of the base record. */
-		baserecordid_uii_context: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_sharedlinksetting: string;
 		/** Unique identifier of the base record. */
-		baserecordid_uii_hostedapplication: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_sharepointdocumentlocation: string;
 		/** Unique identifier of the base record. */
-		baserecordid_uii_nonhostedapplication: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_sharepointsite: string;
 		/** Unique identifier of the base record. */
-		baserecordid_uii_option: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_socialactivity: string;
 		/** Unique identifier of the base record. */
-		baserecordid_uii_savedsession: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_socialprofile: string;
 		/** Unique identifier of the base record. */
-		baserecordid_uii_sessiontransfer: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_solutioncomponentattributeconfiguration: string;
 		/** Unique identifier of the base record. */
-		baserecordid_uii_workflow: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_solutioncomponentbatchconfiguration: string;
 		/** Unique identifier of the base record. */
-		baserecordid_uii_workflowstep: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_solutioncomponentconfiguration: string;
 		/** Unique identifier of the base record. */
-		baserecordid_uii_workflow_workflowstep_mapping: DevKit.WebApi.LookupValueReadonly;
+		readonly baserecordid_solutioncomponentrelationshipconfiguration: string;
+		/** Unique identifier of the base record. */
+		readonly baserecordid_stagesolutionupload: string;
+		/** Unique identifier of the base record. */
+		readonly baserecordid_synapsedatabase: string;
+		/** Unique identifier of the base record. */
+		readonly baserecordid_synapselinkexternaltablestate: string;
+		/** Unique identifier of the base record. */
+		readonly baserecordid_synapselinkprofile: string;
+		/** Unique identifier of the base record. */
+		readonly baserecordid_synapselinkprofileentity: string;
+		/** Unique identifier of the base record. */
+		readonly baserecordid_synapselinkprofileentitystate: string;
+		/** Unique identifier of the base record. */
+		readonly baserecordid_synapselinkschedule: string;
+		/** Unique identifier of the base record. */
+		readonly baserecordid_systemuser: string;
+		/** Unique identifier of the base record. */
+		readonly baserecordid_task: string;
+		/** Unique identifier of the base record. */
+		readonly baserecordid_team: string;
+		/** Unique identifier of the base record. */
+		readonly baserecordid_territory: string;
+		/** Unique identifier of the base record. */
+		readonly baserecordid_transactioncurrency: string;
+		/** Unique identifier of the base record. */
+		readonly baserecordid_uii_action: string;
+		/** Unique identifier of the base record. */
+		readonly baserecordid_uii_context: string;
+		/** Unique identifier of the base record. */
+		readonly baserecordid_uii_hostedapplication: string;
+		/** Unique identifier of the base record. */
+		readonly baserecordid_uii_nonhostedapplication: string;
+		/** Unique identifier of the base record. */
+		readonly baserecordid_uii_option: string;
+		/** Unique identifier of the base record. */
+		readonly baserecordid_uii_savedsession: string;
+		/** Unique identifier of the base record. */
+		readonly baserecordid_uii_sessiontransfer: string;
+		/** Unique identifier of the base record. */
+		readonly baserecordid_uii_workflow: string;
+		/** Unique identifier of the base record. */
+		readonly baserecordid_uii_workflowstep: string;
+		/** Unique identifier of the base record. */
+		readonly baserecordid_uii_workflow_workflowstep_mapping: string;
 		/** Date and time when the duplicate record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the duplicate record. */
-		DuplicateId: DevKit.WebApi.GuidValue;
+		DuplicateId: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_account: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_account: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_activityfileattachment: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_activityfileattachment: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_activitymonitor: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_activitymonitor: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_adminsettingsentity: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_adminsettingsentity: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_applicationuser: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_applicationuser: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_appointment: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_appointment: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_bookableresource: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_bookableresource: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_bookableresourcebooking: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_bookableresourcebooking: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_bookableresourcebookingheader: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_bookableresourcebookingheader: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_bookableresourcecategory: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_bookableresourcecategory: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_bookableresourcecategoryassn: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_bookableresourcecategoryassn: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_bookableresourcecharacteristic: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_bookableresourcecharacteristic: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_bookableresourcegroup: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_bookableresourcegroup: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_bookingstatus: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_bookingstatus: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_campaign: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_campaign: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_campaignresponse: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_campaignresponse: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_canvasappextendedmetadata: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_canvasappextendedmetadata: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_cascadegrantrevokeaccessrecordstracker: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_cascadegrantrevokeaccessrecordstracker: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_cascadegrantrevokeaccessversiontracker: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_cascadegrantrevokeaccessversiontracker: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_catalogassignment: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_catalogassignment: string;
 		/** Unique identifier of the potential duplicate record. */
-		channelaccessprofile_duplicatematchingrecord: DevKit.WebApi.LookupValueReadonly;
+		readonly channelaccessprofile_duplicatematchingrecord: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_characteristic: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_characteristic: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_competitor: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_chat: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_connector: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_competitor: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_contact: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_connector: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_contract: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_contact: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_conversationtranscript: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_contract: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_datalakefolder: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_conversationtranscript: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_datalakefolderpermission: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_datalakefolder: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_datalakeworkspace: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_datalakefolderpermission: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_datalakeworkspacepermission: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_datalakeworkspace: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_datasyncstate: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_datalakeworkspacepermission: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_email: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_dataprocessingconfiguration: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_emailserverprofile: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_datasyncstate: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_entitlement: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_email: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_entitlementchannel: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_emailserverprofile: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_entitlemententityallocationtypemapping: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_entitlement: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_entitlementtemplate: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_entitlementchannel: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_environmentvariabledefinition: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_entitlemententityallocationtypemapping: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_environmentvariablevalue: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_entitlementtemplate: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_equipment: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_environmentvariabledefinition: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_exportsolutionupload: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_environmentvariablevalue: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_fax: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_equipment: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_featurecontrolsetting: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_exportsolutionupload: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_feedback: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_fax: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_flowmachinegroup: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_featurecontrolsetting: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_goal: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_feedback: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_goalrollupquery: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_flowmachinegroup: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_incident: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_goal: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_kbarticle: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_goalrollupquery: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_keyvaultreference: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_incident: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_knowledgearticle: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_kbarticle: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_knowledgebaserecord: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_keyvaultreference: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_lead: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_knowledgearticle: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_letter: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_knowledgebaserecord: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_list: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_lead: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_managedidentity: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_letter: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_marketingformdisplayattributes: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_list: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_accountpricelist: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_managedidentity: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_actioncardregarding: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_marketingformdisplayattributes: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_actual: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_accountpricelist: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_agentstatushistory: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_actioncardregarding: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_agreement: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_actual: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_agreementbookingdate: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_agentstatushistory: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_agreementbookingincident: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_agreement: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_agreementbookingproduct: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_agreementbookingdate: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_agreementbookingservice: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_agreementbookingincident: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_agreementbookingservicetask: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_agreementbookingproduct: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_agreementbookingsetup: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_agreementbookingservice: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_agreementinvoicedate: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_agreementbookingservicetask: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_agreementinvoiceproduct: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_agreementbookingsetup: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_agreementinvoicesetup: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_agreementinvoicedate: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_agreementsubstatus: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_agreementinvoiceproduct: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_aibdataset: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_agreementinvoicesetup: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_aibdatasetfile: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_agreementsubstatus: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_aibdatasetrecord: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_aibdataset: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_aibdatasetscontainer: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_aibdatasetfile: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_aibfile: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_aibdatasetrecord: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_aibfileattacheddata: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_aibdatasetscontainer: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_aiodimage: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_aibfeedbackloop: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_aiodlabel: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_aibfile: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_aiodtrainingboundingbox: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_aibfileattacheddata: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_aiodtrainingimage: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_aiodimage: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_analysiscomponent: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_aiodlabel: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_analysisjob: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_aiodtrainingboundingbox: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_analysisresult: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_aiodtrainingimage: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_analysisresultdetail: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_analysiscomponent: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_analytics: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_analysisjob: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_appconfiguration: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_analysisresult: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_applicationextension: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_analysisresultdetail: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_applicationtabtemplate: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_analytics: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_approval: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_appconfiguration: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_approvalset: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_applicationextension: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_assignmentconfiguration: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_applicationtabtemplate: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_assignmentconfigurationstep: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_approval: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_attribute: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_approvalset: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_attributevalue: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_assignmentconfiguration: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_autocapturerule: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_assignmentconfigurationstep: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_autocapturesettings: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_attribute: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_batchjob: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_attributevalue: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_bookableresourceassociation: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_autocapturerule: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_bookableresourcebookingquicknote: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_autocapturesettings: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_bookableresourcecapacityprofile: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_batchjob: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_bookingalert: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_bookableresourceassociation: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_bookingalertstatus: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_bookableresourcebookingquicknote: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_bookingrule: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_bookableresourcecapacityprofile: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_bookingtimestamp: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_bookingalert: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_callablecontext: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_bookingalertstatus: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_cannedmessage: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_bookingrule: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_capacityprofile: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_bookingtimestamp: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_channel: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_callablecontext: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_channelcapability: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_cannedmessage: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_channelprovider: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_capacityprofile: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_characteristicreqforteammember: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_channel: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_chatwidgetlanguage: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_channelcapability: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_ciprovider: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_channelprovider: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_clientextension: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_characteristicreqforteammember: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_consoleapplicationnotificationfield: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_chatwidgetlanguage: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_consoleapplicationnotificationtemplate: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_ciprovider: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_consoleapplicationsessiontemplate: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_clientextension: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_consoleapplicationtemplate: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_consoleapplicationnotificationfield: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_consoleapplicationtemplateparameter: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_consoleapplicationnotificationtemplate: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_consoleapplicationtype: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_consoleapplicationsessiontemplate: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_contactpricelist: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_consoleapplicationtemplate: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_contactsuggestionrule: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_consoleapplicationtemplateparameter: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_contactsuggestionruleset: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_consoleapplicationtype: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_contractlinedetailperformance: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_contactpricelist: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_contractlineinvoiceschedule: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_contactsuggestionrule: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_contractlinescheduleofvalue: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_contactsuggestionruleset: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_conversationaction: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_contractlinedetailperformance: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_conversationactionlocale: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_contractlineinvoiceschedule: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_conversationdata: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_contractlinescheduleofvalue: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_conversationsuggestionrequestpayload: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_conversationaction: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_customengagementctx: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_conversationactionlocale: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_customerasset: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_conversationdata: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_customerassetattachment: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_conversationsuggestionrequestpayload: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_customerassetcategory: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_customengagementctx: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_dataanalyticsreport_fs: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_customerasset: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_dataanalyticsreport_fspredictrs: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_customerassetattachment: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_dataanalyticsreport_fspredictwhd: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_customerassetcategory: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_dataexport: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_dataanalyticsreport_fs: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_dataflow: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_dataanalyticsreport_fspredictrs: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_dealmanageraccess: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_dataanalyticsreport_fspredictwhd: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_dealmanagersettings: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_dataexport: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_decisioncontract: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_dataflow: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_decisionruleset: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_dataflowrefreshhistory: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_delegation: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_dealmanageraccess: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_dimension: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_dealmanagersettings: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_dimensionfieldname: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_decisioncontract: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_effortpredictionresult: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_decisionruleset: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_entitlementapplication: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_delegation: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_entityconfiguration: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_dimension: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_entitylinkchatconfiguration: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_dimensionfieldname: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_estimate: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_duplicatedetectionpluginrun: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_estimateline: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_duplicateleadmapping: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_expense: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_effortpredictionresult: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_expensecategory: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_entitlementapplication: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_fact: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_entityconfiguration: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_federatedarticle: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_entitylinkchatconfiguration: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_federatedarticleincident: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_entityrefreshhistory: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_fieldcomputation: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_estimate: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_fieldservicepricelistitem: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_estimateline: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_findworkevent: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_expense: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_flowcardtype: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_expensecategory: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_forecastconfiguration: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_fact: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_forecastdefinition: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_federatedarticle: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_forecastinstance: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_federatedarticleincident: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_forecastrecurrence: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_fieldcomputation: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_geofence: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_fieldservicepricelistitem: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_geofenceevent: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_findworkevent: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_geofencingsettings: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_flowcardtype: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_geolocationsettings: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_forecastconfiguration: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_geolocationtracking: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_forecastdefinition: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_icebreakersconfig: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_forecastinstance: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_iermlmodel: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_forecastrecurrence: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_iermltraining: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_geofence: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_incidenttype: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_geofenceevent: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_incidenttypecharacteristic: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_geofencingsettings: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_incidenttypeproduct: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_geolocationsettings: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_incidenttyperecommendationresult: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_geolocationtracking: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_incidenttyperecommendationrunhistory: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_icebreakersconfig: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_incidenttyperesolution: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_iermlmodel: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_incidenttypeservice: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_iermltraining: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_incidenttypeservicetask: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_incidenttype: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_incidenttypessetup: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_incidenttypecharacteristic: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_incidenttype_requirementgroup: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_incidenttypeproduct: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_inspection: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_incidenttyperecommendationresult: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_inspectionattachment: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_incidenttyperecommendationrunhistory: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_inspectiondefinition: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_incidenttyperesolution: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_inspectioninstance: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_incidenttypeservice: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_inspectionresponse: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_incidenttypeservicetask: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_inventoryadjustment: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_incidenttypessetup: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_inventoryadjustmentproduct: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_incidenttype_requirementgroup: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_inventoryjournal: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_inspection: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_inventorytransfer: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_inspectionattachment: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_invoicefrequency: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_inspectiondefinition: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_invoicefrequencydetail: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_inspectioninstance: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_invoicelinetransaction: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_inspectionresponse: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_iotdevice: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_inventoryadjustment: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_iotdevicecategory: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_inventoryadjustmentproduct: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_iotdevicecommand: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_inventoryjournal: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_iotdevicecommanddefinition: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_inventorytransfer: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_iotdevicedatahistory: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_invoicefrequency: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_iotdeviceproperty: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_invoicefrequencydetail: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_iotdeviceregistrationhistory: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_invoicelinetransaction: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_iotdevicevisualizationconfiguration: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_iotdevice: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_iotfieldmapping: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_iotdevicecategory: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_iotpropertydefinition: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_iotdevicecommand: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_iotprovider: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_iotdevicecommanddefinition: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_iotproviderinstance: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_iotdevicedatahistory: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_iotsettings: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_iotdeviceproperty: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_journal: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_iotdeviceregistrationhistory: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_journalline: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_iotdevicevisualizationconfiguration: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_kalanguagesetting: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_iotfieldmapping: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_kbattachment: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_iotpropertydefinition: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_kmfederatedsearchconfig: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_iotprovider: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_knowledgearticleimage: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_iotproviderinstance: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_knowledgearticletemplate: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_iotsettings: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_knowledgeinteractioninsight: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_journal: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_knowledgepersonalfilter: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_journalline: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_knowledgesearchfilter: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_kalanguagesetting: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_knowledgesearchinsight: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_kbattachment: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_kpieventdata: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_kmfederatedsearchconfig: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_kpieventdefinition: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_knowledgearticleimage: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_leadmodelconfig: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_knowledgearticletemplate: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_liveworkitemevent: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_knowledgeinteractioninsight: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_liveworkstreamcapacityprofile: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_knowledgemanagementsetting: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_localizedsurveyquestion: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_knowledgepersonalfilter: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_macrosession: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_knowledgesearchfilter: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_maskingrule: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_knowledgesearchinsight: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_masterentityroutingconfiguration: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_kpieventdata: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_migrationtracker: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_kpieventdefinition: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_modelpreviewstatus: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_leadhygienesetting: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_notificationfield: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_leadmodelconfig: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_notificationtemplate: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_liveworkitemevent: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_ocautoblockrule: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_liveworkstreamcapacityprofile: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_ocbotchannelregistration: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_localizedsurveyquestion: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_occarrier: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_macrosession: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_occhannelconfiguration: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_maskingrule: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_occhannelstateconfiguration: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_masterentityroutingconfiguration: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_occommunicationprovidersetting: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_migrationtracker: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_occommunicationprovidersettingentry: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_modelpreviewstatus: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_occustommessagingchannel: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_notificationfield: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_ocfbapplication: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_notificationtemplate: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_ocfbpage: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_ocautoblockrule: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_ocflaggedspam: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_ocbotchannelregistration: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_oclanguage: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_occarrier: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_oclinechannelconfig: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_occhannelapiconversationprivilege: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_ocliveworkitemcapacityprofile: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_occhannelapimessageprivilege: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_ocliveworkitemcharacteristic: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_occhannelapimethodmapping: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_ocliveworkitemcontextitem: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_occhannelconfiguration: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_ocliveworkitemparticipant: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_occhannelstateconfiguration: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_ocliveworkstreamcontextvariable: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_occommunicationprovidersetting: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_oclocalizationdata: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_occommunicationprovidersettingentry: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_ocoutboundconfiguration: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_occustommessagingchannel: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_ocoutboundmessage: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_ocfbapplication: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_ocphonenumber: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_ocfbpage: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_ocprovisioningstate: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_ocflaggedspam: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_ocrecording: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_oclanguage: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_ocrequest: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_oclinechannelconfig: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_ocsentimentdailytopic: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_ocliveworkitemcapacityprofile: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_ocsentimentdailytopickeyword: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_ocliveworkitemcharacteristic: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_ocsentimentdailytopictrending: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_ocliveworkitemcontextitem: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_ocsession: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_ocliveworkitemparticipant: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_ocsessioncharacteristic: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_ocliveworkstreamcontextvariable: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_ocsessionparticipantevent: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_oclocalizationdata: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_ocsimltraining: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_ocoutboundconfiguration: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_ocsitdimportconfig: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_ocoutboundmessage: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_ocsitdskill: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_ocphonenumber: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_ocsitrainingdata: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_ocprovisioningstate: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_ocskillidentmlmodel: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_ocrecording: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_ocsmschannelsetting: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_ocrequest: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_ocsystemmessage: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_ocsentimentdailytopic: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_octeamschannelconfig: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_ocsentimentdailytopickeyword: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_octwitterapplication: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_ocsentimentdailytopictrending: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_octwitterhandle: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_ocsession: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_ocwechatchannelconfig: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_ocsessioncharacteristic: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_ocwhatsappchannelaccount: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_ocsessionparticipantevent: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_ocwhatsappchannelnumber: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_ocsimltraining: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_oc_geolocationprovider: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_ocsitdimportconfig: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_omnichannelconfiguration: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_ocsitdskill: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_omnichannelsyncconfig: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_ocsitrainingdata: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_opportunitylineresourcecategory: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_ocskillidentmlmodel: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_opportunitylinetransaction: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_ocsmschannelsetting: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_opportunitylinetransactioncategory: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_ocsystemmessage: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_opportunitylinetransactionclassificatio: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_octeamschannelconfig: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_opportunitymodelconfig: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_octwitterapplication: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_opportunitypricelist: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_octwitterhandle: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_orderinvoicingdate: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_ocwechatchannelconfig: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_orderinvoicingproduct: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_ocwhatsappchannelaccount: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_orderinvoicingsetup: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_ocwhatsappchannelnumber: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_orderinvoicingsetupdate: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_oc_geolocationprovider: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_orderlineresourcecategory: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_omnichannelconfiguration: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_orderlinetransaction: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_omnichannelsyncconfig: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_orderlinetransactioncategory: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_opportunitylineresourcecategory: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_orderlinetransactionclassification: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_opportunitylinetransaction: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_orderpricelist: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_opportunitylinetransactioncategory: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_organizationalunit: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_opportunitylinetransactionclassificatio: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_overflowactionconfig: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_opportunitymodelconfig: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_paneconfiguration: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_opportunitypricelist: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_panetabconfiguration: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_orderinvoicingdate: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_panetoolconfiguration: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_orderinvoicingproduct: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_payment: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_orderinvoicingsetup: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_paymentdetail: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_orderinvoicingsetupdate: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_paymentmethod: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_orderlineresourcecategory: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_paymentterm: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_orderlinetransaction: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_personalmessage: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_orderlinetransactioncategory: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_personalsoundsetting: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_orderlinetransactionclassification: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_personasecurityrolemapping: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_orderpricelist: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_playbookactivity: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_organizationalunit: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_playbookactivityattribute: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_overflowactionconfig: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_playbookcategory: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_paneconfiguration: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_playbookinstance: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_panetabconfiguration: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_playbooktemplate: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_panetoolconfiguration: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_pminferredtask: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_payment: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_pmrecording: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_paymentdetail: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_postalbum: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_paymentmethod: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_postalcode: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_paymentterm: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_predictivemodelscore: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_personalmessage: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_predictivescore: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_personalsoundsetting: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_presence: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_personasecurityrolemapping: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_priority: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_playbookactivity: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_problematicasset: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_playbookactivityattribute: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_problematicassetfeedback: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_playbookcategory: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_processnotes: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_playbookinstance: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_productinventory: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_playbooktemplate: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_productivityactioninputparameter: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_pminferredtask: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_productivityactionoutputparameter: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_pmrecording: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_productivityagentscript: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_postalbum: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_productivityagentscriptstep: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_postalcode: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_productivitymacroactiontemplate: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_predictivemodelscore: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_productivitymacroconnector: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_predictivescore: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_productivitymacrosolutionconfiguration: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_presence: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_productivityparameterdefinition: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_priority: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_project: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_problematicasset: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_projectapproval: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_problematicassetfeedback: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_projectparameter: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_processnotes: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_projectparameterpricelist: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_productinventory: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_projectpricelist: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_productivityactioninputparameter: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_projecttask: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_productivityactionoutputparameter: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_projecttaskdependency: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_productivityagentscript: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_projecttaskstatususer: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_productivityagentscriptstep: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_projectteam: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_productivitymacroactiontemplate: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_projectteammembersignup: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_productivitymacroconnector: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_projecttransactioncategory: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_productivitymacrosolutionconfiguration: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_provider: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_productivityparameterdefinition: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_purchaseorder: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_project: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_purchaseorderbill: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_projectapproval: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_purchaseorderreceipt: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_projectparameter: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_purchaseorderreceiptproduct: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_projectparameterpricelist: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_purchaseordersubstatus: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_projectpricelist: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_quotebookingincident: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_projecttask: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_quotebookingproduct: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_projecttaskdependency: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_quotebookingservice: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_projecttaskstatususer: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_quotebookingservicetask: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_projectteam: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_quotebookingsetup: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_projectteammembersignup: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_quoteinvoicingproduct: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_projecttransactioncategory: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_quoteinvoicingsetup: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_provider: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_quotelineanalyticsbreakdown: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_purchaseorder: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_quotelineinvoiceschedule: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_purchaseorderbill: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_quotelineresourcecategory: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_purchaseorderreceipt: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_quotelinescheduleofvalue: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_purchaseorderreceiptproduct: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_quotelinetransaction: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_purchaseordersubstatus: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_quotelinetransactioncategory: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_quotebookingincident: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_quotelinetransactionclassification: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_quotebookingproduct: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_quotepricelist: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_quotebookingservice: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_recording: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_quotebookingservicetask: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_relationshipinsightsunifiedconfig: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_quotebookingsetup: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_requirementcharacteristic: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_quoteinvoicingproduct: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_requirementdependency: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_quoteinvoicingsetup: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_requirementgroup: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_quotelineanalyticsbreakdown: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_requirementorganizationunit: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_quotelineinvoiceschedule: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_requirementrelationship: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_quotelineresourcecategory: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_requirementresourcecategory: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_quotelinescheduleofvalue: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_requirementresourcepreference: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_quotelinetransaction: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_requirementstatus: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_quotelinetransactioncategory: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_resolution: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_quotelinetransactionclassification: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_resourceassignmentdetail: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_quotepricelist: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_resourcecategorymarkuppricelevel: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_recording: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_resourcecategorypricelevel: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_relationshipinsightsunifiedconfig: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_resourcerequest: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_requirementcharacteristic: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_resourcerequirement: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_requirementdependency: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_resourcerequirementdetail: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_requirementgroup: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_resourceterritory: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_requirementorganizationunit: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_rma: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_requirementrelationship: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_rmareceipt: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_requirementresourcecategory: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_rmareceiptproduct: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_requirementresourcepreference: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_rmasubstatus: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_requirementstatus: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_rolecompetencyrequirement: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_resolution: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_roleutilization: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_resourceassignmentdetail: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_routingconfiguration: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_resourcecategorymarkuppricelevel: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_routingconfigurationstep: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_resourcecategorypricelevel: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_routingrequest: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_resourcerequest: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_routingrulesetsetting: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_resourcerequirement: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_rtv: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_resourcerequirementdetail: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_rtvproduct: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_resourceterritory: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_rtvsubstatus: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_rma: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_rulesetdependencymapping: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_rmareceipt: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_salesaccelerationsettings: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_rmareceiptproduct: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_salesinsightssettings: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_rmasubstatus: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_salesroutingrun: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_rolecompetencyrequirement: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_salestag: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_roleutilization: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_scenario: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_routingconfiguration: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_scheduleboardsetting: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_routingconfigurationstep: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_schedulingfeatureflag: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_routingrequest: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_segment: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_routingrulesetsetting: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_sentimentanalysis: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_rtv: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_sequence: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_rtvproduct: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_sequencetarget: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_rtvsubstatus: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_serviceconfiguration: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_rulesetdependencymapping: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_servicetasktype: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_salesaccelerationsettings: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_sessiondata: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_salesinsightssettings: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_sessionevent: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_salesroutingrun: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_sessionparticipant: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_salessuggestion: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_sessionparticipantdata: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_salestag: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_sessiontemplate: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_scenario: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_shipvia: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_scheduleboardsetting: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_siconfig: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_schedulingfeatureflag: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_skillattachmentruleitem: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_segment: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_skillattachmenttarget: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_sentimentanalysis: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_slakpi: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_sequence: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_smartassistconfig: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_sequencetarget: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_smsnumber: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_serviceconfiguration: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_solutionhealthrule: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_servicetasktype: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_solutionhealthruleargument: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_sessiondata: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_solutionhealthruleset: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_sessionevent: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_soundfile: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_sessionparticipant: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_soundnotificationsetting: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_sessionparticipantdata: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_systemuserschedulersetting: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_sessiontemplate: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_taxcode: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_shipvia: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_taxcodedetail: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_siconfig: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_teamschannelengagementctx: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_skillattachmentruleitem: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_teamsdialeradminsettings: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_skillattachmenttarget: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_teamsengagementctx: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_slakpi: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_templateparameter: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_smartassistconfig: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_templatetags: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_smsnumber: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_timeentrysetting: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_solutionhealthrule: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_timegroup: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_solutionhealthruleargument: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_timegroupdetail: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_solutionhealthruleset: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_timeoffcalendar: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_soundfile: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_timeoffrequest: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_soundnotificationsetting: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_transactioncategory: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_systemuserschedulersetting: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_transactioncategoryclassification: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_taxcode: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_transactioncategoryhierarchyelement: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_taxcodedetail: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_transactioncategorypricelevel: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_teamschannelengagementctx: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_transactionconnection: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_teamsdialeradminsettings: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_transactionorigin: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_teamsengagementctx: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_transactiontype: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_templateparameter: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_twitterengagementctx: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_templatetags: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_unifiedroutingdiagnostic: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_timeentrysetting: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_unifiedroutingrun: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_timegroup: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_unifiedroutingsetuptracker: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_timegroupdetail: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_untrackedappointment: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_timeoffcalendar: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_urnotificationtemplate: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_timeoffrequest: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_urnotificationtemplatemapping: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_transactioncategory: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_userworkhistory: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_transactioncategoryclassification: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_warehouse: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_transactioncategoryhierarchyelement: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_workhourtemplate: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_transactioncategorypricelevel: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_workorder: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_transactionconnection: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_workordercharacteristic: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_transactionorigin: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_workorderdetailsgenerationqueue: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_transactiontype: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_workorderincident: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_twitterengagementctx: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_workorderresolution: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_unifiedroutingdiagnostic: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_workorderresourcerestriction: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_unifiedroutingrun: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_workorderservice: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_unifiedroutingsetuptracker: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_workorderservicetask: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_untrackedappointment: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_workordersubstatus: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_urnotificationtemplate: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_workordertype: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_urnotificationtemplatemapping: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_workqueuestate: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_userworkhistory: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyn_workqueueusersetting: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_warehouse: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyusd_agentscriptaction: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_workhourtemplate: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyusd_agentscripttaskcategory: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_worklistviewconfiguration: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyusd_configuration: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_workorder: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyusd_customizationfiles: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_workordercharacteristic: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyusd_entityassignment: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_workorderdetailsgenerationqueue: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyusd_entitysearch: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_workorderincident: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyusd_form: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_workorderresolution: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyusd_languagemodule: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_workorderresourcerestriction: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyusd_scriptlet: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_workorderservice: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyusd_search: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_workorderservicetask: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyusd_sessioninformation: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_workordersubstatus: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyusd_toolbarbutton: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_workordertype: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyusd_toolbarstrip: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_workqueuestate: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyusd_tracesourcesetting: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyn_workqueueusersetting: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyusd_ucisettings: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyusd_agentscriptaction: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msdyusd_uiievent: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyusd_agentscripttaskcategory: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msfp_alert: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyusd_configuration: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msfp_alertrule: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyusd_customizationfiles: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msfp_fileresponse: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyusd_entityassignment: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_msfp_surveyreminder: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyusd_entitysearch: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_opportunity: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyusd_form: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_organizationdatasyncsubscription: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyusd_languagemodule: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_organizationdatasyncsubscriptionentity: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyusd_scriptlet: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_package: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyusd_search: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_phonecall: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyusd_sessioninformation: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_privilegesremovalsetting: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyusd_toolbarbutton: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_publisher: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyusd_toolbarstrip: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_queue: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyusd_tracesourcesetting: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_quote: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyusd_ucisettings: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_ratingmodel: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msdyusd_uiievent: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_ratingvalue: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msfp_alert: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_recurringappointmentmaster: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msfp_alertrule: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_resourcegroup: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msfp_fileresponse: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_revokeinheritedaccessrecordstracker: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_msfp_surveyreminder: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_service: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_opportunity: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_serviceplan: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_organizationdatasyncstate: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_serviceplanmapping: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_organizationdatasyncsubscription: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_sharepointdocumentlocation: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_organizationdatasyncsubscriptionentity: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_sharepointsite: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_package: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_socialactivity: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_phonecall: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_socialprofile: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_privilegesremovalsetting: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_solutioncomponentattributeconfiguration: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_publisher: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_solutioncomponentbatchconfiguration: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_queue: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_solutioncomponentconfiguration: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_quote: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_solutioncomponentrelationshipconfiguration: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_ratingmodel: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_stagesolutionupload: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_ratingvalue: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_systemuser: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_recurringappointmentmaster: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_task: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_resourcegroup: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_team: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_revokeinheritedaccessrecordstracker: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_territory: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_service: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_transactioncurrency: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_serviceplan: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_uii_action: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_serviceplanmapping: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_uii_context: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_sharedlinksetting: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_uii_hostedapplication: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_sharepointdocumentlocation: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_uii_nonhostedapplication: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_sharepointsite: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_uii_option: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_socialactivity: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_uii_savedsession: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_socialprofile: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_uii_sessiontransfer: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_solutioncomponentattributeconfiguration: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_uii_workflow: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_solutioncomponentbatchconfiguration: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_uii_workflowstep: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_solutioncomponentconfiguration: string;
 		/** Unique identifier of the potential duplicate record. */
-		duplicaterecordid_uii_workflow_workflowstep_mapping: DevKit.WebApi.LookupValueReadonly;
+		readonly duplicaterecordid_solutioncomponentrelationshipconfiguration: string;
+		/** Unique identifier of the potential duplicate record. */
+		readonly duplicaterecordid_stagesolutionupload: string;
+		/** Unique identifier of the potential duplicate record. */
+		readonly duplicaterecordid_synapsedatabase: string;
+		/** Unique identifier of the potential duplicate record. */
+		readonly duplicaterecordid_synapselinkexternaltablestate: string;
+		/** Unique identifier of the potential duplicate record. */
+		readonly duplicaterecordid_synapselinkprofile: string;
+		/** Unique identifier of the potential duplicate record. */
+		readonly duplicaterecordid_synapselinkprofileentity: string;
+		/** Unique identifier of the potential duplicate record. */
+		readonly duplicaterecordid_synapselinkprofileentitystate: string;
+		/** Unique identifier of the potential duplicate record. */
+		readonly duplicaterecordid_synapselinkschedule: string;
+		/** Unique identifier of the potential duplicate record. */
+		readonly duplicaterecordid_systemuser: string;
+		/** Unique identifier of the potential duplicate record. */
+		readonly duplicaterecordid_task: string;
+		/** Unique identifier of the potential duplicate record. */
+		readonly duplicaterecordid_team: string;
+		/** Unique identifier of the potential duplicate record. */
+		readonly duplicaterecordid_territory: string;
+		/** Unique identifier of the potential duplicate record. */
+		readonly duplicaterecordid_transactioncurrency: string;
+		/** Unique identifier of the potential duplicate record. */
+		readonly duplicaterecordid_uii_action: string;
+		/** Unique identifier of the potential duplicate record. */
+		readonly duplicaterecordid_uii_context: string;
+		/** Unique identifier of the potential duplicate record. */
+		readonly duplicaterecordid_uii_hostedapplication: string;
+		/** Unique identifier of the potential duplicate record. */
+		readonly duplicaterecordid_uii_nonhostedapplication: string;
+		/** Unique identifier of the potential duplicate record. */
+		readonly duplicaterecordid_uii_option: string;
+		/** Unique identifier of the potential duplicate record. */
+		readonly duplicaterecordid_uii_savedsession: string;
+		/** Unique identifier of the potential duplicate record. */
+		readonly duplicaterecordid_uii_sessiontransfer: string;
+		/** Unique identifier of the potential duplicate record. */
+		readonly duplicaterecordid_uii_workflow: string;
+		/** Unique identifier of the potential duplicate record. */
+		readonly duplicaterecordid_uii_workflowstep: string;
+		/** Unique identifier of the potential duplicate record. */
+		readonly duplicaterecordid_uii_workflow_workflowstep_mapping: string;
 		/** Unique identifier of the duplicate rule against which this duplicate was found. */
-		DuplicateRuleId: DevKit.WebApi.LookupValueReadonly;
+		readonly DuplicateRuleId: string;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValueReadonly;
+		readonly OwnerId_team: string;
 		/** Unique identifier of the business unit that owns the duplicate record. */
-		OwningBusinessUnit: DevKit.WebApi.GuidValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier of the user who owns the duplicate record. */
-		OwningUser: DevKit.WebApi.GuidValueReadonly;
+		readonly OwningUser: string;
 	}
 }
 declare namespace OptionSet {
@@ -2189,4 +2279,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

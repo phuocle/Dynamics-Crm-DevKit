@@ -19,49 +19,51 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
 		EntityCollectionName: string;
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.SiteMap.ComponentState;
 		/** Shows who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics CRM options. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalfÂ of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Enable to allow sitemap groups to be collapsed. */
-		EnableCollapsibleGroups: DevKit.WebApi.BooleanValue;
+		EnableCollapsibleGroups: boolean;
 		/** Information about whether the site map is associated with app module. */
-		IsAppAware: DevKit.WebApi.BooleanValue;
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		IsAppAware: boolean;
+		readonly IsManaged: boolean;
 		/** Shows who last updated the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics CRM options. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Shows who last updated the record on behalf of another user. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
-		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
+		readonly OrganizationId: string;
+		readonly OverwriteTime_UtcDateOnly: Date;
 		/** Enable to show the home button in the sitemap. */
-		ShowHome: DevKit.WebApi.BooleanValue;
+		ShowHome: boolean;
 		/** Enable to show the pinned dropdown in the sitemap. */
-		ShowPinned: DevKit.WebApi.BooleanValue;
+		ShowPinned: boolean;
 		/** Enable to show the recents dropdown in the sitemap. */
-		ShowRecents: DevKit.WebApi.BooleanValue;
-		SiteMapId: DevKit.WebApi.GuidValueReadonly;
-		SiteMapIdUnique: DevKit.WebApi.GuidValueReadonly;
-		SiteMapName: DevKit.WebApi.StringValue;
-		SiteMapNameUnique: DevKit.WebApi.StringValue;
-		SiteMapXml: DevKit.WebApi.StringValue;
-		SiteMapXmlManaged: DevKit.WebApi.StringValueReadonly;
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		ShowRecents: boolean;
+		readonly SiteMapId: string;
+		readonly SiteMapIdUnique: string;
+		SiteMapName: string;
+		SiteMapNameUnique: string;
+		SiteMapXml: string;
+		readonly SiteMapXmlManaged: string;
+		readonly SolutionId: string;
+		readonly SupportingSolutionId: string;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -94,4 +96,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

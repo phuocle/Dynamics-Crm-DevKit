@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,21 +30,21 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Date and time when the record was created. */
-		CreatedTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedTime_UtcDateAndTime: Date;
 		/** Unique identifier of a dependency. */
-		DependencyId: DevKit.WebApi.GuidValueReadonly;
+		readonly DependencyId: string;
 		/** Unique identifier of the dependent component's node. */
-		DependentComponentNodeId: DevKit.WebApi.GuidValue;
+		DependentComponentNodeId: string;
 		/** Dependent Component Node Type */
-		DependentComponentType: DevKit.WebApi.IntegerValue;
+		DependentComponentType: number;
 		/** Determines whether required component is published */
-		IsPublished: DevKit.WebApi.ManagedPropertyValue;
+		IsPublished: string;
 		/** Date and time when the required component was modified. */
-		RequiredComponentModifiedTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly RequiredComponentModifiedTime_UtcDateAndTime: Date;
 		/** Unique identifier of the required component's node */
-		RequiredComponentNodeId: DevKit.WebApi.StringValue;
+		RequiredComponentNodeId: string;
 		/** Required Component Node Type */
-		RequiredComponentType: DevKit.WebApi.IntegerValue;
+		RequiredComponentType: number;
 	}
 }
 declare namespace OptionSet {
@@ -65,4 +67,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

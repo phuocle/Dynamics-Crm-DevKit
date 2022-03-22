@@ -4,20 +4,18 @@ var DevKit;
 (function (DevKit) {
 	'use strict';
 	DevKit.msdyn_liveworkstreamApi = function (e) {
-		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
 			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-			var property = {};
 			var getFormattedValue = function () {
 				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-					return EMPTY_STRING;
+					return '';
 				}
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
 					if (entity[logicalName + l] === entityLogicalName) {
 						return entity[logicalName + f];
 					}
-					return EMPTY_STRING;
+					return '';
 				}
 				if (isMultiOptionSet) {
 					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -42,30 +40,29 @@ var DevKit;
 			var setValue = function (value) {
 				if (isMultiOptionSet) value = value.join(',');
 				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+					value = value.replace('{', '').replace('}', '');
 					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
 				} else {
 					upsertEntity[logicalName] = value;
 				}
 				entity[logicalName] = value;
 			};
-			Object.defineProperty(property, 'FormattedValue', {
+			Object.defineProperty(obj.FormattedValue, field, {
 				get: getFormattedValue
 			});
 			if (readOnly) {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue
 				});
 			}
 			else {
-				Object.defineProperty(property, 'Value', {
+				Object.defineProperty(obj, field, {
 					get: getValue,
 					set: setValue
 				});
 			}
-			return property;
 		}
-		var msdyn_liveworkstream = {
+		var _msdyn_liveworkstream = {
 			CreatedBy: { b: 'createdby', a: '_createdby_value', c: 'systemusers', d: 'systemuser', r: true },
 			CreatedOn_UtcDateAndTime: { a: 'createdon', r: true },
 			CreatedOnBehalfBy: { b: 'createdonbehalfby', a: '_createdonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
@@ -87,6 +84,7 @@ var DevKit;
 			msdyn_ConnectorsURL: { a: 'msdyn_connectorsurl' },
 			msdyn_conversationmode: { a: 'msdyn_conversationmode' },
 			msdyn_CustomerID: { a: 'msdyn_customerid' },
+			msdyn_defaultqueue: { b: 'msdyn_defaultqueue', a: '_msdyn_defaultqueue_value', c: 'queues', d: 'queue' },
 			msdyn_direction: { a: 'msdyn_direction' },
 			msdyn_enableagentaffinity: { a: 'msdyn_enableagentaffinity' },
 			msdyn_enableautomatedmessages: { a: 'msdyn_enableautomatedmessages' },
@@ -142,20 +140,23 @@ var DevKit;
 		};
 		if (e === undefined) e = {};
 		var u = {};
-		for (var field in msdyn_liveworkstream) {
-			var a = msdyn_liveworkstream[field].a;
-			var b = msdyn_liveworkstream[field].b;
-			var c = msdyn_liveworkstream[field].c;
-			var d = msdyn_liveworkstream[field].d;
-			var g = msdyn_liveworkstream[field].g;
-			var r = msdyn_liveworkstream[field].r;
-			msdyn_liveworkstream[field] = webApiField(e, a, b, c, d, r, u, g);
+		var msdyn_liveworkstream = {};
+		msdyn_liveworkstream.ODataEntity = e;
+		msdyn_liveworkstream.FormattedValue = {};
+		for (var field in _msdyn_liveworkstream) {
+			var a = _msdyn_liveworkstream[field].a;
+			var b = _msdyn_liveworkstream[field].b;
+			var c = _msdyn_liveworkstream[field].c;
+			var d = _msdyn_liveworkstream[field].d;
+			var g = _msdyn_liveworkstream[field].g;
+			var r = _msdyn_liveworkstream[field].r;
+			webApiField(msdyn_liveworkstream, field, e, a, b, c, d, r, u, g);
 		}
 		msdyn_liveworkstream.Entity = u;
 		msdyn_liveworkstream.EntityName = 'msdyn_liveworkstream';
 		msdyn_liveworkstream.EntityCollectionName = 'msdyn_liveworkstreams';
 		msdyn_liveworkstream['@odata.etag'] = e['@odata.etag'];
-		msdyn_liveworkstream.getAliasedValue = function (alias, isMultiOptionSet) {
+		msdyn_liveworkstream.getAliasedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias] === undefined || e[alias] === null) {
 				return null;
 			}
@@ -164,7 +165,7 @@ var DevKit;
 			}
 			return e[alias];
 		}
-		msdyn_liveworkstream.getAliasedFormattedValue = function (alias, isMultiOptionSet) {
+		msdyn_liveworkstream.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
 				return EMPTY_STRING;
 			}

@@ -19,8 +19,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -28,36 +30,36 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** For internal use only. */
-		AsyncEventId: DevKit.WebApi.GuidValueReadonly;
+		readonly AsyncEventId: string;
 		/** Items remaining in CRM to process after this synchronization cycle. */
-		CrmItemsBacklog: DevKit.WebApi.IntegerValueReadonly;
+		readonly CrmItemsBacklog: number;
 		/** Time each exchange sync step is taking */
-		IndividualStepDurations: DevKit.WebApi.StringValueReadonly;
+		readonly IndividualStepDurations: string;
 		/** Number of items processed unsuccessfully. */
-		ItemsFailed: DevKit.WebApi.IntegerValueReadonly;
+		readonly ItemsFailed: number;
 		/** Number of items processed. */
-		ItemsProcessed: DevKit.WebApi.IntegerValueReadonly;
+		readonly ItemsProcessed: number;
 		/** Name of Machine on which mailbox was processed */
-		MachineName: DevKit.WebApi.StringValueReadonly;
+		readonly MachineName: string;
 		/** Regarding Mailbox. */
-		MailboxId: DevKit.WebApi.LookupValueReadonly;
+		readonly MailboxId: string;
 		/** Completion time of the synchronization cycle. */
-		MailboxProcessCompletedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly MailboxProcessCompletedOn_UtcDateAndTime: Date;
 		/** Scheduled time of the synchronization cycle. */
-		MailboxProcessScheduledOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly MailboxProcessScheduledOn_UtcDateAndTime: Date;
 		/** Start time of the synchronization cycle. */
-		MailboxProcessStartedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
-		MailboxStatisticsId: DevKit.WebApi.GuidValueReadonly;
+		readonly MailboxProcessStartedOn_UtcDateAndTime: Date;
+		readonly MailboxStatisticsId: string;
 		/** Type of the mailbox operation */
-		OperationTypeId: DevKit.WebApi.OptionSetValueReadonly;
+		readonly OperationTypeId: OptionSet.MailboxStatistics.OperationTypeId;
 		/** Unique identifier of the organization associated with the record. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Result of Mailbox processing cycle */
-		ProcessResult: DevKit.WebApi.BooleanValueReadonly;
+		readonly ProcessResult: boolean;
 		/** Time it took to process the mailbox. */
-		ProcessTimeIntervalInMinutes: DevKit.WebApi.IntegerValueReadonly;
+		readonly ProcessTimeIntervalInMinutes: number;
 		/** Time it took from the scheduled time to the actual start time to process the mailbox. */
-		ScheduledTimeIntervalInMinutes: DevKit.WebApi.IntegerValueReadonly;
+		readonly ScheduledTimeIntervalInMinutes: number;
 	}
 }
 declare namespace OptionSet {
@@ -88,4 +90,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

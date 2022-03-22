@@ -76,8 +76,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -85,39 +87,39 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Type the Azure account key. */
-		AccountKey: DevKit.WebApi.StringValue;
+		AccountKey: string;
 		/** Unique identifier of the Azure service connection. */
-		AzureServiceConnectionId: DevKit.WebApi.GuidValue;
+		AzureServiceConnectionId: string;
 		/** Azure service connection type */
-		ConnectionType: DevKit.WebApi.OptionSetValue;
+		ConnectionType: OptionSet.AzureServiceConnection.ConnectionType;
 		/** Unique identifier of the user who created the Azure service connection. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the Azure service connection was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the Azure service connection. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Enter a description of the Azure service connection. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Shows the status of the last connection to the Azure service. */
-		LastConnectionStatusCode: DevKit.WebApi.OptionSetValue;
+		LastConnectionStatusCode: OptionSet.AzureServiceConnection.LastConnectionStatusCode;
 		/** shows the time of the last connection to the Azure service. */
-		LastConnectionTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		LastConnectionTime_UtcDateAndTime: Date;
 		/** Unique identifier of the user who modified the Azure service connection. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the Azure service connection was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the Azure service connection. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Type a logical name for the connection. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Unique identifier of the organization associated with the Azure service connection. */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Type the service URL for the Azure service. */
-		ServiceUri: DevKit.WebApi.StringValue;
+		ServiceUri: string;
 		/** Shows whether the Azure service connection is active or inactive. */
-		StateCode: DevKit.WebApi.OptionSetValue;
+		StateCode: OptionSet.AzureServiceConnection.StateCode;
 		/** Select the Azure service connection's status. */
-		StatusCode: DevKit.WebApi.OptionSetValue;
+		StatusCode: OptionSet.AzureServiceConnection.StatusCode;
 	}
 }
 declare namespace OptionSet {
@@ -164,4 +166,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

@@ -22,7 +22,8 @@
       "rootfolder": "",
       "type": "JsWebApi",
       "entities": "*",
-      "debug": "yes"
+      "debug": "yes",
+      "version": "2"
     }
   ]
 }

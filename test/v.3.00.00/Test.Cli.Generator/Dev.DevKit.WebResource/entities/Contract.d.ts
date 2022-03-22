@@ -217,8 +217,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -226,120 +228,120 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the account with which the contract is associated. */
-		AccountId: DevKit.WebApi.LookupValueReadonly;
+		readonly AccountId: string;
 		/** Enter the date when the contract becomes active. */
-		ActiveOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		ActiveOn_UtcDateOnly: Date;
 		/** Type of allotment that the contract supports. */
-		AllotmentTypeCode: DevKit.WebApi.OptionSetValue;
+		AllotmentTypeCode: OptionSet.Contract.AllotmentTypeCode;
 		/** Unique identifier of the account to which the contract is to be billed. */
-		BillingAccountId: DevKit.WebApi.LookupValueReadonly;
+		readonly BillingAccountId: string;
 		/** Unique identifier of the contact to whom the contract is to be billed. */
-		BillingContactId: DevKit.WebApi.LookupValueReadonly;
+		readonly BillingContactId: string;
 		/** Select the customer account or contact to which the contract should be billed to provide a quick link to address and other customer details. */
-		billingcustomerid_account: DevKit.WebApi.LookupValue;
+		billingcustomerid_account: string;
 		/** Select the customer account or contact to which the contract should be billed to provide a quick link to address and other customer details. */
-		billingcustomerid_contact: DevKit.WebApi.LookupValue;
+		billingcustomerid_contact: string;
 		/** Enter the end date for the contract's billing period to indicate the period for which the customer must pay for a service. */
-		BillingEndOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		BillingEndOn_UtcDateOnly: Date;
 		/** Select the billing schedule of the contract to indicate how often the customer should be invoiced. */
-		BillingFrequencyCode: DevKit.WebApi.OptionSetValue;
+		BillingFrequencyCode: OptionSet.Contract.BillingFrequencyCode;
 		/** Enter the start date for the contract's billing period to indicate the period for which the customer must pay for a service. This defaults to the same date that is selected in the Contract Start Date field. */
-		BillingStartOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		BillingStartOn_UtcDateOnly: Date;
 		/** Choose which address to send the invoice to. */
-		BillToAddress: DevKit.WebApi.LookupValue;
+		BillToAddress: string;
 		/** Shows the date and time when the contract was canceled. */
-		CancelOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		readonly CancelOn_UtcDateOnly: Date;
 		/** Unique identifier of the contact specified for the contract. */
-		ContactId: DevKit.WebApi.LookupValueReadonly;
+		readonly ContactId: string;
 		/** Unique identifier of the contract. */
-		ContractId: DevKit.WebApi.GuidValue;
+		ContractId: string;
 		/** Type additional information about the contract, such as the products or services provided to the customer. */
-		ContractLanguage: DevKit.WebApi.StringValue;
+		ContractLanguage: string;
 		/** Shows the number for the contract for customer reference and searching capabilities. You cannot modify this number. */
-		ContractNumber: DevKit.WebApi.StringValue;
+		ContractNumber: string;
 		/** Select the level of service that should be provided for the contract based on your company's definition of bronze, silver, or gold. */
-		ContractServiceLevelCode: DevKit.WebApi.OptionSetValue;
+		ContractServiceLevelCode: OptionSet.Contract.ContractServiceLevelCode;
 		/** Shows the abbreviation of the contract template selected when the contract is created. */
-		ContractTemplateAbbreviation: DevKit.WebApi.StringValueReadonly;
+		readonly ContractTemplateAbbreviation: string;
 		/** Choose the contract template that should be used to determine the terms of the contract, such as allotment type, available hours, and billing frequency. */
-		ContractTemplateId: DevKit.WebApi.LookupValue;
+		ContractTemplateId: string;
 		/** Shows who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Select the customer account or contact to provide a quick link to additional customer details, such as address, phone number, activities, and orders. */
-		customerid_account: DevKit.WebApi.LookupValue;
+		customerid_account: string;
 		/** Select the customer account or contact to provide a quick link to additional customer details, such as address, phone number, activities, and orders. */
-		customerid_contact: DevKit.WebApi.LookupValue;
+		customerid_contact: string;
 		/** Shows for the duration of the contract, in days, based on the contract start and end dates. */
-		Duration: DevKit.WebApi.IntegerValueReadonly;
+		readonly Duration: number;
 		/** Days of the week and times during which customer service support is available for the duration of the contract. */
-		EffectivityCalendar: DevKit.WebApi.StringValue;
+		EffectivityCalendar: string;
 		/** The primary email address for the entity. */
-		EmailAddress: DevKit.WebApi.StringValue;
+		EmailAddress: string;
 		/** The default image for the entity. */
-		EntityImage: DevKit.WebApi.StringValue;
-		EntityImage_Timestamp: DevKit.WebApi.BigIntValueReadonly;
-		EntityImage_URL: DevKit.WebApi.StringValueReadonly;
-		EntityImageId: DevKit.WebApi.GuidValueReadonly;
+		EntityImage: string;
+		EntityImage_Timestamp: number;
+		EntityImage_URL: string;
+		readonly EntityImageId: string;
 		/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Enter the date when the contract expires. */
-		ExpiresOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		ExpiresOn_UtcDateOnly: Date;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Shows who last updated the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Shows who last updated the record on behalf of another user. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Shows the total charge to the customer for the service contract, calculated as the sum of values in the Net field for each existing contract line related to the contract. */
-		NetPrice: DevKit.WebApi.MoneyValueReadonly;
+		readonly NetPrice: number;
 		/** Value of the Net Price in base currency. */
-		NetPrice_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly NetPrice_Base: number;
 		/** Choose the original contract that this contract was created from. This information is used to track renewal history. */
-		OriginatingContract: DevKit.WebApi.LookupValue;
+		OriginatingContract: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Choose the address for the customer account or contact where the services are provided. */
-		ServiceAddress: DevKit.WebApi.LookupValue;
+		ServiceAddress: string;
 		/** Shows whether the contract is in draft, invoiced, active, on hold, canceled, or expired. You can edit only the contracts that are in draft status. */
-		StateCode: DevKit.WebApi.OptionSetValue;
+		StateCode: OptionSet.Contract.StateCode;
 		/** Select the contract's status. */
-		StatusCode: DevKit.WebApi.OptionSetValue;
+		StatusCode: OptionSet.Contract.StatusCode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Type a title or name for the contract that indicates the purpose of the contract. */
-		Title: DevKit.WebApi.StringValue;
+		Title: string;
 		/** Shows the total discount applied to the contract's service charges, calculated as the sum of values in the Discount fields for each existing contract line related to the contract. */
-		TotalDiscount: DevKit.WebApi.MoneyValueReadonly;
+		readonly TotalDiscount: number;
 		/** Value of the Total Discount in base currency. */
-		TotalDiscount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly TotalDiscount_Base: number;
 		/** Shows the total service charge for the contract, before any discounts are credited. This is calculated as the sum of values in the Total Price field for each existing contract line related to the contract. */
-		TotalPrice: DevKit.WebApi.MoneyValueReadonly;
+		readonly TotalPrice: number;
 		/** Value of the Total Price in base currency. */
-		TotalPrice_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly TotalPrice_Base: number;
 		/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** Select whether the discounts entered on contract lines for this contract should be entered as a percentage or a fixed dollar value. */
-		UseDiscountAsPercentage: DevKit.WebApi.BooleanValue;
+		UseDiscountAsPercentage: boolean;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -418,4 +420,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

@@ -174,8 +174,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -183,105 +185,105 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the account with which the contract is associated. */
-		AccountId: DevKit.WebApi.LookupValueReadonly;
+		readonly AccountId: string;
 		/** Enter the date when the contract line becomes active. */
-		ActiveOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		ActiveOn_UtcDateOnly: Date;
 		/** Shows the number of minutes over the Total Allotments field that have been spent on resolved cases related to the contract line. */
-		AllotmentsOverage: DevKit.WebApi.IntegerValueReadonly;
+		readonly AllotmentsOverage: number;
 		/** Shows the number of cases or minutes remaining, based on the resolved cases logged to the contract line. */
-		AllotmentsRemaining: DevKit.WebApi.IntegerValueReadonly;
+		readonly AllotmentsRemaining: number;
 		/** Shows the number of cases or minutes used in the resolved cases on the contract line. */
-		AllotmentsUsed: DevKit.WebApi.IntegerValueReadonly;
+		readonly AllotmentsUsed: number;
 		/** Unique identifier for the contact associated with the contract line. */
-		ContactId: DevKit.WebApi.LookupValueReadonly;
+		readonly ContactId: string;
 		/** Unique identifier of the contract line. */
-		ContractDetailId: DevKit.WebApi.GuidValue;
+		ContractDetailId: string;
 		/** Unique identifier of the contract associated with the contract line. */
-		ContractId: DevKit.WebApi.LookupValue;
+		ContractId: string;
 		/** Status of the contract. */
-		ContractStateCode: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ContractStateCode: OptionSet.ContractDetail.ContractStateCode;
 		/** Shows who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Shows who created the record on behalf of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Select the customer account or contact to provide a quick link to additional customer details, such as address, phone number, activities, and orders. */
-		customerid_account: DevKit.WebApi.LookupValue;
+		customerid_account: string;
 		/** Select the customer account or contact to provide a quick link to additional customer details, such as address, phone number, activities, and orders. */
-		customerid_contact: DevKit.WebApi.LookupValue;
+		customerid_contact: string;
 		/** Type the discount amount for the contract line to deduct any negotiated or other savings from the net amount due. */
-		Discount: DevKit.WebApi.MoneyValue;
+		Discount: number;
 		/** Value of the Discount in base currency. */
-		Discount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly Discount_Base: number;
 		/** Type the discount rate that should be applied to the Total Price, for use in calculating the net amount due for the contract line. */
-		DiscountPercentage: DevKit.WebApi.DecimalValue;
+		DiscountPercentage: number;
 		/** Days of the week and times for which the contract line item is effective. */
-		EffectivityCalendar: DevKit.WebApi.StringValue;
+		EffectivityCalendar: string;
 		/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Enter the date when the contract line expires. The date is automatically filled with the contract date, but you can change it if required. */
-		ExpiresOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		ExpiresOn_UtcDateOnly: Date;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Type the number of units of the specified product or service that are eligible for support on the contract line. */
-		InitialQuantity: DevKit.WebApi.IntegerValue;
+		InitialQuantity: number;
 		/** Type the line item number for the contract line to easily identify the contract line and make sure it's listed in the correct order in the parent contract. */
-		LineItemOrder: DevKit.WebApi.IntegerValue;
+		LineItemOrder: number;
 		/** Shows who last updated the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Shows who last updated the record on behalf of another user. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Shows the total charge to the customer for the contract line, calculated as the Total Price minus any discounts. */
-		Net: DevKit.WebApi.MoneyValueReadonly;
+		readonly Net: number;
 		/** Value of the Net in base currency. */
-		Net_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly Net_Base: number;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValueReadonly;
+		readonly OwnerId_team: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Type the total service charge for the contract line before any discounts are credited. */
-		Price: DevKit.WebApi.MoneyValue;
+		Price: number;
 		/** Value of the Total Price in base currency. */
-		Price_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly Price_Base: number;
 		/** Choose the product that is eligible for services on the contract line. */
-		ProductId: DevKit.WebApi.LookupValue;
+		ProductId: string;
 		/** Type the serial number for the product that is eligible for services on the contract line. */
-		ProductSerialNumber: DevKit.WebApi.StringValue;
+		ProductSerialNumber: string;
 		/** Shows the cost per case or minute, calculated by dividing the Total Price value by the total number of cases or minutes allocated to the contract line. */
-		Rate: DevKit.WebApi.MoneyValueReadonly;
+		readonly Rate: number;
 		/** Value of the Rate in base currency. */
-		Rate_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly Rate_Base: number;
 		/** Choose the address for the customer account or contact where the services are provided. */
-		ServiceAddress: DevKit.WebApi.LookupValue;
+		ServiceAddress: string;
 		/** Select the unit type allotted in the contract line, such as cases or minutes, to determine the level of support. */
-		ServiceContractUnitsCode: DevKit.WebApi.OptionSetValue;
+		ServiceContractUnitsCode: OptionSet.ContractDetail.ServiceContractUnitsCode;
 		/** Shows whether the contract line is existing, renewed, canceled, or expired. You can't edit a contract line after it is saved, regardless of the status. */
-		StateCode: DevKit.WebApi.OptionSetValue;
+		StateCode: OptionSet.ContractDetail.StateCode;
 		/** Select the contract line's status. */
-		StatusCode: DevKit.WebApi.OptionSetValue;
+		StatusCode: OptionSet.ContractDetail.StatusCode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Type a title or name that describes the contract line. */
-		Title: DevKit.WebApi.StringValue;
+		Title: string;
 		/** Type the total number of minutes or cases allowed for the contract line. */
-		TotalAllotments: DevKit.WebApi.IntegerValue;
+		TotalAllotments: number;
 		/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValueReadonly;
+		readonly TransactionCurrencyId: string;
 		/** Choose the unit of measurement for the base unit quantity for this purchase, such as each or dozen. */
-		UoMId: DevKit.WebApi.LookupValue;
+		UoMId: string;
 		/** Unique identifier of the unit group associated with the contract line. */
-		UoMScheduleId: DevKit.WebApi.LookupValue;
+		UoMScheduleId: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -328,4 +330,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

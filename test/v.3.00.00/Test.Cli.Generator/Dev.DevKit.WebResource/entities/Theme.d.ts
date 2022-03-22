@@ -91,8 +91,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -100,80 +102,80 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Choose the Unified Interface secondary theme color to be used on the process control */
-		AccentColor: DevKit.WebApi.StringValue;
+		AccentColor: string;
 		/** For internal use only. */
-		BackgroundColor: DevKit.WebApi.StringValue;
+		BackgroundColor: string;
 		/** Choose the color that controls will use for borders */
-		ControlBorder: DevKit.WebApi.StringValue;
+		ControlBorder: string;
 		/** Choose the background color for controls to use to indicate when you hover over items */
-		ControlShade: DevKit.WebApi.StringValue;
+		ControlShade: string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Choose the default custom entity color if no color is assigned */
-		DefaultCustomEntityColor: DevKit.WebApi.StringValue;
+		DefaultCustomEntityColor: string;
 		/** Choose the default color for system entities if no color is assigned */
-		DefaultEntityColor: DevKit.WebApi.StringValue;
+		DefaultEntityColor: string;
 		/** Exchange rate for the currency associated with the Theme with respect to the base currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Choose the color for all links, such as e-mail address and lookup links, and for all buttons that are in focus */
-		GlobalLinkColor: DevKit.WebApi.StringValue;
+		GlobalLinkColor: string;
 		/** Choose the color for title text, such as form tab labels */
-		HeaderColor: DevKit.WebApi.StringValue;
+		HeaderColor: string;
 		/** Choose the color that commands or lists will use to indicate hovered over items */
-		HoverLinkEffect: DevKit.WebApi.StringValue;
+		HoverLinkEffect: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Default status of theme. */
-		IsDefaultTheme: DevKit.WebApi.BooleanValue;
+		IsDefaultTheme: boolean;
 		/** Upload a web resource to use as a logo. Recommended dimensions are a height of 50 pixels and a maximum width of 400 pixels. */
-		LogoId: DevKit.WebApi.LookupValue;
+		LogoId: string;
 		/** Enter text that will be used as the tooltip and alt text for the logo. */
-		LogoToolTip: DevKit.WebApi.StringValue;
+		LogoToolTip: string;
 		/** Choose the Unified Interface primary theme color to be used on main command bar, buttons and tabs */
-		MainColor: DevKit.WebApi.StringValue;
+		MainColor: string;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** The name of the Theme Entity. */
-		Name: DevKit.WebApi.StringValue;
+		Name: string;
 		/** Choose the primary Navigation Bar background color */
-		NavBarBackgroundColor: DevKit.WebApi.StringValue;
+		NavBarBackgroundColor: string;
 		/** Choose the secondary Navigation Bar background color */
-		NavBarShelfColor: DevKit.WebApi.StringValue;
+		NavBarShelfColor: string;
 		/** Unique identifier for the organization */
-		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		readonly OrganizationId: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Choose the page header background color */
-		PageHeaderBackgroundColor: DevKit.WebApi.StringValue;
+		PageHeaderBackgroundColor: string;
 		/** Choose the panel header background color */
-		PanelHeaderBackgroundColor: DevKit.WebApi.StringValue;
+		PanelHeaderBackgroundColor: string;
 		/** Choose the primary background color for process controls */
-		ProcessControlColor: DevKit.WebApi.StringValue;
+		ProcessControlColor: string;
 		/** Choose the color that commands or lists will use to indicate selected items */
-		SelectedLinkEffect: DevKit.WebApi.StringValue;
+		SelectedLinkEffect: string;
 		/** Status of the Theme */
-		statecode: DevKit.WebApi.OptionSetValueReadonly;
+		readonly statecode: OptionSet.Theme.statecode;
 		/** Reason for the status of the Theme */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.Theme.statuscode;
 		/** Unique identifier for entity instances */
-		ThemeId: DevKit.WebApi.GuidValue;
+		ThemeId: string;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Exchange rate for the currency associated with the Theme with respect to the base currency. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** Define type of theme. */
-		Type: DevKit.WebApi.BooleanValue;
+		Type: boolean;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		UTCConversionTimeZoneCode: number;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -208,4 +210,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

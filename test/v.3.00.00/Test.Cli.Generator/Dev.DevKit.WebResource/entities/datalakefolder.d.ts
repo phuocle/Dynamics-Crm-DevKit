@@ -75,92 +75,106 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
 		EntityCollectionName: string;
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
+		/** Path to the CDM file. */
+		CDMPath: string;
 		/** For internal use only. */
-		ComponentIdUnique: DevKit.WebApi.GuidValueReadonly;
+		readonly ComponentIdUnique: string;
 		/** For internal use only. */
-		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		readonly ComponentState: OptionSet.datalakefolder.ComponentState;
 		/** Azure Data Lake container endpoint for this folder. */
-		containerendpoint: DevKit.WebApi.StringValue;
+		containerendpoint: string;
 		/** The security group for contributor access. */
-		ContributorSecurityGroupId: DevKit.WebApi.GuidValue;
+		ContributorSecurityGroupId: string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Unique Name for the entity. */
-		datalakefolder_UniqueName: DevKit.WebApi.StringValue;
+		datalakefolder_UniqueName: string;
 		/** Unique identifier for entity instances */
-		datalakefolderId: DevKit.WebApi.GuidValue;
+		datalakefolderId: string;
 		/** Extended Properties associated with this folder. */
-		extendedproperties: DevKit.WebApi.StringValue;
+		extendedproperties: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Indicates if folder data storage uses customer capacity. */
-		iscustomercapacity: DevKit.WebApi.BooleanValue;
+		iscustomercapacity: boolean;
 		/** For internal use only. */
-		IsCustomizable: DevKit.WebApi.ManagedPropertyValue;
+		IsCustomizable: string;
 		/** Indicates if deep copy is enabled for folder. */
-		isdeepcopyenabled: DevKit.WebApi.BooleanValue;
+		isdeepcopyenabled: boolean;
 		/** Indicates whether lake is managed or external. */
-		IsExternalLake: DevKit.WebApi.BooleanValue;
+		IsExternalLake: boolean;
 		/** Indicates whether external lake is read only. */
-		IsExternalLakeReadOnly: DevKit.WebApi.BooleanValue;
+		IsExternalLakeReadOnly: boolean;
 		/** Indicates whether the solution component is part of a managed solution. */
-		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsManaged: boolean;
 		/** Indicates if folder data and metadata are visible to all applications, or only visible to the folder owner and applications with explicit permissions to the folder. */
-		isprivate: DevKit.WebApi.BooleanValue;
+		isprivate: boolean;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** The name of the custom entity. */
-		name: DevKit.WebApi.StringValue;
+		name: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** For internal use only. */
-		OverwriteTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly OverwriteTime_UtcDateAndTime: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** The app id which owns this folder. The owning app id has full control i.e. read, write and execute permissions on the ADLS folder. */
-		owningappid: DevKit.WebApi.GuidValue;
+		owningappid: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Folder path in the Azure Data Lake container. */
-		path: DevKit.WebApi.StringValue;
+		path: string;
 		/** The security group for reader access. */
-		ReaderSecurityGroupId: DevKit.WebApi.GuidValue;
+		ReaderSecurityGroupId: string;
+		/** Azure resource group of the storage account. */
+		ResourceGroup: string;
 		/** Unique identifier of the associated solution. */
-		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SolutionId: string;
 		/** Status of the Data Lake Folder */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.datalakefolder.statecode;
 		/** Reason for the status of the Data Lake Folder */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.datalakefolder.statuscode;
+		/** Azure subscription of the storage account. */
+		Subscription: string;
 		/** For internal use only. */
-		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
+		readonly SupportingSolutionId: string;
+		/** Enable schema synchronization to Dataverse. */
+		SynchronizeSchemaToDataverse: boolean;
+		/** Enable schema synchronization to Synapse database. */
+		SynchronizeSchemaToSynapseDb: boolean;
+		/** Azure tenant of the storage account. */
+		Tenant: string;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -205,4 +219,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

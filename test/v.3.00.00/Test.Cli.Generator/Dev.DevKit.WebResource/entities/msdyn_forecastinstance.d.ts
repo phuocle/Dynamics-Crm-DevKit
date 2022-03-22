@@ -70,8 +70,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -79,105 +81,105 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the user who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Exchange rate for the currency associated with the entity with respect to the base currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Unique identifier of the user who modified the record. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Shows the actual value (money) achieved toward the target as of the last rollup date. */
-		msdyn_actualamount: DevKit.WebApi.MoneyValue;
+		msdyn_actualamount: number;
 		/** Value of the Actual (Money) in base currency. */
-		msdyn_actualamount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_actualamount_Base: number;
 		/** Shows the rollup value (money) for the best case category as of the last rollup date. */
-		msdyn_bestcaseamount: DevKit.WebApi.MoneyValue;
+		msdyn_bestcaseamount: number;
 		/** Value of the BestCase in base currency. */
-		msdyn_bestcaseamount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_bestcaseamount_Base: number;
 		/** Shows the committed rollup value (money) as of the last rollup date. */
-		msdyn_committedamount: DevKit.WebApi.MoneyValue;
+		msdyn_committedamount: number;
 		/** Value of the Committed in base currency. */
-		msdyn_committedamount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_committedamount_Base: number;
 		/** Unique identifier for the forecast definition that is associated with the forecast. */
-		msdyn_forecastdefinitionid: DevKit.WebApi.LookupValue;
+		msdyn_forecastdefinitionid: string;
 		/** Unique identifier for the forecast. */
-		msdyn_forecastinstanceId: DevKit.WebApi.GuidValue;
+		msdyn_forecastinstanceId: string;
 		/** For internal use only. */
-		msdyn_forecastinstancetype: DevKit.WebApi.IntegerValue;
+		msdyn_forecastinstancetype: number;
 		/** Name of the forecast. */
-		msdyn_forecastname: DevKit.WebApi.StringValue;
+		msdyn_forecastname: string;
 		/** Unique identifier for the parent forecast that is associated with the forecast. */
-		msdyn_forecastparentid: DevKit.WebApi.LookupValue;
+		msdyn_forecastparentid: string;
 		/** Unique identifier for the forecast recurrence associated with the forecast. */
-		msdyn_forecastrecurrenceid: DevKit.WebApi.LookupValue;
+		msdyn_forecastrecurrenceid: string;
 		/** Select whether the bestcase rollup has been manually updated. */
-		msdyn_ismanualbestcase: DevKit.WebApi.IntegerValue;
+		msdyn_ismanualbestcase: number;
 		/** Select whether the committed rollup has been manually updated. */
-		msdyn_ismanualcommitted: DevKit.WebApi.IntegerValue;
+		msdyn_ismanualcommitted: number;
 		/** Select whether the pipeline rollup has been manually updated. */
-		msdyn_ismanualpipeline: DevKit.WebApi.IntegerValue;
+		msdyn_ismanualpipeline: number;
 		/** Is quota source manual */
-		msdyn_isquotasourcemanual: DevKit.WebApi.BooleanValue;
+		msdyn_isquotasourcemanual: boolean;
 		/** For internal use only. */
-		msdyn_level: DevKit.WebApi.IntegerValue;
+		msdyn_level: number;
 		/** Shows the changed value of the best case rollup (Money type) as of the last rolled-up date. */
-		msdyn_manualbestcaseamount: DevKit.WebApi.MoneyValue;
+		msdyn_manualbestcaseamount: number;
 		/** Value of the Manual BestCase in base currency. */
-		msdyn_manualbestcaseamount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_manualbestcaseamount_Base: number;
 		/** Shows the changed value of the committed rollup (Money type) as of the last rolled-up date. */
-		msdyn_manualcommittedamount: DevKit.WebApi.MoneyValue;
+		msdyn_manualcommittedamount: number;
 		/** Value of the Manual Committed in base currency. */
-		msdyn_manualcommittedamount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_manualcommittedamount_Base: number;
 		/** Shows the changed value of the pipeline rollup (Money type) as of the last rolled-up date. */
-		msdyn_manualpipelineamount: DevKit.WebApi.MoneyValue;
+		msdyn_manualpipelineamount: number;
 		/** Value of the Manual Pipeline in base currency. */
-		msdyn_manualpipelineamount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_manualpipelineamount_Base: number;
 		/** Unique identifier for the matching goal associated with the forecast. */
-		msdyn_matchinggoalid: DevKit.WebApi.LookupValue;
+		msdyn_matchinggoalid: string;
 		/** Shows the percentage achieved against the target. */
-		msdyn_percentageachieved: DevKit.WebApi.DecimalValueReadonly;
+		readonly msdyn_percentageachieved: number;
 		/** Shows the pipeline rollup value (money) as of the last rollup date. */
-		msdyn_pipelineamount: DevKit.WebApi.MoneyValue;
+		msdyn_pipelineamount: number;
 		/** Value of the Pipeline in base currency. */
-		msdyn_pipelineamount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_pipelineamount_Base: number;
 		/** Shows the recurrence index of the forecast created from the forecast definition. */
-		msdyn_recurrenceindex: DevKit.WebApi.IntegerValue;
+		msdyn_recurrenceindex: number;
 		/** Select a target (Money type) to track a monetary amount, such as estimated revenue from an opportunity. */
-		msdyn_targetamount: DevKit.WebApi.MoneyValue;
+		msdyn_targetamount: number;
 		/** Value of the Target (Money) in base currency. */
-		msdyn_targetamount_Base: DevKit.WebApi.MoneyValueReadonly;
+		readonly msdyn_targetamount_Base: number;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier for the team that owns the record. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier for the user that owns the record. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** Status of the Forecast */
-		statecode: DevKit.WebApi.OptionSetValue;
+		statecode: OptionSet.msdyn_forecastinstance.statecode;
 		/** Reason for the status of the Forecast */
-		statuscode: DevKit.WebApi.OptionSetValue;
+		statuscode: OptionSet.msdyn_forecastinstance.statuscode;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Unique identifier of the currency associated with the entity. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version Number */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 	}
 }
 declare namespace OptionSet {
@@ -212,4 +214,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}

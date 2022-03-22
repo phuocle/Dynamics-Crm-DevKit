@@ -144,8 +144,10 @@ declare namespace DevKit {
 		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object */
-		Entity: any;
+		/** The entity object for Create/Update */
+		Entity: unknown;
+		/** The OData entity object */
+		ODataEntity: unknown;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -153,169 +155,171 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** For internal use only. */
-		ActivityAdditionalParams: DevKit.WebApi.StringValue;
+		ActivityAdditionalParams: string;
 		/** Unique identifier of the campaign response. */
-		ActivityId: DevKit.WebApi.GuidValue;
+		ActivityId: string;
 		/** Type the number of minutes spent on this activity. The duration is used in reporting. */
-		ActualDurationMinutes: DevKit.WebApi.IntegerValue;
+		ActualDurationMinutes: number;
 		/** Enter the date when the campaign response was actually completed. */
-		ActualEnd_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		ActualEnd_UtcDateOnly: Date;
 		/** Enter the actual start date and time for the campaign response. */
-		ActualStart_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		ActualStart_UtcDateOnly: Date;
 		/** Type a category to identify the campaign response type, such as new business development or customer retention, to tie the campaign response to a business group or function. */
-		Category: DevKit.WebApi.StringValue;
+		Category: string;
 		/** Select how the response was received, such as phone, letter, fax, or email. */
-		ChannelTypeCode: DevKit.WebApi.OptionSetValue;
+		ChannelTypeCode: OptionSet.CampaignResponse.ChannelTypeCode;
 		/** Shows how contact about the social activity originated, such as from Twitter or Facebook. This field is read-only. */
-		Community: DevKit.WebApi.OptionSetValue;
+		Community: OptionSet.CampaignResponse.Community;
 		/** Type the name of the company if the campaign response was received from a new prospect or customer. */
-		CompanyName: DevKit.WebApi.StringValue;
+		CompanyName: string;
 		/** Unique identifier of the user who created the activity. */
-		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedBy: string;
 		/** Date and time when the activity was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly CreatedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who created the activitypointer. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly CreatedOnBehalfBy: string;
 		/** Date and time when the delivery of the activity was last attempted. */
-		DeliveryLastAttemptedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly DeliveryLastAttemptedOn_UtcDateAndTime: Date;
 		/** Priority of delivery of the activity to the email server. */
-		DeliveryPriorityCode: DevKit.WebApi.OptionSetValue;
+		DeliveryPriorityCode: OptionSet.CampaignResponse.DeliveryPriorityCode;
 		/** Type additional information to describe the campaign response, such as key discussion points or objectives. */
-		Description: DevKit.WebApi.StringValue;
+		Description: string;
 		/** Type the responder's email address. */
-		EMailAddress: DevKit.WebApi.StringValue;
+		EMailAddress: string;
 		/** The message id of activity which is returned from Exchange Server. */
-		ExchangeItemId: DevKit.WebApi.StringValue;
+		ExchangeItemId: string;
 		/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		readonly ExchangeRate: number;
 		/** Shows the web link of Activity of type email. */
-		ExchangeWebLink: DevKit.WebApi.StringValue;
+		ExchangeWebLink: string;
 		/** Type the responder's fax number. */
-		Fax: DevKit.WebApi.StringValue;
+		Fax: string;
 		/** Type the responder's first name if the campaign response was received from a new prospect or customer. */
-		FirstName: DevKit.WebApi.StringValue;
+		FirstName: string;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		ImportSequenceNumber: number;
 		/** Type of instance of a recurring series. */
-		InstanceTypeCode: DevKit.WebApi.OptionSetValueReadonly;
+		readonly InstanceTypeCode: OptionSet.CampaignResponse.InstanceTypeCode;
 		/** Specifies whether the campaign response was billed as part of resolving a case. */
-		IsBilled: DevKit.WebApi.BooleanValue;
+		IsBilled: boolean;
 		/** For internal use only. */
-		IsMapiPrivate: DevKit.WebApi.BooleanValue;
+		IsMapiPrivate: boolean;
 		/** Information regarding whether the activity is a regular activity type or event type. */
-		IsRegularActivity: DevKit.WebApi.BooleanValueReadonly;
+		readonly IsRegularActivity: boolean;
 		/** Specifies whether the campaign response is created by a workflow rule. */
-		IsWorkflowCreated: DevKit.WebApi.BooleanValue;
+		IsWorkflowCreated: boolean;
 		/** Type the responder's last name if the campaign response was received from a new prospect or customer. */
-		LastName: DevKit.WebApi.StringValue;
+		LastName: string;
 		/** Contains the date and time stamp of the last on hold time. */
-		LastOnHoldTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		LastOnHoldTime_UtcDateAndTime: Date;
 		/** Left the voice mail */
-		LeftVoiceMail: DevKit.WebApi.BooleanValue;
+		LeftVoiceMail: boolean;
 		/** Unique identifier of user who last modified the activity. */
-		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedBy: string;
 		/** Date and time when activity was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who last modified the activitypointer. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		readonly ModifiedOnBehalfBy: string;
 		/** Shows how long, in minutes, that the record was on hold. */
-		OnHoldTime: DevKit.WebApi.IntegerValueReadonly;
+		readonly OnHoldTime: number;
 		/** Choose the phone call, email, fax, letter, or appointment activity that led the prospect or customer to respond to the campaign. */
-		originatingactivityid_appointment: DevKit.WebApi.LookupValue;
+		originatingactivityid_appointment: string;
 		/** Choose the phone call, email, fax, letter, or appointment activity that led the prospect or customer to respond to the campaign. */
-		originatingactivityid_email: DevKit.WebApi.LookupValue;
+		originatingactivityid_email: string;
 		/** Choose the phone call, email, fax, letter, or appointment activity that led the prospect or customer to respond to the campaign. */
-		originatingactivityid_fax: DevKit.WebApi.LookupValue;
+		originatingactivityid_fax: string;
 		/** Choose the phone call, email, fax, letter, or appointment activity that led the prospect or customer to respond to the campaign. */
-		originatingactivityid_letter: DevKit.WebApi.LookupValue;
+		originatingactivityid_letter: string;
 		/** Choose the phone call, email, fax, letter, or appointment activity that led the prospect or customer to respond to the campaign. */
-		originatingactivityid_phonecall: DevKit.WebApi.LookupValue;
+		originatingactivityid_phonecall: string;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: string;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
+		OwnerId_team: string;
 		/** Unique identifier of the business unit that owns the activity. */
-		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningBusinessUnit: string;
 		/** Unique identifier of the team that owns the activity. */
-		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningTeam: string;
 		/** Unique identifier of the user that owns the activity. */
-		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		readonly OwningUser: string;
 		/** For internal use only. */
-		PostponeActivityProcessingUntil_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly PostponeActivityProcessingUntil_UtcDateAndTime: Date;
 		/** Select the priority so that preferred customers or critical issues are handled quickly. */
-		PriorityCode: DevKit.WebApi.OptionSetValue;
+		PriorityCode: OptionSet.CampaignResponse.PriorityCode;
 		/** Unique identifier of the Process. */
-		ProcessId: DevKit.WebApi.GuidValue;
+		ProcessId: string;
 		/** Type a promotional code to track sales related to the campaign response or to allow the responder to redeem a discount offer. */
-		PromotionCodeName: DevKit.WebApi.StringValue;
+		PromotionCodeName: string;
 		/** Enter the date when the campaign response was received. */
-		ReceivedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		ReceivedOn_UtcDateOnly: Date;
 		/** Choose the parent campaign so that the campaign's response rate is tracked correctly. */
-		regardingobjectid_bulkoperation_campaignresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_bulkoperation_campaignresponse: string;
 		/** Choose the parent campaign so that the campaign's response rate is tracked correctly. */
-		regardingobjectid_campaign_campaignresponse: DevKit.WebApi.LookupValue;
+		regardingobjectid_campaign_campaignresponse: string;
 		/** Select the type of response from the prospect or customer to indicate their interest in the campaign. */
-		ResponseCode: DevKit.WebApi.OptionSetValue;
+		ResponseCode: OptionSet.CampaignResponse.ResponseCode;
 		/** Scheduled duration of the campaign response in minutes. */
-		ScheduledDurationMinutes: DevKit.WebApi.IntegerValueReadonly;
+		readonly ScheduledDurationMinutes: number;
 		/** Enter the expected due date and time for the activity to be completed to provide details about the timing of the campaign response. */
-		ScheduledEnd_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		ScheduledEnd_UtcDateOnly: Date;
 		/** Enter the expected start date and time for the activity to provide details about the timing of the campaign response. */
-		ScheduledStart_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		ScheduledStart_UtcDateOnly: Date;
 		/** Unique identifier of the mailbox associated with the sender of the email message. */
-		SenderMailboxId: DevKit.WebApi.LookupValueReadonly;
+		readonly SenderMailboxId: string;
 		/** Date and time when the activity was sent. */
-		SentOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		readonly SentOn_UtcDateAndTime: Date;
 		/** Uniqueidentifier specifying the id of recurring series of an instance. */
-		SeriesId: DevKit.WebApi.GuidValueReadonly;
+		readonly SeriesId: string;
 		/** Unique identifier for the associated service. */
-		ServiceId: DevKit.WebApi.LookupValue;
+		ServiceId: string;
 		/** Choose the service level agreement (SLA) that you want to apply to the case record. */
-		SLAId: DevKit.WebApi.LookupValue;
+		SLAId: string;
 		/** Last SLA that was applied to this case. This field is for internal use only. */
-		SLAInvokedId: DevKit.WebApi.LookupValueReadonly;
+		readonly SLAInvokedId: string;
 		/** Shows the date and time by which the activities are sorted. */
-		SortDate_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		SortDate_UtcDateAndTime: Date;
 		/** Unique identifier of the Stage. */
-		StageId: DevKit.WebApi.GuidValue;
+		StageId: string;
 		/** Shows whether the campaign response is open, closed, or canceled. Closed and canceled campaign responses are read-only and can't be edited. */
-		StateCode: DevKit.WebApi.OptionSetValue;
+		StateCode: OptionSet.CampaignResponse.StateCode;
 		/** Select the campaign response's status. */
-		StatusCode: DevKit.WebApi.OptionSetValue;
+		StatusCode: OptionSet.CampaignResponse.StatusCode;
 		/** Type a subcategory to identify the campaign response type and relate the activity to a specific product, sales region, business group, or other function. */
-		Subcategory: DevKit.WebApi.StringValue;
+		Subcategory: string;
 		/** Type a short description about the objective or primary topic of the campaign response. */
-		Subject: DevKit.WebApi.StringValue;
+		Subject: string;
 		/** Type the responder's primary phone number. */
-		Telephone: DevKit.WebApi.StringValue;
+		Telephone: string;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: number;
 		/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
-		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		TransactionCurrencyId: string;
 		/** For internal use only. */
-		TraversedPath: DevKit.WebApi.StringValue;
+		TraversedPath: string;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: number;
 		/** Version number of the activity. */
-		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		readonly VersionNumber: number;
 		/** Type the phonetic spelling of the company name, if specified in Japanese, to make sure the name is pronounced correctly in phone calls and other communications. */
-		YomiCompanyName: DevKit.WebApi.StringValue;
+		YomiCompanyName: string;
 		/** Type the phonetic spelling of the campaign responder's first name, if specified in Japanese, to make sure the name is pronounced correctly in phone calls and other communications. */
-		YomiFirstName: DevKit.WebApi.StringValue;
+		YomiFirstName: string;
 		/** Type the phonetic spelling of the campaign responder's last name, if specified in Japanese, to make sure the name is pronounced correctly in phone calls and other communications. */
-		YomiLastName: DevKit.WebApi.StringValue;
+		YomiLastName: string;
 		/** The array of object that can cast object to ActivityPartyApi class */
-		ActivityParties: Array<any>;
+		ActivityParties: Array<unknown>;
 	}
 }
 declare namespace OptionSet {
 	namespace CampaignResponse {
 		enum ActivityTypeCode {
+			/** 10086 */
+			Activity_record_for_the_Teams_chat,
 			/** 4201 */
 			Appointment,
-			/** 10400 */
+			/** 10404 */
 			Booking_Alert,
 			/** 4402 */
 			Campaign_Activity,
@@ -323,13 +327,13 @@ declare namespace OptionSet {
 			Campaign_Response,
 			/** 4206 */
 			Case_Resolution,
-			/** 10702 */
+			/** 10707 */
 			Conversation,
-			/** 10294 */
+			/** 10313 */
 			Customer_Voice_alert,
-			/** 10304 */
+			/** 10323 */
 			Customer_Voice_survey_invite,
-			/** 10306 */
+			/** 10325 */
 			Customer_Voice_survey_response,
 			/** 4202 */
 			Email,
@@ -341,11 +345,11 @@ declare namespace OptionSet {
 			Opportunity_Close,
 			/** 4209 */
 			Order_Close,
-			/** 10813 */
+			/** 10817 */
 			Outbound_message,
 			/** 4210 */
 			Phone_Call,
-			/** 10430 */
+			/** 10434 */
 			Project_Service_Approval,
 			/** 4406 */
 			Quick_Campaign,
@@ -355,7 +359,7 @@ declare namespace OptionSet {
 			Recurring_Appointment,
 			/** 4214 */
 			Service_Activity,
-			/** 10717 */
+			/** 10721 */
 			Session,
 			/** 4212 */
 			Task
@@ -480,4 +484,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
