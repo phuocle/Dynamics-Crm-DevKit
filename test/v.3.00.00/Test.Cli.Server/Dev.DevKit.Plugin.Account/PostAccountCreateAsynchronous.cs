@@ -8,6 +8,9 @@ namespace Dev.DevKit.PluginAccount
     [CrmPluginRegistration("Create", "account", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "",
     "Dev.DevKit.PluginAccount.PostAccountCreateAsynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = true, UnSecureConfiguration = "A", SecureConfiguration = "B",
     Image1Name = "", Image1Alias = "", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "")]
+    [CrmPluginRegistration("Create", "account", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "",
+    "Dev.DevKit.PluginAccount.PostAccountCreateAsynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox, PluginType = PluginType.CustomAction, DeleteAsyncOperation = true, UnSecureConfiguration = "A", SecureConfiguration = "B",
+    Image1Name = "", Image1Alias = "", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "")]
     public class PostAccountCreateAsynchronous : IPlugin
     {
         /*

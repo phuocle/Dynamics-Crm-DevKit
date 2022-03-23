@@ -37,6 +37,13 @@ namespace DynamicsCrm.DevKit.Cli
                     var downloadWebResource = new TaskDownloadWebResource(arg, json.downloadwebresources.FirstOrDefault(x => x.profile == arg.Profile));
                     downloadWebResource.Run();
                     break;
+                case nameof(CliType.workflows):
+                case nameof(CliType.plugins):
+                case nameof(CliType.dataproviders):
+                case nameof(CliType.servers):
+                    var server = new TaskServer(arg, json);
+                    server.Run();
+                    break;
             }
         }
     }

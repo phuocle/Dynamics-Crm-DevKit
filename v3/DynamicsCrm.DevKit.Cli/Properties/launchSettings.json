@@ -65,11 +65,6 @@
       "commandLineArgs": "/sdklogin:\"yes\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"downloadwebresources\" /profile:\"DEBUG\"",
       "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.00.00\\Test.Cli.DownloadWebresources\\Dev.DevKit.WebResource"
     },
-    "Profile 2": {
-      "commandName": "Project",
-      "commandLineArgs": "/sdklogin:\"yes\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"downloadwebresources\" /profile:\"DEBUG\"",
-      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.00.00\\Test.Cli.DownloadWebresources\\Dev.DevKit.WebResource"
-    },
     "plugin.Workflow": {
       "commandName": "Project",
       "commandLineArgs": "/sdklogin:\"yes\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"servers\" /profile:\"DEBUG\"",
@@ -79,6 +74,11 @@
       "commandName": "Project",
       "commandLineArgs": "/sdklogin:\"yes\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"JS-WEBAPI\"",
       "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.00.00\\Test..WebResource.WebApi\\Dev.DevKit.WebResource\\entities"
+    },
+    "SERVER": {
+      "commandName": "Project",
+      "commandLineArgs": "/sdklogin:\"yes\" /json:\"DynamicsCrm.DevKit.Cli.json\" /type:\"servers\" /profile:\"RELEASE\"",
+      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.00.00\\Test.Cli.Server"
     }
   }
 }

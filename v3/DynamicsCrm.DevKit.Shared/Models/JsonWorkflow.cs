@@ -1,6 +1,6 @@
 ﻿namespace DynamicsCrm.DevKit.Shared.Models
 {
-    public class JsonWorkflow : JsonPlugin
+    public class JsonWorkflow : JsonServer
     {
     }
 }

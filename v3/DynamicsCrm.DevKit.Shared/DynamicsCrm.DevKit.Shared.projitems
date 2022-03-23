@@ -26,6 +26,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\CommentTypeScriptDeclaration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\ControlClassId.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\CrmConnection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\CrmPluginRegistrationAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Dependency.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\DevKitConnections.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\DownloadFile.cs" />
