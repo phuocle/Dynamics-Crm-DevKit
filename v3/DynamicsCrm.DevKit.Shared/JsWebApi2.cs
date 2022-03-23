@@ -68,7 +68,7 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"{TAB}{TAB}}}{NEW_LINE}";
             code += $"{TAB}{TAB}{logicalName}.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {{{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}if (e[alias + f] === undefined || e[alias + f] === null) {{{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}{TAB}return EMPTY_STRING;{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}return '';{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}}}{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}if (isMultiOptionSet) {{{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}{TAB}return e[alias + f].toString().split(';').map(function (item) {{ return item.trim(); }});{NEW_LINE}";

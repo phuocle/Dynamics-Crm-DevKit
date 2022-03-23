@@ -117,14 +117,13 @@ namespace DynamicsCrm.DevKit.Shared
             _d_ts += $"{TAB}{TAB}EntityCollectionName: string;{NEW_LINE}";
             _d_ts += $"{TAB}{TAB}/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */{NEW_LINE}";
             _d_ts += $"{TAB}{TAB}\"@odata.etag\": string;{NEW_LINE}";
-
             foreach (var attribute in EntityMetadata?.Attributes?.OrderBy(x => x.SchemaName))
             {
                 var attributeSchemaName = Utility.SafeDeclareName(attribute.SchemaName, GeneratorType.jswebapi, EntityMetadata.SchemaName, attribute);
                 if (attribute.AttributeType == AttributeTypeCode.PartyList || attribute.AttributeType == AttributeTypeCode.EntityName) continue;
                 if (attribute.AttributeOf != null && attribute.AttributeTypeName != AttributeTypeDisplayName.ImageType) continue;
 
-                var Readonly = (!(attribute.IsValidForCreate ?? false) && !(attribute.IsValidForUpdate ?? false)) ? "Readonly" : string.Empty;
+                //var Readonly = (!(attribute.IsValidForCreate ?? false) && !(attribute.IsValidForUpdate ?? false)) ? "Readonly" : string.Empty;
                 var @readonly = (!(attribute.IsValidForCreate ?? false) && !(attribute.IsValidForUpdate ?? false)) ? "readonly " : string.Empty;
                 var jdoc = attribute?.Description?.UserLocalizedLabel?.Label ?? string.Empty;
                 switch (attribute.AttributeType)
@@ -281,6 +280,165 @@ namespace DynamicsCrm.DevKit.Shared
                 _d_ts += $"{TAB}{TAB}/** The array of object that can cast object to ActivityPartyApi class */{NEW_LINE}"; ;
                 _d_ts += $"{TAB}{TAB}ActivityParties: Array<unknown>;{NEW_LINE}";
             }
+            _d_ts += $"{TAB}{TAB}readonly FormattedValue: {{{NEW_LINE}";
+            foreach (var attribute in EntityMetadata?.Attributes?.OrderBy(x => x.SchemaName))
+            {
+                var attributeSchemaName = Utility.SafeDeclareName(attribute.SchemaName, GeneratorType.jswebapi, EntityMetadata.SchemaName, attribute);
+                if (attribute.AttributeType == AttributeTypeCode.PartyList || attribute.AttributeType == AttributeTypeCode.EntityName) continue;
+                if (attribute.AttributeOf != null && attribute.AttributeTypeName != AttributeTypeDisplayName.ImageType) continue;
+
+                var @readonly = "readonly ";
+                var jdoc = attribute?.Description?.UserLocalizedLabel?.Label ?? string.Empty;
+                switch (attribute.AttributeType)
+                {
+                    case AttributeTypeCode.Picklist:
+                    case AttributeTypeCode.State:
+                    case AttributeTypeCode.Status:
+                        if (attribute is MultiSelectPicklistAttributeMetadata)
+                        {
+                            if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                            _d_ts += $"{TAB}{TAB}{TAB}{@readonly}{attributeSchemaName}: Array<string>;{NEW_LINE}";
+                        }
+                        else if (attribute is PicklistAttributeMetadata || attribute is StateAttributeMetadata || attribute is StatusAttributeMetadata)
+                        {
+                            if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                            _d_ts += $"{TAB}{TAB}{TAB}{@readonly}{attributeSchemaName}: string;{NEW_LINE}";
+                        }
+                        break;
+                    case AttributeTypeCode.Owner:
+                        _d_ts += $"{TAB}{TAB}{TAB}/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{TAB}{@readonly}OwnerId_systemuser: string;\r\n";
+                        _d_ts += $"{TAB}{TAB}{TAB}/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{TAB}{@readonly}OwnerId_team: string;\r\n";
+                        break;
+                    case AttributeTypeCode.Lookup:
+                    case AttributeTypeCode.Customer:
+                        if (attribute is LookupAttributeMetadata lookup)
+                        {
+                            if (lookup.Targets.Count() == 1)
+                            {
+                                if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                                _d_ts += $"{TAB}{TAB}{TAB}{@readonly}{attributeSchemaName}: string;{NEW_LINE}";
+                            }
+                            else
+                            {
+                                if (attribute.LogicalName == "acceptingentityid")
+                                {
+                                    if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                                    _d_ts += $"{TAB}{TAB}{TAB}{@readonly}acceptingentityid_queue: string;{NEW_LINE}";
+                                    if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                                    _d_ts += $"{TAB}{TAB}{TAB}{@readonly}acceptingentityid_systemuser: string;{NEW_LINE}";
+                                }
+                                else
+                                {
+                                    foreach (var entityLogicalName in lookup.Targets.Distinct())
+                                    {
+                                        var navigation = EntityMetadata.ManyToOneRelationships.FirstOrDefault(x => x.ReferencingAttribute == attribute.LogicalName && x.ReferencedEntity == entityLogicalName);
+                                        if (navigation?.ReferencingEntityNavigationPropertyName != null && navigation?.ReferencingEntityNavigationPropertyName.Length > 0)
+                                        {
+                                            var temp = $"{TAB}{TAB}{TAB}{@readonly}{Utility.SafeDeclareName(navigation?.ReferencingEntityNavigationPropertyName, GeneratorType.jswebapi, EntityMetadata.SchemaName, attribute)}: string;{NEW_LINE}";
+                                            if (!_d_ts.Contains(temp))
+                                            {
+                                                if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                                                _d_ts += temp;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                    case AttributeTypeCode.Memo:
+                    case AttributeTypeCode.String:
+                        if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{TAB}{@readonly}{attributeSchemaName}: string;{NEW_LINE}";
+                        break;
+                    case AttributeTypeCode.Boolean:
+                        if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{TAB}{@readonly}{attributeSchemaName}: string;{NEW_LINE}";
+                        break;
+                    case AttributeTypeCode.DateTime:
+                        if (attribute is DateTimeAttributeMetadata dateTime)
+                        {
+                            if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                            if (dateTime.DateTimeBehavior == DateTimeBehavior.DateOnly)
+                                _d_ts += $"{TAB}{TAB}{TAB}{@readonly}{attributeSchemaName}_DateOnly: string;{NEW_LINE}";
+                            else if (dateTime.DateTimeBehavior == DateTimeBehavior.TimeZoneIndependent)
+                            {
+                                if (dateTime.Format == DateTimeFormat.DateOnly)
+                                    _d_ts += $"{TAB}{TAB}{TAB}{@readonly}{attributeSchemaName}_TimezoneDateOnly: string;{NEW_LINE}";
+                                else
+                                    _d_ts += $"{TAB}{TAB}{TAB}{@readonly}{attributeSchemaName}_TimezoneDateAndTime: string;{NEW_LINE}";
+                            }
+                            else
+                            {
+                                if (dateTime.Format == DateTimeFormat.DateOnly)
+                                    _d_ts += $"{TAB}{TAB}{TAB}{@readonly}{attributeSchemaName}_UtcDateOnly: string;{NEW_LINE}";
+                                else
+                                    _d_ts += $"{TAB}{TAB}{TAB}{@readonly}{attributeSchemaName}_UtcDateAndTime: string;{NEW_LINE}";
+                            }
+                        }
+                        break;
+                    case AttributeTypeCode.Integer:
+                        if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                        //_d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: DevKit.WebApi.IntegerValue{Readonly};{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{TAB}{@readonly}{attributeSchemaName}: string;{NEW_LINE}";
+                        break;
+                    case AttributeTypeCode.BigInt:
+                        if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                        //_d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: DevKit.WebApi.BigIntValue{Readonly};{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{TAB}{@readonly}{attributeSchemaName}: string;{NEW_LINE}";
+                        break;
+                    case AttributeTypeCode.Decimal:
+                        if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                        //_d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: DevKit.WebApi.DecimalValue{Readonly};{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{TAB}{@readonly}{attributeSchemaName}: string;{NEW_LINE}";
+                        break;
+                    case AttributeTypeCode.Double:
+                        if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                        //_d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: DevKit.WebApi.DoubleValue{Readonly};{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{TAB}{@readonly}{attributeSchemaName}: string;{NEW_LINE}";
+                        break;
+                    case AttributeTypeCode.Money:
+                        if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                        //_d_ts += $"{TAB}{TAB}{@readonly}{attributeSchemaName}: DevKit.WebApi.MoneyValue{Readonly};{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{TAB}{@readonly}{attributeSchemaName}: string;{NEW_LINE}";
+                        break;
+                    case AttributeTypeCode.Uniqueidentifier:
+                        if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                        //_d_ts += $"{TAB}{TAB}{attributeSchemaName}: DevKit.WebApi.GuidValue{Readonly};{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{TAB}{@readonly}{attributeSchemaName}: string;{NEW_LINE}";
+                        break;
+                    case AttributeTypeCode.ManagedProperty:
+                        if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                        //_d_ts += $"{TAB}{TAB}{attributeSchemaName}: DevKit.WebApi.ManagedPropertyValue{Readonly};{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{TAB}{@readonly}{attributeSchemaName}: string;{NEW_LINE}";
+                        break;
+
+                    default:
+                        if (attribute is ImageAttributeMetadata image)
+                        {
+                            if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                            if ((image.IsPrimaryImage ?? false) && image.LogicalName != "entityimage")
+                                _d_ts += GetGeneratorImageCode_d_ts_2("EntityImage", image.LogicalName, @readonly);
+                            _d_ts += GetGeneratorImageCode_d_ts_2(attributeSchemaName, attribute.LogicalName, @readonly);
+                        }
+                        else if (attribute is FileAttributeMetadata file)
+                        {
+                            if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                            _d_ts += $"{TAB}{TAB}{TAB}{@readonly}{attributeSchemaName}: string;{NEW_LINE}";
+                        }
+                        else if (attribute is MultiSelectPicklistAttributeMetadata)
+                        {
+                            if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                            _d_ts += $"{TAB}{TAB}{TAB}{@readonly}{attributeSchemaName}: Array<string>;{NEW_LINE}";
+                        }
+                        else
+                            _d_ts += $"{attribute.AttributeType}-{attributeSchemaName}-{attribute.LogicalName};{NEW_LINE}";
+                        break;
+                }
+            }
+            _d_ts += $"{TAB}{TAB}}}{NEW_LINE}";
             _d_ts += $"{TAB}}}{NEW_LINE}";
             return _d_ts;
         }
@@ -291,6 +449,15 @@ namespace DynamicsCrm.DevKit.Shared
             _d_ts += $"{TAB}{TAB}{@readonly}{schemaName}: string;{NEW_LINE}";
             _d_ts += $"{TAB}{TAB}{@readonly}{schemaName}_Timestamp: number;{NEW_LINE}";
             _d_ts += $"{TAB}{TAB}{@readonly}{schemaName}_URL: string;{NEW_LINE}";
+            return _d_ts;
+        }
+
+        private static string GetGeneratorImageCode_d_ts_2(string schemaName, string logicalName, string @readonly)
+        {
+            var _d_ts = string.Empty;
+            _d_ts += $"{TAB}{TAB}{TAB}{@readonly}{schemaName}: string;{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}{TAB}{@readonly}{schemaName}_Timestamp: string;{NEW_LINE}";
+            _d_ts += $"{TAB}{TAB}{TAB}{@readonly}{schemaName}_URL: string;{NEW_LINE}";
             return _d_ts;
         }
 
