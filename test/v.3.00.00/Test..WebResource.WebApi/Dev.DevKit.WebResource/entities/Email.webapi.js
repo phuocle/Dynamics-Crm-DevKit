@@ -4,68 +4,65 @@ var DevKit;
 (function (DevKit) {
 	'use strict';
 	DevKit.EmailApi = function (e) {
-		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-        function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
-            var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-            var property = {};
-            var getFormattedValue = function () {
-                if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-                    return EMPTY_STRING;
-                }
-                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-                    if (entity[logicalName + l] === entityLogicalName) {
-                        return entity[logicalName + f];
-                    }
-                    return EMPTY_STRING;
-                }
-                if (isMultiOptionSet) {
-                    return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
-                }
-                return entity[logicalName + f];
-            };
-            var getValue = function () {
-                if (entity[logicalName] === undefined || entity[logicalName] === null) {
-                    return null;
-                }
-                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-                    if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
-                        return entity[logicalName];
-                    }
-                    return null;
-                }
-                if (isMultiOptionSet) {
-                    return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
-                }
-                return entity[logicalName];
-            };
-            var setValue = function (value) {
-                if (isMultiOptionSet) value = value.join(',');
-                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-                    value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
-                    upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
-                } else {
-                    upsertEntity[logicalName] = value;
-                }
-                entity[logicalName] = value;
-            };
-            Object.defineProperty(property, 'FormattedValue', {
-                get: getFormattedValue
-            });
-            if (readOnly) {
-                Object.defineProperty(property, 'Value', {
-                    get: getValue
-                });
-            }
-            else {
-                Object.defineProperty(property, 'Value', {
-                    get: getValue,
-                    set: setValue
-                });
-            }
-            return property;
-        }
-		var email = {
+		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
+			var getFormattedValue = function () {
+				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
+					return '';
+				}
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					if (entity[logicalName + l] === entityLogicalName) {
+						return entity[logicalName + f];
+					}
+					return '';
+				}
+				if (isMultiOptionSet) {
+					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
+				}
+				return entity[logicalName + f];
+			};
+			var getValue = function () {
+				if (entity[logicalName] === undefined || entity[logicalName] === null) {
+					return null;
+				}
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
+						return entity[logicalName];
+					}
+					return null;
+				}
+				if (isMultiOptionSet) {
+					return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
+				}
+				return entity[logicalName];
+			};
+			var setValue = function (value) {
+				if (isMultiOptionSet) value = value.join(',');
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					value = value.replace('{', '').replace('}', '');
+					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
+				} else {
+					upsertEntity[logicalName] = value;
+				}
+				entity[logicalName] = value;
+			};
+			Object.defineProperty(obj.FormattedValue, field, {
+				get: getFormattedValue
+			});
+			if (readOnly) {
+				Object.defineProperty(obj, field, {
+					get: getValue
+				});
+			}
+			else {
+				Object.defineProperty(obj, field, {
+					get: getValue,
+					set: setValue
+				});
+			}
+		}
+		var _email = {
 			acceptingentityid_queue: { b: 'acceptingentityid_queue', a: '_acceptingentityid_value', c: 'queues', d: 'queue' },
 			acceptingentityid_systemuser: { b: 'acceptingentityid_systemuser', a: '_acceptingentityid_value', c: 'systemusers', d: 'systemuser' },
 			ActivityAdditionalParams: { a: 'activityadditionalparams' },
@@ -95,9 +92,9 @@ var DevKit;
 			EmailReminderStatus: { a: 'emailreminderstatus', r: true },
 			EmailReminderText: { a: 'emailremindertext' },
 			EmailReminderType: { a: 'emailremindertype' },
-			emailsender_account: { b: 'emailsender_account', a: '_emailsender_value', c: 'accounts', d: 'account' },
-			emailsender_contact: { b: 'emailsender_contact', a: '_emailsender_value', c: 'contacts', d: 'contact' },
-			emailsender_queue: { b: 'emailsender_queue', a: '_emailsender_value', c: 'queues', d: 'queue' },
+			emailsender_account: { b: 'emailsender_account', a: '_emailsender_value', c: 'accounts', d: 'account', r: true },
+			emailsender_contact: { b: 'emailsender_contact', a: '_emailsender_value', c: 'contacts', d: 'contact', r: true },
+			emailsender_queue: { b: 'emailsender_queue', a: '_emailsender_value', c: 'queues', d: 'queue', r: true },
 			emailsender_systemuser: { b: 'emailsender_systemuser', a: '_emailsender_value', c: 'systemusers', d: 'systemuser', r: true },
 			EmailTrackingId: { a: 'emailtrackingid' },
 			ExchangeRate: { a: 'exchangerate', r: true },
@@ -114,6 +111,7 @@ var DevKit;
 			LastOpenedTime_UtcDateAndTime: { a: 'lastopenedtime' },
 			LinksClickedCount: { a: 'linksclickedcount' },
 			MessageId: { a: 'messageid' },
+			MessageIdDupCheck: { a: 'messageiddupcheck' },
 			MimeType: { a: 'mimetype' },
 			ModifiedBy: { b: 'modifiedby', a: '_modifiedby_value', c: 'systemusers', d: 'systemuser', r: true },
 			ModifiedOn_UtcDateAndTime: { a: 'modifiedon', r: true },
@@ -142,7 +140,6 @@ var DevKit;
 			ReminderActionCardId: { a: 'reminderactioncardid' },
 			ReplyCount: { a: 'replycount', r: true },
 			ReservedForInternalUse: { a: 'reservedforinternaluse' },
-			SafeDescription: { a: 'safedescription', r: true },
 			ScheduledDurationMinutes: { a: 'scheduleddurationminutes', r: true },
 			ScheduledEnd_UtcDateAndTime: { a: 'scheduledend' },
 			ScheduledStart_UtcDateAndTime: { a: 'scheduledstart' },
@@ -152,7 +149,6 @@ var DevKit;
 			SentOn_UtcDateAndTime: { a: 'senton', r: true },
 			SLAId: { b: 'slaid', a: '_slaid_value', c: 'slas', d: 'sla' },
 			SLAInvokedId: { b: 'slainvokedid', a: '_slainvokedid_value', c: 'slas', d: 'sla', r: true },
-			SLAName: { a: 'slaname', r: true },
 			SortDate_UtcDateAndTime: { a: 'sortdate' },
 			StageId: { a: 'stageid' },
 			StateCode: { a: 'statecode' },
@@ -171,14 +167,17 @@ var DevKit;
 		};
 		if (e === undefined) e = {};
 		var u = {};
-		for (var field in email) {
-			var a = email[field].a;
-			var b = email[field].b;
-			var c = email[field].c;
-			var d = email[field].d;
-			var g = email[field].g;
-			var r = email[field].r;
-			email[field] = webApiField(e, a, b, c, d, r, u, g);
+		var email = {};
+		email.ODataEntity = e;
+		email.FormattedValue = {};
+		for (var field in _email) {
+			var a = _email[field].a;
+			var b = _email[field].b;
+			var c = _email[field].c;
+			var d = _email[field].d;
+			var g = _email[field].g;
+			var r = _email[field].r;
+			webApiField(email, field, e, a, b, c, d, r, u, g);
 		}
 		Object.defineProperty(email, 'ActivityParties', {
 			get: function () { return e['email_activity_parties']; },
@@ -191,7 +190,7 @@ var DevKit;
 		email.EntityName = 'email';
 		email.EntityCollectionName = 'emails';
 		email['@odata.etag'] = e['@odata.etag'];
-		email.getAliasedValue = function (alias, isMultiOptionSet) {
+		email.getAliasedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias] === undefined || e[alias] === null) {
 				return null;
 			}
@@ -200,9 +199,9 @@ var DevKit;
 			}
 			return e[alias];
 		}
-		email.getAliasedFormattedValue = function (alias, isMultiOptionSet) {
+		email.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -216,6 +215,16 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.Email = {
+		ActivityTypeCode : {
+			Activity_record_for_the_Teams_chat: 10268,
+			Appointment: 4201,
+			Email: 4202,
+			Fax: 4204,
+			Letter: 4207,
+			Phone_Call: 4210,
+			Recurring_Appointment: 4251,
+			Task: 4212
+		},
 		CorrelationMethod : {
 			ConversationIndex: 5,
 			CustomCorrelation: 7,
@@ -267,15 +276,14 @@ var OptionSet;
 			Sending: 7,
 			Sent: 3
 		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
-
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 	};
 })(OptionSet || (OptionSet = {}));

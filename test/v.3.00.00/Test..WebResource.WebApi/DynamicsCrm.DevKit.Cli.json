@@ -36,5 +36,15 @@
         }
       ]
     }
+  ],
+  "generators": [
+    {
+      "profile": "JS-WEBAPI",
+      "rootnamespace": "DevKit",
+      "rootfolder": "",
+      "type": "JsWebApi",
+      "entities": "account,email,activityparty",
+      "version": "2"
+    }
   ]
 }

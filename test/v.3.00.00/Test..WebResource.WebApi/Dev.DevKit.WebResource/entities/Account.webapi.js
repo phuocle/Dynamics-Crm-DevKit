@@ -58,7 +58,7 @@ var DevKit;
 			else {
 				Object.defineProperty(obj, field, {
 					get: getValue,
-					set: setValue,
+					set: setValue
 				});
 			}
 		}
@@ -163,7 +163,6 @@ var DevKit;
 			MarketCap: { a: 'marketcap' },
 			MarketCap_Base: { a: 'marketcap_base', r: true },
 			MarketingOnly: { a: 'marketingonly' },
-			MasterAccountIdName: { a: 'masteraccountidname', r: true },
 			MasterId: { b: 'masterid', a: '_masterid_value', c: 'accounts', d: 'account', r: true },
 			Merged: { a: 'merged', r: true },
 			ModifiedBy: { b: 'modifiedby', a: '_modifiedby_value', c: 'systemusers', d: 'systemuser', r: true },
@@ -198,7 +197,6 @@ var DevKit;
 			SIC: { a: 'sic' },
 			SLAId: { b: 'slaid', a: '_slaid_value', c: 'slas', d: 'sla' },
 			SLAInvokedId: { b: 'slainvokedid', a: '_slainvokedid_value', c: 'slas', d: 'sla', r: true },
-			SLAName: { a: 'slaname', r: true },
 			StageId: { a: 'stageid' },
 			StateCode: { a: 'statecode' },
 			StatusCode: { a: 'statuscode' },
@@ -246,7 +244,7 @@ var DevKit;
 		}
 		account.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -319,7 +317,7 @@ var OptionSet;
 			Vendor: 11
 		},
 		devkit_CategoryCode : {
-			Business: 1,
+			Bu_siness: 1,
 			Family: 2,
 			Other: 5,
 			Sales: 4,
@@ -410,15 +408,14 @@ var OptionSet;
 		TerritoryCode : {
 			Default_Value: 1
 		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
-
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 	};
 })(OptionSet || (OptionSet = {}));

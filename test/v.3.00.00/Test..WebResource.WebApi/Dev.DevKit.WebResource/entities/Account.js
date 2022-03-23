@@ -22,8 +22,17 @@ var formAccount = (function () {
     <attribute name='accountnumber'/>
     <attribute name='telephone1'/>
     <attribute name='creditlimit'/>
-	<attribute name='creditlimit_base'/>
+	<attribute name='devkit_categorycode'/>
+	<attribute name='primarycontactid'/>
     <order attribute='name' descending='false'/>
+    <link-entity name='contact' from='contactid' to='primarycontactid' visible='false' link-type='outer' alias='primarycontactid'>
+      <attribute name='lastname'/>
+      <attribute name='fullname'/>
+      <attribute name='firstname'/>
+    </link-entity>
+    <link-entity name='account' from='accountid' to='parentaccountid' visible='false' link-type='outer' alias='parentaccountid'>
+      <attribute name='devkit_categorycode'/>
+    </link-entity>
     <filter type='and'>
       <condition attribute='accountid' operator='eq' value='${fetchData.accountid}'/>
     </filter>
@@ -39,10 +48,22 @@ var formAccount = (function () {
 		accountApi.CreditLimit = 123.455;
 		accountApi.PrimaryContactId = "AAAA";
 		var a = accountApi.CreatedOn_UtcDateAndTime;
-		var formatName = accountApi.FormattedValue.Name;
+		var formatName = accountApi.FormattedValue.CreditLimit;
+		accountApi.OwnerId_systemuser
 		if (accountApi.AccountCategoryCode === OptionSet.Account.AccountCategoryCode.Preferred_Customer) {
 		}
+		var contactFirstName = accountApi.getAliasedValue("primarycontactid.firstname");
+		var contactFirstName2 = accountApi.getAliasedFormattedValue("primarycontactid.firstname");
+		var a2 = accountApi.getAliasedValue("parentaccountid.devkit_categorycode", true);
+		var a3 = accountApi.getAliasedFormattedValue("parentaccountid.devkit_categorycode", true);
+		debugger;
 
+		var create = new DevKit.AccountApi();
+		create.Name = "ABC";
+		create.AccountCategoryCode = OptionSet.Account.AccountCategoryCode.Standard;
+		create.devkit_CategoryCode = [OptionSet.Account.devkit_CategoryCode.Bu_siness, OptionSet.Account.devkit_CategoryCode.Family];
+		create.PrimaryContactId = "5099a63b-b7a9-ec11-9840-00224817a323";
+		//var accountId = await Xrm.WebApi.createRecord(create.EntityName, create.Entity);
 		debugger;
 	}
 	return {
