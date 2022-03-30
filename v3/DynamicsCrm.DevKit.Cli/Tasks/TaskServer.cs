@@ -1,5 +1,7 @@
 ﻿using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
+using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Tooling.Connector;
 using System;
@@ -8,6 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.ServiceModel;
 
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
@@ -101,22 +104,307 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             foreach (var file in files)
             {
-                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Deploy: ", ConsoleColor.White ,$"{Path.GetFileName(file)}");
+                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, ConsoleColor.White, $"{Path.GetFileName(file)}");
                 var types = GetTypes(file);
-                if (types.Count == 0)
+                if (!IsValidTypes(file, types)) continue;
+                DeployFile(file, types);
+            }
+        }
+
+        private void DeployFile(string file, List<TypeInfo> types)
+        {
+            var pluginAssemblyId = DeployAssembly(file);
+            if (pluginAssemblyId == null) return;
+            if (Arg?.OnlyUpdateAssembly?.Length > 0) return;
+            foreach (var type in types)
+            {
+                var attributes = GetCrmPluginRegistrationAttributes(type);
+                var pluginTypeId = DeployPluginType(pluginAssemblyId.Value, type, attributes[0]);
+                if (pluginTypeId == null) return;
+                if (IsWorkflowType(type)) continue;
+                foreach (var attribute in attributes)
                 {
-                    CliLog.WriteLineError(ConsoleColor.Yellow, $"Not found any valid types to deploy.");
-                    continue;
-                }
-                if (!IsValidTypes(types))
-                {
-                    continue;
-                }
-                if (!IsValidTypesWithCDS(types, Path.GetFileNameWithoutExtension(file)))
-                {
-                    continue;
+                    switch (attribute.PluginType)
+                    {
+                        case PluginType.Plugin:
+                        case PluginType.CustomAction:
+                            var pluginStepId = DeployPluginStep(pluginTypeId.Value, type, attribute);
+                            if (pluginStepId == null) return;
+                            break;
+                        case PluginType.DataProvider:
+                            break;
+                        case PluginType.CustomApi:
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
+        }
+
+        private Guid? DeployPluginStep(Guid pluginTypeId, TypeInfo type, CrmPluginRegistrationAttribute attribute)
+        {
+            if (attribute?.Message?.ToLower() == "update")
+            {
+                if (attribute?.FilteringAttributes?.Length == 0)
+                {
+                    CliLog.WriteLineError(ConsoleColor.Yellow, $"{type.FullName} Update message need provide FilteringAttributes value. Deploy assembly stopped.");
+                    return null;
+                }
+            }
+            var fetchData = new
+            {
+                plugintypeid = pluginTypeId,
+                name = attribute.Name,
+                sdkmessageidname = attribute.Message
+            };
+            var fetchXml = $@"
+<fetch>
+  <entity name='sdkmessageprocessingstep'>
+    <all-attributes />
+    <filter type='and'>
+      <condition attribute='plugintypeid' operator='eq' value='{fetchData.plugintypeid}'/>
+      <condition attribute='name' operator='eq' value='{fetchData.name}'/>
+      <condition attribute='sdkmessageidname' operator='eq' value='{fetchData.sdkmessageidname}'/>
+    </filter>
+  </entity>
+</fetch>";
+            var rows = CrmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            if (rows.Entities.Count > 0)
+            {
+                if (rows.Entities.Count > 0 && rows.Entities.Count != 1)
+                {
+                    CliLog.WriteLineError(ConsoleColor.Yellow, $"Found more than 1 step name {type.FullName}. Deploy assembly stopped.");
+                    return null;
+                }
+            }
+
+            return null;
+        }
+
+        private Guid? DeployPluginType(Guid pluginAssemblyId, TypeInfo type, CrmPluginRegistrationAttribute attribute)
+        {
+            var fetchData = new
+            {
+                typename = type.FullName
+            };
+            var fetchXml = $@"
+<fetch>
+  <entity name='plugintype'>
+    <attribute name='plugintypeid' />
+    <attribute name='name' />
+    <attribute name='typename' />
+    <attribute name='friendlyname' />
+    <attribute name='workflowactivitygroupname' />
+    <attribute name='description' />
+    <attribute name='customworkflowactivityinfo' />
+    <filter type='and'>
+      <condition attribute='typename' operator='eq' value='{fetchData.typename}'/>
+    </filter>
+  </entity>
+</fetch>";
+            var rows = CrmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            if (rows.Entities.Count > 0)
+            {
+                if (rows.Entities.Count > 0 && rows.Entities.Count != 1)
+                {
+                    CliLog.WriteLineError(ConsoleColor.Yellow, $"Found more than 1 type name {type.FullName}. Deploy assembly stopped.");
+                    return null;
+                }
+            }
+            var pluginType = new Entity("plugintype");
+            if (attribute.PluginType == PluginType.Workflow)
+            {
+                pluginType["name"] = attribute.Name;
+                pluginType["pluginassemblyid"] = new EntityReference("pluginassembly", pluginAssemblyId);
+                pluginType["typename"] = type.FullName;
+                pluginType["friendlyname"] = attribute.FriendlyName;
+                pluginType["workflowactivitygroupname"] = attribute.GroupName;
+            }
+            else
+            {
+                pluginType["name"] = type.FullName;
+                pluginType["pluginassemblyid"] = new EntityReference("pluginassembly", pluginAssemblyId);
+                pluginType["typename"] = type.FullName;
+                pluginType["friendlyname"] = type.FullName;
+            };
+            if (rows.Entities.Count == 0 || (rows.Entities.Count > 0 && string.IsNullOrWhiteSpace(rows.Entities[0].GetAttributeValue<string>("description"))))
+            {
+                pluginType["description"] = Const.WindowTitle;
+            }
+            if (rows.Entities.Count == 0)
+            {
+                var request = new CreateRequest
+                {
+                    Target = pluginType
+                };
+                request.Parameters.Add("SolutionUniqueName", JsonServer.solution);
+                CliLog.WriteLineWarning(SPACE, SPACE, ConsoleColor.Red, "Registering ", ConsoleColor.White, $"{attribute.PluginType.ToString()} Type: ", ConsoleColor.Cyan, type.FullName);
+                var response = (CreateResponse)CrmServiceClient.Execute(request);
+                return response.id;
+            }
+            else
+            {
+                pluginType["plugintypeid"] = rows.Entities[0].Id;
+                var request = new UpdateRequest
+                {
+                    Target = pluginType
+                };
+                request.Parameters.Add("SolutionUniqueName", JsonServer.solution);
+                try
+                {
+                    CrmServiceClient.Execute(request);
+                }
+                catch (FaultException fe)
+                {
+                    CliLog.WriteLine(ConsoleColor.White, "|");
+                    CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Red, CliAction.Error, ConsoleColor.White, fe.Message);
+                    CliLog.WriteLine(ConsoleColor.White, "|");
+                    throw;
+                }
+                if (IsWorkflowType(type))
+                {
+                    var old = rows.Entities[0].GetAttributeValue<string>("customworkflowactivityinfo");
+                    var @new = CrmServiceClient.Retrieve("plugintype", rows.Entities[0].Id, new ColumnSet("customworkflowactivityinfo")).GetAttributeValue<string>("customworkflowactivityinfo");
+                    if (IsEqualsWorkflowType(old, @new))
+                    {
+                        CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, ConsoleColor.Green, CliAction.DoNothing, ConsoleColor.White, $"{attribute.PluginType.ToString()} Type: ", ConsoleColor.Cyan, type.FullName);
+                    }
+                    else
+                    {
+                        CliLog.WriteLineWarning(SPACE, SPACE, ConsoleColor.Red, CliAction.Updated, ConsoleColor.White, $"{attribute.PluginType.ToString()} Type: ", ConsoleColor.Cyan, type.FullName);
+                    }
+                }
+                else
+                {
+                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, ConsoleColor.Green, CliAction.DoNothing, ConsoleColor.White, $"{attribute.PluginType.ToString()} Type: ", ConsoleColor.Cyan, type.FullName);
+                }
+            }
+            return rows.Entities[0].Id;
+        }
+
+        private bool IsEqualsWorkflowType(string old, string @new)
+        {
+            return old == @new;
+        }
+
+        private bool IsEqualsPluginType(Entity oldEntity, Entity newEntity)
+        {
+            if (
+                oldEntity.GetAttributeValue<string>("name") != newEntity.GetAttributeValue<string>("name") ||
+                oldEntity.GetAttributeValue<string>("typename") != newEntity.GetAttributeValue<string>("typename") ||
+                oldEntity.GetAttributeValue<string>("friendlyname") != newEntity.GetAttributeValue<string>("friendlyname") ||
+                oldEntity.GetAttributeValue<string>("workflowactivitygroupname") != newEntity.GetAttributeValue<string>("workflowactivitygroupname")
+               )
+                return false;
+            return true;
+        }
+
+        private Guid? DeployAssembly(string file)
+        {
+            var assembly = Assembly.ReflectionOnlyLoadFrom(file);
+            var assemblyProperties = assembly.GetName().FullName.Split(",= ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+            var assemblyName = assemblyProperties[0];
+            var fetchData = new
+            {
+                name = assemblyName
+            };
+            var fetchXml = $@"
+<fetch>
+  <entity name='pluginassembly'>
+    <attribute name='pluginassemblyid' />
+    <attribute name='content' />
+    <filter type='and'>
+      <condition attribute='name' operator='eq' value='{fetchData.name}'/>
+    </filter>
+  </entity>
+</fetch>";
+            var rows = CrmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            if (rows.Entities.Count > 0)
+            {
+                if (rows.Entities.Count > 0 && rows.Entities.Count != 1)
+                {
+                    CliLog.WriteLineError(ConsoleColor.Yellow, $"Found more than 1 plugin assembly name {assemblyName}. Deploy assembly stopped.");
+                    return null;
+                }
+            }
+            var newContent = Convert.ToBase64String(File.ReadAllBytes(file));
+            var plugin = new Entity("pluginassembly")
+            {
+                ["content"] = newContent,
+                ["name"] = assemblyProperties[0],
+                ["culture"] = assemblyProperties[4],
+                ["version"] = assemblyProperties[2],
+                ["publickeytoken"] = assemblyProperties[6],
+                ["sourcetype"] = new OptionSetValue(0),
+                ["isolationmode"] = GetIsolationMode(file)
+            };
+            if (rows.Entities.Count == 0)
+            {
+                var request = new CreateRequest
+                {
+                    Target = plugin
+                };
+                request.Parameters.Add("SolutionUniqueName", JsonServer.solution);
+                CliLog.WriteLineWarning(SPACE, ConsoleColor.Red, "Registering", ConsoleColor.White, " Assembly ", ConsoleColor.Cyan, assemblyName);
+                var response = (CreateResponse)CrmServiceClient.Execute(request);
+                return response.id;
+            }
+            else
+            {
+                var oldContent = rows.Entities[0].GetAttributeValue<string>("content");
+                if (IsEqualsAssembly(oldContent, newContent))
+                {
+                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, ConsoleColor.Green, CliAction.DoNothing, ConsoleColor.White, "Assembly ", ConsoleColor.Cyan, assemblyName);
+                    return rows.Entities[0].Id;
+                }
+                else
+                {
+                    plugin["pluginassemblyid"] = rows.Entities[0].Id;
+                    var request = new UpdateRequest
+                    {
+                        Target = plugin
+                    };
+                    request.Parameters.Add("SolutionUniqueName", JsonServer.solution);
+                    CliLog.WriteLineWarning(SPACE, ConsoleColor.Red, CliAction.Updated, ConsoleColor.White, "Assembly ", ConsoleColor.Cyan, assemblyName);
+                    try
+                    {
+                        CrmServiceClient.Execute(request);
+                    }
+                    catch (FaultException fe)
+                    {
+                        CliLog.WriteLine(ConsoleColor.White, "|");
+                        CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Red, CliAction.Error, ConsoleColor.White, fe.Message);
+                        CliLog.WriteLine(ConsoleColor.White, "|");
+                        throw;
+                    }
+                }
+            }
+            return rows.Entities[0].Id;
+        }
+
+        private bool IsEqualsAssembly(string oldContent, string newContent)
+        {
+            return oldContent == newContent;
+        }
+
+        private const string SPACE = "  ";
+        private bool IsValidTypes(string file, List<TypeInfo> types)
+        {
+            if (types.Count == 0)
+            {
+                CliLog.WriteLineError(ConsoleColor.Yellow, $"Not found any valid types to deploy.");
+                return false;
+            }
+            if (!IsValidTypes(types))
+            {
+                return false;
+            }
+            if (!IsValidTypesWithCDS(types, Path.GetFileNameWithoutExtension(file)))
+            {
+                return false;
+            }
+            return true;
         }
 
         private bool IsValidTypesWithCDS(List<TypeInfo> types, string fileNameWithoutExtension)
@@ -128,7 +416,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var fetchXml = $@"
 <fetch>
   <entity name='plugintype'>
-    <attribute name='name' />
+    <attribute name='typename' />
     <link-entity name='pluginassembly' from='pluginassemblyid' to='pluginassemblyid'>
       <filter>
         <condition attribute='name' operator='eq' value='{fetchData.name}'/>
@@ -140,10 +428,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             if (rows.Entities.Count == 0) return true;
             foreach (var entity in rows.Entities)
             {
-                var name = entity.GetAttributeValue<string>("name");
-                if (types.Count(x => x.Name == name) == 0)
+                var typeName = entity.GetAttributeValue<string>("typename");
+                if (types.Count(x => x.FullName == typeName) == 0)
                 {
-                    CliLog.WriteLineError(ConsoleColor.Yellow, $"Type: '{name}' not found in the assembly file. This type: '{name}' already registered to CRM/CDS. Deploy stopped.");
+                    CliLog.WriteLineError(ConsoleColor.Yellow, $"Type: '{typeName}' not found in the assembly file. This type: '{typeName}' already registered to CRM/CDS. Deploy assembly stopped.");
                     CliLog.WriteLineWarning(ConsoleColor.Yellow, $"If you need to deploy this assembly. Please manually remove this type from Plugin Registration Tool and try it again.");
                     return false;
                 }
@@ -158,7 +446,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 var attributes = GetCrmPluginRegistrationAttributes(type);
                 if (attributes.Count() > 1)
                 {
-                    if (IsCodeActivity(type))
+                    if (IsWorkflowType(type))
                     {
                         CliLog.WriteLineError(ConsoleColor.Yellow, $"Type '{type.FullName}' has multi attribute CrmPluginRegistration. Deploy stopped.");
                         return false;
@@ -259,9 +547,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     case "FilteringAttributes":
                         attribute.FilteringAttributes = (string)namedArgument.TypedValue.Value;
                         break;
-                    case "FilteringAllAttributes":
-                        attribute.FilteringAllAttributes = (bool)namedArgument.TypedValue.Value;
-                        break;
                     case "Name":
                         attribute.Name = (string)namedArgument.TypedValue.Value;
                         break;
@@ -292,9 +577,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     case "Image1Attributes":
                         attribute.Image1Attributes = (string)namedArgument.TypedValue.Value;
                         break;
-                    case "Image1AllAttributes":
-                        attribute.Image1AllAttributes = (bool)namedArgument.TypedValue.Value;
-                        break;
                     case "Image2Name":
                         attribute.Image2Name = (string)namedArgument.TypedValue.Value;
                         break;
@@ -306,9 +588,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         break;
                     case "Image2Attributes":
                         attribute.Image2Attributes = (string)namedArgument.TypedValue.Value;
-                        break;
-                    case "Image2AllAttributes":
-                        attribute.Image2AllAttributes = (bool)namedArgument.TypedValue.Value;
                         break;
                     case "Image3Name":
                         attribute.Image3Name = (string)namedArgument.TypedValue.Value;
@@ -322,9 +601,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     case "Image3Attributes":
                         attribute.Image3Attributes = (string)namedArgument.TypedValue.Value;
                         break;
-                    case "Image3AllAttributes":
-                        attribute.Image3AllAttributes = (bool)namedArgument.TypedValue.Value;
-                        break;
                     case "Image4Name":
                         attribute.Image4Name = (string)namedArgument.TypedValue.Value;
                         break;
@@ -336,9 +612,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         break;
                     case "Image4Attributes":
                         attribute.Image4Attributes = (string)namedArgument.TypedValue.Value;
-                        break;
-                    case "Image4AllAttributes":
-                        attribute.Image4AllAttributes = (bool)namedArgument.TypedValue.Value;
                         break;
                     case "PluginType":
                         hasNamedArgumentPluginType = true;
@@ -436,11 +709,26 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             return assembly;
         }
 
-        private bool IsCodeActivity(Type type)
+        private bool IsWorkflowType(Type type)
         {
             if (type?.Name == typeof(CodeActivity)?.Name) return true;
-            if (type?.BaseType != null) return IsCodeActivity(type?.BaseType);
+            if (type?.BaseType != null) return IsWorkflowType(type?.BaseType);
             return false;
+        }
+
+        private OptionSetValue GetIsolationMode(string file)
+        {
+            var types = GetTypes(file);
+            foreach (var type in types)
+            {
+                if (IsWorkflowType(type)) continue;
+                var attributes = GetCrmPluginRegistrationAttributes(type);
+                foreach (var attribute in attributes)
+                {
+                    if (attribute.IsolationMode == IsolationModeEnum.None) return new OptionSetValue(1);
+                }
+            }
+            return new OptionSetValue(2);
         }
     }
 }

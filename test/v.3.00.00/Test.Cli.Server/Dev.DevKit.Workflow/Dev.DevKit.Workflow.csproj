@@ -93,9 +93,11 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GetTeamMembers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SendEmailTemplate.cs" />
-    <None Include="ShareAccountWithTeamMembers.cs" />
+    <Compile Include="SetOwner.cs" />
+    <Compile Include="ShareAccountWithTeamMembers.cs" />
     <None Include="app.config" />
     <None Include="Dev.DevKit.Workflow.snk" />
     <None Include="deploy.debug.bat" />
