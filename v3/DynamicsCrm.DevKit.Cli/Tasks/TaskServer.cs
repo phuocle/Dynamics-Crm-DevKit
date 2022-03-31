@@ -1,7 +1,9 @@
 ﻿using DynamicsCrm.DevKit.Shared;
+using DynamicsCrm.DevKit.Shared.Entities;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
+using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Tooling.Connector;
 using System;
@@ -146,10 +148,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             if (attribute?.Message?.ToLower() == "update")
             {
-                if (attribute?.FilteringAttributes?.Length == 0)
+                if (attribute?.FilteringAttributes?.Trim().Length == 0)
                 {
                     CliLog.WriteLineError(ConsoleColor.Yellow, $"{type.FullName} Update message need provide FilteringAttributes value. Deploy assembly stopped.");
                     return null;
+                }
+                if (attribute?.FilteringAttributes.Trim() == "*")
+                {
+                    attribute.FilteringAttributes = null;
                 }
             }
             var fetchData = new
@@ -178,8 +184,204 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     return null;
                 }
             }
+            var sdkMessageFilterId = GetSdkMessageFilterId(attribute.EntityLogicalName, attribute.Message);
+            var sdkMessageId = GetSdkMessageId(attribute.EntityLogicalName, attribute.Message);
+            var impersonatingUserId = GetImpersonatingUserId(attribute.RunAs);
+            if (attribute.ExecutionMode == 0) attribute.DeleteAsyncOperation = false;
+            var pluginStep = new Entity("sdkmessageprocessingstep")
+            {
+                ["name"] = attribute.Name,
+                ["configuration"] = attribute.UnSecureConfiguration,
+                ["description"] = attribute.Description,
+                ["mode"] = new OptionSetValue(attribute.ExecutionMode == ExecutionModeEnum.Asynchronous ? 1 : 0),
+                ["rank"] = attribute.ExecutionOrder,
+                ["stage"] = new OptionSetValue((int)attribute.Stage),
+                ["asyncautodelete"] = attribute.DeleteAsyncOperation,
+                ["plugintypeid"] = new EntityReference("plugintype", pluginTypeId),
+                ["sdkmessagefilterid"] = sdkMessageFilterId,
+                ["sdkmessageid"] = sdkMessageId,
+                ["filteringattributes"] = attribute.FilteringAttributes?.Replace(" ", ""),
+                ["impersonatinguserid"] = impersonatingUserId != null ? new EntityReference("systemuser", impersonatingUserId.Value) : null,
+                ["supporteddeployment"] = (attribute.Server && attribute.Offline) ? new OptionSetValue(2/*Both*/) : (!attribute.Server && attribute.Offline ? new OptionSetValue(1/*Offline*/) : new OptionSetValue(0/*Server*/))
+            };
+            if (rows.Entities.Count == 0)
+            {
+                if (attribute.SecureConfiguration?.Trim().Length > 0)
+                {
+                    var secureEntity = new Entity("sdkmessageprocessingstepsecureconfig");
+                    secureEntity["secureconfig"] = attribute.SecureConfiguration;
+                    var sdkmessageprocessingstepsecureconfigid = CrmServiceClient.Create(secureEntity);
+                    pluginStep["sdkmessageprocessingstepsecureconfigid"] = new EntityReference("sdkmessageprocessingstepsecureconfig", sdkmessageprocessingstepsecureconfigid);
+                }
+                var request = new CreateRequest
+                {
+                    Target = pluginStep
+                };
+                request.Parameters.Add("SolutionUniqueName", JsonServer.solution);
+                CliLog.WriteLineWarning(SPACE, SPACE, SPACE, ConsoleColor.Red, CliAction.Register, ConsoleColor.White, $"{attribute.Message} Step: ", ConsoleColor.Cyan, attribute.Name);
+                try
+                {
+                    var response = (CreateResponse)CrmServiceClient.Execute(request);
+                    return response.id;
+                }
+                catch (FaultException fe)
+                {
+                    if (fe.Message.Contains("The dependent component Attribute "))
+                    {
+                        CliLog.WriteLineError(ConsoleColor.Yellow, $"Plugin Step {attribute.Name} have invalid Image Attribute {attribute.FilteringAttributes}. Deploy assembly stopped.");
+                    }
+                    return null;
+                }
+                catch (Exception e)
+                {
+                    CliLog.WriteLineError(ConsoleColor.Yellow, $"{e.Message}. Deploy assembly stopped.");
+                    return null;
+                }
+            }
+            else
+            {
+                pluginStep["sdkmessageprocessingstepid"] = rows.Entities[0].Id;
+                var hasChangedPluginStep = false;
+                var secureEntity = GetSecureEntity(rows.Entities[0].Id);
+                if (attribute.SecureConfiguration?.Trim().Length == 0 && secureEntity != null) //delete secure value
+                {
+                    var sdkmessageprocessingstepsecureconfigid = (Guid?)secureEntity.GetAttributeValue<AliasedValue>("s.sdkmessageprocessingstepsecureconfigid")?.Value;
+                    if (sdkmessageprocessingstepsecureconfigid.HasValue)
+                    {
+                        CrmServiceClient.Delete("sdkmessageprocessingstepsecureconfig", sdkmessageprocessingstepsecureconfigid.Value);
+                        hasChangedPluginStep = true;
+                    }
+                }
+                else if (attribute.SecureConfiguration?.Trim().Length > 0 && secureEntity != null) //exist secure
+                {
+                    var sdkmessageprocessingstepsecureconfigid = (Guid?)secureEntity.GetAttributeValue<AliasedValue>("s.sdkmessageprocessingstepsecureconfigid")?.Value;
+                    if (sdkmessageprocessingstepsecureconfigid.HasValue)
+                    {
+                        var old = (string)secureEntity.GetAttributeValue<AliasedValue>("s.secureconfig")?.Value;
+                        if (old != attribute.SecureConfiguration)
+                        {
+                            var update = new Entity("sdkmessageprocessingstepsecureconfig", sdkmessageprocessingstepsecureconfigid.Value);
+                            update["secureconfig"] = attribute.SecureConfiguration;
+                            CrmServiceClient.Update(update);
+                            hasChangedPluginStep = true;
+                        }
+                    }
+                }
+                else if (attribute.SecureConfiguration?.Trim().Length > 0 && secureEntity == null) //create the secure
+                {
+                    var create = new Entity("sdkmessageprocessingstepsecureconfig");
+                    create["secureconfig"] = attribute.SecureConfiguration;
+                    var sdkmessageprocessingstepsecureconfigid = CrmServiceClient.Create(secureEntity);
+                    pluginStep["sdkmessageprocessingstepsecureconfigid"] = new EntityReference("sdkmessageprocessingstepsecureconfig", sdkmessageprocessingstepsecureconfigid);
+                    hasChangedPluginStep = true;
+                }
+                if (!IsChangedPluginStep(hasChangedPluginStep, rows.Entities[0], pluginStep))
+                {
+                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DoNothing, ConsoleColor.White, $"{attribute.Message} Step: ", ConsoleColor.Cyan, type.Name);
+                }
+                else
+                {
+                    var request = new UpdateRequest
+                    {
+                        Target = pluginStep
+                    };
+                    request.Parameters.Add("SolutionUniqueName", JsonServer.solution);
+                    CliLog.WriteLineWarning(SPACE, SPACE, SPACE, ConsoleColor.Red, CliAction.Updated, ConsoleColor.White, $"{attribute.Message} Step: ", ConsoleColor.Cyan, type.Name);
+                    try
+                    {
+                        CrmServiceClient.Execute(request);
+                    }
+                    catch (FaultException fe)
+                    {
+                        if (fe.Message.Contains("The dependent component Attribute "))
+                        {
+                            CliLog.WriteLineError(ConsoleColor.Yellow, $"Plugin Step {attribute.Name} have invalid Image Attribute {attribute.FilteringAttributes}. Deploy assembly stopped.");
+                        }
+                        return null;
+                    }
+                    catch (Exception e)
+                    {
+                        CliLog.WriteLineError(ConsoleColor.Yellow, $"{e.Message}. Deploy assembly stopped.");
+                        return null;
+                    }
+                }
+            }
+            return rows.Entities[0].Id;
+        }
 
-            return null;
+        private bool IsChangedPluginStep(bool alreadyChanged, Entity _old, Entity _new)
+        {
+            if (alreadyChanged) return true;
+            var old = new SdkMessageProcessingStep(_old);
+            var @new = new SdkMessageProcessingStep(_new);
+            if (
+                old.Name != @new.Name ||
+                (old.Configuration ?? string.Empty) != @new.Configuration ||
+                (old.Description ?? string.Empty) != @new.Description ||
+                old.Mode != @new.Mode ||
+                old.Rank != @new.Rank ||
+                old.Stage != @new.Stage ||
+                old.AsyncAutoDelete != @new.AsyncAutoDelete ||
+                //plutintypeid
+                old.SdkMessageFilterId?.Id != @new.SdkMessageFilterId?.Id ||
+                old.SdkMessageId?.Id != @new.SdkMessageId?.Id ||
+                (old.FilteringAttributes ?? string.Empty) != @new.FilteringAttributes ||
+                old.ImpersonatingUserId?.Id != @new.ImpersonatingUserId?.Id ||
+                old.SupportedDeployment != @new.SupportedDeployment)
+                return true;
+            return false;
+            ;
+        }
+
+        //private string GetAllAttributes(string entityLogicalName)
+        //{
+        //    var retrieveEntityRequest = new RetrieveEntityRequest();
+        //    retrieveEntityRequest.LogicalName = entityLogicalName;
+        //    retrieveEntityRequest.EntityFilters = EntityFilters.Attributes;
+        //    var response = (RetrieveEntityResponse)CrmServiceClient.Execute(retrieveEntityRequest);
+        //    if (response == null) return string.Empty;
+        //    var attributes = string.Empty;
+        //    foreach (var attributeMetadata in response.EntityMetadata.Attributes)
+        //    {
+        //        if (attributeMetadata.AttributeOf != null) continue;
+        //        //if (attributeMetadata.IsPrimaryId != null && attributeMetadata.IsPrimaryId.Value) continue;
+        //        if (attributeMetadata.IsRenameable == null) continue;
+        //        if (attributes.Length == 0)
+        //        {
+        //            attributes = attributeMetadata.LogicalName;
+        //        }
+        //        else
+        //        {
+        //            attributes += $",{attributeMetadata.LogicalName}";
+        //        }
+        //    }
+        //    return attributes;
+        //}
+
+        private Entity GetSecureEntity(Guid pluginStepId)
+        {
+            var fetchData = new
+            {
+                sdkmessageprocessingstepid = pluginStepId
+            };
+            var fetchXml = $@"
+<fetch>
+  <entity name='sdkmessageprocessingstep'>
+    <attribute name='name' />
+    <attribute name='sdkmessageprocessingstepid' />
+    <filter>
+      <condition attribute='sdkmessageprocessingstepid' operator='eq' value='{fetchData.sdkmessageprocessingstepid}'/>
+    </filter>
+    <link-entity name='sdkmessageprocessingstepsecureconfig' from='sdkmessageprocessingstepsecureconfigid' to='sdkmessageprocessingstepsecureconfigid' link-type='outer' alias='s'>
+      <attribute name='secureconfig' />
+      <attribute name='sdkmessageprocessingstepsecureconfigid' />
+    </link-entity>
+  </entity>
+</fetch>";
+
+            var rows = CrmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            if (rows.Entities.Count != 1) return null;
+            return rows.Entities[0];
         }
 
         private Guid? DeployPluginType(Guid pluginAssemblyId, TypeInfo type, CrmPluginRegistrationAttribute attribute)
@@ -228,9 +430,15 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 pluginType["typename"] = type.FullName;
                 pluginType["friendlyname"] = type.FullName;
             };
-            if (rows.Entities.Count == 0 || (rows.Entities.Count > 0 && string.IsNullOrWhiteSpace(rows.Entities[0].GetAttributeValue<string>("description"))))
+            if (string.IsNullOrWhiteSpace(attribute.Description)) {
+                if (rows.Entities.Count == 0 || (rows.Entities.Count > 0 && string.IsNullOrWhiteSpace(rows.Entities[0].GetAttributeValue<string>("description"))))
+                {
+                    pluginType["description"] = Const.WindowTitle;
+                }
+            }
+            else
             {
-                pluginType["description"] = Const.WindowTitle;
+                pluginType["description"] = attribute.Description;
             }
             if (rows.Entities.Count == 0)
             {
@@ -239,7 +447,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     Target = pluginType
                 };
                 request.Parameters.Add("SolutionUniqueName", JsonServer.solution);
-                CliLog.WriteLineWarning(SPACE, SPACE, ConsoleColor.Red, "Registering ", ConsoleColor.White, $"{attribute.PluginType.ToString()} Type: ", ConsoleColor.Cyan, type.FullName);
+                CliLog.WriteLineWarning(SPACE, SPACE, ConsoleColor.Red, CliAction.Register, ConsoleColor.White, $"{attribute.PluginType.ToString()} Type: ", ConsoleColor.Cyan, type.FullName);
                 var response = (CreateResponse)CrmServiceClient.Execute(request);
                 return response.id;
             }
@@ -257,10 +465,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 catch (FaultException fe)
                 {
-                    CliLog.WriteLine(ConsoleColor.White, "|");
-                    CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Red, CliAction.Error, ConsoleColor.White, fe.Message);
-                    CliLog.WriteLine(ConsoleColor.White, "|");
-                    throw;
+                    CliLog.WriteLineError(ConsoleColor.Yellow, $"{fe.Message}. Deploy assembly stopped.");
+                    return null;
                 }
                 if (IsWorkflowType(type))
                 {
@@ -288,17 +494,17 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             return old == @new;
         }
 
-        private bool IsEqualsPluginType(Entity oldEntity, Entity newEntity)
-        {
-            if (
-                oldEntity.GetAttributeValue<string>("name") != newEntity.GetAttributeValue<string>("name") ||
-                oldEntity.GetAttributeValue<string>("typename") != newEntity.GetAttributeValue<string>("typename") ||
-                oldEntity.GetAttributeValue<string>("friendlyname") != newEntity.GetAttributeValue<string>("friendlyname") ||
-                oldEntity.GetAttributeValue<string>("workflowactivitygroupname") != newEntity.GetAttributeValue<string>("workflowactivitygroupname")
-               )
-                return false;
-            return true;
-        }
+        //private bool IsEqualsPluginType(Entity oldEntity, Entity newEntity)
+        //{
+        //    if (
+        //        oldEntity.GetAttributeValue<string>("name") != newEntity.GetAttributeValue<string>("name") ||
+        //        oldEntity.GetAttributeValue<string>("typename") != newEntity.GetAttributeValue<string>("typename") ||
+        //        oldEntity.GetAttributeValue<string>("friendlyname") != newEntity.GetAttributeValue<string>("friendlyname") ||
+        //        oldEntity.GetAttributeValue<string>("workflowactivitygroupname") != newEntity.GetAttributeValue<string>("workflowactivitygroupname")
+        //       )
+        //        return false;
+        //    return true;
+        //}
 
         private Guid? DeployAssembly(string file)
         {
@@ -346,7 +552,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     Target = plugin
                 };
                 request.Parameters.Add("SolutionUniqueName", JsonServer.solution);
-                CliLog.WriteLineWarning(SPACE, ConsoleColor.Red, "Registering", ConsoleColor.White, " Assembly ", ConsoleColor.Cyan, assemblyName);
+                CliLog.WriteLineWarning(SPACE, ConsoleColor.Red, CliAction.Register, ConsoleColor.White, "Assembly ", ConsoleColor.Cyan, assemblyName);
                 var response = (CreateResponse)CrmServiceClient.Execute(request);
                 return response.id;
             }
@@ -373,10 +579,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     }
                     catch (FaultException fe)
                     {
-                        CliLog.WriteLine(ConsoleColor.White, "|");
-                        CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Red, CliAction.Error, ConsoleColor.White, fe.Message);
-                        CliLog.WriteLine(ConsoleColor.White, "|");
-                        throw;
+                        CliLog.WriteLineError(ConsoleColor.Yellow, $"{fe.Message}. Deploy assembly stopped.");
+                        return null;
                     }
                 }
             }
@@ -729,6 +933,111 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
             }
             return new OptionSetValue(2);
+        }
+
+        private EntityReference GetSdkMessageFilterId(string entityLogicalName, string message)
+        {
+            if (entityLogicalName?.Length == 0 || entityLogicalName?.ToLower() == "none") return null;
+            var fetchData = new
+            {
+                primaryobjecttypecode = GetPrimaryObjectTypeCode(entityLogicalName),
+                name = message
+            };
+            var fetchXml = $@"
+<fetch>
+  <entity name='sdkmessagefilter'>
+    <attribute name='sdkmessagefilterid' />
+    <filter type='and'>
+      <condition attribute='primaryobjecttypecode' operator='eq' value='{fetchData.primaryobjecttypecode}'/>
+    </filter>
+    <link-entity name='sdkmessage' from='sdkmessageid' to='sdkmessageid'>
+      <filter type='and'>
+        <condition attribute='name' operator='eq' value='{fetchData.name}'/>
+      </filter>
+    </link-entity>
+  </entity>
+</fetch>";
+            var rows = CrmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            return rows.Entities.Count == 0 ? null : new EntityReference("sdkmessagefilter", rows.Entities[0].Id);
+        }
+
+        private int? GetPrimaryObjectTypeCode(string entityName)
+        {
+            if (entityName?.Length == 0) return null;
+            var request = new RetrieveEntityRequest
+            {
+                EntityFilters = EntityFilters.Entity,
+                LogicalName = entityName.ToLower()
+            };
+            var response = (RetrieveEntityResponse)CrmServiceClient.Execute(request);
+            return response.EntityMetadata.ObjectTypeCode ?? 0;
+        }
+
+        private EntityReference GetSdkMessageId(string entityLogicalName, string message)
+        {
+            if (entityLogicalName?.Length == 0) return null;
+            string fetchXml;
+            if (entityLogicalName.ToLower() == "none")
+            {
+                var fetchData = new
+                {
+                    name = message
+                };
+                fetchXml = $@"
+<fetch>
+  <entity name='sdkmessage'>
+    <attribute name='sdkmessageid' />
+    <filter type='and'>
+      <condition attribute='name' operator='eq' value='{fetchData.name}'/>
+    </filter>
+  </entity>
+</fetch>";
+            }
+            else
+            {
+                var fetchData = new
+                {
+                    name = message,
+                    primaryobjecttypecode = GetPrimaryObjectTypeCode(entityLogicalName)
+                };
+                fetchXml = $@"
+<fetch>
+  <entity name='sdkmessage'>
+    <attribute name='sdkmessageid' />
+    <filter type='and'>
+      <condition attribute='name' operator='eq' value='{fetchData.name}'/>
+    </filter>
+    <link-entity name='sdkmessagefilter' from='sdkmessageid' to='sdkmessageid'>
+      <filter type='and'>
+        <condition attribute='primaryobjecttypecode' operator='eq' value='{fetchData.primaryobjecttypecode}'/>
+      </filter>
+    </link-entity>
+  </entity>
+</fetch>";
+            }
+            var rows = CrmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            return rows.Entities.Count == 0 ? null : new EntityReference("sdkmessage", rows.Entities[0].Id);
+        }
+
+        private Guid? GetImpersonatingUserId(string runAs)
+        {
+            if (runAs.Length == 0) return (Guid?)null;
+            var fetchData = new
+            {
+                fullname = runAs
+            };
+            var fetchXml = $@"
+<fetch>
+  <entity name='systemuser'>
+    <attribute name='systemuserid' />
+    <filter type='and'>
+      <condition attribute='fullname' operator='eq' value='{fetchData.fullname}'/>
+    </filter>
+  </entity>
+</fetch>";
+            var rows = CrmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            if (rows.Entities.Count == 0) return (Guid?)null;
+            return rows.Entities[0].Id;
         }
     }
 }

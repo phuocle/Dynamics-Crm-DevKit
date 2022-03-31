@@ -5,7 +5,7 @@ using System.Activities;
 
 namespace Dev.DevKit.Workflow
 {
-    [CrmPluginRegistration("GetTeamMembers", "GetTeamMembers", "", "Dev.DevKit.Workflow", IsolationModeEnum.Sandbox, PluginType = PluginType.Workflow)]
+    [CrmPluginRegistration("GetTeamMembers", "GetTeamMembers", "", "Dev.DevKit.Workflow", IsolationModeEnum.Sandbox, PluginType = PluginType.Workflow, Description = "ABCDEF")]
     public class GetTeamMembers : CodeActivity
     {
         //https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/workflow/add-metadata-custom-workflow-activity

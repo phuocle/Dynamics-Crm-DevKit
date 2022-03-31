@@ -14,6 +14,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)Const.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CSharpLateBound.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EncryptDecrypt.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\EntityBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\SdkMessageProcessingStep.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\SdkMessageProcessingStep.generated.cs">
+      <DependentUpon>SdkMessageProcessingStep.cs</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Extensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)JsForm.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)JsonHelper.cs" />
@@ -57,5 +63,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)VsixCache.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)VsixHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)XrmHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)Entities\DynamicsCrm.DevKit.Cli.json" />
   </ItemGroup>
 </Project>

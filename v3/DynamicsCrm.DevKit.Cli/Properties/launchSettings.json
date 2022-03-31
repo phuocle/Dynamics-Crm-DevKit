@@ -33,7 +33,7 @@
     "ALL-DEMO-generator-csharp": {
       "commandName": "Project",
       "commandLineArgs": "/sdklogin:\"yes\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"LATEBOUND\"",
-      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.00.00\\TestAllEntities\\All-DEMO-2\\Dev.DevKit.Shared\\Entities"
+      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.00.00\\Test.Cli.Generator\\Dev.DevKit.Shared\\Entities"
     },
     "ALL-DEMO-generator-webapi": {
       "commandName": "Project",
@@ -84,6 +84,11 @@
       "commandName": "Project",
       "commandLineArgs": "/sdklogin:\"yes\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"servers\" /profile:\"DEBUG\"",
       "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.00.00\\Test.Cli.Server\\Dev.DevKit.Plugin.Account"
+    },
+    "DynamicsCrm.DevKit.Shared.Entities": {
+      "commandName": "Project",
+      "commandLineArgs": "/sdklogin:\"yes\" /json:\"DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"LATEBOUND\"",
+      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\v3\\DynamicsCrm.DevKit.Shared\\Entities"
     }
   }
 }

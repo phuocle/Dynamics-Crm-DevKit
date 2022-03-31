@@ -9,5 +9,6 @@
         public static string Updated => "[UPDATED] ";
         public static string Created => "[CREATED] ";
         public static string Error => "[ERROR] ";
+        public static string Register => "[REGISTER] ";
     }
 }
