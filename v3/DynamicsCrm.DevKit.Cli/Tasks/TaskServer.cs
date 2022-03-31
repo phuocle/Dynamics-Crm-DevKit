@@ -132,6 +132,19 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         case PluginType.CustomAction:
                             var pluginStepId = DeployPluginStep(pluginTypeId.Value, type, attribute);
                             if (pluginStepId == null) return;
+                            if (attribute.PluginType == PluginType.Plugin && HasPluginImage(attribute))
+                            {
+                                if (IsSupportPluginImage(attribute))
+                                {
+                                    var pluginImageId = DeployPluginImage(pluginStepId.Value, type, attribute);
+                                    if (pluginImageId == null) return;
+                                }
+                                else
+                                {
+                                    CliLog.WriteLineError(ConsoleColor.Yellow, $"The message {attribute.Message} of {attribute.Name} not support Image. Deploy assembly stopped.");
+                                    return;
+                                }
+                            }
                             break;
                         case PluginType.DataProvider:
                             break;
@@ -142,6 +155,176 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     }
                 }
             }
+        }
+
+        private Guid? DeployPluginImage(Guid pluginStepId, TypeInfo type, CrmPluginRegistrationAttribute attribute)
+        {
+            Guid? check = null;
+            if (attribute?.Image1Name?.Length > 0 && attribute?.Image1Attributes?.Length > 0)
+                check = DeployPluginImage(attribute.Message, attribute.Image1Name, attribute.Image1Alias, attribute.Image1Type, attribute.Image1Attributes, pluginStepId, attribute.Name);
+            if (check != null && attribute?.Image2Name?.Length > 0 && attribute?.Image2Attributes?.Length > 0)
+                check = DeployPluginImage(attribute.Message, attribute.Image2Name, attribute.Image2Alias, attribute.Image2Type, attribute.Image2Attributes, pluginStepId, attribute.Name);
+            if (check != null && attribute?.Image3Name?.Length > 0 && attribute?.Image3Attributes?.Length > 0)
+                check = DeployPluginImage(attribute.Message, attribute.Image3Name, attribute.Image3Alias, attribute.Image3Type, attribute.Image3Attributes, pluginStepId, attribute.Name);
+            if (check != null && attribute?.Image4Name?.Length > 0 && attribute?.Image4Attributes?.Length > 0)
+                check = DeployPluginImage(attribute.Message, attribute.Image4Name, attribute.Image4Alias, attribute.Image4Type, attribute.Image4Attributes, pluginStepId, attribute.Name);
+            return check;
+        }
+
+
+        private Guid? DeployPluginImage(string message, string imageName, string imageAliasName, ImageTypeEnum imageType, string imageAttributes, Guid pluginStepId, string pluginStepName)
+        {
+            if (imageAliasName.Length == 0) imageAliasName = imageName;
+            imageAttributes = imageAttributes?.Replace(" ", string.Empty);
+            if (imageAttributes?.Trim() == "*") imageAttributes = null;
+
+            var fetchData = new
+            {
+                name = imageName,
+                sdkmessageprocessingstepid = pluginStepId,
+                imagetype = (int)imageType
+            };
+            var fetchXml = $@"
+<fetch>
+  <entity name='sdkmessageprocessingstepimage'>
+    <attribute name='sdkmessageprocessingstepimageid' />
+    <attribute name='name' />
+    <attribute name='entityalias' />
+    <attribute name='attributes' />
+    <attribute name='imagetype' />
+    <filter type='and'>
+      <condition attribute='sdkmessageprocessingstepid' operator='eq' value='{fetchData.sdkmessageprocessingstepid}'/>
+      <condition attribute='imagetype' operator='eq' value='{fetchData.imagetype}'/>
+      <condition attribute='name' operator='eq' value='{fetchData.name}'/>
+    </filter>
+  </entity>
+</fetch>";
+            var rows = CrmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            if (rows.Entities.Count > 0)
+            {
+                if (rows.Entities.Count > 0 && rows.Entities.Count != 1)
+                {
+                    CliLog.WriteLineError(ConsoleColor.Yellow, $"Found more than 1 plugin image name {imageName}. Deploy assembly stopped.");
+                    return null;
+                }
+            }
+
+            var pluginImage = new Entity("sdkmessageprocessingstepimage")
+            {
+                ["name"] = imageName,
+                ["imagetype"] = new OptionSetValue((int)imageType),
+                ["sdkmessageprocessingstepid"] = new EntityReference("sdkmessageprocessingstep", pluginStepId),
+                ["attributes"] = imageAttributes,
+                ["entityalias"] = imageAliasName,
+                ["messagepropertyname"] = message == "Create" ? "Id" : "Target"
+            };
+            if (rows.Entities.Count == 0)
+            {
+                var request = new CreateRequest
+                {
+                    Target = pluginImage
+                };
+                request.Parameters.Add("SolutionUniqueName", JsonServer.solution);
+                CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, ConsoleColor.Red, CliAction.Register, ConsoleColor.White, $"{imageType.ToString()}: ", ConsoleColor.Cyan, imageName);
+                try
+                {
+                    var response = (CreateResponse)CrmServiceClient.Execute(request);
+                    return response.id;
+                }
+                catch (FaultException fe)
+                {
+                    if (fe.Message.Contains("entity doesn't contain attribute with"))
+                    {
+                        CliLog.WriteLineError(ConsoleColor.Yellow, $"Plugin Step {pluginStepName} have invalid {imageType.ToString()} Attribute {imageAttributes}. Deploy assembly stopped.");
+                    }
+                    return null;
+                }
+                catch (Exception e)
+                {
+                    CliLog.WriteLineError(ConsoleColor.Yellow, $"{e.Message}. Deploy assembly stopped.");
+                    return null;
+                }
+            }
+            else
+            {
+                var row = rows.Entities[0];
+                var name = row.GetAttributeValue<string>("name");
+                var entityalias = row.GetAttributeValue<string>("entityalias");
+                var attributes = row.GetAttributeValue<string>("attributes");
+                var imagetype = row.GetAttributeValue<OptionSetValue>("imagetype").Value;
+                if (name == imageName &&
+                    entityalias == imageAliasName &&
+                    attributes == imageAttributes &&
+                    imagetype == (int)imageType)
+                {
+                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DoNothing, ConsoleColor.White, $"{imageType.ToString()}: ", ConsoleColor.Cyan, imageName);
+                }
+                else
+                {
+                    if (attributes != imageAttributes && imageAttributes.Length != 0)
+                    {
+                        pluginImage["sdkmessageprocessingstepimageid"] = rows.Entities[0].Id;
+                        CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, ConsoleColor.Red, CliAction.Updated, ConsoleColor.White, $"{imageType.ToString()}: ", ConsoleColor.Cyan, imageName);
+                    }
+                    else if (imageAttributes.Length == 0)
+                    {
+                        CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, ConsoleColor.Red, CliAction.Deleted, ConsoleColor.White, $"{imageType.ToString()}: ", ConsoleColor.Cyan, imageName);
+                        CrmServiceClient.Delete("sdkmessageprocessingstepimage", rows.Entities[0].Id);
+                        pluginImage["sdkmessageprocessingstepimageid"] = null;
+                    }
+                    try
+                    {
+                        CrmServiceClient.Update(pluginImage);
+                    }
+                    catch (FaultException fe)
+                    {
+                        if (fe.Message.Contains("entity doesn't contain attribute with"))
+                        {
+                            CliLog.WriteLineError(ConsoleColor.Yellow, $"Plugin Step {pluginStepName} have invalid {imageType.ToString()} Attribute {imageAttributes}. Deploy assembly stopped.");
+                        }
+                        return null;
+                    }
+                    catch (Exception e)
+                    {
+                        CliLog.WriteLineError(ConsoleColor.Yellow, $"{e.Message}. Deploy assembly stopped.");
+                        return null;
+                    }
+                }
+                return rows.Entities[0].Id;
+            }
+        }
+        private bool IsSupportPluginImage(CrmPluginRegistrationAttribute attribute)
+        {
+            switch (attribute?.Message?.ToLower())
+            {
+                case "assign":
+                case "create":
+                case "delete":
+                case "deliverincoming":
+                case "deliverpromote":
+                case "merge":
+                case "route":
+                case "send":
+                case "setstate":
+                case "setstatedynamicentity":
+                case "update":
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        private bool HasPluginImage(CrmPluginRegistrationAttribute attribute)
+        {
+            if (attribute?.Image1Name?.Length > 0 && attribute?.Image1Attributes?.Length > 0)
+                return true;
+            if (attribute?.Image2Name?.Length > 0 && attribute?.Image2Attributes?.Length > 0)
+                return true;
+            if (attribute?.Image3Name?.Length > 0 && attribute?.Image3Attributes?.Length > 0)
+                return true;
+            if (attribute?.Image4Name?.Length > 0 && attribute?.Image4Attributes?.Length > 0)
+                return true;
+            return false;
         }
 
         private Guid? DeployPluginStep(Guid pluginTypeId, TypeInfo type, CrmPluginRegistrationAttribute attribute)
@@ -192,7 +375,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 ["name"] = attribute.Name,
                 ["configuration"] = attribute.UnSecureConfiguration,
-                ["description"] = attribute.Description,
                 ["mode"] = new OptionSetValue(attribute.ExecutionMode == ExecutionModeEnum.Asynchronous ? 1 : 0),
                 ["rank"] = attribute.ExecutionOrder,
                 ["stage"] = new OptionSetValue((int)attribute.Stage),
@@ -204,6 +386,17 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 ["impersonatinguserid"] = impersonatingUserId != null ? new EntityReference("systemuser", impersonatingUserId.Value) : null,
                 ["supporteddeployment"] = (attribute.Server && attribute.Offline) ? new OptionSetValue(2/*Both*/) : (!attribute.Server && attribute.Offline ? new OptionSetValue(1/*Offline*/) : new OptionSetValue(0/*Server*/))
             };
+            if (string.IsNullOrWhiteSpace(attribute.Description))
+            {
+                if (rows.Entities.Count == 0 || (rows.Entities.Count > 0 && string.IsNullOrWhiteSpace(rows.Entities[0].GetAttributeValue<string>("description"))))
+                {
+                    pluginStep["description"] = Const.WindowTitle;
+                }
+            }
+            else
+            {
+                pluginStep["description"] = attribute.Description;
+            }
             if (rows.Entities.Count == 0)
             {
                 if (attribute.SecureConfiguration?.Trim().Length > 0)
@@ -317,12 +510,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             if (
                 old.Name != @new.Name ||
                 (old.Configuration ?? string.Empty) != @new.Configuration ||
-                (old.Description ?? string.Empty) != @new.Description ||
+                (old.Description ?? string.Empty) != (@new.Description ?? Const.WindowTitle) ||
                 old.Mode != @new.Mode ||
                 old.Rank != @new.Rank ||
                 old.Stage != @new.Stage ||
                 old.AsyncAutoDelete != @new.AsyncAutoDelete ||
-                //plutintypeid
+                //old.PluginTypeId?.Id != @new.PluginTypeId?.Id ||
                 old.SdkMessageFilterId?.Id != @new.SdkMessageFilterId?.Id ||
                 old.SdkMessageId?.Id != @new.SdkMessageId?.Id ||
                 (old.FilteringAttributes ?? string.Empty) != @new.FilteringAttributes ||

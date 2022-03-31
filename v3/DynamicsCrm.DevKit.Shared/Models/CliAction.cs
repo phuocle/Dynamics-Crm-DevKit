@@ -10,5 +10,6 @@
         public static string Created => "[CREATED] ";
         public static string Error => "[ERROR] ";
         public static string Register => "[REGISTER] ";
+        public static string Deleted => "[DELETED] ";
     }
 }

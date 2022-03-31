@@ -26,8 +26,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         }
         public CommandLineArgs Arg { get; set; }
         private JsonSolutionPackager json { get; set; }
-
-
         public string CurrentDirectory { get; set; }
         public string TaskType => $"[{nameof(CliType.solutionpackagers).ToUpper()}]";
         public CrmServiceClient CrmServiceClient { get; set; }
