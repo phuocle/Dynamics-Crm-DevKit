@@ -18,6 +18,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 {
     public class TaskServer : ITask
     {
+        private const string SPACE = "  ";
         public TaskServer(CommandLineArgs arg, Json json)
         {
             this.Arg = arg;
@@ -43,7 +44,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     break;
             }
         }
-
         public string CurrentDirectory { get; set; }
         public string TaskType { get; set; }
         public CrmServiceClient CrmServiceClient { get; set; }
@@ -463,7 +463,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 if (!IsChangedPluginStep(hasChangedPluginStep, rows.Entities[0], pluginStep))
                 {
-                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DoNothing, ConsoleColor.White, $"{attribute.Message} Step: ", ConsoleColor.Cyan, attribute.Name);
+                    if (attribute.Action == PluginStepOperationEnum.Activate)
+                        CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DoNothing, ConsoleColor.White, $"{attribute.Message} Step: ", ConsoleColor.Cyan, attribute.Name);
+                    else
+                        CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DoNothing, CliAction.Deactivated, ConsoleColor.White, $"{attribute.Message} Step: ", ConsoleColor.Cyan, attribute.Name);
                 }
                 else
                 {
@@ -472,7 +475,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         Target = pluginStep
                     };
                     request.Parameters.Add("SolutionUniqueName", JsonServer.solution);
-                    CliLog.WriteLineWarning(SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.Updated, ConsoleColor.White, $"{attribute.Message} Step: ", ConsoleColor.Cyan, attribute.Name);
+                    if (attribute.Action == PluginStepOperationEnum.Activate)
+                        CliLog.WriteLineWarning(SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.Updated, ConsoleColor.White, $"{attribute.Message} Step: ", ConsoleColor.Cyan, attribute.Name);
+                    else
+                        CliLog.WriteLineWarning(SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.Updated, CliAction.Deactivated, ConsoleColor.White, $"{attribute.Message} Step: ", ConsoleColor.Cyan, attribute.Name);
                     try
                     {
                         CrmServiceClient.Execute(request);
@@ -494,8 +500,15 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
 
             if (
-                (rows.Entities[0]?.GetAttributeValue<OptionSetValue>("statecode")?.Value == 0 && attribute.Action == PluginStepOperationEnum.Deactivate) ||
-                (rows.Entities[0]?.GetAttributeValue<OptionSetValue>("statecode")?.Value == null && attribute.Action == PluginStepOperationEnum.Deactivate)
+                (
+                    (rows.Entities.Count == 0) &&
+                    (attribute.Action == PluginStepOperationEnum.Deactivate)
+                )
+                ||
+                (
+                    (rows?.Entities?[0]?.GetAttributeValue<OptionSetValue>("statecode")?.Value == 0 && attribute.Action == PluginStepOperationEnum.Deactivate) ||
+                    (rows?.Entities?[0]?.GetAttributeValue<OptionSetValue>("statecode")?.Value == null && attribute.Action == PluginStepOperationEnum.Deactivate)
+                )
                )
             {
                 var update = new Entity("sdkmessageprocessingstep", pluginStepId.Value);
@@ -504,7 +517,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 CrmServiceClient.Update(update);
                 CliLog.WriteLineWarning(SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.Deactivated, ConsoleColor.White, $"{attribute.Message} Step: ", ConsoleColor.Cyan, attribute.Name);
             }
-            else if (rows.Entities[0]?.GetAttributeValue<OptionSetValue>("statecode")?.Value == 1 && attribute.Action == PluginStepOperationEnum.Activate)
+            else if (
+                rows.Entities.Count > 0 &&
+                rows?.Entities?[0]?.GetAttributeValue<OptionSetValue>("statecode")?.Value == 1 &&
+                attribute.Action == PluginStepOperationEnum.Activate)
             {
                 var update = new Entity("sdkmessageprocessingstep", pluginStepId.Value);
                 update["statecode"] = new OptionSetValue(0);
@@ -512,7 +528,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 CrmServiceClient.Update(update);
                 CliLog.WriteLineWarning(SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.Activated, ConsoleColor.White, $"{attribute.Message} Step: ", ConsoleColor.Cyan, attribute.Name);
             }
-            return rows.Entities[0].Id;
+            return pluginStepId.Value;
         }
         private bool IsChangedPluginStep(bool alreadyChanged, Entity _old, Entity _new)
         {
@@ -670,17 +686,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             return old == @new;
         }
-        //private bool IsEqualsPluginType(Entity oldEntity, Entity newEntity)
-        //{
-        //    if (
-        //        oldEntity.GetAttributeValue<string>("name") != newEntity.GetAttributeValue<string>("name") ||
-        //        oldEntity.GetAttributeValue<string>("typename") != newEntity.GetAttributeValue<string>("typename") ||
-        //        oldEntity.GetAttributeValue<string>("friendlyname") != newEntity.GetAttributeValue<string>("friendlyname") ||
-        //        oldEntity.GetAttributeValue<string>("workflowactivitygroupname") != newEntity.GetAttributeValue<string>("workflowactivitygroupname")
-        //       )
-        //        return false;
-        //    return true;
-        //}
         private Guid? DeployAssembly(string file)
         {
             var assembly = Assembly.ReflectionOnlyLoadFrom(file);
@@ -765,7 +770,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             return oldContent == newContent;
         }
-        private const string SPACE = "  ";
         private bool IsValidTypes(string file, List<TypeInfo> types)
         {
             if (types.Count == 0)
@@ -831,8 +835,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         if (attributes.GroupBy(x => x.PluginType).Count() != 1)
                         {
                             CliLog.WriteLineError(ConsoleColor.Yellow, $"Type '{type.FullName}' has multi invalid attribute CrmPluginRegistration. Deploy stopped.");
+                            return false;
                         }
-                        return false;
                     }
                 }
             }
