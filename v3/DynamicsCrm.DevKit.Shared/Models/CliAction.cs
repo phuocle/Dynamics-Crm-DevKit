@@ -11,5 +11,7 @@
         public static string Error => "[ERROR] ";
         public static string Register => "[REGISTER] ";
         public static string Deleted => "[DELETED] ";
+        public static string Deactivated => "[DEACTIVATED] ";
+        public static string Activated => "[ACTIVATED] ";
     }
 }
