@@ -89,6 +89,11 @@
       "commandName": "Project",
       "commandLineArgs": "/sdklogin:\"yes\" /json:\"DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"LATEBOUND\"",
       "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\v3\\DynamicsCrm.DevKit.Shared\\Entities"
+    },
+    "CustomApi": {
+      "commandName": "Project",
+      "commandLineArgs": "/sdklogin:\"yes\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"servers\" /profile:\"DEBUG\"",
+      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.00.00\\Test.Cli.Server\\Dev.DevKit.CustomApi"
     }
   }
 }

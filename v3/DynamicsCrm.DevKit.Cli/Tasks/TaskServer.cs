@@ -145,6 +145,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         case PluginType.DataProvider:
                             break;
                         case PluginType.CustomApi:
+                            DeployCustomApiStep(pluginTypeId.Value, type.FullName, attribute);
                             break;
                         default:
                             break;
@@ -152,6 +153,57 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
             }
         }
+        private void DeployCustomApiStep(Guid pluginTypeId, string pluginTypeName, CrmPluginRegistrationAttribute attribute)
+        {
+            var fetchData = new
+            {
+                uniquename = attribute.Message
+            };
+            var fetchXml = $@"
+<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+  <entity name='customapi'>
+    <attribute name='customapiid'/>
+    <attribute name='plugintypeid'/>
+    <filter type='and'>
+      <condition attribute='uniquename' operator='eq' value='{fetchData.uniquename}'/>
+    </filter>
+  </entity>
+</fetch>
+";
+            var rows = CrmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            if (rows.Entities.Count != 1)
+            {
+                CliLog.WriteLineError(ConsoleColor.Yellow, $"Custom Api with message {attribute.Message} not found. Deploy assembly stopped.");
+                return;
+            }
+            if (rows.Entities[0].GetAttributeValue<EntityReference>("plugintypeid")?.Id.ToString("D") == pluginTypeId.ToString("D"))
+            {
+                if (attribute.Action == PluginStepOperationEnum.Activate)
+                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DoNothing, ConsoleColor.White, $"{attribute.PluginType.ToString()} Message: ", ConsoleColor.Cyan, attribute.Message, ConsoleColor.White, " with type: ", ConsoleColor.Cyan, pluginTypeName);
+                else
+                {
+                    CliLog.WriteLineWarning(SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.Updated, CliAction.Deactivated, ConsoleColor.White, $"{attribute.PluginType.ToString()} Message: ", ConsoleColor.Cyan, attribute.Message, ConsoleColor.White, " with type: ", ConsoleColor.Cyan, pluginTypeName);
+                    var update = new Entity("customapi", rows.Entities[0].Id);
+                    update["plugintypeid"] = null;
+                    CrmServiceClient.Update(update);
+                }
+            }
+            else
+            {
+                if (attribute.Action == PluginStepOperationEnum.Deactivate)
+                {
+                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DoNothing, CliAction.Deactivated, ConsoleColor.White, $"{attribute.PluginType.ToString()} Message: ", ConsoleColor.Cyan, attribute.Message, ConsoleColor.White, " with type: ", ConsoleColor.Cyan, pluginTypeName);
+                }
+                else
+                {
+                    CliLog.WriteLineWarning(SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.Updated, ConsoleColor.White, $"{attribute.PluginType.ToString()} Message: ", ConsoleColor.Cyan, attribute.Message, ConsoleColor.White, " with type: ", ConsoleColor.Cyan, pluginTypeName);
+                    var update = new Entity("customapi", rows.Entities[0].Id);
+                    update["plugintypeid"] = new EntityReference("plugintype", pluginTypeId);
+                    CrmServiceClient.Update(update);
+                }
+            }
+        }
+
         private Guid? DeployPluginImage(Guid pluginStepId, TypeInfo type, CrmPluginRegistrationAttribute attribute)
         {
             Guid? check = null;
