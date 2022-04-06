@@ -428,13 +428,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private Guid? DeployPluginImage(Guid pluginStepId, TypeInfo type, CrmPluginRegistrationAttribute attribute)
         {
             Guid? check = null;
-            if (attribute?.Image1Name?.Length > 0 && attribute?.Image1Attributes?.Length > 0)
+            if (attribute?.Image1Name?.Length > 0)
                 check = DeployPluginImage(attribute.Message, attribute.Image1Name, attribute.Image1Alias, attribute.Image1Type, attribute.Image1Attributes, pluginStepId, attribute.Name);
-            if (check != null && attribute?.Image2Name?.Length > 0 && attribute?.Image2Attributes?.Length > 0)
+            if (check != null && attribute?.Image2Name?.Length > 0)
                 check = DeployPluginImage(attribute.Message, attribute.Image2Name, attribute.Image2Alias, attribute.Image2Type, attribute.Image2Attributes, pluginStepId, attribute.Name);
-            if (check != null && attribute?.Image3Name?.Length > 0 && attribute?.Image3Attributes?.Length > 0)
+            if (check != null && attribute?.Image3Name?.Length > 0)
                 check = DeployPluginImage(attribute.Message, attribute.Image3Name, attribute.Image3Alias, attribute.Image3Type, attribute.Image3Attributes, pluginStepId, attribute.Name);
-            if (check != null && attribute?.Image4Name?.Length > 0 && attribute?.Image4Attributes?.Length > 0)
+            if (check != null && attribute?.Image4Name?.Length > 0)
                 check = DeployPluginImage(attribute.Message, attribute.Image4Name, attribute.Image4Alias, attribute.Image4Type, attribute.Image4Attributes, pluginStepId, attribute.Name);
             return check;
         }
@@ -442,8 +442,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             if (imageAliasName.Length == 0) imageAliasName = imageName;
             imageAttributes = imageAttributes?.Replace(" ", string.Empty);
-            if (imageAttributes?.Trim() == "*") imageAttributes = null;
-
+            //if (imageAttributes?.Trim() == "*") imageAttributes = null;
             var fetchData = new
             {
                 name = imageName,
@@ -474,41 +473,47 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     return null;
                 }
             }
-
             var pluginImage = new Entity("sdkmessageprocessingstepimage")
             {
                 ["name"] = imageName,
                 ["imagetype"] = new OptionSetValue((int)imageType),
                 ["sdkmessageprocessingstepid"] = new EntityReference("sdkmessageprocessingstep", pluginStepId),
-                ["attributes"] = imageAttributes,
+                ["attributes"] = imageAttributes.Trim() == "*" ? null : imageAttributes,
                 ["entityalias"] = imageAliasName,
                 ["messagepropertyname"] = message == "Create" ? "Id" : "Target"
             };
             if (rows.Entities.Count == 0)
             {
-                var request = new CreateRequest
+                if (imageName.Length > 0 && imageAttributes.Length == 0)
                 {
-                    Target = pluginImage
-                };
-                request.Parameters.Add("SolutionUniqueName", JsonServer.solution);
-                CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.Register, ConsoleColor.White, $"{imageType.ToString()}: ", ConsoleColor.Cyan, imageName);
-                try
-                {
-                    var response = (CreateResponse)CrmServiceClient.Execute(request);
-                    return response.id;
+                    return Guid.NewGuid();
                 }
-                catch (FaultException fe)
+                else
                 {
-                    if (fe.Message.Contains("entity doesn't contain attribute with"))
+                    var request = new CreateRequest
                     {
-                        CliLog.WriteLineError(ConsoleColor.Yellow, $"Plugin Step {pluginStepName} have invalid {imageType.ToString()} Attribute {imageAttributes}. Deploy assembly stopped.");
+                        Target = pluginImage
+                    };
+                    request.Parameters.Add("SolutionUniqueName", JsonServer.solution);
+                    CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.Register, ConsoleColor.White, $"{imageType.ToString()}: ", ConsoleColor.Cyan, imageName);
+                    try
+                    {
+                        var response = (CreateResponse)CrmServiceClient.Execute(request);
+                        return response.id;
                     }
-                    return null;
-                }
-                catch (Exception e)
-                {
-                    CliLog.WriteLineError(ConsoleColor.Yellow, $"{e.Message}. Deploy assembly stopped.");
-                    return null;
+                    catch (FaultException fe)
+                    {
+                        if (fe.Message.Contains("entity doesn't contain attribute with"))
+                        {
+                            CliLog.WriteLineError(ConsoleColor.Yellow, $"Plugin Step {pluginStepName} have invalid {imageType.ToString()} Attribute {imageAttributes}. Deploy assembly stopped.");
+                        }
+                        return null;
+                    }
+                    catch (Exception e)
+                    {
+                        CliLog.WriteLineError(ConsoleColor.Yellow, $"{e.Message}. Deploy assembly stopped.");
+                        return null;
+                    }
                 }
             }
             else
@@ -520,23 +525,23 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 var imagetype = row.GetAttributeValue<OptionSetValue>("imagetype").Value;
                 if (name == imageName &&
                     entityalias == imageAliasName &&
-                    attributes == imageAttributes &&
+                    attributes == (imageAttributes.Trim() == "*" ? null : imageAttributes) &&
                     imagetype == (int)imageType)
                 {
                     CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DoNothing, ConsoleColor.White, $"{imageType.ToString()}: ", ConsoleColor.Cyan, imageName);
                 }
                 else
                 {
-                    if (attributes != imageAttributes && imageAttributes != null && imageAttributes.Length != 0)
+                    if (attributes != (imageAttributes.Trim() == "*" ? null : imageAttributes) && imageAttributes.Length != 0)
                     {
                         pluginImage["sdkmessageprocessingstepimageid"] = rows.Entities[0].Id;
                         CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.Updated, ConsoleColor.White, $"{imageType.ToString()}: ", ConsoleColor.Cyan, imageName);
                     }
-                    else if (imageAttributes == null || imageAttributes.Length == 0)
+                    else if (imageAttributes.Length == 0)
                     {
                         CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.Deleted, ConsoleColor.White, $"{imageType.ToString()}: ", ConsoleColor.Cyan, imageName);
                         CrmServiceClient.Delete("sdkmessageprocessingstepimage", rows.Entities[0].Id);
-                        pluginImage["sdkmessageprocessingstepimageid"] = null;
+                        return Guid.NewGuid();
                     }
                     try
                     {
@@ -581,13 +586,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         }
         private bool HasPluginImage(CrmPluginRegistrationAttribute attribute)
         {
-            if (attribute?.Image1Name?.Length > 0 && attribute?.Image1Attributes?.Length > 0)
+            if (attribute?.Image1Name?.Length > 0)
                 return true;
-            if (attribute?.Image2Name?.Length > 0 && attribute?.Image2Attributes?.Length > 0)
+            if (attribute?.Image2Name?.Length > 0)
                 return true;
-            if (attribute?.Image3Name?.Length > 0 && attribute?.Image3Attributes?.Length > 0)
+            if (attribute?.Image3Name?.Length > 0)
                 return true;
-            if (attribute?.Image4Name?.Length > 0 && attribute?.Image4Attributes?.Length > 0)
+            if (attribute?.Image4Name?.Length > 0)
                 return true;
             return false;
         }
