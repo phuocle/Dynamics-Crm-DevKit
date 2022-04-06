@@ -6,15 +6,19 @@
   <FileName>/PluginAssemblies/DevDevKitPluginActivities-E019AD23-C2C6-EB11-BACC-000D3A807100/DevDevKitPluginActivities.dll</FileName>
   <PluginTypes>
     <PluginType AssemblyQualifiedName="Dev.DevKit.PluginActivities.Email.PostEmailSendAsynchronous, Dev.DevKit.Plugin.Activities, Version=1.0.0.0, Culture=en, PublicKeyToken=4b609534ceaa701a" PluginTypeId="e719ad23-c2c6-eb11-bacc-000d3a807100" Name="Dev.DevKit.PluginActivities.Email.PostEmailSendAsynchronous">
+      <Description>DynamicsCrm.DevKit v.3.00.00 - Build: xxxx-yy-zz</Description>
       <FriendlyName>Dev.DevKit.PluginActivities.Email.PostEmailSendAsynchronous</FriendlyName>
     </PluginType>
     <PluginType AssemblyQualifiedName="Dev.DevKit.PluginActivities.PhoneCall.PostPhoneCallHandleAsynchronous, Dev.DevKit.Plugin.Activities, Version=1.0.0.0, Culture=en, PublicKeyToken=4b609534ceaa701a" PluginTypeId="e319ad23-c2c6-eb11-bacc-000d3a807100" Name="Dev.DevKit.PluginActivities.PhoneCall.PostPhoneCallHandleAsynchronous">
+      <Description>DynamicsCrm.DevKit v.3.00.00 - Build: xxxx-yy-zz</Description>
       <FriendlyName>Dev.DevKit.PluginActivities.PhoneCall.PostPhoneCallHandleAsynchronous</FriendlyName>
     </PluginType>
     <PluginType AssemblyQualifiedName="Dev.DevKit.PluginActivities.Task.PostTaskHandleAsynchronous, Dev.DevKit.Plugin.Activities, Version=1.0.0.0, Culture=en, PublicKeyToken=4b609534ceaa701a" PluginTypeId="eb19ad23-c2c6-eb11-bacc-000d3a807100" Name="Dev.DevKit.PluginActivities.Task.PostTaskHandleAsynchronous">
+      <Description>DynamicsCrm.DevKit v.3.00.00 - Build: xxxx-yy-zz</Description>
       <FriendlyName>Dev.DevKit.PluginActivities.Task.PostTaskHandleAsynchronous</FriendlyName>
     </PluginType>
     <PluginType AssemblyQualifiedName="Dev.DevKit.PluginActivities.Task.PostTaskUpdateAsynchronous, Dev.DevKit.Plugin.Activities, Version=1.0.0.0, Culture=en, PublicKeyToken=4b609534ceaa701a" PluginTypeId="ef19ad23-c2c6-eb11-bacc-000d3a807100" Name="Dev.DevKit.PluginActivities.Task.PostTaskUpdateAsynchronous">
+      <Description>DynamicsCrm.DevKit v.3.00.00 - Build: xxxx-yy-zz</Description>
       <FriendlyName>Dev.DevKit.PluginActivities.Task.PostTaskUpdateAsynchronous</FriendlyName>
     </PluginType>
   </PluginTypes>

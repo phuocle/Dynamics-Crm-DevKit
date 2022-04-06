@@ -6,6 +6,7 @@
   <FileName>/PluginAssemblies/DevDevKitCustomAction-87D4E37F-BEC6-EB11-BACC-000D3A807100/DevDevKitCustomAction.dll</FileName>
   <PluginTypes>
     <PluginType AssemblyQualifiedName="Dev.DevKit.CustomAction.PostNonedevkit_AjaxSynchronous, Dev.DevKit.CustomAction, Version=1.0.0.0, Culture=en, PublicKeyToken=a3ae1a774b8980c3" PluginTypeId="8ad4e37f-bec6-eb11-bacc-000d3a807100" Name="Dev.DevKit.CustomAction.PostNonedevkit_AjaxSynchronous">
+      <Description>DynamicsCrm.DevKit v.3.00.00 - Build: xxxx-yy-zz</Description>
       <FriendlyName>Dev.DevKit.CustomAction.PostNonedevkit_AjaxSynchronous</FriendlyName>
     </PluginType>
   </PluginTypes>

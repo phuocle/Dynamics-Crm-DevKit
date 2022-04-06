@@ -1,10 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<SdkMessageProcessingStep Name="Dev.DevKit.PluginContact.PostContactCreateAsynchronous" SdkMessageProcessingStepId="{011ff018-c2c6-eb11-bacc-000d3a807100}" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SdkMessageProcessingStep Name="Dev.DevKit.PluginAccount.PostAccountCreateAsynchronous" SdkMessageProcessingStepId="{fba0801b-c0b0-ec11-983f-00224816b39e}" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <SdkMessageId>9ebdbb1b-ea3e-db11-86a7-000a3a5473e8</SdkMessageId>
-  <PluginTypeName>Dev.DevKit.PluginContact.PostContactCreateAsynchronous, Dev.DevKit.Plugin.Contact, Version=1.0.0.0, Culture=en, PublicKeyToken=70a78f26ca2483c5</PluginTypeName>
-  <PluginTypeId>001ff018-c2c6-eb11-bacc-000d3a807100</PluginTypeId>
-  <PrimaryEntity>contact</PrimaryEntity>
+  <PluginTypeName>Dev.DevKit.PluginAccount.PostAccountCreateAsynchronous, Dev.DevKit.Plugin.Account, Version=1.0.0.0, Culture=en, PublicKeyToken=9dcd893647daec04</PluginTypeName>
+  <PluginTypeId>f8a0801b-c0b0-ec11-983f-00224816b39e</PluginTypeId>
+  <PrimaryEntity>account</PrimaryEntity>
   <AsyncAutoDelete>1</AsyncAutoDelete>
+  <Configuration>A</Configuration>
   <Description>DynamicsCrm.DevKit v.3.00.00 - Build: xxxx-yy-zz</Description>
   <FilteringAttributes></FilteringAttributes>
   <InvocationSource>1</InvocationSource>

@@ -6,6 +6,7 @@
   <FileName>/PluginAssemblies/DevDevKitCustomApi-705B2B7E-31C7-EB11-BACC-000D3A807100/DevDevKitCustomApi.dll</FileName>
   <PluginTypes>
     <PluginType AssemblyQualifiedName="Dev.DevKit.CustomApi.devkit_CustomApiRequest, Dev.DevKit.CustomApi, Version=1.0.0.0, Culture=en, PublicKeyToken=4d20ad2e98c0d95d" PluginTypeId="735b2b7e-31c7-eb11-bacc-000d3a807100" Name="Dev.DevKit.CustomApi.devkit_CustomApiRequest">
+      <Description>DynamicsCrm.DevKit v.3.00.00 - Build: xxxx-yy-zz</Description>
       <FriendlyName>Dev.DevKit.CustomApi.devkit_CustomApiRequest</FriendlyName>
     </PluginType>
   </PluginTypes>

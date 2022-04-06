@@ -5,6 +5,7 @@
   <PluginTypeId>c9028ddf-30c7-eb11-bacc-000d3a807100</PluginTypeId>
   <PrimaryEntity>account</PrimaryEntity>
   <AsyncAutoDelete>0</AsyncAutoDelete>
+  <Description>DynamicsCrm.DevKit v.3.00.00 - Build: xxxx-yy-zz</Description>
   <FilteringAttributes></FilteringAttributes>
   <InvocationSource>0</InvocationSource>
   <Mode>0</Mode>

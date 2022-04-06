@@ -745,6 +745,10 @@
     <value>Data Source</value>
     <comment> 'devkit_DataSource' : LocalizedName for Entity</comment>
   </data>
+  <data name="29:LocalizedName,{3e6ca9b9-edb0-4731-94d6-26b96e2df4cf}" xml:space="preserve">
+    <value>TestAccount</value>
+    <comment>'TestAccount' : LocalizedName for Workflow</comment>
+  </data>
   <data name="29:LocalizedName,{c249171f-afbe-4c9c-a129-c4b8e78785c6}" xml:space="preserve">
     <value>SendEmail</value>
     <comment>'SendEmail' : LocalizedName for Workflow</comment>

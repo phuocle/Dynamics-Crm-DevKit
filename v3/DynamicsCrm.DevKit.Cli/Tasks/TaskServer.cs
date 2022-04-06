@@ -527,12 +527,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 else
                 {
-                    if (attributes != imageAttributes && imageAttributes.Length != 0)
+                    if (attributes != imageAttributes && imageAttributes != null && imageAttributes.Length != 0)
                     {
                         pluginImage["sdkmessageprocessingstepimageid"] = rows.Entities[0].Id;
                         CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.Updated, ConsoleColor.White, $"{imageType.ToString()}: ", ConsoleColor.Cyan, imageName);
                     }
-                    else if (imageAttributes.Length == 0)
+                    else if (imageAttributes == null || imageAttributes.Length == 0)
                     {
                         CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.Deleted, ConsoleColor.White, $"{imageType.ToString()}: ", ConsoleColor.Cyan, imageName);
                         CrmServiceClient.Delete("sdkmessageprocessingstepimage", rows.Entities[0].Id);
@@ -819,7 +819,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 //old.PluginTypeId?.Id != @new.PluginTypeId?.Id ||
                 old.SdkMessageFilterId?.Id != @new.SdkMessageFilterId?.Id ||
                 old.SdkMessageId?.Id != @new.SdkMessageId?.Id ||
-                (old.FilteringAttributes ?? string.Empty) != @new.FilteringAttributes ||
+                (old.FilteringAttributes ?? string.Empty) != (@new.FilteringAttributes ?? string.Empty) ||
                 old.ImpersonatingUserId?.Id != @new.ImpersonatingUserId?.Id ||
                 old.SupportedDeployment != @new.SupportedDeployment)
                 return true;
@@ -1314,7 +1314,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     excludefiles.AddRange(Directory.GetFiles(folder, other).ToList());
                 }
             }
-            return includefiles.Where(file => !excludefiles.Contains(file)).Distinct().ToList();
+            var files =  includefiles.Where(file => !excludefiles.Contains(file)).Distinct().ToList();
+            files.Sort();
+            return files;
         }
         private List<TypeInfo> GetTypes(string file)
         {
@@ -1338,6 +1340,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 catch { }
             }
+            types = types.OrderBy(x => x.FullName).ToList();
             return types;
         }
         private Assembly CurrentDomain_ReflectionOnlyAssemblyResolve(object sender, ResolveEventArgs args)
