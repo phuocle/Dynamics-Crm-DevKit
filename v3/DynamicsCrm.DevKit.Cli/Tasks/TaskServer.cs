@@ -4,6 +4,7 @@ using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
+using Microsoft.Xrm.Sdk.Metadata.Query;
 using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Tooling.Connector;
 using System;
@@ -18,6 +19,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 {
     public class TaskServer : ITask
     {
+        private class DataProviderEvent
+        {
+            public Guid PluginTypeId { get; set; }
+            public string Message { get; set; }
+            public string DataSource { get; set; }
+        }
         private const string SPACE = "  ";
         public TaskServer(CommandLineArgs arg, Json json)
         {
@@ -111,6 +118,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         }
         private void DeployFile(string file, List<TypeInfo> types)
         {
+            var dataProviderEvents = new List<DataProviderEvent>();
             var pluginAssemblyId = DeployAssembly(file);
             if (pluginAssemblyId == null) return;
             if (Arg?.OnlyUpdateAssembly?.Length > 0) return;
@@ -143,6 +151,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                             }
                             break;
                         case PluginType.DataProvider:
+                            dataProviderEvents.Add(new DataProviderEvent
+                            {
+                                PluginTypeId = pluginTypeId.Value,
+                                Message = attribute.Message,
+                                DataSource = attribute.DataSource
+                            });
                             break;
                         case PluginType.CustomApi:
                             DeployCustomApiStep(pluginTypeId.Value, type.FullName, attribute);
@@ -152,6 +166,214 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     }
                 }
             }
+            if (dataProviderEvents.Count > 0)
+            {
+                var dataSources = from dataProviderEvent in dataProviderEvents
+                                  group dataProviderEvent by dataProviderEvent.DataSource into @group
+                                  select new { DataSource = @group.Key };
+                foreach (var dataSource in dataSources)
+                {
+                    if (dataSource.DataSource == null) continue;
+                    if (IsValidDataProvider(dataProviderEvents, dataSource.DataSource))
+                    {
+                        RegisterDataProvider(dataProviderEvents, dataSource.DataSource);
+                    }
+                }
+            }
+        }
+        private bool IsValidDataProvider(List<DataProviderEvent> dataProviderEvents, string dataSource)
+        {
+            var checkDataSource = dataSource.ToLower().StartsWith(Prefix.ToLower()) ? dataSource : $"{Prefix?.ToLower()}{dataSource}";
+            if (!IsExistDataSource($"{checkDataSource}"))
+            {
+                CliLog.WriteLineError(ConsoleColor.Yellow, $"DataSource {dataSource} with prefix {Prefix.ToLower()} not exist ({checkDataSource}). Deploy assembly stopped.");
+                return false;
+            }
+            var countRetrieve = dataProviderEvents.Count(x => x.Message == "Retrieve" && x.DataSource == dataSource);
+            if (countRetrieve != 0 && countRetrieve != 1)
+            {
+                CliLog.WriteLineError(ConsoleColor.Yellow, $"Multiple message Retrieve found with data source {dataSource} ({checkDataSource}). Deploy assembly stopped.");
+                return false;
+            }
+            var countRetrieveMultiple = dataProviderEvents.Count(x => x.Message == "RetrieveMultiple" && x.DataSource == dataSource);
+            if (countRetrieveMultiple != 0 && countRetrieveMultiple != 1)
+            {
+                CliLog.WriteLineError(ConsoleColor.Yellow, $"Multiple message RetrieveMultiple found with data source {dataSource} ({checkDataSource}). Deploy assembly stopped.");
+                return false;
+            }
+            if (IsVirtualTableSupportCRUD())
+            {
+                var countCreate = dataProviderEvents.Count(x => x.Message == "Create" && x.DataSource == dataSource);
+                if (countCreate != 0 && countCreate != 1)
+                {
+                    CliLog.WriteLineError(ConsoleColor.Yellow, $"Multiple message Create found with data source {dataSource} ({checkDataSource}). Deploy assembly stopped.");
+                    return false;
+                }
+                var countUpdate = dataProviderEvents.Count(x => x.Message == "Update" && x.DataSource == dataSource);
+                if (countUpdate != 0 && countUpdate != 1)
+                {
+                    CliLog.WriteLineError(ConsoleColor.Yellow, $"Multiple message Update found with data source {dataSource} ({checkDataSource}). Deploy assembly stopped.");
+                    return false;
+                }
+                var countDelete = dataProviderEvents.Count(x => x.Message == "Delete" && x.DataSource == dataSource);
+                if (countDelete != 0 && countDelete != 1)
+                {
+                    CliLog.WriteLineError(ConsoleColor.Yellow, $"Multiple message Delete found with data source {dataSource} ({checkDataSource}). Deploy assembly stopped.");
+                    return false;
+                }
+            }
+            return true;
+        }
+        private void RegisterDataProvider(List<DataProviderEvent> dataProviderEvents, string dataSource)
+        {
+            var events = string.Empty;
+            var logicalNameDataSource = dataSource.ToLower().StartsWith(Prefix.ToLower()) ? dataSource.ToLower() : $"{Prefix?.ToLower()}{dataSource}".ToLower();
+            var entity = new Entity("entitydataprovider");
+            entity.Attributes.Add("name", logicalNameDataSource);
+            entity.Attributes.Add("datasourcelogicalname", logicalNameDataSource);
+            entity.Attributes.Add("solutionid", SolutionId);
+            var retrieve = dataProviderEvents.Where(x => x.Message == "Retrieve" && x.DataSource == dataSource).FirstOrDefault();
+            if (retrieve == null)
+                entity.Attributes.Add("retrieveplugin", new Guid("{c1919979-0021-4f11-a587-a8f904bdfdf9}"));
+            else
+            {
+                entity.Attributes.Add("retrieveplugin", retrieve.PluginTypeId);
+                events += "Retrieve, ";
+            }
+
+            var retrievemultiple = dataProviderEvents.Where(x => x.Message == "RetrieveMultiple" && x.DataSource == dataSource).FirstOrDefault();
+            if (retrievemultiple == null)
+                entity.Attributes.Add("retrievemultipleplugin", new Guid("{c1919979-0021-4f11-a587-a8f904bdfdf9}"));
+            else
+            {
+                entity.Attributes.Add("retrievemultipleplugin", retrievemultiple.PluginTypeId);
+                events += "RetrieveMultiple, ";
+            }
+            if (IsVirtualTableSupportCRUD())
+            {
+                var create = dataProviderEvents.Where(x => x.Message == "Create" && x.DataSource == dataSource).FirstOrDefault();
+                if (create == null)
+                    entity.Attributes.Add("createplugin", new Guid("{c1919979-0021-4f11-a587-a8f904bdfdf9}"));
+                else
+                {
+                    entity.Attributes.Add("createplugin", create.PluginTypeId);
+                    events += "Create, ";
+                }
+                var update = dataProviderEvents.Where(x => x.Message == "Update" && x.DataSource == dataSource).FirstOrDefault();
+                if (update == null)
+                    entity.Attributes.Add("updateplugin", new Guid("{c1919979-0021-4f11-a587-a8f904bdfdf9}"));
+                else
+                {
+                    entity.Attributes.Add("updateplugin", update.PluginTypeId);
+                    events += "Update, ";
+                }
+                var delete = dataProviderEvents.Where(x => x.Message == "Delete" && x.DataSource == dataSource).FirstOrDefault();
+                if (delete == null)
+                    entity.Attributes.Add("deleteplugin", new Guid("{c1919979-0021-4f11-a587-a8f904bdfdf9}"));
+                else
+                {
+                    entity.Attributes.Add("deleteplugin", delete.PluginTypeId);
+                    events += "Delete, ";
+                }
+            }
+            events = events.TrimEnd(", ".ToCharArray());
+            var entityDataProvider = GetEntityDataProviderId(logicalNameDataSource);
+            if (entityDataProvider == null)
+            {
+                var request = new CreateRequest();
+                if (request.Parameters == null)
+                    request.Parameters = new ParameterCollection();
+                request.Target = entity;
+                request.Parameters.Add("SuppressDuplicateDetection", true);
+                request.Parameters.Add("SolutionUniqueName", JsonServer.solution);
+                CliLog.WriteLineWarning(SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.Register, ConsoleColor.White, $"DataSource ", ConsoleColor.Cyan, $"{logicalNameDataSource}", ConsoleColor.White, " linked with events ", ConsoleColor.Cyan, events);
+                CrmServiceClient.Execute(request);
+            }
+            else
+            {
+                var entitydataproviderid = entityDataProvider.GetAttributeValue<Guid?>("entitydataproviderid");
+                var retrieveplugin = entityDataProvider.GetAttributeValue<Guid?>("retrieveplugin");
+                var retrievemultipleplugin = entityDataProvider.GetAttributeValue<Guid?>("retrievemultipleplugin");
+                var createplugin = entityDataProvider.GetAttributeValue<Guid?>("createplugin");
+                var deleteplugin = entityDataProvider.GetAttributeValue<Guid?>("deleteplugin");
+                var updateplugin = entityDataProvider.GetAttributeValue<Guid?>("updateplugin");
+                if (retrievemultipleplugin != entity.GetAttributeValue<Guid>("retrievemultipleplugin") ||
+                    retrieveplugin != entity.GetAttributeValue<Guid>("retrieveplugin") ||
+                    createplugin != entity.GetAttributeValue<Guid>("createplugin") ||
+                    deleteplugin != entity.GetAttributeValue<Guid>("deleteplugin") ||
+                    updateplugin != entity.GetAttributeValue<Guid>("updateplugin")
+                    )
+                {
+                    entity.Attributes.Add("entitydataproviderid", entitydataproviderid.Value);
+                    var request = new UpdateRequest
+                    {
+                        Target = entity
+                    };
+                    CliLog.WriteLineWarning(SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.Updated, ConsoleColor.White, $"DataSource ", ConsoleColor.Cyan, $"{logicalNameDataSource}", ConsoleColor.White, " linked with events ", ConsoleColor.Cyan, events);
+                    CrmServiceClient.Execute(request);
+                }
+                else
+                {
+                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DoNothing, ConsoleColor.White, $"DataSource ",  ConsoleColor.Cyan, $"{logicalNameDataSource}", ConsoleColor.White, " linked with events ", ConsoleColor.Cyan, events);
+                }
+            }
+        }
+        private Entity GetEntityDataProviderId(string dataSource)
+        {
+            var fetchData = new
+            {
+                datasourcelogicalname = dataSource
+            };
+            var fetchXml = $@"
+<fetch>
+  <entity name='entitydataprovider'>
+    <attribute name='entitydataproviderid' />
+    <attribute name='retrievemultipleplugin' />
+    <attribute name='createplugin' />
+    <attribute name='deleteplugin' />
+    <attribute name='updateplugin' />
+    <attribute name='retrieveplugin' />
+    <filter>
+      <condition attribute='datasourcelogicalname' operator='eq' value='{fetchData.datasourcelogicalname}'/>
+    </filter>
+  </entity>
+</fetch>";
+            var rows = CrmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            if (rows.Entities.Count != 1) return null;
+            return rows.Entities[0];
+        }
+        private bool IsVirtualTableSupportCRUD()
+        {
+            return CrmServiceClient.ConnectedOrgVersion >= new Version("9.1.0.18950");
+        }
+        private bool IsExistDataSource(string logicalname)
+        {
+            var filterExpression = new MetadataFilterExpression();
+            logicalname = logicalname.ToLower();
+            filterExpression.Conditions.Add(new MetadataConditionExpression("DataProviderId", MetadataConditionOperator.Equals, Guid.Parse("B2112A7E-B26C-42F7-9B63-9A809A9D716F")));
+            var propertiesExpression = new MetadataPropertiesExpression(new string[7]
+            {
+                "DataProviderId",
+                "LogicalName",
+                "SchemaName",
+                "MetadataId",
+                "DisplayName",
+                "ExternalName",
+                "DisplayCollectionName"
+            });
+            var entityQueryExpression = new EntityQueryExpression();
+            entityQueryExpression.Criteria = new MetadataFilterExpression();
+            entityQueryExpression.Criteria = filterExpression;
+            entityQueryExpression.Properties = propertiesExpression;
+            var request = new RetrieveMetadataChangesRequest
+            {
+                Query = entityQueryExpression
+            };
+            var response = (RetrieveMetadataChangesResponse)CrmServiceClient.Execute(request);
+            foreach (EntityMetadata entityMetadata in response.EntityMetadata)
+                if (entityMetadata.LogicalName == logicalname)
+                    return true;
+            return false;
         }
         private void DeployCustomApiStep(Guid pluginTypeId, string pluginTypeName, CrmPluginRegistrationAttribute attribute)
         {
@@ -196,14 +418,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 else
                 {
-                    CliLog.WriteLineWarning(SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.Updated, ConsoleColor.White, $"{attribute.PluginType.ToString()} Message: ", ConsoleColor.Cyan, attribute.Message, ConsoleColor.White, " with type: ", ConsoleColor.Cyan, pluginTypeName);
+                    CliLog.WriteLineWarning(SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.Register, ConsoleColor.White, $"{attribute.PluginType.ToString()} Message: ", ConsoleColor.Cyan, attribute.Message, ConsoleColor.White, " with type: ", ConsoleColor.Cyan, pluginTypeName);
                     var update = new Entity("customapi", rows.Entities[0].Id);
                     update["plugintypeid"] = new EntityReference("plugintype", pluginTypeId);
                     CrmServiceClient.Update(update);
                 }
             }
         }
-
         private Guid? DeployPluginImage(Guid pluginStepId, TypeInfo type, CrmPluginRegistrationAttribute attribute)
         {
             Guid? check = null;
