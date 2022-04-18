@@ -10,13 +10,9 @@ namespace Dev.DevKit.Workflow
     {
         //https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/workflow/add-metadata-custom-workflow-activity
 
-        //[Default("Default Value")]
-        //[Input("Input Value")]
-        //[ReferenceTarget("account")]
-        //public InArgument<EntityReference> InputValue { get; set; }
-
-        //[Default("Default OutputValue"), Output("OutputValue")]
-        //public OutArgument<string> OutputValue { get; set; }
+        [Input("Record Url")]
+        [RequiredArgument]
+        public InArgument<string> RecordUrl { get; set; }
 
         protected override void Execute(CodeActivityContext executionContext)
         {
@@ -25,7 +21,7 @@ namespace Dev.DevKit.Workflow
             var service = serviceFactory.CreateOrganizationService(workflowContext.UserId);
             var tracing = executionContext.GetExtension<ITracingService>();
 
-            //tracing.DebugContext(workflowContext);
+            tracing.DebugContext(workflowContext);
 
             ExecuteWorkflow(executionContext, workflowContext, serviceFactory, service, tracing);
         }

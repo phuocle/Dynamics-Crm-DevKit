@@ -19,11 +19,19 @@ namespace DynamicsCrm.DevKit.Cli
         [STAThread]
         public static void Main(string[] args)
         {
-            var arguments = CommandLine.Parse<CommandLineArgs>();
-            RunCli(arguments);
+            if (args.Count() == 0)
+            {
+                ShowHelp();
+                Console.ReadKey();
+            }
+            else
+            {
+                var arguments = CommandLine.Parse<CommandLineArgs>();
+                RunCli(arguments);
+            }
         }
 
-        static void RunCli(CommandLineArgs arguments)
+        private static void ShowHelp()
         {
             CliLog.SetupCliLog();
 #if DEBUG
@@ -41,6 +49,11 @@ namespace DynamicsCrm.DevKit.Cli
             CliLog.Write(ConsoleColor.White, " Build: ");
             CliLog.WriteSuccess(ConsoleColor.White, Const.Build);
             CliLog.WriteLine(ConsoleColor.Black, "█");
+        }
+
+        static void RunCli(CommandLineArgs arguments)
+        {
+            ShowHelp();
             CliLog.WriteLine(ConsoleColor.White, "|");
             if (IsValid(arguments))
             {

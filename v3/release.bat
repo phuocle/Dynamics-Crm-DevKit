@@ -9,8 +9,8 @@ if exist "DynamicsCrm.DevKit.Console\bin\Debug\DynamicsCrm.DevKit.Console.exe" (
     echo ************************************************************
 )
 set MsBuild=""
-if exist "C:\Program Files\Microsoft Visual Studio\2022\Preview\MSBuild\Current\Bin\MSBuild.exe" (
-	set MsBuild="C:\Program Files\Microsoft Visual Studio\2022\Preview\MSBuild\Current\Bin\MSBuild.exe"
+if exist "C:\Program Files\Microsoft Visual Studio\2022\Professional\MSBuild\Current\Bin\MSBuild.exe" (
+	set MsBuild="C:\Program Files\Microsoft Visual Studio\2022\Professional\MSBuild\Current\Bin\MSBuild.exe"
 )
 if %MsBuild%=="" (
 	echo msbuild.exe not found !!!
@@ -30,15 +30,15 @@ if %MsBuild%=="" (
 	rem call pack.bat
 
 	rem cd ..\..
-	rem cd DynamicsCrm.DevKit.Cli\Nuget
-	rem call pack.bat
+	cd DynamicsCrm.DevKit.Cli\Nuget
+	call pack.bat
 
 	rem cd ..\..
 	rem cd DynamicsCrm.DevKit.Tool\Nuget
 	rem call pack.bat
 
 	rem cd ..\..
-	copy DynamicsCrm.DevKit\bin\Release\DynamicsCrm.DevKit.vsix Published\%VERSION%\DynamicsCrm.DevKit.%VERSION%.vsix
+	rem copy DynamicsCrm.DevKit\bin\Release\DynamicsCrm.DevKit.vsix Published\%VERSION%\DynamicsCrm.DevKit.%VERSION%.vsix
 
     rem call DynamicsCrm.DevKit.Console\bin\Debug\DynamicsCrm.DevKit.Console.exe 1
 )

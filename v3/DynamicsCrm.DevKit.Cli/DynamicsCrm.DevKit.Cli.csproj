@@ -16,6 +16,7 @@
 		<Version>3.0.0.0</Version>
 		<OutputType>Exe</OutputType>
 		<StartupObject>DynamicsCrm.DevKit.Cli.Program</StartupObject>
+		<BaseOutputPath>bin</BaseOutputPath>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
