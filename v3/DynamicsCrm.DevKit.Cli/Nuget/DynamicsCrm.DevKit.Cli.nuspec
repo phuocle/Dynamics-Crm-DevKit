@@ -32,5 +32,7 @@
 		<file src="..\bin\Release\net472\Microsoft.Xrm.Tooling.Ui.Styles.dll" target="tools\Microsoft.Xrm.Tooling.Ui.Styles.dll" />
 		<file src="..\bin\Release\net472\Microsoft.Xrm.Tooling.WebResourceUtility.dll" target="tools\Microsoft.Xrm.Tooling.WebResourceUtility.dll" />
 		<file src="..\bin\Release\net472\Newtonsoft.Json.dll" target="tools\Newtonsoft.Json.dll" />
+		<file src="..\bin\Release\net472\Microsoft.CodeAnalysis.dll" target="tools\Microsoft.CodeAnalysis.dll" />
+		<file src="..\bin\Release\net472\Microsoft.CodeAnalysis.CSharp.dll" target="tools\Microsoft.CodeAnalysis.CSharp.dll" />
     </files>
 </package>
