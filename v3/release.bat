@@ -1,5 +1,8 @@
 @echo off
 set /p VERSION=<version.txt
+
+powershell -Command "(gc DynamicsCrm.DevKit.Shared\Const.cs) -replace 'xxxx-yy-zz', (Get-Date).ToString('yyyy.MM.dd HH.mm') | Out-File -encoding UTF8 DynamicsCrm.DevKit.Shared\Const.cs"
+
 echo ************************************************************
 echo Building solution: DEPLOY RELEASE MODE - version: %VERSION%
 echo ************************************************************
@@ -22,6 +25,8 @@ if %MsBuild%=="" (
 	if not exist Published\%VERSION% ( md Published\%VERSION% )
 	call %MsBuild% /nologo /noautorsp /verbosity:minimal -p:Configuration=Release -target:Clean;Build DynamicsCrm.DevKit.sln
 
+	powershell -Command "(gc DynamicsCrm.DevKit.Shared\Const.cs) -replace (Get-Date).ToString('yyyy.MM.dd HH.mm'), 'xxxx-yy-zz' | Out-File -encoding UTF8 DynamicsCrm.DevKit.Shared\Const.cs"
+
     echo ************************************************************
     echo NuGet pack ...
     echo ************************************************************
@@ -42,3 +47,5 @@ if %MsBuild%=="" (
 
     rem call DynamicsCrm.DevKit.Console\bin\Debug\DynamicsCrm.DevKit.Console.exe 1
 )
+
+exit

@@ -3,7 +3,7 @@
     public class Const
     {
         public const string Version = "3.11.11";
-        public const string Build = "xxxx-yy-zz";
+        public const string Build = "2022.04.18 11.23";
         public const string CrmString = "Dataverse/CDS";
         public const string DynamicsCrmDevKitJson = "DynamicsCrm.DevKit.json";
         public const string DynamicsCrmDevKitLibDll = "DynamicsCrm.DevKit.Lib.dll";
