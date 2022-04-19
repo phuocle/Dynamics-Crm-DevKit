@@ -9,6 +9,7 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "DynamicsCrm.DevKit.Shared",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CC9B5ABC-FD05-46AB-BE73-A94B1F911426}"
 	ProjectSection(SolutionItems) = preProject
+		build.txt = build.txt
 		release.bat = release.bat
 		version.txt = version.txt
 	EndProjectSection

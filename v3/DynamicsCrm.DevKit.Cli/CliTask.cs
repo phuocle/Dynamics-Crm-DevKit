@@ -44,6 +44,10 @@ namespace DynamicsCrm.DevKit.Cli
                     var server = new TaskServer(arg, json);
                     server.Run();
                     break;
+                case nameof(CliType.webresources):
+                    var webresource = new TaskWebResource(arg, json.webresources.FirstOrDefault(x => x.profile == arg.Profile));
+                    webresource.Run();
+                    break;
             }
         }
     }

@@ -28,6 +28,18 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="images\**" />
+	  <Compile Remove="license\**" />
+	  <Compile Remove="Nuget\**" />
+	  <EmbeddedResource Remove="images\**" />
+	  <EmbeddedResource Remove="license\**" />
+	  <EmbeddedResource Remove="Nuget\**" />
+	  <None Remove="images\**" />
+	  <None Remove="license\**" />
+	  <None Remove="Nuget\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <Compile Remove="C:\Users\ple\.nuget\packages\community.visualstudio.toolkit\17.0.76.268-pre\build\AssemblyInfo.cs" />
 	</ItemGroup>
 
