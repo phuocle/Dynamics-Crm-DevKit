@@ -35,6 +35,7 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"{NEW_LINE}";
             code += $"namespace {rootNameSpace}{NEW_LINE}";
             code += $"{{{NEW_LINE}";
+            code += $"{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
             code += $"{TAB}public partial class {@class} : EntityBase{NEW_LINE}";
             code += $"{TAB}{{{NEW_LINE}";
             code += $"{TAB}{TAB}public struct Fields{NEW_LINE}";

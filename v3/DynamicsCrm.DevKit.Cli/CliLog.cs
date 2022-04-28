@@ -47,7 +47,7 @@ namespace DynamicsCrm.DevKit.Cli
             }
             Console.ForegroundColor = oldConsoleForegroundColor;
             Console.BackgroundColor = oldConsoleBackgroundColor;
-            //WriteLine(ConsoleColor.Black, "█");
+            WriteLine();
             WriteLine(ConsoleColor.White, "|");
         }
 
@@ -70,7 +70,7 @@ namespace DynamicsCrm.DevKit.Cli
             }
             Console.ForegroundColor = oldConsoleForegroundColor;
             Console.BackgroundColor = oldConsoleBackgroundColor;
-            //WriteLine(ConsoleColor.Black, "█");
+            WriteLine();
         }
 
         public static void WriteWarning(params object[] values)
