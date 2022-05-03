@@ -3,7 +3,7 @@
     "downloadreports": {
       "commandName": "Project",
       "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://hslg2ewodev.crm7.dynamics.com;ClientId=881c7316-fcf9-4ba9-900e-3bf62b73b981;ClientSecret=7y[87[H5p_FJAw[ROTlm6]c3vWbn33UP;\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"downloadreports\" /profile:\"DEBUG\"",
-      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.00.00\\TestExistingReports\\2.after\\Dev.DevKit.Report"
+      "workingDirectory": "C:\\src\\VUS\\SourceCode\\Hs.Vus.WebResource\\entities"
     },
     "uploadreports": {
       "commandName": "Project",
@@ -18,11 +18,6 @@
     "generator-form-DSMS": {
       "commandName": "Project",
       "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://pmm-dev.crm5.dynamics.com;ClientId=a871ae25-6786-424b-b167-56eb598b8c76;ClientSecret=T2W7Q~JIzIvhWrIt~5MaUTBTamAqKGV1NhMvm;\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"JS-FORM-DEBUG-YES\"",
-      "workingDirectory": "C:\\src\\azure\\abiz\\git\\ABIZ_DSM\\Abiz.DSM.WebResource\\entities"
-    },
-    "generator-webapi-DSMS": {
-      "commandName": "Project",
-      "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://pmm-dev.crm5.dynamics.com;ClientId=a871ae25-6786-424b-b167-56eb598b8c76;ClientSecret=T2W7Q~JIzIvhWrIt~5MaUTBTamAqKGV1NhMvm;\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"JS-WEBAPI-DEBUG-YES\"",
       "workingDirectory": "C:\\src\\azure\\abiz\\git\\ABIZ_DSM\\Abiz.DSM.WebResource\\entities"
     },
     "ALL-DEMO-generator-form": {
@@ -112,6 +107,11 @@
       "commandName": "Project",
       "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://vus-dev.crm5.dynamics.com;ClientId=690a3a0a-556c-431e-8182-b887295627d5;ClientSecret=A2d7Q~LvCjbsM1Upa1jOtxPh.9Rwf9NapdFPO;\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"webresources\" /profile:\"IMAGES\"",
       "workingDirectory": "C:\\src\\VUS\\SourceCode\\Hs.Vus.WebResource"
+    },
+    "generator-webapi-VUS": {
+      "commandName": "Project",
+      "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://vus-dev.crm5.dynamics.com;ClientId=690a3a0a-556c-431e-8182-b887295627d5;ClientSecret=A2d7Q~LvCjbsM1Upa1jOtxPh.9Rwf9NapdFPO;\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"JS-WEBAPI\"",
+      "workingDirectory": "C:\\src\\VUS\\SourceCode\\Hs.Vus.WebResource\\entities"
     }
   }
 }
