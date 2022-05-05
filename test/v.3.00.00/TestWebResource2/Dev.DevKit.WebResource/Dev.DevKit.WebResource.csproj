@@ -77,9 +77,6 @@
       <DependentUpon>PhoneCall.js</DependentUpon>
     </Content>
     <Content Include="entities\PhoneCall.js" />
-    <Content Include="entities\PhoneCall.webapi.js">
-      <DependentUpon>PhoneCall.js</DependentUpon>
-    </Content>
     <Content Include="lib\devkit.js" />
     <Content Include="entities\devkit.d.ts" />
     <Content Include="process.xml" />

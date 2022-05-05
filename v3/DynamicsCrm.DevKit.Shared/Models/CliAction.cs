@@ -13,5 +13,7 @@
         public static string Deleted => "[DELETED] ";
         public static string Deactivated => "[DEACTIVATED] ";
         public static string Activated => "[ACTIVATED] ";
+        public static string NotExisting => "[NOT EXISTING] ";
+        public static string Added=> "[ADDED] ";
     }
 }
