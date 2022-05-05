@@ -1,6 +1,8 @@
 ﻿using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.Crm.Sdk.Messages;
+using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Tooling.Connector;
 using System;
 using System.Collections.Generic;
@@ -26,6 +28,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private bool IsOk { get; set; }
         private Guid SolutionId { get; set; }
         private string Prefix { get; set; }
+        private List<Guid> WebResourcesToPublish { get; } = new List<Guid>();
         public bool IsValid()
         {
             if (json == null)
@@ -72,11 +75,342 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
             if (IsValid())
             {
-
+                if (WebResourceFiles.Count == 0)
+                {
+                    CliLog.WriteLineWarning(ConsoleColor.Green, "Not found any webresource files to deploy");
+                }
+                else
+                {
+                    DeployWebResourceFiles();
+                }
             }
 
             CliLog.WriteLine(ConsoleColor.White, "|");
             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "END ", ConsoleColor.Blue, TaskType);
+        }
+
+        private void DeployWebResourceFiles()
+        {
+            CliLog.WriteLineWarning(ConsoleColor.Green, "DEPLOYING WEBRESOURCES");
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Found: ", ConsoleColor.Yellow, WebResourceFiles.Count, ConsoleColor.Green, " webresources");
+            CliLog.WriteLine(ConsoleColor.White, "|");
+            var i = 1;
+            foreach (var webResourceFile in WebResourceFiles)
+            {
+                DeployWebResourceFile(webResourceFile, i);
+                i++;
+            }
+
+            if (IsSupportWebResourceDependency && Dependencies.Count > 0)
+            {
+                CliLog.WriteLine(ConsoleColor.White, "|");
+                CliLog.WriteLineWarning(ConsoleColor.Green, "DEPLOYING WEBRESOURCES DEPENDENCIES");
+                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Found: ", ConsoleColor.Yellow, Dependencies.Count, ConsoleColor.Green, " dependencies");
+                CliLog.WriteLine(ConsoleColor.White, "|");
+                var j = 1;
+                foreach (var dependency in Dependencies)
+                {
+                    UpdateDependency(dependency, j);
+                    j++;
+                }
+            }
+        }
+
+        private void UpdateDependency(Dependency dependency, int current)
+        {
+            var len = Dependencies.Count.ToString().Length;
+            List<string> dependencies = dependency.dependencies;
+            dependencies = dependencies.Distinct().ToList();
+            dependency.dependencies = dependencies;
+            var dependencyXml = GetDependencyXml(dependency.dependencies, out var foundDependencies);
+            foreach (var webResourceName in dependency.webresources)
+            {
+                var fetchXml = $@"
+<fetch>
+  <entity name='webresource'>
+    <attribute name='dependencyxml' />
+    <filter type='and'>
+      <condition attribute='name' operator='eq' value='{webResourceName}'/>
+    </filter>
+  </entity>
+</fetch>";
+                var rows = CrmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+                string existingDependencyXml;
+                if (rows.Entities.Count > 0)
+                    existingDependencyXml = rows.Entities[0].GetAttributeValue<string>("dependencyxml");
+                else
+                {
+                    CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", current) + ": ", ConsoleColor.Magenta, "Not existing", ConsoleColor.Green, " Webresource ", ConsoleColor.Cyan, webResourceName);
+                    return;
+                }
+                if (!IsTheSameDependencyXml(dependency.dependencies, existingDependencyXml))
+                {
+                    var webResourceId = rows.Entities[0].Id;
+                    var entity = new Entity("webresource", webResourceId)
+                    {
+                        ["dependencyxml"] = dependencyXml
+                    };
+                    CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", current), ": ", ConsoleColor.Magenta, "Updating ", ConsoleColor.Cyan, webResourceName, ConsoleColor.Green, " dependencies");
+                    foreach (var d in foundDependencies)
+                        CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Cyan, "\t" + d);
+                    CrmServiceClient.Update(entity);
+                    if (!WebResourcesToPublish.Contains(webResourceId))
+                        WebResourcesToPublish.Add(webResourceId);
+                }
+                else
+                {
+                    CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", current) + ": ", ConsoleColor.Green, CliAction.DoNothing, ConsoleColor.White, webResourceName, ConsoleColor.Green, " dependencies");
+                    foreach (var d in foundDependencies)
+                        CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, "\t" + d);
+                }
+            }
+        }
+
+        private bool IsTheSameDependencyXml(List<string> webresources, string existingDependencyXml)
+        {
+            foreach (var webresource in webresources)
+                if (!existingDependencyXml.Contains(webresource)) return false;
+            return true;
+        }
+
+        private string GetDependencyXml(List<string> dependencies, out List<string> foundDependencies)
+        {
+            var library = string.Empty;
+            foundDependencies = new List<string>();
+            foreach (var dependency in dependencies)
+            {
+                var fetchData = new
+                {
+                    name = dependency
+                };
+                var fetchXml = $@"
+<fetch>
+  <entity name='webresource'>
+    <attribute name='webresourceid' />
+    <attribute name='languagecode' />
+    <attribute name='name' />
+    <attribute name='displayname' />
+    <attribute name='description' />
+    <attribute name='webresourceidunique' />
+    <filter type='and'>
+      <condition attribute='name' operator='eq' value='{fetchData.name}'/>
+    </filter>
+  </entity>
+</fetch>";
+                var rows = CrmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+                if (rows.Entities.Count > 0)
+                {
+                    var entity = rows.Entities[0];
+                    var name = entity.GetAttributeValue<string>("name");
+                    var displayname = entity.GetAttributeValue<string>("displayname");
+                    var description = entity.GetAttributeValue<string>("description");
+                    var webresourceidunique = entity.GetAttributeValue<Guid>("webresourceidunique");
+                    var languagecode = entity.GetAttributeValue<int?>("languagecode");
+                    library += $"<Library name='{name}' displayName='{displayname}' languagecode='{languagecode}' description='{description}' libraryUniqueId='{{{webresourceidunique}}}'/>";
+                    foundDependencies.Add(dependency);
+                }
+            }
+            if (library.Length == 0) return library;
+            var dependencyXml = $"<Dependencies><Dependency componentType='WebResource'>{library}</Dependency></Dependencies>";
+            dependencyXml = dependencyXml.Replace("'", "\"");
+            return dependencyXml;
+        }
+
+
+        private void DeployWebResourceFile(WebResourceFile webResourceFile, int current)
+        {
+            var len = WebResourceFiles.Count.ToString().Length;
+            if (webResourceFile.uniquename.StartsWith("/")) webResourceFile.uniquename = webResourceFile.uniquename.Substring(1);
+            var fetchData = new
+            {
+                name = webResourceFile.uniquename,
+                name2 = webResourceFile.uniquename.Substring(0, webResourceFile.uniquename.LastIndexOf('.'))
+            };
+            var fetchXml = $@"
+<fetch>
+  <entity name='webresource'>
+    <attribute name='content' />
+    <attribute name='webresourceid' />
+    <attribute name='name' />
+    <attribute name='iscustomizable' />
+    <attribute name='ismanaged' />
+    <filter type='or'>
+      <condition attribute='name' operator='eq' value='{fetchData.name}'/>
+      <condition attribute='name' operator='eq' value='{fetchData.name2}'/>
+    </filter>
+  </entity>
+</fetch>";
+            var rows = CrmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var content = string.Empty;
+            var webResourceId = Guid.Empty;
+            if (rows.Entities.Count > 0)
+            {
+                if (rows.Entities.Count == 1)
+                {
+                    var entity = rows.Entities[0];
+                    var ismanaged = entity.GetAttributeValue<bool?>("ismanaged");
+                    var iscustomizable = entity.GetAttributeValue<BooleanManagedProperty>("iscustomizable");
+                    if (ismanaged.HasValue && ismanaged.Value == true)
+                    {
+                        if (iscustomizable?.Value == false)
+                        {
+                            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, string.Format("{0,0}{1," + len + "}", "", current) + ": ", ConsoleColor.Red, "Update webresource failed because the setting webresource.iscustomizable = false - ", ConsoleColor.Green, webResourceFile.uniquename);
+                            return;
+                        }
+                    }
+                    webResourceId = entity.Id;
+                    content = entity?["content"]?.ToString();
+                }
+                else
+                {
+                    foreach (var entity in rows.Entities)
+                    {
+                        if (entity.GetAttributeValue<string>("name") != fetchData.name) continue;
+                        var ismanaged = entity.GetAttributeValue<bool?>("ismanaged");
+                        var iscustomizable = entity.GetAttributeValue<BooleanManagedProperty>("iscustomizable");
+                        if (ismanaged.HasValue && ismanaged.Value == true)
+                        {
+                            if (iscustomizable?.Value == false)
+                            {
+                                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, string.Format("{0,0}{1," + len + "}", "", current) + ": ", ConsoleColor.Red, "Update webresource failed because the setting webresource.iscustomizable = false - ", ConsoleColor.Green, webResourceFile.uniquename);
+                                return;
+                            }
+                        }
+                        webResourceId = entity.Id;
+                        content = entity?["content"]?.ToString();
+                        break;
+                    }
+                }
+            }
+            var fileContent = Convert.ToBase64String(File.ReadAllBytes(webResourceFile.file));
+            if (fileContent == content)
+            {
+                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", current) + ": ", ConsoleColor.Green, CliAction.DoNothing, ConsoleColor.White, webResourceFile.file.Substring(CurrentDirectory.Length + 1));
+                AddWebResourceToSolution(new Entity("webresource")
+                {
+                    ["name"] = webResourceFile.uniquename,
+                    ["webresourceid"] = webResourceId
+                });
+                return;
+            }
+            var webResource = new Entity("webresource")
+            {
+                ["name"] = webResourceFile.uniquename,
+                ["displayname"] = webResourceFile.displayname,
+                ["description"] = webResourceFile.version,
+                ["content"] = fileContent
+            };
+            var webResourceFileInfo = new FileInfo(webResourceFile.file);
+            var fileType = WebResourceWebResourceType.ScriptJScript;
+            switch (webResourceFileInfo.Extension.ToLower().TrimStart('.'))
+            {
+                case "html":
+                case "htm":
+                    fileType = WebResourceWebResourceType.WebpageHtml;
+                    break;
+                case "js":
+                    fileType = WebResourceWebResourceType.ScriptJScript;
+                    break;
+                case "png":
+                    fileType = WebResourceWebResourceType.PngFormat;
+                    break;
+                case "gif":
+                    fileType = WebResourceWebResourceType.GifFormat;
+                    break;
+                case "jpg":
+                case "jpeg":
+                    fileType = WebResourceWebResourceType.JpgFormat;
+                    break;
+                case "css":
+                    fileType = WebResourceWebResourceType.StyleSheetCss;
+                    break;
+                case "ico":
+                    fileType = WebResourceWebResourceType.IcoFormat;
+                    break;
+                case "xml":
+                    fileType = WebResourceWebResourceType.DataXml;
+                    break;
+                case "xsl":
+                case "xslt":
+                    fileType = WebResourceWebResourceType.StyleSheetXsl;
+                    break;
+                case "xap":
+                    fileType = WebResourceWebResourceType.SilverlightXap;
+                    break;
+                case "resx":
+                    fileType = WebResourceWebResourceType.StringResx;
+                    break;
+                case "svg":
+                    fileType = WebResourceWebResourceType.SvgFormat;
+                    break;
+            }
+            webResource["webresourcetype"] = new OptionSetValue((int)fileType);
+            if (fileType == WebResourceWebResourceType.StringResx)
+            {
+                var fileName = webResourceFileInfo.Name.Substring(0, webResourceFileInfo.Name.Length - webResourceFileInfo.Extension.Length);
+                var arr = fileName.Split(".".ToCharArray());
+                if (int.TryParse(arr[arr.Length - 1], out var languagecode))
+                {
+                    var req = new RetrieveProvisionedLanguagesRequest();
+                    var res = (RetrieveProvisionedLanguagesResponse)CrmServiceClient.Execute(req);
+                    if (res.RetrieveProvisionedLanguages.Contains(languagecode))
+                        webResource["languagecode"] = languagecode;
+                    else
+                    {
+                        throw new Exception($"Language code not found: {languagecode}");
+                    }
+                }
+            }
+            if (webResourceId == Guid.Empty)
+            {
+                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", current), ": ", ConsoleColor.Magenta, "Creating", ConsoleColor.Green, " WebResource ", ConsoleColor.Cyan, webResourceFile.file, ConsoleColor.Green, " to ", ConsoleColor.Cyan, webResourceFile.uniquename);
+                webResourceId = CrmServiceClient.Create(webResource);
+                webResource["webresourceid"] = webResourceId;
+            }
+            else
+            {
+                webResource["webresourceid"] = webResourceId;
+                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", current), ": ", ConsoleColor.Magenta, "Updating", ConsoleColor.Green, " WebResource ", ConsoleColor.Cyan, webResourceFile.file, ConsoleColor.Green, " to ", ConsoleColor.Cyan, webResourceFile.uniquename);
+                CrmServiceClient.Update(webResource);
+            }
+            WebResourcesToPublish.Add(webResourceId);
+            AddWebResourceToSolution(webResource);
+        }
+
+        private void AddWebResourceToSolution(Entity webResource)
+        {
+            var fetchData = new
+            {
+                objectid = Guid.Parse(webResource["webresourceid"].ToString()),
+                componenttype = 61,
+                uniquename = json.solution
+            };
+            var fetchXml = $@"
+<fetch>
+  <entity name='solutioncomponent'>
+    <attribute name='solutioncomponentid' />
+    <filter type='and'>
+      <condition attribute='objectid' operator='eq' value='{fetchData.objectid}'/>
+      <condition attribute='componenttype' operator='eq' value='{fetchData.componenttype}'/>
+    </filter>
+    <link-entity name='solution' from='solutionid' to='solutionid'>
+      <filter type='and'>
+        <condition attribute='uniquename' operator='eq' value='{fetchData.uniquename}'/>
+      </filter>
+    </link-entity>
+  </entity>
+</fetch>";
+            var rows = CrmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            if (rows.Entities.Count != 0) return;
+            var request = new AddSolutionComponentRequest
+            {
+                AddRequiredComponents = true,
+                ComponentType = 61,
+                ComponentId = Guid.Parse(webResource["webresourceid"].ToString()),
+                SolutionUniqueName = json.solution
+            };
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Magenta, " Adding ", ConsoleColor.Green, "WebResource: ", ConsoleColor.Magenta, $"{webResource["name"]} ", ConsoleColor.Green, "to solution: ", ConsoleColor.Magenta, $"{json.solution}");
+            CrmServiceClient.Execute(request);
         }
 
         private bool? _isSupportWebResourceDependency = (bool?)null;
@@ -165,7 +499,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     };
                     _webResourceFiles.Add(webResourceFile);
                 }
-                _webResourceFiles = _webResourceFiles.Where(i => IsSupportedExtensions(i.file)).ToList();
+                _webResourceFiles = _webResourceFiles.Where(i => IsSupportedExtensions(i.file)).OrderBy(x => x.uniquename).ToList();
                 return _webResourceFiles;
             }
         }

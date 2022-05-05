@@ -55,7 +55,6 @@ namespace DynamicsCrm.DevKit.Cli
         static void RunCli(CommandLineArgs arguments)
         {
             ShowHelp();
-            //CliLog.WriteLine(ConsoleColor.White, "|");
             if (IsValid(arguments))
             {
                 CliTask.Run(arguments);
