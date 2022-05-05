@@ -47,7 +47,7 @@ namespace DynamicsCrm.DevKit.Cli
             }
             Console.ForegroundColor = oldConsoleForegroundColor;
             Console.BackgroundColor = oldConsoleBackgroundColor;
-            WriteLine();
+            WriteLine(ConsoleColor.Black, "█");
             WriteLine(ConsoleColor.White, "|");
         }
 
@@ -70,7 +70,7 @@ namespace DynamicsCrm.DevKit.Cli
             }
             Console.ForegroundColor = oldConsoleForegroundColor;
             Console.BackgroundColor = oldConsoleBackgroundColor;
-            WriteLine();
+            WriteLine(ConsoleColor.Black, "█");
         }
 
         public static void WriteWarning(params object[] values)
@@ -132,15 +132,10 @@ namespace DynamicsCrm.DevKit.Cli
         {
             Write(ConsoleColor.White, "| ", message);
             int counter = 0;
-            //Console.CursorVisible = false;
             while (true)
             {
                 switch (counter % 4)
                 {
-                    //case 0: Console.Write("┐"); counter = 0; break;
-                    //case 1: Console.Write("┌"); break;
-                    //case 2: Console.Write("└"); break;
-                    //case 3: Console.Write("┘"); break;
                     case 0: Console.Write("."); counter = 0; break;
                     case 1: Console.Write("."); break;
                     case 2: Console.Write("."); break;
@@ -148,7 +143,6 @@ namespace DynamicsCrm.DevKit.Cli
                 }
                 counter++;
                 Thread.Sleep(1000);
-                //Console.SetCursorPosition(Console.CursorLeft - 1, Console.CursorTop);
             }
         }
     }
