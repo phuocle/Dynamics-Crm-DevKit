@@ -84,7 +84,7 @@ declare namespace DevKit {
 			/** Select the preferred method of contact. */
 			PreferredContactMethodCode: DevKit.Controls.OptionSet;
 			/** Select the preferred method of contact. */
-			PreferredContactMethodCode1: DevKit.Controls.OptionSet;
+			PreferredContactMethodCode_1: DevKit.Controls.OptionSet;
 			/** Type the name of the contact's spouse or partner for reference during calls, events, or other communications with the contact. */
 			SpousesName: DevKit.Controls.String;
 			/** Type the main phone number for this contact. */
@@ -99,21 +99,10 @@ declare namespace DevKit {
 			navRelationships: DevKit.Controls.NavigationItem,
 			navSubConts: DevKit.Controls.NavigationItem
 		}
-		interface ProcessBPF_Account {
-			/** Type the contact's first name to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns. */
-			FirstName: DevKit.Controls.String;
-			/** Type the contact's first name to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns. */
-			FirstName_1: DevKit.Controls.String;
-			/** Type the contact's last name to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns. */
-			LastName: DevKit.Controls.String;
-		}
-		interface Process extends DevKit.Controls.IProcess {
-			BPF_Account: ProcessBPF_Account;
-		}
 	}
 	class FormContact extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Contact Main Form
+		* DynamicsCrm.DevKit form Contact
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -126,8 +115,6 @@ declare namespace DevKit {
 		Header: DevKit.FormContact.Header;
 		/** The Navigation of form Contact */
 		Navigation: DevKit.FormContact.Navigation;
-		/** The Process of form Contact */
-		Process: DevKit.FormContact.Process;
 		/** The SidePanes of form Contact */
 		SidePanes: DevKit.SidePanes;
 	}
@@ -280,24 +267,13 @@ declare namespace DevKit {
 			navRelationships: DevKit.Controls.NavigationItem,
 			navSubConts: DevKit.Controls.NavigationItem
 		}
-		interface ProcessBPF_Account {
-			/** Type the contact's first name to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns. */
-			FirstName: DevKit.Controls.String;
-			/** Type the contact's first name to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns. */
-			FirstName_1: DevKit.Controls.String;
-			/** Type the contact's last name to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns. */
-			LastName: DevKit.Controls.String;
-		}
-		interface Process extends DevKit.Controls.IProcess {
-			BPF_Account: ProcessBPF_Account;
-		}
 		interface Grid {
 			contactactivitiesgrid: DevKit.Controls.Grid;
 		}
 	}
 	class FormContact_Information extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Contact_Information Main Form
+		* DynamicsCrm.DevKit form Contact_Information
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -310,8 +286,6 @@ declare namespace DevKit {
 		Header: DevKit.FormContact_Information.Header;
 		/** The Navigation of form Contact_Information */
 		Navigation: DevKit.FormContact_Information.Navigation;
-		/** The Process of form Contact_Information */
-		Process: DevKit.FormContact_Information.Process;
 		/** The Grid of form Contact_Information */
 		Grid: DevKit.FormContact_Information.Grid;
 		/** The SidePanes of form Contact_Information */
@@ -359,7 +333,7 @@ declare namespace DevKit {
 	}
 	class FormContact_Quick_Create extends DevKit.IForm {
 		/**
-		* DynamicsCrm.DevKit form Contact_Quick_Create Quick Create
+		* DynamicsCrm.DevKit form Contact_Quick_Create
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -677,6 +651,7 @@ declare namespace DevKit {
 		ManagerPhone: DevKit.WebApi.StringValue;
 		/** Whether is only for marketing */
 		MarketingOnly: DevKit.WebApi.BooleanValue;
+		MasterContactIdName: DevKit.WebApi.StringValueReadonly;
 		/** Unique identifier of the master contact for merge. */
 		MasterId: DevKit.WebApi.LookupValueReadonly;
 		/** Shows whether the account has been merged with a master contact. */
@@ -715,9 +690,7 @@ declare namespace DevKit {
 		Pager: DevKit.WebApi.StringValue;
 		/** Unique identifier of the parent contact. */
 		ParentContactId: DevKit.WebApi.LookupValueReadonly;
-		/** Select the parent account or parent contact for the contact to provide a quick link to additional details, such as financial information, activities, and opportunities. */
 		parentcustomerid_account: DevKit.WebApi.LookupValue;
-		/** Select the parent account or parent contact for the contact to provide a quick link to additional details, such as financial information, activities, and opportunities. */
 		parentcustomerid_contact: DevKit.WebApi.LookupValue;
 		/** Shows whether the contact participates in workflow rules. */
 		ParticipatesInWorkflow: DevKit.WebApi.BooleanValue;
@@ -741,6 +714,7 @@ declare namespace DevKit {
 		SLAId: DevKit.WebApi.LookupValue;
 		/** Last SLA that was applied to this case. This field is for internal use only. */
 		SLAInvokedId: DevKit.WebApi.LookupValueReadonly;
+		SLAName: DevKit.WebApi.StringValueReadonly;
 		/** Type the name of the contact's spouse or partner for reference during calls, events, or other communications with the contact. */
 		SpousesName: DevKit.WebApi.StringValue;
 		/** Shows the ID of the stage. */
@@ -861,7 +835,7 @@ declare namespace OptionSet {
 		}
 		enum devkit_CategoryCode {
 			/** 1 */
-			Business,
+			Bu_siness,
 			/** 2 */
 			Family,
 			/** 5 */
@@ -971,22 +945,22 @@ declare namespace OptionSet {
 			/** 1 */
 			Default_Value
 		}
-		enum RollupState {
-			/** 0 - Attribute value is yet to be calculated */
-			NotCalculated,
-			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-			Calculated,
-			/** 2 - Attribute value calculation lead to overflow error */
-			OverflowError,
-			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-			OtherError,
-			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-			RetryLimitExceeded,
-			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-			HierarchicalRecursionLimitReached,
-			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-			LoopDetected
-		}
+        enum RollupState {
+            /** 0 - Attribute value is yet to be calculated */
+            NotCalculated,
+            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+            Calculated,
+            /** 2 - Attribute value calculation lead to overflow error */
+            OverflowError,
+            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+            OtherError,
+            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+            RetryLimitExceeded,
+            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+            HierarchicalRecursionLimitReached,
+            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+            LoopDetected
+        }
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00'}
+//{'JsForm':['Contact','Information','Quick Create'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.13.33','JsFormVersion':'v2'}

@@ -43,7 +43,7 @@ var DevKit;
 			ParentCustomerId: {},
 			PaymentTermsCode: {},
 			PreferredContactMethodCode: {},
-			PreferredContactMethodCode1: {},
+			PreferredContactMethodCode_1: {},
 			SpousesName: {},
 			Telephone1: {},
 			TransactionCurrencyId: {}
@@ -76,15 +76,11 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
-		var process = devKit.LoadProcess(formContext);
-		var _BPF_Account = {
-			FirstName: {},
-			FirstName_1: {},
-			LastName: {}
-		}
-		devKit.LoadFields(formContext, _BPF_Account, "header_process_");
-		process.BPF_Account = _BPF_Account;
-		form.Process = process;
+		var quickForm = {
+
+		};
+		devKit.LoadQuickForms(formContext, quickForm);
+		form.QuickForm = quickForm;
 		var navigation = {
 			navAddresses: {},
 			navAsyncOperations: {},
@@ -200,15 +196,11 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
-		var process = devKit.LoadProcess(formContext);
-		var _BPF_Account = {
-			FirstName: {},
-			FirstName_1: {},
-			LastName: {}
-		}
-		devKit.LoadFields(formContext, _BPF_Account, "header_process_");
-		process.BPF_Account = _BPF_Account;
-		form.Process = process;
+		var quickForm = {
+
+		};
+		devKit.LoadQuickForms(formContext, quickForm);
+		form.QuickForm = quickForm;
 		var grid = {
 			contactactivitiesgrid: {},
 		};
@@ -253,7 +245,7 @@ var DevKit;
 			MobilePhone: {},
 			ParentCustomerId: {},
 			Telephone1: {}
-		};
+		}
 		devKit.LoadFields(formContext, body);
 		var tab = {
 			tab_1: {
@@ -263,15 +255,13 @@ var DevKit;
 					tab_1_column_3_section_1: {}
 				}
 			}
-		};
+		}
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
-		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
-		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
-	};
+	}
 })(DevKit || (DevKit = {}));
 /** @namespace OptionSet */
 var OptionSet;
@@ -326,7 +316,7 @@ var OptionSet;
 			Default_Value: 1
 		},
 		devkit_CategoryCode : {
-			Business: 1,
+			Bu_siness: 1,
 			Family: 2,
 			Other: 5,
 			Sales: 4,
@@ -395,14 +385,15 @@ var OptionSet;
 		TerritoryCode : {
 			Default_Value: 1
 		},
-		RollupState : {
-			NotCalculated: 0,
-			Calculated: 1,
-			OverflowError: 2,
-			OtherError: 3,
-			RetryLimitExceeded: 4,
-			HierarchicalRecursionLimitReached: 5,
-			LoopDetected: 6
-		}
+        RollupState : {
+            NotCalculated: 0,
+            Calculated: 1,
+            OverflowError: 2,
+            OtherError: 3,
+            RetryLimitExceeded: 4,
+            HierarchicalRecursionLimitReached: 5,
+            LoopDetected: 6
+        }
+
 	};
 })(OptionSet || (OptionSet = {}));

@@ -1,12 +1,12 @@
 ﻿//@ts-check
-///<reference path="Contact.d.ts" />
+///<reference path="PhoneCall.d.ts" />
 "use strict";
-var formContact = (function () {
+var formPhone_Call = (function () {
 	"use strict";
-	/** @type DevKit.FormContact */
+	/** @type DevKit.FormPhone_Call */
 	var form = null;
 	async function onLoad(executionContext) {
-		form = new DevKit.FormContact(executionContext);
+		form = new DevKit.FormPhone_Call(executionContext);
 
 	}
 	async function onSave(executionContext) {
@@ -16,12 +16,12 @@ var formContact = (function () {
 		OnSave: onSave
 	};
 })();
-var formContact_Quick_Create = (function () {
+var formPhone_Call_for_Interactive_experience = (function () {
 	"use strict";
-	/** @type DevKit.FormContact_Quick_Create */
+	/** @type DevKit.FormPhone_Call_for_Interactive_experience */
 	var form = null;
 	async function onLoad(executionContext) {
-		form = new DevKit.FormContact_Quick_Create(executionContext);
+		form = new DevKit.FormPhone_Call_for_Interactive_experience(executionContext);
 
 	}
 	async function onSave(executionContext) {
@@ -31,12 +31,12 @@ var formContact_Quick_Create = (function () {
 		OnSave: onSave
 	};
 })();
-var formInformation = (function () {
+var formPhone_call_quick_create_form = (function () {
 	"use strict";
-	/** @type DevKit.FormInformation */
+	/** @type DevKit.FormPhone_call_quick_create_form */
 	var form = null;
 	async function onLoad(executionContext) {
-		form = new DevKit.FormInformation(executionContext);
+		form = new DevKit.FormPhone_call_quick_create_form(executionContext);
 
 	}
 	async function onSave(executionContext) {

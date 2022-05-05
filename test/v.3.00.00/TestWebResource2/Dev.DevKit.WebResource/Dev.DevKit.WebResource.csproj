@@ -63,10 +63,23 @@
       <DependentUpon>Account.js</DependentUpon>
     </Content>
     <Content Include="entities\Account.js" />
+    <Content Include="entities\Account.webapi.js">
+      <DependentUpon>Account.js</DependentUpon>
+    </Content>
     <Content Include="entities\Contact.form.js">
       <DependentUpon>Contact.js</DependentUpon>
     </Content>
     <Content Include="entities\Contact.js" />
+    <Content Include="entities\Contact.webapi.js">
+      <DependentUpon>Contact.js</DependentUpon>
+    </Content>
+    <Content Include="entities\PhoneCall.form.js">
+      <DependentUpon>PhoneCall.js</DependentUpon>
+    </Content>
+    <Content Include="entities\PhoneCall.js" />
+    <Content Include="entities\PhoneCall.webapi.js">
+      <DependentUpon>PhoneCall.js</DependentUpon>
+    </Content>
     <Content Include="lib\devkit.js" />
     <Content Include="entities\devkit.d.ts" />
     <Content Include="process.xml" />
@@ -93,6 +106,9 @@
     </TypeScriptCompile>
     <TypeScriptCompile Include="entities\Contact.d.ts">
       <DependentUpon>Contact.js</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="entities\PhoneCall.d.ts">
+      <DependentUpon>PhoneCall.js</DependentUpon>
     </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
