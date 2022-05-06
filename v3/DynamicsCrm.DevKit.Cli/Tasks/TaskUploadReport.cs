@@ -81,17 +81,17 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         var reports = reportFiles.Where(x => x?.Language.ToLower() == json?.language.ToLower() && x.FileName?.ToLower() == fileName?.ToLower());
                         if (reports.Count() != 1)
                         {
-                            CliLog.WriteLineError(ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, "File ", ConsoleColor.White, file, ConsoleColor.Green, " found ", ConsoleColor.White, reports.Count(), ConsoleColor.Green, (reports.Count() == 0 ? " report file name " : " report(s) file name "), ConsoleColor.White, fileName, ConsoleColor.Green, " with language: ", ConsoleColor.White, json.language);
+                            CliLog.WriteLineError(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, "File ", ConsoleColor.White, file, ConsoleColor.Green, " found ", ConsoleColor.White, reports.Count(), ConsoleColor.Green, (reports.Count() == 0 ? " report file name " : " report(s) file name "), ConsoleColor.White, fileName, ConsoleColor.Green, " with language: ", ConsoleColor.White, json.language);
                         }
                         else
                         {
                             var report = reports.First();
                             if (Utility.IsTheSame(report.Content, File.ReadAllText(file))) {
-                                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DoNothing, ConsoleColor.White, json.language, ConsoleColor.Green, " report ", ConsoleColor.White, file, ConsoleColor.Green, " to ", ConsoleColor.White, fileName, ConsoleColor.Green, " report file name");
+                                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DoNothing, ConsoleColor.White, json.language, ConsoleColor.Green, " report ", ConsoleColor.White, file, ConsoleColor.Green, " to ", ConsoleColor.White, fileName, ConsoleColor.Green, " report file name");
                             }
                             else {
                                 XrmHelper.DeployReport(CrmServiceClient, report.ObjectId, file);
-                                CliLog.WriteLineWarning(ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Deployed, ConsoleColor.White, json.language, ConsoleColor.Green, " report ", ConsoleColor.White, file, ConsoleColor.Green, " to ", ConsoleColor.White, fileName, ConsoleColor.Green, " report file name");
+                                CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Deployed, ConsoleColor.White, json.language, ConsoleColor.Green, " report ", ConsoleColor.White, file, ConsoleColor.Green, " to ", ConsoleColor.White, fileName, ConsoleColor.Green, " report file name");
                             }
                         }
                         i++;

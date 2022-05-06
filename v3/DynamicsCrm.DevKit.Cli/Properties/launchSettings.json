@@ -112,6 +112,11 @@
       "commandName": "Project",
       "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://vus-dev.crm5.dynamics.com;ClientId=690a3a0a-556c-431e-8182-b887295627d5;ClientSecret=A2d7Q~LvCjbsM1Upa1jOtxPh.9Rwf9NapdFPO;\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"JS-WEBAPI\"",
       "workingDirectory": "C:\\src\\VUS\\SourceCode\\Hs.Vus.WebResource\\entities"
+    },
+    "plugin.server.VUS": {
+      "commandName": "Project",
+      "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://vus-dev.crm5.dynamics.com;ClientId=690a3a0a-556c-431e-8182-b887295627d5;ClientSecret=A2d7Q~LvCjbsM1Upa1jOtxPh.9Rwf9NapdFPO;\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"servers\" /profile:\"DEBUG\"",
+      "workingDirectory": "C:\\src\\VUS\\SourceCode\\Hs.Vus.Plugins"
     }
   }
 }

@@ -654,19 +654,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 ["sdkmessageid"] = sdkMessageId,
                 ["filteringattributes"] = attribute.FilteringAttributes?.Replace(" ", ""),
                 ["impersonatinguserid"] = impersonatingUserId != null ? new EntityReference("systemuser", impersonatingUserId.Value) : null,
-                ["supporteddeployment"] = (attribute.Server && attribute.Offline) ? new OptionSetValue(2/*Both*/) : (!attribute.Server && attribute.Offline ? new OptionSetValue(1/*Offline*/) : new OptionSetValue(0/*Server*/))
+                ["supporteddeployment"] = (attribute.Server && attribute.Offline) ? new OptionSetValue(2/*Both*/) : (!attribute.Server && attribute.Offline ? new OptionSetValue(1/*Offline*/) : new OptionSetValue(0/*Server*/)),
+                ["description"] = attribute.Description
             };
-            if (string.IsNullOrWhiteSpace(attribute.Description))
-            {
-                if (rows.Entities.Count == 0 || (rows.Entities.Count > 0 && string.IsNullOrWhiteSpace(rows.Entities[0].GetAttributeValue<string>("description"))))
-                {
-                    pluginStep["description"] = Const.WindowTitle;
-                }
-            }
-            else
-            {
-                pluginStep["description"] = attribute.Description;
-            }
             if (rows.Entities.Count == 0)
             {
                 if (attribute.SecureConfiguration?.Trim().Length > 0)
@@ -816,7 +806,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             if (
                 old.Name != @new.Name ||
                 (old.Configuration ?? string.Empty) != @new.Configuration ||
-                (old.Description ?? string.Empty) != (@new.Description ?? Const.WindowTitle) ||
+                (old.Description ?? string.Empty) != (@new.Description ?? String.Empty) ||
                 old.Mode != @new.Mode ||
                 old.Rank != @new.Rank ||
                 old.Stage != @new.Stage ||
