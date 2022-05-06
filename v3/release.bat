@@ -48,5 +48,3 @@ if %MsBuild%=="" (
 
     rem call DynamicsCrm.DevKit.Console\bin\Debug\DynamicsCrm.DevKit.Console.exe 1
 )
-
-exit

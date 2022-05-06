@@ -57,12 +57,14 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             if (IsCli)
             {
+#pragma warning disable VSTHRD001 // Avoid legacy thread switching APIs
                 Dispatcher.Invoke(DispatcherPriority.Normal,
                     new System.Action(() =>
                     {
                         this.Title = string.IsNullOrWhiteSpace(e.StatusMessage) ? e.ErrorMessage : e.StatusMessage;
                     }
                 ));
+#pragma warning restore VSTHRD001 // Avoid legacy thread switching APIs
             }
             else
             {
@@ -88,6 +90,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 CrmLoginCtrl.GoBackToLogin();
                 if (IsCli)
                 {
+#pragma warning disable VSTHRD001 // Avoid legacy thread switching APIs
                     Dispatcher.Invoke(DispatcherPriority.Normal,
                        new System.Action(() =>
                        {
@@ -96,6 +99,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                            CrmLoginCtrl.IsEnabled = true;
                        }
                         ));
+#pragma warning restore VSTHRD001 // Avoid legacy thread switching APIs
                 }
                 else
                 {
@@ -122,6 +126,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             bIsConnectedComplete = false;
             if (IsCli)
             {
+#pragma warning disable VSTHRD001 // Avoid legacy thread switching APIs
                 Dispatcher.Invoke(DispatcherPriority.Normal,
                 new System.Action(() =>
                 {
@@ -129,6 +134,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     CrmLoginCtrl.IsEnabled = true;
                 }
             ));
+#pragma warning restore VSTHRD001 // Avoid legacy thread switching APIs
             }
             else
             {
@@ -164,6 +170,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             CrmLoginCtrl.GoBackToLogin();
             if (IsCli)
             {
+#pragma warning disable VSTHRD001 // Avoid legacy thread switching APIs
                 Dispatcher.Invoke(DispatcherPriority.Normal,
                     new System.Action(() =>
                     {
@@ -171,6 +178,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         CrmLoginCtrl.IsEnabled = true;
                     }
                 ));
+#pragma warning restore VSTHRD001 // Avoid legacy thread switching APIs
             }
             else
             {
