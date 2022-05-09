@@ -37,8 +37,8 @@
     },
     "ALL-DEMO-proxy-user-pass": {
       "commandName": "Project",
-      "commandLineArgs": "/conn:\"AuthType=OAuth;Url=https://pmm-dev.crm5.dynamics.com;Username=phuoc.le@abiz.co;Password=T7H3v4wyYg+QhUOerrXP5w==;\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"proxytypes\" /profile:\"ALL\" /version:\"9.1.0.92\"",
-      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.00.00\\TestAllEntities\\All-DEMO-2\\Dev.DevKit.ProxyTypes"
+      "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://vus-dev.crm5.dynamics.com;ClientId=690a3a0a-556c-431e-8182-b887295627d5;ClientSecret=A2d7Q~LvCjbsM1Upa1jOtxPh.9Rwf9NapdFPO;\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"proxytypes\" /profile:\"ALL\" /version:\"9.1.0.110\"",
+      "workingDirectory": "C:\\src\\VUS\\SourceCode\\Hs.Vus.ProxyTypes"
     },
     "ALL-DEMO-proxy-clientsecret": {
       "commandName": "Project",

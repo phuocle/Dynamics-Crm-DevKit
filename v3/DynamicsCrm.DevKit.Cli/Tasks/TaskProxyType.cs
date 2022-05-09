@@ -148,7 +148,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             while (!process.StandardOutput.EndOfStream)
             {
                 var line = process.StandardOutput.ReadLine();
-                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Yellow, line);
+                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, line);
             }
             process.WaitForExit();
         }
@@ -167,7 +167,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             command.Append($"/nologo ");
             command.Append($"/SuppressGeneratedCodeAttribute ");
             command.Append($"/generateActions ");
-            command.Append($"/legacyMode ");
+            command.Append($"/emitfieldsclasses ");
+            //command.Append($"/legacyMode ");
+            command.Append($"/generateGlobalOptionSets ");
             command.Append($"/namespace:\"{json.@namespace}\" ");
             if (json.entities != null && json.entities.Length > 0)
             {
@@ -201,7 +203,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             command.Append($"/nologo ");
             command.Append($"/SuppressGeneratedCodeAttribute ");
             command.Append($"/generateActions ");
-            command.Append($"/legacyMode ");
+            command.Append($"/emitfieldsclasses ");
+            //command.Append($"/legacyMode ");
+            command.Append($"/generateGlobalOptionSets ");
             command.Append($"/namespace:\"{json.@namespace}\" ");
             command.Append($"/out:\"{json.output}\"");
             return command.ToString();
