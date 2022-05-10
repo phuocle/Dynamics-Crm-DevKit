@@ -17,11 +17,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             CurrentDirectory = arg.CurrentDirectory;
         }
         public CommandLineArgs Arg { get; set; }
-        private JsonDownloadReport json { get; set; }
-
         public string CurrentDirectory { get; set; }
         public CrmServiceClient CrmServiceClient { get; set; }
         public string TaskType => $"[{nameof(CliType.downloadreports).ToUpper()}]";
+        private JsonDownloadReport json { get; set; }
         public bool IsValid()
         {
             if (json == null)
@@ -58,7 +57,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "START ", ConsoleColor.Blue, TaskType);
             CliLog.WriteLine(ConsoleColor.White, "|");
-
             if (IsValid())
             {
                 var reportFiles = XrmHelper.GetReportsBySolution(CrmServiceClient, json.solution);
@@ -80,7 +78,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         if (!File.Exists(fileName))
                         {
                             Utility.ForceWriteAllText(fileName, reportFile.Content);
-                            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Downloaded, ConsoleColor.White, reportFile.Language, ConsoleColor.Green, " report file name ", ConsoleColor.White, reportFile.FileName, ConsoleColor.Green, " to: ", ConsoleColor.White, fileName);
+                            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Downloaded, ConsoleColor.White, reportFile.Language, ConsoleColor.Green, " report file name ", ConsoleColor.White, reportFile.FileName, ConsoleColor.Green, " to: ", ConsoleColor.White, ".." + fileName.Substring(CurrentDirectory.Length));
                         }
                         else
                         {
@@ -92,7 +90,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     }
                 }
             }
-
             CliLog.WriteLine(ConsoleColor.White, "|");
             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "END ", ConsoleColor.Blue, TaskType);
         }
