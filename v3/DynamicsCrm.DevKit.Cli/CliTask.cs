@@ -1,6 +1,7 @@
 ﻿using DynamicsCrm.DevKit.Cli.Tasks;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
+using System;
 using System.IO;
 using System.Linq;
 
@@ -47,6 +48,13 @@ namespace DynamicsCrm.DevKit.Cli
                 case nameof(CliType.webresources):
                     var webresource = new TaskWebResource(arg, json.webresources.FirstOrDefault(x => x.profile == arg.Profile));
                     webresource.Run();
+                    break;
+                case nameof(CliType.datasources):
+                    var dataSource = new TaskDataSource(arg, json.datasources.FirstOrDefault(x => x.profile == arg.Profile));
+                    dataSource.Run();
+                    break;
+                default:
+                    CliLog.WriteLineError(ConsoleColor.Yellow, $"/type:{arg.Type} not support");
                     break;
             }
         }

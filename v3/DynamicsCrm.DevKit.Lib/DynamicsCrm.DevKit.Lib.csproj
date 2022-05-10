@@ -71,7 +71,7 @@
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.1.0" />
     <PackageReference Include="Microsoft.CrmSdk.XrmTooling.CoreAssembly" Version="9.1.0.110" />
     <PackageReference Include="Microsoft.CrmSdk.XrmTooling.WpfControls" Version="9.1.0.110" />
-    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.0.32112.339" />
+    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.1.32210.191" />
   </ItemGroup>
 
   <ItemGroup>

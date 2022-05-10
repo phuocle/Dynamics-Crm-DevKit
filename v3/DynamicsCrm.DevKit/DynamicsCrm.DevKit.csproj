@@ -48,9 +48,6 @@
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="..\.editorconfig">
-      <Link>.editorconfig</Link>
-    </None>
     <None Include="Commands\CommandWebResource.cs" />
     <Compile Include="Commands\DeployWebResource.cs" />
     <Compile Include="DevKitPackageVsct.cs">
@@ -110,10 +107,10 @@
     <PackageReference Include="Microsoft.CrmSdk.XrmTooling.WpfControls">
       <Version>9.1.0.110</Version>
     </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.0.32112.339" ExcludeAssets="runtime">
+    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.1.32210.191" ExcludeAssets="runtime">
       <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.1.9-preview1">
+    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.1.4057">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
