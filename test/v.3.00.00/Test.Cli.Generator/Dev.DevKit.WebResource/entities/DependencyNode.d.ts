@@ -46,6 +46,25 @@ declare namespace DevKit {
 		/** Unique identifier of the top solution. */
 		readonly TopSolutionId: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the solution */
+			readonly BaseSolutionId: string;
+			/** The type code of the component. */
+			readonly ComponentType: string;
+			/** Unique identifier of the dependency node. */
+			readonly DependencyNodeId: string;
+			/** Introduced version for the component */
+			readonly IntroducedVersion: string;
+			/** Whether this component is shared by two solutions with the same publisher. */
+			readonly IsSharedComponent: string;
+			/** Unique identifier of the object with which the node is associated. */
+			readonly ObjectId: string;
+			/** Unique identifier of the parent entity. */
+			readonly ParentId: string;
+			/** Unique identifier of the top solution. */
+			readonly TopSolutionId: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -250,4 +269,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

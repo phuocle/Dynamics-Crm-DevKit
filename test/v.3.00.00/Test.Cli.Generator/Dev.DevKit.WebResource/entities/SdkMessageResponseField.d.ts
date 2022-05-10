@@ -78,6 +78,57 @@ declare namespace DevKit {
 		Value: string;
 		/** For internal use only. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Common language runtime (CLR)-based formatter of the SDK message response field. */
+			readonly ClrFormatter: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier of the user who created the SDK message response field. */
+			readonly CreatedBy: string;
+			/** Date and time when the SDK message response field was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the sdkmessageresponsefield. */
+			readonly CreatedOnBehalfBy: string;
+			/** Customization level of the SDK message response field. */
+			readonly CustomizationLevel: string;
+			/** Formatter for the SDK message response field. */
+			readonly Formatter: string;
+			/** Version in which the component is introduced. */
+			readonly IntroducedVersion: string;
+			/** Information that specifies whether this component is managed. */
+			readonly IsManaged: string;
+			/** Unique identifier of the user who last modified the SDK message response field. */
+			readonly ModifiedBy: string;
+			/** Date and time when the SDK message response field was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the sdkmessageresponsefield. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Name of the SDK message response field. */
+			readonly Name: string;
+			/** Unique identifier of the organization with which the SDK message response field is associated. */
+			readonly OrganizationId: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			readonly ParameterBindingInformation: string;
+			/** Position of the Sdk message response field */
+			readonly Position: string;
+			/** Public name of the SDK message response field. */
+			readonly PublicName: string;
+			/** Unique identifier of the SDK message response field entity. */
+			readonly SdkMessageResponseFieldId: string;
+			/** Unique identifier of the SDK message response field. */
+			readonly SdkMessageResponseFieldIdUnique: string;
+			/** Unique identifier of the message response with which the SDK message response field is associated. */
+			readonly SdkMessageResponseId: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** Actual value of the SDK message response field. */
+			readonly Value: string;
+			/** For internal use only. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -110,4 +161,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

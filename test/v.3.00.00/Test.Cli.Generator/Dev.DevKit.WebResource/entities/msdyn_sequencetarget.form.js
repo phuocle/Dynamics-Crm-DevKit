@@ -74,6 +74,10 @@ var OptionSet;
 			Regarding_Entity_Deactivated: 2,
 			User_Disconnected: 0
 		},
+		msdyn_targetIdType : {
+		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

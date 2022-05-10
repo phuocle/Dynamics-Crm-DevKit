@@ -106,6 +106,8 @@ var OptionSet;
 			Tue: 192350002,
 			Wed: 192350003
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

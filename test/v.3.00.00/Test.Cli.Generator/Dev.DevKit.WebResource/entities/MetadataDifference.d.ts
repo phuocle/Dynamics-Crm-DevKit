@@ -43,6 +43,22 @@ declare namespace DevKit {
 		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the associated solution. */
 		readonly SolutionId: string;
+		readonly FormattedValue: {
+			/** Date and time when the metadata difference was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Difference Xml */
+			readonly DifferenceXml: string;
+			/** Introduced Version */
+			readonly IntroducedVersion: string;
+			/** Version in which the differences were introduced. */
+			readonly IntroducedVersionString: string;
+			/** Unique identifier of the metadata difference. */
+			readonly MetadataDifferenceId: string;
+			/** Date and time when the metadata difference was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -65,4 +81,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

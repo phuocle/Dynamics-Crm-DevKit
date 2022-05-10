@@ -33,6 +33,12 @@ declare namespace DevKit {
 		readonly msdyn_callablecontextid: string;
 		readonly msdyn_playbooktemplateid: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			readonly msdyn_callablecontext_msdyn_playbooktemplateId: string;
+			readonly msdyn_callablecontextid: string;
+			readonly msdyn_playbooktemplateid: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -55,4 +61,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

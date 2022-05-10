@@ -49,6 +49,28 @@ declare namespace DevKit {
 		Subject: string;
 		/** Version number of the attachment. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the attachment. */
+			readonly AttachmentId: string;
+			/** Contents of the attachment. */
+			readonly Body: string;
+			/** File name of the attachment. */
+			readonly FileName: string;
+			/** File pointer of the attachment. */
+			readonly FilePointer: string;
+			/** File size of the attachment. */
+			readonly FileSize: string;
+			/** MIME type of the attachment. */
+			readonly MimeType: string;
+			/** Prefix of the file pointer in blob storage. */
+			readonly Prefix: string;
+			/** Storage pointer. */
+			readonly StoragePointer: string;
+			/** Subject associated with the attachment. */
+			readonly Subject: string;
+			/** Version number of the attachment. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -71,4 +93,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

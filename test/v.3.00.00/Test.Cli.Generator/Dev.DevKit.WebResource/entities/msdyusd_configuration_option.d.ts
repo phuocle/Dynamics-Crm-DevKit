@@ -33,6 +33,12 @@ declare namespace DevKit {
 		readonly msdyusd_configurationid: string;
 		readonly uii_optionid: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			readonly msdyusd_configuration_optionId: string;
+			readonly msdyusd_configurationid: string;
+			readonly uii_optionid: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -55,4 +61,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

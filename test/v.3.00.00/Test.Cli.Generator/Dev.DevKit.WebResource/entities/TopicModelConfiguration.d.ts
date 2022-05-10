@@ -128,6 +128,54 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Specify the data filter configured to filter records. */
+			readonly DataFilter: string;
+			/** Enter a description for the model */
+			readonly Description: string;
+			/** Fetch Xml */
+			readonly FetchXmlList: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Is Manageed */
+			readonly IsManaged: string;
+			/** Enter the minimum relevance score of a topic. */
+			readonly MinRelevanceScore: string;
+			/** Type a logical name for the model. */
+			readonly Name: string;
+			/** Enter the maximum number of key phrase words to use in a topic. */
+			readonly NgramSize: string;
+			/** Unique identifier for the organization */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Date and time when the record was created. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** Stop words. */
+			readonly StopWords: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** Select the time window to filter on for the last number of days or weeks. */
+			readonly TimeFilter: string;
+			/** Time Filter Duration */
+			readonly TimeFilterDuration: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Unique identifier for entity instances */
+			readonly TopicModelConfigurationId: string;
+			/** Unique identifier of the Topic Model Configuration used when synchronizing customizations for the Microsoft Dynamics 365 client for Outlook */
+			readonly TopicModelConfigurationIdUnique: string;
+			/** Unique identifier for Model associated with Topic Model Configuration. */
+			readonly TopicModelId: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -170,4 +218,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

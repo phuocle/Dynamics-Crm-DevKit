@@ -167,6 +167,78 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Shows the sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who last updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Work Order this product is allocated to */
+			readonly msdyn_AllocatedToWorkOrder: string;
+			/** For internal use only. */
+			readonly msdyn_InternalFlags: string;
+			/** The Inventory Adjustment Product record related to this journal */
+			readonly msdyn_InventoryAdjustmentProduct: string;
+			/** Shows the entity instances. */
+			readonly msdyn_inventoryjournalId: string;
+			/** Shows the transaction type of this journal. */
+			readonly msdyn_JournalType: string;
+			/** Enter the name of the custom entity. */
+			readonly msdyn_name: string;
+			/** Indicates the Journal reversed by this journal record */
+			readonly msdyn_OriginatingJournal: string;
+			/** Product this journal relates to */
+			readonly msdyn_Product: string;
+			/** The Purchase Order Product record related to this journal */
+			readonly msdyn_PurchaseOrderProduct: string;
+			/** Unique identifier for Purchase Order Receipt Product associated with Inventory Journal. */
+			readonly msdyn_PurchaseOrderReceiptProduct: string;
+			/** Enter the quantity affected. A positive quantity indicates the receipt of this product into the specified warehouse, whereas a negative indicates a withdrawal. */
+			readonly msdyn_Quantity: string;
+			/** Indicates if this Journal reverses a previous journal record */
+			readonly msdyn_Reversal: string;
+			/** The RMA Receipt Product record related to this journal */
+			readonly msdyn_RMAReceiptProduct: string;
+			/** Shows the transaction type of this journal. */
+			readonly msdyn_TransactionType: string;
+			/** Unit of product used */
+			readonly msdyn_Unit: string;
+			/** Warehouse affected by this transaction */
+			readonly msdyn_Warehouse: string;
+			/** The Work Order Product record related to this journal */
+			readonly msdyn_WorkOrderProduct: string;
+			/** Shows the date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the Inventory Journal */
+			readonly statecode: string;
+			/** Reason for the status of the Inventory Journal */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Shows the time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -194,6 +266,8 @@ declare namespace OptionSet {
 			RMA_Product,
 			/** 690970002 */
 			WO_Product
+		}
+		enum OwnerIdType {
 		}
 		enum statecode {
 			/** 0 */
@@ -225,4 +299,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

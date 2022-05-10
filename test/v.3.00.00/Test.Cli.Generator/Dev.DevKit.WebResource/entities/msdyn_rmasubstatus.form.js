@@ -56,6 +56,8 @@ var OptionSet;
 			Pending: 690970000,
 			Products_Received: 690970002
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

@@ -51,6 +51,10 @@ var OptionSet;
 			Success: 2,
 			Warning: 1
 		},
+		OwnerIdType : {
+		},
+		RegardingObjectTypeCode : {
+		},
 		Status : {
 			Canceled: 5,
 			In_Progress: 0,

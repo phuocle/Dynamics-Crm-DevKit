@@ -121,10 +121,66 @@ declare namespace DevKit {
 		UserQueryId: string;
 		/** Version number of the saved view. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Type the column name that will be used to group the results from the data collected across multiple records from a user view. */
+			readonly AdvancedGroupBy: string;
+			/** Shows the columns and sorting criteria for the saved view, stored in XML format. */
+			readonly ColumnSetXml: string;
+			/** Type information about how the items in the user view are formatted. */
+			readonly ConditionalFormatting: string;
+			/** Shows who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Type additional information to describe the saved view, such as the filter criteria or intended results set. */
+			readonly Description: string;
+			/** Contains the Fetch XML query that defines the entities and attributes included in the saved view. */
+			readonly FetchXml: string;
+			/** Layout data in JSON format. */
+			readonly LayoutJson: string;
+			/** For internal use only. */
+			readonly LayoutXml: string;
+			/** Shows who last updated the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who last updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Type a descriptive name for the saved view. */
+			readonly Name: string;
+			/** String specifying the corresponding sql query for the fetch xml specified for offline use. */
+			readonly OfflineSqlQuery: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Shows the business unit that the record owner belongs to. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the team who owns this saved view. */
+			readonly OwningTeam: string;
+			/** Unique identifier of the user who owns this saved view. */
+			readonly OwningUser: string;
+			/** Shows the code for the query type to indicate whether the saved view is an address book filter, advanced search, or other view. */
+			readonly QueryType: string;
+			/** Shows whether the saved view is active or inactive. */
+			readonly StateCode: string;
+			/** Select the item's status. */
+			readonly StatusCode: string;
+			/** Unique identifier of the saved view. */
+			readonly UserQueryId: string;
+			/** Version number of the saved view. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace UserQuery {
+		enum OwnerIdType {
+		}
+		enum ReturnedTypeCode {
+		}
 		enum StateCode {
 			/** 0 */
 			Active,
@@ -157,4 +213,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

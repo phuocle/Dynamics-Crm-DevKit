@@ -356,6 +356,8 @@ var OptionSet;
 			Vacation: 192350002,
 			Work: 192350000
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

@@ -126,7 +126,7 @@ var DevKit;
 		}
 		msdyn_iermlmodel.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -160,6 +160,8 @@ var OptionSet;
 			Training_completed: 100000002,
 			Training_failed: 100000003,
 			Training_in_progress: 100000001
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

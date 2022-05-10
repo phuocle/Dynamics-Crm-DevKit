@@ -38,10 +38,23 @@ declare namespace DevKit {
 		readonly SourceEntityTypeCode: number;
 		readonly StateCode: OptionSet.RollupJob.StateCode;
 		readonly StatusCode: OptionSet.RollupJob.StatusCode;
+		readonly FormattedValue: {
+			readonly DepthProcessed: string;
+			readonly PostponeUntil_UtcDateAndTime: string;
+			readonly RecordCreatedOn_UtcDateAndTime: string;
+			readonly RetryCount: string;
+			readonly RollupJobId1: string;
+			readonly RollupPropertiesId: string;
+			readonly SourceEntityTypeCode: string;
+			readonly StateCode: string;
+			readonly StatusCode: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace RollupJob {
+		enum RegardingObjectTypeCode {
+		}
 		enum StateCode {
 			/** 3 */
 			Completed,
@@ -88,4 +101,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

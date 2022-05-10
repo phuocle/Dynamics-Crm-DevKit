@@ -115,6 +115,69 @@ declare namespace DevKit {
 		msdyn_workflowidunique: string;
 		/** Unique identifier for the organization */
 		readonly OrganizationId: string;
+		readonly FormattedValue: {
+			readonly msdyn_canvasappuniqueid: string;
+			readonly msdyn_componentlogicalname: string;
+			readonly msdyn_componenttype: string;
+			readonly msdyn_componenttypename: string;
+			readonly msdyn_connectorinternalid: string;
+			readonly msdyn_createdon: string;
+			readonly msdyn_culture: string;
+			readonly msdyn_deployment: string;
+			readonly msdyn_description: string;
+			readonly msdyn_displayname: string;
+			readonly msdyn_eventhandler: string;
+			readonly msdyn_executionorder: string;
+			readonly msdyn_executionstage: string;
+			readonly msdyn_fieldsecurity: string;
+			readonly msdyn_fieldtype: string;
+			readonly msdyn_isappaware: string;
+			readonly msdyn_isappawarename: string;
+			readonly msdyn_isauditenabled: string;
+			readonly msdyn_isauditenabledname: string;
+			readonly msdyn_iscustom: string;
+			readonly msdyn_iscustomizable: string;
+			readonly msdyn_iscustomizablename: string;
+			readonly msdyn_iscustomname: string;
+			readonly msdyn_isdefault: string;
+			readonly msdyn_isdefaultname: string;
+			readonly msdyn_ismanaged: string;
+			readonly msdyn_ismanagedname: string;
+			readonly msdyn_isolationmode: string;
+			readonly msdyn_istableenabled: string;
+			readonly msdyn_logicalcollectionname: string;
+			readonly msdyn_modifiedon: string;
+			/** The name of the custom entity. */
+			readonly msdyn_name: string;
+			readonly msdyn_objectid: string;
+			readonly msdyn_objecttypecode: string;
+			readonly msdyn_owner: string;
+			readonly msdyn_owningbusinessunit: string;
+			readonly msdyn_primaryentityname: string;
+			readonly msdyn_primaryidattribute: string;
+			readonly msdyn_publickeytoken: string;
+			readonly msdyn_relatedentity: string;
+			readonly msdyn_relatedentityattribute: string;
+			readonly msdyn_schemaname: string;
+			readonly msdyn_sdkmessagename: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_solutioncomponentsummaryId: string;
+			readonly msdyn_solutionid: string;
+			readonly msdyn_standardstatus: string;
+			readonly msdyn_status: string;
+			readonly msdyn_statusname: string;
+			readonly msdyn_subtype: string;
+			readonly msdyn_synctoexternalsearchindex: string;
+			readonly msdyn_total: string;
+			readonly msdyn_typename: string;
+			readonly msdyn_uniquename: string;
+			readonly msdyn_version: string;
+			readonly msdyn_workflowcategory: string;
+			readonly msdyn_workflowcategoryname: string;
+			readonly msdyn_workflowidunique: string;
+			/** Unique identifier for the organization */
+			readonly OrganizationId: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -137,4 +200,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

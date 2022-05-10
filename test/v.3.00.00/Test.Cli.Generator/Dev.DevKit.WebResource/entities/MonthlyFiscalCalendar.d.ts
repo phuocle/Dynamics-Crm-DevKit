@@ -106,6 +106,85 @@ declare namespace DevKit {
 		UserFiscalCalendarId: string;
 		/** Time zone code that was in use when the record was created. */
 		UTCConversionTimeZoneCode: number;
+		readonly FormattedValue: {
+			readonly BusinessUnitId: string;
+			/** Unique identifier of the user who created the fiscal calendar. */
+			readonly CreatedBy: string;
+			/** Date and time when the quota for the monthly fiscal calendar was modified. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the monthlyfiscalcalendar. */
+			readonly CreatedOnBehalfBy: string;
+			/** Date and time when the monthly fiscal calendar sales quota takes effect. */
+			readonly EffectiveOn_UtcDateOnly: string;
+			/** Exchange rate for the currency associated with the monthly fiscal calendar with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Type of fiscal period used in the sales quota. */
+			readonly FiscalPeriodType: string;
+			/** Unique identifier of the user who last modified the quota for the monthly fiscal calendar. */
+			readonly ModifiedBy: string;
+			/** Date and time when the quota for the monthly fiscal calendar was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the monthlyfiscalcalendar. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Sales quota for the first month in the fiscal year. */
+			readonly Period1: string;
+			/** Base currency equivalent of the sales quota for the first month in the fiscal year. */
+			readonly Period1_Base: string;
+			/** Sales quota for the tenth month in the fiscal year. */
+			readonly Period10: string;
+			/** Base currency equivalent of the sales quota for the tenth month in the fiscal year. */
+			readonly Period10_Base: string;
+			/** Sales quota for the eleventh month in the fiscal year. */
+			readonly Period11: string;
+			/** Base currency equivalent of the sales quota for the eleventh month in the fiscal year. */
+			readonly Period11_Base: string;
+			/** Sales quota for the twelfth month in the fiscal year. */
+			readonly Period12: string;
+			/** Base currency equivalent of the sales quota for the twelfth month in the fiscal year. */
+			readonly Period12_Base: string;
+			/** Sales quota for the second month in the fiscal year. */
+			readonly Period2: string;
+			/** Base currency equivalent of the sales quota for the second month in the fiscal year. */
+			readonly Period2_Base: string;
+			/** Sales quota for the third month in the fiscal year. */
+			readonly Period3: string;
+			/** Base currency equivalent of the sales quota for the third month in the fiscal year. */
+			readonly Period3_Base: string;
+			/** Sales quota for the fourth month in the fiscal year. */
+			readonly Period4: string;
+			/** Base currency equivalent of the sales quota for the fourth month in the fiscal year. */
+			readonly Period4_Base: string;
+			/** Sales quota for the fifth month in the fiscal year. */
+			readonly Period5: string;
+			/** Base currency equivalent of the sales quota for the fifth month in the fiscal year. */
+			readonly Period5_Base: string;
+			/** Sales quota for the sixth month in the fiscal year. */
+			readonly Period6: string;
+			/** Base currency equivalent of the sales quota for the sixth month in the fiscal year. */
+			readonly Period6_Base: string;
+			/** Sales quota for the seventh month in the fiscal year. */
+			readonly Period7: string;
+			/** Base currency equivalent of the sales quota for the seventh month in the fiscal year. */
+			readonly Period7_Base: string;
+			/** Sales quota for the eighth month in the fiscal year. */
+			readonly Period8: string;
+			/** Base currency equivalent of the sales quota for the eighth month in the fiscal year. */
+			readonly Period8_Base: string;
+			/** Sales quota for the ninth month in the fiscal year. */
+			readonly Period9: string;
+			/** Base currency equivalent of the sales quota for the ninth month in the fiscal year. */
+			readonly Period9_Base: string;
+			/** Unique identifier of the associated salesperson. */
+			readonly SalesPersonId: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Unique identifier of the currency associated with the monthly fiscal calendar. */
+			readonly TransactionCurrencyId: string;
+			/** Unique identifier of the monthly fiscal calendar. */
+			readonly UserFiscalCalendarId: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -128,4 +207,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

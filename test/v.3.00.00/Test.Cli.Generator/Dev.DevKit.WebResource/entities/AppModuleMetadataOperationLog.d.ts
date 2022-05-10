@@ -43,6 +43,22 @@ declare namespace DevKit {
 		StartedOn_UtcDateAndTime: Date;
 		/** For internal use only. */
 		State: number;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly AppModuleId: string;
+			/** For internal use only. */
+			readonly AppModuleMetadataOperationLogId: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** For internal use only. */
+			readonly RetryCount: string;
+			/** Date and time when the Async job was started. */
+			readonly StartedOn_UtcDateAndTime: string;
+			/** For internal use only. */
+			readonly State: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -65,4 +81,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

@@ -106,6 +106,8 @@ var OptionSet;
 			Goal_based: 192350000,
 			Manual: 192350001
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Draft: 0,
 			Published: 1

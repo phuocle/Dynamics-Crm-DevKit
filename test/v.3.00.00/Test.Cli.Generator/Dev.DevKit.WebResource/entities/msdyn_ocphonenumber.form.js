@@ -40,6 +40,10 @@ var OptionSet;
 		msdyn_appmodule : {
 			Service: 192350000
 		},
+		msdyn_Objective : {
+			Conversation: 192350000,
+			Lead: 192350001
+		},
 		msdyn_ocphonenumbersource : {
 			Direct_Offer: 192350000,
 			Direct_Routing: 192350001
@@ -48,6 +52,8 @@ var OptionSet;
 			Geo: 192350000,
 			Short_code: 192350002,
 			Toll_free: 192350001
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

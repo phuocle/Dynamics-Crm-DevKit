@@ -43,6 +43,8 @@ var OptionSet;
 			WorkOpen: 192350000,
 			WorkViewDuration: 192350001
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

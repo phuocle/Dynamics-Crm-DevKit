@@ -86,6 +86,65 @@ declare namespace DevKit {
 		/** For internal use only */
 		TimeZoneRuleVersionNumber: number;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Base time bias of the time zone rule. */
+			readonly Bias: string;
+			/** Unique identifier of the user who created the time zone rule. */
+			readonly CreatedBy: string;
+			/** Date and time when the time zone rule was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the timezonerule. */
+			readonly CreatedOnBehalfBy: string;
+			/** Time bias in addition to the base bias for daylight savings time. */
+			readonly DaylightBias: string;
+			/** Day of the month when daylight savings time starts. */
+			readonly DaylightDay: string;
+			/** Day of the week when daylight savings time starts. */
+			readonly DaylightDayOfWeek: string;
+			/** Hour of the day when daylight savings time starts */
+			readonly DaylightHour: string;
+			/** Minute of the hour when daylight savings time starts. */
+			readonly DaylightMinute: string;
+			/** Month when daylight savings time starts. */
+			readonly DaylightMonth: string;
+			/** Second of the minute when daylight savings time starts */
+			readonly DaylightSecond: string;
+			/** Year when daylight savings times starts. */
+			readonly DaylightYear: string;
+			/** Time that this rule takes effect, in local time. */
+			readonly EffectiveDateTime_UtcDateOnly: string;
+			/** Unique identifier of the user who last modified the time zone rule. */
+			readonly ModifiedBy: string;
+			/** Date and time when the time zone rule was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the timezonerule. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Unique identifier of the organization associated with the time zone rule. */
+			readonly OrganizationId: string;
+			/** Time bias in addition to the base bias for standard time. */
+			readonly StandardBias: string;
+			/** Day of the month when standard time starts. */
+			readonly StandardDay: string;
+			/** Day of the week when standard time starts. */
+			readonly StandardDayOfWeek: string;
+			/** Hour of the day when standard time starts. */
+			readonly StandardHour: string;
+			/** Minute of the hour when standard time starts. */
+			readonly StandardMinute: string;
+			/** Month when standard time starts. */
+			readonly StandardMonth: string;
+			/** Second of the Minute when standard time starts. */
+			readonly StandardSecond: string;
+			/** Year when standard time starts. */
+			readonly StandardYear: string;
+			/** Unique identifier of the time zone definition. */
+			readonly TimeZoneDefinitionId: string;
+			/** Unique identifier of the time zone rule. */
+			readonly TimeZoneRuleId: string;
+			/** For internal use only */
+			readonly TimeZoneRuleVersionNumber: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -108,4 +167,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

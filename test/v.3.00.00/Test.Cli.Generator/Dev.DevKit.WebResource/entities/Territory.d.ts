@@ -164,6 +164,51 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the territory. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the territory. */
+			readonly CreatedOnBehalfBy: string;
+			/** Description of the territory. */
+			readonly Description: string;
+			/** The default image for the entity. */
+			readonly EntityImage: string;
+			readonly EntityImage_Timestamp: string;
+			readonly EntityImage_URL: string;
+			readonly EntityImageId: string;
+			/** Exchange rate for the currency associated with the territory with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the manager of the territory. */
+			readonly ManagerId: string;
+			/** Unique identifier of the user who last modified the territory. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the territory. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Name of the territory. */
+			readonly Name: string;
+			/** Unique identifier for the organization */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Choose the parent for this territory. */
+			readonly ParentTerritoryId: string;
+			/** Unique identifier of the territory. */
+			readonly TerritoryId: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Unique identifier of the currency associated with the territory. */
+			readonly TransactionCurrencyId: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -186,4 +231,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

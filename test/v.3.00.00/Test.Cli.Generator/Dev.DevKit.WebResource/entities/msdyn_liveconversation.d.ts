@@ -169,11 +169,99 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the Ongoing Conversation. */
+			readonly CreatedBy: string;
+			/** Date and time when the Ongoing Conversation was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the Ongoing Conversation. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of user who last modified the Ongoing Conversation. */
+			readonly ModifiedBy: string;
+			/** Date and time when Ongoing Conversation was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the Ongoing Conversation. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Date and time when last agent was assigned to the conversation */
+			readonly msdyn_activeagentassignedon_UtcDateAndTime: string;
+			/** Last agent assigned to the conversation */
+			readonly msdyn_activeagentid: string;
+			/** Unique identifier for Queue associated with Conversation. */
+			readonly msdyn_cdsqueueid: string;
+			/** The channel(s) in the conversation. */
+			readonly msdyn_channel: Array<string>;
+			/** Date and time when conversation was closed */
+			readonly msdyn_closedon_UtcDateAndTime: string;
+			/** Date and time when conversation was created */
+			readonly msdyn_createdon_UtcDateAndTime: string;
+			/** Customer associated to the conversation */
+			readonly msdyn_customer_msdyn_liveconversation_account: string;
+			/** Customer associated to the conversation */
+			readonly msdyn_customer_msdyn_liveconversation_contact: string;
+			/** Customer Sentiment Label powered by Sentiment Service */
+			readonly msdyn_customersentimentlabel: string;
+			/** Number of times conversation was escalated to Supervisor i.e. transferred to Supervisor */
+			readonly msdyn_escalationcount: string;
+			/** Time when conversation was initiated */
+			readonly msdyn_initiatedon_UtcDateAndTime: string;
+			/** Id of this ongoing conversation record */
+			readonly msdyn_liveconversationId: string;
+			/** Work stream associated to the conversation */
+			readonly msdyn_liveworkstreamid: string;
+			/** Date and time when conversation was last modified */
+			readonly msdyn_modifiedon_UtcDateAndTime: string;
+			/** Last agent session */
+			readonly msdyn_oclastsessionid: string;
+			/** Unique identifier for msdyn_omnichannelqueue associated with Conversation */
+			readonly msdyn_queueid: string;
+			/** Date and time when conversation was started */
+			readonly msdyn_startedon_UtcDateAndTime: string;
+			/** State of the conversation record */
+			readonly msdyn_statecode: string;
+			/** Reason for the status of Ongoing conversation record */
+			readonly msdyn_statuscode: string;
+			/** Date and time when conversation status was last modified */
+			readonly msdyn_statusupdatedon_UtcDateAndTime: string;
+			/** Subject associated with the conversation record */
+			readonly msdyn_subject: string;
+			/** Conversation Title */
+			readonly msdyn_title: string;
+			/** Number of times the conversation was transferred */
+			readonly msdyn_transfercount: string;
+			/** Work distribution mode of the associated work stream */
+			readonly msdyn_workstreamworkdistributionmode: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier of the business unit that owns the Ongoing Conversation. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the team that owns the Ongoing Conversation. */
+			readonly OwningTeam: string;
+			/** Unique identifier of the user that owns the Ongoing Conversation. */
+			readonly OwningUser: string;
+			/** Status of the Ongoing conversation record */
+			readonly statecode: string;
+			/** Reason for the status of Ongoing conversation record */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace msdyn_liveconversation {
 		enum msdyn_channel {
+			/** 192450000 */
+			Apple_Messages_for_Business,
 			/** 192390000 */
 			Co_browse,
 			/** 192350002 */
@@ -202,6 +290,8 @@ declare namespace OptionSet {
 			WeChat,
 			/** 192300000 */
 			WhatsApp
+		}
+		enum msdyn_customerIdType {
 		}
 		enum msdyn_customersentimentlabel {
 			/** 0 */
@@ -251,6 +341,8 @@ declare namespace OptionSet {
 			/** 192350000 */
 			Push
 		}
+		enum OwnerIdType {
+		}
 		enum statecode {
 			/** 1 */
 			Active,
@@ -293,4 +385,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

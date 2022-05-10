@@ -171,6 +171,62 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Determines if this pricing dimension is applicable for Cost price. */
+			readonly msdyn_ApplicableToCost: string;
+			/** Determines if this pricing dimension is applicable for Purchase price. */
+			readonly msdyn_ApplicableToPurchase: string;
+			/** Determines if this pricing dimension is applicable for Sales price. */
+			readonly msdyn_ApplicableToSales: string;
+			/** Determines priority of the pricing dimension when resolving for Cost price. */
+			readonly msdyn_CostPriority: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_dimensionId: string;
+			/** Name of the Dimension to be used in pricing calculations. */
+			readonly msdyn_name: string;
+			/** Determines priority of the pricing dimension when resolving for Purchase price. */
+			readonly msdyn_PurchasePriority: string;
+			/** Determines priority of the pricing dimension when resolving for Sales price. */
+			readonly msdyn_SalesPriority: string;
+			/** Type determines if the dimension is to be used for retrieving the final per unit price or to retrieve a markup that is to be applied on a base price. */
+			readonly msdyn_Type: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the Pricing Dimension */
+			readonly statecode: string;
+			/** Reason for the status of the Pricing Dimension */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -180,6 +236,8 @@ declare namespace OptionSet {
 			Amount_based,
 			/** 192350001 */
 			Markup_based
+		}
+		enum OwnerIdType {
 		}
 		enum statecode {
 			/** 0 */
@@ -211,4 +269,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

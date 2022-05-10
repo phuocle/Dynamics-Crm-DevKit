@@ -75,9 +75,15 @@ var OptionSet;
 			Background: 0,
 			Real_time: 1
 		},
+		OwnerIdType : {
+		},
+		PrimaryEntity : {
+		},
 		ProcessTriggerScope : {
 			Entity: 2,
 			Form: 1
+		},
+		RendererObjectTypeCode : {
 		},
 		RunAs : {
 			Calling_User: 1,

@@ -122,10 +122,63 @@ declare namespace DevKit {
 		/** Exchange rate for the currency associated with the ExternalPartyItem with respect to the base currency. */
 		TransactionCurrencyId: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Choose the channel access profile that's used to determine the permissions when CRM is accessed from an external channel. */
+			readonly ChannelAccessProfileId: string;
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Exchange rate for the currency associated with the external party item with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Type the external party record that this item is created for. */
+			readonly ExternalPartyId: string;
+			/** Unique identifier for external party instances */
+			readonly ExternalPartyItemId: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Version in which the similarity rule is introduced. */
+			readonly IntroducedVersion: string;
+			/** Shows the date and time when the external party item was last disabled for external channel access. */
+			readonly LastDisabledOn_UtcDateOnly: string;
+			/** Shows the date and time when the external party item was last enabled for external channel access. */
+			readonly LastEnabledOn_UtcDateOnly: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Type the name of the external party item. */
+			readonly Name: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Choose the external party enabled record that is associated with this external party item. */
+			readonly regardingobjectid_contact: string;
+			/** Choose the external party enabled record that is associated with this external party item. */
+			readonly regardingobjectid_systemuser: string;
+			/** Shows whether the external party item is enabled or disabled. */
+			readonly StateCode: string;
+			/** Select the external party items status. */
+			readonly StatusCode: string;
+			/** Exchange rate for the currency associated with the ExternalPartyItem with respect to the base currency. */
+			readonly TransactionCurrencyId: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace ExternalPartyItem {
+		enum OwnerIdType {
+		}
+		enum RegardingObjectTypeCode {
+		}
 		enum StateCode {
 			/** 1 */
 			Disabled,
@@ -156,4 +209,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

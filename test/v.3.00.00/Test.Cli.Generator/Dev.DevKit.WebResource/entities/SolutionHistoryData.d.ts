@@ -73,6 +73,52 @@ declare namespace DevKit {
 		Status: OptionSet.SolutionHistoryData.Status;
 		/** The suboperation performed on the solution. */
 		SubOperation: OptionSet.SolutionHistoryData.SubOperation;
+		readonly FormattedValue: {
+			/** The Activity Id. */
+			readonly ActivityId: string;
+			/** The Correlation Id. */
+			readonly CorrelationId: string;
+			/** DateTime of the end of the solution event. */
+			readonly EndTime_UtcDateAndTime: string;
+			/** The error code of the operation performed on the solution. */
+			readonly ErrorCode: string;
+			/** The Exception Message. */
+			readonly ExceptionMessage: string;
+			/** The Exception Stack. */
+			readonly ExceptionStack: string;
+			/** Is Solution Managed */
+			readonly IsManaged: string;
+			/** Is the solution published by a Microsoft publisher. */
+			readonly IsMicrosoftPublisher: string;
+			/** Does the event overwrite customizations. */
+			readonly IsOverwriteCustomizations: string;
+			/** Is Solution Patch */
+			readonly IsPatch: string;
+			/** The operation performed on the solution. */
+			readonly Operation: string;
+			/** Name of the package. */
+			readonly PackageName: string;
+			/** Version of the package. */
+			readonly PackageVersion: string;
+			/** Name of the solution's publisher. */
+			readonly PublisherName: string;
+			/** The result of the operation performed on the solution. */
+			readonly Result: string;
+			/** Unique identifier for entity instances */
+			readonly SolutionHistoryDataId: string;
+			/** The Solution. */
+			readonly SolutionId: string;
+			/** Name of the solution. */
+			readonly SolutionName: string;
+			/** The Version of the Solution. */
+			readonly SolutionVersion: string;
+			/** DateTime of the start of the solution event. */
+			readonly StartTime_UtcDateAndTime: string;
+			/** The status of the operation performed on the solution. */
+			readonly Status: string;
+			/** The suboperation performed on the solution. */
+			readonly SubOperation: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -121,4 +167,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

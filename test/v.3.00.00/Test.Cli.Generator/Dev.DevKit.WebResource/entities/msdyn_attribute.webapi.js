@@ -117,7 +117,7 @@ var DevKit;
 		}
 		msdyn_attribute.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -135,6 +135,8 @@ var OptionSet;
 			Approved: 1,
 			Dismissed: 2,
 			Not_approved: 0
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

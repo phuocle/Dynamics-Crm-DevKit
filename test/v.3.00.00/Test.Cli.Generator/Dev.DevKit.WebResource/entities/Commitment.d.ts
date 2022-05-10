@@ -53,10 +53,44 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			readonly ActivityId: string;
+			readonly CommitmentId: string;
+			readonly Effort: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** name */
+			readonly Name: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			readonly ParticipationTypeMask: string;
+			readonly PartyId: string;
+			readonly ResourceSpecId: string;
+			readonly ScheduledEnd_UtcDateOnly: string;
+			readonly ScheduledStart_UtcDateOnly: string;
+			readonly ServiceId: string;
+			readonly StateCode: string;
+			readonly StatusCode: string;
+			readonly Subject: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace Commitment {
+		enum ActivityTypeCode {
+		}
+		enum PartyObjectTypeCode {
+		}
+		enum StateCode {
+		}
+		enum StatusCode {
+		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
 			NotCalculated,
@@ -75,4 +109,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

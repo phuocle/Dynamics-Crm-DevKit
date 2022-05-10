@@ -193,6 +193,66 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Description of the Inspection Definition */
+			readonly msdyn_description: string;
+			/** Shows the date and time when the inspection template would be effective. By default its the inspection template published date. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly msdyn_EffectiveDate_UtcDateAndTime: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_inspectiondefinitionId: string;
+			/** Depicts whether the record is the default version for the inspection template. */
+			readonly msdyn_IsDefault: string;
+			/** Depicts whether the record is processed. */
+			readonly msdyn_IsProcessed: string;
+			/** Depicts whether the record has required question at the time of creation of inspection template. */
+			readonly msdyn_IsRequiredToAnswer: string;
+			/** Inspection definition Json */
+			readonly msdyn_JsonContent: string;
+			/** The name of the Inspection Definition entity. */
+			readonly msdyn_name: string;
+			/** Unique identifier for Inspection Template associated with InspectionDefinition. */
+			readonly msdyn_ParentInspectionId: string;
+			/** Status of the inspection definition */
+			readonly msdyn_state: string;
+			/** Version of the Inspection Template */
+			readonly msdyn_Version: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the InspectionDefinition */
+			readonly statecode: string;
+			/** Reason for the status of the InspectionDefinition */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -202,6 +262,8 @@ declare namespace OptionSet {
 			Draft,
 			/** 1 */
 			Published
+		}
+		enum OwnerIdType {
 		}
 		enum statecode {
 			/** 0 */
@@ -233,4 +295,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

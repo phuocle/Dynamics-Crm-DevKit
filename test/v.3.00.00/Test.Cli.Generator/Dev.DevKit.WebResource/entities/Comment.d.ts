@@ -94,6 +94,73 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Anchor context for the record within the maker artifact */
+			readonly Anchor: string;
+			/** Unique identifier of the maker artifact */
+			readonly ArtifactId: string;
+			/** Type of the maker artifact */
+			readonly ArtifactType: string;
+			/** Body content for the record */
+			readonly Body: string;
+			/** Unique identifier for entity instances */
+			readonly CommentId: string;
+			/** Unique identifier for the container of this record */
+			readonly Container: string;
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Kind of record */
+			readonly Kind: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Required name field */
+			readonly Name: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Unique identifier for the parent of this record */
+			readonly AppModule: string;
+			/** Unique identifier for the parent of this record */
+			readonly Bot: string;
+			/** Unique identifier for the parent of this record */
+			readonly BotComponent: string;
+			/** Unique identifier for the parent of this record */
+			readonly CanvasApp: string;
+			/** Unique identifier for the parent of this record */
+			readonly Parent: string;
+			/** Unique identifier for the parent of this record */
+			readonly Workflow: string;
+			readonly State: string;
+			/** Status of the Comment */
+			readonly statecode: string;
+			/** Reason for the status of the Comment */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -117,6 +184,10 @@ declare namespace OptionSet {
 			Reply,
 			/** 1 */
 			Thread
+		}
+		enum OwnerIdType {
+		}
+		enum ParentIdType {
 		}
 		enum State {
 			/** 0 */
@@ -154,4 +225,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

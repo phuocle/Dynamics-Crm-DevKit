@@ -67,6 +67,8 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.msdyn_playbooktemplate = {
+		OwnerIdType : {
+		},
 		statecode : {
 			Draft: 0,
 			Published: 1

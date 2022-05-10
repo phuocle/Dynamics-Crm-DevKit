@@ -61,6 +61,40 @@ declare namespace DevKit {
 		readonly SolutionId: string;
 		/** For internal use only. */
 		readonly SupportingSolutionId: string;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** JSON data representing values from a data source entity as individual fields. */
+			readonly ConnectionDefinition: string;
+			/** JSON data representing secrets in a data source entity as individual fields. */
+			readonly ConnectionDefinitionSecrets: string;
+			/** Enter additional information to describe the environment this data source targets and the purpose of this system. */
+			readonly Description: string;
+			/** Choose the entity dataprovider for the entity datasource. */
+			readonly EntityDataProviderId: string;
+			/** Unique identifier of the Data Source Id */
+			readonly EntityDataSourceId: string;
+			/** For internal use only. */
+			readonly EntityDataSourceIdUnique: string;
+			/** Entity Logical Name */
+			readonly EntityName1: string;
+			/** Version in which the form is introduced. */
+			readonly IntroducedVersion: string;
+			/** Information that specifies whether this component can be customized. */
+			readonly IsCustomizable: string;
+			/** Indicates whether the solution component is part of a managed solution. */
+			readonly IsManaged: string;
+			/** Name of this data source. This name appears in the data source drop-down when creating a new entity. */
+			readonly Name: string;
+			/** Unique identifier for the organization. */
+			readonly OrganizationId: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -93,4 +127,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

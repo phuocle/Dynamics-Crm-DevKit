@@ -42,6 +42,8 @@ var OptionSet;
 			Completed: 647390001,
 			Failed: 647390002
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

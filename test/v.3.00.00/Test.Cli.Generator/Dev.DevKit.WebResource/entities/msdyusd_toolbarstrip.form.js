@@ -68,6 +68,8 @@ var OptionSet;
 			Application: 803750001,
 			Unified_Service_Desk_Control: 803750003
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

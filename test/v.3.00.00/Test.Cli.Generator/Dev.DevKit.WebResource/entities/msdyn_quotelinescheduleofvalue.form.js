@@ -98,6 +98,8 @@ var OptionSet;
 			Not_Ready_for_invoicing: 192350000,
 			Ready_for_invoicing: 192350001
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

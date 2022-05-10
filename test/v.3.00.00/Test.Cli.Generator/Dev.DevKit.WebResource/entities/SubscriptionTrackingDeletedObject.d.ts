@@ -33,14 +33,30 @@ declare namespace DevKit {
 		CrmCreatedOn_UtcDateAndTime: Date;
 		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
 		DeleteTime_UtcDateAndTime: Date;
+		/** Indicates that the record is deleted by Archival or not */
+		IsArchivalDelete: boolean;
 		/** Indicates whether solution aware entity record is logical delete or not */
 		IsLogicalDelete: boolean;
 		readonly ObjectId: string;
 		readonly TimeStamp: number;
+		readonly FormattedValue: {
+			/** Shows the date and time when the record was created in CRM. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CrmCreatedOn_UtcDateAndTime: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly DeleteTime_UtcDateAndTime: string;
+			/** Indicates that the record is deleted by Archival or not */
+			readonly IsArchivalDelete: string;
+			/** Indicates whether solution aware entity record is logical delete or not */
+			readonly IsLogicalDelete: string;
+			readonly ObjectId: string;
+			readonly TimeStamp: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace SubscriptionTrackingDeletedObject {
+		enum ObjectTypeCode {
+		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
 			NotCalculated,
@@ -59,4 +75,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

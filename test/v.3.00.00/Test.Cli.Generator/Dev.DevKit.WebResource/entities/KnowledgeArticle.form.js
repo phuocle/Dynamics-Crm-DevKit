@@ -334,6 +334,8 @@ var OptionSet;
 			Needs_Updating: 0,
 			Republish: 1
 		},
+		OwnerIdType : {
+		},
 		Review : {
 			Approved: 0,
 			Rejected: 1

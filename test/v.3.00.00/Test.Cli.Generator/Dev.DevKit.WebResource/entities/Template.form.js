@@ -96,6 +96,8 @@ var OptionSet;
 			Published: 0,
 			Unpublished: 1
 		},
+		OwnerIdType : {
+		},
 		TemplateTypeCode : {
 			Account: 1,
 			Campaign_Activity: 4402,

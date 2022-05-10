@@ -155,10 +155,92 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Unique identifier for Inspection Template associated with Survey. */
+			readonly msdyn_Inspection: string;
+			/** Specifies if responses can be accepted from anonymous respondents. */
+			readonly msfp_acceptanonymousresponses: string;
+			/** Link to the anonymous survey response. */
+			readonly msfp_anonymousurl: string;
+			/** Description of the survey. */
+			readonly msfp_description: string;
+			/** Embed code for the survey */
+			readonly msfp_embedcode: string;
+			/** End date and time of the survey, if configured. */
+			readonly msfp_enddate_UtcDateAndTime: string;
+			/** Friendly name of the survey. */
+			readonly msfp_friendlyname: string;
+			/** The name of the custom entity. */
+			readonly msfp_name: string;
+			/** Other survey properties in JSON format. */
+			readonly msfp_otherproperties: string;
+			/** Permanent ID is auto-generated for a new survey. For a copied survey, the ID is carried over from the original survey. */
+			readonly msfp_PermanentID: string;
+			/** Project associated with the survey. */
+			readonly msfp_project: string;
+			/** User who published the survey. */
+			readonly msfp_publishedby: string;
+			/** Date and time on which the survey was published. */
+			readonly msfp_publishedon_UtcDateAndTime: string;
+			/** Unique identifier for the survey in the source application. */
+			readonly msfp_sourcesurveyidentifier: string;
+			/** Date when a survey is modified in source. */
+			readonly msfp_sourcesurveymodifieddate_UtcDateOnly: string;
+			/** Version number of the survey. */
+			readonly msfp_sourcesurveyversion: string;
+			/** Start date and time of the survey, if configured. */
+			readonly msfp_startdate_UtcDateAndTime: string;
+			/** Unique identifier for entity instances */
+			readonly msfp_surveyId: string;
+			/** Source through which the survey was created. */
+			readonly msfp_surveysource: string;
+			/** Link to the survey in Customer Voice. */
+			readonly msfp_surveyurl: string;
+			/** Stores survey variables and their default values in JSON format. */
+			readonly msfp_variables: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the Survey */
+			readonly statecode: string;
+			/** Reason for the status of the Survey */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace msfp_survey {
+		enum OwnerIdType {
+		}
 		enum statecode {
 			/** 0 */
 			Active,
@@ -195,4 +277,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

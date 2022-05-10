@@ -124,7 +124,7 @@ var DevKit;
 		}
 		msdyn_customerassetattachment.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -145,6 +145,8 @@ var OptionSet;
 		msdyn_Category : {
 			Capture: 700610000,
 			Document: 700610001
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

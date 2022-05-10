@@ -54,6 +54,33 @@ declare namespace DevKit {
 		readonly SupportingSolutionId: string;
 		/** Represents a version of customizations to be synchronized with the Microsoft Dynamics 365 client for Outlook. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** The id of a group of contextual tabs. */
+			readonly ContextGroupId: string;
+			/** Layout XML for a contextual group header */
+			readonly ContextGroupXml: string;
+			/** The entity this rule applies to, also the entity this rule was imported from, will be exported to. */
+			readonly Entity1: string;
+			readonly IsManaged: string;
+			/** Unique identifier of the organization. */
+			readonly OrganizationId: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Unique identifier. */
+			readonly RibbonContextGroupId: string;
+			/** Unique identifier of the form used when synchronizing customizations for the Microsoft Dynamics 365 client for Outlook. */
+			readonly RibbonContextGroupUniqueId: string;
+			/** Unique identifier of the ribbon customization with which the ribbon command is associated. */
+			readonly RibbonCustomizationId: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** Represents a version of customizations to be synchronized with the Microsoft Dynamics 365 client for Outlook. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -86,4 +113,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

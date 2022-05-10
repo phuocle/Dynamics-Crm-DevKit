@@ -44,6 +44,8 @@ var OptionSet;
 			Register: 192350000,
 			Unregister: 192350001
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

@@ -62,6 +62,41 @@ declare namespace DevKit {
 		/** For internal use only. */
 		readonly SyncAttributeMappingProfileIdUnique: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier of the user who created the profile. */
+			readonly CreatedBy: string;
+			/** Date and time when the profile was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the role. */
+			readonly CreatedOnBehalfBy: string;
+			/** Description of the Profile */
+			readonly Description: string;
+			/** Indicates whether the solution component is part of a managed solution. */
+			readonly IsManaged: string;
+			/** Unique identifier of the user who last modified the profile. */
+			readonly ModifiedBy: string;
+			/** Date and time when the profile was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the profile. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Name of the profile. */
+			readonly Name: string;
+			/** Unique identifier of the associated organization. */
+			readonly OrganizationId: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** Unique identifier of the profile. */
+			readonly SyncAttributeMappingProfileId: string;
+			/** For internal use only. */
+			readonly SyncAttributeMappingProfileIdUnique: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -94,4 +129,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

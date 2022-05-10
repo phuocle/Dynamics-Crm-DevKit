@@ -1,6 +1,58 @@
 ﻿//@ts-check
 ///<reference path="devkit.d.ts" />
 declare namespace DevKit {
+	namespace Formsynapselinkexternaltablestate_Information {
+		interface Tabs {
+		}
+		interface Body {
+			/** The name of the custom entity. */
+			name: DevKit.Controls.String;
+		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
+	}
+	class Formsynapselinkexternaltablestate_Information extends DevKit.IForm {
+		/**
+		* Information [Main Form]
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form synapselinkexternaltablestate_Information */
+		Body: DevKit.Formsynapselinkexternaltablestate_Information.Body;
+		/** The Process of form synapselinkexternaltablestate_Information */
+		Process: DevKit.Formsynapselinkexternaltablestate_Information.Process;
+		/** The SidePanes of form synapselinkexternaltablestate_Information */
+		SidePanes: DevKit.SidePanes;
+	}
+	namespace Formsynapselinkexternaltablestate_Information2 {
+		interface Tabs {
+		}
+		interface Body {
+			/** The name of the custom entity. */
+			name: DevKit.Controls.String;
+		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
+	}
+	class Formsynapselinkexternaltablestate_Information2 extends DevKit.IForm {
+		/**
+		* Information [Main Form]
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form synapselinkexternaltablestate_Information2 */
+		Body: DevKit.Formsynapselinkexternaltablestate_Information2.Body;
+		/** The Process of form synapselinkexternaltablestate_Information2 */
+		Process: DevKit.Formsynapselinkexternaltablestate_Information2.Process;
+		/** The SidePanes of form synapselinkexternaltablestate_Information2 */
+		SidePanes: DevKit.SidePanes;
+	}
 	class synapselinkexternaltablestateApi {
 		/**
 		* DynamicsCrm.DevKit synapselinkexternaltablestateApi
@@ -75,6 +127,54 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Unique identifier for Data Lake Folder associated with Synapse Link External Table State. */
+			readonly datalakefolder: string;
+			/** Name of the entity */
+			readonly EntityName1: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Metadata version */
+			readonly MetadataVersion: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** The name of the custom entity. */
+			readonly name: string;
+			/** Unique identifier for the organization */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Schema modified on date-time */
+			readonly SchemaModifiedOn_UtcDateAndTime: string;
+			/** Status of the Synapse Link External Table State */
+			readonly statecode: string;
+			/** Reason for the status of the Synapse Link External Table State */
+			readonly statuscode: string;
+			/** Synapse database name */
+			readonly SynapseDatabaseName: string;
+			/** Unique identifier for entity instances */
+			readonly synapselinkexternaltablestateId: string;
+			/** Synapse workspace name */
+			readonly SynapseWorkspaceName: string;
+			/** External table state */
+			readonly TableState: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -119,4 +219,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

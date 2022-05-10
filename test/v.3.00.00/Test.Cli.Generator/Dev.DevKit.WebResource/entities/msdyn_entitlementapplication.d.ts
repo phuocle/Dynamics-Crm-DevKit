@@ -117,10 +117,64 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Entitlement Application record will only drive automatic application when the work was performed for this Customer Asset Category. If populated with other fields, then both must be true. */
+			readonly msdyn_assetcategory: string;
+			/** Entitlement Application record will only drive automatic application when the work was performed for this customer asset. If populated with other fields, both must be true. */
+			readonly msdyn_customerasset: string;
+			/** Entitlement Application record will only drive automatic application for this related Entitlement. */
+			readonly msdyn_entitlement: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_entitlementapplicationId: string;
+			/** Entitlement Application record will only drive automatic application when the work was performed related to this incident type. If populated with other fields, both must be true. */
+			readonly msdyn_incidenttype: string;
+			/** The name of entitlement application name */
+			readonly msdyn_name: string;
+			/** Entitlement Application record will only drive automatic application when the work was performed for this service account. If populated with other fields, both must be true. */
+			readonly msdyn_serviceaccount: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the Entitlement Application */
+			readonly statecode: string;
+			/** Reason for the status of the Entitlement Application */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace msdyn_entitlementapplication {
+		enum OwnerIdType {
+		}
 		enum statecode {
 			/** 0 */
 			Active,
@@ -151,4 +205,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

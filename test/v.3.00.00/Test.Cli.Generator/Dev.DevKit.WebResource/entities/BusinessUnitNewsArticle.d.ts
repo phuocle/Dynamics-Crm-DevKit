@@ -109,6 +109,47 @@ declare namespace DevKit {
 		/** Time zone code that was in use when the record was created. */
 		UTCConversionTimeZoneCode: number;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Date and time for the announcement to become active. */
+			readonly ActiveOn_UtcDateOnly: string;
+			/** Date and time of the last day the announcement is active. */
+			readonly ActiveUntil_UtcDateOnly: string;
+			/** Title of the announcement. */
+			readonly ArticleTitle: string;
+			/** Type of announcement. */
+			readonly ArticleTypeCode: string;
+			/** URL for the Website on which the announcement is located. */
+			readonly ArticleUrl: string;
+			/** Unique identifier of the announcement. */
+			readonly BusinessUnitNewsArticleId: string;
+			/** Unique identifier of the user who created the announcement. */
+			readonly CreatedBy: string;
+			/** Date and time when the announcement was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the businessunitnewsarticle. */
+			readonly CreatedOnBehalfBy: string;
+			/** Unique identifier of the data import or data migration that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who last modified the announcement. */
+			readonly ModifiedBy: string;
+			/** Date and time when the announcement was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the businessunitnewsarticle. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Text for the announcement. */
+			readonly NewsArticle: string;
+			/** Unique identifier of the organization associated with the announcement. */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Information about whether to show the announcement on the Website home page. */
+			readonly ShowOnHomepage: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -139,4 +180,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

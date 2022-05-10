@@ -67,16 +67,56 @@ declare namespace DevKit {
 		TransactionCurrencyId: string;
 		/** Version number of the untracked email message. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of untracked the email activity. */
+			readonly ActivityId: string;
+			/** Unique identifier of the user who created the activity. */
+			readonly CreatedBy: string;
+			/** Date and time when the activity was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the activitypointer. */
+			readonly CreatedOnBehalfBy: string;
+			/** Shows information about the untracked email. This field is read-only. */
+			readonly Description: string;
+			/** The message id of untracked email which is returned from Exchange Server. */
+			readonly ExchangeItemId: string;
+			/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
+			readonly ExchangeRate: string;
+			/** Shows the web link of untracked email. */
+			readonly ExchangeWebLink: string;
+			/** Shows who last updated the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who last updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier of the business unit that owns the untracked email activity. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the team who owns the untracked email activity. */
+			readonly OwningTeam: string;
+			/** Unique identifier of the user who owns the untracked email activity. */
+			readonly OwningUser: string;
+			/** Type a short description about the objective or primary topic of the UntrackedEmail. */
+			readonly Subject: string;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			readonly TransactionCurrencyId: string;
+			/** Version number of the untracked email message. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace UntrackedEmail {
 		enum ActivityTypeCode {
-			/** 10086 */
+			/** 10088 */
 			Activity_record_for_the_Teams_chat,
 			/** 4201 */
 			Appointment,
-			/** 10404 */
+			/** 10473 */
 			Booking_Alert,
 			/** 4402 */
 			Campaign_Activity,
@@ -84,13 +124,13 @@ declare namespace OptionSet {
 			Campaign_Response,
 			/** 4206 */
 			Case_Resolution,
-			/** 10707 */
+			/** 10743 */
 			Conversation,
-			/** 10313 */
+			/** 10330 */
 			Customer_Voice_alert,
-			/** 10323 */
+			/** 10340 */
 			Customer_Voice_survey_invite,
-			/** 10325 */
+			/** 10342 */
 			Customer_Voice_survey_response,
 			/** 4202 */
 			Email,
@@ -102,11 +142,11 @@ declare namespace OptionSet {
 			Opportunity_Close,
 			/** 4209 */
 			Order_Close,
-			/** 10817 */
+			/** 10857 */
 			Outbound_message,
 			/** 4210 */
 			Phone_Call,
-			/** 10434 */
+			/** 10489 */
 			Project_Service_Approval,
 			/** 4406 */
 			Quick_Campaign,
@@ -116,10 +156,14 @@ declare namespace OptionSet {
 			Recurring_Appointment,
 			/** 4214 */
 			Service_Activity,
-			/** 10721 */
+			/** 10760 */
 			Session,
 			/** 4212 */
 			Task
+		}
+		enum OwnerIdType {
+		}
+		enum RegardingObjectTypeCode {
 		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
@@ -139,4 +183,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

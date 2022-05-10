@@ -57,6 +57,8 @@ var OptionSet;
 			Azure_IoT_Suite: 192350001,
 			Other: 192350000
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

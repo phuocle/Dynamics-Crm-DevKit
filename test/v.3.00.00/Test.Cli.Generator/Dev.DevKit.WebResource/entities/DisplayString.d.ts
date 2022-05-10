@@ -105,6 +105,48 @@ declare namespace DevKit {
 		/** For internal use only. */
 		readonly SupportingSolutionId: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier of the user who created the display string. */
+			readonly CreatedBy: string;
+			/** Date and time when the display string was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the displaystring. */
+			readonly CreatedOnBehalfBy: string;
+			/** Comment for a customized display string. */
+			readonly CustomComment: string;
+			/** Customized display string. */
+			readonly CustomDisplayString: string;
+			/** Unique identifier of the display string. */
+			readonly DisplayStringId: string;
+			/** For internal use only. */
+			readonly DisplayStringIdUnique: string;
+			/** For internal use only. */
+			readonly DisplayStringKey: string;
+			/** Parameters used for formatting the display string. */
+			readonly FormatParameters: string;
+			readonly IsManaged: string;
+			/** Language code of the display string. */
+			readonly LanguageCode: string;
+			/** Unique identifier of the user who last modified the display string. */
+			readonly ModifiedBy: string;
+			/** Date and time when the display string was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the displaystring. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Unique identifier of the organization associated with the display string. */
+			readonly OrganizationId: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Published display string. */
+			readonly PublishedDisplayString: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -137,4 +179,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

@@ -45,6 +45,7 @@ var OptionSet;
 		msdyn_PersonaType : {
 			Administrator: 1,
 			Agent: 3,
+			Application_User: 4,
 			Supervisor: 2
 		},
 		statecode : {

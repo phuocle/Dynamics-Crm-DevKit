@@ -66,6 +66,19 @@ declare namespace DevKit {
 		msdyn_suggestedentity: string;
 		msdyn_suggestionforentitylogicalname: string;
 		msdyn_suggestionforid: string;
+		readonly FormattedValue: {
+			readonly msdyn_additionalcontext: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_casesuggestionId: string;
+			readonly msdyn_confidencescore: string;
+			readonly msdyn_keyphrases: string;
+			/** The name of the custom entity. */
+			readonly msdyn_name: string;
+			readonly msdyn_rank: string;
+			readonly msdyn_suggestedentity: string;
+			readonly msdyn_suggestionforentitylogicalname: string;
+			readonly msdyn_suggestionforid: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -88,4 +101,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

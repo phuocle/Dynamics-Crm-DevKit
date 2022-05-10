@@ -225,6 +225,93 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Shows the exchange rate for the currency associated with the entity with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Shows the sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who last updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** User who approved RMA */
+			readonly msdyn_ApprovedBy: string;
+			/** Internal field used to generate the next name upon entity creation. It is optionally copied to the msdyn_name field. */
+			readonly msdyn_AutoNumbering: string;
+			/** Account to be billed. If a billing account has been set on service account it will be populated by default. Otherwise, the billing account will be the same as the service account. */
+			readonly msdyn_BillingAccount: string;
+			/** Enter the date RMA was requested by the customer. */
+			readonly msdyn_DateRequested_UtcDateOnly: string;
+			/** Enter a short description of the RMA. */
+			readonly msdyn_Description: string;
+			/** ETA */
+			readonly msdyn_ETA_UtcDateOnly: string;
+			/** Shows the unique number identifying this RMA record. */
+			readonly msdyn_name: string;
+			/** Shows the tracking number of package */
+			readonly msdyn_PackagingTrackingNo: string;
+			/** Price List that determines the pricing for this product */
+			readonly msdyn_PriceList: string;
+			/** Shows the default action to be taken on all RMA Products. */
+			readonly msdyn_ProcessingAction: string;
+			readonly msdyn_ReferenceNo: string;
+			/** Contact who requested this return */
+			readonly msdyn_RequestedByContact: string;
+			/** Shows the entity instances. */
+			readonly msdyn_rmaId: string;
+			/** Account to be serviced */
+			readonly msdyn_ServiceAccount: string;
+			/** Shows the tracking number of the shipment. */
+			readonly msdyn_ShippingTrackingNo: string;
+			/** Method of shipment by Customer */
+			readonly msdyn_ShipVia: string;
+			/** RMA Substatus */
+			readonly msdyn_SubStatus: string;
+			/** Enter the current status of the RMA. */
+			readonly msdyn_SystemStatus: string;
+			/** Specify if RMA is taxable */
+			readonly msdyn_Taxable: string;
+			/** Tax Code to be used to calculate tax when RMA is taxable. By default the system will use the tax code specified on the service account */
+			readonly msdyn_TaxCode: string;
+			/** Shows the total amount of all RMA Products including tax. */
+			readonly msdyn_TotalAmount: string;
+			/** Shows the value of the total amount in the base currency. */
+			readonly msdyn_totalamount_Base: string;
+			/** Work Order this RMA is linked to */
+			readonly msdyn_WorkOrder: string;
+			/** Shows the date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the RMA */
+			readonly statecode: string;
+			/** Reason for the status of the RMA */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Unique identifier of the currency associated with the entity. */
+			readonly TransactionCurrencyId: string;
+			/** Shows the time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -244,6 +331,8 @@ declare namespace OptionSet {
 			Pending,
 			/** 690970002 */
 			Products_Received
+		}
+		enum OwnerIdType {
 		}
 		enum statecode {
 			/** 0 */
@@ -275,4 +364,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

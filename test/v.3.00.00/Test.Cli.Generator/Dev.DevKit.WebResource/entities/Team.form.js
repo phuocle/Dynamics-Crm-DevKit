@@ -169,6 +169,8 @@ var OptionSet;
 			Members_and_guests: 0,
 			Owners: 2
 		},
+		RegardingObjectTypeCode : {
+		},
 		TeamType : {
 			AAD_Office_Group: 3,
 			AAD_Security_Group: 2,

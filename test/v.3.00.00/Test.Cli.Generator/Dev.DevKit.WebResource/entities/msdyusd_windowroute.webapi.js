@@ -140,7 +140,7 @@ var DevKit;
 		}
 		msdyusd_windowroute.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -192,6 +192,8 @@ var OptionSet;
 			Create_Session_then_Do_Action: 803750002,
 			Do_Action: 803750000,
 			Next_Rule: 803750001
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

@@ -34,6 +34,13 @@ declare namespace DevKit {
 		/** For internal use only. */
 		SystemUserProfileId: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			readonly FieldSecurityProfileId: string;
+			readonly SystemUserId: string;
+			/** For internal use only. */
+			readonly SystemUserProfileId: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -56,4 +63,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

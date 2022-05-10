@@ -128,7 +128,7 @@ var DevKit;
 		}
 		msdyn_bookingjournal.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -148,6 +148,8 @@ var OptionSet;
 			Overtime: 690970003,
 			Travel: 690970002,
 			Working_Hours: 690970000
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

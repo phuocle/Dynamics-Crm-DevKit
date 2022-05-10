@@ -73,10 +73,58 @@ declare namespace DevKit {
 		State: number;
 		/** For internal use only. */
 		UserApplicationMetadataId: string;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly AssociatedEntityLogicalName: string;
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** For internal use only. */
+			readonly Data: string;
+			/** For internal use only. */
+			readonly Dependency: string;
+			/** For internal use only. */
+			readonly DisplayName: string;
+			/** For internal use only. */
+			readonly FormFactor: string;
+			/** For internal use only. */
+			readonly IsDefault: string;
+			/** For internal use only. */
+			readonly Lcid: string;
+			/** For internal use only. */
+			readonly MetadataSubtype: string;
+			/** For internal use only. */
+			readonly MetadataType: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** For internal use only. */
+			readonly SourceId: string;
+			/** For internal use only. */
+			readonly State: string;
+			/** For internal use only. */
+			readonly UserApplicationMetadataId: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace UserApplicationMetadata {
+		enum OwnerIdType {
+		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
 			NotCalculated,
@@ -95,4 +143,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

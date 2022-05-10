@@ -168,7 +168,7 @@ var DevKit;
 		}
 		emailserverprofile.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -236,6 +236,8 @@ var OptionSet;
 			Server_to_Server_Authentication: 2,
 			Windows_Integrated_Authentication: 3,
 			Without_Credentials_Anonymous: 4
+		},
+		OwnerIdType : {
 		},
 		ServerType : {
 			Exchange_Online_Hybrid: 3,

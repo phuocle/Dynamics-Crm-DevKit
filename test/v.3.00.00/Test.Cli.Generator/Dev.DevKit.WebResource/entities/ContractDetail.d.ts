@@ -284,10 +284,118 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the account with which the contract is associated. */
+			readonly AccountId: string;
+			/** Enter the date when the contract line becomes active. */
+			readonly ActiveOn_UtcDateOnly: string;
+			/** Shows the number of minutes over the Total Allotments field that have been spent on resolved cases related to the contract line. */
+			readonly AllotmentsOverage: string;
+			/** Shows the number of cases or minutes remaining, based on the resolved cases logged to the contract line. */
+			readonly AllotmentsRemaining: string;
+			/** Shows the number of cases or minutes used in the resolved cases on the contract line. */
+			readonly AllotmentsUsed: string;
+			/** Unique identifier for the contact associated with the contract line. */
+			readonly ContactId: string;
+			/** Unique identifier of the contract line. */
+			readonly ContractDetailId: string;
+			/** Unique identifier of the contract associated with the contract line. */
+			readonly ContractId: string;
+			/** Status of the contract. */
+			readonly ContractStateCode: string;
+			/** Shows who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Select the customer account or contact to provide a quick link to additional customer details, such as address, phone number, activities, and orders. */
+			readonly customerid_account: string;
+			/** Select the customer account or contact to provide a quick link to additional customer details, such as address, phone number, activities, and orders. */
+			readonly customerid_contact: string;
+			/** Type the discount amount for the contract line to deduct any negotiated or other savings from the net amount due. */
+			readonly Discount: string;
+			/** Value of the Discount in base currency. */
+			readonly Discount_Base: string;
+			/** Type the discount rate that should be applied to the Total Price, for use in calculating the net amount due for the contract line. */
+			readonly DiscountPercentage: string;
+			/** Days of the week and times for which the contract line item is effective. */
+			readonly EffectivityCalendar: string;
+			/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
+			readonly ExchangeRate: string;
+			/** Enter the date when the contract line expires. The date is automatically filled with the contract date, but you can change it if required. */
+			readonly ExpiresOn_UtcDateOnly: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Type the number of units of the specified product or service that are eligible for support on the contract line. */
+			readonly InitialQuantity: string;
+			/** Type the line item number for the contract line to easily identify the contract line and make sure it's listed in the correct order in the parent contract. */
+			readonly LineItemOrder: string;
+			/** Shows who last updated the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who last updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Shows the total charge to the customer for the contract line, calculated as the Total Price minus any discounts. */
+			readonly Net: string;
+			/** Value of the Net in base currency. */
+			readonly Net_Base: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Type the total service charge for the contract line before any discounts are credited. */
+			readonly Price: string;
+			/** Value of the Total Price in base currency. */
+			readonly Price_Base: string;
+			/** Choose the product that is eligible for services on the contract line. */
+			readonly ProductId: string;
+			/** Type the serial number for the product that is eligible for services on the contract line. */
+			readonly ProductSerialNumber: string;
+			/** Shows the cost per case or minute, calculated by dividing the Total Price value by the total number of cases or minutes allocated to the contract line. */
+			readonly Rate: string;
+			/** Value of the Rate in base currency. */
+			readonly Rate_Base: string;
+			/** Choose the address for the customer account or contact where the services are provided. */
+			readonly ServiceAddress: string;
+			/** Select the unit type allotted in the contract line, such as cases or minutes, to determine the level of support. */
+			readonly ServiceContractUnitsCode: string;
+			/** Shows whether the contract line is existing, renewed, canceled, or expired. You can't edit a contract line after it is saved, regardless of the status. */
+			readonly StateCode: string;
+			/** Select the contract line's status. */
+			readonly StatusCode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Type a title or name that describes the contract line. */
+			readonly Title: string;
+			/** Type the total number of minutes or cases allowed for the contract line. */
+			readonly TotalAllotments: string;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			readonly TransactionCurrencyId: string;
+			/** Choose the unit of measurement for the base unit quantity for this purchase, such as each or dozen. */
+			readonly UoMId: string;
+			/** Unique identifier of the unit group associated with the contract line. */
+			readonly UoMScheduleId: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace ContractDetail {
+		enum ContractStateCode {
+		}
+		enum CustomerIdType {
+		}
+		enum OwnerIdType {
+		}
 		enum ServiceContractUnitsCode {
 			/** 1 */
 			Default_Value
@@ -330,4 +438,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

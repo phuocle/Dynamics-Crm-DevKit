@@ -163,6 +163,90 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly ComponentIdUnique: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** For internal use only. */
+			readonly IsCustomizable: string;
+			/** Indicates whether the solution component is part of a managed solution. */
+			readonly IsManaged: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** The description of this macro action. */
+			readonly msdyn_actionDescription: string;
+			/** Unique value to set the brand color */
+			readonly msdyn_brandcolor: string;
+			/** Unique value to set the display name */
+			readonly msdyn_displayname: string;
+			/** Unique value to set the icon */
+			readonly msdyn_icon: string;
+			/** Input parameters for the macro action template */
+			readonly msdyn_inputparameters: string;
+			/** Kind is either 'TRIGGERS' or 'ACTIONS' */
+			readonly msdyn_kind: string;
+			/** Sets the value of macro connector */
+			readonly msdyn_macroconnector: string;
+			/** The name of the custom entity. */
+			readonly msdyn_name: string;
+			/** Output parameters for macro action template entity */
+			readonly msdyn_outputparameters: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_productivitymacroactiontemplateId: string;
+			/** Function to be executed at runtime */
+			readonly msdyn_runtimeapi: string;
+			/** Unique value to set the subtitle value */
+			readonly msdyn_subtitle: string;
+			/** Unique value to set the summary */
+			readonly msdyn_summary: string;
+			/** The title of this macro action. */
+			readonly msdyn_title: string;
+			/** Unique Name for the entity. */
+			readonly msdyn_UniqueName: string;
+			/** Unique value to set the visibility value */
+			readonly msdyn_visibility: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateAndTime: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** Status of the Macro Action Template */
+			readonly statecode: string;
+			/** Reason for the status of the Macro Action Template */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -176,6 +260,8 @@ declare namespace OptionSet {
 			Published,
 			/** 1 */
 			Unpublished
+		}
+		enum OwnerIdType {
 		}
 		enum statecode {
 			/** 0 */
@@ -207,4 +293,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

@@ -185,6 +185,60 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Default language of the message template. */
+			readonly msdyn_defaultlanguage: string;
+			/** ID of the instance this system message is related to, represented in text form. */
+			readonly msdyn_instanceid: string;
+			/** Description of the message. */
+			readonly msdyn_messagedescription: string;
+			/** Stores the list of message receivers. */
+			readonly msdyn_messagereceiver: string;
+			/** Stores the list of event types for message template */
+			readonly msdyn_messagetemplatetrigger: string;
+			/** Text sent to the message receiver. */
+			readonly msdyn_messagetext: string;
+			/** Stores the list of event types for system messages. */
+			readonly msdyn_messagetype: string;
+			/** The name of the custom entity. */
+			readonly msdyn_name: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_ocsystemmessageId: string;
+			/** List of all available channels. */
+			readonly msdyn_streamsource: string;
+			/** Stores the list of event types for system messages. */
+			readonly msdyn_systemmessageeventtype: string;
+			/** Unique identifier for Chat Widget associated with System Message. */
+			readonly msdyn_widgetid: string;
+			/** Unique identifier for the organization */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Status of the System Message */
+			readonly statecode: string;
+			/** Reason for the status of the System Message */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -206,6 +260,8 @@ declare namespace OptionSet {
 			Message_Template
 		}
 		enum msdyn_streamsource {
+			/** 192450000 */
+			Apple_Messages_for_Business,
 			/** 192390000 */
 			Co_browse,
 			/** 192350002 */
@@ -260,6 +316,10 @@ declare namespace OptionSet {
 			Agent_removed_from_consult_conversation,
 			/** 192350022 */
 			Agents_message_couldnt_be_sent,
+			/** 192350069 */
+			Apple_Pay_request_payment_failed,
+			/** 192350068 */
+			Apple_Pay_request_payment_succeeded,
 			/** 192350031 */
 			Average_wait_time_for_customers_Hours,
 			/** 192350032 */
@@ -290,6 +350,10 @@ declare namespace OptionSet {
 			Customer_is_next_in_line,
 			/** 192350043 */
 			Customer_no_longer_on_hold,
+			/** 192350066 */
+			Customer_OAuth_Sign_in_response_failed,
+			/** 192350065 */
+			Customer_OAuth_Sign_in_response_successful,
 			/** 192350042 */
 			Customer_put_on_hold,
 			/** 192350038 */
@@ -304,6 +368,8 @@ declare namespace OptionSet {
 			Greeting_Message_for_Async_Channels,
 			/** 192350035 */
 			Holiday_message_to_customer,
+			/** 192350071 */
+			Invalid_Apple_OAuth_response,
 			/** 192350041 */
 			Leave_as_many_messages_as_youd_like_and_well_get_back_to_you_as_soon_as_possible_Well_save_your_chat_history_so_you_can_leave_and_come_back_anytime,
 			/** 192350025 */
@@ -316,6 +382,8 @@ declare namespace OptionSet {
 			Message_couldnt_be_sent_Outside_allowed_timeframe,
 			/** 192350044 */
 			Message_or_attachment_failed_to_send_Providing_error_details_including_error_code_reason_for_failure_message_id_timestamp_and_transaction_id,
+			/** 192350064 */
+			Not_enough_data_for_average_wait_time,
 			/** 192350036 */
 			Out_of_operating_hour_message_to_customer,
 			/** 192350050 */
@@ -363,7 +431,9 @@ declare namespace OptionSet {
 			/** 192350033 */
 			Voice_call_ended,
 			/** 192350026 */
-			Voice_call_requested
+			Voice_call_requested,
+			/** 192350070 */
+			Waiting_time_for_agent_when_customer_is_disconnected
 		}
 		enum statecode {
 			/** 0 */
@@ -395,4 +465,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

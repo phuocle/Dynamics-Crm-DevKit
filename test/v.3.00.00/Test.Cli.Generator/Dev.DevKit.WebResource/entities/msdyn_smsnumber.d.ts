@@ -182,6 +182,76 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** SMS number description */
+			readonly msdyn_Description: string;
+			/** Enable file attachments for agents */
+			readonly msdyn_enablefileattachmentsforagents: string;
+			/** Enable file attachments for customers */
+			readonly msdyn_enablefileattachmentsforcustomers: string;
+			/** Readable field to display SMS phone number (Deprecated) */
+			readonly msdyn_FormattedPhoneNumber: string;
+			/** Unique identifier for Work Stream associated with SMS Number. (Deprecated) */
+			readonly msdyn_LiveWorkStreamId: string;
+			/** The SMS number of the SMS entity. (Deprecated) */
+			readonly msdyn_number: string;
+			/** The language setting for the SMS number (Deprecated) */
+			readonly msdyn_ocwidgetlanguage: string;
+			/** Used to denote operating hours for the sms numbers record */
+			readonly msdyn_operatinghourid: string;
+			/** Phone Number */
+			readonly msdyn_PhoneNumberId: string;
+			/** Lookup to Dynamics 365 Customer Voice survey field */
+			readonly msdyn_PostConversationSurvey: string;
+			/** To enable or disable post conversation survey */
+			readonly msdyn_PostConversationSurveyEnable: string;
+			/** Prefix text for survey link message that will be sent to the user. */
+			readonly msdyn_PostConversationSurveyMessageText: string;
+			/** Mode of the survey to be sent */
+			readonly msdyn_PostConversationSurveyMode: string;
+			/** SMS Provider for number */
+			readonly msdyn_Provider: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_smsnumberId: string;
+			/** The SMS number type (Deprecated) */
+			readonly msdyn_Type: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the SMS Number */
+			readonly statecode: string;
+			/** Reason for the status of the SMS Number */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -203,6 +273,8 @@ declare namespace OptionSet {
 			Short_code,
 			/** 192350002 */
 			Toll_free
+		}
+		enum OwnerIdType {
 		}
 		enum statecode {
 			/** 0 */
@@ -234,4 +306,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

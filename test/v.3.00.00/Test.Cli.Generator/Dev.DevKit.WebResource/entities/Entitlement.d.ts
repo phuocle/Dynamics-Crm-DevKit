@@ -226,6 +226,102 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier for Account associated with Entitlement. */
+			readonly AccountId: string;
+			/** Select the type of entitlement terms. */
+			readonly AllocationTypeCode: string;
+			/** Unique identifier for Contact associated with Entitlement. */
+			readonly ContactId: string;
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the entitlement. */
+			readonly CreatedOnBehalfBy: string;
+			/** Choose a contact or account for which this entitlement has been defined. */
+			readonly customerid_account: string;
+			/** Choose a contact or account for which this entitlement has been defined. */
+			readonly customerid_contact: string;
+			/** Select whether to decrease the remaining terms when the case is created or when it is resolved. */
+			readonly DecreaseRemainingOn: string;
+			/** Type additional information to describe the Entitlement */
+			readonly Description: string;
+			/** The primary email address for the entity. */
+			readonly EmailAddress: string;
+			/** Enter the date when the entitlement ends. */
+			readonly EndDate_UtcDateOnly: string;
+			/** Unique identifier for entity instances */
+			readonly EntitlementId: string;
+			/** Unique identifier for Entitlement Template associated with Entitlement. */
+			readonly EntitlementTemplateId: string;
+			/** Entity type for which the entitlement applies */
+			readonly entitytype: string;
+			/** Exchange rate for the currency associated with the contact with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Shows whether this entitlement is the default one for the specified customer. */
+			readonly IsDefault: string;
+			/** Select the access someone will have to the knowledge base on the portal. */
+			readonly KbAccessLevel: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** The work order entities to which the entitlement is applicable. */
+			readonly msdyn_AppliesTo: string;
+			/** The priority level when considering which eligible entitlement to apply, where the lower the number the higher the priority. */
+			readonly msdyn_EntitlementPrioritization: string;
+			/** The percent discount the entitlement applies to the work order. */
+			readonly msdyn_PercentDiscount: string;
+			/** The price list that the entitlement applies to the work order. */
+			readonly msdyn_PriceListToApply: string;
+			/** Type a meaningful name for the entitlement. */
+			readonly Name: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Contains the id of the process associated with the entity. */
+			readonly ProcessId: string;
+			/** Type the total number of entitlement terms that are left. */
+			readonly RemainingTerms: string;
+			/** Tells whether case creation is restricted based on entitlement terms. */
+			readonly RestrictCaseCreation: string;
+			/** Choose the service level agreement (SLA) associated with the entitlement. */
+			readonly SLAId: string;
+			/** Contains the id of the stage where the entity is located. */
+			readonly StageId: string;
+			/** Enter the date when the entitlement starts. */
+			readonly StartDate_UtcDateOnly: string;
+			/** For internal use only. */
+			readonly StateCode: string;
+			/** Select the reason code that explains the status of the entitlement. */
+			readonly StatusCode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Type the total number of entitlement terms. */
+			readonly TotalTerms: string;
+			/** Unique identifier of the currency associated with the contact. */
+			readonly TransactionCurrencyId: string;
+			/** A comma separated list of string values representing the unique identifiers of stages in a Business Process Flow Instance in the order that they occur. */
+			readonly TraversedPath: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -237,6 +333,8 @@ declare namespace OptionSet {
 			Number_of_cases,
 			/** 1 */
 			Number_of_hours
+		}
+		enum CustomerIdType {
 		}
 		enum DecreaseRemainingOn {
 			/** 1 */
@@ -265,6 +363,8 @@ declare namespace OptionSet {
 			Work_Order_Products,
 			/** 690970001 */
 			Work_Order_Services
+		}
+		enum OwnerIdType {
 		}
 		enum StateCode {
 			/** 1 */
@@ -308,4 +408,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

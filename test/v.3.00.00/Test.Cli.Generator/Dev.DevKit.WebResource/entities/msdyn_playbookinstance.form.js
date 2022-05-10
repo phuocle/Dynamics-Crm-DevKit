@@ -65,6 +65,10 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.msdyn_playbookinstance = {
+		OwnerIdType : {
+		},
+		RegardingObjectTypeCode : {
+		},
 		statecode : {
 			Active: 0,
 			Completed: 1

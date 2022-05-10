@@ -122,6 +122,8 @@ var OptionSet;
 			Desktop: 690970000,
 			Mobile: 690970001
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

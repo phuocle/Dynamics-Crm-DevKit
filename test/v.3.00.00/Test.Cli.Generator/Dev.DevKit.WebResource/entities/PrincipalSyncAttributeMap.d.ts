@@ -57,6 +57,36 @@ declare namespace DevKit {
 		/** Sync Direction */
 		SyncDirection: OptionSet.PrincipalSyncAttributeMap.SyncDirection;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Specifies allowed sync directions. */
+			readonly AllowedSyncDirection: string;
+			/** CRM Attribute Display Name. */
+			readonly AttributeCRMDisplayName: string;
+			/** CRM Attribute Name. */
+			readonly AttributeCRMName: string;
+			/** Exchange Attribute Display Name. */
+			readonly AttributeExchangeDisplayName: string;
+			/** Exchange Attribute Name. */
+			readonly AttributeExchangeName: string;
+			/** Computed Properties. */
+			readonly ComputedProperties: string;
+			/** Default Sync Direction */
+			readonly DefaultSyncDirection: string;
+			/** Indicates whether the mapping is a computed property */
+			readonly IsComputed: string;
+			/** Mapping Name. */
+			readonly MappingName: string;
+			/** Unique identifier of the associated organization. */
+			readonly OrganizationId: string;
+			/** Parent Sync-Attribute Mapping to which this mapping belongs */
+			readonly ParentPrincipalSyncAttributeMappingId: string;
+			readonly PrincipalId: string;
+			/** Unique identifier of the principal sync attribute mapping. */
+			readonly PrincipalSyncAttributeMapId: string;
+			/** Sync Direction */
+			readonly SyncDirection: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -70,6 +100,8 @@ declare namespace OptionSet {
 			ToCRM,
 			/** 1 */
 			ToExchange
+		}
+		enum EntityTypeCode1 {
 		}
 		enum SyncDirection {
 			/** 3 */
@@ -99,4 +131,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

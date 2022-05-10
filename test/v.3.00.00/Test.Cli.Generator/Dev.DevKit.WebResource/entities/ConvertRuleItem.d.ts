@@ -167,6 +167,68 @@ declare namespace DevKit {
 		readonly VersionNumber: number;
 		/** Workflow associated with the Convert Rule Item. */
 		WorkflowId: string;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Identifies the step of the associated workflow */
+			readonly ConditionId: string;
+			/** Condition for convert rule item */
+			readonly ConditionXml: string;
+			/** Unique identifier of the convert rule associated with the convert rule item. */
+			readonly ConvertRuleId: string;
+			/** Unique identifier for entity instances */
+			readonly ConvertRuleItemId: string;
+			/** For internal use only. */
+			readonly ConvertRuleItemIdUnique: string;
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Type additional information to describe the rule item for automatic record creation. */
+			readonly Description: string;
+			/** Exchange rate for the currency associated with the queue with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** For internal use only. */
+			readonly IsManaged: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Type a name or title of the rule item that is used for automatic record creation and update. */
+			readonly Name: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Shows the business unit that the convert rule item owner belongs to. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the user who owns the Convert Rule Item. */
+			readonly OwningUser: string;
+			/** Primary create entity for a rule item */
+			readonly PrimaryCreateEntityLogicalName: string;
+			/** Set properties xml for convert rule item */
+			readonly PropertiesXml: string;
+			/** Choose the queue that the rule is assigned to. */
+			readonly QueueId: string;
+			/** Sequence number of the convert rule item */
+			readonly SequenceNumber: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			readonly TransactionCurrencyId: string;
+			/** Version number of the Covert Rule Item. */
+			readonly VersionNumber: string;
+			/** Workflow associated with the Convert Rule Item. */
+			readonly WorkflowId: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -180,6 +242,8 @@ declare namespace OptionSet {
 			Published,
 			/** 1 */
 			Unpublished
+		}
+		enum OwnerIdType {
 		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
@@ -199,4 +263,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

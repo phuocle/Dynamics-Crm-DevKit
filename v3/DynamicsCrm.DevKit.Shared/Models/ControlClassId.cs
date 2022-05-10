@@ -72,7 +72,7 @@
         public const string UNKNOWN_15 = "4273EDBD-AC1D-40D3-9FB2-095C621B5511";
         public const string UNKNOWN_16 = "3DE87A16-47A2-48C6-8939-EE111C83B9AD";
         public const string UNKNOWN_17 = "83ACFF84-DCE0-4E32-9DB9-99624A721DD0";
-
+        public const string UNKNOWN_18 = "75ECD29C-0FBA-4C4B-83AE-5888A0437640";
 
         public const string CASERESEARCH_LINKCONTROL = "DFDF1CDE-837B-4AC9-98CF-AC74361FD89D";
         public const string KBVIEWER = "A62B6FA9-169E-406C-B1AA-EAB828CB6026";
@@ -164,6 +164,7 @@
             UNKNOWN_15,
             UNKNOWN_16,
             UNKNOWN_17,
+            UNKNOWN_18,
             FILE,
             IMAGE,
             CASERESEARCH_LINKCONTROL,

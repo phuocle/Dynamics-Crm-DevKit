@@ -76,6 +76,8 @@ var OptionSet;
 			RMA_Product: 690970005,
 			WO_Product: 690970002
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

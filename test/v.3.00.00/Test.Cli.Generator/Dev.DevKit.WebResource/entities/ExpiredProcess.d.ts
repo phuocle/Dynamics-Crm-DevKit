@@ -109,6 +109,54 @@ declare namespace DevKit {
 		TraversedPath: string;
 		/** Version number of the business process instance. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the active stage for the Business Process Flow instance. */
+			readonly ActiveStageId: string;
+			/** Date and time when current active stage is started. */
+			readonly ActiveStageStartedOn_UtcDateOnly: string;
+			/** Unique identifier for Expired Process bpf entity instances */
+			readonly BusinessProcessFlowInstanceId: string;
+			/** Date and time when Business Process Flow instance is completed. */
+			readonly CompletedOn_UtcDateOnly: string;
+			/** Shows who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics CRM options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Duration the business process flow was active. */
+			readonly Duration: string;
+			/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
+			readonly ExchangeRate: string;
+			/** Unique identifier of the data import or data migration that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the workflow associated to the Business Process Flow instance. */
+			readonly KnowledgeArticleId: string;
+			/** Shows who last updated the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics CRM options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who last updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Process Name. */
+			readonly Name: string;
+			/** Unique identifier of the organization with which the SDK message request is associated. */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Unique identifier of the workflow associated to the Business Process Flow instance. */
+			readonly ProcessId: string;
+			/** Shows whether the Delve action record is pending, completed, or tracking. */
+			readonly StateCode: string;
+			/** Select the delve action record status. */
+			readonly StatusCode: string;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			readonly TransactionCurrencyId: string;
+			/** Traversed Path */
+			readonly TraversedPath: string;
+			/** Version number of the business process instance. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -145,4 +193,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

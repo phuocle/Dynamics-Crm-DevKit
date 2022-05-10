@@ -132,7 +132,7 @@ var DevKit;
 		}
 		msdyn_migrationtracker.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -146,6 +146,10 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.msdyn_migrationtracker = {
+		msdyn_LegacyRuleIdType : {
+		},
+		msdyn_LegacyRuleItemIdType : {
+		},
 		msdyn_MigrationStatus : {
 			In_Progress: 0,
 			Incomplete: 2,
@@ -154,6 +158,14 @@ var OptionSet;
 		msdyn_MigrationType : {
 			Migration: 0,
 			PreValidation: 1
+		},
+		msdyn_ModernRuleIdType : {
+		},
+		msdyn_ModernRuleItemIdType : {
+		},
+		msdyn_Objecttypecode : {
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

@@ -202,6 +202,10 @@ var OptionSet;
 			Teal: 192360017,
 			Violet: 192350004
 		},
+		msdyn_PostConversationSurveyBotSurveyMode : {
+			Insert_survey_in_conversation: 192350000,
+			Send_survey_link_to_conversation: 192350001
+		},
 		msdyn_PostConversationSurveyMode : {
 			Insert_survey_in_conversation: 192350000,
 			Send_survey_link_to_conversation: 192350001
@@ -223,6 +227,8 @@ var OptionSet;
 			Red: 19236001,
 			Teal: 192360017,
 			Violet: 192350004
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

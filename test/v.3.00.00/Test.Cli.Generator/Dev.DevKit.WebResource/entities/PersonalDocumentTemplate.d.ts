@@ -120,15 +120,60 @@ declare namespace DevKit {
 		/** Information about whether the personal document template is active. */
 		Status: boolean;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Client data regarding this personal document template. */
+			readonly ClientData: string;
+			/** Bytes of the personal document template. */
+			readonly Content: string;
+			/** Unique identifier of the user who created the personal document template. */
+			readonly CreatedBy: string;
+			/** Date and time when the personal document template was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the personal document template. */
+			readonly CreatedOnBehalfBy: string;
+			/** Additional information to describe the Personal Document Template */
+			readonly Description: string;
+			/** Option set for selecting the type of the personal document template */
+			readonly DocumentType: string;
+			/** Language of Personal Document Template. */
+			readonly LanguageCode: string;
+			/** Unique identifier of the user who last modified the personal document template. */
+			readonly ModifiedBy: string;
+			/** Date and time when the personal document template was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the personal document template. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Name of the personal document template. */
+			readonly Name: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier of the business unit that owns the personal document template. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the team who owns the personal document template. */
+			readonly OwningTeam: string;
+			/** Unique identifier of the user who owns the personal document template. */
+			readonly OwningUser: string;
+			/** Unique identifier of the personal document template. */
+			readonly PersonalDocumentTemplateId: string;
+			/** Information about whether the personal document template is active. */
+			readonly Status: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace PersonalDocumentTemplate {
+		enum AssociatedEntityTypeCode {
+		}
 		enum DocumentType {
 			/** 1 */
 			Microsoft_Excel,
 			/** 2 */
 			Microsoft_Word
+		}
+		enum OwnerIdType {
 		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
@@ -148,4 +193,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

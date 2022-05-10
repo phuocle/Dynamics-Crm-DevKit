@@ -83,6 +83,62 @@ declare namespace DevKit {
 		Version: number;
 		/** Represents a version of customizations to be synchronized with the Microsoft Dynamics 365 client for Outlook. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the parent form. */
+			readonly AncestorFormId: string;
+			/** Information that specifies whether this component can be deleted. */
+			readonly CanBeDeleted: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Description of the form or dashboard. */
+			readonly Description: string;
+			/** Specifies the state of the form. */
+			readonly FormActivationState: string;
+			/** Unique identifier of the record type form. */
+			readonly FormId: string;
+			/** Unique identifier of the form used when synchronizing customizations for the Microsoft Dynamics 365 client for Outlook. */
+			readonly FormIdUnique: string;
+			/** Json representation of the form layout. */
+			readonly FormJson: string;
+			/** Specifies whether this form is in the updated UI layout in Microsoft Dynamics CRM 2015 or Microsoft Dynamics CRM Online 2015 Update. */
+			readonly FormPresentation: string;
+			/** XML representation of the form layout. */
+			readonly FormXml: string;
+			/** formXml diff as in a managed solution. for internal use only */
+			readonly FormXmlManaged: string;
+			/** Version in which the form is introduced. */
+			readonly IntroducedVersion: string;
+			/** Specifies whether this form is merged with the updated UI layout in Microsoft Dynamics CRM 2015 or Microsoft Dynamics CRM Online 2015 Update. */
+			readonly IsAIRMerged: string;
+			/** Information that specifies whether this component can be customized. */
+			readonly IsCustomizable: string;
+			/** Information that specifies whether the form or the dashboard is the system default. */
+			readonly IsDefault: string;
+			/** Information that specifies whether the dashboard is enabled for desktop. */
+			readonly IsDesktopEnabled: string;
+			readonly IsManaged: string;
+			/** Information that specifies whether the dashboard is enabled for tablet. */
+			readonly IsTabletEnabled: string;
+			/** Name of the form. */
+			readonly Name: string;
+			/** Unique identifier of the organization. */
+			readonly OrganizationId: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			readonly PublishedOn_UtcDateAndTime: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** Type of the form, for example, Dashboard or Preview. */
+			readonly Type: string;
+			/** Unique Name */
+			readonly UniqueName: string;
+			/** For internal use only. */
+			readonly Version: string;
+			/** Represents a version of customizations to be synchronized with the Microsoft Dynamics 365 client for Outlook. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -110,6 +166,8 @@ declare namespace OptionSet {
 			ClassicForm,
 			/** 2 */
 			ConvertedICForm
+		}
+		enum ObjectTypeCode {
 		}
 		enum Type {
 			/** 1 */
@@ -167,4 +225,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

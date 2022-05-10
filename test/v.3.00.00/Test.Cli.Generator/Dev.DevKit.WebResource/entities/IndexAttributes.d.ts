@@ -37,6 +37,16 @@ declare namespace DevKit {
 		readonly RecordId: number;
 		/** The version number of this index attribute. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the index attribute */
+			readonly IndexAttributeId: string;
+			/** Unique identifier of the entity index */
+			readonly IndexId: string;
+			/** The record id of this index attribute. */
+			readonly RecordId: string;
+			/** The version number of this index attribute. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -59,4 +69,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

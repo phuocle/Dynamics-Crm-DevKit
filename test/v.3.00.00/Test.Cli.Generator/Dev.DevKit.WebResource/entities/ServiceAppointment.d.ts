@@ -437,16 +437,328 @@ declare namespace DevKit {
 		readonly VersionNumber: number;
 		/** The array of object that can cast object to ActivityPartyApi class */
 		ActivityParties: Array<unknown>;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly ActivityAdditionalParams: string;
+			/** Unique identifier of the service activity. */
+			readonly ActivityId: string;
+			/** Shows the value selected in the Duration field on the service activity at the time the service activity is closed as completed. The duration is used to report the time spent on the activity. */
+			readonly ActualDurationMinutes: string;
+			/** Enter the actual end date and time of the service activity. By default, it displays when the activity was closed or canceled. */
+			readonly ActualEnd_UtcDateAndTime: string;
+			/** Enter the actual start date and time for the service activity. By default, it displays when the activity was created. */
+			readonly ActualStart_UtcDateAndTime: string;
+			/** Type a category to identify the service activity type, such as routine maintenance or service call, to tie the service activity to a business group or function. */
+			readonly Category: string;
+			/** Shows how contact about the social activity originated, such as from Twitter or Facebook. This field is read-only. */
+			readonly Community: string;
+			/** Unique identifier of the user who created the activity. */
+			readonly CreatedBy: string;
+			/** Date and time when the activity was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the activitypointer. */
+			readonly CreatedOnBehalfBy: string;
+			/** Date and time when the delivery of the activity was last attempted. */
+			readonly DeliveryLastAttemptedOn_UtcDateAndTime: string;
+			/** Priority of delivery of the activity to the email server. */
+			readonly DeliveryPriorityCode: string;
+			/** Type additional information to describe the service activity, such as key talking points or objectives. */
+			readonly Description: string;
+			/** The message id of activity which is returned from Exchange Server. */
+			readonly ExchangeItemId: string;
+			/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
+			readonly ExchangeRate: string;
+			/** Shows the web link of Activity of type email. */
+			readonly ExchangeWebLink: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Type of instance of a recurring series. */
+			readonly InstanceTypeCode: string;
+			/** Select whether the service activity is an all-day event to make sure the required resources are scheduled for the full day. */
+			readonly IsAllDayEvent: string;
+			/** Information which specifies whether the service activity was billed as part of resolving a case. */
+			readonly IsBilled: string;
+			/** For internal use only. */
+			readonly IsMapiPrivate: string;
+			/** Information regarding whether the activity is a regular activity type or event type. */
+			readonly IsRegularActivity: string;
+			/** Information which specifies if the service activity was created from a workflow rule. */
+			readonly IsWorkflowCreated: string;
+			/** Contains the date and time stamp of the last on hold time. */
+			readonly LastOnHoldTime_UtcDateAndTime: string;
+			/** Left the voice mail */
+			readonly LeftVoiceMail: string;
+			/** Type the location where the service activity will take place, such as a conference room, customer office, or other venue. */
+			readonly Location: string;
+			/** Unique identifier of user who last modified the activity. */
+			readonly ModifiedBy: string;
+			/** Date and time when activity was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the activitypointer. */
+			readonly ModifiedOnBehalfBy: string;
+			/** OrganizationalUnit ServiceAppointment Id */
+			readonly msdyn_OrganizationalUnitId: string;
+			/** Shows how long, in minutes, that the record was on hold. */
+			readonly OnHoldTime: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier of the business unit that owns the activity. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the team that owns the activity. */
+			readonly OwningTeam: string;
+			/** Unique identifier of the user that owns the activity. */
+			readonly OwningUser: string;
+			/** For internal use only. */
+			readonly PostponeActivityProcessingUntil_UtcDateAndTime: string;
+			/** Select the priority so that preferred customers or critical issues are handled quickly. */
+			readonly PriorityCode: string;
+			/** Unique identifier of the Process. */
+			readonly ProcessId: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_account_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_bookableresourcebooking_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_bookableresourcebookingheader_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_bulkoperation_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_campaign_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_campaignactivity_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_contact_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_contract_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_entitlement_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_entitlementtemplate_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_incident_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_new_interactionforemail_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_invoice_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_knowledgearticle_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_knowledgebaserecord_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_lead_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_agreement_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_agreementbookingdate_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_agreementbookingincident_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_agreementbookingproduct_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_agreementbookingservice_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_agreementbookingservicetask_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_agreementbookingsetup_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_agreementinvoicedate_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_agreementinvoiceproduct_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_agreementinvoicesetup_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_bookingalertstatus_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_bookingrule_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_bookingtimestamp_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_customerasset_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_fieldservicesetting_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_incidenttypecharacteristic_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_incidenttypeproduct_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_incidenttypeservice_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_inventoryadjustment_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_inventoryadjustmentproduct_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_inventoryjournal_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_inventorytransfer_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_payment_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_paymentdetail_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_paymentmethod_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_paymentterm_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_playbookinstance_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_postalbum_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_postalcode_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_processnotes_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_productinventory_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_projectteam_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_purchaseorder_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_purchaseorderbill_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_purchaseorderproduct_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_purchaseorderreceipt_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_purchaseorderreceiptproduct_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_purchaseordersubstatus_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_quotebookingincident_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_quotebookingproduct_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_quotebookingservice_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_quotebookingservicetask_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_resourceterritory_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_rma_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_rmaproduct_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_rmareceipt_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_rmareceiptproduct_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_rmasubstatus_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_rtv_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_rtvproduct_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_rtvsubstatus_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_salessuggestion_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_shipvia_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_systemuserschedulersetting_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_timegroup_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_timegroupdetail_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_timeoffrequest_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_warehouse_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_workorder_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_workordercharacteristic_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_workorderincident_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_workorderproduct_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_workorderresourcerestriction_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_workorderservice_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_msdyn_workorderservicetask_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_opportunity_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_quote_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_salesorder_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_site_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_uii_action_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_uii_hostedapplication_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_uii_nonhostedapplication_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_uii_option_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_uii_savedsession_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_uii_workflow_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_uii_workflowstep_serviceappointment: string;
+			/** Unique identifier of the object with which the service activity is associated. */
+			readonly regardingobjectid_uii_workflow_workflowstep_mapping_serviceappointment: string;
+			/** Shows the expected duration of the service activity, in minutes. */
+			readonly ScheduledDurationMinutes: string;
+			/** Enter the expected due date and time. */
+			readonly ScheduledEnd_UtcDateAndTime: string;
+			/** Enter the expected due date and time. */
+			readonly ScheduledStart_UtcDateAndTime: string;
+			/** Unique identifier of the mailbox associated with the sender of the email message. */
+			readonly SenderMailboxId: string;
+			/** Date and time when the activity was sent. */
+			readonly SentOn_UtcDateAndTime: string;
+			/** Uniqueidentifier specifying the id of recurring series of an instance. */
+			readonly SeriesId: string;
+			/** Choose the service scheduled to be performed during the service activity. */
+			readonly ServiceId: string;
+			/** Choose the site or location where the service activity will be performed. */
+			readonly SiteId: string;
+			/** Choose the service level agreement (SLA) that you want to apply to the service appointment record. */
+			readonly SLAId: string;
+			/** Last SLA that was applied to this email. This field is for internal use only. */
+			readonly SLAInvokedId: string;
+			/** Shows the date and time by which the activities are sorted. */
+			readonly SortDate_UtcDateAndTime: string;
+			/** Unique identifier of the Stage. */
+			readonly StageId: string;
+			/** Shows whether the service activity is open, completed, or canceled. Completed and canceled service activities are read-only and can't be edited. */
+			readonly StateCode: string;
+			/** Select the service activity's status. */
+			readonly StatusCode: string;
+			/** Type a subcategory to identify the service activity type and relate the activity to a specific product, service region, business group, or other function. */
+			readonly Subcategory: string;
+			/** Type a short description about the objective or primary topic of the service activity. */
+			readonly Subject: string;
+			/** For internal use only. */
+			readonly SubscriptionId: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			readonly TransactionCurrencyId: string;
+			/** For internal use only. */
+			readonly TraversedPath: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version number of the activity. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace ServiceAppointment {
 		enum ActivityTypeCode {
-			/** 10086 */
+			/** 10088 */
 			Activity_record_for_the_Teams_chat,
 			/** 4201 */
 			Appointment,
-			/** 10404 */
+			/** 10473 */
 			Booking_Alert,
 			/** 4402 */
 			Campaign_Activity,
@@ -454,13 +766,13 @@ declare namespace OptionSet {
 			Campaign_Response,
 			/** 4206 */
 			Case_Resolution,
-			/** 10707 */
+			/** 10743 */
 			Conversation,
-			/** 10313 */
+			/** 10330 */
 			Customer_Voice_alert,
-			/** 10323 */
+			/** 10340 */
 			Customer_Voice_survey_invite,
-			/** 10325 */
+			/** 10342 */
 			Customer_Voice_survey_response,
 			/** 4202 */
 			Email,
@@ -472,11 +784,11 @@ declare namespace OptionSet {
 			Opportunity_Close,
 			/** 4209 */
 			Order_Close,
-			/** 10817 */
+			/** 10857 */
 			Outbound_message,
 			/** 4210 */
 			Phone_Call,
-			/** 10434 */
+			/** 10489 */
 			Project_Service_Approval,
 			/** 4406 */
 			Quick_Campaign,
@@ -486,12 +798,14 @@ declare namespace OptionSet {
 			Recurring_Appointment,
 			/** 4214 */
 			Service_Activity,
-			/** 10721 */
+			/** 10760 */
 			Session,
 			/** 4212 */
 			Task
 		}
 		enum Community {
+			/** 16 */
+			Apple_Messages_For_Business,
 			/** 5 */
 			Cortana,
 			/** 6 */
@@ -502,6 +816,8 @@ declare namespace OptionSet {
 			Email,
 			/** 1 */
 			Facebook,
+			/** 17 */
+			Googles_Business_Messages,
 			/** 10 */
 			GroupMe,
 			/** 11 */
@@ -545,6 +861,8 @@ declare namespace OptionSet {
 			/** 1 */
 			Recurring_Master
 		}
+		enum OwnerIdType {
+		}
 		enum PriorityCode {
 			/** 2 */
 			High,
@@ -552,6 +870,8 @@ declare namespace OptionSet {
 			Low,
 			/** 1 */
 			Normal
+		}
+		enum RegardingObjectTypeCode {
 		}
 		enum StateCode {
 			/** 2 */
@@ -601,4 +921,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

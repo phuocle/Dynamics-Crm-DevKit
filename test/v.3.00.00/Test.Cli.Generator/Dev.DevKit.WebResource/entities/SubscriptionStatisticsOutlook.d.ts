@@ -35,6 +35,14 @@ declare namespace DevKit {
 		ObjectTypeCode: number;
 		/** Subscription Id */
 		SubscriptionId: string;
+		readonly FormattedValue: {
+			/** Is full sync required or not */
+			readonly FullSyncRequired: string;
+			/** Entity object type code */
+			readonly ObjectTypeCode: string;
+			/** Subscription Id */
+			readonly SubscriptionId: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -57,4 +65,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

@@ -144,6 +144,8 @@ var OptionSet;
 			Do_Action: 803750000,
 			Next_Rule: 803750001
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

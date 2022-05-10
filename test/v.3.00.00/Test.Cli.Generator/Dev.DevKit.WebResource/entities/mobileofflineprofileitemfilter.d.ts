@@ -1,6 +1,32 @@
 ﻿//@ts-check
 ///<reference path="devkit.d.ts" />
 declare namespace DevKit {
+	namespace Formmobileofflineprofileitemfilter_Information {
+		interface Tabs {
+		}
+		interface Body {
+			/** Unique identifier for entity instances */
+			mobileofflineprofileitemfilterId: DevKit.Controls.String;
+		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
+	}
+	class Formmobileofflineprofileitemfilter_Information extends DevKit.IForm {
+		/**
+		* Information [Main Form]
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form mobileofflineprofileitemfilter_Information */
+		Body: DevKit.Formmobileofflineprofileitemfilter_Information.Body;
+		/** The Process of form mobileofflineprofileitemfilter_Information */
+		Process: DevKit.Formmobileofflineprofileitemfilter_Information.Process;
+		/** The SidePanes of form mobileofflineprofileitemfilter_Information */
+		SidePanes: DevKit.SidePanes;
+	}
 	class mobileofflineprofileitemfilterApi {
 		/**
 		* DynamicsCrm.DevKit mobileofflineprofileitemfilterApi
@@ -46,10 +72,31 @@ declare namespace DevKit {
 		type: OptionSet.mobileofflineprofileitemfilter.type;
 		/** Version number. */
 		readonly versionnumber: number;
+		readonly FormattedValue: {
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			readonly fetchxml: string;
+			/** Unique identifier for Mobile Offline Profile associated with MobileOfflineProfileItemFilter. */
+			readonly mobileofflineprofileid: string;
+			/** Unique identifier for entity instances */
+			readonly mobileofflineprofileitemfilterId: string;
+			readonly mobileofflineprofileitemid: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Name */
+			readonly Name: string;
+			readonly offlinesql: string;
+			readonly subtype: string;
+			readonly type: string;
+			/** Version number. */
+			readonly versionnumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace mobileofflineprofileitemfilter {
+		enum returnedtypecode {
+		}
 		enum subtype {
 			/** 0 */
 			CUD_IN,
@@ -59,6 +106,8 @@ declare namespace OptionSet {
 			FULL_SYNC,
 			/** 1 */
 			RELATED_CUD_IN,
+			/** 6 */
+			RELATED_ENTITIES,
 			/** 3 */
 			RELATED_SHARED_IN,
 			/** 2 */
@@ -70,7 +119,11 @@ declare namespace OptionSet {
 			/** 1 */
 			DELTA_OUT,
 			/** 2 */
-			FULL_SYNC
+			FULL_SYNC,
+			/** 4 */
+			RELATED_ENTITIES,
+			/** 3 */
+			TOP_1
 		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
@@ -90,4 +143,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

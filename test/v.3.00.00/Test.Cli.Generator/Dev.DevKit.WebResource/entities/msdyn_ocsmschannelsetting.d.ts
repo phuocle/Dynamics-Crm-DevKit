@@ -89,12 +89,20 @@ declare namespace DevKit {
 		msdyn_PhoneNumberId: string;
 		/** Lookup to Dynamics 365 Customer Voice survey field */
 		msdyn_postconversationsurvey: string;
+		/** Enable or disable bot survey */
+		msdyn_postconversationsurveybotsurvey: boolean;
+		/** Prefix text for survey link message that will be sent to the user. */
+		msdyn_postconversationsurveybotsurveymessagetext: string;
+		/** Mode of the survey to be sent */
+		msdyn_postconversationsurveybotsurveymode: OptionSet.msdyn_ocsmschannelsetting.msdyn_postconversationsurveybotsurveymode;
 		/** To enable or disable post conversation survey */
 		msdyn_postconversationsurveyenable: boolean;
 		/** Prefix text for survey link message that will be sent to the user. */
 		msdyn_postconversationsurveymessagetext: string;
 		/** Mode of the survey to be sent */
 		msdyn_postconversationsurveymode: OptionSet.msdyn_ocsmschannelsetting.msdyn_postconversationsurveymode;
+		/** Lookup to Dynamics 365 Customer Voice survey field */
+		msdyn_postconversationsurveyseparatebotsurvey: string;
 		/** Unique identifier for the organization */
 		readonly OrganizationId: string;
 		/** Date and time that the record was migrated. */
@@ -109,10 +117,80 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Enable file attachments for agents */
+			readonly msdyn_enablefileattachmentforagents: string;
+			/** Enable file attachments for customers */
+			readonly msdyn_enablefileattachmentforcustomers: string;
+			/** URL for Inbound link */
+			readonly msdyn_inboundurl: string;
+			/** The language setting for the SMS number */
+			readonly msdyn_language: string;
+			/** Unique identifier for Work Stream associated with SMS Number */
+			readonly msdyn_liveworkstreamid: string;
+			/** The name of the custom entity. */
+			readonly msdyn_name: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_ocsmschannelsettingId: string;
+			/** Used to denote operating hours for the sms numbers record */
+			readonly msdyn_operatinghourid: string;
+			/** Phone Number */
+			readonly msdyn_PhoneNumberId: string;
+			/** Lookup to Dynamics 365 Customer Voice survey field */
+			readonly msdyn_postconversationsurvey: string;
+			/** Enable or disable bot survey */
+			readonly msdyn_postconversationsurveybotsurvey: string;
+			/** Prefix text for survey link message that will be sent to the user. */
+			readonly msdyn_postconversationsurveybotsurveymessagetext: string;
+			/** Mode of the survey to be sent */
+			readonly msdyn_postconversationsurveybotsurveymode: string;
+			/** To enable or disable post conversation survey */
+			readonly msdyn_postconversationsurveyenable: string;
+			/** Prefix text for survey link message that will be sent to the user. */
+			readonly msdyn_postconversationsurveymessagetext: string;
+			/** Mode of the survey to be sent */
+			readonly msdyn_postconversationsurveymode: string;
+			/** Lookup to Dynamics 365 Customer Voice survey field */
+			readonly msdyn_postconversationsurveyseparatebotsurvey: string;
+			/** Unique identifier for the organization */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Status of the ocsmschannelsetting */
+			readonly statecode: string;
+			/** Reason for the status of the ocsmschannelsetting */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace msdyn_ocsmschannelsetting {
+		enum msdyn_postconversationsurveybotsurveymode {
+			/** 192350000 */
+			Insert_survey_in_conversation,
+			/** 192350001 */
+			Send_survey_link_to_conversation
+		}
 		enum msdyn_postconversationsurveymode {
 			/** 192350000 */
 			Insert_survey_in_conversation,
@@ -149,4 +227,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

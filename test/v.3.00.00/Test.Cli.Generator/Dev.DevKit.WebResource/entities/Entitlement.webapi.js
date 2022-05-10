@@ -140,7 +140,7 @@ var DevKit;
 		}
 		entitlement.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -159,6 +159,8 @@ var OptionSet;
 			Number_of_cases: 0,
 			Number_of_hours: 1
 		},
+		CustomerIdType : {
+		},
 		DecreaseRemainingOn : {
 			Case_Creation: 1,
 			Case_Resolution: 0
@@ -176,6 +178,8 @@ var OptionSet;
 			Both_Work_Order_Products_Services: 690970002,
 			Work_Order_Products: 690970000,
 			Work_Order_Services: 690970001
+		},
+		OwnerIdType : {
 		},
 		StateCode : {
 			Active: 1,

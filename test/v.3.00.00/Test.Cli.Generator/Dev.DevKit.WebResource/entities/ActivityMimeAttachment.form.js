@@ -51,6 +51,8 @@ var OptionSet;
 			Email_Activity: 4200,
 			Email_Template: 2010
 		},
+		OwnerIdType : {
+		},
 		RollupState : {
 			NotCalculated: 0,
 			Calculated: 1,

@@ -115,7 +115,7 @@ var DevKit;
 		}
 		msdyn_timeentrysetting.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -132,6 +132,8 @@ var OptionSet;
 		msdyn_sourcetype : {
 			Field_Service: 192354000,
 			Project_Service: 192351000
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

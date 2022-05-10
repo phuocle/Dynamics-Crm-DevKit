@@ -43,6 +43,8 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.msdyusd_entityassignment = {
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

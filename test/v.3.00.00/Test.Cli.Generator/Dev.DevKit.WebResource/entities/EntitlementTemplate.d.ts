@@ -142,6 +142,60 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Select whether the entitlement allocation is based on number of cases or number of hours. */
+			readonly AllocationTypeCode: string;
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Information about whether to decrease the remaining terms when the case is created or when it is resolved */
+			readonly DecreaseRemainingOn: string;
+			/** Type additional information to describe the account, such as an excerpt from the company's website. */
+			readonly Description: string;
+			/** Enter the date and time when the entitlement ends. */
+			readonly EndDate_UtcDateOnly: string;
+			/** Unique identifier for entity instances */
+			readonly EntitlementTemplateId: string;
+			/** Entity type for which the entitlement template applies */
+			readonly entitytype: string;
+			/** Exchange rate for the currency associated with the contact with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Select the access someone will have to the knowledge base on the portal. */
+			readonly KbAccessLevel: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Type a descriptive name for the entitlement template. */
+			readonly Name: string;
+			/** Unique identifier for the organization */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Tells whether case creation is restricted based on entitlement terms. */
+			readonly RestrictCaseCreation: string;
+			/** Choose the service level agreement (SLA) associated with the entitlement. */
+			readonly SLAId: string;
+			/** Enter the date and time when the entitlement begins. */
+			readonly StartDate_UtcDateOnly: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Type the total number of entitlement terms. */
+			readonly TotalTerms: string;
+			/** Unique identifier of the currency associated with the contact. */
+			readonly TransactionCurrencyId: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -190,4 +244,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

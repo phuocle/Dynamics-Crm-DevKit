@@ -122,7 +122,7 @@ var DevKit;
 		}
 		activitymonitor.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -141,6 +141,10 @@ var OptionSet;
 			Ready_for_Power_Automate: 1,
 			Ready_for_workflow: 0,
 			Skipped: 3
+		},
+		MonitoredActivityItemIdType : {
+		},
+		OwnerIdType : {
 		},
 		Reason : {
 			__0: 0,

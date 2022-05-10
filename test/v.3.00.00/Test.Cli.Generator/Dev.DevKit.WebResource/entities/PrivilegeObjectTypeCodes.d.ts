@@ -48,6 +48,27 @@ declare namespace DevKit {
 		/** For internal use only. */
 		readonly SupportingSolutionId: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Version in which the component is introduced. */
+			readonly IntroducedVersion: string;
+			/** Information that specifies whether this component is managed. */
+			readonly IsManaged: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** For internal use only. */
+			readonly PrivilegeId: string;
+			/** For internal use only. */
+			readonly PrivilegeObjectTypeCodeId: string;
+			/** Unique identifier of the PrivlegeObjectTypeCode used when synchronizing customizations for the Microsoft Dynamics CRM client for Outlook */
+			readonly PrivilegeObjectTypeCodeRowId: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -61,6 +82,8 @@ declare namespace OptionSet {
 			Published,
 			/** 1 */
 			Unpublished
+		}
+		enum ObjectTypeCode {
 		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
@@ -80,4 +103,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

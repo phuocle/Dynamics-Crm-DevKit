@@ -44,6 +44,8 @@ var OptionSet;
 			Default: 192350000,
 			SkillIdentified: 192350005
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

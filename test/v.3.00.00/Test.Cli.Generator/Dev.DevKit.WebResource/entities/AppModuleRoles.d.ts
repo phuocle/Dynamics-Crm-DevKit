@@ -49,6 +49,28 @@ declare namespace DevKit {
 		/** For internal use only. */
 		readonly SupportingSolutionId: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the app module. */
+			readonly AppModuleId: string;
+			/** For internal use only. */
+			readonly AppModuleRoleId: string;
+			/** Unique identifier of the App Module Roles used when synchronizing customizations for the Microsoft Dynamics 365 client for Outlook */
+			readonly AppModuleRoleIdUnique: string;
+			/** For internal use only */
+			readonly ComponentState: string;
+			/** Version in which the similarity rule is introduced. */
+			readonly IntroducedVersion: string;
+			/** Is Managed */
+			readonly IsManaged: string;
+			/** Internal use only */
+			readonly OverwriteTime_UtcDateOnly: string;
+			readonly RoleId: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -81,4 +103,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

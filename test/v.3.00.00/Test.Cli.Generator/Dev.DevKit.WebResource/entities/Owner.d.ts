@@ -36,10 +36,21 @@ declare namespace DevKit {
 		readonly VersionNumber: number;
 		/** Pronunciation of the name of the owner, written in phonetic hiragana or katakana characters. */
 		readonly YomiName: string;
+		readonly FormattedValue: {
+			/** Name of the Owner. */
+			readonly Name: string;
+			/** Unique identifier for the Owner: systemuserid or teamid. */
+			readonly OwnerId: string;
+			readonly VersionNumber: string;
+			/** Pronunciation of the name of the owner, written in phonetic hiragana or katakana characters. */
+			readonly YomiName: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace Owner {
+		enum OwnerIdType {
+		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
 			NotCalculated,
@@ -58,4 +69,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

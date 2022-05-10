@@ -52,10 +52,37 @@ declare namespace DevKit {
 		readonly OwningBusinessUnit: string;
 		/** Unique identifier of the team who owns the category. */
 		readonly OwningTeam: string;
+		readonly FormattedValue: {
+			/** Information to indicate whether the category has been created in Exchange or not. */
+			readonly CategoryOnboardingStatus: string;
+			/** Date and time when the entry was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Color for category in Exchange. */
+			readonly ExchangeCategoryColor: string;
+			/** Category Id for a category in Exchange */
+			readonly ExchangeCategoryId: string;
+			/** Exchange Category Name */
+			readonly ExchangeCategoryName: string;
+			/** Mailbox id associated with this record. */
+			readonly MailboxId: string;
+			readonly MailboxTrackingCategoryId: string;
+			/** Date and time when the entry was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier of the business unit that owns the category. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the team who owns the category. */
+			readonly OwningTeam: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace MailboxTrackingCategory {
+		enum OwnerIdType {
+		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
 			NotCalculated,
@@ -74,4 +101,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

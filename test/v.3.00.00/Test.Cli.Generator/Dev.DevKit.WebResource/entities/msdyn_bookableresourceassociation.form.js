@@ -44,6 +44,8 @@ var OptionSet;
 		msdyn_Type : {
 			Work_Location: 192350000
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

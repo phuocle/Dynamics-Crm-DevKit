@@ -115,10 +115,100 @@ declare namespace DevKit {
 		readonly StoragePointer: string;
 		/** Version number of the file attachment. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Body */
+			readonly Body: string;
+			/** Date and time when the attachment was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the file attachment. */
+			readonly FileAttachmentId: string;
+			/** File name of the attachment. */
+			readonly FileName: string;
+			/** File pointer of the attachment. */
+			readonly FilePointer: string;
+			/** File size of the attachment in bytes. */
+			readonly FileSizeInBytes: string;
+			/** IsCommitted */
+			readonly IsCommitted: string;
+			/** MIME type of the attachment. */
+			readonly MimeType: string;
+			/** Unique identifier of the object with which the attachment is associated. */
+			readonly objectid_activityfileattachment: string;
+			/** Unique identifier of the object with which the attachment is associated. */
+			readonly objectid_asyncoperation: string;
+			/** Unique identifier of the object with which the attachment is associated. */
+			readonly objectid_canvasapp: string;
+			/** Unique identifier of the object with which the attachment is associated. */
+			readonly objectid_cascadegrantrevokeaccessrecordstracker: string;
+			/** Unique identifier of the object with which the attachment is associated. */
+			readonly objectid_exportsolutionupload: string;
+			/** Unique identifier of the object with which the attachment is associated. */
+			readonly objectid_flowsession: string;
+			/** Unique identifier of the object with which the attachment is associated. */
+			readonly objectid_imagedescriptor: string;
+			/** Unique identifier of the object with which the attachment is associated. */
+			readonly objectid_knowledgearticle: string;
+			/** Unique identifier of the object with which the attachment is associated. */
+			readonly objectid_mailbox: string;
+			/** Unique identifier of the object with which the attachment is associated. */
+			readonly objectid_msdyn_aibfeedbackloop: string;
+			/** Unique identifier of the object with which the attachment is associated. */
+			readonly objectid_msdyn_aibfile: string;
+			/** Unique identifier of the object with which the attachment is associated. */
+			readonly objectid_msdyn_aiconfiguration: string;
+			/** Unique identifier of the object with which the attachment is associated. */
+			readonly objectid_msdyn_bookableresourcebookingquicknote: string;
+			/** Unique identifier of the object with which the attachment is associated. */
+			readonly objectid_msdyn_conversationinsight: string;
+			/** Unique identifier of the object with which the attachment is associated. */
+			readonly objectid_msdyn_customerassetattachment: string;
+			/** Unique identifier of the object with which the attachment is associated. */
+			readonly objectid_msdyn_kbattachment: string;
+			/** Unique identifier of the object with which the attachment is associated. */
+			readonly objectid_msdyn_knowledgearticleimage: string;
+			/** Unique identifier of the object with which the attachment is associated. */
+			readonly objectid_msdyn_ocrecording: string;
+			/** Unique identifier of the object with which the attachment is associated. */
+			readonly objectid_msdyn_pminferredtask: string;
+			/** Unique identifier of the object with which the attachment is associated. */
+			readonly objectid_msdyn_richtextfile: string;
+			/** Unique identifier of the object with which the attachment is associated. */
+			readonly objectid_msdyn_soundfile: string;
+			/** Unique identifier of the object with which the attachment is associated. */
+			readonly objectid_msdyn_transcript: string;
+			/** Unique identifier of the object with which the attachment is associated. */
+			readonly objectid_msfp_fileresponse: string;
+			/** Unique identifier of the object with which the attachment is associated. */
+			readonly objectid_pluginpackage: string;
+			/** Unique identifier of the object with which the attachment is associated. */
+			readonly objectid_revokeinheritedaccessrecordstracker: string;
+			/** Unique identifier of the object with which the attachment is associated. */
+			readonly objectid_ribbonclientmetadata: string;
+			/** Unique identifier of the object with which the attachment is associated. */
+			readonly FileAttachment_Solution: string;
+			/** Unique identifier of the object with which the attachment is associated. */
+			readonly objectid_stagesolutionupload: string;
+			/** Unique identifier of the object with which the attachment is associated. */
+			readonly objectid_webresource: string;
+			/** Unique identifier of the object with which the attachment is associated. */
+			readonly objectid_workflowbinary: string;
+			/** Unique identifier of the object with which the attachment is associated. */
+			readonly objectid_workflowlog: string;
+			/** Prefix of the file pointer in blob storage. */
+			readonly Prefix: string;
+			/** Regarding attribute schema name of the attachment. */
+			readonly RegardingFieldName: string;
+			/** Storage pointer. */
+			readonly StoragePointer: string;
+			/** Version number of the file attachment. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace FileAttachment {
+		enum ObjectIdTypeCode {
+		}
 		enum ObjectTypeCode {
 			/** 1 */
 			Account
@@ -141,4 +231,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

@@ -196,7 +196,7 @@ var DevKit;
 		}
 		mailbox.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -263,6 +263,10 @@ var OptionSet;
 			Failure: 2,
 			Not_Run: 0,
 			Success: 1
+		},
+		OwnerIdType : {
+		},
+		RegardingObjectTypeCode : {
 		},
 		StateCode : {
 			Active: 0,

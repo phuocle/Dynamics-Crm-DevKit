@@ -50,6 +50,8 @@ var OptionSet;
 			Capture: 700610000,
 			Document: 700610001
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

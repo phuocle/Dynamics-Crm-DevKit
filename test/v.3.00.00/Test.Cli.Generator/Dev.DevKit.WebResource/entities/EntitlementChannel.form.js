@@ -49,6 +49,8 @@ var OptionSet;
 			Twitter: 3986,
 			Web: 3
 		},
+		OwnerIdType : {
+		},
 		RollupState : {
 			NotCalculated: 0,
 			Calculated: 1,

@@ -62,10 +62,47 @@ declare namespace DevKit {
 		readonly VersionNumber: number;
 		/** Data representing the view personalization settings */
 		ViewPersonalizationSettings: string;
+		readonly FormattedValue: {
+			/** Describes which entities are most recently inserted into email for this entity */
+			readonly InsertIntoEmailMRUXml: string;
+			/** Describes which forms are most recently viewed for this entity. */
+			readonly LastViewedFormXml: string;
+			/** List of most recently used lookup references for this entity */
+			readonly LookupMRUXml: string;
+			/** Describes which tabs are most recently used for this entity */
+			readonly MRUXml: string;
+			/** Object Type Code */
+			readonly ObjectTypeCode: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier of the business unit that owns this. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the team who owns this saved view. */
+			readonly OwningTeam: string;
+			/** Unique identifier of the user who owns this saved view. */
+			readonly OwningUser: string;
+			/** Describes the reading pane formatting of this entity */
+			readonly ReadingPaneXml: string;
+			/** Describes which objects are most recently viewed for this entity */
+			readonly RecentlyViewedXml: string;
+			/** Determines whether a record type is exposed in the Outlook Address Book */
+			readonly ShowInAddressBook: string;
+			/** Describes the tab ordering for this entity */
+			readonly TabOrderXml: string;
+			/** Unique identifier user entity */
+			readonly UserEntityUISettingsId: string;
+			readonly VersionNumber: string;
+			/** Data representing the view personalization settings */
+			readonly ViewPersonalizationSettings: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace UserEntityUISettings {
+		enum OwnerIdType {
+		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
 			NotCalculated,
@@ -84,4 +121,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

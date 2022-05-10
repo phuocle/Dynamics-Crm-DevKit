@@ -129,6 +129,61 @@ declare namespace DevKit {
 		/** Time zone code that was in use when the record was created. */
 		UTCConversionTimeZoneCode: number;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Choose the channel access profile that the item is assigned to. */
+			readonly AssociatedChannelAccessProfile: string;
+			/** Shows the channel access profile rule associated with this channel access profile rule item. */
+			readonly ChannelAccessProfileRuleId: string;
+			/** Unique identifier for entity instances */
+			readonly ChannelAccessProfileRuleItemId: string;
+			/** Unique identifier of the channel access profile rule item. */
+			readonly ChannelAccessProfileRuleItemIdUnique: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Condition for Rule item */
+			readonly ConditionXml: string;
+			/** Shows who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Type additional information to describe the channel access profile rule item. */
+			readonly Description: string;
+			/** Exchange rate for the currency associated with the channel access profile rule item with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Version in which the channel access profile rule item is introduced. */
+			readonly IntroducedVersion: string;
+			/** Is Managed */
+			readonly IsManaged: string;
+			/** Shows who last updated the record */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who last updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Type a descriptive name for the channel access profile rule item. */
+			readonly Name: string;
+			/** Date and time when the record was created. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Sequence number of the Channel access profile rule item */
+			readonly SequenceNumber: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Exchange rate for the currency associated with the channel access profile rule item with respect to the base currency. */
+			readonly TransactionCurrencyId: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -142,6 +197,8 @@ declare namespace OptionSet {
 			Published,
 			/** 1 */
 			Unpublished
+		}
+		enum OwnerIdType {
 		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
@@ -161,4 +218,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

@@ -407,10 +407,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 wait.Start();
                 XrmHelper.ReadEntitiesMetadata(crmServiceClient);
                 wait.Abort();
-                //if(Console.CursorLeft > 0) Console.SetCursorPosition(Console.CursorLeft - 1, Console.CursorTop);
-                CliLog.WriteSuccess(ConsoleColor.White, "√");
                 CliLog.WriteLine();
-
                 if (json.type.ToLower() != nameof(GeneratorType.csharp))
                 {
                     IsAll = true;
@@ -418,8 +415,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     wait.Start();
                     XrmHelper.ReadEntitiesFormXml(crmServiceClient);
                     wait.Abort();
-                    //if (Console.CursorLeft > 0) Console.SetCursorPosition(Console.CursorLeft - 1, Console.CursorTop);
-                    CliLog.WriteSuccess(ConsoleColor.White, "√");
                     CliLog.WriteLine();
                 }
                 CliLog.WriteLine(ConsoleColor.White, "|");

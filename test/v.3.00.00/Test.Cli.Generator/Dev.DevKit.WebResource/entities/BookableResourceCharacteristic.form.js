@@ -148,6 +148,8 @@ var OptionSet;
 			Rejected: 192350002,
 			Saved: 192350000
 		},
+		OwnerIdType : {
+		},
 		StateCode : {
 			Active: 0,
 			Inactive: 1

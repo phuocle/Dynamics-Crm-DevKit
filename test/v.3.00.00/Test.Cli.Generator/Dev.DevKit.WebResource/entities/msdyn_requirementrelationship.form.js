@@ -58,6 +58,8 @@ var OptionSet;
 			Organizational_Unit: 192350000,
 			Related_Resource_Pools: 192350001
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

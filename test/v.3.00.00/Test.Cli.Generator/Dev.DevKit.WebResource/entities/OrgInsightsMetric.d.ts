@@ -40,6 +40,19 @@ declare namespace DevKit {
 		/** Unique identifier of the organization associated with the record */
 		readonly OrganizationId: string;
 		OrgInsightsMetricId: string;
+		readonly FormattedValue: {
+			/** Date and time when the organization insights metric was created */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Name of the metric which is used for retrieving the data */
+			readonly InternalName: string;
+			/** Type of the metric */
+			readonly MetricType: string;
+			/** Legend Name used while displaying the metric */
+			readonly Name: string;
+			/** Unique identifier of the organization associated with the record */
+			readonly OrganizationId: string;
+			readonly OrgInsightsMetricId: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -68,4 +81,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

@@ -308,6 +308,154 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Exchange rate for the currency associated with the entity with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Select the customer. */
+			readonly msdyn_AccountCustomer: string;
+			readonly msdyn_AccountingDate_UtcDateOnly: string;
+			readonly msdyn_AccountVendor: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_actualId: string;
+			/** Shows the adjustment status ID of the transaction. */
+			readonly msdyn_AdjustmentStatus: string;
+			readonly msdyn_Agreement: string;
+			/** Enter the amount in transaction currency. */
+			readonly msdyn_Amount: string;
+			/** Enter the value of the amount in the base (organization) currency. */
+			readonly msdyn_amount_Base: string;
+			/** Select the method by which the amount was computed. */
+			readonly msdyn_AmountMethod: string;
+			/** Enter the cost amount of the sales transaction in the transaction currency. */
+			readonly msdyn_BasisAmount: string;
+			/** Enter the cost amount of the sales transaction in the base (organization) currency. */
+			readonly msdyn_basisamount_Base: string;
+			/** Enter the cost price of the sales transaction in transaction currency. */
+			readonly msdyn_BasisPrice: string;
+			/** Enter the cost price of the sales transaction in base (organization) currency. */
+			readonly msdyn_basisprice_Base: string;
+			/** Enter the cost quantity of the sales transaction in the base (organization) currency. */
+			readonly msdyn_BasisQuantity: string;
+			/** Select the billing status ID. */
+			readonly msdyn_BillingStatus: string;
+			/** Select the billing type ID. */
+			readonly msdyn_BillingType: string;
+			/** Shows the bookable resource for which the actual is recorded. */
+			readonly msdyn_bookableresource: string;
+			/** Select the customer contact. */
+			readonly msdyn_ContactCustomer: string;
+			readonly msdyn_ContactVendor: string;
+			/** Select the organizational unit ID for the contract. */
+			readonly msdyn_contractorganizationalunitid: string;
+			/** Select the customer type ID. */
+			readonly msdyn_CustomerType: string;
+			/** Type the record description. */
+			readonly msdyn_description: string;
+			/** Enter the transaction date of the business event. */
+			readonly msdyn_DocumentDate_UtcDateOnly: string;
+			/** Enter the end date and time for this transaction. */
+			readonly msdyn_EndDateTime_UtcDateAndTime: string;
+			/** Enter the date of the exchange rate used for this transaction. */
+			readonly msdyn_ExchangeRateDate_UtcDateOnly: string;
+			/** The external description of the business transaction. */
+			readonly msdyn_externaldescription: string;
+			/** Stores a date from an external system, such as a journal entry voucher date from an ERP system */
+			readonly msdyn_ExternalReferenceDate_UtcDateOnly: string;
+			/** Stores an ID from an external system, such as the journal entry voucher number from an ERP system. */
+			readonly msdyn_ExternalReferenceID: string;
+			readonly msdyn_IncidentType: string;
+			/** The unique identifier of an invoice. */
+			readonly msdyn_Invoice: string;
+			readonly msdyn_IsJournalized: string;
+			/** Type of journal for resource cost. */
+			readonly msdyn_JournalType: string;
+			/** Enter the percent. */
+			readonly msdyn_Percent: string;
+			/** Enter the price in the transaction currency. */
+			readonly msdyn_Price: string;
+			/** Enter the price in the base (organization) currency. */
+			readonly msdyn_price_Base: string;
+			/** Select the price list. */
+			readonly msdyn_PriceList: string;
+			/** Select the product ID. */
+			readonly msdyn_Product: string;
+			readonly msdyn_ProductType: string;
+			/** Select the project ID. */
+			readonly msdyn_Project: string;
+			/** Enter the quantity. */
+			readonly msdyn_Quantity: string;
+			/** Select the role ID of the resource performing the work. */
+			readonly msdyn_ResourceCategory: string;
+			/** Organizational unit at the time the actual was registered of the resource who performed the work. */
+			readonly msdyn_ResourceOrganizationalUnitId: string;
+			/** Select the project contract. */
+			readonly msdyn_SalesContract: string;
+			/** (Deprecated) Type the project contract line. */
+			readonly msdyn_SalesContractLine: string;
+			/** Unique identifier for Project Contract Line associated with Actual. */
+			readonly msdyn_SalesContractLineId: string;
+			/** Account that was serviced */
+			readonly msdyn_ServiceAccount: string;
+			readonly msdyn_ServiceTerritory: string;
+			/** Enter the start date and time. */
+			readonly msdyn_StartDateTime_UtcDateAndTime: string;
+			/** Select the task. */
+			readonly msdyn_Task: string;
+			readonly msdyn_TaxCode: string;
+			/** Select the transaction category. */
+			readonly msdyn_TransactionCategory: string;
+			/** Shows the transaction classification of this transaction. */
+			readonly msdyn_TransactionClassification: string;
+			/** Shows the transaction type of this transaction. */
+			readonly msdyn_TransactionTypeCode: string;
+			/** Select the unit of measure. */
+			readonly msdyn_Unit: string;
+			/** Select the unit schedule. */
+			readonly msdyn_UnitSchedule: string;
+			readonly msdyn_VendorType: string;
+			readonly msdyn_Warehouse: string;
+			readonly msdyn_WorkLocation: string;
+			readonly msdyn_WorkOrder: string;
+			readonly msdyn_WorkOrderType: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the Actual */
+			readonly statecode: string;
+			/** Reason for the status of the Actual */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Shows the currency associated with the entity. */
+			readonly TransactionCurrencyId: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -428,6 +576,8 @@ declare namespace OptionSet {
 			/** 690970000 */
 			Onsite
 		}
+		enum OwnerIdType {
+		}
 		enum statecode {
 			/** 0 */
 			Active,
@@ -458,4 +608,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

@@ -155,6 +155,64 @@ declare namespace DevKit {
 		TransactionCurrencyId: string;
 		/** Title of the knowledge base article. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Shows the article content and formatting, stored as XML. */
+			readonly ArticleXml: string;
+			/** Comments regarding the knowledge base article. */
+			readonly Comments: string;
+			/** Description of the content of the knowledge base article. */
+			readonly Content: string;
+			/** Unique identifier of the user who created the knowledge base article. */
+			readonly CreatedBy: string;
+			/** Date and time when the knowledge base article was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the article. */
+			readonly CreatedOnBehalfBy: string;
+			/** Type additional information that describes the knowledge base article. */
+			readonly Description: string;
+			/** The default image for the entity. */
+			readonly EntityImage: string;
+			readonly EntityImage_Timestamp: string;
+			readonly EntityImage_URL: string;
+			/** For internal use only. */
+			readonly EntityImageId: string;
+			/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
+			readonly ExchangeRate: string;
+			/** Unique identifier of the data import or data migration that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Shows the ID of the article. */
+			readonly KbArticleId: string;
+			/** Choose the template that you want to use as a base for creating the new article. */
+			readonly KbArticleTemplateId: string;
+			/** Keywords to be used for searches in knowledge base articles. */
+			readonly KeyWords: string;
+			/** Select which language the article must be available in. This list is based on the list of language packs that are installed in your Microsoft Dynamics 365 environment. */
+			readonly LanguageCode: string;
+			/** Unique identifier of the user who last modified the knowledge base article. */
+			readonly ModifiedBy: string;
+			/** Date and time when the knowledge base article was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the kbarticle. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Knowledge base article number. */
+			readonly Number: string;
+			/** Unique identifier of the organization associated with the article. */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Shows whether the knowledge base article is in draft, unapproved, or published status. Published articles are read-only and can't be edited unless they are unpublished. */
+			readonly StateCode: string;
+			/** Select the article's status. */
+			readonly StatusCode: string;
+			/** Choose the subject of the article to assist with article searches. You can configure subjects under Business Management in the Settings area. */
+			readonly SubjectId: string;
+			/** Type a subject or descriptive name for the article to assist with article searches. */
+			readonly Title: string;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			readonly TransactionCurrencyId: string;
+			/** Title of the knowledge base article. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -193,4 +251,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

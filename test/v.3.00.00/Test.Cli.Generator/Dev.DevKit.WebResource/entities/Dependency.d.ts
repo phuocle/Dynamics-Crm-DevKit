@@ -47,6 +47,26 @@ declare namespace DevKit {
 		readonly RequiredComponentParentId: string;
 		readonly RequiredComponentType: OptionSet.Dependency.RequiredComponentType;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of a dependency. */
+			readonly DependencyId: string;
+			/** The dependency type of the dependency. */
+			readonly DependencyType: string;
+			readonly DependentComponentBaseSolutionId: string;
+			/** Unique identifier of the dependent component's node. */
+			readonly DependentComponentNodeId: string;
+			readonly DependentComponentObjectId: string;
+			readonly DependentComponentParentId: string;
+			readonly DependentComponentType: string;
+			readonly RequiredComponentBaseSolutionId: string;
+			readonly RequiredComponentIntroducedVersion: string;
+			/** Unique identifier of the required component's node */
+			readonly RequiredComponentNodeId: string;
+			readonly RequiredComponentObjectId: string;
+			readonly RequiredComponentParentId: string;
+			readonly RequiredComponentType: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -443,4 +463,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

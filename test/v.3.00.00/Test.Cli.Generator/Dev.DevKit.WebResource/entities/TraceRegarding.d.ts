@@ -41,10 +41,30 @@ declare namespace DevKit {
 		readonly RegardingObjectOwningBusinessUnit: string;
 		/** Unique identifier of the trace-regarding record. */
 		TraceRegardingId: string;
+		readonly FormattedValue: {
+			/** Unique identifier of the regarding object. */
+			readonly regardingobjectid_emailserverprofile: string;
+			/** Unique identifier of the regarding object. */
+			readonly regardingobjectid_mailbox: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier of the business unit that owns the regarding object. */
+			readonly RegardingObjectOwningBusinessUnit: string;
+			/** Unique identifier of the trace-regarding record. */
+			readonly TraceRegardingId: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace TraceRegarding {
+		enum RegardingObjectOwnerIdType {
+		}
+		enum RegardingObjectTypeCode {
+		}
+		enum RegardingObjectTypeCodeForSharing {
+		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
 			NotCalculated,
@@ -63,4 +83,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

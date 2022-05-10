@@ -56,6 +56,8 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.BulkDeleteOperation = {
+		OwnerIdType : {
+		},
 		StateCode : {
 			Completed: 3,
 			Locked: 2,

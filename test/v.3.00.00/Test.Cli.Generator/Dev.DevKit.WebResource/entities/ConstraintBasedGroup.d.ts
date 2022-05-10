@@ -108,6 +108,44 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Shows the business unit that the record owner belongs to. */
+			readonly BusinessUnitId: string;
+			/** Unique identifier of the resource group. */
+			readonly ConstraintBasedGroupId: string;
+			/** Shows the constraints defined for the users, equipment, teams, and other resource groups included as resources for the group, stored in XML format. */
+			readonly Constraints: string;
+			/** Unique identifier of the user who created the resource group. */
+			readonly CreatedBy: string;
+			/** Date and time when the resource group was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the constraintbasedgroup. */
+			readonly CreatedOnBehalfBy: string;
+			/** Type additional information to describe the resource group, such as the intended use or associated resource types. */
+			readonly Description: string;
+			/** Shows whether the resource group is static, dynamic or hidden. Hidden groups are for system use only and are not viewable in Microsoft Dynamics 365. */
+			readonly GroupTypeCode: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who last modified the resource group. */
+			readonly ModifiedBy: string;
+			/** Date and time when the resource group was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the constraintbasedgroup. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Type a title or name that describes the resource group. */
+			readonly Name: string;
+			/** Unique identifier of the organization associated with the resource group. */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -138,4 +176,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

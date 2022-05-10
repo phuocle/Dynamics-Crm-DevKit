@@ -36,6 +36,12 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.msdyn_salesroutingrun = {
+		msdyn_ownerassignedIdType : {
+		},
+		msdyn_targetobjectIdType : {
+		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Failed: 2,
 			Inprogress: 0,

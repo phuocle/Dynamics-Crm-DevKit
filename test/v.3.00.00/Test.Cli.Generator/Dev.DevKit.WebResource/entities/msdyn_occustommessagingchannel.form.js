@@ -78,12 +78,19 @@ var OptionSet;
 	OptionSet.msdyn_occustommessagingchannel = {
 		msdyn_occustomchannelid : {
 			Direct_Line: 192350000,
+			Googles_Business_Messages: 192350004,
 			Kik: 192350001,
 			Telegram: 192350002
+		},
+		msdyn_PostConversationSurveyBotSurveyMode : {
+			Insert_survey_in_conversation: 192350000,
+			Send_survey_link_to_conversation: 192350001
 		},
 		msdyn_PostConversationSurveyMode : {
 			Insert_survey_in_conversation: 192350000,
 			Send_survey_link_to_conversation: 192350001
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

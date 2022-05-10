@@ -137,6 +137,62 @@ declare namespace DevKit {
 		SafeHtml: string;
 		/** Title of the email signature. */
 		Title: string;
+		readonly FormattedValue: {
+			/** Body text of the email signature. */
+			readonly Body: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier of the user who created the email signature. */
+			readonly CreatedBy: string;
+			/** Date and time when the email signature was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the email signature. */
+			readonly CreatedOnBehalfBy: string;
+			/** Description of the email signature. */
+			readonly Description: string;
+			/** Unique identifier of the email signature. */
+			readonly EmailSignatureId: string;
+			/** For internal use only. */
+			readonly GenerationTypeCode: string;
+			/** Unique identifier of the data import or data migration that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Information that specifies whether this component can be customized. */
+			readonly IsCustomizable: string;
+			/** Information that specifies whether the email signature is default to the user. */
+			readonly IsDefault: string;
+			/** Information about whether the email signature is personal or is available to all users. */
+			readonly IsPersonal: string;
+			/** Language of the email signature. */
+			readonly LanguageCode: string;
+			/** MIME type of the email signature. */
+			readonly MimeType: string;
+			/** Unique identifier of the user who last modified the email signature. */
+			readonly ModifiedBy: string;
+			/** Date and time when the email signature was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the email signature. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier of the business unit that owns the email signature. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the team who owns the email signature. */
+			readonly OwningTeam: string;
+			/** Unique identifier of the user who owns the email signature. */
+			readonly OwningUser: string;
+			/** XML data for the body of the email signature. */
+			readonly PresentationXml: string;
+			/** Safe html of email signature. */
+			readonly SafeHtml: string;
+			/** Title of the email signature. */
+			readonly Title: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -150,6 +206,8 @@ declare namespace OptionSet {
 			Published,
 			/** 1 */
 			Unpublished
+		}
+		enum OwnerIdType {
 		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
@@ -169,4 +227,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

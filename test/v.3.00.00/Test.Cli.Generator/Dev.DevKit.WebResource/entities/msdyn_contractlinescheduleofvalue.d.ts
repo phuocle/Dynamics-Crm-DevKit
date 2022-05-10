@@ -215,6 +215,92 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Exchange rate for the currency associated with the entity with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Enter the value of the milestone. */
+			readonly msdyn_amount: string;
+			readonly msdyn_amount_after_tax: string;
+			/** Value of the amount_after_tax in base currency. */
+			readonly msdyn_amount_after_tax_Base: string;
+			/** Value of the Amount in base currency. */
+			readonly msdyn_amount_Base: string;
+			/** Select the project contract associated with this milestone. */
+			readonly msdyn_contract: string;
+			/** (Deprecated) Shows the project contract line that has this milestone */
+			readonly msdyn_ContractLine: string;
+			/** Enter a description of the project contract line that has this milestone. */
+			readonly msdyn_ContractLineDescription: string;
+			/** Unique identifier for Project Contract Line associated with Project Contract Line Invoice Schedule. */
+			readonly msdyn_ContractLineId: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_contractlinescheduleofvalueId: string;
+			/** Type a description of the milestone. */
+			readonly msdyn_description: string;
+			/** Description of the project contract line milestone */
+			readonly msdyn_externaldescription: string;
+			/** Enter the date of which this milestone should be achieved */
+			readonly msdyn_Invoicedate_UtcDateOnly: string;
+			/** Select the status of invoicing of this milestone */
+			readonly msdyn_Invoicestatus: string;
+			/** Type the name of the milestone. */
+			readonly msdyn_name: string;
+			/** Enter the price of the transaction. */
+			readonly msdyn_price: string;
+			/** Value of the Price in base currency. */
+			readonly msdyn_price_Base: string;
+			/** Select the project that is tracking the work required to achieve this milestone. */
+			readonly msdyn_project: string;
+			/** Select the project work breakdown structure (WBS) task that is tracking the work for this milestone. */
+			readonly msdyn_projecttask: string;
+			/** Date of project contract line milestone */
+			readonly msdyn_startdatetime_UtcDateAndTime: string;
+			readonly msdyn_tax: string;
+			/** Value of the tax in base currency. */
+			readonly msdyn_tax_Base: string;
+			/** Transaction classification of the project contract line milestone */
+			readonly msdyn_TransactionClassification: string;
+			/** Transaction type of the project contract line milestone */
+			readonly msdyn_TransactionTypeCode: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the project contract line milestone. */
+			readonly statecode: string;
+			/** Reason for the status of the project contract line milestone. */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Shows the currency associated with the entity. */
+			readonly TransactionCurrencyId: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -261,6 +347,8 @@ declare namespace OptionSet {
 			/** 192350005 */
 			Unbilled_Sales
 		}
+		enum OwnerIdType {
+		}
 		enum statecode {
 			/** 0 */
 			Active,
@@ -291,4 +379,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

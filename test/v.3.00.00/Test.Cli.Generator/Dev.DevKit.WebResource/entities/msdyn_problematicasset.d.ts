@@ -173,6 +173,98 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Exchange rate for the currency associated with the entity with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Lookup field for customer asset */
+			readonly msdyn_Asset: string;
+			/** Unique identifier of customer asset */
+			readonly msdyn_AssetId: string;
+			/** Value of breakfix cost for customer asset */
+			readonly msdyn_BreakfixCost: string;
+			/** Value of the Breakfix Cost in base currency. */
+			readonly msdyn_breakfixcost_Base: string;
+			/** Value of breakfix sale of customer asset */
+			readonly msdyn_BreakfixSale: string;
+			/** Value of the Breakfix Sale in base currency. */
+			readonly msdyn_breakfixsale_Base: string;
+			/** Expected break/fix work order count for customer asset */
+			readonly msdyn_BreakfixWorkOrderCount: string;
+			/** Probability of predicting customer asset to be problematic in current date */
+			readonly msdyn_Confidence: string;
+			/** Flag value indicating if customer asset has higher total cost than similar assets or not */
+			readonly msdyn_HigherTotalCost: string;
+			/** Flag value indicating if customer asset work order count is higher than similar assets or not */
+			readonly msdyn_HigherWorkOrderCount: string;
+			/** Value of maintenance cost of customer asset */
+			readonly msdyn_MaintenanceCost: string;
+			/** Value of the Maintenance Cost in base currency. */
+			readonly msdyn_maintenancecost_Base: string;
+			/** Value of maintenance sale of customer asset */
+			readonly msdyn_MaintenanceSale: string;
+			/** Value of the Maintenance Sale in base currency. */
+			readonly msdyn_maintenancesale_Base: string;
+			/** Expected maintenance work order count from model output */
+			readonly msdyn_MaintenanceWorkOrderCount: string;
+			/** The name of the custom entity. */
+			readonly msdyn_Name: string;
+			/** The option set value indicating how many days the record is preficted from current */
+			readonly msdyn_NumberofDays: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_problematicassetId: string;
+			/** Value of replacement cost of customer asset */
+			readonly msdyn_ReplacementCost: string;
+			/** Value of the Replacement Cost in base currency. */
+			readonly msdyn_replacementcost_Base: string;
+			/** Value of replacement sale of customer asset */
+			readonly msdyn_ReplacementSale: string;
+			/** Value of the Replacement Sale in base currency. */
+			readonly msdyn_replacementsale_Base: string;
+			/** Unique identifier of model run id */
+			readonly msdyn_RunId: string;
+			/** Probability of customer asset to be problematic asset */
+			readonly msdyn_Score: string;
+			/** Optionset value of suggestions for customer asset */
+			readonly msdyn_Suggestion: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the Problematic Asset */
+			readonly statecode: string;
+			/** Reason for the status of the Problematic Asset */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Unique identifier of the currency associated with the entity. */
+			readonly TransactionCurrencyId: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -209,6 +301,8 @@ declare namespace OptionSet {
 			/** 192350001 */
 			Replace
 		}
+		enum OwnerIdType {
+		}
 		enum statecode {
 			/** 0 */
 			Active,
@@ -239,4 +333,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

@@ -44,6 +44,8 @@ var OptionSet;
 			Liquid: 2,
 			Solid: 1
 		},
+		OwnerIdType : {
+		},
 		StateCode : {
 			Active: 0,
 			Inactive: 1

@@ -149,7 +149,7 @@ var DevKit;
 		}
 		msdyn_projectapproval.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -181,6 +181,8 @@ var OptionSet;
 			Recall_Requested: 4,
 			Rejected: 1,
 			Submitted: 0
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

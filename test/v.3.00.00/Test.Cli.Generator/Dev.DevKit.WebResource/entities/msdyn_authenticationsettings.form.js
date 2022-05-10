@@ -18,6 +18,7 @@ var DevKit;
 			msdyn_Authenticationtype: {},
 			msdyn_JavaScriptclientfunction: {},
 			msdyn_name: {},
+			msdyn_ocauthchanneltype: {},
 			msdyn_PublickeyURL: {},
 			OwnerId: {}
 		};
@@ -41,7 +42,14 @@ var OptionSet;
 (function (OptionSet) {
 	OptionSet.msdyn_authenticationsettings = {
 		msdyn_Authenticationtype : {
+			OAuth_20_code_flow: 192350001,
 			OAuth_20_implicit_flow: 192350000
+		},
+		msdyn_ocauthchanneltype : {
+			Apple_Messages_For_Business: 192450000,
+			Live_chat: 192360000
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

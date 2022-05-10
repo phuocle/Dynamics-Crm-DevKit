@@ -156,6 +156,68 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Shows the average number of topics found per build. */
+			readonly AvgNumberofTopics: string;
+			/** Azure Scheduler Job Name. */
+			readonly AzureSchedulerJobName: string;
+			/** Azure Scheduler Job Name for build model */
+			readonly AzureSchedulerOnDemandJobName: string;
+			/** Azure Scheduler Job Name for test model */
+			readonly AzureSchedulerTestJobName: string;
+			/** Unique identifier for AzureServiceConnection associated with TopicModel. */
+			readonly AzureServiceConnectionId: string;
+			/** Shows how frequently topic analysis is done. */
+			readonly BuildRecurrence: string;
+			/** Shows the configuration used for topic analysis. */
+			readonly ConfigurationUsed: string;
+			/** Unique identifier of the user who created the Topic Model. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the topic Model. */
+			readonly CreatedOnBehalfBy: string;
+			/** Enter a description for the model. */
+			readonly Description: string;
+			/** Shows the time when topic analysis will stop */
+			readonly EndTime_UtcDateAndTime: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Shows the maximum number of topics found across builds. */
+			readonly MaxNumberofTopics: string;
+			/** Shows the maximum number of topics to be determined. */
+			readonly MaxTopics: string;
+			/** Unique identifier of the user who modified the Topic Model. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the Topic model. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Shows the name of the topic model. */
+			readonly Name: string;
+			/** Unique identifier for the organization */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Shows the time when topic analysis will start according to the recurrence schedule. */
+			readonly StartTime_UtcDateAndTime: string;
+			/** Shows the status of the topic model build */
+			readonly StateCode: string;
+			/** Reason for the status of the TopicModel */
+			readonly StatusCode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Unique identifier for entity instances */
+			readonly TopicModelId: string;
+			/** Shows when the topics were last created. */
+			readonly TopicsLastCreatedOn_UtcDateAndTime: string;
+			/** Shows the total number of topics found. */
+			readonly TotalTopicsFound: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -194,4 +256,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

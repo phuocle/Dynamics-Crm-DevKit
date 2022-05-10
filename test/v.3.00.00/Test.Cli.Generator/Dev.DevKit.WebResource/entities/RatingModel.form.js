@@ -114,6 +114,8 @@ var OptionSet;
 			None: 192350000,
 			Skill: 192350001
 		},
+		OwnerIdType : {
+		},
 		StateCode : {
 			Active: 0,
 			Inactive: 1

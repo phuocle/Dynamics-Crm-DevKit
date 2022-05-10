@@ -173,6 +173,60 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Exchange rate for the currency associated with the entity with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Type the name of the custom entity. */
+			readonly msdyn_description: string;
+			/** Enter the mark up on cost when creating billable transactions from cost transactions. This field is relevant only when the price calculation is "Markup over cost."  */
+			readonly msdyn_percent: string;
+			/** Enter the price of the transaction category. */
+			readonly msdyn_Price: string;
+			/** Value of the Price in base currency. */
+			readonly msdyn_price_Base: string;
+			/** Select the method used to determine the sales or bill rate of expenses in this category. Valid values are Price per unit, At cost or Markup over cost. */
+			readonly msdyn_pricecalculation: string;
+			/** Select the price list that this price list line belongs to. */
+			readonly msdyn_PriceList: string;
+			/** Select the transaction category whose price is being setup */
+			readonly msdyn_TransactionCategory: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_transactioncategorypricelevelId: string;
+			/** Select the units that transactions of this category can be expressed in. */
+			readonly msdyn_Unit: string;
+			/** Select the unit schedule that determines in which units the category can be priced. */
+			readonly msdyn_UnitSchedule: string;
+			/** Unique identifier for the organization */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Status of the Transaction Category Price */
+			readonly statecode: string;
+			/** Reason for the status of the Transaction Category Price */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Shows the currency associated with the entity. */
+			readonly TransactionCurrencyId: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -215,4 +269,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

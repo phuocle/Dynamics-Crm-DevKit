@@ -55,6 +55,8 @@ var OptionSet;
 			Normal: 690970001,
 			Snoozed: 690970000
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

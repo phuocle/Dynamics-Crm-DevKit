@@ -117,7 +117,7 @@ var DevKit;
 		}
 		channelproperty.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -141,6 +141,8 @@ var OptionSet;
 			Floating_Point_Number: 0,
 			Single_Line_Of_Text: 1,
 			Whole_Number: 2
+		},
+		RegardingObjectTypeCode : {
 		},
 		statecode : {
 			Active: 0,

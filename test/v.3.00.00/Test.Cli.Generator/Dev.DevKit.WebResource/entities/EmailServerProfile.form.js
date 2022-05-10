@@ -141,6 +141,8 @@ var OptionSet;
 			Windows_Integrated_Authentication: 3,
 			Without_Credentials_Anonymous: 4
 		},
+		OwnerIdType : {
+		},
 		ServerType : {
 			Exchange_Online_Hybrid: 3,
 			Exchange_Server: 0,

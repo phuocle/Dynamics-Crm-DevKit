@@ -426,16 +426,344 @@ declare namespace DevKit {
 		readonly VersionNumber: number;
 		/** The array of object that can cast object to ActivityPartyApi class */
 		ActivityParties: Array<unknown>;
+		readonly FormattedValue: {
+			/** Additional information provided by the external application as JSON. For internal use only. */
+			readonly ActivityAdditionalParams: string;
+			/** Unique identifier of the activity. */
+			readonly ActivityId: string;
+			/** Actual duration of the activity in minutes. */
+			readonly ActualDurationMinutes: string;
+			/** Actual end time of the activity. */
+			readonly ActualEnd_UtcDateAndTime: string;
+			/** Actual start time of the activity. */
+			readonly ActualStart_UtcDateAndTime: string;
+			/** Shows how contact about the social activity originated, such as from Twitter or Facebook. This field is read-only. */
+			readonly Community: string;
+			/** Unique identifier of the user who created the activity. */
+			readonly CreatedBy: string;
+			/** Date and time when the activity was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the activitypointer. */
+			readonly CreatedOnBehalfBy: string;
+			/** Date and time when the delivery of the activity was last attempted. */
+			readonly DeliveryLastAttemptedOn_UtcDateAndTime: string;
+			/** Priority of delivery of the activity to the email server. */
+			readonly DeliveryPriorityCode: string;
+			/** Description of the activity. */
+			readonly Description: string;
+			/** The message id of activity which is returned from Exchange Server. */
+			readonly ExchangeItemId: string;
+			/** Exchange rate for the currency associated with the activitypointer with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Shows the web link of Activity of type email. */
+			readonly ExchangeWebLink: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Type of instance of a recurring series. */
+			readonly InstanceTypeCode: string;
+			/** Information regarding whether the activity was billed as part of resolving a case. */
+			readonly IsBilled: string;
+			/** For internal use only. */
+			readonly IsMapiPrivate: string;
+			/** Information regarding whether the activity is a regular activity type or event type. */
+			readonly IsRegularActivity: string;
+			/** Information regarding whether the activity was created from a workflow rule. */
+			readonly IsWorkflowCreated: string;
+			/** Contains the date and time stamp of the last on hold time. */
+			readonly LastOnHoldTime_UtcDateAndTime: string;
+			/** Left the voice mail */
+			readonly LeftVoiceMail: string;
+			/** Unique identifier of user who last modified the activity. */
+			readonly ModifiedBy: string;
+			/** Date and time when activity was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the activitypointer. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Date and time when session was accepted by agent */
+			readonly msdyn_agentacceptedon_UtcDateAndTime: string;
+			/** Date and time when session was assigned to agent */
+			readonly msdyn_agentassignedon_UtcDateAndTime: string;
+			/** Indicates when a bot was engaged */
+			readonly msdyn_botengagementmode: string;
+			/** Unique identifier for Queue associated with Session. */
+			readonly msdyn_cdsqueueid: string;
+			/** The channel type of the session */
+			readonly msdyn_channel: string;
+			/** Reason for session closure */
+			readonly msdyn_closurereason: string;
+			/** Unique Identifier  of Conversation associated to the session */
+			readonly msdyn_liveworkitemid: string;
+			/** Reference to primary session. */
+			readonly msdyn_primarysession: string;
+			/** Date and time when queue was assigned to session */
+			readonly msdyn_queueassignedon_UtcDateOnly: string;
+			/** Queue associated to the session */
+			readonly msdyn_queueid: string;
+			/** Date and time when session was closed */
+			readonly msdyn_sessionclosedon_UtcDateAndTime: string;
+			/** Date and time when session was created */
+			readonly msdyn_sessioncreatedon_UtcDateAndTime: string;
+			/** Unique Identifier of Session */
+			readonly msdyn_sessionid: string;
+			/** Date and time when session was last modified */
+			readonly msdyn_sessionmodifiedon_UtcDateOnly: string;
+			/** (Deprecated) */
+			readonly msdyn_state: string;
+			/** Shows how long, in minutes, that the record was on hold. */
+			readonly OnHoldTime: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier of the business unit that owns the activity. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the team that owns the activity. */
+			readonly OwningTeam: string;
+			/** Unique identifier of the user that owns the activity. */
+			readonly OwningUser: string;
+			/** For internal use only. */
+			readonly PostponeActivityProcessingUntil_UtcDateAndTime: string;
+			/** Priority of the activity. */
+			readonly PriorityCode: string;
+			/** Unique identifier of the Process. */
+			readonly ProcessId: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_account_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_bookableresourcebooking_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_bookableresourcebookingheader_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_bulkoperation_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_campaign_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_campaignactivity_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_contact_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_contract_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_entitlement_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_entitlementtemplate_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_incident_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_new_interactionforemail_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_invoice_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_knowledgearticle_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_knowledgebaserecord_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_lead_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_agreement_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_agreementbookingdate_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_agreementbookingincident_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_agreementbookingproduct_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_agreementbookingservice_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_agreementbookingservicetask_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_agreementbookingsetup_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_agreementinvoicedate_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_agreementinvoiceproduct_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_agreementinvoicesetup_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_bookingalertstatus_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_bookingrule_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_bookingtimestamp_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_customerasset_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_fieldservicesetting_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_incidenttypecharacteristic_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_incidenttypeproduct_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_incidenttypeservice_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_inventoryadjustment_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_inventoryadjustmentproduct_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_inventoryjournal_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_inventorytransfer_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_payment_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_paymentdetail_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_paymentmethod_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_paymentterm_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_playbookinstance_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_postalbum_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_postalcode_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_processnotes_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_productinventory_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_projectteam_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_purchaseorder_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_purchaseorderbill_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_purchaseorderproduct_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_purchaseorderreceipt_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_purchaseorderreceiptproduct_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_purchaseordersubstatus_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_quotebookingincident_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_quotebookingproduct_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_quotebookingservice_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_quotebookingservicetask_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_resourceterritory_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_rma_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_rmaproduct_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_rmareceipt_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_rmareceiptproduct_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_rmasubstatus_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_rtv_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_rtvproduct_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_rtvsubstatus_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_salessuggestion_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_shipvia_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_systemuserschedulersetting_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_timegroup_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_timegroupdetail_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_timeoffrequest_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_warehouse_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_workorder_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_workordercharacteristic_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_workorderincident_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_workorderproduct_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_workorderresourcerestriction_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_workorderservice_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_workorderservicetask_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_opportunity_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_quote_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_salesorder_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_site_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_uii_action_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_uii_hostedapplication_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_uii_nonhostedapplication_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_uii_option_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_uii_savedsession_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_uii_workflow_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_uii_workflowstep_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_uii_workflow_workflowstep_mapping_msdyn_ocsession: string;
+			/** Scheduled duration of the activity, specified in minutes. */
+			readonly ScheduledDurationMinutes: string;
+			/** Scheduled end time of the activity. */
+			readonly ScheduledEnd_UtcDateAndTime: string;
+			/** Scheduled start time of the activity. */
+			readonly ScheduledStart_UtcDateAndTime: string;
+			/** Unique identifier of the mailbox associated with the sender of the email message. */
+			readonly SenderMailboxId: string;
+			/** Date and time when the activity was sent. */
+			readonly SentOn_UtcDateAndTime: string;
+			/** Uniqueidentifier specifying the id of recurring series of an instance. */
+			readonly SeriesId: string;
+			/** Unique identifier of an associated service. */
+			readonly ServiceId: string;
+			/** Choose the service level agreement (SLA) that you want to apply to the case record. */
+			readonly SLAId: string;
+			/** Last SLA that was applied to this case. This field is for internal use only. */
+			readonly SLAInvokedId: string;
+			/** Shows the date and time by which the activities are sorted. */
+			readonly SortDate_UtcDateAndTime: string;
+			/** Unique identifier of the Stage. */
+			readonly StageId: string;
+			/** Status of the activity. */
+			readonly StateCode: string;
+			/** Reason for the status of the activity. */
+			readonly StatusCode: string;
+			/** Subject associated with the activity. */
+			readonly Subject: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Unique identifier of the currency associated with the activitypointer. */
+			readonly TransactionCurrencyId: string;
+			/** For internal use only. */
+			readonly TraversedPath: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version number of the activity. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace msdyn_ocsession {
 		enum ActivityTypeCode {
-			/** 10086 */
+			/** 10088 */
 			Activity_record_for_the_Teams_chat,
 			/** 4201 */
 			Appointment,
-			/** 10404 */
+			/** 10473 */
 			Booking_Alert,
 			/** 4402 */
 			Campaign_Activity,
@@ -443,13 +771,13 @@ declare namespace OptionSet {
 			Campaign_Response,
 			/** 4206 */
 			Case_Resolution,
-			/** 10707 */
+			/** 10743 */
 			Conversation,
-			/** 10313 */
+			/** 10330 */
 			Customer_Voice_alert,
-			/** 10323 */
+			/** 10340 */
 			Customer_Voice_survey_invite,
-			/** 10325 */
+			/** 10342 */
 			Customer_Voice_survey_response,
 			/** 4202 */
 			Email,
@@ -461,11 +789,11 @@ declare namespace OptionSet {
 			Opportunity_Close,
 			/** 4209 */
 			Order_Close,
-			/** 10817 */
+			/** 10857 */
 			Outbound_message,
 			/** 4210 */
 			Phone_Call,
-			/** 10434 */
+			/** 10489 */
 			Project_Service_Approval,
 			/** 4406 */
 			Quick_Campaign,
@@ -475,12 +803,14 @@ declare namespace OptionSet {
 			Recurring_Appointment,
 			/** 4214 */
 			Service_Activity,
-			/** 10721 */
+			/** 10760 */
 			Session,
 			/** 4212 */
 			Task
 		}
 		enum Community {
+			/** 16 */
+			Apple_Messages_For_Business,
 			/** 5 */
 			Cortana,
 			/** 6 */
@@ -491,6 +821,8 @@ declare namespace OptionSet {
 			Email,
 			/** 1 */
 			Facebook,
+			/** 17 */
+			Googles_Business_Messages,
 			/** 10 */
 			GroupMe,
 			/** 11 */
@@ -545,6 +877,8 @@ declare namespace OptionSet {
 			PreConversation
 		}
 		enum msdyn_channel {
+			/** 192450000 */
+			Apple_Messages_for_Business,
 			/** 192390000 */
 			Co_browse,
 			/** 192350002 */
@@ -612,6 +946,8 @@ declare namespace OptionSet {
 			/** 192350003 */
 			New
 		}
+		enum OwnerIdType {
+		}
 		enum PriorityCode {
 			/** 2 */
 			High,
@@ -619,6 +955,8 @@ declare namespace OptionSet {
 			Low,
 			/** 1 */
 			Normal
+		}
+		enum RegardingObjectTypeCode {
 		}
 		enum StateCode {
 			/** 2 */
@@ -658,4 +996,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

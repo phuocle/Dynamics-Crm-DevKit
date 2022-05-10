@@ -229,26 +229,182 @@ declare namespace DevKit {
 		workerid_team: string;
 		/** Shows the date and time when the queue item was last assigned to a user. */
 		readonly WorkerIdModifiedOn_UtcDateOnly: Date;
+		readonly FormattedValue: {
+			/** Shows who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Shows the date the record was assigned to the queue. */
+			readonly EnteredOn_UtcDateAndTime: string;
+			/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
+			readonly ExchangeRate: string;
+			/** Unique identifier of the data import or data migration that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Shows who last updated the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the queueitem. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Liveworkstream this queue item belongs to */
+			readonly msdyn_liveworkstreamid: string;
+			/** Choose the activity, case, or article assigned to the queue. */
+			readonly objectid_activitypointer: string;
+			/** Choose the activity, case, or article assigned to the queue. */
+			readonly objectid_appointment: string;
+			/** Choose the activity, case, or article assigned to the queue. */
+			readonly objectid_bulkoperation: string;
+			/** Choose the activity, case, or article assigned to the queue. */
+			readonly objectid_campaignactivity: string;
+			/** Choose the activity, case, or article assigned to the queue. */
+			readonly objectid_campaignresponse: string;
+			/** Choose the activity, case, or article assigned to the queue. */
+			readonly objectid_chat: string;
+			/** Choose the activity, case, or article assigned to the queue. */
+			readonly objectid_email: string;
+			/** Choose the activity, case, or article assigned to the queue. */
+			readonly objectid_fax: string;
+			/** Choose the activity, case, or article assigned to the queue. */
+			readonly objectid_incident: string;
+			/** Choose the activity, case, or article assigned to the queue. */
+			readonly objectid_knowledgearticle: string;
+			/** Choose the activity, case, or article assigned to the queue. */
+			readonly objectid_letter: string;
+			/** Choose the activity, case, or article assigned to the queue. */
+			readonly objectid_msdyn_agreementbookingdate: string;
+			/** Choose the activity, case, or article assigned to the queue. */
+			readonly objectid_msdyn_agreementbookingsetup: string;
+			/** Choose the activity, case, or article assigned to the queue. */
+			readonly objectid_msdyn_agreementinvoicedate: string;
+			/** Choose the activity, case, or article assigned to the queue. */
+			readonly objectid_msdyn_agreementinvoicesetup: string;
+			/** Choose the activity, case, or article assigned to the queue. */
+			readonly objectid_msdyn_approval: string;
+			/** Choose the activity, case, or article assigned to the queue. */
+			readonly objectid_msdyn_bookingalert: string;
+			/** Choose the activity, case, or article assigned to the queue. */
+			readonly objectid_msdyn_inventoryadjustment: string;
+			/** Choose the activity, case, or article assigned to the queue. */
+			readonly objectid_msdyn_inventorytransfer: string;
+			/** Choose the activity, case, or article assigned to the queue. */
+			readonly objectid_msdyn_iotalert: string;
+			/** Choose the activity, case, or article assigned to the queue. */
+			readonly objectid_msdyn_knowledgearticletemplate: string;
+			/** Choose the activity, case, or article assigned to the queue. */
+			readonly objectid_msdyn_liveconversation: string;
+			/** Choose the activity, case, or article assigned to the queue. */
+			readonly objectid_msdyn_ocliveworkitem: string;
+			/** Choose the activity, case, or article assigned to the queue. */
+			readonly objectid_msdyn_ocoutboundmessage: string;
+			/** Choose the activity, case, or article assigned to the queue. */
+			readonly objectid_msdyn_ocsession: string;
+			/** Choose the activity, case, or article assigned to the queue. */
+			readonly objectid_msdyn_overflowactionconfig: string;
+			/** Choose the activity, case, or article assigned to the queue. */
+			readonly objectid_msdyn_project: string;
+			/** Choose the activity, case, or article assigned to the queue. */
+			readonly objectid_msdyn_projecttask: string;
+			/** Choose the activity, case, or article assigned to the queue. */
+			readonly objectid_msdyn_resourcerequest: string;
+			/** Choose the activity, case, or article assigned to the queue. */
+			readonly objectid_msdyn_timegroup: string;
+			/** Choose the activity, case, or article assigned to the queue. */
+			readonly objectid_msdyn_timegroupdetail: string;
+			/** Choose the activity, case, or article assigned to the queue. */
+			readonly objectid_msdyn_workorder: string;
+			/** Choose the activity, case, or article assigned to the queue. */
+			readonly objectid_msdyn_workorderincident: string;
+			/** Choose the activity, case, or article assigned to the queue. */
+			readonly objectid_msdyn_workorderservice: string;
+			/** Choose the activity, case, or article assigned to the queue. */
+			readonly objectid_msdyn_workorderservicetask: string;
+			/** Choose the activity, case, or article assigned to the queue. */
+			readonly objectid_msfp_alert: string;
+			/** Choose the activity, case, or article assigned to the queue. */
+			readonly objectid_msfp_surveyinvite: string;
+			/** Choose the activity, case, or article assigned to the queue. */
+			readonly objectid_msfp_surveyresponse: string;
+			/** Choose the activity, case, or article assigned to the queue. */
+			readonly objectid_phonecall: string;
+			/** Choose the activity, case, or article assigned to the queue. */
+			readonly objectid_recurringappointmentmaster: string;
+			/** Choose the activity, case, or article assigned to the queue. */
+			readonly objectid_serviceappointment: string;
+			/** Choose the activity, case, or article assigned to the queue. */
+			readonly objectid_socialactivity: string;
+			/** Choose the activity, case, or article assigned to the queue. */
+			readonly objectid_task: string;
+			/** Select the type of the queue item, such as activity, case, or appointment. */
+			readonly ObjectTypeCode: string;
+			/** Unique identifier of the organization with which the queue item is associated. */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier of the business unit that owns the queue item. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the user who owns the queue item. */
+			readonly OwningUser: string;
+			/** Priority of the queue item. */
+			readonly Priority: string;
+			/** Choose the queue that the item is assigned to. */
+			readonly QueueId: string;
+			/** Unique identifier of the queue item. */
+			readonly QueueItemId: string;
+			/** Sender who created the queue item. */
+			readonly Sender: string;
+			/** Status of the queue item. */
+			readonly State: string;
+			/** Shows whether the queue record is active or inactive. Inactive queue records are read-only and can't be edited unless they are reactivated. */
+			readonly StateCode: string;
+			/** Reason for the status of the queue item. */
+			readonly Status: string;
+			/** Select the item's status. */
+			readonly StatusCode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Shows the title or name that describes the queue record. This value is copied from the record that was assigned to the queue. */
+			readonly Title: string;
+			/** Recipients listed on the To line of the message for email queue items. */
+			readonly ToRecipients: string;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			readonly TransactionCurrencyId: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version number of the queue item. */
+			readonly VersionNumber: string;
+			/** Shows who is working on the queue item. */
+			readonly workerid_systemuser: string;
+			/** Shows who is working on the queue item. */
+			readonly workerid_team: string;
+			/** Shows the date and time when the queue item was last assigned to a user. */
+			readonly WorkerIdModifiedOn_UtcDateOnly: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace QueueItem {
+		enum ObjectIdTypeCode {
+		}
 		enum ObjectTypeCode {
 			/** 4200 */
 			Activity,
-			/** 10086 */
-			Activity_record_for_the_Teams_chat,
-			/** 10525 */
+			/** 10580 */
 			Agreement_Booking_Date,
-			/** 10530 */
+			/** 10585 */
 			Agreement_Booking_Setup,
-			/** 10531 */
+			/** 10586 */
 			Agreement_Invoice_Date,
-			/** 10533 */
+			/** 10588 */
 			Agreement_Invoice_Setup,
 			/** 4201 */
 			Appointment,
-			/** 10404 */
+			/** 10473 */
 			Booking_Alert,
 			/** 4402 */
 			Campaign_Activity,
@@ -256,70 +412,74 @@ declare namespace OptionSet {
 			Campaign_Response,
 			/** 112 */
 			Case,
-			/** 10707 */
+			/** 10743 */
 			Conversation,
-			/** 10313 */
+			/** 10330 */
 			Customer_Voice_alert,
-			/** 10323 */
+			/** 10340 */
 			Customer_Voice_survey_invite,
-			/** 10325 */
+			/** 10342 */
 			Customer_Voice_survey_response,
 			/** 4202 */
 			Email,
 			/** 4204 */
 			Fax,
-			/** 10427 */
+			/** 10484 */
 			Fulfillment_Preference,
-			/** 10553 */
+			/** 10608 */
 			Inventory_Adjustment,
-			/** 10556 */
+			/** 10611 */
 			Inventory_Transfer,
-			/** 10152 */
+			/** 10165 */
 			IoT_Alert,
 			/** 9953 */
 			Knowledge_Article,
-			/** 10098 */
+			/** 10101 */
 			Knowledge_Article_Template,
 			/** 4207 */
 			Letter,
-			/** 10697 */
+			/** 10733 */
 			Ongoing_conversation_Deprecated,
-			/** 10817 */
+			/** 10857 */
 			Outbound_message,
-			/** 10680 */
+			/** 10714 */
 			Overflow_Action_Config,
 			/** 4210 */
 			Phone_Call,
-			/** 10473 */
+			/** 10528 */
 			Project,
-			/** 10434 */
+			/** 10489 */
 			Project_Service_Approval,
-			/** 10478 */
+			/** 10533 */
 			Project_Task,
 			/** 4406 */
 			Quick_Campaign,
 			/** 4251 */
 			Recurring_Appointment,
-			/** 10496 */
+			/** 10551 */
 			Resource_Request,
 			/** 4214 */
 			Service_Activity,
-			/** 10721 */
+			/** 10760 */
 			Session,
 			/** 4216 */
 			Social_Activity,
 			/** 4212 */
 			Task,
-			/** 10428 */
+			/** 10088 */
+			Teams_chat,
+			/** 10485 */
 			Time_Group_Detail,
-			/** 10596 */
+			/** 10651 */
 			Work_Order,
-			/** 10599 */
+			/** 10654 */
 			Work_Order_Incident,
-			/** 10602 */
+			/** 10657 */
 			Work_Order_Service,
-			/** 10603 */
+			/** 10658 */
 			Work_Order_Service_Task
+		}
+		enum OwnerIdType {
 		}
 		enum StateCode {
 			/** 0 */
@@ -332,6 +492,8 @@ declare namespace OptionSet {
 			Active,
 			/** 2 */
 			Inactive
+		}
+		enum WorkerIdType {
 		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
@@ -351,4 +513,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

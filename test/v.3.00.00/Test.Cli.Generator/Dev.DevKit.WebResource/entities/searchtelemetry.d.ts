@@ -49,6 +49,28 @@ declare namespace DevKit {
 		TTLInSeconds: number;
 		/** User Query */
 		UserQuery: string;
+		readonly FormattedValue: {
+			/** CorrelationId for the search */
+			readonly CorrelationId: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** If customer is allow our engineer to eye on */
+			readonly EyesOnAnalyticsAllowed: string;
+			/** Feedback data for the search */
+			readonly FeedbackData: string;
+			/** RequestId for the search */
+			readonly RequestId: string;
+			/** ScenarioName for the search, current will be one of RelevanceSearch/Marketing/Cxp */
+			readonly ScenarioName: string;
+			/** Unique identifier for entity instances */
+			readonly searchtelemetryId: string;
+			/** SessionId for the search */
+			readonly SessionId: string;
+			/** Time to live in seconds. */
+			readonly TTLInSeconds: string;
+			/** User Query */
+			readonly UserQuery: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -71,4 +93,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

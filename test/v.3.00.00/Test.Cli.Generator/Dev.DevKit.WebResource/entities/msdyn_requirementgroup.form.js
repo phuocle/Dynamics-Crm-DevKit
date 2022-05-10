@@ -90,6 +90,8 @@ var OptionSet;
 			Crew: 1,
 			None: 0
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

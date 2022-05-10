@@ -127,7 +127,7 @@ var DevKit;
 		}
 		recurrencerule.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -162,6 +162,10 @@ var OptionSet;
 			November: 11,
 			October: 10,
 			September: 9
+		},
+		ObjectTypeCode : {
+		},
+		OwnerIdType : {
 		},
 		PatternEndType : {
 			No_End_Date: 1,

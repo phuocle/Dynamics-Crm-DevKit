@@ -64,6 +64,43 @@ declare namespace DevKit {
 		/** For internal use only. */
 		readonly ReportLinkIdUnique: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the report link. */
+			readonly CreatedBy: string;
+			/** Date and time when the report link record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the reportlink. */
+			readonly CreatedOnBehalfBy: string;
+			/** Unique identifier of the data import or data migration that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the linked report. */
+			readonly LinkedReportId: string;
+			/** Name of the linked report. */
+			readonly LinkedReportName: string;
+			/** Link type of the report. */
+			readonly LinkTypeCode: string;
+			/** Unique identifier of the user who last modified the report link. */
+			readonly ModifiedBy: string;
+			/** Date and time when the report link was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the reportlink. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier of the business unit that owns the report link. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the user who owns the report link. */
+			readonly OwningUser: string;
+			/** Unique identifier of the main report. */
+			readonly ReportId: string;
+			/** Unique identifier of the report link. */
+			readonly ReportLinkId: string;
+			/** For internal use only. */
+			readonly ReportLinkIdUnique: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -75,6 +112,8 @@ declare namespace OptionSet {
 			Drill_through_and_sub_report,
 			/** 2 */
 			Sub_report
+		}
+		enum OwnerIdType {
 		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
@@ -94,4 +133,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

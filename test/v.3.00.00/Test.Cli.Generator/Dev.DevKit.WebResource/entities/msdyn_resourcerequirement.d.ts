@@ -389,6 +389,139 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Exchange rate for the currency associated with the entity with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Select the allocation method to be used for creating requirement distribution over a time period. */
+			readonly msdyn_allocationmethod: string;
+			/** Unique identifier for Appointment associated with Resource Requirement. */
+			readonly msdyn_AppointmentRequirementId: string;
+			/** A unique identifier for the booking setup metadata that is associated with a resource requirement. */
+			readonly msdyn_BookingSetupMetadataId: string;
+			/** The calendar that will be used for a resource requirement */
+			readonly msdyn_CalendarId: string;
+			/** Type the city where the resource is required. */
+			readonly msdyn_city: string;
+			/** Enter the cost price of the resource required. */
+			readonly msdyn_costprice: string;
+			/** Value of the Cost Price in base currency. */
+			readonly msdyn_costprice_Base: string;
+			/** Type the country/region where the resource is required. */
+			readonly msdyn_country: string;
+			/** Duration of total minutes required */
+			readonly msdyn_duration: string;
+			/** Effort that's required from resource capacity */
+			readonly msdyn_effort: string;
+			readonly msdyn_fromdate_UtcDateOnly: string;
+			/** The fulfilled duration, in minutes. */
+			readonly msdyn_FulfilledDuration: string;
+			/** Enter the hours fulfilled against requirement when the requirement status is fulfilled. */
+			readonly msdyn_fulfilledhours: string;
+			/** Enter the number of hours for which a requirement is required. */
+			readonly msdyn_hours: string;
+			/** For internal use only. */
+			readonly msdyn_InternalFlags: string;
+			readonly msdyn_IsPrimary: string;
+			/** Is template requirement */
+			readonly msdyn_istemplate: string;
+			/** The latitude to use for the location of a requirement. */
+			readonly msdyn_Latitude: string;
+			/** The longitude to use for the location of a requirement. */
+			readonly msdyn_Longitude: string;
+			/** The name of the custom entity. */
+			readonly msdyn_name: string;
+			/** Enter the percentage of the calendar capacity required. */
+			readonly msdyn_percentage: string;
+			readonly msdyn_PoolType: Array<string>;
+			/** Priority of the requirement. To be taken into consideration while scheduling resources */
+			readonly msdyn_Priority: string;
+			/** Select the project for which the resource is required. */
+			readonly msdyn_projectid: string;
+			readonly msdyn_ProposedDuration: string;
+			/** Enter the number of resources required. */
+			readonly msdyn_quantity: string;
+			readonly msdyn_RemainingDuration: string;
+			/** The status of the resource request associated with this requirement. */
+			readonly msdyn_requeststatus: string;
+			/** The requirement group control view id of the resource requirement entity. This field will has value only when the entity is inside the requirement group control. */
+			readonly msdyn_requirementgroupcontrolviewid: string;
+			/** Requirement Group */
+			readonly msdyn_requirementgroupid: string;
+			/** Requirement Relationship */
+			readonly msdyn_requirementrelationshipid: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_resourcerequirementId: string;
+			readonly msdyn_resourcetype: Array<string>;
+			/** Select the required role. */
+			readonly msdyn_roleid: string;
+			/** Unique identifier for Service Appointment associated with Resource Requirement. */
+			readonly msdyn_serviceappointment: string;
+			/** Sort option string field of resource requirement */
+			readonly msdyn_sortoptions: string;
+			/** Type the state/province where the resource is required. */
+			readonly msdyn_stateorprovince: string;
+			/** Requirement Status */
+			readonly msdyn_Status: string;
+			/** template requirement id if requirement is created from template */
+			readonly msdyn_templaterequirementid: string;
+			readonly msdyn_Territory: string;
+			/** Enter the starting range of the time promised to the account that incidents will be resolved. */
+			readonly msdyn_TimeFromPromised_UtcDateAndTime: string;
+			readonly msdyn_TimeGroup: string;
+			/** Enter the ending range of the time promised to the account that incidents will be resolved. */
+			readonly msdyn_TimeToPromised_UtcDateAndTime: string;
+			readonly msdyn_TimeWindowEnd_UtcDateAndTime: string;
+			readonly msdyn_TimeWindowStart_UtcDateAndTime: string;
+			/** The Timezone in which the Time windows are defined by the User */
+			readonly msdyn_timezonefortimewindow: string;
+			/** End date of requirement period */
+			readonly msdyn_todate_UtcDateOnly: string;
+			/** Select the type of resource requirement. */
+			readonly msdyn_type: string;
+			/** The working hours for a requirement. */
+			readonly msdyn_workhourtemplate: string;
+			readonly msdyn_WorkLocation: string;
+			/** Unique identifier for Work Order associated with Resource Requirement. */
+			readonly msdyn_WorkOrder: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the Resource Requirement */
+			readonly statecode: string;
+			/** Reason for the status of the Resource Requirement */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Unique identifier of the currency associated with the entity. */
+			readonly TransactionCurrencyId: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -449,6 +582,8 @@ declare namespace OptionSet {
 			/** 690970000 */
 			Onsite
 		}
+		enum OwnerIdType {
+		}
 		enum statecode {
 			/** 0 */
 			Active,
@@ -479,4 +614,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

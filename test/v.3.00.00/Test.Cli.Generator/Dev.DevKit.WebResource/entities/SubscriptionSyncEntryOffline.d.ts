@@ -39,6 +39,18 @@ declare namespace DevKit {
 		SyncState: number;
 		/** Version number */
 		VersionNumber: number;
+		readonly FormattedValue: {
+			/** Object Id */
+			readonly ObjectId: string;
+			/** Entity object type code */
+			readonly ObjectTypeCode: string;
+			/** Subscription Id */
+			readonly SubscriptionId: string;
+			/** Sync state */
+			readonly SyncState: string;
+			/** Version number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -61,4 +73,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

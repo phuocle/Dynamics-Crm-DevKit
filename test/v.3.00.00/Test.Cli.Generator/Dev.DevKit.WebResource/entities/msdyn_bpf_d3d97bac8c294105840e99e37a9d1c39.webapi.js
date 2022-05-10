@@ -116,7 +116,7 @@ var DevKit;
 		}
 		msdyn_bpf_d3d97bac8c294105840e99e37a9d1c39.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });

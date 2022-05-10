@@ -220,6 +220,66 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the resource characteristic. */
+			readonly BookableResourceCharacteristicId: string;
+			/** Choose the characteristic to associate with the resource. */
+			readonly Characteristic: string;
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Exchange rate for the currency associated with the bookableresourcecharacteristic with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			readonly msdyn_approvalstatus: string;
+			readonly msdyn_supportingrecord: string;
+			/** Type the name of the association between the resource and characteristic. */
+			readonly Name: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Contains the id of the process associated with the entity. */
+			readonly ProcessId: string;
+			/** Select a rating value that represents the evaluation of a characteristic for a particular resource. */
+			readonly RatingValue: string;
+			/** Shows the resource associated with the characteristic. */
+			readonly Resource: string;
+			/** Contains the id of the stage where the entity is located. */
+			readonly StageId: string;
+			/** Status of the Bookable Resource Characteristic */
+			readonly StateCode: string;
+			/** Reason for the status of the Bookable Resource Characteristic */
+			readonly StatusCode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Exchange rate for the currency associated with the BookableResourceCharacteristic with respect to the base currency. */
+			readonly TransactionCurrencyId: string;
+			/** A comma separated list of string values representing the unique identifiers of stages in a Business Process Flow Instance in the order that they occur. */
+			readonly TraversedPath: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -235,6 +295,8 @@ declare namespace OptionSet {
 			Rejected,
 			/** 192350000 */
 			Saved
+		}
+		enum OwnerIdType {
 		}
 		enum StateCode {
 			/** 0 */
@@ -266,4 +328,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

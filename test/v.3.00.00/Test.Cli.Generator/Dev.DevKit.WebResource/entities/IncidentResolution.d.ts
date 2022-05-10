@@ -256,16 +256,167 @@ declare namespace DevKit {
 		readonly VersionNumber: number;
 		/** The array of object that can cast object to ActivityPartyApi class */
 		ActivityParties: Array<unknown>;
+		readonly FormattedValue: {
+			/** Additional information provided by the external application as JSON. For internal use only. */
+			readonly ActivityAdditionalParams: string;
+			/** Unique identifier of the case resolution activity. */
+			readonly ActivityId: string;
+			/** Actual duration of the case resolution activity in minutes. */
+			readonly ActualDurationMinutes: string;
+			/** Actual end time of the case resolution activity. */
+			readonly ActualEnd_UtcDateOnly: string;
+			/** Actual start time of the case resolution activity. */
+			readonly ActualStart_UtcDateOnly: string;
+			/** Category for the case resolution activity. */
+			readonly Category: string;
+			/** Shows how contact about the social activity originated, such as from Twitter or Facebook. This field is read-only. */
+			readonly Community: string;
+			/** Unique identifier of the user who created the case resolution activity. */
+			readonly CreatedBy: string;
+			/** Shows the external party who created the record. */
+			readonly CreatedByExternalParty: string;
+			/** Date and time when the case resolution activity was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the incidentresolution. */
+			readonly CreatedOnBehalfBy: string;
+			/** Date and time when the delivery of the activity was last attempted. */
+			readonly DeliveryLastAttemptedOn_UtcDateAndTime: string;
+			/** Priority of delivery of the activity to the email server. */
+			readonly DeliveryPriorityCode: string;
+			/** Type additional information that describes the case resolution. */
+			readonly Description: string;
+			/** The message id of activity which is returned from Exchange Server. */
+			readonly ExchangeItemId: string;
+			/** Exchange rate for the currency associated with the activitypointer with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Shows the web link of Activity of type email. */
+			readonly ExchangeWebLink: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the case. */
+			readonly IncidentId: string;
+			/** Type of instance of a recurring series. */
+			readonly InstanceTypeCode: string;
+			/** Information about whether the case resolution activity was billed as part of resolving a case. */
+			readonly IsBilled: string;
+			/** For internal use only. */
+			readonly IsMapiPrivate: string;
+			/** Information regarding whether the activity is a regular activity type or event type. */
+			readonly IsRegularActivity: string;
+			/** Information that specifies if the case resolution activity was created from a workflow rule. */
+			readonly IsWorkflowCreated: string;
+			/** Contains the date and time stamp of the last on hold time. */
+			readonly LastOnHoldTime_UtcDateAndTime: string;
+			/** Left the voice mail */
+			readonly LeftVoiceMail: string;
+			/** Unique identifier of the user who last modified the case resolution activity. */
+			readonly ModifiedBy: string;
+			/** Shows the external party who modified the record. */
+			readonly ModifiedByExternalParty: string;
+			/** Date and time when the case resolution activity was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the incidentresolution. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Shows how long, in minutes, that the record was on hold. */
+			readonly OnHoldTime: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier of the business unit that owns the activity. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the team that owns the activity. */
+			readonly OwningTeam: string;
+			/** Unique identifier of the user that owns the activity. */
+			readonly OwningUser: string;
+			/** For internal use only. */
+			readonly PostponeActivityProcessingUntil_UtcDateAndTime: string;
+			/** Priority of the activity. */
+			readonly PriorityCode: string;
+			/** Unique identifier of the Process. */
+			readonly ProcessId: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_account_incidentresolution: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_bookableresourcebooking_incidentresolution: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_bookableresourcebookingheader_incidentresolution: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_bulkoperation_incidentresolution: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_campaign_incidentresolution: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_campaignactivity_incidentresolution: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_entitlement_incidentresolution: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_entitlementtemplate_incidentresolution: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_new_interactionforemail_incidentresolution: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_knowledgearticle_incidentresolution: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_knowledgebaserecord_incidentresolution: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_lead_incidentresolution: string;
+			readonly ResolutionTypeCode: string;
+			/** Scheduled duration of the case resolution activity, specified in minutes. */
+			readonly ScheduledDurationMinutes: string;
+			/** Scheduled end time of the case resolution activity. */
+			readonly ScheduledEnd_UtcDateOnly: string;
+			/** Scheduled start time of the case resolution activity. */
+			readonly ScheduledStart_UtcDateOnly: string;
+			/** Unique identifier of the mailbox associated with the sender of the email message. */
+			readonly SenderMailboxId: string;
+			/** Date and time when the activity was sent. */
+			readonly SentOn_UtcDateAndTime: string;
+			/** Uniqueidentifier specifying the id of recurring series of an instance. */
+			readonly SeriesId: string;
+			/** Unique identifier of the service with which the case resolution activity is associated. */
+			readonly ServiceId: string;
+			/** Choose the service level agreement (SLA) that you want to apply to the case record. */
+			readonly SLAId: string;
+			/** Last SLA that was applied to this case. This field is for internal use only. */
+			readonly SLAInvokedId: string;
+			/** Shows the date and time by which the activities are sorted. */
+			readonly SortDate_UtcDateAndTime: string;
+			/** Unique identifier of the Stage. */
+			readonly StageId: string;
+			/** Shows whether the case resolution is open, completed, or canceled. By default, all case resolutions are completed and the status value can't be changed. */
+			readonly StateCode: string;
+			/** Reason for the status of the case resolution activity. */
+			readonly StatusCode: string;
+			/** Subcategory of the case resolution activity. */
+			readonly Subcategory: string;
+			/** Subject associated with the case resolution activity. */
+			readonly Subject: string;
+			/** Time spent on the case resolution activity. */
+			readonly TimeSpent: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Total time spent on the case resolution activity. */
+			readonly TotalTimeSpent: string;
+			/** Unique identifier of the currency associated with the activitypointer. */
+			readonly TransactionCurrencyId: string;
+			/** For internal use only. */
+			readonly TraversedPath: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version number of the activity. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace IncidentResolution {
 		enum ActivityTypeCode {
-			/** 10086 */
+			/** 10088 */
 			Activity_record_for_the_Teams_chat,
 			/** 4201 */
 			Appointment,
-			/** 10404 */
+			/** 10473 */
 			Booking_Alert,
 			/** 4402 */
 			Campaign_Activity,
@@ -273,13 +424,13 @@ declare namespace OptionSet {
 			Campaign_Response,
 			/** 4206 */
 			Case_Resolution,
-			/** 10707 */
+			/** 10743 */
 			Conversation,
-			/** 10313 */
+			/** 10330 */
 			Customer_Voice_alert,
-			/** 10323 */
+			/** 10340 */
 			Customer_Voice_survey_invite,
-			/** 10325 */
+			/** 10342 */
 			Customer_Voice_survey_response,
 			/** 4202 */
 			Email,
@@ -291,11 +442,11 @@ declare namespace OptionSet {
 			Opportunity_Close,
 			/** 4209 */
 			Order_Close,
-			/** 10817 */
+			/** 10857 */
 			Outbound_message,
 			/** 4210 */
 			Phone_Call,
-			/** 10434 */
+			/** 10489 */
 			Project_Service_Approval,
 			/** 4406 */
 			Quick_Campaign,
@@ -305,12 +456,14 @@ declare namespace OptionSet {
 			Recurring_Appointment,
 			/** 4214 */
 			Service_Activity,
-			/** 10721 */
+			/** 10760 */
 			Session,
 			/** 4212 */
 			Task
 		}
 		enum Community {
+			/** 16 */
+			Apple_Messages_For_Business,
 			/** 5 */
 			Cortana,
 			/** 6 */
@@ -321,6 +474,8 @@ declare namespace OptionSet {
 			Email,
 			/** 1 */
 			Facebook,
+			/** 17 */
+			Googles_Business_Messages,
 			/** 10 */
 			GroupMe,
 			/** 11 */
@@ -352,6 +507,8 @@ declare namespace OptionSet {
 			/** 1 */
 			Normal
 		}
+		enum IncidentIdType {
+		}
 		enum InstanceTypeCode {
 			/** 0 */
 			Not_Recurring,
@@ -364,6 +521,8 @@ declare namespace OptionSet {
 			/** 1 */
 			Recurring_Master
 		}
+		enum OwnerIdType {
+		}
 		enum PriorityCode {
 			/** 2 */
 			High,
@@ -371,6 +530,8 @@ declare namespace OptionSet {
 			Low,
 			/** 1 */
 			Normal
+		}
+		enum RegardingObjectTypeCode {
 		}
 		enum ResolutionTypeCode {
 			/** 1000 */
@@ -412,4 +573,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

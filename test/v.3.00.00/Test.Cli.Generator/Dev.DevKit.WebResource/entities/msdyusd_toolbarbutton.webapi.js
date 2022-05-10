@@ -126,7 +126,7 @@ var DevKit;
 		}
 		msdyusd_toolbarbutton.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -144,6 +144,8 @@ var OptionSet;
 			Always: 803750000,
 			Customer_Session: 803750001,
 			Script_Expression: 803750002
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

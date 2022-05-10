@@ -35,6 +35,14 @@ declare namespace DevKit {
 		ModifiedOn_UtcDateAndTime: Date;
 		/** Lock token. */
 		Token: string;
+		readonly FormattedValue: {
+			/** Unique identifier of the Inter Process Lock record. */
+			readonly InterProcessLockId: string;
+			/** Date and time when the record was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Lock token. */
+			readonly Token: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -57,4 +65,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

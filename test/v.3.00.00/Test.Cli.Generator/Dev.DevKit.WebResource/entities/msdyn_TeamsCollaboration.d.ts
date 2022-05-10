@@ -115,6 +115,68 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Collaboration appid which was used to pin the record */
+			readonly msdyn_AppId: string;
+			/** Collaboration channel relative folder URL */
+			readonly msdyn_ChannelFolderRelativeUrl: string;
+			/** Collaboration channel Id */
+			readonly msdyn_ChannelId: string;
+			/** Collaboration channel name */
+			readonly msdyn_ChannelName: string;
+			/** Collaboration Channel Type required to differentiate between private and other channels */
+			readonly msdyn_channelType: string;
+			/** Collaboration tab content url */
+			readonly msdyn_ContentUrl: string;
+			/** Collaboration group identifier */
+			readonly msdyn_GroupId: string;
+			/** Collaboration piped entity which was used to pin the record */
+			readonly msdyn_pipedEntityId: string;
+			/** Collaboration team Id */
+			readonly msdyn_TeamId: string;
+			/** Collaboration team name */
+			readonly msdyn_TeamName: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_TeamsCollaborationId: string;
+			/** Team site URL */
+			readonly msdyn_TeamSiteUrl: string;
+			/** Collaboration tenant identifier */
+			readonly msdyn_TenantId: string;
+			/** Collaboration tab web url */
+			readonly msdyn_WebUrl: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Related Dynamics 365 record Id */
+			readonly RegardingObjectId: string;
+			/** Related Dynamics 365 record Id (entity code) */
+			readonly RegardingObjectTypeCode: string;
+			/** Related Dynamics 365 record type name */
+			readonly RegardingObjectTypeName: string;
+			/** Status of the Collaboration entity */
+			readonly statecode: string;
+			/** Reason for the status of the Collaboration entity */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -149,4 +211,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

@@ -52,6 +52,8 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.ExternalParty = {
+		OwnerIdType : {
+		},
 		StateCode : {
 			Disabled: 1,
 			Enabled: 0

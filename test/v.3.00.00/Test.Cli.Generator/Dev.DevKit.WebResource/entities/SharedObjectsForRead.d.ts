@@ -34,6 +34,13 @@ declare namespace DevKit {
 		readonly SharedObjectsForReadId: string;
 		readonly UserIds: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			readonly ObjectId: string;
+			readonly ObjectTypeCode: string;
+			readonly SharedObjectsForReadId: string;
+			readonly UserIds: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -56,4 +63,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

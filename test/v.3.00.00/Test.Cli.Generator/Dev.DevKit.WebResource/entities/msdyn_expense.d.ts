@@ -227,6 +227,98 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Exchange rate for the currency associated with the entity with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Enter the total amount for expense. */
+			readonly msdyn_Amount: string;
+			/** Value of the Amount in base currency. */
+			readonly msdyn_amount_Base: string;
+			/** Shows the bookable resource.. */
+			readonly msdyn_bookableresource: string;
+			/** Enter the expense category. */
+			readonly msdyn_ExpenseCategory: string;
+			/** Shows the entity instances. */
+			readonly msdyn_expenseId: string;
+			/** Shows the status of the expense entry. */
+			readonly msdyn_ExpenseStatus: string;
+			/** The external comments of the expense entry. */
+			readonly msdyn_externaldescription: string;
+			/** Select the manager of the expense user. This field is used for approval. */
+			readonly msdyn_manager: string;
+			/** Enter the expense's purpose. */
+			readonly msdyn_name: string;
+			/** Enter the Unit Price */
+			readonly msdyn_Price: string;
+			/** Value of the Price in base currency. */
+			readonly msdyn_price_Base: string;
+			/** Enter the project. */
+			readonly msdyn_Project: string;
+			/** Enter the Quantity */
+			readonly msdyn_Quantity: string;
+			/** Select the organizational unit at the time the entry was registered of the resource who had the expense. */
+			readonly msdyn_ResourceOrganizationalUnitId: string;
+			/** Enter the sales tax amount. */
+			readonly msdyn_Salestaxamount: string;
+			/** Value of the Sales tax amount in base currency. */
+			readonly msdyn_salestaxamount_Base: string;
+			/** Shows the status that the record will be transitioned to asynchronously. Currently, this is only implemented from submission to approved. */
+			readonly msdyn_targetExpenseStatus: string;
+			/** Shows the total amount of the expense entry. */
+			readonly msdyn_totalamount: string;
+			/** Enter the value of the total amount in the base currency. */
+			readonly msdyn_totalamount_Base: string;
+			/** Enter the date of the expense transaction. */
+			readonly msdyn_TransactionDate_UtcDateOnly: string;
+			/** Enter the Unit */
+			readonly msdyn_Unit: string;
+			/** Enter the Unit Group */
+			readonly msdyn_UnitGroup: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Contains the id of the process associated with the entity. */
+			readonly processid: string;
+			/** Contains the id of the stage where the entity is located. */
+			readonly stageid: string;
+			/** Status of the Expense */
+			readonly statecode: string;
+			/** Reason for the status of the Expense */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Shows the currency associated with the entity. */
+			readonly TransactionCurrencyId: string;
+			/** A comma separated list of string values representing the unique identifiers of stages in a Business Process Flow Instance in the order that they occur. */
+			readonly traversedpath: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -262,6 +354,8 @@ declare namespace OptionSet {
 			Rejected,
 			/** 192350001 */
 			Submitted
+		}
+		enum OwnerIdType {
 		}
 		enum statecode {
 			/** 0 */
@@ -301,4 +395,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

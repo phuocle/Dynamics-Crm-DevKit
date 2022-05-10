@@ -79,6 +79,8 @@ var OptionSet;
 			Inside: 192350001,
 			Outside: 192350000
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

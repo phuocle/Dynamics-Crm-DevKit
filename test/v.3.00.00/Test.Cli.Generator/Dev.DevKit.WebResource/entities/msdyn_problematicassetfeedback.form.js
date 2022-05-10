@@ -61,6 +61,8 @@ var OptionSet;
 			Dislike: 700610001,
 			Like: 700610000
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

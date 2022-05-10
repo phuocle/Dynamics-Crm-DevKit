@@ -120,6 +120,42 @@ declare namespace DevKit {
 		StateCode: OptionSet.AzureServiceConnection.StateCode;
 		/** Select the Azure service connection's status. */
 		StatusCode: OptionSet.AzureServiceConnection.StatusCode;
+		readonly FormattedValue: {
+			/** Type the Azure account key. */
+			readonly AccountKey: string;
+			/** Unique identifier of the Azure service connection. */
+			readonly AzureServiceConnectionId: string;
+			/** Azure service connection type */
+			readonly ConnectionType: string;
+			/** Unique identifier of the user who created the Azure service connection. */
+			readonly CreatedBy: string;
+			/** Date and time when the Azure service connection was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the Azure service connection. */
+			readonly CreatedOnBehalfBy: string;
+			/** Enter a description of the Azure service connection. */
+			readonly Description: string;
+			/** Shows the status of the last connection to the Azure service. */
+			readonly LastConnectionStatusCode: string;
+			/** shows the time of the last connection to the Azure service. */
+			readonly LastConnectionTime_UtcDateAndTime: string;
+			/** Unique identifier of the user who modified the Azure service connection. */
+			readonly ModifiedBy: string;
+			/** Date and time when the Azure service connection was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the Azure service connection. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Type a logical name for the connection. */
+			readonly Name: string;
+			/** Unique identifier of the organization associated with the Azure service connection. */
+			readonly OrganizationId: string;
+			/** Type the service URL for the Azure service. */
+			readonly ServiceUri: string;
+			/** Shows whether the Azure service connection is active or inactive. */
+			readonly StateCode: string;
+			/** Select the Azure service connection's status. */
+			readonly StatusCode: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -166,4 +202,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

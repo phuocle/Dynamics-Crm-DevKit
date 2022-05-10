@@ -75,6 +75,8 @@ var OptionSet;
 			ShowNPSDialog: 100000010,
 			ShowScriptErrors: 100000005
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

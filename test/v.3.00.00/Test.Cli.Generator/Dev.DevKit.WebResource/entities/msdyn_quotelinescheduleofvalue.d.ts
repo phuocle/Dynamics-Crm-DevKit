@@ -189,6 +189,74 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Exchange rate for the currency associated with the entity with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Enter the value of the amount on the billing milestone. */
+			readonly msdyn_amount: string;
+			readonly msdyn_amount_after_tax: string;
+			/** Value of the amount_after_tax in base currency. */
+			readonly msdyn_amount_after_tax_Base: string;
+			/** Value of the Amount in base currency. */
+			readonly msdyn_amount_Base: string;
+			/** Enter the date on which the milestone is to be invoiced. This, in conjunction with the Invoice status, will be used by the invoice creation job. */
+			readonly msdyn_invoicedate_UtcDateOnly: string;
+			/** Select whether this milestone was invoiced. Valid values are Not ready for invoicing, Ready for Invoicing, On an invoice, and Invoiced. */
+			readonly msdyn_invoicestatus: string;
+			/** Indicates if this record was created via import. It's purpose is to support data import. */
+			readonly msdyn_isdataimport: string;
+			/** Type the name of the custom entity. */
+			readonly msdyn_name: string;
+			/** Select the project task that is tracking the work for this billing milestone. */
+			readonly msdyn_projecttask: string;
+			/** (Deprecated) Shows a reference to the quote line that this milestone schedule belongs to. */
+			readonly msdyn_quoteline: string;
+			/** Shows a reference to the quote line that this milestone schedule belongs to. */
+			readonly msdyn_quotelineid: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_quotelinescheduleofvalueId: string;
+			readonly msdyn_tax: string;
+			/** Value of the tax in base currency. */
+			readonly msdyn_tax_Base: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the Quote Line Schedule Of Value */
+			readonly statecode: string;
+			/** Reason for the status of the Quote Line Schedule Of Value */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Shows the currency associated with the entity. */
+			readonly TransactionCurrencyId: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -202,6 +270,8 @@ declare namespace OptionSet {
 			Not_Ready_for_invoicing,
 			/** 192350001 */
 			Ready_for_invoicing
+		}
+		enum OwnerIdType {
 		}
 		enum statecode {
 			/** 0 */
@@ -233,4 +303,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

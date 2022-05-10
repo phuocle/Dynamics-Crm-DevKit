@@ -122,6 +122,56 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Whether multi-language support is enabled */
+			readonly msdyn_additionallanguagesenabled: string;
+			/** The agent threshold for sentiment threshold alerts */
+			readonly msdyn_agentthreshold: string;
+			/** This field is deprecated */
+			readonly msdyn_driversenabled: string;
+			/** Whether real-time customer sentiment monitoring is enabled */
+			readonly msdyn_enabled: string;
+			/** Enable Unified Routing */
+			readonly msdyn_enableur: string;
+			/** The name of the custom entity. */
+			readonly msdyn_name: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_sentimentanalysisId: string;
+			/** The supervisor threshold for sentiment threshold alerts */
+			readonly msdyn_supervisorthreshold: string;
+			/** This field is deprecated */
+			readonly msdyn_supervisorthresholdalerttimeoutseconds: string;
+			/** This field is deprecated */
+			readonly msdyn_thresholdalertsenabled: string;
+			/** Unique identifier for the organization */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Status of the sentiment analysis */
+			readonly statecode: string;
+			/** Reason for the status of the Sentiment Analysis */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -176,4 +226,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

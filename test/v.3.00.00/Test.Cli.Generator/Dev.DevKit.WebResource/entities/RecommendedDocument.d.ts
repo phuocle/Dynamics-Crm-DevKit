@@ -111,10 +111,71 @@ declare namespace DevKit {
 		/** Shows the recommended document version. */
 		readonly Version: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Type the URL where the recommended document is located. */
+			readonly AbsoluteUrl: string;
+			/** Shows the associated record name of the recommended document. */
+			readonly AssociatedRecordName: string;
+			/** Shows the name of the author of the recommended document. */
+			readonly Author: string;
+			/** Select the document content type. */
+			readonly ContentType: string;
+			/** Shows the user who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Shows the Edit URL of the recommended document. */
+			readonly EditUrl: string;
+			/** Shows the exchange rate for the currency associated with the recommended document with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Shows the external document. */
+			readonly ExternalDocumentId: string;
+			/** Shows who last updated the document record. */
+			readonly ExternalModifiedBy: string;
+			/** Shows the file size. */
+			readonly FileSize: string;
+			/** Shows the file type. */
+			readonly FileType: string;
+			/** Shows the full name of the recommended document. */
+			readonly FullName: string;
+			/** Stores the Icon Class name of the recommended document. */
+			readonly IconClassName: string;
+			/** Shows the location of the recommended document. */
+			readonly Location: string;
+			/** Shows who last updated the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who last updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Shows the organization. */
+			readonly OrganizationId: string;
+			/** Shows the Read URL of the recommended document. */
+			readonly ReadUrl: string;
+			/** Shows the recommended document record. */
+			readonly RecommendedDocumentId: string;
+			/** Shows the source storage of the recommended document. */
+			readonly Source: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Type a title for the entity. */
+			readonly Title: string;
+			/** Shows the exchange rate for the currency associated with the recommended document with respect to the base currency. */
+			readonly TransactionCurrencyId: string;
+			/** Shows the time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Shows the recommended document version. */
+			readonly Version: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace RecommendedDocument {
+		enum RegardingObjectTypeCode {
+		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
 			NotCalculated,
@@ -133,4 +194,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

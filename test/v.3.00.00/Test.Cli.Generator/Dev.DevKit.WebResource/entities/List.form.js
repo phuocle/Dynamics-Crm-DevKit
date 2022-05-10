@@ -49,7 +49,8 @@ var DevKit;
 			members: {
 				Section: {
 					listoperationssection: {},
-					members: {}
+					members: {},
+					ucimembers: {}
 				}
 			},
 			notes: {
@@ -197,6 +198,8 @@ var OptionSet;
 			Account: 1,
 			Contact: 2,
 			Lead: 4
+		},
+		OwnerIdType : {
 		},
 		StateCode : {
 			Active: 0,

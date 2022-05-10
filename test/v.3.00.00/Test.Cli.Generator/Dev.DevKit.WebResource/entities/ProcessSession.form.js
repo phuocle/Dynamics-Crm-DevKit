@@ -80,6 +80,10 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.ProcessSession = {
+		OwnerIdType : {
+		},
+		RegardingObjectTypeCode : {
+		},
 		StateCode : {
 			Complete: 1,
 			Incomplete: 0

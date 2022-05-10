@@ -64,6 +64,43 @@ declare namespace DevKit {
 		Version: number;
 		/** Represents a version of customizations to be synchronized with the Microsoft Dynamics 365 client for Outlook. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** For internal use only. */
+			readonly FieldXml: string;
+			/** Unique identifier of the record type form. */
+			readonly FormId: string;
+			/** Unique identifier of the form used when synchronizing customizations for the Microsoft Dynamics 365 client for Outlook. */
+			readonly FormIdUnique: string;
+			/** XML representation of the form layout. */
+			readonly FormXml: string;
+			/** Binary representation of the icon used in record type grid views. */
+			readonly GridIcon: string;
+			/** Information that specifies whether this component can be customized. */
+			readonly IsCustomizable: string;
+			readonly IsManaged: string;
+			/** Binary representation of the large icon used in the record type form. */
+			readonly LargeEntityIcon: string;
+			/** Unique identifier of the organization. */
+			readonly OrganizationId: string;
+			/** Binary representation of the large icon used in the Microsoft Dynamics 365 client for Outlook for this record type. */
+			readonly OutlookShortcutIcon: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** For internal use only. */
+			readonly PreviewColumnsetXml: string;
+			/** For internal use only. */
+			readonly PreviewXml: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** For internal use only. */
+			readonly Version: string;
+			/** Represents a version of customizations to be synchronized with the Microsoft Dynamics 365 client for Outlook. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -77,6 +114,8 @@ declare namespace OptionSet {
 			Published,
 			/** 1 */
 			Unpublished
+		}
+		enum ObjectTypeCode {
 		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
@@ -96,4 +135,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

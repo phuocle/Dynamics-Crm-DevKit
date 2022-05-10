@@ -63,6 +63,12 @@ var OptionSet;
 			Dedicated_for_OneNote_Integration: 1,
 			General: 0
 		},
+		OwnerIdType : {
+		},
+		ParentSiteOrLocationTypeCode : {
+		},
+		RegardingObjectTypeCode : {
+		},
 		ServiceType : {
 			MS_Teams: 3,
 			OneDrive: 1,

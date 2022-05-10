@@ -36,6 +36,10 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.msdyn_suggestioninteraction = {
+		msdyn_suggestedentityIdType : {
+		},
+		msdyn_suggestionforIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

@@ -47,6 +47,26 @@ declare namespace DevKit {
 		/** For internal use only. */
 		readonly SupportingSolutionId: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly ComponentIdUnique: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** For internal use only. */
+			readonly IsCustomizable: string;
+			/** Indicates whether the solution component is part of a managed solution. */
+			readonly IsManaged: string;
+			readonly msdyn_appconfigurationid: string;
+			readonly msdyn_msdyn_paneconfig_msdyn_appconfigId: string;
+			readonly msdyn_paneconfigurationid: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateAndTime: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -79,4 +99,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

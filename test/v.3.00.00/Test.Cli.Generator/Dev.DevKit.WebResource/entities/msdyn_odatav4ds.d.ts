@@ -264,6 +264,61 @@ declare namespace DevKit {
 		msdyn_timeout: number;
 		/** URL of the OData v4 web service endpoint this data source will target. */
 		msdyn_uri: string;
+		readonly FormattedValue: {
+			/** Type additional information to describe this OData v4 data source. What environment does this data source target and what is the purpose of this system ? */
+			readonly msdyn_description: string;
+			/** Parameter10 Type */
+			readonly msdyn_isparameter10header: string;
+			/** Parameter1 Type */
+			readonly msdyn_isparameter1header: string;
+			/** Parameter2 Type */
+			readonly msdyn_isparameter2header: string;
+			/** Parameter3 Type */
+			readonly msdyn_isparameter3header: string;
+			/** Parameter4 Type */
+			readonly msdyn_isparameter4header: string;
+			/** Parameter5 Type */
+			readonly msdyn_isparameter5header: string;
+			/** Parameter6 Type */
+			readonly msdyn_isparameter6header: string;
+			/** Parameter7 Type */
+			readonly msdyn_isparameter7header: string;
+			/** Parameter8 Type */
+			readonly msdyn_isparameter8header: string;
+			/** Parameter9 Type */
+			readonly msdyn_isparameter9header: string;
+			/** Name of the OData v4 data source. This name appears in the data source drop-down list when creating a new entity. */
+			readonly msdyn_name: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_odatav4dsId: string;
+			readonly msdyn_paginationmode: string;
+			readonly msdyn_paginationtype: string;
+			readonly msdyn_parameter10name: string;
+			readonly msdyn_parameter10value: string;
+			readonly msdyn_parameter1name: string;
+			readonly msdyn_parameter1value: string;
+			readonly msdyn_parameter2name: string;
+			readonly msdyn_parameter2value: string;
+			readonly msdyn_parameter3name: string;
+			readonly msdyn_parameter3value: string;
+			readonly msdyn_parameter4name: string;
+			readonly msdyn_parameter4value: string;
+			readonly msdyn_parameter5name: string;
+			readonly msdyn_parameter5value: string;
+			readonly msdyn_parameter6name: string;
+			readonly msdyn_parameter6value: string;
+			readonly msdyn_parameter7name: string;
+			readonly msdyn_parameter7value: string;
+			readonly msdyn_parameter8name: string;
+			readonly msdyn_parameter8value: string;
+			readonly msdyn_parameter9name: string;
+			readonly msdyn_parameter9value: string;
+			readonly msdyn_returninlinecount: string;
+			/** Amount of time to wait, in seconds, before timing out an OData v4 request. */
+			readonly msdyn_timeout: string;
+			/** URL of the OData v4 web service endpoint this data source will target. */
+			readonly msdyn_uri: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -292,4 +347,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

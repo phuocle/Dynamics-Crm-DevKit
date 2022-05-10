@@ -70,6 +70,10 @@ var OptionSet;
 			Account: 1,
 			Contact: 2
 		},
+		OwnerIdType : {
+		},
+		ParentIdTypeCode : {
+		},
 		ShippingMethodCode : {
 			Airborne: 1,
 			DHL: 2,

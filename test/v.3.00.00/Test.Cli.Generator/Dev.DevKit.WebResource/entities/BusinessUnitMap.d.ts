@@ -34,10 +34,19 @@ declare namespace DevKit {
 		BusinessUnitMapId: string;
 		SubBusinessId: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			readonly BusinessId: string;
+			/** Unique identifier of the business unit. */
+			readonly BusinessUnitMapId: string;
+			readonly SubBusinessId: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace BusinessUnitMap {
+		enum SubBusinessIdType {
+		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
 			NotCalculated,
@@ -56,4 +65,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

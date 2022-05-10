@@ -153,10 +153,76 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Unique identifier for Communication Provider Setting associated with Bot Channel Registration. */
+			readonly msdyn_communicationprovidersettingid: string;
+			/** Flag to indicate if BCR entity is related to Custom Messaging */
+			readonly msdyn_iscustommessagingbcr: string;
+			/** Flag to indicate if the record is newly created */
+			readonly msdyn_iscustommessagingcreated: string;
+			/** Microsoft app Id and secret last validated date. */
+			readonly msdyn_lastvalidateddate_UtcDateAndTime: string;
+			/** Messaging Endpoint (URL) */
+			readonly msdyn_messagingendpoint: string;
+			/** MS Application ID for the BCR */
+			readonly msdyn_msappid: string;
+			/** Bot channel registration client secret */
+			readonly msdyn_msappsecret: string;
+			/** The name of the custom entity. */
+			readonly msdyn_name: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_ocbotchannelregistrationId: string;
+			/** Related Facebook application */
+			readonly msdyn_ocfbapplicationid: string;
+			/** Related Line Channel */
+			readonly msdyn_oclinechannelconfigid: string;
+			/** Related Teams Channel */
+			readonly msdyn_octeamschannelconfigid: string;
+			/** Microsoft app ID and secert Validation status */
+			readonly msdyn_validationstatus: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the Bot Channel Registration */
+			readonly statecode: string;
+			/** Reason for the status of the Bot Channel Registration */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace msdyn_ocbotchannelregistration {
+		enum OwnerIdType {
+		}
 		enum statecode {
 			/** 0 */
 			Active,
@@ -187,4 +253,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

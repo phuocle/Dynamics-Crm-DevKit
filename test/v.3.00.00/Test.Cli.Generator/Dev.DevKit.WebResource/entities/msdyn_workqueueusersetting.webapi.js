@@ -117,7 +117,7 @@ var DevKit;
 		}
 		msdyn_workqueueusersetting.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -140,6 +140,8 @@ var OptionSet;
 			Always_ask: 0,
 			Move_to_next: 1,
 			Stay_on_the_record: 2
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

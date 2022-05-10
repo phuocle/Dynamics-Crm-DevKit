@@ -16,7 +16,9 @@ var DevKit;
 		var form = devKit.LoadForm(formContext);
 		var body = {
 			Description: {},
+			IsOnlineMeeting: {},
 			Location: {},
+			OnlineMeetingJoinUrl: {},
 			OptionalAttendees: {},
 			RegardingObjectId: {},
 			RequiredAttendees: {},
@@ -55,28 +57,29 @@ var OptionSet;
 (function (OptionSet) {
 	OptionSet.RecurringAppointmentMaster = {
 		ActivityTypeCode : {
+			Activity_record_for_the_Teams_chat: 10088,
 			Appointment: 4201,
-			Booking_Alert: 10400,
+			Booking_Alert: 10473,
 			Campaign_Activity: 4402,
 			Campaign_Response: 4401,
 			Case_Resolution: 4206,
-			Conversation: 10702,
-			Customer_Voice_alert: 10294,
-			Customer_Voice_survey_invite: 10304,
-			Customer_Voice_survey_response: 10306,
+			Conversation: 10743,
+			Customer_Voice_alert: 10330,
+			Customer_Voice_survey_invite: 10340,
+			Customer_Voice_survey_response: 10342,
 			Email: 4202,
 			Fax: 4204,
 			Letter: 4207,
 			Opportunity_Close: 4208,
 			Order_Close: 4209,
-			Outbound_message: 10813,
+			Outbound_message: 10857,
 			Phone_Call: 4210,
-			Project_Service_Approval: 10430,
+			Project_Service_Approval: 10489,
 			Quick_Campaign: 4406,
 			Quote_Close: 4211,
 			Recurring_Appointment: 4251,
 			Service_Activity: 4214,
-			Session: 10717,
+			Session: 10760,
 			Task: 4212
 		},
 		ExpansionStateCode : {
@@ -116,6 +119,8 @@ var OptionSet;
 		OnlineMeetingType : {
 			Teams_Meeting: 1
 		},
+		OwnerIdType : {
+		},
 		PatternEndType : {
 			No_End_Date: 1,
 			Occurrences: 2,
@@ -131,6 +136,8 @@ var OptionSet;
 			Monthly: 2,
 			Weekly: 1,
 			Yearly: 3
+		},
+		RegardingObjectTypeCode : {
 		},
 		StateCode : {
 			Canceled: 2,

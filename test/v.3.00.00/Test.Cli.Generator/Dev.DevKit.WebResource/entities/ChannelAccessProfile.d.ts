@@ -193,6 +193,87 @@ declare namespace DevKit {
 		ViewKnowledgeArticles: boolean;
 		/** Select whether access to the web channel is allowed. */
 		WebAccess: boolean;
+		readonly FormattedValue: {
+			/** Unique identifier for entity instances */
+			readonly ChannelAccessProfileId: string;
+			/** Unique identifier of the Channel Access Profile used when synchronizing customizations for the Microsoft Dynamics 365 client for Outlook */
+			readonly ChannelAccessProfileIdUnique: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Select whether access to the email channel is allowed. */
+			readonly EmailAccess: string;
+			/** Exchange rate for the currency associated with the ChannelAccessProfile with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Select whether access to the Facebook channel is allowed. */
+			readonly FacebookAccess: string;
+			/** For internal use only */
+			readonly HavePrivilegesChanged: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Version in which the similarity rule is introduced. */
+			readonly IntroducedVersion: string;
+			/** For internal use only. */
+			readonly IsGuestProfile: string;
+			/** Is Managed */
+			readonly IsManaged: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Type a descriptive name for the channel access profile. */
+			readonly Name: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Date and time when the record was created. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Select whether access to the phone channel is allowed. */
+			readonly PhoneAccess: string;
+			/** Select whether access to rate a knowledge article is allowed. */
+			readonly RateKnowledgeArticles: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** Shows whether the channel access profile is active or inactive. */
+			readonly StateCode: string;
+			/** Select the the channel access profiles status. */
+			readonly StatusCode: string;
+			/** Select whether access to submit feedback on knowledge articles is allowed. */
+			readonly SubmitFeedback: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Exchange rate for the currency associated with the ChannelAccessProfile with respect to the base currency. */
+			readonly TransactionCurrencyId: string;
+			/** Select whether access to the Twitter channel is allowed. */
+			readonly TwitterAccess: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			readonly VersionNumber: string;
+			/** Select whether access to view a knowledge article rating is allowed. */
+			readonly ViewArticleRating: string;
+			/** Select whether access to view knowledge articles is allowed. */
+			readonly ViewKnowledgeArticles: string;
+			/** Select whether access to the web channel is allowed. */
+			readonly WebAccess: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -206,6 +287,8 @@ declare namespace OptionSet {
 			Published,
 			/** 1 */
 			Unpublished
+		}
+		enum OwnerIdType {
 		}
 		enum StateCode {
 			/** 0 */
@@ -237,4 +320,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

@@ -68,6 +68,21 @@ declare namespace DevKit {
 		msdyn_publishername: string;
 		msdyn_solutioncomponentname: string;
 		msdyn_solutionname: string;
+		readonly FormattedValue: {
+			readonly msdyn_changes: string;
+			readonly msdyn_children: string;
+			readonly msdyn_componentid: string;
+			readonly msdyn_componentjson: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_componentlayerId: string;
+			readonly msdyn_endtime_UtcDateAndTime: string;
+			/** The name of the component. */
+			readonly msdyn_name: string;
+			readonly msdyn_order: string;
+			readonly msdyn_publishername: string;
+			readonly msdyn_solutioncomponentname: string;
+			readonly msdyn_solutionname: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -90,4 +105,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

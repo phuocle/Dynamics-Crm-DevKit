@@ -113,6 +113,8 @@ var OptionSet;
 			Downstream: 1,
 			Upstream: 0
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

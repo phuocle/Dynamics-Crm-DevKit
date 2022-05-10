@@ -877,6 +877,8 @@ var OptionSet;
 			Mileage: 690970001,
 			None: 690970003
 		},
+		OwnerIdType : {
+		},
 		OwnershipCode : {
 			Other: 4,
 			Private: 2,

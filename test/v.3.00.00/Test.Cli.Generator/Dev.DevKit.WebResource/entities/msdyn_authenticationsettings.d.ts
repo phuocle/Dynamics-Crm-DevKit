@@ -11,6 +11,7 @@ declare namespace DevKit {
 			msdyn_JavaScriptclientfunction: DevKit.Controls.String;
 			/** The name of the custom entity. */
 			msdyn_name: DevKit.Controls.String;
+			msdyn_ocauthchanneltype: DevKit.Controls.OptionSet;
 			/** URL to the Public Key which will be used for token validation */
 			msdyn_PublickeyURL: DevKit.Controls.String;
 			/** Owner Id */
@@ -77,14 +78,23 @@ declare namespace DevKit {
 		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
 		readonly ModifiedOnBehalfBy: string;
+		/** Auth service Client Id */
+		msdyn_authenticationclientid: string;
+		/** Auth service client secret */
+		msdyn_authenticationclientsecret: string;
+		/** Auth service scopes */
+		msdyn_authenticationscopes: string;
 		/** Unique identifier for entity instances */
 		msdyn_authenticationsettingsId: string;
 		/** Authentication Type which will be applied to the chat */
 		msdyn_Authenticationtype: OptionSet.msdyn_authenticationsettings.msdyn_Authenticationtype;
+		/** Decrypted token url to hit with Access token */
+		msdyn_decryptedtokenurl: string;
 		/** Javascript function which will need to return the authentication token */
 		msdyn_JavaScriptclientfunction: string;
 		/** The name of the custom entity. */
 		msdyn_name: string;
+		msdyn_ocauthchanneltype: OptionSet.msdyn_authenticationsettings.msdyn_ocauthchanneltype;
 		/** URL to the Public Key which will be used for token validation */
 		msdyn_PublickeyURL: string;
 		/** Date and time that the record was migrated. */
@@ -109,13 +119,80 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Auth service Client Id */
+			readonly msdyn_authenticationclientid: string;
+			/** Auth service client secret */
+			readonly msdyn_authenticationclientsecret: string;
+			/** Auth service scopes */
+			readonly msdyn_authenticationscopes: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_authenticationsettingsId: string;
+			/** Authentication Type which will be applied to the chat */
+			readonly msdyn_Authenticationtype: string;
+			/** Decrypted token url to hit with Access token */
+			readonly msdyn_decryptedtokenurl: string;
+			/** Javascript function which will need to return the authentication token */
+			readonly msdyn_JavaScriptclientfunction: string;
+			/** The name of the custom entity. */
+			readonly msdyn_name: string;
+			readonly msdyn_ocauthchanneltype: string;
+			/** URL to the Public Key which will be used for token validation */
+			readonly msdyn_PublickeyURL: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the Authentication settings */
+			readonly statecode: string;
+			/** Reason for the status of the Authentication settings */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace msdyn_authenticationsettings {
 		enum msdyn_Authenticationtype {
+			/** 192350001 */
+			OAuth_20_code_flow,
 			/** 192350000 */
 			OAuth_20_implicit_flow
+		}
+		enum msdyn_ocauthchanneltype {
+			/** 192450000 */
+			Apple_Messages_For_Business,
+			/** 192360000 */
+			Live_chat
+		}
+		enum OwnerIdType {
 		}
 		enum statecode {
 			/** 0 */
@@ -147,4 +224,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

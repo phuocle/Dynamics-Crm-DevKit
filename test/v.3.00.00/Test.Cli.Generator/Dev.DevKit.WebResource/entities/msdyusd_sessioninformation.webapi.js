@@ -118,7 +118,7 @@ var DevKit;
 		}
 		msdyusd_sessioninformation.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -135,6 +135,8 @@ var OptionSet;
 		msdyusd_type : {
 			Session_Name: 803750000,
 			Session_Overview_Line: 803750001
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

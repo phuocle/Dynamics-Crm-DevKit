@@ -59,10 +59,44 @@ declare namespace DevKit {
 		Title: string;
 		/** Version number of Image descriptor. */
 		readonly versionnumber: number;
+		readonly FormattedValue: {
+			readonly ColorDepthBits: string;
+			/** Lookup to FileAttachment */
+			readonly FileId: string;
+			readonly FileLocation: string;
+			readonly FileName: string;
+			readonly FileSizeBytes: string;
+			readonly FileType: string;
+			readonly EntityImage: string;
+			readonly EntityImage_Timestamp: string;
+			readonly EntityImage_URL: string;
+			readonly FullImageData: string;
+			readonly FullImageData_Timestamp: string;
+			readonly FullImageData_URL: string;
+			readonly FullImageURL: string;
+			readonly ImageData: string;
+			readonly ImageData_Timestamp: string;
+			readonly ImageData_URL: string;
+			readonly ImageDescription: string;
+			readonly ImageDescriptorId: string;
+			readonly ImagePixelHeight: string;
+			readonly ImagePixelWidth: string;
+			readonly ImageTags: string;
+			readonly ImageTimestamp: string;
+			readonly ImageURL: string;
+			readonly MimeType: string;
+			readonly ObjectId: string;
+			readonly Size: string;
+			readonly Title: string;
+			/** Version number of Image descriptor. */
+			readonly versionnumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace ImageDescriptor {
+		enum ObjectTypeCode {
+		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
 			NotCalculated,
@@ -81,4 +115,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

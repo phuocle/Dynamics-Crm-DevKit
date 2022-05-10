@@ -76,6 +76,55 @@ declare namespace DevKit {
 		readonly VersionNumber: number;
 		/** Whether or not the SDK message can be called from a workflow. */
 		readonly WorkflowSdkStepEnabled: boolean;
+		readonly FormattedValue: {
+			/** Identifies where a method will be exposed. 0 - Server, 1 - Client, 2 - both. */
+			readonly Availability: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier of the user who created the SDK message filter. */
+			readonly CreatedBy: string;
+			/** Date and time when the SDK message filter was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the sdkmessagefilter. */
+			readonly CreatedOnBehalfBy: string;
+			/** Customization level of the SDK message filter. */
+			readonly CustomizationLevel: string;
+			/** Version in which the component is introduced. */
+			readonly IntroducedVersion: string;
+			/** Indicates whether a custom SDK message processing step is allowed. */
+			readonly IsCustomProcessingStepAllowed: string;
+			/** Information that specifies whether this component is managed. */
+			readonly IsManaged: string;
+			/** Indicates whether the filter should be visible. */
+			readonly IsVisible: string;
+			/** Unique identifier of the user who last modified the SDK message filter. */
+			readonly ModifiedBy: string;
+			/** Date and time when the SDK message filter was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the sdkmessagefilter. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Name of the SDK message filter. */
+			readonly Name: string;
+			/** Unique identifier of the organization with which the SDK message filter is associated. */
+			readonly OrganizationId: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** For internal use only. */
+			readonly RestrictionLevel: string;
+			/** Unique identifier of the SDK message filter entity. */
+			readonly SdkMessageFilterId: string;
+			/** Unique identifier of the SDK message filter. */
+			readonly SdkMessageFilterIdUnique: string;
+			/** Unique identifier of the related SDK message. */
+			readonly SdkMessageId: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			readonly VersionNumber: string;
+			/** Whether or not the SDK message can be called from a workflow. */
+			readonly WorkflowSdkStepEnabled: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -89,6 +138,10 @@ declare namespace OptionSet {
 			Published,
 			/** 1 */
 			Unpublished
+		}
+		enum PrimaryObjectTypeCode {
+		}
+		enum SecondaryObjectTypeCode {
 		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
@@ -108,4 +161,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

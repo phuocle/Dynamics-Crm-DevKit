@@ -81,6 +81,8 @@ var OptionSet;
 			Canceled: 690970002,
 			Completed: 690970001
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

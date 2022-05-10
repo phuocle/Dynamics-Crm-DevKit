@@ -238,6 +238,124 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Exchange rate for the currency associated with the entity with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Shows the customer for the estimate line. */
+			readonly msdyn_AccountCustomer: string;
+			readonly msdyn_AccountingDate_UtcDateOnly: string;
+			readonly msdyn_AccountVendor: string;
+			/** Shows the amount on the estimate line. */
+			readonly msdyn_Amount: string;
+			/** Value of the Amount in base currency. */
+			readonly msdyn_amount_Base: string;
+			/** Shows the calculation method used to determine the amount on the estimate line.  */
+			readonly msdyn_AmountMethod: string;
+			readonly msdyn_BasisAmount: string;
+			/** Value of the Basis Amount in base currency. */
+			readonly msdyn_basisamount_Base: string;
+			readonly msdyn_BasisPrice: string;
+			/** Value of the Basis Price in base currency. */
+			readonly msdyn_basisprice_Base: string;
+			readonly msdyn_BasisQuantity: string;
+			/** Shows whether this estimate line is charged to the customer.  */
+			readonly msdyn_BillingType: string;
+			/** Shows the bookable resource for which estimates are generated. */
+			readonly msdyn_bookableresource: string;
+			/** Shows the name of the customer contact. */
+			readonly msdyn_ContactCustomer: string;
+			readonly msdyn_ContactVendor: string;
+			/** Select the type of customer. */
+			readonly msdyn_CustomerType: string;
+			/** Type the name of the custom entity. */
+			readonly msdyn_description: string;
+			/** Shows the transaction date of the estimate line. */
+			readonly msdyn_DocumentDate_UtcDateOnly: string;
+			/** Enter the end date and time. */
+			readonly msdyn_EndDateTime_UtcDateAndTime: string;
+			/** Shows the name of the estimate line. */
+			readonly msdyn_Estimate: string;
+			/** Shows the entity instances. */
+			readonly msdyn_estimatelineId: string;
+			/** Stores the estimate per day detail lines. */
+			readonly msdyn_estimateperdaylines: string;
+			readonly msdyn_ExchangeRateDate_UtcDateOnly: string;
+			/** Shows the estimate of the number of resources intended to be staffed for this task. */
+			readonly msdyn_numberofresources: string;
+			/** Foreign key to the estimate line that originated this entry. For example, revenue line points to it's related cost line. */
+			readonly msdyn_Origin: string;
+			/** Shows the percent for the estimate line. */
+			readonly msdyn_Percent: string;
+			/** Shows the price for this estimate line. */
+			readonly msdyn_Price: string;
+			/** Value of the Price in base currency. */
+			readonly msdyn_price_Base: string;
+			/** Shows the price list used in this estimate line. */
+			readonly msdyn_PriceList: string;
+			/** Select the product. */
+			readonly msdyn_Product: string;
+			/** Shows the project for this estimate line. */
+			readonly msdyn_Project: string;
+			/** Enter the estimated quantity of work, cost, and sales. */
+			readonly msdyn_Quantity: string;
+			/** Shows the role of this resource on the estimate line. */
+			readonly msdyn_ResourceCategory: string;
+			/** Select the organizational unit at the time the estimate line was registered of the resource who should perform the work. */
+			readonly msdyn_ResourceOrganizationalUnitId: string;
+			/** Shows the start date and time for the task for this estimate line. */
+			readonly msdyn_StartDateTime_UtcDateAndTime: string;
+			/** Shows the task related to this estimate line. */
+			readonly msdyn_Task: string;
+			/** Select the type of transaction. */
+			readonly msdyn_TransactionCategory: string;
+			/** Shows the transaction classification for this estimate line. */
+			readonly msdyn_TransactionClassification: string;
+			/** Shows the transaction type for this estimate line. */
+			readonly msdyn_TransactionTypeCode: string;
+			/** Shows the unit of measurement for this estimate line. */
+			readonly msdyn_Unit: string;
+			/** Select the unit of measure for the estimate quantity. */
+			readonly msdyn_UnitSchedule: string;
+			readonly msdyn_VendorType: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the Estimate Line */
+			readonly statecode: string;
+			/** Reason for the status of the Estimate Line */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Shows the currency associated with the entity. */
+			readonly TransactionCurrencyId: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -308,6 +426,8 @@ declare namespace OptionSet {
 			/** 192350002 */
 			Contact
 		}
+		enum OwnerIdType {
+		}
 		enum statecode {
 			/** 0 */
 			Active,
@@ -338,4 +458,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

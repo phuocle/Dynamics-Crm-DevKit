@@ -123,7 +123,7 @@ var DevKit;
 		}
 		bookableresourcecharacteristic.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -143,6 +143,8 @@ var OptionSet;
 			Recalled: 192350004,
 			Rejected: 192350002,
 			Saved: 192350000
+		},
+		OwnerIdType : {
 		},
 		StateCode : {
 			Active: 0,

@@ -396,6 +396,84 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Shows the sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who last updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Parent Customer of this Asset */
+			readonly msdyn_Account: string;
+			/** If active parent alerts exist for the customer asset */
+			readonly msdyn_alert: string;
+			/** Count of parent alerts for this customer asset */
+			readonly msdyn_alertcount: string;
+			/** Last Updated time of rollup field Alert Count. */
+			readonly msdyn_alertcount_Date_UtcDateAndTime: string;
+			/** State of rollup field Alert Count. */
+			readonly msdyn_alertcount_State: string;
+			/** The category of the customer asset */
+			readonly msdyn_CustomerAssetCategory: string;
+			/** Shows the entity instances. */
+			readonly msdyn_customerassetId: string;
+			/** Device ID used to register with the IoT provider. This will not be used if there are two or more connected devices for this asset. This value will be updated based on the connected devices. */
+			readonly msdyn_DeviceId: string;
+			readonly msdyn_FunctionalLocation: string;
+			readonly msdyn_LastAlertTime_UtcDateAndTime: string;
+			/** Last Updated time of rollup field Last active alert time. */
+			readonly msdyn_LastAlertTime_Date_UtcDateAndTime: string;
+			/** State of rollup field Last active alert time. */
+			readonly msdyn_LastAlertTime_State: string;
+			/** The last command sent to any of the connected devices for this asset. */
+			readonly msdyn_LastCommandSent: string;
+			/** The timestamp of the last command sent for any of the connected devices for this asset. */
+			readonly msdyn_LastCommandSentTime_UtcDateOnly: string;
+			readonly msdyn_Latitude: string;
+			readonly msdyn_Longitude: string;
+			/** Top-Level Asset, (if this asset is a sub asset) */
+			readonly msdyn_MasterAsset: string;
+			/** Enter the name of the custom entity. */
+			readonly msdyn_name: string;
+			/** Parent Asset */
+			readonly msdyn_ParentAsset: string;
+			/** Reference to Product associated with this Asset */
+			readonly msdyn_Product: string;
+			/** A status field that denotes whether all the devices connected to this asset are registered with the IoT provider. */
+			readonly msdyn_RegistrationStatus: string;
+			/** Indicates a link to the Work Order Product from where this Asset was auto created by the system. */
+			readonly msdyn_WorkOrderProduct: string;
+			/** Shows the date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the Customer Asset */
+			readonly statecode: string;
+			/** Reason for the status of the Customer Asset */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Shows the time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -411,6 +489,8 @@ declare namespace OptionSet {
 			Unknown,
 			/** 192350001 */
 			Unregistered
+		}
+		enum OwnerIdType {
 		}
 		enum statecode {
 			/** 0 */
@@ -442,4 +522,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

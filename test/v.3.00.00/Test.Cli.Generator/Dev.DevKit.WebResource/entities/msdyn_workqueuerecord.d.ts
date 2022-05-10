@@ -113,6 +113,66 @@ declare namespace DevKit {
 		msdyn_sequencestepid: string;
 		/** Unique identifier for entity instances. */
 		msdyn_workqueuerecordId: string;
+		readonly FormattedValue: {
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Display Attributes */
+			readonly msdyn_displayattributes: string;
+			/** Next activity or Sequence step due time */
+			readonly msdyn_duetime_UtcDateAndTime: string;
+			/** Activity End time */
+			readonly msdyn_endtime_UtcDateAndTime: string;
+			/** Set Name of Entity. */
+			readonly msdyn_entitysetname: string;
+			/** Entity Type code for this entity. */
+			readonly msdyn_entitytypecode: string;
+			/** Display Name of Entity Type. */
+			readonly msdyn_entitytypedisplayname: string;
+			/** Logical Name of Entity Type. */
+			readonly msdyn_entitytypelogicalname: string;
+			/** Fields added for performing client side custom filtering. */
+			readonly msdyn_filterattributes: string;
+			/** Unique identifier of the activity linked to the sequence step */
+			readonly msdyn_linkedactivityid: string;
+			/** Next action error state for this record. */
+			readonly msdyn_nextactionerrorstate: string;
+			/** GUID for next action id. */
+			readonly msdyn_nextactionid: string;
+			/** Next action name from Sequence/Activity. */
+			readonly msdyn_nextactionname: string;
+			/** Source name for action from Sequence or Activity. */
+			readonly msdyn_nextactionsource: string;
+			/** Display Name for Next Action Sub Type. */
+			readonly msdyn_nextactionsubtype: string;
+			/** Activity Name or Sequence step like Email, Phone Call, Task etc. */
+			readonly msdyn_nextactiontype: string;
+			/** Display Name for Next Action Type. */
+			readonly msdyn_nextactiontypedisplayname: string;
+			/** Next action wait state for this record. */
+			readonly msdyn_nextactionwaitstate: string;
+			/** Sequence Operation Parameter. */
+			readonly msdyn_operationparameter: string;
+			/** Unique ID for entity record. */
+			readonly msdyn_primaryentityid: string;
+			/** Name of the entity for the related workqueue record. */
+			readonly msdyn_primaryname: string;
+			/** Priority grade for primary entity. */
+			readonly msdyn_prioritygrade: string;
+			/** Priority score for primary entity. */
+			readonly msdyn_priorityscore: string;
+			/** GUID of sequence id. */
+			readonly msdyn_sequenceid: string;
+			/** Name of the Sequence */
+			readonly msdyn_sequencename: string;
+			/** GUID of sequence step id. */
+			readonly msdyn_sequencestepid: string;
+			/** Unique identifier for entity instances. */
+			readonly msdyn_workqueuerecordId: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -135,4 +195,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

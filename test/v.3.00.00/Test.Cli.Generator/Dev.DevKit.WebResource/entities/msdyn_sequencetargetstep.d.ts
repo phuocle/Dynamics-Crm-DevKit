@@ -124,6 +124,75 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Date and time when the record was marked completed. */
+			readonly msdyn_completedon_UtcDateAndTime: string;
+			/** Shows which msdyn_sequencestep_type this was before it was converted to current step type */
+			readonly msdyn_convertedtomanualfrom: string;
+			/** Description for Sequence target step */
+			readonly msdyn_description: string;
+			/** Actual due time for Sequence target step */
+			readonly msdyn_duetime_UtcDateAndTime: string;
+			/** Select the error state for sequence step */
+			readonly msdyn_errorstate: string;
+			/** Unique identifier of the activity linked to the sequence step */
+			readonly msdyn_linkedactivityid: string;
+			/** The name of the Sequence Target step entity. */
+			readonly msdyn_name: string;
+			/** Parameter for operation in Sequence target step */
+			readonly msdyn_operationparameter: string;
+			/** Sequence proposed due time for Sequence target step */
+			readonly msdyn_sequenceduetime_UtcDateAndTime: string;
+			/** Unique Identifier for step in Sequence entity */
+			readonly msdyn_sequencestepId: string;
+			/** Related Sequence Target */
+			readonly msdyn_sequencetarget: string;
+			/** Unique identifier for entity Sequence Target Step */
+			readonly msdyn_sequencetargetstepId: string;
+			/** Number of times sequence step is snoozed. */
+			readonly msdyn_snoozecount: string;
+			/** Shows the sub type of sequence target step */
+			readonly msdyn_subtype: string;
+			readonly msdyn_type: string;
+			/** Select whether wait step is pending or skipped */
+			readonly msdyn_waitstate: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the Sequence Target Step */
+			readonly statecode: string;
+			/** Reason for the status of the Sequence Target Step */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -192,6 +261,8 @@ declare namespace OptionSet {
 			/** 3 */
 			Waiting_for_update
 		}
+		enum OwnerIdType {
+		}
 		enum statecode {
 			/** 0 */
 			Active,
@@ -226,4 +297,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

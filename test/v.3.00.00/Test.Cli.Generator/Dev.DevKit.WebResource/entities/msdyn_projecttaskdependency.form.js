@@ -44,6 +44,8 @@ var OptionSet;
 			Start_to_Finish: 192350004,
 			Start_to_Start: 192350001
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

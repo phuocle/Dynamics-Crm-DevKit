@@ -39,6 +39,18 @@ declare namespace DevKit {
 		/** Unique identifier for entity instances */
 		ProvisionLanguageForUserId: string;
 		UserId: string;
+		readonly FormattedValue: {
+			readonly AsyncOperationId: string;
+			readonly Lcid: string;
+			/** The name of the custom entity. */
+			readonly Name: string;
+			readonly OperationStatus: string;
+			/** Unique identifier for the organization */
+			readonly OrganizationId: string;
+			/** Unique identifier for entity instances */
+			readonly ProvisionLanguageForUserId: string;
+			readonly UserId: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -71,4 +83,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

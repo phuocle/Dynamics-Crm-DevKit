@@ -62,6 +62,41 @@ declare namespace DevKit {
 		UserFiscalCalendarId: string;
 		/** Time zone code that was in use when the record was created. */
 		UTCConversionTimeZoneCode: number;
+		readonly FormattedValue: {
+			readonly BusinessUnitId: string;
+			/** Unique identifier of the user who created the quota for the annual fiscal calendar. */
+			readonly CreatedBy: string;
+			/** Date and time when the quota for the annual fiscal calendar was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the annualfiscalcalendar. */
+			readonly CreatedOnBehalfBy: string;
+			/** Date and time when the fiscal calendar sales quota takes effect. */
+			readonly EffectiveOn_UtcDateOnly: string;
+			/** Exchange rate for the currency associated with the annual fiscal calendar with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Type of fiscal period used in the sales quota. */
+			readonly FiscalPeriodType: string;
+			/** Unique identifier of the user who last modified the quota for the annual fiscal calendar. */
+			readonly ModifiedBy: string;
+			/** Date and time when the annual fiscal calendar was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the annualfiscalcalendar. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Sales quota for the first period in the fiscal year. */
+			readonly Period1: string;
+			/** Base currency equivalent of the sales quota for the first period in the fiscal year. */
+			readonly Period1_Base: string;
+			/** Unique identifier of the sales person associated with the sales quota. */
+			readonly SalesPersonId: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Unique identifier of the currency associated with the annual fiscal calendar. */
+			readonly TransactionCurrencyId: string;
+			/** Unique identifier of the user associated with the annual fiscal calendar. */
+			readonly UserFiscalCalendarId: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -84,4 +119,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

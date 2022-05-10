@@ -51,6 +51,8 @@ var OptionSet;
 			Success: 100000001,
 			Warning: 100000003
 		},
+		OwnerIdType : {
+		},
 		Priority : {
 			High: 200000001,
 			Normal: 200000000

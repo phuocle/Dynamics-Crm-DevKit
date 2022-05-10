@@ -93,6 +93,72 @@ declare namespace DevKit {
 		readonly SolutionId: string;
 		/** For internal use only. */
 		readonly SupportingSolutionId: string;
+		readonly FormattedValue: {
+			/** Enter the position of this NavigationSetting as it should appear within its group in the Advanced Setup menu. */
+			readonly AdvancedSettingOrder: string;
+			/** Enter the App Config record that this Navigation Setting is associated with. */
+			readonly AppConfigId: string;
+			/** For system use only. */
+			readonly AppConfigIdUnique: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Shows who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics CRM options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Type a description that describes that Navigation Setting in detail. */
+			readonly Description: string;
+			/** Type the name of the group represented by this Navigation Setting record. */
+			readonly GroupName: string;
+			/** The web resource identifier of the icon to be used for a navigation setting area or sub area. */
+			readonly IconResourceId: string;
+			/** Unique identifier of the data import or data migration that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Version in which the similarity rule is introduced. */
+			readonly IntroducedVersion: string;
+			/** For internal use only. */
+			readonly IsManaged: string;
+			/** Shows who last updated the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics CRM options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who last updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Type a title or name that describes the Navigation Setting so it can be identified in Dynamics CRM views. */
+			readonly Name: string;
+			/** Identifies a single setting page or group of pages configured for use in a single app. */
+			readonly NavigationSettingId: string;
+			/** For system use only. */
+			readonly NavigationSettingIdUnique: string;
+			/** Enter the Object Type Code of the entity associated whose page this Navigation Setting record represents. */
+			readonly ObjectTypeCode: string;
+			/** System-populated field that identifies the organization that owns this Navigation Setting record. */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Type the URL which locates the page associated with this Navigation Setting record. */
+			readonly PageUrl: string;
+			/** The Navigation Setting record that represents the group that this record belongs to. */
+			readonly ParentNavigationSettingId: string;
+			/** Enter the Privilege Mask for the entity associated with this navigation setting page that will be the minimum requirement for the page to be made available to a user. */
+			readonly Privileges: string;
+			/** Select the setup completion level for this Navigation Setting page. */
+			readonly ProgressState: string;
+			/** Enter the position of this NavigationSetting as it should appear in the Quick Setup menu. */
+			readonly QuickSettingOrder: string;
+			/** The Web Resource that will be associated with this Navigation Setting record. */
+			readonly ResourceId: string;
+			/** Select the type of group this Navigation Setting record represents. This determines which of the three in-app customization menus will contain this group. */
+			readonly SettingType: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -135,4 +201,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

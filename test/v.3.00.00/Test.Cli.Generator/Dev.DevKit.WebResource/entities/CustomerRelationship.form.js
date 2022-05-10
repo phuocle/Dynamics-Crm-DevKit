@@ -45,6 +45,12 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.CustomerRelationship = {
+		CustomerIdType : {
+		},
+		OwnerIdType : {
+		},
+		PartnerIdType : {
+		},
 		RollupState : {
 			NotCalculated: 0,
 			Calculated: 1,

@@ -1,6 +1,34 @@
 ﻿//@ts-check
 ///<reference path="devkit.d.ts" />
 declare namespace DevKit {
+	namespace Formmsdyn_occhannelapimethodmapping_Information {
+		interface Tabs {
+		}
+		interface Body {
+			/** The name of the custom entity. */
+			msdyn_name: DevKit.Controls.String;
+			/** Owner Id */
+			OwnerId: DevKit.Controls.Lookup;
+		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
+	}
+	class Formmsdyn_occhannelapimethodmapping_Information extends DevKit.IForm {
+		/**
+		* Information [Main Form]
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form msdyn_occhannelapimethodmapping_Information */
+		Body: DevKit.Formmsdyn_occhannelapimethodmapping_Information.Body;
+		/** The Process of form msdyn_occhannelapimethodmapping_Information */
+		Process: DevKit.Formmsdyn_occhannelapimethodmapping_Information.Process;
+		/** The SidePanes of form msdyn_occhannelapimethodmapping_Information */
+		SidePanes: DevKit.SidePanes;
+	}
 	class msdyn_occhannelapimethodmappingApi {
 		/**
 		* DynamicsCrm.DevKit msdyn_occhannelapimethodmappingApi
@@ -75,11 +103,61 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Channel field of the channel api mapping entity */
+			readonly msdyn_channel: string;
+			/** Mapped to entity name of the mapping */
+			readonly msdyn_mappedtoentityname: string;
+			/** Method name of the mapping */
+			readonly msdyn_methodname: string;
+			/** The name of the custom entity. */
+			readonly msdyn_name: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_occhannelapimethodmappingId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the Channel api method mapping */
+			readonly statecode: string;
+			/** Reason for the status of the Channel api method mapping */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace msdyn_occhannelapimethodmapping {
 		enum msdyn_channel {
+			/** 192450000 */
+			Apple_Messages_for_Business,
 			/** 192390000 */
 			Co_browse,
 			/** 192350002 */
@@ -108,6 +186,8 @@ declare namespace OptionSet {
 			WeChat,
 			/** 192300000 */
 			WhatsApp
+		}
+		enum OwnerIdType {
 		}
 		enum statecode {
 			/** 0 */
@@ -139,4 +219,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

@@ -342,6 +342,123 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the account with which the contract is associated. */
+			readonly AccountId: string;
+			/** Enter the date when the contract becomes active. */
+			readonly ActiveOn_UtcDateOnly: string;
+			/** Type of allotment that the contract supports. */
+			readonly AllotmentTypeCode: string;
+			/** Unique identifier of the account to which the contract is to be billed. */
+			readonly BillingAccountId: string;
+			/** Unique identifier of the contact to whom the contract is to be billed. */
+			readonly BillingContactId: string;
+			/** Select the customer account or contact to which the contract should be billed to provide a quick link to address and other customer details. */
+			readonly billingcustomerid_account: string;
+			/** Select the customer account or contact to which the contract should be billed to provide a quick link to address and other customer details. */
+			readonly billingcustomerid_contact: string;
+			/** Enter the end date for the contract's billing period to indicate the period for which the customer must pay for a service. */
+			readonly BillingEndOn_UtcDateOnly: string;
+			/** Select the billing schedule of the contract to indicate how often the customer should be invoiced. */
+			readonly BillingFrequencyCode: string;
+			/** Enter the start date for the contract's billing period to indicate the period for which the customer must pay for a service. This defaults to the same date that is selected in the Contract Start Date field. */
+			readonly BillingStartOn_UtcDateOnly: string;
+			/** Choose which address to send the invoice to. */
+			readonly BillToAddress: string;
+			/** Shows the date and time when the contract was canceled. */
+			readonly CancelOn_UtcDateOnly: string;
+			/** Unique identifier of the contact specified for the contract. */
+			readonly ContactId: string;
+			/** Unique identifier of the contract. */
+			readonly ContractId: string;
+			/** Type additional information about the contract, such as the products or services provided to the customer. */
+			readonly ContractLanguage: string;
+			/** Shows the number for the contract for customer reference and searching capabilities. You cannot modify this number. */
+			readonly ContractNumber: string;
+			/** Select the level of service that should be provided for the contract based on your company's definition of bronze, silver, or gold. */
+			readonly ContractServiceLevelCode: string;
+			/** Shows the abbreviation of the contract template selected when the contract is created. */
+			readonly ContractTemplateAbbreviation: string;
+			/** Choose the contract template that should be used to determine the terms of the contract, such as allotment type, available hours, and billing frequency. */
+			readonly ContractTemplateId: string;
+			/** Shows who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Select the customer account or contact to provide a quick link to additional customer details, such as address, phone number, activities, and orders. */
+			readonly customerid_account: string;
+			/** Select the customer account or contact to provide a quick link to additional customer details, such as address, phone number, activities, and orders. */
+			readonly customerid_contact: string;
+			/** Shows for the duration of the contract, in days, based on the contract start and end dates. */
+			readonly Duration: string;
+			/** Days of the week and times during which customer service support is available for the duration of the contract. */
+			readonly EffectivityCalendar: string;
+			/** The primary email address for the entity. */
+			readonly EmailAddress: string;
+			/** The default image for the entity. */
+			readonly EntityImage: string;
+			readonly EntityImage_Timestamp: string;
+			readonly EntityImage_URL: string;
+			readonly EntityImageId: string;
+			/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
+			readonly ExchangeRate: string;
+			/** Enter the date when the contract expires. */
+			readonly ExpiresOn_UtcDateOnly: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Shows who last updated the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who last updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Shows the total charge to the customer for the service contract, calculated as the sum of values in the Net field for each existing contract line related to the contract. */
+			readonly NetPrice: string;
+			/** Value of the Net Price in base currency. */
+			readonly NetPrice_Base: string;
+			/** Choose the original contract that this contract was created from. This information is used to track renewal history. */
+			readonly OriginatingContract: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Choose the address for the customer account or contact where the services are provided. */
+			readonly ServiceAddress: string;
+			/** Shows whether the contract is in draft, invoiced, active, on hold, canceled, or expired. You can edit only the contracts that are in draft status. */
+			readonly StateCode: string;
+			/** Select the contract's status. */
+			readonly StatusCode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Type a title or name for the contract that indicates the purpose of the contract. */
+			readonly Title: string;
+			/** Shows the total discount applied to the contract's service charges, calculated as the sum of values in the Discount fields for each existing contract line related to the contract. */
+			readonly TotalDiscount: string;
+			/** Value of the Total Discount in base currency. */
+			readonly TotalDiscount_Base: string;
+			/** Shows the total service charge for the contract, before any discounts are credited. This is calculated as the sum of values in the Total Price field for each existing contract line related to the contract. */
+			readonly TotalPrice: string;
+			/** Value of the Total Price in base currency. */
+			readonly TotalPrice_Base: string;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			readonly TransactionCurrencyId: string;
+			/** Select whether the discounts entered on contract lines for this contract should be entered as a percentage or a fixed dollar value. */
+			readonly UseDiscountAsPercentage: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -353,6 +470,8 @@ declare namespace OptionSet {
 			Number_of_Cases,
 			/** 2 */
 			Time
+		}
+		enum BillingCustomerIdType {
 		}
 		enum BillingFrequencyCode {
 			/** 5 */
@@ -373,6 +492,10 @@ declare namespace OptionSet {
 			Gold,
 			/** 2 */
 			Silver
+		}
+		enum CustomerIdType {
+		}
+		enum OwnerIdType {
 		}
 		enum StateCode {
 			/** 2 */
@@ -420,4 +543,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

@@ -205,6 +205,93 @@ declare namespace DevKit {
 		readonly UsedCount: number;
 		/** Version number of the template. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Body text of the email template. */
+			readonly Body: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier of the user who created the email template. */
+			readonly CreatedBy: string;
+			/** Date and time when the email template was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the template. */
+			readonly CreatedOnBehalfBy: string;
+			/** Description of the email template. */
+			readonly Description: string;
+			/** Shows the default image for the record. */
+			readonly EntityImage: string;
+			readonly EntityImage_Timestamp: string;
+			readonly EntityImage_URL: string;
+			readonly EntityImageId: string;
+			/** For internal use only. */
+			readonly GenerationTypeCode: string;
+			/** Unique identifier of the data import or data migration that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Version in which the form is introduced. */
+			readonly IntroducedVersion: string;
+			/** Information that specifies whether this component can be customized. */
+			readonly IsCustomizable: string;
+			/** Indicates whether the solution component is part of a managed solution. */
+			readonly IsManaged: string;
+			/** Information about whether the template is personal or is available to all users. */
+			readonly IsPersonal: string;
+			/** Indicates if a template is recommended by Dynamics 365. */
+			readonly IsRecommended: string;
+			/** Language of the email template. */
+			readonly LanguageCode: string;
+			/** MIME type of the email template. */
+			readonly MimeType: string;
+			/** Unique identifier of the user who last modified the template. */
+			readonly ModifiedBy: string;
+			/** Date and time when the email template was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the template. */
+			readonly ModifiedOnBehalfBy: string;
+			/** For internal use only. Shows the number of times emails that use this template have been opened. */
+			readonly OpenCount: string;
+			/** Shows the open rate of this template. This is based on number of opens on followed emails that use this template. */
+			readonly OpenRate: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier of the business unit that owns the template. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the team who owns the template. */
+			readonly OwningTeam: string;
+			/** Unique identifier of the user who owns the template. */
+			readonly OwningUser: string;
+			/** XML data for the body of the email template. */
+			readonly PresentationXml: string;
+			/** For internal use only. Shows the number of times emails that use this template have received replies. */
+			readonly ReplyCount: string;
+			/** Shows the reply rate for this template. This is based on number of replies received on followed emails that use this template. */
+			readonly ReplyRate: string;
+			/** Safe html of email template. */
+			readonly SafeHtml: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** Subject associated with the email template. */
+			readonly Subject: string;
+			/** XML data for the subject of the email template. */
+			readonly SubjectPresentationXml: string;
+			/** Safe html of email template subject. */
+			readonly SubjectSafeHtml: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** Unique identifier of the template. */
+			readonly TemplateId: string;
+			/** For internal use only. */
+			readonly TemplateIdUnique: string;
+			/** Title of the template. */
+			readonly Title: string;
+			/** Shows the number of sent emails that use this template. */
+			readonly UsedCount: string;
+			/** Version number of the template. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -218,6 +305,8 @@ declare namespace OptionSet {
 			Published,
 			/** 1 */
 			Unpublished
+		}
+		enum OwnerIdType {
 		}
 		enum TemplateTypeCode {
 			/** 1 */
@@ -267,4 +356,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

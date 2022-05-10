@@ -113,10 +113,70 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Shows the data value at which an error occurred during the quick campaign. */
+			readonly AdditionalInfo: string;
+			/** Shows the quick campaign record that the log applies to. This information is used to relate log data to the parent quick campaign. */
+			readonly BulkOperationId: string;
+			/** Unique identifier of the bulk operation log. */
+			readonly BulkOperationLogId: string;
+			/** Shows the campaign activity record that the log applies to. This information is used to relate log data to the parent campaign activity. */
+			readonly CampaignActivityId: string;
+			/** Choose the activity or other item created by the bulk operation. */
+			readonly createdobjectid_account: string;
+			/** Choose the activity or other item created by the bulk operation. */
+			readonly createdobjectid_activitypointer: string;
+			/** Choose the activity or other item created by the bulk operation. */
+			readonly createdobjectid_contact: string;
+			/** Choose the activity or other item created by the bulk operation. */
+			readonly createdobjectid_lead: string;
+			/** Choose the activity or other item created by the bulk operation. */
+			readonly createdobjectid_opportunity: string;
+			/** The error description formatted. */
+			readonly ErrorDescriptionFormatted: string;
+			/** Shows the error code that is used to troubleshoot issues in the bulk operation. */
+			readonly ErrorNumber: string;
+			/** The error number formatted. */
+			readonly ErrorNumberFormatted: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** name */
+			readonly Name: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Choose the account, contact, lead, or list that the bulk operation log item applies to. */
+			readonly regardingobjectid_account: string;
+			/** Choose the account, contact, lead, or list that the bulk operation log item applies to. */
+			readonly regardingobjectid_contact: string;
+			/** Choose the account, contact, lead, or list that the bulk operation log item applies to. */
+			readonly regardingobjectid_lead: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace BulkOperationLog {
+		enum BulkOperationIdType {
+		}
+		enum CampaignActivityIdType {
+		}
+		enum CreatedObjectIdTypeCode {
+		}
+		enum OwnerIdType {
+		}
+		enum RegardingObjectIdTypeCode {
+		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
 			NotCalculated,
@@ -135,4 +195,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

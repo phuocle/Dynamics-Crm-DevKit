@@ -68,6 +68,8 @@ var OptionSet;
 			Solution: 192350000,
 			View: 192350002
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

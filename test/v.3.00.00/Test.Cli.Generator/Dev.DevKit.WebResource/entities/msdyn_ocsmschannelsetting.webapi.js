@@ -80,9 +80,13 @@ var DevKit;
 			msdyn_operatinghourid: { b: 'msdyn_operatinghourid', a: '_msdyn_operatinghourid_value', c: 'msdyn_operatinghours', d: 'msdyn_operatinghour' },
 			msdyn_PhoneNumberId: { b: 'msdyn_PhoneNumberId', a: '_msdyn_phonenumberid_value', c: 'msdyn_ocphonenumbers', d: 'msdyn_ocphonenumber' },
 			msdyn_postconversationsurvey: { b: 'msdyn_postconversationsurvey', a: '_msdyn_postconversationsurvey_value', c: 'msfp_surveies', d: 'msfp_survey' },
+			msdyn_postconversationsurveybotsurvey: { a: 'msdyn_postconversationsurveybotsurvey' },
+			msdyn_postconversationsurveybotsurveymessagetext: { a: 'msdyn_postconversationsurveybotsurveymessagetext' },
+			msdyn_postconversationsurveybotsurveymode: { a: 'msdyn_postconversationsurveybotsurveymode' },
 			msdyn_postconversationsurveyenable: { a: 'msdyn_postconversationsurveyenable' },
 			msdyn_postconversationsurveymessagetext: { a: 'msdyn_postconversationsurveymessagetext' },
 			msdyn_postconversationsurveymode: { a: 'msdyn_postconversationsurveymode' },
+			msdyn_postconversationsurveyseparatebotsurvey: { b: 'msdyn_postconversationsurveyseparatebotsurvey', a: '_msdyn_postconversationsurveyseparatebotsurvey_value', c: 'msfp_surveies', d: 'msfp_survey' },
 			OrganizationId: { b: 'organizationid', a: '_organizationid_value', c: 'organizations', d: 'organization', r: true },
 			OverriddenCreatedOn_UtcDateOnly: { a: 'overriddencreatedon' },
 			statecode: { a: 'statecode' },
@@ -120,7 +124,7 @@ var DevKit;
 		}
 		msdyn_ocsmschannelsetting.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -134,6 +138,10 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.msdyn_ocsmschannelsetting = {
+		msdyn_postconversationsurveybotsurveymode : {
+			Insert_survey_in_conversation: 192350000,
+			Send_survey_link_to_conversation: 192350001
+		},
 		msdyn_postconversationsurveymode : {
 			Insert_survey_in_conversation: 192350000,
 			Send_survey_link_to_conversation: 192350001

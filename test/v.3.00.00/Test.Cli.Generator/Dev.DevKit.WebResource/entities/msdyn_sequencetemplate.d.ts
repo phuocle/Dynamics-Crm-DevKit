@@ -1,6 +1,45 @@
 ﻿//@ts-check
 ///<reference path="devkit.d.ts" />
 declare namespace DevKit {
+	namespace Formmsdyn_sequencetemplate_Information {
+		interface Tabs {
+		}
+		interface Body {
+			/** Sequence definition Old */
+			msdyn_definition: DevKit.Controls.String;
+			/** Sequence definition */
+			msdyn_definitionnew: DevKit.Controls.String;
+			/** Description */
+			msdyn_description: DevKit.Controls.String;
+			msdyn_language: DevKit.Controls.OptionSet;
+			/** Maximum number of days to complete the sequence */
+			msdyn_maxduration: DevKit.Controls.String;
+			/** The max step count for the sequence. */
+			msdyn_maxstepcount: DevKit.Controls.Integer;
+			/** The name of the custom entity. */
+			msdyn_name: DevKit.Controls.String;
+			/** Owner Id */
+			OwnerId: DevKit.Controls.Lookup;
+		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
+	}
+	class Formmsdyn_sequencetemplate_Information extends DevKit.IForm {
+		/**
+		* Information [Main Form]
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form msdyn_sequencetemplate_Information */
+		Body: DevKit.Formmsdyn_sequencetemplate_Information.Body;
+		/** The Process of form msdyn_sequencetemplate_Information */
+		Process: DevKit.Formmsdyn_sequencetemplate_Information.Process;
+		/** The SidePanes of form msdyn_sequencetemplate_Information */
+		SidePanes: DevKit.SidePanes;
+	}
 	class msdyn_sequencetemplateApi {
 		/**
 		* DynamicsCrm.DevKit msdyn_sequencetemplateApi
@@ -43,10 +82,14 @@ declare namespace DevKit {
 		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
 		readonly ModifiedOnBehalfBy: string;
-		/** CJO Definition */
+		/** CJO Definition Old */
 		msdyn_cjodefinition: string;
-		/** Sequence definition */
+		/** CJO Definition */
+		msdyn_cjodefinitionnew: string;
+		/** Sequence definition Old */
 		msdyn_definition: string;
+		/** Sequence definition */
+		msdyn_definitionnew: string;
 		/** Description */
 		msdyn_description: string;
 		msdyn_language: OptionSet.msdyn_sequencetemplate.msdyn_language;
@@ -54,8 +97,14 @@ declare namespace DevKit {
 		msdyn_maxduration: string;
 		/** The max step count for the sequence. */
 		msdyn_maxstepcount: number;
+		/** Maximum number of days to complete the sequence */
+		msdyn_maxstepcounttext: string;
 		/** The name of the custom entity. */
 		msdyn_name: string;
+		/** The display name information about record to which this sequence could be associated */
+		msdyn_prefferedregardingentitydisplayname: string;
+		/** The logical name of regarding entity */
+		msdyn_prefferedregardingEntityName: string;
 		/** Unique identifier for entity instances */
 		msdyn_sequencetemplateId: string;
 		/** Date and time that the record was migrated. */
@@ -80,6 +129,69 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** CJO Definition Old */
+			readonly msdyn_cjodefinition: string;
+			/** CJO Definition */
+			readonly msdyn_cjodefinitionnew: string;
+			/** Sequence definition Old */
+			readonly msdyn_definition: string;
+			/** Sequence definition */
+			readonly msdyn_definitionnew: string;
+			/** Description */
+			readonly msdyn_description: string;
+			readonly msdyn_language: string;
+			/** Maximum number of days to complete the sequence */
+			readonly msdyn_maxduration: string;
+			/** The max step count for the sequence. */
+			readonly msdyn_maxstepcount: string;
+			/** Maximum number of days to complete the sequence */
+			readonly msdyn_maxstepcounttext: string;
+			/** The name of the custom entity. */
+			readonly msdyn_name: string;
+			/** The display name information about record to which this sequence could be associated */
+			readonly msdyn_prefferedregardingentitydisplayname: string;
+			/** The logical name of regarding entity */
+			readonly msdyn_prefferedregardingEntityName: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_sequencetemplateId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the Sequence Template */
+			readonly statecode: string;
+			/** Reason for the status of the Sequence Template */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -176,6 +288,8 @@ declare namespace OptionSet {
 			/** 1066 */
 			Vietnamese_Vietnam
 		}
+		enum OwnerIdType {
+		}
 		enum statecode {
 			/** 0 */
 			Active,
@@ -206,4 +320,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

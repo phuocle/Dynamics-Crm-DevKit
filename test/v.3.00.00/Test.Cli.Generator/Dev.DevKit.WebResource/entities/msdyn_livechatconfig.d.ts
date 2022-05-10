@@ -337,12 +337,18 @@ declare namespace DevKit {
 		msdyn_PostConversationSurvey: string;
 		/** Enable or disable bot survey */
 		msdyn_PostConversationSurveyBotSurvey: boolean;
+		/** Prefix text for survey link message that will be sent to the user. */
+		msdyn_PostConversationSurveyBotSurveyMessageText: string;
+		/** Mode of the survey to be sent */
+		msdyn_PostConversationSurveyBotSurveyMode: OptionSet.msdyn_livechatconfig.msdyn_PostConversationSurveyBotSurveyMode;
 		/** To enable or disable post conversation survey */
 		msdyn_PostConversationSurveyEnable: boolean;
 		/** Prefix text for survey link message that will be sent to the user. */
 		msdyn_PostConversationSurveyMessageText: string;
 		/** Mode of the survey to be sent */
 		msdyn_PostConversationSurveyMode: OptionSet.msdyn_livechatconfig.msdyn_PostConversationSurveyMode;
+		/** Lookup to Dynamics 365 Customer Voice survey field */
+		msdyn_PostConversationSurveySeparateBotSurvey: string;
 		/** Enable Pre-chat survey feature */
 		msdyn_PrechatEnabled: boolean;
 		/** Prechat Question set for authenticated users */
@@ -403,6 +409,164 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Configure agent name to be displayed in the chat widget */
+			readonly msdyn_agentDisplayName: string;
+			/** Unique identifier for Authentication settings associated with Chat widget. */
+			readonly msdyn_AuthsettingsId: string;
+			/** Indicates if the chat widget should automatically detect user locale. */
+			readonly msdyn_AutoDetectLanguage: string;
+			/** Chat logo */
+			readonly msdyn_avatarUrl: string;
+			/** Indicates whether display of wait time is enabled */
+			readonly msdyn_averagewaittime_enabled: string;
+			/** List of calling options available for the chat widget */
+			readonly msdyn_callingoptions: string;
+			/** Select a co-browse provider */
+			readonly msdyn_cobrowseprovider: string;
+			/** Indicates the conversation mode of the chat widget */
+			readonly msdyn_conversationmode: string;
+			/** (Deprecated) During non-operating hours */
+			readonly msdyn_Duringnonoperatinghours: string;
+			/** Email Template */
+			readonly msdyn_EmailTemplate: string;
+			/** This will let customers reconnect to their previous session. */
+			readonly msdyn_enablechatreconnect: string;
+			/** Allow download of transcript */
+			readonly msdyn_Enablechattranscriptdownload: string;
+			/** Allow email of transcript */
+			readonly msdyn_Enablechattranscriptemail: string;
+			/** Co-browse allows agent and customer to interact on the same web page in real time */
+			readonly msdyn_enablecobrowse: string;
+			/** Enable file attachments for agents */
+			readonly msdyn_Enablefileattachmentsforagents: string;
+			/** Enable file attachments for customers */
+			readonly msdyn_Enablefileattachmentsforcustomers: string;
+			/** Enable Screen sharing */
+			readonly msdyn_enablescreensharing: string;
+			/** Display Agent Generic Name */
+			readonly msdyn_genericagentdisplayname: string;
+			/** Label string indicating user to save the record to add location information */
+			readonly msdyn_infolabel: string;
+			/** Language  in which chat widget is rendered */
+			readonly msdyn_Language: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_livechatconfigId: string;
+			/** Work Stream Identifier */
+			readonly msdyn_liveworkstreamid: string;
+			/** The mailbox where your email transcripts will be sent from. */
+			readonly msdyn_Mailbox: string;
+			/** The name of the custom entity. */
+			readonly msdyn_name: string;
+			/** Geo Location Provider API Key */
+			readonly msdyn_oc_geolocationprovider: string;
+			/** The language of the chat widget. */
+			readonly msdyn_ocWidgetLanguage: string;
+			/** Description for offline widget subtitle attribute */
+			readonly msdyn_offlinewidgetsubtitle: string;
+			/** Description for offline widget theme color attribute */
+			readonly msdyn_offlinewidgetthemecolor: string;
+			/** Description for offline widget title attribute */
+			readonly msdyn_offlinewidgettitle: string;
+			/** Unique identifier for Operating hour associated with Chat widget. */
+			readonly msdyn_operatinghourid: string;
+			/** Provide a link to the web portal where your chat is hosted. */
+			readonly msdyn_portalurl: string;
+			/** Enable Position In Queue feature */
+			readonly msdyn_positioninqueue_enabled: string;
+			/** Enable Post-Chat (Deprecated) */
+			readonly msdyn_postchatenabled: string;
+			/** Lookup to Dynamics 365 Customer Voice survey field */
+			readonly msdyn_PostConversationSurvey: string;
+			/** Enable or disable bot survey */
+			readonly msdyn_PostConversationSurveyBotSurvey: string;
+			/** Prefix text for survey link message that will be sent to the user. */
+			readonly msdyn_PostConversationSurveyBotSurveyMessageText: string;
+			/** Mode of the survey to be sent */
+			readonly msdyn_PostConversationSurveyBotSurveyMode: string;
+			/** To enable or disable post conversation survey */
+			readonly msdyn_PostConversationSurveyEnable: string;
+			/** Prefix text for survey link message that will be sent to the user. */
+			readonly msdyn_PostConversationSurveyMessageText: string;
+			/** Mode of the survey to be sent */
+			readonly msdyn_PostConversationSurveyMode: string;
+			/** Lookup to Dynamics 365 Customer Voice survey field */
+			readonly msdyn_PostConversationSurveySeparateBotSurvey: string;
+			/** Enable Pre-chat survey feature */
+			readonly msdyn_PrechatEnabled: string;
+			/** Prechat Question set for authenticated users */
+			readonly msdyn_PreChatQuestionnaireAuthenticated: string;
+			/** Prechat Question set for unauthenticated users */
+			readonly msdyn_PreChatQuestionnaireUnauthenticated: string;
+			/** Enable Proactive chat for this chat widget */
+			readonly msdyn_proactivechatenabled: string;
+			/** We'll redirect customers to this webpage. */
+			readonly msdyn_redirectionurl: string;
+			/** Enable Visitor Location Feature */
+			readonly msdyn_requestvisitorlocation: string;
+			/** Select a screen sharing provider */
+			readonly msdyn_screensharingprovider: string;
+			/** Agent Display Name configuration for the chat widget */
+			readonly msdyn_showagentname: string;
+			/** Description for show/hide offline widget attribute */
+			readonly msdyn_Showwidgetduringofflinehours: string;
+			/** The previous agent's capacity will be held for this time period. */
+			readonly msdyn_timetoreconnectwithpreviousagent: string;
+			/** Widget App Identifier used to identify the chat widget */
+			readonly msdyn_widgetAppId: string;
+			/** The language of the chat widget. */
+			readonly msdyn_WidgetLocale: string;
+			/** Chat position relative to the page */
+			readonly msdyn_widgetPosition: string;
+			/** Javascript snippet which can be embedded in a webpage */
+			readonly msdyn_WidgetSnippet: string;
+			/** Enable sound notifications for new incoming messages */
+			readonly msdyn_widgetsoundnotification: string;
+			/** Subtitle for the chat widget */
+			readonly msdyn_widgetSubtitle: string;
+			/** Theme color for the chat widget */
+			readonly msdyn_widgetThemeColor: string;
+			/** Title for the chat widget */
+			readonly msdyn_widgetTitle: string;
+			/** Enable visual indicators for unread messages */
+			readonly msdyn_widgetvisualnotification: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the Chat widget */
+			readonly statecode: string;
+			/** Reason for the status of the Chat widget */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -463,6 +627,12 @@ declare namespace OptionSet {
 			/** 192350004 */
 			Violet
 		}
+		enum msdyn_PostConversationSurveyBotSurveyMode {
+			/** 192350000 */
+			Insert_survey_in_conversation,
+			/** 192350001 */
+			Send_survey_link_to_conversation
+		}
 		enum msdyn_PostConversationSurveyMode {
 			/** 192350000 */
 			Insert_survey_in_conversation,
@@ -501,6 +671,8 @@ declare namespace OptionSet {
 			/** 192350004 */
 			Violet
 		}
+		enum OwnerIdType {
+		}
 		enum statecode {
 			/** 0 */
 			Active,
@@ -531,4 +703,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

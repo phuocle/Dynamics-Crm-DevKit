@@ -120,6 +120,62 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Type of the Component being diagnosed like appmodule, sitemap, systemform etc. */
+			readonly msdyn_ComponentType: string;
+			/** Rule description. */
+			readonly msdyn_Description: string;
+			/** The name of the custom entity. */
+			readonly msdyn_name: string;
+			readonly msdyn_OwningSolutionId: string;
+			readonly msdyn_ResolutionAction: string;
+			/** This message will be visible to end use when he/she tried to resolve rule failure. */
+			readonly msdyn_resolutionmessage: string;
+			/** Type of Resolution action. */
+			readonly msdyn_ResolutionType: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_solutionhealthruleId: string;
+			/** Rule set to which the rule belongs to. */
+			readonly msdyn_solutionhealthrulesetId: string;
+			readonly msdyn_uniquename: string;
+			readonly msdyn_Workflow: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the Solution Health Rule */
+			readonly statecode: string;
+			/** Reason for the status of the Solution Health Rule */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -133,6 +189,8 @@ declare namespace OptionSet {
 			Documenation,
 			/** 192350003 */
 			None
+		}
+		enum OwnerIdType {
 		}
 		enum statecode {
 			/** 0 */
@@ -164,4 +222,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

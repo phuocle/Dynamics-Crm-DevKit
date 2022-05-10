@@ -68,6 +68,8 @@ declare namespace DevKit {
 		msdyn_MinorIterationNumber: number;
 		/** This is a file type attribute to store Ai builder Model. */
 		readonly msdyn_Model: string;
+		/** Model Action */
+		msdyn_ModelAction: string;
 		msdyn_ModelData: string;
 		msdyn_modelglobalexplainability: string;
 		msdyn_ModelPerformance: string;
@@ -115,6 +117,96 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Version in which the form is introduced. */
+			readonly IntroducedVersion: string;
+			/** Tells whether the component can be customized. */
+			readonly IsCustomizable: string;
+			/** Indicates whether the solution component is part of a managed solution. */
+			readonly IsManaged: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_AIConfigurationId: string;
+			/** For internal use only. */
+			readonly msdyn_AIConfigurationIdUnique: string;
+			/** Unique identifier for AIModel associated with AIConfiguration. */
+			readonly msdyn_AIModelId: string;
+			/** Unique identifier for Connection Reference associated with AIConfiguration. */
+			readonly msdyn_ConnectionReferenceId: string;
+			readonly msdyn_CreatedFromConfigurationId: string;
+			readonly msdyn_CustomConfiguration: string;
+			readonly msdyn_DataBinding: string;
+			readonly msdyn_lasterrors: string;
+			readonly msdyn_lasttrainorrundate_TimezoneDateAndTime: string;
+			readonly msdyn_MajorIterationNumber: string;
+			readonly msdyn_MinorIterationNumber: string;
+			/** This is a file type attribute to store Ai builder Model. */
+			readonly msdyn_Model: string;
+			/** Model Action */
+			readonly msdyn_ModelAction: string;
+			readonly msdyn_ModelData: string;
+			readonly msdyn_modelglobalexplainability: string;
+			readonly msdyn_ModelPerformance: string;
+			/** Model Provisioning Metadata */
+			readonly msdyn_ModelProvisioningMetadata: string;
+			/** Model Provisioning Status */
+			readonly msdyn_ModelProvisioningStatus: string;
+			readonly msdyn_ModelRunDataSpecification: string;
+			/** The name of the custom entity. */
+			readonly msdyn_Name: string;
+			readonly msdyn_ResourceInfo: string;
+			/** Run Configuration */
+			readonly msdyn_RunConfiguration: string;
+			readonly msdyn_SchedulingOptions: string;
+			/** Template Version */
+			readonly msdyn_TemplateVersion: string;
+			/** Unique identifier for AIConfiguration associated with AIConfiguration. */
+			readonly msdyn_TrainedModelAIConfigurationPareId: string;
+			readonly msdyn_Type: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** Status of the AIConfiguration */
+			readonly statecode: string;
+			/** Reason for the status of the AIConfiguration */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -134,6 +226,8 @@ declare namespace OptionSet {
 			RunConfiguration,
 			/** 190690000 */
 			TrainingConfiguration
+		}
+		enum OwnerIdType {
 		}
 		enum statecode {
 			/** 2 */
@@ -195,4 +289,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

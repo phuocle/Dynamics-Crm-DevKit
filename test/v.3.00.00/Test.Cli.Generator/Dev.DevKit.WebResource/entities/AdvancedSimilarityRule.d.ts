@@ -140,6 +140,64 @@ declare namespace DevKit {
 		StatusCode: OptionSet.AdvancedSimilarityRule.StatusCode;
 		/** For internal use only. */
 		readonly SupportingSolutionId: string;
+		readonly FormattedValue: {
+			/** Unique identifier for entity instances */
+			readonly AdvancedSimilarityRuleId: string;
+			/** Unique identifier of the Advanced Similarity Rule used when synchronizing customizations for the Microsoft Dynamics 365 client for Outlook */
+			readonly AdvancedSimilarityRuleIdUnique: string;
+			/** Unique identifier for AzureServiceConnection associated with AdvancedSimilarityRule. */
+			readonly AzureServiceConnectionId: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier of the user who created the Advanced Similarity Rules. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Enter a description for the Advanced Similarity Rule */
+			readonly Description: string;
+			/** entity */
+			readonly Entity1: string;
+			/** For internal use only. */
+			readonly ExactMatchList: string;
+			/** For internal use only. */
+			readonly FetchXmlList: string;
+			/** Filter Result By Status */
+			readonly FilterResultByStatus: string;
+			/** Filter Result By Status */
+			readonly FilterResultByStatusDisplayName: string;
+			/** Use Text Analytics for Target Match */
+			readonly IsAzureMLRequired: string;
+			/** Is Manageed */
+			readonly IsManaged: string;
+			/** Enter the maximum number of keywords and key phrases to use with text analytics. */
+			readonly MaxNumberKeyphrases: string;
+			/** Unique identifier of the user who modified the Advanced Similarity Rules. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the advanced similarity rules. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Type a logical name for the similarity configuration */
+			readonly name: string;
+			/** Enter the maximum number of words in a key phrase to use with text analytics. */
+			readonly NgramSize: string;
+			/** Provide noise key phrases by a semicolon ( ; ). These phrases will be filtered while searching for similar cases */
+			readonly NoiseKeyphraseslist: string;
+			/** Unique identifier of the organization associated with the advanced similarity rules */
+			readonly OrganizationId: string;
+			/** Date and time when the record was created. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** Status of the advanced similarity rules */
+			readonly StateCode: string;
+			/** Reason for the status of the advanced similarity rules */
+			readonly StatusCode: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -194,4 +252,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

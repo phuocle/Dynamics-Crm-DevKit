@@ -51,6 +51,8 @@ var OptionSet;
 			Red: 192350002,
 			Yellow: 192350001
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

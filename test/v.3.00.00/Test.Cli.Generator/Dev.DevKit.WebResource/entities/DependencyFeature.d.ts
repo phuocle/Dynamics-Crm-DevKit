@@ -45,6 +45,24 @@ declare namespace DevKit {
 		readonly SolutionId: string;
 		/** For internal use only. */
 		readonly SupportingSolutionId: string;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier of a dependency feature. */
+			readonly DependencyFeatureId: string;
+			/** For internal use only. */
+			readonly DependencyFeatureIdUnique: string;
+			/** Version in which the feature is introduced. */
+			readonly IntroducedVersion: string;
+			/** Tells whether the record is part of a managed solution. */
+			readonly IsManaged: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -77,4 +95,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

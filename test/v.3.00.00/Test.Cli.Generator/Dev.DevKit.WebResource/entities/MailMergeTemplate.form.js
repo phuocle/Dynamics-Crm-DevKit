@@ -66,6 +66,8 @@ var OptionSet;
 			Letter: 1,
 			Quotes: 5
 		},
+		OwnerIdType : {
+		},
 		StateCode : {
 			Active: 0,
 			Inactive: 1

@@ -39,6 +39,18 @@ declare namespace DevKit {
 		readonly TargetDatacenterId: string;
 		/** Unique identifier of the target object */
 		readonly TargetObjectId: string;
+		readonly FormattedValue: {
+			/** Additional data related to the replication backlog entry. For internal use only. */
+			readonly Data: string;
+			/** Unique identifier of the replication backlog entry. */
+			readonly ReplicationBacklogId: string;
+			/** The type of replication backlog. */
+			readonly ReplicationBacklogType: string;
+			/** For internal use only. */
+			readonly TargetDatacenterId: string;
+			/** Unique identifier of the target object */
+			readonly TargetObjectId: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -50,6 +62,8 @@ declare namespace OptionSet {
 			Delete,
 			/** 1 */
 			Update
+		}
+		enum TargetObjectTypeCode {
 		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
@@ -69,4 +83,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

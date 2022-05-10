@@ -51,6 +51,30 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Item that is part of expansion of resource identified by object ID. One object ID can have many item IDs. */
+			readonly ItemId: string;
+			/** Code for retrieval method. */
+			readonly MethodCode: string;
+			/** Date and time when the record was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** name */
+			readonly Name: string;
+			/** Object being expanded. */
+			readonly ObjectId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Unique identifier of the resource expansion record. */
+			readonly ResourceGroupExpansionId: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -93,4 +117,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

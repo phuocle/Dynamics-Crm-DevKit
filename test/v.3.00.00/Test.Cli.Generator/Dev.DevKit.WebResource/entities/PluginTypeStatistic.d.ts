@@ -69,6 +69,48 @@ declare namespace DevKit {
 		readonly TerminateMemoryContributionPercent: number;
 		/** The plug-in type percentage contribution to Worker process termination due to unknown reasons. */
 		readonly TerminateOtherContributionPercent: number;
+		readonly FormattedValue: {
+			/** The average execution time (in milliseconds) for the plug-in type. */
+			readonly AverageExecuteTimeInMilliseconds: string;
+			/** The plug-in type percentage contribution to crashes. */
+			readonly CrashContributionPercent: string;
+			/** Number of times the plug-in type has crashed. */
+			readonly CrashCount: string;
+			/** Percentage of crashes for the plug-in type. */
+			readonly CrashPercent: string;
+			/** Unique identifier of the user who created the plug-in type statistic. */
+			readonly CreatedBy: string;
+			/** Date and time when the plug-in type statistic was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the plug-in type statistic. */
+			readonly CreatedOnBehalfBy: string;
+			/** Number of times the plug-in type has been executed. */
+			readonly ExecuteCount: string;
+			/** Number of times the plug-in type has failed. */
+			readonly FailureCount: string;
+			/** Percentage of failures for the plug-in type. */
+			readonly FailurePercent: string;
+			/** Unique identifier of the user who last modified the plug-in type statistic. */
+			readonly ModifiedBy: string;
+			/** Date and time when the plug-in type statistic was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the plug-in type statistic. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Unique identifier of the organization with which the plug-in type statistic is associated. */
+			readonly OrganizationId: string;
+			/** Unique identifier of the plug-in type associated with this plug-in type statistic. */
+			readonly PluginTypeId: string;
+			/** Unique identifier of the plug-in type statistic. */
+			readonly PluginTypeStatisticId: string;
+			/** The plug-in type percentage contribution to Worker process termination due to excessive CPU usage. */
+			readonly TerminateCpuContributionPercent: string;
+			/** The plug-in type percentage contribution to Worker process termination due to excessive handle usage. */
+			readonly TerminateHandlesContributionPercent: string;
+			/** The plug-in type percentage contribution to Worker process termination due to excessive memory usage. */
+			readonly TerminateMemoryContributionPercent: string;
+			/** The plug-in type percentage contribution to Worker process termination due to unknown reasons. */
+			readonly TerminateOtherContributionPercent: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -91,4 +133,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

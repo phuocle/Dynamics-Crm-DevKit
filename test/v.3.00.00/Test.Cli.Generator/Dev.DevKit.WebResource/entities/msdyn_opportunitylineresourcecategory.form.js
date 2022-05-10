@@ -44,6 +44,8 @@ var OptionSet;
 			Non_Chargeable: 192350000,
 			Not_Available: 192350003
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

@@ -120,7 +120,7 @@ var DevKit;
 		}
 		msdyn_requirementresourcepreference.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -138,6 +138,8 @@ var OptionSet;
 			Must_choose_from: 690970002,
 			Preferred: 690970000,
 			Restricted: 690970001
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

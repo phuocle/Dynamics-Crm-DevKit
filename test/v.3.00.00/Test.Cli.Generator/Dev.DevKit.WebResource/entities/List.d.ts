@@ -316,6 +316,88 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Type the cost of obtaining the marketing list. */
+			readonly Cost: string;
+			/** Value of the Cost in base currency. */
+			readonly Cost_Base: string;
+			/** Shows who created the record. */
+			readonly CreatedBy: string;
+			/** Select the type of members that this marketing list will contain: accounts, contacts, or leads. Each list can have only one member type and this value can't be changed after the marketing list is created. */
+			readonly CreatedFromCode: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Type additional information to describe the marketing list, such as the intended use or date of the last update. */
+			readonly Description: string;
+			/** Select whether to override the opt-out settings on leads, contacts, and accounts for the members of the target marketing lists of the campaign activity. If No is selected, those who have chosen to opt out won't be excluded from the list. This means they will receive marketing materials. */
+			readonly DoNotSendOnOptOut: string;
+			/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
+			readonly ExchangeRate: string;
+			/** Select whether inactive accounts, contacts, or leads should be excluded from the campaign activity distribution when the marketing list is included in a campaign. */
+			readonly IgnoreInactiveListMembers: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Shows the date and time when the marketing list was last used in a campaign or in the creation of activities or opportunities. */
+			readonly LastUsedOn_UtcDateOnly: string;
+			/** Unique identifier of the marketing list. */
+			readonly ListId: string;
+			/** Type a name for the marketing list so that it is identified correctly in lists. */
+			readonly ListName: string;
+			/** Select whether the marketing list is locked. If Yes is selected, no additional members can be added to the marketing list. */
+			readonly LockStatus: string;
+			/** Shows the sum of all members in the marketing list. */
+			readonly MemberCount: string;
+			/** Type of the members that can be stored in the marketing list. Please do not remove from form! */
+			readonly MemberType: string;
+			/** Shows who last updated the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who last updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			readonly processedMemberCount: string;
+			readonly processFetchXML: string;
+			/** Contains the id of the process associated with the entity. */
+			readonly ProcessId: string;
+			/** Type the intended use of the marketing list to identify its key segments, target offers, or business group. */
+			readonly Purpose: string;
+			/** Query used for retrieving members of marketing list. */
+			readonly Query: string;
+			/** Type the source of the marketing list, such as a third-party supplier or internal database. */
+			readonly Source: string;
+			/** Contains the id of the stage where the entity is located. */
+			readonly StageId: string;
+			/** Shows whether the marketing list is active or inactive. Inactive marketing lists are read-only and can't be edited unless they are reactivated. */
+			readonly StateCode: string;
+			/** Select the marketing list's status. */
+			readonly StatusCode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			readonly TransactionCurrencyId: string;
+			/** A comma separated list of string values representing the unique identifiers of stages in a Business Process Flow Instance in the order that they occur. */
+			readonly TraversedPath: string;
+			/** Select whether you want the marketing list to be static or dynamic. The members in a static marketing list are unchanging. A dynamic marketing list is based on a dynamic query that retrieves the updated list of members */
+			readonly Type: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -327,6 +409,8 @@ declare namespace OptionSet {
 			Contact,
 			/** 4 */
 			Lead
+		}
+		enum OwnerIdType {
 		}
 		enum StateCode {
 			/** 0 */
@@ -358,4 +442,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

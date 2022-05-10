@@ -54,6 +54,33 @@ declare namespace DevKit {
 		/** For internal use only. */
 		readonly SupportingSolutionId: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Attribute Name. */
+			readonly AttributeLogicalName: string;
+			/** Can this Profile create the attribute */
+			readonly CanCreate: string;
+			/** Can this Profile read the attribute */
+			readonly CanRead: string;
+			/** Can this Profile update the attribute */
+			readonly CanUpdate: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier of the Field Permission. */
+			readonly FieldPermissionId: string;
+			/** For internal use only. */
+			readonly FieldPermissionIdUnique: string;
+			/** Unique identifier of profile to which this privilege belongs. */
+			readonly FieldSecurityProfileId: string;
+			/** Indicates whether the solution component is part of a managed solution. */
+			readonly IsManaged: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -86,6 +113,8 @@ declare namespace OptionSet {
 			/** 1 */
 			Unpublished
 		}
+		enum EntityName1 {
+		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
 			NotCalculated,
@@ -104,4 +133,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

@@ -37,6 +37,8 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.msfp_unsubscribedrecipient = {
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

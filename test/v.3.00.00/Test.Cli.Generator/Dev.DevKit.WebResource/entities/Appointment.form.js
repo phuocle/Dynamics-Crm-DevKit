@@ -18,17 +18,19 @@ var DevKit;
 			attachmentsGrid: {},
 			Description: {},
 			IsAllDayEvent: {},
+			IsOnlineMeeting: {},
 			Location: {},
-			msdyn_ci_call_summary_control_field: {},
-			msdyn_ci_url: {},
 			notescontrol: {},
+			OnlineMeetingJoinUrl: {},
 			OptionalAttendees: {},
 			RegardingObjectId: {},
 			requiredattendees: {},
 			ScheduledDurationMinutes: {},
 			ScheduledEnd: {},
 			ScheduledStart: {},
-			Subject: {}
+			Subject: {},
+			Subject1: {},
+			Subject2: {}
 		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
@@ -37,12 +39,18 @@ var DevKit;
 					appointment_description: {},
 					attachments: {},
 					general_information: {},
-					scheduling_information: {}
+					scheduling_information: {},
+					tab_2_section_2: {}
 				}
 			},
-			tab_call_summary: {
+			tab_ci_call_summary: {
 				Section: {
 					tab_ci_section_call_summary: {}
+				}
+			},
+			tab_ci_notes: {
+				Section: {
+					tab_ci_section_notes: {}
 				}
 			},
 			tab_notes: {
@@ -88,7 +96,9 @@ var DevKit;
 			attachmentsGrid: {},
 			Description: {},
 			IsAllDayEvent: {},
+			IsOnlineMeeting: {},
 			Location: {},
+			OnlineMeetingJoinUrl: {},
 			OptionalAttendees: {},
 			RegardingObjectId: {},
 			RegardingObjectId1: {},
@@ -147,7 +157,9 @@ var DevKit;
 			attachmentsGrid: {},
 			Description: {},
 			IsAllDayEvent: {},
+			IsOnlineMeeting: {},
 			Location: {},
+			OnlineMeetingJoinUrl: {},
 			OptionalAttendees: {},
 			RegardingObjectId: {},
 			requiredattendees: {},
@@ -205,6 +217,7 @@ var DevKit;
 		var body = {
 			Description: {},
 			IsAllDayEvent: {},
+			IsOnlineMeeting: {},
 			Location: {},
 			OptionalAttendees: {},
 			OwnerId: {},
@@ -240,28 +253,29 @@ var OptionSet;
 (function (OptionSet) {
 	OptionSet.Appointment = {
 		ActivityTypeCode : {
+			Activity_record_for_the_Teams_chat: 10088,
 			Appointment: 4201,
-			Booking_Alert: 10400,
+			Booking_Alert: 10473,
 			Campaign_Activity: 4402,
 			Campaign_Response: 4401,
 			Case_Resolution: 4206,
-			Conversation: 10702,
-			Customer_Voice_alert: 10294,
-			Customer_Voice_survey_invite: 10304,
-			Customer_Voice_survey_response: 10306,
+			Conversation: 10743,
+			Customer_Voice_alert: 10330,
+			Customer_Voice_survey_invite: 10340,
+			Customer_Voice_survey_response: 10342,
 			Email: 4202,
 			Fax: 4204,
 			Letter: 4207,
 			Opportunity_Close: 4208,
 			Order_Close: 4209,
-			Outbound_message: 10813,
+			Outbound_message: 10857,
 			Phone_Call: 4210,
-			Project_Service_Approval: 10430,
+			Project_Service_Approval: 10489,
 			Quick_Campaign: 4406,
 			Quote_Close: 4211,
 			Recurring_Appointment: 4251,
 			Service_Activity: 4214,
-			Session: 10717,
+			Session: 10760,
 			Task: 4212
 		},
 		AttachmentErrors : {
@@ -278,10 +292,14 @@ var OptionSet;
 		OnlineMeetingType : {
 			Teams_Meeting: 1
 		},
+		OwnerIdType : {
+		},
 		PriorityCode : {
 			High: 2,
 			Low: 0,
 			Normal: 1
+		},
+		RegardingObjectTypeCode : {
 		},
 		StateCode : {
 			Canceled: 2,

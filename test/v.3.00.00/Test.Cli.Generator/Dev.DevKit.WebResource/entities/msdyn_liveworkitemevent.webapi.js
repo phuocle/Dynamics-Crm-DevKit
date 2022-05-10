@@ -117,7 +117,7 @@ var DevKit;
 		}
 		msdyn_liveworkitemevent.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -137,6 +137,8 @@ var OptionSet;
 			CustomerRejoin: 192350003,
 			Default: 192350000,
 			SkillIdentified: 192350005
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

@@ -51,6 +51,8 @@ var OptionSet;
 			Loading_training_data: 192350001,
 			Triggering_load: 192350000
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

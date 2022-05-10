@@ -109,10 +109,58 @@ declare namespace DevKit {
 		readonly YammerPostState: number;
 		/** Internal use only. */
 		readonly YammerRetryCount: number;
+		readonly FormattedValue: {
+			/** Shows who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Shows the text of a post. */
+			readonly LargeText: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Unique identifier of the organization associated with the solution. */
+			readonly OrganizationId: string;
+			/** Unique identifier for entity instances */
+			readonly PostId: string;
+			/** Unique identifier of the post regarding with which the post is associated. */
+			readonly PostRegardingId: string;
+			/** Internal use only. */
+			readonly PostToYammer: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier of the business unit that owns the regarding object. */
+			readonly RegardingObjectOwningBusinessUnit: string;
+			/** Select whether the post was created manually or automatically. */
+			readonly Source: string;
+			/** Shows the text of a post. If this is a manual post, it appears in plain text. If this is an auto post, it appears in XML. */
+			readonly Text: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Select the post type. */
+			readonly Type: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Internal use only. */
+			readonly YammerPostState: string;
+			/** Internal use only. */
+			readonly YammerRetryCount: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace Post {
+		enum RegardingObjectOwnerIdType {
+		}
+		enum RegardingObjectTypeCode {
+		}
 		enum Source {
 			/** 3 */
 			ActionHub_Post,
@@ -155,4 +203,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

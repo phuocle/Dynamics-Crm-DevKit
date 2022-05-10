@@ -170,7 +170,7 @@ var DevKit;
 		}
 		queueitem.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -184,50 +184,54 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.QueueItem = {
+		ObjectIdTypeCode : {
+		},
 		ObjectTypeCode : {
 			Activity: 4200,
-			Activity_record_for_the_Teams_chat: 10086,
-			Agreement_Booking_Date: 10525,
-			Agreement_Booking_Setup: 10530,
-			Agreement_Invoice_Date: 10531,
-			Agreement_Invoice_Setup: 10533,
+			Agreement_Booking_Date: 10580,
+			Agreement_Booking_Setup: 10585,
+			Agreement_Invoice_Date: 10586,
+			Agreement_Invoice_Setup: 10588,
 			Appointment: 4201,
-			Booking_Alert: 10404,
+			Booking_Alert: 10473,
 			Campaign_Activity: 4402,
 			Campaign_Response: 4401,
 			Case: 112,
-			Conversation: 10707,
-			Customer_Voice_alert: 10313,
-			Customer_Voice_survey_invite: 10323,
-			Customer_Voice_survey_response: 10325,
+			Conversation: 10743,
+			Customer_Voice_alert: 10330,
+			Customer_Voice_survey_invite: 10340,
+			Customer_Voice_survey_response: 10342,
 			Email: 4202,
 			Fax: 4204,
-			Fulfillment_Preference: 10427,
-			Inventory_Adjustment: 10553,
-			Inventory_Transfer: 10556,
-			IoT_Alert: 10152,
+			Fulfillment_Preference: 10484,
+			Inventory_Adjustment: 10608,
+			Inventory_Transfer: 10611,
+			IoT_Alert: 10165,
 			Knowledge_Article: 9953,
-			Knowledge_Article_Template: 10098,
+			Knowledge_Article_Template: 10101,
 			Letter: 4207,
-			Ongoing_conversation_Deprecated: 10697,
-			Outbound_message: 10817,
-			Overflow_Action_Config: 10680,
+			Ongoing_conversation_Deprecated: 10733,
+			Outbound_message: 10857,
+			Overflow_Action_Config: 10714,
 			Phone_Call: 4210,
-			Project: 10473,
-			Project_Service_Approval: 10434,
-			Project_Task: 10478,
+			Project: 10528,
+			Project_Service_Approval: 10489,
+			Project_Task: 10533,
 			Quick_Campaign: 4406,
 			Recurring_Appointment: 4251,
-			Resource_Request: 10496,
+			Resource_Request: 10551,
 			Service_Activity: 4214,
-			Session: 10721,
+			Session: 10760,
 			Social_Activity: 4216,
 			Task: 4212,
-			Time_Group_Detail: 10428,
-			Work_Order: 10596,
-			Work_Order_Incident: 10599,
-			Work_Order_Service: 10602,
-			Work_Order_Service_Task: 10603
+			Teams_chat: 10088,
+			Time_Group_Detail: 10485,
+			Work_Order: 10651,
+			Work_Order_Incident: 10654,
+			Work_Order_Service: 10657,
+			Work_Order_Service_Task: 10658
+		},
+		OwnerIdType : {
 		},
 		StateCode : {
 			Active: 0,
@@ -236,6 +240,8 @@ var OptionSet;
 		StatusCode : {
 			Active: 1,
 			Inactive: 2
+		},
+		WorkerIdType : {
 		},
 		RollupState : {
 			NotCalculated: 0,

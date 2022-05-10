@@ -51,6 +51,8 @@ var OptionSet;
 			Daily: 192350001,
 			Immediate: 192350000
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

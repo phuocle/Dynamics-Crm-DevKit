@@ -54,6 +54,33 @@ declare namespace DevKit {
 		WebWizardId: string;
 		/** Unique identifier of the wizard page. */
 		WizardPageId: string;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the wizard page. */
+			readonly CreatedBy: string;
+			/** Date and time when the wizard page was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the wizardpage. */
+			readonly CreatedOnBehalfBy: string;
+			/** Unique identifier of the user who last modified the wizard page. */
+			readonly ModifiedBy: string;
+			/** Date and time when the wizard page was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the wizardpage. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Unique identifier of the organization. */
+			readonly OrganizationId: string;
+			/** Data to post to the wizard page when requesting the page. */
+			readonly PageDataToPost: string;
+			/** Sequence number of the wizard page. */
+			readonly PageSequenceNumber: string;
+			/** URL for the wizard page. */
+			readonly PageUrl: string;
+			readonly VersionNumber: string;
+			/** Unique identifier of the wizard associated with this wizard page. */
+			readonly WebWizardId: string;
+			/** Unique identifier of the wizard page. */
+			readonly WizardPageId: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -76,4 +103,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

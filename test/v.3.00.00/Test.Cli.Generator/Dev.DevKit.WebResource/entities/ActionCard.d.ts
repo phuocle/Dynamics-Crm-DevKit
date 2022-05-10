@@ -138,10 +138,129 @@ declare namespace DevKit {
 		readonly VersionNumber: number;
 		/** Select whether the visibility should be set to public/private. */
 		Visibility: boolean;
+		readonly FormattedValue: {
+			/** Unique identifier of the action card. */
+			readonly ActionCardId: string;
+			/** The CardType ENUM value. */
+			readonly CardType: string;
+			/** Unique identifier of the card type. */
+			readonly CardTypeId: string;
+			/** Unique identifier of the user who created the action card. */
+			readonly CreatedBy: string;
+			/** Date and time when action card was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the action card. */
+			readonly CreatedOnBehalfBy: string;
+			/** Json formatted string for generic purpose. */
+			readonly Data: string;
+			/** Card Description */
+			readonly Description: string;
+			/** Exchange rate for the currency associated with the action card with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Shows the Expiry Date */
+			readonly ExpiryDate_UtcDateAndTime: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who last modified the action card. */
+			readonly ModifiedBy: string;
+			/** Date and time when action card was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified action card. */
+			readonly ModifiedOnBehalfBy: string;
+			readonly msdyn_actioncardregardingid: string;
+			readonly msdyn_regardingobjectid: string;
+			readonly msdyn_regardingobjectlogicalname: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier of the business unit that owns the action card. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the team who owns the action card. */
+			readonly OwningTeam: string;
+			/** Unique identifier of the user who owns the action card. */
+			readonly OwningUser: string;
+			/** Json formatted string for parent regarding object. */
+			readonly ParentRegardingObjectIdData: string;
+			/** Priority of the ActionCard */
+			readonly Priority: string;
+			/** RecordIdObjectTypeCode2 of the ActionCard */
+			readonly RecordIdObjectTypeCode2: string;
+			/** For internal use only. */
+			readonly ReferenceTokens: string;
+			/** Choose the record that the card relates to. */
+			readonly regardingobjectid_account_actioncard: string;
+			/** Choose the record that the card relates to. */
+			readonly regardingobjectid_appointment_actioncard: string;
+			/** Choose the record that the card relates to. */
+			readonly regardingobjectid_chat: string;
+			/** Choose the record that the card relates to. */
+			readonly regardingobjectid_contact_actioncard: string;
+			/** Choose the record that the card relates to. */
+			readonly regardingobjectid_email_actioncard: string;
+			/** Choose the record that the card relates to. */
+			readonly regardingobjectid_fax_actioncard: string;
+			/** Choose the record that the card relates to. */
+			readonly regardingobjectid_incident_actioncard: string;
+			/** Choose the record that the card relates to. */
+			readonly regardingobjectid_lead_actioncard: string;
+			/** Choose the record that the card relates to. */
+			readonly regardingobjectid_letter_actioncard: string;
+			/** Choose the record that the card relates to. */
+			readonly regardingobjectid_msdyn_approval: string;
+			/** Choose the record that the card relates to. */
+			readonly regardingobjectid_msdyn_bookingalert: string;
+			/** Choose the record that the card relates to. */
+			readonly regardingobjectid_msdyn_ocliveworkitem: string;
+			/** Choose the record that the card relates to. */
+			readonly regardingobjectid_msdyn_ocoutboundmessage: string;
+			/** Choose the record that the card relates to. */
+			readonly regardingobjectid_msdyn_ocsession: string;
+			/** Choose the record that the card relates to. */
+			readonly regardingobjectid_msfp_alert: string;
+			/** Choose the record that the card relates to. */
+			readonly regardingobjectid_msfp_surveyinvite: string;
+			/** Choose the record that the card relates to. */
+			readonly regardingobjectid_msfp_surveyresponse: string;
+			/** Choose the record that the card relates to. */
+			readonly regardingobjectid_opportunity_actioncard: string;
+			/** Choose the record that the card relates to. */
+			readonly regardingobjectid_phonecall_actioncard: string;
+			/** Choose the record that the card relates to. */
+			readonly regardingobjectid_recurringappointmentmaster_actioncard: string;
+			/** Choose the record that the card relates to. */
+			readonly regardingobjectid_serviceappointment_actioncard: string;
+			/** Choose the record that the card relates to. */
+			readonly regardingobjectid_task_actioncard: string;
+			/** Source for the Action Card */
+			readonly Source: string;
+			/** Shows the Start Date */
+			readonly StartDate_UtcDateAndTime: string;
+			/** State of the Action Card */
+			readonly State: string;
+			/** Title of the ActionCard */
+			readonly Title: string;
+			/** Unique identifier of the currency associated with the action card. */
+			readonly TransactionCurrencyId: string;
+			/** Version number of the action card. */
+			readonly VersionNumber: string;
+			/** Select whether the visibility should be set to public/private. */
+			readonly Visibility: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace ActionCard {
+		enum OwnerIdType {
+		}
+		enum ParentRegardingObjectTypeCode {
+		}
+		enum RecordIdObjectTypeCode {
+		}
+		enum RegardingObjectTypeCode {
+		}
 		enum Source {
 			/** 1 */
 			CRM,
@@ -174,4 +293,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

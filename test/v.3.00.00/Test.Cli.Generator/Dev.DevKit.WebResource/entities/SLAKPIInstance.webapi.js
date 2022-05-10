@@ -128,7 +128,7 @@ var DevKit;
 		}
 		slakpiinstance.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -146,6 +146,10 @@ var OptionSet;
 			None: 0,
 			Success: 2,
 			Warning: 1
+		},
+		OwnerIdType : {
+		},
+		RegardingObjectTypeCode : {
 		},
 		Status : {
 			Canceled: 5,

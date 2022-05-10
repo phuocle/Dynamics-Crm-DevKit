@@ -65,6 +65,19 @@ declare namespace DevKit {
 		msdyn_subtype: string;
 		msdyn_total: number;
 		msdyn_workflowcategory: string;
+		readonly FormattedValue: {
+			readonly msdyn_componentlogicalname: string;
+			readonly msdyn_componenttype: string;
+			/** The name of the custom entity. */
+			readonly msdyn_name: string;
+			readonly msdyn_primaryentityname: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_solutioncomponentcountsummaryId: string;
+			readonly msdyn_solutionid: string;
+			readonly msdyn_subtype: string;
+			readonly msdyn_total: string;
+			readonly msdyn_workflowcategory: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -87,4 +100,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

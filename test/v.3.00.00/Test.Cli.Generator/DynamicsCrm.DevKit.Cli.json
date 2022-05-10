@@ -5,16 +5,14 @@
       "rootnamespace": "Dev.DevKit.Shared.Entities",
       "rootfolder": "",
       "type": "CSharp",
-      "entities": "*",
-      "debug": "?"
+      "entities": "*"
     },
     {
       "profile": "JS-FORM",
       "rootnamespace": "DevKit",
       "rootfolder": "",
       "type": "JsForm",
-      "entities": "*",
-      "debug": "yes"
+      "entities": "msdyn_dataanalyticsreport_forecast"
     },
     {
       "profile": "JS-WEBAPI",
@@ -22,7 +20,6 @@
       "rootfolder": "",
       "type": "JsWebApi",
       "entities": "*",
-      "debug": "yes",
       "version": "2"
     }
   ]

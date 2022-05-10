@@ -246,6 +246,8 @@ var OptionSet;
 			Never: 690970000,
 			On_Work_Order_Posted: 690970001
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

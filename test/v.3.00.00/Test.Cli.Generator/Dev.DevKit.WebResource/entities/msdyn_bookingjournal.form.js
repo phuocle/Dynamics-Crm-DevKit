@@ -143,6 +143,8 @@ var OptionSet;
 			Travel: 690970002,
 			Working_Hours: 690970000
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

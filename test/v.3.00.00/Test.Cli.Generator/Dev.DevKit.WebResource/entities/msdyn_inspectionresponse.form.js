@@ -41,6 +41,8 @@ var OptionSet;
 			InProgress: 192350000,
 			Submitted: 192350001
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

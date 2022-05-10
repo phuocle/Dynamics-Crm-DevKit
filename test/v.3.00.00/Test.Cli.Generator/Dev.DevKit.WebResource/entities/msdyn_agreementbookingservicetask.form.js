@@ -133,6 +133,8 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.msdyn_agreementbookingservicetask = {
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

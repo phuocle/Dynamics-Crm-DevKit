@@ -970,6 +970,7 @@ namespace DynamicsCrm.DevKit.Shared
                              item.ClassId == ControlClassId.UNKNOWN_15 ||
                              item.ClassId == ControlClassId.UNKNOWN_16 ||
                              item.ClassId == ControlClassId.UNKNOWN_17 ||
+                             item.ClassId == ControlClassId.UNKNOWN_18 ||
                              item.ClassId == ControlClassId.SUB_GRID ||
                              item.ClassId == ControlClassId.SUB_GRID_PANEL ||
                              item.ClassId == ControlClassId.QUICK_VIEW_FORM ||

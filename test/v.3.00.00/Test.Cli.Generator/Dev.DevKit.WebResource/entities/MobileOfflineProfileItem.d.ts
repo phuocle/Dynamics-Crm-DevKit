@@ -155,6 +155,82 @@ declare namespace DevKit {
 		readonly VersionNumber: number;
 		/** Contains converted sql of the referenced view. */
 		ViewQuery: string;
+		readonly FormattedValue: {
+			/** Specifies whether records of this entity can be followed. */
+			readonly CanBeFollowed: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Shows who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Internal Use Only */
+			readonly EntityObjectTypeCode: string;
+			/** Specify whether records related to this entity will be made available for offline access. */
+			readonly GetRelatedEntityRecords: string;
+			/** Version in which the Mobile offline Profile Item is introduced. */
+			readonly IntroducedVersion: string;
+			/** For internal use only. */
+			readonly IsManaged: string;
+			/** Information about whether profile item is validated or not */
+			readonly IsValidated: string;
+			/** Information about whether the mobile offline profile item is visible in the Profile Item subgrid. */
+			readonly IsVisibleInGrid: string;
+			/** Unique identifier of the mobile offline profile item. */
+			readonly MobileOfflineProfileItemId: string;
+			/** For Internal Use Only */
+			readonly MobileOfflineProfileItemIdUnique: string;
+			/** Shows who last updated the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Enter the name of the mobile offline profile item. */
+			readonly Name: string;
+			/** Unique identifier of the organization associated with the Mobile Offline Profile Item. */
+			readonly OrganizationId: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Shows the ID of the process. */
+			readonly ProcessId: string;
+			/** Profile item entity filter criteria */
+			readonly ProfileItemEntityFilter: string;
+			/** Saved Query associated with the Mobile offline profile item rule. */
+			readonly ProfileItemRule: string;
+			/** Displays the last published date time. */
+			readonly PublishedOn_UtcDateAndTime: string;
+			/** Specify data download filter for selected entity */
+			readonly RecordDistributionCriteria: string;
+			/** Download my records */
+			readonly RecordsOwnedByMe: string;
+			/** Download my business unit's records */
+			readonly RecordsOwnedByMyBusinessUnit: string;
+			/** Download my team's records */
+			readonly RecordsOwnedByMyTeam: string;
+			/** Items contained with a particular Profile. */
+			readonly RegardingObjectId: string;
+			/** Internal Use Only */
+			readonly RelationshipData: string;
+			/** Internal Use Only */
+			readonly SelectedEntityMetadata: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** Shows the ID of the stage. */
+			readonly StageId: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** How often to sync data offline. */
+			readonly SyncIntervalInMinutes: string;
+			/** For internal use only. */
+			readonly TraversedPath: string;
+			/** Version number of the Mobile Offline Profile Item. */
+			readonly VersionNumber: string;
+			/** Contains converted sql of the referenced view. */
+			readonly ViewQuery: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -184,15 +260,15 @@ declare namespace OptionSet {
 			Account,
 			/** 16 */
 			AccountLeads,
-			/** 10085 */
+			/** 10087 */
 			Activity_File_Attachment,
-			/** 10539 */
+			/** 10594 */
 			Agreement_Business_Process,
 			/** 4201 */
 			Appointment,
-			/** 10139 */
+			/** 10149 */
 			Asset_Category_Template_Association,
-			/** 10140 */
+			/** 10150 */
 			Asset_Template_Association,
 			/** 1001 */
 			Attachment,
@@ -200,17 +276,17 @@ declare namespace OptionSet {
 			Bookable_Resource,
 			/** 1145 */
 			Bookable_Resource_Booking,
-			/** 10623 */
+			/** 10662 */
 			Bookable_Resource_Booking_Quick_Note,
 			/** 1152 */
 			Booking_Status,
-			/** 10536 */
+			/** 10591 */
 			Booking_Timestamp,
 			/** 112 */
 			Case,
-			/** 10538 */
+			/** 10593 */
 			Case_to_Work_Order_Business_Process,
-			/** 10635 */
+			/** 10674 */
 			CFS_IoT_Alert_Process_Flow,
 			/** 123 */
 			Competitor,
@@ -228,9 +304,9 @@ declare namespace OptionSet {
 			ContactLeads,
 			/** 9105 */
 			Currency,
-			/** 10141 */
+			/** 10151 */
 			Customer_Asset,
-			/** 10143 */
+			/** 10155 */
 			Customer_Asset_Category,
 			/** 4202 */
 			Email,
@@ -242,75 +318,75 @@ declare namespace OptionSet {
 			Entitlement_Product,
 			/** 4545 */
 			Entitlement_Template_Product,
-			/** 10542 */
+			/** 10597 */
 			Field_Service_Price_List_Item,
-			/** 10543 */
+			/** 10598 */
 			Field_Service_Setting,
-			/** 10144 */
+			/** 10156 */
 			Functional_Location,
-			/** 10636 */
+			/** 10675 */
 			Geolocation_Settings,
 			/** 1007 */
 			Image_Descriptor,
 			/** 9931 */
 			Incident_KnowledgeBaseRecord,
-			/** 10546 */
+			/** 10601 */
 			Incident_Type,
-			/** 10548 */
+			/** 10603 */
 			Incident_Type_Product,
-			/** 10628 */
+			/** 10667 */
 			Incident_Type_Resolution,
-			/** 10549 */
+			/** 10604 */
 			Incident_Type_Service,
-			/** 10550 */
+			/** 10605 */
 			Incident_Type_Service_Task,
-			/** 10551 */
+			/** 10606 */
 			Incident_Types_Setup,
-			/** 10520 */
+			/** 10575 */
 			Inspection_Attachment,
-			/** 10523 */
+			/** 10578 */
 			Inspection_Response,
-			/** 10519 */
+			/** 10574 */
 			Inspection_Template,
-			/** 10521 */
+			/** 10576 */
 			Inspection_Template_Version,
 			/** 1090 */
 			Invoice,
 			/** 1091 */
 			Invoice_Line,
-			/** 10437 */
+			/** 10492 */
 			Invoice_Process,
-			/** 10152 */
-			IoT_Alert,
-			/** 10168 */
-			IoT_Alert_to_Case_Process,
-			/** 10153 */
-			IoT_Device,
-			/** 10154 */
-			IoT_Device_Category,
-			/** 10155 */
-			IoT_Device_Command,
-			/** 10156 */
-			IoT_Device_Command_Definition,
-			/** 10157 */
-			IoT_Device_Data_History,
-			/** 10158 */
-			IoT_Device_Property,
-			/** 10159 */
-			IoT_Device_Registration_History,
-			/** 10162 */
-			IoT_Property_Definition,
-			/** 10163 */
-			IoT_Provider,
-			/** 10164 */
-			IoT_Provider_Instance,
 			/** 10165 */
+			IoT_Alert,
+			/** 10181 */
+			IoT_Alert_to_Case_Process,
+			/** 10166 */
+			IoT_Device,
+			/** 10167 */
+			IoT_Device_Category,
+			/** 10168 */
+			IoT_Device_Command,
+			/** 10169 */
+			IoT_Device_Command_Definition,
+			/** 10170 */
+			IoT_Device_Data_History,
+			/** 10171 */
+			IoT_Device_Property,
+			/** 10172 */
+			IoT_Device_Registration_History,
+			/** 10175 */
+			IoT_Property_Definition,
+			/** 10176 */
+			IoT_Provider,
+			/** 10177 */
+			IoT_Provider_Instance,
+			/** 10178 */
 			IoT_Settings,
 			/** 9953 */
 			Knowledge_Article,
-			/** 10096 */
+			/** 10099 */
 			Knowledge_Article_Attachment,
-			/** 10092 */
+			/** 10095 */
 			Knowledge_Article_Image,
 			/** 9955 */
 			Knowledge_Article_Views,
@@ -336,7 +412,7 @@ declare namespace OptionSet {
 			Order,
 			/** 1089 */
 			Order_Line,
-			/** 10880 */
+			/** 10114 */
 			OrganizationDataSyncState,
 			/** 4210 */
 			Phone_Call,
@@ -346,33 +422,33 @@ declare namespace OptionSet {
 			Price_List,
 			/** 1026 */
 			Price_List_Item,
-			/** 10413 */
+			/** 10479 */
 			Priority,
 			/** 1024 */
 			Product,
-			/** 10566 */
+			/** 10621 */
 			Product_Inventory,
 			/** 1028 */
 			Product_Relationship,
-			/** 10436 */
+			/** 10491 */
 			Project_Stages,
 			/** 1048 */
 			Property,
-			/** 10146 */
+			/** 10158 */
 			Property_Asset_Association,
 			/** 1235 */
 			Property_Association,
-			/** 10145 */
+			/** 10157 */
 			Property_Definition,
 			/** 1333 */
 			Property_Instance,
-			/** 10147 */
+			/** 10159 */
 			Property_Log,
 			/** 1049 */
 			Property_Option_Set_Item,
-			/** 10148 */
+			/** 10160 */
 			Property_Template_Association,
-			/** 10537 */
+			/** 10592 */
 			Purchase_Order_Business_Process,
 			/** 2020 */
 			Queue,
@@ -382,29 +458,29 @@ declare namespace OptionSet {
 			Quote,
 			/** 1085 */
 			Quote_Line,
-			/** 10631 */
+			/** 10670 */
 			Resolution,
-			/** 10425 */
+			/** 10482 */
 			Scheduling_Parameter,
-			/** 10589 */
+			/** 10644 */
 			Service_Task_Type,
 			/** 9752 */
 			SLA_KPI_Instance,
 			/** 4212 */
 			Task,
-			/** 10591 */
+			/** 10646 */
 			Tax_Code,
 			/** 9 */
 			Team,
-			/** 10149 */
+			/** 10161 */
 			Template_For_Properties,
 			/** 2013 */
 			Territory,
-			/** 10499 */
+			/** 10554 */
 			Time_Entry,
-			/** 10593 */
+			/** 10648 */
 			Time_Off_Request,
-			/** 10514 */
+			/** 10569 */
 			Time_Source,
 			/** 1055 */
 			Unit,
@@ -412,25 +488,25 @@ declare namespace OptionSet {
 			Unit_Group,
 			/** 8 */
 			User,
-			/** 10595 */
+			/** 10650 */
 			Warehouse,
-			/** 10596 */
+			/** 10651 */
 			Work_Order,
-			/** 10540 */
+			/** 10595 */
 			Work_Order_Business_Process,
-			/** 10599 */
+			/** 10654 */
 			Work_Order_Incident,
-			/** 10600 */
+			/** 10655 */
 			Work_Order_Product,
-			/** 10634 */
+			/** 10673 */
 			Work_Order_Resolution,
-			/** 10602 */
+			/** 10657 */
 			Work_Order_Service,
-			/** 10603 */
+			/** 10658 */
 			Work_Order_Service_Task,
-			/** 10604 */
+			/** 10659 */
 			Work_Order_Substatus,
-			/** 10605 */
+			/** 10660 */
 			Work_Order_Type
 		}
 		enum RollupState {
@@ -451,4 +527,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

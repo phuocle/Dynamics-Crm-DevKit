@@ -154,6 +154,86 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version number of the mail merge template. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Body text of the mail merge template. */
+			readonly Body: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier of the user who created the mail merge template. */
+			readonly CreatedBy: string;
+			/** Date and time when the mail merge template was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the mailmergetemplate. */
+			readonly CreatedOnBehalfBy: string;
+			/** Default data fields associated with the mail merge template. */
+			readonly DefaultFilter: string;
+			/** Description of the mail merge template. */
+			readonly Description: string;
+			/** Version of the Microsoft Office Word XML format used by the template. */
+			readonly DocumentFormat: string;
+			/** Exchange rate for the currency associated with the mailmergetemplate with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** File name of the mail merge template. */
+			readonly FileName: string;
+			/** File size of the mail merge template. */
+			readonly FileSize: string;
+			/** Version in which the form is introduced. */
+			readonly IntroducedVersion: string;
+			/** Information that specifies whether this component can be customized. */
+			readonly IsCustomizable: string;
+			/** Indicates whether the solution component is part of a managed solution. */
+			readonly IsManaged: string;
+			/** Information about whether the mail merge template is personal or is available to all users. */
+			readonly IsPersonal: string;
+			/** Language of the mail merge template. */
+			readonly LanguageCode: string;
+			/** Unique identifier of the mail merge template. */
+			readonly MailMergeTemplateId: string;
+			/** For internal use only. */
+			readonly MailMergeTemplateIdUnique: string;
+			/** Drop-down list for selecting the type of the mail merge. */
+			readonly MailMergeType: string;
+			/** MIME type of the mail merge template. */
+			readonly MimeType: string;
+			/** Unique identifier of the user who last modified the mail merge template. */
+			readonly ModifiedBy: string;
+			/** Date and time when the mail merge template was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the mailmergetemplate. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Name of the mail merge template. */
+			readonly Name: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier of the business unit that owns the mail merge template. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the team who owns the mail merge template. */
+			readonly OwningTeam: string;
+			/** Unique identifier of the user who owns the mail merge template. */
+			readonly OwningUser: string;
+			/** Parameter Xml. */
+			readonly ParameterXml: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** Status of the mail merge template. */
+			readonly StateCode: string;
+			/** Reason for the status of the mail merge template. */
+			readonly StatusCode: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Unique identifier of the currency associated with the mailmergetemplate. */
+			readonly TransactionCurrencyId: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version number of the mail merge template. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -187,6 +267,8 @@ declare namespace OptionSet {
 			Letter,
 			/** 5 */
 			Quotes
+		}
+		enum OwnerIdType {
 		}
 		enum StateCode {
 			/** 0 */
@@ -222,4 +304,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

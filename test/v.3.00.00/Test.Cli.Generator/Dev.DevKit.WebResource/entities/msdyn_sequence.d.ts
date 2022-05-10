@@ -137,6 +137,8 @@ declare namespace DevKit {
 		msdyn_SequenceStats30d: string;
 		/** Sequence Stats 90d */
 		msdyn_SequenceStats90d: string;
+		/** Sequence template id */
+		msdyn_template: string;
 		/** Total task count of sequence record */
 		msdyn_totaltasks: number;
 		/** For internal use only */
@@ -169,6 +171,88 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			readonly msdyn_cjodefinition: string;
+			/** Depicts whether CJO definition is updated or not */
+			readonly msdyn_cjodefinitionstate: string;
+			readonly msdyn_definition: string;
+			readonly msdyn_description: string;
+			/** The max step count for the sequence. */
+			readonly msdyn_maxstepcount: string;
+			/** The name of the custom entity. */
+			readonly msdyn_name: string;
+			/** Select version of sequence orchestrator */
+			readonly msdyn_orchestratorversion: string;
+			/** For internal use only */
+			readonly msdyn_ParentSequence: string;
+			/** The display name information about record to which this sequence could be associated */
+			readonly msdyn_regardingentitydisplayname: string;
+			/** The logical name of regarding entity */
+			readonly msdyn_regardingEntityName: string;
+			/** Information about various exit criterion for a sequence */
+			readonly msdyn_SequenceExitCriterion: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_sequenceId: string;
+			readonly msdyn_SequenceRecords: string;
+			/** Sequence Stats 180d */
+			readonly msdyn_SequenceStats180d: string;
+			/** Sequence Stats 1y */
+			readonly msdyn_SequenceStats1y: string;
+			/** Sequence Stats 2y */
+			readonly msdyn_SequenceStats2y: string;
+			/** Sequence Stats 30d */
+			readonly msdyn_SequenceStats30d: string;
+			/** Sequence Stats 90d */
+			readonly msdyn_SequenceStats90d: string;
+			/** Sequence template id */
+			readonly msdyn_template: string;
+			/** Total task count of sequence record */
+			readonly msdyn_totaltasks: string;
+			/** For internal use only */
+			readonly msdyn_Type: string;
+			/** Version of the sequence */
+			readonly msdyn_Version: string;
+			/** Information about this version of the sequence */
+			readonly msdyn_VersionDescription: string;
+			/** Workflow identifier */
+			readonly msdyn_workflowid: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the Sequence */
+			readonly statecode: string;
+			/** Reason for the status of the Sequence */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -184,6 +268,8 @@ declare namespace OptionSet {
 			Activation,
 			/** 0 */
 			Definition
+		}
+		enum OwnerIdType {
 		}
 		enum statecode {
 			/** 1 */
@@ -217,4 +303,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

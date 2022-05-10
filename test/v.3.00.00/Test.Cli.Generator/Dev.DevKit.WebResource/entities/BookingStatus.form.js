@@ -89,6 +89,8 @@ var OptionSet;
 			Pending: 3,
 			Reserved: 4
 		},
+		OwnerIdType : {
+		},
 		StateCode : {
 			Active: 0,
 			Inactive: 1

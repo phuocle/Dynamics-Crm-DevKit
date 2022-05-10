@@ -1,6 +1,32 @@
 ﻿//@ts-check
 ///<reference path="devkit.d.ts" />
 declare namespace DevKit {
+	namespace Formmsdyn_worklistsuggestion_Information {
+		interface Tabs {
+		}
+		interface Body {
+			/** The name of the custom entity */
+			msdyn_name: DevKit.Controls.String;
+		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
+	}
+	class Formmsdyn_worklistsuggestion_Information extends DevKit.IForm {
+		/**
+		* Information [Main Form]
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form msdyn_worklistsuggestion_Information */
+		Body: DevKit.Formmsdyn_worklistsuggestion_Information.Body;
+		/** The Process of form msdyn_worklistsuggestion_Information */
+		Process: DevKit.Formmsdyn_worklistsuggestion_Information.Process;
+		/** The SidePanes of form msdyn_worklistsuggestion_Information */
+		SidePanes: DevKit.SidePanes;
+	}
 	class msdyn_worklistsuggestionApi {
 		/**
 		* DynamicsCrm.DevKit msdyn_worklistsuggestionApi
@@ -52,6 +78,31 @@ declare namespace DevKit {
 		msdyn_suggesteddate_UtcDateOnly: Date;
 		/** Unique identifier for entity instances */
 		msdyn_worklistsuggestionId: string;
+		readonly FormattedValue: {
+			/** Custom Data */
+			readonly msdyn_customdata: string;
+			/** The name of the custom entity */
+			readonly msdyn_name: string;
+			/** Potential Revenue Returns */
+			readonly msdyn_potentialrevenue: string;
+			/** Related Custom Data */
+			readonly msdyn_relatedcustomdata: string;
+			/** Related record for Suggestion */
+			readonly msdyn_relatedrecordid: string;
+			/** Related Record Name */
+			readonly msdyn_relatedrecordname: string;
+			/** Related Record Name */
+			readonly msdyn_relatedrecordtype: string;
+			readonly msdyn_salesmotion: string;
+			/** Sales play */
+			readonly msdyn_salesplay: string;
+			/** Solution area */
+			readonly msdyn_solutionarea: string;
+			/** Suggested date */
+			readonly msdyn_suggesteddate_UtcDateOnly: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_worklistsuggestionId: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -86,4 +137,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

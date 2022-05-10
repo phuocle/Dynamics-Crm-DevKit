@@ -63,6 +63,42 @@ declare namespace DevKit {
 		Title: string;
 		/** Version number of the subject. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the subject. */
+			readonly CreatedBy: string;
+			/** Shows the external party who created the record. */
+			readonly CreatedByExternalParty: string;
+			/** Date and time when the subject was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the subject. */
+			readonly CreatedOnBehalfBy: string;
+			/** Description of the subject. */
+			readonly Description: string;
+			/** Information that specifies when the subject will be displayed in lists of subjects. */
+			readonly FeatureMask: string;
+			/** Unique identifier of the data import or data migration that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who last modified the subject. */
+			readonly ModifiedBy: string;
+			/** Shows the external party who modified the record. */
+			readonly ModifiedByExternalParty: string;
+			/** Date and time when the subject was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the subject. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Unique identifier for the organization associated with the subject. */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Unique identifier of the parent subject. */
+			readonly ParentSubject: string;
+			/** Unique identifier of the subject. */
+			readonly SubjectId: string;
+			/** Title of the subject. */
+			readonly Title: string;
+			/** Version number of the subject. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -85,4 +121,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

@@ -210,15 +210,24 @@ namespace DynamicsCrm.DevKit.Shared
                 if (XrmHelper.IsOptionSet(attribute))
                 {
                     var values = attribute.OptionSetValues();
-                    if (values.Count == 0) continue;
-                    code += $"{TAB}{TAB}{attribute.SchemaName} : {{{NEW_LINE}";
-                    foreach (var value in values)
+                    if (values.Count == 0)
                     {
-                        code += $"{TAB}{TAB}{TAB}{value.Name}: {value.Value},{NEW_LINE}";
+                        code += $"{TAB}{TAB}{attribute.SchemaName} : {{{NEW_LINE}";
+                        code = code.TrimEnd($",{NEW_LINE}".ToCharArray());
+                        code += $"{NEW_LINE}";
+                        code += $"{TAB}{TAB}}},{NEW_LINE}";
                     }
-                    code = code.TrimEnd($",{NEW_LINE}".ToCharArray());
-                    code += $"{NEW_LINE}";
-                    code += $"{TAB}{TAB}}},{NEW_LINE}";
+                    else
+                    {
+                        code += $"{TAB}{TAB}{attribute.SchemaName} : {{{NEW_LINE}";
+                        foreach (var value in values)
+                        {
+                            code += $"{TAB}{TAB}{TAB}{value.Name}: {value.Value},{NEW_LINE}";
+                        }
+                        code = code.TrimEnd($",{NEW_LINE}".ToCharArray());
+                        code += $"{NEW_LINE}";
+                        code += $"{TAB}{TAB}}},{NEW_LINE}";
+                    }
                 }
             }
             code += $"{TAB}{TAB}RollupState : {{{NEW_LINE}";

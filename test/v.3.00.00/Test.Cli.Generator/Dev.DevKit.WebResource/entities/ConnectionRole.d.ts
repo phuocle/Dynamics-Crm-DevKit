@@ -127,6 +127,54 @@ declare namespace DevKit {
 		readonly SupportingSolutionId: string;
 		/** Version number of the connection role. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Categories for connection roles. */
+			readonly Category: string;
+			/** State of the component. */
+			readonly ComponentState: string;
+			/** Unique identifier of the connection role. */
+			readonly ConnectionRoleId: string;
+			/** Unique identifier of the published or unpublished connection role record. */
+			readonly ConnectionRoleIdUnique: string;
+			/** Unique identifier of the user who created the relationship role. */
+			readonly CreatedBy: string;
+			/** Date and time when the connection role was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the relationship role. */
+			readonly CreatedOnBehalfBy: string;
+			/** Description of the connection role. */
+			readonly Description: string;
+			/** Unique identifier of the data import or data migration that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Version in which the form is introduced. */
+			readonly IntroducedVersion: string;
+			/** Information that specifies whether this component can be customized. */
+			readonly IsCustomizable: string;
+			/** Indicates whether the solution component is part of a managed solution. */
+			readonly IsManaged: string;
+			/** Unique identifier of the user who last modified the connection role. */
+			readonly ModifiedBy: string;
+			/** Date and time when the connection role was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the relationship role. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Name of the connection role. */
+			readonly Name: string;
+			/** Unique identifier of the organization that this connection role belongs to. */
+			readonly OrganizationId: string;
+			/** Date and time when the record was last overwritten. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** Status of the connection role. */
+			readonly StateCode: string;
+			/** Reason for the status of the connection role. */
+			readonly StatusCode: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** Version number of the connection role. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -189,4 +237,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

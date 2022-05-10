@@ -44,6 +44,23 @@ declare namespace DevKit {
 		/** Unique identifier of the role template privileges. */
 		RoleTemplatePrivilegeId: string;
 		readonly Upgrading: boolean;
+		readonly FormattedValue: {
+			/** Information about whether the role in the template applies to the user, the user's team, or objects shared by the user. */
+			readonly IsBasic: string;
+			/** Information about whether the role in the template applies to child business units of the business unit associated with the user. */
+			readonly IsDeep: string;
+			/** Information about whether the role in the template applies to the entire organization. */
+			readonly IsGlobal: string;
+			/** Information about whether the role in the template applies to the user's business unit. */
+			readonly IsLocal: string;
+			/** Unique identifier of the privilege assigned to the role template. */
+			readonly PrivilegeId: string;
+			/** Unique identifier of the role template that is associated with the role privilege. */
+			readonly RoleTemplateId: string;
+			/** Unique identifier of the role template privileges. */
+			readonly RoleTemplatePrivilegeId: string;
+			readonly Upgrading: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -66,4 +83,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

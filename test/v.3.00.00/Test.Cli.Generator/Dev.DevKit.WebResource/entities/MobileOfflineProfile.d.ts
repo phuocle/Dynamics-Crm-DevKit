@@ -121,6 +121,56 @@ declare namespace DevKit {
 		TraversedPath: string;
 		/** Version number of the Mobile Offline Profile. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Shows who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Enter a description of the mobile offline profile. */
+			readonly Description: string;
+			/** Version in which the Mobile offline Profile is introduced. */
+			readonly IntroducedVersion: string;
+			/** For internal use only. */
+			readonly IsManaged: string;
+			/** Information about whether profile is validated or not */
+			readonly IsValidated: string;
+			/** Unique identifier of the mobile offline profile. */
+			readonly MobileOfflineProfileId: string;
+			/** For Internal Use Only */
+			readonly MobileOfflineProfileIdUnique: string;
+			/** Shows who last updated the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Enter the name of the mobile offline profile. */
+			readonly Name: string;
+			/** Unique identifier of the organization associated with the Mobile Offline Profile. */
+			readonly OrganizationId: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Shows the ID of the process. */
+			readonly ProcessId: string;
+			/** Displays the last published date time. */
+			readonly PublishedOn_UtcDateAndTime: string;
+			/** Internal Use Only */
+			readonly SelectedEntityMetadata: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** Shows the ID of the stage. */
+			readonly StageId: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** For internal use only. */
+			readonly TraversedPath: string;
+			/** Version number of the Mobile Offline Profile. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -153,4 +203,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

@@ -33,6 +33,12 @@ declare namespace DevKit {
 		readonly msdyn_octagid: string;
 		readonly msdyn_personalmessageid: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			readonly msdyn_msdyn_personalmessage_msdyn_octagId: string;
+			readonly msdyn_octagid: string;
+			readonly msdyn_personalmessageid: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -55,4 +61,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

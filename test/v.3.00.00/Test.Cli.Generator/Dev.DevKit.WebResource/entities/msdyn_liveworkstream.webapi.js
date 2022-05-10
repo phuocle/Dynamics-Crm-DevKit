@@ -167,7 +167,7 @@ var DevKit;
 		}
 		msdyn_liveworkstream.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -230,6 +230,7 @@ var OptionSet;
 			Twilio: 192350001
 		},
 		msdyn_streamsource : {
+			Apple_Messages_for_Business: 192450000,
 			Co_browse: 192390000,
 			Custom: 192350002,
 			Entity_Records: 192350000,
@@ -248,6 +249,8 @@ var OptionSet;
 		msdyn_workdistributionmode : {
 			Pick: 192350001,
 			Push: 192350000
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

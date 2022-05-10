@@ -43,6 +43,8 @@ var OptionSet;
 			Page_View: 192350000,
 			Search: 192350001
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

@@ -129,7 +129,7 @@ var DevKit;
 		}
 		msdyn_ocsimltraining.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -160,6 +160,8 @@ var OptionSet;
 			Training_completed: 326340006,
 			Training_failed: 326340004,
 			Training_in_progress: 326340005
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

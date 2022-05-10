@@ -146,6 +146,50 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Enter the date for the invoice creation job to use as invoice date on the invoice generated */
+			readonly msdyn_InvoiceRunDate_UtcDateOnly: string;
+			/** Type the name of the custom entity. */
+			readonly msdyn_name: string;
+			/** (Deprecated) Type the reference to the quote line that this invoice schedule is for. */
+			readonly msdyn_QuoteLine: string;
+			/** Unique identifier for Quote Line associated with this invoice schedule. */
+			readonly msdyn_quotelineid: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_quotelineinvoicescheduleId: string;
+			/** Billing milestone for the quote line */
+			readonly msdyn_QuoteLineScheduleOfValue: string;
+			/** Enter the date used by the invoice creation job to filter transactions that happened on or before this date for invoice creation */
+			readonly msdyn_transactioncutoffdate_UtcDateOnly: string;
+			/** Unique identifier for the organization */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Status of the Quote Line Invoice Schedule */
+			readonly statecode: string;
+			/** Reason for the status of the Quote Line Invoice Schedule */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -180,4 +224,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

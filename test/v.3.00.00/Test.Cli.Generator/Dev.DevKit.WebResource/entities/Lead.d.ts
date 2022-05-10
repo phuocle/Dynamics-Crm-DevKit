@@ -92,6 +92,7 @@ declare namespace DevKit {
 			Revenue: DevKit.Controls.Money;
 			/** Type the Standard Industrial Classification (SIC) code that indicates the lead's primary industry of business for use in marketing segmentation and demographic analysis. */
 			SIC: DevKit.Controls.String;
+			Stakeholders: DevKit.Controls.ActionCards;
 			/** Type a subject or descriptive name, such as the expected order, company name, or marketing source list, to identify the lead. */
 			Subject: DevKit.Controls.String;
 			/** Type the work phone number for the primary contact for the lead. */
@@ -133,7 +134,6 @@ declare namespace DevKit {
 		interface Grid {
 			Competitors: DevKit.Controls.Grid;
 			DocumentsSubGrid: DevKit.Controls.Grid;
-			Stakeholders: DevKit.Controls.Grid;
 		}
 	}
 	class FormLead extends DevKit.IForm {
@@ -180,6 +180,7 @@ declare namespace DevKit {
 			MapSection: DevKit.Controls.Section;
 			PredictiveScoreSection: DevKit.Controls.Section;
 			RELATED_TAB: DevKit.Controls.Section;
+			SOCIAL_PANE: DevKit.Controls.Section;
 			Summary_CadenceWidget: DevKit.Controls.Section;
 			Summary_section_6: DevKit.Controls.Section;
 		}
@@ -705,6 +706,330 @@ declare namespace DevKit {
 		YomiLastName: string;
 		/** Type the phonetic spelling of the lead's middle name, if the name is specified in Japanese, to make sure the name is pronounced correctly in phone calls with the prospect. */
 		YomiMiddleName: string;
+		readonly FormattedValue: {
+			/** Unique identifier of the account with which the lead is associated. */
+			readonly AccountId: string;
+			/** Unique identifier for address 1. */
+			readonly Address1_AddressId: string;
+			/** Select the primary address type. */
+			readonly Address1_AddressTypeCode: string;
+			/** Type the city for the primary address. */
+			readonly Address1_City: string;
+			/** Shows the complete primary address. */
+			readonly Address1_Composite: string;
+			/** Type the country or region for the primary address. */
+			readonly Address1_Country: string;
+			/** Type the county for the primary address. */
+			readonly Address1_County: string;
+			/** Type the fax number associated with the primary address. */
+			readonly Address1_Fax: string;
+			/** Type the latitude value for the primary address for use in mapping and other applications. */
+			readonly Address1_Latitude: string;
+			/** Type the first line of the primary address. */
+			readonly Address1_Line1: string;
+			/** Type the second line of the primary address. */
+			readonly Address1_Line2: string;
+			/** Type the third line of the primary address. */
+			readonly Address1_Line3: string;
+			/** Type the longitude value for the primary address for use in mapping and other applications. */
+			readonly Address1_Longitude: string;
+			/** Type a descriptive name for the primary address, such as Corporate Headquarters. */
+			readonly Address1_Name: string;
+			/** Type the ZIP Code or postal code for the primary address. */
+			readonly Address1_PostalCode: string;
+			/** Type the post office box number of the primary address. */
+			readonly Address1_PostOfficeBox: string;
+			/** Select a shipping method for deliveries sent to this address. */
+			readonly Address1_ShippingMethodCode: string;
+			/** Type the state or province of the primary address. */
+			readonly Address1_StateOrProvince: string;
+			/** Type the main phone number associated with the primary address. */
+			readonly Address1_Telephone1: string;
+			/** Type a second phone number associated with the primary address. */
+			readonly Address1_Telephone2: string;
+			/** Type a third phone number associated with the primary address. */
+			readonly Address1_Telephone3: string;
+			/** Type the UPS zone of the primary address to make sure shipping charges are calculated correctly and deliveries are made promptly, if shipped by UPS. */
+			readonly Address1_UPSZone: string;
+			/** Select the time zone, or UTC offset, for this address so that other people can reference it when they contact someone at this address. */
+			readonly Address1_UTCOffset: string;
+			/** Unique identifier for address 2. */
+			readonly Address2_AddressId: string;
+			/** Select the secondary address type. */
+			readonly Address2_AddressTypeCode: string;
+			/** Type the city for the secondary address. */
+			readonly Address2_City: string;
+			/** Shows the complete secondary address. */
+			readonly Address2_Composite: string;
+			/** Type the country or region for the secondary address. */
+			readonly Address2_Country: string;
+			/** Type the county for the secondary address. */
+			readonly Address2_County: string;
+			/** Type the fax number associated with the secondary address. */
+			readonly Address2_Fax: string;
+			/** Type the latitude value for the secondary address for use in mapping and other applications. */
+			readonly Address2_Latitude: string;
+			/** Type the first line of the secondary address. */
+			readonly Address2_Line1: string;
+			/** Type the second line of the secondary address. */
+			readonly Address2_Line2: string;
+			/** Type the third line of the secondary address. */
+			readonly Address2_Line3: string;
+			/** Type the longitude value for the secondary address for use in mapping and other applications. */
+			readonly Address2_Longitude: string;
+			/** Type a descriptive name for the secondary address, such as Corporate Headquarters. */
+			readonly Address2_Name: string;
+			/** Type the ZIP Code or postal code for the secondary address. */
+			readonly Address2_PostalCode: string;
+			/** Type the post office box number of the secondary address. */
+			readonly Address2_PostOfficeBox: string;
+			/** Select a shipping method for deliveries sent to this address. */
+			readonly Address2_ShippingMethodCode: string;
+			/** Type the state or province of the secondary address. */
+			readonly Address2_StateOrProvince: string;
+			/** Type the main phone number associated with the secondary address. */
+			readonly Address2_Telephone1: string;
+			/** Type a second phone number associated with the secondary address. */
+			readonly Address2_Telephone2: string;
+			/** Type a third phone number associated with the secondary address. */
+			readonly Address2_Telephone3: string;
+			/** Type the UPS zone of the secondary address to make sure shipping charges are calculated correctly and deliveries are made promptly, if shipped by UPS. */
+			readonly Address2_UPSZone: string;
+			/** Select the time zone, or UTC offset, for this address so that other people can reference it when they contact someone at this address. */
+			readonly Address2_UTCOffset: string;
+			/** Information about the budget amount of the lead's company or organization. */
+			readonly BudgetAmount: string;
+			/** Value of the Budget Amount in base currency. */
+			readonly BudgetAmount_Base: string;
+			/** Information about the budget status of the lead's company or organization. */
+			readonly BudgetStatus: string;
+			/** Stores Image of the Business Card */
+			readonly BusinessCard: string;
+			/** Stores Business Card Control Properties. */
+			readonly BusinessCardAttributes: string;
+			/** Choose the campaign that the lead was generated from to track the effectiveness of marketing campaigns and identify  communications received by the lead. */
+			readonly CampaignId: string;
+			/** Type the name of the company associated with the lead. This becomes the account name when the lead is qualified and converted to a customer account. */
+			readonly CompanyName: string;
+			/** Select whether the lead confirmed interest in your offerings. This helps in determining the lead quality. */
+			readonly ConfirmInterest: string;
+			/** Unique identifier of the contact with which the lead is associated. */
+			readonly ContactId: string;
+			/** Shows who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
+			readonly customerid_account: string;
+			/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
+			readonly customerid_contact: string;
+			/** Select whether your notes include information about who makes the purchase decisions at the lead's company. */
+			readonly DecisionMaker: string;
+			/** Type additional information to describe the lead, such as an excerpt from the company's website. */
+			readonly Description: string;
+			/** Select whether the lead accepts bulk email sent through marketing campaigns or quick campaigns. If Do Not Allow is selected, the lead can be added to marketing lists, but will be excluded from the email. */
+			readonly DoNotBulkEMail: string;
+			/** Select whether the lead allows direct email sent from Microsoft Dynamics 365. */
+			readonly DoNotEMail: string;
+			/** Select whether the lead allows faxes. */
+			readonly DoNotFax: string;
+			/** Select whether the lead allows phone calls. */
+			readonly DoNotPhone: string;
+			/** Select whether the lead allows direct mail. */
+			readonly DoNotPostalMail: string;
+			/** Select whether the lead accepts marketing materials, such as brochures or catalogs. Leads that opt out can be excluded from marketing initiatives. */
+			readonly DoNotSendMM: string;
+			/** Type the primary email address for the lead. */
+			readonly EMailAddress1: string;
+			/** Type the secondary email address for the lead. */
+			readonly EMailAddress2: string;
+			/** Type a third email address for the lead. */
+			readonly EMailAddress3: string;
+			/** Shows the default image for the record. */
+			readonly EntityImage: string;
+			readonly EntityImage_Timestamp: string;
+			readonly EntityImage_URL: string;
+			readonly EntityImageId: string;
+			/** Type the estimated revenue value that this lead will generate to assist in sales forecasting and planning. */
+			readonly EstimatedAmount: string;
+			/** Value of the Est. Value in base currency. */
+			readonly EstimatedAmount_Base: string;
+			/** Enter the expected close date for the lead, so that the sales team can schedule timely follow-up meetings to move the prospect to the next sales stage. */
+			readonly EstimatedCloseDate_DateOnly: string;
+			/** Type a numeric value of the lead's estimated value, such as a product quantity, if no revenue amount can be specified in the Est. Value field. This can be used for sales forecasting and planning. */
+			readonly EstimatedValue: string;
+			/** Select whether the fit between the lead's requirements and your offerings was evaluated. */
+			readonly EvaluateFit: string;
+			/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
+			readonly ExchangeRate: string;
+			/** Type the fax number for the primary contact for the lead. */
+			readonly Fax: string;
+			/** Type the first name of the primary contact for the lead to make sure the prospect is addressed correctly in sales calls, email, and marketing campaigns. */
+			readonly FirstName: string;
+			/** Information about whether to allow following email activity like opens, attachment views and link clicks for emails sent to the lead. */
+			readonly FollowEmail: string;
+			/** Combines and shows the lead's first and last names so the full name can be displayed in views and reports. */
+			readonly FullName: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Select the primary industry in which the lead's business is focused, for use in marketing segmentation and demographic analysis. */
+			readonly IndustryCode: string;
+			/** Choose whether someone from the sales team contacted this lead earlier. */
+			readonly InitialCommunication: string;
+			/** Information about whether the contact was auto-created when promoting an email or an appointment. */
+			readonly IsAutoCreate: string;
+			/** Indicates whether the lead is private or visible to the entire organization. */
+			readonly IsPrivate: string;
+			/** Type the job title of the primary contact for this lead to make sure the prospect is addressed correctly in sales calls, email, and marketing campaigns. */
+			readonly JobTitle: string;
+			/** Type the last name of the primary contact for the lead to make sure the prospect is addressed correctly in sales calls, email, and marketing campaigns. */
+			readonly LastName: string;
+			/** Contains the date and time stamp of the last on hold time. */
+			readonly LastOnHoldTime_UtcDateAndTime: string;
+			/** Shows the date when the lead was last included in a marketing campaign or quick campaign. */
+			readonly LastUsedInCampaign_UtcDateOnly: string;
+			/** Unique identifier of the lead. */
+			readonly LeadId: string;
+			/** Select a rating value to indicate the lead's potential to become a customer. */
+			readonly LeadQualityCode: string;
+			/** Select the primary marketing source that prompted the lead to contact you. */
+			readonly LeadSourceCode: string;
+			/** Unique identifier of the master lead for merge. */
+			readonly MasterId: string;
+			/** Tells whether the lead has been merged with another lead. */
+			readonly Merged: string;
+			/** Type the middle name or initial of the primary contact for the lead to make sure the prospect is addressed correctly. */
+			readonly MiddleName: string;
+			/** Type the mobile phone number for the primary contact for the lead. */
+			readonly MobilePhone: string;
+			/** Shows who last updated the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who last updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Describes whether lead is opted out or not */
+			readonly msdyn_gdproptout: string;
+			readonly msdyn_LeadGrade: string;
+			readonly msdyn_LeadScore: string;
+			readonly msdyn_LeadScoreTrend: string;
+			/** Whether the Opportunity created when qualifying this Lead is for an Item- based or a Work-based sale */
+			readonly msdyn_ordertype: string;
+			/** Predictive score */
+			readonly msdyn_PredictiveScoreId: string;
+			/** Result of the assignment rule process */
+			readonly msdyn_salesassignmentresult: string;
+			readonly msdyn_ScoreHistory: string;
+			readonly msdyn_ScoreReasons: string;
+			/** Unique identifier for Segment associated with Lead. */
+			readonly msdyn_segmentid: string;
+			/** Choose how high the level of need is for the lead's company. */
+			readonly Need: string;
+			/** Type the number of employees that work at the company associated with the lead, for use in marketing segmentation and demographic analysis. */
+			readonly NumberOfEmployees: string;
+			/** Shows how long, in minutes, that the record was on hold. */
+			readonly OnHoldTime: string;
+			/** This attribute is used for Sample Service Business Processes. */
+			readonly OriginatingCaseId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Type the pager number for the primary contact for the lead. */
+			readonly Pager: string;
+			/** Choose an account to connect this lead to, so that the relationship is visible in reports and analytics. */
+			readonly ParentAccountId: string;
+			/** Choose a contact to connect this lead to, so that the relationship is visible in reports and analytics. */
+			readonly ParentContactId: string;
+			/** Shows whether the lead participates in workflow rules. */
+			readonly ParticipatesInWorkflow: string;
+			/** Select the preferred method of contact. */
+			readonly PreferredContactMethodCode: string;
+			/** Select the priority so that preferred customers or critical issues are handled quickly. */
+			readonly PriorityCode: string;
+			/** Contains the id of the process associated with the entity. */
+			readonly ProcessId: string;
+			/** Choose whether an individual or a committee will be involved in the  purchase process for the lead. */
+			readonly PurchaseProcess: string;
+			/** Choose how long the lead will likely take to make the purchase, so the sales team will be aware. */
+			readonly PurchaseTimeFrame: string;
+			/** Type comments about the qualification or scoring of the lead. */
+			readonly QualificationComments: string;
+			/** Choose the opportunity that the lead was qualified on and then converted to. */
+			readonly QualifyingOpportunityId: string;
+			/** Related Campaign Response. */
+			readonly RelatedObjectId: string;
+			/** Type the annual revenue of the company associated with the lead to provide an understanding of the prospect's business. */
+			readonly Revenue: string;
+			/** Value of the Annual Revenue in base currency. */
+			readonly Revenue_Base: string;
+			/** Select the sales stage of this lead to aid the sales team in their efforts to convert this lead to an opportunity. */
+			readonly SalesStage: string;
+			/** Select the sales process stage for the lead to help determine the probability of the lead converting to an opportunity. */
+			readonly SalesStageCode: string;
+			/** Type the salutation of the primary contact for this lead to make sure the prospect is addressed correctly in sales calls, email messages, and marketing campaigns. */
+			readonly Salutation: string;
+			/** Enter the date and time of the prospecting follow-up meeting with the lead. */
+			readonly ScheduleFollowUp_Prospect_UtcDateOnly: string;
+			/** Enter the date and time of the qualifying follow-up meeting with the lead. */
+			readonly ScheduleFollowUp_Qualify_UtcDateOnly: string;
+			/** Type the Standard Industrial Classification (SIC) code that indicates the lead's primary industry of business for use in marketing segmentation and demographic analysis. */
+			readonly SIC: string;
+			/** Choose the service level agreement (SLA) that you want to apply to the Lead record. */
+			readonly SLAId: string;
+			/** Last SLA that was applied to this case. This field is for internal use only. */
+			readonly SLAInvokedId: string;
+			/** Contains the id of the stage where the entity is located. */
+			readonly StageId: string;
+			/** Shows whether the lead is open, qualified, or disqualified. Qualified and disqualified leads are read-only and can't be edited unless they are reactivated. */
+			readonly StateCode: string;
+			/** Select the lead's status. */
+			readonly StatusCode: string;
+			/** Type a subject or descriptive name, such as the expected order, company name, or marketing source list, to identify the lead. */
+			readonly Subject: string;
+			/** Number of users or conversations followed the record */
+			readonly TeamsFollowed: string;
+			/** Type the work phone number for the primary contact for the lead. */
+			readonly Telephone1: string;
+			/** Type the home phone number for the primary contact for the lead. */
+			readonly Telephone2: string;
+			/** Type an alternate phone number for the primary contact for the lead. */
+			readonly Telephone3: string;
+			/** Total time spent for emails (read and write) and meetings by me in relation to the lead record. */
+			readonly TimeSpentByMeOnEmailAndMeetings: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			readonly TransactionCurrencyId: string;
+			/** A comma separated list of string values representing the unique identifiers of stages in a Business Process Flow Instance in the order that they occur. */
+			readonly TraversedPath: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+			/** Type the website URL for the company associated with this lead. */
+			readonly WebSiteUrl: string;
+			/** Type the phonetic spelling of the lead's company name, if the name is specified in Japanese, to make sure the name is pronounced correctly in phone calls with the prospect. */
+			readonly YomiCompanyName: string;
+			/** Type the phonetic spelling of the lead's first name, if the name is specified in Japanese, to make sure the name is pronounced correctly in phone calls with the prospect. */
+			readonly YomiFirstName: string;
+			/** Combines and shows the lead's Yomi first and last names so the full phonetic name can be displayed in views and reports. */
+			readonly YomiFullName: string;
+			/** Type the phonetic spelling of the lead's last name, if the name is specified in Japanese, to make sure the name is pronounced correctly in phone calls with the prospect. */
+			readonly YomiLastName: string;
+			/** Type the phonetic spelling of the lead's middle name, if the name is specified in Japanese, to make sure the name is pronounced correctly in phone calls with the prospect. */
+			readonly YomiMiddleName: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -734,6 +1059,8 @@ declare namespace OptionSet {
 			No_Committed_Budget,
 			/** 3 */
 			Will_Buy
+		}
+		enum CustomerIdType {
 		}
 		enum IndustryCode {
 			/** 1 */
@@ -883,6 +1210,8 @@ declare namespace OptionSet {
 			/** 1 */
 			Should_have
 		}
+		enum OwnerIdType {
+		}
 		enum PreferredContactMethodCode {
 			/** 1 */
 			Any,
@@ -969,4 +1298,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

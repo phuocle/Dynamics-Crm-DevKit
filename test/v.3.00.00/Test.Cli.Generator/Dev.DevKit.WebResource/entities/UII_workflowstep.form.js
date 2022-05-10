@@ -55,6 +55,8 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.UII_workflowstep = {
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

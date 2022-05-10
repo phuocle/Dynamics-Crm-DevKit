@@ -110,7 +110,7 @@ var DevKit;
 		}
 		officedocument.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -127,6 +127,10 @@ var OptionSet;
 		DocumentType : {
 			Microsoft_Excel: 1,
 			Microsoft_Word: 2
+		},
+		ObjectTypeCode : {
+		},
+		OwnerIdType : {
 		},
 		RollupState : {
 			NotCalculated: 0,

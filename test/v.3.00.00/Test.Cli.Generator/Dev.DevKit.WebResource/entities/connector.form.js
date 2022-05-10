@@ -37,6 +37,14 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.connector = {
+		Capabilities : {
+			actions: 118690005,
+			blob: 118690002,
+			cloud: 118690004,
+			composite: 118690000,
+			gateway: 118690003,
+			tabular: 118690001
+		},
 		ComponentState : {
 			Deleted: 2,
 			Deleted_Unpublished: 3,
@@ -46,6 +54,8 @@ var OptionSet;
 		ConnectorType : {
 			CustomConnector: 1,
 			NotSpecified: 0
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

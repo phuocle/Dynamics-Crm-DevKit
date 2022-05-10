@@ -149,6 +149,65 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Unique identifier for Toolbar Button associated with Toolbar Button. */
+			readonly msdyusd_Buttons: string;
+			readonly msdyusd_ButtonText: string;
+			readonly msdyusd_EnableCondition: string;
+			readonly msdyusd_EnabledCondition: string;
+			readonly msdyusd_Image: string;
+			/** The name of the custom entity. */
+			readonly msdyusd_name: string;
+			readonly msdyusd_order: string;
+			readonly msdyusd_ScriptCondition: string;
+			/** Example: CTRL+T */
+			readonly msdyusd_shortcutkey: string;
+			/** Unique identifier for UII Hosted Application associated with Toolbar Button. */
+			readonly msdyusd_showtab: string;
+			/** Unique identifier for entity instances */
+			readonly msdyusd_toolbarbuttonId: string;
+			/** Unique identifier for Toolbar associated with Toolbar Button. */
+			readonly msdyusd_ToolbarId: string;
+			readonly msdyusd_Tooltip: string;
+			readonly msdyusd_VisibleCondition: string;
+			readonly msdyusd_WebResourceUrl: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the ToolbarButton */
+			readonly statecode: string;
+			/** Reason for the status of the ToolbarButton */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -160,6 +219,8 @@ declare namespace OptionSet {
 			Customer_Session,
 			/** 803750002 */
 			Script_Expression
+		}
+		enum OwnerIdType {
 		}
 		enum statecode {
 			/** 0 */
@@ -191,4 +252,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

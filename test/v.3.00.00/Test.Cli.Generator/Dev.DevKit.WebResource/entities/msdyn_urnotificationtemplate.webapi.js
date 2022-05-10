@@ -123,7 +123,7 @@ var DevKit;
 		}
 		msdyn_urnotificationtemplate.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -144,6 +144,7 @@ var OptionSet;
 			Unpublished: 1
 		},
 		msdyn_channeltype : {
+			Apple_Messages_for_Business: 192450000,
 			Co_browse: 192390000,
 			Custom: 192350002,
 			Entity_Records: 192350000,
@@ -158,6 +159,8 @@ var OptionSet;
 			Voice: 192370000,
 			WeChat: 192320000,
 			WhatsApp: 192300000
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

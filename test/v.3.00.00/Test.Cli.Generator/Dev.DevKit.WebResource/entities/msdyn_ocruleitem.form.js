@@ -51,6 +51,8 @@ var OptionSet;
 			Agent: 2,
 			Queue: 1
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

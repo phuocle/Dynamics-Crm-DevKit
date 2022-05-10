@@ -143,6 +143,80 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Shows the incident related to this suggestion result. */
+			readonly msdyn_IncidentType: string;
+			/** Shows the incident (for merge) related to this suggestion result. */
+			readonly msdyn_IncidentTypeForMerge: string;
+			/** Shows unique identifier of an incident type. */
+			readonly msdyn_IncidentTypeId: string;
+			/** Shows unique identifier of an incident (for merge). */
+			readonly msdyn_IncidentTypeIdForMerge: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_incidenttyperecommendationresultId: string;
+			/** The name of the custom entity. */
+			readonly msdyn_name: string;
+			/** Shows the occurrence times of the related incident type. */
+			readonly msdyn_OccurrenceTimes: string;
+			/** Shows the product related to this suggestion result. */
+			readonly msdyn_ProductService: string;
+			/** Shows unique identifier of a product. */
+			readonly msdyn_ProductServiceId: string;
+			/** Shows the suggestion description. */
+			readonly msdyn_RecommendationDescription: string;
+			/** Shows the type of incident type suggestion. */
+			readonly msdyn_RecommendationType: string;
+			/** Id of Incident Type Suggestion Run History */
+			readonly msdyn_RunHistoryId: string;
+			/** Shows unique identifier of the related run job. */
+			readonly msdyn_RunId: string;
+			/** Shows the score ranking of the result. */
+			readonly msdyn_ScoreRanking: string;
+			/** Shows the suggested value of product quantity or service duration. */
+			readonly msdyn_SuggestedValue: string;
+			/** Shows the total occurrence times of the related incident type. */
+			readonly msdyn_TotalOccurrenceTimes: string;
+			/** The unit that determines the pricing and final quantity for this product or service. */
+			readonly msdyn_Unit: string;
+			/** Shows unique identifier of the unit. */
+			readonly msdyn_UnitId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the Incident Type Suggestion Result */
+			readonly statecode: string;
+			/** Reason for the status of the Incident Type Suggestion Result */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -154,6 +228,8 @@ declare namespace OptionSet {
 			Work_Order_Product,
 			/** 192350001 */
 			Work_Order_Service
+		}
+		enum OwnerIdType {
 		}
 		enum statecode {
 			/** 0 */
@@ -189,4 +265,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

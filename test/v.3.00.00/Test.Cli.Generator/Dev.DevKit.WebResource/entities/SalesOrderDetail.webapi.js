@@ -183,7 +183,7 @@ var DevKit;
 		}
 		salesorderdetail.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -212,6 +212,8 @@ var OptionSet;
 		msdyn_LineType : {
 			Field_Service_Line: 690970001,
 			Project_Service_Line: 690970000
+		},
+		OwnerIdType : {
 		},
 		PricingErrorCode : {
 			Base_Currency_Attribute_Overflow: 36,
@@ -265,6 +267,8 @@ var OptionSet;
 			Edit: 0,
 			Not_Configured: 2,
 			Rectify: 1
+		},
+		SalesOrderStateCode : {
 		},
 		ShipTo_FreightTermsCode : {
 			FOB: 1,

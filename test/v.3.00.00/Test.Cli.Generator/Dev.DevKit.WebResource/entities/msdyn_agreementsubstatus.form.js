@@ -57,6 +57,8 @@ var OptionSet;
 			Estimate: 690970000,
 			Expired: 690970002
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

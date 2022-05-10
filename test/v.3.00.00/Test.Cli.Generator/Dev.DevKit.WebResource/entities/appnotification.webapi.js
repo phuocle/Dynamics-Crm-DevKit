@@ -119,7 +119,7 @@ var DevKit;
 		}
 		appnotification.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -140,6 +140,8 @@ var OptionSet;
 			Mention: 100000004,
 			Success: 100000001,
 			Warning: 100000003
+		},
+		OwnerIdType : {
 		},
 		Priority : {
 			High: 200000001,

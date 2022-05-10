@@ -133,6 +133,67 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Action name for IoT device visualization */
+			readonly msdyn_actionname: string;
+			readonly msdyn_Aggregation: string;
+			/** Device Event of device visualization */
+			readonly msdyn_DeviceEvent: string;
+			/** Visualizations shown for this device */
+			readonly msdyn_IoTDevice: string;
+			/** Visualization shown for this device category */
+			readonly msdyn_IoTDeviceCategory: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_iotdevicevisualizationconfigurationId: string;
+			/** Property Definition */
+			readonly msdyn_Measurement: string;
+			/** The name of the custom entity. */
+			readonly msdyn_name: string;
+			/** Position of device visualization */
+			readonly msdyn_Position: string;
+			/** Time range unit for device visualization */
+			readonly msdyn_TimeRangeType: string;
+			/** Time range value for device visualization */
+			readonly msdyn_TimeRangeValue: string;
+			/** Visualization Configuration */
+			readonly msdyn_VisualizationConfigurationType: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the IoT Device Visualization Configuration */
+			readonly statecode: string;
+			/** Reason for the status of the IoT Device Visualization Configuration */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -175,6 +236,8 @@ declare namespace OptionSet {
 			/** 192350002 */
 			Configuration_3
 		}
+		enum OwnerIdType {
+		}
 		enum statecode {
 			/** 0 */
 			Active,
@@ -205,4 +268,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

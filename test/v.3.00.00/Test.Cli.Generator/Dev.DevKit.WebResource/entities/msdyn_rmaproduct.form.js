@@ -81,6 +81,8 @@ var OptionSet;
 			Create_RTV: 690970000,
 			Return_to_Warehouse: 690970001
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

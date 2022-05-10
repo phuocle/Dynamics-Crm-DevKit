@@ -240,6 +240,85 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Data sent from the device about the alert. */
+			readonly msdyn_AlertData: string;
+			/** The suggested priority score for this alert. */
+			readonly msdyn_alertpriorityscore: string;
+			/** The time the alert was issued. */
+			readonly msdyn_AlertTime_UtcDateAndTime: string;
+			/** The unique reference to the event id on the IoT provider. */
+			readonly msdyn_AlertToken: string;
+			readonly msdyn_alerttype: string;
+			/** External URL to view more information about the iot alert. */
+			readonly msdyn_AlertURL: string;
+			/** Case created for this iot alert. */
+			readonly msdyn_case: string;
+			/** The asset connected to the IoT device that raised the alert. */
+			readonly msdyn_CustomerAsset: string;
+			/** A description for the alert. */
+			readonly msdyn_Description: string;
+			/** The IoT device for which this alert was raised. */
+			readonly msdyn_Device: string;
+			/** The ID of the IoT device that sent the alert. */
+			readonly msdyn_DeviceID: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_iotalertId: string;
+			readonly msdyn_LastCommandSent: string;
+			readonly msdyn_LastCommandSentTime_UtcDateAndTime: string;
+			/** Reference to a primary alert. This field is inferred if Primary Alert Token is set. */
+			readonly msdyn_ParentAlert: string;
+			/** Reference to a previously created primary iot alert */
+			readonly msdyn_ParentAlertToken: string;
+			/** The suggested incident type for this alert */
+			readonly msdyn_suggestedincidenttype: string;
+			/** The suggested priority for this alert. */
+			readonly msdyn_suggestedpriority: string;
+			/** Work order created for this iot alert. */
+			readonly msdyn_Workorder: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Contains the id of the process associated with the entity. */
+			readonly processid: string;
+			/** Contains the id of the stage where the entity is located. */
+			readonly stageid: string;
+			/** Status of the IoT Alert */
+			readonly statecode: string;
+			/** Reason for the status of the IoT Alert */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** A comma separated list of string values representing the unique identifiers of stages in a Business Process Flow Instance in the order that they occur. */
+			readonly traversedpath: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -263,6 +342,8 @@ declare namespace OptionSet {
 			Low,
 			/** 192350003 */
 			No_Suggestions
+		}
+		enum OwnerIdType {
 		}
 		enum statecode {
 			/** 0 */
@@ -308,4 +389,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

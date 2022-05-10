@@ -120,7 +120,7 @@ var DevKit;
 		}
 		msfp_surveyreminder.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -138,6 +138,8 @@ var OptionSet;
 			Active: 647390000,
 			Completed: 647390001,
 			Failed: 647390002
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

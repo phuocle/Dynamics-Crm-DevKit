@@ -124,7 +124,7 @@ var DevKit;
 		}
 		msfp_emailtemplate.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -141,6 +141,8 @@ var OptionSet;
 		msfp_templatetype : {
 			Survey: 647390001,
 			User: 647390000
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

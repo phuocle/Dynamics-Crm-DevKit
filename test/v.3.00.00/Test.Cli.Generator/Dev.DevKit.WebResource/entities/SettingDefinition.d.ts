@@ -97,6 +97,76 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly ComponentIdUnique: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Data type of Setting Definition. */
+			readonly DataType: string;
+			/** Default value to be used, if there is no associated App Setting Value. */
+			readonly DefaultValue: string;
+			/** The description of the Setting Definition. */
+			readonly Description: string;
+			/** Display name of the Setting Definition. */
+			readonly DisplayName: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Specifies information url of the setting. */
+			readonly InformationUrl: string;
+			/** For internal use only. */
+			readonly IsCustomizable: string;
+			/** Specifies whether settings is hidden from ui designer. */
+			readonly IsHidden: string;
+			/** Indicates whether the solution component is part of a managed solution. */
+			readonly IsManaged: string;
+			/** Specifies whether settings can be overridden at an app or org level by other publishers. */
+			readonly IsOverridable: string;
+			/** Specifies whether setting is a internal platform setting. */
+			readonly IsPlatform: string;
+			/** Specifies whether settings controls the flighting a preview feature. */
+			readonly IsPreview: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Unique identifier for the organization */
+			readonly OrganizationId: string;
+			/** Overridable Level of Setting Definition. */
+			readonly OverridableLevel: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateAndTime: string;
+			/** Specifies settings release level. */
+			readonly ReleaseLevel: string;
+			/** Unique identifier for entity instances */
+			readonly SettingDefinitionId: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** Status of the SettingDefinition */
+			readonly statecode: string;
+			/** Reason for the status of the SettingDefinition */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Unique name of the Setting Definition. */
+			readonly UniqueName: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -165,4 +235,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

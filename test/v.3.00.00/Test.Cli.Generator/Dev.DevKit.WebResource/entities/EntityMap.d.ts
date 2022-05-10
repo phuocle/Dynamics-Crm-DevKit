@@ -61,6 +61,40 @@ declare namespace DevKit {
 		/** Name of the Microsoft Dynamics 365 entity. */
 		TargetEntityName: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier of the user who created the entity map. */
+			readonly CreatedBy: string;
+			/** Date and time when the entity map was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the entitymap. */
+			readonly CreatedOnBehalfBy: string;
+			/** Unique identifier of the entity map. */
+			readonly EntityMapId: string;
+			/** For internal use only. */
+			readonly EntityMapIdUnique: string;
+			readonly IsManaged: string;
+			/** Unique identifier of the user who last modified the entity map. */
+			readonly ModifiedBy: string;
+			/** Date and time when the entity map was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the entitymap. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Unique identifier of the organization with which the entity map is associated. */
+			readonly OrganizationId: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** Name of the source entity for the entity mapping. */
+			readonly SourceEntityName: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** Name of the Microsoft Dynamics 365 entity. */
+			readonly TargetEntityName: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -93,4 +127,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

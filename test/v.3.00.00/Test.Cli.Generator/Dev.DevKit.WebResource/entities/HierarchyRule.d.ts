@@ -67,6 +67,46 @@ declare namespace DevKit {
 		readonly SupportingSolutionId: string;
 		/** Version number of the Hierarchy rule. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Description of the hierarchy rule. */
+			readonly Description: string;
+			/** Unique identifier of the record type hierarchy rule. */
+			readonly HierarchyRuleID: string;
+			/** Unique identifier of the hierarchy rule used when synchronizing customizations for the Microsoft Dynamics 365 client for Outlook */
+			readonly HierarchyRuleIDUnique: string;
+			/** Version in which the hierarchy rule is introduced. */
+			readonly IntroducedVersion: string;
+			/** Information that specifies whether this component can be customized. */
+			readonly IsCustomizable: string;
+			readonly IsManaged: string;
+			/** Name of the hierarchy rule. */
+			readonly Name: string;
+			/** Unique identifier of the organization. */
+			readonly OrganizationId: string;
+			/** Date and time when the record was created. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Form Id for the Primary Entity */
+			readonly PrimaryEntityFormID: string;
+			/** Logical Name for the Primary entity. */
+			readonly PrimaryEntityLogicalName: string;
+			readonly PublishedOn_UtcDateAndTime: string;
+			/** Form Id for the Related Entity. */
+			readonly RelatedEntityFormId: string;
+			/** Logical Name for the Related entity. */
+			readonly RelatedEntityLogicalName: string;
+			/** To show disabled records or not. */
+			readonly ShowDisabled: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** columns to sort in the primary entity */
+			readonly SortBy: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** Version number of the Hierarchy rule. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -99,4 +139,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

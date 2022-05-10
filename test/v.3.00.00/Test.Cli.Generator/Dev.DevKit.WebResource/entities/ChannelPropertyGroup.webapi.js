@@ -115,7 +115,7 @@ var DevKit;
 		}
 		channelpropertygroup.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -136,19 +136,19 @@ var OptionSet;
 			Unpublished: 1
 		},
 		RegardingTypeCode : {
-			Activity_record_for_the_Teams_chat: 10086,
+			Activity_record_for_the_Teams_chat: 10088,
 			Appointment: 4201,
-			Booking_Alert: 10404,
-			Conversation: 10707,
-			Customer_Voice_alert: 10313,
-			Customer_Voice_survey_invite: 10323,
-			Customer_Voice_survey_response: 10325,
+			Booking_Alert: 10473,
+			Conversation: 10743,
+			Customer_Voice_alert: 10330,
+			Customer_Voice_survey_invite: 10340,
+			Customer_Voice_survey_response: 10342,
 			Email: 4202,
-			Outbound_message: 10817,
+			Outbound_message: 10857,
 			Phone_Call: 4210,
-			Project_Service_Approval: 10434,
+			Project_Service_Approval: 10489,
 			Service_Activity: 4214,
-			Session: 10721,
+			Session: 10760,
 			Social_Activity: 4216,
 			Task: 4212
 		},

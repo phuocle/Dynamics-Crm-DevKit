@@ -121,6 +121,72 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Application module picklist */
+			readonly msdyn_appmodule: Array<string>;
+			/** Carrier associated to the phone number */
+			readonly msdyn_carrierid: string;
+			/** ISO code for the country */
+			readonly msdyn_countryisocode: string;
+			/** The name of the custom entity. */
+			readonly msdyn_name: string;
+			/** Objective of the phone number */
+			readonly msdyn_Objective: string;
+			/** Unique identifier for Communication Provider Setting associated with Phone Number. */
+			readonly msdyn_occommunicationprovidersettingId: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_ocphonenumberId: string;
+			/** Source of phone number */
+			readonly msdyn_ocphonenumbersource: string;
+			/** Indicates if inbound calling is enabled on the phone number */
+			readonly msdyn_phoneinboundenabled: string;
+			/** The phone number of the phone number entity. */
+			readonly msdyn_phonenumber: string;
+			/** Indicates if inbound calling is enabled on the phone number */
+			readonly msdyn_phoneoutboundenabled: string;
+			/** Indicates if inbound SMS is enabled on the phonenumber */
+			readonly msdyn_smsinboundenabled: string;
+			/** Indicates if outbound SMS is enabled on the phone number */
+			readonly msdyn_smsoutboundenabled: string;
+			/** The phone number type */
+			readonly msdyn_type: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the phone number */
+			readonly statecode: string;
+			/** Reason for the status of the phone number */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -148,6 +214,8 @@ declare namespace OptionSet {
 			Short_code,
 			/** 192350001 */
 			Toll_free
+		}
+		enum OwnerIdType {
 		}
 		enum statecode {
 			/** 0 */
@@ -179,4 +247,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

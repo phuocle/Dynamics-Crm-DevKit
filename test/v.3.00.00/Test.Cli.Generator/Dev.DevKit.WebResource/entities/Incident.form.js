@@ -260,6 +260,7 @@ var DevKit;
 			SocialProfileId: {},
 			SubjectId: {},
 			SubjectId1: {},
+			SwarmSubgrid: {},
 			TicketNumber: {},
 			TicketNumber1: {},
 			Title: {},
@@ -278,7 +279,8 @@ var DevKit;
 					ChildCases: {},
 					KnowledgeArticles: {},
 					MergedCases: {},
-					Solutions: {}
+					Solutions: {},
+					SwarmSection: {}
 				}
 			},
 			Details: {
@@ -378,6 +380,7 @@ var DevKit;
 			Devices: {},
 			MergedCasesGrid: {},
 			SLA_KPI_Instances_List: {},
+			SwarmSubgrid: {},
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
@@ -418,6 +421,7 @@ var DevKit;
 			ResponseBy: {},
 			StatusCode: {},
 			SubjectId: {},
+			SwarmSubgrid: {},
 			Title: {}
 		};
 		devKit.LoadFields(formContext, body);
@@ -429,7 +433,8 @@ var DevKit;
 					ChildCases: {},
 					KnowledgeArticles: {},
 					MergedCases: {},
-					RelatedCases: {}
+					RelatedCases: {},
+					SwarmSection: {}
 				}
 			},
 			Summary: {
@@ -489,6 +494,7 @@ var DevKit;
 			ChildCasesGrid: {},
 			MergedCasesGrid: {},
 			relatedCases: {},
+			SwarmSubgrid: {},
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
@@ -835,6 +841,8 @@ var OptionSet;
 			Gold: 1,
 			Silver: 2
 		},
+		CustomerIdType : {
+		},
 		CustomerSatisfactionCode : {
 			Dissatisfied: 2,
 			Neutral: 3,
@@ -859,6 +867,8 @@ var OptionSet;
 		MessageTypeCode : {
 			Private_Message: 1,
 			Public_Message: 0
+		},
+		OwnerIdType : {
 		},
 		PriorityCode : {
 			High: 1,

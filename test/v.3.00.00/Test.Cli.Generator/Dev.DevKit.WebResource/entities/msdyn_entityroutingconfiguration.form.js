@@ -59,6 +59,8 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.msdyn_entityroutingconfiguration = {
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

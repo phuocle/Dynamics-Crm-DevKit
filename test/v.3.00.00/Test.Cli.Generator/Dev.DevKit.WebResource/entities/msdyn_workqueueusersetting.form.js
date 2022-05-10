@@ -47,6 +47,8 @@ var OptionSet;
 			Move_to_next: 1,
 			Stay_on_the_record: 2
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

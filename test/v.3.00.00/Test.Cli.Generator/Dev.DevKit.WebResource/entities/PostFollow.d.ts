@@ -123,10 +123,74 @@ declare namespace DevKit {
 		readonly YammerPostState: number;
 		/** Internal Use Only */
 		readonly YammerRetryCount: number;
+		readonly FormattedValue: {
+			/** Shows who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the team who owns the follow. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user who owns the record. */
+			readonly OwningUser: string;
+			/** Shows the ID of the post follow. */
+			readonly PostFollowId: string;
+			/** Internal Use Only */
+			readonly PostToYammer: string;
+			/** Choose the parent record for the followed post to identify the customer, opportunity, case, or other record type that the post most closely relates to. */
+			readonly regardingobjectid_account: string;
+			/** Choose the parent record for the followed post to identify the customer, opportunity, case, or other record type that the post most closely relates to. */
+			readonly regardingobjectid_appointment: string;
+			/** Choose the parent record for the followed post to identify the customer, opportunity, case, or other record type that the post most closely relates to. */
+			readonly regardingobjectid_competitor: string;
+			/** Choose the parent record for the followed post to identify the customer, opportunity, case, or other record type that the post most closely relates to. */
+			readonly regardingobjectid_contact: string;
+			/** Choose the parent record for the followed post to identify the customer, opportunity, case, or other record type that the post most closely relates to. */
+			readonly regardingobjectid_incident: string;
+			/** Choose the parent record for the followed post to identify the customer, opportunity, case, or other record type that the post most closely relates to. */
+			readonly regardingobjectid_knowledgearticle: string;
+			/** Choose the parent record for the followed post to identify the customer, opportunity, case, or other record type that the post most closely relates to. */
+			readonly regardingobjectid_lead: string;
+			/** Choose the parent record for the followed post to identify the customer, opportunity, case, or other record type that the post most closely relates to. */
+			readonly regardingobjectid_opportunity: string;
+			/** Choose the parent record for the followed post to identify the customer, opportunity, case, or other record type that the post most closely relates to. */
+			readonly regardingobjectid_phonecall: string;
+			/** Choose the parent record for the followed post to identify the customer, opportunity, case, or other record type that the post most closely relates to. */
+			readonly regardingobjectid_processsession: string;
+			/** Choose the parent record for the followed post to identify the customer, opportunity, case, or other record type that the post most closely relates to. */
+			readonly regardingobjectid_queue: string;
+			/** Choose the parent record for the followed post to identify the customer, opportunity, case, or other record type that the post most closely relates to. */
+			readonly regardingobjectid_recurringappointmentmaster: string;
+			/** Choose the parent record for the followed post to identify the customer, opportunity, case, or other record type that the post most closely relates to. */
+			readonly regardingobjectid_systemuser: string;
+			/** Choose the parent record for the followed post to identify the customer, opportunity, case, or other record type that the post most closely relates to. */
+			readonly regardingobjectid_task: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version number of post follow. */
+			readonly VersionNumber: string;
+			/** Internal Use Only */
+			readonly YammerPostState: string;
+			/** Internal Use Only */
+			readonly YammerRetryCount: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace PostFollow {
+		enum OwnerIdType {
+		}
+		enum RegardingObjectTypeCode {
+		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
 			NotCalculated,
@@ -145,4 +209,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

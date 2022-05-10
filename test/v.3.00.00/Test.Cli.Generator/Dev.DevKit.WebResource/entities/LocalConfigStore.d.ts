@@ -40,6 +40,19 @@ declare namespace DevKit {
 		readonly PublicToken: string;
 		/** Value */
 		readonly Value: string;
+		readonly FormattedValue: {
+			/** Assembly Name */
+			readonly AssemblyName: string;
+			/** Unique identifier of LocalConfigStore entry. */
+			readonly Id1: string;
+			readonly IsValueSet: string;
+			/** Key Name */
+			readonly KeyName: string;
+			/** Assembly Public Token */
+			readonly PublicToken: string;
+			/** Value */
+			readonly Value: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -62,4 +75,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

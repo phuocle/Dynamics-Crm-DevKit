@@ -70,6 +70,8 @@ var OptionSet;
 			In_Progress: 192350000,
 			Sent: 192350001
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

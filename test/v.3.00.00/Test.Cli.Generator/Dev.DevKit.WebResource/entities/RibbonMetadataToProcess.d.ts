@@ -51,6 +51,30 @@ declare namespace DevKit {
 		SolutionName: string;
 		/** Status */
 		Status: number;
+		readonly FormattedValue: {
+			/** Shows the date and time when the ribbon entity record has finished processing. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CompletedOn_UtcDateAndTime: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Entity Logical Name */
+			readonly EntityName1: string;
+			/** Exception message */
+			readonly ExceptionMessage: string;
+			/** Is entity created via Db Update */
+			readonly IsDbUpdate: string;
+			/** Shows the date and time when the record was processed. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ProcessedOn_UtcDateAndTime: string;
+			/** Retry Count */
+			readonly RetryCount: string;
+			/** Unique identifier for Ribbon Metadata Instance To Process */
+			readonly RibbonMetadataRowId: string;
+			/** Solution Id */
+			readonly SolutionId: string;
+			/** Solution Name of the ribbon entity */
+			readonly SolutionName: string;
+			/** Status */
+			readonly Status: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -73,4 +97,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

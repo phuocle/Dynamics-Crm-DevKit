@@ -64,6 +64,43 @@ declare namespace DevKit {
 		readonly SolutionId: string;
 		readonly SupportingSolutionId: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			readonly ComponentState: string;
+			/** Shows who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics CRM options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalfÂ of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Enable to allow sitemap groups to be collapsed. */
+			readonly EnableCollapsibleGroups: string;
+			/** Information about whether the site map is associated with app module. */
+			readonly IsAppAware: string;
+			readonly IsManaged: string;
+			/** Shows who last updated the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics CRM options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who last updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			readonly OrganizationId: string;
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Enable to show the home button in the sitemap. */
+			readonly ShowHome: string;
+			/** Enable to show the pinned dropdown in the sitemap. */
+			readonly ShowPinned: string;
+			/** Enable to show the recents dropdown in the sitemap. */
+			readonly ShowRecents: string;
+			readonly SiteMapId: string;
+			readonly SiteMapIdUnique: string;
+			readonly SiteMapName: string;
+			readonly SiteMapNameUnique: string;
+			readonly SiteMapXml: string;
+			readonly SiteMapXmlManaged: string;
+			readonly SolutionId: string;
+			readonly SupportingSolutionId: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -96,4 +133,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

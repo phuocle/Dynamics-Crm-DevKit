@@ -268,6 +268,74 @@ declare namespace DevKit {
 		readonly VersionNumber: number;
 		/** Pronunciation of the full name of the team, written in phonetic hiragana or katakana characters. */
 		YomiName: string;
+		readonly FormattedValue: {
+			/** Unique identifier of the user primary responsible for the team. */
+			readonly AdministratorId: string;
+			/** The Azure active directory object Id for a group. */
+			readonly AzureActiveDirectoryObjectId: string;
+			/** Unique identifier of the business unit with which the team is associated. */
+			readonly BusinessUnitId: string;
+			/** Unique identifier of the user who created the team. */
+			readonly CreatedBy: string;
+			/** Date and time when the team was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the team. */
+			readonly CreatedOnBehalfBy: string;
+			/** Description of the team. */
+			readonly Description: string;
+			/** Email address for the team. */
+			readonly EMailAddress: string;
+			/** Exchange rate for the currency associated with the team with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Unique identifier of the data import or data migration that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Information about whether the team is a default business unit team. */
+			readonly IsDefault: string;
+			readonly IsSasTokenSet: string;
+			readonly MembershipType: string;
+			/** Unique identifier of the user who last modified the team. */
+			readonly ModifiedBy: string;
+			/** Date and time when the team was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the team. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Name of the team. */
+			readonly Name: string;
+			/** Unique identifier of the organization associated with the team. */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Shows the ID of the process. */
+			readonly ProcessId: string;
+			/** Unique identifier of the default queue for the team. */
+			readonly QueueId: string;
+			/** Choose the record that the team relates to. */
+			readonly regardingobjectid_knowledgearticle: string;
+			/** Choose the record that the team relates to. */
+			readonly regardingobjectid_opportunity: string;
+			/** Sas Token for Team. */
+			readonly SasToken: string;
+			/** For internal use only. */
+			readonly ShareLinkQualifier: string;
+			/** Shows the ID of the stage. */
+			readonly StageId: string;
+			/** Select whether the team will be managed by the system. */
+			readonly SystemManaged: string;
+			/** Unique identifier for the team. */
+			readonly TeamId: string;
+			/** Shows the team template that is associated with the team. */
+			readonly TeamTemplateId: string;
+			/** Select the team type. */
+			readonly TeamType: string;
+			/** Unique identifier of the currency associated with the team. */
+			readonly TransactionCurrencyId: string;
+			/** For internal use only. */
+			readonly TraversedPath: string;
+			/** Version number of the team. */
+			readonly VersionNumber: string;
+			/** Pronunciation of the full name of the team, written in phonetic hiragana or katakana characters. */
+			readonly YomiName: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -281,6 +349,8 @@ declare namespace OptionSet {
 			Members_and_guests,
 			/** 2 */
 			Owners
+		}
+		enum RegardingObjectTypeCode {
 		}
 		enum TeamType {
 			/** 3 */
@@ -310,4 +380,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

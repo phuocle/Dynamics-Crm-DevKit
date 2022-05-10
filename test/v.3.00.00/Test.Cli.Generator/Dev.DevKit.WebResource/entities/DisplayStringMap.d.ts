@@ -44,6 +44,23 @@ declare namespace DevKit {
 		readonly SolutionId: string;
 		/** For internal use only. */
 		readonly SupportingSolutionId: string;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier of the display string. */
+			readonly DisplayStringId: string;
+			/** Unique identifier of the display string map. */
+			readonly DisplayStringMapId: string;
+			/** For internal use only. */
+			readonly DisplayStringMapIdUnique: string;
+			readonly IsManaged: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -57,6 +74,8 @@ declare namespace OptionSet {
 			Published,
 			/** 1 */
 			Unpublished
+		}
+		enum ObjectTypeCode {
 		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
@@ -76,4 +95,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

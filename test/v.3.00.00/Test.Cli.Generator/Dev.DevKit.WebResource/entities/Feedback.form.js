@@ -153,6 +153,12 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.Feedback = {
+		msdyn_ContextObjectIdType : {
+		},
+		OwnerIdType : {
+		},
+		RegardingObjectTypeCode : {
+		},
 		Source : {
 			Internal: 0,
 			Portal: 1

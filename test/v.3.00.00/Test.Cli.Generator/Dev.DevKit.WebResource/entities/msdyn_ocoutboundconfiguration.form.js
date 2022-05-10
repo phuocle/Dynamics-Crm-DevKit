@@ -44,6 +44,7 @@ var OptionSet;
 (function (OptionSet) {
 	OptionSet.msdyn_ocoutboundconfiguration = {
 		msdyn_channel : {
+			Apple_Messages_for_Business: 192450000,
 			Co_browse: 192390000,
 			Custom: 192350002,
 			Entity_Records: 192350000,
@@ -66,6 +67,8 @@ var OptionSet;
 		msdyn_type : {
 			Create_conversation_on_send: 100000001,
 			Create_conversation_when_customer_responds: 100000000
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

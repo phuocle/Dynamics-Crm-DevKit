@@ -161,6 +161,8 @@ var OptionSet;
 			Declined: 3,
 			Requested: 1
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

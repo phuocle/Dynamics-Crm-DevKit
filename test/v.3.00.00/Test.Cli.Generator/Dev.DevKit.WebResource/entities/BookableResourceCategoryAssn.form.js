@@ -76,6 +76,8 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.BookableResourceCategoryAssn = {
+		OwnerIdType : {
+		},
 		StateCode : {
 			Active: 0,
 			Inactive: 1

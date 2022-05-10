@@ -111,7 +111,7 @@ var DevKit;
 		}
 		duplicaterulecondition.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -133,6 +133,8 @@ var OptionSet;
 			Same_Date_and_Time: 4,
 			Same_First_Characters: 1,
 			Same_Last_Characters: 2
+		},
+		OwnerIdType : {
 		},
 		RollupState : {
 			NotCalculated: 0,

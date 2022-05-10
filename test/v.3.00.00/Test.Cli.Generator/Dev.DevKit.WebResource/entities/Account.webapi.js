@@ -269,7 +269,7 @@ var DevKit;
 		}
 		account.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -381,6 +381,8 @@ var OptionSet;
 			Hourly: 690970000,
 			Mileage: 690970001,
 			None: 690970003
+		},
+		OwnerIdType : {
 		},
 		OwnershipCode : {
 			Other: 4,

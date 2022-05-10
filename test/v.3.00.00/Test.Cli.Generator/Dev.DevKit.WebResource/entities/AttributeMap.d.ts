@@ -67,6 +67,46 @@ declare namespace DevKit {
 		/** Name of the target attribute for the mapping. */
 		TargetAttributeName: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the attribute map. */
+			readonly AttributeMapId: string;
+			/** For internal use only. */
+			readonly AttributeMapIdUnique: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier of the user who created the attribute map. */
+			readonly CreatedBy: string;
+			/** Date and time when the attribute map was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the attributemap. */
+			readonly CreatedOnBehalfBy: string;
+			/** Unique identifier of the entity map with which the attribute map is associated. */
+			readonly EntityMapId: string;
+			readonly IsManaged: string;
+			/** Information about whether this attribute map is user-defined or system-defined. */
+			readonly IsSystem: string;
+			/** Unique identifier of the user who last modified the attribute map. */
+			readonly ModifiedBy: string;
+			/** Date and time when the attribute map was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the attributemap. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Unique identifier of the organization with which the attribute map is associated. */
+			readonly OrganizationId: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Unique identifier of the parent attribute map. */
+			readonly ParentAttributeMapId: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** Name of the source attribute for the mapping. */
+			readonly SourceAttributeName: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** Name of the target attribute for the mapping. */
+			readonly TargetAttributeName: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -99,4 +139,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

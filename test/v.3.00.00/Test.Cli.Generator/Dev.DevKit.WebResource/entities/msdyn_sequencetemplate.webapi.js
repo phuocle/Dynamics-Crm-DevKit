@@ -71,12 +71,17 @@ var DevKit;
 			ModifiedOn_UtcDateAndTime: { a: 'modifiedon', r: true },
 			ModifiedOnBehalfBy: { b: 'modifiedonbehalfby', a: '_modifiedonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
 			msdyn_cjodefinition: { a: 'msdyn_cjodefinition' },
+			msdyn_cjodefinitionnew: { a: 'msdyn_cjodefinitionnew' },
 			msdyn_definition: { a: 'msdyn_definition' },
+			msdyn_definitionnew: { a: 'msdyn_definitionnew' },
 			msdyn_description: { a: 'msdyn_description' },
 			msdyn_language: { a: 'msdyn_language' },
 			msdyn_maxduration: { a: 'msdyn_maxduration' },
 			msdyn_maxstepcount: { a: 'msdyn_maxstepcount' },
+			msdyn_maxstepcounttext: { a: 'msdyn_maxstepcounttext' },
 			msdyn_name: { a: 'msdyn_name' },
+			msdyn_prefferedregardingentitydisplayname: { a: 'msdyn_prefferedregardingentitydisplayname' },
+			msdyn_prefferedregardingEntityName: { a: 'msdyn_prefferedregardingEntityName' },
 			msdyn_sequencetemplateId: { a: 'msdyn_sequencetemplateid' },
 			OverriddenCreatedOn_UtcDateOnly: { a: 'overriddencreatedon' },
 			OwnerId_systemuser: { b: 'ownerid', a: '_ownerid_value', c: 'systemusers', d: 'systemuser' },
@@ -119,7 +124,7 @@ var DevKit;
 		}
 		msdyn_sequencetemplate.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -179,6 +184,8 @@ var OptionSet;
 			Turkish_Turkey: 1055,
 			Ukrainian_Ukraine: 1058,
 			Vietnamese_Vietnam: 1066
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

@@ -39,6 +39,18 @@ declare namespace DevKit {
 		readonly SubscriptionClientId: string;
 		/** For internal use only. */
 		SubscriptionId: string;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly ClientId: string;
+			/** For internal use only. */
+			readonly IsPrimaryClient: string;
+			/** For internal use only. */
+			readonly MachineName: string;
+			/** For internal use only. */
+			readonly SubscriptionClientId: string;
+			/** For internal use only. */
+			readonly SubscriptionId: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -61,4 +73,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

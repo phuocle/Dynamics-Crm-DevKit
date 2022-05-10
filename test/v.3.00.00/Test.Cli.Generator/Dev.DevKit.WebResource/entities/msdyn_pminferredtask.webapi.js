@@ -74,6 +74,7 @@ var DevKit;
 			ModifiedBy: { b: 'modifiedby', a: '_modifiedby_value', c: 'systemusers', d: 'systemuser', r: true },
 			ModifiedOn_UtcDateAndTime: { a: 'modifiedon', r: true },
 			ModifiedOnBehalfBy: { b: 'modifiedonbehalfby', a: '_modifiedonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
+			msdyn_analysisschedule: { a: 'msdyn_analysisschedule' },
 			msdyn_automationdata: { a: 'msdyn_automationdata' },
 			msdyn_automationstatus: { a: 'msdyn_automationstatus' },
 			msdyn_description: { a: 'msdyn_description' },
@@ -134,7 +135,7 @@ var DevKit;
 		}
 		msdyn_pminferredtask.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -169,6 +170,8 @@ var OptionSet;
 		msdyn_source : {
 			DataLake: 1,
 			Recording: 0
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Done: 2,

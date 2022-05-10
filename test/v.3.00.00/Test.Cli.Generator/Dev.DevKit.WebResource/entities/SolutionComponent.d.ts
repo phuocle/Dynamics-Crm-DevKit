@@ -56,6 +56,35 @@ declare namespace DevKit {
 		/** Unique identifier of the solution. */
 		readonly SolutionId: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** The object type code of the component. */
+			readonly ComponentType: string;
+			/** Unique identifier of the user who created the solution */
+			readonly CreatedBy: string;
+			/** Date and time when the solution was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the solution. */
+			readonly CreatedOnBehalfBy: string;
+			/** Indicates whether this component is metadata or data. */
+			readonly IsMetadata: string;
+			/** Unique identifier of the user who last modified the solution. */
+			readonly ModifiedBy: string;
+			/** Date and time when the solution was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the solution. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Unique identifier of the object with which the component is associated. */
+			readonly ObjectId: string;
+			/** Indicates the include behavior of the root component. */
+			readonly RootComponentBehavior: string;
+			/** The parent ID of the subcomponent, which will be a root */
+			readonly RootSolutionComponentId: string;
+			/** Unique identifier of the solution component. */
+			readonly SolutionComponentId: string;
+			/** Unique identifier of the solution. */
+			readonly SolutionId: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -268,4 +297,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

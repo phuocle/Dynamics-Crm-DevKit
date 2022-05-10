@@ -98,6 +98,7 @@ var DevKit;
 			statecode: { a: 'statecode' },
 			statuscode: { a: 'statuscode' },
 			SupportingSolutionId: { a: 'supportingsolutionid', r: true },
+			SynchronizationStatus: { a: 'synchronizationstatus' },
 			TimeZoneRuleVersionNumber: { a: 'timezoneruleversionnumber' },
 			UTCConversionTimeZoneCode: { a: 'utcconversiontimezonecode' },
 			VersionNumber: { a: 'versionnumber', r: true }
@@ -131,7 +132,7 @@ var DevKit;
 		}
 		bot.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -171,11 +172,14 @@ var OptionSet;
 			Arabic: 1025,
 			Chinese_Simplified: 2052,
 			Chinese_Traditional: 1028,
+			Czech: 1029,
 			Danish: 1030,
 			Dutch: 1043,
 			English: 1033,
+			Finnish: 1035,
 			French: 1036,
 			German: 1031,
+			Greek: 1032,
 			Hindi: 1081,
 			Indonesian: 1057,
 			Italian: 1040,
@@ -187,7 +191,10 @@ var OptionSet;
 			Russian: 1049,
 			Spanish: 1034,
 			Swedish: 1053,
+			Thai: 1054,
 			Turkish: 1055
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

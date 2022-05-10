@@ -59,6 +59,38 @@ declare namespace DevKit {
 		Version: number;
 		/** Represents a version of customizations to be synchronized with the Microsoft Dynamics 365 client for Outlook. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the complex control. */
+			readonly ComplexControlId: string;
+			/** Unique identifier of the form used when synchronizing customizations for the Microsoft Dynamics 365 client for Outlook. */
+			readonly ComplexControlIdUnique: string;
+			/** XML representation of the complex control layout. */
+			readonly ComplexControlXml: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Description of the complex control. */
+			readonly Description: string;
+			/** Version in which the component is introduced. */
+			readonly IntroducedVersion: string;
+			/** Information that specifies whether this component is managed. */
+			readonly IsManaged: string;
+			/** Name of the complex control. */
+			readonly Name: string;
+			/** Unique identifier of the organization. */
+			readonly OrganizationId: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** Type of the complex control, for example, Process Control or Link Control. */
+			readonly Type: string;
+			/** For internal use only. */
+			readonly Version: string;
+			/** Represents a version of customizations to be synchronized with the Microsoft Dynamics 365 client for Outlook. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -97,4 +129,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

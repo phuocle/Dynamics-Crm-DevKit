@@ -44,6 +44,7 @@ var OptionSet;
 			Unpublished: 1
 		},
 		msdyn_channeltype : {
+			Apple_Messages_for_Business: 192450000,
 			Co_browse: 192390000,
 			Custom: 192350002,
 			Entity_Records: 192350000,
@@ -58,6 +59,8 @@ var OptionSet;
 			Voice: 192370000,
 			WeChat: 192320000,
 			WhatsApp: 192300000
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

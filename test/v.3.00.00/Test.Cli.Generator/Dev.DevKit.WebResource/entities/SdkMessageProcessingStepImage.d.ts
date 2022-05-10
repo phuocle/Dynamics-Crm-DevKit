@@ -80,6 +80,59 @@ declare namespace DevKit {
 		readonly SupportingSolutionId: string;
 		/** Number that identifies a specific revision of the step image.  */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Comma-separated list of attributes that are to be passed into the SDK message processing step image. */
+			readonly Attributes: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier of the user who created the SDK message processing step image. */
+			readonly CreatedBy: string;
+			/** Date and time when the SDK message processing step image was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the sdkmessageprocessingstepimage. */
+			readonly CreatedOnBehalfBy: string;
+			/** Customization level of the SDK message processing step image. */
+			readonly CustomizationLevel: string;
+			/** Description of the SDK message processing step image. */
+			readonly Description: string;
+			/** Key name used to access the pre-image or post-image property bags in a step. */
+			readonly EntityAlias: string;
+			/** Type of image requested. */
+			readonly ImageType: string;
+			/** Version in which the form is introduced. */
+			readonly IntroducedVersion: string;
+			/** Information that specifies whether this component can be customized. */
+			readonly IsCustomizable: string;
+			readonly IsManaged: string;
+			/** Name of the property on the Request message. */
+			readonly MessagePropertyName: string;
+			/** Unique identifier of the user who last modified the SDK message processing step. */
+			readonly ModifiedBy: string;
+			/** Date and time when the SDK message processing step was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the sdkmessageprocessingstepimage. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Name of SdkMessage processing step image. */
+			readonly Name: string;
+			/** Unique identifier of the organization with which the SDK message processing step is associated. */
+			readonly OrganizationId: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Name of the related entity. */
+			readonly RelatedAttributeName: string;
+			/** Unique identifier of the SDK message processing step. */
+			readonly SdkMessageProcessingStepId: string;
+			/** Unique identifier of the SDK message processing step image entity. */
+			readonly SdkMessageProcessingStepImageId: string;
+			/** Unique identifier of the SDK message processing step image. */
+			readonly SdkMessageProcessingStepImageIdUnique: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** Number that identifies a specific revision of the step image.  */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -120,4 +173,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

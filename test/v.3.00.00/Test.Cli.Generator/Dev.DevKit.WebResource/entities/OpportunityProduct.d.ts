@@ -167,14 +167,11 @@ declare namespace DevKit {
 			BaseAmount: DevKit.Controls.Money;
 			/** Shows the total amount due for the opportunity product, calculated on the Amount value minus the Manual Discount amount. */
 			ExtendedAmount: DevKit.Controls.Money;
-			/** Select whether the pricing on the opportunity product reflects an override of the product catalog pricing. */
-			IsPriceOverridden: DevKit.Controls.Boolean;
-			/** For system use only. */
-			IsProductOverridden: DevKit.Controls.Boolean;
+			ispriceoverridden: DevKit.Controls.ActionCards;
+			isproductoverridden: DevKit.Controls.ActionCards;
 			/** Type the manual discount amount for the opportunity product to deduct any negotiated or other savings from the product total. */
 			ManualDiscountAmount: DevKit.Controls.Money;
-			/** Unique identifier of the opportunity with which the opportunity product is associated. */
-			OpportunityId: DevKit.Controls.Lookup;
+			editpropertiescontrol: DevKit.Controls.ActionCards;
 			/** Shows the price per unit of the opportunity product, based on the price list specified on the parent opportunity. */
 			PricePerUnit: DevKit.Controls.Money;
 			/** Type a detailed product description or additional notes about the opportunity product, such as talking points or product updates, that will assist the sales team when they discuss the product with the customer. */
@@ -306,10 +303,8 @@ declare namespace DevKit {
 		}
 		interface Body {
 			Tab: Tabs;
-			/** Select whether the pricing on the opportunity product reflects an override of the product catalog pricing. */
-			IsPriceOverridden: DevKit.Controls.Boolean;
-			/** For system use only. */
-			IsProductOverridden: DevKit.Controls.Boolean;
+			ispriceoverridden: DevKit.Controls.ActionCards;
+			isproductoverridden: DevKit.Controls.ActionCards;
 			/** Type the manual discount amount for the opportunity product to deduct any negotiated or other savings from the product total. */
 			ManualDiscountAmount: DevKit.Controls.Money;
 			/** Unique identifier of the opportunity with which the opportunity product is associated. */
@@ -499,6 +494,139 @@ declare namespace DevKit {
 		readonly VolumeDiscountAmount: number;
 		/** Value of the Volume Discount in base currency. */
 		readonly VolumeDiscountAmount_Base: number;
+		readonly FormattedValue: {
+			/** Shows the total price of the opportunity product, based on the price per unit, volume discount, and quantity. */
+			readonly BaseAmount: string;
+			/** Value of the Amount in base currency. */
+			readonly BaseAmount_Base: string;
+			/** Shows who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Type additional information to describe the opportunity product, such as manufacturing details. */
+			readonly Description: string;
+			/** The default image for the entity. */
+			readonly EntityImage: string;
+			readonly EntityImage_Timestamp: string;
+			readonly EntityImage_URL: string;
+			readonly EntityImageId: string;
+			/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
+			readonly ExchangeRate: string;
+			/** Shows the total amount due for the opportunity product, calculated on the Amount value minus the Manual Discount amount. */
+			readonly ExtendedAmount: string;
+			/** Value of the Extended Amount in base currency. */
+			readonly ExtendedAmount_Base: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Select whether the pricing on the opportunity product reflects an override of the product catalog pricing. */
+			readonly IsPriceOverridden: string;
+			/** For system use only. */
+			readonly IsProductOverridden: string;
+			/** Type the line item number for the opportunity product to easily identify the product in the opportunity documents and make sure it's listed in the correct order. */
+			readonly LineItemNumber: string;
+			/** Type the manual discount amount for the opportunity product to deduct any negotiated or other savings from the product total. */
+			readonly ManualDiscountAmount: string;
+			/** Value of the Manual Discount Amount in base currency. */
+			readonly ManualDiscountAmount_Base: string;
+			/** Shows who last updated the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the opportunityproduct. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Billing method for the project opportunity line. Valid values are Time and Material and Fixed Price */
+			readonly msdyn_BillingMethod: string;
+			/** Enter the customer budget amount for this opportunity line. */
+			readonly msdyn_BudgetAmount: string;
+			/** Value of the Budget Amount in base currency. */
+			readonly msdyn_budgetamount_Base: string;
+			/** Shows the total cost price of the product based on the cost price per unit and quantity. */
+			readonly msdyn_CostAmount: string;
+			/** Value of the Cost Amount in base currency. */
+			readonly msdyn_costamount_Base: string;
+			/** Cost price per unit of the product. The default is the cost price of the product. */
+			readonly msdyn_CostPricePerUnit: string;
+			/** Value of the Cost Price Per Unit in base currency. */
+			readonly msdyn_costpriceperunit_Base: string;
+			/** Enter the duration of the agreement */
+			readonly msdyn_Duration: string;
+			/** Enter the end date of the agreement */
+			readonly msdyn_enddate_UtcDateOnly: string;
+			/** The field to distinguish the order lines to be of project service or field service */
+			readonly msdyn_LineType: string;
+			/** Select a price list for the opportunity line */
+			readonly msdyn_pricelist: string;
+			/** Select the project for this opportunity line. */
+			readonly msdyn_Project: string;
+			/** Select the service account for the opportunity line */
+			readonly msdyn_serviceaccount: string;
+			/** Start date of the Agreement */
+			readonly msdyn_startdate_UtcDateOnly: string;
+			/** Unique identifier of the opportunity with which the opportunity product is associated. */
+			readonly OpportunityId: string;
+			/** Unique identifier of the opportunity product. */
+			readonly OpportunityProductId: string;
+			/** Opportunity Product Name. Added for 1:n referential relationship (internal purposes only) */
+			readonly OpportunityProductName: string;
+			/** Select the status of the opportunity product. */
+			readonly OpportunityStateCode: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Choose the parent bundle associated with this product */
+			readonly ParentBundleId: string;
+			/** Choose the parent bundle associated with this product */
+			readonly ParentBundleIdRef: string;
+			/** Shows the price per unit of the opportunity product, based on the price list specified on the parent opportunity. */
+			readonly PricePerUnit: string;
+			/** Value of the Price Per Unit in base currency. */
+			readonly PricePerUnit_Base: string;
+			/** Select the pricing error for the opportunity product. */
+			readonly PricingErrorCode: string;
+			/** Unique identifier of the product line item association with bundle in the opportunity */
+			readonly ProductAssociationId: string;
+			/** Type a detailed product description or additional notes about the opportunity product, such as talking points or product updates, that will assist the sales team when they discuss the product with the customer. */
+			readonly ProductDescription: string;
+			/** Choose the product to include on the opportunity to link the product's pricing and other information to the opportunity. */
+			readonly ProductId: string;
+			/** Calculated field that will be populated by name and description of the product. */
+			readonly ProductName: string;
+			/** Product Type */
+			readonly ProductTypeCode: string;
+			/** Status of the property configuration. */
+			readonly PropertyConfigurationStatus: string;
+			/** Type the amount or quantity of the product the customer would like to purchase. */
+			readonly Quantity: string;
+			/** Shows the ID of the data that maintains the sequence. */
+			readonly SequenceNumber: string;
+			/** Skip price calculation */
+			readonly SkipPriceCalculation: string;
+			/** Type the tax amount to be applied on the opportunity product. */
+			readonly Tax: string;
+			/** Value of the Tax in base currency. */
+			readonly Tax_Base: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			readonly TransactionCurrencyId: string;
+			/** Choose the unit of measurement for the base unit quantity for this purchase, such as each or dozen. */
+			readonly UoMId: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+			/** Shows the discount amount per unit if a specified volume is purchased. Configure volume discounts in the Product Catalog in the Settings area. */
+			readonly VolumeDiscountAmount: string;
+			/** Value of the Volume Discount in base currency. */
+			readonly VolumeDiscountAmount_Base: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -514,6 +642,10 @@ declare namespace OptionSet {
 			Field_Service_Line,
 			/** 690970000 */
 			Project_Service_Line
+		}
+		enum OpportunityStateCode {
+		}
+		enum OwnerIdType {
 		}
 		enum PricingErrorCode {
 			/** 36 */
@@ -643,4 +775,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

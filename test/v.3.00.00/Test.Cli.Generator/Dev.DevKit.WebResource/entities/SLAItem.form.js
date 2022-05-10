@@ -23,6 +23,8 @@ var DevKit;
 			FailureAfter: {},
 			FailureAfter1: {},
 			msdyn_AdvancedPauseConfiguration: {},
+			msdyn_CustomTimeCalculation: {},
+			msdyn_CustomTimeCalculationWorkflowId: {},
 			msdyn_PauseConfigurationXml: {},
 			msdyn_slakpiid: {},
 			Name: {},
@@ -72,6 +74,8 @@ var OptionSet;
 			Deleted_Unpublished: 3,
 			Published: 0,
 			Unpublished: 1
+		},
+		OwnerIdType : {
 		},
 		RollupState : {
 			NotCalculated: 0,

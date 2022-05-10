@@ -179,10 +179,83 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Help text used to describe action parameters */
+			readonly msdyusd_Help: string;
+			readonly msdyusd_UnifiedServiceDeskCreated: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the UII Action */
+			readonly statecode: string;
+			/** Reason for the status of the UII Action */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Unique identifier for entity instances */
+			readonly UII_actionId: string;
+			/** Determines the mode of automation for this action */
+			readonly UII_AutomationMode: string;
+			/** THis attribute captures the additional data in an xml format which can be used by the action. */
+			readonly UII_ExtensionsXML: string;
+			/** Every Action should be mapped to a Hosted Application. The Hosted Application can have many Actions. */
+			readonly uii_hostedapplicationid: string;
+			/** sets whether this action is executed as default action for the hosted application */
+			readonly UII_isDefault: string;
+			/** Focus the application after the action is completed */
+			readonly UII_isFocussedApplication: string;
+			/** Run automation asynchronously to desktop thread */
+			readonly UII_isRunModeAsynchronous: string;
+			/** Specify the Method to be used to Navigate */
+			readonly UII_Method: string;
+			/** The name of the custom entity. */
+			readonly UII_name: string;
+			/** Speify the Query String needs to be added to the URL attribute. */
+			readonly UII_QueryString: string;
+			/** Captures the Script path file which will be executed on selection of No Automation mode. */
+			readonly UII_ScriptFilePathtoRun: string;
+			/** Specify the URL to which the hosted web application should navigate. */
+			readonly UII_URL: string;
+			/** Captures the Workflow Assembly Type. This is required when Workflow Automation mode is selected */
+			readonly UII_WorkflowAssemblyType: string;
+			/** When Workflow XAML mode is selected for automation mode, this attribute captures the Rules xml. */
+			readonly UII_WorkflowRules: string;
+			/** When Workflow XAML mode is selected for automation mode, this attribute captures the XAML code */
+			readonly UII_WorkflowXAML: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace UII_action {
+		enum OwnerIdType {
+		}
 		enum statecode {
 			/** 0 */
 			Active,
@@ -227,4 +300,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

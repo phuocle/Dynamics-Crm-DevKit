@@ -104,6 +104,33 @@ declare namespace DevKit {
 		msdyn_suggestedactivityId: string;
 		/** To */
 		msdyn_to: string;
+		readonly FormattedValue: {
+			readonly msdyn_ActivityType: string;
+			readonly msdyn_BodyPreview: string;
+			/** Created Date */
+			readonly msdyn_createddate_UtcDateAndTime: string;
+			readonly msdyn_duration: string;
+			/** End Time */
+			readonly msdyn_endtime_UtcDateAndTime: string;
+			/** Exchange web link */
+			readonly msdyn_exchangeweblink: string;
+			readonly msdyn_Importance: string;
+			/** Location */
+			readonly msdyn_location: string;
+			/** Regarding Name */
+			readonly msdyn_regardingname: string;
+			/** Sender */
+			readonly msdyn_sender: string;
+			/** Sender's Name */
+			readonly msdyn_sendername: string;
+			/** Start Time */
+			readonly msdyn_starttime_UtcDateAndTime: string;
+			readonly msdyn_Subject: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_suggestedactivityId: string;
+			/** To */
+			readonly msdyn_to: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -126,4 +153,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

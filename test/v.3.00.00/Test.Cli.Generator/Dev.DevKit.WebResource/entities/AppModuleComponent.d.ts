@@ -70,6 +70,49 @@ declare namespace DevKit {
 		/** Time zone code that was in use when the record was created. */
 		UTCConversionTimeZoneCode: number;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier for entity instances */
+			readonly AppModuleComponentId: string;
+			/** Unique identifier of the Application Component used when synchronizing customizations for the Microsoft Dynamics 365 client for Outlook */
+			readonly AppModuleComponentIdUnique: string;
+			/** The App Module Id Unique */
+			readonly AppModuleIdUnique: string;
+			/** The object type code of the component. */
+			readonly ComponentType: string;
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Exchange rate for the currency associated with the Application Component with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Version in which the application component record is introduced. */
+			readonly IntroducedVersion: string;
+			/** Is Default */
+			readonly IsDefault: string;
+			/** Is Metadata */
+			readonly IsMetadata: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Object Id */
+			readonly ObjectId: string;
+			/** Date and time when the record was created. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** The parent ID of the subcomponent, which will be a root */
+			readonly RootAppModuleComponentId: string;
+			/** Indicates the include behavior of the root component. */
+			readonly RootComponentBehavior: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -116,4 +159,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

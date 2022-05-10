@@ -145,6 +145,72 @@ declare namespace DevKit {
 		readonly VersionNumber: number;
 		/** Application Id that is white listed in AAD Tenant ID to access the Graph API. */
 		whitelistedappid: string;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly ComponentIdUnique: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Azure Data Lake container endpoint for this workspace. */
+			readonly containerendpoint: string;
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Unique Name for the entity. */
+			readonly datalakeworkspace_UniqueName: string;
+			/** Unique identifier for entity instances */
+			readonly datalakeworkspaceId: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Indicates if workspace data storage uses customer capacity. */
+			readonly iscustomercapacity: string;
+			/** For internal use only. */
+			readonly IsCustomizable: string;
+			/** Indicates if deep copy is enabled for workspace. */
+			readonly isdeepcopyenabled: string;
+			/** Indicates whether the solution component is part of a managed solution. */
+			readonly IsManaged: string;
+			/** Indicates if workspace data and metadata are visible to all applications, or only visible to the workspace owner and applications with explicit permissions to the workspace. */
+			readonly isprivate: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** The name of the custom entity. */
+			readonly name: string;
+			/** Unique identifier for the organization */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateAndTime: string;
+			/** The app id which owns this workspace. The owning app id has full control i.e. read, write and execute permissions on the ADLS folder. */
+			readonly owningappid: string;
+			/** Workspace path in the Azure Data Lake container. */
+			readonly path: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** Status of the Data Lake Workspace */
+			readonly statecode: string;
+			/** Reason for the status of the Data Lake Workspace */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** AAD tenant id where the owning application id is registered. */
+			readonly tenantid: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+			/** Application Id that is white listed in AAD Tenant ID to access the Graph API. */
+			readonly whitelistedappid: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -189,4 +255,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

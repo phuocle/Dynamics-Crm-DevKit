@@ -83,6 +83,8 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.Annotation = {
+		ObjectIdTypeCode : {
+		},
 		ObjectTypeCode : {
 			Account: 1,
 			Appointment: 4201,
@@ -119,6 +121,8 @@ var OptionSet;
 			Service: 4001,
 			Service_Activity: 4214,
 			Task: 4212
+		},
+		OwnerIdType : {
 		},
 		RollupState : {
 			NotCalculated: 0,

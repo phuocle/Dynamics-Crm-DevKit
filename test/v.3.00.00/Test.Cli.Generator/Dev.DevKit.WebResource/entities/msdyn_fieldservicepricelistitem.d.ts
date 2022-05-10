@@ -134,6 +134,60 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Shows the exchange rate for the currency associated with the entity with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Shows the sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who last updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Specify how the system should round the Duration To Bill on the Work Order Service */
+			readonly msdyn_DurationRoundingPolicy: string;
+			/** Specify the rounding duration. */
+			readonly msdyn_DurationRoundTo: string;
+			/** Shows the entity instances. */
+			readonly msdyn_fieldservicepricelistitemId: string;
+			/** If enabled then the pricing of this item will not be multiplied by quantity */
+			readonly msdyn_FlatFee: string;
+			/** Specify the minimum charge you wish to charge for this service. See note on Minimum Charge Duration */
+			readonly msdyn_MinimumChargeAmount: string;
+			/** Shows the value of the minimum charge amount in the base currency. */
+			readonly msdyn_minimumchargeamount_Base: string;
+			/** If this field has a value, the Minimum Charge Amount will first apply to the Minimum Duration and beyond the minimum duration the regular fee will apply */
+			readonly msdyn_MinimumChargeDuration: string;
+			/** Enter the name of the custom entity. */
+			readonly msdyn_name: string;
+			/** Shows the price list associated with the field service price list item. */
+			readonly msdyn_PriceList: string;
+			/** If you wish to limit this price list item to a certain product or service you can specify it. Otherwise this should be left blank */
+			readonly msdyn_ProductService: string;
+			/** Unique identifier for the organization */
+			readonly OrganizationId: string;
+			/** Shows the date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Status of the Field Service Price List Item */
+			readonly statecode: string;
+			/** Shows the reason for the status of the field service price list item. */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Unique identifier of the currency associated with the entity. */
+			readonly TransactionCurrencyId: string;
+			/** Shows the time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -178,4 +232,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

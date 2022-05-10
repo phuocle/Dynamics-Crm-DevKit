@@ -73,6 +73,52 @@ declare namespace DevKit {
 		TargetAttributeName: string;
 		/** Name of the Microsoft Dynamics 365 entity. */
 		TargetEntityName: string;
+		readonly FormattedValue: {
+			/** Unique identifier of the column mapping. */
+			readonly ColumnMappingId: string;
+			/** Unique identifier of the Column Mapping. */
+			readonly ColumnMappingIdUnique: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier of the user who created the column mapping. */
+			readonly CreatedBy: string;
+			/** Date and time when the column mapping was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the columnmapping. */
+			readonly CreatedOnBehalfBy: string;
+			/** Unique identifier of the associated data map. */
+			readonly ImportMapId: string;
+			/** Version in which the component is introduced. */
+			readonly IntroducedVersion: string;
+			/** Information that specifies whether this component is managed. */
+			readonly IsManaged: string;
+			/** Unique identifier of the user who last modified the column mapping. */
+			readonly ModifiedBy: string;
+			/** Date and time when the column mapping was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the columnmapping. */
+			readonly ModifiedOnBehalfBy: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Information about whether the column mapping needs to be processed. */
+			readonly ProcessCode: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** Name of the source attribute. */
+			readonly SourceAttributeName: string;
+			/** Name of the source entity. */
+			readonly SourceEntityName: string;
+			/** Status of the column mapping. */
+			readonly StateCode: string;
+			/** Reason for the status of the column mapping. */
+			readonly StatusCode: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** Name of the Microsoft Dynamics 365 attribute. */
+			readonly TargetAttributeName: string;
+			/** Name of the Microsoft Dynamics 365 entity. */
+			readonly TargetEntityName: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -121,4 +167,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

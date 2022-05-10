@@ -62,6 +62,41 @@ declare namespace DevKit {
 		/** Stores the SHA256 Hash key value. */
 		SHA256: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Client data regarding this office document. */
+			readonly ClientData: string;
+			/** Bytes of the office document. */
+			readonly Content: string;
+			/** Unique identifier of the user who created the office document. */
+			readonly CreatedBy: string;
+			/** Date and time when the office document was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the office document. */
+			readonly CreatedOnBehalfBy: string;
+			/** Option set for selecting the type of the office document */
+			readonly DocumentType: string;
+			/** Lock state of file. */
+			readonly FileLockState: string;
+			/** File Size. */
+			readonly FileSize: string;
+			/** Unique identifier of the user who last modified the office document. */
+			readonly ModifiedBy: string;
+			/** Date and time when the office document was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the office document. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Name of the office document. */
+			readonly Name: string;
+			/** Unique identifier of the office document. */
+			readonly OfficeDocumentId: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Stores the SHA256 Hash key value. */
+			readonly SHA256: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -71,6 +106,10 @@ declare namespace OptionSet {
 			Microsoft_Excel,
 			/** 2 */
 			Microsoft_Word
+		}
+		enum ObjectTypeCode {
+		}
+		enum OwnerIdType {
 		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
@@ -90,4 +129,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

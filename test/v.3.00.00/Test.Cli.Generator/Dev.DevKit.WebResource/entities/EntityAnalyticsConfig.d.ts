@@ -59,6 +59,38 @@ declare namespace DevKit {
 		readonly SupportingSolutionId: string;
 		/** Version number of Entity Analytics Config. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly ComponentIdUnique: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier for entity instances */
+			readonly EntityAnalyticsConfigId: string;
+			/** Azure Data Lake Storage is enabled for the selected entity */
+			readonly IsEnabledForADLS: string;
+			/** Time series is enabled for the selected entity */
+			readonly IsEnabledForTimeSeries: string;
+			/** Indicates whether the solution component is part of a managed solution. */
+			readonly IsManaged: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier for the organization */
+			readonly OrganizationId: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateAndTime: string;
+			/** Unique identifier for Entity associated with Entity Analytics Config. */
+			readonly ParentEntityId: string;
+			/** Entity Logical Name For Analytics */
+			readonly ParentEntityLogicalName: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** Version number of Entity Analytics Config. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -91,4 +123,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

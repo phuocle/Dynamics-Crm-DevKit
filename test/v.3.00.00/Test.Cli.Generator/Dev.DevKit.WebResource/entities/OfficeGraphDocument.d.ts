@@ -113,6 +113,67 @@ declare namespace DevKit {
 		readonly ViewCount: number;
 		/** Shows the Web Location Url of Office Graph Document. */
 		readonly WebLocationUrl: string;
+		readonly FormattedValue: {
+			/** Shows Author Names of Office Graph Document. */
+			readonly AuthorNames: string;
+			/** Shows Created By of Office Graph Document. */
+			readonly CreatedBy: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedTime_UtcDateAndTime: string;
+			/** Document Id. */
+			readonly DocumentId: string;
+			/** Document Last Modified By */
+			readonly DocumentLastModifiedBy: string;
+			/** Document Last Modified On */
+			readonly DocumentLastModifiedOn_UtcDateAndTime: string;
+			/** document preview metadata */
+			readonly DocumentPreviewMetadata: string;
+			/** Exchange rate for the currency associated with the Office Graph Document with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** File Extension of Office Graph Document. */
+			readonly FileExtension: string;
+			/** Shows the File Type of Office Graph Document. */
+			readonly FileType: string;
+			/** Shows modified by of Office Graph Document. */
+			readonly ModifiedBy: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedTime_UtcDateAndTime: string;
+			/** Unique identifier for entity instances */
+			readonly OfficeGraphDocumentId: string;
+			/** Unique identifier for the organization */
+			readonly OrganizationId: string;
+			/** Shows the Preview Image Url Office Graph Document. */
+			readonly PreviewImageUrl: string;
+			/** Shows Query Type of child folders */
+			readonly QueryType: string;
+			/** The relevancy rank of the document retrieved */
+			readonly Rank: string;
+			/** The online read url */
+			readonly ReadUrl: string;
+			/** Secondary File Extension of Office Graph Document. */
+			readonly SecondaryFileExtension: string;
+			/** The title of the parent document site */
+			readonly SiteTitle: string;
+			/** The site url for the parent document site */
+			readonly SiteUrl: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** The title of the entity. */
+			readonly Title: string;
+			/** Exchange rate for the currency associated with the Office Graph Document with respect to the base currency. */
+			readonly TransactionCurrencyId: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			readonly VersionNumber: string;
+			/** Shows View Count of child folders. */
+			readonly ViewCount: string;
+			/** Shows the Web Location Url of Office Graph Document. */
+			readonly WebLocationUrl: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -135,4 +196,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

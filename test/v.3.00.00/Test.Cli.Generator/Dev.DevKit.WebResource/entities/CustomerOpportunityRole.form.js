@@ -44,6 +44,10 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.CustomerOpportunityRole = {
+		CustomerIdType : {
+		},
+		OwnerIdType : {
+		},
 		RollupState : {
 			NotCalculated: 0,
 			Calculated: 1,

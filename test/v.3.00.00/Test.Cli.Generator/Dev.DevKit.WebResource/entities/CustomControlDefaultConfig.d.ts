@@ -66,6 +66,45 @@ declare namespace DevKit {
 		readonly SupportingSolutionId: string;
 		/** Version number of the Custom Control Default Config. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Custom control configuration data in JSON format. */
+			readonly ControlDescriptionJson: string;
+			/** controlDescriptionXML of the custom control default config. */
+			readonly ControlDescriptionXML: string;
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Unique identifier of the Custom Control Default Config for the Microsoft Dynamics 365. */
+			readonly CustomControlDefaultConfigId: string;
+			/** For internal use only. */
+			readonly CustomControlDefaultConfigIdUnique: string;
+			/** The events XML of the custom control default config. */
+			readonly EventsXml: string;
+			/** Version in which the form is introduced. */
+			readonly IntroducedVersion: string;
+			readonly IsManaged: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Unique identifier of the organization associated with the web resource. */
+			readonly OrganizationId: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** Version number of the Custom Control Default Config. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -79,6 +118,8 @@ declare namespace OptionSet {
 			Published,
 			/** 1 */
 			Unpublished
+		}
+		enum PrimaryEntityTypeCode {
 		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
@@ -98,4 +139,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

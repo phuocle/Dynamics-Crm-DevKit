@@ -386,6 +386,8 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.SalesOrder = {
+		CustomerIdType : {
+		},
 		FreightTermsCode : {
 			FOB: 1,
 			No_Charge: 2
@@ -409,6 +411,8 @@ var OptionSet;
 			In_review: 192350001,
 			Lost: 192350005,
 			On_hold: 192350002
+		},
+		OwnerIdType : {
 		},
 		PaymentTermsCode : {
 			_2_10_Net_30: 2,

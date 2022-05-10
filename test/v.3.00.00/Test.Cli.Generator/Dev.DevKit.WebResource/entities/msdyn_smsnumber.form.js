@@ -86,6 +86,8 @@ var OptionSet;
 			Short_code: 192350001,
 			Toll_free: 192350002
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

@@ -70,6 +70,8 @@ var OptionSet;
 			String: 192350000,
 			Whole_Number: 192350004
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

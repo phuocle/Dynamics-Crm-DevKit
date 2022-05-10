@@ -277,6 +277,88 @@ declare namespace DevKit {
 		readonly VersionNumber: number;
 		/** Shows the workflow for this rule. */
 		WorkflowId: string;
+		readonly FormattedValue: {
+			/** Choose whether items from unknown senders should be converted to records. */
+			readonly AllowUnknownSender: string;
+			/** channel property group associated with the convert rule. */
+			readonly ChannelPropertyGroupId: string;
+			/** Choose whether cases should be created for customers with active entitlements. */
+			readonly CheckActiveEntitlement: string;
+			/** Information whether record needs to be created for black listed social profiles. */
+			readonly CheckBlockedSocialProfile: string;
+			/** Information whether record needs to be created for direct messages. */
+			readonly CheckDirectMessages: string;
+			/** Choose whether an item related to a resolved case should be converted to a case. */
+			readonly CheckIfResolved: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier for entity instances */
+			readonly ConvertRuleId: string;
+			/** For internal use only. */
+			readonly ConvertRuleIdUnique: string;
+			/** Choose whether an ARC rule is modern or legacy. */
+			readonly ConvertRuleType: string;
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Type additional information to describe the rule for creating records automatically. */
+			readonly Description: string;
+			/** Exchange rate for the currency associated with the queue with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** For internal use only. */
+			readonly IsManaged: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Type a title or name of the queue for which the setting is defined. */
+			readonly Name: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Shows the business unit that the convert rule owner belongs to. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Choose the queue that the rule is assigned to. */
+			readonly QueueId: string;
+			/** Record Version */
+			readonly RecordVersion: string;
+			/** If you want to create a new case for an item associated with a resolved case, type how long a case must remain resolved before a new case is created for the associated item. */
+			readonly ResolvedSince: string;
+			/** Choose the email template to use to create an automatic response to the customer. */
+			readonly ResponseTemplateId: string;
+			/** Choose whether to send an automatic email response to the customer after a record is created. */
+			readonly SendAutomaticResponse: string;
+			/** Choose whether an ARC rule should resolve email sender manually or automatically. */
+			readonly SenderResolutionOption: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** Source of the record. */
+			readonly SourceTypeCode: string;
+			/** Status of the Convert Rule */
+			readonly StateCode: string;
+			/** Reason for the status of the Convert Rule */
+			readonly StatusCode: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** Unique identifier of the currency associated with the queue. */
+			readonly TransactionCurrencyId: string;
+			/** Version number of the convert rule. */
+			readonly VersionNumber: string;
+			/** Shows the workflow for this rule. */
+			readonly WorkflowId: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -291,6 +373,8 @@ declare namespace OptionSet {
 			/** 1 */
 			Unpublished
 		}
+		enum OwnerIdType {
+		}
 		enum SenderResolutionOption {
 			/** 0 */
 			Creating_a_new_contact_automatically,
@@ -298,31 +382,31 @@ declare namespace OptionSet {
 			Mapping_in_Power_Automate_manually
 		}
 		enum SourceChannelTypeCode {
-			/** 10086 */
+			/** 10088 */
 			Activity_record_for_the_Teams_chat,
 			/** 4201 */
 			Appointment,
-			/** 10404 */
+			/** 10473 */
 			Booking_Alert,
-			/** 10707 */
+			/** 10743 */
 			Conversation,
-			/** 10313 */
+			/** 10330 */
 			Customer_Voice_alert,
-			/** 10323 */
+			/** 10340 */
 			Customer_Voice_survey_invite,
-			/** 10325 */
+			/** 10342 */
 			Customer_Voice_survey_response,
 			/** 4202 */
 			Email,
-			/** 10817 */
+			/** 10857 */
 			Outbound_message,
 			/** 4210 */
 			Phone_Call,
-			/** 10434 */
+			/** 10489 */
 			Project_Service_Approval,
 			/** 4214 */
 			Service_Activity,
-			/** 10721 */
+			/** 10760 */
 			Session,
 			/** 4216 */
 			Social_Activity,
@@ -365,4 +449,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

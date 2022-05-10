@@ -42,6 +42,8 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.UII_sessiontransfer = {
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

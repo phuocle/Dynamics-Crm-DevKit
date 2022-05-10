@@ -41,6 +41,8 @@ var OptionSet;
 			Custom: 100000001,
 			System: 100000000
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

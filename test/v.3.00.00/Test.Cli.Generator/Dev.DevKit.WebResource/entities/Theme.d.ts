@@ -176,6 +176,83 @@ declare namespace DevKit {
 		/** Time zone code that was in use when the record was created. */
 		UTCConversionTimeZoneCode: number;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Choose the Unified Interface secondary theme color to be used on the process control */
+			readonly AccentColor: string;
+			/** For internal use only. */
+			readonly BackgroundColor: string;
+			/** Choose the color that controls will use for borders */
+			readonly ControlBorder: string;
+			/** Choose the background color for controls to use to indicate when you hover over items */
+			readonly ControlShade: string;
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Choose the default custom entity color if no color is assigned */
+			readonly DefaultCustomEntityColor: string;
+			/** Choose the default color for system entities if no color is assigned */
+			readonly DefaultEntityColor: string;
+			/** Exchange rate for the currency associated with the Theme with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Choose the color for all links, such as e-mail address and lookup links, and for all buttons that are in focus */
+			readonly GlobalLinkColor: string;
+			/** Choose the color for title text, such as form tab labels */
+			readonly HeaderColor: string;
+			/** Choose the color that commands or lists will use to indicate hovered over items */
+			readonly HoverLinkEffect: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Default status of theme. */
+			readonly IsDefaultTheme: string;
+			/** Upload a web resource to use as a logo. Recommended dimensions are a height of 50 pixels and a maximum width of 400 pixels. */
+			readonly LogoId: string;
+			/** Enter text that will be used as the tooltip and alt text for the logo. */
+			readonly LogoToolTip: string;
+			/** Choose the Unified Interface primary theme color to be used on main command bar, buttons and tabs */
+			readonly MainColor: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** The name of the Theme Entity. */
+			readonly Name: string;
+			/** Choose the primary Navigation Bar background color */
+			readonly NavBarBackgroundColor: string;
+			/** Choose the secondary Navigation Bar background color */
+			readonly NavBarShelfColor: string;
+			/** Unique identifier for the organization */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Choose the page header background color */
+			readonly PageHeaderBackgroundColor: string;
+			/** Choose the panel header background color */
+			readonly PanelHeaderBackgroundColor: string;
+			/** Choose the primary background color for process controls */
+			readonly ProcessControlColor: string;
+			/** Choose the color that commands or lists will use to indicate selected items */
+			readonly SelectedLinkEffect: string;
+			/** Status of the Theme */
+			readonly statecode: string;
+			/** Reason for the status of the Theme */
+			readonly statuscode: string;
+			/** Unique identifier for entity instances */
+			readonly ThemeId: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Exchange rate for the currency associated with the Theme with respect to the base currency. */
+			readonly TransactionCurrencyId: string;
+			/** Define type of theme. */
+			readonly Type: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -210,4 +287,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

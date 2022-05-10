@@ -81,6 +81,8 @@ var OptionSet;
 			Entity: 1,
 			Generic: 0
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

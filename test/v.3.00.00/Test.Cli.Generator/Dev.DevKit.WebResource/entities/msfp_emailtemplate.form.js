@@ -43,6 +43,8 @@ var OptionSet;
 			Survey: 647390001,
 			User: 647390000
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

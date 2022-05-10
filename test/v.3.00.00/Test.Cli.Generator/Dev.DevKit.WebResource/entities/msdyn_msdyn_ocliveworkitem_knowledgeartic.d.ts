@@ -33,6 +33,12 @@ declare namespace DevKit {
 		readonly knowledgearticleid: string;
 		readonly msdyn_msdyn_ocliveworkitem_knowledgearticId: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			readonly activityid: string;
+			readonly knowledgearticleid: string;
+			readonly msdyn_msdyn_ocliveworkitem_knowledgearticId: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -55,4 +61,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

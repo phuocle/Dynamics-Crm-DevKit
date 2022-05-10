@@ -704,6 +704,7 @@ declare namespace DevKit {
 			ACCOUNT_INFORMATION: DevKit.Controls.Section;
 			ADDRESS: DevKit.Controls.Section;
 			MapSection: DevKit.Controls.Section;
+			SOCIAL_PANE_TAB: DevKit.Controls.Section;
 			Summary_CadenceWidget: DevKit.Controls.Section;
 			Summary_section_6: DevKit.Controls.Section;
 			SUMMARY_TAB_section_6: DevKit.Controls.Section;
@@ -1336,6 +1337,355 @@ declare namespace DevKit {
 		WebSiteURL: string;
 		/** Type the phonetic spelling of the company name, if specified in Japanese, to make sure the name is pronounced correctly in phone calls and other communications. */
 		YomiName: string;
+		readonly FormattedValue: {
+			/** Select a category to indicate whether the customer account is standard or preferred. */
+			readonly AccountCategoryCode: string;
+			/** Select a classification code to indicate the potential value of the customer account based on the projected return on investment, cooperation level, sales cycle length or other criteria. */
+			readonly AccountClassificationCode: string;
+			/** Unique identifier of the account. */
+			readonly AccountId: string;
+			/** Type an ID number or code for the account to quickly search and identify the account in system views. */
+			readonly AccountNumber: string;
+			/** Select a rating to indicate the value of the customer account. */
+			readonly AccountRatingCode: string;
+			/** Unique identifier for address 1. */
+			readonly Address1_AddressId: string;
+			/** Select the primary address type. */
+			readonly Address1_AddressTypeCode: string;
+			/** Type the city for the primary address. */
+			readonly Address1_City: string;
+			/** Shows the complete primary address. */
+			readonly Address1_Composite: string;
+			/** Type the country or region for the primary address. */
+			readonly Address1_Country: string;
+			/** Type the county for the primary address. */
+			readonly Address1_County: string;
+			/** Type the fax number associated with the primary address. */
+			readonly Address1_Fax: string;
+			/** Select the freight terms for the primary address to make sure shipping orders are processed correctly. */
+			readonly Address1_FreightTermsCode: string;
+			/** Type the latitude value for the primary address for use in mapping and other applications. */
+			readonly Address1_Latitude: string;
+			/** Type the first line of the primary address. */
+			readonly Address1_Line1: string;
+			/** Type the second line of the primary address. */
+			readonly Address1_Line2: string;
+			/** Type the third line of the primary address. */
+			readonly Address1_Line3: string;
+			/** Type the longitude value for the primary address for use in mapping and other applications. */
+			readonly Address1_Longitude: string;
+			/** Type a descriptive name for the primary address, such as Corporate Headquarters. */
+			readonly Address1_Name: string;
+			/** Type the ZIP Code or postal code for the primary address. */
+			readonly Address1_PostalCode: string;
+			/** Type the post office box number of the primary address. */
+			readonly Address1_PostOfficeBox: string;
+			/** Type the name of the main contact at the account's primary address. */
+			readonly Address1_PrimaryContactName: string;
+			/** Select a shipping method for deliveries sent to this address. */
+			readonly Address1_ShippingMethodCode: string;
+			/** Type the state or province of the primary address. */
+			readonly Address1_StateOrProvince: string;
+			/** Type the main phone number associated with the primary address. */
+			readonly Address1_Telephone1: string;
+			/** Type a second phone number associated with the primary address. */
+			readonly Address1_Telephone2: string;
+			/** Type a third phone number associated with the primary address. */
+			readonly Address1_Telephone3: string;
+			/** Type the UPS zone of the primary address to make sure shipping charges are calculated correctly and deliveries are made promptly, if shipped by UPS. */
+			readonly Address1_UPSZone: string;
+			/** Select the time zone, or UTC offset, for this address so that other people can reference it when they contact someone at this address. */
+			readonly Address1_UTCOffset: string;
+			/** Unique identifier for address 2. */
+			readonly Address2_AddressId: string;
+			/** Select the secondary address type. */
+			readonly Address2_AddressTypeCode: string;
+			/** Type the city for the secondary address. */
+			readonly Address2_City: string;
+			/** Shows the complete secondary address. */
+			readonly Address2_Composite: string;
+			/** Type the country or region for the secondary address. */
+			readonly Address2_Country: string;
+			/** Type the county for the secondary address. */
+			readonly Address2_County: string;
+			/** Type the fax number associated with the secondary address. */
+			readonly Address2_Fax: string;
+			/** Select the freight terms for the secondary address to make sure shipping orders are processed correctly. */
+			readonly Address2_FreightTermsCode: string;
+			/** Type the latitude value for the secondary address for use in mapping and other applications. */
+			readonly Address2_Latitude: string;
+			/** Type the first line of the secondary address. */
+			readonly Address2_Line1: string;
+			/** Type the second line of the secondary address. */
+			readonly Address2_Line2: string;
+			/** Type the third line of the secondary address. */
+			readonly Address2_Line3: string;
+			/** Type the longitude value for the secondary address for use in mapping and other applications. */
+			readonly Address2_Longitude: string;
+			/** Type a descriptive name for the secondary address, such as Corporate Headquarters. */
+			readonly Address2_Name: string;
+			/** Type the ZIP Code or postal code for the secondary address. */
+			readonly Address2_PostalCode: string;
+			/** Type the post office box number of the secondary address. */
+			readonly Address2_PostOfficeBox: string;
+			/** Type the name of the main contact at the account's secondary address. */
+			readonly Address2_PrimaryContactName: string;
+			/** Select a shipping method for deliveries sent to this address. */
+			readonly Address2_ShippingMethodCode: string;
+			/** Type the state or province of the secondary address. */
+			readonly Address2_StateOrProvince: string;
+			/** Type the main phone number associated with the secondary address. */
+			readonly Address2_Telephone1: string;
+			/** Type a second phone number associated with the secondary address. */
+			readonly Address2_Telephone2: string;
+			/** Type a third phone number associated with the secondary address. */
+			readonly Address2_Telephone3: string;
+			/** Type the UPS zone of the secondary address to make sure shipping charges are calculated correctly and deliveries are made promptly, if shipped by UPS. */
+			readonly Address2_UPSZone: string;
+			/** Select the time zone, or UTC offset, for this address so that other people can reference it when they contact someone at this address. */
+			readonly Address2_UTCOffset: string;
+			/** For system use only. */
+			readonly Aging30: string;
+			/** The base currency equivalent of the aging 30 field. */
+			readonly Aging30_Base: string;
+			/** For system use only. */
+			readonly Aging60: string;
+			/** The base currency equivalent of the aging 60 field. */
+			readonly Aging60_Base: string;
+			/** For system use only. */
+			readonly Aging90: string;
+			/** The base currency equivalent of the aging 90 field. */
+			readonly Aging90_Base: string;
+			/** Select the legal designation or other business type of the account for contracts or reporting purposes. */
+			readonly BusinessTypeCode: string;
+			/** Shows who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the external party who created the record. */
+			readonly CreatedByExternalParty: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Type the credit limit of the account. This is a useful reference when you address invoice and accounting issues with the customer. */
+			readonly CreditLimit: string;
+			/** Shows the credit limit converted to the system's default base currency for reporting purposes. */
+			readonly CreditLimit_Base: string;
+			/** Select whether the credit for the account is on hold. This is a useful reference while addressing the invoice and accounting issues with the customer. */
+			readonly CreditOnHold: string;
+			/** Select the size category or range of the account for segmentation and reporting purposes. */
+			readonly CustomerSizeCode: string;
+			/** Select the category that best describes the relationship between the account and your organization. */
+			readonly CustomerTypeCode: string;
+			/** Choose the default price list associated with the account to make sure the correct product prices for this customer are applied in sales opportunities, quotes, and orders. */
+			readonly DefaultPriceLevelId: string;
+			/** Type additional information to describe the account, such as an excerpt from the company's website. */
+			readonly Description: string;
+			/** Select whether the account allows bulk email sent through campaigns. If Do Not Allow is selected, the account can be added to marketing lists, but is excluded from email. */
+			readonly DoNotBulkEMail: string;
+			/** Select whether the account allows bulk postal mail sent through marketing campaigns or quick campaigns. If Do Not Allow is selected, the account can be added to marketing lists, but will be excluded from the postal mail. */
+			readonly DoNotBulkPostalMail: string;
+			/** Select whether the account allows direct email sent from Microsoft Dynamics 365. */
+			readonly DoNotEMail: string;
+			/** Select whether the account allows faxes. If Do Not Allow is selected, the account will be excluded from fax activities distributed in marketing campaigns. */
+			readonly DoNotFax: string;
+			/** Select whether the account allows phone calls. If Do Not Allow is selected, the account will be excluded from phone call activities distributed in marketing campaigns. */
+			readonly DoNotPhone: string;
+			/** Select whether the account allows direct mail. If Do Not Allow is selected, the account will be excluded from letter activities distributed in marketing campaigns. */
+			readonly DoNotPostalMail: string;
+			/** Select whether the account accepts marketing materials, such as brochures or catalogs. */
+			readonly DoNotSendMM: string;
+			/** Type the primary email address for the account. */
+			readonly EMailAddress1: string;
+			/** Type the secondary email address for the account. */
+			readonly EMailAddress2: string;
+			/** Type an alternate email address for the account. */
+			readonly EMailAddress3: string;
+			/** Shows the default image for the record. */
+			readonly EntityImage: string;
+			readonly EntityImage_Timestamp: string;
+			readonly EntityImage_URL: string;
+			/** For internal use only. */
+			readonly EntityImageId: string;
+			/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
+			readonly ExchangeRate: string;
+			/** Type the fax number for the account. */
+			readonly Fax: string;
+			/** Information about whether to allow following email activity like opens, attachment views and link clicks for emails sent to the account. */
+			readonly FollowEmail: string;
+			/** Type the URL for the account's FTP site to enable users to access data and share documents. */
+			readonly FtpSiteURL: string;
+			/** Unique identifier of the data import or data migration that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Select the account's primary industry for use in marketing segmentation and demographic analysis. */
+			readonly IndustryCode: string;
+			readonly IsPrivate: string;
+			/** Contains the date and time stamp of the last on hold time. */
+			readonly LastOnHoldTime_UtcDateAndTime: string;
+			/** Shows the date when the account was last included in a marketing campaign or quick campaign. */
+			readonly LastUsedInCampaign_UtcDateOnly: string;
+			/** Type the market capitalization of the account to identify the company's equity, used as an indicator in financial performance analysis. */
+			readonly MarketCap: string;
+			/** Shows the market capitalization converted to the system's default base currency. */
+			readonly MarketCap_Base: string;
+			/** Whether is only for marketing */
+			readonly MarketingOnly: string;
+			/** Shows the master account that the account was merged with. */
+			readonly MasterId: string;
+			/** Shows whether the account has been merged with another account. */
+			readonly Merged: string;
+			/** Shows who last updated the record. */
+			readonly ModifiedBy: string;
+			/** Shows the external party who modified the record. */
+			readonly ModifiedByExternalParty: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Reference to an other account to be used for billing (only to be used if billing account differs) */
+			readonly msdyn_BillingAccount: string;
+			/** External Account ID from other systems. */
+			readonly msdyn_externalaccountid: string;
+			/** Describes whether account is opted out or not */
+			readonly msdyn_gdproptout: string;
+			readonly msdyn_PreferredResource: string;
+			/** Default Sales Tax Code */
+			readonly msdyn_SalesTaxCode: string;
+			/** Unique identifier for Segment associated with account. */
+			readonly msdyn_segmentid: string;
+			/** The Service Territory this account belongs to. This is used to optimize scheduling and routing */
+			readonly msdyn_ServiceTerritory: string;
+			/** Select whether the account is tax exempt. */
+			readonly msdyn_TaxExempt: string;
+			/** Shows the government tax exempt number. */
+			readonly msdyn_TaxExemptNumber: string;
+			/** Enter the travel charge to include on work orders. This value will be multiplied by the travel charge type. */
+			readonly msdyn_TravelCharge: string;
+			/** Value of the Travel Charge in base currency. */
+			readonly msdyn_travelcharge_Base: string;
+			/** Specify how travel is charged for this account. */
+			readonly msdyn_TravelChargeType: string;
+			readonly msdyn_workhourtemplate: string;
+			/** Shows the default instructions to show on new work orders. */
+			readonly msdyn_WorkOrderInstructions: string;
+			/** Captures the facebook id */
+			readonly msdyusd_Facebook: string;
+			/** Capture the twitter id */
+			readonly msdyusd_Twitter: string;
+			/** Type the company or business name. */
+			readonly Name: string;
+			/** Type the number of employees that work at the account for use in marketing segmentation and demographic analysis. */
+			readonly NumberOfEmployees: string;
+			/** Shows how long, in minutes, that the record was on hold. */
+			readonly OnHoldTime: string;
+			/** Number of open opportunities against an account and its child accounts. */
+			readonly OpenDeals: string;
+			/** Last Updated time of rollup field Open Deals. */
+			readonly OpenDeals_Date_UtcDateAndTime: string;
+			/** State of rollup field Open Deals. */
+			readonly OpenDeals_State: string;
+			/** Sum of open revenue against an account and its child accounts. */
+			readonly OpenRevenue: string;
+			/** Value of the Open Revenue in base currency. */
+			readonly OpenRevenue_Base: string;
+			/** Last Updated time of rollup field Open Revenue. */
+			readonly OpenRevenue_Date_UtcDateAndTime: string;
+			/** State of rollup field Open Revenue. */
+			readonly OpenRevenue_State: string;
+			/** Shows the lead that the account was created from if the account was created by converting a lead in Microsoft Dynamics 365. This is used to relate the account to data on the originating lead for use in reporting and analytics. */
+			readonly OriginatingLeadId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Select the account's ownership structure, such as public or private. */
+			readonly OwnershipCode: string;
+			/** Shows the business unit that the record owner belongs to. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the team who owns the account. */
+			readonly OwningTeam: string;
+			/** Unique identifier of the user who owns the account. */
+			readonly OwningUser: string;
+			/** Choose the parent account associated with this account to show parent and child businesses in reporting and analytics. */
+			readonly ParentAccountId: string;
+			/** For system use only. Legacy Microsoft Dynamics CRM 3.0 workflow data. */
+			readonly ParticipatesInWorkflow: string;
+			/** Select the payment terms to indicate when the customer needs to pay the total amount. */
+			readonly PaymentTermsCode: string;
+			/** Select the preferred day of the week for service appointments. */
+			readonly PreferredAppointmentDayCode: string;
+			/** Select the preferred time of day for service appointments. */
+			readonly PreferredAppointmentTimeCode: string;
+			/** Select the preferred method of contact. */
+			readonly PreferredContactMethodCode: string;
+			/** Choose the account's preferred service facility or equipment to make sure services are scheduled correctly for the customer. */
+			readonly PreferredEquipmentId: string;
+			/** Choose the account's preferred service for reference when you schedule service activities. */
+			readonly PreferredServiceId: string;
+			/** Choose the preferred service representative for reference when you schedule service activities for the account. */
+			readonly PreferredSystemUserId: string;
+			/** Choose the primary contact for the account to provide quick access to contact details. */
+			readonly PrimaryContactId: string;
+			/** Primary Satori ID for Account */
+			readonly PrimarySatoriId: string;
+			/** Primary Twitter ID for Account */
+			readonly PrimaryTwitterId: string;
+			/** Shows the ID of the process. */
+			readonly ProcessId: string;
+			/** Type the annual revenue for the account, used as an indicator in financial performance analysis. */
+			readonly Revenue: string;
+			/** Shows the annual revenue converted to the system's default base currency. The calculations use the exchange rate specified in the Currencies area. */
+			readonly Revenue_Base: string;
+			/** Type the number of shares available to the public for the account. This number is used as an indicator in financial performance analysis. */
+			readonly SharesOutstanding: string;
+			/** Select a shipping method for deliveries sent to the account's address to designate the preferred carrier or other delivery option. */
+			readonly ShippingMethodCode: string;
+			/** Type the Standard Industrial Classification (SIC) code that indicates the account's primary industry of business, for use in marketing segmentation and demographic analysis. */
+			readonly SIC: string;
+			/** Choose the service level agreement (SLA) that you want to apply to the Account record. */
+			readonly SLAId: string;
+			/** Last SLA that was applied to this case. This field is for internal use only. */
+			readonly SLAInvokedId: string;
+			/** Shows the ID of the stage. */
+			readonly StageId: string;
+			/** Shows whether the account is active or inactive. Inactive accounts are read-only and can't be edited unless they are reactivated. */
+			readonly StateCode: string;
+			/** Select the account's status. */
+			readonly StatusCode: string;
+			/** Type the stock exchange at which the account is listed to track their stock and financial performance of the company. */
+			readonly StockExchange: string;
+			/** Number of users or conversations followed the record */
+			readonly TeamsFollowed: string;
+			/** Type the main phone number for this account. */
+			readonly Telephone1: string;
+			/** Type a second phone number for this account. */
+			readonly Telephone2: string;
+			/** Type a third phone number for this account. */
+			readonly Telephone3: string;
+			/** Select a region or territory for the account for use in segmentation and analysis. */
+			readonly TerritoryCode: string;
+			/** Choose the sales region or territory for the account to make sure the account is assigned to the correct representative and for use in segmentation and analysis. */
+			readonly TerritoryId: string;
+			/** Type the stock exchange symbol for the account to track financial performance of the company. You can click the code entered in this field to access the latest trading information from MSN Money. */
+			readonly TickerSymbol: string;
+			/** Total time spent for emails (read and write) and meetings by me in relation to account record. */
+			readonly TimeSpentByMeOnEmailAndMeetings: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			readonly TransactionCurrencyId: string;
+			/** For internal use only. */
+			readonly TraversedPath: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version number of the account. */
+			readonly VersionNumber: string;
+			/** Type the account's website URL to get quick details about the company profile. */
+			readonly WebSiteURL: string;
+			/** Type the phonetic spelling of the company name, if specified in Japanese, to make sure the name is pronounced correctly in phone calls and other communications. */
+			readonly YomiName: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -1510,6 +1860,8 @@ declare namespace OptionSet {
 			/** 690970003 */
 			None
 		}
+		enum OwnerIdType {
+		}
 		enum OwnershipCode {
 			/** 4 */
 			Other,
@@ -1604,4 +1956,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

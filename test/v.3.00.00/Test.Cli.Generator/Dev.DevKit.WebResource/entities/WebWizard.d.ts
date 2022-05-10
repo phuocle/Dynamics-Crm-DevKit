@@ -74,6 +74,53 @@ declare namespace DevKit {
 		WizardPageHeight: number;
 		/** Window width for the wizard. */
 		WizardPageWidth: number;
+		readonly FormattedValue: {
+			/** Privileges required to use this wizard, separated with commas (,). */
+			readonly AccessPrivileges: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier of the user who created the wizard definition. */
+			readonly CreatedBy: string;
+			/** Date and time when the wizard definition was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the webwizard. */
+			readonly CreatedOnBehalfBy: string;
+			/** Version in which the component is introduced. */
+			readonly IntroducedVersion: string;
+			/** Information that specifies whether this component is managed. */
+			readonly IsManaged: string;
+			/** Information about whether all pages for this wizard are statically defined. */
+			readonly IsStaticPageSequence: string;
+			/** Unique identifier of the user who last modified the wizard definition. */
+			readonly ModifiedBy: string;
+			/** Date and time when the wizard definition was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the webwizard. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Name of the wizard */
+			readonly Name: string;
+			/** Unique identifier of the organization. */
+			readonly OrganizationId: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** Sequence number of the first page of this wizard. */
+			readonly StartPageSequenceNumber: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** Title of the wizard. */
+			readonly TitleResourceString: string;
+			readonly VersionNumber: string;
+			/** Unique identifier of the wizard. */
+			readonly WebWizardId: string;
+			/** Unique identifier of the Web Wizard. */
+			readonly WebWizardIdUnique: string;
+			/** Window height for the wizard. */
+			readonly WizardPageHeight: string;
+			/** Window width for the wizard. */
+			readonly WizardPageWidth: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -106,4 +153,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

@@ -40,6 +40,19 @@ declare namespace DevKit {
 		/** Object Column Number */
 		readonly ObjectColumnNumber: number;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the Business Data Localized Label. */
+			readonly BusinessDataLocalizedLabelId: string;
+			/** Label */
+			readonly Label: string;
+			/** Language Id */
+			readonly LanguageId: string;
+			/** Object Column Name */
+			readonly ObjectColumnName: string;
+			/** Object Column Number */
+			readonly ObjectColumnNumber: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -62,4 +75,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

@@ -180,10 +180,114 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Exchange rate for the currency associated with the entity with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Shows the actual value (money) achieved toward the target as of the last rollup date. */
+			readonly msdyn_actualamount: string;
+			/** Value of the Actual (Money) in base currency. */
+			readonly msdyn_actualamount_Base: string;
+			/** Shows the rollup value (money) for the best case category as of the last rollup date. */
+			readonly msdyn_bestcaseamount: string;
+			/** Value of the BestCase in base currency. */
+			readonly msdyn_bestcaseamount_Base: string;
+			/** Shows the committed rollup value (money) as of the last rollup date. */
+			readonly msdyn_committedamount: string;
+			/** Value of the Committed in base currency. */
+			readonly msdyn_committedamount_Base: string;
+			/** Unique identifier for the forecast definition that is associated with the forecast. */
+			readonly msdyn_forecastdefinitionid: string;
+			/** Unique identifier for the forecast. */
+			readonly msdyn_forecastinstanceId: string;
+			/** For internal use only. */
+			readonly msdyn_forecastinstancetype: string;
+			/** Name of the forecast. */
+			readonly msdyn_forecastname: string;
+			/** Unique identifier for the parent forecast that is associated with the forecast. */
+			readonly msdyn_forecastparentid: string;
+			/** Unique identifier for the forecast recurrence associated with the forecast. */
+			readonly msdyn_forecastrecurrenceid: string;
+			/** Select whether the bestcase rollup has been manually updated. */
+			readonly msdyn_ismanualbestcase: string;
+			/** Select whether the committed rollup has been manually updated. */
+			readonly msdyn_ismanualcommitted: string;
+			/** Select whether the pipeline rollup has been manually updated. */
+			readonly msdyn_ismanualpipeline: string;
+			/** Is quota source manual */
+			readonly msdyn_isquotasourcemanual: string;
+			/** For internal use only. */
+			readonly msdyn_level: string;
+			/** Shows the changed value of the best case rollup (Money type) as of the last rolled-up date. */
+			readonly msdyn_manualbestcaseamount: string;
+			/** Value of the Manual BestCase in base currency. */
+			readonly msdyn_manualbestcaseamount_Base: string;
+			/** Shows the changed value of the committed rollup (Money type) as of the last rolled-up date. */
+			readonly msdyn_manualcommittedamount: string;
+			/** Value of the Manual Committed in base currency. */
+			readonly msdyn_manualcommittedamount_Base: string;
+			/** Shows the changed value of the pipeline rollup (Money type) as of the last rolled-up date. */
+			readonly msdyn_manualpipelineamount: string;
+			/** Value of the Manual Pipeline in base currency. */
+			readonly msdyn_manualpipelineamount_Base: string;
+			/** Unique identifier for the matching goal associated with the forecast. */
+			readonly msdyn_matchinggoalid: string;
+			/** Shows the percentage achieved against the target. */
+			readonly msdyn_percentageachieved: string;
+			/** Shows the pipeline rollup value (money) as of the last rollup date. */
+			readonly msdyn_pipelineamount: string;
+			/** Value of the Pipeline in base currency. */
+			readonly msdyn_pipelineamount_Base: string;
+			/** Shows the recurrence index of the forecast created from the forecast definition. */
+			readonly msdyn_recurrenceindex: string;
+			/** Select a target (Money type) to track a monetary amount, such as estimated revenue from an opportunity. */
+			readonly msdyn_targetamount: string;
+			/** Value of the Target (Money) in base currency. */
+			readonly msdyn_targetamount_Base: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the Forecast */
+			readonly statecode: string;
+			/** Reason for the status of the Forecast */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Unique identifier of the currency associated with the entity. */
+			readonly TransactionCurrencyId: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace msdyn_forecastinstance {
+		enum OwnerIdType {
+		}
 		enum statecode {
 			/** 0 */
 			Active,
@@ -214,4 +318,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

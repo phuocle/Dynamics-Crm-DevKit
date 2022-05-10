@@ -82,6 +82,27 @@ declare namespace DevKit {
 		/** Language Status Code */
 		statuscode: OptionSet.LanguageLocale.statuscode;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Code */
+			readonly Code: string;
+			/** Language */
+			readonly Language: string;
+			/** LanguageLocaleId */
+			readonly LanguageLocaleId: string;
+			/** Locale ID */
+			readonly LocaleId: string;
+			/** Name */
+			readonly Name: string;
+			/** Unique identifier of the organization associated with the language locale. */
+			readonly OrganizationId: string;
+			/** Region */
+			readonly Region: string;
+			/** State Code */
+			readonly statecode: string;
+			/** Language Status Code */
+			readonly statuscode: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -116,4 +137,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

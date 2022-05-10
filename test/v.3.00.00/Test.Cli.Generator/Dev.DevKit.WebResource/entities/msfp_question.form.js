@@ -65,6 +65,8 @@ var OptionSet;
 			Rating: 647390002,
 			Text: 647390001
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

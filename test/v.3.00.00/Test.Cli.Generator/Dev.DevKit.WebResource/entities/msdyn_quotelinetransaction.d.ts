@@ -353,6 +353,132 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Exchange rate for the currency associated with the entity with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Select the name of the customer account. */
+			readonly msdyn_AccountCustomer: string;
+			readonly msdyn_AccountingDate_UtcDateOnly: string;
+			readonly msdyn_AccountVendor: string;
+			/** Enter the amount on the quote line estimate. */
+			readonly msdyn_Amount: string;
+			readonly msdyn_amount_after_tax: string;
+			/** Value of the amount_after_tax in base currency. */
+			readonly msdyn_amount_after_tax_Base: string;
+			/** Value of the Amount in base currency. */
+			readonly msdyn_amount_Base: string;
+			/** Select the calculation method used for the amount on the estimate line. Valid methods are: Multiply Quantity By Price, Fixed Price, Multiply Basis Quantity By Price, Multiply Basis Amount By Percent */
+			readonly msdyn_AmountMethod: string;
+			readonly msdyn_BasisAmount: string;
+			/** Value of the Basis Amount in base currency. */
+			readonly msdyn_basisamount_Base: string;
+			readonly msdyn_BasisPrice: string;
+			/** Value of the Basis Price in base currency. */
+			readonly msdyn_basisprice_Base: string;
+			readonly msdyn_BasisQuantity: string;
+			/** Select whether this quote line estimate will be charged to the customer or not. Only chargeable transactions will add to the invoice total */
+			readonly msdyn_BillingType: string;
+			/** Shows the resource. */
+			readonly msdyn_bookableresource: string;
+			/** Select the contact customer on the quote. */
+			readonly msdyn_ContactCustomer: string;
+			readonly msdyn_ContactVendor: string;
+			/** Select whether the customer is an account or a contact  */
+			readonly msdyn_CustomerType: string;
+			/** Type the name of the custom entity. */
+			readonly msdyn_description: string;
+			/** Enter the date that the invoice is sent to the customer. Only relevant on invoice and invoice line transactions */
+			readonly msdyn_DocumentDate_UtcDateOnly: string;
+			/** Enter the end date of the work being estimated on the quote line estimate. */
+			readonly msdyn_EndDateTime_UtcDateOnly: string;
+			readonly msdyn_ExchangeRateDate_UtcDateOnly: string;
+			/** Indicates if this record was created via import. It's purpose is to support data import. */
+			readonly msdyn_isdataimport: string;
+			/** Points to the quote line detail that originated an entry. For example, a revenue entry points to its related cost entry. */
+			readonly msdyn_Origin: string;
+			/** Enter the amount, in percent, to multiply the basis by. This field is relevant when the amount calculation method is "Multiply basis amount by percent." */
+			readonly msdyn_Percent: string;
+			/** Enter the price on the quote line estimate. */
+			readonly msdyn_Price: string;
+			/** Value of the Price in base currency. */
+			readonly msdyn_price_Base: string;
+			/** Select the price List used to default price on the estimate line. */
+			readonly msdyn_PriceList: string;
+			/** Select the product on the quote line estimate. */
+			readonly msdyn_Product: string;
+			/** Select the project being referenced by the quote line estimate. */
+			readonly msdyn_Project: string;
+			/** Enter the quantity on the quote line estimate. */
+			readonly msdyn_Quantity: string;
+			/** Select the denormalized reference to the quote. This is used for performance improvements and to allow the use of Power BI on a quote. */
+			readonly msdyn_QuoteId: string;
+			/** (Deprecated) Type the quote line to which this estimate line belongs to. */
+			readonly msdyn_QuoteLine: string;
+			/** Unique identifier for Quote Line to which this estimate line belongs to. */
+			readonly msdyn_quotelineid: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_quotelinetransactionId: string;
+			/** Select the role on the quote line estimate. */
+			readonly msdyn_ResourceCategory: string;
+			/** Select the organizational unit of the resource who should perform the work. */
+			readonly msdyn_ResourceOrganizationalUnitId: string;
+			/** Enter the estimated start of the work being estimated on the quote line estimate. */
+			readonly msdyn_StartDateTime_UtcDateOnly: string;
+			/** Select the project work breakdown structure (WBS) task referenced by the quote line estimate. */
+			readonly msdyn_Task: string;
+			readonly msdyn_tax: string;
+			/** Value of the tax in base currency. */
+			readonly msdyn_tax_Base: string;
+			/** Select the category on the quote line estimate. */
+			readonly msdyn_TransactionCategory: string;
+			/** Transaction classification for the quote line */
+			readonly msdyn_TransactionClassification: string;
+			/** Shows the transaction type for this quote line. */
+			readonly msdyn_TransactionTypeCode: string;
+			/** Select the unit that the quantity is estimated in on this quote line estimate. */
+			readonly msdyn_Unit: string;
+			/** Select the unit schedule associated with the estimate line. */
+			readonly msdyn_UnitSchedule: string;
+			readonly msdyn_VendorType: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the Quote Line Detail */
+			readonly statecode: string;
+			/** Reason for the status of the Quote Line Detail */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Shows the currency associated with the entity. */
+			readonly TransactionCurrencyId: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -423,6 +549,8 @@ declare namespace OptionSet {
 			/** 192350002 */
 			Contact
 		}
+		enum OwnerIdType {
+		}
 		enum statecode {
 			/** 0 */
 			Active,
@@ -453,4 +581,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

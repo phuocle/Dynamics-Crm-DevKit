@@ -66,6 +66,45 @@ declare namespace DevKit {
 		/** For internal use only. */
 		readonly SupportingSolutionId: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier of the user who created the SDK message request. */
+			readonly CreatedBy: string;
+			/** Date and time when the SDK message request was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the sdkmessagerequest. */
+			readonly CreatedOnBehalfBy: string;
+			/** Customization level of the SDK message request. */
+			readonly CustomizationLevel: string;
+			/** Version in which the component is introduced. */
+			readonly IntroducedVersion: string;
+			/** Information that specifies whether this component is managed. */
+			readonly IsManaged: string;
+			/** Unique identifier of the user who last modified the SDK message request. */
+			readonly ModifiedBy: string;
+			/** Date and time when the SDK message request was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the sdkmessagerequest. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Name of the SDK message request. */
+			readonly Name: string;
+			/** Unique identifier of the organization with which the SDK message request is associated. */
+			readonly OrganizationId: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Unique identifier of the message pair with which the SDK message request is associated. */
+			readonly SdkMessagePairId: string;
+			/** Unique identifier of the SDK message request entity. */
+			readonly SdkMessageRequestId: string;
+			/** Unique identifier of the SDK message request. */
+			readonly SdkMessageRequestIdUnique: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -79,6 +118,8 @@ declare namespace OptionSet {
 			Published,
 			/** 1 */
 			Unpublished
+		}
+		enum PrimaryObjectTypeCode {
 		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
@@ -98,4 +139,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

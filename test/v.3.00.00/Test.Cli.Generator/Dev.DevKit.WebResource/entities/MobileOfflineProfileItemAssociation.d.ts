@@ -127,6 +127,66 @@ declare namespace DevKit {
 		TraversedPath: string;
 		/** Version number of the Mobile Offline profileitemassociation. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Shows who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Version in which the Mobile offline Profile Item Association is introduced. */
+			readonly IntroducedVersion: string;
+			/** For internal use only. */
+			readonly IsManaged: string;
+			/** Information about whether profile item association is validated or not */
+			readonly IsValidated: string;
+			/** Unique identifier of the mobile offline profile item associaition. */
+			readonly MobileOfflineProfileItemAssociationId: string;
+			/** For Internal Use Only */
+			readonly MobileOfflineProfileItemAssociationIdUnique: string;
+			/** Id of the parent profile item. */
+			readonly MobileOfflineProfileItemId: string;
+			/** Shows who last updated the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Enter the name of the mobile offline profile item association. */
+			readonly Name: string;
+			/** Unique identifier of the organization associated with the Mobile Offline Profile Item Association. */
+			readonly OrganizationId: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Shows the ID of the process. */
+			readonly ProcessId: string;
+			/** Profile item association entity filter criteria. */
+			readonly ProfileItemAssociationEntityFilter: string;
+			/** Displays the last published date time. */
+			readonly PublishedOn_UtcDateAndTime: string;
+			/** Internal Use Only */
+			readonly RelationshipData: string;
+			/** Entity relationship schema name */
+			readonly RelationshipDisplayName: string;
+			/** Shows the relationship */
+			readonly RelationshipId: string;
+			/** Display name of entity relationship */
+			readonly RelationshipName: string;
+			/** List of relationships of entity selected in parent profile item */
+			readonly SelectedRelationShipsSchema: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** Shows the ID of the stage. */
+			readonly StageId: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** For internal use only. */
+			readonly TraversedPath: string;
+			/** Version number of the Mobile Offline profileitemassociation. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -140,6 +200,8 @@ declare namespace OptionSet {
 			Published,
 			/** 1 */
 			Unpublished
+		}
+		enum SelectedRelationShipsSchema {
 		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
@@ -159,4 +221,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

@@ -63,6 +63,42 @@ declare namespace DevKit {
 		SyncAttributeMappingProfileId: string;
 		/** Sync Direction */
 		SyncDirection: OptionSet.SyncAttributeMapping.SyncDirection;
+		readonly FormattedValue: {
+			/** Allowed Sync Directions */
+			readonly AllowedSyncDirection: string;
+			/** CRM Attribute Name. */
+			readonly AttributeCRMName: string;
+			/** Exchange Attribute Name. */
+			readonly AttributeExchangeName: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Computed Properties. */
+			readonly ComputedProperties: string;
+			/** Default Sync Direction */
+			readonly DefaultSyncDirection: string;
+			/** Indicates whether the mapping is a computed property */
+			readonly IsComputed: string;
+			/** Indicates whether the solution component is part of a managed solution. */
+			readonly IsManaged: string;
+			/** Attribute Name. */
+			readonly MappingName: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Parent Sync-Attribute Mapping to which this mapping belongs */
+			readonly ParentSyncAttributeMappingId: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** Unique identifier of the Sync-Attribute Mapping. */
+			readonly SyncAttributeMappingId: string;
+			/** For internal use only. */
+			readonly SyncAttributeMappingIdUnique: string;
+			/** Unique identifier of profile to which this mapping belongs. */
+			readonly SyncAttributeMappingProfileId: string;
+			/** Sync Direction */
+			readonly SyncDirection: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -86,6 +122,8 @@ declare namespace OptionSet {
 			ToCRM,
 			/** 1 */
 			ToExchange
+		}
+		enum EntityTypeCode1 {
 		}
 		enum SyncDirection {
 			/** 3 */
@@ -115,4 +153,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

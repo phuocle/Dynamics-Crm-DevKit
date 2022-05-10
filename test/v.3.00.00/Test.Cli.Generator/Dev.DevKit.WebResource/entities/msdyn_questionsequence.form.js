@@ -86,6 +86,8 @@ var OptionSet;
 			Pre_chat_authenticated: 192350000,
 			Pre_chat_unauthenticated: 192350001
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

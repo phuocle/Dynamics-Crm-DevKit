@@ -41,6 +41,8 @@ var OptionSet;
 			TeleSign: 192350000,
 			Twilio: 192350001
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

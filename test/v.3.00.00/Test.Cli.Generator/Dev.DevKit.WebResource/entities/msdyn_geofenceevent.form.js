@@ -44,6 +44,8 @@ var OptionSet;
 			Entered: 1,
 			Exited: 2
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

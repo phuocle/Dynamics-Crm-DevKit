@@ -1,6 +1,58 @@
 ﻿//@ts-check
 ///<reference path="devkit.d.ts" />
 declare namespace DevKit {
+	namespace Formorganizationdatasyncstate_Information {
+		interface Tabs {
+		}
+		interface Body {
+			/** The name of the custom entity. */
+			name: DevKit.Controls.String;
+		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
+	}
+	class Formorganizationdatasyncstate_Information extends DevKit.IForm {
+		/**
+		* Information [Main Form]
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form organizationdatasyncstate_Information */
+		Body: DevKit.Formorganizationdatasyncstate_Information.Body;
+		/** The Process of form organizationdatasyncstate_Information */
+		Process: DevKit.Formorganizationdatasyncstate_Information.Process;
+		/** The SidePanes of form organizationdatasyncstate_Information */
+		SidePanes: DevKit.SidePanes;
+	}
+	namespace Formorganizationdatasyncstate_Information2 {
+		interface Tabs {
+		}
+		interface Body {
+			/** The name of the custom entity. */
+			name: DevKit.Controls.String;
+		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
+	}
+	class Formorganizationdatasyncstate_Information2 extends DevKit.IForm {
+		/**
+		* Information [Main Form]
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form organizationdatasyncstate_Information2 */
+		Body: DevKit.Formorganizationdatasyncstate_Information2.Body;
+		/** The Process of form organizationdatasyncstate_Information2 */
+		Process: DevKit.Formorganizationdatasyncstate_Information2.Process;
+		/** The SidePanes of form organizationdatasyncstate_Information2 */
+		SidePanes: DevKit.SidePanes;
+	}
 	class organizationdatasyncstateApi {
 		/**
 		* DynamicsCrm.DevKit organizationdatasyncstateApi
@@ -79,6 +131,58 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Continue from last delta sync */
+			readonly continuefromlastdeltasync: string;
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			readonly currentfullsyncfetchxml: string;
+			readonly currentfullsyncstate: string;
+			readonly entityname1: string;
+			readonly fullsynconly: string;
+			readonly implicitlastdataversion: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			readonly lastdataversion: string;
+			/** Last Metadata Version */
+			readonly lastmetadataversion: string;
+			readonly lockexpiretimestamp_UtcDateAndTime: string;
+			readonly lockowner: string;
+			readonly minactiverowversion: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** The name of the custom entity. */
+			readonly name: string;
+			readonly nullstatedate_UtcDateOnly: string;
+			/** Unique identifier for entity instances */
+			readonly organizationdatasyncstateId: string;
+			/** Organization Data Sync Subscription Id */
+			readonly organizationdatasyncsubscriptionid: string;
+			/** Unique identifier for the organization */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			readonly pagingcookie: string;
+			readonly partitionid: string;
+			/** Status of the OrganizationDataSyncState */
+			readonly statecode: string;
+			/** Reason for the status of the OrganizationDataSyncState */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -129,4 +233,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

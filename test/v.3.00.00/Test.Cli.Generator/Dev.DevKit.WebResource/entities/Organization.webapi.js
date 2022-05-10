@@ -116,6 +116,7 @@ var DevKit;
 			ClientFeatureSet: { a: 'clientfeatureset' },
 			ContentSecurityPolicyConfiguration: { a: 'contentsecuritypolicyconfiguration' },
 			ContentSecurityPolicyConfigurationForCanvas: { a: 'contentsecuritypolicyconfigurationforcanvas' },
+			ContentSecurityPolicyReportUri: { a: 'contentsecuritypolicyreporturi' },
 			ContractPrefix: { a: 'contractprefix' },
 			CopresenceRefreshRate: { a: 'copresencerefreshrate' },
 			CortanaProactiveExperienceEnabled: { a: 'cortanaproactiveexperienceenabled' },
@@ -163,6 +164,7 @@ var DevKit;
 			EmailTemplateDefaultView: { a: 'emailtemplatedefaultview' },
 			EnableAsyncMergeAPIForUCI: { a: 'enableasyncmergeapiforuci' },
 			EnableBingMapsIntegration: { a: 'enablebingmapsintegration' },
+			EnableCalendarImportExport: { a: 'enablecalendarimportexport' },
 			EnableCanvasAppsInSolutionsByDefault: { a: 'enablecanvasappsinsolutionsbydefault' },
 			EnableImmersiveSkypeIntegration: { a: 'enableimmersiveskypeintegration' },
 			EnableLivePersonaCardUCI: { a: 'enablelivepersonacarduci' },
@@ -173,6 +175,7 @@ var DevKit;
 			EnablePricingOnCreate: { a: 'enablepricingoncreate' },
 			EnableSensitivityLabelsForTeamsCollab: { a: 'enablesensitivitylabelsforteamscollab' },
 			EnableSmartMatching: { a: 'enablesmartmatching' },
+			EnableUnifiedClientCDN: { a: 'enableunifiedclientcdn' },
 			EnableUnifiedInterfaceShellRefresh: { a: 'enableunifiedinterfaceshellrefresh' },
 			EnforceReadOnlyPlugins: { a: 'enforcereadonlyplugins' },
 			EnhancedOQOIAddProductsSettings: { a: 'enhancedoqoiaddproductssettings' },
@@ -401,6 +404,8 @@ var DevKit;
 			ResolveSimilarUnresolvedEmailAddress: { a: 'resolvesimilarunresolvedemailaddress' },
 			RestrictStatusUpdate: { a: 'restrictstatusupdate' },
 			RiErrorStatus: { a: 'rierrorstatus' },
+			SalesMobileUseUCIFormsForCreate: { a: 'salesmobileuseuciformsforcreate' },
+			SalesMobileUseUCIFormsForView: { a: 'salesmobileuseuciformsforview' },
 			SampleDataImportId: { a: 'sampledataimportid' },
 			SchedulingEngine: { a: 'schedulingengine' },
 			SchemaNamePrefix: { a: 'schemanameprefix' },
@@ -498,7 +503,7 @@ var DevKit;
 		}
 		organization.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -521,6 +526,8 @@ var OptionSet;
 			_123_0: 0,
 			_123_1: 1,
 			_123_2: 2
+		},
+		DateFormatCode : {
 		},
 		DefaultRecurrenceEndRangeType : {
 			End_By_Date: 3,
@@ -617,6 +624,10 @@ var OptionSet;
 			Failed: 3,
 			Passed: 2,
 			Processing: 1
+		},
+		TimeFormatCode : {
+		},
+		WeekStartDayCode : {
 		},
 		YammerPostMethod : {
 			Private: 1,

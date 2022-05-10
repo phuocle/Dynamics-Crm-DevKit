@@ -372,7 +372,7 @@ var DevKit;
 		}
 		annotation.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -386,6 +386,8 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.Annotation = {
+		ObjectIdTypeCode : {
+		},
 		ObjectTypeCode : {
 			Account: 1,
 			Appointment: 4201,
@@ -422,6 +424,8 @@ var OptionSet;
 			Service: 4001,
 			Service_Activity: 4214,
 			Task: 4212
+		},
+		OwnerIdType : {
 		},
 		RollupState : {
 			NotCalculated: 0,

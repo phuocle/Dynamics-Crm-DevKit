@@ -235,10 +235,85 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Shows the exchange rate for the currency associated with the entity with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Shows the sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who last updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			readonly msdyn_BillDate_UtcDateOnly: string;
+			/** Enter the name of the custom entity. */
+			readonly msdyn_name: string;
+			readonly msdyn_Note: string;
+			/** Unique identifier for Payment Term associated with Purchase Order Bill. */
+			readonly msdyn_PaymentTerm: string;
+			/** Unique identifier for Purchase Order associated with Purchase Order Bill. */
+			readonly msdyn_PurchaseOrder: string;
+			/** Shows the entity instances. */
+			readonly msdyn_purchaseorderbillId: string;
+			readonly msdyn_ShippingAmount: string;
+			/** Shows the value of the shipping amount in the base currency. */
+			readonly msdyn_shippingamount_Base: string;
+			readonly msdyn_Subtotal: string;
+			/** Shows the value of the subtotal in the base currency. */
+			readonly msdyn_subtotal_Base: string;
+			readonly msdyn_TaxAmount: string;
+			/** Shows the value of the tax amount in the base currency. */
+			readonly msdyn_taxamount_Base: string;
+			/** Unique identifier for Tax Code associated with Purchase Order Bill. */
+			readonly msdyn_TaxCode: string;
+			readonly msdyn_TotalAmount: string;
+			/** Shows the value of the total amount in the base currency. */
+			readonly msdyn_totalamount_Base: string;
+			readonly msdyn_VendorInvoiceNumber: string;
+			/** Shows the date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Contains the ID of the process associated with the entity. */
+			readonly processid: string;
+			/** Contains the ID of the stage where the entity is located. */
+			readonly stageid: string;
+			/** Status of the Purchase Order Bill */
+			readonly statecode: string;
+			/** Reason for the status of the Purchase Order Bill */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Unique identifier of the currency associated with the entity. */
+			readonly TransactionCurrencyId: string;
+			/** Shows a comma-separated list of string values that represent the unique identifiers of stages in a business process flow instance in the order that they occur. */
+			readonly traversedpath: string;
+			/** Shows the time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace msdyn_purchaseorderbill {
+		enum OwnerIdType {
+		}
 		enum statecode {
 			/** 0 */
 			Active,
@@ -269,4 +344,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

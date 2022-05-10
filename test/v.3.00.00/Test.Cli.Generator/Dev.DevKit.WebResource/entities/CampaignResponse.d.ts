@@ -310,16 +310,172 @@ declare namespace DevKit {
 		YomiLastName: string;
 		/** The array of object that can cast object to ActivityPartyApi class */
 		ActivityParties: Array<unknown>;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly ActivityAdditionalParams: string;
+			/** Unique identifier of the campaign response. */
+			readonly ActivityId: string;
+			/** Type the number of minutes spent on this activity. The duration is used in reporting. */
+			readonly ActualDurationMinutes: string;
+			/** Enter the date when the campaign response was actually completed. */
+			readonly ActualEnd_UtcDateOnly: string;
+			/** Enter the actual start date and time for the campaign response. */
+			readonly ActualStart_UtcDateOnly: string;
+			/** Type a category to identify the campaign response type, such as new business development or customer retention, to tie the campaign response to a business group or function. */
+			readonly Category: string;
+			/** Select how the response was received, such as phone, letter, fax, or email. */
+			readonly ChannelTypeCode: string;
+			/** Shows how contact about the social activity originated, such as from Twitter or Facebook. This field is read-only. */
+			readonly Community: string;
+			/** Type the name of the company if the campaign response was received from a new prospect or customer. */
+			readonly CompanyName: string;
+			/** Unique identifier of the user who created the activity. */
+			readonly CreatedBy: string;
+			/** Date and time when the activity was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the activitypointer. */
+			readonly CreatedOnBehalfBy: string;
+			/** Date and time when the delivery of the activity was last attempted. */
+			readonly DeliveryLastAttemptedOn_UtcDateAndTime: string;
+			/** Priority of delivery of the activity to the email server. */
+			readonly DeliveryPriorityCode: string;
+			/** Type additional information to describe the campaign response, such as key discussion points or objectives. */
+			readonly Description: string;
+			/** Type the responder's email address. */
+			readonly EMailAddress: string;
+			/** The message id of activity which is returned from Exchange Server. */
+			readonly ExchangeItemId: string;
+			/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
+			readonly ExchangeRate: string;
+			/** Shows the web link of Activity of type email. */
+			readonly ExchangeWebLink: string;
+			/** Type the responder's fax number. */
+			readonly Fax: string;
+			/** Type the responder's first name if the campaign response was received from a new prospect or customer. */
+			readonly FirstName: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Type of instance of a recurring series. */
+			readonly InstanceTypeCode: string;
+			/** Specifies whether the campaign response was billed as part of resolving a case. */
+			readonly IsBilled: string;
+			/** For internal use only. */
+			readonly IsMapiPrivate: string;
+			/** Information regarding whether the activity is a regular activity type or event type. */
+			readonly IsRegularActivity: string;
+			/** Specifies whether the campaign response is created by a workflow rule. */
+			readonly IsWorkflowCreated: string;
+			/** Type the responder's last name if the campaign response was received from a new prospect or customer. */
+			readonly LastName: string;
+			/** Contains the date and time stamp of the last on hold time. */
+			readonly LastOnHoldTime_UtcDateAndTime: string;
+			/** Left the voice mail */
+			readonly LeftVoiceMail: string;
+			/** Unique identifier of user who last modified the activity. */
+			readonly ModifiedBy: string;
+			/** Date and time when activity was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the activitypointer. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Shows how long, in minutes, that the record was on hold. */
+			readonly OnHoldTime: string;
+			/** Choose the phone call, email, fax, letter, or appointment activity that led the prospect or customer to respond to the campaign. */
+			readonly originatingactivityid_appointment: string;
+			/** Choose the phone call, email, fax, letter, or appointment activity that led the prospect or customer to respond to the campaign. */
+			readonly originatingactivityid_email: string;
+			/** Choose the phone call, email, fax, letter, or appointment activity that led the prospect or customer to respond to the campaign. */
+			readonly originatingactivityid_fax: string;
+			/** Choose the phone call, email, fax, letter, or appointment activity that led the prospect or customer to respond to the campaign. */
+			readonly originatingactivityid_letter: string;
+			/** Choose the phone call, email, fax, letter, or appointment activity that led the prospect or customer to respond to the campaign. */
+			readonly originatingactivityid_phonecall: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier of the business unit that owns the activity. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the team that owns the activity. */
+			readonly OwningTeam: string;
+			/** Unique identifier of the user that owns the activity. */
+			readonly OwningUser: string;
+			/** For internal use only. */
+			readonly PostponeActivityProcessingUntil_UtcDateAndTime: string;
+			/** Select the priority so that preferred customers or critical issues are handled quickly. */
+			readonly PriorityCode: string;
+			/** Unique identifier of the Process. */
+			readonly ProcessId: string;
+			/** Type a promotional code to track sales related to the campaign response or to allow the responder to redeem a discount offer. */
+			readonly PromotionCodeName: string;
+			/** Enter the date when the campaign response was received. */
+			readonly ReceivedOn_UtcDateOnly: string;
+			/** Choose the parent campaign so that the campaign's response rate is tracked correctly. */
+			readonly regardingobjectid_bulkoperation_campaignresponse: string;
+			/** Choose the parent campaign so that the campaign's response rate is tracked correctly. */
+			readonly regardingobjectid_campaign_campaignresponse: string;
+			/** Select the type of response from the prospect or customer to indicate their interest in the campaign. */
+			readonly ResponseCode: string;
+			/** Scheduled duration of the campaign response in minutes. */
+			readonly ScheduledDurationMinutes: string;
+			/** Enter the expected due date and time for the activity to be completed to provide details about the timing of the campaign response. */
+			readonly ScheduledEnd_UtcDateOnly: string;
+			/** Enter the expected start date and time for the activity to provide details about the timing of the campaign response. */
+			readonly ScheduledStart_UtcDateOnly: string;
+			/** Unique identifier of the mailbox associated with the sender of the email message. */
+			readonly SenderMailboxId: string;
+			/** Date and time when the activity was sent. */
+			readonly SentOn_UtcDateAndTime: string;
+			/** Uniqueidentifier specifying the id of recurring series of an instance. */
+			readonly SeriesId: string;
+			/** Unique identifier for the associated service. */
+			readonly ServiceId: string;
+			/** Choose the service level agreement (SLA) that you want to apply to the case record. */
+			readonly SLAId: string;
+			/** Last SLA that was applied to this case. This field is for internal use only. */
+			readonly SLAInvokedId: string;
+			/** Shows the date and time by which the activities are sorted. */
+			readonly SortDate_UtcDateAndTime: string;
+			/** Unique identifier of the Stage. */
+			readonly StageId: string;
+			/** Shows whether the campaign response is open, closed, or canceled. Closed and canceled campaign responses are read-only and can't be edited. */
+			readonly StateCode: string;
+			/** Select the campaign response's status. */
+			readonly StatusCode: string;
+			/** Type a subcategory to identify the campaign response type and relate the activity to a specific product, sales region, business group, or other function. */
+			readonly Subcategory: string;
+			/** Type a short description about the objective or primary topic of the campaign response. */
+			readonly Subject: string;
+			/** Type the responder's primary phone number. */
+			readonly Telephone: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			readonly TransactionCurrencyId: string;
+			/** For internal use only. */
+			readonly TraversedPath: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version number of the activity. */
+			readonly VersionNumber: string;
+			/** Type the phonetic spelling of the company name, if specified in Japanese, to make sure the name is pronounced correctly in phone calls and other communications. */
+			readonly YomiCompanyName: string;
+			/** Type the phonetic spelling of the campaign responder's first name, if specified in Japanese, to make sure the name is pronounced correctly in phone calls and other communications. */
+			readonly YomiFirstName: string;
+			/** Type the phonetic spelling of the campaign responder's last name, if specified in Japanese, to make sure the name is pronounced correctly in phone calls and other communications. */
+			readonly YomiLastName: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace CampaignResponse {
 		enum ActivityTypeCode {
-			/** 10086 */
+			/** 10088 */
 			Activity_record_for_the_Teams_chat,
 			/** 4201 */
 			Appointment,
-			/** 10404 */
+			/** 10473 */
 			Booking_Alert,
 			/** 4402 */
 			Campaign_Activity,
@@ -327,13 +483,13 @@ declare namespace OptionSet {
 			Campaign_Response,
 			/** 4206 */
 			Case_Resolution,
-			/** 10707 */
+			/** 10743 */
 			Conversation,
-			/** 10313 */
+			/** 10330 */
 			Customer_Voice_alert,
-			/** 10323 */
+			/** 10340 */
 			Customer_Voice_survey_invite,
-			/** 10325 */
+			/** 10342 */
 			Customer_Voice_survey_response,
 			/** 4202 */
 			Email,
@@ -345,11 +501,11 @@ declare namespace OptionSet {
 			Opportunity_Close,
 			/** 4209 */
 			Order_Close,
-			/** 10817 */
+			/** 10857 */
 			Outbound_message,
 			/** 4210 */
 			Phone_Call,
-			/** 10434 */
+			/** 10489 */
 			Project_Service_Approval,
 			/** 4406 */
 			Quick_Campaign,
@@ -359,7 +515,7 @@ declare namespace OptionSet {
 			Recurring_Appointment,
 			/** 4214 */
 			Service_Activity,
-			/** 10721 */
+			/** 10760 */
 			Session,
 			/** 4212 */
 			Task
@@ -379,6 +535,8 @@ declare namespace OptionSet {
 			Phone
 		}
 		enum Community {
+			/** 16 */
+			Apple_Messages_For_Business,
 			/** 5 */
 			Cortana,
 			/** 6 */
@@ -389,6 +547,8 @@ declare namespace OptionSet {
 			Email,
 			/** 1 */
 			Facebook,
+			/** 17 */
+			Googles_Business_Messages,
 			/** 10 */
 			GroupMe,
 			/** 11 */
@@ -432,6 +592,10 @@ declare namespace OptionSet {
 			/** 1 */
 			Recurring_Master
 		}
+		enum OriginatingActivityIdTypeCode {
+		}
+		enum OwnerIdType {
+		}
 		enum PriorityCode {
 			/** 2 */
 			High,
@@ -439,6 +603,8 @@ declare namespace OptionSet {
 			Low,
 			/** 1 */
 			Normal
+		}
+		enum RegardingObjectTypeCode {
 		}
 		enum ResponseCode {
 			/** 3 */
@@ -484,4 +650,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

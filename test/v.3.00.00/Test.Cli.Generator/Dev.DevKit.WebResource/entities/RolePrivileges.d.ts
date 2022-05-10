@@ -51,6 +51,30 @@ declare namespace DevKit {
 		/** For internal use only. */
 		readonly SupportingSolutionId: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Tells whether the role privilege can be deleted. */
+			readonly CanBeDeleted: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			readonly IsManaged: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** System-generated attribute that stores the privileges associated with the role. */
+			readonly PrivilegeDepthMask: string;
+			/** Unique identifier of the privilege associated with the role. */
+			readonly PrivilegeId: string;
+			/** Unique identifier of the role that is associated with the role privilege. */
+			readonly RoleId: string;
+			/** Unique identifier of the role privilege. */
+			readonly RolePrivilegeId: string;
+			/** For internal use only. */
+			readonly RolePrivilegeIdUnique: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -83,4 +107,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

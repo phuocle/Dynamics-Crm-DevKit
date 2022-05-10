@@ -41,6 +41,8 @@ var OptionSet;
 		msdyn_SLAType : {
 			Arrival_Time: 690970000
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

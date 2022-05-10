@@ -37,6 +37,10 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.msdyn_aicontactsuggestion = {
+		msdyn_sourcerecordIdType : {
+		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

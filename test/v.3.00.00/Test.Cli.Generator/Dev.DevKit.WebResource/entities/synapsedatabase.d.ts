@@ -1,6 +1,62 @@
 ﻿//@ts-check
 ///<reference path="devkit.d.ts" />
 declare namespace DevKit {
+	namespace Formsynapsedatabase_Information {
+		interface Tabs {
+		}
+		interface Body {
+			/** The name of the custom entity. */
+			name: DevKit.Controls.String;
+			/** Owner Id */
+			OwnerId: DevKit.Controls.Lookup;
+		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
+	}
+	class Formsynapsedatabase_Information extends DevKit.IForm {
+		/**
+		* Information [Main Form]
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form synapsedatabase_Information */
+		Body: DevKit.Formsynapsedatabase_Information.Body;
+		/** The Process of form synapsedatabase_Information */
+		Process: DevKit.Formsynapsedatabase_Information.Process;
+		/** The SidePanes of form synapsedatabase_Information */
+		SidePanes: DevKit.SidePanes;
+	}
+	namespace Formsynapsedatabase_Information2 {
+		interface Tabs {
+		}
+		interface Body {
+			/** The name of the custom entity. */
+			name: DevKit.Controls.String;
+			/** Owner Id */
+			OwnerId: DevKit.Controls.Lookup;
+		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
+	}
+	class Formsynapsedatabase_Information2 extends DevKit.IForm {
+		/**
+		* Information [Main Form]
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form synapsedatabase_Information2 */
+		Body: DevKit.Formsynapsedatabase_Information2.Body;
+		/** The Process of form synapsedatabase_Information2 */
+		Process: DevKit.Formsynapsedatabase_Information2.Process;
+		/** The SidePanes of form synapsedatabase_Information2 */
+		SidePanes: DevKit.SidePanes;
+	}
 	class synapsedatabaseApi {
 		/**
 		* DynamicsCrm.DevKit synapsedatabaseApi
@@ -105,6 +161,84 @@ declare namespace DevKit {
 		readonly VersionNumber: number;
 		/** Workspace name of the Synapse database. */
 		WorkspaceName: string;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly ComponentIdUnique: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Name of the Synapse database. */
+			readonly DatabaseName: string;
+			/** Unique identifier for Data Lake Folder associated with Synapse Database. */
+			readonly datalakefolder: string;
+			/** The development endpoint for this Synapse database. */
+			readonly DevelopmentEndpoint: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** For internal use only. */
+			readonly IsCustomizable: string;
+			/** Indicates whether the solution component is part of a managed solution. */
+			readonly IsManaged: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** The name of the custom entity. */
+			readonly name: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateAndTime: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Azure resource group of the Synapse database. */
+			readonly ResourceGroup: string;
+			/** Schema prefix to use for the table names */
+			readonly SchemaPrefix: string;
+			/** Serverless Sql Endpoint of the Synapse database. */
+			readonly ServerlessSqlEndpoint: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** Spark pool configuration */
+			readonly SparkPoolConfig: string;
+			/** Status of the Synapse Database */
+			readonly statecode: string;
+			/** Reason for the status of the Synapse Database */
+			readonly statuscode: string;
+			/** Azure subscription for the Synapse database */
+			readonly Subscription: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** Unique identifier for entity instances */
+			readonly synapsedatabaseId: string;
+			/** Azure tenant of the Synapse database */
+			readonly Tenant: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Unique Name for the entity. */
+			readonly UniqueName: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+			/** Workspace name of the Synapse database. */
+			readonly WorkspaceName: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -118,6 +252,8 @@ declare namespace OptionSet {
 			Published,
 			/** 1 */
 			Unpublished
+		}
+		enum OwnerIdType {
 		}
 		enum statecode {
 			/** 0 */
@@ -149,4 +285,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

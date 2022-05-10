@@ -70,6 +70,8 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.UII_action = {
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

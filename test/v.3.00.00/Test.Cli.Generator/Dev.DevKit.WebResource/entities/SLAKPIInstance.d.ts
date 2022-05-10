@@ -130,6 +130,67 @@ declare namespace DevKit {
 		WarningTime_UtcDateAndTime: Date;
 		/** Shows information about whether the case has reached its warning time. */
 		WarningTimeReached: OptionSet.SLAKPIInstance.WarningTimeReached;
+		readonly FormattedValue: {
+			readonly ApplicableFromValue_UtcDateAndTime: string;
+			/** Computed Failure Date and time */
+			readonly ComputedFailureTime_UtcDateAndTime: string;
+			/** Computed Warning Date and time */
+			readonly ComputedWarningTime_UtcDateAndTime: string;
+			/** For internal use only. */
+			readonly CreatedBy: string;
+			/** For internal use only. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** For internal use only. */
+			readonly CreatedOnBehalfBy: string;
+			/** For internal use only. */
+			readonly Description: string;
+			readonly ElapsedTime: string;
+			/** For internal use only. */
+			readonly ExchangeRate: string;
+			/** Enter the date and time when the service level agreement (SLA) key performance indicator (KPI) will expire. */
+			readonly FailureTime_UtcDateAndTime: string;
+			readonly LastResumeTime_UtcDateAndTime: string;
+			/** For internal use only. */
+			readonly ModifiedBy: string;
+			/** For internal use only. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** For internal use only. */
+			readonly ModifiedOnBehalfBy: string;
+			readonly msdyn_ActionExecutionStatus: string;
+			readonly msdyn_calendarid: string;
+			readonly msdyn_prevslakpiinstanceid: string;
+			/** Unique identifier for SLA KPI Instance associated with SLA Item. */
+			readonly msdyn_slaitemid: string;
+			/** Type a descriptive name for the service level agreement (SLA) key performance indicator (KPI) instance. */
+			readonly Name: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Owning Business Unit. */
+			readonly OwningBusinessUnit: string;
+			readonly PausedOn_UtcDateAndTime: string;
+			/** Unique identifier of the record that this service level agreement (SLA) key performance indicator (KPI) instance is associated with. */
+			readonly Regarding: string;
+			readonly RegardingEntityID: string;
+			/** Unique identifier of the SLA KPI Instance. */
+			readonly SLAKPIInstanceId: string;
+			/** Reason for the status of the service level agreement (SLA) key performance indicator (KPI) instance. For example, the SLA KPI could be Noncompliant or Succeeded. */
+			readonly Status: string;
+			/** Shows the date and time when the service level agreement (SLA) key performance indicator (KPI) success criteria was met. */
+			readonly SucceededOn_UtcDateAndTime: string;
+			readonly SuccessCheckedAt_TimezoneDateAndTime: string;
+			readonly TerminalStateReached: string;
+			readonly TerminalStateTime_UtcDateAndTime: string;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			readonly TransactionCurrencyId: string;
+			/** For internal use only. */
+			readonly VersionNumber: string;
+			/** Enter the date and time when the service level agreement (SLA) key performance indicator (KPI)will go to a warning state. */
+			readonly WarningTime_UtcDateAndTime: string;
+			/** Shows information about whether the case has reached its warning time. */
+			readonly WarningTimeReached: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -141,6 +202,10 @@ declare namespace OptionSet {
 			Success,
 			/** 1 */
 			Warning
+		}
+		enum OwnerIdType {
+		}
+		enum RegardingObjectTypeCode {
 		}
 		enum Status {
 			/** 5 */
@@ -180,4 +245,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

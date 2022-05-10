@@ -572,6 +572,137 @@ declare namespace DevKit {
 		VendorPartNumber: string;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the product. */
+			readonly CreatedBy: string;
+			/** Shows the external party who created the record. */
+			readonly CreatedByExternalParty: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the product. */
+			readonly CreatedOnBehalfBy: string;
+			/** Current cost for the product item. Used in price calculations. */
+			readonly CurrentCost: string;
+			/** Value of the Current Cost in base currency. */
+			readonly CurrentCost_Base: string;
+			/** Default unit for the product. */
+			readonly DefaultUoMId: string;
+			/** Default unit group for the product. */
+			readonly DefaultUoMScheduleId: string;
+			/** Description of the product. */
+			readonly Description: string;
+			/** Internal Use Only */
+			readonly DMTImportState: string;
+			/** Shows the default image for the record. */
+			readonly EntityImage: string;
+			readonly EntityImage_Timestamp: string;
+			readonly EntityImage_URL: string;
+			readonly EntityImageId: string;
+			/** Exchange rate for the currency associated with the product with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Hierarchy path of the product. */
+			readonly HierarchyPath: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Information that specifies whether the product is a kit. */
+			readonly IsKit: string;
+			readonly IsReparented: string;
+			/** Information about whether the product is a stock item. */
+			readonly IsStockItem: string;
+			/** Unique identifier of the user who last modified the product. */
+			readonly ModifiedBy: string;
+			/** Shows the external party who modified the record. */
+			readonly ModifiedByExternalParty: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the product. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Specify whether a product is to be converted to a customer asset. When a product is used on a work order, the system will automatically convert it into a customer asset when the work order is closed. */
+			readonly msdyn_ConvertToCustomerAsset: string;
+			/** Default vendor that supplies this product */
+			readonly msdyn_DefaultVendor: string;
+			readonly msdyn_FieldServiceProductType: string;
+			/** Describes whether product is opted out or not */
+			readonly msdyn_gdproptout: string;
+			/** Type the name for the product when used on a purchase order. */
+			readonly msdyn_PurchaseName: string;
+			/** Select whether the item is taxable. If an item is set as not taxable, it won't be taxable even on a taxable work order. */
+			readonly msdyn_Taxable: string;
+			/** Select the transaction category for this product. */
+			readonly msdyn_TransactionCategory: string;
+			/** Shows the UPC Code for product. Used for bar code scanning. */
+			readonly msdyn_UPCCode: string;
+			/** Name of the product. */
+			readonly Name: string;
+			/** Unique identifier for the organization */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Specifies the parent product family hierarchy. */
+			readonly ParentProductId: string;
+			/** List price for the product item. Used in price calculations. */
+			readonly Price: string;
+			/** Value of the List Price in base currency. */
+			readonly Price_Base: string;
+			/** Select the default price list for the product. */
+			readonly PriceLevelId: string;
+			/** Contains the id of the process associated with the entity. */
+			readonly ProcessId: string;
+			/** Unique identifier of the product. */
+			readonly ProductId: string;
+			/** User-defined product ID. */
+			readonly ProductNumber: string;
+			/** Product Structure. */
+			readonly ProductStructure: string;
+			/** Type of product. */
+			readonly ProductTypeCode: string;
+			/** URL for the Website associated with the product. */
+			readonly ProductUrl: string;
+			/** Number of decimal places that can be used in monetary amounts for the product. */
+			readonly QuantityDecimal: string;
+			/** Quantity of the product in stock. */
+			readonly QuantityOnHand: string;
+			/** Product size. */
+			readonly Size: string;
+			/** Contains the id of the stage where the entity is located. */
+			readonly StageId: string;
+			/** Standard cost for the product item. Used in price calculations. */
+			readonly StandardCost: string;
+			/** Value of the Standard Cost in base currency. */
+			readonly StandardCost_Base: string;
+			/** Status of the product. */
+			readonly StateCode: string;
+			/** Reason for the status of the product. */
+			readonly StatusCode: string;
+			/** Stock volume of the product. */
+			readonly StockVolume: string;
+			/** Stock weight of the product. */
+			readonly StockWeight: string;
+			/** Select a category for the product. */
+			readonly SubjectId: string;
+			/** Name of the product's supplier. */
+			readonly SupplierName: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Unique identifier of the currency associated with the product. */
+			readonly TransactionCurrencyId: string;
+			/** A comma separated list of string values representing the unique identifiers of stages in a Business Process Flow Instance in the order that they occur. */
+			readonly TraversedPath: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Date from which this product is valid. */
+			readonly ValidFromDate_DateOnly: string;
+			/** Date to which this product is valid. */
+			readonly ValidToDate_DateOnly: string;
+			/** Unique identifier of vendor supplying the product. */
+			readonly VendorID: string;
+			/** Name of the product vendor. */
+			readonly VendorName: string;
+			/** Unique part identifier in vendor catalog of this product. */
+			readonly VendorPartNumber: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -640,4 +771,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

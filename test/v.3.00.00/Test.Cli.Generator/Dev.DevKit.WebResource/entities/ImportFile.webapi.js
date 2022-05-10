@@ -141,7 +141,7 @@ var DevKit;
 		}
 		importfile.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -172,6 +172,8 @@ var OptionSet;
 			XLSX: 3,
 			XML_Spreadsheet_2003: 1
 		},
+		OwnerIdType : {
+		},
 		ProcessCode : {
 			Ignore: 2,
 			Internal: 3,
@@ -190,6 +192,8 @@ var OptionSet;
 			Picklist_Transformation: 6,
 			Primary_Key_Transformation: 12,
 			Transformation_Complete: 8
+		},
+		RecordsOwnerIdType : {
 		},
 		StateCode : {
 			Active: 0

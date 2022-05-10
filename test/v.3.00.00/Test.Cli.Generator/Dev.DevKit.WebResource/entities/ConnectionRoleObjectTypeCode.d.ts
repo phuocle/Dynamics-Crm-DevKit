@@ -36,10 +36,21 @@ declare namespace DevKit {
 		/** Unique identifier of the organization associated with the connectionroleobjecttypecode. */
 		readonly OrganizationId: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the connection role associated with the Connection Role Object Type Code. */
+			readonly ConnectionRoleId: string;
+			/** Unique identifier of the connection role object type association. */
+			readonly ConnectionRoleObjectTypeCodeId: string;
+			/** Unique identifier of the organization associated with the connectionroleobjecttypecode. */
+			readonly OrganizationId: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace ConnectionRoleObjectTypeCode {
+		enum AssociatedObjectTypeCode {
+		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
 			NotCalculated,
@@ -58,4 +69,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

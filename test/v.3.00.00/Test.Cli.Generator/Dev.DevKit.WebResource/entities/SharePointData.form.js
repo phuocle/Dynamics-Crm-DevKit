@@ -36,6 +36,8 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.SharePointData = {
+		RegardingObjectTypeCode : {
+		},
 		RollupState : {
 			NotCalculated: 0,
 			Calculated: 1,

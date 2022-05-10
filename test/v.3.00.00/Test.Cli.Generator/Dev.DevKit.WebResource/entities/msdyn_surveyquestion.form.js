@@ -54,6 +54,8 @@ var OptionSet;
 			Single_line: 192350000,
 			User_Consent: 192350004
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

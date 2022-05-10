@@ -162,6 +162,85 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Accent Color for this re-usable subcomponent */
+			readonly AccentColor: string;
+			/** Unique identifier for entity instances */
+			readonly botcomponentId: string;
+			/** The category of Chatbot subcomponent. */
+			readonly Category: string;
+			/** For internal use only. */
+			readonly ComponentIdUnique: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** The sub type of Chatbot subcomponent. */
+			readonly ComponentType: string;
+			/** The content or metadata of the Bot Component that defines its structure and properties. */
+			readonly Content: string;
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** The content of the Bot Component in OBI format */
+			readonly Data: string;
+			/** Contains searchable text for the bot component */
+			readonly Description: string;
+			/** Link to learn More about this subcomponent */
+			readonly HelpLink: string;
+			/** Icon Url for this subcomponent */
+			readonly IconUrl: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** For internal use only. */
+			readonly IsCustomizable: string;
+			/** Indicates whether the solution component is part of a managed solution. */
+			readonly IsManaged: string;
+			/** Language of the chatbot subcomponent */
+			readonly Language: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** The name of the custom entity. */
+			readonly name: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateAndTime: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Unique identifier for Chatbot subcomponent associated with Chatbot subcomponent. */
+			readonly ParentBotComponentId: string;
+			/** Reuse Policy for the chatbot subcomponent */
+			readonly ReusePolicy: string;
+			readonly SchemaName: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** Status of the BotComponent */
+			readonly statecode: string;
+			/** Reason for the status of the BotComponent */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -213,16 +292,22 @@ declare namespace OptionSet {
 			Chinese_Simplified,
 			/** 1028 */
 			Chinese_Traditional,
+			/** 1029 */
+			Czech,
 			/** 1030 */
 			Danish,
 			/** 1043 */
 			Dutch,
 			/** 1033 */
 			English,
+			/** 1035 */
+			Finnish,
 			/** 1036 */
 			French,
 			/** 1031 */
 			German,
+			/** 1032 */
+			Greek,
 			/** 1081 */
 			Hindi,
 			/** 1057 */
@@ -245,8 +330,12 @@ declare namespace OptionSet {
 			Spanish,
 			/** 1053 */
 			Swedish,
+			/** 1054 */
+			Thai,
 			/** 1055 */
 			Turkish
+		}
+		enum OwnerIdType {
 		}
 		enum ReusePolicy {
 			/** 0 */
@@ -286,4 +375,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

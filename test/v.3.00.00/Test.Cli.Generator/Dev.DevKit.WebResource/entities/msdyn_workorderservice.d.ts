@@ -467,6 +467,161 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Shows the exchange rate for the currency associated with the entity with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Shows the sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who last updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Enter any additional costs associated with this service. The values are manually entered. Note: additional cost is not unit dependent. */
+			readonly msdyn_AdditionalCost: string;
+			/** Shows the value of the additional cost in the base currency. */
+			readonly msdyn_additionalcost_Base: string;
+			/** Agreement Booking Service linked to this Work Order Service */
+			readonly msdyn_AgreementBookingService: string;
+			/** Shows the resource booking detail where this product was added. */
+			readonly msdyn_Booking: string;
+			/** Shows the sale amount per unit calculated by the system considering the minimum charge, if applicable. */
+			readonly msdyn_CalculatedUnitAmount: string;
+			/** Shows the value of the calculated unit amount in the base currency. */
+			readonly msdyn_calculatedunitamount_Base: string;
+			/** Enter the commission costs associated with this service. The value is manually specified and isn't automatically calculated. */
+			readonly msdyn_CommissionCosts: string;
+			/** Shows the value of the commission costs in the base currency. */
+			readonly msdyn_commissioncosts_Base: string;
+			/** Unique identifier for Customer Asset associated with Work Order Service. */
+			readonly msdyn_CustomerAsset: string;
+			/** Enter the description of the service as presented to the customer. The value defaults to the description defined on the service. */
+			readonly msdyn_Description: string;
+			/** Choose whether to disable entitlement selection for this work order service. */
+			readonly msdyn_DisableEntitlement: string;
+			/** Specify any discount amount on this service. Note: If you enter a discount amount you cannot enter a discount % */
+			readonly msdyn_DiscountAmount: string;
+			/** Shows the value of the discount Amount in the base currency. */
+			readonly msdyn_discountamount_Base: string;
+			/** Specify any discount % on this service. Note: If you enter a discount % it will overwrite the discount $ */
+			readonly msdyn_DiscountPercent: string;
+			/** Shows the actual duration of service. */
+			readonly msdyn_Duration: string;
+			/** Enter the quantity you wish to bill the customer for. By default, this will default to the same value as "Quantity." */
+			readonly msdyn_DurationToBill: string;
+			/** Entitlement to apply to the Work Order Service. */
+			readonly msdyn_Entitlement: string;
+			/** Shows the estimated sale amount per unit calculated by the system considering the initial charge (if applicable). */
+			readonly msdyn_EstimateCalculatedUnitAmount: string;
+			/** Shows the value of the estimate calculated unit amount in the base currency. */
+			readonly msdyn_estimatecalculatedunitamount_Base: string;
+			/** Enter a discount amount on the subtotal amount. Note: If you enter a discount amount you cannot enter a discount % */
+			readonly msdyn_EstimateDiscountAmount: string;
+			/** Shows the value of the estimate discount amount in the base currency. */
+			readonly msdyn_estimatediscountamount_Base: string;
+			/** Enter a discount % on the subtotal amount. Note: If you enter a discount % it will overwrite the discount $ */
+			readonly msdyn_EstimateDiscountPercent: string;
+			/** Enter the estimated duration of this service. */
+			readonly msdyn_EstimateDuration: string;
+			/** Shows the total amount for this service, excluding discounts. */
+			readonly msdyn_EstimateSubtotal: string;
+			/** Shows the value of the estimate subtotal in the base currency. */
+			readonly msdyn_estimatesubtotal_Base: string;
+			/** Shows the estimated total amount of this service, including discounts. */
+			readonly msdyn_EstimateTotalAmount: string;
+			/** Shows the value of the estimate total amount in the base currency. */
+			readonly msdyn_estimatetotalamount_Base: string;
+			/** Shows the estimated total cost of this service. */
+			readonly msdyn_EstimateTotalCost: string;
+			/** Shows the value of the estimate total cost in the base currency. */
+			readonly msdyn_estimatetotalcost_Base: string;
+			/** Shows the estimated sale amount per unit. */
+			readonly msdyn_EstimateUnitAmount: string;
+			/** Shows the value of the estimate unit amount in the base currency. */
+			readonly msdyn_estimateunitamount_Base: string;
+			/** Shows the estimated cost amount per unit. */
+			readonly msdyn_EstimateUnitCost: string;
+			/** Shows the value of the estimate unit cost in the base currency. */
+			readonly msdyn_estimateunitcost_Base: string;
+			/** Enter any internal notes you want to track on this service. */
+			readonly msdyn_InternalDescription: string;
+			readonly msdyn_InternalFlags: string;
+			readonly msdyn_LineOrder: string;
+			/** Enter the current status of the line, estimate or used. */
+			readonly msdyn_LineStatus: string;
+			/** Enter the amount charged as a minimum charge. */
+			readonly msdyn_MinimumChargeAmount: string;
+			/** Shows the value of the minimum charge amount in the base currency. */
+			readonly msdyn_minimumchargeamount_Base: string;
+			/** Enter the duration of up to how long the minimum charge applies. */
+			readonly msdyn_MinimumChargeDuration: string;
+			/** Enter the name of the custom entity. */
+			readonly msdyn_name: string;
+			/** Price List that determines the pricing for this service */
+			readonly msdyn_PriceList: string;
+			/** Service proposed or used for this work order */
+			readonly msdyn_Service: string;
+			/** Enter the total amount excluding discounts. */
+			readonly msdyn_Subtotal: string;
+			/** Shows the value of the subtotal in the base currency. */
+			readonly msdyn_subtotal_Base: string;
+			/** Specify if service is taxable. If you do not wish to charge tax set this field to No. */
+			readonly msdyn_Taxable: string;
+			readonly msdyn_TotalAmount: string;
+			/** Shows the value of the total amount in the base currency. */
+			readonly msdyn_totalamount_Base: string;
+			/** Shows the total cost of this service. This is calculated by (Unit Cost * Units) + Additional Cost + Commission Costs. */
+			readonly msdyn_TotalCost: string;
+			/** Shows the value of the total cost in the base currency. */
+			readonly msdyn_totalcost_Base: string;
+			/** The unit that determines the final quantity for this service */
+			readonly msdyn_Unit: string;
+			/** Enter the amount you want to charge the customer per unit. By default, this is calculated based on the selected price list. The amount can be changed. */
+			readonly msdyn_UnitAmount: string;
+			/** Shows the value of the unit amount in the base currency. */
+			readonly msdyn_unitamount_Base: string;
+			/** Shows the actual cost per unit. */
+			readonly msdyn_UnitCost: string;
+			/** Shows the value of the unit cost in the base currency. */
+			readonly msdyn_unitcost_Base: string;
+			/** The work order this service relates to */
+			readonly msdyn_WorkOrder: string;
+			/** The Incident related to this product */
+			readonly msdyn_WorkOrderIncident: string;
+			/** Shows the entity instances. */
+			readonly msdyn_workorderserviceId: string;
+			/** Shows the date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the Work Order Service */
+			readonly statecode: string;
+			/** Reason for the status of the Work Order Service */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Unique identifier of the currency associated with the entity. */
+			readonly TransactionCurrencyId: string;
+			/** Shows the time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -476,6 +631,8 @@ declare namespace OptionSet {
 			Estimated,
 			/** 690970001 */
 			Used
+		}
+		enum OwnerIdType {
 		}
 		enum statecode {
 			/** 0 */
@@ -507,4 +664,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

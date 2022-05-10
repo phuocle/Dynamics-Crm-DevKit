@@ -64,6 +64,10 @@ var OptionSet;
 			Record_already_exists: 2,
 			Record_not_found: 1
 		},
+		OwnerIdType : {
+		},
+		RegardingObjectTypeCode : {
+		},
 		StateCode : {
 			Active: 0,
 			Resolved: 1

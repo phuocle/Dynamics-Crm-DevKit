@@ -69,6 +69,48 @@ declare namespace DevKit {
 		readonly SolutionId: string;
 		/** The version number of this entity. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** The address table name of this entity. */
+			readonly AddressTableName: string;
+			/** The base table name of this entity. */
+			readonly BaseTableName: string;
+			/** The collection name of this entity. */
+			readonly CollectionName: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier of the entity. */
+			readonly EntityId: string;
+			/** The entity set name of this entity. */
+			readonly EntitySetName: string;
+			/** The extension table name of this entity. */
+			readonly ExtensionTableName: string;
+			/** The external collection name of this entity. */
+			readonly ExternalCollectionName: string;
+			/** The external name of this entity. */
+			readonly ExternalName: string;
+			/** The logical collection name of this entity. */
+			readonly LogicalCollectionName: string;
+			/** The logical name of this entity. */
+			readonly LogicalName: string;
+			/** The name of this Entity. */
+			readonly Name: string;
+			/** The original localized collection name of this entity. */
+			readonly OriginalLocalizedCollectionName: string;
+			/** The original localized name of this entity. */
+			readonly OriginalLocalizedName: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** The parent controlling attribute name of this entity. */
+			readonly ParentControllingAttributeName: string;
+			/** The physical name of this entity. */
+			readonly PhysicalName: string;
+			/** The Report view name of this entity. */
+			readonly ReportViewName: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** The version number of this entity. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -101,4 +143,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

@@ -39,6 +39,18 @@ declare namespace DevKit {
 		readonly OverwriteTime_UtcDateOnly: Date;
 		/** Unique identifier of the associated solution. */
 		readonly SolutionId: string;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** The name of this OptionSet. */
+			readonly Name: string;
+			/** Unique identifier of the attribute. */
+			readonly OptionSetId: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -71,4 +83,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

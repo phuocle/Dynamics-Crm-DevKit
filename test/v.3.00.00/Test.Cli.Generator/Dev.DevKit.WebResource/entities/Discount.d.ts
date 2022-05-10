@@ -119,10 +119,62 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Amount of the discount, specified either as a percentage or as a monetary amount. */
+			readonly Amount: string;
+			/** Value of the Amount in base currency. */
+			readonly Amount_Base: string;
+			/** Unique identifier of the user who created the discount. */
+			readonly CreatedBy: string;
+			/** Date and time when the discount was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the discount. */
+			readonly CreatedOnBehalfBy: string;
+			/** Unique identifier of the discount. */
+			readonly DiscountId: string;
+			/** Unique identifier of the discount list associated with the discount. */
+			readonly DiscountTypeId: string;
+			/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
+			readonly ExchangeRate: string;
+			/** Upper boundary for the quantity range to which a particular discount can be applied. */
+			readonly HighQuantity: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Specifies whether the discount is specified as a monetary amount or a percentage. */
+			readonly IsAmountType: string;
+			/** Lower boundary for the quantity range to which a particular discount is applied. */
+			readonly LowQuantity: string;
+			/** Unique identifier of the user who last modified the discount. */
+			readonly ModifiedBy: string;
+			/** Date and time when the discount was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the discount. */
+			readonly ModifiedOnBehalfBy: string;
+			/** name */
+			readonly Name: string;
+			/** Unique identifier of the organization associated with the discount. */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Percentage discount value. */
+			readonly Percentage: string;
+			/** Select the discount's status. */
+			readonly StatusCode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			readonly TransactionCurrencyId: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace Discount {
+		enum StatusCode {
+		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
 			NotCalculated,
@@ -141,4 +193,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

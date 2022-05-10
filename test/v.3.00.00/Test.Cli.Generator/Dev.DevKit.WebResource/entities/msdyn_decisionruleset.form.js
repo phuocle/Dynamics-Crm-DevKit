@@ -63,6 +63,8 @@ var OptionSet;
 			Declarative: 192350000,
 			ML_model_based: 192350001
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

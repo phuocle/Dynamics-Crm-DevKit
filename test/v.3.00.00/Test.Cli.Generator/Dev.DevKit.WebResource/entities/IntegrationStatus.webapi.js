@@ -108,7 +108,7 @@ var DevKit;
 		}
 		integrationstatus.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -122,6 +122,12 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.IntegrationStatus = {
+		ObjectTypeCode : {
+		},
+		StateCode : {
+		},
+		StatusCode : {
+		},
 		RollupState : {
 			NotCalculated: 0,
 			Calculated: 1,

@@ -90,6 +90,35 @@ declare namespace DevKit {
 		/** Reason for the status of the relationship role. */
 		StatusCode: OptionSet.RelationshipRole.StatusCode;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique Identifier of the user who created the relationship role. */
+			readonly CreatedBy: string;
+			/** Date and time when the relationship role was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the relationshiprole. */
+			readonly CreatedOnBehalfBy: string;
+			/** Description of the relationship role. */
+			readonly Description: string;
+			/** Unique identifier of the data import or data migration that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who last modified the relationship role. */
+			readonly ModifiedBy: string;
+			/** Date and time when the relationship role was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the relationshiprole. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Name of the relationship role. */
+			readonly Name: string;
+			/** Unique Identifier of the organization that this relationship role belongs to. */
+			readonly OrganizationId: string;
+			/** Unique identifier of the relationship role. */
+			readonly RelationshipRoleId: string;
+			/** Status of the relationship role. */
+			readonly StateCode: string;
+			/** Reason for the status of the relationship role. */
+			readonly StatusCode: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -124,4 +153,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

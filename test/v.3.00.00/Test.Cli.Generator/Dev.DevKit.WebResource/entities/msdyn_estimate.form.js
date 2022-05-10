@@ -59,6 +59,8 @@ var OptionSet;
 			Custom_estimate: 192350003,
 			Resource_based_estimate: 192350000
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

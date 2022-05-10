@@ -46,6 +46,25 @@ declare namespace DevKit {
 		/** Unique identifier of the associated solution. */
 		readonly SolutionId: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Entity logical name */
+			readonly EntityLogicalName1: string;
+			/** Ribbon context */
+			readonly RibbonContext: string;
+			/** Unique identifier of a ribbon client metadata. */
+			readonly RibbonId: string;
+			/** Unique identifier of the Ribbon client Metadata */
+			readonly RibbonIdUnique: string;
+			/** Ribbon representation in JSON format. */
+			readonly RibbonJson: string;
+			/** Reference to the Ribbon JSON file on Azure. */
+			readonly RibbonJsonFileRef: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -68,4 +87,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

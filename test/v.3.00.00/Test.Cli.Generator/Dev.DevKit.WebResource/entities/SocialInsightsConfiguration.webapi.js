@@ -106,7 +106,7 @@ var DevKit;
 		}
 		socialinsightsconfiguration.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -123,6 +123,8 @@ var OptionSet;
 		FormTypeCode : {
 			System_Form: 1030,
 			User_Form: 1031
+		},
+		RegardingObjectTypeCode : {
 		},
 		SocialDataItemType : {
 			Class: 2,

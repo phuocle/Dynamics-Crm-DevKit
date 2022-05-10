@@ -49,6 +49,28 @@ declare namespace DevKit {
 		/** For internal use only. */
 		readonly SupportingSolutionId: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the entity access level associated with the channel access profile. */
+			readonly ChannelAccessProfileEntityAccessLevelId: string;
+			/** For internal use only. */
+			readonly ChannelAccessProfileEntityAccessLevelIdUnique: string;
+			/** Unique identifier of the channel access profile. */
+			readonly ChannelAccessProfileId: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** System-generated attribute that stores the privileges associated with the role. */
+			readonly EntityAccessLevelDepthMask: string;
+			/** Unique identifier of the entity access level associated with the channel access profile */
+			readonly EntityAccessLevelId: string;
+			readonly IsManaged: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -81,4 +103,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

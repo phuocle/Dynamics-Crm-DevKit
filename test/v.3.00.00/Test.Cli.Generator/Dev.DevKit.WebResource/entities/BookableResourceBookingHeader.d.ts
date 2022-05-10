@@ -132,6 +132,78 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the resource booking header. */
+			readonly BookableResourceBookingHeaderId: string;
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Shows the aggregate duration of the linked bookings. */
+			readonly Duration: string;
+			/** Shows the end date and time of the booking summary. */
+			readonly EndTime_UtcDateAndTime: string;
+			/** Exchange rate for the currency associated with the bookableresourcebookingheader with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Shows the resource. */
+			readonly msdyn_bookableresourceid: string;
+			/** Booking Status */
+			readonly msdyn_bookingstatusid: string;
+			/** Select whether the booking is solid or liquid. Solid bookings are firm and cannot be changed whereas liquid bookings can be changed. */
+			readonly msdyn_BookingType: string;
+			/** Project */
+			readonly msdyn_projectid: string;
+			/** Project Team */
+			readonly msdyn_projectteamid: string;
+			/** Resource Category */
+			readonly msdyn_resourcecategoryid: string;
+			/** Resource Requirement */
+			readonly msdyn_ResourceRequirement: string;
+			/** The name of the booking summary. */
+			readonly Name: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Contains the id of the process associated with the entity. */
+			readonly ProcessId: string;
+			/** Contains the id of the stage where the entity is located. */
+			readonly StageId: string;
+			/** Shows the start date and time of the booking summary. */
+			readonly StartTime_UtcDateAndTime: string;
+			/** Status of the Bookable Resource Booking Header */
+			readonly StateCode: string;
+			/** Reason for the status of the Bookable Resource Booking Header */
+			readonly StatusCode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Exchange rate for the currency associated with the BookableResourceBookingHeader with respect to the base currency. */
+			readonly TransactionCurrencyId: string;
+			/** A comma separated list of string values representing the unique identifiers of stages in a Business Process Flow Instance in the order that they occur. */
+			readonly TraversedPath: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -141,6 +213,8 @@ declare namespace OptionSet {
 			Liquid,
 			/** 1 */
 			Solid
+		}
+		enum OwnerIdType {
 		}
 		enum StateCode {
 			/** 0 */
@@ -172,4 +246,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

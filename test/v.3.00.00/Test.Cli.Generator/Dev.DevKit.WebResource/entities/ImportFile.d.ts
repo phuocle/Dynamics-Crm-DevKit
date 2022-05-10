@@ -210,6 +210,104 @@ declare namespace DevKit {
 		UseSystemMap: boolean;
 		/** Time zone code that was in use when the record was created. */
 		UTCConversionTimeZoneCode: number;
+		readonly FormattedValue: {
+			/** Shows the secondary column headers. The additional headers are used during the process of transforming the import file into import data records. */
+			readonly AdditionalHeaderRow: string;
+			/** Shows the date and time when the import associated with the import file was completed. */
+			readonly CompletedOn_UtcDateOnly: string;
+			/** Stores the content of the import file, stored as comma-separated values. */
+			readonly Content: string;
+			/** Shows who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Select the single-character data delimiter used in the import file. This is typically a single or double quotation mark. */
+			readonly DataDelimiterCode: string;
+			/** Select whether duplicate-detection rules should be run against the import job. */
+			readonly EnableDuplicateDetection: string;
+			/** Unique identifier of the Alternate key Id */
+			readonly EntityKeyId: string;
+			/** Shows the number of records in the import file that cannot be imported. */
+			readonly FailureCount: string;
+			/** Select the character that is used to separate each field in the import file. Typically, it is a comma. */
+			readonly FieldDelimiterCode: string;
+			/** Shows the type of source file that is uploaded for import. */
+			readonly FileTypeCode: string;
+			/** Shows a list of each column header in the import file separated by a comma. The header is used for parsing the file during the import job. */
+			readonly HeaderRow: string;
+			/** Unique identifier of the import file. */
+			readonly ImportFileId: string;
+			/** Choose the import job that the file was uploaded for. */
+			readonly ImportId: string;
+			/** Choose a data map to match the import file and its column headers with the record types and fields in Microsoft Dynamics 365. If the column headers in the file match the display names of the target fields in Microsoft Dynamics 365, we import the data automatically. If not, you can manually define matches during import. */
+			readonly ImportMapId: string;
+			/** Select whether the first row of the import file contains column headings, which are used for data mapping during the import job. */
+			readonly IsFirstRowHeader: string;
+			/** Shows who last updated the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Shows the name of the import file. This name is based on the name of the uploaded file. */
+			readonly Name: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Shows the business unit that the record owner belongs to. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the team who owns the import file. */
+			readonly OwningTeam: string;
+			/** Unique identifier of the user who owns the import file. */
+			readonly OwningUser: string;
+			/** Shows the prefix applied to each column after the import file is parsed. */
+			readonly ParsedTableColumnPrefix: string;
+			/** Shows the number of columns included in the parsed import file. */
+			readonly ParsedTableColumnsNumber: string;
+			/** Shows the name of the table that contains the parsed data from the import file. */
+			readonly ParsedTableName: string;
+			/** Shows the number of records in this file that had failures during the import. */
+			readonly PartialFailureCount: string;
+			/** Tells whether the import file should be ignored or processed during the import. */
+			readonly ProcessCode: string;
+			/** Shows the import file's processing status code. This indicates whether the data in the import file has been parsed, transformed, or imported. */
+			readonly ProcessingStatus: string;
+			/** Shows the progress code for the processing of the import file. This field is used when a paused import job is resumed. */
+			readonly ProgressCounter: string;
+			/** Choose the user that the records created during the import job should be assigned to. */
+			readonly recordsownerid_systemuser: string;
+			/** Choose the user that the records created during the import job should be assigned to. */
+			readonly recordsownerid_team: string;
+			/** Shows the columns that are mapped to a related record type (entity) of the primary record type (entity) included in the import file. */
+			readonly RelatedEntityColumns: string;
+			/** Shows the size of the import file, in kilobytes. */
+			readonly Size: string;
+			/** Shows the name of the data source file uploaded in the import job. */
+			readonly Source: string;
+			/** Shows the record type (entity) of the source data. */
+			readonly SourceEntityName: string;
+			/** Shows the status of the import file record. By default, all records are active and can't be deactivated. */
+			readonly StateCode: string;
+			/** Shows the reason code that explains the import file's status to identify the stage of the import process, from parsing the data to completed. */
+			readonly StatusCode: string;
+			/** Shows the number of records in the import file that are imported successfully. */
+			readonly SuccessCount: string;
+			/** Select the target record type (entity) for the records that will be created during the import job. */
+			readonly TargetEntityName: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Shows the total number of records in the import file. */
+			readonly TotalCount: string;
+			/** Select the value which is used for identify the upsert mode. By Default, it is a Create. */
+			readonly UpsertModeCode: string;
+			/** Tells whether an automatic system map was applied to the import file, which automatically maps the import data to the target entity in Microsoft Dynamics 365. */
+			readonly UseSystemMap: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -241,6 +339,8 @@ declare namespace OptionSet {
 			XLSX,
 			/** 1 */
 			XML_Spreadsheet_2003
+		}
+		enum OwnerIdType {
 		}
 		enum ProcessCode {
 			/** 2 */
@@ -275,6 +375,8 @@ declare namespace OptionSet {
 			Primary_Key_Transformation,
 			/** 8 */
 			Transformation_Complete
+		}
+		enum RecordsOwnerIdType {
 		}
 		enum StateCode {
 			/** 0 */
@@ -320,4 +422,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

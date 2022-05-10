@@ -170,6 +170,61 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Abstract of the document. */
+			readonly Abstract: string;
+			/** URL of the Website on which the document is located. */
+			readonly AttachedDocumentUrl: string;
+			/** Author name for the document. */
+			readonly AuthorName: string;
+			/** Unique identifier of the user who created the document. */
+			readonly CreatedBy: string;
+			/** Date and time when the document was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the salesliteratureitem. */
+			readonly CreatedOnBehalfBy: string;
+			/** Shows the encoded contents of the sales literature document attachment. */
+			readonly DocumentBody: string;
+			/** File name of the document. */
+			readonly FileName: string;
+			/** File size of the document. */
+			readonly FileSize: string;
+			readonly FileType: string;
+			/** Select the file type of the document. */
+			readonly FileTypeCode: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Tells whether the document can be shared with customers or is for internal use only. */
+			readonly IsCustomerViewable: string;
+			/** Keywords to use for searches in documents. */
+			readonly KeyWords: string;
+			/** Shows the file type of the sales literature document attachment, such as text or document. */
+			readonly MimeType: string;
+			/** Defines the mode of the sales literature document attachment. */
+			readonly Mode: string;
+			/** Unique identifier of the user who last modified the document. */
+			readonly ModifiedBy: string;
+			/** Date and time when the document was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the salesliteratureitem. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Unique identifier of the organization associated with the document. */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Unique identifier of the sales literature that is associated with the individual item. */
+			readonly SalesLiteratureId: string;
+			/** Unique identifier for the document. */
+			readonly SalesLiteratureItemId: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Type the title or name that describes the document. */
+			readonly Title: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -196,4 +251,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

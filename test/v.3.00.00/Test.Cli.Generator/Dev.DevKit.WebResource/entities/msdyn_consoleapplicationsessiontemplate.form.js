@@ -64,6 +64,8 @@ var OptionSet;
 			Hidden: 100000002,
 			Minimized: 100000001
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

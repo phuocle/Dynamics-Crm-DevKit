@@ -41,10 +41,28 @@ declare namespace DevKit {
 		/** Time zone code that was in use when the record was created. */
 		UTCConversionTimeZoneCode: number;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			readonly AccessRightsMask: string;
+			readonly ChangedOn_UtcDateOnly: string;
+			readonly InheritedAccessRightsMask: string;
+			readonly ObjectId: string;
+			readonly PrincipalId: string;
+			/** Unique identifier of the principal object access. */
+			readonly PrincipalObjectAccessId: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace PrincipalObjectAccess {
+		enum ObjectTypeCode {
+		}
+		enum PrincipalTypeCode {
+		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
 			NotCalculated,
@@ -63,4 +81,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

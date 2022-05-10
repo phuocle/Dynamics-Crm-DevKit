@@ -51,6 +51,30 @@ declare namespace DevKit {
 		readonly SdkMessageProcessingStepSecureConfigIdUnique: string;
 		/** Secure step-specific configuration for the plug-in type that is passed to the plug-in's constructor at run time. */
 		SecureConfig: string;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the SDK message processing step. */
+			readonly CreatedBy: string;
+			/** Date and time when the SDK message processing step was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the sdkmessageprocessingstepsecureconfig. */
+			readonly CreatedOnBehalfBy: string;
+			/** Customization level of the SDK message processing step secure configuration. */
+			readonly CustomizationLevel: string;
+			/** Unique identifier of the user who last modified the SDK message processing step. */
+			readonly ModifiedBy: string;
+			/** Date and time when the SDK message processing step was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the sdkmessageprocessingstepsecureconfig. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Unique identifier of the organization with which the SDK message processing step is associated. */
+			readonly OrganizationId: string;
+			/** Unique identifier of the SDK message processing step secure configuration. */
+			readonly SdkMessageProcessingStepSecureConfigId: string;
+			/** Unique identifier of the SDK message processing step. */
+			readonly SdkMessageProcessingStepSecureConfigIdUnique: string;
+			/** Secure step-specific configuration for the plug-in type that is passed to the plug-in's constructor at run time. */
+			readonly SecureConfig: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -73,4 +97,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

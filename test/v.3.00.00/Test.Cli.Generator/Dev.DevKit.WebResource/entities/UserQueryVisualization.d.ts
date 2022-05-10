@@ -69,6 +69,48 @@ declare namespace DevKit {
 		readonly VersionNumber: number;
 		/** Shows the web resource that will be displayed in the chart to the user. */
 		WebResourceId: string;
+		readonly FormattedValue: {
+			/** Indicates the library used to render the visualization. */
+			readonly ChartType: string;
+			/** Shows who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Shows the fields that are used to display data in a chart, stored in XML format. */
+			readonly DataDescription: string;
+			/** Type additional information to describe the chart, such as the filter criteria or intended audience. */
+			readonly Description: string;
+			/** Select whether the chart is the default chart for the view that it is associated with. */
+			readonly IsDefault: string;
+			/** Shows who last updated the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Type a descriptive name for the chart. */
+			readonly Name: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Shows the business unit that the record owner belongs to. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the team who owns the user chart. */
+			readonly OwningTeam: string;
+			/** Unique identifier of the team who owns the user chart. */
+			readonly OwningUser: string;
+			/** Contains the chart's formatting details and presentation properties, stored in XML format. */
+			readonly PresentationDescription: string;
+			/** Unique identifier of the user chart. */
+			readonly UserQueryVisualizationId: string;
+			/** Version number of the user chart. */
+			readonly VersionNumber: string;
+			/** Shows the web resource that will be displayed in the chart to the user. */
+			readonly WebResourceId: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -78,6 +120,10 @@ declare namespace OptionSet {
 			ASPNET_Charts,
 			/** 1 */
 			Power_BI
+		}
+		enum OwnerIdType {
+		}
+		enum PrimaryEntityTypeCode {
 		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
@@ -97,4 +143,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

@@ -77,6 +77,56 @@ declare namespace DevKit {
 		readonly StateCode: OptionSet.ImportLog.StateCode;
 		/** Reason for the status of the import log. */
 		StatusCode: OptionSet.ImportLog.StatusCode;
+		readonly FormattedValue: {
+			/** Additional information related to the error. */
+			readonly AdditionalInfo: string;
+			/** Value in the column. */
+			readonly ColumnValue: string;
+			/** Unique identifier of the user who created the import log. */
+			readonly CreatedBy: string;
+			/** Date and time when the import log was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the importlog. */
+			readonly CreatedOnBehalfBy: string;
+			/** Description of an error. */
+			readonly ErrorDescription: string;
+			/** Error code of an error. */
+			readonly ErrorNumber: string;
+			/** Name of the column heading. */
+			readonly HeaderColumn: string;
+			/** Unique identifier of the import data for this import log. */
+			readonly ImportDataId: string;
+			/** Unique identifier of the import file for this import log. */
+			readonly ImportFileId: string;
+			/** Unique identifier of the import log. */
+			readonly ImportLogId: string;
+			/** Original line number of the data used in this log. */
+			readonly LineNumber: string;
+			/** Phase for which the log is recorded. */
+			readonly LogPhaseCode: string;
+			/** Unique identifier of the user who last modified the import log. */
+			readonly ModifiedBy: string;
+			/** Date and time when the import log was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the importlog. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Business unit that owns the import log. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the team who owns the import log. */
+			readonly OwningTeam: string;
+			/** Unique identifier of the user who owns the import log. */
+			readonly OwningUser: string;
+			/** Sequence number of the error in this log. */
+			readonly SequenceNumber: string;
+			/** Status of the import log. */
+			readonly StateCode: string;
+			/** Reason for the status of the import log. */
+			readonly StatusCode: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -90,6 +140,8 @@ declare namespace OptionSet {
 			Parse,
 			/** 1 */
 			Transform
+		}
+		enum OwnerIdType {
 		}
 		enum StateCode {
 			/** 0 */
@@ -117,4 +169,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

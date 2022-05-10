@@ -40,6 +40,19 @@ declare namespace DevKit {
 		/** Unique identifier of the organization associated with the record */
 		readonly OrganizationId: string;
 		OrgInsightsNotificationId: string;
+		readonly FormattedValue: {
+			/** Date and time when the organization insights notification was created */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Name of the notification which is used for retrieving the data */
+			readonly InternalName: string;
+			/** Notification Data in Json format */
+			readonly JsonData: string;
+			/** Legend Name used while displaying the notification */
+			readonly Name: string;
+			/** Unique identifier of the organization associated with the record */
+			readonly OrganizationId: string;
+			readonly OrgInsightsNotificationId: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -62,4 +75,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

@@ -51,6 +51,30 @@ declare namespace DevKit {
 		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
 		UTCConversionTimeZoneCode: number;
+		readonly FormattedValue: {
+			/** Client (subscriber) version number. */
+			readonly ClientVersion: string;
+			/** For internal use only. */
+			readonly DataSize: string;
+			/** For internal use only. */
+			readonly DeleteObjectCount: string;
+			/** For internal use only. */
+			readonly EndTime_UtcDateOnly: string;
+			/** For internal use only. */
+			readonly InsertObjectCount: string;
+			/** For internal use only. */
+			readonly StartTime_UtcDateOnly: string;
+			/** For internal use only. */
+			readonly SubscriptionId: string;
+			/** For internal use only. */
+			readonly SubscriptionSyncInfoId1: string;
+			/** For internal use only. */
+			readonly SyncResult: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -73,4 +97,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

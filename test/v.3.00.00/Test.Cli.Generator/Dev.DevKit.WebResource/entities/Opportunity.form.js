@@ -456,9 +456,7 @@ var DevKit;
 			Competitors: {},
 			DocumentsSubGrid: {},
 			opportunityproductsGrid: {},
-			Pursuit_Team: {},
 			quote: {},
-			Stakeholders: {},
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
@@ -693,6 +691,8 @@ var OptionSet;
 			No_Committed_Budget: 0,
 			Will_Buy: 3
 		},
+		CustomerIdType : {
+		},
 		InitialCommunication : {
 			Contacted: 0,
 			Not_Contacted: 1
@@ -732,6 +732,8 @@ var OptionSet;
 			Cold: 3,
 			Hot: 1,
 			Warm: 2
+		},
+		OwnerIdType : {
 		},
 		PricingErrorCode : {
 			Base_Currency_Attribute_Overflow: 36,

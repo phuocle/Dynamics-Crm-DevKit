@@ -46,6 +46,25 @@ declare namespace DevKit {
 		readonly MissingComponentLookupType: number;
 		/** The object type code of the missing component. */
 		readonly MissingComponentType: OptionSet.InvalidDependency.MissingComponentType;
+		readonly FormattedValue: {
+			/** Unique identifier of the object that has an invalid dependency */
+			readonly ExistingComponentId: string;
+			/** Component type of the object that has an invalid dependency */
+			readonly ExistingComponentType: string;
+			/** The dependency type of the invalid dependency. */
+			readonly ExistingDependencyType: string;
+			/** Unique identifier of the invalid dependency. */
+			readonly InvalidDependencyId: string;
+			/** Indicates whether the existing node is the required component in the dependency */
+			readonly IsExistingNodeRequiredComponent: string;
+			/** Unique identifier of the missing component. */
+			readonly MissingComponentId: string;
+			readonly MissingComponentInfo: string;
+			/** The lookup type of the missing component. */
+			readonly MissingComponentLookupType: string;
+			/** The object type code of the missing component. */
+			readonly MissingComponentType: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -442,4 +461,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

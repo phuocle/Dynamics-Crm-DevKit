@@ -88,6 +88,67 @@ declare namespace DevKit {
 		TraceStatus: boolean;
 		/** Time zone code that was in use when the trace was created. */
 		UTCConversionTimeZoneCode: number;
+		readonly FormattedValue: {
+			/** Indicates if this trace log can be deleted. */
+			readonly CanBeDeleted: string;
+			/** Indicates the collation level */
+			readonly CollationLevel: string;
+			/** Unique identifier of the user who created the trace. */
+			readonly CreatedBy: string;
+			/** Time the error is created and logged. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the trace. */
+			readonly CreatedOnBehalfBy: string;
+			readonly ErrorDetails: string;
+			readonly ErrorTypeDisplay: string;
+			/** Tells if this traceLog is created uniquely(only one) for the associated entity. */
+			readonly IsUnique: string;
+			/** Information about the trace level. */
+			readonly Level: string;
+			readonly MachineName: string;
+			/** Unique identifier of the user who modified the trace. */
+			readonly ModifiedBy: string;
+			/** Time the error is updated and logged for the same regarding object. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the trace. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Unique identifier of the organization associated with the trace. */
+			readonly OrganizationId: string;
+			/** Indicates the parent ID of the trace log. */
+			readonly ParentTraceLogId: string;
+			/** Regarding mailbox or email server profile. */
+			readonly regardingobjectid_emailserverprofile: string;
+			/** Regarding mailbox or email server profile. */
+			readonly regardingobjectid_mailbox: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier of the business unit that owns the regarding object. */
+			readonly RegardingObjectOwningBusinessUnit: string;
+			/** Text of the trace. */
+			readonly Text: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** XML representation of the trace actions. */
+			readonly TraceActionXml: string;
+			/** Error code. */
+			readonly TraceCode: string;
+			/** XML representation of the trace details. */
+			readonly TraceDetailXml: string;
+			/** Unique identifier of the trace. */
+			readonly TraceLogId: string;
+			/** Stores the hash of the entity object associated with this tracelog. Hash is computed using the object type code and its id. */
+			readonly TraceParameterHash: string;
+			/** XML representation of the trace parameters. */
+			readonly TraceParameterXml: string;
+			/** For internal use only. */
+			readonly TraceRegardingId: string;
+			/** Status about the trace. */
+			readonly TraceStatus: string;
+			/** Time zone code that was in use when the trace was created. */
+			readonly UTCConversionTimeZoneCode: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -99,6 +160,10 @@ declare namespace OptionSet {
 			Information,
 			/** 2 */
 			Warning
+		}
+		enum RegardingObjectOwnerIdType {
+		}
+		enum RegardingObjectTypeCode {
 		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
@@ -118,4 +183,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

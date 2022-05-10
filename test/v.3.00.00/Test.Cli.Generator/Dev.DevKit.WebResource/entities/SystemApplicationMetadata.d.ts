@@ -69,6 +69,48 @@ declare namespace DevKit {
 		SystemApplicationMetadataId: string;
 		/** For internal use only. */
 		Version: string;
+		readonly FormattedValue: {
+			/** The logical name of the entity this application metadata is associated with. */
+			readonly AssociatedEntityLogicalName: string;
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** For internal use only. */
+			readonly Data: string;
+			/** For internal use only. */
+			readonly Dependency: string;
+			/** For internal use only. */
+			readonly DisplayName: string;
+			/** For internal use only. */
+			readonly FormFactor: string;
+			/** For internal use only. */
+			readonly IsDefault: string;
+			/** For internal use only. */
+			readonly Lcid: string;
+			/** For internal use only. */
+			readonly MetadataSubtype: string;
+			/** For internal use only. */
+			readonly MetadataType: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Unique identifier for the organization */
+			readonly OrganizationId: string;
+			/** For internal use only. */
+			readonly SourceId: string;
+			/** For internal use only. */
+			readonly State: string;
+			/** For internal use only. */
+			readonly SystemApplicationMetadataId: string;
+			/** For internal use only. */
+			readonly Version: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -91,4 +133,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

@@ -3,6 +3,132 @@
 var DevKit;
 (function (DevKit) {
 	'use strict';
+	DevKit.FormContact_AI_for_Sales = function(executionContext, defaultWebResourceName) {
+		var formContext = null;
+		if (executionContext !== undefined) {
+			if (executionContext.getFormContext === undefined) {
+				formContext = executionContext;
+			}
+			else {
+				formContext = executionContext.getFormContext();
+			}
+		}
+		var form = devKit.LoadForm(formContext);
+		var body = {
+			ActionCards: {},
+			Address1_Composite: {},
+			Address1_FreightTermsCode: {},
+			Address1_ShippingMethodCode: {},
+			Anniversary: {},
+			BirthDate: {},
+			CadenceWidgetControl: {},
+			contactopportunitiesgrid: {},
+			CreditLimit: {},
+			CreditOnHold: {},
+			Description: {},
+			DoNotBulkEMail: {},
+			DoNotEMail: {},
+			DoNotFax: {},
+			DoNotPhone: {},
+			DoNotPostalMail: {},
+			DoNotSendMM: {},
+			EMailAddress1: {},
+			FamilyStatusCode: {},
+			Fax: {},
+			FollowEmail: {},
+			FullName: {},
+			GenderCode: {},
+			JobTitle: {},
+			LastUsedInCampaign: {},
+			mapcontrol: {},
+			MobilePhone: {},
+			notescontrol: {},
+			OriginatingLeadId: {},
+			ParentCustomerId: {},
+			ParentCustomerId1: {},
+			ParentCustomerId2: {},
+			PaymentTermsCode: {},
+			PreferredContactMethodCode: {},
+			PreferredContactMethodCode1: {},
+			SpousesName: {},
+			TalkingPoints: {},
+			Telephone1: {},
+			TransactionCurrencyId: {}
+		};
+		devKit.LoadFields(formContext, body);
+		var tab = {
+			DETAILS_TAB: {
+				Section: {
+					billing_information: {},
+					CONTACT_PREFERENCES: {},
+					marketing_information: {},
+					PERSONAL_INFORMATION: {},
+					PERSONAL_NOTES_SECTION: {},
+					shipping_information: {}
+				}
+			},
+			SUMMARY_TAB: {
+				Section: {
+					CONTACT_INFORMATION: {},
+					CUSTOMER_DETAILS_TAB: {},
+					MapSection: {},
+					SOCIAL_PANE_TAB: {},
+					Summary_CadenceWidget: {},
+					Summary_section_6: {},
+					TalkingPoints_section: {}
+				}
+			}
+		};
+		devKit.LoadTabs(formContext, tab);
+		body.Tab = tab;
+		form.Body = body;
+		var header = {
+			OwnerId: {}
+		};
+		devKit.LoadFields(formContext, header, "header_");
+		form.Header = header;
+		var process = devKit.LoadProcess(formContext);
+		var _Case_to_Work_Order_Business_Process = {
+
+		}
+		devKit.LoadFields(formContext, _Case_to_Work_Order_Business_Process, "header_process_");
+		process.Case_to_Work_Order_Business_Process = _Case_to_Work_Order_Business_Process;
+		var _Phone_to_Case_Process = {
+
+		}
+		devKit.LoadFields(formContext, _Phone_to_Case_Process, "header_process_");
+		process.Phone_to_Case_Process = _Phone_to_Case_Process;
+		form.Process = process;
+		var quickForm = {
+			contactquickform: {
+				EMailAddress1: {},
+				Telephone1: {}
+			}
+		};
+		devKit.LoadQuickForms(formContext, quickForm);
+		form.QuickForm = quickForm;
+		var grid = {
+			contactopportunitiesgrid: {},
+		};
+		devKit.LoadGrids(formContext, grid);
+		form.Grid = grid;
+		var navigation = {
+			navAddresses: {},
+			navAsyncOperations: {},
+			navInvoices: {},
+			navOrders: {},
+			navProcessSessions: {},
+			navQuotes: {},
+			navRelationships: {},
+			navSubConts: {}
+		};
+		devKit.LoadNavigations(formContext, navigation);
+		form.Navigation = navigation;
+		form.Utility = devKit.LoadUtility(defaultWebResourceName);
+		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
+		return form;
+	};
 	DevKit.FormContact = function(executionContext, defaultWebResourceName) {
 		var formContext = null;
 		if (executionContext !== undefined) {
@@ -683,132 +809,6 @@ var DevKit;
 		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
-	DevKit.FormContact_Sales_Insights = function(executionContext, defaultWebResourceName) {
-		var formContext = null;
-		if (executionContext !== undefined) {
-			if (executionContext.getFormContext === undefined) {
-				formContext = executionContext;
-			}
-			else {
-				formContext = executionContext.getFormContext();
-			}
-		}
-		var form = devKit.LoadForm(formContext);
-		var body = {
-			ActionCards: {},
-			Address1_Composite: {},
-			Address1_FreightTermsCode: {},
-			Address1_ShippingMethodCode: {},
-			Anniversary: {},
-			BirthDate: {},
-			CadenceWidgetControl: {},
-			contactopportunitiesgrid: {},
-			CreditLimit: {},
-			CreditOnHold: {},
-			Description: {},
-			DoNotBulkEMail: {},
-			DoNotEMail: {},
-			DoNotFax: {},
-			DoNotPhone: {},
-			DoNotPostalMail: {},
-			DoNotSendMM: {},
-			EMailAddress1: {},
-			FamilyStatusCode: {},
-			Fax: {},
-			FollowEmail: {},
-			FullName: {},
-			GenderCode: {},
-			JobTitle: {},
-			LastUsedInCampaign: {},
-			mapcontrol: {},
-			MobilePhone: {},
-			notescontrol: {},
-			OriginatingLeadId: {},
-			ParentCustomerId: {},
-			ParentCustomerId1: {},
-			ParentCustomerId2: {},
-			PaymentTermsCode: {},
-			PreferredContactMethodCode: {},
-			PreferredContactMethodCode1: {},
-			SpousesName: {},
-			TalkingPoints: {},
-			Telephone1: {},
-			TransactionCurrencyId: {}
-		};
-		devKit.LoadFields(formContext, body);
-		var tab = {
-			DETAILS_TAB: {
-				Section: {
-					billing_information: {},
-					CONTACT_PREFERENCES: {},
-					marketing_information: {},
-					PERSONAL_INFORMATION: {},
-					PERSONAL_NOTES_SECTION: {},
-					shipping_information: {}
-				}
-			},
-			SUMMARY_TAB: {
-				Section: {
-					CONTACT_INFORMATION: {},
-					CUSTOMER_DETAILS_TAB: {},
-					MapSection: {},
-					SOCIAL_PANE_TAB: {},
-					Summary_CadenceWidget: {},
-					Summary_section_6: {},
-					TalkingPoints_section: {}
-				}
-			}
-		};
-		devKit.LoadTabs(formContext, tab);
-		body.Tab = tab;
-		form.Body = body;
-		var header = {
-			OwnerId: {}
-		};
-		devKit.LoadFields(formContext, header, "header_");
-		form.Header = header;
-		var process = devKit.LoadProcess(formContext);
-		var _Case_to_Work_Order_Business_Process = {
-
-		}
-		devKit.LoadFields(formContext, _Case_to_Work_Order_Business_Process, "header_process_");
-		process.Case_to_Work_Order_Business_Process = _Case_to_Work_Order_Business_Process;
-		var _Phone_to_Case_Process = {
-
-		}
-		devKit.LoadFields(formContext, _Phone_to_Case_Process, "header_process_");
-		process.Phone_to_Case_Process = _Phone_to_Case_Process;
-		form.Process = process;
-		var quickForm = {
-			contactquickform: {
-				EMailAddress1: {},
-				Telephone1: {}
-			}
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
-		var grid = {
-			contactopportunitiesgrid: {},
-		};
-		devKit.LoadGrids(formContext, grid);
-		form.Grid = grid;
-		var navigation = {
-			navAddresses: {},
-			navAsyncOperations: {},
-			navInvoices: {},
-			navOrders: {},
-			navProcessSessions: {},
-			navQuotes: {},
-			navRelationships: {},
-			navSubConts: {}
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
-		form.Utility = devKit.LoadUtility(defaultWebResourceName);
-		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
-		devKit.LoadOthers(formContext, form, defaultWebResourceName);
-		return form;
-	};
 	DevKit.FormTimelineWallControl_Contact_Main = function(executionContext, defaultWebResourceName) {
 		var formContext = null;
 		if (executionContext !== undefined) {
@@ -1018,6 +1018,10 @@ var OptionSet;
 			Ignore: 2,
 			No_Feedback: 0,
 			Not_at_Company: 1
+		},
+		OwnerIdType : {
+		},
+		ParentCustomerIdType : {
 		},
 		PaymentTermsCode : {
 			_2_10_Net_30: 2,

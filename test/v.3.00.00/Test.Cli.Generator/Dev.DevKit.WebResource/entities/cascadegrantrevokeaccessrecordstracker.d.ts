@@ -54,6 +54,33 @@ declare namespace DevKit {
 		TotalRecords: number;
 		/** Time zone code that was in use when the record was created. */
 		UTCConversionTimeZoneCode: number;
+		readonly FormattedValue: {
+			/** Unique identifier for entity instances */
+			readonly cascadegrantrevokeaccessrecordstrackerId: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** The name of the custom entity. */
+			readonly name: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			readonly ProcessedRecords: string;
+			readonly RecordsAttachment: string;
+			readonly RecordsJson: string;
+			/** Status of the CascadeGrantRevokeAccessRecordsTracker */
+			readonly statecode: string;
+			/** Reason for the status of the CascadeGrantRevokeAccessRecordsTracker */
+			readonly statuscode: string;
+			readonly SyncTrackerId: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			readonly TotalRecords: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -88,4 +115,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

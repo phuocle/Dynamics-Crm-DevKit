@@ -98,6 +98,8 @@ var OptionSet;
 			Number_of_cases: 0,
 			Number_of_hours: 1
 		},
+		CustomerIdType : {
+		},
 		DecreaseRemainingOn : {
 			Case_Creation: 1,
 			Case_Resolution: 0
@@ -115,6 +117,8 @@ var OptionSet;
 			Both_Work_Order_Products_Services: 690970002,
 			Work_Order_Products: 690970000,
 			Work_Order_Services: 690970001
+		},
+		OwnerIdType : {
 		},
 		StateCode : {
 			Active: 1,

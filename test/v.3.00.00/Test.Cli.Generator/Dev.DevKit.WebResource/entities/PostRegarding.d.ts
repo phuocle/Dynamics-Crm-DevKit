@@ -73,10 +73,62 @@ declare namespace DevKit {
 		OwnerId_team: string;
 		/** Select the business unit that owns the regarding object. */
 		readonly RegardingObjectOwningBusinessUnit: string;
+		readonly FormattedValue: {
+			/** Date of Latest Auto Post on the Regarding entity */
+			readonly LatestAutoPostModifiedOn_UtcDateAndTime: string;
+			/** Date of Latest Manual Post on the Regarding entity */
+			readonly LatestManualPostModifiedOn_UtcDateAndTime: string;
+			/** Shows the ID of the record that the post is referring to. */
+			readonly PostRegardingId: string;
+			/** Choose the record that the post relates to. */
+			readonly regardingobjectid_account: string;
+			/** Choose the record that the post relates to. */
+			readonly regardingobjectid_appointment: string;
+			/** Choose the record that the post relates to. */
+			readonly regardingobjectid_competitor: string;
+			/** Choose the record that the post relates to. */
+			readonly regardingobjectid_contact: string;
+			/** Choose the record that the post relates to. */
+			readonly regardingobjectid_externalparty: string;
+			/** Choose the record that the post relates to. */
+			readonly regardingobjectid_incident: string;
+			/** Choose the record that the post relates to. */
+			readonly regardingobjectid_knowledgearticle: string;
+			/** Choose the record that the post relates to. */
+			readonly regardingobjectid_lead: string;
+			/** Choose the record that the post relates to. */
+			readonly regardingobjectid_opportunity: string;
+			/** Choose the record that the post relates to. */
+			readonly regardingobjectid_phonecall: string;
+			/** Choose the record that the post relates to. */
+			readonly regardingobjectid_processsession: string;
+			/** Choose the record that the post relates to. */
+			readonly regardingobjectid_queue: string;
+			/** Choose the record that the post relates to. */
+			readonly regardingobjectid_recurringappointmentmaster: string;
+			/** Choose the record that the post relates to. */
+			readonly regardingobjectid_systemuser: string;
+			/** Choose the record that the post relates to. */
+			readonly regardingobjectid_task: string;
+			/** Choose the record that the post relates to. */
+			readonly regardingobjectid_team: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Select the business unit that owns the regarding object. */
+			readonly RegardingObjectOwningBusinessUnit: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace PostRegarding {
+		enum RegardingObjectOwnerIdType {
+		}
+		enum RegardingObjectTypeCode {
+		}
+		enum RegardingObjectTypeCodeForSharing {
+		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
 			NotCalculated,
@@ -95,4 +147,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

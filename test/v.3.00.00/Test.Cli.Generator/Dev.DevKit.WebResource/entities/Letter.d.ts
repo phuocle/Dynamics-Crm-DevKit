@@ -372,16 +372,296 @@ declare namespace DevKit {
 		readonly VersionNumber: number;
 		/** The array of object that can cast object to ActivityPartyApi class */
 		ActivityParties: Array<unknown>;
+		readonly FormattedValue: {
+			/** Unique identifier of the letter activity. */
+			readonly ActivityId: string;
+			/** Type the number of minutes spent creating and sending the letter. The duration is used in reporting. */
+			readonly ActualDurationMinutes: string;
+			/** Enter the actual end date and time of the letter. By default, it displays the date and time when the activity was completed or canceled, but can be edited to capture the actual time to create and send the letter. */
+			readonly ActualEnd_UtcDateOnly: string;
+			/** Enter the actual start date and time for the letter. By default, it displays the date and time when the activity was created, but can be edited to capture the actual time to create and send the letter. */
+			readonly ActualStart_UtcDateOnly: string;
+			/** Type the complete recipient address for the letter to ensure timely delivery. */
+			readonly Address: string;
+			/** Type a category to identify the letter type, such as sales offer or past due notice, to tie the letter to a business group or function. */
+			readonly Category: string;
+			/** Shows who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Type the letter body or additional information to describe the letter, such as the primary message or the products and services described. */
+			readonly Description: string;
+			/** Select the direction of the letter as incoming or outbound. */
+			readonly DirectionCode: string;
+			/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
+			readonly ExchangeRate: string;
+			/** Unique identifier of the data import or data migration that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Shows whether the letter activity was billed as part of resolving a case. */
+			readonly IsBilled: string;
+			/** Shows whether the activity is a regular activity type or event type. */
+			readonly IsRegularActivity: string;
+			/** Shows whether the letter activity was created by a workflow rule. */
+			readonly IsWorkflowCreated: string;
+			/** Contains the date and time stamp of the last on hold time. */
+			readonly LastOnHoldTime_UtcDateAndTime: string;
+			/** Shows who last updated the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who last updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Shows how long, in minutes, that the record was on hold. */
+			readonly OnHoldTime: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier of the business unit that owns the letter activity. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the team that owns the letter activity. */
+			readonly OwningTeam: string;
+			/** Unique identifier of the user that owns the letter activity. */
+			readonly OwningUser: string;
+			/** Select the priority so that preferred customers or critical issues are handled quickly. */
+			readonly PriorityCode: string;
+			/** Shows the ID of the process. */
+			readonly ProcessId: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_account_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_bookableresourcebooking_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_bookableresourcebookingheader_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_bulkoperation_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_campaign_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_campaignactivity_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_contact_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_contract_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_entitlement_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_entitlementtemplate_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_incident_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_invoice_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_knowledgearticle_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_knowledgebaserecord_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_lead_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_agreement_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_agreementbookingdate_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_agreementbookingincident_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_agreementbookingproduct_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_agreementbookingservice_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_agreementbookingservicetask_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_agreementbookingsetup_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_agreementinvoicedate_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_agreementinvoiceproduct_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_agreementinvoicesetup_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_bookingalertstatus_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_bookingrule_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_bookingtimestamp_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_customerasset_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_fieldservicesetting_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_incidenttypecharacteristic_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_incidenttypeproduct_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_incidenttypeservice_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_inventoryadjustment_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_inventoryadjustmentproduct_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_inventoryjournal_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_inventorytransfer_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_payment_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_paymentdetail_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_paymentmethod_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_paymentterm_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_playbookinstance_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_postalbum_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_postalcode_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_processnotes_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_productinventory_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_projectteam_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_purchaseorder_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_purchaseorderbill_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_purchaseorderproduct_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_purchaseorderreceipt_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_purchaseorderreceiptproduct_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_purchaseordersubstatus_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_quotebookingincident_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_quotebookingproduct_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_quotebookingservice_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_quotebookingservicetask_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_resourceterritory_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_rma_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_rmaproduct_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_rmareceipt_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_rmareceiptproduct_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_rmasubstatus_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_rtv_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_rtvproduct_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_rtvsubstatus_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_salessuggestion_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_shipvia_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_systemuserschedulersetting_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_timegroup_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_timegroupdetail_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_timeoffrequest_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_warehouse_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_workorder_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_workordercharacteristic_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_workorderincident_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_workorderproduct_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_workorderresourcerestriction_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_workorderservice_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_msdyn_workorderservicetask_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_opportunity_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_quote_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_salesorder_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_site_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_uii_action_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_uii_hostedapplication_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_uii_nonhostedapplication_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_uii_option_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_uii_savedsession_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_uii_workflow_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_uii_workflowstep_letter: string;
+			/** Unique identifier of the object with which the letter activity is associated. */
+			readonly regardingobjectid_uii_workflow_workflowstep_mapping_letter: string;
+			/** Scheduled duration of the letter activity, specified in minutes. */
+			readonly ScheduledDurationMinutes: string;
+			/** Enter the expected due date and time. */
+			readonly ScheduledEnd_UtcDateAndTime: string;
+			/** Enter the expected due date and time. */
+			readonly ScheduledStart_UtcDateAndTime: string;
+			/** Unique identifier for an associated service. */
+			readonly ServiceId: string;
+			/** Choose the service level agreement (SLA) that you want to apply to the Letter record. */
+			readonly SLAId: string;
+			/** Last SLA that was applied to this Letter. This field is for internal use only. */
+			readonly SLAInvokedId: string;
+			/** Shows the date and time by which the activities are sorted. */
+			readonly SortDate_UtcDateAndTime: string;
+			/** Shows the ID of the stage. */
+			readonly StageId: string;
+			/** Shows whether the letter is open, completed, or canceled. Completed and canceled letters are read-only and can't be edited. */
+			readonly StateCode: string;
+			/** Select the letter's status. */
+			readonly StatusCode: string;
+			/** Type a subcategory to identify the letter type and relate the activity to a specific product, sales region, business group, or other function. */
+			readonly Subcategory: string;
+			/** Type a short description about the objective or primary topic of the letter. */
+			readonly Subject: string;
+			/** For internal use only. */
+			readonly SubscriptionId: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			readonly TransactionCurrencyId: string;
+			/** For internal use only. */
+			readonly TraversedPath: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version number of the letter. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace Letter {
 		enum ActivityTypeCode {
-			/** 10086 */
+			/** 10088 */
 			Activity_record_for_the_Teams_chat,
 			/** 4201 */
 			Appointment,
-			/** 10404 */
+			/** 10473 */
 			Booking_Alert,
 			/** 4402 */
 			Campaign_Activity,
@@ -389,13 +669,13 @@ declare namespace OptionSet {
 			Campaign_Response,
 			/** 4206 */
 			Case_Resolution,
-			/** 10707 */
+			/** 10743 */
 			Conversation,
-			/** 10313 */
+			/** 10330 */
 			Customer_Voice_alert,
-			/** 10323 */
+			/** 10340 */
 			Customer_Voice_survey_invite,
-			/** 10325 */
+			/** 10342 */
 			Customer_Voice_survey_response,
 			/** 4202 */
 			Email,
@@ -407,11 +687,11 @@ declare namespace OptionSet {
 			Opportunity_Close,
 			/** 4209 */
 			Order_Close,
-			/** 10817 */
+			/** 10857 */
 			Outbound_message,
 			/** 4210 */
 			Phone_Call,
-			/** 10434 */
+			/** 10489 */
 			Project_Service_Approval,
 			/** 4406 */
 			Quick_Campaign,
@@ -421,10 +701,12 @@ declare namespace OptionSet {
 			Recurring_Appointment,
 			/** 4214 */
 			Service_Activity,
-			/** 10721 */
+			/** 10760 */
 			Session,
 			/** 4212 */
 			Task
+		}
+		enum OwnerIdType {
 		}
 		enum PriorityCode {
 			/** 2 */
@@ -433,6 +715,8 @@ declare namespace OptionSet {
 			Low,
 			/** 1 */
 			Normal
+		}
+		enum RegardingObjectTypeCode {
 		}
 		enum StateCode {
 			/** 2 */
@@ -472,4 +756,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

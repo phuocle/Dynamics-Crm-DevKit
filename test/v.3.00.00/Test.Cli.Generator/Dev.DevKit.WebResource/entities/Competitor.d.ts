@@ -395,6 +395,173 @@ declare namespace DevKit {
 		WinPercentage: number;
 		/** Type the phonetic spelling of the competitor's name, if specified in Japanese, to make sure the name is pronounced correctly in phone calls and other communications. */
 		YomiName: string;
+		readonly FormattedValue: {
+			/** Unique identifier for address 1. */
+			readonly Address1_AddressId: string;
+			/** Select the primary address type. */
+			readonly Address1_AddressTypeCode: string;
+			/** Type the city for the primary address. */
+			readonly Address1_City: string;
+			/** Shows the complete primary address. */
+			readonly Address1_Composite: string;
+			/** Type the country or region for the primary address. */
+			readonly Address1_Country: string;
+			/** Type the county for the primary address. */
+			readonly Address1_County: string;
+			/** Type the fax number associated with the primary address. */
+			readonly Address1_Fax: string;
+			/** Type the latitude value for the primary address for use in mapping and other applications. */
+			readonly Address1_Latitude: string;
+			/** Type the first line of the primary address. */
+			readonly Address1_Line1: string;
+			/** Type the second line of the primary address. */
+			readonly Address1_Line2: string;
+			/** Type the third line of the primary address. */
+			readonly Address1_Line3: string;
+			/** Type the longitude value for the primary address for use in mapping and other applications. */
+			readonly Address1_Longitude: string;
+			/** Type a descriptive name for the primary address, such as Corporate Headquarters. */
+			readonly Address1_Name: string;
+			/** Type the ZIP Code or postal code for the primary address. */
+			readonly Address1_PostalCode: string;
+			/** Type the post office box number of the primary address. */
+			readonly Address1_PostOfficeBox: string;
+			/** Select a shipping method for deliveries sent to this address. */
+			readonly Address1_ShippingMethodCode: string;
+			/** Type the state or province of the primary address. */
+			readonly Address1_StateOrProvince: string;
+			/** Type the main phone number associated with the primary address. */
+			readonly Address1_Telephone1: string;
+			/** Type a second phone number associated with the primary address. */
+			readonly Address1_Telephone2: string;
+			/** Type a third phone number associated with the primary address. */
+			readonly Address1_Telephone3: string;
+			/** Type the UPS zone of the primary address to make sure shipping charges are calculated correctly and deliveries are made promptly, if shipped by UPS. */
+			readonly Address1_UPSZone: string;
+			/** Select the time zone, or UTC offset, for this address so that other people can reference it when they contact someone at this address. */
+			readonly Address1_UTCOffset: string;
+			/** Unique identifier for address 2. */
+			readonly Address2_AddressId: string;
+			/** Select the secondary address type. */
+			readonly Address2_AddressTypeCode: string;
+			/** Type the city for the secondary address. */
+			readonly Address2_City: string;
+			/** Shows the complete secondary address. */
+			readonly Address2_Composite: string;
+			/** Type the country or region for the secondary address. */
+			readonly Address2_Country: string;
+			/** Type the county for the secondary address. */
+			readonly Address2_County: string;
+			/** Type the fax number associated with the secondary address. */
+			readonly Address2_Fax: string;
+			/** Type the latitude value for the secondary address for use in mapping and other applications. */
+			readonly Address2_Latitude: string;
+			/** Type the first line of the secondary address. */
+			readonly Address2_Line1: string;
+			/** Type the second line of the secondary address. */
+			readonly Address2_Line2: string;
+			/** Type the third line of the secondary address. */
+			readonly Address2_Line3: string;
+			/** Type the longitude value for the secondary address for use in mapping and other applications. */
+			readonly Address2_Longitude: string;
+			/** Type a descriptive name for the secondary address, such as Corporate Headquarters. */
+			readonly Address2_Name: string;
+			/** Type the ZIP Code or postal code for the secondary address. */
+			readonly Address2_PostalCode: string;
+			/** Type the post office box number of the secondary address. */
+			readonly Address2_PostOfficeBox: string;
+			/** Select a shipping method for deliveries sent to this address. */
+			readonly Address2_ShippingMethodCode: string;
+			/** Type the state or province of the secondary address. */
+			readonly Address2_StateOrProvince: string;
+			/** Type the main phone number associated with the secondary address. */
+			readonly Address2_Telephone1: string;
+			/** Type a second phone number associated with the secondary address. */
+			readonly Address2_Telephone2: string;
+			/** Type a third phone number associated with the secondary address. */
+			readonly Address2_Telephone3: string;
+			/** Type the UPS zone of the secondary address to make sure shipping charges are calculated correctly and deliveries are made promptly , if shipped by UPS. */
+			readonly Address2_UPSZone: string;
+			/** Select the time zone, or UTC offset, for this address so that other people can reference it when they contact someone at this address. */
+			readonly Address2_UTCOffset: string;
+			/** Unique identifier of the competitor. */
+			readonly CompetitorId: string;
+			/** Shows who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Shows the default image for the record. */
+			readonly EntityImage: string;
+			readonly EntityImage_Timestamp: string;
+			readonly EntityImage_URL: string;
+			readonly EntityImageId: string;
+			/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
+			readonly ExchangeRate: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Type the competitor's primary product, service, or specialty. */
+			readonly KeyProduct: string;
+			/** Shows who last updated the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who last updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Describes whether competitor is opted out or not */
+			readonly msdyn_gdproptout: string;
+			/** Type the company or business name used to identify the competitor in data views and related records. */
+			readonly Name: string;
+			/** Type notes or other information about the competitive opportunities or selling points you can make. */
+			readonly Opportunities: string;
+			/** Unique identifier for the organization */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Type notes or other information about the competitor's business, such as location, revenue, or distribution channel. */
+			readonly Overview: string;
+			/** Contains the id of the process associated with the entity. */
+			readonly ProcessId: string;
+			/** Type the URL for the website used to obtain reference information about the competitor. */
+			readonly ReferenceInfoUrl: string;
+			/** Type the amount of revenue reported in the competitor's annual report or other source. */
+			readonly ReportedRevenue: string;
+			/** Value of the Reported Revenue in base currency. */
+			readonly ReportedRevenue_Base: string;
+			/** Type the quarter number during which the competitor's reported revenue was recorded or announced for use in reporting and analysis. */
+			readonly ReportingQuarter: string;
+			/** Type the fiscal year during which the competitor's reported revenue was announced for use in reporting and analysis. */
+			readonly ReportingYear: string;
+			/** Contains the id of the stage where the entity is located. */
+			readonly StageId: string;
+			/** Type the stock exchange at which the competitor is listed to track their stock and financial performance of the company. */
+			readonly StockExchange: string;
+			/** Type notes or other information about the competitor's strengths, such as top-selling products and targeted industries or markets. */
+			readonly Strengths: string;
+			/** Type notes or other information about the competitor's threats to your organization when you sell to the same prospect or customer. */
+			readonly Threats: string;
+			/** Type the stock exchange symbol for the competitor to track financial performance of the company. You can click the code entered in this field to access the latest trading information from MSN Money. */
+			readonly TickerSymbol: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			readonly TransactionCurrencyId: string;
+			/** A comma separated list of string values representing the unique identifiers of stages in a Business Process Flow Instance in the order that they occur. */
+			readonly TraversedPath: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+			/** Type notes or other information about the competitor's weaknesses or areas in which your organization outperforms the competitor. */
+			readonly Weaknesses: string;
+			/** Type the website URL for the competitor. */
+			readonly WebSiteUrl: string;
+			/** Type the percentage of your organization's lost opportunities that are won by the competitor to identify your strongest competitors. */
+			readonly WinPercentage: string;
+			/** Type the phonetic spelling of the competitor's name, if specified in Japanese, to make sure the name is pronounced correctly in phone calls and other communications. */
+			readonly YomiName: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -433,4 +600,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

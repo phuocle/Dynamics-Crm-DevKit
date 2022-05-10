@@ -145,10 +145,83 @@ declare namespace DevKit {
 		YomiLastName: string;
 		/** Type the phonetic spelling of the external party's middle name, if the name is specified in Japanese, to make sure the name is pronounced correctly in phone calls with the contact. */
 		YomiMiddleName: string;
+		readonly FormattedValue: {
+			/** Contains the value that is used to detect and avoid duplicate external party records. */
+			readonly CorrelationKey: string;
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Shows the email address derived from the equivalent record that's enabled as the external party and shows the external user's email address. */
+			readonly EmailAddress: string;
+			/** Exchange rate for the currency associated with the ExternalParty with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Unique identifier for entity instances */
+			readonly ExternalPartyId: string;
+			/** Unique identifier of the External Party used when synchronizing customizations for the Microsoft Dynamics 365 client for Outlook */
+			readonly ExternalPartyIdUnique: string;
+			/** Type the external party's first name. */
+			readonly FirstName: string;
+			/** Type the full name of the external party. */
+			readonly FullName: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Shows the date when the external party was last disabled on. */
+			readonly LastDisabledOn_UtcDateOnly: string;
+			/** Shows the date when the external party was last enabled on. */
+			readonly LastEnabledOn_UtcDateOnly: string;
+			/** Type the external party's last name. */
+			readonly LastName: string;
+			/** Type the external party's middle name. */
+			readonly MiddleName: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Shows whether the external party is enabled or disabled */
+			readonly StateCode: string;
+			/** Select the external party status */
+			readonly StatusCode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Exchange rate for the currency associated with the ExternalParty with respect to the base currency. */
+			readonly TransactionCurrencyId: string;
+			/** Type of the external party. */
+			readonly Type: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			readonly VersionNumber: string;
+			/** Type the phonetic spelling of the external party's first name, if the name is specified in Japanese, to make sure the name is pronounced correctly in phone calls with the external party.. */
+			readonly YomiFirstName: string;
+			/** Shows the combined Yomi first and last names of the external party so that the full phonetic name can be displayed in views and reports. */
+			readonly YomiFullName: string;
+			/** Type the phonetic spelling of the external party's last name, if the name is specified in Japanese, to make sure the name is pronounced correctly in phone calls with the external party. */
+			readonly YomiLastName: string;
+			/** Type the phonetic spelling of the external party's middle name, if the name is specified in Japanese, to make sure the name is pronounced correctly in phone calls with the contact. */
+			readonly YomiMiddleName: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace ExternalParty {
+		enum OwnerIdType {
+		}
 		enum StateCode {
 			/** 1 */
 			Disabled,
@@ -179,4 +252,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

@@ -98,7 +98,7 @@ var DevKit;
 		}
 		replicationbacklog.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -116,6 +116,8 @@ var OptionSet;
 			Create: 0,
 			Delete: 2,
 			Update: 1
+		},
+		TargetObjectTypeCode : {
 		},
 		RollupState : {
 			NotCalculated: 0,

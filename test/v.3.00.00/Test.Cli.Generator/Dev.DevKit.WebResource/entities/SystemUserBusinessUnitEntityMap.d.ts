@@ -35,10 +35,20 @@ declare namespace DevKit {
 		SystemUserBusinessUnitEntityMapId: string;
 		readonly SystemUserId: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			readonly BusinessUnitId: string;
+			readonly ReadPrivilegeDepth: string;
+			/** Unique identifier of the SystemUserBusinessUnitEntityMap . */
+			readonly SystemUserBusinessUnitEntityMapId: string;
+			readonly SystemUserId: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace SystemUserBusinessUnitEntityMap {
+		enum ObjectTypeCode {
+		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
 			NotCalculated,
@@ -57,4 +67,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

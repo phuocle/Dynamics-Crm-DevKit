@@ -126,7 +126,7 @@ var DevKit;
 		}
 		msdyn_applicationtabtemplate.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -155,6 +155,8 @@ var OptionSet;
 			Search: 509180005,
 			Third_Party_Website: 509180006,
 			Web_Resource: 509180002
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

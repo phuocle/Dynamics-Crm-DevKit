@@ -128,7 +128,7 @@ var DevKit;
 		}
 		msdyn_inventoryjournal.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -155,6 +155,8 @@ var OptionSet;
 			Purchase_Order_Receipt: 690970001,
 			RMA_Product: 690970005,
 			WO_Product: 690970002
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

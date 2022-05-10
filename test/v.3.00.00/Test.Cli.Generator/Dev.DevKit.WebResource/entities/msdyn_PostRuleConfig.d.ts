@@ -173,6 +173,52 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Internal Use Only. */
+			readonly msdyn_FormatId: string;
+			/** Name of the rule. */
+			readonly msdyn_name: string;
+			/** Entity that is enabled for Activity feeds. */
+			readonly msdyn_PostConfigId: string;
+			/** Unique identifier of the post rule configuration. */
+			readonly msdyn_PostRuleConfigId: string;
+			/** Determine whether to post this message to the Yammer Activity Stream. Please do not check this box if this message contains sensitive information requiring Microsoft Dynamics 365 access. */
+			readonly msdyn_PostToYammer: string;
+			/** Identifier in the format WebResourceName:SchemaName of the definition for this rule. */
+			readonly msdyn_RuleId: string;
+			/** Internal Use Only. */
+			readonly msdyn_RuleSource: string;
+			/** Unique identifier of the SDK message processing step for this rule. */
+			readonly msdyn_StepId: string;
+			/** Unique identifier for the organization */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Status of the Post Rule Configuration */
+			readonly statecode: string;
+			/** Reason for the status of the Post Rule Configuration */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -207,4 +253,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

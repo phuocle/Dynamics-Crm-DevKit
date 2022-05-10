@@ -62,6 +62,41 @@ declare namespace DevKit {
 		/** Validator */
 		readonly Validator: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** System-Populated App Configuration instance identifier. */
+			readonly AppConfigMasterId: string;
+			/** Enter the App Configuration and Setting property data type. */
+			readonly ConfigType: string;
+			/** Shows who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics CRM options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalfÂ of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Enter the default value of the App Configuration and Setting property. */
+			readonly DefaultValue: string;
+			/** For internal use only. */
+			readonly ImportSequenceNumber: string;
+			/** Enter whether this App Configuration and Setting is Navigation Setting. */
+			readonly IsNavigationSetting: string;
+			/** Shows who last updated the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics CRM options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who last updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Enter the name of the App Configuration and Setting property with which this customization will be identified. */
+			readonly Name: string;
+			/** System-calculated field for Organization identifier. */
+			readonly OrganizationId: string;
+			/** Shows the date and time when the record was migrated. The date and time are displayed in the time zone selected in Microsoft Dynamics CRM options. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** ParentAppConfigMasterId */
+			readonly ParentAppConfigMasterId: string;
+			/** Validator */
+			readonly Validator: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -84,4 +119,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

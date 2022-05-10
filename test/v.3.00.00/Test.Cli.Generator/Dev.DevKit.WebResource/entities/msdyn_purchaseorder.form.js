@@ -264,6 +264,8 @@ var OptionSet;
 			Products_Received: 690970003,
 			Submitted: 690970001
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

@@ -197,6 +197,137 @@ declare namespace DevKit {
 		readonly WorkflowIdUnique: string;
 		/** XAML that defines the process. */
 		Xaml: string;
+		readonly FormattedValue: {
+			/** Unique identifier of the latest activation record for the process. */
+			readonly ActiveWorkflowId: string;
+			/** Indicates whether the asynchronous system job is automatically deleted on completion. */
+			readonly AsyncAutoDelete: string;
+			/** Business Process Type. */
+			readonly BusinessProcessType: string;
+			/** Category of the process. */
+			readonly Category: string;
+			/** Business logic converted into client data */
+			readonly ClientData: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier of the user who created the process. */
+			readonly CreatedBy: string;
+			/** Date and time when the process was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the process. */
+			readonly CreatedOnBehalfBy: string;
+			/** Stage of the process when triggered on Create. */
+			readonly CreateStage: string;
+			/** Stage of the process when triggered on Delete. */
+			readonly DeleteStage: string;
+			/** Description of the process. */
+			readonly Description: string;
+			/** Shows the default image for the record. */
+			readonly EntityImage: string;
+			readonly EntityImage_Timestamp: string;
+			readonly EntityImage_URL: string;
+			/** For internal use only. */
+			readonly EntityImageId: string;
+			/** Unique identifier of the associated form. */
+			readonly FormId: string;
+			/** Input parameters to the process. */
+			readonly InputParameters: string;
+			/** Version in which the form is introduced. */
+			readonly IntroducedVersion: string;
+			/** Indicates whether the process was created using the Microsoft Dynamics 365 Web application. */
+			readonly IsCrmUIWorkflow: string;
+			/** Information that specifies whether this component can be customized. */
+			readonly IsCustomizable: string;
+			/** Defines whether other publishers can attach custom processing steps to this action */
+			readonly IsCustomProcessingStepAllowedForOtherPublishers: string;
+			/** Indicates whether the solution component is part of a managed solution. */
+			readonly IsManaged: string;
+			/** Whether or not the steps in the process are executed in a single transaction. */
+			readonly IsTransacted: string;
+			/** Language of the process. */
+			readonly LanguageCode: string;
+			/** Shows the mode of the process. */
+			readonly Mode: string;
+			/** Unique identifier of the user who last modified the process. */
+			readonly ModifiedBy: string;
+			/** Date and time when the process was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the process. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Name of the process. */
+			readonly Name: string;
+			/** Indicates whether the process is able to run as an on-demand process. */
+			readonly OnDemand: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier of the business unit that owns the process. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the team who owns the process. */
+			readonly OwningTeam: string;
+			/** Unique identifier of the user who owns the process. */
+			readonly OwningUser: string;
+			/** Unique identifier of the definition for process activation. */
+			readonly ParentWorkflowId: string;
+			/** Unique identifier of the plug-in type. */
+			readonly PluginTypeId: string;
+			/** Type the business process flow order. */
+			readonly ProcessOrder: string;
+			/** Contains the role assignment for the process. */
+			readonly ProcessRoleAssignment: string;
+			/** Unique identifier of the associated form for process trigger. */
+			readonly ProcessTriggerFormId: string;
+			/** Scope of the process trigger. */
+			readonly ProcessTriggerScope: string;
+			/** Indicates the rank for order of execution for the synchronous workflow. */
+			readonly Rank: string;
+			/** Specifies the system user account under which a workflow executes. */
+			readonly RunAs: string;
+			/** Scope of the process. */
+			readonly Scope: string;
+			/** Unique identifier of the SDK Message associated with this workflow. */
+			readonly SdkMessageId: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** Status of the workflow */
+			readonly StateCode: string;
+			/** Reason for the status of the workflow */
+			readonly StatusCode: string;
+			/** Indicates whether the process can be included in other processes as a child process. */
+			readonly Subprocess: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** Select whether synchronous workflow failures will be saved to log files. */
+			readonly SyncWorkflowLogOnFailure: string;
+			/** Indicates whether the process will be triggered when the primary entity is created. */
+			readonly TriggerOnCreate: string;
+			/** Indicates whether the process will be triggered on deletion of the primary entity. */
+			readonly TriggerOnDelete: string;
+			/** Attributes that trigger the process when updated. */
+			readonly TriggerOnUpdateAttributeList: string;
+			/** For Internal Use Only. */
+			readonly TrustedAccess: string;
+			/** Type of the process. */
+			readonly Type: string;
+			/** For internal use only. */
+			readonly UIData: string;
+			/** Type of the UI Flow process. */
+			readonly UIFlowType: string;
+			/** Unique name of the process */
+			readonly UniqueName: string;
+			/** Select the stage a process will be triggered on update. */
+			readonly UpdateStage: string;
+			readonly VersionNumber: string;
+			/** Unique identifier of the process. */
+			readonly WorkflowId: string;
+			/** For internal use only. */
+			readonly WorkflowIdUnique: string;
+			/** XAML that defines the process. */
+			readonly Xaml: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -253,11 +384,17 @@ declare namespace OptionSet {
 			/** 1 */
 			Real_time
 		}
+		enum OwnerIdType {
+		}
+		enum PrimaryEntity {
+		}
 		enum ProcessTriggerScope {
 			/** 2 */
 			Entity,
 			/** 1 */
 			Form
+		}
+		enum RendererObjectTypeCode {
 		}
 		enum RunAs {
 			/** 1 */
@@ -333,4 +470,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

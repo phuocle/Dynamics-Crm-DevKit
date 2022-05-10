@@ -62,6 +62,8 @@ var OptionSet;
 			Scheduled: 690970001,
 			Unscheduled: 690970000
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

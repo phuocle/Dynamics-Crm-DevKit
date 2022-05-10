@@ -50,6 +50,8 @@ var OptionSet;
 			Enabled: 192350000,
 			Not_Found: 192350002
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

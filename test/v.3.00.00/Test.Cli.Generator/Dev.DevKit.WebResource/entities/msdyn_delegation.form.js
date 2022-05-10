@@ -50,6 +50,8 @@ var OptionSet;
 			Expense: 192350001,
 			Time_Entry: 192350000
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

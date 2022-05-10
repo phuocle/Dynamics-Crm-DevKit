@@ -36,6 +36,8 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.msdyn_suggestionrequestpayload = {
+		msdyn_suggestionforIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

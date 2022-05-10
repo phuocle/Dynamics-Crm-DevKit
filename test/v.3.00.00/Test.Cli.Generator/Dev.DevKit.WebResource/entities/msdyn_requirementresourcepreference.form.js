@@ -120,6 +120,8 @@ var OptionSet;
 			Preferred: 690970000,
 			Restricted: 690970001
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

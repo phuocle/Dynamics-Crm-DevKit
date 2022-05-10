@@ -69,6 +69,8 @@ var OptionSet;
 			Third_Party_Website: 509180006,
 			Web_Resource: 509180002
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

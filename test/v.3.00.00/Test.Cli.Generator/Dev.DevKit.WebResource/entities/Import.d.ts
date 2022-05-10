@@ -105,6 +105,48 @@ declare namespace DevKit {
 		readonly StateCode: OptionSet.Import.StateCode;
 		/** Shows the reason code that explains the import job's status to identify the job's stage of the import processes, from transforming the data to completed. */
 		StatusCode: OptionSet.Import.StatusCode;
+		readonly FormattedValue: {
+			/** Shows who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the import was initiated. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Type the email address that the import completion notification must be sent to. */
+			readonly EMailAddress: string;
+			/** Unique identifier of the import job. */
+			readonly ImportId: string;
+			/** Information about whether the source of this import job is data import or data migration. */
+			readonly IsImport: string;
+			/** Select whether to create or update records in Microsoft Dynamics 365 during the import job. */
+			readonly ModeCode: string;
+			/** Shows who last updated the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Shows the name of the import job, based on the import file and the entity being imported. */
+			readonly Name: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Business unit that owns the import job. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the team who owns the import. */
+			readonly OwningTeam: string;
+			/** Unique identifier of the user who owns the import. */
+			readonly OwningUser: string;
+			/** Select whether to send a notification email message to a selected user after the import is completed. */
+			readonly SendNotification: string;
+			/** Order in which the import was created. */
+			readonly Sequence: string;
+			/** Shows the status of the import job. By default, import jobs are active and can't be deactivated. */
+			readonly StateCode: string;
+			/** Shows the reason code that explains the import job's status to identify the job's stage of the import processes, from transforming the data to completed. */
+			readonly StatusCode: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -114,6 +156,8 @@ declare namespace OptionSet {
 			Create,
 			/** 1 */
 			Update
+		}
+		enum OwnerIdType {
 		}
 		enum StateCode {
 			/** 0 */
@@ -151,4 +195,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

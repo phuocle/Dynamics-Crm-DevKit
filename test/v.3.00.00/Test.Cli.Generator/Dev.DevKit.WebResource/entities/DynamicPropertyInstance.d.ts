@@ -89,10 +89,76 @@ declare namespace DevKit {
 		ValueString: string;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Internal Use Only */
+			readonly DMTImportState: string;
+			/** Shows the property that this record is associated with. */
+			readonly DynamicPropertyId: string;
+			/** Shows the unique identifier of the property instance. */
+			readonly DynamicPropertyInstanceid: string;
+			/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
+			readonly ExchangeRate: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** name */
+			readonly Name: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Shows the object that the property is associated with. */
+			readonly regardingobjectid_invoicedetail: string;
+			/** Shows the object that the property is associated with. */
+			readonly regardingobjectid_opportunityproduct: string;
+			/** Shows the object that the property is associated with. */
+			readonly regardingobjectid_quotedetail: string;
+			/** Shows the object that the property is associated with. */
+			readonly regardingobjectid_salesorderdetail: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Shows the currency associated with the record. */
+			readonly TransactionCurrencyId: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Shows whether the property value is valid. */
+			readonly validationstatus: string;
+			/** Shows the decimal value of the property. */
+			readonly ValueDecimal: string;
+			/** Shows the double value of the property. */
+			readonly ValueDouble: string;
+			/** Shows the integer value of the property. */
+			readonly ValueInteger: string;
+			/** Shows the string value of the property. */
+			readonly ValueString: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace DynamicPropertyInstance {
+		enum OwnerIdType {
+		}
+		enum RegardingObjectIdType {
+		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
 			NotCalculated,
@@ -111,4 +177,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

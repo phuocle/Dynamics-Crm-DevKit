@@ -51,6 +51,8 @@ var OptionSet;
 		msdyn_type : {
 			UiFlow: 192350000
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Complete: 2,
 			Draft: 0,

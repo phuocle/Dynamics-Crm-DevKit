@@ -37,6 +37,10 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.flowsession = {
+		OwnerIdType : {
+		},
+		RegardingObjectTypeCode : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

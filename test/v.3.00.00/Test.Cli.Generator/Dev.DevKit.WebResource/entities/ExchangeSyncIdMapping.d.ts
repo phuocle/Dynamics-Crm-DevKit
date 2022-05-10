@@ -56,10 +56,41 @@ declare namespace DevKit {
 		ToCrmChangeType: number;
 		UserDecision: number;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			readonly ExchangeEntryId: string;
+			readonly ExchangeSyncIdmappingId: string;
+			readonly FromCrmChangeType: string;
+			readonly IsDeletedInExchange: string;
+			readonly IsUnlinkedInCRM: string;
+			readonly ItemSubject: string;
+			readonly LastSyncError: string;
+			readonly LastSyncErrorCode: string;
+			/** Last Sync Error Time */
+			readonly LastSyncErrorOccurredOn_UtcDateAndTime: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			readonly ObjectId: string;
+			readonly ObjectTypeCode: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			readonly OwningBusinessUnit: string;
+			readonly OwningTeam: string;
+			readonly OwningUser: string;
+			readonly Retries: string;
+			readonly ToCrmChangeType: string;
+			readonly UserDecision: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace ExchangeSyncIdMapping {
+		enum OwnerIdType {
+		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
 			NotCalculated,
@@ -78,4 +109,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

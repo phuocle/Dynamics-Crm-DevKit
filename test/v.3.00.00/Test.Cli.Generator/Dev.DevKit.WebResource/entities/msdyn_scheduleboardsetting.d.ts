@@ -194,6 +194,101 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics CRM options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Shows the sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics CRM options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who last updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			readonly msdyn_BookBasedOn: string;
+			readonly msdyn_CustomTabName: string;
+			readonly msdyn_CustomTabWebResource: string;
+			readonly msdyn_FilterLayout: string;
+			/** Storing filter values as Json string. */
+			readonly msdyn_FilterValues: string;
+			readonly msdyn_FullyBookedColor: string;
+			readonly msdyn_HideCancelled: string;
+			readonly msdyn_IsPublic: string;
+			readonly msdyn_IsSynchronizeResources: string;
+			readonly msdyn_MapViewTabPlacement: string;
+			readonly msdyn_NotBookedColor: string;
+			/** Tab index. */
+			readonly msdyn_OrderNumber: string;
+			readonly msdyn_OrganizationalUnitTooltipsViewId: string;
+			readonly msdyn_OrganizationalUnitViewId: string;
+			readonly msdyn_OverbookedColor: string;
+			readonly msdyn_PartiallyBookedColor: string;
+			readonly msdyn_ResourceCellTemplate: string;
+			readonly msdyn_RetrieveResourcesQuery: string;
+			readonly msdyn_SAAvailableColor: string;
+			readonly msdyn_SAAvailableIcon: string;
+			/** Is available icon inheriting from default setting. */
+			readonly msdyn_SAAvailableIconDefault: string;
+			readonly msdyn_SAPartiallyAvailableColor: string;
+			readonly msdyn_SAPartiallyAvailableIcon: string;
+			/** Is partially available icon inheriting from default setting. */
+			readonly msdyn_SAPartiallyAvailableIconDefault: string;
+			readonly msdyn_SAUnavailableColor: string;
+			readonly msdyn_SAUnavailableIcon: string;
+			/** Is unavailable icon inheriting from default setting. */
+			readonly msdyn_SAUnavailableIconDefault: string;
+			/** Shows the entity instances. */
+			readonly msdyn_scheduleboardsettingId: string;
+			readonly msdyn_SchedulerAlertsView: string;
+			readonly msdyn_SchedulerBusinessUnitDetailsView: string;
+			readonly msdyn_SchedulerBusinessUnitTooltipView: string;
+			readonly msdyn_SchedulerCoreDetailsView: string;
+			readonly msdyn_SchedulerCoreSlotTextTemplate: string;
+			readonly msdyn_SchedulerCoreTooltipView: string;
+			readonly msdyn_SchedulerFieldServiceDetailsView: string;
+			readonly msdyn_SchedulerFieldServiceSlotTextTemplate: string;
+			readonly msdyn_SchedulerFieldServiceTooltipView: string;
+			readonly msdyn_SchedulerResourceDetailsView: string;
+			readonly msdyn_SchedulerResourceTooltipView: string;
+			/** Shows the settings as a JSON string. */
+			readonly msdyn_Settings: string;
+			/** Field is used to determine if Schedule Board Tab are Private, Public or Shareable */
+			readonly msdyn_ShareType: string;
+			/** Enter the tab name. */
+			readonly msdyn_TabName: string;
+			readonly msdyn_UnscheduledRequirementsViewId: string;
+			readonly msdyn_UnscheduledViewId: string;
+			/** Shows the number of records to be displayed per page in 'Resource Requirement' section. */
+			readonly msdyn_UnscheduledWOPageRecCount: string;
+			readonly msdyn_UnscheduledWOTooltipsViewId: string;
+			readonly msdyn_WorkingHoursColor: string;
+			/** Shows the date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the Schedule Board Setting */
+			readonly statecode: string;
+			/** Reason for the status of the Schedule Board Setting */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Shows the time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -207,6 +302,8 @@ declare namespace OptionSet {
 			Specific_people,
 			/** 192350003 */
 			System
+		}
+		enum OwnerIdType {
 		}
 		enum statecode {
 			/** 0 */
@@ -238,4 +335,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

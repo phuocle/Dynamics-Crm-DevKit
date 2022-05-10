@@ -60,6 +60,39 @@ declare namespace DevKit {
 		readonly ProcessTimeIntervalInMinutes: number;
 		/** Time it took from the scheduled time to the actual start time to process the mailbox. */
 		readonly ScheduledTimeIntervalInMinutes: number;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly AsyncEventId: string;
+			/** Items remaining in CRM to process after this synchronization cycle. */
+			readonly CrmItemsBacklog: string;
+			/** Time each exchange sync step is taking */
+			readonly IndividualStepDurations: string;
+			/** Number of items processed unsuccessfully. */
+			readonly ItemsFailed: string;
+			/** Number of items processed. */
+			readonly ItemsProcessed: string;
+			/** Name of Machine on which mailbox was processed */
+			readonly MachineName: string;
+			/** Regarding Mailbox. */
+			readonly MailboxId: string;
+			/** Completion time of the synchronization cycle. */
+			readonly MailboxProcessCompletedOn_UtcDateAndTime: string;
+			/** Scheduled time of the synchronization cycle. */
+			readonly MailboxProcessScheduledOn_UtcDateAndTime: string;
+			/** Start time of the synchronization cycle. */
+			readonly MailboxProcessStartedOn_UtcDateAndTime: string;
+			readonly MailboxStatisticsId: string;
+			/** Type of the mailbox operation */
+			readonly OperationTypeId: string;
+			/** Unique identifier of the organization associated with the record. */
+			readonly OrganizationId: string;
+			/** Result of Mailbox processing cycle */
+			readonly ProcessResult: string;
+			/** Time it took to process the mailbox. */
+			readonly ProcessTimeIntervalInMinutes: string;
+			/** Time it took from the scheduled time to the actual start time to process the mailbox. */
+			readonly ScheduledTimeIntervalInMinutes: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -90,4 +123,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

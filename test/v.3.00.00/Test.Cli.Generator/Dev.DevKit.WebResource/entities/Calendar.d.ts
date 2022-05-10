@@ -98,6 +98,39 @@ declare namespace DevKit {
 		/** Calendar type, such as User work hour calendar, or Customer service hour calendar. */
 		Type: OptionSet.Calendar.Type;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the business unit with which the calendar is associated. */
+			readonly BusinessUnitId: string;
+			/** Unique identifier of the calendar. */
+			readonly CalendarId: string;
+			/** Unique identifier of the user who created the calendar. */
+			readonly CreatedBy: string;
+			/** Date and time when the calendar was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the calendar. */
+			readonly CreatedOnBehalfBy: string;
+			/** Calendar used by the scheduling system to define when an appointment or activity is to occur. */
+			readonly Description: string;
+			/** Holiday Schedule CalendarId */
+			readonly HolidayScheduleCalendarId: string;
+			/** Calendar is shared by other calendars, such as the organization calendar. */
+			readonly IsShared: string;
+			/** Unique identifier of the user who last modified the calendar. */
+			readonly ModifiedBy: string;
+			/** Date and time when the calendar was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the calendar. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Name of the calendar. */
+			readonly Name: string;
+			/** Unique identifier of the organization with which the calendar is associated. */
+			readonly OrganizationId: string;
+			/** Unique identifier of the primary user of this calendar. */
+			readonly PrimaryUserId: string;
+			/** Calendar type, such as User work hour calendar, or Customer service hour calendar. */
+			readonly Type: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -128,4 +161,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

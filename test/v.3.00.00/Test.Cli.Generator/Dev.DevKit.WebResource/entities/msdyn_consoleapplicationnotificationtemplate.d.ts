@@ -156,6 +156,72 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Display label for the button to accept a notification */
+			readonly msdyn_AcceptButtonText: string;
+			/** The action buttons to be displayed. (Deprecated) */
+			readonly msdyn_ActionButtons: Array<string>;
+			readonly msdyn_AutoAcceptNotification: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_consoleapplicationnotificationtemplateId: string;
+			/** Display icon for this notification. Can be either an image URL or a font-icon */
+			readonly msdyn_Icon: string;
+			/** The name of this Notification template. */
+			readonly msdyn_name: string;
+			/** JSON object to pass key-value pairs for action buttons that are to be present on the notification */
+			readonly msdyn_NotificationButtons: string;
+			/** Deprecated field */
+			readonly msdyn_NotificationFieldsPlaceholder: string;
+			readonly msdyn_RejectButtonAutoAccept: string;
+			/** Display label for the button to reject a notification */
+			readonly msdyn_RejectButtonText: string;
+			/** Notification display order relative to other notification templates. */
+			readonly msdyn_RenderingOrder: string;
+			/** Show countdown for when the notification will disappear */
+			readonly msdyn_Showtimeout: string;
+			/** Theme color for Notification template. */
+			readonly msdyn_Theme: string;
+			/** Notification time out period. */
+			readonly msdyn_Timeout: string;
+			/** The title to be displayed for this notification. */
+			readonly msdyn_Title: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the Notification Template */
+			readonly statecode: string;
+			/** Reason for the status of the Notification Template */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -177,6 +243,8 @@ declare namespace OptionSet {
 			Dark,
 			/** 100000001 */
 			Light
+		}
+		enum OwnerIdType {
 		}
 		enum statecode {
 			/** 0 */
@@ -208,4 +276,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

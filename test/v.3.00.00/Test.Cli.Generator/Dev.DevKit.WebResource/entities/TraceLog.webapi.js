@@ -124,7 +124,7 @@ var DevKit;
 		}
 		tracelog.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -142,6 +142,10 @@ var OptionSet;
 			Error: 3,
 			Information: 1,
 			Warning: 2
+		},
+		RegardingObjectOwnerIdType : {
+		},
+		RegardingObjectTypeCode : {
 		},
 		RollupState : {
 			NotCalculated: 0,

@@ -128,6 +128,65 @@ declare namespace DevKit {
 		readonly VersionNumber: number;
 		/** Shows the workflow for this rule. */
 		WorkflowId: string;
+		readonly FormattedValue: {
+			/** Unique identifier for entity instances */
+			readonly ChannelAccessProfileRuleId: string;
+			/** Unique identifier of the Channel Access Profile Rule Item used when synchronizing customizations for the Microsoft Dynamics 365 client for Outlook */
+			readonly ChannelAccessProfileRuleIdUnique: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Type a short description for the channel access profile rule. */
+			readonly Description: string;
+			/** Exchange rate for the currency associated with the channel access profile rule with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Version in which the similarity rule is introduced. */
+			readonly IntroducedVersion: string;
+			/** Is Managed */
+			readonly IsManaged: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Type a descriptive name for the channel access profile rule. */
+			readonly Name: string;
+			/** Date and time when the record was created. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** Shows whether the channel access profile rule is in a draft state or an active state. */
+			readonly StateCode: string;
+			/** Select the channel access profile rule's status. */
+			readonly StatusCode: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Exchange rate for the currency associated with the channel access profile rule with respect to the base currency. */
+			readonly TransactionCurrencyId: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			readonly VersionNumber: string;
+			/** Shows the workflow for this rule. */
+			readonly WorkflowId: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -141,6 +200,8 @@ declare namespace OptionSet {
 			Published,
 			/** 1 */
 			Unpublished
+		}
+		enum OwnerIdType {
 		}
 		enum StateCode {
 			/** 1 */
@@ -172,4 +233,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

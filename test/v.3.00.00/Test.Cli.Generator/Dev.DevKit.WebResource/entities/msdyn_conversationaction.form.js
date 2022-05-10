@@ -61,6 +61,8 @@ var OptionSet;
 			Open_App_Tab_Template: 100000000,
 			Send_message: 100000001
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

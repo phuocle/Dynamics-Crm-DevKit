@@ -50,6 +50,8 @@ var OptionSet;
 			Dismissed: 2,
 			Not_approved: 0
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

@@ -118,6 +118,52 @@ declare namespace DevKit {
 		readonly UniqueDscId: string;
 		/** Version number of the transaction currency. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the transaction currency. */
+			readonly CreatedBy: string;
+			/** Date and time when the transaction currency was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the transactioncurrency. */
+			readonly CreatedOnBehalfBy: string;
+			/** Name of the transaction currency. */
+			readonly CurrencyName: string;
+			/** Number of decimal places that can be used for currency. */
+			readonly CurrencyPrecision: string;
+			/** Symbol for the transaction currency. */
+			readonly CurrencySymbol: string;
+			/** The default image for the entity. */
+			readonly EntityImage: string;
+			readonly EntityImage_Timestamp: string;
+			readonly EntityImage_URL: string;
+			/** For internal use only. */
+			readonly EntityImageId: string;
+			/** Exchange rate between the transaction currency and the base currency. */
+			readonly ExchangeRate: string;
+			/** Unique identifier of the data import or data migration that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** ISO currency code for the transaction currency. */
+			readonly ISOCurrencyCode: string;
+			/** Unique identifier of the user who last modified the transaction currency. */
+			readonly ModifiedBy: string;
+			/** Date and time when the transaction currency was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the transactioncurrency. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Unique identifier of the organization associated with the transaction currency. */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Status of the transaction currency. */
+			readonly StateCode: string;
+			/** Reason for the status of the transaction currency. */
+			readonly StatusCode: string;
+			/** Unique identifier of the transaction currency. */
+			readonly TransactionCurrencyId: string;
+			/** For internal use only. */
+			readonly UniqueDscId: string;
+			/** Version number of the transaction currency. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -152,4 +198,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

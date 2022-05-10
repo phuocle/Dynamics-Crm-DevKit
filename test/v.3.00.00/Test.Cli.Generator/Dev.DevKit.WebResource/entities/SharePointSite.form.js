@@ -69,6 +69,10 @@ var OptionSet;
 			Contact: 2,
 			None: 0
 		},
+		OwnerIdType : {
+		},
+		ParentSiteObjectTypeCode : {
+		},
 		ServiceType : {
 			MS_Teams: 3,
 			OneDrive: 1,

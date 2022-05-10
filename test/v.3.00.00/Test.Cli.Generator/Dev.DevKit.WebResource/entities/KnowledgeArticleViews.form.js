@@ -72,6 +72,8 @@ var OptionSet;
 			Internal: 1,
 			Web: 2
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

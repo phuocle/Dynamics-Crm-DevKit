@@ -57,6 +57,36 @@ declare namespace DevKit {
 		StageName: string;
 		/** Version number of the process stage. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Step metadata for process stage */
+			readonly ClientData: string;
+			/** The connector associated with the stage. */
+			readonly Connector: string;
+			/** Whether the stage is a trigger */
+			readonly IsTrigger: string;
+			/** The operation id of the stage */
+			readonly OperationId: string;
+			/** The operation kind */
+			readonly OperationKind: string;
+			/** The type of the operation */
+			readonly OperationType: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Select the business unit that owns the record. */
+			readonly OwningBusinessUnit: string;
+			/** Shows the ID of the process. */
+			readonly ProcessId: string;
+			/** Shows the ID of the process stage record. */
+			readonly ProcessStageId: string;
+			/** Select the category of the sales process. */
+			readonly StageCategory: string;
+			/** Type a name for the process stage. */
+			readonly StageName: string;
+			/** Version number of the process stage. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -221,6 +251,10 @@ declare namespace OptionSet {
 			/** 473330024 */
 			Xslt
 		}
+		enum OwnerIdType {
+		}
+		enum PrimaryEntityTypeCode {
+		}
 		enum StageCategory {
 			/** 7 */
 			Approval,
@@ -257,4 +291,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

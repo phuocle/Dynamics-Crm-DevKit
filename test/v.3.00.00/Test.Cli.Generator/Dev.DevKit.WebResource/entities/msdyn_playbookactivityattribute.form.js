@@ -73,6 +73,8 @@ var OptionSet;
 			integer: 2,
 			optionset: 5
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Draft: 0,
 			Published: 1

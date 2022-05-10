@@ -126,7 +126,7 @@ var DevKit;
 		}
 		msdyn_iotfieldmapping.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -158,6 +158,8 @@ var OptionSet;
 		msdyn_SearchType : {
 			Direct_Path: 192350000,
 			Key_Value_Path: 192350001
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

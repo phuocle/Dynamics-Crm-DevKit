@@ -50,6 +50,8 @@ var OptionSet;
 			Inbound: 1,
 			Outbound: 0
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

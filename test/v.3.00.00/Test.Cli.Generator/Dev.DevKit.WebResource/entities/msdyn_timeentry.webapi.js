@@ -139,7 +139,7 @@ var DevKit;
 		}
 		msdyn_timeentry.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -182,6 +182,8 @@ var OptionSet;
 			Travel: 192355001,
 			Vacation: 192350002,
 			Work: 192350000
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

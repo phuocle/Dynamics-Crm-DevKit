@@ -43,6 +43,22 @@ declare namespace DevKit {
 		readonly SolutionId: string;
 		/** The version number of this entity index. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier of the index id */
+			readonly IndexId: string;
+			/** Display Name */
+			readonly Name: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** The record id of this entity index. */
+			readonly RecordId: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** The version number of this entity index. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -75,4 +91,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

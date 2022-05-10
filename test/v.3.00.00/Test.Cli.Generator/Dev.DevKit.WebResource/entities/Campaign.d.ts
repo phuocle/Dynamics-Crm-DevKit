@@ -243,10 +243,120 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Enter the date when the campaign was closed or completed. */
+			readonly ActualEnd_UtcDateOnly: string;
+			/** Enter the actual start date and time for the campaign. */
+			readonly ActualStart_UtcDateOnly: string;
+			/** Type the amount budgeted for the campaign to define a limit for how much you can spend. */
+			readonly BudgetedCost: string;
+			/** Value of the Budget Allocated in base currency. */
+			readonly BudgetedCost_Base: string;
+			/** Unique identifier of the campaign. */
+			readonly CampaignId: string;
+			/** Type a number or other tracking code to identify the campaign. If no value is entered, a code will be generated automatically. */
+			readonly CodeName: string;
+			/** Shows who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Type additional information to describe the campaign, such as the products or services offered or the targeted audience. */
+			readonly Description: string;
+			/** The primary email address for the entity. */
+			readonly EmailAddress: string;
+			/** The default image for the entity. */
+			readonly EntityImage: string;
+			readonly EntityImage_Timestamp: string;
+			readonly EntityImage_URL: string;
+			readonly EntityImageId: string;
+			/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
+			readonly ExchangeRate: string;
+			/** Type the expected response rate for the campaign as a full number between 0 and 100. */
+			readonly ExpectedResponse: string;
+			/** Type the expected revenue for the campaign for return on investment projections and post-campaign reporting. */
+			readonly ExpectedRevenue: string;
+			/** Value of the Estimated Revenue in base currency. */
+			readonly ExpectedRevenue_Base: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Select whether the campaign is a template that can be copied when you create future campaigns. */
+			readonly IsTemplate: string;
+			/** Type the promotional message or marketing copy for the campaign. */
+			readonly Message: string;
+			/** Shows who last updated the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Describes whether campaign is opted out or not */
+			readonly msdyn_gdproptout: string;
+			/** Type a name for the campaign so that it is identified correctly in lists. */
+			readonly Name: string;
+			/** Type the objective of the campaign, including products, services, discounts, and pricing. */
+			readonly Objective: string;
+			/** Type the sum of any miscellaneous campaign costs not included in the campaign activities to make sure the actual cost of the campaign is calculated correctly. */
+			readonly OtherCost: string;
+			/** Value of the Miscellaneous Costs in base currency. */
+			readonly OtherCost_Base: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Choose the price list associated with this item to make sure the products associated with the campaign are offered at the correct prices. */
+			readonly PriceListId: string;
+			/** Contains the id of the process associated with the entity. */
+			readonly ProcessId: string;
+			/** Type a promotional code to track sales related to the campaign or allow customers to redeem a discount offer. */
+			readonly PromotionCodeName: string;
+			/** Enter the date when the campaign is scheduled to end. */
+			readonly ProposedEnd_UtcDateOnly: string;
+			/** Enter the date when the campaign is scheduled to start. */
+			readonly ProposedStart_UtcDateOnly: string;
+			/** Contains the id of the stage where the entity is located. */
+			readonly StageId: string;
+			/** Shows the status of the campaign. By default, campaigns are active and can't be deactivated. */
+			readonly StateCode: string;
+			/** Select the campaign's status. */
+			readonly StatusCode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			readonly TmpRegardingObjectId: string;
+			/** Shows the sum of the amounts entered in the Total Cost of Campaign Activities and Miscellaneous Costs fields. */
+			readonly TotalActualCost: string;
+			/** Value of the Total Cost of Campaign in base currency. */
+			readonly TotalActualCost_Base: string;
+			/** Shows the sum of the values entered in the Actual Cost field on all campaign activities related to the campaign. */
+			readonly TotalCampaignActivityActualCost: string;
+			/** Value of the Total Cost of Campaign Activities in base currency. */
+			readonly TotalCampaignActivityActualCost_Base: string;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			readonly TransactionCurrencyId: string;
+			/** A comma separated list of string values representing the unique identifiers of stages in a Business Process Flow Instance in the order that they occur. */
+			readonly TraversedPath: string;
+			/** Select the type of the campaign. */
+			readonly TypeCode: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace Campaign {
+		enum OwnerIdType {
+		}
 		enum StateCode {
 			/** 0 */
 			Active,
@@ -299,4 +409,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

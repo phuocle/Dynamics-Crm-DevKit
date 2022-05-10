@@ -31,10 +31,16 @@ declare namespace DevKit {
 		"@odata.etag": string;
 		readonly QueueId: string;
 		readonly QueueMemberCountId: string;
+		readonly FormattedValue: {
+			readonly QueueId: string;
+			readonly QueueMemberCountId: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace QueueMemberCount {
+		enum QueueMemberCount1 {
+		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
 			NotCalculated,
@@ -53,4 +59,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

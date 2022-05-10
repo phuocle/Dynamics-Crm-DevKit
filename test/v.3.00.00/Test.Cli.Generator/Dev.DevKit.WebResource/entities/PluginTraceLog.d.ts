@@ -163,6 +163,58 @@ declare namespace DevKit {
 		readonly SecureConfiguration: string;
 		/** Class name of the plug-in. */
 		readonly TypeName: string;
+		readonly FormattedValue: {
+			/** Unsecured configuration for the plug-in trace log. */
+			readonly Configuration: string;
+			/** Unique identifier for tracking plug-in or custom workflow activity execution. */
+			readonly CorrelationId: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Depth of execution of the plug-in or custom workflow activity. */
+			readonly Depth: string;
+			/** Details of the exception. */
+			readonly ExceptionDetails: string;
+			/** Where the event originated. Set to true if it's a system trace; otherwise, false. */
+			readonly IsSystemCreated: string;
+			/** Trace text from the plug-in. */
+			readonly MessageBlock: string;
+			/** Name of the message that triggered this plug-in. */
+			readonly MessageName: string;
+			/** Type of execution. */
+			readonly Mode: string;
+			/** Type of custom code. */
+			readonly OperationType: string;
+			/** Unique identifier for the organization. */
+			readonly OrganizationId: string;
+			/** Time, in milliseconds, to construct. */
+			readonly PerformanceConstructorDuration: string;
+			/** Date and time when constructed. */
+			readonly PerformanceConstructorStartTime_UtcDateAndTime: string;
+			/** Time, in milliseconds, to execute the request. */
+			readonly PerformanceExecutionDuration: string;
+			/** Time, in milliseconds, to execute the request. */
+			readonly PerformanceExecutionStartTime_UtcDateAndTime: string;
+			/** Asynchronous workflow persistence key. */
+			readonly PersistenceKey: string;
+			/** ID of the plug-in registration step. */
+			readonly PluginStepId: string;
+			/** Unique identifier for an entity instance. */
+			readonly PluginTraceLogId: string;
+			/** Entity, if any, that the plug-in is executed against. */
+			readonly PrimaryEntity: string;
+			/** Plug-in profile formatted as serialized text. */
+			readonly Profile: string;
+			/** Unique identifier of the message request. */
+			readonly RequestId: string;
+			/** Secured configuration for the plug-in trace log. */
+			readonly SecureConfiguration: string;
+			/** Class name of the plug-in. */
+			readonly TypeName: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -199,4 +251,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

@@ -284,6 +284,88 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Shows the exchange rate for the currency associated with the entity with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Shows the sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Link this product to Booking. If specified and warehouse is not set then product will be added to Resource Booking */
+			readonly msdyn_AssociateToBooking: string;
+			/** Warehouse to which this product should be received to */
+			readonly msdyn_AssociateToWarehouse: string;
+			/** Link this product to Work Order. If specified and warehouse is not set then product will be added to work order */
+			readonly msdyn_AssociateToWorkOrder: string;
+			/** Enter the date you expect this product to arrive to the shipping address. This value defaults to the date set on the PO. */
+			readonly msdyn_DateExpected_UtcDateOnly: string;
+			/** Enter the product description to display for the vendor. */
+			readonly msdyn_Description: string;
+			readonly msdyn_InternalFlags: string;
+			readonly msdyn_IsOrdered: string;
+			/** Enter the current status of this product. */
+			readonly msdyn_ItemStatus: string;
+			/** Shows the order of this product within the purchase order. */
+			readonly msdyn_LineOrder: string;
+			/** Enter the name of the custom entity. */
+			readonly msdyn_name: string;
+			/** Product to order */
+			readonly msdyn_Product: string;
+			/** Purchase order this line item relates to */
+			readonly msdyn_PurchaseOrder: string;
+			/** Shows the entity instances. */
+			readonly msdyn_purchaseorderproductId: string;
+			/** Enter the quantity currently billed. */
+			readonly msdyn_QtyBilled: string;
+			/** Enter the quantity currently received. */
+			readonly msdyn_QtyReceived: string;
+			/** Enter the quantity ordered. */
+			readonly msdyn_Quantity: string;
+			/** Shows the total cost of this product. This is calculated by (Unit Cost * Units) + Additional Cost + Commission Costs */
+			readonly msdyn_TotalCost: string;
+			/** Shows the value of the total cost in the base currency. */
+			readonly msdyn_totalcost_Base: string;
+			/** Unit for this product */
+			readonly msdyn_Unit: string;
+			/** Enter the cost of this product per unit. */
+			readonly msdyn_UnitCost: string;
+			/** Shows the value of the unit cost in the base currency. */
+			readonly msdyn_unitcost_Base: string;
+			/** Shows the date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the Purchase Order Product */
+			readonly statecode: string;
+			/** Reason for the status of the Purchase Order Product */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Unique identifier of the currency associated with the entity. */
+			readonly TransactionCurrencyId: string;
+			/** Shows the time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -295,6 +377,8 @@ declare namespace OptionSet {
 			Pending,
 			/** 690970001 */
 			Received
+		}
+		enum OwnerIdType {
 		}
 		enum statecode {
 			/** 0 */
@@ -326,4 +410,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

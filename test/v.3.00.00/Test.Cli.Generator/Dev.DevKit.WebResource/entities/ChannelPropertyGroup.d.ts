@@ -117,6 +117,52 @@ declare namespace DevKit {
 		readonly SupportingSolutionId: string;
 		/** Version number of the channel property group. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the channel property group */
+			readonly ChannelPropertyGroupId: string;
+			/** For Internal Use Only */
+			readonly ChannelPropertyGroupIdUnique: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Shows who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Type a description for the property group. */
+			readonly Description: string;
+			/** Unique identifier of the data import or data migration that created this property. */
+			readonly ImportSequenceNumber: string;
+			/** For internal use only. */
+			readonly IsManaged: string;
+			/** Shows who last updated the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Type the name of the channel property group. */
+			readonly Name: string;
+			/** Unique identifier of the organization associated with the channel property group. */
+			readonly OrganizationId: string;
+			/** Date and time that the attribute was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Select the activity that the property group is associated with. */
+			readonly RegardingTypeCode: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** State of the channel property group */
+			readonly statecode: string;
+			/** Status of the channel property group */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** Version number of the channel property group. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -132,31 +178,31 @@ declare namespace OptionSet {
 			Unpublished
 		}
 		enum RegardingTypeCode {
-			/** 10086 */
+			/** 10088 */
 			Activity_record_for_the_Teams_chat,
 			/** 4201 */
 			Appointment,
-			/** 10404 */
+			/** 10473 */
 			Booking_Alert,
-			/** 10707 */
+			/** 10743 */
 			Conversation,
-			/** 10313 */
+			/** 10330 */
 			Customer_Voice_alert,
-			/** 10323 */
+			/** 10340 */
 			Customer_Voice_survey_invite,
-			/** 10325 */
+			/** 10342 */
 			Customer_Voice_survey_response,
 			/** 4202 */
 			Email,
-			/** 10817 */
+			/** 10857 */
 			Outbound_message,
 			/** 4210 */
 			Phone_Call,
-			/** 10434 */
+			/** 10489 */
 			Project_Service_Approval,
 			/** 4214 */
 			Service_Activity,
-			/** 10721 */
+			/** 10760 */
 			Session,
 			/** 4216 */
 			Social_Activity,
@@ -193,4 +239,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

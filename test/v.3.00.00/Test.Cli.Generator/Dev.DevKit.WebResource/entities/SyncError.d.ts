@@ -150,6 +150,10 @@ declare namespace DevKit {
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_appaction: string;
 		/** Choose the record that the sync error relates to. */
+		regardingobjectid_appactionmigration: string;
+		/** Choose the record that the sync error relates to. */
+		regardingobjectid_appactionrule: string;
+		/** Choose the record that the sync error relates to. */
 		regardingobjectid_appelement: string;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_applicationuser: string;
@@ -275,8 +279,6 @@ declare namespace DevKit {
 		regardingobjectid_datalakeworkspacepermission: string;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_dataprocessingconfiguration: string;
-		/** Choose the record that the sync error relates to. */
-		regardingobjectid_datasyncstate: string;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_discount_syncerror: string;
 		/** Choose the record that the sync error relates to. */
@@ -528,6 +530,8 @@ declare namespace DevKit {
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_authenticationsettings: string;
 		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_authsettingsentry: string;
+		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_autocapturerule: string;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_autocapturesettings: string;
@@ -660,6 +664,8 @@ declare namespace DevKit {
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_conversationtopic_conversation: string;
 		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_csadminconfig: string;
+		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_customengagementctx: string;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_customerasset: string;
@@ -668,9 +674,13 @@ declare namespace DevKit {
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_customerassetcategory: string;
 		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_dataanalyticscustomizedreport: string;
+		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_dataanalyticsreport: string;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_dataanalyticsreport_csrmanager: string;
+		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_dataanalyticsreport_forecast: string;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_dataanalyticsreport_fs: string;
 		/** Choose the record that the sync error relates to. */
@@ -772,6 +782,8 @@ declare namespace DevKit {
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_forecastrecurrence: string;
 		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_forecastsettingsandsummary: string;
+		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_functionallocation: string;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_gdprdata: string;
@@ -794,6 +806,8 @@ declare namespace DevKit {
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_iermltraining: string;
 		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_inboxconfiguration: string;
+		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_incidenttype: string;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_incidenttypecharacteristic: string;
@@ -813,6 +827,8 @@ declare namespace DevKit {
 		regardingobjectid_msdyn_incidenttypessetup: string;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_incidenttype_requirementgroup: string;
+		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_insightsstorevirtualentity: string;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_inspection: string;
 		/** Choose the record that the sync error relates to. */
@@ -950,6 +966,12 @@ declare namespace DevKit {
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_notificationtemplate: string;
 		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_ocapplebusinessaccount: string;
+		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_ocapplemessagesforbusinessengagementctx: string;
+		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_ocapplepay: string;
+		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_ocautoblockrule: string;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_ocbotchannelregistration: string;
@@ -1002,6 +1024,8 @@ declare namespace DevKit {
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_ocoutboundmessage: string;
 		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_ocpaymentprofile: string;
+		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_ocphonenumber: string;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_ocprovisioningstate: string;
@@ -1009,6 +1033,10 @@ declare namespace DevKit {
 		regardingobjectid_msdyn_ocrecording: string;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_ocrequest: string;
+		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_ocrichobject: string;
+		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_ocrichobjectmap: string;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_ocruleitem: string;
 		/** Choose the record that the sync error relates to. */
@@ -1130,9 +1158,13 @@ declare namespace DevKit {
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_playbooktemplate: string;
 		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_pmanalysishistory: string;
+		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_pminferredtask: string;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_pmrecording: string;
+		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_pmtemplate: string;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_postalbum: string;
 		/** Choose the record that the sync error relates to. */
@@ -1414,6 +1446,18 @@ declare namespace DevKit {
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_surveyquestion: string;
 		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_swarm: string;
+		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_swarmparticipant: string;
+		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_swarmparticipantrule: string;
+		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_swarmrole: string;
+		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_swarmskill: string;
+		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_swarmtemplate: string;
+		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_systemuserschedulersetting: string;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_taxcode: string;
@@ -1449,6 +1493,8 @@ declare namespace DevKit {
 		regardingobjectid_msdyn_timeoffcalendar: string;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_timeoffrequest: string;
+		/** Choose the record that the sync error relates to. */
+		regardingobjectid_msdyn_timespent: string;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_msdyn_tour: string;
 		/** Choose the record that the sync error relates to. */
@@ -1738,6 +1784,10 @@ declare namespace DevKit {
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_sharedlinksetting: string;
 		/** Choose the record that the sync error relates to. */
+		regardingobjectid_sharedobject: string;
+		/** Choose the record that the sync error relates to. */
+		regardingobjectid_sharedworkspace: string;
+		/** Choose the record that the sync error relates to. */
 		regardingobjectid_sharepointdocumentlocation_syncerror: string;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_sharepointsite_syncerror: string;
@@ -1859,6 +1909,1824 @@ declare namespace DevKit {
 		SyncErrorId: string;
 		/** Shows the version number of the sync error. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Action Name for which sync error has occurred */
+			readonly Action: string;
+			/** Show the action data */
+			readonly ActionData: string;
+			/** Unique identifier of the user who created the sync error. */
+			readonly CreatedBy: string;
+			/** Date and time when the sync Error was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the sync error. */
+			readonly CreatedOnBehalfBy: string;
+			/** Enter a short description of the sync error. */
+			readonly Description: string;
+			/** Displays the error code. */
+			readonly ErrorCode: string;
+			/** Error description from the exception */
+			readonly ErrorDetail: string;
+			/** Error Message of the exception */
+			readonly ErrorMessage: string;
+			/** Date and time when the upsync request was executed on CRM server */
+			readonly ErrorTime_UtcDateAndTime: string;
+			/** Select the preferred error type. */
+			readonly ErrorType: string;
+			/** Unique identifier of the user who last modified the sync error. */
+			readonly ModifiedBy: string;
+			/** Date and time when the sync error was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the sync error. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Entity name of the record for which sync error has occurred */
+			readonly Name: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Business unit that owns the sync error. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the team who owns the sync error. */
+			readonly OwningTeam: string;
+			/** Unique identifier of the user who owns the sync error. */
+			readonly OwningUser: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_account_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_activityfileattachment: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_activitymimeattachment_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_activitymonitor: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_activityparty_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_adminsettingsentity: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_annotation_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_appaction: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_appactionmigration: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_appactionrule: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_appelement: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_applicationuser: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_appmodulecomponentedge: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_appmodulecomponentnode: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_appointment_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_appsetting: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_appusersetting: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_attachment_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_attributeimageconfig: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_bookableresource_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_bookableresourcebooking_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_bookableresourcebookingexchangesyncidmapping: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_bookableresourcebookingheader_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_bookableresourcecategory_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_bookableresourcecategoryassn_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_bookableresourcecharacteristic_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_bookableresourcegroup_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_bookingstatus_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_bot: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_botcomponent: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_bulkoperation_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_bulkoperationlog: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_businessdatalocalizedlabel_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_businessunit_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_campaign_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_campaignactivity_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_campaignresponse_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_canvasappextendedmetadata: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_cascadegrantrevokeaccessrecordstracker: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_cascadegrantrevokeaccessversiontracker: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_catalog: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_catalogassignment: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_category_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_channelaccessprofile_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_channelaccessprofilerule_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_channelaccessprofileruleitem_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_characteristic_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_chat: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_childincidentcount: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_comment: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_commitment: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_competitor_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_competitoraddress_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_connection_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_connectionreference: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_connectionrole_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_connector: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_constraintbasedgroup: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_contact_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_contract_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_contractdetail_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_contracttemplate_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_conversationtranscript: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_customapi: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_customapirequestparameter: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_customapiresponseproperty: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_customeraddress_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_customeropportunityrole_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_datalakefolder: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_datalakefolderpermission: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_datalakeworkspace: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_datalakeworkspacepermission: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_dataprocessingconfiguration: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_discount_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_discounttype_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_duplicaterule_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_duplicaterulecondition_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_dynamicproperty: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_dynamicpropertyassociation: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_dynamicpropertyinstance: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_dynamicpropertyoptionsetitem: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_email_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_emailserverprofile_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_entitlement_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_entitlementchannel: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_entitlemententityallocationtypemapping: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_entitlementtemplate_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_entitlementtemplatechannel: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_entityanalyticsconfig: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_entityimageconfig: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_entityindex: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_environmentvariabledefinition: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_environmentvariablevalue: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_equipment_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_ExpiredProcess_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_exportsolutionupload: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_externalparty_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_externalpartyitem_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_fax_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_featurecontrolsetting: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_feedback_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_fieldpermission_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_fieldsecurityprofile_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_fileattachment_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_flowmachine: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_flowmachinegroup: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_flowsession: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_goal_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_goalrollupquery_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_holidaywrapper: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_importmap_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_incident_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_incidentresolution_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_indexattributes: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_internaladdress_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_internalcatalogassignment: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_invoice_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_invoicedetail_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_kbarticle_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_kbarticletemplate_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_keyvaultreference: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_knowledgearticle_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_knowledgearticleincident_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_knowledgearticleviews_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_knowledgebaserecord_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_lead_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_leadaddress_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_LeadToOpportunitySalesProcess_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_letter_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_list_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_listoperation: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_mailbox_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_mailmergetemplate_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_managedidentity: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_marketingformdisplayattributes: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_metric_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdynce_botcontent: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdynsm_marketingsitemap: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdynsm_salessitemap: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdynsm_servicessitemap: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdynsm_settingssitemap: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_3dmodel: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_accountpricelist: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_actioncardregarding: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_actioncardrolesetting: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_actual: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_adaptivecardconfiguration: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_adminappstate: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_agentstatushistory: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_agreement: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_agreementbookingdate: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_agreementbookingincident: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_agreementbookingproduct: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_agreementbookingservice: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_agreementbookingservicetask: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_agreementbookingsetup: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_agreementinvoicedate: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_agreementinvoiceproduct: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_agreementinvoicesetup: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_agreementsubstatus: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_aibdataset: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_aibdatasetfile: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_aibdatasetrecord: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_aibdatasetscontainer: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_aibfeedbackloop: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_aibfile: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_aibfileattacheddata: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_aiconfiguration: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_aicontactsuggestion: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_aifptrainingdocument: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_aimodel: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_aiodimage: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_aiodlabel: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_aiodtrainingboundingbox: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_aiodtrainingimage: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_aitemplate: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_analysiscomponent: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_analysisjob: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_analysisresult: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_analysisresultdetail: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_analytics: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_analyticsadminsettings: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_analyticsforcs: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_appconfiguration: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_applicationextension: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_applicationtabtemplate: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_approval: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_approvalset: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_assetcategorytemplateassociation: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_assetsuggestionssetting: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_assettemplateassociation: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_assignmentconfiguration: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_assignmentconfigurationstep: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_assignmentmap: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_assignmentrule: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_attribute: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_attributevalue: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_authenticationsettings: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_authsettingsentry: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_autocapturerule: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_autocapturesettings: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_batchjob: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_bookableresourceassociation: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_bookableresourcebookingquicknote: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_bookableresourcecapacityprofile: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_bookingalert: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_bookingalertstatus: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_bookingchange: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_bookingjournal: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_bookingrule: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_bookingsetupmetadata: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_bookingtimestamp: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_bpf_2c5fe86acc8b414b8322ae571000c799: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_bpf_477c16f59170487b8b4dc895c5dcd09b: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_bpf_665e73aa18c247d886bfc50499c73b82: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_bpf_989e9b1857e24af18787d5143b67523b: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_bpf_baa0a411a239410cb8bded8b5fdd88e3: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_bpf_d3d97bac8c294105840e99e37a9d1c39: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_bpf_d8f9dc7f099f44db9d641dd81fbd470d: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_businessclosure: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_callablecontext: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_cannedmessage: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_capacityprofile: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_caseenrichment: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_casesuggestionrequestpayload: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_casetopic: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_casetopicsetting: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_casetopicsummary: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_casetopic_incident: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_cdsentityengagementctx: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_channel: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_channelcapability: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_channelprovider: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_characteristicreqforteammember: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_chatansweroption: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_chatquestionnaireresponse: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_chatquestionnaireresponseitem: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_chatwidgetlanguage: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_ciprovider: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_clientextension: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_collabgraphresource: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_configuration: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_consoleapplicationnotificationfield: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_consoleapplicationnotificationtemplate: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_consoleapplicationsessiontemplate: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_consoleapplicationtemplate: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_consoleapplicationtemplateparameter: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_consoleapplicationtype: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_consoleappparameterdefinition: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_contactpricelist: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_contactsuggestionrule: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_contactsuggestionruleset: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_contractlinedetailperformance: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_contractlineinvoiceschedule: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_contractlinescheduleofvalue: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_contractperformance: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_conversationaction: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_conversationactionlocale: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_conversationdata: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_conversationinsight: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_conversationsuggestionrequestpayload: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_conversationtopic: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_conversationtopicsetting: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_conversationtopicsummary: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_conversationtopic_conversation: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_csadminconfig: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_customengagementctx: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_customerasset: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_customerassetattachment: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_customerassetcategory: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_dataanalyticscustomizedreport: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_dataanalyticsreport: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_dataanalyticsreport_csrmanager: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_dataanalyticsreport_forecast: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_dataanalyticsreport_fs: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_dataanalyticsreport_fspredictrs: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_dataanalyticsreport_fspredictwhd: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_dataanalyticsreport_ksinsights: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_dataanalyticsreport_oc: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_dataanalyticsreport_ocvoice: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_dataanalyticsreport_sutreporting: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_databaseversion: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_dataexport: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_dataflow: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_dataflowrefreshhistory: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_datainsightsandanalyticsfeature: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_dealmanageraccess: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_dealmanagersettings: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_decisioncontract: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_decisionruleset: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_delegation: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_dimension: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_dimensionfieldname: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_duplicatedetectionpluginrun: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_duplicateleadmapping: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_effortpredictionresult: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_entitlementapplication: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_entityconfig: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_entityconfiguration: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_entitylinkchatconfiguration: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_entityrankingrule: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_entityrefreshhistory: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_entityroutingconfiguration: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_estimate: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_estimateline: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_expense: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_expensecategory: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_expensereceipt: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_extendedusersetting: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_facebookengagementctx: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_fact: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_federatedarticle: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_federatedarticleincident: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_fieldcomputation: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_fieldservicepricelistitem: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_fieldservicesetting: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_fieldserviceslaconfiguration: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_fieldservicesystemjob: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_findworkevent: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_flowcardtype: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_forecastconfiguration: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_forecastdefinition: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_forecastinstance: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_forecastrecurrence: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_forecastsettingsandsummary: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_functionallocation: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_gdprdata: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_geofence: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_geofenceevent: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_geofencingsettings: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_geolocationsettings: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_geolocationtracking: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_helppage: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_icebreakersconfig: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_iermlmodel: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_iermltraining: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_inboxconfiguration: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_incidenttype: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_incidenttypecharacteristic: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_incidenttypeproduct: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_incidenttyperecommendationresult: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_incidenttyperecommendationrunhistory: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_incidenttyperesolution: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_incidenttypeservice: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_incidenttypeservicetask: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_incidenttypessetup: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_incidenttype_requirementgroup: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_insightsstorevirtualentity: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_inspection: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_inspectionattachment: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_inspectiondefinition: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_inspectioninstance: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_inspectionresponse: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_integrationjob: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_integrationjobdetail: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_inventoryadjustment: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_inventoryadjustmentproduct: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_inventoryjournal: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_inventorytransfer: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_invoicefrequency: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_invoicefrequencydetail: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_invoicelinetransaction: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_iotalert: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_iotdevice: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_iotdevicecategory: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_iotdevicecommand: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_iotdevicecommanddefinition: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_iotdevicedatahistory: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_iotdeviceproperty: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_iotdeviceregistrationhistory: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_iotdevicevisualizationconfiguration: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_iotfieldmapping: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_iotpropertydefinition: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_iotprovider: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_iotproviderinstance: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_iotsettings: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_iottocaseprocess: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_journal: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_journalline: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_kalanguagesetting: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_kbattachment: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_kbenrichment: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_kbkeywordsdescsuggestionsetting: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_kmfederatedsearchconfig: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_kmpersonalizationsetting: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_knowledgearticleimage: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_knowledgearticletemplate: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_knowledgeinteractioninsight: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_knowledgemanagementsetting: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_knowledgepersonalfilter: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_knowledgesearchfilter: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_knowledgesearchinsight: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_kpieventdata: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_kpieventdefinition: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_leadhygienesetting: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_leadmodelconfig: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_lineengagementctx: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_livechatconfig: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_livechatengagementctx: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_livechatwidgetlocation: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_liveconversation: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_liveworkitemevent: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_liveworkstream: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_liveworkstreamcapacityprofile: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_localizedsurveyquestion: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_macrosession: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_maskingrule: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_masterentityroutingconfiguration: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_migrationtracker: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_mlresultcache: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_modelpreviewstatus: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_msteamssetting: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_msteamssettingsv2: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_notesanalysisconfig: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_notificationfield: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_notificationtemplate: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_ocapplebusinessaccount: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_ocapplemessagesforbusinessengagementctx: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_ocapplepay: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_ocautoblockrule: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_ocbotchannelregistration: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_occarrier: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_occhannelapiconversationprivilege: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_occhannelapimessageprivilege: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_occhannelapimethodmapping: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_occhannelconfiguration: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_occhannelstateconfiguration: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_occommunicationprovidersetting: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_occommunicationprovidersettingentry: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_occustommessagingchannel: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_ocfbapplication: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_ocfbpage: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_ocflaggedspam: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_oclanguage: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_oclinechannelconfig: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_ocliveworkitem: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_ocliveworkitemcapacityprofile: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_ocliveworkitemcharacteristic: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_ocliveworkitemcontextitem: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_ocliveworkitemparticipant: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_ocliveworkitemsentiment: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_ocliveworkstreamcontextvariable: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_oclocalizationdata: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_ocoutboundconfiguration: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_ocoutboundmessage: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_ocpaymentprofile: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_ocphonenumber: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_ocprovisioningstate: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_ocrecording: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_ocrequest: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_ocrichobject: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_ocrichobjectmap: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_ocruleitem: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_ocsentimentdailytopic: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_ocsentimentdailytopickeyword: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_ocsentimentdailytopictrending: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_ocsession: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_ocsessioncharacteristic: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_ocsessionparticipantevent: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_ocsessionsentiment: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_ocsimltraining: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_ocsitdimportconfig: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_ocsitdskill: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_ocsitrainingdata: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_ocskillidentmlmodel: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_ocsmschannelsetting: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_ocsystemmessage: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_octag: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_octeamschannelconfig: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_octwitterapplication: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_octwitterhandle: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_ocwechatchannelconfig: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_ocwhatsappchannelaccount: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_ocwhatsappchannelnumber: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_oc_geolocationprovider: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_omnichannelconfiguration: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_omnichannelpersonalization: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_omnichannelqueue: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_omnichannelsyncconfig: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_operatinghour: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_opportunitylineresourcecategory: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_opportunitylinetransaction: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_opportunitylinetransactioncategory: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_opportunitylinetransactionclassificatio: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_opportunitymodelconfig: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_opportunitypricelist: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_orderinvoicingdate: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_orderinvoicingproduct: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_orderinvoicingsetup: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_orderinvoicingsetupdate: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_orderlineresourcecategory: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_orderlinetransaction: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_orderlinetransactioncategory: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_orderlinetransactionclassification: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_orderpricelist: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_organizationalunit: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_overflowactionconfig: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_paneconfiguration: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_panetabconfiguration: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_panetoolconfiguration: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_payment: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_paymentdetail: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_paymentmethod: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_paymentterm: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_personalmessage: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_personalsoundsetting: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_personasecurityrolemapping: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_playbookactivity: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_playbookactivityattribute: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_playbookcategory: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_playbookinstance: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_playbooktemplate: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_pmanalysishistory: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_pminferredtask: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_pmrecording: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_pmtemplate: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_postalbum: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_postalcode: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_postconfig: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_postruleconfig: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_predictivemodelscore: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_predictivescore: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_predictworkhourdurationsetting: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_presence: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_priority: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_problematicasset: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_problematicassetfeedback: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_processnotes: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_productinventory: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_productivityactioninputparameter: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_productivityactionoutputparameter: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_productivityagentscript: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_productivityagentscriptstep: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_productivitymacroactiontemplate: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_productivitymacroconnector: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_productivitymacrosolutionconfiguration: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_productivityparameterdefinition: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_project: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_projectapproval: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_projectparameter: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_projectparameterpricelist: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_projectpricelist: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_projecttask: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_projecttaskdependency: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_projecttaskstatususer: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_projectteam: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_projectteammembersignup: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_projecttransactioncategory: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_property: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_propertyassetassociation: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_propertylog: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_propertytemplateassociation: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_provider: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_purchaseorder: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_purchaseorderbill: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_purchaseorderproduct: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_purchaseorderreceipt: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_purchaseorderreceiptproduct: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_purchaseordersubstatus: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_questionsequence: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_quotebookingincident: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_quotebookingproduct: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_quotebookingservice: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_quotebookingservicetask: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_quotebookingsetup: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_quoteinvoicingproduct: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_quoteinvoicingsetup: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_quotelineanalyticsbreakdown: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_quotelineinvoiceschedule: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_quotelineresourcecategory: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_quotelinescheduleofvalue: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_quotelinetransaction: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_quotelinetransactioncategory: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_quotelinetransactionclassification: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_quotepricelist: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_recording: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_relationshipinsightsunifiedconfig: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_requirementcharacteristic: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_requirementdependency: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_requirementgroup: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_requirementorganizationunit: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_requirementrelationship: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_requirementresourcecategory: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_requirementresourcepreference: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_requirementstatus: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_resolution: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_resourceassignment: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_resourceassignmentdetail: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_resourcecategorymarkuppricelevel: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_resourcecategorypricelevel: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_resourcepaytype: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_resourcerequest: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_resourcerequirement: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_resourcerequirementdetail: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_resourceterritory: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_richtextfile: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_rma: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_rmaproduct: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_rmareceipt: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_rmareceiptproduct: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_rmasubstatus: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_rolecompetencyrequirement: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_roleutilization: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_routingconfiguration: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_routingconfigurationstep: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_routingrequest: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_routingrulesetsetting: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_rtv: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_rtvproduct: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_rtvsubstatus: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_rulesetdependencymapping: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_salesaccelerationsettings: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_salesassignmentsetting: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_salesinsightssettings: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_salesroutingrun: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_salessuggestion: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_salestag: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_scenario: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_scheduleboardsetting: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_schedulingfeatureflag: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_schedulingparameter: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_searchconfiguration: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_segment: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_segmentcatalogue: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_sentimentanalysis: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_sequence: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_sequencestat: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_sequencetarget: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_sequencetargetstep: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_sequencetemplate: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_serviceconfiguration: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_servicetasktype: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_sessiondata: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_sessionevent: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_sessionparticipant: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_sessionparticipantdata: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_sessiontemplate: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_shipvia: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_siconfig: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_sikeyvalueconfig: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_skillattachmentruleitem: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_skillattachmenttarget: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_slakpi: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_smartassistconfig: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_smsengagementctx: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_smsnumber: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_solutionhealthrule: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_solutionhealthruleargument: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_solutionhealthruleset: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_soundfile: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_soundnotificationsetting: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_suggestioninteraction: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_suggestionrequestpayload: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_suggestionsmodelsummary: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_suggestionssetting: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_surveyquestion: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_swarm: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_swarmparticipant: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_swarmparticipantrule: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_swarmrole: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_swarmskill: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_swarmtemplate: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_systemuserschedulersetting: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_taxcode: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_taxcodedetail: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_teamschannelengagementctx: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_teamschatassociation: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_teamschatsuggestion: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_teamscollaboration: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_teamsdialeradminsettings: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_teamsengagementctx: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_templateforproperties: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_templateparameter: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_templatetags: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_timeentry: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_timeentrysetting: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_timegroup: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_timegroupdetail: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_timeoffcalendar: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_timeoffrequest: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_timespent: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_tour: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_transactioncategory: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_transactioncategoryclassification: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_transactioncategoryhierarchyelement: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_transactioncategorypricelevel: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_transactionconnection: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_transactionorigin: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_transactiontype: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_transcript: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_twitterengagementctx: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_unifiedroutingdiagnostic: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_unifiedroutingrun: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_unifiedroutingsetuptracker: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_uniquenumber: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_untrackedappointment: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_upgraderun: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_upgradestep: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_upgradeversion: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_urnotificationtemplate: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_urnotificationtemplatemapping: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_usagemetric: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_usersetting: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_userworkhistory: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_visitorjourney: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_wallsavedquery: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_wallsavedqueryusersettings: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_warehouse: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_wechatengagementctx: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_whatsappengagementctx: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_workhourtemplate: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_worklistviewconfiguration: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_workorder: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_workordercharacteristic: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_workorderdetailsgenerationqueue: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_workorderincident: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_workorderproduct: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_workorderresolution: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_workorderresourcerestriction: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_workorderservice: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_workorderservicetask: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_workordersubstatus: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_workordertype: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_workqueuestate: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyn_workqueueusersetting: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyusd_actioncallworkflow: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyusd_agentscriptaction: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyusd_agentscripttaskcategory: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyusd_answer: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyusd_auditanddiagnosticssetting: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyusd_configuration: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyusd_customizationfiles: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyusd_entityassignment: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyusd_entitysearch: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyusd_form: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyusd_languagemodule: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyusd_scriptlet: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyusd_scripttasktrigger: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyusd_search: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyusd_sessioninformation: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyusd_sessiontransfer: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyusd_task: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyusd_toolbarbutton: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyusd_toolbarstrip: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyusd_tracesourcesetting: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyusd_ucisettings: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyusd_uiievent: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyusd_usersettings: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msdyusd_windowroute: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msfp_alert: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msfp_alertrule: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msfp_emailtemplate: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msfp_fileresponse: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msfp_localizedemailtemplate: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msfp_project: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msfp_question: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msfp_questionresponse: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msfp_satisfactionmetric: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msfp_survey: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msfp_surveyinvite: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msfp_surveyreminder: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msfp_surveyresponse: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_msfp_unsubscribedrecipient: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_NewProcess_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_offlinecommanddefinition_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_opportunity_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_opportunityclose_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_opportunityproduct_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_OpportunitySalesProcess_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_orderclose_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_organization_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_organizationdatasyncstate: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_organizationdatasyncsubscription: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_organizationdatasyncsubscriptionentity: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_organizationsetting: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_package: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_pdfsetting: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_phonecall_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_PhoneToCaseProcess_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_pluginpackage: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_position_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_postfollow_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_pricelevel_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_privilegesremovalsetting: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_processsession_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_processstage_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_processstageparameter: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_processtrigger_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_product_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_productassociation_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_productpricelevel_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_productsubstitute_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_provisionlanguageforuser: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_publisher_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_queue_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_queueitem_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_quote_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_quoteclose_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_quotedetail_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_ratingmodel_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_ratingvalue_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_recurringappointmentmaster_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_relationshipattribute: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_report_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_reportcategory_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_resource_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_resourcegroup_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_resourcegroupexpansion_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_resourcespec: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_revokeinheritedaccessrecordstracker: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_role_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_rollupfield_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_salesliterature_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_salesliteratureitem: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_salesorder_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_salesorderdetail_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_salesprocessinstance: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_savedquery_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_savedqueryvisualization_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_service_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_serviceappointment_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_serviceplan: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_serviceplanmapping: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_settingdefinition: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_sharedlinksetting: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_sharedobject: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_sharedworkspace: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_sharepointdocumentlocation_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_sharepointsite_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_site_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_sla_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_slaitem_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_slakpiinstance_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_socialactivity_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_socialprofile_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_solution_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_solutioncomponentattributeconfiguration: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_solutioncomponentbatchconfiguration: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_solutioncomponentconfiguration: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_solutioncomponentrelationshipconfiguration: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_stagesolutionupload: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_subject_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_synapsedatabase: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_synapselinkexternaltablestate: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_synapselinkprofile: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_synapselinkprofileentity: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_synapselinkprofileentitystate: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_synapselinkschedule: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_syncerror_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_systemuser_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_systemuserauthorizationchangetracker: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_task_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_team_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_teammobileofflineprofilemembership: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_teamtemplate_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_template_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_territory_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_topic: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_topichistory: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_topicmodel: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_topicmodelconfiguration: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_topicmodelexecutionhistory: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_transactioncurrency_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_TranslationProcess_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_uii_action: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_uii_audit: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_uii_context: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_uii_hostedapplication: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_uii_nonhostedapplication: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_uii_option: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_uii_savedsession: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_uii_sessiontransfer: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_uii_workflow: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_uii_workflowstep: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_uii_workflow_workflowstep_mapping: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_uom_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_uomschedule_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_usermobileofflineprofilemembership: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_userquery_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_userqueryvisualization_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_virtualentitymetadata: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_workflow_syncerror: string;
+			/** Choose the record that the sync error relates to. */
+			readonly regardingobjectid_workflowbinary: string;
+			/** Request data for the entity that had the sync error. */
+			readonly RequestData: string;
+			/** Shows whether the sync error is active or resolved. */
+			readonly StateCode: string;
+			/** Select the sync error status. */
+			readonly StatusCode: string;
+			/** Unique identifier of the sync error. */
+			readonly SyncErrorId: string;
+			/** Shows the version number of the sync error. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -1872,6 +3740,10 @@ declare namespace OptionSet {
 			Record_already_exists,
 			/** 1 */
 			Record_not_found
+		}
+		enum OwnerIdType {
+		}
+		enum RegardingObjectTypeCode {
 		}
 		enum StateCode {
 			/** 0 */
@@ -1903,4 +3775,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

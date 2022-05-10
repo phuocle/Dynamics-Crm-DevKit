@@ -127,6 +127,8 @@ var OptionSet;
 			Credit_Card: 690970002,
 			Other: 690970003
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

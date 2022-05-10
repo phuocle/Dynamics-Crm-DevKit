@@ -86,6 +86,7 @@ var DevKit;
 			msdyn_MajorIterationNumber: { a: 'msdyn_majoriterationnumber' },
 			msdyn_MinorIterationNumber: { a: 'msdyn_minoriterationnumber' },
 			msdyn_Model: { a: 'msdyn_model', r: true },
+			msdyn_ModelAction: { a: 'msdyn_modelaction' },
 			msdyn_ModelData: { a: 'msdyn_modeldata' },
 			msdyn_modelglobalexplainability: { a: 'msdyn_modelglobalexplainability' },
 			msdyn_ModelPerformance: { a: 'msdyn_modelperformance' },
@@ -143,7 +144,7 @@ var DevKit;
 		}
 		msdyn_aiconfiguration.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -166,6 +167,8 @@ var OptionSet;
 		msdyn_Type : {
 			RunConfiguration: 190690001,
 			TrainingConfiguration: 190690000
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Done: 2,

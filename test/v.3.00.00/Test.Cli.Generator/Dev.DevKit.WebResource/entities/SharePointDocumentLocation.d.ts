@@ -224,6 +224,143 @@ declare namespace DevKit {
 		/** Time zone code that was in use when the record was created. */
 		UTCConversionTimeZoneCode: number;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Absolute URL of the SharePoint document location. */
+			readonly AbsoluteURL: string;
+			/** Unique identifier of the user who created the SharePoint document location record. */
+			readonly CreatedBy: string;
+			/** Date and time when the SharePoint document location record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the SharePoint document location record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Description of the SharePoint document location record. */
+			readonly Description: string;
+			/** Exchange rate between the currency associated with the SharePoint document location record and the base currency. */
+			readonly ExchangeRate: string;
+			/** Sequence number of the import that created the SharePoint document location record. */
+			readonly ImportSequenceNumber: string;
+			/** Location type of the SharePoint document location. */
+			readonly LocationType: string;
+			/** Unique identifier of the user who last modified the SharePoint document location record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the SharePoint document location record was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the SharePoint document location record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Name of the SharePoint document location record. */
+			readonly Name: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier of the business unit that owns the SharePoint document location record. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the team who owns the SharePoint document location record. */
+			readonly OwningTeam: string;
+			/** Unique identifier of the user who owns the SharePoint document location record. */
+			readonly OwningUser: string;
+			/** Unique identifier of the parent site or location. */
+			readonly parentsiteorlocation_sharepointdocumentlocation: string;
+			/** Unique identifier of the parent site or location. */
+			readonly parentsiteorlocation_sharepointsite: string;
+			/** Unique identifier of the object with which the SharePoint document location record is associated. */
+			readonly regardingobjectid_account: string;
+			/** Unique identifier of the object with which the SharePoint document location record is associated. */
+			readonly regardingobjectid_kbarticle: string;
+			/** Unique identifier of the object with which the SharePoint document location record is associated. */
+			readonly regardingobjectid_knowledgearticle: string;
+			/** Unique identifier of the object with which the SharePoint document location record is associated. */
+			readonly regardingobjectid_lead: string;
+			/** Unique identifier of the object with which the SharePoint document location record is associated. */
+			readonly regardingobjectid_msdyn_agreement: string;
+			/** Unique identifier of the object with which the SharePoint document location record is associated. */
+			readonly regardingobjectid_msdyn_agreementbookingdate: string;
+			/** Unique identifier of the object with which the SharePoint document location record is associated. */
+			readonly regardingobjectid_msdyn_agreementbookingsetup: string;
+			/** Unique identifier of the object with which the SharePoint document location record is associated. */
+			readonly regardingobjectid_msdyn_agreementinvoicedate: string;
+			/** Unique identifier of the object with which the SharePoint document location record is associated. */
+			readonly regardingobjectid_msdyn_agreementinvoicesetup: string;
+			/** Unique identifier of the object with which the SharePoint document location record is associated. */
+			readonly regardingobjectid_msdyn_bookingtimestamp: string;
+			/** Unique identifier of the object with which the SharePoint document location record is associated. */
+			readonly regardingobjectid_msdyn_expense: string;
+			/** Unique identifier of the object with which the SharePoint document location record is associated. */
+			readonly regardingobjectid_msdyn_incidenttypeproduct: string;
+			/** Unique identifier of the object with which the SharePoint document location record is associated. */
+			readonly regardingobjectid_msdyn_inventoryadjustment: string;
+			/** Unique identifier of the object with which the SharePoint document location record is associated. */
+			readonly regardingobjectid_msdyn_inventoryadjustmentproduct: string;
+			/** Unique identifier of the object with which the SharePoint document location record is associated. */
+			readonly regardingobjectid_msdyn_inventorytransfer: string;
+			/** Unique identifier of the object with which the SharePoint document location record is associated. */
+			readonly regardingobjectid_msdyn_knowledgearticletemplate: string;
+			/** Unique identifier of the object with which the SharePoint document location record is associated. */
+			readonly regardingobjectid_msdyn_playbookactivity: string;
+			/** Unique identifier of the object with which the SharePoint document location record is associated. */
+			readonly regardingobjectid_msdyn_project: string;
+			/** Unique identifier of the object with which the SharePoint document location record is associated. */
+			readonly regardingobjectid_msdyn_purchaseorder: string;
+			/** Unique identifier of the object with which the SharePoint document location record is associated. */
+			readonly regardingobjectid_msdyn_purchaseorderproduct: string;
+			/** Unique identifier of the object with which the SharePoint document location record is associated. */
+			readonly regardingobjectid_msdyn_purchaseorderreceipt: string;
+			/** Unique identifier of the object with which the SharePoint document location record is associated. */
+			readonly regardingobjectid_msdyn_resourceterritory: string;
+			/** Unique identifier of the object with which the SharePoint document location record is associated. */
+			readonly regardingobjectid_msdyn_rma: string;
+			/** Unique identifier of the object with which the SharePoint document location record is associated. */
+			readonly regardingobjectid_msdyn_rmareceipt: string;
+			/** Unique identifier of the object with which the SharePoint document location record is associated. */
+			readonly regardingobjectid_msdyn_rtv: string;
+			/** Unique identifier of the object with which the SharePoint document location record is associated. */
+			readonly regardingobjectid_msdyn_timegroup: string;
+			/** Unique identifier of the object with which the SharePoint document location record is associated. */
+			readonly regardingobjectid_msdyn_timegroupdetail: string;
+			/** Unique identifier of the object with which the SharePoint document location record is associated. */
+			readonly regardingobjectid_msdyn_warehouse: string;
+			/** Unique identifier of the object with which the SharePoint document location record is associated. */
+			readonly regardingobjectid_msdyn_workorder: string;
+			/** Unique identifier of the object with which the SharePoint document location record is associated. */
+			readonly regardingobjectid_msdyn_workorderincident: string;
+			/** Unique identifier of the object with which the SharePoint document location record is associated. */
+			readonly regardingobjectid_msdyn_workorderproduct: string;
+			/** Unique identifier of the object with which the SharePoint document location record is associated. */
+			readonly regardingobjectid_msdyn_workorderservice: string;
+			/** Unique identifier of the object with which the SharePoint document location record is associated. */
+			readonly regardingobjectid_msdyn_workorderservicetask: string;
+			/** Unique identifier of the object with which the SharePoint document location record is associated. */
+			readonly regardingobjectid_opportunity: string;
+			/** Unique identifier of the object with which the SharePoint document location record is associated. */
+			readonly regardingobjectid_product: string;
+			/** Unique identifier of the object with which the SharePoint document location record is associated. */
+			readonly regardingobjectid_quote: string;
+			/** Unique identifier of the object with which the SharePoint document location record is associated. */
+			readonly regardingobjectid_salesliterature: string;
+			/** Relative URL of the SharePoint document location. */
+			readonly RelativeUrl: string;
+			/** Shows the service type of the SharePoint site. */
+			readonly ServiceType: string;
+			/** Unique identifier of the SharePoint document location record. */
+			readonly SharePointDocumentLocationId: string;
+			/** For internal use only. */
+			readonly SiteCollectionId: string;
+			/** Status of the SharePoint document location record. */
+			readonly StateCode: string;
+			/** Reason for the status of the SharePoint document location record. */
+			readonly StatusCode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Unique identifier of the currency associated with the SharePoint document location record. */
+			readonly TransactionCurrencyId: string;
+			/** Choose the user who owns the SharePoint document location. */
+			readonly UserId: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -233,6 +370,12 @@ declare namespace OptionSet {
 			Dedicated_for_OneNote_Integration,
 			/** 0 */
 			General
+		}
+		enum OwnerIdType {
+		}
+		enum ParentSiteOrLocationTypeCode {
+		}
+		enum RegardingObjectTypeCode {
 		}
 		enum ServiceType {
 			/** 3 */
@@ -274,4 +417,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

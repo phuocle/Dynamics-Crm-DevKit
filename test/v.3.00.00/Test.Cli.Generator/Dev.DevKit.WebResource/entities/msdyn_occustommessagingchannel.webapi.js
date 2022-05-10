@@ -79,9 +79,13 @@ var DevKit;
 			msdyn_occustommessagingchannelId: { a: 'msdyn_occustommessagingchannelid' },
 			msdyn_ocwidgetlanguage: { b: 'msdyn_ocwidgetlanguage', a: '_msdyn_ocwidgetlanguage_value', c: 'msdyn_oclanguages', d: 'msdyn_oclanguage' },
 			msdyn_PostConversationSurvey: { b: 'msdyn_PostConversationSurvey', a: '_msdyn_postconversationsurvey_value', c: 'msfp_surveies', d: 'msfp_survey' },
+			msdyn_PostConversationSurveyBotSurvey: { a: 'msdyn_postconversationsurveybotsurvey' },
+			msdyn_PostConversationSurveyBotSurveyMessageText: { a: 'msdyn_postconversationsurveybotsurveymessagetext' },
+			msdyn_PostConversationSurveyBotSurveyMode: { a: 'msdyn_postconversationsurveybotsurveymode' },
 			msdyn_PostConversationSurveyEnable: { a: 'msdyn_postconversationsurveyenable' },
 			msdyn_PostConversationSurveyMessageText: { a: 'msdyn_postconversationsurveymessagetext' },
 			msdyn_PostConversationSurveyMode: { a: 'msdyn_postconversationsurveymode' },
+			msdyn_PostConversationSurveySeparateBotSurvey: { b: 'msdyn_PostConversationSurveySeparateBotSurvey', a: '_msdyn_postconversationsurveyseparatebotsurvey_value', c: 'msfp_surveies', d: 'msfp_survey' },
 			OverriddenCreatedOn_UtcDateOnly: { a: 'overriddencreatedon' },
 			OwnerId_systemuser: { b: 'ownerid', a: '_ownerid_value', c: 'systemusers', d: 'systemuser' },
 			OwnerId_team: { b: 'ownerid', a: '_ownerid_value', c: 'teams', d: 'team' },
@@ -123,7 +127,7 @@ var DevKit;
 		}
 		msdyn_occustommessagingchannel.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -139,12 +143,19 @@ var OptionSet;
 	OptionSet.msdyn_occustommessagingchannel = {
 		msdyn_occustomchannelid : {
 			Direct_Line: 192350000,
+			Googles_Business_Messages: 192350004,
 			Kik: 192350001,
 			Telegram: 192350002
+		},
+		msdyn_PostConversationSurveyBotSurveyMode : {
+			Insert_survey_in_conversation: 192350000,
+			Send_survey_link_to_conversation: 192350001
 		},
 		msdyn_PostConversationSurveyMode : {
 			Insert_survey_in_conversation: 192350000,
 			Send_survey_link_to_conversation: 192350001
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

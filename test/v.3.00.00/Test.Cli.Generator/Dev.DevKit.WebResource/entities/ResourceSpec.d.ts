@@ -107,6 +107,52 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the business unit with which the resource specification is associated. */
+			readonly BusinessUnitId: string;
+			/** Additional constraints, specified as expressions, which are used to filter a set of valid resources. */
+			readonly Constraints: string;
+			/** Unique identifier of the user who created the resource specification. */
+			readonly CreatedBy: string;
+			/** Date and time when the resource specification was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the resourcespec. */
+			readonly CreatedOnBehalfBy: string;
+			/** Selection rule that allows the scheduling engine to select a number of resources from a pool of resources. The rules can be associated with a service. */
+			readonly Description: string;
+			/** Number that specifies the minimal effort required from resources. */
+			readonly EffortRequired: string;
+			/** Unique identifier of the scheduling group with which the resource specification is associated. */
+			readonly GroupObjectId: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who last modified the resource specification. */
+			readonly ModifiedBy: string;
+			/** Date and time when the resource specification was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the resourcespec. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Name of the resource specification. */
+			readonly Name: string;
+			/** Search strategy to use for the resource specification. */
+			readonly ObjectiveExpression: string;
+			/** Unique identifier of the organization with which the resource specification is associated. */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Required number of resources that must be available. Use -1 to indicate all resources. */
+			readonly RequiredCount: string;
+			/** Unique identifier of the resource specification. */
+			readonly ResourceSpecId: string;
+			/** Value that specifies that all valid and available resources must be in the same site. */
+			readonly SameSite: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -133,4 +179,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

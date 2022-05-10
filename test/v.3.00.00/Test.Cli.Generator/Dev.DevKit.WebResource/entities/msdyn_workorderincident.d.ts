@@ -294,10 +294,80 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Shows the sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who last updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Agreement Booking Incident linked to this Work Order Incident */
+			readonly msdyn_AgreementBookingIncident: string;
+			/** Customer Asset related to this incident reported */
+			readonly msdyn_CustomerAsset: string;
+			/** Incident description */
+			readonly msdyn_Description: string;
+			/** Shows the time estimated to resolve this incident. */
+			readonly msdyn_EstimatedDuration: string;
+			/** Workorder incident's functional location. */
+			readonly msdyn_FunctionalLocation: string;
+			/** Shows if the incident has been resolved by one of its related tasks. */
+			readonly msdyn_IncidentResolved: string;
+			/** Incident type reported */
+			readonly msdyn_IncidentType: string;
+			/** For internal use only. */
+			readonly msdyn_InternalFlags: string;
+			readonly msdyn_IsMobile: string;
+			readonly msdyn_IsPrimary: string;
+			readonly msdyn_ItemsPopulated: string;
+			/** Enter the name of the custom entity. */
+			readonly msdyn_name: string;
+			readonly msdyn_PrimaryResolution: string;
+			/** Resource Requirement */
+			readonly msdyn_ResourceRequirement: string;
+			/** Shows the percent completed on associated tasks. This indicates the total of completed tasks, but not if the incident was resolved. */
+			readonly msdyn_TasksPercentCompleted: string;
+			/** Parent Work Order where incident was reported on */
+			readonly msdyn_WorkOrder: string;
+			/** Shows the entity instances. */
+			readonly msdyn_workorderincidentId: string;
+			/** Shows the date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the Work Order Incident */
+			readonly statecode: string;
+			/** Reason for the status of the Work Order Incident */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Shows the time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace msdyn_workorderincident {
+		enum OwnerIdType {
+		}
 		enum statecode {
 			/** 0 */
 			Active,
@@ -328,4 +398,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

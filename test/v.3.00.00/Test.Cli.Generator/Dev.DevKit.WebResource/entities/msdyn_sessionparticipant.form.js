@@ -47,7 +47,10 @@ var OptionSet;
 		msdyn_mode : {
 			Consult: 192350003,
 			Monitor: 192350004,
+			Preview: 192350005,
 			Primary: 192350002
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

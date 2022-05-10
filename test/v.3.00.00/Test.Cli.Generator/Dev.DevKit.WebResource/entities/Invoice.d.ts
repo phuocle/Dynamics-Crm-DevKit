@@ -833,10 +833,211 @@ declare namespace DevKit {
 		readonly VersionNumber: number;
 		/** Select whether the products included in the invoice should be shipped to the specified address or held until the customer calls with further pick up or delivery instructions. */
 		WillCall: boolean;
+		readonly FormattedValue: {
+			/** Unique identifier of the account with which the invoice is associated. */
+			readonly AccountId: string;
+			/** Type the city for the customer's billing address. */
+			readonly BillTo_City: string;
+			/** Shows the complete Bill To address. */
+			readonly BillTo_Composite: string;
+			/** Type the country or region for the customer's billing address. */
+			readonly BillTo_Country: string;
+			/** Type the fax number for the customer's billing address. */
+			readonly BillTo_Fax: string;
+			/** Type the first line of the customer's billing address. */
+			readonly BillTo_Line1: string;
+			/** Type the second line of the customer's billing address. */
+			readonly BillTo_Line2: string;
+			/** Type the third line of the billing address. */
+			readonly BillTo_Line3: string;
+			/** Type a name for the customer's billing address, such as "Headquarters" or "Field office", to identify the address. */
+			readonly BillTo_Name: string;
+			/** Type the ZIP Code or postal code for the billing address. */
+			readonly BillTo_PostalCode: string;
+			/** Type the state or province for the billing address. */
+			readonly BillTo_StateOrProvince: string;
+			/** Type the phone number for the customer's billing address. */
+			readonly BillTo_Telephone: string;
+			/** Unique identifier of the contact associated with the invoice. */
+			readonly ContactId: string;
+			/** Shows who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
+			readonly customerid_account: string;
+			/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
+			readonly customerid_contact: string;
+			/** Enter the date when the products included in the invoice were delivered. */
+			readonly DateDelivered_UtcDateOnly: string;
+			/** Type additional information to describe the invoice, such as shipping details or product substitutions. */
+			readonly Description: string;
+			/** Type the discount amount for the invoice if the customer is eligible for special savings. */
+			readonly DiscountAmount: string;
+			/** Value of the Invoice Discount Amount in base currency. */
+			readonly DiscountAmount_Base: string;
+			/** Type the discount rate that should be applied to the Detail Amount field, for use in calculating the Pre-Freight Amount and Total Amount values for the invoice. */
+			readonly DiscountPercentage: string;
+			/** Enter the date by which the invoice should be paid by the customer. */
+			readonly DueDate_DateOnly: string;
+			/** The primary email address for the entity. */
+			readonly EmailAddress: string;
+			/** The default image for the entity. */
+			readonly EntityImage: string;
+			readonly EntityImage_Timestamp: string;
+			readonly EntityImage_URL: string;
+			readonly EntityImageId: string;
+			/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
+			readonly ExchangeRate: string;
+			/** Type the cost of freight or shipping for the products included in the invoice for use in calculating the total amount due. */
+			readonly FreightAmount: string;
+			/** Value of the Freight Amount in base currency. */
+			readonly FreightAmount_Base: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the invoice. */
+			readonly InvoiceId: string;
+			/** Shows the identifying number or code of the invoice. */
+			readonly InvoiceNumber: string;
+			/** Select whether prices specified on the invoice are locked from any further updates. */
+			readonly IsPriceLocked: string;
+			/** Enter the date and time when the invoice was last submitted to an accounting or ERP system for processing. */
+			readonly LastBackofficeSubmit_UtcDateOnly: string;
+			/** Contains the date time stamp of the last on hold time. */
+			readonly LastOnHoldTime_UtcDateAndTime: string;
+			/** Shows who last updated the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who last updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Enter the amount due on this invoice. */
+			readonly msdyn_AmountDue: string;
+			/** Value of the Amount Due in base currency. */
+			readonly msdyn_amountdue_Base: string;
+			/** Type the primary contact name at the customer's billing address. */
+			readonly msdyn_billtocontactname: string;
+			/** Indicates if this invoice contains corrections to previous invoices. */
+			readonly msdyn_HasCorrections: string;
+			/** Document date of the Invoice for use in calculation of payment due date */
+			readonly msdyn_InvoiceDate_TimezoneDateOnly: string;
+			/** Whether the Invoice is for an Item-based or a service maintainence-based sale */
+			readonly msdyn_OrderType: string;
+			/** Project specific status */
+			readonly msdyn_projectinvoicestatus: string;
+			/** Type a descriptive name for the invoice. */
+			readonly Name: string;
+			/** Shows the duration in minutes for which the invoice was on hold. */
+			readonly OnHoldTime: string;
+			/** Choose the opportunity that the invoice is related to for reporting and analytics. */
+			readonly OpportunityId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Select the payment terms to indicate when the customer needs to pay the total amount. */
+			readonly PaymentTermsCode: string;
+			/** Choose the price list associated with this record to make sure the products associated with the campaign are offered at the correct prices. */
+			readonly PriceLevelId: string;
+			/** Type of pricing error for the invoice. */
+			readonly PricingErrorCode: string;
+			/** Select the priority so that preferred customers or critical issues are handled quickly. */
+			readonly PriorityCode: string;
+			/** Contains the id of the process associated with the entity. */
+			readonly ProcessId: string;
+			/** Choose the order related to the invoice to make sure the order is fulfilled and invoiced correctly. */
+			readonly SalesOrderId: string;
+			/** Select a shipping method for deliveries sent to this address. */
+			readonly ShippingMethodCode: string;
+			/** Type the city for the customer's shipping address. */
+			readonly ShipTo_City: string;
+			/** Shows the complete Ship To address. */
+			readonly ShipTo_Composite: string;
+			/** Type the country or region for the customer's shipping address. */
+			readonly ShipTo_Country: string;
+			/** Type the fax number for the customer's shipping address. */
+			readonly ShipTo_Fax: string;
+			/** Select the freight terms to make sure shipping orders are processed correctly. */
+			readonly ShipTo_FreightTermsCode: string;
+			/** Type the first line of the customer's shipping address. */
+			readonly ShipTo_Line1: string;
+			/** Type the second line of the customer's shipping address. */
+			readonly ShipTo_Line2: string;
+			/** Type the third line of the shipping address. */
+			readonly ShipTo_Line3: string;
+			/** Type a name for the customer's shipping address, such as "Headquarters" or "Field office",  to identify the address. */
+			readonly ShipTo_Name: string;
+			/** Type the ZIP Code or postal code for the shipping address. */
+			readonly ShipTo_PostalCode: string;
+			/** Type the state or province for the shipping address. */
+			readonly ShipTo_StateOrProvince: string;
+			/** Type the phone number for the customer's shipping address. */
+			readonly ShipTo_Telephone: string;
+			/** Skip Price Calculation (For Internal Use) */
+			readonly SkipPriceCalculation: string;
+			/** Choose the service level agreement (SLA) that you want to apply to the invoice record. */
+			readonly SLAId: string;
+			/** Last SLA that was applied to this invoice. This field is for internal use only. */
+			readonly SLAInvokedId: string;
+			/** Contains the id of the stage where the entity is located. */
+			readonly StageId: string;
+			/** Shows whether the invoice is active, paid, or canceled. Paid and canceled invoices are read-only and can't be edited unless they are reactivated. */
+			readonly StateCode: string;
+			/** Select the invoice's status. */
+			readonly StatusCode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Shows the total amount due, calculated as the sum of the products, discount, freight, and taxes for the invoice. */
+			readonly TotalAmount: string;
+			/** Value of the Total Amount in base currency. */
+			readonly TotalAmount_Base: string;
+			/** Shows the total product amount due, minus any discounts. This value is added to freight and tax amounts in the calculation for the total amount due for the invoice. */
+			readonly TotalAmountLessFreight: string;
+			/** Value of the Total Pre-Freight Amount in base currency. */
+			readonly TotalAmountLessFreight_Base: string;
+			/** Shows the total discount amount, based on the discount price and rate entered on the invoice. */
+			readonly TotalDiscountAmount: string;
+			/** Value of the Total Discount Amount in base currency. */
+			readonly TotalDiscountAmount_Base: string;
+			/** Shows the sum of all existing and write-in products included on the invoice, based on the specified price list and quantities. */
+			readonly TotalLineItemAmount: string;
+			/** Value of the Total Detail Amount in base currency. */
+			readonly TotalLineItemAmount_Base: string;
+			/** Shows the Manual Discount amounts specified on all products included in the invoice. This value is reflected in the Detail Amount field on the invoice and is added to any discount amount or rate specified on the invoice. */
+			readonly TotalLineItemDiscountAmount: string;
+			/** Value of the Total Line Item Discount Amount in base currency. */
+			readonly TotalLineItemDiscountAmount_Base: string;
+			/** Shows the total of the Tax amounts specified on all products included in the invoice, included in the Total Amount due calculation for the invoice. */
+			readonly TotalTax: string;
+			/** Value of the Total Tax in base currency. */
+			readonly TotalTax_Base: string;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			readonly TransactionCurrencyId: string;
+			/** A comma separated list of string values representing the unique identifiers of stages in a Business Process Flow Instance in the order that they occur. */
+			readonly TraversedPath: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+			/** Select whether the products included in the invoice should be shipped to the specified address or held until the customer calls with further pick up or delivery instructions. */
+			readonly WillCall: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace Invoice {
+		enum CustomerIdType {
+		}
 		enum msdyn_OrderType {
 			/** 192350000 */
 			Item_based,
@@ -854,6 +1055,8 @@ declare namespace OptionSet {
 			In_Review,
 			/** 192350003 */
 			Invoice_Paid
+		}
+		enum OwnerIdType {
 		}
 		enum PaymentTermsCode {
 			/** 2 */
@@ -1025,4 +1228,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

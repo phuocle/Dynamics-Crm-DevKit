@@ -49,9 +49,13 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.PersonalDocumentTemplate = {
+		AssociatedEntityTypeCode : {
+		},
 		DocumentType : {
 			Microsoft_Excel: 1,
 			Microsoft_Word: 2
+		},
+		OwnerIdType : {
 		},
 		RollupState : {
 			NotCalculated: 0,

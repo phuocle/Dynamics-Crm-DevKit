@@ -105,10 +105,92 @@ declare namespace DevKit {
 		UTCOffset: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Information about the address for the lead. */
+			readonly AddressNumber: string;
+			/** Type of address for the lead address. */
+			readonly AddressTypeCode: string;
+			/** City name in the address for the lead. */
+			readonly City: string;
+			/** Shows the complete address. */
+			readonly Composite: string;
+			/** Country/region name in the address for the lead. */
+			readonly Country: string;
+			/** County name in the address for the lead. */
+			readonly County: string;
+			/** Unique identifier of the user who created the lead address. */
+			readonly CreatedBy: string;
+			/** Date and time when the lead address was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the leadaddress. */
+			readonly CreatedOnBehalfBy: string;
+			/** Exchange rate for the currency associated with the leadaddress with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Fax number for the address for the lead. */
+			readonly Fax: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Latitude for the address for the lead. */
+			readonly Latitude: string;
+			/** Unique identifier of the lead address. */
+			readonly LeadAddressId: string;
+			/** First line for entering address information. */
+			readonly Line1: string;
+			/** Second line for entering address information. */
+			readonly Line2: string;
+			/** Third line for entering address information. */
+			readonly Line3: string;
+			/** Longitude for the address for the lead. */
+			readonly Longitude: string;
+			/** Unique identifier of the user who last modified the lead address. */
+			readonly ModifiedBy: string;
+			/** Date and time when the lead address was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the leadaddress. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Name used to identify the lead address. */
+			readonly Name: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			readonly OwnerId: string;
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the parent object with which the lead address is associated. */
+			readonly ParentId: string;
+			/** ZIP Code or postal code in the address for the lead. */
+			readonly PostalCode: string;
+			/** Post office box number in the address for the lead. */
+			readonly PostOfficeBox: string;
+			/** Method of shipment for the lead. */
+			readonly ShippingMethodCode: string;
+			/** State or province in the address for the lead. */
+			readonly StateOrProvince: string;
+			/** First telephone number for the lead address. */
+			readonly Telephone1: string;
+			/** Second telephone number for the lead address. */
+			readonly Telephone2: string;
+			/** Third telephone number for the lead address. */
+			readonly Telephone3: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Unique identifier of the currency associated with the leadaddress. */
+			readonly TransactionCurrencyId: string;
+			/** United Parcel Service (UPS) zone for the address of the lead. */
+			readonly UPSZone: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** UTC offset for the lead address. This is the difference between local time and standard Coordinated Universal Time. */
+			readonly UTCOffset: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace LeadAddress {
+		enum AddressTypeCode {
+		}
+		enum ShippingMethodCode {
+		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
 			NotCalculated,
@@ -127,4 +209,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

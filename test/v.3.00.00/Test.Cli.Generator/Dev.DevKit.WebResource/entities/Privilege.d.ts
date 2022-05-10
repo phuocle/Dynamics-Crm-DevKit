@@ -64,6 +64,43 @@ declare namespace DevKit {
 		/** For internal use only. */
 		readonly SupportingSolutionId: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Rights a user has to an instance of an entity. */
+			readonly AccessRight: string;
+			/** Information that specifies whether the privilege applies to the user, the user's team, or objects shared by the user. */
+			readonly CanBeBasic: string;
+			/** Information that specifies whether the privilege applies to child business units of the business unit associated with the user. */
+			readonly CanBeDeep: string;
+			/** Information that specifies whether the privilege applies to the local reference of an external party. */
+			readonly CanBeEntityReference: string;
+			/** Information that specifies whether the privilege applies to the entire organization. */
+			readonly CanBeGlobal: string;
+			/** Information that specifies whether the privilege applies to the user's business unit. */
+			readonly CanBeLocal: string;
+			/** Information that specifies whether the privilege applies to parent reference of the external party. */
+			readonly CanBeParentEntityReference: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Version in which the component is introduced. */
+			readonly IntroducedVersion: string;
+			/** Specifies whether the privilege is disabled. */
+			readonly IsDisabledWhenIntegrated: string;
+			/** Information that specifies whether this component is managed. */
+			readonly IsManaged: string;
+			/** Name of the privilege. */
+			readonly Name: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Unique identifier of the privilege. */
+			readonly PrivilegeId: string;
+			/** Unique identifier of the Privilege used when synchronizing customizations for the Microsoft Dynamics CRM client for Outlook */
+			readonly PrivilegeRowId: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -96,4 +133,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

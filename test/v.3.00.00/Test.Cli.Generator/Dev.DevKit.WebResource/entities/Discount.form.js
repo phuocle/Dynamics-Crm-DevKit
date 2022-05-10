@@ -44,6 +44,8 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.Discount = {
+		StatusCode : {
+		},
 		RollupState : {
 			NotCalculated: 0,
 			Calculated: 1,

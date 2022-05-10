@@ -69,6 +69,8 @@ var OptionSet;
 			Configuration_2: 192350001,
 			Configuration_3: 192350002
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

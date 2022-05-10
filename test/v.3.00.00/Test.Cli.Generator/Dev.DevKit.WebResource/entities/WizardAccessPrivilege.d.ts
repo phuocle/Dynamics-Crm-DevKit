@@ -52,6 +52,31 @@ declare namespace DevKit {
 		WebWizardId: string;
 		/** Unique identifier of the access privilege. */
 		WizardAccessPrivilegeId: string;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the wizard access privilege record. */
+			readonly CreatedBy: string;
+			/** Date and time when the wizard access privilege record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the wizardaccessprivilege. */
+			readonly CreatedOnBehalfBy: string;
+			/** Logical name of the entity for which access privileges are required. */
+			readonly EntityName1: string;
+			/** Unique identifier of the user who last modified the wizard access privilege record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the wizard access privilege record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the wizardaccessprivilege. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Unique identifier of the organization associated with the wizard access privilege. */
+			readonly OrganizationId: string;
+			/** Name of the privilege required to access the wizard. */
+			readonly PrivilegeName: string;
+			readonly VersionNumber: string;
+			/** Unique identifier of the wizard associated with this wizard access privilege record. */
+			readonly WebWizardId: string;
+			/** Unique identifier of the access privilege. */
+			readonly WizardAccessPrivilegeId: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -74,4 +99,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

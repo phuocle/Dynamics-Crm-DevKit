@@ -39,6 +39,18 @@ declare namespace DevKit {
 		readonly StatisticType: number;
 		/** Value of the statistic. */
 		readonly StatisticValue: number;
+		readonly FormattedValue: {
+			/** Hour that the statistic measurement was taken. */
+			readonly Hour: string;
+			/** Unique identifier of the record. */
+			readonly OrganizationStatisticId: string;
+			/** Server that owns this record. */
+			readonly ServerName: string;
+			/** Statistic type that is being measured. */
+			readonly StatisticType: string;
+			/** Value of the statistic. */
+			readonly StatisticValue: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -61,4 +73,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

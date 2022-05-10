@@ -38,6 +38,17 @@ declare namespace DevKit {
 		/** Shows the ID of the multiple entity search. */
 		readonly MultiEntitySearchId: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Logical entity name of the entity participating in the multi entity search. */
+			readonly EntityName1: string;
+			/** Order of the entity in the result collection. */
+			readonly EntityOrder: string;
+			/** Shows the entity used for the multiple entity search. */
+			readonly MultiEntitySearchEntityId: string;
+			/** Shows the ID of the multiple entity search. */
+			readonly MultiEntitySearchId: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -60,4 +71,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

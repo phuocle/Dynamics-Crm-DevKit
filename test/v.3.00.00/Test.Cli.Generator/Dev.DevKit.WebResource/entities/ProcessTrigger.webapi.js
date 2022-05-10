@@ -120,7 +120,7 @@ var DevKit;
 		}
 		processtrigger.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -144,10 +144,14 @@ var OptionSet;
 			Attribute: 1,
 			Form_Tab: 2
 		},
+		OwnerIdType : {
+		},
 		PipelineStage : {
 			After_Main_Operation: 40,
 			Before_Main_Operation: 20,
 			Default_Value: 0
+		},
+		PrimaryEntityTypeCode : {
 		},
 		Scope : {
 			Entity: 2,

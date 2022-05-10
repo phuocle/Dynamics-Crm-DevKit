@@ -104,6 +104,83 @@ declare namespace DevKit {
 		/** Scheduled start time of the activity. */
 		readonly ScheduledStart_UtcDateOnly: Date;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the activity associated with the activity party. (A "party" is any person who is associated with an activity.) */
+			readonly ActivityId: string;
+			/** Unique identifier of the activity party. */
+			readonly ActivityPartyId: string;
+			/** Email address to which an email is delivered, and which is associated with the target entity. */
+			readonly AddressUsed: string;
+			/** Email address column number from associated party. */
+			readonly AddressUsedEmailColumnNumber: string;
+			/** Information about whether to allow sending email to the activity party. */
+			readonly DoNotEmail: string;
+			/** Information about whether to allow sending faxes to the activity party. */
+			readonly DoNotFax: string;
+			/** Information about whether to allow phone calls to the lead. */
+			readonly DoNotPhone: string;
+			/** Information about whether to allow sending postal mail to the lead. */
+			readonly DoNotPostalMail: string;
+			/** Amount of effort used by the resource in a service appointment activity. */
+			readonly Effort: string;
+			/** For internal use only. */
+			readonly ExchangeEntryId: string;
+			/** Type of instance of a recurring series. */
+			readonly InstanceTypeCode: string;
+			/** Information about whether the underlying entity record is deleted. */
+			readonly IsPartyDeleted: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			readonly OwningBusinessUnit: string;
+			readonly OwningUser: string;
+			/** Role of the person in the activity, such as sender, to, cc, bcc, required, optional, organizer, regarding, or owner. */
+			readonly ParticipationTypeMask: string;
+			/** Unique identifier of the party associated with the activity. */
+			readonly partyid_account: string;
+			/** Unique identifier of the party associated with the activity. */
+			readonly partyid_bulkoperation: string;
+			/** Unique identifier of the party associated with the activity. */
+			readonly partyid_campaign: string;
+			/** Unique identifier of the party associated with the activity. */
+			readonly partyid_campaignactivity: string;
+			/** Unique identifier of the party associated with the activity. */
+			readonly partyid_contact: string;
+			/** Unique identifier of the party associated with the activity. */
+			readonly partyid_contract: string;
+			/** Unique identifier of the party associated with the activity. */
+			readonly partyid_entitlement: string;
+			/** Unique identifier of the party associated with the activity. */
+			readonly partyid_equipment: string;
+			/** Unique identifier of the party associated with the activity. */
+			readonly partyid_incident: string;
+			/** Unique identifier of the party associated with the activity. */
+			readonly partyid_invoice: string;
+			/** Unique identifier of the party associated with the activity. */
+			readonly partyid_knowledgearticle: string;
+			/** Unique identifier of the party associated with the activity. */
+			readonly partyid_lead: string;
+			/** Unique identifier of the party associated with the activity. */
+			readonly partyid_msdyn_salessuggestion: string;
+			/** Unique identifier of the party associated with the activity. */
+			readonly partyid_opportunity: string;
+			/** Unique identifier of the party associated with the activity. */
+			readonly partyid_queue: string;
+			/** Unique identifier of the party associated with the activity. */
+			readonly partyid_quote: string;
+			/** Unique identifier of the party associated with the activity. */
+			readonly partyid_salesorder: string;
+			/** Unique identifier of the party associated with the activity. */
+			readonly partyid_systemuser: string;
+			/** Unique identifier of the resource specification for the activity party. */
+			readonly ResourceSpecId: string;
+			/** Scheduled end time of the activity. */
+			readonly ScheduledEnd_UtcDateOnly: string;
+			/** Scheduled start time of the activity. */
+			readonly ScheduledStart_UtcDateOnly: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -119,6 +196,8 @@ declare namespace OptionSet {
 			Recurring_Instance,
 			/** 1 */
 			Recurring_Master
+		}
+		enum OwnerIdType {
 		}
 		enum ParticipationTypeMask {
 			/** 4 */
@@ -144,6 +223,8 @@ declare namespace OptionSet {
 			/** 2 */
 			To_Recipient
 		}
+		enum PartyObjectTypeCode {
+		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
 			NotCalculated,
@@ -162,4 +243,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

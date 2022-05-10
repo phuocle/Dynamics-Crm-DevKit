@@ -73,6 +73,8 @@ var OptionSet;
 			Solution: 2,
 			Source: 3
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

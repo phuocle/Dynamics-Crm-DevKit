@@ -41,6 +41,20 @@ declare namespace DevKit {
 		resourcegroupId: string;
 		/** Unique identifier for entity instances */
 		virtualresourcegroupresourceId: string;
+		readonly FormattedValue: {
+			readonly businessunit: string;
+			readonly constraintbasedgroupid: string;
+			/** The name of the custom entity. */
+			readonly name: string;
+			/** Entity type logical name of resource */
+			readonly resourceentitylogicalname: string;
+			/** Entity type of resource */
+			readonly resourceentityname: string;
+			/** Unique identifier for Resource Group associated with virtualresourcegroupresource. */
+			readonly resourcegroupId: string;
+			/** Unique identifier for entity instances */
+			readonly virtualresourcegroupresourceId: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -63,4 +77,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

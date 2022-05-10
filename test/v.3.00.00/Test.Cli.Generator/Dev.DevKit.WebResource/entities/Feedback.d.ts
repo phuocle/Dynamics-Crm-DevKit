@@ -297,10 +297,102 @@ declare namespace DevKit {
 		TransactionCurrencyId: string;
 		/** Version number of the feedback. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Shows who closed the record. */
+			readonly ClosedBy: string;
+			/** Shows the date and time when the record was closed. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ClosedOn_UtcDateAndTime: string;
+			/** Type the feedback comments. */
+			readonly Comments: string;
+			/** Shows who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the contact who created the record. */
+			readonly CreatedByContact: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Shows the contact who created the record on behalf of another user. */
+			readonly CreatedOnBehalfByContact: string;
+			/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
+			readonly ExchangeRate: string;
+			/** FeedbackId */
+			readonly FeedbackId: string;
+			/** Unique identifier of the data import or data migration that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Enter the maximum rating value. */
+			readonly MaxRating: string;
+			/** Enter the minimum rating value. */
+			readonly MinRating: string;
+			/** Shows who last updated the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Shows the record in context of which feedback rating is being provided. */
+			readonly msdyn_ContextObjectId_incident: string;
+			/** Shows the record in context of which feedback rating is being provided. */
+			readonly msdyn_ContextObjectId_knowledgearticle: string;
+			/** Shows the rating scaled to a value between 0 and 1 based on minimum and maximum ratings. */
+			readonly NormalizedRating: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier of the business unit that owns the knowledge article views. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the team that owns the feedback. */
+			readonly OwningTeam: string;
+			/** Unique identifier of the user who owns this feedback. */
+			readonly OwningUser: string;
+			/** Specifies how helpful the related record was. */
+			readonly Rating: string;
+			/** Shows the record that the feedback is associated with. */
+			readonly ContactId: string;
+			/** Shows the record that the feedback is associated with. */
+			readonly FeedbackId1: string;
+			/** Shows the record that the feedback is associated with. */
+			readonly KnowledgeArticleId: string;
+			/** Shows the record that the feedback is associated with. */
+			readonly regardingobjectid_msdyn_liveconversation: string;
+			/** Shows the record that the feedback is associated with. */
+			readonly regardingobjectid_msdyn_ocliveworkitem: string;
+			/** Shows the record that the feedback is associated with. */
+			readonly regardingobjectid_msdyn_ocoutboundmessage: string;
+			/** Shows the record that the feedback is associated with. */
+			readonly regardingobjectid_msdyn_ocsession: string;
+			/** Shows the record that the feedback is associated with. */
+			readonly regardingobjectid_msfp_alert: string;
+			/** Shows the record that the feedback is associated with. */
+			readonly regardingobjectid_msfp_surveyinvite: string;
+			/** Shows the record that the feedback is associated with. */
+			readonly regardingobjectid_msfp_surveyresponse: string;
+			/** Shows where the feedback was submitted from. */
+			readonly Source: string;
+			/** Shows whether the feedback is open, rejected or closed. */
+			readonly StateCode: string;
+			/** Select the feedback's status. */
+			readonly StatusCode: string;
+			/** Type a title for the feedback. */
+			readonly Title: string;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			readonly TransactionCurrencyId: string;
+			/** Version number of the feedback. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace Feedback {
+		enum msdyn_ContextObjectIdType {
+		}
+		enum OwnerIdType {
+		}
+		enum RegardingObjectTypeCode {
+		}
 		enum Source {
 			/** 0 */
 			Internal,
@@ -341,4 +433,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

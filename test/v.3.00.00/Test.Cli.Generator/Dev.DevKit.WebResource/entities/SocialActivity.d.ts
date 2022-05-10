@@ -463,16 +463,322 @@ declare namespace DevKit {
 		readonly VersionNumber: number;
 		/** The array of object that can cast object to ActivityPartyApi class */
 		ActivityParties: Array<unknown>;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly ActivityAdditionalParams: string;
+			/** Unique identifier of the activity. */
+			readonly ActivityId: string;
+			/** Actual duration of the activity in minutes. */
+			readonly ActualDurationMinutes: string;
+			/** Actual end time of the activity. */
+			readonly ActualEnd_UtcDateAndTime: string;
+			/** Actual start time of the activity. */
+			readonly ActualStart_UtcDateAndTime: string;
+			/** Shows how contact about the social activity originated, such as from Twitter or Facebook. This field is read-only. */
+			readonly Community: string;
+			/** Unique identifier of the user who created the activity. */
+			readonly CreatedBy: string;
+			/** Date and time when the activity was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the activitypointer. */
+			readonly CreatedOnBehalfBy: string;
+			/** Shows information about the social post content. This field is read-only. */
+			readonly Description: string;
+			/** Select the direction of the post as incoming or outbound. */
+			readonly DirectionCode: string;
+			/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
+			readonly ExchangeRate: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier for the responses to a post. For internal use only. */
+			readonly InResponseTo: string;
+			/** Information regarding whether the activity was billed as part of resolving a case. */
+			readonly IsBilled: string;
+			/** Information regarding whether the activity is a regular activity type or event type. */
+			readonly IsRegularActivity: string;
+			/** Information regarding whether the activity was created from a workflow rule. */
+			readonly IsWorkflowCreated: string;
+			/** Contains the date and time stamp of the last on hold time. */
+			readonly LastOnHoldTime_UtcDateAndTime: string;
+			/** For internal use only. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** For internal use only. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Shows how long, in minutes, that the record was on hold. */
+			readonly OnHoldTime: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier of the business unit that owns the activity. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the team that owns the activity. */
+			readonly OwningTeam: string;
+			/** Unique identifier of the user who owns the Activity. */
+			readonly OwningUser: string;
+			/** Shows the contact or account that authored the post. */
+			readonly postauthor_account: string;
+			/** Shows the contact or account that authored the post. */
+			readonly postauthor_contact: string;
+			/** Shows the parent account of the author of the post. */
+			readonly postauthoraccount_account: string;
+			/** Shows the parent account of the author of the post. */
+			readonly postauthoraccount_contact: string;
+			/** For internal use only. */
+			readonly PostedOn_UtcDateAndTime: string;
+			/** Shows the author of the post on the corresponding social channel. */
+			readonly PostFromProfileId: string;
+			/** Unique identifier of the post. For internal use only. */
+			readonly PostId: string;
+			/** Shows if the social post originated as a private or public message. */
+			readonly PostMessageType: string;
+			/** Shows the recipients of the social post. */
+			readonly PostToProfileId: string;
+			/** Shows the URL of the post. */
+			readonly PostURL: string;
+			/** Shows the priority so that preferred customers or critical issues are handled quickly. */
+			readonly PriorityCode: string;
+			/** Unique identifier of the Process. */
+			readonly ProcessId: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_account_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_asyncoperation: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_bookableresourcebooking_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_bookableresourcebookingheader_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_bulkoperation_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_campaign_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_campaignactivity_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_contact_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_contract_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_entitlement_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_entitlementtemplate_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_incident_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_invoice_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_knowledgearticle_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_knowledgebaserecord_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_lead_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_agreement_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_agreementbookingdate_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_agreementbookingincident_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_agreementbookingproduct_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_agreementbookingservice_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_agreementbookingservicetask_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_agreementbookingsetup_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_agreementinvoicedate_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_agreementinvoiceproduct_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_agreementinvoicesetup_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_bookingalertstatus_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_bookingrule_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_bookingtimestamp_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_customerasset_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_fieldservicesetting_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_incidenttypecharacteristic_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_incidenttypeproduct_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_incidenttypeservice_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_inventoryadjustment_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_inventoryadjustmentproduct_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_inventoryjournal_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_inventorytransfer_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_payment_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_paymentdetail_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_paymentmethod_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_paymentterm_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_playbookinstance_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_postalbum_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_postalcode_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_processnotes_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_productinventory_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_projectteam_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_purchaseorder_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_purchaseorderbill_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_purchaseorderproduct_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_purchaseorderreceipt_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_purchaseorderreceiptproduct_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_purchaseordersubstatus_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_quotebookingincident_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_quotebookingproduct_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_quotebookingservice_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_quotebookingservicetask_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_resourceterritory_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_rma_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_rmaproduct_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_rmareceipt_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_rmareceiptproduct_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_rmasubstatus_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_rtv_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_rtvproduct_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_rtvsubstatus_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_salessuggestion_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_shipvia_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_systemuserschedulersetting_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_timegroup_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_timegroupdetail_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_timeoffrequest_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_warehouse_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_workorder_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_workordercharacteristic_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_workorderincident_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_workorderproduct_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_workorderresourcerestriction_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_workorderservice_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_msdyn_workorderservicetask_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_opportunity_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_quote_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_salesorder_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_site_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_uii_action_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_uii_hostedapplication_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_uii_nonhostedapplication_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_uii_option_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_uii_savedsession_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_uii_workflow_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_uii_workflowstep_socialactivity: string;
+			/** Shows the record that the social activity relates to. */
+			readonly regardingobjectid_uii_workflow_workflowstep_mapping_socialactivity: string;
+			/** Scheduled duration of the activity, specified in minutes. */
+			readonly ScheduledDurationMinutes: string;
+			/** Scheduled end time of the activity. */
+			readonly ScheduledEnd_UtcDateAndTime: string;
+			/** Scheduled start time of the activity. */
+			readonly ScheduledStart_UtcDateAndTime: string;
+			/** Value derived after assessing words commonly associated with a negative, neutral, or positive sentiment that occurs in a social post. Sentiment information can also be reported as numeric values. */
+			readonly SentimentValue: string;
+			/** Unique identifier for the associated service. */
+			readonly ServiceId: string;
+			/** Choose the service level agreement (SLA) that you want to apply to the Social Activity record. */
+			readonly SLAId: string;
+			/** Last SLA that was applied to this Social Activity. This field is for internal use only. */
+			readonly SLAInvokedId: string;
+			/** For internal use only. */
+			readonly SocialAdditionalParams: string;
+			/** Shows the date and time by which the activities are sorted. */
+			readonly SortDate_UtcDateAndTime: string;
+			/** Unique identifier of the Stage. */
+			readonly StageId: string;
+			/** Shows whether the social activity completed. This field is read-only. */
+			readonly StateCode: string;
+			/** Shows whether the social activity is completed, failed, or processing. This field is read-only. */
+			readonly StatusCode: string;
+			/** Subject associated with the activity. */
+			readonly Subject: string;
+			/** Unique identifier of the social conversation. For internal use only. */
+			readonly ThreadId: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			readonly TransactionCurrencyId: string;
+			/** For internal use only. */
+			readonly TraversedPath: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version number of the social activity. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace SocialActivity {
 		enum ActivityTypeCode {
-			/** 10086 */
+			/** 10088 */
 			Activity_record_for_the_Teams_chat,
 			/** 4201 */
 			Appointment,
-			/** 10404 */
+			/** 10473 */
 			Booking_Alert,
 			/** 4402 */
 			Campaign_Activity,
@@ -480,13 +786,13 @@ declare namespace OptionSet {
 			Campaign_Response,
 			/** 4206 */
 			Case_Resolution,
-			/** 10707 */
+			/** 10743 */
 			Conversation,
-			/** 10313 */
+			/** 10330 */
 			Customer_Voice_alert,
-			/** 10323 */
+			/** 10340 */
 			Customer_Voice_survey_invite,
-			/** 10325 */
+			/** 10342 */
 			Customer_Voice_survey_response,
 			/** 4202 */
 			Email,
@@ -498,11 +804,11 @@ declare namespace OptionSet {
 			Opportunity_Close,
 			/** 4209 */
 			Order_Close,
-			/** 10817 */
+			/** 10857 */
 			Outbound_message,
 			/** 4210 */
 			Phone_Call,
-			/** 10434 */
+			/** 10489 */
 			Project_Service_Approval,
 			/** 4406 */
 			Quick_Campaign,
@@ -512,12 +818,14 @@ declare namespace OptionSet {
 			Recurring_Appointment,
 			/** 4214 */
 			Service_Activity,
-			/** 10721 */
+			/** 10760 */
 			Session,
 			/** 4212 */
 			Task
 		}
 		enum Community {
+			/** 16 */
+			Apple_Messages_For_Business,
 			/** 5 */
 			Cortana,
 			/** 6 */
@@ -528,6 +836,8 @@ declare namespace OptionSet {
 			Email,
 			/** 1 */
 			Facebook,
+			/** 17 */
+			Googles_Business_Messages,
 			/** 10 */
 			GroupMe,
 			/** 11 */
@@ -551,6 +861,12 @@ declare namespace OptionSet {
 			/** 15 */
 			WhatsApp
 		}
+		enum OwnerIdType {
+		}
+		enum PostAuthorAccountType {
+		}
+		enum PostAuthorType {
+		}
 		enum PostMessageType {
 			/** 1 */
 			Private_Message,
@@ -564,6 +880,8 @@ declare namespace OptionSet {
 			Low,
 			/** 1 */
 			Normal
+		}
+		enum RegardingObjectTypeCode {
 		}
 		enum StateCode {
 			/** 2 */
@@ -603,4 +921,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

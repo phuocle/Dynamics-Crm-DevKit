@@ -165,6 +165,88 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			readonly msdyn_addedWeekIndex: string;
+			readonly msdyn_additionalfilter: string;
+			/** Forecast configuration settings */
+			readonly msdyn_advancedsettings: string;
+			readonly msdyn_CalendarTemplate: string;
+			readonly msdyn_columns: string;
+			readonly msdyn_enddate_UtcDateOnly: string;
+			readonly msdyn_errormessage: string;
+			readonly msdyn_FiscalYearStartDate_UtcDateOnly: string;
+			readonly msdyn_forecastcategoryattribute: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_forecastconfigurationId: string;
+			readonly msdyn_hierarchyentity: string;
+			readonly msdyn_hierarchyfilter: string;
+			readonly msdyn_hierarchyrelationship: string;
+			/** Determine if FC is default */
+			readonly msdyn_isdefault: string;
+			/** Enable scheduling for forecast snapshots */
+			readonly msdyn_issnapshotscheduled: string;
+			/** The name of the custom entity. */
+			readonly msdyn_name: string;
+			/** Indicate the number of recurrences that the forecast will be generated. */
+			readonly msdyn_numberofrecurrences: string;
+			/** Select the type of period for which the forecast must be generated. */
+			readonly msdyn_periodtype: string;
+			readonly msdyn_permissionsdata: string;
+			readonly msdyn_pivots: string;
+			readonly msdyn_previewFlags: string;
+			readonly msdyn_publisheddatetime_UtcDateOnly: string;
+			readonly msdyn_rollupdefaultviewid: string;
+			readonly msdyn_rollupentity: string;
+			readonly msdyn_rootentityrecordid: string;
+			/** Schedule governing the forecast snapshot */
+			readonly msdyn_snapshotschedule: string;
+			/** Prefered timezone governing the scheduler of forecast snapshot */
+			readonly msdyn_snapshottimezone: string;
+			readonly msdyn_startdate_UtcDateOnly: string;
+			/** Select the fiscal month for the forecast configuration. */
+			readonly msdyn_startingfiscalmonth: string;
+			/** Select the fiscal quarter for the forecast configuration. */
+			readonly msdyn_startingfiscalquarter: string;
+			/** Select the fiscal year for the forecast configuration. */
+			readonly msdyn_startingfiscalyear: string;
+			readonly msdyn_templatetype: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the Forecast Configuration */
+			readonly statecode: string;
+			/** Reason for the status of the Forecast Configuration */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -255,6 +337,8 @@ declare namespace OptionSet {
 			/** 10 */
 			FY2028
 		}
+		enum OwnerIdType {
+		}
 		enum statecode {
 			/** 0 */
 			Active,
@@ -295,4 +379,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

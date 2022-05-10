@@ -115,7 +115,7 @@ var DevKit;
 		}
 		msdyn_occhannelconfiguration.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -130,6 +130,7 @@ var OptionSet;
 (function (OptionSet) {
 	OptionSet.msdyn_occhannelconfiguration = {
 		msdyn_streamsource : {
+			Apple_Messages_for_Business: 192450000,
 			Co_browse: 192390000,
 			Custom: 192350002,
 			Entity_Records: 192350000,

@@ -117,6 +117,56 @@ declare namespace DevKit {
 		readonly SupportingSolutionId: string;
 		/** Version number of the channel property. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Type the name of the application that the property is associated with. */
+			readonly Applicationsource: string;
+			/** Unique identifier of the channel property */
+			readonly ChannelPropertyId: string;
+			/** For Internal Use Only */
+			readonly ChannelPropertyIdUnique: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Shows who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Enter the data type for the property. */
+			readonly DataType: string;
+			/** Description of property */
+			readonly Description: string;
+			/** Unique identifier of the data import or data migration that created this property. */
+			readonly ImportSequenceNumber: string;
+			/** For internal use only. */
+			readonly IsManaged: string;
+			/** Shows who last updated the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Type the name of the property as received in the information provided by the external application. */
+			readonly Name: string;
+			/** Unique identifier of the organization associated with the channel property. */
+			readonly OrganizationId: string;
+			/** Date and time that the attribute was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Properties contained with a particular bag. */
+			readonly RegardingObjectId: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** State of the channel property */
+			readonly statecode: string;
+			/** Status of the channel property */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** Version number of the channel property. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -138,6 +188,8 @@ declare namespace OptionSet {
 			Single_Line_Of_Text,
 			/** 2 */
 			Whole_Number
+		}
+		enum RegardingObjectTypeCode {
 		}
 		enum statecode {
 			/** 0 */
@@ -169,4 +221,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

@@ -45,6 +45,24 @@ declare namespace DevKit {
 		RequiredComponentNodeId: string;
 		/** Required Component Node Type */
 		RequiredComponentType: number;
+		readonly FormattedValue: {
+			/** Date and time when the record was created. */
+			readonly CreatedTime_UtcDateAndTime: string;
+			/** Unique identifier of a dependency. */
+			readonly DependencyId: string;
+			/** Unique identifier of the dependent component's node. */
+			readonly DependentComponentNodeId: string;
+			/** Dependent Component Node Type */
+			readonly DependentComponentType: string;
+			/** Determines whether required component is published */
+			readonly IsPublished: string;
+			/** Date and time when the required component was modified. */
+			readonly RequiredComponentModifiedTime_UtcDateAndTime: string;
+			/** Unique identifier of the required component's node */
+			readonly RequiredComponentNodeId: string;
+			/** Required Component Node Type */
+			readonly RequiredComponentType: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -67,4 +85,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

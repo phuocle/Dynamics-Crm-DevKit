@@ -49,6 +49,28 @@ declare namespace DevKit {
 		UserAdditionalInfo: string;
 		/** Unique identifier of the user who caused a change */
 		readonly userid: string;
+		readonly FormattedValue: {
+			/** Actions the user can perform that cause a change */
+			readonly Action: string;
+			/** Contains a CSV of the ColumnNumber metadata property of attributes */
+			readonly AttributeMask: string;
+			/** Unique identifier of the auditing instance */
+			readonly AuditId: string;
+			/** Unique identifier of the calling user in case of an impersonated call */
+			readonly CallingUserId: string;
+			/** Contains a CSV of old values of all the attributes whose IsAuditEnabled property is True and are being changed */
+			readonly ChangeData: string;
+			/** Date and time when the audit record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** The action that causes the audit--it will be create, delete, or update */
+			readonly Operation: string;
+			/** Unique identifier for multiple changes that are part of a single operation; this field contains the same GUID for all the audit rows generated in a single transaction */
+			readonly TransactionId: string;
+			/** Additional information associated to the user who caused the change. */
+			readonly UserAdditionalInfo: string;
+			/** Unique identifier of the user who caused a change */
+			readonly userid: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -203,6 +225,8 @@ declare namespace OptionSet {
 			/** 44 */
 			Win
 		}
+		enum ObjectTypeCode {
+		}
 		enum Operation {
 			/** 4 */
 			Access,
@@ -231,4 +255,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

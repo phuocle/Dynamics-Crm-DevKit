@@ -126,7 +126,7 @@ var DevKit;
 		}
 		comment.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -151,6 +151,10 @@ var OptionSet;
 			Container: 0,
 			Reply: 2,
 			Thread: 1
+		},
+		OwnerIdType : {
+		},
+		ParentIdType : {
 		},
 		State : {
 			Open: 0,

@@ -196,6 +196,98 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Shows the exchange rate for the currency associated with the entity with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Shows the sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who last updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			readonly msdyn_Address1: string;
+			readonly msdyn_Address2: string;
+			readonly msdyn_Address3: string;
+			/** The user who approved or rejected this return */
+			readonly msdyn_ApprovedDeclinedBy: string;
+			/** Internal field used to generate the next name upon entity creation. It is optionally copied to the msdyn_name field. */
+			readonly msdyn_AutoNumbering: string;
+			/** Unique identifier for Resource Booking associated with RTV. */
+			readonly msdyn_Booking: string;
+			readonly msdyn_City: string;
+			readonly msdyn_Country: string;
+			readonly msdyn_Latitude: string;
+			readonly msdyn_Longitude: string;
+			/** Shows the unique number for identifying this RTV record. */
+			readonly msdyn_name: string;
+			/** Purchase Order from where items are originating */
+			readonly msdyn_OriginalPurchaseOrder: string;
+			/** Originating RMA if items were returned from customer */
+			readonly msdyn_OriginatingRMA: string;
+			readonly msdyn_PostalCode: string;
+			readonly msdyn_ReferenceNo: string;
+			/** Enter the date when return was requested. */
+			readonly msdyn_RequestDate_UtcDateOnly: string;
+			/** Enter the date items were returned to vendor. */
+			readonly msdyn_ReturnDate_UtcDateOnly: string;
+			/** User processing this return */
+			readonly msdyn_ReturnedBy: string;
+			/** Shows the entity instances. */
+			readonly msdyn_rtvId: string;
+			/** Method of Shipment to Vendor */
+			readonly msdyn_ShipVia: string;
+			readonly msdyn_StateOrProvince: string;
+			/** RTV Substatus */
+			readonly msdyn_SubStatus: string;
+			/** Enter the current status of the RTV. */
+			readonly msdyn_SystemStatus: string;
+			/** Tax code vendor charges you */
+			readonly msdyn_TaxCode: string;
+			/** Shows the total Amount to be credited on this RTV. */
+			readonly msdyn_TotalAmount: string;
+			/** Shows the value of the total amount in the base currency. */
+			readonly msdyn_totalamount_Base: string;
+			/** Vendor where items will be returned */
+			readonly msdyn_Vendor: string;
+			/** Contact person at Vendor */
+			readonly msdyn_VendorContact: string;
+			/** RMA from Vendor */
+			readonly msdyn_VendorRMA: string;
+			/** Unique identifier for Work Order associated with RTV. */
+			readonly msdyn_WorkOrder: string;
+			/** Shows the date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the RTV */
+			readonly statecode: string;
+			/** Reason for the status of the RTV */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Unique identifier of the currency associated with the entity. */
+			readonly TransactionCurrencyId: string;
+			/** Shows the time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -211,6 +303,8 @@ declare namespace OptionSet {
 			Received,
 			/** 690970002 */
 			Shipped
+		}
+		enum OwnerIdType {
 		}
 		enum statecode {
 			/** 0 */
@@ -242,4 +336,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

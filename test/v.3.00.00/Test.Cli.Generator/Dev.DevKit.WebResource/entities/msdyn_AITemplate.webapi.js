@@ -79,6 +79,7 @@ var DevKit;
 			msdyn_DataBinding: { a: 'msdyn_databinding' },
 			msdyn_defaultrunschedulingoptions: { a: 'msdyn_defaultrunschedulingoptions' },
 			msdyn_IsTrainable: { a: 'msdyn_istrainable' },
+			msdyn_ModelAction: { a: 'msdyn_modelaction' },
 			msdyn_ResourceInfo: { a: 'msdyn_resourceinfo' },
 			msdyn_RunConfigSchema: { a: 'msdyn_runconfigschema' },
 			msdyn_RunDataSpecification: { a: 'msdyn_rundataspecification' },
@@ -131,7 +132,7 @@ var DevKit;
 		}
 		msdyn_aitemplate.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -150,6 +151,8 @@ var OptionSet;
 			Deleted_Unpublished: 3,
 			Published: 0,
 			Unpublished: 1
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

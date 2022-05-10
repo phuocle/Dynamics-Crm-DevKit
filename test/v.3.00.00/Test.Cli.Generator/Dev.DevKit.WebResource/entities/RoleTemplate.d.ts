@@ -34,6 +34,13 @@ declare namespace DevKit {
 		/** Unique identifier of the role template. */
 		RoleTemplateId: string;
 		readonly Upgrading: boolean;
+		readonly FormattedValue: {
+			/** Name of the role template. */
+			readonly Name: string;
+			/** Unique identifier of the role template. */
+			readonly RoleTemplateId: string;
+			readonly Upgrading: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -56,4 +63,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

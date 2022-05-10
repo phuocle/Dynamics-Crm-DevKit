@@ -200,6 +200,8 @@ var OptionSet;
 			Vertical_Split: 803750004,
 			XAML: 803750002
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

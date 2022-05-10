@@ -107,6 +107,8 @@ var OptionSet;
 			TransferedToAgent: 192350018,
 			TransferedToQueue: 192350019
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

@@ -44,6 +44,10 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.UserQuery = {
+		OwnerIdType : {
+		},
+		ReturnedTypeCode : {
+		},
 		StateCode : {
 			Active: 0,
 			Inactive: 1

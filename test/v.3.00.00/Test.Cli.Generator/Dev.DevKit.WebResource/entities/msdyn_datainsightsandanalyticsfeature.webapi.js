@@ -76,13 +76,17 @@ var DevKit;
 			ModifiedOnBehalfBy: { b: 'modifiedonbehalfby', a: '_modifiedonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
 			msdyn_analyticschecksum: { a: 'msdyn_analyticschecksum' },
 			msdyn_datainsightsandanalyticsfeatureId: { a: 'msdyn_datainsightsandanalyticsfeatureid' },
+			msdyn_iscustomizationsupported: { a: 'msdyn_iscustomizationsupported', r: true },
 			msdyn_isdemoenabled: { a: 'msdyn_isdemoenabled' },
 			msdyn_isenabled: { a: 'msdyn_isenabled' },
 			msdyn_lastaccesstime_TimezoneDateAndTime: { a: 'msdyn_lastaccesstime' },
 			msdyn_lastreportrefreshtime_TimezoneDateAndTime: { a: 'msdyn_lastreportrefreshtime' },
 			msdyn_name: { a: 'msdyn_name' },
 			msdyn_provisionstatus: { a: 'msdyn_provisionstatus' },
+			msdyn_reporttype: { a: 'msdyn_reporttype' },
+			msdyn_schedule: { a: 'msdyn_schedule' },
 			msdyn_templateid: { a: 'msdyn_templateid' },
+			msdyn_timezonecode: { a: 'msdyn_timezonecode' },
 			OrganizationId: { b: 'organizationid', a: '_organizationid_value', c: 'organizations', d: 'organization', r: true },
 			OverriddenCreatedOn_UtcDateOnly: { a: 'overriddencreatedon' },
 			OverwriteTime_UtcDateAndTime: { a: 'overwritetime', r: true },
@@ -123,7 +127,7 @@ var DevKit;
 		}
 		msdyn_datainsightsandanalyticsfeature.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -148,6 +152,11 @@ var OptionSet;
 			Provision_Failed: 192350002,
 			Provision_in_Progress: 192350003,
 			Provisioned: 192350000
+		},
+		msdyn_reporttype : {
+			Default: 192350000,
+			Draft: 192350002,
+			Published: 192350001
 		},
 		statecode : {
 			Active: 0,

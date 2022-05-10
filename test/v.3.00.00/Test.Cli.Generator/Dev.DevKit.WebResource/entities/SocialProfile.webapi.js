@@ -83,6 +83,7 @@ var DevKit;
 			msdyn_octwitterhandleid: { b: 'msdyn_octwitterhandleid', a: '_msdyn_octwitterhandleid_value', c: 'msdyn_octwitterhandles', d: 'msdyn_octwitterhandle' },
 			msdyn_phonenumber: { a: 'msdyn_phonenumber' },
 			msdyn_profileimagelink: { a: 'msdyn_profileimagelink' },
+			msdyn_sourceid: { a: 'msdyn_sourceid' },
 			OverriddenCreatedOn_UtcDateOnly: { a: 'overriddencreatedon' },
 			OwnerId_systemuser: { b: 'ownerid', a: '_ownerid_value', c: 'systemusers', d: 'systemuser' },
 			OwnerId_team: { b: 'ownerid', a: '_ownerid_value', c: 'teams', d: 'team' },
@@ -130,7 +131,7 @@ var DevKit;
 		}
 		socialprofile.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -145,11 +146,13 @@ var OptionSet;
 (function (OptionSet) {
 	OptionSet.SocialProfile = {
 		Community : {
+			Apple_Messages_For_Business: 16,
 			Cortana: 5,
 			Direct_Line: 6,
 			Direct_Line_Speech: 8,
 			Email: 9,
 			Facebook: 1,
+			Googles_Business_Messages: 17,
 			GroupMe: 10,
 			Kik: 11,
 			Line: 3,
@@ -161,6 +164,10 @@ var OptionSet;
 			Twitter: 2,
 			Wechat: 4,
 			WhatsApp: 15
+		},
+		CustomerIdType : {
+		},
+		OwnerIdType : {
 		},
 		StateCode : {
 			Active: 0,

@@ -107,6 +107,48 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Name of the base unit. */
+			readonly BaseUoMName: string;
+			/** Unique identifier of the user who created the unit group. */
+			readonly CreatedBy: string;
+			/** Shows the external party who created the record. */
+			readonly CreatedByExternalParty: string;
+			/** Date and time when the unit group was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the uomschedule. */
+			readonly CreatedOnBehalfBy: string;
+			/** Description of the unit group. */
+			readonly Description: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who last modified the unit group. */
+			readonly ModifiedBy: string;
+			/** Shows the external party who modified the record. */
+			readonly ModifiedByExternalParty: string;
+			/** Date and time when the unit group was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the uomschedule. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Name of the unit group. */
+			readonly Name: string;
+			/** Unique identifier for the organization */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Status of the Unit Group. */
+			readonly StateCode: string;
+			/** Reason for the status of the Unit Group. */
+			readonly StatusCode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Unique identifier for the unit group. */
+			readonly UoMScheduleId: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -141,4 +183,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

@@ -57,6 +57,8 @@ var OptionSet;
 			Published: 0,
 			Unpublished: 1
 		},
+		OwnerIdType : {
+		},
 		SecretStore : {
 			Azure_Key_Vault: 0,
 			Microsoft_Dataverse: 1

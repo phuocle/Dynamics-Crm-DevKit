@@ -159,7 +159,7 @@ var DevKit;
 		}
 		workflow.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -205,9 +205,15 @@ var OptionSet;
 			Background: 0,
 			Real_time: 1
 		},
+		OwnerIdType : {
+		},
+		PrimaryEntity : {
+		},
 		ProcessTriggerScope : {
 			Entity: 2,
 			Form: 1
+		},
+		RendererObjectTypeCode : {
 		},
 		RunAs : {
 			Calling_User: 1,

@@ -81,6 +81,8 @@ var OptionSet;
 			Number: 192350001,
 			Text: 192350000
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

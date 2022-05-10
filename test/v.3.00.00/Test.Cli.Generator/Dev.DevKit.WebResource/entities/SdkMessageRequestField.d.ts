@@ -80,6 +80,59 @@ declare namespace DevKit {
 		readonly SupportingSolutionId: string;
 		/** For internal use only. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Common language runtime (CLR)-based parser for the SDK message request field. */
+			readonly ClrParser: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier of the user who created the SDK message request field. */
+			readonly CreatedBy: string;
+			/** Date and time when the SDK message request field was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the sdkmessagerequestfield. */
+			readonly CreatedOnBehalfBy: string;
+			/** Customization level of the SDK message request field. */
+			readonly CustomizationLevel: string;
+			/** Indicates how field contents are used during message processing. 1 - Primary entity, 2- Secondary entity */
+			readonly FieldMask: string;
+			/** Version in which the component is introduced. */
+			readonly IntroducedVersion: string;
+			/** Information that specifies whether this component is managed. */
+			readonly IsManaged: string;
+			/** Unique identifier of the user who last modified the SDK message request field. */
+			readonly ModifiedBy: string;
+			/** Date and time when the SDK message request field was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the sdkmessagerequestfield. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Name of the SDK message request field. */
+			readonly Name: string;
+			/** Information about whether SDK message request field is optional. */
+			readonly Optional: string;
+			/** Unique identifier of the organization with which the SDK message request field is associated. */
+			readonly OrganizationId: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			readonly ParameterBindingInformation: string;
+			/** Parser for the SDK message request field. */
+			readonly Parser: string;
+			/** Position of the Sdk message request field */
+			readonly Position: string;
+			/** Public name of the SDK message request field. */
+			readonly PublicName: string;
+			/** Unique identifier of the SDK message request field entity. */
+			readonly SdkMessageRequestFieldId: string;
+			/** Entity identifier of the SDK message request field. */
+			readonly SdkMessageRequestFieldIdUnique: string;
+			/** Unique identifier of the message request with which the SDK message request field is associated. */
+			readonly SdkMessageRequestId: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** For internal use only. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -112,4 +165,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

@@ -71,6 +71,7 @@ var DevKit;
 			FilterExpression: { a: 'filterexpression' },
 			FilteringAttributes: { a: 'filteringattributes' },
 			HardDelete: { a: 'harddelete' },
+			LogicAppsVersion: { a: 'logicappsversion' },
 			Message: { a: 'message' },
 			ModifiedBy: { b: 'modifiedby', a: '_modifiedby_value', c: 'systemusers', d: 'systemuser', r: true },
 			ModifiedOn_UtcDateAndTime: { a: 'modifiedon', r: true },
@@ -119,7 +120,7 @@ var DevKit;
 		}
 		callbackregistration.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -141,6 +142,8 @@ var OptionSet;
 			Deleted: 2,
 			Modified: 3,
 			Modified_or_Deleted: 6
+		},
+		OwnerIdType : {
 		},
 		RunAs : {
 			Flow_owner: 3,

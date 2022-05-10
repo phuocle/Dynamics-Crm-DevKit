@@ -55,6 +55,34 @@ declare namespace DevKit {
 		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
 		UTCConversionTimeZoneCode: number;
+		readonly FormattedValue: {
+			/** Client Version. */
+			readonly ClientVersion: string;
+			/** UTC time when the last successfully completed synchronization was started. This is the difference between local time and standard Coordinated Universal Time. */
+			readonly CompletedSyncStartedOn_UtcDateOnly: string;
+			/** Database time stamp at the start time of the last successfully completed synchronization. */
+			readonly CompletedSyncVersionNumber: string;
+			/** For internal use only. */
+			readonly LastSyncStartedOn_UtcDateOnly: string;
+			/** For internal use only. */
+			readonly MachineName: string;
+			/** Database time stamp at the start time of the last successfully completed synchronization. */
+			readonly ReInitialize: string;
+			/** For internal use only. */
+			readonly ResetForCreate: string;
+			/** For internal use only. */
+			readonly SubscriptionId: string;
+			/** For internal use only. */
+			readonly SubscriptionType: string;
+			/** For internal use only. */
+			readonly SyncEntryTableName: string;
+			/** For internal use only. */
+			readonly SystemUserId: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -77,4 +105,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

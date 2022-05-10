@@ -103,7 +103,7 @@ var DevKit;
 		}
 		audit.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -192,6 +192,8 @@ var OptionSet;
 			User_Access_via_Web: 64,
 			User_Access_via_Web_Services: 65,
 			Win: 44
+		},
+		ObjectTypeCode : {
 		},
 		Operation : {
 			Access: 4,

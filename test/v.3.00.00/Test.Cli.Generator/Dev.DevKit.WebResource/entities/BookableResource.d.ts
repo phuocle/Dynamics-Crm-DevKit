@@ -432,6 +432,118 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Select the account that represents this resource. */
+			readonly AccountId: string;
+			/** Unique identifier of the resource. */
+			readonly BookableResourceId: string;
+			/** Specifies the working days and hours of the resource. */
+			readonly CalendarId: string;
+			/** Select the contact that represents this resource. */
+			readonly ContactId: string;
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Exchange rate for the currency associated with the bookableresource with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** The number of bookings to drip on the Mobile . This field is disabled/enabled based on Enable Drip Scheduling field */
+			readonly msdyn_BookingsToDrip: string;
+			/** Crew Strategy */
+			readonly msdyn_CrewStrategy: string;
+			readonly msdyn_DeriveCapacity: string;
+			/** Specify if this resource should be enabled for availablity search. */
+			readonly msdyn_DisplayOnScheduleAssistant: string;
+			/** Specify if this resource should be displayed on the schedule board. */
+			readonly msdyn_DisplayOnScheduleBoard: string;
+			/** Enable appointments to display on the new schedule board and be considered in availability search for resources. */
+			readonly msdyn_EnableAppointments: string;
+			/** Set this field to Yes if this resource requires access to the legacy Field Service Mobile application. */
+			readonly msdyn_EnabledForFieldServiceMobile: string;
+			/** Enables drip scheduling on the mobile app. */
+			readonly msdyn_EnableDripScheduling: string;
+			/** This only applies when directly calling the API. It does not apply when the Book button is clicked on the Schedule Board or on any schedulable entity. */
+			readonly msdyn_EnableOutlookSchedules: string;
+			/** Shows the default ending location type when booking daily schedules for this resource. */
+			readonly msdyn_EndLocation: string;
+			/** Unique identifier for Facility Equipment */
+			readonly msdyn_facilityequipmentid: string;
+			readonly msdyn_GenericType: string;
+			readonly msdyn_HourlyRate: string;
+			/** Value of the Hourly Rate in base currency. */
+			readonly msdyn_hourlyrate_Base: string;
+			/** For internal use only. */
+			readonly msdyn_InternalFlags: string;
+			/** Is Default */
+			readonly msdyn_isgenericresourceprojectscoped: string;
+			/** The location latitude. */
+			readonly msdyn_Latitude: string;
+			/** The location timestamp. */
+			readonly msdyn_locationtimestamp_UtcDateAndTime: string;
+			/** The location longitude. */
+			readonly msdyn_Longitude: string;
+			/** Organizational Unit that resource belong to */
+			readonly msdyn_organizationalunit: string;
+			/** Select whether the pool is an account, contact, user, equipment or a facility of resources. */
+			readonly msdyn_PoolType: Array<string>;
+			readonly msdyn_PrimaryEMail: string;
+			/** Shows the default starting location type when booking daily schedules for this resource. */
+			readonly msdyn_StartLocation: string;
+			/** Shows the target utilization for the resource. */
+			readonly msdyn_targetutilization: string;
+			/** Specifies if approval required for Time Off Requests. */
+			readonly msdyn_TimeOffApprovalRequired: string;
+			/** Default Warehouse for this resource. */
+			readonly msdyn_Warehouse: string;
+			/** Type the name of the resource. */
+			readonly Name: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Contains the id of the process associated with the entity. */
+			readonly ProcessId: string;
+			/** Select whether the resource is a user, equipment, contact, account, generic resource or a group of resources. */
+			readonly ResourceType: string;
+			/** Contains the id of the stage where the entity is located. */
+			readonly StageId: string;
+			/** Status of the Bookable Resource */
+			readonly StateCode: string;
+			/** Reason for the status of the Bookable Resource */
+			readonly StatusCode: string;
+			/** Specifies the timezone for the resource's working hours. */
+			readonly TimeZone: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Exchange rate for the currency associated with the BookableResource with respect to the base currency. */
+			readonly TransactionCurrencyId: string;
+			/** A comma separated list of string values representing the unique identifiers of stages in a Business Process Flow Instance in the order that they occur. */
+			readonly TraversedPath: string;
+			/** Select the user who represents this resource. */
+			readonly UserId: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -488,6 +600,8 @@ declare namespace OptionSet {
 			/** 690970000 */
 			Resource_Address
 		}
+		enum OwnerIdType {
+		}
 		enum ResourceType {
 			/** 5 */
 			Account,
@@ -536,4 +650,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

@@ -43,6 +43,22 @@ declare namespace DevKit {
 		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
 		UTCConversionTimeZoneCode: number;
+		readonly FormattedValue: {
+			/** Date and time when the license was installed. */
+			readonly InstalledOn_UtcDateOnly: string;
+			/** Unique identifier of the license. */
+			readonly LicenseId: string;
+			/** Key for the license. */
+			readonly LicenseKey: string;
+			/** Type of license, such as Professional, Standard, or Suite. */
+			readonly LicenseType: string;
+			/** Unique identifier of the organization associated with the license. */
+			readonly OrganizationId: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -65,4 +81,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

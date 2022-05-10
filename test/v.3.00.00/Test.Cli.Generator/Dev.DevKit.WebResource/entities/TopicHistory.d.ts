@@ -49,6 +49,28 @@ declare namespace DevKit {
 		readonly VersionNumber: number;
 		/** Weight */
 		Weight: number;
+		readonly FormattedValue: {
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Key Phrase of the custom entity. */
+			readonly KeyPhrase: string;
+			/** name */
+			readonly Name: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Unique identifier for entity instances */
+			readonly TopicHistoryId: string;
+			/** Unique identifier for Model associated with Topic Model Execution History. */
+			readonly TopicModelExecutionHistoryId: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+			/** Weight */
+			readonly Weight: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -71,4 +93,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

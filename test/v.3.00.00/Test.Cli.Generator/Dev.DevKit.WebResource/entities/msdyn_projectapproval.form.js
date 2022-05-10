@@ -106,6 +106,8 @@ var OptionSet;
 			Rejected: 1,
 			Submitted: 0
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

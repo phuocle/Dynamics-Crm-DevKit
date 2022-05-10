@@ -163,10 +163,90 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier to distinguish each batch of migration(Deprecated) */
+			readonly CorrelationId: string;
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Unique identifier to distinguish each batch of migration */
+			readonly msdyn_CorrelationId: string;
+			/** Indicates if the migration was successfully completed or not */
+			readonly msdyn_IsMigrationComplete: string;
+			/** Id of the legacy ARC rule to be migrated */
+			readonly msdyn_LegacyConvertRuleId: string;
+			/** Id of the legacy ARC item to be migrated */
+			readonly msdyn_LegacyConvertRuleItemId: string;
+			readonly msdyn_LegacyRuleIdName: string;
+			readonly msdyn_LegacyRuleItemIdName: string;
+			/** Id of the legacy SLA to be migrated */
+			readonly msdyn_LegacySLAId: string;
+			/** Id of the legacy SLA item to be migrated */
+			readonly msdyn_LegacySLAItemId: string;
+			/** The overall status of a migration process */
+			readonly msdyn_MigrationStatus: string;
+			/** The exception of a certain status */
+			readonly msdyn_MigrationStatusException: string;
+			/** The reason of a certain status */
+			readonly msdyn_MigrationStatusReason: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_migrationtrackerId: string;
+			/** Indicates whether the request is a pre-validation check or an actual migration run */
+			readonly msdyn_MigrationType: string;
+			/** Id of the Uci ARC rule created post migration */
+			readonly msdyn_ModernConvertRuleId: string;
+			/** Id of the Uci ARC item created post migration */
+			readonly msdyn_ModernConvertRuleItemId: string;
+			readonly msdyn_ModernRuleIdName: string;
+			readonly msdyn_ModernRuleItemIdName: string;
+			/** Id of the Uci SLA created post migration */
+			readonly msdyn_ModernSLAId: string;
+			/** Id of the Uci SLA item created post migration */
+			readonly msdyn_ModernSLAItemId: string;
+			/** The name of the custom entity. */
+			readonly msdyn_Name: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the Migration tracker */
+			readonly statecode: string;
+			/** Reason for the status of the Migration tracker */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace msdyn_migrationtracker {
+		enum msdyn_LegacyRuleIdType {
+		}
+		enum msdyn_LegacyRuleItemIdType {
+		}
 		enum msdyn_MigrationStatus {
 			/** 0 */
 			In_Progress,
@@ -180,6 +260,14 @@ declare namespace OptionSet {
 			Migration,
 			/** 1 */
 			PreValidation
+		}
+		enum msdyn_ModernRuleIdType {
+		}
+		enum msdyn_ModernRuleItemIdType {
+		}
+		enum msdyn_Objecttypecode {
+		}
+		enum OwnerIdType {
 		}
 		enum statecode {
 			/** 0 */
@@ -211,4 +299,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

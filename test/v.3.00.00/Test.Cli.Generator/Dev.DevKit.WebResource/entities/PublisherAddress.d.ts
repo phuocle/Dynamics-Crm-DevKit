@@ -98,6 +98,77 @@ declare namespace DevKit {
 		/** UTC offset for the address. This is the difference between local time and standard Coordinated Universal Time. */
 		UTCOffset: number;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Specifies which publisher address is applicable. */
+			readonly AddressNumber: string;
+			/** Type of address for the publisher, such as billing, shipping, or primary address. */
+			readonly AddressTypeCode: string;
+			/** City name in the publisher address. */
+			readonly City: string;
+			/** Country/region name in the publisher address. */
+			readonly Country: string;
+			/** County name in the publisher address. */
+			readonly County: string;
+			/** Unique identifier of the user who created the publisher address. */
+			readonly CreatedBy: string;
+			/** Date and time when the publisher address was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the publisher address. */
+			readonly CreatedOnBehalfBy: string;
+			/** Fax number for the publisher address. */
+			readonly Fax: string;
+			/** Freight terms for the publisher address. */
+			readonly FreightTermsCode: string;
+			/** Unique identifier of the data import or data migration that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Latitude for the publisher address. */
+			readonly Latitude: string;
+			/** First line for entering address information. */
+			readonly Line1: string;
+			/** Second line for entering address information. */
+			readonly Line2: string;
+			/** Third line for entering address information. */
+			readonly Line3: string;
+			/** Longitude for the publisher address. */
+			readonly Longitude: string;
+			/** Unique identifier of the user who last modified the publisher address. */
+			readonly ModifiedBy: string;
+			/** Date and time when the publisher address was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the publisher address. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Name used to identify the publisher address. */
+			readonly Name: string;
+			/** Unique identifier of the parent object with which the publisher address is associated. */
+			readonly ParentId: string;
+			/** ZIP Code or postal code in the publisher address. */
+			readonly PostalCode: string;
+			/** Post office box number in the publisher address. */
+			readonly PostOfficeBox: string;
+			/** Name of the primary contact at the publisher address. */
+			readonly PrimaryContactName: string;
+			/** Unique identifier of the publisher address. */
+			readonly PublisherAddressId: string;
+			/** Method of shipment for the publisher address. */
+			readonly ShippingMethodCode: string;
+			/** State or province in the publisher address. */
+			readonly StateOrProvince: string;
+			/** First telephone number for the publisher address. */
+			readonly Telephone1: string;
+			/** Second telephone number for the publisher address. */
+			readonly Telephone2: string;
+			/** Third telephone number for the publisher address. */
+			readonly Telephone3: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** United Parcel Service (UPS) zone for the address of the publisher. */
+			readonly UPSZone: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** UTC offset for the address. This is the difference between local time and standard Coordinated Universal Time. */
+			readonly UTCOffset: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -117,6 +188,8 @@ declare namespace OptionSet {
 			FOB,
 			/** 2 */
 			No_Charge
+		}
+		enum ParentIdTypeCode {
 		}
 		enum ShippingMethodCode {
 			/** 1 */
@@ -140,4 +213,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

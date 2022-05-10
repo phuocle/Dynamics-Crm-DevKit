@@ -119,7 +119,7 @@ var DevKit;
 		}
 		msdyn_requirementrelationship.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -141,6 +141,8 @@ var OptionSet;
 			Location: 192350002,
 			Organizational_Unit: 192350000,
 			Related_Resource_Pools: 192350001
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

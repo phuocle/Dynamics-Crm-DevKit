@@ -38,10 +38,23 @@ declare namespace DevKit {
 		StringMapId: string;
 		Value: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			readonly AttributeName: string;
+			readonly AttributeValue: string;
+			readonly DisplayOrder: string;
+			readonly LangId: string;
+			readonly OrganizationId: string;
+			/** Unique identifier of the string map. */
+			readonly StringMapId: string;
+			readonly Value: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace StringMap {
+		enum ObjectTypeCode {
+		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
 			NotCalculated,
@@ -60,4 +73,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

@@ -81,6 +81,60 @@ declare namespace DevKit {
 		readonly VersionNumber: number;
 		/** Unique identifier of the Web resource that will be displayed in the system chart. */
 		WebResourceId: string;
+		readonly FormattedValue: {
+			/** Tells whether the saved query visualization can be deleted. */
+			readonly CanBeDeleted: string;
+			/** Indicates the library used to render the visualization. */
+			readonly ChartType: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier of the user who created the system chart. */
+			readonly CreatedBy: string;
+			/** Date and time when the system chart was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the system chart. */
+			readonly CreatedOnBehalfBy: string;
+			/** XML string used to define the underlying data for the system chart. */
+			readonly DataDescription: string;
+			/** Description of the system chart. */
+			readonly Description: string;
+			/** Version in which the form is introduced. */
+			readonly IntroducedVersion: string;
+			/** Information that specifies whether this component can be customized. */
+			readonly IsCustomizable: string;
+			/** Indicates whether the system chart is the default chart for the entity. */
+			readonly IsDefault: string;
+			/** Indicates whether the solution component is part of a managed solution. */
+			readonly IsManaged: string;
+			/** Unique identifier of the user who last modified the system chart. */
+			readonly ModifiedBy: string;
+			/** Date and time when the system chart was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the system chart. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Name of the system chart. */
+			readonly Name: string;
+			/** Unique identifier of the organization associated with the system chart. */
+			readonly OrganizationId: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** XML string used to define the presentation properties of the system chart. */
+			readonly PresentationDescription: string;
+			/** Unique identifier of the system chart. */
+			readonly SavedQueryVisualizationId: string;
+			/** For internal use only. */
+			readonly SavedQueryVisualizationIdUnique: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** Specifies where the chart will be used, 0 for data centric as well as interaction centric and 1 for just interaction centric */
+			readonly Type: string;
+			/** Version number of the system chart. */
+			readonly VersionNumber: string;
+			/** Unique identifier of the Web resource that will be displayed in the system chart. */
+			readonly WebResourceId: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -100,6 +154,8 @@ declare namespace OptionSet {
 			Published,
 			/** 1 */
 			Unpublished
+		}
+		enum PrimaryEntityTypeCode {
 		}
 		enum Type {
 			/** 0 */
@@ -125,4 +181,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

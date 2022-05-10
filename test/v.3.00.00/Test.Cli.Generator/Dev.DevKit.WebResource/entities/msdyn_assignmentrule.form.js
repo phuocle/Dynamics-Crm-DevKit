@@ -69,6 +69,8 @@ var OptionSet;
 			Entity_Create: 0,
 			FieldUpdate: 1
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

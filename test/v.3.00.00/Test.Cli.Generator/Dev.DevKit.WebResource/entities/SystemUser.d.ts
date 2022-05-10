@@ -913,6 +913,303 @@ declare namespace DevKit {
 		YomiLastName: string;
 		/** Pronunciation of the middle name of the user, written in phonetic hiragana or katakana characters. */
 		YomiMiddleName: string;
+		readonly FormattedValue: {
+			/** Type of user. */
+			readonly AccessMode: string;
+			/** Active Directory object GUID for the system user. */
+			readonly ActiveDirectoryGuid: string;
+			/** Unique identifier for address 1. */
+			readonly Address1_AddressId: string;
+			/** Type of address for address 1, such as billing, shipping, or primary address. */
+			readonly Address1_AddressTypeCode: string;
+			/** City name for address 1. */
+			readonly Address1_City: string;
+			/** Shows the complete primary address. */
+			readonly Address1_Composite: string;
+			/** Country/region name in address 1. */
+			readonly Address1_Country: string;
+			/** County name for address 1. */
+			readonly Address1_County: string;
+			/** Fax number for address 1. */
+			readonly Address1_Fax: string;
+			/** Latitude for address 1. */
+			readonly Address1_Latitude: string;
+			/** First line for entering address 1 information. */
+			readonly Address1_Line1: string;
+			/** Second line for entering address 1 information. */
+			readonly Address1_Line2: string;
+			/** Third line for entering address 1 information. */
+			readonly Address1_Line3: string;
+			/** Longitude for address 1. */
+			readonly Address1_Longitude: string;
+			/** Name to enter for address 1. */
+			readonly Address1_Name: string;
+			/** ZIP Code or postal code for address 1. */
+			readonly Address1_PostalCode: string;
+			/** Post office box number for address 1. */
+			readonly Address1_PostOfficeBox: string;
+			/** Method of shipment for address 1. */
+			readonly Address1_ShippingMethodCode: string;
+			/** State or province for address 1. */
+			readonly Address1_StateOrProvince: string;
+			/** First telephone number associated with address 1. */
+			readonly Address1_Telephone1: string;
+			/** Second telephone number associated with address 1. */
+			readonly Address1_Telephone2: string;
+			/** Third telephone number associated with address 1. */
+			readonly Address1_Telephone3: string;
+			/** United Parcel Service (UPS) zone for address 1. */
+			readonly Address1_UPSZone: string;
+			/** UTC offset for address 1. This is the difference between local time and standard Coordinated Universal Time. */
+			readonly Address1_UTCOffset: string;
+			/** Unique identifier for address 2. */
+			readonly Address2_AddressId: string;
+			/** Type of address for address 2, such as billing, shipping, or primary address. */
+			readonly Address2_AddressTypeCode: string;
+			/** City name for address 2. */
+			readonly Address2_City: string;
+			/** Shows the complete secondary address. */
+			readonly Address2_Composite: string;
+			/** Country/region name in address 2. */
+			readonly Address2_Country: string;
+			/** County name for address 2. */
+			readonly Address2_County: string;
+			/** Fax number for address 2. */
+			readonly Address2_Fax: string;
+			/** Latitude for address 2. */
+			readonly Address2_Latitude: string;
+			/** First line for entering address 2 information. */
+			readonly Address2_Line1: string;
+			/** Second line for entering address 2 information. */
+			readonly Address2_Line2: string;
+			/** Third line for entering address 2 information. */
+			readonly Address2_Line3: string;
+			/** Longitude for address 2. */
+			readonly Address2_Longitude: string;
+			/** Name to enter for address 2. */
+			readonly Address2_Name: string;
+			/** ZIP Code or postal code for address 2. */
+			readonly Address2_PostalCode: string;
+			/** Post office box number for address 2. */
+			readonly Address2_PostOfficeBox: string;
+			/** Method of shipment for address 2. */
+			readonly Address2_ShippingMethodCode: string;
+			/** State or province for address 2. */
+			readonly Address2_StateOrProvince: string;
+			/** First telephone number associated with address 2. */
+			readonly Address2_Telephone1: string;
+			/** Second telephone number associated with address 2. */
+			readonly Address2_Telephone2: string;
+			/** Third telephone number associated with address 2. */
+			readonly Address2_Telephone3: string;
+			/** United Parcel Service (UPS) zone for address 2. */
+			readonly Address2_UPSZone: string;
+			/** UTC offset for address 2. This is the difference between local time and standard Coordinated Universal Time. */
+			readonly Address2_UTCOffset: string;
+			/** The identifier for the application. This is used to access data in another application. */
+			readonly ApplicationId: string;
+			/** The URI used as a unique logical identifier for the external app. This can be used to validate the application. */
+			readonly ApplicationIdUri: string;
+			/** This is the application directory object Id. */
+			readonly AzureActiveDirectoryObjectId: string;
+			/** Date and time when the user was set as soft deleted in Azure. */
+			readonly AzureDeletedOn_UtcDateAndTime: string;
+			/** Azure state of user */
+			readonly AzureState: string;
+			/** Unique identifier of the business unit with which the user is associated. */
+			readonly BusinessUnitId: string;
+			/** Fiscal calendar associated with the user. */
+			readonly CalendarId: string;
+			/** License type of user. This is used only in the on-premises version of the product. Online licenses are managed through Microsoft 365 Office Portal */
+			readonly CALType: string;
+			/** Unique identifier of the user who created the user. */
+			readonly CreatedBy: string;
+			/** Date and time when the user was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the systemuser. */
+			readonly CreatedOnBehalfBy: string;
+			/** Indicates if default outlook filters have been populated. */
+			readonly DefaultFiltersPopulated: string;
+			/** Select the mailbox associated with this user. */
+			readonly DefaultMailbox: string;
+			/** Type a default folder name for the user's OneDrive For Business location. */
+			readonly DefaultOdbFolderName: string;
+			/** User delete state */
+			readonly DeletedState: string;
+			/** Reason for disabling the user. */
+			readonly DisabledReason: string;
+			/** Whether to display the user in service views. */
+			readonly DisplayInServiceViews: string;
+			/** Active Directory domain of which the user is a member. */
+			readonly DomainName: string;
+			/** Shows the status of the primary email address. */
+			readonly EmailRouterAccessApproval: string;
+			/** Employee identifier for the user. */
+			readonly EmployeeId: string;
+			/** Shows the default image for the record. */
+			readonly EntityImage: string;
+			readonly EntityImage_Timestamp: string;
+			readonly EntityImage_URL: string;
+			/** For internal use only. */
+			readonly EntityImageId: string;
+			/** Exchange rate for the currency associated with the systemuser with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** First name of the user. */
+			readonly FirstName: string;
+			/** Full name of the user. */
+			readonly FullName: string;
+			/** Government identifier for the user. */
+			readonly GovernmentId: string;
+			/** Home phone number for the user. */
+			readonly HomePhone: string;
+			/** For internal use only. */
+			readonly IdentityId: string;
+			/** Unique identifier of the data import or data migration that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Incoming email delivery method for the user. */
+			readonly IncomingEmailDeliveryMethod: string;
+			/** Internal email address for the user. */
+			readonly InternalEMailAddress: string;
+			/** User invitation status. */
+			readonly InviteStatusCode: string;
+			/** Information about whether the user is an AD user. */
+			readonly IsActiveDirectoryUser: string;
+			/** Information about whether the user is enabled. */
+			readonly IsDisabled: string;
+			/** Shows the status of approval of the email address by O365 Admin. */
+			readonly IsEmailAddressApprovedByO365Admin: string;
+			/** Check if user is an integration user. */
+			readonly IsIntegrationUser: string;
+			/** Information about whether the user is licensed. */
+			readonly IsLicensed: string;
+			/** Information about whether the user is synced with the directory. */
+			readonly IsSyncWithDirectory: string;
+			/** Job title of the user. */
+			readonly JobTitle: string;
+			/** Last name of the user. */
+			readonly LastName: string;
+			/** Time stamp of the latest update for the user */
+			readonly LatestUpdateTime_UtcDateAndTime: string;
+			/** Middle name of the user. */
+			readonly MiddleName: string;
+			/** Mobile alert email address for the user. */
+			readonly MobileAlertEMail: string;
+			/** Items contained with a particular SystemUser. */
+			readonly MobileOfflineProfileId: string;
+			/** Mobile phone number for the user. */
+			readonly MobilePhone: string;
+			/** Unique identifier of the user who last modified the user. */
+			readonly ModifiedBy: string;
+			/** Date and time when the user was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the systemuser. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Type of user - Application user or Bot application user */
+			readonly msdyn_AgentType: string;
+			/** Application ID of the bot. */
+			readonly msdyn_BotApplicationId: string;
+			/** BOT User Description */
+			readonly msdyn_BotDescription: string;
+			/** Bot User Endpoint */
+			readonly msdyn_BotEndpoint: string;
+			/** Bot handle */
+			readonly msdyn_bothandle: string;
+			/** Indicates the type of bot */
+			readonly msdyn_BotProvider: string;
+			/** Bot User Secret Keys */
+			readonly msdyn_BotSecretKeys: string;
+			/** Capacity associated with the User. */
+			readonly msdyn_Capacity: string;
+			/** Unique identifier for Presence associated with User. */
+			readonly msdyn_DefaultPresenceIdUser: string;
+			/** Describes whether user is opted out or not */
+			readonly msdyn_gdproptout: string;
+			/** Field to bind grid wrapper control */
+			readonly msdyn_gridwrappercontrolfield: string;
+			/** Environment Id of the CDS environment that owns the bot user. */
+			readonly msdyn_OwningEnvironmentId: string;
+			readonly msdyn_phonenumberid: string;
+			/** Type of user - CRM or BOT user */
+			readonly msdyn_UserType: string;
+			/** Unique identifier for Configuration associated with User. */
+			readonly msdyusd_USDConfigurationId: string;
+			/** Nickname of the user. */
+			readonly NickName: string;
+			/** Unique identifier of the organization associated with the user. */
+			readonly OrganizationId: string;
+			/** Outgoing email delivery method for the user. */
+			readonly OutgoingEmailDeliveryMethod: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Unique identifier of the manager of the user. */
+			readonly ParentSystemUserId: string;
+			/** For internal use only. */
+			readonly PassportHi: string;
+			/** For internal use only. */
+			readonly PassportLo: string;
+			/** Personal email address of the user. */
+			readonly PersonalEMailAddress: string;
+			/** URL for the Website on which a photo of the user is located. */
+			readonly PhotoUrl: string;
+			/** User's position in hierarchical security model. */
+			readonly PositionId: string;
+			/** Preferred address for the user. */
+			readonly PreferredAddressCode: string;
+			/** Preferred email address for the user. */
+			readonly PreferredEmailCode: string;
+			/** Preferred phone number for the user. */
+			readonly PreferredPhoneCode: string;
+			/** Shows the ID of the process. */
+			readonly ProcessId: string;
+			/** Unique identifier of the default queue for the user. */
+			readonly QueueId: string;
+			/** Salutation for correspondence with the user. */
+			readonly Salutation: string;
+			/** Check if user is a setup user. */
+			readonly SetupUser: string;
+			/** SharePoint Work Email Address */
+			readonly SharePointEmailAddress: string;
+			/** Site at which the user is located. */
+			readonly SiteId: string;
+			/** Skill set of the user. */
+			readonly Skills: string;
+			/** Shows the ID of the stage. */
+			readonly StageId: string;
+			/** Unique identifier for the user. */
+			readonly SystemUserId: string;
+			/** Unique identifier of the territory to which the user is assigned. */
+			readonly TerritoryId: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Title of the user. */
+			readonly Title: string;
+			/** Unique identifier of the currency associated with the systemuser. */
+			readonly TransactionCurrencyId: string;
+			/** For internal use only. */
+			readonly TraversedPath: string;
+			/** Shows the type of user license. */
+			readonly UserLicenseType: string;
+			/**  User PUID User Identifiable Information */
+			readonly UserPuid: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version number of the user. */
+			readonly VersionNumber: string;
+			/** Windows Live ID */
+			readonly WindowsLiveID: string;
+			/** User's Yammer login email address */
+			readonly YammerEmailAddress: string;
+			/** User's Yammer ID */
+			readonly YammerUserId: string;
+			/** Pronunciation of the first name of the user, written in phonetic hiragana or katakana characters. */
+			readonly YomiFirstName: string;
+			/** Pronunciation of the full name of the user, written in phonetic hiragana or katakana characters. */
+			readonly YomiFullName: string;
+			/** Pronunciation of the last name of the user, written in phonetic hiragana or katakana characters. */
+			readonly YomiLastName: string;
+			/** Pronunciation of the middle name of the user, written in phonetic hiragana or katakana characters. */
+			readonly YomiMiddleName: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -1091,4 +1388,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

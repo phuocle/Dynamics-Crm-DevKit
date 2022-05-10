@@ -34,6 +34,13 @@ declare namespace DevKit {
 		FacetOrder: number;
 		SystemUserId: string;
 		UserSearchFacetId: string;
+		readonly FormattedValue: {
+			readonly AttributeName: string;
+			readonly EntityName1: string;
+			readonly FacetOrder: string;
+			readonly SystemUserId: string;
+			readonly UserSearchFacetId: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -56,4 +63,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

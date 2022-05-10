@@ -52,6 +52,8 @@ var OptionSet;
 		msdyn_ComputedField : {
 			Quantity: 192350001
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

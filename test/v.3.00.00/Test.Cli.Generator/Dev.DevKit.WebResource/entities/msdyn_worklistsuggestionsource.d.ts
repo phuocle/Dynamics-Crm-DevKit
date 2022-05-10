@@ -1,6 +1,31 @@
 ﻿//@ts-check
 ///<reference path="devkit.d.ts" />
 declare namespace DevKit {
+	namespace Formmsdyn_worklistsuggestionsource_Information {
+		interface Tabs {
+		}
+		interface Body {
+			msdyn_name: DevKit.Controls.String;
+		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
+	}
+	class Formmsdyn_worklistsuggestionsource_Information extends DevKit.IForm {
+		/**
+		* Information [Main Form]
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form msdyn_worklistsuggestionsource_Information */
+		Body: DevKit.Formmsdyn_worklistsuggestionsource_Information.Body;
+		/** The Process of form msdyn_worklistsuggestionsource_Information */
+		Process: DevKit.Formmsdyn_worklistsuggestionsource_Information.Process;
+		/** The SidePanes of form msdyn_worklistsuggestionsource_Information */
+		SidePanes: DevKit.SidePanes;
+	}
 	class msdyn_worklistsuggestionsourceApi {
 		/**
 		* DynamicsCrm.DevKit msdyn_worklistsuggestionsourceApi
@@ -32,6 +57,11 @@ declare namespace DevKit {
 		msdyn_name: string;
 		/** Unique identifier for entity instances */
 		msdyn_worklistsuggestionsourceId: string;
+		readonly FormattedValue: {
+			readonly msdyn_name: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_worklistsuggestionsourceId: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -54,4 +84,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

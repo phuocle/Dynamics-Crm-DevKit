@@ -1,6 +1,32 @@
 ﻿//@ts-check
 ///<reference path="devkit.d.ts" />
 declare namespace DevKit {
+	namespace Formaaduser_Information {
+		interface Tabs {
+		}
+		interface Body {
+			/** The name displayed in the address book for the user. */
+			DisplayName: DevKit.Controls.String;
+		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
+	}
+	class Formaaduser_Information extends DevKit.IForm {
+		/**
+		* Information [Main Form]
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form aaduser_Information */
+		Body: DevKit.Formaaduser_Information.Body;
+		/** The Process of form aaduser_Information */
+		Process: DevKit.Formaaduser_Information.Process;
+		/** The SidePanes of form aaduser_Information */
+		SidePanes: DevKit.SidePanes;
+	}
 	class aaduserApi {
 		/**
 		* DynamicsCrm.DevKit aaduserApi
@@ -69,6 +95,48 @@ declare namespace DevKit {
 		UserPrincipalName: string;
 		/** User Type. */
 		UserType: string;
+		readonly FormattedValue: {
+			/** Unique identifier of an aad user. */
+			readonly aaduserId: string;
+			/** Indicates if the Account of an AAD User is enabled. */
+			readonly AccountEnabled: string;
+			/** Business phone number for the user */
+			readonly BusinessPhones: string;
+			/** City. */
+			readonly City: string;
+			/** Company Name. */
+			readonly CompanyName: string;
+			/** Date and time when the AAD user was created. */
+			readonly CreatedDateTime_UtcDateAndTime: string;
+			/** The name displayed in the address book for the user. */
+			readonly DisplayName: string;
+			/** The given name (first name) of the user. */
+			readonly GivenName: string;
+			/** A unique identifer for AAD User */
+			readonly id1: string;
+			/** ImAddresses for the user */
+			readonly ImAddresses: string;
+			/** The user's job title. */
+			readonly JobTitle: string;
+			/** The SMTP address for the user. */
+			readonly Mail: string;
+			/** The primary cellular telephone number for the user. */
+			readonly MobilePhone: string;
+			/** The office location in the user's place of business. */
+			readonly OfficeLocation: string;
+			/** Postal Code. */
+			readonly PostalCode: string;
+			/** The preferred language for the user. Should follow ISO 639-1 Code; for example 'en-US'. */
+			readonly PreferredLanguage: string;
+			/** Street Address. */
+			readonly StreetAddress: string;
+			/** The user's surname (family name or last name). */
+			readonly surname: string;
+			/** The user principal name (UPN) of the user. */
+			readonly UserPrincipalName: string;
+			/** User Type. */
+			readonly UserType: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -91,4 +159,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

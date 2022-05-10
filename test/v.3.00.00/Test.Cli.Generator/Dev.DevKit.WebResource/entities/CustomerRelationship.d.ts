@@ -122,10 +122,67 @@ declare namespace DevKit {
 		/** For internal use only. */
 		readonly UniqueDscId: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the converse relationship of the customer relationship. */
+			readonly ConverseRelationshipId: string;
+			/** Shows who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the customer relationship was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Select the primary account or contact involved in the customer relationship. */
+			readonly customerid_account: string;
+			/** Select the primary account or contact involved in the customer relationship. */
+			readonly customerid_contact: string;
+			/** Unique identifier of the customer relationship. */
+			readonly CustomerRelationshipId: string;
+			/** Type additional information about the primary party's role in the customer relationship, such as the length or quality of the relationship. */
+			readonly CustomerRoleDescription: string;
+			/** Choose the primary party's role or nature of the relationship the customer has with the second party. The field is read-only until both parties have been selected. Administrators can configure role values under Business Management in the Settings area. */
+			readonly CustomerRoleId: string;
+			/** Unique identifier of the data import or data migration that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Shows who last updated the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier of the business unit that owns the customer relationship. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the team who owns the customer relationship. */
+			readonly OwningTeam: string;
+			/** Unique identifier of the user who owns the customer relationship. */
+			readonly OwningUser: string;
+			/** Select the secondary account or contact involved in the customer relationship. */
+			readonly partnerid_account: string;
+			/** Select the secondary account or contact involved in the customer relationship. */
+			readonly partnerid_contact: string;
+			/** Type additional information about the secondary party's role in the customer relationship, such as the length or quality of the relationship. */
+			readonly PartnerRoleDescription: string;
+			/** Choose the secondary party's role or nature of the relationship the customer has with the primary party. The field is read-only until both parties have been selected. Administrators can configure role values under Business Management in the Settings area. */
+			readonly PartnerRoleId: string;
+			/** For internal use only. */
+			readonly UniqueDscId: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace CustomerRelationship {
+		enum CustomerIdType {
+		}
+		enum OwnerIdType {
+		}
+		enum PartnerIdType {
+		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
 			NotCalculated,
@@ -144,4 +201,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

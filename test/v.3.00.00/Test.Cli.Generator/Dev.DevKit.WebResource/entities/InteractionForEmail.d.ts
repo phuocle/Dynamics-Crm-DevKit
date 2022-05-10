@@ -96,6 +96,75 @@ declare namespace DevKit {
 		/** Time zone code that was in use when the record was created. */
 		UTCConversionTimeZoneCode: number;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Email Activity Id. */
+			readonly EmailActivityId: string;
+			/** For internal use only. */
+			readonly EmailAddress: string;
+			/** Email Activity Id. */
+			readonly EmailInteractionReplyId: string;
+			/** Shows the Interaction date and time of the an email. */
+			readonly EmailInteractionTime_UtcDateAndTime: string;
+			/** Exchange rate for the currency associated with the InteractionForEmail with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** For internal use only. */
+			readonly InteractedComponentText: string;
+			/** Unique identifier for entity instances */
+			readonly InteractionForEmailId: string;
+			/** Shows the location for an Interaction */
+			readonly InteractionLocation: string;
+			/** For internal use only. */
+			readonly InteractionPartyId: string;
+			/** For internal use only */
+			readonly InteractionPartyTypecode: string;
+			/** Shows the Name who replied to email if interaction is reply */
+			readonly InteractionRepliedBy: string;
+			/** InteractionReplyId */
+			readonly InteractionReplyId: string;
+			/** Shows the type of Interaction. */
+			readonly InteractionType: string;
+			/** Shows the User Agent for an Interaction if available */
+			readonly InteractionUserAgent: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** The name of the custom entity. */
+			readonly name: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the Interaction for Email */
+			readonly statecode: string;
+			/** Reason for the status of the Interaction for Email */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Exchange rate for the currency associated with the InteractionForEmail with respect to the base currency. */
+			readonly TransactionCurrencyId: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -109,6 +178,8 @@ declare namespace OptionSet {
 			EmailReply,
 			/** 1 */
 			LinkOpen
+		}
+		enum OwnerIdType {
 		}
 		enum statecode {
 			/** 0 */
@@ -140,4 +211,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

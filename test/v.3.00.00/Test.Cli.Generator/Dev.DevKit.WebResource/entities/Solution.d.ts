@@ -156,6 +156,70 @@ declare namespace DevKit {
 		/** Solution version, used to identify a solution for upgrades and hotfixes. */
 		Version: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** A link to an optional configuration page for this solution. */
+			readonly ConfigurationPageId: string;
+			/** Unique identifier of the user who created the solution. */
+			readonly CreatedBy: string;
+			/** Date and time when the solution was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the solution. */
+			readonly CreatedOnBehalfBy: string;
+			/** Description of the solution. */
+			readonly Description: string;
+			/** File Id for the blob url used for file storage. */
+			readonly FileId: string;
+			/** User display name for the solution. */
+			readonly FriendlyName: string;
+			/** Date and time when the solution was installed/upgraded. */
+			readonly InstalledOn_UtcDateOnly: string;
+			/** Information about whether the solution is api managed. */
+			readonly IsApiManaged: string;
+			/** Indicates whether the solution is internal or not. */
+			readonly IsInternal: string;
+			/** Indicates whether the solution is managed or unmanaged. */
+			readonly IsManaged: string;
+			/** Indicates whether the solution is visible outside of the platform. */
+			readonly IsVisible: string;
+			/** Unique identifier of the user who last modified the solution. */
+			readonly ModifiedBy: string;
+			/** Date and time when the solution was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the solution. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Unique identifier of the organization associated with the solution. */
+			readonly OrganizationId: string;
+			/** Unique identifier of the parent solution. Should only be non-null if this solution is a patch. */
+			readonly ParentSolutionId: string;
+			readonly PinpointAssetId: string;
+			/** Identifier of the publisher of this solution in Microsoft Pinpoint. */
+			readonly PinpointPublisherId: string;
+			/** Default locale of the solution in Microsoft Pinpoint. */
+			readonly PinpointSolutionDefaultLocale: string;
+			/** Identifier of the solution in Microsoft Pinpoint. */
+			readonly PinpointSolutionId: string;
+			/** Unique identifier of the publisher. */
+			readonly PublisherId: string;
+			/** Unique identifier of the solution. */
+			readonly SolutionId: string;
+			/** Solution package source organization version */
+			readonly SolutionPackageVersion: string;
+			/** Solution Type */
+			readonly SolutionType: string;
+			/** The template suffix of this solution */
+			readonly TemplateSuffix: string;
+			/** thumbprint of the solution signature */
+			readonly Thumbprint: string;
+			/** The unique name of this solution */
+			readonly UniqueName: string;
+			/** Date and time when the solution was updated. */
+			readonly UpdatedOn_UtcDateAndTime: string;
+			/** Contains component info for the solution upgrade operation */
+			readonly UpgradeInfo: string;
+			/** Solution version, used to identify a solution for upgrades and hotfixes. */
+			readonly Version: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -186,4 +250,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

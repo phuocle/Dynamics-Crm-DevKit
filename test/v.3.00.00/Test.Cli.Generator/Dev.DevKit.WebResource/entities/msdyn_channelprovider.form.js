@@ -55,6 +55,8 @@ var OptionSet;
 		msdyn_apiversion : {
 			_2: 162450000
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

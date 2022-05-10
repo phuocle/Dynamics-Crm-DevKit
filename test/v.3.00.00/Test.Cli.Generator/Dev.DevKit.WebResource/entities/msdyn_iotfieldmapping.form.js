@@ -67,6 +67,8 @@ var OptionSet;
 			Direct_Path: 192350000,
 			Key_Value_Path: 192350001
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

@@ -153,6 +153,74 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** The Beacon configuration */
+			readonly msdyn_BeaconConfiguration: string;
+			/** Checks if location tracking is enabled. */
+			readonly msdyn_EnableLocationTracking: string;
+			/** The Friday tracking end time */
+			readonly msdyn_fridayendtime_TimezoneDateAndTime: string;
+			/** The Friday tracking start time */
+			readonly msdyn_fridaystarttime_TimezoneDateAndTime: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_geolocationsettingsId: string;
+			/** The Monday tracking end time */
+			readonly msdyn_mondayendtime_TimezoneDateAndTime: string;
+			/** The Monday tracking start time */
+			readonly msdyn_mondaystarttime_TimezoneDateAndTime: string;
+			/** The name of the geolocation settings */
+			readonly msdyn_name: string;
+			/** The frequency in seconds at which location data should be uploaded from mobile clients to the server */
+			readonly msdyn_refreshIntervalSeconds: string;
+			/** The Saturday tracking end time */
+			readonly msdyn_saturdayendtime_TimezoneDateAndTime: string;
+			/** The Saturday tracking start time */
+			readonly msdyn_saturdaystarttime_TimezoneDateAndTime: string;
+			/** The Sunday tracking end time */
+			readonly msdyn_sundayendtime_TimezoneDateAndTime: string;
+			/** The Sunday tracking start time */
+			readonly msdyn_sundaystarttime_TimezoneDateAndTime: string;
+			/** The Thursday tracking end time */
+			readonly msdyn_thursdayendtime_TimezoneDateAndTime: string;
+			/** The Thursday tracking start time */
+			readonly msdyn_thursdaystarttime_TimezoneDateAndTime: string;
+			/** The Tuesday tracking end time */
+			readonly msdyn_tuesdayendtime_TimezoneDateAndTime: string;
+			/** The Tuesday tracking start time */
+			readonly msdyn_tuesdaystarttime_TimezoneDateAndTime: string;
+			/** The Wednesday tracking end time */
+			readonly msdyn_wednesdayendtime_TimezoneDateAndTime: string;
+			/** The Wednesday tracking start time */
+			readonly msdyn_wednesdaystarttime_TimezoneDateAndTime: string;
+			/** Unique identifier for the organization */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Status of the GeolocationSettings */
+			readonly statecode: string;
+			/** Reason for the status of the GeolocationSettings */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -187,4 +255,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

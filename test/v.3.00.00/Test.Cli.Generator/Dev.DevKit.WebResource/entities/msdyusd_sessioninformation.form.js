@@ -52,6 +52,8 @@ var OptionSet;
 			Session_Name: 803750000,
 			Session_Overview_Line: 803750001
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

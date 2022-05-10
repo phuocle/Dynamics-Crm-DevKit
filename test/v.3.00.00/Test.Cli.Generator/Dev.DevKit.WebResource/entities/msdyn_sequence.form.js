@@ -71,6 +71,8 @@ var OptionSet;
 			Activation: 1,
 			Definition: 0
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 1,
 			Inactive: 0

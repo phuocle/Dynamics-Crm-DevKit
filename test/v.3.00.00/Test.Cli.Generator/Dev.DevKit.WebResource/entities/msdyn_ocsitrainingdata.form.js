@@ -45,6 +45,8 @@ var OptionSet;
 			Needs_further_investigation: 326340002,
 			Pending: 326340001
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

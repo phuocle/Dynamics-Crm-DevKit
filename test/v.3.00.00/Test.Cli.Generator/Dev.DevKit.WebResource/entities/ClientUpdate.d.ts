@@ -42,6 +42,21 @@ declare namespace DevKit {
 		WasExecuted: boolean;
 		/** For internal use only. Values are: 1 - Before SchemaChanges; 2 - After SchemaChanges but before Download data; 3 - After download data. */
 		WhenExecute: OptionSet.ClientUpdate.WhenExecute;
+		readonly FormattedValue: {
+			/** Unique identifier of the client update. */
+			readonly ClientUpdateId: string;
+			/** For internal use only. Date and time when the ClientUpdate script was created on server. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Description of the client update. */
+			readonly Description: string;
+			/** Contents of the client update. */
+			readonly SqlScript: string;
+			readonly VersionNumber: string;
+			/** For internal use only. Should be set by client to 1 after action was executed. */
+			readonly WasExecuted: string;
+			/** For internal use only. Values are: 1 - Before SchemaChanges; 2 - After SchemaChanges but before Download data; 3 - After download data. */
+			readonly WhenExecute: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -72,4 +87,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

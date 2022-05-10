@@ -81,6 +81,60 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version number of the report category. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Category of the report. */
+			readonly CategoryCode: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier of the user who created the report category. */
+			readonly CreatedBy: string;
+			/** Date and time when the report category record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the report category. */
+			readonly CreatedOnBehalfBy: string;
+			/** Exchange rate for the currency associated with the report category with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Unique identifier of the data import or data migration that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Information that specifies whether this component can be customized. */
+			readonly IsCustomizable: string;
+			/** Indicates whether the solution component is part of a managed solution. */
+			readonly IsManaged: string;
+			/** Unique identifier of the user who last modified the report category. */
+			readonly ModifiedBy: string;
+			/** Date and time when the report category was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the report category. */
+			readonly ModifiedOnBehalfBy: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier of the business unit that owns the report category. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the user who owns the report category. */
+			readonly OwningUser: string;
+			/** Unique identifier of the report category. */
+			readonly ReportCategoryId: string;
+			/** For internal use only. */
+			readonly ReportCategoryIdUnique: string;
+			/** Unique identifier of the report. */
+			readonly ReportId: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Unique identifier of the currency associated with the Report category. */
+			readonly TransactionCurrencyId: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version number of the report category. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -105,6 +159,8 @@ declare namespace OptionSet {
 			/** 1 */
 			Unpublished
 		}
+		enum OwnerIdType {
+		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
 			NotCalculated,
@@ -123,4 +179,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

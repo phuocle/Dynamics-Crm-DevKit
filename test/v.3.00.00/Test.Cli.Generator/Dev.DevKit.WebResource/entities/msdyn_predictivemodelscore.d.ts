@@ -109,6 +109,62 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Entity ID of primary entity. */
+			readonly msdyn_EntityId: string;
+			/** Entity type of primary entity. */
+			readonly msdyn_EntityType: string;
+			/** Grade of prediction score. */
+			readonly msdyn_Grade: string;
+			/** Prediction model name. */
+			readonly msdyn_ModelName: string;
+			/** The name of the custom entity. */
+			readonly msdyn_name: string;
+			/** Prediction model definition ID. */
+			readonly msdyn_PredictionID: string;
+			/** Unique identifier for entity instances. */
+			readonly msdyn_predictivemodelscoreId: string;
+			/** Unique identifier for Predictive Score associated with Predictive Model Score. */
+			readonly msdyn_PredictiveScoreId: string;
+			/** Prediction score. */
+			readonly msdyn_Score: string;
+			/** Scored on. */
+			readonly msdyn_ScoredOn_UtcDateOnly: string;
+			/** Score history. */
+			readonly msdyn_ScoreHistory: string;
+			/** Score reasons. */
+			readonly msdyn_ScoreReasons: string;
+			/** Score trend. */
+			readonly msdyn_ScoreTrend: string;
+			/** Unique identifier for the organization. */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Status of the Predictive Model Score. */
+			readonly statecode: string;
+			/** Reason for the status of the Predictive Model Score. */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -163,4 +219,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

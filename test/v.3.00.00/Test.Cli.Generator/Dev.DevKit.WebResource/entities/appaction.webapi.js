@@ -80,10 +80,12 @@ var DevKit;
 			CreatedOn_UtcDateAndTime: { a: 'createdon', r: true },
 			CreatedOnBehalfBy: { b: 'createdonbehalfby', a: '_createdonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
 			FontIcon: { a: 'fonticon' },
+			GroupTitle: { a: 'grouptitle' },
 			Hidden: { a: 'hidden' },
 			IconWebResourceId: { b: 'iconwebresourceid', a: '_iconwebresourceid_value', c: 'webresources', d: 'webresource' },
 			ImportSequenceNumber: { a: 'importsequencenumber' },
 			IsCustomizable: { a: 'iscustomizable' },
+			isGroupTitleHidden: { a: 'isgrouptitlehidden' },
 			IsManaged: { a: 'ismanaged', r: true },
 			Location: { a: 'location' },
 			ModifiedBy: { b: 'modifiedby', a: '_modifiedby_value', c: 'systemusers', d: 'systemuser', r: true },
@@ -101,6 +103,7 @@ var DevKit;
 			OrganizationId: { b: 'organizationid', a: '_organizationid_value', c: 'organizations', d: 'organization', r: true },
 			OverriddenCreatedOn_UtcDateOnly: { a: 'overriddencreatedon' },
 			OverwriteTime_UtcDateAndTime: { a: 'overwritetime', r: true },
+			ParentAppActionId: { b: 'parentappactionid', a: '_parentappactionid_value', c: 'appactions', d: 'appaction' },
 			SolutionId: { a: 'solutionid', r: true },
 			statecode: { a: 'statecode' },
 			statuscode: { a: 'statuscode' },
@@ -113,7 +116,8 @@ var DevKit;
 			VisibilityFormulaComponentLibrary: { a: 'visibilityformulacomponentlibrary' },
 			VisibilityFormulaComponentLibraryId: { b: 'visibilityformulacomponentlibraryid', a: '_visibilityformulacomponentlibraryid_value', c: 'canvasapps', d: 'canvasapp' },
 			VisibilityFormulaComponentName: { a: 'visibilityformulacomponentname' },
-			VisibilityFormulaFunctionName: { a: 'visibilityformulafunctionname' }
+			VisibilityFormulaFunctionName: { a: 'visibilityformulafunctionname' },
+			VisibilityType: { a: 'visibilitytype' }
 		};
 		if (e === undefined) e = {};
 		var u = {};
@@ -144,7 +148,7 @@ var DevKit;
 		}
 		appaction.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -197,8 +201,14 @@ var OptionSet;
 		},
 		Type : {
 			Dropdown_Button: 1,
+			Group: 3,
 			Split_Button: 2,
 			Standard_Button: 0
+		},
+		VisibilityType : {
+			Classic_Rules: 2,
+			Formula: 1,
+			None: 0
 		},
 		RollupState : {
 			NotCalculated: 0,

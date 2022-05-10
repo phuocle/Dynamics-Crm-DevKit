@@ -42,6 +42,8 @@ var OptionSet;
 			Published: 0,
 			Unpublished: 1
 		},
+		ObjectIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

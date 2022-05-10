@@ -48,6 +48,10 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.ExternalPartyItem = {
+		OwnerIdType : {
+		},
+		RegardingObjectTypeCode : {
+		},
 		StateCode : {
 			Disabled: 1,
 			Enabled: 0

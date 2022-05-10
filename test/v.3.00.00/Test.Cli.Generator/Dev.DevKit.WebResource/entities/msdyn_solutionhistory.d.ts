@@ -106,6 +106,37 @@ declare namespace DevKit {
 		msdyn_status: OptionSet.msdyn_solutionhistory.msdyn_status;
 		msdyn_suboperation: OptionSet.msdyn_solutionhistory.msdyn_suboperation;
 		msdyn_totaltime: number;
+		readonly FormattedValue: {
+			readonly msdyn_activityid: string;
+			readonly msdyn_correlationid: string;
+			readonly msdyn_endtime_UtcDateAndTime: string;
+			readonly msdyn_errorcode: string;
+			readonly msdyn_exceptionmessage: string;
+			readonly msdyn_exceptionstack: string;
+			readonly msdyn_ismanaged: string;
+			readonly msdyn_isoverwritecustomizations: string;
+			readonly msdyn_ispatch: string;
+			/** Maximum number of retries. */
+			readonly msdyn_maxretries: string;
+			/** The name of the custom entity. */
+			readonly msdyn_name: string;
+			readonly msdyn_operation: string;
+			readonly msdyn_packagename: string;
+			readonly msdyn_packageversion: string;
+			readonly msdyn_publisherid: string;
+			readonly msdyn_publishername: string;
+			readonly msdyn_result: string;
+			/** Retry count */
+			readonly msdyn_retrycount: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_solutionhistoryId: string;
+			readonly msdyn_solutionid: string;
+			readonly msdyn_solutionversion: string;
+			readonly msdyn_starttime_UtcDateAndTime: string;
+			readonly msdyn_status: string;
+			readonly msdyn_suboperation: string;
+			readonly msdyn_totaltime: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -168,4 +199,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

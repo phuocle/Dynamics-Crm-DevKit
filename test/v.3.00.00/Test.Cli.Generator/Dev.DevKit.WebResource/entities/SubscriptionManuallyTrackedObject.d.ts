@@ -39,6 +39,18 @@ declare namespace DevKit {
 		Track: boolean;
 		/** Version number of the subscription manually tracked object. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the object with which the subscription is associated. */
+			readonly ObjectId: string;
+			/** Unique identifier of the subscription. */
+			readonly SubscriptionId: string;
+			/** For internal use only. */
+			readonly SubscriptionManuallyTrackedObjectId: string;
+			/** Information that specifies if the object is tracked. */
+			readonly Track: string;
+			/** Version number of the subscription manually tracked object. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -67,4 +79,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

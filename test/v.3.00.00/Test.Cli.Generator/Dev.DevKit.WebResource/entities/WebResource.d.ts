@@ -91,6 +91,70 @@ declare namespace DevKit {
 		readonly WebResourceIdUnique: string;
 		/** Drop-down list for selecting the type of the web resource. */
 		WebResourceType: OptionSet.WebResource.WebResourceType;
+		readonly FormattedValue: {
+			/** Information that specifies whether this component can be deleted. */
+			readonly CanBeDeleted: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Bytes of the web resource, in Base64 format. */
+			readonly Content: string;
+			/** Reference to the content file on Azure. */
+			readonly ContentFileRef: string;
+			/** Json representation of the content of the resource. */
+			readonly ContentJson: string;
+			/** Reference to the Json content file on Azure. */
+			readonly ContentJsonFileRef: string;
+			/** Unique identifier of the user who created the web resource. */
+			readonly CreatedBy: string;
+			/** Date and time when the web resource was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the web resource. */
+			readonly CreatedOnBehalfBy: string;
+			/** For internal use only. */
+			readonly DependencyXml: string;
+			/** Description of the web resource. */
+			readonly Description: string;
+			/** Display name of the web resource. */
+			readonly DisplayName: string;
+			/** Version in which the form is introduced. */
+			readonly IntroducedVersion: string;
+			/** Information that specifies whether this web resource is available for mobile client in offline mode. */
+			readonly IsAvailableForMobileOffline: string;
+			/** Information that specifies whether this component can be customized. */
+			readonly IsCustomizable: string;
+			/** Information that specifies whether this web resource is enabled for mobile client. */
+			readonly IsEnabledForMobileClient: string;
+			/** Information that specifies whether this component should be hidden. */
+			readonly IsHidden: string;
+			readonly IsManaged: string;
+			/** Language of the web resource. */
+			readonly LanguageCode: string;
+			/** Unique identifier of the user who last modified the web resource. */
+			readonly ModifiedBy: string;
+			/** Date and time when the web resource was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the web resource. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Name of the web resource. */
+			readonly Name: string;
+			/** Unique identifier of the organization associated with the web resource. */
+			readonly OrganizationId: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Silverlight runtime version number required by a silverlight web resource. */
+			readonly SilverlightVersion: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			readonly VersionNumber: string;
+			/** Unique identifier of the web resource. */
+			readonly WebResourceId: string;
+			/** For internal use only. */
+			readonly WebResourceIdUnique: string;
+			/** Drop-down list for selecting the type of the web resource. */
+			readonly WebResourceType: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -149,4 +213,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

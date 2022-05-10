@@ -43,6 +43,22 @@ declare namespace DevKit {
 		readonly NotificationNumber: number;
 		/** For internal use only. */
 		OrganizationId: string;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** For internal use only. */
+			readonly CreatedOnString: string;
+			/** For internal use only. */
+			readonly EventData: string;
+			/** For internal use only. */
+			readonly EventId: string;
+			/** For internal use only. */
+			readonly NotificationId: string;
+			/** For internal use only. */
+			readonly NotificationNumber: string;
+			/** For internal use only. */
+			readonly OrganizationId: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -65,4 +81,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

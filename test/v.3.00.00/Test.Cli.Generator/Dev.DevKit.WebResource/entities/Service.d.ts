@@ -168,6 +168,61 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Used in conjunction with granularity to describes when services can be performed in relation to midnight on a given day. */
+			readonly AnchorOffset: string;
+			/** Unique identifier of the calendar. */
+			readonly CalendarId: string;
+			/** Unique identifier of the user who created the service. */
+			readonly CreatedBy: string;
+			/** Date and time when the service was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the service. */
+			readonly CreatedOnBehalfBy: string;
+			/** Description of activity that represents work done to satisfy a customer's need. */
+			readonly Description: string;
+			/** Duration of the service. */
+			readonly Duration: string;
+			/** Describes how often the service is performed. */
+			readonly Granularity: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Initial status reason for the service activity. */
+			readonly InitialStatusCode: string;
+			/** Information about whether the service can be scheduled. */
+			readonly IsSchedulable: string;
+			/** Information about whether the service is visible to users. */
+			readonly IsVisible: string;
+			/** Unique identifier of the user who last modified the service. */
+			readonly ModifiedBy: string;
+			/** Date and time when the service was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the service. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Unique identifier for Requirement Group associated with Service. */
+			readonly msdyn_RequirementGroupId: string;
+			readonly msdyn_SchedulingEngine: string;
+			/** Name of the service. */
+			readonly Name: string;
+			/** Unique identifier for the organization */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Unique identifier of the resource specification with which the service is associated. */
+			readonly ResourceSpecId: string;
+			/** Unique identifier of the associated service. */
+			readonly ServiceId: string;
+			/** For internal use only. */
+			readonly ShowResources: string;
+			/** Value that is taken from PluginTypeId in the Plugin Type record for the scheduling strategy. This is the ID of the scheduling strategy plug-in associated with the service. */
+			readonly StrategyId: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -216,4 +271,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

@@ -504,10 +504,8 @@ declare namespace DevKit {
 		}
 		interface Body {
 			Tab: Tabs;
-			/** Select whether the price per unit is fixed at the value in the specified price list or can be overridden by users who have edit rights to the order product. */
-			IsPriceOverridden: DevKit.Controls.Boolean;
-			/** Select whether the product exists in the Microsoft Dynamics 365 product catalog or is a write-in product specific to the order. */
-			IsProductOverridden: DevKit.Controls.Boolean;
+			ispriceoverridden: DevKit.Controls.ActionCards;
+			isproductoverridden: DevKit.Controls.ActionCards;
 			/** Type the manual discount amount for the order product to deduct any negotiated or other savings from the product total on the order. */
 			ManualDiscountAmount: DevKit.Controls.Money;
 			/** Type the price per unit of the order product. The default is the value in the price list specified on the order for existing products. */
@@ -772,6 +770,188 @@ declare namespace DevKit {
 		readonly VolumeDiscountAmount_Base: number;
 		/** Select whether the order product should be shipped to the specified address or held until the customer calls with further pick up or delivery instructions. */
 		WillCall: boolean;
+		readonly FormattedValue: {
+			/** Shows the total price of the order product, based on the price per unit, volume discount, and quantity. */
+			readonly BaseAmount: string;
+			/** Value of the Amount in base currency. */
+			readonly BaseAmount_Base: string;
+			/** Shows who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Type additional information to describe the order product, such as manufacturing details or acceptable substitutions. */
+			readonly Description: string;
+			/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
+			readonly ExchangeRate: string;
+			/** Shows the total amount due for the order product, based on the sum of the unit price, quantity, discounts, and tax. */
+			readonly ExtendedAmount: string;
+			/** Value of the Extended Amount in base currency. */
+			readonly ExtendedAmount_Base: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Select whether the invoice line item is copied from another item or data source. */
+			readonly IsCopied: string;
+			/** Select whether the price per unit is fixed at the value in the specified price list or can be overridden by users who have edit rights to the order product. */
+			readonly IsPriceOverridden: string;
+			/** Select whether the product exists in the Microsoft Dynamics 365 product catalog or is a write-in product specific to the order. */
+			readonly IsProductOverridden: string;
+			/** Type the line item number for the order product to easily identify the product in the order and make sure it's listed in the correct sequence. */
+			readonly LineItemNumber: string;
+			/** Type the manual discount amount for the order product to deduct any negotiated or other savings from the product total on the order. */
+			readonly ManualDiscountAmount: string;
+			/** Value of the Manual Discount in base currency. */
+			readonly ManualDiscountAmount_Base: string;
+			/** Shows who last updated the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who last updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Select a Agreement for this order line */
+			readonly msdyn_agreement: string;
+			/** Billing method for the project contract line. Valid values are Time and Material and Fixed Price */
+			readonly msdyn_BillingMethod: string;
+			/** Select the billing start date for the project contract line. */
+			readonly msdyn_BillingStartDate_UtcDateOnly: string;
+			/** Select the billing status for the project contract line. */
+			readonly msdyn_BillingStatus: string;
+			/** Enter the amount the customer has set aside or is willing to pay for the project contract component. */
+			readonly msdyn_BudgetAmount: string;
+			/** Value of the Budget Amount in base currency. */
+			readonly msdyn_budgetamount_Base: string;
+			/** Shows the total cost price of the product based on the cost price per unit and quantity. */
+			readonly msdyn_CostAmount: string;
+			/** Value of the Cost Amount in base currency. */
+			readonly msdyn_costamount_Base: string;
+			/** Cost per unit of the product. The default is the cost price of the product. */
+			readonly msdyn_CostPricePerUnit: string;
+			/** Value of the Cost Price Per Unit in base currency. */
+			readonly msdyn_costpriceperunit_Base: string;
+			/** Select whether to include expenses in the project contract line. */
+			readonly msdyn_IncludeExpense: string;
+			/** Select whether to include fees in the project contract line. */
+			readonly msdyn_IncludeFee: string;
+			/** Select whether to include materials in the project contract line. */
+			readonly msdyn_IncludeMaterial: string;
+			/** Select whether to include time transactions in the project contract line. */
+			readonly msdyn_IncludeTime: string;
+			/** Select the frequency for the automatic invoice creation job to create the invoice. */
+			readonly msdyn_invoicefrequency: string;
+			/** The field to distinguish the order lines to be of project service or field service */
+			readonly msdyn_LineType: string;
+			/** Select the project of the project contract line. */
+			readonly msdyn_Project: string;
+			/** (Deprecated) Shows the quote line related to the project contract line. */
+			readonly msdyn_QuoteLine: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Choose the parent bundle associated with this product */
+			readonly ParentBundleId: string;
+			/** Choose the parent bundle associated with this product */
+			readonly ParentBundleIdRef: string;
+			/** Type the price per unit of the order product. The default is the value in the price list specified on the order for existing products. */
+			readonly PricePerUnit: string;
+			/** Value of the Price Per Unit in base currency. */
+			readonly PricePerUnit_Base: string;
+			/** Select the type of pricing error, such as a missing or invalid product, or missing quantity. */
+			readonly PricingErrorCode: string;
+			/** Unique identifier of the product line item association with bundle in the sales order */
+			readonly ProductAssociationId: string;
+			/** Type a name or description to identify the type of write-in product included in the order. */
+			readonly ProductDescription: string;
+			/** Choose the product to include on the order to link the product's pricing and other information to the parent order. */
+			readonly ProductId: string;
+			/** Calculated field that will be populated by name and description of the product. */
+			readonly ProductName: string;
+			/** User-defined product ID. */
+			readonly ProductNumber: string;
+			/** Product Type */
+			readonly ProductTypeCode: string;
+			/** Status of the property configuration. */
+			readonly PropertyConfigurationStatus: string;
+			/** Type the amount or quantity of the product ordered by the customer. */
+			readonly Quantity: string;
+			/** Type the amount or quantity of the product that is back ordered for the order. */
+			readonly QuantityBackordered: string;
+			/** Type the amount or quantity of the product that was canceled. */
+			readonly QuantityCancelled: string;
+			/** Type the amount or quantity of the product that was shipped for the order. */
+			readonly QuantityShipped: string;
+			/** Unique identifier for Quote Line associated with Order Line. */
+			readonly QuoteDetailId: string;
+			/** Enter the delivery date requested by the customer for the order product. */
+			readonly RequestDeliveryBy_UtcDateOnly: string;
+			/** Unique identifier of the product specified in the order. */
+			readonly SalesOrderDetailId: string;
+			/** Sales Order Detail Name. Added for 1:n referential relationship (internal purposes only) */
+			readonly SalesOrderDetailName: string;
+			/** Shows the order for the product. The ID is used to link product pricing and other details to the total amounts and other information on the order. */
+			readonly SalesOrderId: string;
+			/** Tells whether product pricing is locked for the order. */
+			readonly SalesOrderIsPriceLocked: string;
+			/** Shows the status of the order that the order detail is associated with. */
+			readonly SalesOrderStateCode: string;
+			/** Choose the user responsible for the sale of the order product. */
+			readonly SalesRepId: string;
+			/** Shows the ID of the data that maintains the sequence. */
+			readonly SequenceNumber: string;
+			/** Unique identifier of the shipping address. */
+			readonly ShipTo_AddressId: string;
+			/** Type the city for the customer's shipping address. */
+			readonly ShipTo_City: string;
+			/** Type the primary contact name at the customer's shipping address. */
+			readonly ShipTo_ContactName: string;
+			/** Type the country or region for the customer's shipping address. */
+			readonly ShipTo_Country: string;
+			/** Type the fax number for the customer's shipping address. */
+			readonly ShipTo_Fax: string;
+			/** Select the freight terms to make sure shipping orders are processed correctly. */
+			readonly ShipTo_FreightTermsCode: string;
+			/** Type the first line of the customer's shipping address. */
+			readonly ShipTo_Line1: string;
+			/** Type the second line of the customer's shipping address. */
+			readonly ShipTo_Line2: string;
+			/** Type the third line of the shipping address. */
+			readonly ShipTo_Line3: string;
+			/** Type a name for the customer's shipping address, such as "Headquarters" or "Field office",  to identify the address. */
+			readonly ShipTo_Name: string;
+			/** Type the ZIP Code or postal code for the shipping address. */
+			readonly ShipTo_PostalCode: string;
+			/** Type the state or province for the shipping address. */
+			readonly ShipTo_StateOrProvince: string;
+			/** Type the phone number for the customer's shipping address. */
+			readonly ShipTo_Telephone: string;
+			/** Skip the price calculation */
+			readonly SkipPriceCalculation: string;
+			/** Type the tax amount for the order product. */
+			readonly Tax: string;
+			/** Value of the Tax in base currency. */
+			readonly Tax_Base: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			readonly TransactionCurrencyId: string;
+			/** Choose the unit of measurement for the base unit quantity for this purchase, such as each or dozen. */
+			readonly UoMId: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+			/** Shows the discount amount per unit if a specified volume is purchased. Configure volume discounts in the Product Catalog in the Settings area. */
+			readonly VolumeDiscountAmount: string;
+			/** Value of the Volume Discount in base currency. */
+			readonly VolumeDiscountAmount_Base: string;
+			/** Select whether the order product should be shipped to the specified address or held until the customer calls with further pick up or delivery instructions. */
+			readonly WillCall: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -801,6 +981,8 @@ declare namespace OptionSet {
 			Field_Service_Line,
 			/** 690970000 */
 			Project_Service_Line
+		}
+		enum OwnerIdType {
 		}
 		enum PricingErrorCode {
 			/** 36 */
@@ -902,6 +1084,8 @@ declare namespace OptionSet {
 			/** 1 */
 			Rectify
 		}
+		enum SalesOrderStateCode {
+		}
 		enum ShipTo_FreightTermsCode {
 			/** 1 */
 			FOB,
@@ -936,4 +1120,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

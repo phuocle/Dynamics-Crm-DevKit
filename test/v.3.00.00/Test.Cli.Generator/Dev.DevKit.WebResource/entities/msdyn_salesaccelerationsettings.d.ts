@@ -115,6 +115,68 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Type of calendar to honour availability */
+			readonly msdyn_CalendarType: string;
+			/** Indicates whether when Mark Complete is done on a step/manual activity, is the WQ to be refreshed or not */
+			readonly msdyn_DisableWQAutoRefreshOnMarkComplete: string;
+			/** Entity configuration for the work queue */
+			readonly msdyn_EntityConfiguration: string;
+			/** Indicates whether automatic creation of phonecall activity record is enabled. */
+			readonly msdyn_IsAutoCreatePhoneCallEnabled: string;
+			/** Indicates whether the settings record is default. */
+			readonly msdyn_IsDefaultSetting: string;
+			/** Indicates whether receiving notifications from signalR is enabled or not. */
+			readonly msdyn_IsSignalRNotificationEnabled: string;
+			/** Indicates whether work schedule setting is enabled. */
+			readonly msdyn_IsWorkScheduleEnabled: string;
+			/** Admin configuration of linking between sequence step and activities */
+			readonly msdyn_linkingconfiguration: string;
+			/** Indicates whether sequence step should be linked to activity created from it. */
+			readonly msdyn_LinkSequenceStepToActivity: string;
+			/** Status of Migration */
+			readonly msdyn_MigrationStatus: string;
+			/** The name of the Sales Acceleration settings instance. */
+			readonly msdyn_name: string;
+			/** Suggestion Security roles enabled for the settings instance */
+			readonly msdyn_RecommendationSecurityRoles: string;
+			/** Unique identifier for Sales Acceleration settings instance */
+			readonly msdyn_salesaccelerationsettingsId: string;
+			/** Security roles enabled for the settings instance */
+			readonly msdyn_SecurityRoles: string;
+			/** Security roles list for assignment rules */
+			readonly msdyn_SecurityRolesAssignmentRules: string;
+			/** Security roles (new) enabled for the settings instance */
+			readonly msdyn_SecurityRolesNew: string;
+			/** Unique identifier for the organization */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Status of the Sales Acceleration settings */
+			readonly statecode: string;
+			/** Reason for the status of the Sales Acceleration settings */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -157,4 +219,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

@@ -50,6 +50,7 @@ var DevKit;
 			msdyn_name: {},
 			msdyn_OpportunityId: {},
 			msdyn_ParentWorkOrder: {},
+			msdyn_phoneNumber: {},
 			msdyn_PostalCode: {},
 			msdyn_PriceList: {},
 			msdyn_PrimaryIncidentDescription: {},
@@ -264,6 +265,7 @@ var DevKit;
 		var body = {
 			msdyn_Address1: {},
 			msdyn_Address2: {},
+			msdyn_Address3: {},
 			msdyn_BillingAccount: {},
 			msdyn_City: {},
 			msdyn_Country: {},
@@ -273,6 +275,7 @@ var DevKit;
 			msdyn_Longitude: {},
 			msdyn_mapcontrol: {},
 			msdyn_name: {},
+			msdyn_phoneNumber: {},
 			msdyn_PostalCode: {},
 			msdyn_PrimaryIncidentType: {},
 			msdyn_ServiceAccount: {},
@@ -400,6 +403,7 @@ var DevKit;
 			msdyn_mapcontrol: {},
 			msdyn_name: {},
 			msdyn_ParentWorkOrder: {},
+			msdyn_phoneNumber: {},
 			msdyn_PostalCode: {},
 			msdyn_PriceList: {},
 			msdyn_PrimaryIncidentDescription: {},
@@ -954,6 +958,8 @@ var OptionSet;
 			Facility: 690970001,
 			Location_Agnostic: 690970002,
 			Onsite: 690970000
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

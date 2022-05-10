@@ -137,12 +137,94 @@ declare namespace DevKit {
 		statuscode: OptionSet.bot.statuscode;
 		/** For internal use only. */
 		readonly SupportingSolutionId: string;
+		/** Used to store information about the synchronization operations of the bot */
+		SynchronizationStatus: string;
 		/** For internal use only. */
 		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Defines which users may interact with the bot. */
+			readonly accesscontrolpolicy: string;
+			/** Stores information with application manifest data such as Teams application information. */
+			readonly applicationmanifestinformation: string;
+			/** Defines how the bot should be authenticated to the user. */
+			readonly authenticationmode: string;
+			/** Defines at which point authentication for the bot should be triggered. Security can be enforced at the bot entry point, removing the need for explicit authentication nodes in the dialog flow. */
+			readonly authenticationtrigger: string;
+			/** Contains a comma-delimited list of up to 20 Azure Active Directory Group IDs that are allowed to interact with the bot. This field is ignored if Access Control Policy is not set to Group membership. */
+			readonly authorizedsecuritygroupids: string;
+			/** Unique identifier of the Chatbot. */
+			readonly botId: string;
+			/** For internal use only. */
+			readonly ComponentIdUnique: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Used to store content of bot configuration data. */
+			readonly Configuration: string;
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Used to visually identify your bot in channels and services. Represented in a base64 encoded string. Must be in PNG format, and no larger than 30K in size. This value can be changed at any time. */
+			readonly iconbase64: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** For internal use only. */
+			readonly IsCustomizable: string;
+			/** Indicates whether the solution component is part of a managed solution. */
+			readonly IsManaged: string;
+			/** The language identifier (LCID) of this Chatbot. */
+			readonly Language: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** The display name of the Chatbot. */
+			readonly name: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateAndTime: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Unique identifier of the user who last published the bot. */
+			readonly publishedby: string;
+			/** Date and time when the Chatbot was last published */
+			readonly publishedon_UtcDateAndTime: string;
+			/** Unique name identifying the Chatbot. */
+			readonly SchemaName: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** Status of the Chatbot */
+			readonly statecode: string;
+			/** Reason for the status of the Chatbot */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** Used to store information about the synchronization operations of the bot */
+			readonly SynchronizationStatus: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -190,16 +272,22 @@ declare namespace OptionSet {
 			Chinese_Simplified,
 			/** 1028 */
 			Chinese_Traditional,
+			/** 1029 */
+			Czech,
 			/** 1030 */
 			Danish,
 			/** 1043 */
 			Dutch,
 			/** 1033 */
 			English,
+			/** 1035 */
+			Finnish,
 			/** 1036 */
 			French,
 			/** 1031 */
 			German,
+			/** 1032 */
+			Greek,
 			/** 1081 */
 			Hindi,
 			/** 1057 */
@@ -222,8 +310,12 @@ declare namespace OptionSet {
 			Spanish,
 			/** 1053 */
 			Swedish,
+			/** 1054 */
+			Thai,
 			/** 1055 */
 			Turkish
+		}
+		enum OwnerIdType {
 		}
 		enum statecode {
 			/** 0 */
@@ -261,4 +353,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

@@ -64,6 +64,43 @@ declare namespace DevKit {
 		/** For internal use only. */
 		readonly SupportingSolutionId: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier of the user who created the SDK message response. */
+			readonly CreatedBy: string;
+			/** Date and time when the SDK message response was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the sdkmessageresponse. */
+			readonly CreatedOnBehalfBy: string;
+			/** Customization level of the SDK message response. */
+			readonly CustomizationLevel: string;
+			/** Version in which the component is introduced. */
+			readonly IntroducedVersion: string;
+			/** Information that specifies whether this component is managed. */
+			readonly IsManaged: string;
+			/** Unique identifier of the user who last modified the SDK message response. */
+			readonly ModifiedBy: string;
+			/** Date and time when the SDK message response was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the sdkmessageresponse. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Unique identifier of the organization with which the SDK message response is associated. */
+			readonly OrganizationId: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Unique identifier of the message request with which the SDK message response is associated. */
+			readonly SdkMessageRequestId: string;
+			/** Unique identifier of the SDK message response entity. */
+			readonly SdkMessageResponseId: string;
+			/** Unique identifier of the SDK message response. */
+			readonly SdkMessageResponseIdUnique: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -96,4 +133,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

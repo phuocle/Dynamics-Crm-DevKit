@@ -94,6 +94,31 @@ declare namespace DevKit {
 		/** Title of the knowledge base article comment. */
 		Title: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Comment text for the knowledge base article. */
+			readonly CommentText: string;
+			/** Unique identifier of the user who created the knowledge base article comment. */
+			readonly CreatedBy: string;
+			/** Date and time when the knowledge base article comment was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the kbarticlecomment. */
+			readonly CreatedOnBehalfBy: string;
+			/** Unique identifier of the knowledge base article comment. */
+			readonly KbArticleCommentId: string;
+			/** Unique identifier of the knowledge base article to which the comment applies. */
+			readonly KbArticleId: string;
+			/** Unique identifier of the user who last modified the knowledge base article comment. */
+			readonly ModifiedBy: string;
+			/** Date and time when the knowledge base article comment was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the kbarticlecomment. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Unique identifier of the organization with which the article comment is associated. */
+			readonly OrganizationId: string;
+			/** Title of the knowledge base article comment. */
+			readonly Title: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -116,4 +141,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

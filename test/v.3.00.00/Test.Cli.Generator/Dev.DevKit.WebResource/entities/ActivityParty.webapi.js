@@ -132,7 +132,7 @@ var DevKit;
 		}
 		activityparty.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -153,6 +153,8 @@ var OptionSet;
 			Recurring_Instance: 2,
 			Recurring_Master: 1
 		},
+		OwnerIdType : {
+		},
 		ParticipationTypeMask : {
 			BCC_Recipient: 4,
 			CC_Recipient: 3,
@@ -165,6 +167,8 @@ var OptionSet;
 			Resource: 10,
 			Sender: 1,
 			To_Recipient: 2
+		},
+		PartyObjectTypeCode : {
 		},
 		RollupState : {
 			NotCalculated: 0,

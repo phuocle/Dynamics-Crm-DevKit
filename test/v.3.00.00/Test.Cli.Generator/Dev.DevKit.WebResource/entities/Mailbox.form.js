@@ -123,6 +123,10 @@ var OptionSet;
 			Not_Run: 0,
 			Success: 1
 		},
+		OwnerIdType : {
+		},
+		RegardingObjectTypeCode : {
+		},
 		StateCode : {
 			Active: 0,
 			Inactive: 1

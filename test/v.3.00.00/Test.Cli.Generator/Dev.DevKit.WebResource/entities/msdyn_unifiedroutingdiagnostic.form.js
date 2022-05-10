@@ -45,6 +45,13 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.msdyn_unifiedroutingdiagnostic = {
+		msdyn_diagnosticdatatype : {
+			Assignment_Diagnostic: 4,
+			Demand_Classification_Diagnostic: 2,
+			Demand_ML_Diagnostic: 1,
+			Demand_RTQ_Diagnostic: 3,
+			Unknown: 0
+		},
 		msdyn_ruletype : {
 			Assignment: 6,
 			Assignment_Selection_Criteria: 9,
@@ -54,6 +61,10 @@ var OptionSet;
 			Prioritization: 5,
 			Route_To_Queue: 2,
 			Skill_Identification: 3
+		},
+		msdyn_targetobjectIdType : {
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

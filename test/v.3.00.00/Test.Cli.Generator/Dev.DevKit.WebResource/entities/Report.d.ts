@@ -129,6 +129,108 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version number of the report. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Binary report contents (base-64 encoded). */
+			readonly BodyBinary: string;
+			/** Text contents of the RDL file for a Reporting Services report. */
+			readonly BodyText: string;
+			/** URL for a linked report. */
+			readonly BodyUrl: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier of the user who created the report. */
+			readonly CreatedBy: string;
+			/** Major version number of Crm, used to identify the version of Crm in which report is created. */
+			readonly CreatedInMajorVersion: string;
+			/** Date and time when the report was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the report. */
+			readonly CreatedOnBehalfBy: string;
+			/** XML used to define a custom report. */
+			readonly CustomReportXml: string;
+			/** Default filter for the report. */
+			readonly DefaultFilter: string;
+			/** Description of the report. */
+			readonly Description: string;
+			/** File name of the report. */
+			readonly FileName: string;
+			/** File size of the report. */
+			readonly FileSize: string;
+			/** Version in which the report is introduced. */
+			readonly IntroducedVersion: string;
+			/** Information that specifies whether this component can be customized. */
+			readonly IsCustomizable: string;
+			/** Information about whether the report is a custom report. */
+			readonly IsCustomReport: string;
+			/** Indicates whether the solution component is part of a managed solution. */
+			readonly IsManaged: string;
+			/** Information about whether the report is personal or is available to all users. */
+			readonly IsPersonal: string;
+			/** Information about whether the report is a scheduled report. */
+			readonly IsScheduledReport: string;
+			/** Language in which the report will be displayed. */
+			readonly LanguageCode: string;
+			/** MIME type of the report. */
+			readonly MimeType: string;
+			/** Unique identifier of the user who last modified the report. */
+			readonly ModifiedBy: string;
+			/** Date and time when the report was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the report. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Name of the report. */
+			readonly Name: string;
+			/** Original Text contents of the RDL file for a Reporting Services report. */
+			readonly OriginalBodyText: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier of the business unit that owns the report. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the team who owns the report. */
+			readonly OwningTeam: string;
+			/** Unique identifier of the user who owns the report. */
+			readonly OwningUser: string;
+			/** Unique identifier of the parent report. */
+			readonly ParentReportId: string;
+			/** For internal use only. */
+			readonly QueryInfo: string;
+			/** Hash value of the body text of the report. */
+			readonly RdlHash: string;
+			/** Unique identifier of the report. */
+			readonly ReportId: string;
+			/** For internal use only. */
+			readonly ReportIdUnique: string;
+			/** Name of the report on SRS. */
+			readonly ReportNameOnSRS: string;
+			/** Type of the report. */
+			readonly ReportTypeCode: string;
+			/** XML used for defining the report schedule. */
+			readonly ScheduleXml: string;
+			/** Report signature date, used to identify a report for upgrades and hotfixes. */
+			readonly SignatureDate_UtcDateOnly: string;
+			/** Unique identifier of the report signature used to identify a report for upgrades and hotfixes. */
+			readonly SignatureId: string;
+			/** Report signature language code used to identify a report for upgrades and hotfixes. */
+			readonly SignatureLcid: string;
+			/** Report signature major version, used to identify a report for upgrades and hotfixes. */
+			readonly SignatureMajorVersion: string;
+			/** Report signature minor version, used to identify a report for upgrades and hotfixes. */
+			readonly SignatureMinorVersion: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version number of the report. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -142,6 +244,8 @@ declare namespace OptionSet {
 			Published,
 			/** 1 */
 			Unpublished
+		}
+		enum OwnerIdType {
 		}
 		enum ReportTypeCode {
 			/** 3 */
@@ -169,4 +273,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

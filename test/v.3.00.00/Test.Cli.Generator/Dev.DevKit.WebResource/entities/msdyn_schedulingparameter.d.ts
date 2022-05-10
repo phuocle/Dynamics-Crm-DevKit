@@ -195,6 +195,80 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** For internal use */
+			readonly msdyn_AdvancedSettings: string;
+			/** When changing bookings on hourly Schedule Board, automatically update travel time and distance for affected bookings. */
+			readonly msdyn_AutoUpdateBookingTravel: string;
+			/** Configuration that defines operations, which will be executed in background periodically (internal use only) */
+			readonly msdyn_BackgroundJobsConfiguration: string;
+			/** Determines if the mapping provider will be used for map location and distance calculations. */
+			readonly msdyn_ConnectToMaps: string;
+			/** Shows the logical name of the latitude field to be used by geolocations. */
+			readonly msdyn_CustomGeoLatitudeField: string;
+			/** Shows the logical name of custom entity to be used for geolocations. */
+			readonly msdyn_CustomGeoLocationEntity: string;
+			/** Shows the logical name of the longitude field to be used for geolocations. */
+			readonly msdyn_CustomGeoLongitudeField: string;
+			/** Shows the logical name of the resource field to be used for geolocations. */
+			readonly msdyn_CustomGeoResourceField: string;
+			/** Shows the logical name of the timestamp field to be used for geolocations. */
+			readonly msdyn_CustomGeoTimestampField: string;
+			/** Choose the unit to display the distance on the Schedule Assistant experience */
+			readonly msdyn_DefaultRadiusUnit: string;
+			readonly msdyn_DefaultRadiusValue: string;
+			/** Disable Sanitizing HTML Templates on the Schedule Board */
+			readonly msdyn_DisableSanitizingHTMLTemplates: string;
+			/** Enable appointments to display on the new schedule board and be considered in availability search for resources. */
+			readonly msdyn_EnableAppointments: string;
+			/** Determines if a custom entity will be used as a source of geo locations for resources to be displayed in the map view. */
+			readonly msdyn_EnableCustomGeoLocation: string;
+			/** Determines if scheduling optimization is enabled. */
+			readonly msdyn_enableOptimizer: string;
+			/** This only applies when directly calling the API. It does not apply when the Book button is clicked on the Schedule Board or on any schedulable entity. */
+			readonly msdyn_EnableOutlookSchedules: string;
+			readonly msdyn_GeoLocationExpiresAfterXMinutes: string;
+			readonly msdyn_GeoLocationRefreshIntervalSeconds: string;
+			/** For internal use */
+			readonly msdyn_internalflag: string;
+			/** Api key for map */
+			readonly msdyn_MapApiKey: string;
+			/** The name of the custom entity. */
+			readonly msdyn_name: string;
+			/** Determines if the schedule assistant should automatically filter results based on the requirement territory. */
+			readonly msdyn_SAAutoFilterServiceTerritory: string;
+			readonly msdyn_ScheduleBoardRefreshIntervalSeconds: string;
+			/** A unique identifier for an entity instance. */
+			readonly msdyn_schedulingparameterId: string;
+			/** Unique identifier for the organization */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Status of the Scheduling Parameter */
+			readonly statecode: string;
+			/** Reason for the status of the Scheduling Parameter */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -253,4 +327,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

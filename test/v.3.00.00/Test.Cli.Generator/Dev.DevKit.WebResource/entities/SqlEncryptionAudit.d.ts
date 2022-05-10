@@ -32,6 +32,11 @@ declare namespace DevKit {
 		/** Unique identifier of the user who created the account. */
 		readonly CreatedBy: string;
 		readonly CreatedOn_UtcDateOnly: Date;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the account. */
+			readonly CreatedBy: string;
+			readonly CreatedOn_UtcDateOnly: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -54,4 +59,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

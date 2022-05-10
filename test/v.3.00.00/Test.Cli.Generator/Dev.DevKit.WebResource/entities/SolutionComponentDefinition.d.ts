@@ -107,6 +107,86 @@ declare namespace DevKit {
 		UseSentinelRowInBaseSolution: boolean;
 		/** The component type of the viewable descendent */
 		ViewableDescendentComponentType: number;
+		readonly FormattedValue: {
+			/** Boolean identifier for using deleting base layers. */
+			readonly AllowDeleteBaseSolutionRowAndFakeDelete: string;
+			/** Whether this component allows Overwrite Customizations when update managed solution */
+			readonly AllowOverwriteCustomizations: string;
+			/** Boolean identifier for a row that is marked as logically deleted in the Active solution and should be re-created back */
+			readonly AllowRecreateForLogicallyDeletedRow: string;
+			/** Flag used to indicate whether this component always removes active customizations on uninstall */
+			readonly AlwaysRemoveActiveCustomizationsOnUninstall: string;
+			/** Flag indicating whether the subcomponent can be added directly to the SolutionComponents table */
+			readonly CanBeAddedToSolutionComponents: string;
+			/** Whether this component is hidden using an IsHidden managed property */
+			readonly CanBeHidden: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Path to component's XML node */
+			readonly ComponentXPath: string;
+			/** Flag that indicates whether this component uses its descendent as its viewable component */
+			readonly DescendentIsViewableComponent: string;
+			/** Group Parent Component Attribute Name */
+			readonly GroupParentComponentAttributeName: string;
+			/** Group Parent Component Type */
+			readonly GroupParentComponentType: string;
+			/** Boolean that indicates if the component has a renamable attribute */
+			readonly HasIsRenameableAttribute: string;
+			/** Unique identifier of the data import or data migration that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Version in which the component is introduced. */
+			readonly IntroducedVersion: string;
+			/** Is dependency disabled for the component */
+			readonly IsDependencyDisabled: string;
+			/** Boolean that indicates if the component has user interface enabled */
+			readonly IsDisplayable: string;
+			/** Boolean that indicates if the component is managed */
+			readonly IsManaged: string;
+			/** Whether this component is either a mergeable component, or part of a mergeable component */
+			readonly IsMergeable: string;
+			/** Boolean identifier for metadata components */
+			readonly IsMetadata: string;
+			/** Whether this component is viewable in the SDK and UI */
+			readonly IsViewable: string;
+			/** Label Type Code */
+			readonly LabelTypeCode: string;
+			/** Name */
+			readonly Name: string;
+			/** Object Type Code */
+			readonly ObjectTypeCode: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** The attribute name of the parent attribute */
+			readonly ParentAttributeName: string;
+			/** Component Entity Logical Name */
+			readonly PrimaryEntityName: string;
+			/** Remove Active Customizations Behavior. */
+			readonly RemoveActiveCustomizationsBehavior: string;
+			/** Root Solution Component Type Name */
+			readonly RootAttributeName: string;
+			/** Root Solution Component Type */
+			readonly RootComponent: string;
+			/** Unique identifier of the solution component definition */
+			readonly SolutionComponentDefinitionId: string;
+			/** For internal use only. */
+			readonly SolutionComponentDefinitionIdUnique: string;
+			/** Solution Component Type */
+			readonly SolutionComponentType: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** Boolean identifier for forcing delete for solution update. */
+			readonly UseForceDeleteForSolutionUpdate: string;
+			/** Boolean identifier for always forcing update. */
+			readonly UseForceUpdateAlways: string;
+			/** Boolean identifier for using sentine rows. */
+			readonly UseSentinelRowInBaseSolution: string;
+			/** The component type of the viewable descendent */
+			readonly ViewableDescendentComponentType: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -147,4 +227,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

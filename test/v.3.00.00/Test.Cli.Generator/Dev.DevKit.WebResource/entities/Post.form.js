@@ -42,6 +42,10 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.Post = {
+		RegardingObjectOwnerIdType : {
+		},
+		RegardingObjectTypeCode : {
+		},
 		Source : {
 			ActionHub_Post: 3,
 			Auto_Post: 1,

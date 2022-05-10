@@ -666,48 +666,622 @@ declare namespace DevKit {
 		TransactionCurrencyId: string;
 		/** Version number of the connection. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the connection. */
+			readonly ConnectionId: string;
+			/** Shows who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Type additional information to describe the connection, such as the length or quality of the relationship. */
+			readonly Description: string;
+			/** Enter the end date of the connection. */
+			readonly EffectiveEnd_UtcDateOnly: string;
+			/** Enter the start date of the connection. */
+			readonly EffectiveStart_UtcDateOnly: string;
+			/** The default image for the entity. */
+			readonly EntityImage: string;
+			readonly EntityImage_Timestamp: string;
+			readonly EntityImage_URL: string;
+			/** For internal use only. */
+			readonly EntityImageId: string;
+			/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
+			readonly ExchangeRate: string;
+			/** Unique identifier of the data import or data migration that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Indicates that this is the master record. */
+			readonly IsMaster: string;
+			/** Shows who last updated the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who last updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Name of the connection. */
+			readonly Name: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Shows the business unit that the record owner belongs to. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the team who owns the connection. */
+			readonly OwningTeam: string;
+			/** Unique identifier of the user who owns the connection. */
+			readonly OwningUser: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_account: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_activitypointer: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_appointment: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_campaign: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_campaignactivity: string;
+			/** Unique identifier of the source record. */
+			readonly profileruleid1: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_competitor: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_constraintbasedgroup: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_contact: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_contract: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_email: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_entitlement: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_entitlementchannel: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_entitlementtemplatechannel: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_equipment: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_fax: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_goal: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_incident: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_invoice: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_knowledgearticle: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_knowledgebaserecord: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_lead: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_letter: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_list: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_agreement: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_agreementbookingdate: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_agreementbookingincident: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_agreementbookingproduct: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_agreementbookingservice: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_agreementbookingservicetask: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_agreementbookingsetup: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_agreementinvoicedate: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_agreementinvoiceproduct: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_agreementinvoicesetup: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_approval: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_assignmentmap: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_assignmentrule: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_bookingalert: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_bookingalertstatus: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_bookingrule: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_bookingtimestamp: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_customerasset: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_incidenttypecharacteristic: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_incidenttypeproduct: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_incidenttypeservice: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_inventoryadjustment: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_inventoryadjustmentproduct: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_inventoryjournal: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_inventorytransfer: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_iotalert: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_iotdevice: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_iotdevicecategory: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_iotdevicecommand: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_iotdeviceregistrationhistory: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_liveconversation: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_ocliveworkitem: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_ocoutboundmessage: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_ocsession: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_payment: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_paymentdetail: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_paymentmethod: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_paymentterm: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_postalbum: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_postalcode: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_processnotes: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_productinventory: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_project: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_projectteam: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_purchaseorder: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_purchaseorderbill: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_purchaseorderproduct: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_purchaseorderreceipt: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_purchaseorderreceiptproduct: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_purchaseordersubstatus: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_quotebookingincident: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_quotebookingproduct: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_quotebookingservice: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_quotebookingservicetask: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_resourceterritory: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_rma: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_rmaproduct: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_rmareceipt: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_rmareceiptproduct: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_rmasubstatus: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_rtv: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_rtvproduct: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_rtvsubstatus: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_salessuggestion: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_sequence: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_sequencetarget: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_shipvia: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_systemuserschedulersetting: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_taxcode: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_timegroup: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_timegroupdetail: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_timeoffrequest: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_warehouse: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_workorder: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_workordercharacteristic: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_workorderincident: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_workorderproduct: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_workorderresourcerestriction: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_workorderservice: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyn_workorderservicetask: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msdyusd_toolbarbutton: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msfp_alert: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msfp_surveyinvite: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_msfp_surveyresponse: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_opportunity: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_phonecall: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_position: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_pricelevel: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_processsession: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_product: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_quote: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_recurringappointmentmaster: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_resourcegroup: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_salesorder: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_serviceappointment: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_socialactivity: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_socialprofile: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_systemuser: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_task: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_team: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_territory: string;
+			/** Unique identifier of the source record. */
+			readonly record1id_uii_option: string;
+			/** Shows the record type of the source record. */
+			readonly Record1ObjectTypeCode: string;
+			/** Choose the primary party's role or relationship with the second party. */
+			readonly Record1RoleId: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_account: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_activitypointer: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_appointment: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_campaign: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_campaignactivity: string;
+			/** Unique identifier of the target record. */
+			readonly channelaccessprofileruleid: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_competitor: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_constraintbasedgroup: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_contact: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_contract: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_email: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_entitlement: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_entitlementchannel: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_entitlementtemplatechannel: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_equipment: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_fax: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_goal: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_incident: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_invoice: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_knowledgearticle: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_knowledgebaserecord: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_lead: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_letter: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_list: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_agreement: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_agreementbookingdate: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_agreementbookingincident: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_agreementbookingproduct: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_agreementbookingservice: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_agreementbookingservicetask: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_agreementbookingsetup: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_agreementinvoicedate: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_agreementinvoiceproduct: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_agreementinvoicesetup: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_approval: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_assignmentmap: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_assignmentrule: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_bookingalert: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_bookingalertstatus: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_bookingrule: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_bookingtimestamp: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_customerasset: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_incidenttypecharacteristic: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_incidenttypeproduct: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_incidenttypeservice: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_inventoryadjustment: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_inventoryadjustmentproduct: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_inventoryjournal: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_inventorytransfer: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_iotalert: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_iotdevice: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_iotdevicecategory: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_iotdevicecommand: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_iotdeviceregistrationhistory: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_liveconversation: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_ocliveworkitem: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_ocoutboundmessage: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_ocsession: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_payment: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_paymentdetail: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_paymentmethod: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_paymentterm: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_postalbum: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_postalcode: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_processnotes: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_productinventory: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_project: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_projectteam: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_purchaseorder: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_purchaseorderbill: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_purchaseorderproduct: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_purchaseorderreceipt: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_purchaseorderreceiptproduct: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_purchaseordersubstatus: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_quotebookingincident: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_quotebookingproduct: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_quotebookingservice: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_quotebookingservicetask: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_resourceterritory: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_rma: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_rmaproduct: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_rmareceipt: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_rmareceiptproduct: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_rmasubstatus: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_rtv: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_rtvproduct: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_rtvsubstatus: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_salessuggestion: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_sequence: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_sequencetarget: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_shipvia: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_systemuserschedulersetting: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_taxcode: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_timegroup: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_timegroupdetail: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_timeoffrequest: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_warehouse: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_workorder: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_workordercharacteristic: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_workorderincident: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_workorderproduct: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_workorderresourcerestriction: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_workorderservice: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyn_workorderservicetask: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msdyusd_toolbarbutton: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msfp_alert: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msfp_surveyinvite: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_msfp_surveyresponse: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_opportunity: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_phonecall: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_position: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_pricelevel: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_processsession: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_product: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_quote: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_recurringappointmentmaster: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_resourcegroup: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_salesorder: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_serviceappointment: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_socialactivity: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_socialprofile: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_systemuser: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_task: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_team: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_territory: string;
+			/** Unique identifier of the target record. */
+			readonly record2id_uii_option: string;
+			/** Shows the record type of the target record. */
+			readonly Record2ObjectTypeCode: string;
+			/** Choose the secondary party's role or relationship with the primary party. */
+			readonly Record2RoleId: string;
+			/** Unique identifier for the reciprocal connection record. */
+			readonly RelatedConnectionId: string;
+			/** Shows whether the connection is active or inactive. Inactive connections are read-only and can't be edited unless they are reactivated. */
+			readonly StateCode: string;
+			/** Reason for the status of the connection. */
+			readonly StatusCode: string;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			readonly TransactionCurrencyId: string;
+			/** Version number of the connection. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace Connection {
+		enum OwnerIdType {
+		}
+		enum Record1IdObjectTypeCode {
+		}
 		enum Record1ObjectTypeCode {
 			/** 1 */
 			Account,
 			/** 4200 */
 			Activity,
-			/** 10524 */
+			/** 10579 */
 			Agreement,
-			/** 10525 */
+			/** 10580 */
 			Agreement_Booking_Date,
-			/** 10526 */
+			/** 10581 */
 			Agreement_Booking_Incident,
-			/** 10527 */
+			/** 10582 */
 			Agreement_Booking_Product,
-			/** 10528 */
+			/** 10583 */
 			Agreement_Booking_Service,
-			/** 10529 */
+			/** 10584 */
 			Agreement_Booking_Service_Task,
-			/** 10530 */
+			/** 10585 */
 			Agreement_Booking_Setup,
-			/** 10531 */
+			/** 10586 */
 			Agreement_Invoice_Date,
-			/** 10532 */
+			/** 10587 */
 			Agreement_Invoice_Product,
-			/** 10533 */
+			/** 10588 */
 			Agreement_Invoice_Setup,
 			/** 4201 */
 			Appointment,
-			/** 10283 */
+			/** 10300 */
 			Assignment_Map,
-			/** 10280 */
+			/** 10297 */
 			Assignment_Rule,
-			/** 10404 */
+			/** 10473 */
 			Booking_Alert,
-			/** 10405 */
+			/** 10474 */
 			Booking_Alert_Status,
-			/** 10407 */
+			/** 10476 */
 			Booking_Rule,
-			/** 10536 */
+			/** 10591 */
 			Booking_Timestamp,
 			/** 4400 */
 			Campaign,
@@ -723,15 +1297,15 @@ declare namespace OptionSet {
 			Contact,
 			/** 1010 */
 			Contract,
-			/** 10707 */
+			/** 10743 */
 			Conversation,
-			/** 10141 */
+			/** 10151 */
 			Customer_Asset,
-			/** 10313 */
+			/** 10330 */
 			Customer_Voice_alert,
-			/** 10323 */
+			/** 10340 */
 			Customer_Voice_survey_invite,
-			/** 10325 */
+			/** 10342 */
 			Customer_Voice_survey_response,
 			/** 4202 */
 			Email,
@@ -745,35 +1319,35 @@ declare namespace OptionSet {
 			FacilityEquipment,
 			/** 4204 */
 			Fax,
-			/** 10427 */
+			/** 10484 */
 			Fulfillment_Preference,
 			/** 9600 */
 			Goal,
-			/** 10547 */
+			/** 10602 */
 			Incident_Type_Characteristic,
-			/** 10548 */
+			/** 10603 */
 			Incident_Type_Product,
-			/** 10549 */
+			/** 10604 */
 			Incident_Type_Service,
-			/** 10553 */
+			/** 10608 */
 			Inventory_Adjustment,
-			/** 10554 */
+			/** 10609 */
 			Inventory_Adjustment_Product,
-			/** 10555 */
+			/** 10610 */
 			Inventory_Journal,
-			/** 10556 */
+			/** 10611 */
 			Inventory_Transfer,
 			/** 1090 */
 			Invoice,
-			/** 10152 */
+			/** 10165 */
 			IoT_Alert,
-			/** 10153 */
+			/** 10166 */
 			IoT_Device,
-			/** 10154 */
+			/** 10167 */
 			IoT_Device_Category,
-			/** 10155 */
+			/** 10168 */
 			IoT_Device_Command,
-			/** 10159 */
+			/** 10172 */
 			IoT_Device_Registration_History,
 			/** 9953 */
 			Knowledge_Article,
@@ -785,183 +1359,185 @@ declare namespace OptionSet {
 			Letter,
 			/** 4300 */
 			Marketing_List,
-			/** 10697 */
+			/** 10733 */
 			Ongoing_conversation_Deprecated,
 			/** 3 */
 			Opportunity,
-			/** 10823 */
+			/** 10916 */
 			Option,
 			/** 1088 */
 			Order,
-			/** 10817 */
+			/** 10857 */
 			Outbound_message,
-			/** 10561 */
+			/** 10616 */
 			Payment,
-			/** 10562 */
+			/** 10617 */
 			Payment_Detail,
-			/** 10563 */
+			/** 10618 */
 			Payment_Method,
-			/** 10564 */
+			/** 10619 */
 			Payment_Term,
 			/** 4210 */
 			Phone_Call,
 			/** 50 */
 			Position,
-			/** 10565 */
+			/** 10620 */
 			Postal_Code,
 			/** 1022 */
 			Price_List,
-			/** 10472 */
+			/** 10527 */
 			Process_Notes,
 			/** 4710 */
 			Process_Session,
 			/** 1024 */
 			Product,
-			/** 10566 */
+			/** 10621 */
 			Product_Inventory,
-			/** 10308 */
+			/** 10325 */
 			Profile_Album,
-			/** 10473 */
+			/** 10528 */
 			Project,
-			/** 10434 */
+			/** 10489 */
 			Project_Service_Approval,
-			/** 10481 */
+			/** 10536 */
 			Project_Team_Member,
-			/** 10567 */
+			/** 10622 */
 			Purchase_Order,
-			/** 10568 */
+			/** 10623 */
 			Purchase_Order_Bill,
-			/** 10569 */
+			/** 10624 */
 			Purchase_Order_Product,
-			/** 10570 */
+			/** 10625 */
 			Purchase_Order_Receipt,
-			/** 10571 */
+			/** 10626 */
 			Purchase_Order_Receipt_Product,
-			/** 10572 */
+			/** 10627 */
 			Purchase_Order_SubStatus,
 			/** 1084 */
 			Quote,
-			/** 10573 */
+			/** 10628 */
 			Quote_Booking_Incident,
-			/** 10574 */
+			/** 10629 */
 			Quote_Booking_Product,
-			/** 10575 */
+			/** 10630 */
 			Quote_Booking_Service,
-			/** 10576 */
+			/** 10631 */
 			Quote_Booking_Service_Task,
 			/** 4251 */
 			Recurring_Appointment,
 			/** 4007 */
 			Resource_Group,
-			/** 10601 */
+			/** 10656 */
 			Resource_Restriction_Deprecated,
-			/** 10423 */
+			/** 10480 */
 			Resource_Territory,
-			/** 10581 */
+			/** 10636 */
 			RMA,
-			/** 10582 */
+			/** 10637 */
 			RMA_Product,
-			/** 10583 */
+			/** 10638 */
 			RMA_Receipt,
-			/** 10584 */
+			/** 10639 */
 			RMA_Receipt_Product,
-			/** 10585 */
+			/** 10640 */
 			RMA_SubStatus,
-			/** 10586 */
+			/** 10641 */
 			RTV,
-			/** 10587 */
+			/** 10642 */
 			RTV_Product,
-			/** 10588 */
+			/** 10643 */
 			RTV_Substatus,
 			/** 4005 */
 			Scheduling_Group,
-			/** 10273 */
+			/** 10289 */
 			Sequence,
-			/** 10275 */
+			/** 10291 */
 			Sequence_Target,
 			/** 4214 */
 			Service_Activity,
-			/** 10721 */
+			/** 10760 */
 			Session,
-			/** 10590 */
+			/** 10645 */
 			Ship_Via,
 			/** 4216 */
 			Social_Activity,
 			/** 99 */
 			Social_Profile,
-			/** 10289 */
+			/** 10306 */
 			Suggestion,
-			/** 10426 */
+			/** 10483 */
 			System_User_Scheduler_Setting,
 			/** 4212 */
 			Task,
-			/** 10591 */
+			/** 10646 */
 			Tax_Code,
 			/** 9 */
 			Team,
 			/** 2013 */
 			Territory,
-			/** 10428 */
+			/** 10485 */
 			Time_Group_Detail,
-			/** 10593 */
+			/** 10648 */
 			Time_Off_Request,
-			/** 10846 */
+			/** 10952 */
 			Toolbar_Button,
 			/** 8 */
 			User,
-			/** 10595 */
+			/** 10650 */
 			Warehouse,
-			/** 10596 */
+			/** 10651 */
 			Work_Order,
-			/** 10597 */
+			/** 10652 */
 			Work_Order_Characteristic_Deprecated,
-			/** 10599 */
+			/** 10654 */
 			Work_Order_Incident,
-			/** 10600 */
+			/** 10655 */
 			Work_Order_Product,
-			/** 10602 */
+			/** 10657 */
 			Work_Order_Service,
-			/** 10603 */
+			/** 10658 */
 			Work_Order_Service_Task
+		}
+		enum Record2IdObjectTypeCode {
 		}
 		enum Record2ObjectTypeCode {
 			/** 1 */
 			Account,
 			/** 4200 */
 			Activity,
-			/** 10524 */
+			/** 10579 */
 			Agreement,
-			/** 10525 */
+			/** 10580 */
 			Agreement_Booking_Date,
-			/** 10526 */
+			/** 10581 */
 			Agreement_Booking_Incident,
-			/** 10527 */
+			/** 10582 */
 			Agreement_Booking_Product,
-			/** 10528 */
+			/** 10583 */
 			Agreement_Booking_Service,
-			/** 10529 */
+			/** 10584 */
 			Agreement_Booking_Service_Task,
-			/** 10530 */
+			/** 10585 */
 			Agreement_Booking_Setup,
-			/** 10531 */
+			/** 10586 */
 			Agreement_Invoice_Date,
-			/** 10532 */
+			/** 10587 */
 			Agreement_Invoice_Product,
-			/** 10533 */
+			/** 10588 */
 			Agreement_Invoice_Setup,
 			/** 4201 */
 			Appointment,
-			/** 10283 */
+			/** 10300 */
 			Assignment_Map,
-			/** 10280 */
+			/** 10297 */
 			Assignment_Rule,
-			/** 10404 */
+			/** 10473 */
 			Booking_Alert,
-			/** 10405 */
+			/** 10474 */
 			Booking_Alert_Status,
-			/** 10407 */
+			/** 10476 */
 			Booking_Rule,
-			/** 10536 */
+			/** 10591 */
 			Booking_Timestamp,
 			/** 4400 */
 			Campaign,
@@ -977,15 +1553,15 @@ declare namespace OptionSet {
 			Contact,
 			/** 1010 */
 			Contract,
-			/** 10707 */
+			/** 10743 */
 			Conversation,
-			/** 10141 */
+			/** 10151 */
 			Customer_Asset,
-			/** 10313 */
+			/** 10330 */
 			Customer_Voice_alert,
-			/** 10323 */
+			/** 10340 */
 			Customer_Voice_survey_invite,
-			/** 10325 */
+			/** 10342 */
 			Customer_Voice_survey_response,
 			/** 4202 */
 			Email,
@@ -999,35 +1575,35 @@ declare namespace OptionSet {
 			FacilityEquipment,
 			/** 4204 */
 			Fax,
-			/** 10427 */
+			/** 10484 */
 			Fulfillment_Preference,
 			/** 9600 */
 			Goal,
-			/** 10547 */
+			/** 10602 */
 			Incident_Type_Characteristic,
-			/** 10548 */
+			/** 10603 */
 			Incident_Type_Product,
-			/** 10549 */
+			/** 10604 */
 			Incident_Type_Service,
-			/** 10553 */
+			/** 10608 */
 			Inventory_Adjustment,
-			/** 10554 */
+			/** 10609 */
 			Inventory_Adjustment_Product,
-			/** 10555 */
+			/** 10610 */
 			Inventory_Journal,
-			/** 10556 */
+			/** 10611 */
 			Inventory_Transfer,
 			/** 1090 */
 			Invoice,
-			/** 10152 */
+			/** 10165 */
 			IoT_Alert,
-			/** 10153 */
+			/** 10166 */
 			IoT_Device,
-			/** 10154 */
+			/** 10167 */
 			IoT_Device_Category,
-			/** 10155 */
+			/** 10168 */
 			IoT_Device_Command,
-			/** 10159 */
+			/** 10172 */
 			IoT_Device_Registration_History,
 			/** 9953 */
 			Knowledge_Article,
@@ -1039,143 +1615,143 @@ declare namespace OptionSet {
 			Letter,
 			/** 4300 */
 			Marketing_List,
-			/** 10697 */
+			/** 10733 */
 			Ongoing_conversation_Deprecated,
 			/** 3 */
 			Opportunity,
-			/** 10823 */
+			/** 10916 */
 			Option,
 			/** 1088 */
 			Order,
-			/** 10817 */
+			/** 10857 */
 			Outbound_message,
-			/** 10561 */
+			/** 10616 */
 			Payment,
-			/** 10562 */
+			/** 10617 */
 			Payment_Detail,
-			/** 10563 */
+			/** 10618 */
 			Payment_Method,
-			/** 10564 */
+			/** 10619 */
 			Payment_Term,
 			/** 4210 */
 			Phone_Call,
 			/** 50 */
 			Position,
-			/** 10565 */
+			/** 10620 */
 			Postal_Code,
 			/** 1022 */
 			Price_List,
-			/** 10472 */
+			/** 10527 */
 			Process_Notes,
 			/** 4710 */
 			Process_Session,
 			/** 1024 */
 			Product,
-			/** 10566 */
+			/** 10621 */
 			Product_Inventory,
-			/** 10308 */
+			/** 10325 */
 			Profile_Album,
-			/** 10473 */
+			/** 10528 */
 			Project,
-			/** 10434 */
+			/** 10489 */
 			Project_Service_Approval,
-			/** 10481 */
+			/** 10536 */
 			Project_Team_Member,
-			/** 10567 */
+			/** 10622 */
 			Purchase_Order,
-			/** 10568 */
+			/** 10623 */
 			Purchase_Order_Bill,
-			/** 10569 */
+			/** 10624 */
 			Purchase_Order_Product,
-			/** 10570 */
+			/** 10625 */
 			Purchase_Order_Receipt,
-			/** 10571 */
+			/** 10626 */
 			Purchase_Order_Receipt_Product,
-			/** 10572 */
+			/** 10627 */
 			Purchase_Order_SubStatus,
 			/** 1084 */
 			Quote,
-			/** 10573 */
+			/** 10628 */
 			Quote_Booking_Incident,
-			/** 10574 */
+			/** 10629 */
 			Quote_Booking_Product,
-			/** 10575 */
+			/** 10630 */
 			Quote_Booking_Service,
-			/** 10576 */
+			/** 10631 */
 			Quote_Booking_Service_Task,
 			/** 4251 */
 			Recurring_Appointment,
 			/** 4007 */
 			Resource_Group,
-			/** 10601 */
+			/** 10656 */
 			Resource_Restriction_Deprecated,
-			/** 10423 */
+			/** 10480 */
 			Resource_Territory,
-			/** 10581 */
+			/** 10636 */
 			RMA,
-			/** 10582 */
+			/** 10637 */
 			RMA_Product,
-			/** 10583 */
+			/** 10638 */
 			RMA_Receipt,
-			/** 10584 */
+			/** 10639 */
 			RMA_Receipt_Product,
-			/** 10585 */
+			/** 10640 */
 			RMA_SubStatus,
-			/** 10586 */
+			/** 10641 */
 			RTV,
-			/** 10587 */
+			/** 10642 */
 			RTV_Product,
-			/** 10588 */
+			/** 10643 */
 			RTV_Substatus,
 			/** 4005 */
 			Scheduling_Group,
-			/** 10273 */
+			/** 10289 */
 			Sequence,
-			/** 10275 */
+			/** 10291 */
 			Sequence_Target,
 			/** 4214 */
 			Service_Activity,
-			/** 10721 */
+			/** 10760 */
 			Session,
-			/** 10590 */
+			/** 10645 */
 			Ship_Via,
 			/** 4216 */
 			Social_Activity,
 			/** 99 */
 			Social_Profile,
-			/** 10289 */
+			/** 10306 */
 			Suggestion,
-			/** 10426 */
+			/** 10483 */
 			System_User_Scheduler_Setting,
 			/** 4212 */
 			Task,
-			/** 10591 */
+			/** 10646 */
 			Tax_Code,
 			/** 9 */
 			Team,
 			/** 2013 */
 			Territory,
-			/** 10428 */
+			/** 10485 */
 			Time_Group_Detail,
-			/** 10593 */
+			/** 10648 */
 			Time_Off_Request,
-			/** 10846 */
+			/** 10952 */
 			Toolbar_Button,
 			/** 8 */
 			User,
-			/** 10595 */
+			/** 10650 */
 			Warehouse,
-			/** 10596 */
+			/** 10651 */
 			Work_Order,
-			/** 10597 */
+			/** 10652 */
 			Work_Order_Characteristic_Deprecated,
-			/** 10599 */
+			/** 10654 */
 			Work_Order_Incident,
-			/** 10600 */
+			/** 10655 */
 			Work_Order_Product,
-			/** 10602 */
+			/** 10657 */
 			Work_Order_Service,
-			/** 10603 */
+			/** 10658 */
 			Work_Order_Service_Task
 		}
 		enum StateCode {
@@ -1208,4 +1784,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

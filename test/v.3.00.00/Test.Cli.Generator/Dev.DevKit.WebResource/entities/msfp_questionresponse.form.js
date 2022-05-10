@@ -47,6 +47,8 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.msfp_questionresponse = {
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

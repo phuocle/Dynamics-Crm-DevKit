@@ -219,7 +219,7 @@ var DevKit;
 		}
 		opportunity.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -238,6 +238,8 @@ var OptionSet;
 			May_Buy: 1,
 			No_Committed_Budget: 0,
 			Will_Buy: 3
+		},
+		CustomerIdType : {
 		},
 		InitialCommunication : {
 			Contacted: 0,
@@ -278,6 +280,8 @@ var OptionSet;
 			Cold: 3,
 			Hot: 1,
 			Warm: 2
+		},
+		OwnerIdType : {
 		},
 		PricingErrorCode : {
 			Base_Currency_Attribute_Overflow: 36,

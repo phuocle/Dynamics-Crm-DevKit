@@ -246,6 +246,65 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Date on which the price list becomes effective. */
+			readonly BeginDate_UtcDateOnly: string;
+			/** Unique identifier of the user who created the price list. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the pricelevel. */
+			readonly CreatedOnBehalfBy: string;
+			/** Description of the price list. */
+			readonly Description: string;
+			/** Date that is the last day the price list is valid. */
+			readonly EndDate_UtcDateOnly: string;
+			/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
+			readonly ExchangeRate: string;
+			/** Freight terms for the price list. */
+			readonly FreightTermsCode: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who last modified the price list. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the pricelevel. */
+			readonly ModifiedOnBehalfBy: string;
+			readonly msdyn_BreakHoursBillable: string;
+			/** Shows the price level that this price level was copied from. */
+			readonly msdyn_CopiedFromPriceLevel: string;
+			/** Select the entity for this price level. */
+			readonly msdyn_Entity: string;
+			/** Select the context for this price level i.e whether it is sales prices, cost prices or purchase prices */
+			readonly msdyn_Module: string;
+			/** Select the default unit of role based time on this price list */
+			readonly msdyn_TimeUnit: string;
+			/** Name of the price list. */
+			readonly Name: string;
+			/** Unique identifier for the organization */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Payment terms to use with the price list. */
+			readonly PaymentMethodCode: string;
+			/** Unique identifier of the price list. */
+			readonly PriceLevelId: string;
+			/** Method of shipment for products in the price list. */
+			readonly ShippingMethodCode: string;
+			/** Status of the price list. */
+			readonly StateCode: string;
+			/** Reason for the status of the price list. */
+			readonly StatusCode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Unique identifier of the currency associated with the price level. */
+			readonly TransactionCurrencyId: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -310,4 +369,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

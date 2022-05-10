@@ -97,6 +97,34 @@ declare namespace DevKit {
 		TeamTemplateName: string;
 		/** Version number for team template. */
 		readonly versionnumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the team template. */
+			readonly CreatedBy: string;
+			/** Date and time when the team template was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the team template. */
+			readonly CreatedOnBehalfBy: string;
+			/** Default access rights mask for the access teams associated with entity instances. */
+			readonly DefaultAccessRightsMask: string;
+			/** Type additional information that describes the team. */
+			readonly Description: string;
+			/** Information about whether this team template is user-defined or system-defined. */
+			readonly IsSystem: string;
+			/** Unique identifier of the user who last modified the team template. */
+			readonly ModifiedBy: string;
+			/** Date and time when the team template was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the team template. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Object type code of entity which is enabled for access teams */
+			readonly ObjectTypeCode: string;
+			/** Unique identifier of the team template. */
+			readonly TeamTemplateId: string;
+			/** Type the name of the team template. */
+			readonly TeamTemplateName: string;
+			/** Version number for team template. */
+			readonly versionnumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -119,4 +147,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

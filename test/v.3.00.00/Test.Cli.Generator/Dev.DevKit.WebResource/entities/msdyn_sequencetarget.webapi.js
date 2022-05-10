@@ -127,7 +127,7 @@ var DevKit;
 		}
 		msdyn_sequencetarget.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -163,6 +163,10 @@ var OptionSet;
 			Parent_Sequence_Deactivated: 1,
 			Regarding_Entity_Deactivated: 2,
 			User_Disconnected: 0
+		},
+		msdyn_targetIdType : {
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

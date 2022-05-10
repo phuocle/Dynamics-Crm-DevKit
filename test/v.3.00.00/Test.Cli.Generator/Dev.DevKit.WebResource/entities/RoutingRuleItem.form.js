@@ -60,6 +60,8 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.RoutingRuleItem = {
+		AssignObjectIdType : {
+		},
 		ComponentState : {
 			Deleted: 2,
 			Deleted_Unpublished: 3,
@@ -69,6 +71,8 @@ var OptionSet;
 		msdyn_routeto : {
 			Queue: 1,
 			UserTeam: 2
+		},
+		OwnerIdType : {
 		},
 		RollupState : {
 			NotCalculated: 0,

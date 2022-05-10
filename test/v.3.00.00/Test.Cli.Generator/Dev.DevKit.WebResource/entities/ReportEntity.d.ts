@@ -71,6 +71,50 @@ declare namespace DevKit {
 		/** For internal use only. */
 		readonly SupportingSolutionId: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier of the user who created the report record. */
+			readonly CreatedBy: string;
+			/** Date and time when the report record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the reportentity. */
+			readonly CreatedOnBehalfBy: string;
+			/** Unique identifier of the data import or data migration that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Information that specifies whether this component can be customized. */
+			readonly IsCustomizable: string;
+			/** Information about whether the report is filterable. */
+			readonly IsFilterable: string;
+			readonly IsManaged: string;
+			/** Unique identifier of the user who last modified the report record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the report record was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the reportentity. */
+			readonly ModifiedOnBehalfBy: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier of the business unit that owns the report record. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the user who owns the report record. */
+			readonly OwningUser: string;
+			/** Unique identifier of the report record. */
+			readonly ReportEntityId: string;
+			/** For internal use only. */
+			readonly ReportEntityIdUnique: string;
+			/** Unique identifier of the report. */
+			readonly ReportId: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -84,6 +128,10 @@ declare namespace OptionSet {
 			Published,
 			/** 1 */
 			Unpublished
+		}
+		enum ObjectTypeCode {
+		}
+		enum OwnerIdType {
 		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
@@ -103,4 +151,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

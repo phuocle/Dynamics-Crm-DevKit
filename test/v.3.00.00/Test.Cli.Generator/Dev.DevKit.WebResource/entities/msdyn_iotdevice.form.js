@@ -163,6 +163,8 @@ var OptionSet;
 			Unknown: 192350000,
 			Unregistered: 192350001
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

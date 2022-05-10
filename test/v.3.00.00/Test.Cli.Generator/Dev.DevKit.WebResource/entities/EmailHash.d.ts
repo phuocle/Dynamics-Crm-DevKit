@@ -48,10 +48,33 @@ declare namespace DevKit {
 		/** Unique identifier of the user who owns the email hash. */
 		readonly OwningUser: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the activity with which the hash is associated. */
+			readonly ActivityId: string;
+			/** Shows the date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the email hash. */
+			readonly EmailHashId: string;
+			/** Hash value. */
+			readonly Hash: string;
+			/** Hash type. */
+			readonly HashType: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier of the business unit that owns the email hash. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the user who owns the email hash. */
+			readonly OwningUser: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace EmailHash {
+		enum OwnerIdType {
+		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
 			NotCalculated,
@@ -70,4 +93,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

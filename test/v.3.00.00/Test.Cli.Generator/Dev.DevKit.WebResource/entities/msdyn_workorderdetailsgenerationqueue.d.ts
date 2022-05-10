@@ -111,6 +111,49 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Shows the sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who last updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Unique identifier for Agreement Booking Date associated with Work Order Details Generation Queue. */
+			readonly msdyn_AgreementBookingDate: string;
+			readonly msdyn_Booking: string;
+			readonly msdyn_ExceptionMessage: string;
+			readonly msdyn_ExceptionTrace: string;
+			/** Enter the name of the custom entity. */
+			readonly msdyn_name: string;
+			readonly msdyn_Processed: string;
+			readonly msdyn_SchDateOwnerId: string;
+			readonly msdyn_WorkOrderDetails: string;
+			/** Shows the entity instances. */
+			readonly msdyn_workorderdetailsgenerationqueueId: string;
+			readonly msdyn_WorkorderId: string;
+			/** Unique identifier for the organization */
+			readonly OrganizationId: string;
+			/** Shows the date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Status of the Work Order Details Generation Queue */
+			readonly statecode: string;
+			/** Reason for the status of the Work Order Details Generation Queue */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Shows the time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -145,4 +188,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

@@ -119,7 +119,7 @@ var DevKit;
 		}
 		msdyn_conversationaction.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -137,6 +137,8 @@ var OptionSet;
 			Customer_Defined_Function: 100000002,
 			Open_App_Tab_Template: 100000000,
 			Send_message: 100000001
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

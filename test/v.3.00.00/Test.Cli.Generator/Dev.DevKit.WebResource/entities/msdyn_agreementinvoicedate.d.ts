@@ -131,6 +131,63 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Shows the sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who last updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Agreement this Invoice Date relates to */
+			readonly msdyn_Agreement: string;
+			/** Shows the entity instances. */
+			readonly msdyn_agreementinvoicedateId: string;
+			/** Shows the invoice generated for this agreement invoice date. */
+			readonly msdyn_Invoice: string;
+			/** Enter the date to generate the invoice. */
+			readonly msdyn_InvoiceDate_UtcDateOnly: string;
+			/** Invoice Setup this Invoice Date relates to */
+			readonly msdyn_InvoiceSetup: string;
+			readonly msdyn_InvoiceStatus: string;
+			/** Enter the name of the custom entity. */
+			readonly msdyn_name: string;
+			/** Intended for internal use. Manipulating values in this field is not supported and can lead to unexpected system behavior. */
+			readonly msdyn_PostponeGenerationUntil_TimezoneDateAndTime: string;
+			/** For internal use only */
+			readonly msdyn_ProcessStartedOn_TimezoneDateAndTime: string;
+			/** For internal use only. */
+			readonly msdyn_Revision: string;
+			/** Shows the date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the Agreement Invoice Date */
+			readonly statecode: string;
+			/** Reason for the status of the Agreement Invoice Date */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Shows the time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -142,6 +199,8 @@ declare namespace OptionSet {
 			Processed,
 			/** 690970000 */
 			Scheduled
+		}
+		enum OwnerIdType {
 		}
 		enum statecode {
 			/** 0 */
@@ -173,4 +232,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

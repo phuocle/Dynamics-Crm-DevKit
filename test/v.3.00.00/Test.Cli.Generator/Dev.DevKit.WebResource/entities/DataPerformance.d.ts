@@ -123,6 +123,48 @@ declare namespace DevKit {
 		readonly Solution: string;
 		/** Query Weight of the component. Factored with the Optimization Impact to determine the overall importance of applying an optimization. (P2) */
 		readonly Weight: number;
+		readonly FormattedValue: {
+			/** An internal state which indicates whether at least one optimization is applied. */
+			readonly AnyOptimizationApplied: string;
+			/** An internal state which indicates whether at least one optimization is available for this record. */
+			readonly AnyOptimizationAvailable: string;
+			/** Name of the component */
+			readonly Component: string;
+			/** Number of times a queries were executed (Aggregated) */
+			readonly Count: string;
+			/** Unique identifier of the performance suggestion. */
+			readonly DataPerformanceId: string;
+			/** Primary entity */
+			readonly Entity1: string;
+			/** The expected average cost benefit of an optimization. */
+			readonly EstimatedOptimizationImpact: string;
+			/** The execution period for which the performance metrics are calculated. */
+			readonly ExecutionPeriod: string;
+			/** An internal state which shows the result of the last action that was taken on this record. */
+			readonly LastActionResult: string;
+			/** Last time an optimization was applied. */
+			readonly LastOptimizationDate_UtcDateAndTime: string;
+			/** Maximum execution time in seconds. (Aggregated) */
+			readonly MaxTime: string;
+			/** Average execution time in seconds. (Aggregated) */
+			readonly MedianTime: string;
+			/** Minimum execution time in seconds. (Aggregated) */
+			readonly MinTime: string;
+			/** Data operation that triggered the query (Retrieve Multiple, etc.) */
+			readonly Operation: string;
+			/** Current optimization status of the record, showed to the customer. */
+			readonly OptimizationStatus: string;
+			/** Storage consumed by the optimization. (MB) */
+			readonly OptimizationStorage: string;
+			/** Unique identifier of the organization associated. */
+			readonly OrganizationId: string;
+			/** Actual performance change after taking an optimization action on the record. */
+			readonly RealizedOptimizationImpact: string;
+			/** Name of the solution that owns the component */
+			readonly Solution: string;
+			/** Query Weight of the component. Factored with the Optimization Impact to determine the overall importance of applying an optimization. (P2) */
+			readonly Weight: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -145,4 +187,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

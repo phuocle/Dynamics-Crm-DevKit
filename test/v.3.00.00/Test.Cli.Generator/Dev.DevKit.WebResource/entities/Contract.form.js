@@ -157,6 +157,8 @@ var OptionSet;
 			Number_of_Cases: 1,
 			Time: 2
 		},
+		BillingCustomerIdType : {
+		},
 		BillingFrequencyCode : {
 			Annually: 5,
 			Bimonthly: 2,
@@ -168,6 +170,10 @@ var OptionSet;
 			Bronze: 3,
 			Gold: 1,
 			Silver: 2
+		},
+		CustomerIdType : {
+		},
+		OwnerIdType : {
 		},
 		StateCode : {
 			Active: 2,

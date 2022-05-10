@@ -39,10 +39,24 @@ declare namespace DevKit {
 		Name: string;
 		/** For internal use only. */
 		QueryType: number;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly Description: string;
+			/** String that specifies the filter template in Fetch XML language. */
+			readonly FetchXml: string;
+			/** Unique identifier of the filter template. */
+			readonly FilterTemplateId: string;
+			/** Name of the filter template. */
+			readonly Name: string;
+			/** For internal use only. */
+			readonly QueryType: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace FilterTemplate {
+		enum ReturnedTypeCode {
+		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
 			NotCalculated,
@@ -61,4 +75,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

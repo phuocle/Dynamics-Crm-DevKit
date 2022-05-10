@@ -233,6 +233,8 @@ var OptionSet;
 			Location_Agnostic: 690970002,
 			Onsite: 690970000
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

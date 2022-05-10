@@ -110,6 +110,8 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.RatingValue = {
+		OwnerIdType : {
+		},
 		StateCode : {
 			Active: 0,
 			Inactive: 1

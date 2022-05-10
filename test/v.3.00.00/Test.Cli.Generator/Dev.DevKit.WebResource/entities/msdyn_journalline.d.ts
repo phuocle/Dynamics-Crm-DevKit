@@ -325,6 +325,132 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Exchange rate for the currency associated with the entity with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Shows the customer for the journal line. */
+			readonly msdyn_AccountCustomer: string;
+			readonly msdyn_AccountingDate_UtcDateOnly: string;
+			readonly msdyn_AccountVendor: string;
+			/** Shows the amount of the journal line. */
+			readonly msdyn_Amount: string;
+			/** Value of the Amount in base currency. */
+			readonly msdyn_amount_Base: string;
+			/** Select the calculation method for the amount. */
+			readonly msdyn_AmountMethod: string;
+			/** Enter the basis amount of the journal line. */
+			readonly msdyn_BasisAmount: string;
+			/** Value of the Basis Amount in base currency. */
+			readonly msdyn_basisamount_Base: string;
+			/** Enter the basis price of the journal line. */
+			readonly msdyn_BasisPrice: string;
+			/** Value of the Basis Price in base currency. */
+			readonly msdyn_basisprice_Base: string;
+			/** Enter the basis quantity of the journal line. */
+			readonly msdyn_BasisQuantity: string;
+			readonly msdyn_BillingStatus: string;
+			/** Select the billing type for the journal line. */
+			readonly msdyn_BillingType: string;
+			/** Shows the resource. */
+			readonly msdyn_bookableresource: string;
+			readonly msdyn_ContactCustomer: string;
+			readonly msdyn_ContactVendor: string;
+			/** Unique identifier for Organizational Unit associated with Journal Line. */
+			readonly msdyn_contractorganizationalunitid: string;
+			/** Shows the type of customer. */
+			readonly msdyn_CustomerType: string;
+			/** The name of the custom entity. */
+			readonly msdyn_description: string;
+			/** Enter the transaction date of the journal line. */
+			readonly msdyn_DocumentDate_UtcDateOnly: string;
+			/** Enter the end date and time. */
+			readonly msdyn_EndDateTime_UtcDateAndTime: string;
+			readonly msdyn_ExchangeRateDate_UtcDateOnly: string;
+			/** The external description of the journal line. */
+			readonly msdyn_externaldescription: string;
+			/** Shows whether the journal has been submitted. */
+			readonly msdyn_IsPosted: string;
+			/** Shows the name of the journal. */
+			readonly msdyn_Journal: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_journallineId: string;
+			/** Enter the percent. */
+			readonly msdyn_Percent: string;
+			/** Enter the price. */
+			readonly msdyn_Price: string;
+			/** Value of the Price in base currency. */
+			readonly msdyn_price_Base: string;
+			/** Shows the price list used for the journal line. */
+			readonly msdyn_PriceList: string;
+			/** Select the product. */
+			readonly msdyn_Product: string;
+			/** Select the project. */
+			readonly msdyn_Project: string;
+			/** Enter the quantity. */
+			readonly msdyn_Quantity: string;
+			/** Select the resource role. */
+			readonly msdyn_ResourceCategory: string;
+			/** Organizational unit at the time the entry was registered of the resource who performed the work. */
+			readonly msdyn_ResourceOrganizationalUnitId: string;
+			/** Shows the project contract. */
+			readonly msdyn_SalesContract: string;
+			/** (Deprecated) Shows the project contract line. */
+			readonly msdyn_SalesContractLine: string;
+			/** Unique identifier for Project Contract Line associated with Journal Line. */
+			readonly msdyn_SalesContractLineId: string;
+			/** Enter the start date and time. */
+			readonly msdyn_StartDateTime_UtcDateAndTime: string;
+			/** Select the project task. */
+			readonly msdyn_Task: string;
+			/** Select the transaction category. */
+			readonly msdyn_TransactionCategory: string;
+			/** Select the transaction class. */
+			readonly msdyn_TransactionClassification: string;
+			readonly msdyn_TransactionTypeCode: string;
+			/** Shows the unit of measurement. */
+			readonly msdyn_Unit: string;
+			/** Shows the unit schedule. */
+			readonly msdyn_UnitSchedule: string;
+			readonly msdyn_VendorType: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the Journal Line */
+			readonly statecode: string;
+			/** Reason for the status of the Journal Line */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Shows the currency associated with the entity. */
+			readonly TransactionCurrencyId: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -409,6 +535,8 @@ declare namespace OptionSet {
 			/** 192350002 */
 			Contact
 		}
+		enum OwnerIdType {
+		}
 		enum statecode {
 			/** 0 */
 			Active,
@@ -439,4 +567,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

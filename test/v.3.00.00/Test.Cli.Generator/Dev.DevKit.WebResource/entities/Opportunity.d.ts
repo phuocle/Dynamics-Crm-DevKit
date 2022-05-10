@@ -22,6 +22,7 @@ declare namespace DevKit {
 			opportunityquotes: DevKit.Controls.Section;
 		}
 		interface tab_Summary_Sections {
+			Notes_pane: DevKit.Controls.Section;
 			Opportunity_details: DevKit.Controls.Section;
 			opportunity_information: DevKit.Controls.Section;
 			PredictiveScoreSection: DevKit.Controls.Section;
@@ -524,6 +525,8 @@ declare namespace DevKit {
 			PurchaseProcess: DevKit.Controls.OptionSet;
 			/** Choose how long the lead will likely take to make the purchase. */
 			PurchaseTimeframe: DevKit.Controls.OptionSet;
+			Pursuit_Team: DevKit.Controls.ActionCards;
+			Stakeholders: DevKit.Controls.ActionCards;
 			/** Shows the total amount due, calculated as the sum of the products, discounts, freight, and taxes for the opportunity. */
 			TotalAmount: DevKit.Controls.Money;
 			/** Shows the total product amount for the opportunity, minus any discounts. This value is added to freight and tax amounts in the calculation for the total amount of the opportunity. */
@@ -626,9 +629,7 @@ declare namespace DevKit {
 			Competitors: DevKit.Controls.Grid;
 			DocumentsSubGrid: DevKit.Controls.Grid;
 			opportunityproductsGrid: DevKit.Controls.Grid;
-			Pursuit_Team: DevKit.Controls.Grid;
 			quote: DevKit.Controls.Grid;
-			Stakeholders: DevKit.Controls.Grid;
 		}
 	}
 	class FormOpportunity extends DevKit.IForm {
@@ -1192,6 +1193,255 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the account with which the opportunity is associated. */
+			readonly AccountId: string;
+			/** Shows the date and time when the opportunity was closed or canceled. */
+			readonly ActualCloseDate_DateOnly: string;
+			/** Type the actual revenue amount for the opportunity for reporting and analysis of estimated versus actual sales. Field defaults to the Est. Revenue value when an opportunity is won. */
+			readonly ActualValue: string;
+			/** Value of the Actual Revenue in base currency. */
+			readonly ActualValue_Base: string;
+			/** Type a value between 0 and 1,000,000,000,000 to indicate the lead's potential available budget. */
+			readonly BudgetAmount: string;
+			/** Value of the Budget Amount in base currency. */
+			readonly BudgetAmount_Base: string;
+			/** Select the likely budget status for the lead's company. This may help determine the lead rating or your sales approach. */
+			readonly BudgetStatus: string;
+			/** Shows the campaign that the opportunity was created from. The ID is used for tracking the success of the campaign. */
+			readonly CampaignId: string;
+			/** Choose whether the proposal feedback has been captured for the opportunity. */
+			readonly CaptureProposalFeedback: string;
+			/** Type a number from 0 to 100 that represents the likelihood of closing the opportunity. This can aid the sales team in their efforts to convert the opportunity in a sale. */
+			readonly CloseProbability: string;
+			/** Select whether a final proposal has been completed for the opportunity. */
+			readonly CompleteFinalProposal: string;
+			/** Select whether an internal review has been completed for this opportunity. */
+			readonly CompleteInternalReview: string;
+			/** Select whether the lead confirmed interest in your offerings. This helps in determining the lead quality and the probability of it turning into an opportunity. */
+			readonly ConfirmInterest: string;
+			/** Unique identifier of the contact associated with the opportunity. */
+			readonly ContactId: string;
+			/** Shows who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Type notes about the company or organization associated with the opportunity. */
+			readonly CurrentSituation: string;
+			/** Select the customer account or contact to provide a quick link to additional customer details, such as address, phone number, activities, and orders. */
+			readonly customerid_account: string;
+			/** Select the customer account or contact to provide a quick link to additional customer details, such as address, phone number, activities, and orders. */
+			readonly customerid_contact: string;
+			/** Type some notes about the customer's requirements, to help the sales team identify products and services that could meet their requirements. */
+			readonly CustomerNeed: string;
+			/** Type notes about the customer's pain points to help the sales team identify products and services that could address these pain points. */
+			readonly CustomerPainPoints: string;
+			/** Select whether your notes include information about who makes the purchase decisions at the lead's company. */
+			readonly DecisionMaker: string;
+			/** Type additional information to describe the opportunity, such as possible products to sell or past purchases from the customer. */
+			readonly Description: string;
+			/** Select whether a proposal has been developed for the opportunity. */
+			readonly DevelopProposal: string;
+			/** Type the discount amount for the opportunity if the customer is eligible for special savings. */
+			readonly DiscountAmount: string;
+			/** Value of the Opportunity Discount Amount in base currency. */
+			readonly DiscountAmount_Base: string;
+			/** Type the discount rate that should be applied to the Product Totals field to include additional savings for the customer in the opportunity. */
+			readonly DiscountPercentage: string;
+			/** The primary email address for the entity. */
+			readonly EmailAddress: string;
+			/** Enter the expected closing date of the opportunity to help make accurate revenue forecasts. */
+			readonly EstimatedCloseDate_DateOnly: string;
+			/** Type the estimated revenue amount to indicate the potential sale or value of the opportunity for revenue forecasting. This field can be either system-populated or editable based on the selection in the Revenue field. */
+			readonly EstimatedValue: string;
+			/** Value of the Est. Revenue in base currency. */
+			readonly EstimatedValue_Base: string;
+			/** Select whether the fit between the lead's requirements and your offerings was evaluated. */
+			readonly EvaluateFit: string;
+			/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
+			readonly ExchangeRate: string;
+			/** Choose whether the sales team has recorded detailed notes on the proposals and the account's responses. */
+			readonly FileDebrief: string;
+			/** Enter the date and time when the final decision of the opportunity was made. */
+			readonly FinalDecisionDate_DateOnly: string;
+			/** Type the cost of freight or shipping for the products included in the opportunity for use in calculating the Total Amount field. */
+			readonly FreightAmount: string;
+			/** Value of the Freight Amount in base currency. */
+			readonly FreightAmount_Base: string;
+			/** Select whether information about competitors is included. */
+			readonly IdentifyCompetitors: string;
+			/** Select whether the customer contacts for this opportunity have been identified. */
+			readonly IdentifyCustomerContacts: string;
+			/** Choose whether you have recorded who will pursue the opportunity. */
+			readonly IdentifyPursuitTeam: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Choose whether someone from the sales team contacted this lead earlier. */
+			readonly InitialCommunication: string;
+			/** Shows the forecasted revenue for an Opportunity. */
+			readonly int_Forecast: string;
+			/** Value of the Forecast in base currency. */
+			readonly int_forecast_Base: string;
+			/** Indicates whether the opportunity is private or visible to the entire organization. */
+			readonly IsPrivate: string;
+			/** Select whether the estimated revenue for the opportunity is calculated automatically based on the products entered or entered manually by a user. */
+			readonly IsRevenueSystemCalculated: string;
+			/** Contains the date time stamp of the last on hold time. */
+			readonly LastOnHoldTime_UtcDateAndTime: string;
+			/** Shows who last updated the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who last updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** The account manager responsible for the opportunity. */
+			readonly msdyn_AccountManagerId: string;
+			/** The organizational unit in charge of the opportunity. */
+			readonly msdyn_ContractOrganizationalUnitId: string;
+			/** Categories used for forecasting. */
+			readonly msdyn_forecastcategory: string;
+			/** Describes whether opportunity is opted out or not */
+			readonly msdyn_gdproptout: string;
+			readonly msdyn_OpportunityGrade: string;
+			readonly msdyn_OpportunityScore: string;
+			readonly msdyn_OpportunityScoreTrend: string;
+			/** Internal use only. */
+			readonly msdyn_OrderType: string;
+			/** Predictive score */
+			readonly msdyn_PredictiveScoreId: string;
+			readonly msdyn_ScoreHistory: string;
+			readonly msdyn_ScoreReasons: string;
+			/** Unique identifier for Segment associated with Opportunity. */
+			readonly msdyn_segmentid: string;
+			/** Unique identifier for Work Order Type associated with Opportunity. */
+			readonly msdyn_WorkOrderType: string;
+			/** Type a subject or descriptive name, such as the expected order or company name, for the opportunity. */
+			readonly Name: string;
+			/** Choose how high the level of need is for the lead's company. */
+			readonly Need: string;
+			/** Shows the duration in minutes for which the opportunity was on hold. */
+			readonly OnHoldTime: string;
+			/** Unique identifier of the opportunity. */
+			readonly OpportunityId: string;
+			/** Select the expected value or priority of the opportunity based on revenue, customer status, or closing probability. */
+			readonly OpportunityRatingCode: string;
+			/** Choose the lead that the opportunity was created from for reporting and analytics. The field is read-only after the opportunity is created and defaults to the correct lead when an opportunity is created from a converted lead. */
+			readonly OriginatingLeadId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Choose an account to connect this opportunity to, so that the relationship is visible in reports and analytics, and to provide a quick link to additional details, such as financial information and activities. */
+			readonly ParentAccountId: string;
+			/** Choose a contact to connect this opportunity to, so that the relationship is visible in reports and analytics. */
+			readonly ParentContactId: string;
+			/** Information about whether the opportunity participates in workflow rules. */
+			readonly ParticipatesInWorkflow: string;
+			/** Select whether the final proposal has been presented to the account. */
+			readonly PresentFinalProposal: string;
+			/** Select whether a proposal for the opportunity has been presented to the account. */
+			readonly PresentProposal: string;
+			/** Choose the price list associated with this record to make sure the products associated with the campaign are offered at the correct prices. */
+			readonly PriceLevelId: string;
+			/** Pricing error for the opportunity. */
+			readonly PricingErrorCode: string;
+			/** Select the priority so that preferred customers or critical issues are handled quickly. */
+			readonly PriorityCode: string;
+			/** Contains the id of the process associated with the entity. */
+			readonly ProcessId: string;
+			/** Type notes about the proposed solution for the opportunity. */
+			readonly ProposedSolution: string;
+			/** Choose whether an individual or a committee will be involved in the  purchase process for the lead. */
+			readonly PurchaseProcess: string;
+			/** Choose how long the lead will likely take to make the purchase. */
+			readonly PurchaseTimeframe: string;
+			/** Select whether the decision about pursuing the opportunity has been made. */
+			readonly PursuitDecision: string;
+			/** Type comments about the qualification or scoring of the lead. */
+			readonly QualificationComments: string;
+			/** Type comments about the quotes associated with the opportunity. */
+			readonly QuoteComments: string;
+			/** Choose whether the proposal feedback has been captured and resolved for the opportunity. */
+			readonly ResolveFeedback: string;
+			/** Select the sales stage of this opportunity to aid the sales team in their efforts to win this opportunity. */
+			readonly SalesStage: string;
+			/** Select the sales process stage for the opportunity to indicate the probability of closing the opportunity. */
+			readonly SalesStageCode: string;
+			/** Enter the date and time of the prospecting follow-up meeting with the lead. */
+			readonly ScheduleFollowup_Prospect_UtcDateOnly: string;
+			/** Enter the date and time of the qualifying follow-up meeting with the lead. */
+			readonly ScheduleFollowup_Qualify_UtcDateOnly: string;
+			/** Enter the date and time of the proposal meeting for the opportunity. */
+			readonly ScheduleProposalMeeting_UtcDateOnly: string;
+			/** Select whether a thank you note has been sent to the account for considering the proposal. */
+			readonly SendThankYouNote: string;
+			/** Skip Price Calculation (For Internal Use) */
+			readonly SkipPriceCalculation: string;
+			/** Choose the service level agreement (SLA) that you want to apply to the opportunity record. */
+			readonly SLAId: string;
+			/** Last SLA that was applied to this opportunity. This field is for internal use only. */
+			readonly SLAInvokedId: string;
+			/** Contains the id of the stage where the entity is located. */
+			readonly StageId: string;
+			/** Shows whether the opportunity is open, won, or lost. Won and lost opportunities are read-only and can't be edited until they are reactivated. */
+			readonly StateCode: string;
+			/** Select the opportunity's status. */
+			readonly StatusCode: string;
+			/** Shows the ID of the workflow step. */
+			readonly StepId: string;
+			/** Shows the current phase in the sales pipeline for the opportunity. This is updated by a workflow. */
+			readonly StepName: string;
+			/** Number of users or conversations followed the record */
+			readonly TeamsFollowed: string;
+			/** Select when the opportunity is likely to be closed. */
+			readonly TimeLine: string;
+			/** Total time spent for emails (read and write) and meetings by me in relation to the opportunity record. */
+			readonly TimeSpentByMeOnEmailAndMeetings: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Shows the total amount due, calculated as the sum of the products, discounts, freight, and taxes for the opportunity. */
+			readonly TotalAmount: string;
+			/** Value of the Total Amount in base currency. */
+			readonly TotalAmount_Base: string;
+			/** Shows the total product amount for the opportunity, minus any discounts. This value is added to freight and tax amounts in the calculation for the total amount of the opportunity. */
+			readonly TotalAmountLessFreight: string;
+			/** Value of the Total Pre-Freight Amount in base currency. */
+			readonly TotalAmountLessFreight_Base: string;
+			/** Shows the total discount amount, based on the discount price and rate entered on the opportunity. */
+			readonly TotalDiscountAmount: string;
+			/** Value of the Total Discount Amount in base currency. */
+			readonly TotalDiscountAmount_Base: string;
+			/** Shows the sum of all existing and write-in products included on the opportunity, based on the specified price list and quantities. */
+			readonly TotalLineItemAmount: string;
+			/** Value of the Total Detail Amount in base currency. */
+			readonly TotalLineItemAmount_Base: string;
+			/** Shows the total of the Manual Discount amounts specified on all products included in the opportunity. This value is reflected in the Total Detail Amount field on the opportunity and is added to any discount amount or rate specified on the opportunity. */
+			readonly TotalLineItemDiscountAmount: string;
+			/** Value of the Total Line Item Discount Amount in base currency. */
+			readonly TotalLineItemDiscountAmount_Base: string;
+			/** Shows the total of the Tax amounts specified on all products included in the opportunity, included in the Total Amount field calculation for the opportunity. */
+			readonly TotalTax: string;
+			/** Value of the Total Tax in base currency. */
+			readonly TotalTax_Base: string;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			readonly TransactionCurrencyId: string;
+			/** A comma separated list of string values representing the unique identifiers of stages in a Business Process Flow Instance in the order that they occur. */
+			readonly TraversedPath: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -1205,6 +1455,8 @@ declare namespace OptionSet {
 			No_Committed_Budget,
 			/** 3 */
 			Will_Buy
+		}
+		enum CustomerIdType {
 		}
 		enum InitialCommunication {
 			/** 0 */
@@ -1271,6 +1523,8 @@ declare namespace OptionSet {
 			Hot,
 			/** 2 */
 			Warm
+		}
+		enum OwnerIdType {
 		}
 		enum PricingErrorCode {
 			/** 36 */
@@ -1446,4 +1700,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

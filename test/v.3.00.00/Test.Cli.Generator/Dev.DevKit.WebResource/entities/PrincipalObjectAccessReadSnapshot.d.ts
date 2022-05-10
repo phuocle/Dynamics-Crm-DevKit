@@ -40,6 +40,19 @@ declare namespace DevKit {
 		readonly RecordCountForOwningBU: number;
 		readonly RecordCountForOwningBUPercentOfTotalRows: number;
 		readonly TeamPrincipalsCount: number;
+		readonly FormattedValue: {
+			readonly ChildUserPrincipalsCount: string;
+			readonly Count: string;
+			readonly CountPercentOfTotalRows: string;
+			readonly ObjectTypeCode: string;
+			readonly PrincipalId: string;
+			readonly PrincipalObjectAccessReadSnapshotId: string;
+			readonly RecordCountForOwnerID: string;
+			readonly RecordCountForOwnerIDPercentOfTotalRows: string;
+			readonly RecordCountForOwningBU: string;
+			readonly RecordCountForOwningBUPercentOfTotalRows: string;
+			readonly TeamPrincipalsCount: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -62,4 +75,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

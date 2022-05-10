@@ -86,6 +86,65 @@ declare namespace DevKit {
 		/** Shows the time zone code that was in use when the record was created. */
 		UTCConversionTimeZoneCode: number;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Shows the type of the message. */
+			readonly CardType: string;
+			/** Shows who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CreatedTime_UtcDateAndTime: string;
+			/** Shows the entity instances. */
+			readonly DelveActionHubId: string;
+			/** For internal use only. */
+			readonly Description: string;
+			/** Shows the exchange rate for the currency associated with the Delve action hub with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Stores the Icon Class name of the Delve ActionHub Card. */
+			readonly IconClassName: string;
+			/** Shows the mail web link. */
+			readonly MailWebLink: string;
+			/** Shows the email message. This information is used only for email that is received. */
+			readonly MessageId: string;
+			/** Shows the date and time when the email message is received. */
+			readonly MessageTime_UtcDateAndTime: string;
+			/** Shows who last updated the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who last updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedTime_UtcDateAndTime: string;
+			/** Shows the organization that the record belongs to. */
+			readonly OrganizationId: string;
+			/** For internal use only. */
+			readonly RelatedMailIds: string;
+			/** Enter the sender of the email. */
+			readonly Sender: string;
+			/** Record ID of the sender entity. */
+			readonly SenderEntityId: string;
+			/** Object Type code of the sender entity. */
+			readonly SenderEntityObjectTypeCode: string;
+			/** Image of the sender. */
+			readonly SenderImageUrl: string;
+			/** Shows whether the Delve action record is pending, completed, or tracking. */
+			readonly StateCode: string;
+			/** Select the delve action record status. */
+			readonly StatusCode: string;
+			/** Type a short description about the objective or primary topic of the email. */
+			readonly Subject: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Shows the exchange rate for the currency associated with the Delve action hub with respect to the base currency. */
+			readonly TransactionCurrencyId: string;
+			/** Shows the time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -99,6 +158,10 @@ declare namespace OptionSet {
 			SendContentRequest,
 			/** 2 */
 			YesNo
+		}
+		enum RecordIdObjectTypeCode {
+		}
+		enum RegardingObjectTypeCode {
 		}
 		enum StateCode {
 			/** 1 */
@@ -134,4 +197,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

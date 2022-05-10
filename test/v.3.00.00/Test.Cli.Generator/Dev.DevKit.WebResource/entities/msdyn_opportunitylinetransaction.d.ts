@@ -235,6 +235,119 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Exchange rate for the currency associated with the entity with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Select the name of the customer to which this opportunity belongs. */
+			readonly msdyn_AccountCustomer: string;
+			readonly msdyn_AccountingDate_UtcDateOnly: string;
+			readonly msdyn_AccountVendor: string;
+			/** Enter the amount on the estimate line. */
+			readonly msdyn_Amount: string;
+			/** Value of the Amount in base currency. */
+			readonly msdyn_amount_Base: string;
+			/** Select the calculation method used to determine the amount on the estimate line.  */
+			readonly msdyn_AmountMethod: string;
+			readonly msdyn_BasisAmount: string;
+			/** Value of the Basis Amount in base currency. */
+			readonly msdyn_basisamount_Base: string;
+			readonly msdyn_BasisPrice: string;
+			/** Value of the Basis Price in base currency. */
+			readonly msdyn_basisprice_Base: string;
+			/** Enter the quantity used as basis for calculating quantity on this estimate line. */
+			readonly msdyn_BasisQuantity: string;
+			/** Select whether this estimate line would be charged to the customer or not. Only chargeable transactions will add to the invoice total when an invoices are created */
+			readonly msdyn_BillingType: string;
+			/** Shows the resource. */
+			readonly msdyn_bookableresource: string;
+			/** Select the customer contact of this opportunity. */
+			readonly msdyn_ContactCustomer: string;
+			readonly msdyn_ContactVendor: string;
+			/** Select whether the customer identified on the opportunity was an account or a contact */
+			readonly msdyn_CustomerType: string;
+			/** Type a description of the opportunity line estimate. */
+			readonly msdyn_description: string;
+			/** Enter the document date. The document date is only relevant for actuals and invoiced transactions; does not apply to opportunity line estimates. */
+			readonly msdyn_DocumentDate_UtcDateOnly: string;
+			/** Enter the end time of the opportunity line estimate. */
+			readonly msdyn_EndDateTime_UtcDateAndTime: string;
+			readonly msdyn_ExchangeRateDate_UtcDateOnly: string;
+			/** Shows the opportunity line that this estimate line belongs to. */
+			readonly msdyn_OpportunityLine: string;
+			/** Shows the entity instances. */
+			readonly msdyn_opportunitylinetransactionId: string;
+			/** Relevant when amount calculation method on the opportunity line transactions is "Multiply basis amount by percent" */
+			readonly msdyn_Percent: string;
+			/** Enter the price on the estimate line. */
+			readonly msdyn_Price: string;
+			/** Value of the Price in base currency. */
+			readonly msdyn_price_Base: string;
+			/** Select the price list used on the opportunity line estimate. */
+			readonly msdyn_PriceList: string;
+			/** Select the product on the estimate line. */
+			readonly msdyn_Product: string;
+			/** Select the name of the Project that this estimate line is for. */
+			readonly msdyn_Project: string;
+			/** Enter the quantity of the opportunity estimate line. */
+			readonly msdyn_Quantity: string;
+			/** Select the role that is estimated to perform the work. */
+			readonly msdyn_ResourceCategory: string;
+			/** Select the organizational unit of the resource who is estimated to perform the work. */
+			readonly msdyn_ResourceOrganizationalUnitId: string;
+			/** Enter the start date of the opportunity line estimate. */
+			readonly msdyn_StartDateTime_UtcDateAndTime: string;
+			/** Select the name of the project task for which this estimate line was created. */
+			readonly msdyn_Task: string;
+			/** Select the category of the transaction. */
+			readonly msdyn_TransactionCategory: string;
+			/** Transaction classification of the Opportunity line transaction */
+			readonly msdyn_TransactionClassification: string;
+			/** Transaction type for the opportunity line. */
+			readonly msdyn_TransactionTypeCode: string;
+			/** Select the unit of the estimate quantity. */
+			readonly msdyn_Unit: string;
+			/** Select the unit group of the opportunity line estimate. */
+			readonly msdyn_UnitSchedule: string;
+			readonly msdyn_VendorType: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the Opportunity Line Detail */
+			readonly statecode: string;
+			/** Reason for the status of the Opportunity Line Detail */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Shows the currency associated with the entity. */
+			readonly TransactionCurrencyId: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -305,6 +418,8 @@ declare namespace OptionSet {
 			/** 192350002 */
 			Contact
 		}
+		enum OwnerIdType {
+		}
 		enum statecode {
 			/** 0 */
 			Active,
@@ -335,4 +450,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

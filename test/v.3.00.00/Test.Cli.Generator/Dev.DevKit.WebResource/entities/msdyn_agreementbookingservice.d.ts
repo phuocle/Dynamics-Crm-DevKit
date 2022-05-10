@@ -263,10 +263,86 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Shows the exchange rate for the currency associated with the entity with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Shows the sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who last updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Unique identifier for Agreement associated with Agreement Booking Service. */
+			readonly msdyn_Agreement: string;
+			/** The Agreement Booking Incident related to this service */
+			readonly msdyn_AgreementBookingIncident: string;
+			/** Shows the entity instances. */
+			readonly msdyn_agreementbookingserviceId: string;
+			/** Unique identifier for Agreement Booking Setup associated with Agreement Booking Service. */
+			readonly msdyn_AgreementBookingSetup: string;
+			readonly msdyn_Currency: string;
+			/** Shows the value of the currency in the base currency. */
+			readonly msdyn_currency_Base: string;
+			/** Customer Asset related to this Service */
+			readonly msdyn_CustomerAsset: string;
+			/** Shows the actual duration of service. */
+			readonly msdyn_Duration: string;
+			/** Enter the duration you want to bill the customer for. By default, this will default to the same value as the "Duration" field. */
+			readonly msdyn_DurationToBill: string;
+			readonly msdyn_IsCopied: string;
+			/** Shows the order of this service within the agreement services. */
+			readonly msdyn_LineOrder: string;
+			/** Enter the name of the custom entity. */
+			readonly msdyn_name: string;
+			/** Optionally set Price List that will determine the pricing for this service on the Work Order */
+			readonly msdyn_PriceList: string;
+			/** Unique identifier for Product/Service associated with Agreement Booking Service. */
+			readonly msdyn_Service: string;
+			/** The unit that determines the pricing for this service when Price List is set */
+			readonly msdyn_Unit: string;
+			/** Enter the amount you wish to charge the customer per unit. This field is optional. */
+			readonly msdyn_UnitAmount: string;
+			/** Shows the value of the unit amount in the base currency. */
+			readonly msdyn_unitamount_Base: string;
+			/** Shows the date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the Agreement Booking Service */
+			readonly statecode: string;
+			/** Reason for the status of the Agreement Booking Service */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Unique identifier of the currency associated with the entity. */
+			readonly TransactionCurrencyId: string;
+			/** Shows the time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace msdyn_agreementbookingservice {
+		enum OwnerIdType {
+		}
 		enum statecode {
 			/** 0 */
 			Active,
@@ -297,4 +373,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

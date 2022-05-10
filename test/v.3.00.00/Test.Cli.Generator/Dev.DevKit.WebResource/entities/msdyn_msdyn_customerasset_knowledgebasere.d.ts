@@ -33,6 +33,12 @@ declare namespace DevKit {
 		readonly msdyn_customerassetid: string;
 		readonly msdyn_msdyn_customerasset_knowledgebasereId: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			readonly knowledgebaserecordid: string;
+			readonly msdyn_customerassetid: string;
+			readonly msdyn_msdyn_customerasset_knowledgebasereId: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -55,4 +61,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

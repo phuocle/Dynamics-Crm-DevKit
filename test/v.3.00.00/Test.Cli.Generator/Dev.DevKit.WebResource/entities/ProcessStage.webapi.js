@@ -107,7 +107,7 @@ var DevKit;
 		}
 		processstage.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -202,6 +202,10 @@ var OptionSet;
 			Workflow: 473330003,
 			XmlValidation: 473330017,
 			Xslt: 473330024
+		},
+		OwnerIdType : {
+		},
+		PrimaryEntityTypeCode : {
 		},
 		StageCategory : {
 			Approval: 7,

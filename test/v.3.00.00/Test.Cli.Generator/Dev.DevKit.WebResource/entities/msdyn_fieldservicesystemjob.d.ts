@@ -120,6 +120,52 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Shows the sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who last updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			readonly msdyn_ConditionCode: string;
+			readonly msdyn_ExceptionMessage: string;
+			readonly msdyn_ExceptionTrace: string;
+			/** Shows the entity instances. */
+			readonly msdyn_fieldservicesystemjobId: string;
+			readonly msdyn_InputParameter: string;
+			readonly msdyn_InputParameterType: string;
+			/** Type a name for the job. */
+			readonly msdyn_jobname: string;
+			/** Enter the status of the job. */
+			readonly msdyn_JobStatus: string;
+			readonly msdyn_JobType: string;
+			readonly msdyn_OutputParameter: string;
+			readonly msdyn_OutputParameterType: string;
+			/** Shows the user associated with the field service system job. */
+			readonly msdyn_OwnerId: string;
+			/** Unique identifier for the organization */
+			readonly OrganizationId: string;
+			/** Shows the date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Status of the Field Service System Job */
+			readonly statecode: string;
+			/** Shows the reason for the status of the field service system job. */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Shows the time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -180,4 +226,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

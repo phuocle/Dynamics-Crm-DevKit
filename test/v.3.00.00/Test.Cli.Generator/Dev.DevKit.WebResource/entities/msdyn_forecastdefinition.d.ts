@@ -146,6 +146,68 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Select the fiscal month for the forecast definition. */
+			readonly msdyn_fiscalmonth: string;
+			/** Select the fiscal quarter for the forecast definition. */
+			readonly msdyn_fiscalquarter: string;
+			/** Select the fiscal year for the forecast definition. */
+			readonly msdyn_fiscalyear: string;
+			/** Unique identifier for the forecast definition. */
+			readonly msdyn_forecastdefinitionId: string;
+			/** Name of the forecast definition. */
+			readonly msdyn_forecastdefinitionname: string;
+			/** Select the type of period for which the forecast must be generated. */
+			readonly msdyn_forecastperiodtype: string;
+			/** Select metric to attach with forecast */
+			readonly msdyn_metricid: string;
+			/** Indicate the number of recurrences that the forecast will be generated. */
+			readonly msdyn_numberofrecurrences: string;
+			/** Select whether the quota for the forecast must to be taken from a goal or entered manually. */
+			readonly msdyn_quotasource: string;
+			/** Select the query that will be used to calculate data for the rollup field. */
+			readonly msdyn_rollupquery: string;
+			/** Shows the date from which the forecast is applicable. The date and time are displayed in the time zone selected in Dynamics 365 Customer Engagement apps options. */
+			readonly msdyn_validfrom_DateOnly: string;
+			/** Shows the date till which the forecast is applicable. The date and time are displayed in the time zone selected in Dynamics 365 Customer Engagement apps options. */
+			readonly msdyn_validto_DateOnly: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the Forecast Definition */
+			readonly statecode: string;
+			/** Reason for the status of the Forecast Definition */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -248,6 +310,8 @@ declare namespace OptionSet {
 			/** 192350001 */
 			Manual
 		}
+		enum OwnerIdType {
+		}
 		enum statecode {
 			/** 0 */
 			Draft,
@@ -282,4 +346,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

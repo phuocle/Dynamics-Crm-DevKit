@@ -43,6 +43,8 @@ var OptionSet;
 			Field_Service: 192354000,
 			Project_Service: 192351000
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

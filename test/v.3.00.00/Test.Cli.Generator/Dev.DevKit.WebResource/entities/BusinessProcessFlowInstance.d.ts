@@ -71,10 +71,64 @@ declare namespace DevKit {
 		TraversedPath: string;
 		/** Version number of the business process flow instance. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Date and time when the active stage was started. */
+			readonly ActiveStageStartedOn_UtcDateAndTime: string;
+			/** Unique identifier of the business process flow instance. */
+			readonly BusinessProcessFlowInstanceId: string;
+			/** Date and time when the process completed. */
+			readonly CompletedOn_UtcDateAndTime: string;
+			/** Shows who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Unique identifier of the first entity instance. */
+			readonly Entity1Id: string;
+			/** Unique identifier of the second entity instance. */
+			readonly Entity2Id: string;
+			/** Unique identifier of the third entity instance. */
+			readonly Entity3Id: string;
+			/** Unique identifier of the fourth entity instance. */
+			readonly Entity4Id: string;
+			/** Unique identifier of the fifth entity instance. */
+			readonly Entity5Id: string;
+			/** Shows who last updated the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Type a descriptive name for the instance. */
+			readonly Name: string;
+			/** Unique identifier of the business process flow. */
+			readonly ProcessId: string;
+			/** Unique identifier of active stage in the business process flow instance. */
+			readonly ProcessStageId: string;
+			/** Shows whether the business process flow instance is active or inactive. */
+			readonly StateCode: string;
+			/** Business process flow instance's status. */
+			readonly StatusCode: string;
+			/** For internal use only. */
+			readonly TraversedPath: string;
+			/** Version number of the business process flow instance. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace BusinessProcessFlowInstance {
+		enum Entity1ObjectTypeCode {
+		}
+		enum Entity2ObjectTypeCode {
+		}
+		enum Entity3ObjectTypeCode {
+		}
+		enum Entity4ObjectTypeCode {
+		}
+		enum Entity5ObjectTypeCode {
+		}
 		enum StateCode {
 			/** 0 */
 			Active,
@@ -107,4 +161,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

@@ -36,10 +36,21 @@ declare namespace DevKit {
 		/** Unique identifier of the status map. */
 		StatusMapId: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			readonly IsDefault: string;
+			readonly OrganizationId: string;
+			readonly State: string;
+			readonly Status: string;
+			/** Unique identifier of the status map. */
+			readonly StatusMapId: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace StatusMap {
+		enum ObjectTypeCode {
+		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
 			NotCalculated,
@@ -58,4 +69,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

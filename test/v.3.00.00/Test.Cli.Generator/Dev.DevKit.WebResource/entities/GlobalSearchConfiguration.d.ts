@@ -50,6 +50,29 @@ declare namespace DevKit {
 		readonly SolutionId: string;
 		/** For internal use only. */
 		readonly SupportingSolutionId: string;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly ComponentState: string;
+			readonly GlobalSearchConfigurationId: string;
+			/** For internal use only. */
+			readonly GlobalSearchConfigurationidUnique: string;
+			/** Information that specifies whether the specified search is enabled. */
+			readonly IsEnabled: string;
+			/** Information that specifies whether the search logical name is localized. */
+			readonly IsLocalized: string;
+			/** Indicates whether the solution component is part of a managed solution. */
+			readonly IsManaged: string;
+			/** Information that specifies whether the Search Box is visible. */
+			readonly IsSearchBoxVisible: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			readonly SearchProviderName: string;
+			readonly SearchProviderResultsPage: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -82,4 +105,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

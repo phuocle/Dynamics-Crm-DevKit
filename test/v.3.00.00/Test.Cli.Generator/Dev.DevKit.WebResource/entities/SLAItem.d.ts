@@ -176,6 +176,82 @@ declare namespace DevKit {
 		WarnAfter: number;
 		/** Workflow associated with the SLA Item. */
 		WorkflowId: string;
+		readonly FormattedValue: {
+			readonly actionflowuniquename: string;
+			/** Action URL */
+			readonly ActionURL: string;
+			/** Select whether this SLA will allow pausing and resuming during the time calculation. */
+			readonly AllowPauseResume: string;
+			readonly ApplicableEntity: string;
+			/** Condition for SLA item */
+			readonly ApplicableWhenXml: string;
+			/** Choose the business hours for calculating SLA item timelines. */
+			readonly BusinessHoursId: string;
+			readonly ChangedAttributeList: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Shows who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Type additional information to describe the SLA Item */
+			readonly Description: string;
+			/** Exchange rate between the currency associated with the SLA Item record and the base currency. */
+			readonly ExchangeRate: string;
+			/** Select how soon the success criteria must be met until the SLA item is considered failed and failure actions are initiated. The actual duration is based on the business hours as specified in the associated SLA record. */
+			readonly FailureAfter: string;
+			/** For internal use only. */
+			readonly IsManaged: string;
+			/** Shows who last updated the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			readonly msdyn_AdvancedPauseConfiguration: string;
+			readonly msdyn_CustomTimeCalculation: string;
+			/** Unique identifier for Custom Time Calculation Workflow associated with SLA Item. */
+			readonly msdyn_CustomTimeCalculationWorkflowId: string;
+			readonly msdyn_PauseConfigurationXml: string;
+			/** Unique identifier for SLAKPI associated with SLA Item. */
+			readonly msdyn_slakpiid: string;
+			/** Type a descriptive name of the service level agreement (SLA) item. */
+			readonly Name: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Select the service level agreement (SLA) key performance indicator (KPI) that this SLA Item is created for. */
+			readonly RelatedField: string;
+			/** Select the time zone, or UTC offset, for this address so that other people can reference it when they contact someone at this address. */
+			readonly SequenceNumber: string;
+			/** Unique identifier for SLA associated with SLA Item. */
+			readonly SLAId: string;
+			/** Unique identifier of the SLA Item. */
+			readonly SLAItemId: string;
+			/** For internal use only. */
+			readonly SLAItemIdUnique: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** Condition for SLA item */
+			readonly SuccessConditionsXml: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** Unique identifier of the currency associated with the SLA Item record. */
+			readonly TransactionCurrencyId: string;
+			/** Version number of the SLA Item. */
+			readonly VersionNumber: string;
+			/** Select how soon the success criteria must be met before warning actions are initiated. The actual duration is based on the business hours as specified in the associated SLA record. */
+			readonly WarnAfter: string;
+			/** Workflow associated with the SLA Item. */
+			readonly WorkflowId: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -189,6 +265,8 @@ declare namespace OptionSet {
 			Published,
 			/** 1 */
 			Unpublished
+		}
+		enum OwnerIdType {
 		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
@@ -208,4 +286,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

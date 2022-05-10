@@ -121,6 +121,64 @@ declare namespace DevKit {
 		readonly VersionNumber: number;
 		/** Unique identifier for entity instances */
 		VirtualEntityMetadataId: string;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly ComponentIdUnique: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** The name of the virtual entity that these settings are for. */
+			readonly ExtensionOfRecordId: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Whether the OnExternalUpdated message ChangedFields parameter will include data about which fields have changed. */
+			readonly IsChangedFieldsEnabledForUpdateEvent: string;
+			/** For internal use only. */
+			readonly IsCustomizable: string;
+			/** Indicates whether the solution component is part of a managed solution. */
+			readonly IsManaged: string;
+			/** Will enable a message to send information about new records created in the external data source. */
+			readonly IsOnExternalCreatedEnabled: string;
+			/** Will enable a message to send information about deleted records in the external data source. */
+			readonly IsOnExternalDeletedEnabled: string;
+			/** Will enable a message to send information about updated records in the external data source. */
+			readonly IsOnExternalUpdatedEnabled: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** The name of the  settings. */
+			readonly Name: string;
+			/** Unique identifier for the organization */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateAndTime: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** Status of the VirtualEntityMetadata */
+			readonly statecode: string;
+			/** Reason for the status of the VirtualEntityMetadata */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+			/** Unique identifier for entity instances */
+			readonly VirtualEntityMetadataId: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -165,4 +223,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

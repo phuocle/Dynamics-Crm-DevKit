@@ -52,12 +52,14 @@ declare namespace DevKit {
 		/** Unique identifier of the delegate user who created the record. */
 		readonly CreatedOnBehalfBy: string;
 		FontIcon: string;
+		GroupTitle: string;
 		Hidden: boolean;
 		IconWebResourceId: string;
 		/** Sequence number of the import that created this record. */
 		ImportSequenceNumber: number;
 		/** For internal use only. */
 		IsCustomizable: string;
+		isGroupTitleHidden: boolean;
 		/** Indicates whether the solution component is part of a managed solution. */
 		readonly IsManaged: boolean;
 		Location: OptionSet.appaction.Location;
@@ -83,6 +85,8 @@ declare namespace DevKit {
 		OverriddenCreatedOn_UtcDateOnly: Date;
 		/** For internal use only. */
 		readonly OverwriteTime_UtcDateAndTime: Date;
+		/** Unique identifier for App Action associated with App Action. */
+		ParentAppActionId: string;
 		/** Unique identifier of the associated solution. */
 		readonly SolutionId: string;
 		/** Status of the App Action */
@@ -103,6 +107,88 @@ declare namespace DevKit {
 		VisibilityFormulaComponentLibraryId: string;
 		VisibilityFormulaComponentName: string;
 		VisibilityFormulaFunctionName: string;
+		VisibilityType: OptionSet.appaction.VisibilityType;
+		readonly FormattedValue: {
+			/** Unique identifier for entity instances */
+			readonly appactionId: string;
+			readonly AppModuleId: string;
+			readonly ButtonAccessibilityText: string;
+			readonly ButtonLabelText: string;
+			readonly ButtonSequencePriority: string;
+			readonly ButtonTooltipDescription: string;
+			readonly ButtonTooltipTitle: string;
+			readonly ClientType: Array<string>;
+			/** For internal use only. */
+			readonly ComponentIdUnique: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			readonly Context: string;
+			readonly ContextEntity: string;
+			readonly ContextValue: string;
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			readonly FontIcon: string;
+			readonly GroupTitle: string;
+			readonly Hidden: string;
+			readonly IconWebResourceId: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** For internal use only. */
+			readonly IsCustomizable: string;
+			readonly isGroupTitleHidden: string;
+			/** Indicates whether the solution component is part of a managed solution. */
+			readonly IsManaged: string;
+			readonly Location: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** The name of the custom entity. */
+			readonly name: string;
+			readonly OnClickEventFormulaComponentLibrary: string;
+			readonly OnClickEventFormulaComponentLibraryId: string;
+			readonly OnClickEventFormulaComponentName: string;
+			readonly OnClickEventFormulaFunctionName: string;
+			readonly OnClickEventJavaScriptFunctionName: string;
+			readonly OnClickEventJavaScriptParameters: string;
+			readonly OnClickEventJavaScriptWebResourceId: string;
+			readonly OnClickEventType: string;
+			/** Unique identifier for the organization */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateAndTime: string;
+			/** Unique identifier for App Action associated with App Action. */
+			readonly ParentAppActionId: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** Status of the App Action */
+			readonly statecode: string;
+			/** Reason for the status of the App Action */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			readonly Type: string;
+			readonly UniqueName: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+			readonly VisibilityFormulaComponentLibrary: string;
+			readonly VisibilityFormulaComponentLibraryId: string;
+			readonly VisibilityFormulaComponentName: string;
+			readonly VisibilityFormulaFunctionName: string;
+			readonly VisibilityType: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -170,10 +256,20 @@ declare namespace OptionSet {
 		enum Type {
 			/** 1 */
 			Dropdown_Button,
+			/** 3 */
+			Group,
 			/** 2 */
 			Split_Button,
 			/** 0 */
 			Standard_Button
+		}
+		enum VisibilityType {
+			/** 2 */
+			Classic_Rules,
+			/** 1 */
+			Formula,
+			/** 0 */
+			None
 		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
@@ -193,4 +289,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

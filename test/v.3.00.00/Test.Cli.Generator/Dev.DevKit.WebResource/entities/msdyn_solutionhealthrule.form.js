@@ -50,6 +50,8 @@ var OptionSet;
 			Documenation: 192350002,
 			None: 192350003
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

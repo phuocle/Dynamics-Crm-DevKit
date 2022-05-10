@@ -82,6 +82,8 @@ var OptionSet;
 			Exclude: 100000001,
 			Include: 100000000
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

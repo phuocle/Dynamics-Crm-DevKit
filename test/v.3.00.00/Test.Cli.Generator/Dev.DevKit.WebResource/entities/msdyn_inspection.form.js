@@ -53,6 +53,8 @@ var OptionSet;
 			Draft: 192350000,
 			Published: 192350001
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

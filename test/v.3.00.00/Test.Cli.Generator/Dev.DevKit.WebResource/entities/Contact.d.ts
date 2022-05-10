@@ -18,6 +18,7 @@ declare namespace DevKit {
 			CONTACT_INFORMATION: DevKit.Controls.Section;
 			CUSTOMER_DETAILS_TAB: DevKit.Controls.Section;
 			MapSection: DevKit.Controls.Section;
+			SOCIAL_PANE_TAB: DevKit.Controls.Section;
 			Summary_CadenceWidget: DevKit.Controls.Section;
 			Summary_section_6: DevKit.Controls.Section;
 			TalkingPoints_section: DevKit.Controls.Section;
@@ -1624,6 +1625,418 @@ declare namespace DevKit {
 		YomiLastName: string;
 		/** Type the phonetic spelling of the contact's middle name, if the name is specified in Japanese, to make sure the name is pronounced correctly in phone calls with the contact. */
 		YomiMiddleName: string;
+		readonly FormattedValue: {
+			/** Unique identifier of the account with which the contact is associated. */
+			readonly AccountId: string;
+			/** Select the contact's role within the company or sales process, such as decision maker, employee, or influencer. */
+			readonly AccountRoleCode: string;
+			/** Unique identifier for address 1. */
+			readonly Address1_AddressId: string;
+			/** Select the primary address type. */
+			readonly Address1_AddressTypeCode: string;
+			/** Type the city for the primary address. */
+			readonly Address1_City: string;
+			/** Shows the complete primary address. */
+			readonly Address1_Composite: string;
+			/** Type the country or region for the primary address. */
+			readonly Address1_Country: string;
+			/** Type the county for the primary address. */
+			readonly Address1_County: string;
+			/** Type the fax number associated with the primary address. */
+			readonly Address1_Fax: string;
+			/** Select the freight terms for the primary address to make sure shipping orders are processed correctly. */
+			readonly Address1_FreightTermsCode: string;
+			/** Type the latitude value for the primary address for use in mapping and other applications. */
+			readonly Address1_Latitude: string;
+			/** Type the first line of the primary address. */
+			readonly Address1_Line1: string;
+			/** Type the second line of the primary address. */
+			readonly Address1_Line2: string;
+			/** Type the third line of the primary address. */
+			readonly Address1_Line3: string;
+			/** Type the longitude value for the primary address for use in mapping and other applications. */
+			readonly Address1_Longitude: string;
+			/** Type a descriptive name for the primary address, such as Corporate Headquarters. */
+			readonly Address1_Name: string;
+			/** Type the ZIP Code or postal code for the primary address. */
+			readonly Address1_PostalCode: string;
+			/** Type the post office box number of the primary address. */
+			readonly Address1_PostOfficeBox: string;
+			/** Type the name of the main contact at the account's primary address. */
+			readonly Address1_PrimaryContactName: string;
+			/** Select a shipping method for deliveries sent to this address. */
+			readonly Address1_ShippingMethodCode: string;
+			/** Type the state or province of the primary address. */
+			readonly Address1_StateOrProvince: string;
+			/** Type the main phone number associated with the primary address. */
+			readonly Address1_Telephone1: string;
+			/** Type a second phone number associated with the primary address. */
+			readonly Address1_Telephone2: string;
+			/** Type a third phone number associated with the primary address. */
+			readonly Address1_Telephone3: string;
+			/** Type the UPS zone of the primary address to make sure shipping charges are calculated correctly and deliveries are made promptly, if shipped by UPS. */
+			readonly Address1_UPSZone: string;
+			/** Select the time zone, or UTC offset, for this address so that other people can reference it when they contact someone at this address. */
+			readonly Address1_UTCOffset: string;
+			/** Unique identifier for address 2. */
+			readonly Address2_AddressId: string;
+			/** Select the secondary address type. */
+			readonly Address2_AddressTypeCode: string;
+			/** Type the city for the secondary address. */
+			readonly Address2_City: string;
+			/** Shows the complete secondary address. */
+			readonly Address2_Composite: string;
+			/** Type the country or region for the secondary address. */
+			readonly Address2_Country: string;
+			/** Type the county for the secondary address. */
+			readonly Address2_County: string;
+			/** Type the fax number associated with the secondary address. */
+			readonly Address2_Fax: string;
+			/** Select the freight terms for the secondary address to make sure shipping orders are processed correctly. */
+			readonly Address2_FreightTermsCode: string;
+			/** Type the latitude value for the secondary address for use in mapping and other applications. */
+			readonly Address2_Latitude: string;
+			/** Type the first line of the secondary address. */
+			readonly Address2_Line1: string;
+			/** Type the second line of the secondary address. */
+			readonly Address2_Line2: string;
+			/** Type the third line of the secondary address. */
+			readonly Address2_Line3: string;
+			/** Type the longitude value for the secondary address for use in mapping and other applications. */
+			readonly Address2_Longitude: string;
+			/** Type a descriptive name for the secondary address, such as Corporate Headquarters. */
+			readonly Address2_Name: string;
+			/** Type the ZIP Code or postal code for the secondary address. */
+			readonly Address2_PostalCode: string;
+			/** Type the post office box number of the secondary address. */
+			readonly Address2_PostOfficeBox: string;
+			/** Type the name of the main contact at the account's secondary address. */
+			readonly Address2_PrimaryContactName: string;
+			/** Select a shipping method for deliveries sent to this address. */
+			readonly Address2_ShippingMethodCode: string;
+			/** Type the state or province of the secondary address. */
+			readonly Address2_StateOrProvince: string;
+			/** Type the main phone number associated with the secondary address. */
+			readonly Address2_Telephone1: string;
+			/** Type a second phone number associated with the secondary address. */
+			readonly Address2_Telephone2: string;
+			/** Type a third phone number associated with the secondary address. */
+			readonly Address2_Telephone3: string;
+			/** Type the UPS zone of the secondary address to make sure shipping charges are calculated correctly and deliveries are made promptly, if shipped by UPS. */
+			readonly Address2_UPSZone: string;
+			/** Select the time zone, or UTC offset, for this address so that other people can reference it when they contact someone at this address. */
+			readonly Address2_UTCOffset: string;
+			/** Unique identifier for address 3. */
+			readonly Address3_AddressId: string;
+			/** Select the third address type. */
+			readonly Address3_AddressTypeCode: string;
+			/** Type the city for the 3rd address. */
+			readonly Address3_City: string;
+			/** Shows the complete third address. */
+			readonly Address3_Composite: string;
+			/** the country or region for the 3rd address. */
+			readonly Address3_Country: string;
+			/** Type the county for the third address. */
+			readonly Address3_County: string;
+			/** Type the fax number associated with the third address. */
+			readonly Address3_Fax: string;
+			/** Select the freight terms for the third address to make sure shipping orders are processed correctly. */
+			readonly Address3_FreightTermsCode: string;
+			/** Type the latitude value for the third address for use in mapping and other applications. */
+			readonly Address3_Latitude: string;
+			/** the first line of the 3rd address. */
+			readonly Address3_Line1: string;
+			/** the second line of the 3rd address. */
+			readonly Address3_Line2: string;
+			/** the third line of the 3rd address. */
+			readonly Address3_Line3: string;
+			/** Type the longitude value for the third address for use in mapping and other applications. */
+			readonly Address3_Longitude: string;
+			/** Type a descriptive name for the third address, such as Corporate Headquarters. */
+			readonly Address3_Name: string;
+			/** the ZIP Code or postal code for the 3rd address. */
+			readonly Address3_PostalCode: string;
+			/** the post office box number of the 3rd address. */
+			readonly Address3_PostOfficeBox: string;
+			/** Type the name of the main contact at the account's third address. */
+			readonly Address3_PrimaryContactName: string;
+			/** Select a shipping method for deliveries sent to this address. */
+			readonly Address3_ShippingMethodCode: string;
+			/** the state or province of the third address. */
+			readonly Address3_StateOrProvince: string;
+			/** Type the main phone number associated with the third address. */
+			readonly Address3_Telephone1: string;
+			/** Type a second phone number associated with the third address. */
+			readonly Address3_Telephone2: string;
+			/** Type a third phone number associated with the primary address. */
+			readonly Address3_Telephone3: string;
+			/** Type the UPS zone of the third address to make sure shipping charges are calculated correctly and deliveries are made promptly, if shipped by UPS. */
+			readonly Address3_UPSZone: string;
+			/** Select the time zone, or UTC offset, for this address so that other people can reference it when they contact someone at this address. */
+			readonly Address3_UTCOffset: string;
+			/** For system use only. */
+			readonly Aging30: string;
+			/** Shows the Aging 30 field converted to the system's default base currency. The calculations use the exchange rate specified in the Currencies area. */
+			readonly Aging30_Base: string;
+			/** For system use only. */
+			readonly Aging60: string;
+			/** Shows the Aging 60 field converted to the system's default base currency. The calculations use the exchange rate specified in the Currencies area. */
+			readonly Aging60_Base: string;
+			/** For system use only. */
+			readonly Aging90: string;
+			/** Shows the Aging 90 field converted to the system's default base currency. The calculations use the exchange rate specified in the Currencies area. */
+			readonly Aging90_Base: string;
+			/** Enter the date of the contact's wedding or service anniversary for use in customer gift programs or other communications. */
+			readonly Anniversary_DateOnly: string;
+			/** Type the contact's annual income for use in profiling and financial analysis. */
+			readonly AnnualIncome: string;
+			/** Shows the Annual Income field converted to the system's default base currency. The calculations use the exchange rate specified in the Currencies area. */
+			readonly AnnualIncome_Base: string;
+			/** Type the name of the contact's assistant. */
+			readonly AssistantName: string;
+			/** Type the phone number for the contact's assistant. */
+			readonly AssistantPhone: string;
+			/** Enter the contact's birthday for use in customer gift programs or other communications. */
+			readonly BirthDate_DateOnly: string;
+			/** Type a second business phone number for this contact. */
+			readonly Business2: string;
+			/** Stores Image of the Business Card */
+			readonly BusinessCard: string;
+			/** Stores Business Card Control Properties. */
+			readonly BusinessCardAttributes: string;
+			/** Type a callback phone number for this contact. */
+			readonly Callback: string;
+			/** Type the names of the contact's children for reference in communications and client programs. */
+			readonly ChildrensNames: string;
+			/** Type the company phone of the contact. */
+			readonly Company: string;
+			/** Unique identifier of the contact. */
+			readonly ContactId: string;
+			/** Shows who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the external party who created the record. */
+			readonly CreatedByExternalParty: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Type the credit limit of the contact for reference when you address invoice and accounting issues with the customer. */
+			readonly CreditLimit: string;
+			/** Shows the Credit Limit field converted to the system's default base currency for reporting purposes. The calculations use the exchange rate specified in the Currencies area. */
+			readonly CreditLimit_Base: string;
+			/** Select whether the contact is on a credit hold, for reference when addressing invoice and accounting issues. */
+			readonly CreditOnHold: string;
+			/** Select the size of the contact's company for segmentation and reporting purposes. */
+			readonly CustomerSizeCode: string;
+			/** Select the category that best describes the relationship between the contact and your organization. */
+			readonly CustomerTypeCode: string;
+			/** Choose the default price list associated with the contact to make sure the correct product prices for this customer are applied in sales opportunities, quotes, and orders. */
+			readonly DefaultPriceLevelId: string;
+			/** Type the department or business unit where the contact works in the parent company or business. */
+			readonly Department: string;
+			/** Type additional information to describe the contact, such as an excerpt from the company's website. */
+			readonly Description: string;
+			/** Select whether the contact accepts bulk email sent through marketing campaigns or quick campaigns. If Do Not Allow is selected, the contact can be added to marketing lists, but will be excluded from the email. */
+			readonly DoNotBulkEMail: string;
+			/** Select whether the contact accepts bulk postal mail sent through marketing campaigns or quick campaigns. If Do Not Allow is selected, the contact can be added to marketing lists, but will be excluded from the letters. */
+			readonly DoNotBulkPostalMail: string;
+			/** Select whether the contact allows direct email sent from Microsoft Dynamics 365. If Do Not Allow is selected, Microsoft Dynamics 365 will not send the email. */
+			readonly DoNotEMail: string;
+			/** Select whether the contact allows faxes. If Do Not Allow is selected, the contact will be excluded from any fax activities distributed in marketing campaigns. */
+			readonly DoNotFax: string;
+			/** Select whether the contact accepts phone calls. If Do Not Allow is selected, the contact will be excluded from any phone call activities distributed in marketing campaigns. */
+			readonly DoNotPhone: string;
+			/** Select whether the contact allows direct mail. If Do Not Allow is selected, the contact will be excluded from letter activities distributed in marketing campaigns. */
+			readonly DoNotPostalMail: string;
+			/** Select whether the contact accepts marketing materials, such as brochures or catalogs. Contacts that opt out can be excluded from marketing initiatives. */
+			readonly DoNotSendMM: string;
+			/** Select the contact's highest level of education for use in segmentation and analysis. */
+			readonly EducationCode: string;
+			/** Type the primary email address for the contact. */
+			readonly EMailAddress1: string;
+			/** Type the secondary email address for the contact. */
+			readonly EMailAddress2: string;
+			/** Type an alternate email address for the contact. */
+			readonly EMailAddress3: string;
+			/** Type the employee ID or number for the contact for reference in orders, service cases, or other communications with the contact's organization. */
+			readonly EmployeeId: string;
+			/** Shows the default image for the record. */
+			readonly EntityImage: string;
+			readonly EntityImage_Timestamp: string;
+			readonly EntityImage_URL: string;
+			/** For internal use only. */
+			readonly EntityImageId: string;
+			/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
+			readonly ExchangeRate: string;
+			/** Identifier for an external user. */
+			readonly ExternalUserIdentifier: string;
+			/** Select the marital status of the contact for reference in follow-up phone calls and other communications. */
+			readonly FamilyStatusCode: string;
+			/** Type the fax number for the contact. */
+			readonly Fax: string;
+			/** Type the contact's first name to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns. */
+			readonly FirstName: string;
+			/** Information about whether to allow following email activity like opens, attachment views and link clicks for emails sent to the contact. */
+			readonly FollowEmail: string;
+			/** Type the URL for the contact's FTP site to enable users to access data and share documents. */
+			readonly FtpSiteUrl: string;
+			/** Combines and shows the contact's first and last names so that the full name can be displayed in views and reports. */
+			readonly FullName: string;
+			/** Select the contact's gender to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns. */
+			readonly GenderCode: string;
+			/** Type the passport number or other government ID for the contact for use in documents or reports. */
+			readonly GovernmentId: string;
+			/** Select whether the contact has any children for reference in follow-up phone calls and other communications. */
+			readonly HasChildrenCode: string;
+			/** Type a second home phone number for this contact. */
+			readonly Home2: string;
+			/** Unique identifier of the data import or data migration that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Information about whether the contact was auto-created when promoting an email or an appointment. */
+			readonly IsAutoCreate: string;
+			/** Select whether the contact exists in a separate accounting or other system, such as Microsoft Dynamics GP or another ERP database, for use in integration processes. */
+			readonly IsBackofficeCustomer: string;
+			readonly IsPrivate: string;
+			/** Type the job title of the contact to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns. */
+			readonly JobTitle: string;
+			/** Type the contact's last name to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns. */
+			readonly LastName: string;
+			/** Contains the date and time stamp of the last on hold time. */
+			readonly LastOnHoldTime_UtcDateAndTime: string;
+			/** Shows the date when the contact was last included in a marketing campaign or quick campaign. */
+			readonly LastUsedInCampaign_UtcDateOnly: string;
+			/** Select the primary marketing source that directed the contact to your organization. */
+			readonly LeadSourceCode: string;
+			/** Type the name of the contact's manager for use in escalating issues or other follow-up communications with the contact. */
+			readonly ManagerName: string;
+			/** Type the phone number for the contact's manager. */
+			readonly ManagerPhone: string;
+			/** Whether is only for marketing */
+			readonly MarketingOnly: string;
+			/** Unique identifier of the master contact for merge. */
+			readonly MasterId: string;
+			/** Shows whether the account has been merged with a master contact. */
+			readonly Merged: string;
+			/** Type the contact's middle name or initial to make sure the contact is addressed correctly. */
+			readonly MiddleName: string;
+			/** Type the mobile phone number for the contact. */
+			readonly MobilePhone: string;
+			/** Shows who last updated the record. */
+			readonly ModifiedBy: string;
+			/** Shows the external party who modified the record. */
+			readonly ModifiedByExternalParty: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who last updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Describes whether contact is opted out or not */
+			readonly msdyn_gdproptout: string;
+			/** Whether or not the contact belongs to the associated account */
+			readonly msdyn_orgchangestatus: string;
+			/** Unique identifier for Segment associated with contact. */
+			readonly msdyn_segmentid: string;
+			readonly msdyusd_CurrentProfile: string;
+			readonly msdyusd_Facebook: string;
+			readonly msdyusd_Twitter: string;
+			/** Type the contact's nickname. */
+			readonly NickName: string;
+			/** Type the number of children the contact has for reference in follow-up phone calls and other communications. */
+			readonly NumberOfChildren: string;
+			/** Shows how long, in minutes, that the record was on hold. */
+			readonly OnHoldTime: string;
+			/** Shows the lead that the contact was created if the contact was created by converting a lead in Microsoft Dynamics 365. This is used to relate the contact to the data on the originating lead for use in reporting and analytics. */
+			readonly OriginatingLeadId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier of the business unit that owns the contact. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the team who owns the contact. */
+			readonly OwningTeam: string;
+			/** Unique identifier of the user who owns the contact. */
+			readonly OwningUser: string;
+			/** Type the pager number for the contact. */
+			readonly Pager: string;
+			/** Unique identifier of the parent contact. */
+			readonly ParentContactId: string;
+			/** Select the parent account or parent contact for the contact to provide a quick link to additional details, such as financial information, activities, and opportunities. */
+			readonly parentcustomerid_account: string;
+			/** Select the parent account or parent contact for the contact to provide a quick link to additional details, such as financial information, activities, and opportunities. */
+			readonly parentcustomerid_contact: string;
+			/** Shows whether the contact participates in workflow rules. */
+			readonly ParticipatesInWorkflow: string;
+			/** Select the payment terms to indicate when the customer needs to pay the total amount. */
+			readonly PaymentTermsCode: string;
+			/** Select the preferred day of the week for service appointments. */
+			readonly PreferredAppointmentDayCode: string;
+			/** Select the preferred time of day for service appointments. */
+			readonly PreferredAppointmentTimeCode: string;
+			/** Select the preferred method of contact. */
+			readonly PreferredContactMethodCode: string;
+			/** Choose the contact's preferred service facility or equipment to make sure services are scheduled correctly for the customer. */
+			readonly PreferredEquipmentId: string;
+			/** Choose the contact's preferred service to make sure services are scheduled correctly for the customer. */
+			readonly PreferredServiceId: string;
+			/** Choose the regular or preferred customer service representative for reference when scheduling service activities for the contact. */
+			readonly PreferredSystemUserId: string;
+			/** Shows the ID of the process. */
+			readonly ProcessId: string;
+			/** Type the salutation of the contact to make sure the contact is addressed correctly in sales calls, email messages, and marketing campaigns. */
+			readonly Salutation: string;
+			/** Select a shipping method for deliveries sent to this address. */
+			readonly ShippingMethodCode: string;
+			/** Choose the service level agreement (SLA) that you want to apply to the Contact record. */
+			readonly SLAId: string;
+			/** Last SLA that was applied to this case. This field is for internal use only. */
+			readonly SLAInvokedId: string;
+			/** Type the name of the contact's spouse or partner for reference during calls, events, or other communications with the contact. */
+			readonly SpousesName: string;
+			/** Shows the ID of the stage. */
+			readonly StageId: string;
+			/** Shows whether the contact is active or inactive. Inactive contacts are read-only and can't be edited unless they are reactivated. */
+			readonly StateCode: string;
+			/** Select the contact's status. */
+			readonly StatusCode: string;
+			/** For internal use only. */
+			readonly SubscriptionId: string;
+			/** Type the suffix used in the contact's name, such as Jr. or Sr. to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns. */
+			readonly Suffix: string;
+			/** Number of users or conversations followed the record */
+			readonly TeamsFollowed: string;
+			/** Type the main phone number for this contact. */
+			readonly Telephone1: string;
+			/** Type a second phone number for this contact. */
+			readonly Telephone2: string;
+			/** Type a third phone number for this contact. */
+			readonly Telephone3: string;
+			/** Select a region or territory for the contact for use in segmentation and analysis. */
+			readonly TerritoryCode: string;
+			/** Total time spent for emails (read and write) and meetings by me in relation to the contact record. */
+			readonly TimeSpentByMeOnEmailAndMeetings: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			readonly TransactionCurrencyId: string;
+			/** For internal use only. */
+			readonly TraversedPath: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version number of the contact. */
+			readonly VersionNumber: string;
+			/** Type the contact's professional or personal website or blog URL. */
+			readonly WebSiteUrl: string;
+			/** Type the phonetic spelling of the contact's first name, if the name is specified in Japanese, to make sure the name is pronounced correctly in phone calls with the contact. */
+			readonly YomiFirstName: string;
+			/** Shows the combined Yomi first and last names of the contact so that the full phonetic name can be displayed in views and reports. */
+			readonly YomiFullName: string;
+			/** Type the phonetic spelling of the contact's last name, if the name is specified in Japanese, to make sure the name is pronounced correctly in phone calls with the contact. */
+			readonly YomiLastName: string;
+			/** Type the phonetic spelling of the contact's middle name, if the name is specified in Japanese, to make sure the name is pronounced correctly in phone calls with the contact. */
+			readonly YomiMiddleName: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -1736,6 +2149,10 @@ declare namespace OptionSet {
 			/** 1 */
 			Not_at_Company
 		}
+		enum OwnerIdType {
+		}
+		enum ParentCustomerIdType {
+		}
 		enum PaymentTermsCode {
 			/** 2 */
 			_2_10_Net_30,
@@ -1820,4 +2237,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

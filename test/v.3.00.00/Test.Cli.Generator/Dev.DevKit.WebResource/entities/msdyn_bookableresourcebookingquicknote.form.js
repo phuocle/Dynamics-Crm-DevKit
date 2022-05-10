@@ -74,6 +74,8 @@ var OptionSet;
 			text: 100000001,
 			video: 100000003
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

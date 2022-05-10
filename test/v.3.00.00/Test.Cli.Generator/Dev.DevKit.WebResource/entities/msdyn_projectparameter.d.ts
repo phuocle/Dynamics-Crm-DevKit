@@ -165,6 +165,62 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Allow resources to update their skills via the Project Finder Mobile app. */
+			readonly msdyn_Allowskillupdatebyresource: string;
+			/** Process approvals in the background when the number of approvals exceed this number. */
+			readonly msdyn_BackgroundApprovalThreshold: string;
+			/** Select the default organizational unit that will be used for new resources. */
+			readonly msdyn_defaultorganizationalunit: string;
+			/** Select the default work template for new projects. */
+			readonly msdyn_defaultWorkTemplate: string;
+			/** Type the name of the project parameters. */
+			readonly msdyn_description: string;
+			/** Select the default frequency for generating invoices. */
+			readonly msdyn_invoicefrequency: string;
+			/** Enabling this will make cost price list selection on projects agnostic of contracting unit currency and cost price lists will allow price setup in multiple currencies */
+			readonly msdyn_pricelistdefaultingiscurrencyagnostic: string;
+			/** Shows the default role to be used when a project manager is added to the project team. */
+			readonly msdyn_projectmanagerrole: string;
+			/** Shows the entity instances. */
+			readonly msdyn_projectparameterId: string;
+			/** Select whether project resource requirements are visible to resources. */
+			readonly msdyn_Projectresourcerequirementsvisibletore: string;
+			/** Select the default method for allocating resources to projects. */
+			readonly msdyn_resourceallocationmode: string;
+			/** Shows the default role to be used when a team member is added to the project team. */
+			readonly msdyn_teammemberrole: string;
+			/** For internal use only. */
+			readonly msdyn_upgradebatchsize: string;
+			/** Unique identifier for the organization */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Status of the Project Parameter */
+			readonly statecode: string;
+			/** Reason for the status of the Project Parameter */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -205,4 +261,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

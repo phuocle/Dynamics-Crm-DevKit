@@ -49,6 +49,28 @@ declare namespace DevKit {
 		RequiredComponentVersion: number;
 		/** For internal use only. */
 		State: number;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly AppModuleMetadataDependencyId: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** For internal use only. */
+			readonly DependentComponentId: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** For internal use only. */
+			readonly RequiredComponentId: string;
+			/** For internal use only. */
+			readonly RequiredComponentInternalId: string;
+			/** For internal use only. */
+			readonly RequiredComponentSubType: string;
+			/** For internal use only. */
+			readonly RequiredComponentType: string;
+			/** For internal use only. */
+			readonly RequiredComponentVersion: string;
+			/** For internal use only. */
+			readonly State: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -71,4 +93,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

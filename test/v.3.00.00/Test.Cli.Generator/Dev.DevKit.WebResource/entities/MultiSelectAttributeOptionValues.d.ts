@@ -34,6 +34,13 @@ declare namespace DevKit {
 		readonly ObjectColumnNumber: number;
 		/** Multi Select Option Values */
 		SelectedOptionValues: string;
+		readonly FormattedValue: {
+			readonly MultiSelectFullTextIdKey: string;
+			/** Object Column Number */
+			readonly ObjectColumnNumber: string;
+			/** Multi Select Option Values */
+			readonly SelectedOptionValues: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -56,4 +63,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

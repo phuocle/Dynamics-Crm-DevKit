@@ -64,6 +64,8 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.msdyn_CollabGraphResource = {
+		statecode : {
+		},
 		statuscode : {
 			Active: 1,
 			Inactive: 2

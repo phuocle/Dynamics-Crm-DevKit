@@ -94,6 +94,8 @@ var OptionSet;
 			Draft: 0,
 			Published: 1
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

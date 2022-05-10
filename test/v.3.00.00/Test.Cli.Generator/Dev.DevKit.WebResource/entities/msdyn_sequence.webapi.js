@@ -88,6 +88,7 @@ var DevKit;
 			msdyn_SequenceStats2y: { a: 'msdyn_SequenceStats2y' },
 			msdyn_SequenceStats30d: { a: 'msdyn_SequenceStats30d' },
 			msdyn_SequenceStats90d: { a: 'msdyn_SequenceStats90d' },
+			msdyn_template: { a: 'msdyn_template' },
 			msdyn_totaltasks: { a: 'msdyn_totaltasks' },
 			msdyn_Type: { a: 'msdyn_type' },
 			msdyn_Version: { a: 'msdyn_version' },
@@ -134,7 +135,7 @@ var DevKit;
 		}
 		msdyn_sequence.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -155,6 +156,8 @@ var OptionSet;
 		msdyn_Type : {
 			Activation: 1,
 			Definition: 0
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 1,

@@ -45,6 +45,8 @@ var OptionSet;
 			json: 110000003,
 			number: 110000001
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

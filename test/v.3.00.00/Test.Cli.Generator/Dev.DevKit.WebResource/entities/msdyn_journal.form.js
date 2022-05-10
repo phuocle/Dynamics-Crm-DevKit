@@ -85,6 +85,8 @@ var OptionSet;
 			Expense_Correction: 192350002,
 			Time_Correction: 192350001
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

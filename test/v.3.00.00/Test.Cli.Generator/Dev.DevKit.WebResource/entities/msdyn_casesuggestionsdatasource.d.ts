@@ -57,6 +57,11 @@ declare namespace DevKit {
 		/** Unique identifier for entity instances */
 		msdyn_casesuggestionsdatasourceId: string;
 		msdyn_name: string;
+		readonly FormattedValue: {
+			/** Unique identifier for entity instances */
+			readonly msdyn_casesuggestionsdatasourceId: string;
+			readonly msdyn_name: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -79,4 +84,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

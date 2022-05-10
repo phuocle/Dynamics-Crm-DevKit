@@ -105,9 +105,12 @@ var DevKit;
 			msdyn_postchatenabled: { a: 'msdyn_postchatenabled' },
 			msdyn_PostConversationSurvey: { b: 'msdyn_PostConversationSurvey', a: '_msdyn_postconversationsurvey_value', c: 'msfp_surveies', d: 'msfp_survey' },
 			msdyn_PostConversationSurveyBotSurvey: { a: 'msdyn_postconversationsurveybotsurvey' },
+			msdyn_PostConversationSurveyBotSurveyMessageText: { a: 'msdyn_postconversationsurveybotsurveymessagetext' },
+			msdyn_PostConversationSurveyBotSurveyMode: { a: 'msdyn_postconversationsurveybotsurveymode' },
 			msdyn_PostConversationSurveyEnable: { a: 'msdyn_postconversationsurveyenable' },
 			msdyn_PostConversationSurveyMessageText: { a: 'msdyn_postconversationsurveymessagetext' },
 			msdyn_PostConversationSurveyMode: { a: 'msdyn_postconversationsurveymode' },
+			msdyn_PostConversationSurveySeparateBotSurvey: { b: 'msdyn_PostConversationSurveySeparateBotSurvey', a: '_msdyn_postconversationsurveyseparatebotsurvey_value', c: 'msfp_surveies', d: 'msfp_survey' },
 			msdyn_PrechatEnabled: { a: 'msdyn_prechatenabled' },
 			msdyn_PreChatQuestionnaireAuthenticated: { b: 'msdyn_PreChatQuestionnaireAuthenticated', a: '_msdyn_prechatquestionnaireauthenticated_value', c: 'msdyn_questionsequences', d: 'msdyn_questionsequence' },
 			msdyn_PreChatQuestionnaireUnauthenticated: { b: 'msdyn_PreChatQuestionnaireUnauthenticated', a: '_msdyn_prechatquestionnaireunauthenticated_value', c: 'msdyn_questionsequences', d: 'msdyn_questionsequence' },
@@ -168,7 +171,7 @@ var DevKit;
 		}
 		msdyn_livechatconfig.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -215,6 +218,10 @@ var OptionSet;
 			Teal: 192360017,
 			Violet: 192350004
 		},
+		msdyn_PostConversationSurveyBotSurveyMode : {
+			Insert_survey_in_conversation: 192350000,
+			Send_survey_link_to_conversation: 192350001
+		},
 		msdyn_PostConversationSurveyMode : {
 			Insert_survey_in_conversation: 192350000,
 			Send_survey_link_to_conversation: 192350001
@@ -236,6 +243,8 @@ var OptionSet;
 			Red: 19236001,
 			Teal: 192360017,
 			Violet: 192350004
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

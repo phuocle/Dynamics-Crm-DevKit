@@ -492,6 +492,99 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Shows the bookable resource. */
+			readonly msdyn_bookableresource: string;
+			/** Unique identifier for Resource Booking associated with Time Entry. */
+			readonly msdyn_BookableResourceBooking: string;
+			/** Booking Status */
+			readonly msdyn_BookingStatus: string;
+			/** Enter the time entry date. */
+			readonly msdyn_date_UtcDateOnly: string;
+			/** Type the description of the time entry. */
+			readonly msdyn_description: string;
+			/** Shows the time spent. */
+			readonly msdyn_duration: string;
+			/** The end time of the time entry. */
+			readonly msdyn_end_UtcDateAndTime: string;
+			/** Select the entry status. */
+			readonly msdyn_entryStatus: string;
+			/** Type the external description of the time entry. */
+			readonly msdyn_externalDescription: string;
+			/** For internal use only. */
+			readonly msdyn_internalflags: string;
+			/** Select the manager of the time entry user. This field is used for approval. */
+			readonly msdyn_manager: string;
+			/** Select the project that the time entry is related to. */
+			readonly msdyn_project: string;
+			/** Select the project task that the time entry is related to. */
+			readonly msdyn_projectTask: string;
+			/** The identifier of the related item. */
+			readonly msdyn_relatedItemId: string;
+			/** The related item type */
+			readonly msdyn_relatedItemType: string;
+			/** Select the role that the user has in the project that the time entry is for. */
+			readonly msdyn_resourceCategory: string;
+			/** Select the organizational unit at the time the entry was registered of the resource who performed the work. */
+			readonly msdyn_ResourceOrganizationalUnitId: string;
+			/** The start time of the time entry. */
+			readonly msdyn_start_UtcDateAndTime: string;
+			readonly msdyn_targetEntryStatus: string;
+			/** The unique identifier for a time entry. */
+			readonly msdyn_timeentryId: string;
+			/** Unique identifier for Time Source associated with Time Entry. */
+			readonly msdyn_timeentrysettingId: string;
+			/** Unique identifier for Time Off Request associated with Time Entry. This field is auto-populated when a Time Entry is auto-created from a Time Off Request. */
+			readonly msdyn_timeoffrequest: string;
+			/** Shows the transaction category. */
+			readonly msdyn_transactioncategory: string;
+			/** Select the time entry type. */
+			readonly msdyn_type: string;
+			/** Unique identifier for Work Orders associated with Time Entry. */
+			readonly msdyn_WorkOrder: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Contains the id of the process associated with the entity. */
+			readonly processid: string;
+			/** Contains the id of the stage where the entity is located. */
+			readonly stageid: string;
+			/** Status of the Time Entry */
+			readonly statecode: string;
+			/** Reason for the status of the Time Entry */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** A comma separated list of string values representing the unique identifiers of stages in a Business Process Flow Instance in the order that they occur. */
+			readonly traversedpath: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -548,6 +641,8 @@ declare namespace OptionSet {
 			/** 192350000 */
 			Work
 		}
+		enum OwnerIdType {
+		}
 		enum statecode {
 			/** 0 */
 			Active,
@@ -578,4 +673,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

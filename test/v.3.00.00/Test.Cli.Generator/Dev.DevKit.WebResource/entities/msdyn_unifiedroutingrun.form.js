@@ -74,6 +74,10 @@ var OptionSet;
 			Workstream_Classification_rules_processing: 100000001,
 			Workstream_Route_to_queue_rules_completed: 100000002
 		},
+		msdyn_targetobjectIdType : {
+		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

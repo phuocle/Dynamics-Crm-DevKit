@@ -55,6 +55,34 @@ declare namespace DevKit {
 		ViewName: string;
 		/** End point of web application */
 		WebApplicationEndPoint: string;
+		readonly FormattedValue: {
+			/** Unique identifier for entity instances */
+			readonly ACIViewMapperId: string;
+			/** Unique identifier of the user who created the display string. */
+			readonly CreatedBy: string;
+			/** Date and time when the display string was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the displaystring. */
+			readonly CreatedOnBehalfBy: string;
+			/** Unique identifier of the user who last modified the display string. */
+			readonly ModifiedBy: string;
+			/** Date and time when the display string was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the displaystring. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Unique identifier of the organization associated with the display string. */
+			readonly OrganizationId: string;
+			/** Status of the ACIViewMapper */
+			readonly statecode: string;
+			/** Reason for the status of the Unit Group. */
+			readonly StatusCode: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			readonly VersionNumber: string;
+			readonly ViewName: string;
+			/** End point of web application */
+			readonly WebApplicationEndPoint: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -89,4 +117,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

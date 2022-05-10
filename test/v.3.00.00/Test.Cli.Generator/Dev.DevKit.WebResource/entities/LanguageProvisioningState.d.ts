@@ -41,6 +41,20 @@ declare namespace DevKit {
 		SolutionFileVersion: string;
 		/** Solution Unique Name */
 		SolutionUniqueName: string;
+		readonly FormattedValue: {
+			/** Application Version */
+			readonly ApplicationVersion: string;
+			/** Language Id */
+			readonly LanguageId: string;
+			/** Unique identifier for entity instances */
+			readonly LanguageProvisioningStateId: string;
+			/** Provisioning Stage */
+			readonly ProvisioningStage: string;
+			/** Solution File Version */
+			readonly SolutionFileVersion: string;
+			/** Solution Unique Name */
+			readonly SolutionUniqueName: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -75,4 +89,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

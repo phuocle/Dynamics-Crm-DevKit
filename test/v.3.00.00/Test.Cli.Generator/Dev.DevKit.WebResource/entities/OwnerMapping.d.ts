@@ -75,6 +75,54 @@ declare namespace DevKit {
 		TargetSystemUserId: string;
 		/** Microsoft Dynamics CRM user. */
 		TargetUserValueForSourceCRMUserLink: string;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier of the user who created the owner mapping. */
+			readonly CreatedBy: string;
+			/** Date and time when the owner mapping was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the ownermapping. */
+			readonly CreatedOnBehalfBy: string;
+			/** Unique identifier of the data map with which the owner mapping is associated. */
+			readonly ImportMapId: string;
+			/** Version in which the component is introduced. */
+			readonly IntroducedVersion: string;
+			/** Information that specifies whether this component is managed. */
+			readonly IsManaged: string;
+			/** Unique identifier of the user who last modified the lookup mapping. */
+			readonly ModifiedBy: string;
+			/** Date and time when the owner mapping was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the ownermapping. */
+			readonly ModifiedOnBehalfBy: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Unique identifier of the owner mapping. */
+			readonly OwnerMappingId: string;
+			/** Unique identifier of the OwnerMapping. */
+			readonly OwnerMappingIdUnique: string;
+			/** Code that indicates whether the owner mapping has to be processed */
+			readonly ProcessCode: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** Source user name that has to be replaced */
+			readonly SourceSystemUserName: string;
+			/** Source user value for source Microsoft Dynamics 365 user link. */
+			readonly SourceUserValueForSourceCRMUserLink: string;
+			/** Status of the owner mapping. */
+			readonly StateCode: string;
+			/** Reason for the status of the owner mapping. */
+			readonly StatusCode: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** Microsoft Dynamics 365 logon name with which the source user name should be replaced. */
+			readonly TargetSystemUserDomainName: string;
+			/** Unique identifier of the Microsoft Dynamics 365 user. */
+			readonly TargetSystemUserId: string;
+			/** Microsoft Dynamics CRM user. */
+			readonly TargetUserValueForSourceCRMUserLink: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -123,4 +171,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

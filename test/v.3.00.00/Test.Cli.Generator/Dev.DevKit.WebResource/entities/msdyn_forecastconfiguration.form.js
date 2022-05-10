@@ -114,6 +114,8 @@ var OptionSet;
 			FY2027: 9,
 			FY2028: 10
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

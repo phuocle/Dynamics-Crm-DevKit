@@ -127,7 +127,7 @@ var DevKit;
 		}
 		team.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -146,6 +146,8 @@ var OptionSet;
 			Members: 1,
 			Members_and_guests: 0,
 			Owners: 2
+		},
+		RegardingObjectTypeCode : {
 		},
 		TeamType : {
 			AAD_Office_Group: 3,

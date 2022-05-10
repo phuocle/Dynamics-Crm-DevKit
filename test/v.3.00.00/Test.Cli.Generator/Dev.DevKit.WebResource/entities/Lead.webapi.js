@@ -258,7 +258,7 @@ var DevKit;
 		}
 		lead.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -289,6 +289,8 @@ var OptionSet;
 			May_Buy: 1,
 			No_Committed_Budget: 0,
 			Will_Buy: 3
+		},
+		CustomerIdType : {
 		},
 		IndustryCode : {
 			Accounting: 1,
@@ -372,6 +374,8 @@ var OptionSet;
 			Must_have: 0,
 			No_need: 3,
 			Should_have: 1
+		},
+		OwnerIdType : {
 		},
 		PreferredContactMethodCode : {
 			Any: 1,

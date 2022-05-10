@@ -113,6 +113,92 @@ declare namespace DevKit {
 		readonly SupportingSolutionId: string;
 		/** Number that identifies a specific revision of the SDK message processing step.  */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Indicates whether the asynchronous system job is automatically deleted on completion. */
+			readonly AsyncAutoDelete: string;
+			/** Identifies whether a SDK Message Processing Step type will be ReadOnly or Read Write. false - ReadWrite, true - ReadOnly  */
+			readonly CanUseReadOnlyConnection: string;
+			/** For internal use only. */
+			readonly Category: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Step-specific configuration for the plug-in type. Passed to the plug-in constructor at run time. */
+			readonly Configuration: string;
+			/** Unique identifier of the user who created the SDK message processing step. */
+			readonly CreatedBy: string;
+			/** Date and time when the SDK message processing step was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the sdkmessageprocessingstep. */
+			readonly CreatedOnBehalfBy: string;
+			/** Customization level of the SDK message processing step. */
+			readonly CustomizationLevel: string;
+			/** Description of the SDK message processing step. */
+			readonly Description: string;
+			/** Configuration for sending pipeline events to the Event Expander service. */
+			readonly EventExpander: string;
+			/** Unique identifier of the associated event handler. */
+			readonly eventhandler_plugintype: string;
+			/** Unique identifier of the associated event handler. */
+			readonly eventhandler_serviceendpoint: string;
+			/** Comma-separated list of attributes. If at least one of these attributes is modified, the plug-in should execute. */
+			readonly FilteringAttributes: string;
+			/** Unique identifier of the user to impersonate context when step is executed. */
+			readonly ImpersonatingUserId: string;
+			/** Version in which the form is introduced. */
+			readonly IntroducedVersion: string;
+			/** Identifies if a plug-in should be executed from a parent pipeline, a child pipeline, or both. */
+			readonly InvocationSource: string;
+			/** Information that specifies whether this component can be customized. */
+			readonly IsCustomizable: string;
+			/** Information that specifies whether this component should be hidden. */
+			readonly IsHidden: string;
+			/** Information that specifies whether this component is managed. */
+			readonly IsManaged: string;
+			/** Run-time mode of execution, for example, synchronous or asynchronous. */
+			readonly Mode: string;
+			/** Unique identifier of the user who last modified the SDK message processing step. */
+			readonly ModifiedBy: string;
+			/** Date and time when the SDK message processing step was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the sdkmessageprocessingstep. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Name of SdkMessage processing step. */
+			readonly Name: string;
+			/** Unique identifier of the organization with which the SDK message processing step is associated. */
+			readonly OrganizationId: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Unique identifier of the plug-in type associated with the step. */
+			readonly PluginTypeId: string;
+			/** Processing order within the stage. */
+			readonly Rank: string;
+			/** For internal use only. Holds miscellaneous properties related to runtime integration. */
+			readonly RuntimeIntegrationProperties: string;
+			/** Unique identifier of the SDK message filter. */
+			readonly SdkMessageFilterId: string;
+			/** Unique identifier of the SDK message. */
+			readonly SdkMessageId: string;
+			/** Unique identifier of the SDK message processing step entity. */
+			readonly SdkMessageProcessingStepId: string;
+			/** Unique identifier of the SDK message processing step. */
+			readonly SdkMessageProcessingStepIdUnique: string;
+			/** Unique identifier of the Sdk message processing step secure configuration. */
+			readonly SdkMessageProcessingStepSecureConfigId: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** Stage in the execution pipeline that the SDK message processing step is in. */
+			readonly Stage: string;
+			/** Status of the SDK message processing step. */
+			readonly StateCode: string;
+			/** Reason for the status of the SDK message processing step. */
+			readonly StatusCode: string;
+			/** Deployment that the SDK message processing step should be executed on; server, client, or both. */
+			readonly SupportedDeployment: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** Number that identifies a specific revision of the SDK message processing step.  */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -126,6 +212,8 @@ declare namespace OptionSet {
 			Published,
 			/** 1 */
 			Unpublished
+		}
+		enum EventHandlerTypeCode {
 		}
 		enum InvocationSource {
 			/** 1 */
@@ -205,4 +293,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

@@ -49,6 +49,28 @@ declare namespace DevKit {
 		readonly SupportingSolutionId: string;
 		/** Represents a version of customizations to be synchronized with the Microsoft Dynamics 365 client for Outlook. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Specifies which entity's ribbons this customization applies to. If null, then the customizations apply to the global ribbons. */
+			readonly Entity1: string;
+			readonly IsManaged: string;
+			/** Unique identifier of the organization. */
+			readonly OrganizationId: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			readonly PublishedOn_UtcDateAndTime: string;
+			/** Unique identifier. */
+			readonly RibbonCustomizationId: string;
+			/** Unique identifier for this row. */
+			readonly RibbonCustomizationUniqueId: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** Represents a version of customizations to be synchronized with the Microsoft Dynamics 365 client for Outlook. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -81,4 +103,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

@@ -50,6 +50,29 @@ declare namespace DevKit {
 		/** Unique identifier for the organization */
 		readonly OrganizationId: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Body of application file */
+			readonly Body: string;
+			/** Unique identifier of the user who created the application file. */
+			readonly CreatedBy: string;
+			/** Date and time when the application file was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the applicationfile. */
+			readonly CreatedOnBehalfBy: string;
+			/** Unique identifier for application file instances */
+			readonly FileId: string;
+			/** Unique identifier of the user who last modified the application file. */
+			readonly ModifiedBy: string;
+			/** Date and time when the application file was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the applicationfile. */
+			readonly ModifiedOnBehalfBy: string;
+			/** File name */
+			readonly Name: string;
+			/** Unique identifier for the organization */
+			readonly OrganizationId: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -72,4 +95,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

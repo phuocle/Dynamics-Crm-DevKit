@@ -72,6 +72,11 @@ var OptionSet;
 			Dialog_schema: 8,
 			Language_generation: 7,
 			Language_understanding: 6,
+			Object_Model_custom_entity: 11,
+			Object_Model_Dialog: 9,
+			Object_Model_global_variable: 12,
+			Object_Model_skill: 13,
+			Object_Model_Trigger: 10,
 			Skill: 1,
 			Topic: 0,
 			Trigger: 5
@@ -80,11 +85,14 @@ var OptionSet;
 			Arabic: 1025,
 			Chinese_Simplified: 2052,
 			Chinese_Traditional: 1028,
+			Czech: 1029,
 			Danish: 1030,
 			Dutch: 1043,
 			English: 1033,
+			Finnish: 1035,
 			French: 1036,
 			German: 1031,
+			Greek: 1032,
 			Hindi: 1081,
 			Indonesian: 1057,
 			Italian: 1040,
@@ -96,7 +104,10 @@ var OptionSet;
 			Russian: 1049,
 			Spanish: 1034,
 			Swedish: 1053,
+			Thai: 1054,
 			Turkish: 1055
+		},
+		OwnerIdType : {
 		},
 		ReusePolicy : {
 			None: 0,

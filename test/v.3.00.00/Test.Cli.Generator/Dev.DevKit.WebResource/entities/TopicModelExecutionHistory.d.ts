@@ -83,6 +83,62 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the topic model execution history. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the topic model execution history. */
+			readonly CreatedOnBehalfBy: string;
+			/** Detailed error message for the Topic Analysis process */
+			readonly ErrorDetails: string;
+			/** Fetch Xml */
+			readonly FetchXmlList: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Allow model to check is test executed. */
+			readonly IsTestExecution: string;
+			/** Maximum number of Topics. */
+			readonly MaxTopics: string;
+			/** Unique identifier of the user who modified the topic model execution history. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the topic model execution history. */
+			readonly ModifiedOnBehalfBy: string;
+			/** name */
+			readonly Name: string;
+			/** Number of Topics Identified */
+			readonly NumberOfTopicsFound: string;
+			/** Unique identifier for the organization */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Record Correlation Id. */
+			readonly RecordCorrelationId: string;
+			/** Number of Records Synchronized */
+			readonly RecordsProcessed: string;
+			/** StartTime */
+			readonly StartTime_UtcDateAndTime: string;
+			/** Status */
+			readonly Status: string;
+			/** StatusReason */
+			readonly StatusReason: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Unique identifier for Model associated with Topic Model Execution History. */
+			readonly TopicModelConfigurationId: string;
+			/** Unique identifier for entity instances */
+			readonly TopicModelExecutionHistoryId: string;
+			/** Unique identifier for Model associated with Topic Model Execution History. */
+			readonly TopicModelId: string;
+			/** Duration (in mins) */
+			readonly TotalTime: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -131,4 +187,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

@@ -264,6 +264,159 @@ declare namespace DevKit {
 		WebSiteUrl: string;
 		/** Information about whether workflow or sales process rules have been suspended. */
 		WorkflowSuspended: boolean;
+		readonly FormattedValue: {
+			/** Unique identifier for address 1. */
+			readonly Address1_AddressId: string;
+			/** Type of address for address 1, such as billing, shipping, or primary address. */
+			readonly Address1_AddressTypeCode: string;
+			/** City name for address 1. */
+			readonly Address1_City: string;
+			/** Country/region name for address 1. */
+			readonly Address1_Country: string;
+			/** County name for address 1. */
+			readonly Address1_County: string;
+			/** Fax number for address 1. */
+			readonly Address1_Fax: string;
+			/** Latitude for address 1. */
+			readonly Address1_Latitude: string;
+			/** First line for entering address 1 information. */
+			readonly Address1_Line1: string;
+			/** Second line for entering address 1 information. */
+			readonly Address1_Line2: string;
+			/** Third line for entering address 1 information. */
+			readonly Address1_Line3: string;
+			/** Longitude for address 1. */
+			readonly Address1_Longitude: string;
+			/** Name to enter for address 1. */
+			readonly Address1_Name: string;
+			/** ZIP Code or postal code for address 1. */
+			readonly Address1_PostalCode: string;
+			/** Post office box number for address 1. */
+			readonly Address1_PostOfficeBox: string;
+			/** Method of shipment for address 1. */
+			readonly Address1_ShippingMethodCode: string;
+			/** State or province for address 1. */
+			readonly Address1_StateOrProvince: string;
+			/** First telephone number associated with address 1. */
+			readonly Address1_Telephone1: string;
+			/** Second telephone number associated with address 1. */
+			readonly Address1_Telephone2: string;
+			/** Third telephone number associated with address 1. */
+			readonly Address1_Telephone3: string;
+			/** United Parcel Service (UPS) zone for address 1. */
+			readonly Address1_UPSZone: string;
+			/** UTC offset for address 1. This is the difference between local time and standard Coordinated Universal Time. */
+			readonly Address1_UTCOffset: string;
+			/** Unique identifier for address 2. */
+			readonly Address2_AddressId: string;
+			/** Type of address for address 2, such as billing, shipping, or primary address. */
+			readonly Address2_AddressTypeCode: string;
+			/** City name for address 2. */
+			readonly Address2_City: string;
+			/** Country/region name for address 2. */
+			readonly Address2_Country: string;
+			/** County name for address 2. */
+			readonly Address2_County: string;
+			/** Fax number for address 2. */
+			readonly Address2_Fax: string;
+			/** Latitude for address 2. */
+			readonly Address2_Latitude: string;
+			/** First line for entering address 2 information. */
+			readonly Address2_Line1: string;
+			/** Second line for entering address 2 information. */
+			readonly Address2_Line2: string;
+			/** Third line for entering address 2 information. */
+			readonly Address2_Line3: string;
+			/** Longitude for address 2. */
+			readonly Address2_Longitude: string;
+			/** Name to enter for address 2. */
+			readonly Address2_Name: string;
+			/** ZIP Code or postal code for address 2. */
+			readonly Address2_PostalCode: string;
+			/** Post office box number for address 2. */
+			readonly Address2_PostOfficeBox: string;
+			/** Method of shipment for address 2. */
+			readonly Address2_ShippingMethodCode: string;
+			/** State or province for address 2. */
+			readonly Address2_StateOrProvince: string;
+			/** First telephone number associated with address 2. */
+			readonly Address2_Telephone1: string;
+			/** Second telephone number associated with address 2. */
+			readonly Address2_Telephone2: string;
+			/** Third telephone number associated with address 2. */
+			readonly Address2_Telephone3: string;
+			/** United Parcel Service (UPS) zone for address 2. */
+			readonly Address2_UPSZone: string;
+			/** UTC offset for address 2. This is the difference between local time and standard Coordinated Universal Time. */
+			readonly Address2_UTCOffset: string;
+			/** Unique identifier of the business unit. */
+			readonly BusinessUnitId: string;
+			/** Fiscal calendar associated with the business unit. */
+			readonly CalendarId: string;
+			/** Name of the business unit cost center. */
+			readonly CostCenter: string;
+			/** Unique identifier of the user who created the business unit. */
+			readonly CreatedBy: string;
+			/** Date and time when the business unit was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the businessunit. */
+			readonly CreatedOnBehalfBy: string;
+			/** Credit limit for the business unit. */
+			readonly CreditLimit: string;
+			/** Description of the business unit. */
+			readonly Description: string;
+			/** Reason for disabling the business unit. */
+			readonly DisabledReason: string;
+			/** Name of the division to which the business unit belongs. */
+			readonly DivisionName: string;
+			/** Email address for the business unit. */
+			readonly EMailAddress: string;
+			/** Exchange rate for the currency associated with the businessunit with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Alternative name under which the business unit can be filed. */
+			readonly FileAsName: string;
+			/** FTP site URL for the business unit. */
+			readonly FtpSiteUrl: string;
+			/** Unique identifier of the data import or data migration that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Inheritance mask for the business unit. */
+			readonly InheritanceMask: string;
+			/** Information about whether the business unit is enabled or disabled. */
+			readonly IsDisabled: string;
+			/** Unique identifier of the user who last modified the business unit. */
+			readonly ModifiedBy: string;
+			/** Date and time when the business unit was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the businessunit. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Unique identifier for Warehouse associated with Business Unit. */
+			readonly msdyn_Warehouse: string;
+			/** Name of the business unit. */
+			readonly Name: string;
+			/** Unique identifier of the organization associated with the business unit. */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Unique identifier for the parent business unit. */
+			readonly ParentBusinessUnitId: string;
+			/** Picture or diagram of the business unit. */
+			readonly Picture: string;
+			/** Stock exchange on which the business is listed. */
+			readonly StockExchange: string;
+			/** Stock exchange ticker symbol for the business unit. */
+			readonly TickerSymbol: string;
+			/** Unique identifier of the currency associated with the businessunit. */
+			readonly TransactionCurrencyId: string;
+			readonly UserGroupId: string;
+			/** UTC offset for the business unit. This is the difference between local time and standard Coordinated Universal Time. */
+			readonly UTCOffset: string;
+			/** Version number of the business unit. */
+			readonly VersionNumber: string;
+			/** Website URL for the business unit. */
+			readonly WebSiteUrl: string;
+			/** Information about whether workflow or sales process rules have been suspended. */
+			readonly WorkflowSuspended: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -302,4 +455,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

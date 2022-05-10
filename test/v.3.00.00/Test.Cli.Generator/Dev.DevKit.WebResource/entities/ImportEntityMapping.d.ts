@@ -71,6 +71,50 @@ declare namespace DevKit {
 		readonly SupportingSolutionId: string;
 		/** Name of the Microsoft Dynamics 365 entity. */
 		TargetEntityName: string;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier of the user who created the import entity mapping. */
+			readonly CreatedBy: string;
+			/** Date and time when the import entity mapping was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the importentitymapping. */
+			readonly CreatedOnBehalfBy: string;
+			/** Information about whether the entity needs to be processed to find and delete duplicate records. */
+			readonly DeDupe: string;
+			/** Unique identifier of the import entity mapping. */
+			readonly ImportEntityMappingId: string;
+			/** Unique identifier of the Import Entity Mapping. */
+			readonly ImportEntityMappingIdUnique: string;
+			/** Unique identifier of the associated data map. */
+			readonly ImportMapId: string;
+			/** Version in which the component is introduced. */
+			readonly IntroducedVersion: string;
+			/** Information that specifies whether this component is managed. */
+			readonly IsManaged: string;
+			/** Unique identifier of the user who last modified the import entity mapping. */
+			readonly ModifiedBy: string;
+			/** Date and time when the import entity mapping was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the importentitymapping. */
+			readonly ModifiedOnBehalfBy: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Information about whether the import entity mapping needs to be processed. */
+			readonly ProcessCode: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** Name of the source entity. */
+			readonly SourceEntityName: string;
+			/** Status of the import entity mapping. */
+			readonly StateCode: string;
+			/** Reason for the status of the import entity mapping. */
+			readonly StatusCode: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** Name of the Microsoft Dynamics 365 entity. */
+			readonly TargetEntityName: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -125,4 +169,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

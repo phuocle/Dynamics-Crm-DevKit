@@ -64,6 +64,43 @@ declare namespace DevKit {
 		/** Unique identifier of the object with which the condition is associated. */
 		RegardingObjectId: string;
 		UniqueRuleName: string;
+		readonly FormattedValue: {
+			/** Field that is being compared. */
+			readonly BaseAttributeName: string;
+			/** Unique identifier of the user who created the condition. */
+			readonly CreatedBy: string;
+			/** Date and time when the condition was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the duplicate rule condition. */
+			readonly CreatedOnBehalfBy: string;
+			/** Unique identifier of the condition. */
+			readonly DuplicateRuleConditionId: string;
+			/** Determines whether to consider blank values as non-duplicate values */
+			readonly IgnoreBlankValues: string;
+			/** Field that is being compared with the base field. */
+			readonly MatchingAttributeName: string;
+			/** Unique identifier of the user who last modified the condition. */
+			readonly ModifiedBy: string;
+			/** Date and time when the condition was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the duplicate rule condition. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Operator for this rule condition. */
+			readonly OperatorCode: string;
+			/** Parameter value of N if the operator is Same First Characters or Same Last Characters. */
+			readonly OperatorParam: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier of the business unit that owns the condition. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the user who owns the condition. */
+			readonly OwningUser: string;
+			/** Unique identifier of the object with which the condition is associated. */
+			readonly RegardingObjectId: string;
+			readonly UniqueRuleName: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -84,6 +121,8 @@ declare namespace OptionSet {
 			/** 2 */
 			Same_Last_Characters
 		}
+		enum OwnerIdType {
+		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
 			NotCalculated,
@@ -102,4 +141,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

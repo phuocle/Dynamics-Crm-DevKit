@@ -45,6 +45,24 @@ declare namespace DevKit {
 		readonly OverwriteTime_UtcDateOnly: Date;
 		/** Unique identifier of the associated solution. */
 		readonly SolutionId: string;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Enables Attribute Name of this Managed Property. */
+			readonly EnablesAttributeName: string;
+			/** Enables Entity Name of this Managed Property. */
+			readonly EnablesEntityName: string;
+			/** The logical name of this Managed Property. */
+			readonly LogicalName: string;
+			/** Unique identifier of the managed property key. */
+			readonly ManagedPropertyId: string;
+			/** Unique identifier of the Managed Property */
+			readonly ManagedPropertyRowId: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -77,4 +95,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

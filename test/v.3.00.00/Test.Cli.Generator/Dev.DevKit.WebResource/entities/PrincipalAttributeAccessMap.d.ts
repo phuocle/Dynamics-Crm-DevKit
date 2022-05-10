@@ -37,6 +37,16 @@ declare namespace DevKit {
 		ReadAccess: OptionSet.PrincipalAttributeAccessMap.ReadAccess;
 		UpdateAccess: OptionSet.PrincipalAttributeAccessMap.UpdateAccess;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			readonly AttributeId: string;
+			readonly CreateAccess: string;
+			/** Unique identifier of the principal attribute access. */
+			readonly PrincipalAttributeAccessMapId: string;
+			readonly PrincipalId: string;
+			readonly ReadAccess: string;
+			readonly UpdateAccess: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -77,4 +87,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

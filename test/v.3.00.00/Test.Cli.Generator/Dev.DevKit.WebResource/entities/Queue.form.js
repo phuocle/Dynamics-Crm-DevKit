@@ -222,6 +222,8 @@ var OptionSet;
 			None: 0,
 			Server_Side_Synchronization_or_Email_Router: 2
 		},
+		OwnerIdType : {
+		},
 		QueueTypeCode : {
 			Default_Value: 1
 		},

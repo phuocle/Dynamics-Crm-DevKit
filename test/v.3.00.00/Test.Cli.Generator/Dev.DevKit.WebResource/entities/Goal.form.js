@@ -217,6 +217,10 @@ var OptionSet;
 			FY2037: 2037,
 			FY2038: 2038
 		},
+		GoalOwnerIdType : {
+		},
+		OwnerIdType : {
+		},
 		StateCode : {
 			Active: 0,
 			Inactive: 1

@@ -152,6 +152,54 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** (Deprecated) Shows the associated project contract line for this invoice schedule. */
+			readonly msdyn_ContractLine: string;
+			/** Unique identifier for Project Contract Line associated with Project Contract Line Invoice Schedule. */
+			readonly msdyn_ContractLineId: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_contractlineinvoicescheduleId: string;
+			/** Select the billing milestone for a project contract line. */
+			readonly msdyn_ContractLineScheduleOfValue: string;
+			/** Select the Invoice associated with Project contract line invoice schedule. */
+			readonly msdyn_Invoice: string;
+			/** Enter the date on which invoice should get created */
+			readonly msdyn_InvoiceRunDate_UtcDateOnly: string;
+			/** Select the invoice status, for example, Not Run, Run Successful, or Run Failed. */
+			readonly msdyn_InvoiceRunStatus: string;
+			/** Type the name of the custom entity. */
+			readonly msdyn_name: string;
+			/** Enter the date before or on which the transaction will be picked for invoicing by the invoice creation job. */
+			readonly msdyn_transactioncutoffdate_UtcDateOnly: string;
+			/** Unique identifier for the organization */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Status of the project contract line invoice schedule */
+			readonly statecode: string;
+			/** Reason for the status of the project contract line invoice schedule */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -194,4 +242,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

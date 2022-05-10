@@ -78,6 +78,8 @@ var OptionSet;
 			Google: 192350001,
 			HERE: 192350002
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

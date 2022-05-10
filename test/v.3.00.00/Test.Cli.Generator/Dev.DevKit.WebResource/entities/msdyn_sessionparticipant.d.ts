@@ -9,7 +9,7 @@ declare namespace DevKit {
 			msdyn_agentid: DevKit.Controls.Lookup;
 			/** Date and time when agent accepted the session. */
 			msdyn_joinedon: DevKit.Controls.DateTime;
-			/** Mode of Agent participation i.e. primary, consult, monitor etc. */
+			/** Mode of Agent participation i.e. primary, consult, monitor, preview etc. */
 			msdyn_mode: DevKit.Controls.OptionSet;
 			/** The name of the custom entity. */
 			msdyn_name: DevKit.Controls.String;
@@ -98,7 +98,7 @@ declare namespace DevKit {
 		msdyn_joinedon_UtcDateAndTime: Date;
 		/** Date and time when agent left the session. */
 		msdyn_lefton_UtcDateAndTime: Date;
-		/** Mode of Agent participation i.e. primary, consult, monitor etc. */
+		/** Mode of Agent participation i.e. primary, consult, monitor, preview etc. */
 		msdyn_mode: OptionSet.msdyn_sessionparticipant.msdyn_mode;
 		/** Date and time when session participant information was last modified. */
 		msdyn_modifiedon_UtcDateOnly: Date;
@@ -130,6 +130,73 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Unique identifier of Active Directory User participating in session. */
+			readonly msdyn_activedirectoryuserid: string;
+			/** Active time for agent on the session */
+			readonly msdyn_activetime: string;
+			/** Date and time when agent assigned to the session. */
+			readonly msdyn_addedon_UtcDateOnly: string;
+			/** Unique identifier of System User participating in session. */
+			readonly msdyn_agentid: string;
+			readonly msdyn_externalparticipantchannel: string;
+			/** Channel type of external participant */
+			readonly msdyn_externalparticipantchanneltype: string;
+			/** Idle time for agent on the session */
+			readonly msdyn_idletime: string;
+			/** Inactive time for agent on the session */
+			readonly msdyn_inactivetime: string;
+			/** Date and time when agent accepted the session. */
+			readonly msdyn_joinedon_UtcDateAndTime: string;
+			/** Date and time when agent left the session. */
+			readonly msdyn_lefton_UtcDateAndTime: string;
+			/** Mode of Agent participation i.e. primary, consult, monitor, preview etc. */
+			readonly msdyn_mode: string;
+			/** Date and time when session participant information was last modified. */
+			readonly msdyn_modifiedon_UtcDateOnly: string;
+			/** The name of the custom entity. */
+			readonly msdyn_name: string;
+			/** Unique identifier of the session associated to the participant. */
+			readonly msdyn_omnichannelsession: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_sessionparticipantId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the Session participant */
+			readonly statecode: string;
+			/** Reason for the status of the Session participant */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -143,8 +210,12 @@ declare namespace OptionSet {
 			Consult,
 			/** 192350004 */
 			Monitor,
+			/** 192350005 */
+			Preview,
 			/** 192350002 */
 			Primary
+		}
+		enum OwnerIdType {
 		}
 		enum statecode {
 			/** 0 */
@@ -176,4 +247,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

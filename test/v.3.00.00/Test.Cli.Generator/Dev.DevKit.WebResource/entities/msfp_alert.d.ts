@@ -434,16 +434,344 @@ declare namespace DevKit {
 		readonly VersionNumber: number;
 		/** The array of object that can cast object to ActivityPartyApi class */
 		ActivityParties: Array<unknown>;
+		readonly FormattedValue: {
+			/** Additional information provided by the external application as JSON. For internal use only. */
+			readonly ActivityAdditionalParams: string;
+			/** Unique identifier of the activity. */
+			readonly ActivityId: string;
+			/** Actual duration of the activity in minutes. */
+			readonly ActualDurationMinutes: string;
+			/** Actual end time of the activity. */
+			readonly ActualEnd_UtcDateAndTime: string;
+			/** Actual start time of the activity. */
+			readonly ActualStart_UtcDateAndTime: string;
+			/** Shows how contact about the social activity originated, such as from Twitter or Facebook. This field is read-only. */
+			readonly Community: string;
+			/** Unique identifier of the user who created the activity. */
+			readonly CreatedBy: string;
+			/** Date and time when the activity was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the activitypointer. */
+			readonly CreatedOnBehalfBy: string;
+			/** Date and time when the delivery of the activity was last attempted. */
+			readonly DeliveryLastAttemptedOn_UtcDateAndTime: string;
+			/** Priority of delivery of the activity to the email server. */
+			readonly DeliveryPriorityCode: string;
+			/** Description of the activity. */
+			readonly Description: string;
+			/** The message id of activity which is returned from Exchange Server. */
+			readonly ExchangeItemId: string;
+			/** Exchange rate for the currency associated with the activitypointer with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Shows the web link of Activity of type email. */
+			readonly ExchangeWebLink: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Type of instance of a recurring series. */
+			readonly InstanceTypeCode: string;
+			/** Information regarding whether the activity was billed as part of resolving a case. */
+			readonly IsBilled: string;
+			/** For internal use only. */
+			readonly IsMapiPrivate: string;
+			/** Information regarding whether the activity is a regular activity type or event type. */
+			readonly IsRegularActivity: string;
+			/** Information regarding whether the activity was created from a workflow rule. */
+			readonly IsWorkflowCreated: string;
+			/** Contains the date and time stamp of the last on hold time. */
+			readonly LastOnHoldTime_UtcDateAndTime: string;
+			/** Left the voice mail */
+			readonly LeftVoiceMail: string;
+			/** Unique identifier of user who last modified the activity. */
+			readonly ModifiedBy: string;
+			/** Date and time when activity was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the activitypointer. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Rule associated with this alert. */
+			readonly msfp_alertrule: string;
+			/** Email address of the assignee of the alert. */
+			readonly msfp_assigneeemail: string;
+			/** Name of the assignee of the alert. */
+			readonly msfp_assigneename: string;
+			readonly msfp_customeremail: string;
+			readonly msfp_customername: string;
+			/** Additional detail for the alert. */
+			readonly msfp_notes: string;
+			/** Project to which the alert belongs. */
+			readonly msfp_project: string;
+			/** Questions associated with the alert. */
+			readonly msfp_questions: string;
+			/** Reason for creating the alert. */
+			readonly msfp_reason: string;
+			/** Detail on how the alert was resolved. */
+			readonly msfp_resolutiondetail: string;
+			/** Sentiment while resolving the alert. */
+			readonly msfp_resolutionsentiment: string;
+			/** Email address of the user who resolved the alert. */
+			readonly msfp_resolveremail: string;
+			/** Name of the user who resolved the alert. */
+			readonly msfp_resolvername: string;
+			/** Satisfaction metric associated with the alert. */
+			readonly msfp_satisfactionmetric: string;
+			/** Survey associated with the alert. */
+			readonly msfp_survey: string;
+			/** Survey response associated with the alert. */
+			readonly msfp_surveyresponse: string;
+			/** Shows how long, in minutes, that the record was on hold. */
+			readonly OnHoldTime: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier of the business unit that owns the activity. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the team that owns the activity. */
+			readonly OwningTeam: string;
+			/** Unique identifier of the user that owns the activity. */
+			readonly OwningUser: string;
+			/** For internal use only. */
+			readonly PostponeActivityProcessingUntil_UtcDateAndTime: string;
+			/** Priority of the activity. */
+			readonly PriorityCode: string;
+			/** Unique identifier of the Process. */
+			readonly ProcessId: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_account_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_bookableresourcebooking_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_bookableresourcebookingheader_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_bulkoperation_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_campaign_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_campaignactivity_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_contact_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_contract_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_entitlement_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_entitlementtemplate_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_incident_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_new_interactionforemail_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_invoice_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_knowledgearticle_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_knowledgebaserecord_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_lead_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_agreement_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_agreementbookingdate_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_agreementbookingincident_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_agreementbookingproduct_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_agreementbookingservice_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_agreementbookingservicetask_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_agreementbookingsetup_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_agreementinvoicedate_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_agreementinvoiceproduct_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_agreementinvoicesetup_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_bookingalertstatus_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_bookingrule_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_bookingtimestamp_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_customerasset_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_fieldservicesetting_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_incidenttypecharacteristic_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_incidenttypeproduct_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_incidenttypeservice_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_inventoryadjustment_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_inventoryadjustmentproduct_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_inventoryjournal_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_inventorytransfer_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_payment_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_paymentdetail_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_paymentmethod_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_paymentterm_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_playbookinstance_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_postalbum_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_postalcode_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_processnotes_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_productinventory_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_projectteam_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_purchaseorder_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_purchaseorderbill_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_purchaseorderproduct_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_purchaseorderreceipt_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_purchaseorderreceiptproduct_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_purchaseordersubstatus_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_quotebookingincident_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_quotebookingproduct_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_quotebookingservice_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_quotebookingservicetask_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_resourceterritory_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_rma_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_rmaproduct_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_rmareceipt_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_rmareceiptproduct_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_rmasubstatus_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_rtv_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_rtvproduct_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_rtvsubstatus_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_salessuggestion_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_shipvia_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_systemuserschedulersetting_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_timegroup_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_timegroupdetail_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_timeoffrequest_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_warehouse_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_workorder_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_workordercharacteristic_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_workorderincident_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_workorderproduct_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_workorderresourcerestriction_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_workorderservice_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_msdyn_workorderservicetask_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_opportunity_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_quote_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_salesorder_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_site_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_uii_action_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_uii_hostedapplication_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_uii_nonhostedapplication_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_uii_option_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_uii_savedsession_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_uii_workflow_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_uii_workflowstep_msfp_alert: string;
+			/** Unique identifier of the object with which the activity is associated. */
+			readonly regardingobjectid_uii_workflow_workflowstep_mapping_msfp_alert: string;
+			/** Scheduled duration of the activity, specified in minutes. */
+			readonly ScheduledDurationMinutes: string;
+			/** Scheduled end time of the activity. */
+			readonly ScheduledEnd_UtcDateAndTime: string;
+			/** Scheduled start time of the activity. */
+			readonly ScheduledStart_UtcDateAndTime: string;
+			/** Unique identifier of the mailbox associated with the sender of the email message. */
+			readonly SenderMailboxId: string;
+			/** Date and time when the activity was sent. */
+			readonly SentOn_UtcDateAndTime: string;
+			/** Uniqueidentifier specifying the id of recurring series of an instance. */
+			readonly SeriesId: string;
+			/** Unique identifier of an associated service. */
+			readonly ServiceId: string;
+			/** Choose the service level agreement (SLA) that you want to apply to the case record. */
+			readonly SLAId: string;
+			/** Last SLA that was applied to this case. This field is for internal use only. */
+			readonly SLAInvokedId: string;
+			/** Shows the date and time by which the activities are sorted. */
+			readonly SortDate_UtcDateAndTime: string;
+			/** Unique identifier of the Stage. */
+			readonly StageId: string;
+			/** Status of the activity. */
+			readonly StateCode: string;
+			/** Reason for the status of the activity. */
+			readonly StatusCode: string;
+			/** Subject associated with the activity. */
+			readonly Subject: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Unique identifier of the currency associated with the activitypointer. */
+			readonly TransactionCurrencyId: string;
+			/** For internal use only. */
+			readonly TraversedPath: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version number of the activity. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace msfp_alert {
 		enum ActivityTypeCode {
-			/** 10086 */
+			/** 10088 */
 			Activity_record_for_the_Teams_chat,
 			/** 4201 */
 			Appointment,
-			/** 10404 */
+			/** 10473 */
 			Booking_Alert,
 			/** 4402 */
 			Campaign_Activity,
@@ -451,13 +779,13 @@ declare namespace OptionSet {
 			Campaign_Response,
 			/** 4206 */
 			Case_Resolution,
-			/** 10707 */
+			/** 10743 */
 			Conversation,
-			/** 10313 */
+			/** 10330 */
 			Customer_Voice_alert,
-			/** 10323 */
+			/** 10340 */
 			Customer_Voice_survey_invite,
-			/** 10325 */
+			/** 10342 */
 			Customer_Voice_survey_response,
 			/** 4202 */
 			Email,
@@ -469,11 +797,11 @@ declare namespace OptionSet {
 			Opportunity_Close,
 			/** 4209 */
 			Order_Close,
-			/** 10817 */
+			/** 10857 */
 			Outbound_message,
 			/** 4210 */
 			Phone_Call,
-			/** 10434 */
+			/** 10489 */
 			Project_Service_Approval,
 			/** 4406 */
 			Quick_Campaign,
@@ -483,12 +811,14 @@ declare namespace OptionSet {
 			Recurring_Appointment,
 			/** 4214 */
 			Service_Activity,
-			/** 10721 */
+			/** 10760 */
 			Session,
 			/** 4212 */
 			Task
 		}
 		enum Community {
+			/** 16 */
+			Apple_Messages_For_Business,
 			/** 5 */
 			Cortana,
 			/** 6 */
@@ -499,6 +829,8 @@ declare namespace OptionSet {
 			Email,
 			/** 1 */
 			Facebook,
+			/** 17 */
+			Googles_Business_Messages,
 			/** 10 */
 			GroupMe,
 			/** 11 */
@@ -542,6 +874,8 @@ declare namespace OptionSet {
 			/** 1 */
 			Recurring_Master
 		}
+		enum OwnerIdType {
+		}
 		enum PriorityCode {
 			/** 2 */
 			High,
@@ -549,6 +883,8 @@ declare namespace OptionSet {
 			Low,
 			/** 1 */
 			Normal
+		}
+		enum RegardingObjectTypeCode {
 		}
 		enum StateCode {
 			/** 2 */
@@ -588,4 +924,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

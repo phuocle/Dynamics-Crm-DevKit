@@ -75,6 +75,7 @@ var DevKit;
 			ModifiedOn_UtcDateAndTime: { a: 'modifiedon', r: true },
 			ModifiedOnBehalfBy: { b: 'modifiedonbehalfby', a: '_modifiedonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
 			msdyn_ContextViewId: { a: 'msdyn_contextviewid' },
+			msdyn_EnableAiIntroductionMessage: { a: 'msdyn_enableaiintroductionmessage' },
 			msdyn_EnableAiSuggestion: { a: 'msdyn_enableaisuggestion' },
 			msdyn_EnableAutoNameChats: { a: 'msdyn_enableautonamechats' },
 			msdyn_EnableKickoffMessage: { a: 'msdyn_enablekickoffmessage' },
@@ -82,6 +83,8 @@ var DevKit;
 			msdyn_entitylinkchatconfigurationId: { a: 'msdyn_entitylinkchatconfigurationid' },
 			msdyn_EntityType: { b: 'msdyn_EntityType', a: '_msdyn_entitytype_value', c: 'entities', d: 'entity' },
 			msdyn_Name: { a: 'msdyn_name' },
+			msdyn_RecentChatLinkerCanUnlink: { a: 'msdyn_recentchatlinkercanunlink' },
+			msdyn_RecordOwnerCanUnlink: { a: 'msdyn_recordownercanunlink' },
 			msdyn_UniqueName: { a: 'msdyn_uniquename' },
 			msdyn_UserCanJoinChat: { a: 'msdyn_usercanjoinchat' },
 			OverriddenCreatedOn_UtcDateOnly: { a: 'overriddencreatedon' },
@@ -128,7 +131,7 @@ var DevKit;
 		}
 		msdyn_entitylinkchatconfiguration.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -147,6 +150,8 @@ var OptionSet;
 			Deleted_Unpublished: 3,
 			Published: 0,
 			Unpublished: 1
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

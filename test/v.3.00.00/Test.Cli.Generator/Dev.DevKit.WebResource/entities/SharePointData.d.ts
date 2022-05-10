@@ -87,10 +87,47 @@ declare namespace DevKit {
 		SharePointDataId: string;
 		/** Unique identifier of the user who created the SharePoint data. */
 		readonly UserId: string;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the SharePoint Data. */
+			readonly CreatedBy: string;
+			/** Date and time when the SharePoint Data was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the SharePoint Data. */
+			readonly CreatedOnBehalfBy: string;
+			/** SharePoint Data Serialized */
+			readonly Data: string;
+			/** Is valid */
+			readonly IsValid: string;
+			/** Unique identifier of the user who created the SharePoint Data. */
+			readonly Location: string;
+			/** Unique identifier of the user who last modified the SharePoint Data. */
+			readonly ModifiedBy: string;
+			/** Date and time when the Sharepoint Data was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the SharePoint Data. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Next Page Token of the SharePoint document. */
+			readonly NextPageToken: string;
+			/** Unique identifier of the organization associated with the SharePoint Data. */
+			readonly OrganizationId: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			readonly PageNumber: string;
+			/** Previous Page Token of the SharePoint document. */
+			readonly PreviousPageToken: string;
+			/** Regarding Object Id. */
+			readonly RegardingObjectId: string;
+			/** Unique identifier of the SharePoint data record. */
+			readonly SharePointDataId: string;
+			/** Unique identifier of the user who created the SharePoint data. */
+			readonly UserId: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace SharePointData {
+		enum RegardingObjectTypeCode {
+		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
 			NotCalculated,
@@ -109,4 +146,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

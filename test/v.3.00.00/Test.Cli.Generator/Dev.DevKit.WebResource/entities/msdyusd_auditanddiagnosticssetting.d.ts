@@ -228,6 +228,101 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Select whether activity tracking should be enabled or not. */
+			readonly msdyusd_ATEnabled: string;
+			/** Select whether activity tracking for action calls should be enabled or not. */
+			readonly msdyusd_ATforActionCalls: string;
+			/** Select whether activity tracking for agent login should be enabled or not. */
+			readonly msdyusd_ATforAgentLogin: string;
+			/** Select whether activity tracking for agent scripts should be enabled or not. */
+			readonly msdyusd_ATforAgentScripts: string;
+			/** Select whether activity tracking for customer session should be enabled or not. */
+			readonly msdyusd_ATforCustomerSession: string;
+			/** Select whether activity tracking for events should be enabled or not. */
+			readonly msdyusd_ATforEvents: string;
+			/** Select whether activity tracking for hosted controls should be enabled or not. */
+			readonly msdyusd_ATforHostedControl: string;
+			/** Select whether activity tracking for sub action calls should be enabled or not. */
+			readonly msdyusd_ATforSubActionCalls: string;
+			/** Select whether activity tracking for UII Action should be enabled or not. */
+			readonly msdyusd_ATforUIIAction: string;
+			/** Select whether activity tracking for window navigation rules should be enabled or not. */
+			readonly msdyusd_ATforWindowsNavRules: string;
+			/** Unique identifier for entity instances */
+			readonly msdyusd_auditanddiagnosticssettingId: string;
+			/** Cache Size Audit & Diagnostics Setting. */
+			readonly msdyusd_CacheSize: string;
+			/** Choose whether to generate a memory dump for unhandled exceptions. */
+			readonly msdyusd_CrashDumpEnabled: string;
+			/** Select whether diagnostic tracking should be enabled or not. */
+			readonly msdyusd_DGTEnabled: string;
+			/** Select the verbosity level for diagnostics. */
+			readonly msdyusd_DGTVerbosityLevel: string;
+			/** Select whether Enable Caching for UII Action should be enabled or not. */
+			readonly msdyusd_EnableCaching: string;
+			/** Choose whether to collect a diagnostics report when the application closes unexpectedly. */
+			readonly msdyusd_ExitMonitoringEnabled: string;
+			readonly msdyusd_IsDefault: string;
+			/** Enter the folder name where diagnostics logs are stored. */
+			readonly msdyusd_LogsDirectory: string;
+			/** Enter the maximum size in megabytes (MB) of the folder where diagnostics logs are stored. */
+			readonly msdyusd_MaxDiagnosticLogsSizeInMB: string;
+			/** Enter the name of the Audit & Diagnostics Setting. */
+			readonly msdyusd_name: string;
+			/** Enter the shortcut key combination for on demand diagnostics report collection. */
+			readonly msdyusd_ODDShortcut: string;
+			/** Shortcut to begin performance marker logs at runtime */
+			readonly msdyusd_ODPerfBeginShortcut: string;
+			/** Shortcut to end performance marker logs at runtime */
+			readonly msdyusd_ODPerfEndShortcut: string;
+			/** User Schema Settings */
+			readonly msdyusd_userschemasettings: string;
+			/** Choose whether to enable Windows Error Reporting. */
+			readonly msdyusd_WEREnabled: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Contains the id of the process associated with the entity. */
+			readonly processid: string;
+			/** Contains the id of the stage where the entity is located. */
+			readonly stageid: string;
+			/** Status of the Audit & Diagnostics Setting. */
+			readonly statecode: string;
+			/** Status Reason of the Audit & Diagnostics Setting. */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** A comma separated list of string values representing the unique identifiers of stages in a Business Process Flow Instance in the order that they occur. */
+			readonly traversedpath: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -241,6 +336,8 @@ declare namespace OptionSet {
 			Verbose,
 			/** 100000001 */
 			Warning
+		}
+		enum OwnerIdType {
 		}
 		enum statecode {
 			/** 0 */
@@ -272,4 +369,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

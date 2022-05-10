@@ -48,6 +48,10 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.GoalRollupQuery = {
+		OwnerIdType : {
+		},
+		QueryEntityType : {
+		},
 		StateCode : {
 			Active: 0,
 			Inactive: 1

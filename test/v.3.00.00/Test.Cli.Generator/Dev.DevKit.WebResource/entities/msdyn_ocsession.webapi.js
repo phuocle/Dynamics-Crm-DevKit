@@ -263,7 +263,7 @@ var DevKit;
 		}
 		msdyn_ocsession.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -278,37 +278,39 @@ var OptionSet;
 (function (OptionSet) {
 	OptionSet.msdyn_ocsession = {
 		ActivityTypeCode : {
-			Activity_record_for_the_Teams_chat: 10086,
+			Activity_record_for_the_Teams_chat: 10088,
 			Appointment: 4201,
-			Booking_Alert: 10404,
+			Booking_Alert: 10473,
 			Campaign_Activity: 4402,
 			Campaign_Response: 4401,
 			Case_Resolution: 4206,
-			Conversation: 10707,
-			Customer_Voice_alert: 10313,
-			Customer_Voice_survey_invite: 10323,
-			Customer_Voice_survey_response: 10325,
+			Conversation: 10743,
+			Customer_Voice_alert: 10330,
+			Customer_Voice_survey_invite: 10340,
+			Customer_Voice_survey_response: 10342,
 			Email: 4202,
 			Fax: 4204,
 			Letter: 4207,
 			Opportunity_Close: 4208,
 			Order_Close: 4209,
-			Outbound_message: 10817,
+			Outbound_message: 10857,
 			Phone_Call: 4210,
-			Project_Service_Approval: 10434,
+			Project_Service_Approval: 10489,
 			Quick_Campaign: 4406,
 			Quote_Close: 4211,
 			Recurring_Appointment: 4251,
 			Service_Activity: 4214,
-			Session: 10721,
+			Session: 10760,
 			Task: 4212
 		},
 		Community : {
+			Apple_Messages_For_Business: 16,
 			Cortana: 5,
 			Direct_Line: 6,
 			Direct_Line_Speech: 8,
 			Email: 9,
 			Facebook: 1,
+			Googles_Business_Messages: 17,
 			GroupMe: 10,
 			Kik: 11,
 			Line: 3,
@@ -340,6 +342,7 @@ var OptionSet;
 			PreConversation: 192350001
 		},
 		msdyn_channel : {
+			Apple_Messages_for_Business: 192450000,
 			Co_browse: 192390000,
 			Custom: 192350002,
 			Entity_Records: 192350000,
@@ -376,10 +379,14 @@ var OptionSet;
 			Default: 192350000,
 			New: 192350003
 		},
+		OwnerIdType : {
+		},
 		PriorityCode : {
 			High: 2,
 			Low: 0,
 			Normal: 1
+		},
+		RegardingObjectTypeCode : {
 		},
 		StateCode : {
 			Canceled: 2,

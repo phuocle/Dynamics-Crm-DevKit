@@ -34,10 +34,19 @@ declare namespace DevKit {
 		/** Unique identifier of the email search entry. */
 		EmailSearchId: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** The email address */
+			readonly EmailAddress: string;
+			/** Unique identifier of the email search entry. */
+			readonly EmailSearchId: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace EmailSearch {
+		enum ParentObjectTypeCode {
+		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
 			NotCalculated,
@@ -56,4 +65,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

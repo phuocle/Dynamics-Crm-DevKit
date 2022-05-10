@@ -38,6 +38,17 @@ declare namespace DevKit {
 		/** For internal use only. */
 		UnresolvedAddressId: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly EMailAddress: string;
+			/** For internal use only. */
+			readonly FullName: string;
+			/** For internal use only. */
+			readonly Telephone: string;
+			/** For internal use only. */
+			readonly UnresolvedAddressId: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -60,4 +71,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

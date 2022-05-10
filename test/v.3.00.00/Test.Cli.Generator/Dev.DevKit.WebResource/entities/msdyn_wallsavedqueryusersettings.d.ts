@@ -137,10 +137,82 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** XML blob that stores personalization data for the user. */
+			readonly msdyn_data: string;
+			/** Indicates that view is selected by default if value is greater than 0. Also contains information which specific filter is applied. */
+			readonly msdyn_default: string;
+			/** Display name of the entity to which the corresponding views belong. */
+			readonly msdyn_entitydisplayname: string;
+			/** Name of the entity to which the corresponding views belong. */
+			readonly msdyn_entityname: string;
+			/** Indicates that wall should be included in response to avoid roundtrips to server */
+			readonly msdyn_includewallinresponse: string;
+			/** Indicates that corresponding view is following view */
+			readonly msdyn_isfollowing: string;
+			/** Indicates that the record is virtual */
+			readonly msdyn_IsVirtual: string;
+			/** Information that indicates whether the corresponding view should be displayed on the personal wall for this user. */
+			readonly msdyn_isvisible: string;
+			/** For internal use only. */
+			readonly msdyn_isvisiblebit: string;
+			/** Virtual column which contains entity type code for the entities returned by corresponding savedquery */
+			readonly msdyn_otc: string;
+			/** Name of the corresponding view. */
+			readonly msdyn_savedqueryname: string;
+			/** Sort order to be used when displaying the filter on the user’s personal wall. */
+			readonly msdyn_sortorder: string;
+			/** Reserved to support different view types. Currently not used. */
+			readonly msdyn_type: string;
+			/** Unique identifier for User associated with Wall View User Setting. */
+			readonly msdyn_userid: string;
+			/** Unique identifier for Wall View associated with Wall View User Setting. */
+			readonly msdyn_wallsavedqueryid: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_wallsavedqueryusersettingsId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the Wall View User Setting */
+			readonly statecode: string;
+			/** Reason for the status of the Wall View User Setting */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace msdyn_wallsavedqueryusersettings {
+		enum OwnerIdType {
+		}
 		enum statecode {
 			/** 0 */
 			Active,
@@ -171,4 +243,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

@@ -144,6 +144,123 @@ declare namespace DevKit {
 		readonly VersionNumber: number;
 		/** Wide icon for Canvas Apps. */
 		readonly WideIcon: string;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the canvas app. */
+			readonly AADCreatedById: string;
+			/** Unique identifier of the user who last modified the application. */
+			readonly AADLastModifiedById: string;
+			/** Unique identifier of the user who last published the application. */
+			readonly AADLastPublishedById: string;
+			/** Indicates whether the canvas app was marked for bypass consent by an admin. */
+			readonly AdminControlBypassConsent: string;
+			/** The app component dependencies. */
+			readonly AppComponentDependencies: string;
+			/** The app components. */
+			readonly AppComponents: string;
+			/** The app open URI. */
+			readonly AppOpenUri: string;
+			/** The application version. */
+			readonly AppVersion: string;
+			/** Assets for Canvas Apps. */
+			readonly Assets: string;
+			/** The authorization references of the application. */
+			readonly AuthorizationReferences: string;
+			/** The background image color. */
+			readonly BackgroundColor: string;
+			/** Background image for Canvas Apps. */
+			readonly BackgroundImage: string;
+			/** Indicates whether the canvas app should bypass consent from consumers. */
+			readonly BypassConsent: string;
+			/** The type of the canvas app. */
+			readonly CanConsumeAppPass: string;
+			/** For internal use only. */
+			readonly CanvasAppId: string;
+			/** For internal use only. */
+			readonly CanvasAppRowId: string;
+			/** The type of the canvas app. */
+			readonly CanvasAppType: string;
+			/** Internal use. The app dependency details. */
+			readonly CdsDependencies: string;
+			/** The commit message of the app. */
+			readonly CommitMessage: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** The connection references of the application. */
+			readonly ConnectionReferences: string;
+			/** The version of the client that was used to author the application. */
+			readonly CreatedByClientVersion: string;
+			/** Date and time when the application was created. */
+			readonly CreatedTime_UtcDateAndTime: string;
+			/** The database references of the application. */
+			readonly DatabaseReferences: string;
+			/** The description of the app. */
+			readonly Description: string;
+			/** The display name of the app. */
+			readonly DisplayName: string;
+			/** Document for Canvas Apps. */
+			readonly Document: string;
+			/** Internal use. The embedded app information. */
+			readonly EmbeddedApp: string;
+			/** The gallery item identifier. */
+			readonly GalleryItemId: string;
+			/** Version in which the canvas app is introduced. */
+			readonly IntroducedVersion: string;
+			/** Indicates whether the canvas app contains CDS 1.0 references. */
+			readonly IsCdsUpgraded: string;
+			/** Information that specifies whether this component can be customized. */
+			readonly IsCustomizable: string;
+			/** Indicates whether the canvas app is a featured app. */
+			readonly IsFeaturedApp: string;
+			/** Indicates whether the canvas app is a hero app. */
+			readonly IsHeroApp: string;
+			/** Indicates whether the canvas app is hidden from a user's list. */
+			readonly IsHidden: string;
+			/** Indicates whether the solution component is part of a managed solution. */
+			readonly IsManaged: string;
+			/** Large icon for Canvas Apps. */
+			readonly LargeIcon: string;
+			/** Date and time when the application was last modified. */
+			readonly LastModifiedTime_UtcDateAndTime: string;
+			/** Date and time when the application was last published. */
+			readonly LastPublishTime_UtcDateAndTime: string;
+			/** Medium icon for Canvas Apps. */
+			readonly MediumIcon: string;
+			/** The version of the client that was used to author the application. */
+			readonly MinClientVersion: string;
+			/** Name of the CanvasApp */
+			readonly Name: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier of the business unit that owns the process. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the team who owns the process. */
+			readonly OwningTeam: string;
+			/** Unique identifier of the user who owns the process. */
+			readonly OwningUser: string;
+			/** The publisher of the app. */
+			readonly Publisher: string;
+			/** Small icon for Canvas Apps. */
+			readonly SmallIcon: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** A value indicating whether the application is ready for consumption. */
+			readonly Status: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** The metadata tags of the application. */
+			readonly Tags: string;
+			/** Teams icon for Canvas Apps. */
+			readonly TeamsIcon: string;
+			/** The globally unique canvas app id */
+			readonly UniqueCanvasAppId: string;
+			readonly VersionNumber: string;
+			/** Wide icon for Canvas Apps. */
+			readonly WideIcon: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -168,6 +285,8 @@ declare namespace OptionSet {
 			/** 1 */
 			Unpublished
 		}
+		enum OwnerIdType {
+		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
 			NotCalculated,
@@ -186,4 +305,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

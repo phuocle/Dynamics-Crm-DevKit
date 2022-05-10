@@ -117,6 +117,60 @@ declare namespace DevKit {
 		readonly SupportingSolutionId: string;
 		/** Version number of the activity mime attachment. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the activity with which the attachment is associated. */
+			readonly ActivityId: string;
+			/** Unique identifier of the attachment. */
+			readonly ActivityMimeAttachmentId: string;
+			/** For internal use only. */
+			readonly ActivityMimeAttachmentIdUnique: string;
+			/** Descriptive subject for the activity. */
+			readonly ActivitySubject: string;
+			/** anonymous link */
+			readonly AnonymousLink: string;
+			/** For internal use only */
+			readonly AttachmentContentId: string;
+			/** Unique identifier of the attachment with which this activitymimeattachment is associated. */
+			readonly AttachmentId: string;
+			/** Number of the attachment. */
+			readonly AttachmentNumber: string;
+			/** Contents of the attachment. */
+			readonly Body: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** File name of the attachment. */
+			readonly FileName: string;
+			/** File size of the attachment. */
+			readonly FileSize: string;
+			/** Indicates if this attachment is followed. */
+			readonly IsFollowed: string;
+			/** Indicates whether the solution component is part of a managed solution. */
+			readonly IsManaged: string;
+			/** MIME type of the attachment. */
+			readonly MimeType: string;
+			/** Unique identifier of the record with which the attachment is associated */
+			readonly objectid_activitypointer: string;
+			/** Unique identifier of the record with which the attachment is associated */
+			readonly objectid_template: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier of the business unit that owns the activity mime attachment. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the user who owns the activity mime attachment. */
+			readonly OwningUser: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** Descriptive subject for the attachment. */
+			readonly Subject: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** Version number of the activity mime attachment. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -137,6 +191,8 @@ declare namespace OptionSet {
 			/** 2010 */
 			Email_Template
 		}
+		enum OwnerIdType {
+		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
 			NotCalculated,
@@ -155,4 +211,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

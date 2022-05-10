@@ -71,6 +71,50 @@ declare namespace DevKit {
 		readonly VersionNumber: number;
 		/** Type of visibility of the report. */
 		VisibilityCode: OptionSet.ReportVisibility.VisibilityCode;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier of the user who created the report visibility record. */
+			readonly CreatedBy: string;
+			/** Date and time when the report visibility record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the reportvisibility. */
+			readonly CreatedOnBehalfBy: string;
+			/** Unique identifier of the data import or data migration that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Information that specifies whether this component can be customized. */
+			readonly IsCustomizable: string;
+			readonly IsManaged: string;
+			/** Unique identifier of the user who last modified the report visibility record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the report visibility record was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the reportvisibility. */
+			readonly ModifiedOnBehalfBy: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier of the business unit that owns the report visibility record. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the user who owns the report visibility record. */
+			readonly OwningUser: string;
+			/** Unique identifier of the report. */
+			readonly ReportId: string;
+			/** Unique identifier of the report visibility record. */
+			readonly ReportVisibilityId: string;
+			/** For internal use only. */
+			readonly ReportVisibilityIdUnique: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			readonly VersionNumber: string;
+			/** Type of visibility of the report. */
+			readonly VisibilityCode: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -84,6 +128,8 @@ declare namespace OptionSet {
 			Published,
 			/** 1 */
 			Unpublished
+		}
+		enum OwnerIdType {
 		}
 		enum VisibilityCode {
 			/** 2 */
@@ -111,4 +157,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

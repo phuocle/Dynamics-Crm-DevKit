@@ -181,6 +181,96 @@ declare namespace DevKit {
 		UTCOffset: number;
 		/** Version number of the customer address. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Shows the number of the address, to indicate whether the address is the primary, secondary, or other address for the customer. */
+			readonly AddressNumber: string;
+			/** Select the address type, such as primary or billing. */
+			readonly AddressTypeCode: string;
+			/** Type the city for the customer's address to help identify the location. */
+			readonly City: string;
+			/** Shows the complete address. */
+			readonly Composite: string;
+			/** Type the country or region for the customer's address. */
+			readonly Country: string;
+			/** Type the county for the customer's address. */
+			readonly County: string;
+			/** Shows who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Unique identifier of the customer address. */
+			readonly CustomerAddressId: string;
+			/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
+			readonly ExchangeRate: string;
+			/** Type the fax number associated with the customer's address. */
+			readonly Fax: string;
+			/** Select the freight terms to make sure shipping charges are processed correctly. */
+			readonly FreightTermsCode: string;
+			/** Unique identifier of the data import or data migration that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Type the latitude value for the customer's address, for use in mapping and other applications. */
+			readonly Latitude: string;
+			/** Type the first line of the customer's address to help identify the location. */
+			readonly Line1: string;
+			/** Type the second line of the customer's address. */
+			readonly Line2: string;
+			/** Type the third line of the customer's address. */
+			readonly Line3: string;
+			/** Type the longitude value for the customer's address, for use in mapping and other applications. */
+			readonly Longitude: string;
+			/** Shows who last updated the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who last updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Type a descriptive name for the customer's address, such as Corporate Headquarters. */
+			readonly Name: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Shows the business unit that the record owner belongs to. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the user who owns the customer address. */
+			readonly OwningUser: string;
+			/** Choose the customer's address. */
+			readonly parentid_account: string;
+			/** Choose the customer's address. */
+			readonly parentid_contact: string;
+			/** Type the ZIP Code or postal code for the address. */
+			readonly PostalCode: string;
+			/** Type the post office box number of the customer's address. */
+			readonly PostOfficeBox: string;
+			/** Type the name of the primary contact person for the customer's address. */
+			readonly PrimaryContactName: string;
+			/** Select a shipping method for deliveries sent to this address. */
+			readonly ShippingMethodCode: string;
+			/** Type the state or province of the customer's address. */
+			readonly StateOrProvince: string;
+			/** Type the primary phone number for the customer's address. */
+			readonly Telephone1: string;
+			/** Type a second phone number for the customer's address. */
+			readonly Telephone2: string;
+			/** Type a third phone number for the customer's address. */
+			readonly Telephone3: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			readonly TransactionCurrencyId: string;
+			/** Type the UPS zone of the customer's address to make sure shipping charges are calculated correctly and deliveries are made promptly, if shipped by UPS. */
+			readonly UPSZone: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Select the time zone for the address. */
+			readonly UTCOffset: string;
+			/** Version number of the customer address. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -206,6 +296,10 @@ declare namespace OptionSet {
 			Account,
 			/** 2 */
 			Contact
+		}
+		enum OwnerIdType {
+		}
+		enum ParentIdTypeCode {
 		}
 		enum ShippingMethodCode {
 			/** 1 */
@@ -241,4 +335,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

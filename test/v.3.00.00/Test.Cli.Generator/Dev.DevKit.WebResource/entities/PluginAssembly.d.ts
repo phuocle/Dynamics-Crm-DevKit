@@ -103,6 +103,82 @@ declare namespace DevKit {
 		/** Version number of the assembly. The value can be obtained from the assembly through reflection. */
 		Version: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Specifies mode of authentication with web sources like WebApp */
+			readonly AuthType: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Bytes of the assembly, in Base64 format. */
+			readonly Content: string;
+			/** Unique identifier of the user who created the plug-in assembly. */
+			readonly CreatedBy: string;
+			/** Date and time when the plug-in assembly was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the pluginassembly. */
+			readonly CreatedOnBehalfBy: string;
+			/** Culture code for the plug-in assembly. */
+			readonly Culture: string;
+			/** Customization Level. */
+			readonly CustomizationLevel: string;
+			/** Description of the plug-in assembly. */
+			readonly Description: string;
+			/** Version in which the form is introduced. */
+			readonly IntroducedVersion: string;
+			/** Information that specifies whether this component can be customized. */
+			readonly IsCustomizable: string;
+			/** Information that specifies whether this component should be hidden. */
+			readonly IsHidden: string;
+			/** Information that specifies whether this component is managed. */
+			readonly IsManaged: string;
+			/** Information about how the plugin assembly is to be isolated at execution time; None / Sandboxed. */
+			readonly IsolationMode: string;
+			readonly IsPasswordSet: string;
+			/** Major of the assembly version. */
+			readonly Major: string;
+			/** Unique identifier for managedidentity associated with pluginassembly. */
+			readonly ManagedIdentityId: string;
+			/** Minor of the assembly version. */
+			readonly Minor: string;
+			/** Unique identifier of the user who last modified the plug-in assembly. */
+			readonly ModifiedBy: string;
+			/** Date and time when the plug-in assembly was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the pluginassembly. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Name of the plug-in assembly. */
+			readonly Name: string;
+			/** Unique identifier of the organization with which the plug-in assembly is associated. */
+			readonly OrganizationId: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Unique identifier for Plugin Package associated with Plug-in Assembly. */
+			readonly PackageId: string;
+			/** User Password */
+			readonly Password: string;
+			/** File name of the plug-in assembly. Used when the source type is set to 1. */
+			readonly Path: string;
+			/** Unique identifier of the plug-in assembly. */
+			readonly PluginAssemblyId: string;
+			/** Unique identifier of the plug-in assembly. */
+			readonly PluginAssemblyIdUnique: string;
+			/** Public key token of the assembly. This value can be obtained from the assembly by using reflection. */
+			readonly PublicKeyToken: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** Hash of the source of the assembly. */
+			readonly SourceHash: string;
+			/** Location of the assembly, for example 0=database, 1=on-disk. */
+			readonly SourceType: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** Web Url */
+			readonly Url: string;
+			/** User Name */
+			readonly UserName: string;
+			/** Version number of the assembly. The value can be obtained from the assembly through reflection. */
+			readonly Version: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -159,4 +235,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

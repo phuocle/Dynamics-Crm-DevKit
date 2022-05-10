@@ -51,6 +51,30 @@ declare namespace DevKit {
 		readonly SupportingSolutionId: string;
 		/** Version number of Image Attribute Configuration. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier for entity instances */
+			readonly AttributeImageConfigId: string;
+			/** Logical Name of Image Attribute */
+			readonly AttributeLogicalName: string;
+			/** Indicates if an image attribute can store full image */
+			readonly CanStoreFullImage: string;
+			/** For internal use only. */
+			readonly ComponentIdUnique: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Indicates whether the solution component is part of a managed solution. */
+			readonly IsManaged: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateAndTime: string;
+			/** Parent Entity Logical Name */
+			readonly ParentEntityLogicalName: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** Version number of Image Attribute Configuration. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -83,4 +107,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

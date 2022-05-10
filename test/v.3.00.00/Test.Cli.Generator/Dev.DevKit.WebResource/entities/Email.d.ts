@@ -797,16 +797,404 @@ declare namespace DevKit {
 		readonly VersionNumber: number;
 		/** The array of object that can cast object to ActivityPartyApi class */
 		ActivityParties: Array<unknown>;
+		readonly FormattedValue: {
+			/** The Entity that Accepted the Email */
+			readonly acceptingentityid_queue: string;
+			/** The Entity that Accepted the Email */
+			readonly acceptingentityid_systemuser: string;
+			/** For internal use only. */
+			readonly ActivityAdditionalParams: string;
+			/** Unique identifier of the email activity. */
+			readonly ActivityId: string;
+			/** Type the number of minutes spent creating and sending the email. The duration is used in reporting. */
+			readonly ActualDurationMinutes: string;
+			/** Enter the actual end date and time of the email. By default, it displays the date and time when the activity was completed or canceled, but can be edited to capture the actual time to create and send the email. */
+			readonly ActualEnd_UtcDateOnly: string;
+			/** Enter the actual start date and time for the email. By default, it displays the date and time when the activity was created, but can be edited to capture the actual time to create and send the email. */
+			readonly ActualStart_UtcDateOnly: string;
+			/** Shows the umber of attachments of the email message. */
+			readonly AttachmentCount: string;
+			/** Shows the number of times an email attachment has been viewed. */
+			readonly AttachmentOpenCount: string;
+			/** Hash of base of conversation index. */
+			readonly BaseConversationIndexHash: string;
+			/** Type a category to identify the email type, such as lead outreach, customer follow-up, or service alert, to tie the email to a business group or function. */
+			readonly Category: string;
+			/** Indicates if the body is compressed. */
+			readonly Compressed: string;
+			/** Identifier for all the email responses for this conversation. */
+			readonly ConversationIndex: string;
+			/** Conversation Tracking Id. */
+			readonly ConversationTrackingId: string;
+			/** Correlated Activity Id */
+			readonly CorrelatedActivityId: string;
+			/** Shows how an email is matched to an existing email in Microsoft Dynamics 365. For system use only. */
+			readonly CorrelationMethod: string;
+			/** Shows who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Enter the expected date and time when email will be sent. */
+			readonly DelayedEmailSendTime_UtcDateAndTime: string;
+			/** Shows the count of the number of attempts made to send the email. The count is used as an indicator of email routing issues. */
+			readonly DeliveryAttempts: string;
+			/** Select the priority of delivery of the email to the email server. */
+			readonly DeliveryPriorityCode: string;
+			/** Select whether the sender should receive confirmation that the email was delivered. */
+			readonly DeliveryReceiptRequested: string;
+			/** Type the greeting and message text of the email. */
+			readonly Description: string;
+			/** Select the direction of the email as incoming or outbound. */
+			readonly DirectionCode: string;
+			/** Shows the date and time when an email reminder expires. */
+			readonly EmailReminderExpiryTime_UtcDateAndTime: string;
+			/** Shows the status of the email reminder. */
+			readonly EmailReminderStatus: string;
+			/** For internal use only. */
+			readonly EmailReminderText: string;
+			/** Shows the type of the email reminder. */
+			readonly EmailReminderType: string;
+			/** Shows the sender of the email. */
+			readonly emailsender_account: string;
+			/** Shows the sender of the email. */
+			readonly emailsender_contact: string;
+			/** Shows the sender of the email. */
+			readonly emailsender_equipment: string;
+			/** Shows the sender of the email. */
+			readonly emailsender_lead: string;
+			/** Shows the sender of the email. */
+			readonly emailsender_queue: string;
+			/** Shows the sender of the email. */
+			readonly emailsender_systemuser: string;
+			/** Email Tracking Id. */
+			readonly EmailTrackingId: string;
+			/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
+			readonly ExchangeRate: string;
+			/** Select whether the email allows following recipient activities sent from Microsoft Dynamics 365.This is user preference state which can be overridden by system evaluated state. */
+			readonly FollowEmailUserPreference: string;
+			/** Unique identifier of the data import or data migration that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Type the ID of the email message that this email activity is a response to. */
+			readonly InReplyTo: string;
+			/** Information regarding whether the email activity was billed as part of resolving a case. */
+			readonly IsBilled: string;
+			/** For internal use only. Shows whether this email is followed. This is evaluated state which overrides user selection of follow email. */
+			readonly IsEmailFollowed: string;
+			/** For internal use only. Shows whether this email Reminder is Set. */
+			readonly IsEmailReminderSet: string;
+			/** Information regarding whether the activity is a regular activity type or event type. */
+			readonly IsRegularActivity: string;
+			/** For internal use only. */
+			readonly IsUnsafe: string;
+			/** Indication if the email was created by a workflow rule. */
+			readonly IsWorkflowCreated: string;
+			/** Contains the date and time stamp of the last on hold time. */
+			readonly LastOnHoldTime_UtcDateAndTime: string;
+			/** Shows the latest date and time when email was opened. */
+			readonly LastOpenedTime_UtcDateAndTime: string;
+			/** Shows the number of times a link in an email has been clicked. */
+			readonly LinksClickedCount: string;
+			/** Unique identifier of the email message. Used only for email that is received. */
+			readonly MessageId: string;
+			/** For internal use only. */
+			readonly MessageIdDupCheck: string;
+			/** MIME type of the email message data. */
+			readonly MimeType: string;
+			/** Shows who last updated the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who last updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Individual email will be sent to each recipient. */
+			readonly msdyn_RecipientList: string;
+			/** Select the notification code to identify issues with the email recipients or attachments, such as blocked attachments. */
+			readonly Notifications: string;
+			/** Shows how long, in minutes, that the record was on hold. */
+			readonly OnHoldTime: string;
+			/** Shows the number of times an email has been opened. */
+			readonly OpenCount: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier of the business unit that owns the email activity. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the team who owns the email activity. */
+			readonly OwningTeam: string;
+			/** Unique identifier of the user who owns the email activity. */
+			readonly OwningUser: string;
+			/** Select the activity that the email is associated with. */
+			readonly ParentActivityId: string;
+			/** For internal use only. */
+			readonly PostponeEmailProcessingUntil_UtcDateAndTime: string;
+			/** Select the priority so that preferred customers or critical issues are handled quickly. */
+			readonly PriorityCode: string;
+			/** Shows the ID of the process. */
+			readonly ProcessId: string;
+			/** Indicates that a read receipt is requested. */
+			readonly ReadReceiptRequested: string;
+			/** The Mailbox that Received the Email. */
+			readonly ReceivingMailboxId: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_account_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_asyncoperation: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_bookableresourcebooking_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_bookableresourcebookingheader_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_bulkoperation_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_campaign_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_campaignactivity_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_contact_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_contract_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_entitlement_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_entitlementtemplate_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_incident_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_invoice_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_knowledgearticle_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_knowledgebaserecord_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_lead_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_agreement_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_agreementbookingdate_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_agreementbookingincident_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_agreementbookingproduct_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_agreementbookingservice_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_agreementbookingservicetask_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_agreementbookingsetup_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_agreementinvoicedate_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_agreementinvoiceproduct_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_agreementinvoicesetup_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_bookingalertstatus_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_bookingrule_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_bookingtimestamp_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_customerasset_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_fieldservicesetting_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_incidenttypecharacteristic_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_incidenttypeproduct_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_incidenttypeservice_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_inventoryadjustment_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_inventoryadjustmentproduct_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_inventoryjournal_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_inventorytransfer_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_payment_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_paymentdetail_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_paymentmethod_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_paymentterm_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_playbookinstance_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_postalbum_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_postalcode_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_processnotes_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_productinventory_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_projectteam_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_purchaseorder_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_purchaseorderbill_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_purchaseorderproduct_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_purchaseorderreceipt_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_purchaseorderreceiptproduct_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_purchaseordersubstatus_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_quotebookingincident_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_quotebookingproduct_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_quotebookingservice_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_quotebookingservicetask_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_resourceterritory_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_rma_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_rmaproduct_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_rmareceipt_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_rmareceiptproduct_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_rmasubstatus_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_rtv_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_rtvproduct_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_rtvsubstatus_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_salessuggestion_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_shipvia_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_systemuserschedulersetting_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_timegroup_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_timegroupdetail_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_timeoffrequest_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_warehouse_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_workorder_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_workordercharacteristic_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_workorderincident_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_workorderproduct_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_workorderresourcerestriction_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_workorderservice_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_msdyn_workorderservicetask_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_opportunity_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_quote_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_salesorder_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_site_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_uii_action_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_uii_hostedapplication_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_uii_nonhostedapplication_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_uii_option_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_uii_savedsession_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_uii_workflow_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_uii_workflowstep_email: string;
+			/** Unique identifier of the object with which the e-mail is associated. */
+			readonly regardingobjectid_uii_workflow_workflowstep_mapping_email: string;
+			/** Reminder Action Card Id. */
+			readonly ReminderActionCardId: string;
+			/** Shows the number of replies received for an email. */
+			readonly ReplyCount: string;
+			/** For internal use only */
+			readonly ReservedForInternalUse: string;
+			/** Scheduled duration of the email activity, specified in minutes. */
+			readonly ScheduledDurationMinutes: string;
+			/** Enter the expected due date and time for the activity to be completed to provide details about when the email will be sent. */
+			readonly ScheduledEnd_UtcDateAndTime: string;
+			/** Enter the expected start date and time for the activity to provide details about the tentative time when the email activity must be initiated. */
+			readonly ScheduledStart_UtcDateAndTime: string;
+			/** Sender of the email. */
+			readonly Sender: string;
+			/** Select the mailbox associated with the sender of the email message. */
+			readonly SenderMailboxId: string;
+			/** Shows the parent account of the sender of the email. */
+			readonly SendersAccount: string;
+			/** Shows the date and time that the email was sent. */
+			readonly SentOn_UtcDateAndTime: string;
+			/** Unique identifier for the associated service. */
+			readonly ServiceId: string;
+			/** Choose the service level agreement (SLA) that you want to apply to the email record. */
+			readonly SLAId: string;
+			/** Last SLA that was applied to this email. This field is for internal use only. */
+			readonly SLAInvokedId: string;
+			/** Shows the date and time by which the activities are sorted. */
+			readonly SortDate_UtcDateAndTime: string;
+			/** Shows the ID of the stage. */
+			readonly StageId: string;
+			/** Shows whether the email is open, completed, or canceled. Completed and canceled email is read-only and can't be edited. */
+			readonly StateCode: string;
+			/** Select the email's status. */
+			readonly StatusCode: string;
+			/** Type a subcategory to identify the email type and relate the activity to a specific product, sales region, business group, or other function. */
+			readonly Subcategory: string;
+			/** Type a short description about the objective or primary topic of the email. */
+			readonly Subject: string;
+			/** Shows the Microsoft Office Outlook account for the user who submitted the email to Microsoft Dynamics 365. */
+			readonly SubmittedBy: string;
+			/** For internal use only. ID for template used in email. */
+			readonly TemplateId: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Shows the email addresses corresponding to the recipients. */
+			readonly ToRecipients: string;
+			/** Shows the tracking token assigned to the email to make sure responses are automatically tracked in Microsoft Dynamics 365. */
+			readonly TrackingToken: string;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			readonly TransactionCurrencyId: string;
+			/** For internal use only. */
+			readonly TraversedPath: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version number of the email message. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace Email {
+		enum AcceptingEntityTypeCode {
+		}
 		enum ActivityTypeCode {
-			/** 10086 */
+			/** 10088 */
 			Activity_record_for_the_Teams_chat,
 			/** 4201 */
 			Appointment,
-			/** 10404 */
+			/** 10473 */
 			Booking_Alert,
 			/** 4402 */
 			Campaign_Activity,
@@ -814,13 +1202,13 @@ declare namespace OptionSet {
 			Campaign_Response,
 			/** 4206 */
 			Case_Resolution,
-			/** 10707 */
+			/** 10743 */
 			Conversation,
-			/** 10313 */
+			/** 10330 */
 			Customer_Voice_alert,
-			/** 10323 */
+			/** 10340 */
 			Customer_Voice_survey_invite,
-			/** 10325 */
+			/** 10342 */
 			Customer_Voice_survey_response,
 			/** 4202 */
 			Email,
@@ -832,11 +1220,11 @@ declare namespace OptionSet {
 			Opportunity_Close,
 			/** 4209 */
 			Order_Close,
-			/** 10817 */
+			/** 10857 */
 			Outbound_message,
 			/** 4210 */
 			Phone_Call,
-			/** 10434 */
+			/** 10489 */
 			Project_Service_Approval,
 			/** 4406 */
 			Quick_Campaign,
@@ -846,7 +1234,7 @@ declare namespace OptionSet {
 			Recurring_Appointment,
 			/** 4214 */
 			Service_Activity,
-			/** 10721 */
+			/** 10760 */
 			Session,
 			/** 4212 */
 			Task
@@ -895,6 +1283,8 @@ declare namespace OptionSet {
 			/** 2 */
 			Remind_me_anyways_at
 		}
+		enum EmailSenderObjectTypeCode {
+		}
 		enum Notifications {
 			/** 0 */
 			None,
@@ -903,6 +1293,8 @@ declare namespace OptionSet {
 			/** 2 */
 			Truncated_body
 		}
+		enum OwnerIdType {
+		}
 		enum PriorityCode {
 			/** 2 */
 			High,
@@ -910,6 +1302,10 @@ declare namespace OptionSet {
 			Low,
 			/** 1 */
 			Normal
+		}
+		enum RegardingObjectTypeCode {
+		}
+		enum SendersAccountObjectTypeCode {
 		}
 		enum StateCode {
 			/** 2 */
@@ -955,4 +1351,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

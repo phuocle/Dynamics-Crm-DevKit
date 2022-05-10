@@ -123,6 +123,58 @@ declare namespace DevKit {
 		readonly SupportingSolutionId: string;
 		/** Version number of the role. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the business unit with which the role is associated. */
+			readonly BusinessUnitId: string;
+			/** Tells whether the role can be deleted. */
+			readonly CanBeDeleted: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier of the user who created the role. */
+			readonly CreatedBy: string;
+			/** Date and time when the role was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the role. */
+			readonly CreatedOnBehalfBy: string;
+			/** Unique identifier of the data import or data migration that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Information that specifies whether this component can be customized. */
+			readonly IsCustomizable: string;
+			/** Role is inherited by users from team membership, if role associated with team. */
+			readonly IsInherited: string;
+			/** Indicates whether the solution component is part of a managed solution. */
+			readonly IsManaged: string;
+			/** Unique identifier of the user who last modified the role. */
+			readonly ModifiedBy: string;
+			/** Date and time when the role was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the role. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Name of the role. */
+			readonly Name: string;
+			/** Unique identifier of the organization associated with the role. */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Unique identifier of the parent role. */
+			readonly ParentRoleId: string;
+			/** Unique identifier of the parent root role. */
+			readonly ParentRootRoleId: string;
+			/** Unique identifier of the role. */
+			readonly RoleId: string;
+			/** For internal use only. */
+			readonly RoleIdUnique: string;
+			/** Unique identifier of the role template that is associated with the role. */
+			readonly RoleTemplateId: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** Version number of the role. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -161,4 +213,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

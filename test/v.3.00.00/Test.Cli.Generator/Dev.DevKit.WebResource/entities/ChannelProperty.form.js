@@ -54,6 +54,8 @@ var OptionSet;
 			Single_Line_Of_Text: 1,
 			Whole_Number: 2
 		},
+		RegardingObjectTypeCode : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

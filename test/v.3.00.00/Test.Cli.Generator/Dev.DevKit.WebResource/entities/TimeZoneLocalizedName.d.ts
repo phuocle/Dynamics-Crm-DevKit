@@ -56,6 +56,35 @@ declare namespace DevKit {
 		/** Unique display name for the time zone in the Microsoft Windows registry. */
 		UserInterfaceName: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the timezonelocalizedname. */
+			readonly CreatedOnBehalfBy: string;
+			/** Unique identifier of the culture that the UI names are encoded in. */
+			readonly CultureId: string;
+			/** Name of the time zone for the daylight time. */
+			readonly DaylightName: string;
+			/** Unique identifier of the user who last modified the time zone localized name. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the timezonelocalizedname. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Unique identifier of the organization associated with the time zone localized name. */
+			readonly OrganizationId: string;
+			/** Name of the time zone for the standard time. */
+			readonly StandardName: string;
+			/** Unique identifier of time zone definition entity instances. */
+			readonly TimeZoneDefinitionId: string;
+			/** Unique identifier of entity instances. */
+			readonly TimeZoneLocalizedNameId: string;
+			/** Unique display name for the time zone in the Microsoft Windows registry. */
+			readonly UserInterfaceName: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -78,4 +107,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

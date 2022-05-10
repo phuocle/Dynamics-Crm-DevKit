@@ -332,6 +332,135 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Exchange rate for the currency associated with the entity with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Enable if the system should automatically generate Order Bookings for the Booking Dates of this Booking Setup */
+			readonly msdyn_autogeneratebooking: string;
+			/** Enable if the system should automatically generate Work Orders for the Booking Dates of this Booking Setup */
+			readonly msdyn_autogenerateworkorder: string;
+			/** Type a description of this booking setup. */
+			readonly msdyn_description: string;
+			readonly msdyn_EstimatedCost: string;
+			/** Value of the Estimated Cost in base currency. */
+			readonly msdyn_estimatedcost_Base: string;
+			/** Shows the duration of the booking. */
+			readonly msdyn_estimatedduration: string;
+			/** The estimated margin for this Quote Booking Setup */
+			readonly msdyn_EstimatedMargin: string;
+			readonly msdyn_EstimatedMarginPerWO: string;
+			/** Estimated Costs of all Products that are associated to this Quote Booking Setup */
+			readonly msdyn_EstimatedProductCost: string;
+			/** Value of the EstimatedProductCost in base currency. */
+			readonly msdyn_estimatedproductcost_Base: string;
+			/** The sum of estimated revenue of all products that are associated to this quote booking setup */
+			readonly msdyn_EstimatedProductRevenue: string;
+			/** Value of the EstimatedProductRevenue in base currency. */
+			readonly msdyn_estimatedproductrevenue_Base: string;
+			readonly msdyn_EstimatedRevenue: string;
+			/** Value of the Estimated Revenue in base currency. */
+			readonly msdyn_estimatedrevenue_Base: string;
+			/** The Estimated Revenue per Work Order */
+			readonly msdyn_EstimatedRevenuePerWO: string;
+			/** Value of the EstimatedRevenuePerWO in base currency. */
+			readonly msdyn_estimatedrevenueperwo_Base: string;
+			/** The sum of the estimated costs of all quote booking services that are associated to this quote booking setup */
+			readonly msdyn_EstimatedServiceCost: string;
+			/** Value of the EstimatedServiceCost in base currency. */
+			readonly msdyn_estimatedservicecost_Base: string;
+			/** The sum of estimated revenue of all services that are associated to this quote booking setup */
+			readonly msdyn_EstimatedServiceRevenue: string;
+			/** Value of the EstimatedServiceRevenue in base currency. */
+			readonly msdyn_estimatedservicerevenue_Base: string;
+			/** Specify how many days in advance of the Booking Date the system should automatically generate a Work Order */
+			readonly msdyn_generateworkorderdaysinadvance: string;
+			/** For internal use only. */
+			readonly msdyn_Internalflags: string;
+			/** Only used when Work Location is a Facility. Latitude is used when trying to locate nearby facilities. */
+			readonly msdyn_Latitude: string;
+			/** Only used when Work Location is a Facility. Longitude is used when trying to locate nearby facilities. */
+			readonly msdyn_Longitude: string;
+			readonly msdyn_Margin: string;
+			/** The name of the custom entity. */
+			readonly msdyn_name: string;
+			readonly msdyn_NumberOfWO: string;
+			/** Shows the flexibility of days after the booking date. */
+			readonly msdyn_postbookingflexibility: string;
+			/** Shows the date until which Work Order generation can be postponed. Intended for internal use. Manipulating values in this field is not supported and can lead to unexpected system behavior. */
+			readonly msdyn_postponegenerationuntil_TimezoneDateAndTime: string;
+			/** Shows the flexibility of days prior to the booking date. */
+			readonly msdyn_prebookingflexibility: string;
+			/** Preferred Resource to booked */
+			readonly msdyn_preferredresource: string;
+			/** Shows the preferred time to booking. */
+			readonly msdyn_preferredstarttime_UtcDateOnly: string;
+			/** Booking Priority */
+			readonly msdyn_priority: string;
+			/** Quote this Booking Setup relates to */
+			readonly msdyn_quote: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_quotebookingsetupId: string;
+			/** Relationship between Quote Detail and Quote Booking Setup */
+			readonly msdyn_quotedetail: string;
+			readonly msdyn_QuoteDetailId: string;
+			/** Stores the booking recurrence settings. */
+			readonly msdyn_recurrencesettings: string;
+			/** For internal use only. */
+			readonly msdyn_revision: string;
+			/** Shows the time window up until when this can be booked. */
+			readonly msdyn_timewindowend_UtcDateOnly: string;
+			/** Shows the time window from when this can be booked. */
+			readonly msdyn_timewindowstart_UtcDateOnly: string;
+			readonly msdyn_WorkLocation: string;
+			/** Shows the work order summary to be set on the work orders generated. */
+			readonly msdyn_workordersummary: string;
+			/** Work Order Type to be used on generated Work Orders */
+			readonly msdyn_workordertype: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Contains the id of the process associated with the entity. */
+			readonly processid: string;
+			/** Contains the id of the stage where the entity is located. */
+			readonly stageid: string;
+			/** Status of the Quote Booking Setup */
+			readonly statecode: string;
+			/** Reason for the status of the Quote Booking Setup */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Unique identifier of the currency associated with the entity. */
+			readonly TransactionCurrencyId: string;
+			/** A comma separated list of string values representing the unique identifiers of stages in a Business Process Flow Instance in the order that they occur. */
+			readonly traversedpath: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -343,6 +472,8 @@ declare namespace OptionSet {
 			Location_Agnostic,
 			/** 690970000 */
 			Onsite
+		}
+		enum OwnerIdType {
 		}
 		enum statecode {
 			/** 0 */
@@ -374,4 +505,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

@@ -41,6 +41,16 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.BulkOperationLog = {
+		BulkOperationIdType : {
+		},
+		CampaignActivityIdType : {
+		},
+		CreatedObjectIdTypeCode : {
+		},
+		OwnerIdType : {
+		},
+		RegardingObjectIdTypeCode : {
+		},
 		RollupState : {
 			NotCalculated: 0,
 			Calculated: 1,

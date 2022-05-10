@@ -67,10 +67,52 @@ declare namespace DevKit {
 		regardingobjectid_team: string;
 		/** Select the role type for the post. */
 		Type: OptionSet.PostRole.Type;
+		readonly FormattedValue: {
+			/** Unique identifier of the organization associated with the solution. */
+			readonly OrganizationId: string;
+			/** Unique identifier of the post with which the post role is associated. */
+			readonly PostId: string;
+			/** Unique identifier of the post role. */
+			readonly PostRoleId: string;
+			/** Choose the record that the post role relates to. */
+			readonly regardingobjectid_account: string;
+			/** Choose the record that the post role relates to. */
+			readonly regardingobjectid_appointment: string;
+			/** Choose the record that the post role relates to. */
+			readonly regardingobjectid_competitor: string;
+			/** Choose the record that the post role relates to. */
+			readonly regardingobjectid_contact: string;
+			/** Choose the record that the post role relates to. */
+			readonly regardingobjectid_incident: string;
+			/** Choose the record that the post role relates to. */
+			readonly regardingobjectid_knowledgearticle: string;
+			/** Choose the record that the post role relates to. */
+			readonly regardingobjectid_lead: string;
+			/** Choose the record that the post role relates to. */
+			readonly regardingobjectid_opportunity: string;
+			/** Choose the record that the post role relates to. */
+			readonly regardingobjectid_phonecall: string;
+			/** Choose the record that the post role relates to. */
+			readonly regardingobjectid_processsession: string;
+			/** Choose the record that the post role relates to. */
+			readonly regardingobjectid_queue: string;
+			/** Choose the record that the post role relates to. */
+			readonly regardingobjectid_recurringappointmentmaster: string;
+			/** Choose the record that the post role relates to. */
+			readonly regardingobjectid_systemuser: string;
+			/** Choose the record that the post role relates to. */
+			readonly regardingobjectid_task: string;
+			/** Choose the record that the post role relates to. */
+			readonly regardingobjectid_team: string;
+			/** Select the role type for the post. */
+			readonly Type: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace PostRole {
+		enum RegardingObjectTypeCode {
+		}
 		enum Type {
 			/** 2 */
 			Mentioning,
@@ -99,4 +141,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

@@ -64,6 +64,8 @@ var OptionSet;
 			Training_failed: 326340004,
 			Training_in_progress: 326340005
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

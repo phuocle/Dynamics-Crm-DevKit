@@ -203,6 +203,153 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Exchange rate for the currency associated with the entity with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			readonly msdyn_AccountCustomer: string;
+			readonly msdyn_AccountVendor: string;
+			readonly msdyn_ActChargeableBilledSalesAmount: string;
+			/** Value of the Actual Chargeable Billed Sales Amount in base currency. */
+			readonly msdyn_actchargeablebilledsalesamount_Base: string;
+			readonly msdyn_ActChargeableBilledSalesQuantity: string;
+			readonly msdyn_ActChargeableCostAmount: string;
+			/** Value of the Actual Chargeable Cost Amount in base currency. */
+			readonly msdyn_actchargeablecostamount_Base: string;
+			readonly msdyn_ActChargeableCostQuantity: string;
+			readonly msdyn_ActChargeableUnbilledSalesAmount: string;
+			/** Value of the Actual Chargeable Unbilled Sales Amount in base currency. */
+			readonly msdyn_actchargeableunbilledsalesamount_Base: string;
+			readonly msdyn_ActChargeableUnbilledSalesQuantity: string;
+			readonly msdyn_ActNoChargeBilledSalesAmount: string;
+			/** Value of the Actual No Charge Billed Sales Amount in base currency. */
+			readonly msdyn_actnochargebilledsalesamount_Base: string;
+			readonly msdyn_ActNoChargeBilledSalesQuantity: string;
+			readonly msdyn_ActNoChargeCostAmount: string;
+			/** Value of the Actual No Charge Cost Amount in base currency. */
+			readonly msdyn_actnochargecostamount_Base: string;
+			readonly msdyn_ActNoChargeCostQuantity: string;
+			readonly msdyn_ActNoChargeUnbilledSalesAmount: string;
+			/** Value of the Actual No Charge Unbilled Sales Amount in base currency. */
+			readonly msdyn_actnochargeunbilledsalesamount_Base: string;
+			readonly msdyn_ActNoChargeUnbilledSalesQuantity: string;
+			readonly msdyn_ActNonChargeableCostAmount: string;
+			/** Value of the Actual Non Chargeable Cost Amount in base currency. */
+			readonly msdyn_actnonchargeablecostamount_Base: string;
+			readonly msdyn_ActNonChargeableCostQuantity: string;
+			readonly msdyn_ActNonChargeableUnbilledSalesAmount: string;
+			/** Value of the Actual Non Chargeable Unbilled Sales Amount in base currency. */
+			readonly msdyn_actnonchargeableunbilledsalesamount_Base: string;
+			readonly msdyn_ActNonChargeableUnbilledSalesQuantity: string;
+			readonly msdyn_bookableresource: string;
+			readonly msdyn_ContactCustomer: string;
+			readonly msdyn_ContactVendor: string;
+			readonly msdyn_CustomerType: string;
+			/** Enter the transaction date of the business event. */
+			readonly msdyn_DocumentDate_UtcDateOnly: string;
+			readonly msdyn_earnedrevenue: string;
+			/** Value of the Earned Revenue in base currency. */
+			readonly msdyn_earnedrevenue_Base: string;
+			/** Enter the end date for this transaction. */
+			readonly msdyn_EndDate_UtcDateOnly: string;
+			readonly msdyn_EstChargeableBilledSalesAmount: string;
+			/** Value of the Estimated Chargeable Billed Sales Amount in base currency. */
+			readonly msdyn_estchargeablebilledsalesamount_Base: string;
+			readonly msdyn_EstChargeableBilledSalesQuantity: string;
+			readonly msdyn_EstChargeableCostAmount: string;
+			/** Value of the Estimated Chargeable Cost Amount in base currency. */
+			readonly msdyn_estchargeablecostamount_Base: string;
+			readonly msdyn_EstChargeableCostQuantity: string;
+			readonly msdyn_EstChargeableUnbilledSalesAmount: string;
+			/** Value of the Estimated Chargeable Unbilled Sales Amount in base currency. */
+			readonly msdyn_estchargeableunbilledsalesamount_Base: string;
+			readonly msdyn_EstChargeableUnbilledSalesQuantity: string;
+			readonly msdyn_Estimate: string;
+			readonly msdyn_estimatelineid: string;
+			readonly msdyn_EstNoChargeBilledSalesAmount: string;
+			/** Value of the Estimated No Charge Billed Sales Amount in base currency. */
+			readonly msdyn_estnochargebilledsalesamount_Base: string;
+			readonly msdyn_EstNoChargeBilledSalesQuantity: string;
+			readonly msdyn_EstNoChargeCostAmount: string;
+			/** Value of the Estimated No Charge Cost Amount in base currency. */
+			readonly msdyn_estnochargecostamount_Base: string;
+			readonly msdyn_EstNoChargeCostQuantity: string;
+			readonly msdyn_EstNoChargeUnbilledSalesAmount: string;
+			/** Value of the Estimated No Charge Unbilled Sales Amount in base currency. */
+			readonly msdyn_estnochargeunbilledsalesamount_Base: string;
+			readonly msdyn_EstNoChargeUnbilledSalesQuantity: string;
+			readonly msdyn_EstNonChargeableCostAmount: string;
+			/** Value of the Estimated Non Chargeable Cost Amount in base currency. */
+			readonly msdyn_estnonchargeablecostamount_Base: string;
+			readonly msdyn_EstNonChargeableCostQuantity: string;
+			readonly msdyn_EstNonChargeableUnbilledSalesAmount: string;
+			/** Value of the Estimated Non Chargeable Unbilled Sales Amount in base currency. */
+			readonly msdyn_estnonchargeableunbilledsalesamount_Base: string;
+			readonly msdyn_EstNonChargeableUnbilledSalesQuantity: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_factId: string;
+			readonly msdyn_FactType: string;
+			readonly msdyn_grossmargin: string;
+			/** Value of the Gross Margin in base currency. */
+			readonly msdyn_grossmargin_Base: string;
+			/** The name of the custom entity. */
+			readonly msdyn_name: string;
+			readonly msdyn_Product: string;
+			readonly msdyn_Project: string;
+			readonly msdyn_ResourceCategory: string;
+			readonly msdyn_SalesContract: string;
+			/** (Deprecated) */
+			readonly msdyn_SalesContractLine: string;
+			/** Unique identifier for Project Contract Line associated with Fact. */
+			readonly msdyn_SalesContractLineId: string;
+			/** Enter the start date. */
+			readonly msdyn_StartDate_UtcDateOnly: string;
+			readonly msdyn_Task: string;
+			readonly msdyn_totalcost: string;
+			/** Value of the Total Cost in base currency. */
+			readonly msdyn_totalcost_Base: string;
+			readonly msdyn_totalhours: string;
+			readonly msdyn_TransactionCategory: string;
+			readonly msdyn_TransactionClassification: string;
+			readonly msdyn_VendorType: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the Fact */
+			readonly statecode: string;
+			/** Reason for the status of the Fact */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Shows the currency associated with the entity. */
+			readonly TransactionCurrencyId: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -243,6 +390,8 @@ declare namespace OptionSet {
 			/** 192350002 */
 			Contact
 		}
+		enum OwnerIdType {
+		}
 		enum statecode {
 			/** 0 */
 			Active,
@@ -273,4 +422,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

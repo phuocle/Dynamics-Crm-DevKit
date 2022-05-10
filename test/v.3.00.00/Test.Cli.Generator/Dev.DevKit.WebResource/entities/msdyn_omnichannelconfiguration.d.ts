@@ -587,6 +587,90 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Default language in which customer's messages are translated for an org */
+			readonly msdyn_defaultAgentInputLanguage: string;
+			/** Lookup to display DND presence. */
+			readonly msdyn_dnd_presence_lookup: string;
+			/** Setting to change advance entity routing for the org. */
+			readonly msdyn_enable_advance_entity_routing: string;
+			/** Setting to change agent status when agent rejects a notification. */
+			readonly msdyn_enable_agent_reject_notifications: string;
+			/** Setting to change agent status when a notification has been missed. */
+			readonly msdyn_enable_missed_notifications: string;
+			/** Enable consult pane */
+			readonly msdyn_enable_new_consult_exp: string;
+			/** Enables supervisor assign feature for the org */
+			readonly msdyn_enable_supervisor_assign: string;
+			/** Enables supervisor monitor feature for the org */
+			readonly msdyn_enable_supervisor_monitor: string;
+			/** Enables supervisor transfer feature for the org */
+			readonly msdyn_enable_supervisor_transfer: string;
+			/** Setting to change unified routing diagnostic for the org. */
+			readonly msdyn_enable_unified_routing_diagnostic: string;
+			/** Enables self service feature for the org */
+			readonly msdyn_enable_visitorjourney: string;
+			/** Enable markdown support for messages */
+			readonly msdyn_enablemarkdown: string;
+			/** Enable new conversation form feature */
+			readonly msdyn_enablenewconversationform: string;
+			/** Enable real time translation feature for the org */
+			readonly msdyn_EnableRealTimeTranslation: string;
+			/** Enable sound notifications feature */
+			readonly msdyn_enablesoundnotifications: string;
+			/** Lookup to display inactive presence settings. */
+			readonly msdyn_inactive_presence_lookup: string;
+			readonly msdyn_isdefaultpersonamapped: string;
+			/** Allow agents to create personal sound settings */
+			readonly msdyn_ispersonalizationofsoundenabled: string;
+			/** Enable personal messages feature for the org */
+			readonly msdyn_isPersonalMessagesEnabled: string;
+			readonly msdyn_ispersonasecurityrolemappingenabled: string;
+			/** Enable Skill Based Routing for Agents & Supervisors */
+			readonly msdyn_IsSkillBasedRoutingEnabled: string;
+			/** This will enable agents to view and update skills for a conversation. */
+			readonly msdyn_IsUpdateSkillsEnabled: string;
+			/** Mask agent data */
+			readonly msdyn_maskforagent: string;
+			/** Mask customer data */
+			readonly msdyn_maskforcustomer: string;
+			/** The name of the custom entity. */
+			readonly msdyn_name: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_omnichannelconfigurationId: string;
+			/** Field to host sound form control */
+			readonly msdyn_SoundFormControl: string;
+			/** Webresource URL used for real time translation of the messages */
+			readonly msdyn_translationwebresourceurl: string;
+			/** Unique identifier for the organization */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Status of the Omnichannel Configuration */
+			readonly statecode: string;
+			/** Reason for the status of the Omnichannel Configuration */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -711,4 +795,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

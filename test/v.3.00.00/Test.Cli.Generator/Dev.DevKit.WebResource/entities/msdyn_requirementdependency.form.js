@@ -75,6 +75,8 @@ var OptionSet;
 		msdyn_dependencytype : {
 			Start_After_End: 192350000
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

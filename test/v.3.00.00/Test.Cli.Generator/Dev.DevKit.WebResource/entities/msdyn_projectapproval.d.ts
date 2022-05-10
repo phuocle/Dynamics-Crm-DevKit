@@ -240,6 +240,119 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Exchange rate for the currency associated with the entity with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Shows the Approval Set that the transaction references. */
+			readonly msdyn_ApprovalSet: string;
+			/** Shows the name of the approver. */
+			readonly msdyn_ApprovedBy: string;
+			/** Shows the date of the approval. */
+			readonly msdyn_ApprovedOn_UtcDateOnly: string;
+			/** Billing type for the project approval line. */
+			readonly msdyn_BillingType: string;
+			/** Shows the resource that the entry is submitted for. */
+			readonly msdyn_bookableresource: string;
+			/** Shows the cost amount of the transaction. */
+			readonly msdyn_costamount: string;
+			/** Value of the Cost Amount in base currency. */
+			readonly msdyn_costamount_Base: string;
+			/** Shows the cost price of the transaction. */
+			readonly msdyn_CostPrice: string;
+			/** Value of the Cost Price in base currency. */
+			readonly msdyn_costprice_Base: string;
+			/** Shows the hours submitted for the transaction. */
+			readonly msdyn_CostQuantity: string;
+			/** Shows the date of the transaction. */
+			readonly msdyn_date_UtcDateOnly: string;
+			/** Shows the entry type of the transaction. */
+			readonly msdyn_EntryType: string;
+			/** Shows the expense category of the transaction. */
+			readonly msdyn_ExpenseCategory: string;
+			/** Expense Entry Id. */
+			readonly msdyn_ExpenseEntry: string;
+			/** Shows the external comments entered for the transaction. */
+			readonly msdyn_ExternalComments: string;
+			/** Shows whether the transaction has a receipt. */
+			readonly msdyn_hasreceipt: string;
+			/** Shows the internal comments entered for the transaction. */
+			readonly msdyn_InternalComments: string;
+			/** Shows whether the transaction was entered by a journal. */
+			readonly msdyn_JournalTransaction: string;
+			/** Shows the manager of the person who submitted the transaction. */
+			readonly msdyn_Manager: string;
+			/** The name of the custom entity. */
+			readonly msdyn_name: string;
+			/** Shows the project for the transaction. */
+			readonly msdyn_Project: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_projectapprovalId: string;
+			/** Shows the project task for the transaction. */
+			readonly msdyn_ProjectTask: string;
+			/** Shows the stage of the record. */
+			readonly msdyn_recordstage: string;
+			/** Shows the reference ID for the expense entry. */
+			readonly msdyn_referenceexpenseid: string;
+			/** Shows the journal line ID for the journal transaction. */
+			readonly msdyn_referencejournalline: string;
+			readonly msdyn_referencetimeid: string;
+			/** Shows the role for the resource for this transaction. */
+			readonly msdyn_ResourceCategory: string;
+			/** Shows the sales amount of the transaction. */
+			readonly msdyn_salesamount: string;
+			/** Value of the Sales Amount in base currency. */
+			readonly msdyn_salesamount_Base: string;
+			/** Shows the sales price of the transaction. */
+			readonly msdyn_SalesPrice: string;
+			/** Value of the Sales Price in base currency. */
+			readonly msdyn_salesprice_Base: string;
+			/** Shows the billable hours for the transaction. */
+			readonly msdyn_SalesQuantity: string;
+			/** Resource that has submitted the entry for approval. */
+			readonly msdyn_SubmittedBy: string;
+			/** Time Entry Id. */
+			readonly msdyn_TimeEntry: string;
+			/** Shows the transaction category. */
+			readonly msdyn_TransactionCategory: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the ApprovalsTable */
+			readonly statecode: string;
+			/** Reason for the status of the ApprovalsTable */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Shows the currency associated with the entity. */
+			readonly TransactionCurrencyId: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -276,6 +389,8 @@ declare namespace OptionSet {
 			/** 0 */
 			Submitted
 		}
+		enum OwnerIdType {
+		}
 		enum statecode {
 			/** 0 */
 			Active,
@@ -306,4 +421,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

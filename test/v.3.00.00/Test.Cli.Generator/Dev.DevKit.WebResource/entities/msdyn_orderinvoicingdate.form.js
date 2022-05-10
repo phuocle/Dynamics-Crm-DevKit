@@ -77,6 +77,8 @@ var OptionSet;
 			Processed: 690970001,
 			Scheduled: 690970000
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

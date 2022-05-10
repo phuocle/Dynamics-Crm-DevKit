@@ -74,6 +74,53 @@ declare namespace DevKit {
 		Version: string;
 		/** Version number of the Custom Control. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Authoring Manifest of the CustomControl. */
+			readonly AuthoringManifest: string;
+			/** Custom control data in JSON format. */
+			readonly ClientJson: string;
+			/** Compatible Data Types For Custom Controls */
+			readonly CompatibleDataTypes: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Unique identifier of the Custom Control for the Microsoft Dynamics 365. */
+			readonly CustomControlId: string;
+			/** For internal use only. */
+			readonly CustomControlIdUnique: string;
+			/** Version in which the form is introduced. */
+			readonly IntroducedVersion: string;
+			readonly IsManaged: string;
+			/** Manifest of the CustomControl. */
+			readonly Manifest: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Name of the custom control. */
+			readonly Name: string;
+			/** Unique identifier of the organization associated with the custom control. */
+			readonly OrganizationId: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** Supported platforms of the CustomControl. */
+			readonly SupportedPlatform: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** For internal use only. */
+			readonly Version: string;
+			/** Version number of the Custom Control. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -106,4 +153,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

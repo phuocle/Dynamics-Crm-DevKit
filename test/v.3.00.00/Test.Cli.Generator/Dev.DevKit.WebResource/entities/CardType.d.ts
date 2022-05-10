@@ -96,6 +96,75 @@ declare namespace DevKit {
 		/** Exchange rate for the currency associated with the CardType with respect to the base currency. */
 		TransactionCurrencyId: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly Actions: string;
+			/** AdaptiveCard template. */
+			readonly AdaptiveCardTemplate: string;
+			/** Bolean option for a cardtype. */
+			readonly BoolCardOption: string;
+			/** The name of the custom entity. */
+			readonly CardName: string;
+			/** The CardType ENUM value. */
+			readonly CardType1: string;
+			/** The CardTypeIcon of the card. */
+			readonly CardTypeIcon: string;
+			/** Unique identifier for entity instances */
+			readonly CardTypeId: string;
+			/** Determines on which client is this card available on. */
+			readonly ClientAvailability: string;
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Exchange rate for the currency associated with the CardType with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** GroupCategory dictates the grouping of cards in the Assistant. */
+			readonly GroupCategory: string;
+			/** Specifies the card group type */
+			readonly GroupType: string;
+			/** Specifies if the card type has snooze dismiss */
+			readonly HasSnoozeDismiss: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Any int option for a cardtype. */
+			readonly IntCardOption: string;
+			/** IsBaseCard */
+			readonly IsBaseCard: string;
+			/** IsEnabled */
+			readonly IsEnabled: string;
+			/** IsLiveOnly */
+			readonly IsLiveOnly: string;
+			/** IsPreviewCard */
+			readonly IsPreviewCard: string;
+			/** This column is updated by the Plugin based on the last fetched data. */
+			readonly LastSyncTime_UtcDateAndTime: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** The Priority of the CardType */
+			readonly Priority: string;
+			/** The publisher name of card type */
+			readonly PublisherName: string;
+			/** This column is updated by the Plugin based on the last fetched data. */
+			readonly ScheduleTime_TimezoneDateAndTime: string;
+			/** The soft title of the card. */
+			readonly SoftTitle: string;
+			/** Any string option for a cardtype. */
+			readonly StringCardOption: string;
+			/** The summary text of the card. */
+			readonly SummaryText: string;
+			/** Exchange rate for the currency associated with the CardType with respect to the base currency. */
+			readonly TransactionCurrencyId: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -126,4 +195,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

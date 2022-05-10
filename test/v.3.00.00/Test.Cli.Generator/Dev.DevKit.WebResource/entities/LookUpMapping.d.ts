@@ -73,6 +73,52 @@ declare namespace DevKit {
 		readonly SupportingSolutionId: string;
 		/** Unique identifier of the transformation parameter mapping with which this lookup mapping is associated. */
 		TransformationParameterMappingId: string;
+		readonly FormattedValue: {
+			/** Unique identifier of the column mapping with which this lookup mapping is associated. */
+			readonly ColumnMappingId: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier of the user who created the lookup mapping. */
+			readonly CreatedBy: string;
+			/** Date and time when the lookup mapping was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the lookupmapping. */
+			readonly CreatedOnBehalfBy: string;
+			/** Version in which the component is introduced. */
+			readonly IntroducedVersion: string;
+			/** Information that specifies whether this component is managed. */
+			readonly IsManaged: string;
+			/** Name of the field with which the lookup is associated. */
+			readonly LookUpAttributeName: string;
+			/** Name of the entity with which the lookup is associated. */
+			readonly LookUpEntityName: string;
+			/** Unique identifier of the lookup mapping. */
+			readonly LookUpMappingId: string;
+			/** Unique identifier of the LookUp Mapping. */
+			readonly LookUpMappingIdUnique: string;
+			/** Lookup source code for lookup mapping. */
+			readonly LookUpSourceCode: string;
+			/** Unique identifier of the user who last modified the lookup mapping. */
+			readonly ModifiedBy: string;
+			/** Date and time when the lookup mapping was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the lookupmapping. */
+			readonly ModifiedOnBehalfBy: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Information about whether the lookup mapping has to be processed. */
+			readonly ProcessCode: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** Status of the lookup mapping. */
+			readonly StateCode: string;
+			/** Reason for the status of the lookup mapping. */
+			readonly StatusCode: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** Unique identifier of the transformation parameter mapping with which this lookup mapping is associated. */
+			readonly TransformationParameterMappingId: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -127,4 +173,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

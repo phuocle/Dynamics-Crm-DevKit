@@ -115,7 +115,7 @@ var DevKit;
 		}
 		msdyn_configuration.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -136,6 +136,8 @@ var OptionSet;
 			Retrieve_Resources_Query: 192350002,
 			Schedule_Assistant_Filter_Layout: 192350003,
 			Schedule_Assistant_Retrieve_Constraints_Query: 192350004
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

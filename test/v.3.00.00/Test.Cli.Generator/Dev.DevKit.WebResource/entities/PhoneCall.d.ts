@@ -18,8 +18,11 @@ declare namespace DevKit {
 			phone_call_details: DevKit.Controls.Section;
 			tab_2_section_2: DevKit.Controls.Section;
 		}
-		interface tab_tab_call_summary_Sections {
+		interface tab_tab_ci_call_summary_Sections {
 			tab_ci_section_call_summary: DevKit.Controls.Section;
+		}
+		interface tab_tab_ci_notes_Sections {
+			tab_ci_section_notes: DevKit.Controls.Section;
 		}
 		interface tab_tab_notes_Sections {
 			timeline_section: DevKit.Controls.Section;
@@ -27,15 +30,19 @@ declare namespace DevKit {
 		interface tab_phonecall extends DevKit.Controls.ITab {
 			Section: tab_phonecall_Sections;
 		}
-		interface tab_tab_call_summary extends DevKit.Controls.ITab {
-			Section: tab_tab_call_summary_Sections;
+		interface tab_tab_ci_call_summary extends DevKit.Controls.ITab {
+			Section: tab_tab_ci_call_summary_Sections;
+		}
+		interface tab_tab_ci_notes extends DevKit.Controls.ITab {
+			Section: tab_tab_ci_notes_Sections;
 		}
 		interface tab_tab_notes extends DevKit.Controls.ITab {
 			Section: tab_tab_notes_Sections;
 		}
 		interface Tabs {
 			phonecall: tab_phonecall;
-			tab_call_summary: tab_tab_call_summary;
+			tab_ci_call_summary: tab_tab_ci_call_summary;
+			tab_ci_notes: tab_tab_ci_notes;
 			tab_notes: tab_tab_notes;
 		}
 		interface Body {
@@ -57,6 +64,8 @@ declare namespace DevKit {
 			Subject: DevKit.Controls.String;
 			/** Type a short description about the objective or primary topic of the phone call. */
 			Subject1: DevKit.Controls.String;
+			/** Type a short description about the objective or primary topic of the phone call. */
+			Subject2: DevKit.Controls.String;
 			/** Enter the account, contact, lead, or user recipients of the phone call. */
 			to: DevKit.Controls.Lookup;
 		}
@@ -507,16 +516,300 @@ declare namespace DevKit {
 		readonly VersionNumber: number;
 		/** The array of object that can cast object to ActivityPartyApi class */
 		ActivityParties: Array<unknown>;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly ActivityAdditionalParams: string;
+			/** Unique identifier of the phone call activity. */
+			readonly ActivityId: string;
+			/** Type the number of minutes spent on the phone call. The duration is used in reporting. */
+			readonly ActualDurationMinutes: string;
+			/** Enter the actual end date and time of the phone call. By default, it displays the date and time when the activity was completed or canceled, but can be edited to capture the actual duration of the phone call. */
+			readonly ActualEnd_UtcDateOnly: string;
+			/** Enter the actual start date and time for the phone call. By default, it displays the date and time when the activity was created, but can be edited to capture the actual duration of the phone call. */
+			readonly ActualStart_UtcDateOnly: string;
+			/** Type a category to identify the phone call type, such as lead gathering or customer follow-up, to tie the phone call to a business group or function. */
+			readonly Category: string;
+			/** Shows who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Type additional information to describe the phone call, such as the primary message or the products and services discussed. */
+			readonly Description: string;
+			/** Select the direction of the phone call as incoming or outbound. */
+			readonly DirectionCode: string;
+			/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
+			readonly ExchangeRate: string;
+			/** Unique identifier of the data import or data migration that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Information which specifies whether the phone call activity was billed as part of resolving a case. */
+			readonly IsBilled: string;
+			/** Information regarding whether the activity is a regular activity type or event type. */
+			readonly IsRegularActivity: string;
+			/** Indication which specifies if the phone call activity was created by a workflow rule. */
+			readonly IsWorkflowCreated: string;
+			/** Contains the date and time stamp of the last on hold time. */
+			readonly LastOnHoldTime_UtcDateAndTime: string;
+			/** Select whether a voice mail was left for the person. */
+			readonly LeftVoiceMail: string;
+			/** Shows who last updated the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who last updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Shows how long, in minutes, that the record was on hold. */
+			readonly OnHoldTime: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier of the business unit that owns the phone call activity. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the team that owns the phone call activity. */
+			readonly OwningTeam: string;
+			/** Unique identifier of the user that owns the phone call activity. */
+			readonly OwningUser: string;
+			/** Type the phone number. */
+			readonly PhoneNumber: string;
+			/** Select the priority so that preferred customers or critical issues are handled quickly. */
+			readonly PriorityCode: string;
+			/** Shows the ID of the process. */
+			readonly ProcessId: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_account_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_bookableresourcebooking_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_bookableresourcebookingheader_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_bulkoperation_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_campaign_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_campaignactivity_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_contact_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_contract_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_entitlement_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_entitlementtemplate_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_incident_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_invoice_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_knowledgearticle_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_knowledgebaserecord_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_lead_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_agreement_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_agreementbookingdate_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_agreementbookingincident_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_agreementbookingproduct_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_agreementbookingservice_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_agreementbookingservicetask_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_agreementbookingsetup_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_agreementinvoicedate_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_agreementinvoiceproduct_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_agreementinvoicesetup_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_bookingalertstatus_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_bookingrule_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_bookingtimestamp_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_customerasset_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_fieldservicesetting_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_incidenttypecharacteristic_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_incidenttypeproduct_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_incidenttypeservice_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_inventoryadjustment_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_inventoryadjustmentproduct_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_inventoryjournal_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_inventorytransfer_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_payment_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_paymentdetail_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_paymentmethod_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_paymentterm_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_playbookinstance_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_postalbum_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_postalcode_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_processnotes_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_productinventory_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_projectteam_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_purchaseorder_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_purchaseorderbill_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_purchaseorderproduct_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_purchaseorderreceipt_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_purchaseorderreceiptproduct_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_purchaseordersubstatus_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_quotebookingincident_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_quotebookingproduct_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_quotebookingservice_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_quotebookingservicetask_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_resourceterritory_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_rma_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_rmaproduct_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_rmareceipt_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_rmareceiptproduct_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_rmasubstatus_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_rtv_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_rtvproduct_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_rtvsubstatus_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_salessuggestion_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_shipvia_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_systemuserschedulersetting_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_timegroup_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_timegroupdetail_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_timeoffrequest_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_warehouse_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_workorder_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_workordercharacteristic_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_workorderincident_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_workorderproduct_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_workorderresourcerestriction_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_workorderservice_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_msdyn_workorderservicetask_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_opportunity_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_quote_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_salesorder_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_site_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_uii_action_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_uii_hostedapplication_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_uii_nonhostedapplication_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_uii_option_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_uii_savedsession_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_uii_workflow_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_uii_workflowstep_phonecall: string;
+			/** Unique identifier of the object with which the phone call activity is associated. */
+			readonly regardingobjectid_uii_workflow_workflowstep_mapping_phonecall: string;
+			/** Scheduled duration of the phone call activity, specified in minutes. */
+			readonly ScheduledDurationMinutes: string;
+			/** Enter the expected due date and time. */
+			readonly ScheduledEnd_UtcDateAndTime: string;
+			/** Enter the expected due date and time. */
+			readonly ScheduledStart_UtcDateAndTime: string;
+			/** Unique identifier for an associated service. */
+			readonly ServiceId: string;
+			/** Choose the service level agreement (SLA) that you want to apply to the Phone Call record. */
+			readonly SLAId: string;
+			/** Last SLA that was applied to this Phone Call. This field is for internal use only. */
+			readonly SLAInvokedId: string;
+			/** Shows the date and time by which the activities are sorted. */
+			readonly SortDate_UtcDateAndTime: string;
+			/** Shows the ID of the stage. */
+			readonly StageId: string;
+			/** Shows whether the phone call is open, completed, or canceled. Completed and canceled phone calls are read-only and can't be edited. */
+			readonly StateCode: string;
+			/** Select the phone call's status. */
+			readonly StatusCode: string;
+			/** Type a subcategory to identify the phone call type and relate the activity to a specific product, sales region, business group, or other function. */
+			readonly Subcategory: string;
+			/** Type a short description about the objective or primary topic of the phone call. */
+			readonly Subject: string;
+			/** For internal use only. */
+			readonly SubscriptionId: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			readonly TransactionCurrencyId: string;
+			/** For internal use only. */
+			readonly TraversedPath: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version number of the phone call activity. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace PhoneCall {
 		enum ActivityTypeCode {
-			/** 10086 */
+			/** 10088 */
 			Activity_record_for_the_Teams_chat,
 			/** 4201 */
 			Appointment,
-			/** 10404 */
+			/** 10473 */
 			Booking_Alert,
 			/** 4402 */
 			Campaign_Activity,
@@ -524,13 +817,13 @@ declare namespace OptionSet {
 			Campaign_Response,
 			/** 4206 */
 			Case_Resolution,
-			/** 10707 */
+			/** 10743 */
 			Conversation,
-			/** 10313 */
+			/** 10330 */
 			Customer_Voice_alert,
-			/** 10323 */
+			/** 10340 */
 			Customer_Voice_survey_invite,
-			/** 10325 */
+			/** 10342 */
 			Customer_Voice_survey_response,
 			/** 4202 */
 			Email,
@@ -542,11 +835,11 @@ declare namespace OptionSet {
 			Opportunity_Close,
 			/** 4209 */
 			Order_Close,
-			/** 10817 */
+			/** 10857 */
 			Outbound_message,
 			/** 4210 */
 			Phone_Call,
-			/** 10434 */
+			/** 10489 */
 			Project_Service_Approval,
 			/** 4406 */
 			Quick_Campaign,
@@ -556,10 +849,12 @@ declare namespace OptionSet {
 			Recurring_Appointment,
 			/** 4214 */
 			Service_Activity,
-			/** 10721 */
+			/** 10760 */
 			Session,
 			/** 4212 */
 			Task
+		}
+		enum OwnerIdType {
 		}
 		enum PriorityCode {
 			/** 2 */
@@ -568,6 +863,8 @@ declare namespace OptionSet {
 			Low,
 			/** 1 */
 			Normal
+		}
+		enum RegardingObjectTypeCode {
 		}
 		enum StateCode {
 			/** 2 */
@@ -605,4 +902,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

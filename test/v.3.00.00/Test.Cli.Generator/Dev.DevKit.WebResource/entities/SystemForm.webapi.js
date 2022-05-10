@@ -121,7 +121,7 @@ var DevKit;
 		}
 		systemform.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -149,6 +149,8 @@ var OptionSet;
 			AirForm: 1,
 			ClassicForm: 0,
 			ConvertedICForm: 2
+		},
+		ObjectTypeCode : {
 		},
 		Type : {
 			AppointmentBook: 1,

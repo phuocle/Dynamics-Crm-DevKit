@@ -146,7 +146,7 @@ var DevKit;
 		}
 		queue.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -190,6 +190,8 @@ var OptionSet;
 		OutgoingEmailDeliveryMethod : {
 			None: 0,
 			Server_Side_Synchronization_or_Email_Router: 2
+		},
+		OwnerIdType : {
 		},
 		QueueTypeCode : {
 			Default_Value: 1

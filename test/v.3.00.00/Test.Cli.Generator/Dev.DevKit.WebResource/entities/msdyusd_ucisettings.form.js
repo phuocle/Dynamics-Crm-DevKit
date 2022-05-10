@@ -73,6 +73,8 @@ var OptionSet;
 			Air: 0,
 			Unified_Blue: 1
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

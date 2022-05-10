@@ -224,7 +224,7 @@ var DevKit;
 		}
 		quote.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -238,6 +238,8 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.Quote = {
+		CustomerIdType : {
+		},
 		FreightTermsCode : {
 			FOB: 1,
 			No_Charge: 2
@@ -272,6 +274,8 @@ var OptionSet;
 			Not_Profitable: 192350002,
 			Profitability_Not_Available: 192350000,
 			Profitable: 192350001
+		},
+		OwnerIdType : {
 		},
 		PaymentTermsCode : {
 			_2_10_Net_30: 2,

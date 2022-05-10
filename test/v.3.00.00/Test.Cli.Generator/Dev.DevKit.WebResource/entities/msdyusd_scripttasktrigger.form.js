@@ -49,6 +49,8 @@ var OptionSet;
 			DNIS: 1,
 			Other: 0
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

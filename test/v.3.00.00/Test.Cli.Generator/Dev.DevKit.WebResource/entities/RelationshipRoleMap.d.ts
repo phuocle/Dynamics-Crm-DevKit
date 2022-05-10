@@ -48,10 +48,35 @@ declare namespace DevKit {
 		/** Unique identifier of the relationship role map. */
 		RelationshipRoleMapId: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the relationship role map. */
+			readonly CreatedBy: string;
+			/** Date and time when the relationship role map was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the relationshiprolemap. */
+			readonly CreatedOnBehalfBy: string;
+			/** Unique identifier of the user who last modified the relationship role map. */
+			readonly ModifiedBy: string;
+			/** Date and time when the relationship role map record was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the relationshiprolemap. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Unique identifier of the organization with which the relationship role map is associated. */
+			readonly OrganizationId: string;
+			/** Unique identifier of the relationship role. This relationship role is only valid in a relationship between an entity of type specified in the primaryobjecttypecode property and an entity of type specified in the associateobjecttypecode property. */
+			readonly RelationshipRoleId: string;
+			/** Unique identifier of the relationship role map. */
+			readonly RelationshipRoleMapId: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace RelationshipRoleMap {
+		enum AssociateObjectTypeCode {
+		}
+		enum PrimaryObjectTypeCode {
+		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
 			NotCalculated,
@@ -70,4 +95,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

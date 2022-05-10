@@ -69,6 +69,48 @@ declare namespace DevKit {
 		readonly SupportingSolutionId: string;
 		/** Microsoft Dynamics 365 list value with which to replace the source value. */
 		TargetValue: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the column mapping with which this list value mapping is associated. */
+			readonly ColumnMappingId: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier of the user who created the list value mapping. */
+			readonly CreatedBy: string;
+			/** Date and time when the list value mapping was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the picklistmapping. */
+			readonly CreatedOnBehalfBy: string;
+			/** Version in which the component is introduced. */
+			readonly IntroducedVersion: string;
+			/** Information that specifies whether this component is managed. */
+			readonly IsManaged: string;
+			/** Unique identifier of the user who last modified the list value mapping. */
+			readonly ModifiedBy: string;
+			/** Date and time when the list value mapping was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the picklistmapping. */
+			readonly ModifiedOnBehalfBy: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Unique identifier of the picklist mapping. */
+			readonly PickListMappingId: string;
+			/** Unique identifier of the Pick List Mapping. */
+			readonly PickListMappingIdUnique: string;
+			/** Information about whether the list value mapping needs to be processed. */
+			readonly ProcessCode: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** Source value to be replaced. */
+			readonly SourceValue: string;
+			/** Status of the picklist mapping. */
+			readonly StateCode: string;
+			/** Reason for the status of the picklist mapping. */
+			readonly StatusCode: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** Microsoft Dynamics 365 list value with which to replace the source value. */
+			readonly TargetValue: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -119,4 +161,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

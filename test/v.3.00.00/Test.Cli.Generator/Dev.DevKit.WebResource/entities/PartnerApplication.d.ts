@@ -108,6 +108,48 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version number of the partner application. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Indicates the application role. */
+			readonly ApplicationRole: string;
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Contains the metadata URL. */
+			readonly MetadataUrl: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Name of Partner Application. */
+			readonly Name: string;
+			/** Unique identifier of the organization associated with the record. */
+			readonly OrganizationId: string;
+			/** Unique identifier of the partner application. */
+			readonly PartnerApplicationId: string;
+			/** Principal ID of the partner application. */
+			readonly PrincipalId: string;
+			/** Indicates the realm. */
+			readonly Realm: string;
+			/** Shows the status of the partner application. */
+			readonly StateCode: string;
+			/** Select the partner application's status. */
+			readonly StatusCode: string;
+			/** Shows the tenant ID. */
+			readonly TenantId: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Select whether the partner application uses an authorization server. */
+			readonly UseAuthorizationServer: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version number of the partner application. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -148,4 +190,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

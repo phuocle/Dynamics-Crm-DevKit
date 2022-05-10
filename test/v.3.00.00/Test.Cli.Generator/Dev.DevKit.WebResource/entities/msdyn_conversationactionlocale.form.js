@@ -86,6 +86,8 @@ var OptionSet;
 			zh_HK: 3076,
 			zh_TW: 1028
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

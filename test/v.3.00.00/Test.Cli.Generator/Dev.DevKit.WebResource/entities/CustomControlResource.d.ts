@@ -70,6 +70,49 @@ declare namespace DevKit {
 		VersionRequirement: string;
 		/** Unique identifier of the web resource. */
 		WebResourceId: string;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Unique identifier of the custom control. */
+			readonly CustomControlId: string;
+			/** Unique identifier of the Custom Control Resource. */
+			readonly CustomControlResourceId: string;
+			/** For internal use only. */
+			readonly CustomControlResourceIdUnique: string;
+			/** Version in which the form is introduced. */
+			readonly IntroducedVersion: string;
+			readonly IsManaged: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Name of the custom control resource. */
+			readonly Name: string;
+			/** Unique identifier of the organization associated with the web resource. */
+			readonly OrganizationId: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** For internal use only. */
+			readonly Version: string;
+			/** Version number of the Custom Control Resource. */
+			readonly VersionNumber: string;
+			/** For internal use only. */
+			readonly VersionRequirement: string;
+			/** Unique identifier of the web resource. */
+			readonly WebResourceId: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -102,4 +145,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

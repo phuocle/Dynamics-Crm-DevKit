@@ -125,7 +125,7 @@ var DevKit;
 		}
 		keyvaultreference.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -149,6 +149,8 @@ var OptionSet;
 			Certificate: 1,
 			CertificateWithX5c: 2,
 			Secret: 0
+		},
+		OwnerIdType : {
 		},
 		PreAuthorizedApplicationType : {
 			MicrosoftDataverseFirstParty: 0,

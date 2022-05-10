@@ -384,6 +384,156 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Allowed base presences for the work stream */
+			readonly msdyn_AllowedPresences: Array<string>;
+			/** The API Key equivalent to password of account set up with TeleSign */
+			readonly msdyn_APIKey: string;
+			/** Version number of the API key */
+			readonly msdyn_apikeyversionnumber: string;
+			/** Set the time after which a work item can be assigned to the agent again after he/she has declined the work item or the request has timed out */
+			readonly msdyn_AssignWorkItemAfterDecline: string;
+			/** Set the time after which the work item will be closed if there is no activity on the work item. */
+			readonly msdyn_AutoCloseAfterInactivity: string;
+			/** Time for which the agent's capacity is blocked for wrap up state. After this amount of time the agent's capacity will be released. */
+			readonly msdyn_blockcapacityforwrapup: string;
+			/** The queue created for the bot in the workstream. */
+			readonly msdyn_bot_queue: string;
+			/** The rule added to workstream for bot routing. */
+			readonly msdyn_bot_rule: string;
+			/** The user of the bot. */
+			readonly msdyn_bot_user: string;
+			/** Defines how the work stream will measure capacity consumption */
+			readonly msdyn_capacityformat: string;
+			/** The units of capacity that should be available for an item of this work stream to be processed. */
+			readonly msdyn_CapacityRequired: string;
+			/** Flow URL for Dynamics 365 connector */
+			readonly msdyn_ConnectorsURL: string;
+			/** Conversation mode of chat channels */
+			readonly msdyn_conversationmode: string;
+			/** The Customer Id equivalent to username of account set up with TeleSign */
+			readonly msdyn_CustomerID: string;
+			/** Link the default queue to the workstream. */
+			readonly msdyn_defaultqueue: string;
+			/** Direction to indicate if its an inbound or outbound workstream */
+			readonly msdyn_direction: string;
+			/** Keep same agent for entire conversation */
+			readonly msdyn_enableagentaffinity: string;
+			/** Option for allowing automated messages or not */
+			readonly msdyn_enableautomatedmessages: string;
+			/** Agents can choose to work on items from push-based work streams. */
+			readonly msdyn_enableselectingfrompushbasedworkstreams: string;
+			/** Unique identifier for Workstream Entity Configuration associated with Work Stream. */
+			readonly msdyn_EntityRoutingConfigurationId: string;
+			/** Fall back language to be used for Live chat */
+			readonly msdyn_FallBackLanguage: string;
+			/** Set the time after which the work item should be offered to an agent if the work item has been waiting for input. */
+			readonly msdyn_FollowUpAfterWaiting: string;
+			/** Declare the expected handling time under which work items for this work stream should get resolved */
+			readonly msdyn_handlingtimethreshold: string;
+			/** Indicates whether this is the default workstream or not. */
+			readonly msdyn_isdefault: string;
+			/** The time when Validation api was last run */
+			readonly msdyn_LastValidationOn_TimezoneDateAndTime: string;
+			/** The status of the last Validation results */
+			readonly msdyn_LastValidationStatus: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_liveworkstreamId: string;
+			/** Unique identifier for master entity routing configuration associated with work stream. */
+			readonly msdyn_masterentityroutingconfigurationid: string;
+			/** Matching logic used for Skill Based Routing like Exact Match or Closest match */
+			readonly msdyn_matchinglogic: string;
+			/** Maximum number of concurrent sessions that an agent can work for a work item of a particular stream. */
+			readonly msdyn_MaxConcurrentConnection: string;
+			/** Mode of experience */
+			readonly msdyn_mode: string;
+			/** Name of Work stream */
+			readonly msdyn_name: string;
+			/** Notification type */
+			readonly msdyn_Notification: string;
+			/** Notification association with scenarios */
+			readonly msdyn_notificationscenarioplaceholder: string;
+			/** Consult  notification template scenario */
+			readonly msdyn_notificationtemplate_consult: string;
+			/** Incoming authenticated notification template scenario */
+			readonly msdyn_notificationtemplate_incoming_auth: string;
+			/** Incoming unauthenticated notification template scenario */
+			readonly msdyn_notificationtemplate_incoming_unauth: string;
+			/** supervisorAssign notification template scenario */
+			readonly msdyn_notificationtemplate_supervisorassign: string;
+			/** Transfer notification template scenario */
+			readonly msdyn_notificationtemplate_transfer: string;
+			/** Unique identifier for outbound queue associated with workstream */
+			readonly msdyn_outboundqueueid: string;
+			/** Record identification rule associated to a workstream */
+			readonly msdyn_recordidentificationrule: string;
+			/** Record Identification Validation Rule */
+			readonly msdyn_RecordIdentificationValidationRule: string;
+			/** Link contracts with live work streams. */
+			readonly msdyn_routingcontractid: string;
+			/** Time duration for which notification will be shown to agent. */
+			readonly msdyn_Screenpoptimeout: string;
+			/** Time duration options for notification. */
+			readonly msdyn_Screenpoptimeout_optionSet: string;
+			/** Session association with scenarios */
+			readonly msdyn_sessionscenarioplaceholder: string;
+			/** Default session template scenario */
+			readonly msdyn_sessiontemplate_default: string;
+			/** Skill Attachment Rules Count */
+			readonly msdyn_skillattachmentrulescount: string;
+			/** Last Updated time of rollup field Skill Attachment Rules Count. */
+			readonly msdyn_skillattachmentrulescount_Date_UtcDateAndTime: string;
+			/** State of rollup field Skill Attachment Rules Count. */
+			readonly msdyn_skillattachmentrulescount_State: string;
+			/** SMS Provider */
+			readonly msdyn_smsprovider: string;
+			/** The channel to which this workstream is attached */
+			readonly msdyn_streamsource: string;
+			/** URL for TeleSign Inbound link */
+			readonly msdyn_TelesignInboundURL: string;
+			/** URL for Twilio Inbound link */
+			readonly msdyn_TwilioInboundURL: string;
+			/** Declare the expected waiting time under which work items for this work stream should be assigned to agents */
+			readonly msdyn_waitingtimethreshold: string;
+			/** Specifies the mode i.e Push/Pick for the workstream */
+			readonly msdyn_workdistributionmode: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the Work stream */
+			readonly statecode: string;
+			/** Reason for the status of the Work stream */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -467,6 +617,8 @@ declare namespace OptionSet {
 			Twilio
 		}
 		enum msdyn_streamsource {
+			/** 192450000 */
+			Apple_Messages_for_Business,
 			/** 192390000 */
 			Co_browse,
 			/** 192350002 */
@@ -502,6 +654,8 @@ declare namespace OptionSet {
 			/** 192350000 */
 			Push
 		}
+		enum OwnerIdType {
+		}
 		enum statecode {
 			/** 0 */
 			Active,
@@ -532,4 +686,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

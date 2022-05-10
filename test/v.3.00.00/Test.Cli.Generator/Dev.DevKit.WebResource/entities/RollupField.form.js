@@ -56,6 +56,10 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.RollupField = {
+		EntityForDateAttribute : {
+		},
+		SourceEntity : {
+		},
 		RollupState : {
 			NotCalculated: 0,
 			Calculated: 1,

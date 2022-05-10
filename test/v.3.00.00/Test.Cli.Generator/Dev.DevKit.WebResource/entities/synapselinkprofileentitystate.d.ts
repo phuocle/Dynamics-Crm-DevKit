@@ -1,6 +1,58 @@
 ﻿//@ts-check
 ///<reference path="devkit.d.ts" />
 declare namespace DevKit {
+	namespace Formsynapselinkprofileentitystate_Information {
+		interface Tabs {
+		}
+		interface Body {
+			/** The name of the custom entity. */
+			name: DevKit.Controls.String;
+		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
+	}
+	class Formsynapselinkprofileentitystate_Information extends DevKit.IForm {
+		/**
+		* Information [Main Form]
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form synapselinkprofileentitystate_Information */
+		Body: DevKit.Formsynapselinkprofileentitystate_Information.Body;
+		/** The Process of form synapselinkprofileentitystate_Information */
+		Process: DevKit.Formsynapselinkprofileentitystate_Information.Process;
+		/** The SidePanes of form synapselinkprofileentitystate_Information */
+		SidePanes: DevKit.SidePanes;
+	}
+	namespace Formsynapselinkprofileentitystate_Information2 {
+		interface Tabs {
+		}
+		interface Body {
+			/** The name of the custom entity. */
+			name: DevKit.Controls.String;
+		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
+	}
+	class Formsynapselinkprofileentitystate_Information2 extends DevKit.IForm {
+		/**
+		* Information [Main Form]
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form synapselinkprofileentitystate_Information2 */
+		Body: DevKit.Formsynapselinkprofileentitystate_Information2.Body;
+		/** The Process of form synapselinkprofileentitystate_Information2 */
+		Process: DevKit.Formsynapselinkprofileentitystate_Information2.Process;
+		/** The SidePanes of form synapselinkprofileentitystate_Information2 */
+		SidePanes: DevKit.SidePanes;
+	}
 	class synapselinkprofileentitystateApi {
 		/**
 		* DynamicsCrm.DevKit synapselinkprofileentitystateApi
@@ -91,6 +143,70 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Name of the entity */
+			readonly EntityName1: string;
+			/** Type of the entity */
+			readonly EntityType: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Initial sync data completed time */
+			readonly InitialSyncDataCompletedTime_UtcDateAndTime: string;
+			/** Initial sync metadata created time */
+			readonly InitialSyncMetadataCreatedTime_UtcDateAndTime: string;
+			/** Initial sync process completed time */
+			readonly InitialSyncProcessCompletedTime_UtcDateAndTime: string;
+			/** Initial sync state */
+			readonly InitialSyncState: string;
+			/** Last synced data time */
+			readonly LastSyncedDataTime_UtcDateAndTime: string;
+			/** Last synced data version */
+			readonly LastSyncedDataVersion: string;
+			/** Last synced metadata time */
+			readonly LastSyncedMetadataTime_UtcDateAndTime: string;
+			/** Last synced metadata version */
+			readonly LastSyncedMetadataVersion: string;
+			/** Metadata state */
+			readonly MetadataState: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** The name of the custom entity. */
+			readonly name: string;
+			/** Unique identifier for the organization */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Unique identifier for Synapse Link Profile associated with Synapse Link Profile Entity State. */
+			readonly profile: string;
+			/** Unique identifier for Synapse Link Profile Entity associated with Synapse Link Profile Entity State. */
+			readonly profileentity: string;
+			/** Status of the Synapse Link Profile Entity State */
+			readonly statecode: string;
+			/** Reason for the status of the Synapse Link Profile Entity State */
+			readonly statuscode: string;
+			/** Unique identifier for entity instances */
+			readonly synapselinkprofileentitystateId: string;
+			/** Synapse table creation state */
+			readonly SynapseTableCreationState: string;
+			/** Entity sync state */
+			readonly SyncState: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -189,4 +305,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

@@ -48,6 +48,27 @@ declare namespace DevKit {
 		/** Unique identifier of the organization associated with the ISV configuration XML. */
 		readonly OrganizationId: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Structured XML data representing the customizations. */
+			readonly ConfigXML: string;
+			/** Unique identifier of the user who created the ISV configuration. */
+			readonly CreatedBy: string;
+			/** Date and time when the ISV configuration was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the isvconfig. */
+			readonly CreatedOnBehalfBy: string;
+			/** Unique identifier of the ISV configuration. */
+			readonly IsvConfigId: string;
+			/** Unique identifier of the user who last modified the ISV configuration. */
+			readonly ModifiedBy: string;
+			/** Date and time when the ISV configuration was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the isvconfig. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Unique identifier of the organization associated with the ISV configuration XML. */
+			readonly OrganizationId: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -70,4 +91,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

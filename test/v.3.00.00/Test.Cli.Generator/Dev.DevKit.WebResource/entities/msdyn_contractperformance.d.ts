@@ -137,10 +137,94 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Exchange rate for the currency associated with the entity with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Type the Billed amount for the order. */
+			readonly msdyn_BilledAmount: string;
+			/** Value of the Billed Amount in base currency. */
+			readonly msdyn_billedamount_Base: string;
+			/** Code to identify billing type. */
+			readonly msdyn_BillingTypeCode: string;
+			/** name of billing Type */
+			readonly msdyn_BillingTypeName: string;
+			/** Unique identifier of contractline id. */
+			readonly msdyn_ContractLineId: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_contractperformanceId: string;
+			/** Type the Contracted amount attached with the contract. */
+			readonly msdyn_Contractvalue: string;
+			/** Value of the Contract value in base currency. */
+			readonly msdyn_contractvalue_Base: string;
+			/** Type the Cost incurred amount for the order. */
+			readonly msdyn_CostIncurred: string;
+			/** Value of the Cost Incurred in base currency. */
+			readonly msdyn_costincurred_Base: string;
+			/** 1,000,000,000,000.0000 */
+			readonly msdyn_EstimatedCost: string;
+			/** Value of the Estimated Cost in base currency. */
+			readonly msdyn_estimatedcost_Base: string;
+			/** Expected margin of contract and contractLine */
+			readonly msdyn_ExpectedMargin: string;
+			/** Gross Margin of contract and contract line */
+			readonly msdyn_GrossMargin: string;
+			/** Record is Product Type or not */
+			readonly msdyn_IsProduct: string;
+			/** The name of the custom entity. */
+			readonly msdyn_name: string;
+			/** Choose the related order so that order data and contractPerformance data are linked for reporting and analytics. */
+			readonly msdyn_salesorderid: string;
+			/** Array of transaction classification which converted into string */
+			readonly msdyn_TransactionClassification: string;
+			readonly msdyn_Unit: string;
+			readonly msdyn_UnitPrice: string;
+			/** Value of the Unit Price in base currency. */
+			readonly msdyn_unitprice_Base: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the Contract Performance */
+			readonly statecode: string;
+			/** Reason for the status of the Contract Performance */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Unique identifier of the currency associated with the entity. */
+			readonly TransactionCurrencyId: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace msdyn_contractperformance {
+		enum OwnerIdType {
+		}
 		enum statecode {
 			/** 0 */
 			Active,
@@ -171,4 +255,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

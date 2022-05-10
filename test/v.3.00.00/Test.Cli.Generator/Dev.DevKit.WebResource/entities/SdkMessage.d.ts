@@ -89,6 +89,68 @@ declare namespace DevKit {
 		readonly VersionNumber: number;
 		/** Whether or not the SDK message can be called from a workflow. */
 		readonly WorkflowSdkStepEnabled: boolean;
+		readonly FormattedValue: {
+			/** Information about whether the SDK message is automatically transacted. */
+			readonly AutoTransact: string;
+			/** Identifies where a method will be exposed. 0 - Server, 1 - Client, 2 - both. */
+			readonly Availability: string;
+			/** If this is a categorized method, this is the name, otherwise None. */
+			readonly CategoryName: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier of the user who created the SDK message. */
+			readonly CreatedBy: string;
+			/** Date and time when the SDK message was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the sdkmessage. */
+			readonly CreatedOnBehalfBy: string;
+			/** Customization level of the SDK message. */
+			readonly CustomizationLevel: string;
+			/** Name of the privilege that allows execution of the SDK message */
+			readonly ExecutePrivilegeName: string;
+			/** Indicates whether the SDK message should have its requests expanded per primary entity defined in its filters. */
+			readonly Expand: string;
+			/** Version in which the component is introduced. */
+			readonly IntroducedVersion: string;
+			/** Information about whether the SDK message is active. */
+			readonly IsActive: string;
+			/** Information that specifies whether this component is managed. */
+			readonly IsManaged: string;
+			/** Indicates whether the SDK message is private. */
+			readonly IsPrivate: string;
+			/** Identifies whether an SDK message will be ReadOnly or Read Write. false - ReadWrite, true - ReadOnly . */
+			readonly IsReadOnly: string;
+			/** For internal use only. */
+			readonly IsValidForExecuteAsync: string;
+			/** Unique identifier of the user who last modified the SDK message. */
+			readonly ModifiedBy: string;
+			/** Date and time when the SDK message was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the sdkmessage. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Name of the SDK message. */
+			readonly Name: string;
+			/** Unique identifier of the organization with which the SDK message is associated. */
+			readonly OrganizationId: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Unique identifier of the SDK message entity. */
+			readonly SdkMessageId: string;
+			/** Unique identifier of the SDK message. */
+			readonly SdkMessageIdUnique: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** Indicates whether the SDK message is a template. */
+			readonly Template: string;
+			/** For internal use only. */
+			readonly ThrottleSettings: string;
+			/** Number that identifies a specific revision of the SDK message.  */
+			readonly VersionNumber: string;
+			/** Whether or not the SDK message can be called from a workflow. */
+			readonly WorkflowSdkStepEnabled: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -121,4 +183,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

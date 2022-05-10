@@ -95,6 +95,7 @@ var DevKit;
 			msdyn_iscontentsyncedtostore: { a: 'msdyn_iscontentsyncedtostore' },
 			msdyn_isingestedarticle: { a: 'msdyn_isingestedarticle' },
 			msdyn_keywordsdescsuggestioncontrol: { a: 'msdyn_keywordsdescsuggestioncontrol' },
+			msdyn_retrycountformigrationtocontentstore: { a: 'msdyn_retrycountformigrationtocontentstore' },
 			OverriddenCreatedOn_UtcDateOnly: { a: 'overriddencreatedon' },
 			OwnerId_systemuser: { b: 'ownerid', a: '_ownerid_value', c: 'systemusers', d: 'systemuser' },
 			OwnerId_team: { b: 'ownerid', a: '_ownerid_value', c: 'teams', d: 'team' },
@@ -159,7 +160,7 @@ var DevKit;
 		}
 		knowledgearticle.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -177,6 +178,8 @@ var OptionSet;
 			Archive: 2,
 			Needs_Updating: 0,
 			Republish: 1
+		},
+		OwnerIdType : {
 		},
 		Review : {
 			Approved: 0,

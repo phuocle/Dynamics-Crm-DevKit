@@ -127,7 +127,7 @@ var DevKit;
 		}
 		msdyn_ocoutboundconfiguration.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -142,6 +142,7 @@ var OptionSet;
 (function (OptionSet) {
 	OptionSet.msdyn_ocoutboundconfiguration = {
 		msdyn_channel : {
+			Apple_Messages_for_Business: 192450000,
 			Co_browse: 192390000,
 			Custom: 192350002,
 			Entity_Records: 192350000,
@@ -164,6 +165,8 @@ var OptionSet;
 		msdyn_type : {
 			Create_conversation_on_send: 100000001,
 			Create_conversation_when_customer_responds: 100000000
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

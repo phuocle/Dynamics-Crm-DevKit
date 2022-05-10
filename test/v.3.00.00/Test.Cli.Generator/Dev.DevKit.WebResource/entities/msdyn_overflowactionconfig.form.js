@@ -47,6 +47,8 @@ var OptionSet;
 			End_Conversation: 192350001,
 			Transfer_to_Phone: 192350002
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

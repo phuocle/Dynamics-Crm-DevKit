@@ -1,6 +1,60 @@
 ﻿//@ts-check
 ///<reference path="devkit.d.ts" />
 declare namespace DevKit {
+	namespace FormSuggestion {
+		interface Header extends DevKit.Controls.IHeader {
+			/** Potential revenue */
+			msdyn_potentialrevenue: DevKit.Controls.Money;
+			/** Related record */
+			msdyn_relatedrecord: DevKit.Controls.Lookup;
+			/** Owner Id */
+			OwnerId: DevKit.Controls.Lookup;
+		}
+		interface tab_SUMMARY_TAB_Sections {
+			SOCIAL_PANE: DevKit.Controls.Section;
+			Summary_CadenceWidget: DevKit.Controls.Section;
+			Summary_RecommendedContacts: DevKit.Controls.Section;
+			Summary_Suggestion: DevKit.Controls.Section;
+			Summary_SuggestionWidget: DevKit.Controls.Section;
+		}
+		interface tab_SUMMARY_TAB extends DevKit.Controls.ITab {
+			Section: tab_SUMMARY_TAB_Sections;
+		}
+		interface Tabs {
+			SUMMARY_TAB: tab_SUMMARY_TAB;
+		}
+		interface Body {
+			Tab: Tabs;
+			CadenceWidgetControl: DevKit.Controls.ActionCards;
+			msdyn_qualifiedrecord: DevKit.Controls.Lookup;
+			/** Sales play */
+			msdyn_salesplay: DevKit.Controls.OptionSet;
+			/** Solution area */
+			msdyn_solutionarea: DevKit.Controls.OptionSet;
+			notescontrol: DevKit.Controls.Note;
+			SuggestionWidgetControl: DevKit.Controls.ActionCards;
+		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
+	}
+	class FormSuggestion extends DevKit.IForm {
+		/**
+		* Suggestion [Main Form]
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form Suggestion */
+		Body: DevKit.FormSuggestion.Body;
+		/** The Header section of form Suggestion */
+		Header: DevKit.FormSuggestion.Header;
+		/** The Process of form Suggestion */
+		Process: DevKit.FormSuggestion.Process;
+		/** The SidePanes of form Suggestion */
+		SidePanes: DevKit.SidePanes;
+	}
 	class msdyn_salessuggestionApi {
 		/**
 		* DynamicsCrm.DevKit msdyn_salessuggestionApi
@@ -104,10 +158,91 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** The primary email address for the entity. */
+			readonly EmailAddress: string;
+			/** Exchange rate for the currency associated with the entity with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Customdata JSON */
+			readonly msdyn_customdata: string;
+			/** Expiry date */
+			readonly msdyn_expirydate_UtcDateOnly: string;
+			/** Feedback reason */
+			readonly msdyn_feedbackreason: string;
+			/** Suggestion insight */
+			readonly msdyn_insight: string;
+			/** Model ID */
+			readonly msdyn_modelid: string;
+			/** The name of the custom entity. */
+			readonly msdyn_name: string;
+			/** Potential revenue */
+			readonly msdyn_potentialrevenue: string;
+			/** Value of the potential revenue in base currency. */
+			readonly msdyn_potentialrevenue_Base: string;
+			readonly msdyn_qualifiedrecord: string;
+			/** Related record */
+			readonly msdyn_relatedrecord: string;
+			/** Sales motion */
+			readonly msdyn_salesmotion: string;
+			/** Sales play */
+			readonly msdyn_salesplay: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_salessuggestionId: string;
+			/** Score */
+			readonly msdyn_score: string;
+			/** Solution area */
+			readonly msdyn_solutionarea: string;
+			/** Suggested date */
+			readonly msdyn_suggesteddate_UtcDateOnly: string;
+			/** Suggestion reason */
+			readonly msdyn_suggestionreason: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the Suggestion */
+			readonly statecode: string;
+			/** Reason for the status of the Suggestion */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Unique identifier of the currency associated with the entity. */
+			readonly TransactionCurrencyId: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace msdyn_salessuggestion {
+		enum msdyn_qualifiedrecordIdType {
+		}
+		enum msdyn_relatedrecordIdType {
+		}
 		enum msdyn_salesmotion {
 			/** 1 */
 			Default
@@ -119,6 +254,8 @@ declare namespace OptionSet {
 		enum msdyn_solutionarea {
 			/** 1 */
 			Default
+		}
+		enum OwnerIdType {
 		}
 		enum statecode {
 			/** 1 */
@@ -158,4 +295,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

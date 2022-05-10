@@ -59,6 +59,38 @@ declare namespace DevKit {
 		SolutionName: string;
 		/** Internal use Only */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Command Definition of Non Crud Command */
+			readonly CommandDefinition: string;
+			/** Unique identifier of the Command Definition for the Microsoft Dynamics 365. */
+			readonly CommandDefinitionId: string;
+			/** Command Name of Non Crud Command. */
+			readonly CommandName: string;
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Unique identifier of the data import or data migration that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Unique identifier of the organization associated with the non crud command. */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Primary Entity Logical Name of entity for which command is used */
+			readonly PrimaryEntityLogicalName: string;
+			/** Unique identifier of the solution. */
+			readonly SolutionName: string;
+			/** Internal use Only */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -81,4 +113,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

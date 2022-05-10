@@ -126,7 +126,7 @@ var DevKit;
 		}
 		msfp_satisfactionmetric.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -143,6 +143,8 @@ var OptionSet;
 		msfp_status : {
 			Active: 647390000,
 			InActive: 647390001
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

@@ -629,6 +629,153 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the resource booking. */
+			readonly BookableResourceBookingId: string;
+			/** Select the status of the booking. */
+			readonly BookingStatus: string;
+			/** Select whether the booking is solid or liquid. Solid bookings are firm and cannot be changed whereas liquid bookings can be changed. */
+			readonly BookingType: string;
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Enter the duration of the booking. */
+			readonly Duration: string;
+			/** Enter the end date and time of the booking. */
+			readonly EndTime_UtcDateAndTime: string;
+			/** Exchange rate for the currency associated with the bookableresourcebooking with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Shows the reference to the booking header record that represents the summary of bookings. */
+			readonly Header: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Defines whether this booking accepts changes propagated as cascading changes */
+			readonly msdyn_AcceptCascadeCrewChanges: string;
+			/** Shows the time that work started. */
+			readonly msdyn_ActualArrivalTime_UtcDateAndTime: string;
+			/** Shows the total travel duration. Calculated based on the difference between the Bookable Resource Booking's start time and actual arrival time. */
+			readonly msdyn_ActualTravelDuration: string;
+			/** Agreement Booking Date from where this Booking was generated */
+			readonly msdyn_AgreementBookingDate: string;
+			/** Allow the time of this booking to be displayed on the schedule assistant as available. */
+			readonly msdyn_AllowOverlapping: string;
+			/** Unique identifier for Appointment associated with Bookable Resource Booking. */
+			readonly msdyn_AppointmentBookingId: string;
+			/** The Base travel duration indicates the travel time without traffic */
+			readonly msdyn_BaseTravelDuration: string;
+			/** Shows the method used to create this booking. */
+			readonly msdyn_BookingMethod: string;
+			/** A unique identifier for the booking setup metadata that is associated with a bookable resource booking. */
+			readonly msdyn_BookingSetupMetadataId: string;
+			/** Defines whether changing any of the following fields (Start Time, End Time, Status) should cascade the changes to other bookings on this requirement that have the same start and end time. */
+			readonly msdyn_CascadeCrewChanges: string;
+			/** This field is populated by the Field Service solution to define to which crew a booking is connected. */
+			readonly msdyn_Crew: string;
+			/** Crew Member Type */
+			readonly msdyn_CrewMemberType: string;
+			/** Capacity that needs to take from resource capacity */
+			readonly msdyn_effort: string;
+			/** Estimated Arrival Time */
+			readonly msdyn_EstimatedArrivalTime_UtcDateAndTime: string;
+			/** Estimated Travel Duration */
+			readonly msdyn_EstimatedTravelDuration: string;
+			/** For internal use only. */
+			readonly msdyn_InternalFlags: string;
+			readonly msdyn_Latitude: string;
+			readonly msdyn_Longitude: string;
+			/** In this field you can enter the total miles the resource drove to the job site */
+			readonly msdyn_MilesTraveled: string;
+			/** Internal Use. This field is used to capture the time when the Booking was updated on mobile offline. */
+			readonly msdyn_OfflineTimestamp_UtcDateAndTime: string;
+			/** Prevents time stamp creation if the time stamp was already created on a mobile device. */
+			readonly msdyn_PreventTimestampCreation: string;
+			/** Project of booking detail record */
+			readonly msdyn_projectid: string;
+			/** Project team member of booking detail record */
+			readonly msdyn_projectteamid: string;
+			/** Internal For Quick note pcf control actions */
+			readonly msdyn_quickNoteAction: string;
+			/** Requirement Group */
+			readonly msdyn_requirementgroupid: string;
+			/** Requirement Group Set */
+			readonly msdyn_requirementgroupset: string;
+			/** Resource Category */
+			readonly msdyn_resourcecategoryid: string;
+			/** Unique identifier for Resource associated with Resource Booking */
+			readonly msdyn_ResourceGroup: string;
+			/** Resource Requirement */
+			readonly msdyn_ResourceRequirement: string;
+			/** Unique identifier for Service Appointment associated with Resource Booking. */
+			readonly msdyn_serviceappointment: string;
+			/** This field is used for capturing signature on Mobile (using the Pen Control) */
+			readonly msdyn_Signature: string;
+			/** Shows the automatically generated text of the time slot on the schedule board. */
+			readonly msdyn_SlotText: string;
+			readonly msdyn_TimeGroupDetailSelected: string;
+			/** Shows the total billable duration. If you leave this field blank the system automatically determines the billable duration by calculating the resource journal details. */
+			readonly msdyn_TotalBillableDuration: string;
+			/** Shows the total break duration. If you leave this field blank the system automatically determines the break duration by calculating the resource journal details. */
+			readonly msdyn_TotalBreakDuration: string;
+			/** Shows the total cost for this booking. */
+			readonly msdyn_TotalCost: string;
+			/** Value of the Total Cost in base currency. */
+			readonly msdyn_totalcost_Base: string;
+			/** Shows the total duration that this booking was in progress. */
+			readonly msdyn_TotalDurationInProgress: string;
+			/** Travel Time Calculation */
+			readonly msdyn_TravelTimeCalculationType: string;
+			readonly msdyn_TravelTimeRescheduling: string;
+			/** For internal use only. */
+			readonly msdyn_URSInternalFlags: string;
+			readonly msdyn_WorkLocation: string;
+			/** Unique identifier for Work Order associated with Resource Booking. */
+			readonly msdyn_WorkOrder: string;
+			/** Type a name for the booking. */
+			readonly Name: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Contains the id of the process associated with the entity. */
+			readonly ProcessId: string;
+			/** Shows the resource that is booked. */
+			readonly Resource: string;
+			/** Contains the id of the stage where the entity is located. */
+			readonly StageId: string;
+			/** Enter the start date and time of the booking. */
+			readonly StartTime_UtcDateAndTime: string;
+			/** Status of the Bookable Resource Booking */
+			readonly StateCode: string;
+			/** Reason for the status of the Bookable Resource Booking */
+			readonly StatusCode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Exchange rate for the currency associated with the BookableResourceBooking with respect to the base currency. */
+			readonly TransactionCurrencyId: string;
+			/** A comma separated list of string values representing the unique identifiers of stages in a Business Process Flow Instance in the order that they occur. */
+			readonly TraversedPath: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -693,6 +840,8 @@ declare namespace OptionSet {
 			/** 690970000 */
 			Onsite
 		}
+		enum OwnerIdType {
+		}
 		enum StateCode {
 			/** 0 */
 			Active,
@@ -723,4 +872,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

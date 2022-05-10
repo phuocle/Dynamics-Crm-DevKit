@@ -71,6 +71,50 @@ declare namespace DevKit {
 		ValidationStatus: OptionSet.AppModuleComponentNode.ValidationStatus;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier for entity instances */
+			readonly AppModuleComponentNodeId: string;
+			readonly ComponentDatabaseVersion: string;
+			/** Unique identifier for Model-Driven App component. */
+			readonly ComponentObjectId: string;
+			/** Model-Driven App component type. */
+			readonly ComponentType: string;
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** The name of the AppModuleComponentNode entity. */
+			readonly Name: string;
+			/** Unique identifier for the organization */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Version of Model-Driven App snapshot. */
+			readonly SnapshotVersionNumber: string;
+			/** Status of the AppModuleComponentNode */
+			readonly statecode: string;
+			/** Reason for the status of the Model-Driven App Component Node */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Result of snapshot generation validation. */
+			readonly ValidationResult: string;
+			readonly ValidationStatus: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -111,4 +155,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

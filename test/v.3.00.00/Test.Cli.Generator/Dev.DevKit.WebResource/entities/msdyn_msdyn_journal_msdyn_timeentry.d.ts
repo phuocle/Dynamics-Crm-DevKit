@@ -33,6 +33,12 @@ declare namespace DevKit {
 		readonly msdyn_msdyn_journal_msdyn_timeentryId: string;
 		readonly msdyn_timeentryid: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			readonly msdyn_journalid: string;
+			readonly msdyn_msdyn_journal_msdyn_timeentryId: string;
+			readonly msdyn_timeentryid: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -55,4 +61,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

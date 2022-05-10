@@ -71,6 +71,50 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version number of the authorization server. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier for entity instances */
+			readonly AuthorizationServerId: string;
+			/**  The type of the Authorization Server  */
+			readonly AuthorizationServerType: string;
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Contains the metadata for the authorization server. */
+			readonly Metadata: string;
+			/** Shows the date and time when the metadata was refreshed from the authorization server. */
+			readonly MetadataRefreshedOn_UtcDateAndTime: string;
+			/** Contains the URL for the metadata. */
+			readonly MetadataUrl: string;
+			/** Shows who last updated the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who last updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Type the name of the authorization server. */
+			readonly Name: string;
+			/** Unique identifier for the organization */
+			readonly OrganizationId: string;
+			/** Contains the issuer ID of the authorization server. */
+			readonly PrincipalId: string;
+			/** Indicates the realm. */
+			readonly Realm: string;
+			/** Shows whether the authorization server is active or inactive. */
+			readonly StateCode: string;
+			/** Select the authorization server's status. */
+			readonly StatusCode: string;
+			/** Shows the tenant ID. */
+			readonly TenantId: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version number of the authorization server. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -111,4 +155,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

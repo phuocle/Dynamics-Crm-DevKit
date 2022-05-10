@@ -410,6 +410,8 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.Quote = {
+		CustomerIdType : {
+		},
 		FreightTermsCode : {
 			FOB: 1,
 			No_Charge: 2
@@ -444,6 +446,8 @@ var OptionSet;
 			Not_Profitable: 192350002,
 			Profitability_Not_Available: 192350000,
 			Profitable: 192350001
+		},
+		OwnerIdType : {
 		},
 		PaymentTermsCode : {
 			_2_10_Net_30: 2,

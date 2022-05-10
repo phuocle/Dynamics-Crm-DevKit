@@ -32,6 +32,11 @@ declare namespace DevKit {
 		readonly Date_UtcDateOnly: Date;
 		readonly TimeStamp: number;
 		TimeStampDateMappingId: string;
+		readonly FormattedValue: {
+			readonly Date_UtcDateOnly: string;
+			readonly TimeStamp: string;
+			readonly TimeStampDateMappingId: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -54,4 +59,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

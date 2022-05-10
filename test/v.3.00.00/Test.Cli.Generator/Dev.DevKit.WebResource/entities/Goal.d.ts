@@ -345,6 +345,178 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version number of the goal. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Shows the actual value (Decimal type) achieved towards the target as of the last rolled-up date. This field appears when the metric type of the goal is Amount and the amount data type is Decimal. */
+			readonly ActualDecimal: string;
+			/** Shows the actual value (integer) achieved towards the target as of the last rolled-up date. This field appears when the metric type of the goal is Amount or Count and the amount data type is Integer. */
+			readonly ActualInteger: string;
+			/** Shows the actual value (Money type) achieved towards the target as of the last rolled-up date. This field appears when the metric type of the goal is Amount and the amount data type is Money. */
+			readonly ActualMoney: string;
+			/** Shows the actual value (money type) in base currency to track goal results against the target. */
+			readonly ActualMoney_Base: string;
+			/** Actual Value of the goal. */
+			readonly ActualString: string;
+			/** Data type of the amount. */
+			readonly AmountDataType: string;
+			/** Shows the expected amount for actual value (decimal type) against the target goal. */
+			readonly ComputedTargetAsOfTodayDecimal: string;
+			/** Shows the expected amount for actual value (integer type) against the target goal as of the current date. */
+			readonly ComputedTargetAsOfTodayInteger: string;
+			/** Shows the expected amount for actual value (money type) against the target goal as of the current date. */
+			readonly ComputedTargetAsOfTodayMoney: string;
+			/** Shows the expected amount in base currency for actual value (money type) against the target goal as of the current date. */
+			readonly ComputedTargetAsOfTodayMoney_Base: string;
+			/** Shows the expected value for percentage achieved against the target goal as of the current date. */
+			readonly ComputedTargetAsOfTodayPercentageAchieved: string;
+			/** Select whether only the goal owner's records, or all records, should be rolled up for goal results. */
+			readonly ConsiderOnlyGoalOwnersRecords: string;
+			/** Shows who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Indicates a placeholder rollup field for a decimal value to track a third category of results other than actuals and in-progress results. */
+			readonly CustomRollupFieldDecimal: string;
+			/** Indicates a placeholder rollup field for an integer value to track a third category of results other than actuals and in-progress results. */
+			readonly CustomRollupFieldInteger: string;
+			/** Indicates a placeholder rollup field for a money value to track a third category of results other than actuals and in-progress results. */
+			readonly CustomRollupFieldMoney: string;
+			/** Indicates a placeholder rollup field for a money value in base currency to track a third category of results other than actuals and in-progress results. */
+			readonly CustomRollupFieldMoney_Base: string;
+			/** Placeholder rollup field for the goal. */
+			readonly CustomRollupFieldString: string;
+			/** Depth of the goal in the tree. */
+			readonly Depth: string;
+			/** The default image for the entity. */
+			readonly EntityImage: string;
+			readonly EntityImage_Timestamp: string;
+			readonly EntityImage_URL: string;
+			/** For internal use only. */
+			readonly EntityImageId: string;
+			/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
+			readonly ExchangeRate: string;
+			/** Select the fiscal period for the goal. */
+			readonly FiscalPeriod: string;
+			/** Select the fiscal year for the goal that's being tracked. */
+			readonly FiscalYear: string;
+			/** Enter the date when the goal ends. */
+			readonly GoalEndDate_UtcDateOnly: string;
+			/** Unique identifier of the goal. */
+			readonly GoalId: string;
+			/** Choose the user or team responsible for meeting the goal. */
+			readonly goalownerid_systemuser: string;
+			/** Choose the user or team responsible for meeting the goal. */
+			readonly goalownerid_team: string;
+			/** Enter the date and time when the period for tracking the goal begins. */
+			readonly GoalStartDate_UtcDateOnly: string;
+			/** Unique identifier of the goal that caused an error in the rollup of the goal hierarchy. */
+			readonly GoalWithErrorId: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Shows the in-progress value (decimal) against the target. This value could contribute to a goal, but is not counted yet as actual. */
+			readonly InProgressDecimal: string;
+			/** Shows the in-progress value (integer) against the target. This value could contribute to a goal, but is not counted yet as actual. */
+			readonly InProgressInteger: string;
+			/** Shows the in-progress value (money) against the target. This value could contribute to a goal, but is not counted yet as actual. */
+			readonly InProgressMoney: string;
+			/** Shows the in-progress value (money) in base currency to track goal results against the target. */
+			readonly InProgressMoney_Base: string;
+			/** In-progress value of the goal. */
+			readonly InProgressString: string;
+			/** Indicates whether the metric type is Count or Amount. */
+			readonly IsAmount: string;
+			/** Select whether the goal period is a fiscal period or custom period. */
+			readonly IsFiscalPeriodGoal: string;
+			/** Select whether the system rollup fields are updated. If set to Yes, the next system rollup will not update the values of the rollup fields with the system calculated values. */
+			readonly IsOverridden: string;
+			/** Indicates whether the values of system rollup fields can be updated. */
+			readonly IsOverride: string;
+			/** Shows the date and time when the goal was last rolled up. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly LastRolledupDate_UtcDateAndTime: string;
+			/** Choose the metric for the goal. This metric determines how the goal is tracked. */
+			readonly MetricId: string;
+			/** Shows who last updated the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who last updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the team who owns the goal. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user who owns the record. */
+			readonly OwningUser: string;
+			/** Choose a parent goal if the current goal is a child goal. This sets up a parent-child relationship for reporting and analytics. */
+			readonly ParentGoalId: string;
+			/** Shows the percentage achieved against the target goal. */
+			readonly Percentage: string;
+			/** Error code associated with rollup. */
+			readonly RollupErrorCode: string;
+			/** Select whether the data should be rolled up only from the child goals. */
+			readonly RollupOnlyFromChildGoals: string;
+			/** Choose the query that will be used to calculate the actual data for the goal (decimal). */
+			readonly RollUpQueryActualDecimalId: string;
+			/** Choose the query that will be used to calculate the actual data for the goal (integer). */
+			readonly RollupQueryActualIntegerId: string;
+			/** Choose the query that will be used to calculate the actual data for the goal (money). */
+			readonly RollUpQueryActualMoneyId: string;
+			/** Choose the query that will be used to calculate data for the custom rollup field (decimal). */
+			readonly RollUpQueryCustomDecimalId: string;
+			/** Choose the query that will be used to calculate data for the custom rollup field (integer). */
+			readonly RollUpQueryCustomIntegerId: string;
+			/** Choose the query that will be used to calculate data for the custom rollup field (money). */
+			readonly RollUpQueryCustomMoneyId: string;
+			/** Choose the query that will be used to calculate data for the in-progress rollup field (decimal). */
+			readonly RollUpQueryInprogressDecimalId: string;
+			/** Choose the query that will be used to calculate data for the in-progress rollup field (integer). */
+			readonly RollUpQueryInprogressIntegerId: string;
+			/** Choose the query that will be used to calculate data for the in-progress rollup field (money). */
+			readonly RollUpQueryInprogressMoneyId: string;
+			/** Shows whether the goal is open, completed, or canceled. Completed and canceled goals are read-only and can't be edited. */
+			readonly StateCode: string;
+			/** Select the goal's status. */
+			readonly StatusCode: string;
+			/** Select a stretch target (decimal) of the goal to define a higher or difficult level of goal than the usual ones. */
+			readonly StretchTargetDecimal: string;
+			/** Select the stretch target (integer) of the goal to define a higher or difficult level of goal than the usual ones. */
+			readonly StretchTargetInteger: string;
+			/** Select stretch target (money) of the goal to define a higher or difficult level of goal than the usual ones. */
+			readonly StretchTargetMoney: string;
+			/** Shows the stretch target (money) in base currency to indicate a higher or difficult level of goal than the usual ones. */
+			readonly StretchTargetMoney_Base: string;
+			/** Stretch target value for all data types. */
+			readonly StretchTargetString: string;
+			/** Select a goal target of the decimal type to use for tracking data that include partial numbers, such as pounds sold of a product sold by weight. */
+			readonly TargetDecimal: string;
+			/** Select a goal target of the integer type to use for tracking anything countable in whole numbers, such as units sold. */
+			readonly TargetInteger: string;
+			/** Select a goal target (money) to track a monetary amount such as revenue from a product. */
+			readonly TargetMoney: string;
+			/** Shows the goal target of the money type in base currency. */
+			readonly TargetMoney_Base: string;
+			/** Target value of the goal. */
+			readonly TargetString: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Type a title or name that describes the goal. */
+			readonly Title: string;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			readonly TransactionCurrencyId: string;
+			/** Unique identifier of the goal tree. */
+			readonly TreeId: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version number of the goal. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -563,6 +735,10 @@ declare namespace OptionSet {
 			/** 2038 */
 			FY2038
 		}
+		enum GoalOwnerIdType {
+		}
+		enum OwnerIdType {
+		}
 		enum StateCode {
 			/** 0 */
 			Active,
@@ -595,4 +771,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

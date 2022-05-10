@@ -112,6 +112,60 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Shows the entity instances. */
+			readonly msdyn_dataexportId: string;
+			/** The data token that is returned on a successful export. The data token is used to retrieve only the newly added records. */
+			readonly msdyn_datatoken: string;
+			/** Name of the entity exported */
+			readonly msdyn_entityname: string;
+			/** The number of records that have been currently exported */
+			readonly msdyn_exportedrecordcount: string;
+			/** Status of the export */
+			readonly msdyn_exportstatus: string;
+			/** Contains data representing the linked entities */
+			readonly msdyn_linkedentitydata: string;
+			/** Type the name of the record. */
+			readonly msdyn_name: string;
+			/** Paging data associated to an incomplete export. */
+			readonly msdyn_pagingdata: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the Actual Data Export */
+			readonly statecode: string;
+			/** Reason for the status of the Actual Data Export */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -125,6 +179,8 @@ declare namespace OptionSet {
 			Exporting,
 			/** 192350000 */
 			Submitted
+		}
+		enum OwnerIdType {
 		}
 		enum statecode {
 			/** 0 */
@@ -156,4 +212,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

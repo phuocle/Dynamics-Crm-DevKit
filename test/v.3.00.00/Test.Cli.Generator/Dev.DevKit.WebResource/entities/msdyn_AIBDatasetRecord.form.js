@@ -41,6 +41,8 @@ var OptionSet;
 			eeInputRow: 190691000,
 			eeNamedEntity: 190691001
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

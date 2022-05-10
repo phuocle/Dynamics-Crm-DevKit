@@ -45,6 +45,24 @@ declare namespace DevKit {
 		Site: string;
 		/** Site Identifier */
 		SiteId: string;
+		readonly FormattedValue: {
+			/** Unique identifier for entity instances */
+			readonly availabletimesId: string;
+			/** The name of the available times virtual entity. */
+			readonly Name: string;
+			readonly Resources: string;
+			readonly ResourcesJson: string;
+			readonly ScheduledEnd_UtcDateAndTime: string;
+			/** Scheduled End Local Time */
+			readonly ScheduledEndLocalTime: string;
+			readonly ScheduledStart_UtcDateAndTime: string;
+			/** Scheduled Start Local Time */
+			readonly ScheduledStartLocalTime: string;
+			/** Site */
+			readonly Site: string;
+			/** Site Identifier */
+			readonly SiteId: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -67,4 +85,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

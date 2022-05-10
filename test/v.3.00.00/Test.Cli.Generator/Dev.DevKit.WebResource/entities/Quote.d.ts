@@ -799,10 +799,273 @@ declare namespace DevKit {
 		readonly VersionNumber: number;
 		/** Select whether the products included in the quote should be shipped to the specified address or held until the customer calls with further pick up or delivery instructions. */
 		WillCall: boolean;
+		readonly FormattedValue: {
+			/** Unique identifier of the account with which the quote is associated. */
+			readonly AccountId: string;
+			/** Unique identifier of the billing address. */
+			readonly BillTo_AddressId: string;
+			/** Type the city for the customer's billing address. */
+			readonly BillTo_City: string;
+			/** Shows the complete Bill To address. */
+			readonly BillTo_Composite: string;
+			/** Type the primary contact name at the customer's billing address. */
+			readonly BillTo_ContactName: string;
+			/** Type the country or region for the customer's billing address. */
+			readonly BillTo_Country: string;
+			/** Type the fax number for the customer's billing address. */
+			readonly BillTo_Fax: string;
+			/** Type the first line of the customer's billing address. */
+			readonly BillTo_Line1: string;
+			/** Type the second line of the customer's billing address. */
+			readonly BillTo_Line2: string;
+			/** Type the third line of the billing address. */
+			readonly BillTo_Line3: string;
+			/** Type a name for the customer's billing address, such as "Headquarters" or "Field office", to identify the address. */
+			readonly BillTo_Name: string;
+			/** Type the ZIP Code or postal code for the billing address. */
+			readonly BillTo_PostalCode: string;
+			/** Type the state or province for the billing address. */
+			readonly BillTo_StateOrProvince: string;
+			/** Type the phone number for the customer's billing address. */
+			readonly BillTo_Telephone: string;
+			/** Shows the campaign that the order was created from. */
+			readonly CampaignId: string;
+			/** Enter the date when the quote was closed to indicate the expiration, revision, or cancellation date. */
+			readonly ClosedOn_DateOnly: string;
+			/** Unique identifier of the contact associated with the quote. */
+			readonly ContactId: string;
+			/** Shows who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
+			readonly customerid_account: string;
+			/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
+			readonly customerid_contact: string;
+			/** Type additional information to describe the quote, such as the products or services offered or details about the customer's product preferences. */
+			readonly Description: string;
+			/** Type the discount amount for the quote if the customer is eligible for special savings. */
+			readonly DiscountAmount: string;
+			/** Value of the Quote Discount Amount in base currency. */
+			readonly DiscountAmount_Base: string;
+			/** Type the discount rate that should be applied to the Detail Amount field to include additional savings for the customer in the quote. */
+			readonly DiscountPercentage: string;
+			/** Enter the date when the quote pricing is effective or was first communicated to the customer. */
+			readonly EffectiveFrom_UtcDateOnly: string;
+			/** Enter the expiration date or last day the quote pricing is effective for the customer. */
+			readonly EffectiveTo_UtcDateOnly: string;
+			/** The primary email address for the entity. */
+			readonly EmailAddress: string;
+			/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
+			readonly ExchangeRate: string;
+			/** Enter the date a decision or order is due from the customer to indicate the expiration date of the quote. */
+			readonly ExpiresOn_DateOnly: string;
+			/** Type the cost of freight or shipping for the products included in the quote for use in calculating the Total Amount field. */
+			readonly FreightAmount: string;
+			/** Value of the Freight Amount in base currency. */
+			readonly FreightAmount_Base: string;
+			/** Select the freight terms to make sure shipping charges are processed correctly. */
+			readonly FreightTermsCode: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Contains the date time stamp of the last on hold time. */
+			readonly LastOnHoldTime_UtcDateAndTime: string;
+			/** Shows who last updated the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who last updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Customer Account associated with this Quote */
+			readonly msdyn_Account: string;
+			/** Account manager responsible for the quote. */
+			readonly msdyn_AccountManagerId: string;
+			/** Shows the estimated gross margin after accounting for non-chargeable components. */
+			readonly msdyn_AdjustedGrossMargin: string;
+			/** Shows how the quote estimation of sales value and schedule compare to customer expectations on those parameters. Possible values are 1: Within Customer expectations, 2: Not Within Customer expectations, and 0: Customer expectations Not Available. */
+			readonly msdyn_Competitive: string;
+			/** The organizational unit in charge of the contract. */
+			readonly msdyn_ContractOrganizationalUnitId: string;
+			/** Shows the total customer budget for the quote, computed from all the quote lines. */
+			readonly msdyn_CustomerBudgetRollUp: string;
+			/** Shows the value of the customer budget in the base currency. */
+			readonly msdyn_customerbudgetrollup_Base: string;
+			/** Last Updated time of rollup field Customer Budget. */
+			readonly msdyn_CustomerBudgetRollUp_Date_UtcDateAndTime: string;
+			/** State of rollup field Customer Budget. */
+			readonly msdyn_CustomerBudgetRollUp_State: string;
+			/** Shows how the estimated sales value on the quote compares to customer budgets. Possible values are 1: Within Customer Budget, 2: Exceeds Customer Budget, 0: Budget Estimate Not Available */
+			readonly msdyn_EstimatedBudget: string;
+			/** Estimated completion date, computed from the details of each quote line. */
+			readonly msdyn_EstimatedCompletionRollUp_UtcDateOnly: string;
+			/** Last Updated time of rollup field Estimated Completion. */
+			readonly msdyn_EstimatedCompletionRollUp_Date_UtcDateAndTime: string;
+			/** State of rollup field Estimated Completion. */
+			readonly msdyn_EstimatedCompletionRollUp_State: string;
+			/** The estimated cost of this quote */
+			readonly msdyn_EstimatedCost: string;
+			/** Value of the Estimated Cost in base currency. */
+			readonly msdyn_estimatedcost_Base: string;
+			/** Estimated Margin of this quote */
+			readonly msdyn_EstimatedQuoteMargin: string;
+			/** Shows how the estimated schedule on the quote compares to customer expectations. Possible values are 1: Estimated To Finish Early, 2: Estimated To Finish Late, 3: Estimated To Finish On Schedule, and 0: Schedule Not Available. */
+			readonly msdyn_EstimatedSchedule: string;
+			/** Shows how the quote estimation compares to project estimation. Possible values are 0: Feasibility Not Available, 1: Feasible, and 2: Not Feasible. */
+			readonly msdyn_feasible: string;
+			/** Shows the estimated gross margin without accounting for non-chargeable components. */
+			readonly msdyn_GrossMargin: string;
+			/** The totals of all assigned Invoice Setups */
+			readonly msdyn_InvoiceSetupTotals: string;
+			/** Value of the Invoice Setup Totals in base currency. */
+			readonly msdyn_invoicesetuptotals_Base: string;
+			/** Internal use only. */
+			readonly msdyn_OrderType: string;
+			/** Shows the estimated profitability of the quote. Possible values are Profitable, Not Profitable, and Profitability not available. */
+			readonly msdyn_Profitability: string;
+			/** The latest end date of all associated quote lines */
+			readonly msdyn_QuoteLineEndDate_UtcDateOnly: string;
+			/** The earliest Start Date of all Quote Lines that are associated to this quote */
+			readonly msdyn_QuoteLineStartDate_UtcDateOnly: string;
+			readonly msdyn_TotalAmount: string;
+			/** Value of the TotalAmount in base currency. */
+			readonly msdyn_totalamount_Base: string;
+			readonly msdyn_TotalChargeableCostRollup: string;
+			/** Value of the Total Chargeable Cost in base currency. */
+			readonly msdyn_totalchargeablecostrollup_Base: string;
+			/** Last Updated time of rollup field Total Chargeable Cost. */
+			readonly msdyn_TotalChargeableCostRollup_Date_UtcDateAndTime: string;
+			/** State of rollup field Total Chargeable Cost. */
+			readonly msdyn_TotalChargeableCostRollup_State: string;
+			readonly msdyn_TotalNonchargeableCostRollup: string;
+			/** Value of the Total Non-chargeable Cost in base currency. */
+			readonly msdyn_totalnonchargeablecostrollup_Base: string;
+			/** Last Updated time of rollup field Total Non-chargeable Cost. */
+			readonly msdyn_TotalNonchargeableCostRollup_Date_UtcDateAndTime: string;
+			/** State of rollup field Total Non-chargeable Cost. */
+			readonly msdyn_TotalNonchargeableCostRollup_State: string;
+			/** Type a descriptive name for the quote. */
+			readonly Name: string;
+			/** Shows the duration in minutes for which the quote was on hold. */
+			readonly OnHoldTime: string;
+			/** Choose the opportunity that the quote is related to for reporting and analytics. */
+			readonly OpportunityId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Select the payment terms to indicate when the customer needs to pay the total amount. */
+			readonly PaymentTermsCode: string;
+			/** Choose the price list associated with this record to make sure the products associated with the campaign are offered at the correct prices. */
+			readonly PriceLevelId: string;
+			/** Pricing error for the quote. */
+			readonly PricingErrorCode: string;
+			/** Contains the id of the process associated with the entity. */
+			readonly ProcessId: string;
+			/** Unique identifier of the quote. */
+			readonly QuoteId: string;
+			/** Shows the quote number for customer reference and searching capabilities. The number cannot be modified. */
+			readonly QuoteNumber: string;
+			/** Enter the delivery date requested by the customer for all products in the quote. */
+			readonly RequestDeliveryBy_UtcDateOnly: string;
+			/** Shows the version number of the quote for revision history tracking. */
+			readonly RevisionNumber: string;
+			/** Select a shipping method for deliveries sent to this address. */
+			readonly ShippingMethodCode: string;
+			/** Unique identifier of the shipping address. */
+			readonly ShipTo_AddressId: string;
+			/** Type the city for the customer's shipping address. */
+			readonly ShipTo_City: string;
+			/** Shows the complete Ship To address. */
+			readonly ShipTo_Composite: string;
+			/** Type the primary contact name at the customer's shipping address. */
+			readonly ShipTo_ContactName: string;
+			/** Type the country or region for the customer's shipping address. */
+			readonly ShipTo_Country: string;
+			/** Type the fax number for the customer's shipping address. */
+			readonly ShipTo_Fax: string;
+			/** Select the freight terms to make sure shipping orders are processed correctly. */
+			readonly ShipTo_FreightTermsCode: string;
+			/** Type the first line of the customer's shipping address. */
+			readonly ShipTo_Line1: string;
+			/** Type the second line of the customer's shipping address. */
+			readonly ShipTo_Line2: string;
+			/** Type the third line of the shipping address. */
+			readonly ShipTo_Line3: string;
+			/** Type a name for the customer's shipping address, such as "Headquarters" or "Field office",  to identify the address. */
+			readonly ShipTo_Name: string;
+			/** Type the ZIP Code or postal code for the shipping address. */
+			readonly ShipTo_PostalCode: string;
+			/** Type the state or province for the shipping address. */
+			readonly ShipTo_StateOrProvince: string;
+			/** Type the phone number for the customer's shipping address. */
+			readonly ShipTo_Telephone: string;
+			/** Skip Price Calculation (For Internal use) */
+			readonly SkipPriceCalculation: string;
+			/** Choose the service level agreement (SLA) that you want to apply to the quote record. */
+			readonly SLAId: string;
+			/** Last SLA that was applied to this quote. This field is for internal use only. */
+			readonly SLAInvokedId: string;
+			/** Contains the id of the stage where the entity is located. */
+			readonly StageId: string;
+			/** Shows whether the quote is draft, active, won, or closed. Only draft quotes can be edited. */
+			readonly StateCode: string;
+			/** Select the quote's status. */
+			readonly StatusCode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Shows the total amount due, calculated as the sum of the products, discounts, freight, and taxes for the quote. */
+			readonly TotalAmount: string;
+			/** Value of the Total Amount in base currency. */
+			readonly TotalAmount_Base: string;
+			/** Shows the total product amount for the quote, minus any discounts. This value is added to freight and tax amounts in the calculation for the total amount due for the quote. */
+			readonly TotalAmountLessFreight: string;
+			/** Value of the Total Pre-Freight Amount in base currency. */
+			readonly TotalAmountLessFreight_Base: string;
+			/** Shows the total discount amount, based on the discount price and rate entered on the quote. */
+			readonly TotalDiscountAmount: string;
+			/** Value of the Total Discount Amount in base currency. */
+			readonly TotalDiscountAmount_Base: string;
+			/** Shows the sum of all existing and write-in products included on the quote, based on the specified price list and quantities. */
+			readonly TotalLineItemAmount: string;
+			/** Value of the Total Detail Amount in base currency. */
+			readonly TotalLineItemAmount_Base: string;
+			/** Shows the total of the Manual Discount amounts specified on all products included in the quote. This value is reflected in the Detail Amount field on the quote and is added to any discount amount or rate specified on the quote */
+			readonly TotalLineItemDiscountAmount: string;
+			/** Value of the Total Line Item Discount Amount in base currency. */
+			readonly TotalLineItemDiscountAmount_Base: string;
+			/** Shows the total of the Tax amounts specified on all products included in the quote, included in the Total Amount due calculation for the quote. */
+			readonly TotalTax: string;
+			/** Value of the Total Tax in base currency. */
+			readonly TotalTax_Base: string;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			readonly TransactionCurrencyId: string;
+			/** A comma separated list of string values representing the unique identifiers of stages in a Business Process Flow Instance in the order that they occur. */
+			readonly TraversedPath: string;
+			/** For internal use only. */
+			readonly UniqueDscId: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+			/** Select whether the products included in the quote should be shipped to the specified address or held until the customer calls with further pick up or delivery instructions. */
+			readonly WillCall: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace Quote {
+		enum CustomerIdType {
+		}
 		enum FreightTermsCode {
 			/** 1 */
 			FOB,
@@ -858,6 +1121,8 @@ declare namespace OptionSet {
 			Profitability_Not_Available,
 			/** 192350001 */
 			Profitable
+		}
+		enum OwnerIdType {
 		}
 		enum PaymentTermsCode {
 			/** 2 */
@@ -1019,4 +1284,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

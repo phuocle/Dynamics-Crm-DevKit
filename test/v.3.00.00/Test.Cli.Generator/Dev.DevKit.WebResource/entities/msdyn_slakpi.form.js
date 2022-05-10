@@ -53,6 +53,8 @@ var OptionSet;
 			Published: 0,
 			Unpublished: 1
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 1,
 			Inactive: 0

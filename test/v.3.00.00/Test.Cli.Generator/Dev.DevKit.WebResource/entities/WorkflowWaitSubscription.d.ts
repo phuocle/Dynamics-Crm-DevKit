@@ -55,10 +55,40 @@ declare namespace DevKit {
 		WaitOnAttributeList: string;
 		/** Unique identifier of the subscription. */
 		WorkflowWaitSubscriptionId: string;
+		readonly FormattedValue: {
+			/** Unique identifier of the asynchronous operation with which the subscription is associated. */
+			readonly AsyncOperationId: string;
+			/** Unstructured data associated with the subscription. */
+			readonly Data: string;
+			/** Id of entity to which workflow instance subscribes. */
+			readonly EntityId: string;
+			/** Name of entity to which workflow instance subscribes. */
+			readonly EntityName1: string;
+			/** Indicates whether the entity to which workflow instance subscribes is deleted after the subscription is created. */
+			readonly IsDeleted: string;
+			/** Indicates whether the entity to which workflow instance subscribes is modified after the subscription is created. */
+			readonly IsModified: string;
+			/** Date and time when the entity was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier of the business unit that owns the parent workflow instance. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the user who owns the parent workflow instance. */
+			readonly OwningUser: string;
+			/** Attributes on which the subscription is waiting to change. */
+			readonly WaitOnAttributeList: string;
+			/** Unique identifier of the subscription. */
+			readonly WorkflowWaitSubscriptionId: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace WorkflowWaitSubscription {
+		enum OwnerIdType {
+		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
 			NotCalculated,
@@ -77,4 +107,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

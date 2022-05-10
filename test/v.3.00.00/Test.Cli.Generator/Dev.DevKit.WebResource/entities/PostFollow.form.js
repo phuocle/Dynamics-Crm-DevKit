@@ -41,6 +41,10 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.PostFollow = {
+		OwnerIdType : {
+		},
+		RegardingObjectTypeCode : {
+		},
 		RollupState : {
 			NotCalculated: 0,
 			Calculated: 1,

@@ -166,6 +166,77 @@ declare namespace DevKit {
 		/** Reason for validation status of the URL */
 		ValidationStatusErrorCode: OptionSet.SharePointSite.ValidationStatusErrorCode;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Absolute URL of the SharePoint site. */
+			readonly AbsoluteURL: string;
+			/** Unique identifier of the user who created the SharePoint site record. */
+			readonly CreatedBy: string;
+			/** Date and time when the SharePoint site record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the SharePoint site record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Description of the SharePoint site record. */
+			readonly Description: string;
+			/** Exchange rate between the currency associated with the SharePoint site record and the base currency. */
+			readonly ExchangeRate: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Indicates whether the SharePoint site is the default site or not. */
+			readonly IsDefault: string;
+			/** Indicates if SharePoint Grid is present or not. */
+			readonly IsGridPresent: string;
+			/** Allows embedding of Power BI Reports available in this SharePoint site. */
+			readonly IsPowerBISite: string;
+			/** Date and time when the SharePoint site URL was last validated. */
+			readonly LastValidated_UtcDateAndTime: string;
+			/** Unique identifier of the user who last modified the SharePoint site record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the SharePoint site record was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the SharePoint site record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Name of the SharePoint site record. */
+			readonly Name: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the document location record. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the team that owns the SharePoint site record. */
+			readonly OwningTeam: string;
+			/** Unique identifier of the user who owns the SharePoint site record. */
+			readonly OwningUser: string;
+			/** Unique identifier of the parent SharePoint site. */
+			readonly ParentSite: string;
+			/** Relative URL of the SharePoint site. */
+			readonly RelativeUrl: string;
+			/** Shows the service type of location of the SharePoint site. */
+			readonly ServiceType: string;
+			/** Unique identifier of the SharePoint site in Dynamics 365 */
+			readonly SharePointSiteId: string;
+			/** For internal use only. */
+			readonly SiteCollectionId: string;
+			/** Status of the SharePoint site record. */
+			readonly StateCode: string;
+			/** Reason for the status of the SharePoint site record. */
+			readonly StatusCode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Unique identifier of the currency associated with the SharePoint site record. */
+			readonly TransactionCurrencyId: string;
+			/** Choose the user who owns the SharePoint site. */
+			readonly UserId: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Validation status of the SharePoint site URL. */
+			readonly ValidationStatus: string;
+			/** Reason for validation status of the URL */
+			readonly ValidationStatusErrorCode: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -177,6 +248,10 @@ declare namespace OptionSet {
 			Contact,
 			/** 0 */
 			None
+		}
+		enum OwnerIdType {
+		}
+		enum ParentSiteObjectTypeCode {
 		}
 		enum ServiceType {
 			/** 3 */
@@ -246,4 +321,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

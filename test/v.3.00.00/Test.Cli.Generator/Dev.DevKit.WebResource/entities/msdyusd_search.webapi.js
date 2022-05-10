@@ -116,7 +116,7 @@ var DevKit;
 		}
 		msdyusd_search.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -133,6 +133,8 @@ var OptionSet;
 		msdyusd_Direction : {
 			Inbound: 1,
 			Outbound: 0
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

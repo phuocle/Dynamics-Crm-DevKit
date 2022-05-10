@@ -520,6 +520,210 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Shows the exchange rate for the currency associated with the entity with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Shows the actual duration of the project in minutes. */
+			readonly msdyn_actualdurationminutes: string;
+			/** Enter the actual end time of the project. */
+			readonly msdyn_actualend_UtcDateOnly: string;
+			/** Shows the aggregate of actual expense cost on the project. System Field - For PSA Use Only. */
+			readonly msdyn_actualexpensecost: string;
+			/** Value of the Actual Expense Cost in base currency. System Field - For PSA Use Only. */
+			readonly msdyn_actualexpensecost_Base: string;
+			/** Shows the aggregate of actual expense sales on the project - For PSA use only */
+			readonly msdyn_ActualExpenseSales: string;
+			/** Shows the value of the actual expense sales in the base currency. System Field - For PSA Use Only. */
+			readonly msdyn_actualexpensesales_Base: string;
+			/** Shows the total actual hours of the project. System Field - For PSA Use Only. */
+			readonly msdyn_actualhours: string;
+			/** Shows the aggregate of actual labor cost on the project. System Field - For PSA Use Only. */
+			readonly msdyn_actuallaborcost: string;
+			/** Value of the Actual Labor Cost in base currency. System Field - For PSA Use Only. */
+			readonly msdyn_actuallaborcost_Base: string;
+			/** Shows the aggregate of actual labor sales on the project - For PSA use only */
+			readonly msdyn_ActualSales: string;
+			/** Shows the value of the actual labor sales in the base currency. System Field - For PSA Use Only. */
+			readonly msdyn_actualsales_Base: string;
+			/** Enter the actual start time of the project. */
+			readonly msdyn_actualstart_UtcDateOnly: string;
+			/** The status of the bulk generation operations running on the project entity. If no operation is running, the value is null. System Field - For PSA Use Only. */
+			readonly msdyn_BulkGenerationStatus: string;
+			/** Id of the calendar for the project. */
+			readonly msdyn_calendarid: string;
+			/** Enter the comments that are used to describe the current project status. */
+			readonly msdyn_comments: string;
+			/** Select the organizational unit sponsoring the project. */
+			readonly msdyn_ContractOrganizationalUnitId: string;
+			/** Shows the actual cost divided by the estimated cost at completion. System Field - For PSA Use Only. */
+			readonly msdyn_CostConsumption: string;
+			/** Sum of Actual Cost and Remaining cost. System Field - For PSA Use Only. */
+			readonly msdyn_CostEstimateAtComplete: string;
+			/** Value of the Cost estimate at completion (EAC) in base currency. System Field - For PSA Use Only. */
+			readonly msdyn_costestimateatcomplete_Base: string;
+			/** System Field - For PSA Use Only. */
+			readonly msdyn_CostPerformence: string;
+			/** Variance between the estimated cost and the forecasted cost based on the estimate at completion (EAC). System Field - For PSA Use Only. */
+			readonly msdyn_CostVariance: string;
+			/** Shows the value of the cost variance in the base currency. System Field - For PSA Use Only. */
+			readonly msdyn_costvariance_Base: string;
+			/** Enter the customer who the project is associated with. */
+			readonly msdyn_customer: string;
+			/** Enter a description of the project. */
+			readonly msdyn_description: string;
+			/** This is an internal field, mainly used during import so that we don't create a team member record for the project manager. System Field - For PSA Use Only. */
+			readonly msdyn_disablecreateofteammemberformanager: string;
+			/** Shows the total of actual hours and the remaining hours. */
+			readonly msdyn_EffortestimateatcompleteEAC: string;
+			/** Exchange rate for the currency associated with the project with respect to the base currency. */
+			readonly msdyn_exchangerate: string;
+			/** Specifies if the project is linked to a project in MS Project. System Field - For PSA Use Only. */
+			readonly msdyn_IsLinkedToMSProjectClient: string;
+			/** Shows if the project is a project template. System Field - For PSA Use Only. */
+			readonly msdyn_istemplate: string;
+			/** The URL for the linked document. System Field - For PSA Use Only. */
+			readonly msdyn_linkeddocumenturl: string;
+			/** Describes the project status. */
+			readonly msdyn_overallprojectstatus: string;
+			/** Shows the aggregate of the planned expense cost of all the associated tasks. */
+			readonly msdyn_plannedexpensecost: string;
+			/** Value of the Estimated Expense Cost in base currency. System Field - For PSA Use Only. */
+			readonly msdyn_plannedexpensecost_Base: string;
+			/** Shows the aggregate of estimated expense sales on the project - For PSA use only */
+			readonly msdyn_PlannedExpenseSales: string;
+			/** Shows the value of the estimated expense sales in the base currency. System Field - For PSA Use Only. */
+			readonly msdyn_plannedexpensesales_Base: string;
+			/** Shows the total estimate hours of the project. */
+			readonly msdyn_plannedhours: string;
+			/** Shows the aggregate of the planned labor cost of all the associated tasks. */
+			readonly msdyn_plannedlaborcost: string;
+			/** Value of the Estimated Labor Cost in base currency. System Field - For PSA Use Only. */
+			readonly msdyn_plannedlaborcost_Base: string;
+			/** Shows the aggregate of estimated labor sales on the project - For PSA use only */
+			readonly msdyn_PlannedSales: string;
+			/** Shows the value of the estimated labor sales in the base currency. System Field - For PSA Use Only. */
+			readonly msdyn_plannedsales_Base: string;
+			/** Shows the actual hours divided by effort at estimate. */
+			readonly msdyn_Progress: string;
+			/** Shows the entity instances. */
+			readonly msdyn_projectId: string;
+			/** Shows the project manager assigned to the project. */
+			readonly msdyn_projectmanager: string;
+			/** Indicates if the project resource requirements are visible to the resources assigned to the project. */
+			readonly msdyn_projectresourcerequirementsvisibletore: string;
+			/** Select the Team associated with Project. */
+			readonly msdyn_projectteamid: string;
+			/** Select the project template behind the project. */
+			readonly msdyn_ProjectTemplate: string;
+			/** Shows the difference between the estimated labor cost and the actual labor cost. */
+			readonly msdyn_RemainingCost: string;
+			/** Shows the value of the remaining labor cost in the  base currency. */
+			readonly msdyn_remainingcost_Base: string;
+			/** Shows the difference between the estimate at completion (EAC) and the actual hours. */
+			readonly msdyn_RemainingHours: string;
+			/** Shows the difference between the estimated labor sales and the actual labor sales. */
+			readonly msdyn_RemainingSales: string;
+			/** Shows the value of the remaining labor sales in the base currency. */
+			readonly msdyn_remainingsales_Base: string;
+			/** Shows the actual sales divided by the estimated sales. */
+			readonly msdyn_SalesConsumption: string;
+			/** Shows the total of actual and remaining sales. */
+			readonly msdyn_SalesEstimateAtCompleteEAC: string;
+			/** Value of the Sales Estimate At Complete (EAC) in base currency. */
+			readonly msdyn_salesestimateatcompleteeac_Base: string;
+			/** Shows the contract for this project. */
+			readonly msdyn_salesorderid: string;
+			/** Shows the difference between the planned sales and the sales estimate at completion (EAC). */
+			readonly msdyn_SalesVariance: string;
+			/** Shows the value of the sales variance in the base currency. */
+			readonly msdyn_salesvariance_Base: string;
+			/** Shows the scheduled duration of the project, specified in minutes. */
+			readonly msdyn_scheduleddurationminutes: string;
+			/** Enter the scheduled end time of the project. */
+			readonly msdyn_scheduledend_UtcDateOnly: string;
+			/** Enter the scheduled start time of the project. */
+			readonly msdyn_scheduledstart_UtcDateOnly: string;
+			/** Describes the schedule performance of the project. */
+			readonly msdyn_scheduleperformance: string;
+			/** Shows the difference between the planned effort and the estimate at completion (EAC). */
+			readonly msdyn_ScheduleVariance: string;
+			/** Shows the stage of the project (Deprecated in v3.0). */
+			readonly msdyn_StageName: string;
+			/** Shows the most recent update on a status field(comments or overall project status). */
+			readonly msdyn_statusupdatedon_UtcDateAndTime: string;
+			/** Type the name of the custom entity. */
+			readonly msdyn_subject: string;
+			/** Shows the total number of team members assigned to this project */
+			readonly msdyn_teamsize: string;
+			/** Last Updated time of rollup field Team Size. */
+			readonly msdyn_teamsize_Date_UtcDateAndTime: string;
+			/** State of rollup field Team Size. */
+			readonly msdyn_teamsize_State: string;
+			/** Shows the aggregated cost from actuals on the project. */
+			readonly msdyn_TotalActualCost: string;
+			/** Shows the value of the total actual cost in the base currency. */
+			readonly msdyn_totalactualcost_Base: string;
+			/** Shows aggregated sales values from all project actuals - For PSA use only */
+			readonly msdyn_TotalActualSales: string;
+			/** Shows the value of the actual total sales in the base currency. System Field - For PSA Use Only. */
+			readonly msdyn_totalactualsales_Base: string;
+			/** Shows the aggregate of the total planned cost of all the associated tasks. */
+			readonly msdyn_TotalPlannedCost: string;
+			/** Shows the value of the total planned cost in the base currency. */
+			readonly msdyn_totalplannedcost_Base: string;
+			/** Shows aggregate of estimated sales values on the project - For PSA use only */
+			readonly msdyn_TotalPlannedSales: string;
+			/** Shows the value of the estimated total sales in the base currency. System Field - For PSA Use Only. */
+			readonly msdyn_totalplannedsales_Base: string;
+			/** Shows the work breakdown structure (WBS) duration in days. */
+			readonly msdyn_wbsduration: string;
+			/** Select the work hour template used to create the project calendar. */
+			readonly msdyn_workhourtemplate: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Contains the id of the process associated with the entity. */
+			readonly processid: string;
+			/** Contains the id of the stage where the entity is located. */
+			readonly stageid: string;
+			/** Status of the Project */
+			readonly statecode: string;
+			/** Reason for the status of the Project */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Shows the currency associated with the entity. */
+			readonly TransactionCurrencyId: string;
+			/** A comma separated list of string values representing the unique identifiers of stages in a Business Process Flow Instance in the order that they occur. */
+			readonly traversedpath: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -554,6 +758,8 @@ declare namespace OptionSet {
 			/** 192350000 */
 			On_Time
 		}
+		enum OwnerIdType {
+		}
 		enum statecode {
 			/** 0 */
 			Active,
@@ -586,4 +792,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

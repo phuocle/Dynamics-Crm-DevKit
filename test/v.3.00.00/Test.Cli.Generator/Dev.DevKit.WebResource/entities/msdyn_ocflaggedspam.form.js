@@ -46,6 +46,8 @@ var OptionSet;
 			Email: 100000002,
 			Phone: 100000001
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

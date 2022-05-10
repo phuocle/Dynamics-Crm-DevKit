@@ -404,6 +404,8 @@ var OptionSet;
 			Field_Service_Line: 690970001,
 			Project_Service_Line: 690970000
 		},
+		OwnerIdType : {
+		},
 		PricingErrorCode : {
 			Base_Currency_Attribute_Overflow: 36,
 			Base_Currency_Attribute_Underflow: 37,
@@ -456,6 +458,8 @@ var OptionSet;
 			Edit: 0,
 			Not_Configured: 2,
 			Rectify: 1
+		},
+		QuoteStateCode : {
 		},
 		ShipTo_FreightTermsCode : {
 			FOB: 1,

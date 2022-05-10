@@ -262,6 +262,88 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Shows the property in the product family that this property is being inherited from. */
+			readonly BaseDynamicPropertyId: string;
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Select the data type of the property. */
+			readonly DataType: string;
+			/** Default Value */
+			readonly DefaultAttributeValue: string;
+			/** Shows the default value of the property for a decimal data type. */
+			readonly DefaultValueDecimal: string;
+			/** Shows the default value of the property for a double data type. */
+			readonly DefaultValueDouble: string;
+			/** Shows the default value of the property for a whole number data type. */
+			readonly DefaultValueInteger: string;
+			/** Shows the default value of the property. */
+			readonly DefaultValueOptionSet: string;
+			/** Shows the default value of the property for a string data type. */
+			readonly DefaultValueString: string;
+			/** Type a description for the property. */
+			readonly Description: string;
+			/** Internal Use Only */
+			readonly DMTImportState: string;
+			/** Shows the unique identifier of the property. */
+			readonly DynamicPropertyId: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Defines whether the attribute is hidden or shown. */
+			readonly IsHidden: string;
+			/** Defines whether the attribute is read-only or if it can be edited. */
+			readonly IsReadOnly: string;
+			/** Defines whether the attribute is mandatory. */
+			readonly IsRequired: string;
+			/** Shows the maximum allowed length of the property for a string data type. */
+			readonly MaxLengthString: string;
+			/** Shows the maximum allowed value of the property for a decimal data type. */
+			readonly MaxValueDecimal: string;
+			/** Shows the maximum allowed value of the property for a double data type. */
+			readonly MaxValueDouble: string;
+			/** Shows the maximum allowed value of the property for a whole number data type. */
+			readonly MaxValueInteger: string;
+			/** Shows the minimum allowed value of the property for a decimal data type. */
+			readonly MinValueDecimal: string;
+			/** Shows the minimum allowed value of the property for a double data type. */
+			readonly MinValueDouble: string;
+			/** Shows the minimum allowed value of the property for a whole number data type. */
+			readonly MinValueInteger: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Type the name of the property. */
+			readonly Name: string;
+			/** Unique identifier for the organization */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Shows the related overwritten property. */
+			readonly OverwrittenDynamicPropertyId: string;
+			/** Shows the allowed precision of the property for a whole number data type. */
+			readonly Precision: string;
+			/** Choose the product that the property is associated with. */
+			readonly RegardingObjectId: string;
+			/** Shows the root property that this property is derived from. */
+			readonly RootDynamicPropertyId: string;
+			/** Shows the state of the property. */
+			readonly statecode: string;
+			/** Shows whether the property is active or inactive. */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -277,6 +359,8 @@ declare namespace OptionSet {
 			Single_Line_Of_Text,
 			/** 4 */
 			Whole_Number
+		}
+		enum RegardingObjectTypeCode {
 		}
 		enum statecode {
 			/** 0 */
@@ -312,4 +396,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

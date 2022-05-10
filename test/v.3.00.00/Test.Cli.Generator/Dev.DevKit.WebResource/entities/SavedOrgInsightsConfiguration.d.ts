@@ -67,6 +67,46 @@ declare namespace DevKit {
 		PlotOption: OptionSet.SavedOrgInsightsConfiguration.PlotOption;
 		/** Shows the ID of the Saved Organization Insights Configuration */
 		SavedOrgInsightsConfigurationId: string;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record */
+			readonly CreatedOnBehalfBy: string;
+			/** Description of the saved organization insights configuration */
+			readonly Description: string;
+			/** Indicates whether this saved organization insights configuration is the default config */
+			readonly IsDefault: string;
+			/** Indicates whether this configuration indicates a drilldown chart */
+			readonly IsDrilldown: string;
+			/** Metrics Data in Json format for those metrics defined in parameters */
+			readonly JsonData: string;
+			/** End Time */
+			readonly JsonDataEndTime_UtcDateAndTime: string;
+			/** Start Time */
+			readonly JsonDataStartTime_UtcDateAndTime: string;
+			/** Lookback period */
+			readonly Lookback: string;
+			/** Type of the metric */
+			readonly MetricType: string;
+			/** Unique identifier of the user who modified the record */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record */
+			readonly ModifiedOnBehalfBy: string;
+			/** Display name */
+			readonly Name: string;
+			/** Unique identifier of the organization associated with the solution */
+			readonly OrganizationId: string;
+			/** Parameters needed for data retrieval */
+			readonly Parameters: string;
+			/** Plot Option */
+			readonly PlotOption: string;
+			/** Shows the ID of the Saved Organization Insights Configuration */
+			readonly SavedOrgInsightsConfigurationId: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -129,4 +169,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

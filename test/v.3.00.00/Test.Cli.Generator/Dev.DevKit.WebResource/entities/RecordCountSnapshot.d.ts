@@ -34,6 +34,13 @@ declare namespace DevKit {
 		readonly ObjectTypeCode: number;
 		readonly RecordCountSnapshotId: string;
 		readonly VersionNumberConverted: number;
+		readonly FormattedValue: {
+			readonly Count: string;
+			readonly LastUpdated_UtcDateOnly: string;
+			readonly ObjectTypeCode: string;
+			readonly RecordCountSnapshotId: string;
+			readonly VersionNumberConverted: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -56,4 +63,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

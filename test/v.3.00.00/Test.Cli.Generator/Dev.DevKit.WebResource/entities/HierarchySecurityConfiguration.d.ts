@@ -34,10 +34,19 @@ declare namespace DevKit {
 		/** Shows the entity used for the Hierarchy Security Modeling Configuration. */
 		HierarchySecurityModelingSettingId: string;
 		VersionNumber: number;
+		readonly FormattedValue: {
+			/** Logical entity name of the entity that is configured for hierarchy security. */
+			readonly EntityName1: string;
+			/** Shows the entity used for the Hierarchy Security Modeling Configuration. */
+			readonly HierarchySecurityModelingSettingId: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace HierarchySecurityConfiguration {
+		enum ObjectTypeCode {
+		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
 			NotCalculated,
@@ -56,4 +65,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

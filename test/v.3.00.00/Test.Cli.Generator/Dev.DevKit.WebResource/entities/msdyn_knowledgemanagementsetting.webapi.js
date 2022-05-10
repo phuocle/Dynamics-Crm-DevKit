@@ -81,6 +81,7 @@ var DevKit;
 			msdyn_isautosuggestionsenabled: { a: 'msdyn_isautosuggestionsenabled' },
 			msdyn_knowledgemanagementsettingId: { a: 'msdyn_knowledgemanagementsettingid' },
 			msdyn_showcontextualactions: { a: 'msdyn_showcontextualactions' },
+			msdyn_status: { a: 'msdyn_status' },
 			msdyn_UniqueName: { a: 'msdyn_uniquename' },
 			OverriddenCreatedOn_UtcDateOnly: { a: 'overriddencreatedon' },
 			OverwriteTime_UtcDateAndTime: { a: 'overwritetime', r: true },
@@ -126,7 +127,7 @@ var DevKit;
 		}
 		msdyn_knowledgemanagementsetting.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -151,6 +152,12 @@ var OptionSet;
 			Link_article_and_email_URL: 2,
 			Link_article_and_send_article_content: 3,
 			Link_unlink_article: 0
+		},
+		msdyn_status : {
+			Active: 0,
+			Inactive: 1
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

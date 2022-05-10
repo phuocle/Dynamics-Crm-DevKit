@@ -58,10 +58,47 @@ declare namespace DevKit {
 		/** For internal use only. */
 		readonly SystemName: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the integration status. */
+			readonly CreatedBy: string;
+			/** Date and time when the integration status was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the integrationstatus. */
+			readonly CreatedOnBehalfBy: string;
+			/** For internal use only. */
+			readonly IntegrationEntryId: string;
+			/** Unique identifier of the user who last modified the integration status. */
+			readonly ModifiedBy: string;
+			/** Date and time when the integration status was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the integrationstatus. */
+			readonly ModifiedOnBehalfBy: string;
+			/** For internal use only. */
+			readonly ObjectId: string;
+			/** Unique identifier of the organization associated with the integration status. */
+			readonly OrganizationId: string;
+			/** Status of the integration. */
+			readonly StateCode: string;
+			/** For internal use only. */
+			readonly StateDescription: string;
+			/** Reason for the status of the integration. */
+			readonly StatusCode: string;
+			/** For internal use only. */
+			readonly StatusDescription: string;
+			/** For internal use only. */
+			readonly SystemName: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace IntegrationStatus {
+		enum ObjectTypeCode {
+		}
+		enum StateCode {
+		}
+		enum StatusCode {
+		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
 			NotCalculated,
@@ -80,4 +117,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

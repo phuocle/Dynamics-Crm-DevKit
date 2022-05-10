@@ -77,6 +77,8 @@ var OptionSet;
 			Schedule_Assistant_Filter_Layout: 192350003,
 			Schedule_Assistant_Retrieve_Constraints_Query: 192350004
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

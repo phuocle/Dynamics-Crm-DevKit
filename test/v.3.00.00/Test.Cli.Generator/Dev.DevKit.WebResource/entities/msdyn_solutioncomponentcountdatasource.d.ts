@@ -59,6 +59,13 @@ declare namespace DevKit {
 		msdyn_solutioncomponentcountdatasourceId: string;
 		/** Unique identifier for the organization */
 		readonly OrganizationId: string;
+		readonly FormattedValue: {
+			readonly msdyn_name: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_solutioncomponentcountdatasourceId: string;
+			/** Unique identifier for the organization */
+			readonly OrganizationId: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -81,4 +88,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

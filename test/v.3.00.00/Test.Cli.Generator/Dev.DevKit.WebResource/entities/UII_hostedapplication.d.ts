@@ -390,6 +390,161 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			readonly msdyusd_allowmultiplepages: string;
+			readonly msdyusd_APIVersion: string;
+			readonly msdyusd_AutoLaunch: string;
+			readonly msdyusd_CifUrl: string;
+			readonly msdyusd_CRMWindowHostType: string;
+			readonly msdyusd_CustomParameters: string;
+			readonly msdyusd_DashboardName: string;
+			readonly msdyusd_DisplayName: string;
+			readonly msdyusd_HostingType: string;
+			/** Number of browser instances available within this control before the user is prompted that they hit the limit. (2-20 are valid) */
+			readonly msdyusd_MaximumBrowsers: string;
+			readonly msdyusd_PanelType: string;
+			/** Enable or disable pre-fetching of entity data */
+			readonly msdyusd_prefetchdata: string;
+			readonly msdyusd_SavedURL: string;
+			readonly msdyusd_ScanforDataParameters: string;
+			readonly msdyusd_SpecifyURL: string;
+			readonly msdyusd_TrustedDomain: string;
+			readonly msdyusd_XAML: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the UII Hosted Application */
+			readonly statecode: string;
+			/** Reason for the status of the UII Hosted Application */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Determines the Adapter Mode */
+			readonly UII_AdapterMode: string;
+			/** Determines the Adapter Type information */
+			readonly UII_AdapterType: string;
+			/** URI of Adapter . */
+			readonly UII_AdapterURI: string;
+			/** Determines the Hosting Mode for the Hosted Application */
+			readonly UII_ApplicationHostingMode: string;
+			/** Holds Assembly Type information. */
+			readonly UII_AssemblyType: string;
+			/** Holds Assembly URI */
+			readonly UII_AssemblyURI: string;
+			/** Stores the Automation Bindings information */
+			readonly UII_AutomationXml: string;
+			/** Determines with Display Group Panel the application needs to be displayed. */
+			readonly UII_DisplayGroup: string;
+			/** Stores the Extension Xml file which capture any additional info with the Hosted Application Entity doent allow to enter. */
+			readonly UII_ExtensionsXml: string;
+			/** Holds the Arguments for External App Settings */
+			readonly UII_ExternalAppArguments: string;
+			/** Holds the External Application URI . */
+			readonly UII_ExternalAppURI: string;
+			/** Working Directory of External Application */
+			readonly UII_ExternalAppWorkingDirectory: string;
+			/** FindWindow class to find the Top Level Window */
+			readonly UII_FindWindowClass: string;
+			/** Unique identifier for entity instances */
+			readonly UII_hostedapplicationId: string;
+			/** Determines the Type of Hosted Application */
+			readonly UII_HostedApplicationType: string;
+			/** Holds the ICA File Path for the Citrix Application */
+			readonly UII_ICAFileName: string;
+			/** Determines if the Hosted Application is a Dynamic Application */
+			readonly UII_isAppDynamic: string;
+			/** Determines if Attach Input Thread for the Application Process. */
+			readonly UII_isAttachInputThread: string;
+			/** Enable/Disable Auto Sign On feature for the Hosted Application */
+			readonly UII_isAutoSignOn: string;
+			/** Determines the dependency with Workflow */
+			readonly UII_isDependentonWorkflow: string;
+			/** Determines if the application is  Global Application */
+			readonly UII_isGlobalApplication: string;
+			/** Top Level Window is limit to current Process. */
+			readonly UII_isLimittoProcess: string;
+			/** Determines if Message Pump is set for the Hosted Application */
+			readonly UII_isNoMessagePump: string;
+			/** Restore is Minimized */
+			readonly UII_isRestoreifMinimized: string;
+			/** For Dynamic Positioned App, this setting determines the Frame and caption retainment */
+			readonly UII_isRetainFrameandCaption: string;
+			/** To Retain on Taskbar */
+			readonly UII_isRetainonTaskbar: string;
+			/** For Dynamic Positioned Application , determines if System Menu needs to be retained. */
+			readonly UII_isRetainSystemMenu: string;
+			/** Determines if the Hosted Application need to be displayed in the Toolbar drop down list. */
+			readonly UII_isShowinToolbarDropdown: string;
+			/** Determines if Hosted Application can SHow Menu . */
+			readonly UII_isShowMenu: string;
+			/** Determines if new browser process for every instance. */
+			readonly UII_isUsenewbrowserprocess: string;
+			/** Determines if the webapplication toolbar is enabled. */
+			readonly UII_isWebAppUseToolbar: string;
+			/** Determines the Main Window Acquisition time for the Hosted Application */
+			readonly UII_MainWindowAcquisitionTimeout: string;
+			/** This application life cycle will be managed through automations. */
+			readonly uii_managedApplication: string;
+			/** Check this option to manage the hosting of application using automations. */
+			readonly uii_ManageHosting: string;
+			/** Check this option to handle the pop ups using automations. */
+			readonly uii_ManagePopups: string;
+			/** X co-ordinate of Minimum Size */
+			readonly UII_MinimumSizeX: string;
+			/** Y co-ordinate of Minimum Size */
+			readonly UII_MinimumSizeY: string;
+			/** Hosted Application Name. */
+			readonly UII_name: string;
+			/** X co-ordinate of Optimal Size */
+			readonly UII_OptimalSizeX: string;
+			/** Y co-ordinate of Optimal Size */
+			readonly UII_OptimalSizeY: string;
+			/** Process Acquisition FileName for Remote Application */
+			readonly UII_ProcessAcquisitionFilename: string;
+			/** Remote Server Side Process Acquisition Attempts */
+			readonly UII_remote_ProcessAcquisitionAttempts: string;
+			/** Remote Server Side Process Acquisition Delay */
+			readonly UII_remote_ProcessAcquisitionDelay: string;
+			/** For Dynamic Positioned Application , Determines the existance of Sizing controls */
+			readonly UII_RemoveSizingControls: string;
+			/** Holds Sorting Order Value for the Hosted Application. */
+			readonly UII_SortOrder: string;
+			/** Caption to identify the Top Level Window */
+			readonly UII_TopLevelWindowCaption: string;
+			/** Determines the mode to find the Top Level Window */
+			readonly UII_TopLevelWindowMode: string;
+			/** Determines if the user can close the Hosted Application */
+			readonly UII_UserCanClose: string;
+			/** Holds the Web Application URL */
+			readonly UII_WebAppURL: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -474,6 +629,8 @@ declare namespace OptionSet {
 			/** 803750002 */
 			XAML
 		}
+		enum OwnerIdType {
+		}
 		enum statecode {
 			/** 0 */
 			Active,
@@ -538,4 +695,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

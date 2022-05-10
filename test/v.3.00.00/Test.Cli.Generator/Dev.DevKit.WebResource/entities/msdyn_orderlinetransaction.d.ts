@@ -361,6 +361,136 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Exchange rate for the currency associated with the entity with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Select the customer who this contract belongs to.  */
+			readonly msdyn_AccountCustomer: string;
+			readonly msdyn_AccountingDate_UtcDateOnly: string;
+			readonly msdyn_AccountVendor: string;
+			/** Enter the amount on the project contract line estimate. */
+			readonly msdyn_Amount: string;
+			readonly msdyn_amount_after_tax: string;
+			/** Value of the amount_after_tax in base currency. */
+			readonly msdyn_amount_after_tax_Base: string;
+			/** Value of the Amount in base currency. */
+			readonly msdyn_amount_Base: string;
+			/** Select the amount calculation method used for this project contract estimate line. Valid values are: 
+0: Multiply Quantity By Price
+1: Fixed Price
+2: Multiply Basis Quantity By Price
+3: Multiply Basis Amount By Percent  */
+			readonly msdyn_AmountMethod: string;
+			readonly msdyn_BasisAmount: string;
+			/** Value of the Basis Amount in base currency. */
+			readonly msdyn_basisamount_Base: string;
+			readonly msdyn_BasisPrice: string;
+			/** Value of the Basis Price in base currency. */
+			readonly msdyn_basisprice_Base: string;
+			readonly msdyn_BasisQuantity: string;
+			/** Select whether this project contract line estimate will be charged to the customer or not. Only chargeable project contract line estimates will add to the invoice total */
+			readonly msdyn_BillingType: string;
+			/** Shows the resource. */
+			readonly msdyn_bookableresource: string;
+			/** Select the customer contact of this Project Contract. */
+			readonly msdyn_ContactCustomer: string;
+			readonly msdyn_ContactVendor: string;
+			/** Select whether the customer was a account or a contact */
+			readonly msdyn_CustomerType: string;
+			/** Type a description of the project contract line estimate */
+			readonly msdyn_description: string;
+			/** Enter the document date. */
+			readonly msdyn_DocumentDate_UtcDateOnly: string;
+			/** Enter the end date on the project contract line estimate. */
+			readonly msdyn_EndDateTime_UtcDateOnly: string;
+			readonly msdyn_ExchangeRateDate_UtcDateOnly: string;
+			/** Shows the project contract line that this estimate line belongs to. */
+			readonly msdyn_orderlinetransactionId: string;
+			/** Foreign key to the detail line that originated this entry. For example, revenue line points to it's related cost line. */
+			readonly msdyn_Origin: string;
+			/** Relevant when amount calculation method on the Project Contract line transactions is "Multiply basis amount by percent" */
+			readonly msdyn_Percent: string;
+			/** Enter the price on the project contract line estimate. */
+			readonly msdyn_Price: string;
+			/** Value of the Price in base currency. */
+			readonly msdyn_price_Base: string;
+			/** Select the price list used for defaulting price on this project contract line estimate. */
+			readonly msdyn_PriceList: string;
+			/** Select the product on this project contract line estimate. */
+			readonly msdyn_Product: string;
+			/** Select the name of the project on the project contract estimate line. */
+			readonly msdyn_Project: string;
+			/** Enter the quantity of the project contract line estimate. */
+			readonly msdyn_Quantity: string;
+			/** Unique identifier for Quote Line Detail that Order Line Detail is created from. */
+			readonly msdyn_QuoteLineTransactionId: string;
+			/** Select the name of the role that is estimated to perform this work. */
+			readonly msdyn_ResourceCategory: string;
+			/** Select the organizational unit of the resource who is estimated to perform the work. */
+			readonly msdyn_ResourceOrganizationalUnitId: string;
+			/** Select the project contract that this estimate line is for. */
+			readonly msdyn_SalesContract: string;
+			/** (Deprecated) Shows the project contract line that this project contract line estimate will be mapped to for operating margin calculations. */
+			readonly msdyn_SalesContractLine: string;
+			/** Unique identifier for Project Contract Line associated with Project Contract Line Detail. */
+			readonly msdyn_SalesContractLineId: string;
+			/** Enter the estimate start date of the portion of work that is being estimated on the project contract estimate line. */
+			readonly msdyn_StartDateTime_UtcDateOnly: string;
+			/** Select the name of the work breakdown structure (WBS) task on the project contract line estimate. */
+			readonly msdyn_Task: string;
+			readonly msdyn_tax: string;
+			/** Value of the tax in base currency. */
+			readonly msdyn_tax_Base: string;
+			/** Select the transaction category on the project contract line estimate. */
+			readonly msdyn_TransactionCategory: string;
+			/** Transaction classification of the Project Contract line transaction */
+			readonly msdyn_TransactionClassification: string;
+			/** Transaction type of the Project Contract line transaction */
+			readonly msdyn_TransactionTypeCode: string;
+			/** Select the unit on the project contract line estimate. */
+			readonly msdyn_Unit: string;
+			/** Select the unit schedule of the project contract line estimate. */
+			readonly msdyn_UnitSchedule: string;
+			readonly msdyn_VendorType: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the Estimate Details */
+			readonly statecode: string;
+			/** Reason for the status of the Estimate Details */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Shows the currency associated with the entity. */
+			readonly TransactionCurrencyId: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -431,6 +561,8 @@ declare namespace OptionSet {
 			/** 192350002 */
 			Contact
 		}
+		enum OwnerIdType {
+		}
 		enum statecode {
 			/** 0 */
 			Active,
@@ -461,4 +593,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

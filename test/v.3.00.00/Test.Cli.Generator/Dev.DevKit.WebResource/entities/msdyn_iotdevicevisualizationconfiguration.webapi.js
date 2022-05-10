@@ -123,7 +123,7 @@ var DevKit;
 		}
 		msdyn_iotdevicevisualizationconfiguration.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -159,6 +159,8 @@ var OptionSet;
 			Configuration_1: 192350000,
 			Configuration_2: 192350001,
 			Configuration_3: 192350002
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

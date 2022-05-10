@@ -71,6 +71,8 @@ var OptionSet;
 			Customer_Session: 803750001,
 			Script_Expression: 803750002
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

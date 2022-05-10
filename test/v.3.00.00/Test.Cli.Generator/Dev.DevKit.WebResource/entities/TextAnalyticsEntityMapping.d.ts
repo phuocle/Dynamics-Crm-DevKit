@@ -110,6 +110,50 @@ declare namespace DevKit {
 		readonly TextAnalyticsEntityMappingIdUnique: string;
 		/** Topic Model Configuration associated with entity mapping. */
 		TopicModelConfigurationId: string;
+		readonly FormattedValue: {
+			/** Advanced Similarity RuleId associated with entity mapping. */
+			readonly AdvancedSimilarityRuleId: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Entity */
+			readonly Entity1: string;
+			/** Entity Display Name */
+			readonly EntityDisplayName: string;
+			/** Select Entity */
+			readonly EntityPickList: string;
+			/** Field */
+			readonly Field: string;
+			/** Field Display Name */
+			readonly FieldDisplayName: string;
+			/** Select Field */
+			readonly FieldPickList: string;
+			/** Is Manageed */
+			readonly IsManaged: string;
+			/** Specify if the mapping is for text match or exact match */
+			readonly IsTextMatchMapping: string;
+			/** Knowledge Search Model associated with entity mapping. */
+			readonly KnowledgeSearchModelId: string;
+			/** Model Type. */
+			readonly ModelType: string;
+			/** Unique identifier of the organization associated with the Text Analytics Entity Mapping. */
+			readonly OrganizationId: string;
+			/** Date and time when the record was created. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Relationship Name */
+			readonly RelationshipName: string;
+			/** Similarity Rule associated with entity mapping. */
+			readonly SimilarityRuleId: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** Unique identifier for entity instances */
+			readonly TextAnalyticsEntityMappingId: string;
+			/** Unique identifier of the Text Analytics Entity Mapping */
+			readonly TextAnalyticsEntityMappingIdUnique: string;
+			/** Topic Model Configuration associated with entity mapping. */
+			readonly TopicModelConfigurationId: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -154,4 +198,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

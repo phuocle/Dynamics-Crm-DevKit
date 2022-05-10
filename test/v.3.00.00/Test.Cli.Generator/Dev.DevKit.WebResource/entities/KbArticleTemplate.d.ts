@@ -115,6 +115,56 @@ declare namespace DevKit {
 		/** Title of the knowledge base article template. */
 		Title: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier of the user who created the knowledge base article template. */
+			readonly CreatedBy: string;
+			/** Date and time when the knowledge base article template was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the kbarticletemplate. */
+			readonly CreatedOnBehalfBy: string;
+			/** Description of the knowledge base article template. */
+			readonly Description: string;
+			/** XML format of the knowledge base article template. */
+			readonly FormatXml: string;
+			/** Unique identifier of the data import or data migration that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Version in which the form is introduced. */
+			readonly IntroducedVersion: string;
+			/** Information about whether the knowledge base article is active. */
+			readonly IsActive: string;
+			/** Information that specifies whether this component can be customized. */
+			readonly IsCustomizable: string;
+			readonly IsManaged: string;
+			/** Unique identifier of the knowledge base article template. */
+			readonly KbArticleTemplateId: string;
+			/** For internal use only. */
+			readonly KbArticleTemplateIdUnique: string;
+			/** Language of the Article Template */
+			readonly LanguageCode: string;
+			/** Unique identifier of the user who last modified the knowledge base article template. */
+			readonly ModifiedBy: string;
+			/** Date and time when the knowledge base article template was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the kbarticletemplate. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Unique identifier of the organization associated with the template. */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** XML structure of the knowledge base article. */
+			readonly StructureXml: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** Title of the knowledge base article template. */
+			readonly Title: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -147,4 +197,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

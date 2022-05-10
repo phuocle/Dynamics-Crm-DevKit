@@ -86,6 +86,8 @@ declare namespace DevKit {
 		msdyn_analyticschecksum: number;
 		/** Unique identifier for entity instances */
 		msdyn_datainsightsandanalyticsfeatureId: string;
+		/** Is Customization Supported */
+		readonly msdyn_iscustomizationsupported: boolean;
 		/** Is Demo Enabled */
 		msdyn_isdemoenabled: boolean;
 		/** Is Enabled */
@@ -98,8 +100,14 @@ declare namespace DevKit {
 		msdyn_name: string;
 		/** Provision Status */
 		msdyn_provisionstatus: OptionSet.msdyn_datainsightsandanalyticsfeature.msdyn_provisionstatus;
+		/** Report Type */
+		msdyn_reporttype: OptionSet.msdyn_datainsightsandanalyticsfeature.msdyn_reporttype;
+		/** Job Schedule for the feature */
+		msdyn_schedule: string;
 		/** Template Id for Reports */
 		msdyn_templateid: string;
+		/** timezonecode from TimeZoneDefinition Entity for the Job Schedule */
+		msdyn_timezonecode: number;
 		/** Unique identifier for the organization */
 		readonly OrganizationId: string;
 		/** Date and time that the record was migrated. */
@@ -120,6 +128,76 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly ComponentIdUnique: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** For internal use only. */
+			readonly IsCustomizable: string;
+			/** Indicates whether the solution component is part of a managed solution. */
+			readonly IsManaged: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Internal analytics checksum */
+			readonly msdyn_analyticschecksum: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_datainsightsandanalyticsfeatureId: string;
+			/** Is Customization Supported */
+			readonly msdyn_iscustomizationsupported: string;
+			/** Is Demo Enabled */
+			readonly msdyn_isdemoenabled: string;
+			/** Is Enabled */
+			readonly msdyn_isenabled: string;
+			/** Record the most recent usage of the feature */
+			readonly msdyn_lastaccesstime_TimezoneDateAndTime: string;
+			/** Last Report Refresh Time */
+			readonly msdyn_lastreportrefreshtime_TimezoneDateAndTime: string;
+			/** The name of the custom entity. */
+			readonly msdyn_name: string;
+			/** Provision Status */
+			readonly msdyn_provisionstatus: string;
+			/** Report Type */
+			readonly msdyn_reporttype: string;
+			/** Job Schedule for the feature */
+			readonly msdyn_schedule: string;
+			/** Template Id for Reports */
+			readonly msdyn_templateid: string;
+			/** timezonecode from TimeZoneDefinition Entity for the Job Schedule */
+			readonly msdyn_timezonecode: string;
+			/** Unique identifier for the organization */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateAndTime: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** Status of the DataInsightsAndAnalyticsFeature */
+			readonly statecode: string;
+			/** Reason for the status of the DataInsightsAndAnalyticsFeature */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -143,6 +221,14 @@ declare namespace OptionSet {
 			Provision_in_Progress,
 			/** 192350000 */
 			Provisioned
+		}
+		enum msdyn_reporttype {
+			/** 192350000 */
+			Default,
+			/** 192350002 */
+			Draft,
+			/** 192350001 */
+			Published
 		}
 		enum statecode {
 			/** 0 */
@@ -174,4 +260,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

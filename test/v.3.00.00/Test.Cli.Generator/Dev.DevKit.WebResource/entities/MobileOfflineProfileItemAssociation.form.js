@@ -49,6 +49,8 @@ var OptionSet;
 			Published: 0,
 			Unpublished: 1
 		},
+		SelectedRelationShipsSchema : {
+		},
 		RollupState : {
 			NotCalculated: 0,
 			Calculated: 1,

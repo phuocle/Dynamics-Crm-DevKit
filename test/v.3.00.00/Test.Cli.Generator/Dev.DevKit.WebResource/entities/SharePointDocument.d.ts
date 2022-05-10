@@ -220,6 +220,174 @@ declare namespace DevKit {
 		readonly TransactionCurrencyId: string;
 		/** Shows the SharePoint document version */
 		readonly Version: string;
+		readonly FormattedValue: {
+			/** Type the URL where the SharePoint document is located. */
+			readonly AbsoluteUrl: string;
+			/** Name of the person who created the application. */
+			readonly AppCreatedBy: string;
+			/** Name of the person who last modified the application. */
+			readonly AppModifiedBy: string;
+			/** Name of the author of the SharePoint document. */
+			readonly Author: string;
+			/** Shows the business unit that the record is associated with. */
+			readonly BusinessUnitId: string;
+			/** Shows who the SharePoint document is checked out to. */
+			readonly CheckedOutTo: string;
+			/** Type a comment about the document that is being checked in. */
+			readonly CheckInComment: string;
+			/** Shows the number of child folders. */
+			readonly ChildFolderCount: string;
+			/** Shows how many child items there are. */
+			readonly ChildItemCount: string;
+			/** The content type of the document. */
+			readonly ContentType: string;
+			/** Shows the unique identifier of the content type. */
+			readonly ContentTypeId: string;
+			/** SharePoint source item URL */
+			readonly CopySource: string;
+			/** Shows who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Unique identifier of a SharePoint document in document library. */
+			readonly DocumentId: string;
+			/** Location type of the SharePoint document location. */
+			readonly DocumentLocationType: string;
+			/** Edit Url of the Sharepoint Form */
+			readonly Edit: string;
+			/** Shows the edit URL of the SharePoint document. */
+			readonly EditUrl: string;
+			/** Shows the exchange rate between the currency associated with the SharePoint document record and the base currency. */
+			readonly ExchangeRate: string;
+			/** Shows the file size. */
+			readonly FileSize: string;
+			/** Shows the file type. */
+			readonly FileType: string;
+			/** Shows the full name of the SharePoint document. */
+			readonly FullName: string;
+			/** Stores the Icon Class name of the SharePoint document. */
+			readonly IconClassName: string;
+			/** Shows whether the file is checked out. */
+			readonly IsCheckedOut: string;
+			/** Shows whether the file is a folder. */
+			readonly IsFolder: string;
+			/** Shows whether to fetch data recursively from the given folder location. */
+			readonly IsRecursiveFetch: string;
+			/** Unique identifier of the associated document location. */
+			readonly LocationId: string;
+			/** Name of the associated document location. */
+			readonly LocationName: string;
+			/** Shows the date and time when the SharePoint document was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly Modified_UtcDateAndTime: string;
+			/** Shows who last updated the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who modified the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Unique identifier of the organization associated with the SharePoint document. */
+			readonly OrganizationId: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Shows the business unit that the record owner belongs to. */
+			readonly OwningBusinessUnit: string;
+			/** Shows the Read URL of the SharePoint document. */
+			readonly ReadUrl: string;
+			/** Choose the parent record that the SharePoint document record is associated with. */
+			readonly regardingobjectid_account: string;
+			/** Choose the parent record that the SharePoint document record is associated with. */
+			readonly regardingobjectid_opportunity: string;
+			/** Choose the parent record that the SharePoint document record is associated with. */
+			readonly regardingobjectid_kbarticle: string;
+			/** Choose the parent record that the SharePoint document record is associated with. */
+			readonly regardingobjectid_knowledgearticle: string;
+			/** Choose the parent record that the SharePoint document record is associated with. */
+			readonly regardingobjectid_lead: string;
+			/** Choose the parent record that the SharePoint document record is associated with. */
+			readonly regardingobjectid_msdyn_agreement: string;
+			/** Choose the parent record that the SharePoint document record is associated with. */
+			readonly regardingobjectid_msdyn_agreementbookingdate: string;
+			/** Choose the parent record that the SharePoint document record is associated with. */
+			readonly regardingobjectid_msdyn_agreementbookingsetup: string;
+			/** Choose the parent record that the SharePoint document record is associated with. */
+			readonly regardingobjectid_msdyn_agreementinvoicedate: string;
+			/** Choose the parent record that the SharePoint document record is associated with. */
+			readonly regardingobjectid_msdyn_agreementinvoicesetup: string;
+			/** Choose the parent record that the SharePoint document record is associated with. */
+			readonly regardingobjectid_msdyn_bookingtimestamp: string;
+			/** Choose the parent record that the SharePoint document record is associated with. */
+			readonly regardingobjectid_msdyn_expense: string;
+			/** Choose the parent record that the SharePoint document record is associated with. */
+			readonly regardingobjectid_msdyn_incidenttypeproduct: string;
+			/** Choose the parent record that the SharePoint document record is associated with. */
+			readonly regardingobjectid_msdyn_inventoryadjustment: string;
+			/** Choose the parent record that the SharePoint document record is associated with. */
+			readonly regardingobjectid_msdyn_inventoryadjustmentproduct: string;
+			/** Choose the parent record that the SharePoint document record is associated with. */
+			readonly regardingobjectid_msdyn_inventorytransfer: string;
+			/** Choose the parent record that the SharePoint document record is associated with. */
+			readonly regardingobjectid_msdyn_knowledgearticletemplate: string;
+			/** Choose the parent record that the SharePoint document record is associated with. */
+			readonly regardingobjectid_msdyn_playbookactivity: string;
+			/** Choose the parent record that the SharePoint document record is associated with. */
+			readonly regardingobjectid_msdyn_project: string;
+			/** Choose the parent record that the SharePoint document record is associated with. */
+			readonly regardingobjectid_msdyn_purchaseorder: string;
+			/** Choose the parent record that the SharePoint document record is associated with. */
+			readonly regardingobjectid_msdyn_purchaseorderproduct: string;
+			/** Choose the parent record that the SharePoint document record is associated with. */
+			readonly regardingobjectid_msdyn_purchaseorderreceipt: string;
+			/** Choose the parent record that the SharePoint document record is associated with. */
+			readonly regardingobjectid_msdyn_resourceterritory: string;
+			/** Choose the parent record that the SharePoint document record is associated with. */
+			readonly regardingobjectid_msdyn_rma: string;
+			/** Choose the parent record that the SharePoint document record is associated with. */
+			readonly regardingobjectid_msdyn_rmareceipt: string;
+			/** Choose the parent record that the SharePoint document record is associated with. */
+			readonly regardingobjectid_msdyn_rtv: string;
+			/** Choose the parent record that the SharePoint document record is associated with. */
+			readonly regardingobjectid_msdyn_timegroup: string;
+			/** Choose the parent record that the SharePoint document record is associated with. */
+			readonly regardingobjectid_msdyn_timegroupdetail: string;
+			/** Choose the parent record that the SharePoint document record is associated with. */
+			readonly regardingobjectid_msdyn_warehouse: string;
+			/** Choose the parent record that the SharePoint document record is associated with. */
+			readonly regardingobjectid_msdyn_workorder: string;
+			/** Choose the parent record that the SharePoint document record is associated with. */
+			readonly regardingobjectid_msdyn_workorderincident: string;
+			/** Choose the parent record that the SharePoint document record is associated with. */
+			readonly regardingobjectid_msdyn_workorderproduct: string;
+			/** Choose the parent record that the SharePoint document record is associated with. */
+			readonly regardingobjectid_msdyn_workorderservice: string;
+			/** Choose the parent record that the SharePoint document record is associated with. */
+			readonly regardingobjectid_msdyn_workorderservicetask: string;
+			/** Choose the parent record that the SharePoint document record is associated with. */
+			readonly regardingobjectid_product: string;
+			/** Choose the parent record that the SharePoint document record is associated with. */
+			readonly regardingobjectid_quote: string;
+			/** Choose the parent record that the SharePoint document record is associated with. */
+			readonly regardingobjectid_salesliterature: string;
+			/** Relative location of Sharepoint Document */
+			readonly RelativeLocation: string;
+			/** Shows the service type of the SharePoint site. */
+			readonly ServiceType: string;
+			/** Shows the date and time when the SharePoint document record was created. */
+			readonly SharePointCreatedOn_UtcDateAndTime: string;
+			/** Shows the unique identifier of the SharePoint document record. */
+			readonly SharePointDocumentId: string;
+			/** Shows who last updated the document record. */
+			readonly SharePointModifiedBy: string;
+			/** Shows the title or name that describes the SharePoint document. */
+			readonly Title: string;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			readonly TransactionCurrencyId: string;
+			/** Shows the SharePoint document version */
+			readonly Version: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -229,6 +397,10 @@ declare namespace OptionSet {
 			Dedicated_for_OneNote_Integration,
 			/** 0 */
 			General
+		}
+		enum OwnerIdType {
+		}
+		enum RegardingObjectTypeCode {
 		}
 		enum ServiceType {
 			/** 3 */
@@ -258,4 +430,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

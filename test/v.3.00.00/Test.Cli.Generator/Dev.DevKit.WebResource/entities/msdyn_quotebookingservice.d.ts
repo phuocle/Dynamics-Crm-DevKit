@@ -257,10 +257,107 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Exchange rate for the currency associated with the entity with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** The currency that will be used to charge this service */
+			readonly msdyn_currency: string;
+			/** Value of the Currency in base currency. */
+			readonly msdyn_currency_Base: string;
+			/** Customer Asset related to this Service */
+			readonly msdyn_customerasset: string;
+			/** Shows the actual duration of service. */
+			readonly msdyn_duration: string;
+			/** Enter the duration you want to bill the customer for. By default, this will default to the same value as the "Duration" field. */
+			readonly msdyn_durationtobill: string;
+			/** Shows the total cost amount of the service. It is calculated as (Unit Cost) * Duration */
+			readonly msdyn_EstimatedCostAmount: string;
+			/** Value of the Estimate Cost Amount in base currency. */
+			readonly msdyn_estimatedcostamount_Base: string;
+			/** Shows the total sales amount of the service. */
+			readonly msdyn_EstimatedSalesAmount: string;
+			/** Value of the Estimate Sales Amount in base currency. */
+			readonly msdyn_estimatedsalesamount_Base: string;
+			/** For internal use only. */
+			readonly msdyn_Internalflags: string;
+			readonly msdyn_iscopied: string;
+			/** Shows the order of this service within the agreement services. */
+			readonly msdyn_lineorder: string;
+			/** Enter the amount charged as a minimum charge. */
+			readonly msdyn_minimumchargeamount: string;
+			/** Value of the Minimum Charge Amount in base currency. */
+			readonly msdyn_minimumchargeamount_Base: string;
+			/** Enter the duration of up to how long the minimum charge applies. */
+			readonly msdyn_minimumchargeduration: string;
+			/** The name of the custom entity. */
+			readonly msdyn_name: string;
+			/** Optionally set Price List that will determine the pricing for this service on the Work Order */
+			readonly msdyn_pricelist: string;
+			/** Unique identifier for Quote associated with Quote Booking Service. */
+			readonly msdyn_quote: string;
+			/** The Quote Booking Incident related to this service */
+			readonly msdyn_quotebookingincident: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_quotebookingserviceId: string;
+			/** Unique identifier for Quote Booking Setup associated with Quote Booking Service. */
+			readonly msdyn_quotebookingsetup: string;
+			/** Unique identifier for Product/Service associated with Quote Booking Service. */
+			readonly msdyn_Service: string;
+			/** The unit that determines the pricing for this service when Price List is set */
+			readonly msdyn_unit: string;
+			/** Enter the amount you wish to charge the customer per unit. This field is optional. */
+			readonly msdyn_unitamount: string;
+			/** Value of the Unit Amount in base currency. */
+			readonly msdyn_unitamount_Base: string;
+			/** Shows the estimated cost amount per unit. */
+			readonly msdyn_unitcostamount: string;
+			/** Value of the Unit Cost in base currency. */
+			readonly msdyn_unitcostamount_Base: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the Quote Booking Service */
+			readonly statecode: string;
+			/** Reason for the status of the Quote Booking Service */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Unique identifier of the currency associated with the entity. */
+			readonly TransactionCurrencyId: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace msdyn_quotebookingservice {
+		enum OwnerIdType {
+		}
 		enum statecode {
 			/** 0 */
 			Active,
@@ -291,4 +388,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

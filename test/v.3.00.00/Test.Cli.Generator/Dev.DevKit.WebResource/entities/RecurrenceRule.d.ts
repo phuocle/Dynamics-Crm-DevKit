@@ -94,6 +94,73 @@ declare namespace DevKit {
 		/** Start time of the recurring activity. */
 		StartTime_UtcDateAndTime: Date;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the recurrence rule. */
+			readonly CreatedBy: string;
+			/** Date and time when the recurrence rule was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the recurrence rule. */
+			readonly CreatedOnBehalfBy: string;
+			/** The day of the month on which the recurring appointment or task occurs. */
+			readonly DayOfMonth: string;
+			/** Bitmask representing the days of the week on which the recurring appointment or task occurs. */
+			readonly DaysOfWeekMask: string;
+			/** Duration of the recurrence pattern in minutes. */
+			readonly Duration: string;
+			/** The actual end date for expansion of the recurrence pattern. */
+			readonly EffectiveEndDate_UtcDateAndTime: string;
+			/** The actual start date for expansion of the recurrence pattern. */
+			readonly EffectiveStartDate_UtcDateOnly: string;
+			/** End time of the associated activity. */
+			readonly EndTime_UtcDateAndTime: string;
+			/** First day Of week for the recurrence pattern. */
+			readonly FirstDayOfWeek: string;
+			/** Specifies the count for which the recurrence pattern is valid for a given interval. */
+			readonly Instance: string;
+			/** Number of units of a given recurrence type between occurrences. */
+			readonly Interval: string;
+			/** Specifies whether the monthly recurrence pattern is Nth monthly, valid only for monthly recurrence. */
+			readonly IsNthMonthly: string;
+			/** Specifies whether the yearly recurrence pattern is Nth yearly, valid only for yearly recurrence. */
+			readonly IsNthYearly: string;
+			/** Valid only for task type recurrence,indicates whether task should be regenerated. */
+			readonly IsRegenerate: string;
+			/** Specifies whether the weekly recurrence pattern is actually a daily every weekday pattern, valid only for weekly recurrence. */
+			readonly IsWeekDayPattern: string;
+			/** Unique identifier of the user who last modified the recurrence rule. */
+			readonly ModifiedBy: string;
+			/** Date and time when the recurrence rule was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the recurrence rule. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Specifies the month of the year valid for the recurrence pattern. */
+			readonly MonthOfYear: string;
+			/** Unique identifier of the object with which the recurrence rule is associated. */
+			readonly ObjectId: string;
+			/** Number of occurrences of the recurrence pattern. */
+			readonly Occurrences: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier of the business unit that owns the recurrence rule. */
+			readonly OwningBusinessUnit: string;
+			readonly OwningTeam: string;
+			readonly OwningUser: string;
+			/** End date of the Recurrence Range. */
+			readonly PatternEndDate_UtcDateAndTime: string;
+			/** Pattern End Type of a recurring series. */
+			readonly PatternEndType: string;
+			/** Start date of the Recurrence Range. */
+			readonly PatternStartDate_UtcDateAndTime: string;
+			/** Type of Recurrence. */
+			readonly RecurrencePatternType: string;
+			/** Unique identifier of the entity associated with recurrence rule. */
+			readonly RuleId: string;
+			/** Start time of the recurring activity. */
+			readonly StartTime_UtcDateAndTime: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -138,6 +205,10 @@ declare namespace OptionSet {
 			/** 9 */
 			September
 		}
+		enum ObjectTypeCode {
+		}
+		enum OwnerIdType {
+		}
 		enum PatternEndType {
 			/** 1 */
 			No_End_Date,
@@ -174,4 +245,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

@@ -51,6 +51,8 @@ var OptionSet;
 			Import: 1,
 			Uninstall: 3
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

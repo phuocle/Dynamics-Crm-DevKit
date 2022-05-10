@@ -70,10 +70,15 @@ var DevKit;
 			ModifiedBy: { b: 'modifiedby', a: '_modifiedby_value', c: 'systemusers', d: 'systemuser', r: true },
 			ModifiedOn_UtcDateAndTime: { a: 'modifiedon', r: true },
 			ModifiedOnBehalfBy: { b: 'modifiedonbehalfby', a: '_modifiedonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
+			msdyn_authenticationclientid: { a: 'msdyn_authenticationclientid' },
+			msdyn_authenticationclientsecret: { a: 'msdyn_authenticationclientsecret' },
+			msdyn_authenticationscopes: { a: 'msdyn_authenticationscopes' },
 			msdyn_authenticationsettingsId: { a: 'msdyn_authenticationsettingsid' },
 			msdyn_Authenticationtype: { a: 'msdyn_authenticationtype' },
+			msdyn_decryptedtokenurl: { a: 'msdyn_decryptedtokenurl' },
 			msdyn_JavaScriptclientfunction: { a: 'msdyn_javascriptclientfunction' },
 			msdyn_name: { a: 'msdyn_name' },
+			msdyn_ocauthchanneltype: { a: 'msdyn_ocauthchanneltype' },
 			msdyn_PublickeyURL: { a: 'msdyn_publickeyurl' },
 			OverriddenCreatedOn_UtcDateOnly: { a: 'overriddencreatedon' },
 			OwnerId_systemuser: { b: 'ownerid', a: '_ownerid_value', c: 'systemusers', d: 'systemuser' },
@@ -116,7 +121,7 @@ var DevKit;
 		}
 		msdyn_authenticationsettings.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -131,7 +136,14 @@ var OptionSet;
 (function (OptionSet) {
 	OptionSet.msdyn_authenticationsettings = {
 		msdyn_Authenticationtype : {
+			OAuth_20_code_flow: 192350001,
 			OAuth_20_implicit_flow: 192350000
+		},
+		msdyn_ocauthchanneltype : {
+			Apple_Messages_For_Business: 192450000,
+			Live_chat: 192360000
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

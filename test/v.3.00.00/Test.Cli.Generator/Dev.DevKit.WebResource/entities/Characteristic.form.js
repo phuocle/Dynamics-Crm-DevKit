@@ -131,6 +131,8 @@ var OptionSet;
 			Certification: 2,
 			Skill: 1
 		},
+		OwnerIdType : {
+		},
 		StateCode : {
 			Active: 0,
 			Inactive: 1

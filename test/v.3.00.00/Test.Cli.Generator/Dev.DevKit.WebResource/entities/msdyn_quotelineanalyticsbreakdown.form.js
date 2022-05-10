@@ -61,6 +61,8 @@ var OptionSet;
 			Resourcing_Unit_Cost: 192350007,
 			Unbilled_Sales: 192350005
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

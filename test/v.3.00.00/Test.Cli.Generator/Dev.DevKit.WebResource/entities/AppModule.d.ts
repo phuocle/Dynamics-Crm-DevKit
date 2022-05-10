@@ -106,6 +106,85 @@ declare namespace DevKit {
 		WebResourceId: string;
 		/** Unique identifier of the Web Resource as Welcome Page Id */
 		WelcomePageId: string;
+		readonly FormattedValue: {
+			/** Unique identifier for entity instances */
+			readonly AppModuleId: string;
+			/** Unique identifier of the App Module used when synchronizing customizations for the Microsoft Dynamics 365 client for Outlook */
+			readonly AppModuleIdUnique: string;
+			/** App Module Version */
+			readonly AppModuleVersion: string;
+			/** App Module Xml Managed */
+			readonly AppModuleXmlManaged: string;
+			/** Client Type such as Web or UCI */
+			readonly ClientType: string;
+			/** For internal use only */
+			readonly ComponentState: string;
+			/** Contains configuration XML */
+			readonly ConfigXML: string;
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Description for entity */
+			readonly Description: string;
+			/** App Module Descriptor */
+			readonly Descriptor: string;
+			/** App Module Event Handlers */
+			readonly EventHandlers: string;
+			/** Form Factor */
+			readonly FormFactor: string;
+			/** Unique identifier of the data import or data migration that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Version in which the similarity rule is introduced. */
+			readonly IntroducedVersion: string;
+			/** Is Default */
+			readonly IsDefault: string;
+			/** Is Featured */
+			readonly IsFeatured: string;
+			/** Is Managed */
+			readonly IsManaged: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Name of App Module */
+			readonly Name: string;
+			/** App navigation type */
+			readonly NavigationType: string;
+			/** The client that this app is optimized for */
+			readonly OptimizedFor: string;
+			/** Unique identifier of the organization associated with the app. */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Internal use only */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Date and time when the record was published. */
+			readonly PublishedOn_UtcDateAndTime: string;
+			/** Unique identifier of the publisher. */
+			readonly PublisherId: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** Status of the Model-driven App */
+			readonly statecode: string;
+			/** Reason for the status of the Model-driven App */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** Unique Name of App Module */
+			readonly UniqueName: string;
+			/** Contains URL */
+			readonly URL: string;
+			readonly VersionNumber: string;
+			/** Unique identifier of the Web Resource */
+			readonly WebResourceId: string;
+			/** Unique identifier of the Web Resource as Welcome Page Id */
+			readonly WelcomePageId: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -158,4 +237,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

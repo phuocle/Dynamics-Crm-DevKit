@@ -57,6 +57,11 @@ declare namespace DevKit {
 		/** Unique identifier for entity instances */
 		availabletimesdatasourceId: string;
 		Name: string;
+		readonly FormattedValue: {
+			/** Unique identifier for entity instances */
+			readonly availabletimesdatasourceId: string;
+			readonly Name: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -79,4 +84,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

@@ -87,6 +87,66 @@ declare namespace DevKit {
 		readonly VersionNumber: number;
 		/** Group name of workflow custom activity. */
 		WorkflowActivityGroupName: string;
+		readonly FormattedValue: {
+			/** Full path name of the plug-in assembly. */
+			readonly AssemblyName: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier of the user who created the plug-in type. */
+			readonly CreatedBy: string;
+			/** Date and time when the plug-in type was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the plugintype. */
+			readonly CreatedOnBehalfBy: string;
+			/** Culture code for the plug-in assembly. */
+			readonly Culture: string;
+			/** Customization level of the plug-in type. */
+			readonly CustomizationLevel: string;
+			/** Serialized Custom Activity Type information, including required arguments. For more information, see SandboxCustomActivityInfo. */
+			readonly CustomWorkflowActivityInfo: string;
+			/** Description of the plug-in type. */
+			readonly Description: string;
+			/** User friendly name for the plug-in. */
+			readonly FriendlyName: string;
+			readonly IsManaged: string;
+			/** Indicates if the plug-in is a custom activity for workflows. */
+			readonly IsWorkflowActivity: string;
+			/** Major of the version number of the assembly for the plug-in type. */
+			readonly Major: string;
+			/** Minor of the version number of the assembly for the plug-in type. */
+			readonly Minor: string;
+			/** Unique identifier of the user who last modified the plug-in type. */
+			readonly ModifiedBy: string;
+			/** Date and time when the plug-in type was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the plugintype. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Name of the plug-in type. */
+			readonly Name: string;
+			/** Unique identifier of the organization with which the plug-in type is associated. */
+			readonly OrganizationId: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Unique identifier of the plug-in assembly that contains this plug-in type. */
+			readonly PluginAssemblyId: string;
+			/** Unique identifier of the plug-in type. */
+			readonly PluginTypeId: string;
+			/** Unique identifier of the plug-in type. */
+			readonly PluginTypeIdUnique: string;
+			/** Public key token of the assembly for the plug-in type. */
+			readonly PublicKeyToken: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** Fully qualified type name of the plug-in type. */
+			readonly TypeName: string;
+			/** Version number of the assembly for the plug-in type. */
+			readonly Version: string;
+			readonly VersionNumber: string;
+			/** Group name of workflow custom activity. */
+			readonly WorkflowActivityGroupName: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -119,4 +179,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

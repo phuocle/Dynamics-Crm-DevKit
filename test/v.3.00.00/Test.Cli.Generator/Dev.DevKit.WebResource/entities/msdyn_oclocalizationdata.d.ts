@@ -186,6 +186,56 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Unique identifier for Channel Language associated with Localization Data. */
+			readonly msdyn_customerlanguageid: string;
+			/** Default Localized Text */
+			readonly msdyn_DefaultLocalizedText: string;
+			/** The column name of the original entity to be localized. */
+			readonly msdyn_EntityColumnName: string;
+			/** The name of the original entity to be localized. */
+			readonly msdyn_EntityName: string;
+			/** The record id of the original entity. */
+			readonly msdyn_EntityRecordId: string;
+			/** Indicates if the localization data record is the default record for message template. */
+			readonly msdyn_Isdefault: string;
+			/** The target language code for the record to be localized in. */
+			readonly msdyn_LanguageCode: string;
+			/** Localized text of the original record. */
+			readonly msdyn_localizedtext: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_oclocalizationdataId: string;
+			/** Unique identifier for System Message associated with Localization Data. */
+			readonly msdyn_systemmessageid: string;
+			/** Unique identifier for the organization */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Status of the Localization Data */
+			readonly statecode: string;
+			/** Reason for the status of the Localization Data */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -220,4 +270,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

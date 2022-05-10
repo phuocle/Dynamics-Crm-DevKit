@@ -292,6 +292,104 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Shows the allocation method used to book resources on the project (full capacity, percentage, and so on). */
+			readonly msdyn_allocationmethod: string;
+			/** Shows the number of applicants for this project team. */
+			readonly msdyn_Applicantcount: string;
+			/** Last Updated time of rollup field Applicant count. */
+			readonly msdyn_Applicantcount_Date_UtcDateAndTime: string;
+			/** State of rollup field Applicant count. */
+			readonly msdyn_Applicantcount_State: string;
+			/** Shows if there are applicants available for this project team. */
+			readonly msdyn_Applicantsavailable: string;
+			/** Type the total assigned hours for project team member. */
+			readonly msdyn_AssignedHours: string;
+			/** Select whether the team member is billable */
+			readonly msdyn_BillingType: string;
+			/** Shows the resource. */
+			readonly msdyn_bookableresourceid: string;
+			/** Shows the calendar used for staffing this project team. */
+			readonly msdyn_calendarId: string;
+			/** Type the system description. */
+			readonly msdyn_Description: string;
+			/** Enter the resource team membership start date. */
+			readonly msdyn_From_UtcDateOnly: string;
+			/** Hard Booked Hours */
+			readonly msdyn_hardbookedhours: string;
+			/** Duplicate for resource requirement */
+			readonly msdyn_hours: string;
+			/** Shows the number of hours required of this team member on the project. */
+			readonly msdyn_HoursRequested: string;
+			/** Shows the membership status of this project team member. */
+			readonly msdyn_MembershipStatus: string;
+			/** The id of the project team member in MS Project Client. */
+			readonly msdyn_msprojectclientid: string;
+			/** Type the name of the custom entity. */
+			readonly msdyn_name: string;
+			/** Shows the number of resources requested. */
+			readonly msdyn_Number: string;
+			/** The organizational unit of the resource performing the work. */
+			readonly msdyn_organizationalunit: string;
+			/** Duplicate for resource requirement */
+			readonly msdyn_percentage: string;
+			/** Select the project that this team members are part of. */
+			readonly msdyn_project: string;
+			/** Select whether the team member can approve time and expenses. */
+			readonly msdyn_ProjectApprover: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_projectteamId: string;
+			/** Required hours of team member from team member requirement */
+			readonly msdyn_requiredhours: string;
+			/** Select the role this team member is playing in this team. */
+			readonly msdyn_resourcecategory: string;
+			/** Unique identifier for Resource Requirement associated with Project Team Member. */
+			readonly msdyn_resourcerequirementid: string;
+			/** Enter a description of the role for this team member. */
+			readonly msdyn_RoleDescription: string;
+			/** Soft Booked Hours */
+			readonly msdyn_softbookedhours: string;
+			/** Enter the end date of the resource membership in a team. */
+			readonly msdyn_To_UtcDateOnly: string;
+			/** Template to use for generic resource's schedule. Will be ignored if its a user or facility resource */
+			readonly msdyn_worktemplate: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Shows the status of the project team. */
+			readonly statecode: string;
+			/** Reason for the status of the Project Team */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -326,6 +424,8 @@ declare namespace OptionSet {
 			/** 1 */
 			Requested
 		}
+		enum OwnerIdType {
+		}
 		enum statecode {
 			/** 0 */
 			Active,
@@ -356,4 +456,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

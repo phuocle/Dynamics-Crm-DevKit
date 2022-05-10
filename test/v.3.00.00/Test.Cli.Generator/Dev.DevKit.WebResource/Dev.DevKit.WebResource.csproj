@@ -66,6 +66,9 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="deploy.debug.bat" />
+    <Content Include="entities\aaduser.form.js" />
+    <Content Include="entities\aaduser.js" />
+    <Content Include="entities\aaduser.webapi.js" />
     <Content Include="entities\Account.form.js" />
     <Content Include="entities\Account.js" />
     <Content Include="entities\Account.webapi.js" />
@@ -103,6 +106,14 @@
     <Content Include="entities\AnnualFiscalCalendar.webapi.js" />
     <Content Include="entities\appaction.js" />
     <Content Include="entities\appaction.webapi.js" />
+    <Content Include="entities\appactionmigration.js" />
+    <Content Include="entities\appactionmigration.webapi.js" />
+    <Content Include="entities\appactionrule.js" />
+    <Content Include="entities\appactionrule.webapi.js" />
+    <Content Include="entities\appactionrule_webresource_scripts.js" />
+    <Content Include="entities\appactionrule_webresource_scripts.webapi.js" />
+    <Content Include="entities\appaction_appactionrule_classicrules.js" />
+    <Content Include="entities\appaction_appactionrule_classicrules.webapi.js" />
     <Content Include="entities\AppConfig.js" />
     <Content Include="entities\AppConfig.webapi.js" />
     <Content Include="entities\AppConfigInstance.js" />
@@ -295,6 +306,8 @@
     <Content Include="entities\Characteristic.form.js" />
     <Content Include="entities\Characteristic.js" />
     <Content Include="entities\Characteristic.webapi.js" />
+    <Content Include="entities\chat.js" />
+    <Content Include="entities\chat.webapi.js" />
     <Content Include="entities\ChildIncidentCount.js" />
     <Content Include="entities\ChildIncidentCount.webapi.js" />
     <Content Include="entities\ClientUpdate.js" />
@@ -403,6 +416,9 @@
     <Content Include="entities\DataPerformance.form.js" />
     <Content Include="entities\DataPerformance.js" />
     <Content Include="entities\DataPerformance.webapi.js" />
+    <Content Include="entities\DataProcessingConfiguration.form.js" />
+    <Content Include="entities\DataProcessingConfiguration.js" />
+    <Content Include="entities\DataProcessingConfiguration.webapi.js" />
     <Content Include="entities\datasyncstate.form.js" />
     <Content Include="entities\datasyncstate.js" />
     <Content Include="entities\datasyncstate.webapi.js" />
@@ -713,6 +729,9 @@
     <Content Include="entities\MobileOfflineProfileItemAssociation.form.js" />
     <Content Include="entities\MobileOfflineProfileItemAssociation.js" />
     <Content Include="entities\MobileOfflineProfileItemAssociation.webapi.js" />
+    <Content Include="entities\mobileofflineprofileitemfilter.form.js" />
+    <Content Include="entities\mobileofflineprofileitemfilter.js" />
+    <Content Include="entities\mobileofflineprofileitemfilter.webapi.js" />
     <Content Include="entities\MonthlyFiscalCalendar.js" />
     <Content Include="entities\MonthlyFiscalCalendar.webapi.js" />
     <Content Include="entities\msdynce_botcontent.form.js" />
@@ -799,6 +818,9 @@
     <Content Include="entities\msdyn_AIBDatasetsContainer.form.js" />
     <Content Include="entities\msdyn_AIBDatasetsContainer.js" />
     <Content Include="entities\msdyn_AIBDatasetsContainer.webapi.js" />
+    <Content Include="entities\msdyn_AIBFeedbackLoop.form.js" />
+    <Content Include="entities\msdyn_AIBFeedbackLoop.js" />
+    <Content Include="entities\msdyn_AIBFeedbackLoop.webapi.js" />
     <Content Include="entities\msdyn_AIBFile.form.js" />
     <Content Include="entities\msdyn_AIBFile.js" />
     <Content Include="entities\msdyn_AIBFile.webapi.js" />
@@ -905,6 +927,9 @@
     <Content Include="entities\msdyn_authenticationsettings.form.js" />
     <Content Include="entities\msdyn_authenticationsettings.js" />
     <Content Include="entities\msdyn_authenticationsettings.webapi.js" />
+    <Content Include="entities\msdyn_authsettingsentry.form.js" />
+    <Content Include="entities\msdyn_authsettingsentry.js" />
+    <Content Include="entities\msdyn_authsettingsentry.webapi.js" />
     <Content Include="entities\msdyn_autocapturerule.form.js" />
     <Content Include="entities\msdyn_autocapturerule.js" />
     <Content Include="entities\msdyn_autocapturerule.webapi.js" />
@@ -1119,6 +1144,9 @@
     <Content Include="entities\msdyn_conversationtopic_conversation.form.js" />
     <Content Include="entities\msdyn_conversationtopic_conversation.js" />
     <Content Include="entities\msdyn_conversationtopic_conversation.webapi.js" />
+    <Content Include="entities\msdyn_csadminconfig.form.js" />
+    <Content Include="entities\msdyn_csadminconfig.js" />
+    <Content Include="entities\msdyn_csadminconfig.webapi.js" />
     <Content Include="entities\msdyn_customengagementctx.form.js" />
     <Content Include="entities\msdyn_customengagementctx.js" />
     <Content Include="entities\msdyn_customengagementctx.webapi.js" />
@@ -1131,12 +1159,18 @@
     <Content Include="entities\msdyn_customerassetcategory.form.js" />
     <Content Include="entities\msdyn_customerassetcategory.js" />
     <Content Include="entities\msdyn_customerassetcategory.webapi.js" />
+    <Content Include="entities\msdyn_dataanalyticscustomizedreport.form.js" />
+    <Content Include="entities\msdyn_dataanalyticscustomizedreport.js" />
+    <Content Include="entities\msdyn_dataanalyticscustomizedreport.webapi.js" />
     <Content Include="entities\msdyn_dataanalyticsreport.form.js" />
     <Content Include="entities\msdyn_dataanalyticsreport.js" />
     <Content Include="entities\msdyn_dataanalyticsreport.webapi.js" />
     <Content Include="entities\msdyn_dataanalyticsreport_csrmanager.form.js" />
     <Content Include="entities\msdyn_dataanalyticsreport_csrmanager.js" />
     <Content Include="entities\msdyn_dataanalyticsreport_csrmanager.webapi.js" />
+    <Content Include="entities\msdyn_dataanalyticsreport_forecast.form.js" />
+    <Content Include="entities\msdyn_dataanalyticsreport_forecast.js" />
+    <Content Include="entities\msdyn_dataanalyticsreport_forecast.webapi.js" />
     <Content Include="entities\msdyn_dataanalyticsreport_fs.form.js" />
     <Content Include="entities\msdyn_dataanalyticsreport_fs.js" />
     <Content Include="entities\msdyn_dataanalyticsreport_fs.webapi.js" />
@@ -1155,6 +1189,9 @@
     <Content Include="entities\msdyn_dataanalyticsreport_ocvoice.form.js" />
     <Content Include="entities\msdyn_dataanalyticsreport_ocvoice.js" />
     <Content Include="entities\msdyn_dataanalyticsreport_ocvoice.webapi.js" />
+    <Content Include="entities\msdyn_dataanalyticsreport_sutreporting.form.js" />
+    <Content Include="entities\msdyn_dataanalyticsreport_sutreporting.js" />
+    <Content Include="entities\msdyn_dataanalyticsreport_sutreporting.webapi.js" />
     <Content Include="entities\msdyn_databaseversion.form.js" />
     <Content Include="entities\msdyn_databaseversion.js" />
     <Content Include="entities\msdyn_databaseversion.webapi.js" />
@@ -1163,9 +1200,14 @@
     <Content Include="entities\msdyn_dataexport.webapi.js" />
     <Content Include="entities\msdyn_dataflow.js" />
     <Content Include="entities\msdyn_dataflow.webapi.js" />
+    <Content Include="entities\msdyn_dataflowrefreshhistory.js" />
+    <Content Include="entities\msdyn_dataflowrefreshhistory.webapi.js" />
     <Content Include="entities\msdyn_datainsightsandanalyticsfeature.form.js" />
     <Content Include="entities\msdyn_datainsightsandanalyticsfeature.js" />
     <Content Include="entities\msdyn_datainsightsandanalyticsfeature.webapi.js" />
+    <Content Include="entities\msdyn_datalakeds.form.js" />
+    <Content Include="entities\msdyn_datalakeds.js" />
+    <Content Include="entities\msdyn_datalakeds.webapi.js" />
     <Content Include="entities\msdyn_dealmanageraccess.form.js" />
     <Content Include="entities\msdyn_dealmanageraccess.js" />
     <Content Include="entities\msdyn_dealmanageraccess.webapi.js" />
@@ -1187,6 +1229,12 @@
     <Content Include="entities\msdyn_dimensionfieldname.form.js" />
     <Content Include="entities\msdyn_dimensionfieldname.js" />
     <Content Include="entities\msdyn_dimensionfieldname.webapi.js" />
+    <Content Include="entities\msdyn_duplicatedetectionpluginrun.form.js" />
+    <Content Include="entities\msdyn_duplicatedetectionpluginrun.js" />
+    <Content Include="entities\msdyn_duplicatedetectionpluginrun.webapi.js" />
+    <Content Include="entities\msdyn_duplicateleadmapping.form.js" />
+    <Content Include="entities\msdyn_duplicateleadmapping.js" />
+    <Content Include="entities\msdyn_duplicateleadmapping.webapi.js" />
     <Content Include="entities\msdyn_effortpredictionresult.form.js" />
     <Content Include="entities\msdyn_effortpredictionresult.js" />
     <Content Include="entities\msdyn_effortpredictionresult.webapi.js" />
@@ -1205,6 +1253,8 @@
     <Content Include="entities\msdyn_entityrankingrule.form.js" />
     <Content Include="entities\msdyn_entityrankingrule.js" />
     <Content Include="entities\msdyn_entityrankingrule.webapi.js" />
+    <Content Include="entities\msdyn_entityrefreshhistory.js" />
+    <Content Include="entities\msdyn_entityrefreshhistory.webapi.js" />
     <Content Include="entities\msdyn_entityroutingconfiguration.form.js" />
     <Content Include="entities\msdyn_entityroutingconfiguration.js" />
     <Content Include="entities\msdyn_entityroutingconfiguration.webapi.js" />
@@ -1271,6 +1321,9 @@
     <Content Include="entities\msdyn_forecastrecurrence.form.js" />
     <Content Include="entities\msdyn_forecastrecurrence.js" />
     <Content Include="entities\msdyn_forecastrecurrence.webapi.js" />
+    <Content Include="entities\msdyn_forecastsettingsandsummary.form.js" />
+    <Content Include="entities\msdyn_forecastsettingsandsummary.js" />
+    <Content Include="entities\msdyn_forecastsettingsandsummary.webapi.js" />
     <Content Include="entities\msdyn_FunctionalLocation.form.js" />
     <Content Include="entities\msdyn_FunctionalLocation.js" />
     <Content Include="entities\msdyn_FunctionalLocation.webapi.js" />
@@ -1304,6 +1357,9 @@
     <Content Include="entities\msdyn_iermltraining.form.js" />
     <Content Include="entities\msdyn_iermltraining.js" />
     <Content Include="entities\msdyn_iermltraining.webapi.js" />
+    <Content Include="entities\msdyn_inboxconfiguration.form.js" />
+    <Content Include="entities\msdyn_inboxconfiguration.js" />
+    <Content Include="entities\msdyn_inboxconfiguration.webapi.js" />
     <Content Include="entities\msdyn_incidenttype.form.js" />
     <Content Include="entities\msdyn_incidenttype.js" />
     <Content Include="entities\msdyn_incidenttype.webapi.js" />
@@ -1336,6 +1392,9 @@
     <Content Include="entities\msdyn_incidenttype_requirementgroup.webapi.js" />
     <Content Include="entities\msdyn_incident_msdyn_customerasset.js" />
     <Content Include="entities\msdyn_incident_msdyn_customerasset.webapi.js" />
+    <Content Include="entities\msdyn_InsightsStoreVirtualEntity.form.js" />
+    <Content Include="entities\msdyn_InsightsStoreVirtualEntity.js" />
+    <Content Include="entities\msdyn_InsightsStoreVirtualEntity.webapi.js" />
     <Content Include="entities\msdyn_inspection.form.js" />
     <Content Include="entities\msdyn_inspection.js" />
     <Content Include="entities\msdyn_inspection.webapi.js" />
@@ -1466,6 +1525,8 @@
     <Content Include="entities\msdyn_knowledgeinteractioninsight.form.js" />
     <Content Include="entities\msdyn_knowledgeinteractioninsight.js" />
     <Content Include="entities\msdyn_knowledgeinteractioninsight.webapi.js" />
+    <Content Include="entities\msdyn_knowledgemanagementsetting.js" />
+    <Content Include="entities\msdyn_knowledgemanagementsetting.webapi.js" />
     <Content Include="entities\msdyn_knowledgepersonalfilter.form.js" />
     <Content Include="entities\msdyn_knowledgepersonalfilter.js" />
     <Content Include="entities\msdyn_knowledgepersonalfilter.webapi.js" />
@@ -1481,6 +1542,9 @@
     <Content Include="entities\msdyn_KPIEventDefinition.form.js" />
     <Content Include="entities\msdyn_KPIEventDefinition.js" />
     <Content Include="entities\msdyn_KPIEventDefinition.webapi.js" />
+    <Content Include="entities\msdyn_leadhygienesetting.form.js" />
+    <Content Include="entities\msdyn_leadhygienesetting.js" />
+    <Content Include="entities\msdyn_leadhygienesetting.webapi.js" />
     <Content Include="entities\msdyn_leadmodelconfig.form.js" />
     <Content Include="entities\msdyn_leadmodelconfig.js" />
     <Content Include="entities\msdyn_leadmodelconfig.webapi.js" />
@@ -1573,6 +1637,10 @@
     <Content Include="entities\msdyn_msdyn_ocliveworkitem_knowledgeartic.webapi.js" />
     <Content Include="entities\msdyn_msdyn_ocliveworkitem_knowledgebaser.js" />
     <Content Include="entities\msdyn_msdyn_ocliveworkitem_knowledgebaser.webapi.js" />
+    <Content Include="entities\msdyn_msdyn_ocrichobject_liveworkstream.js" />
+    <Content Include="entities\msdyn_msdyn_ocrichobject_liveworkstream.webapi.js" />
+    <Content Include="entities\msdyn_msdyn_ocrichobject_msdyn_octag.js" />
+    <Content Include="entities\msdyn_msdyn_ocrichobject_msdyn_octag.webapi.js" />
     <Content Include="entities\msdyn_msdyn_paneconfig_msdyn_appconfig.js" />
     <Content Include="entities\msdyn_msdyn_paneconfig_msdyn_appconfig.webapi.js" />
     <Content Include="entities\msdyn_msdyn_personalmessage_msdyn_octag.js" />
@@ -1607,6 +1675,15 @@
     <Content Include="entities\msdyn_notificationtemplate.webapi.js" />
     <Content Include="entities\msdyn_notificationtemplate_notificationfield.js" />
     <Content Include="entities\msdyn_notificationtemplate_notificationfield.webapi.js" />
+    <Content Include="entities\msdyn_ocapplebusinessaccount.form.js" />
+    <Content Include="entities\msdyn_ocapplebusinessaccount.js" />
+    <Content Include="entities\msdyn_ocapplebusinessaccount.webapi.js" />
+    <Content Include="entities\msdyn_ocapplemessagesforbusinessengagementctx.form.js" />
+    <Content Include="entities\msdyn_ocapplemessagesforbusinessengagementctx.js" />
+    <Content Include="entities\msdyn_ocapplemessagesforbusinessengagementctx.webapi.js" />
+    <Content Include="entities\msdyn_ocapplepay.form.js" />
+    <Content Include="entities\msdyn_ocapplepay.js" />
+    <Content Include="entities\msdyn_ocapplepay.webapi.js" />
     <Content Include="entities\msdyn_ocautoblockrule.form.js" />
     <Content Include="entities\msdyn_ocautoblockrule.js" />
     <Content Include="entities\msdyn_ocautoblockrule.webapi.js" />
@@ -1616,6 +1693,15 @@
     <Content Include="entities\msdyn_occarrier.form.js" />
     <Content Include="entities\msdyn_occarrier.js" />
     <Content Include="entities\msdyn_occarrier.webapi.js" />
+    <Content Include="entities\msdyn_occhannelapiconversationprivilege.form.js" />
+    <Content Include="entities\msdyn_occhannelapiconversationprivilege.js" />
+    <Content Include="entities\msdyn_occhannelapiconversationprivilege.webapi.js" />
+    <Content Include="entities\msdyn_occhannelapimessageprivilege.form.js" />
+    <Content Include="entities\msdyn_occhannelapimessageprivilege.js" />
+    <Content Include="entities\msdyn_occhannelapimessageprivilege.webapi.js" />
+    <Content Include="entities\msdyn_occhannelapimethodmapping.form.js" />
+    <Content Include="entities\msdyn_occhannelapimethodmapping.js" />
+    <Content Include="entities\msdyn_occhannelapimethodmapping.webapi.js" />
     <Content Include="entities\msdyn_occhannelconfiguration.form.js" />
     <Content Include="entities\msdyn_occhannelconfiguration.js" />
     <Content Include="entities\msdyn_occhannelconfiguration.webapi.js" />
@@ -1676,6 +1762,9 @@
     <Content Include="entities\msdyn_ocoutboundmessage.form.js" />
     <Content Include="entities\msdyn_ocoutboundmessage.js" />
     <Content Include="entities\msdyn_ocoutboundmessage.webapi.js" />
+    <Content Include="entities\msdyn_ocpaymentprofile.form.js" />
+    <Content Include="entities\msdyn_ocpaymentprofile.js" />
+    <Content Include="entities\msdyn_ocpaymentprofile.webapi.js" />
     <Content Include="entities\msdyn_ocphonenumber.form.js" />
     <Content Include="entities\msdyn_ocphonenumber.js" />
     <Content Include="entities\msdyn_ocphonenumber.webapi.js" />
@@ -1688,6 +1777,12 @@
     <Content Include="entities\msdyn_ocrequest.form.js" />
     <Content Include="entities\msdyn_ocrequest.js" />
     <Content Include="entities\msdyn_ocrequest.webapi.js" />
+    <Content Include="entities\msdyn_ocrichobject.form.js" />
+    <Content Include="entities\msdyn_ocrichobject.js" />
+    <Content Include="entities\msdyn_ocrichobject.webapi.js" />
+    <Content Include="entities\msdyn_ocrichobjectmap.form.js" />
+    <Content Include="entities\msdyn_ocrichobjectmap.js" />
+    <Content Include="entities\msdyn_ocrichobjectmap.webapi.js" />
     <Content Include="entities\msdyn_ocruleitem.form.js" />
     <Content Include="entities\msdyn_ocruleitem.js" />
     <Content Include="entities\msdyn_ocruleitem.webapi.js" />
@@ -1873,12 +1968,18 @@
     <Content Include="entities\msdyn_playbooktemplate.form.js" />
     <Content Include="entities\msdyn_playbooktemplate.js" />
     <Content Include="entities\msdyn_playbooktemplate.webapi.js" />
+    <Content Include="entities\msdyn_pmanalysishistory.form.js" />
+    <Content Include="entities\msdyn_pmanalysishistory.js" />
+    <Content Include="entities\msdyn_pmanalysishistory.webapi.js" />
     <Content Include="entities\msdyn_pminferredtask.form.js" />
     <Content Include="entities\msdyn_pminferredtask.js" />
     <Content Include="entities\msdyn_pminferredtask.webapi.js" />
     <Content Include="entities\msdyn_pmrecording.form.js" />
     <Content Include="entities\msdyn_pmrecording.js" />
     <Content Include="entities\msdyn_pmrecording.webapi.js" />
+    <Content Include="entities\msdyn_pmtemplate.form.js" />
+    <Content Include="entities\msdyn_pmtemplate.js" />
+    <Content Include="entities\msdyn_pmtemplate.webapi.js" />
     <Content Include="entities\msdyn_PostAlbum.form.js" />
     <Content Include="entities\msdyn_PostAlbum.js" />
     <Content Include="entities\msdyn_PostAlbum.webapi.js" />
@@ -2186,6 +2287,9 @@
     <Content Include="entities\msdyn_salesroutingrun.form.js" />
     <Content Include="entities\msdyn_salesroutingrun.js" />
     <Content Include="entities\msdyn_salesroutingrun.webapi.js" />
+    <Content Include="entities\msdyn_salessuggestion.form.js" />
+    <Content Include="entities\msdyn_salessuggestion.js" />
+    <Content Include="entities\msdyn_salessuggestion.webapi.js" />
     <Content Include="entities\msdyn_salestag.form.js" />
     <Content Include="entities\msdyn_salestag.js" />
     <Content Include="entities\msdyn_salestag.webapi.js" />
@@ -2227,6 +2331,9 @@
     <Content Include="entities\msdyn_sequencetargetstep.form.js" />
     <Content Include="entities\msdyn_sequencetargetstep.js" />
     <Content Include="entities\msdyn_sequencetargetstep.webapi.js" />
+    <Content Include="entities\msdyn_sequencetemplate.form.js" />
+    <Content Include="entities\msdyn_sequencetemplate.js" />
+    <Content Include="entities\msdyn_sequencetemplate.webapi.js" />
     <Content Include="entities\msdyn_serviceconfiguration.form.js" />
     <Content Include="entities\msdyn_serviceconfiguration.js" />
     <Content Include="entities\msdyn_serviceconfiguration.webapi.js" />
@@ -2339,6 +2446,24 @@
     <Content Include="entities\msdyn_surveyquestion.form.js" />
     <Content Include="entities\msdyn_surveyquestion.js" />
     <Content Include="entities\msdyn_surveyquestion.webapi.js" />
+    <Content Include="entities\msdyn_swarm.form.js" />
+    <Content Include="entities\msdyn_swarm.js" />
+    <Content Include="entities\msdyn_swarm.webapi.js" />
+    <Content Include="entities\msdyn_swarmparticipant.form.js" />
+    <Content Include="entities\msdyn_swarmparticipant.js" />
+    <Content Include="entities\msdyn_swarmparticipant.webapi.js" />
+    <Content Include="entities\msdyn_swarmparticipantrule.form.js" />
+    <Content Include="entities\msdyn_swarmparticipantrule.js" />
+    <Content Include="entities\msdyn_swarmparticipantrule.webapi.js" />
+    <Content Include="entities\msdyn_swarmrole.form.js" />
+    <Content Include="entities\msdyn_swarmrole.js" />
+    <Content Include="entities\msdyn_swarmrole.webapi.js" />
+    <Content Include="entities\msdyn_swarmskill.form.js" />
+    <Content Include="entities\msdyn_swarmskill.js" />
+    <Content Include="entities\msdyn_swarmskill.webapi.js" />
+    <Content Include="entities\msdyn_swarmtemplate.form.js" />
+    <Content Include="entities\msdyn_swarmtemplate.js" />
+    <Content Include="entities\msdyn_swarmtemplate.webapi.js" />
     <Content Include="entities\msdyn_systemuserschedulersetting.form.js" />
     <Content Include="entities\msdyn_systemuserschedulersetting.js" />
     <Content Include="entities\msdyn_systemuserschedulersetting.webapi.js" />
@@ -2395,6 +2520,9 @@
     <Content Include="entities\msdyn_timeoffrequest.form.js" />
     <Content Include="entities\msdyn_timeoffrequest.js" />
     <Content Include="entities\msdyn_timeoffrequest.webapi.js" />
+    <Content Include="entities\msdyn_timespent.form.js" />
+    <Content Include="entities\msdyn_timespent.js" />
+    <Content Include="entities\msdyn_timespent.webapi.js" />
     <Content Include="entities\msdyn_tour.form.js" />
     <Content Include="entities\msdyn_tour.js" />
     <Content Include="entities\msdyn_tour.webapi.js" />
@@ -2455,6 +2583,9 @@
     <Content Include="entities\msdyn_urnotificationtemplatemapping.form.js" />
     <Content Include="entities\msdyn_urnotificationtemplatemapping.js" />
     <Content Include="entities\msdyn_urnotificationtemplatemapping.webapi.js" />
+    <Content Include="entities\msdyn_usagemetric.form.js" />
+    <Content Include="entities\msdyn_usagemetric.js" />
+    <Content Include="entities\msdyn_usagemetric.webapi.js" />
     <Content Include="entities\msdyn_usersetting.form.js" />
     <Content Include="entities\msdyn_usersetting.js" />
     <Content Include="entities\msdyn_usersetting.webapi.js" />
@@ -2482,6 +2613,15 @@
     <Content Include="entities\msdyn_workhourtemplate.form.js" />
     <Content Include="entities\msdyn_workhourtemplate.js" />
     <Content Include="entities\msdyn_workhourtemplate.webapi.js" />
+    <Content Include="entities\msdyn_worklistsuggestion.form.js" />
+    <Content Include="entities\msdyn_worklistsuggestion.js" />
+    <Content Include="entities\msdyn_worklistsuggestion.webapi.js" />
+    <Content Include="entities\msdyn_worklistsuggestionsource.form.js" />
+    <Content Include="entities\msdyn_worklistsuggestionsource.js" />
+    <Content Include="entities\msdyn_worklistsuggestionsource.webapi.js" />
+    <Content Include="entities\msdyn_worklistviewconfiguration.form.js" />
+    <Content Include="entities\msdyn_worklistviewconfiguration.js" />
+    <Content Include="entities\msdyn_worklistviewconfiguration.webapi.js" />
     <Content Include="entities\msdyn_workorder.form.js" />
     <Content Include="entities\msdyn_workorder.js" />
     <Content Include="entities\msdyn_workorder.webapi.js" />
@@ -2730,6 +2870,9 @@
     <Content Include="entities\OrderClose.webapi.js" />
     <Content Include="entities\Organization.js" />
     <Content Include="entities\Organization.webapi.js" />
+    <Content Include="entities\organizationdatasyncstate.form.js" />
+    <Content Include="entities\organizationdatasyncstate.js" />
+    <Content Include="entities\organizationdatasyncstate.webapi.js" />
     <Content Include="entities\organizationdatasyncsubscription.form.js" />
     <Content Include="entities\organizationdatasyncsubscription.js" />
     <Content Include="entities\organizationdatasyncsubscription.webapi.js" />
@@ -3030,8 +3173,14 @@
     <Content Include="entities\ServicePlanMapping.webapi.js" />
     <Content Include="entities\SettingDefinition.js" />
     <Content Include="entities\SettingDefinition.webapi.js" />
+    <Content Include="entities\SharedLinkSetting.js" />
+    <Content Include="entities\SharedLinkSetting.webapi.js" />
+    <Content Include="entities\sharedobject.js" />
+    <Content Include="entities\sharedobject.webapi.js" />
     <Content Include="entities\SharedObjectsForRead.js" />
     <Content Include="entities\SharedObjectsForRead.webapi.js" />
+    <Content Include="entities\sharedworkspace.js" />
+    <Content Include="entities\sharedworkspace.webapi.js" />
     <Content Include="entities\SharePointData.form.js" />
     <Content Include="entities\SharePointData.js" />
     <Content Include="entities\SharePointData.webapi.js" />
@@ -3120,6 +3269,24 @@
     <Content Include="entities\SubscriptionTrackingDeletedObject.webapi.js" />
     <Content Include="entities\SuggestionCardTemplate.js" />
     <Content Include="entities\SuggestionCardTemplate.webapi.js" />
+    <Content Include="entities\synapsedatabase.form.js" />
+    <Content Include="entities\synapsedatabase.js" />
+    <Content Include="entities\synapsedatabase.webapi.js" />
+    <Content Include="entities\synapselinkexternaltablestate.form.js" />
+    <Content Include="entities\synapselinkexternaltablestate.js" />
+    <Content Include="entities\synapselinkexternaltablestate.webapi.js" />
+    <Content Include="entities\synapselinkprofile.form.js" />
+    <Content Include="entities\synapselinkprofile.js" />
+    <Content Include="entities\synapselinkprofile.webapi.js" />
+    <Content Include="entities\synapselinkprofileentity.form.js" />
+    <Content Include="entities\synapselinkprofileentity.js" />
+    <Content Include="entities\synapselinkprofileentity.webapi.js" />
+    <Content Include="entities\synapselinkprofileentitystate.form.js" />
+    <Content Include="entities\synapselinkprofileentitystate.js" />
+    <Content Include="entities\synapselinkprofileentitystate.webapi.js" />
+    <Content Include="entities\synapselinkschedule.form.js" />
+    <Content Include="entities\synapselinkschedule.js" />
+    <Content Include="entities\synapselinkschedule.webapi.js" />
     <Content Include="entities\SyncAttributeMapping.js" />
     <Content Include="entities\SyncAttributeMapping.webapi.js" />
     <Content Include="entities\SyncAttributeMappingProfile.js" />
@@ -3331,6 +3498,10 @@
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <ItemGroup>
+    <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.2.13.33\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="entities\aaduser.d.ts" />
     <TypeScriptCompile Include="entities\Account.d.ts" />
     <TypeScriptCompile Include="entities\AccountLeads.d.ts" />
     <TypeScriptCompile Include="entities\ACIViewMapper.d.ts" />
@@ -3347,6 +3518,10 @@
     <TypeScriptCompile Include="entities\Annotation.d.ts" />
     <TypeScriptCompile Include="entities\AnnualFiscalCalendar.d.ts" />
     <TypeScriptCompile Include="entities\appaction.d.ts" />
+    <TypeScriptCompile Include="entities\appactionmigration.d.ts" />
+    <TypeScriptCompile Include="entities\appactionrule.d.ts" />
+    <TypeScriptCompile Include="entities\appactionrule_webresource_scripts.d.ts" />
+    <TypeScriptCompile Include="entities\appaction_appactionrule_classicrules.d.ts" />
     <TypeScriptCompile Include="entities\AppConfig.d.ts" />
     <TypeScriptCompile Include="entities\AppConfigInstance.d.ts" />
     <TypeScriptCompile Include="entities\AppConfigMaster.d.ts" />
@@ -3425,6 +3600,7 @@
     <TypeScriptCompile Include="entities\ChannelProperty.d.ts" />
     <TypeScriptCompile Include="entities\ChannelPropertyGroup.d.ts" />
     <TypeScriptCompile Include="entities\Characteristic.d.ts" />
+    <TypeScriptCompile Include="entities\chat.d.ts" />
     <TypeScriptCompile Include="entities\ChildIncidentCount.d.ts" />
     <TypeScriptCompile Include="entities\ClientUpdate.d.ts" />
     <TypeScriptCompile Include="entities\ColumnMapping.d.ts" />
@@ -3467,6 +3643,7 @@
     <TypeScriptCompile Include="entities\datalakeworkspace.d.ts" />
     <TypeScriptCompile Include="entities\datalakeworkspacepermission.d.ts" />
     <TypeScriptCompile Include="entities\DataPerformance.d.ts" />
+    <TypeScriptCompile Include="entities\DataProcessingConfiguration.d.ts" />
     <TypeScriptCompile Include="entities\datasyncstate.d.ts" />
     <TypeScriptCompile Include="entities\DelveActionHub.d.ts" />
     <TypeScriptCompile Include="entities\Dependency.d.ts" />
@@ -3592,6 +3769,7 @@
     <TypeScriptCompile Include="entities\MobileOfflineProfile.d.ts" />
     <TypeScriptCompile Include="entities\MobileOfflineProfileItem.d.ts" />
     <TypeScriptCompile Include="entities\MobileOfflineProfileItemAssociation.d.ts" />
+    <TypeScriptCompile Include="entities\mobileofflineprofileitemfilter.d.ts" />
     <TypeScriptCompile Include="entities\MonthlyFiscalCalendar.d.ts" />
     <TypeScriptCompile Include="entities\msdynce_botcontent.d.ts" />
     <TypeScriptCompile Include="entities\msdynsm_marketingsitemap.d.ts" />
@@ -3621,6 +3799,7 @@
     <TypeScriptCompile Include="entities\msdyn_AIBDatasetFile.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_AIBDatasetRecord.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_AIBDatasetsContainer.d.ts" />
+    <TypeScriptCompile Include="entities\msdyn_AIBFeedbackLoop.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_AIBFile.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_AIBFileAttachedData.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_AIConfiguration.d.ts" />
@@ -3659,6 +3838,7 @@
     <TypeScriptCompile Include="entities\msdyn_attribute.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_attributevalue.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_authenticationsettings.d.ts" />
+    <TypeScriptCompile Include="entities\msdyn_authsettingsentry.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_autocapturerule.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_autocapturesettings.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_batchjob.d.ts" />
@@ -3731,22 +3911,28 @@
     <TypeScriptCompile Include="entities\msdyn_conversationtopicsetting.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_conversationtopicsummary.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_conversationtopic_conversation.d.ts" />
+    <TypeScriptCompile Include="entities\msdyn_csadminconfig.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_customengagementctx.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_customerasset.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_customerassetattachment.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_customerassetcategory.d.ts" />
+    <TypeScriptCompile Include="entities\msdyn_dataanalyticscustomizedreport.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_dataanalyticsreport.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_dataanalyticsreport_csrmanager.d.ts" />
+    <TypeScriptCompile Include="entities\msdyn_dataanalyticsreport_forecast.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_dataanalyticsreport_fs.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_dataanalyticsreport_fspredictrs.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_dataanalyticsreport_fspredictwhd.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_dataanalyticsreport_ksinsights.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_dataanalyticsreport_oc.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_dataanalyticsreport_ocvoice.d.ts" />
+    <TypeScriptCompile Include="entities\msdyn_dataanalyticsreport_sutreporting.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_databaseversion.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_dataexport.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_dataflow.d.ts" />
+    <TypeScriptCompile Include="entities\msdyn_dataflowrefreshhistory.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_datainsightsandanalyticsfeature.d.ts" />
+    <TypeScriptCompile Include="entities\msdyn_datalakeds.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_dealmanageraccess.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_dealmanagersettings.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_decisioncontract.d.ts" />
@@ -3754,12 +3940,15 @@
     <TypeScriptCompile Include="entities\msdyn_delegation.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_dimension.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_dimensionfieldname.d.ts" />
+    <TypeScriptCompile Include="entities\msdyn_duplicatedetectionpluginrun.d.ts" />
+    <TypeScriptCompile Include="entities\msdyn_duplicateleadmapping.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_effortpredictionresult.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_entitlementapplication.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_entityconfig.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_entityconfiguration.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_entitylinkchatconfiguration.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_entityrankingrule.d.ts" />
+    <TypeScriptCompile Include="entities\msdyn_entityrefreshhistory.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_entityroutingconfiguration.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_estimate.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_estimateline.d.ts" />
@@ -3782,6 +3971,7 @@
     <TypeScriptCompile Include="entities\msdyn_forecastdefinition.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_forecastinstance.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_forecastrecurrence.d.ts" />
+    <TypeScriptCompile Include="entities\msdyn_forecastsettingsandsummary.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_FunctionalLocation.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_gdprdata.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_geofence.d.ts" />
@@ -3793,6 +3983,7 @@
     <TypeScriptCompile Include="entities\msdyn_icebreakersconfig.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_iermlmodel.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_iermltraining.d.ts" />
+    <TypeScriptCompile Include="entities\msdyn_inboxconfiguration.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_incidenttype.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_incidenttypecharacteristic.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_incidenttypeproduct.d.ts" />
@@ -3804,6 +3995,7 @@
     <TypeScriptCompile Include="entities\msdyn_incidenttypessetup.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_incidenttype_requirementgroup.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_incident_msdyn_customerasset.d.ts" />
+    <TypeScriptCompile Include="entities\msdyn_InsightsStoreVirtualEntity.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_inspection.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_inspectionattachment.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_inspectiondefinition.d.ts" />
@@ -3848,11 +4040,13 @@
     <TypeScriptCompile Include="entities\msdyn_knowledgearticlesuggestiondatasource.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_knowledgearticletemplate.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_knowledgeinteractioninsight.d.ts" />
+    <TypeScriptCompile Include="entities\msdyn_knowledgemanagementsetting.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_knowledgepersonalfilter.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_knowledgesearchfilter.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_knowledgesearchinsight.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_KPIEventData.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_KPIEventDefinition.d.ts" />
+    <TypeScriptCompile Include="entities\msdyn_leadhygienesetting.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_leadmodelconfig.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_lineengagementctx.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_livechatconfig.d.ts" />
@@ -3891,6 +4085,8 @@
     <TypeScriptCompile Include="entities\msdyn_msdyn_liveworkstream_systemuser.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_msdyn_ocliveworkitem_knowledgeartic.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_msdyn_ocliveworkitem_knowledgebaser.d.ts" />
+    <TypeScriptCompile Include="entities\msdyn_msdyn_ocrichobject_liveworkstream.d.ts" />
+    <TypeScriptCompile Include="entities\msdyn_msdyn_ocrichobject_msdyn_octag.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_msdyn_paneconfig_msdyn_appconfig.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_msdyn_personalmessage_msdyn_octag.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_msdyn_prod_actioninputparameter_msdyn_par.d.ts" />
@@ -3905,9 +4101,15 @@
     <TypeScriptCompile Include="entities\msdyn_notificationfield.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_notificationtemplate.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_notificationtemplate_notificationfield.d.ts" />
+    <TypeScriptCompile Include="entities\msdyn_ocapplebusinessaccount.d.ts" />
+    <TypeScriptCompile Include="entities\msdyn_ocapplemessagesforbusinessengagementctx.d.ts" />
+    <TypeScriptCompile Include="entities\msdyn_ocapplepay.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_ocautoblockrule.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_ocbotchannelregistration.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_occarrier.d.ts" />
+    <TypeScriptCompile Include="entities\msdyn_occhannelapiconversationprivilege.d.ts" />
+    <TypeScriptCompile Include="entities\msdyn_occhannelapimessageprivilege.d.ts" />
+    <TypeScriptCompile Include="entities\msdyn_occhannelapimethodmapping.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_occhannelconfiguration.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_occhannelstateconfiguration.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_occommunicationprovidersetting.d.ts" />
@@ -3928,10 +4130,13 @@
     <TypeScriptCompile Include="entities\msdyn_oclocalizationdata.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_ocoutboundconfiguration.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_ocoutboundmessage.d.ts" />
+    <TypeScriptCompile Include="entities\msdyn_ocpaymentprofile.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_ocphonenumber.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_ocprovisioningstate.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_ocrecording.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_ocrequest.d.ts" />
+    <TypeScriptCompile Include="entities\msdyn_ocrichobject.d.ts" />
+    <TypeScriptCompile Include="entities\msdyn_ocrichobjectmap.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_ocruleitem.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_ocsentimentdailytopic.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_ocsentimentdailytopickeyword.d.ts" />
@@ -3994,8 +4199,10 @@
     <TypeScriptCompile Include="entities\msdyn_playbookcategory.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_playbookinstance.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_playbooktemplate.d.ts" />
+    <TypeScriptCompile Include="entities\msdyn_pmanalysishistory.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_pminferredtask.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_pmrecording.d.ts" />
+    <TypeScriptCompile Include="entities\msdyn_pmtemplate.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_PostAlbum.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_postalcode.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_PostConfig.d.ts" />
@@ -4100,6 +4307,7 @@
     <TypeScriptCompile Include="entities\msdyn_salesassignmentsetting.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_salesinsightssettings.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_salesroutingrun.d.ts" />
+    <TypeScriptCompile Include="entities\msdyn_salessuggestion.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_salestag.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_salestag_msdyn_sequence.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_scenario.d.ts" />
@@ -4114,6 +4322,7 @@
     <TypeScriptCompile Include="entities\msdyn_sequencestat.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_sequencetarget.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_sequencetargetstep.d.ts" />
+    <TypeScriptCompile Include="entities\msdyn_sequencetemplate.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_serviceconfiguration.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_servicetasktype.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_SessionData.d.ts" />
@@ -4152,6 +4361,12 @@
     <TypeScriptCompile Include="entities\msdyn_suggestionsmodelsummary.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_suggestionssetting.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_surveyquestion.d.ts" />
+    <TypeScriptCompile Include="entities\msdyn_swarm.d.ts" />
+    <TypeScriptCompile Include="entities\msdyn_swarmparticipant.d.ts" />
+    <TypeScriptCompile Include="entities\msdyn_swarmparticipantrule.d.ts" />
+    <TypeScriptCompile Include="entities\msdyn_swarmrole.d.ts" />
+    <TypeScriptCompile Include="entities\msdyn_swarmskill.d.ts" />
+    <TypeScriptCompile Include="entities\msdyn_swarmtemplate.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_systemuserschedulersetting.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_systemuser_msdyn_omnichannelqueue.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_taxcode.d.ts" />
@@ -4171,6 +4386,7 @@
     <TypeScriptCompile Include="entities\msdyn_timegroupdetail.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_timeoffcalendar.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_timeoffrequest.d.ts" />
+    <TypeScriptCompile Include="entities\msdyn_timespent.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_tour.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_transactioncategory.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_transactioncategoryclassification.d.ts" />
@@ -4191,6 +4407,7 @@
     <TypeScriptCompile Include="entities\msdyn_upgradeversion.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_urnotificationtemplate.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_urnotificationtemplatemapping.d.ts" />
+    <TypeScriptCompile Include="entities\msdyn_usagemetric.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_usersetting.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_userworkhistory.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_visitorjourney.d.ts" />
@@ -4200,6 +4417,9 @@
     <TypeScriptCompile Include="entities\msdyn_wechatengagementctx.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_whatsappengagementctx.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_workhourtemplate.d.ts" />
+    <TypeScriptCompile Include="entities\msdyn_worklistsuggestion.d.ts" />
+    <TypeScriptCompile Include="entities\msdyn_worklistsuggestionsource.d.ts" />
+    <TypeScriptCompile Include="entities\msdyn_worklistviewconfiguration.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_workorder.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_workordercharacteristic.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_workorderdetailsgenerationqueue.d.ts" />
@@ -4294,6 +4514,7 @@
     <TypeScriptCompile Include="entities\OptionSet.d.ts" />
     <TypeScriptCompile Include="entities\OrderClose.d.ts" />
     <TypeScriptCompile Include="entities\Organization.d.ts" />
+    <TypeScriptCompile Include="entities\organizationdatasyncstate.d.ts" />
     <TypeScriptCompile Include="entities\organizationdatasyncsubscription.d.ts" />
     <TypeScriptCompile Include="entities\organizationdatasyncsubscriptionentity.d.ts" />
     <TypeScriptCompile Include="entities\OrganizationSetting.d.ts" />
@@ -4423,7 +4644,10 @@
     <TypeScriptCompile Include="entities\ServicePlanAppModules.d.ts" />
     <TypeScriptCompile Include="entities\ServicePlanMapping.d.ts" />
     <TypeScriptCompile Include="entities\SettingDefinition.d.ts" />
+    <TypeScriptCompile Include="entities\SharedLinkSetting.d.ts" />
+    <TypeScriptCompile Include="entities\sharedobject.d.ts" />
     <TypeScriptCompile Include="entities\SharedObjectsForRead.d.ts" />
+    <TypeScriptCompile Include="entities\sharedworkspace.d.ts" />
     <TypeScriptCompile Include="entities\SharePointData.d.ts" />
     <TypeScriptCompile Include="entities\SharePointDocument.d.ts" />
     <TypeScriptCompile Include="entities\SharePointDocumentLocation.d.ts" />
@@ -4460,6 +4684,12 @@
     <TypeScriptCompile Include="entities\SubscriptionSyncInfo.d.ts" />
     <TypeScriptCompile Include="entities\SubscriptionTrackingDeletedObject.d.ts" />
     <TypeScriptCompile Include="entities\SuggestionCardTemplate.d.ts" />
+    <TypeScriptCompile Include="entities\synapsedatabase.d.ts" />
+    <TypeScriptCompile Include="entities\synapselinkexternaltablestate.d.ts" />
+    <TypeScriptCompile Include="entities\synapselinkprofile.d.ts" />
+    <TypeScriptCompile Include="entities\synapselinkprofileentity.d.ts" />
+    <TypeScriptCompile Include="entities\synapselinkprofileentitystate.d.ts" />
+    <TypeScriptCompile Include="entities\synapselinkschedule.d.ts" />
     <TypeScriptCompile Include="entities\SyncAttributeMapping.d.ts" />
     <TypeScriptCompile Include="entities\SyncAttributeMappingProfile.d.ts" />
     <TypeScriptCompile Include="entities\SyncError.d.ts" />
@@ -4539,9 +4769,6 @@
     <TypeScriptCompile Include="entities\WorkflowDependency.d.ts" />
     <TypeScriptCompile Include="entities\WorkflowLog.d.ts" />
     <TypeScriptCompile Include="entities\WorkflowWaitSubscription.d.ts" />
-  </ItemGroup>
-  <ItemGroup>
-    <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.2.13.33\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v15.0\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <ProjectExtensions>

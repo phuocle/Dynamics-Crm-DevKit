@@ -118,7 +118,7 @@ var DevKit;
 		}
 		msdyn_sessionevent.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -201,6 +201,8 @@ var OptionSet;
 			SessionEnd: 192350005,
 			TransferedToAgent: 192350018,
 			TransferedToQueue: 192350019
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

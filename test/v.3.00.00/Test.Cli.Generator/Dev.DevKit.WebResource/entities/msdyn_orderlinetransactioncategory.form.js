@@ -59,6 +59,8 @@ var OptionSet;
 			Tax: 690970002,
 			Time: 192350000
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

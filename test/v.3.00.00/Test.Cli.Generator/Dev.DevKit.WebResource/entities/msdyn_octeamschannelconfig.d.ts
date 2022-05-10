@@ -130,6 +130,8 @@ declare namespace DevKit {
 		readonly ModifiedOnBehalfBy: string;
 		/** Bot ID is of Teams Channel */
 		msdyn_botid: string;
+		/** List of calling options available for the Teams channel */
+		msdyn_callingoptions: OptionSet.msdyn_octeamschannelconfig.msdyn_callingoptions;
 		/** Option set to enable or disable attachments for agents */
 		msdyn_enablefileattachmentsforagents: boolean;
 		/** Option set to enable or disable attachments for customers */
@@ -144,12 +146,20 @@ declare namespace DevKit {
 		msdyn_ocwidgetlanguage: string;
 		/** Lookup to Dynamics 365 Customer Voice survey field */
 		msdyn_PostConversationSurvey: string;
+		/** Enable or disable bot survey */
+		msdyn_PostConversationSurveyBotSurvey: boolean;
+		/** Prefix text for survey link message that will be sent to the user. */
+		msdyn_PostConversationSurveyBotSurveyMessageText: string;
+		/** Mode of the survey to be sent */
+		msdyn_PostConversationSurveyBotSurveyMode: OptionSet.msdyn_octeamschannelconfig.msdyn_PostConversationSurveyBotSurveyMode;
 		/** To enable or disable post conversation survey */
 		msdyn_PostConversationSurveyEnable: boolean;
 		/** Prefix text for survey link message that will be sent to the user. */
 		msdyn_PostConversationSurveyMessageText: string;
 		/** Mode of the survey to be sent */
 		msdyn_PostConversationSurveyMode: OptionSet.msdyn_octeamschannelconfig.msdyn_PostConversationSurveyMode;
+		/** Lookup to Dynamics 365 Customer Voice survey field */
+		msdyn_PostConversationSurveySeparateBotSurvey: string;
 		/** Teams App Name or Teams Channel */
 		msdyn_teamsappname: string;
 		/** Date and time that the record was migrated. */
@@ -174,15 +184,103 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Bot ID is of Teams Channel */
+			readonly msdyn_botid: string;
+			/** List of calling options available for the Teams channel */
+			readonly msdyn_callingoptions: string;
+			/** Option set to enable or disable attachments for agents */
+			readonly msdyn_enablefileattachmentsforagents: string;
+			/** Option set to enable or disable attachments for customers */
+			readonly msdyn_enablefileattachmentsforcustomers: string;
+			/** Work Stream */
+			readonly msdyn_liveworkstreamid: string;
+			/** The name of the custom entity. */
+			readonly msdyn_name: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_octeamschannelconfigId: string;
+			/** The language setting for the Teams account */
+			readonly msdyn_ocwidgetlanguage: string;
+			/** Lookup to Dynamics 365 Customer Voice survey field */
+			readonly msdyn_PostConversationSurvey: string;
+			/** Enable or disable bot survey */
+			readonly msdyn_PostConversationSurveyBotSurvey: string;
+			/** Prefix text for survey link message that will be sent to the user. */
+			readonly msdyn_PostConversationSurveyBotSurveyMessageText: string;
+			/** Mode of the survey to be sent */
+			readonly msdyn_PostConversationSurveyBotSurveyMode: string;
+			/** To enable or disable post conversation survey */
+			readonly msdyn_PostConversationSurveyEnable: string;
+			/** Prefix text for survey link message that will be sent to the user. */
+			readonly msdyn_PostConversationSurveyMessageText: string;
+			/** Mode of the survey to be sent */
+			readonly msdyn_PostConversationSurveyMode: string;
+			/** Lookup to Dynamics 365 Customer Voice survey field */
+			readonly msdyn_PostConversationSurveySeparateBotSurvey: string;
+			/** Teams App Name or Teams Channel */
+			readonly msdyn_teamsappname: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the Teams Channel */
+			readonly statecode: string;
+			/** Reason for the status of the Teams Channel */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace msdyn_octeamschannelconfig {
+		enum msdyn_callingoptions {
+			/** 192350000 */
+			No_calling,
+			/** 192350001 */
+			Video_and_voice_calling,
+			/** 192350002 */
+			Voice_only
+		}
+		enum msdyn_PostConversationSurveyBotSurveyMode {
+			/** 192350000 */
+			Insert_survey_in_conversation,
+			/** 192350001 */
+			Send_survey_link_to_conversation
+		}
 		enum msdyn_PostConversationSurveyMode {
 			/** 192350000 */
 			Insert_survey_in_conversation,
 			/** 192350001 */
 			Send_survey_link_to_conversation
+		}
+		enum OwnerIdType {
 		}
 		enum statecode {
 			/** 0 */
@@ -214,4 +312,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

@@ -84,9 +84,15 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.msdyn_ocwechatchannelconfig = {
+		msdyn_PostConversationSurveyBotSurveyMode : {
+			Insert_survey_in_conversation: 192350000,
+			Send_survey_link_to_conversation: 192350001
+		},
 		msdyn_PostConversationSurveyMode : {
 			Insert_survey_in_conversation: 192350000,
 			Send_survey_link_to_conversation: 192350001
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

@@ -135,6 +135,70 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Description of the rule item. */
+			readonly Description: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Action expression of Rule item in Omni channel */
+			readonly msdyn_Action: string;
+			/** Assigned to User or Queue. */
+			readonly msdyn_Assignedto: string;
+			/** Assigned Queue Id */
+			readonly msdyn_cdsqueueassignid: string;
+			/** Condition expression FetchXML of RuleItem */
+			readonly msdyn_Condition: string;
+			/** Condition expression Json of RuleItem */
+			readonly msdyn_Expression: string;
+			/** The Work stream that this Rule item belongs to */
+			readonly msdyn_liveworkstream: string;
+			/** The name of the custom entity. */
+			readonly msdyn_name: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_ocruleitemId: string;
+			/** Priority of Rule item in a Work stream */
+			readonly msdyn_priority: string;
+			/** Assigned Queue Id */
+			readonly msdyn_QueueAssignId: string;
+			/** Metadata Json of RuleItem */
+			readonly msdyn_Rulejson: string;
+			/** Assigned User Id */
+			readonly msdyn_UserAssignId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the Rule item */
+			readonly statecode: string;
+			/** Reason for the status of the Rule item */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -144,6 +208,8 @@ declare namespace OptionSet {
 			Agent,
 			/** 1 */
 			Queue
+		}
+		enum OwnerIdType {
 		}
 		enum statecode {
 			/** 0 */
@@ -175,4 +241,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

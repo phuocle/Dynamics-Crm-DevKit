@@ -270,6 +270,10 @@ var OptionSet;
 			Field_Service_Line: 690970001,
 			Project_Service_Line: 690970000
 		},
+		OpportunityStateCode : {
+		},
+		OwnerIdType : {
+		},
 		PricingErrorCode : {
 			Base_Currency_Attribute_Overflow: 36,
 			Base_Currency_Attribute_Underflow: 37,

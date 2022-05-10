@@ -77,6 +77,8 @@ var OptionSet;
 			Submitted: 192350001,
 			Unknown: 192350999
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

@@ -1,6 +1,39 @@
 ﻿//@ts-check
 ///<reference path="devkit.d.ts" />
 declare namespace DevKit {
+	namespace Formmsdyn_worklistviewconfiguration_Information {
+		interface Tabs {
+		}
+		interface Body {
+			msdyn_defaultsortconfiguration: DevKit.Controls.String;
+			msdyn_entityconfiguration: DevKit.Controls.String;
+			msdyn_filterconfiguration: DevKit.Controls.String;
+			/** The name of the custom entity. */
+			msdyn_name: DevKit.Controls.String;
+			/** Security roles enabled for worklist configuration */
+			msdyn_securityrolelist: DevKit.Controls.String;
+			/** Tags Configuration for worklist view */
+			msdyn_tagsconfiguration: DevKit.Controls.String;
+		}
+		interface Process extends DevKit.Controls.IProcess {
+		}
+	}
+	class Formmsdyn_worklistviewconfiguration_Information extends DevKit.IForm {
+		/**
+		* Information [Main Form]
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form msdyn_worklistviewconfiguration_Information */
+		Body: DevKit.Formmsdyn_worklistviewconfiguration_Information.Body;
+		/** The Process of form msdyn_worklistviewconfiguration_Information */
+		Process: DevKit.Formmsdyn_worklistviewconfiguration_Information.Process;
+		/** The SidePanes of form msdyn_worklistviewconfiguration_Information */
+		SidePanes: DevKit.SidePanes;
+	}
 	class msdyn_worklistviewconfigurationApi {
 		/**
 		* DynamicsCrm.DevKit msdyn_worklistviewconfigurationApi
@@ -72,6 +105,51 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			readonly msdyn_defaultsortconfiguration: string;
+			readonly msdyn_entityconfiguration: string;
+			readonly msdyn_filterconfiguration: string;
+			/** The name of the custom entity. */
+			readonly msdyn_name: string;
+			/** Many to one relationship to sales acceleration entity's primary key */
+			readonly msdyn_salesaccelerationsettingsid: string;
+			/** Security roles enabled for worklist configuration */
+			readonly msdyn_securityrolelist: string;
+			/** Tags Configuration for worklist view */
+			readonly msdyn_tagsconfiguration: string;
+			/** Sales accelerator worklist view type */
+			readonly msdyn_viewtype: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_worklistviewconfigurationId: string;
+			/** Unique identifier for the organization */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Status of the Work List View Configuration */
+			readonly statecode: string;
+			/** Reason for the status of the Work List View Configuration */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -112,4 +190,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

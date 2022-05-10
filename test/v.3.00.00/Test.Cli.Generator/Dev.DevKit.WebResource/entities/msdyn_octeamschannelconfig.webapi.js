@@ -71,6 +71,7 @@ var DevKit;
 			ModifiedOn_UtcDateAndTime: { a: 'modifiedon', r: true },
 			ModifiedOnBehalfBy: { b: 'modifiedonbehalfby', a: '_modifiedonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
 			msdyn_botid: { a: 'msdyn_botid' },
+			msdyn_callingoptions: { a: 'msdyn_callingoptions' },
 			msdyn_enablefileattachmentsforagents: { a: 'msdyn_enablefileattachmentsforagents' },
 			msdyn_enablefileattachmentsforcustomers: { a: 'msdyn_enablefileattachmentsforcustomers' },
 			msdyn_liveworkstreamid: { b: 'msdyn_liveworkstreamid', a: '_msdyn_liveworkstreamid_value', c: 'msdyn_liveworkstreams', d: 'msdyn_liveworkstream' },
@@ -78,9 +79,13 @@ var DevKit;
 			msdyn_octeamschannelconfigId: { a: 'msdyn_octeamschannelconfigid' },
 			msdyn_ocwidgetlanguage: { b: 'msdyn_ocwidgetlanguage', a: '_msdyn_ocwidgetlanguage_value', c: 'msdyn_oclanguages', d: 'msdyn_oclanguage' },
 			msdyn_PostConversationSurvey: { b: 'msdyn_PostConversationSurvey', a: '_msdyn_postconversationsurvey_value', c: 'msfp_surveies', d: 'msfp_survey' },
+			msdyn_PostConversationSurveyBotSurvey: { a: 'msdyn_postconversationsurveybotsurvey' },
+			msdyn_PostConversationSurveyBotSurveyMessageText: { a: 'msdyn_postconversationsurveybotsurveymessagetext' },
+			msdyn_PostConversationSurveyBotSurveyMode: { a: 'msdyn_postconversationsurveybotsurveymode' },
 			msdyn_PostConversationSurveyEnable: { a: 'msdyn_postconversationsurveyenable' },
 			msdyn_PostConversationSurveyMessageText: { a: 'msdyn_postconversationsurveymessagetext' },
 			msdyn_PostConversationSurveyMode: { a: 'msdyn_postconversationsurveymode' },
+			msdyn_PostConversationSurveySeparateBotSurvey: { b: 'msdyn_PostConversationSurveySeparateBotSurvey', a: '_msdyn_postconversationsurveyseparatebotsurvey_value', c: 'msfp_surveies', d: 'msfp_survey' },
 			msdyn_teamsappname: { a: 'msdyn_teamsappname' },
 			OverriddenCreatedOn_UtcDateOnly: { a: 'overriddencreatedon' },
 			OwnerId_systemuser: { b: 'ownerid', a: '_ownerid_value', c: 'systemusers', d: 'systemuser' },
@@ -123,7 +128,7 @@ var DevKit;
 		}
 		msdyn_octeamschannelconfig.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -137,9 +142,20 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.msdyn_octeamschannelconfig = {
+		msdyn_callingoptions : {
+			No_calling: 192350000,
+			Video_and_voice_calling: 192350001,
+			Voice_only: 192350002
+		},
+		msdyn_PostConversationSurveyBotSurveyMode : {
+			Insert_survey_in_conversation: 192350000,
+			Send_survey_link_to_conversation: 192350001
+		},
 		msdyn_PostConversationSurveyMode : {
 			Insert_survey_in_conversation: 192350000,
 			Send_survey_link_to_conversation: 192350001
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

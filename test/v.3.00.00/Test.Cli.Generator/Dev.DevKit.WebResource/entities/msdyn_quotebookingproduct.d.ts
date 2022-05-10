@@ -244,10 +244,102 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Exchange rate for the currency associated with the entity with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** The currency that will be used to charge this product */
+			readonly msdyn_currency: string;
+			/** Value of the Currency in base currency. */
+			readonly msdyn_currency_Base: string;
+			/** Customer asset related to this Product */
+			readonly msdyn_customerasset: string;
+			/** The estimated cost of this quote booking product */
+			readonly msdyn_EstimatedCost: string;
+			/** Value of the EstimatedCost in base currency. */
+			readonly msdyn_estimatedcost_Base: string;
+			/** The estimated sales amount of this quote booking product */
+			readonly msdyn_EstimatedSalesAmount: string;
+			/** Value of the EstimatedSalesAmount in base currency. */
+			readonly msdyn_estimatedsalesamount_Base: string;
+			/** For internal use only. */
+			readonly msdyn_Internalflags: string;
+			/** Internal use only */
+			readonly msdyn_iscopied: string;
+			/** Shows the order of this task within the quote booking products. */
+			readonly msdyn_lineorder: string;
+			/** The name of the custom entity. */
+			readonly msdyn_name: string;
+			/** Optionally set Price List that will determine the pricing for this product on the Work Order */
+			readonly msdyn_pricelist: string;
+			/** Unique identifier for Product/Service associated with Quote Booking Product. */
+			readonly msdyn_product: string;
+			/** Enter the quantity you wish to bill the customer for. By default, this will default to the same value as "Quantity." */
+			readonly msdyn_qtytobill: string;
+			/** Shows the actual quantity of the product. */
+			readonly msdyn_quantity: string;
+			/** Unique identifier for Quote associated with Quote Booking Product. */
+			readonly msdyn_quote: string;
+			/** The Quote Booking Incident related to this product */
+			readonly msdyn_quotebookingincident: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_quotebookingproductId: string;
+			/** Unique identifier for Quote Booking Setup associated with Quote  Booking Product. */
+			readonly msdyn_quotebookingsetup: string;
+			/** The unit that determines the pricing for this product when Price List is set */
+			readonly msdyn_unit: string;
+			/** Enter the amount you wish to charge the customer per unit. This field is optional. */
+			readonly msdyn_unitamount: string;
+			/** Value of the Unit Amount in base currency. */
+			readonly msdyn_unitamount_Base: string;
+			/** Enter the  unit cost amount. This field is optional. */
+			readonly msdyn_unitcostamount: string;
+			/** Value of the Unit Cost in base currency. */
+			readonly msdyn_unitcostamount_Base: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the Quote Booking Product */
+			readonly statecode: string;
+			/** Reason for the status of the Quote Booking Product */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Unique identifier of the currency associated with the entity. */
+			readonly TransactionCurrencyId: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace msdyn_quotebookingproduct {
+		enum OwnerIdType {
+		}
 		enum statecode {
 			/** 0 */
 			Active,
@@ -278,4 +370,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

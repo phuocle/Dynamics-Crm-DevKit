@@ -24,6 +24,7 @@ var DevKit;
 			msdyn_ocfriendcount: {},
 			msdyn_phonenumber: {},
 			msdyn_profileimagelink: {},
+			msdyn_sourceid: {},
 			ProfileFullName: {},
 			ProfileLink: {},
 			ProfileName: {}
@@ -78,6 +79,7 @@ var DevKit;
 			msdyn_ocfriendcount: {},
 			msdyn_phonenumber: {},
 			msdyn_profileimagelink: {},
+			msdyn_sourceid: {},
 			ProfileFullName: {},
 			ProfileLink: {},
 			ProfileName: {}
@@ -128,11 +130,13 @@ var OptionSet;
 (function (OptionSet) {
 	OptionSet.SocialProfile = {
 		Community : {
+			Apple_Messages_For_Business: 16,
 			Cortana: 5,
 			Direct_Line: 6,
 			Direct_Line_Speech: 8,
 			Email: 9,
 			Facebook: 1,
+			Googles_Business_Messages: 17,
 			GroupMe: 10,
 			Kik: 11,
 			Line: 3,
@@ -144,6 +148,10 @@ var OptionSet;
 			Twitter: 2,
 			Wechat: 4,
 			WhatsApp: 15
+		},
+		CustomerIdType : {
+		},
+		OwnerIdType : {
 		},
 		StateCode : {
 			Active: 0,

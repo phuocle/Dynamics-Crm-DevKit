@@ -77,6 +77,8 @@ var OptionSet;
 			Script: 192350000,
 			Stylesheet: 192350001
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

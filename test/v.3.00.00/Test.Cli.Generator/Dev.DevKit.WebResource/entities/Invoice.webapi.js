@@ -193,7 +193,7 @@ var DevKit;
 		}
 		invoice.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -207,6 +207,8 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.Invoice = {
+		CustomerIdType : {
+		},
 		msdyn_OrderType : {
 			Item_based: 192350000,
 			Service_Maintenance_Based: 690970002,
@@ -217,6 +219,8 @@ var OptionSet;
 			Draft: 192350000,
 			In_Review: 192350001,
 			Invoice_Paid: 192350003
+		},
+		OwnerIdType : {
 		},
 		PaymentTermsCode : {
 			_2_10_Net_30: 2,

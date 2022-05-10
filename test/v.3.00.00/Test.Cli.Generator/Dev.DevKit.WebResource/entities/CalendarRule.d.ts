@@ -130,6 +130,73 @@ declare namespace DevKit {
 		/** Local time zone for the calendar rule. */
 		TimeZoneCode: number;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the business unit with which the calendar rule is associated. */
+			readonly BusinessUnitId: string;
+			/** Unique identifier of the calendar with which the calendar rule is associated. */
+			readonly CalendarId: string;
+			/** Unique identifier of the calendar rule. */
+			readonly CalendarRuleId: string;
+			/** Unique identifier of the user who created the calendar rule. */
+			readonly CreatedBy: string;
+			/** Date and time when the calendar rule was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the calendarrule. */
+			readonly CreatedOnBehalfBy: string;
+			/** Defines free/busy times for a service and for resources or resource groups, such as working, non-working, vacation, and blocked. */
+			readonly Description: string;
+			/** Duration of the calendar rule in minutes. */
+			readonly Duration: string;
+			/** Effective interval end of the calendar rule. */
+			readonly EffectiveIntervalEnd_UtcDateOnly: string;
+			/** Effective interval start of the calendar rule. */
+			readonly EffectiveIntervalStart_UtcDateOnly: string;
+			/** Effort available for a resource during the time described by the calendar rule. */
+			readonly Effort: string;
+			/** For internal use only. */
+			readonly EndTime_UtcDateAndTime: string;
+			/** Extent of the calendar rule. */
+			readonly ExtentCode: string;
+			/** Unique identifier of the group. */
+			readonly GroupDesignator: string;
+			/** Unique identifier of the inner calendar for non-leaf calendar rules. */
+			readonly InnerCalendarId: string;
+			/** For internal use only. */
+			readonly IsModified: string;
+			/** Flag used in vary-by-day calendar rules. */
+			readonly IsSelected: string;
+			/** Flag used in vary-by-day calendar rules. */
+			readonly IsSimple: string;
+			/** Flag used in leaf nonrecurring rules. */
+			readonly IsVaried: string;
+			/** Unique identifier of the user who last modified the calendar rule. */
+			readonly ModifiedBy: string;
+			/** Date and time when the calendar rule was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the calendarrule. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Name of the calendar rule. */
+			readonly Name: string;
+			/** Start offset for leaf nonrecurring rules. */
+			readonly Offset: string;
+			/** Unique identifier of the organization with which the calendar rule is associated. */
+			readonly OrganizationId: string;
+			/** Pattern of the rule recurrence. */
+			readonly Pattern: string;
+			/** Rank of the calendar rule. */
+			readonly Rank: string;
+			/** Unique identifier of the service with which the calendar rule is associated. */
+			readonly ServiceId: string;
+			/** Start time for the rule. */
+			readonly StartTime_UtcDateAndTime: string;
+			/** Sub-type of calendar rule. */
+			readonly SubCode: string;
+			/** Type of calendar rule such as working hours, break, holiday, or time off. */
+			readonly TimeCode: string;
+			/** Local time zone for the calendar rule. */
+			readonly TimeZoneCode: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -152,4 +219,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

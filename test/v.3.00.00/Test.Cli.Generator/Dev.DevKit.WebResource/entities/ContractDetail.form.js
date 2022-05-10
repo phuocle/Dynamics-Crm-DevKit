@@ -123,6 +123,12 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.ContractDetail = {
+		ContractStateCode : {
+		},
+		CustomerIdType : {
+		},
+		OwnerIdType : {
+		},
 		ServiceContractUnitsCode : {
 			Default_Value: 1
 		},

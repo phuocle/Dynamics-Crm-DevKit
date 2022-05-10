@@ -116,6 +116,8 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.Category = {
+		OwnerIdType : {
+		},
 		RollupState : {
 			NotCalculated: 0,
 			Calculated: 1,

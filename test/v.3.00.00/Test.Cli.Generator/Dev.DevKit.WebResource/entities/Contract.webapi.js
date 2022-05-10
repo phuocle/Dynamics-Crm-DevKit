@@ -152,7 +152,7 @@ var DevKit;
 		}
 		contract.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -171,6 +171,8 @@ var OptionSet;
 			Number_of_Cases: 1,
 			Time: 2
 		},
+		BillingCustomerIdType : {
+		},
 		BillingFrequencyCode : {
 			Annually: 5,
 			Bimonthly: 2,
@@ -182,6 +184,10 @@ var OptionSet;
 			Bronze: 3,
 			Gold: 1,
 			Silver: 2
+		},
+		CustomerIdType : {
+		},
+		OwnerIdType : {
 		},
 		StateCode : {
 			Active: 2,

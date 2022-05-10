@@ -47,6 +47,8 @@ var OptionSet;
 			Member: 192350001,
 			None: 192350002
 		},
+		OwnerIdType : {
+		},
 		StateCode : {
 			Active: 0,
 			Inactive: 1

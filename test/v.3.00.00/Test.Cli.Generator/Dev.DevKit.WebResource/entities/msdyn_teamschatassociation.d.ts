@@ -93,6 +93,46 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** For internal use only. Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** For internal use only. Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** For internal use only. Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** For internal use only. Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** For internal use only. Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** For internal use only. Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** For internal use only. Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** For internal use only. State of the msdyn_teamschatassociation */
+			readonly msdyn_entityrecordstate: string;
+			/** For internal use only. Regarding Object Id */
+			readonly msdyn_regardingobjectid: string;
+			/** For internal use only. Regarding Object Type Name */
+			readonly msdyn_regardingobjectname: string;
+			/** For internal use only. Unique identifier for entity instances */
+			readonly msdyn_teamschatassociationId: string;
+			/** For internal use only. The name of the custom entity. */
+			readonly msdyn_teamschatassociationname: string;
+			/** For internal use only. Teams Chat Id */
+			readonly msdyn_teamschatid: string;
+			/** For internal use only. Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** For internal use only. Status of the msdyn_teamschatassociation */
+			readonly statecode: string;
+			/** For internal use only. Reason for the status of the msdyn_teamschatassociation */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** For internal use only. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -133,4 +173,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

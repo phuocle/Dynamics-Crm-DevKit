@@ -52,10 +52,39 @@ declare namespace DevKit {
 		/** Time zone code that was in use when the record was created. */
 		UTCConversionTimeZoneCode: number;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Parent ActionCard Id. */
+			readonly ActionCardId: string;
+			/** Unique identifier for entity instances */
+			readonly ActionCardUserStateId: string;
+			/** Exchange rate for the currency associated with the ActionCardUserState with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Shows the Start Date */
+			readonly StartDate_UtcDateAndTime: string;
+			/** State of the Action Card */
+			readonly State: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Exchange rate for the currency associated with the ActionCardUserState with respect to the base currency. */
+			readonly TransactionCurrencyId: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace ActionCardUserState {
+		enum ActionCardIdObjectTypeCode {
+		}
+		enum OwnerIdType {
+		}
 		enum State {
 			/** 0 */
 			Active,
@@ -82,4 +111,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

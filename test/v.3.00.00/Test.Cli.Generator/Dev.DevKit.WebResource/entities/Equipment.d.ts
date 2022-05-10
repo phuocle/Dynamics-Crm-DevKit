@@ -172,6 +172,60 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Shows the business unit that the Equipment belongs to. */
+			readonly BusinessUnitId: string;
+			/** Fiscal calendar associated with the facility/equipment. */
+			readonly CalendarId: string;
+			/** Unique identifier of the user who created the facility/equipment entry. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the equipment. */
+			readonly CreatedOnBehalfBy: string;
+			/** Description of the facility/equipment. */
+			readonly Description: string;
+			/** For internal use only. */
+			readonly DisplayInServiceViews: string;
+			/** Email address of person to contact about the use of the facility/equipment. */
+			readonly EMailAddress: string;
+			/** Unique identifier of the facility/equipment. */
+			readonly EquipmentId: string;
+			/** Exchange rate for the currency associated with the equipment with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Whether the facility/equipment is disabled or operational. */
+			readonly IsDisabled: string;
+			/** Unique identifier of the user who last modified the facility/equipment. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the equipment. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Unique identifier for OrganizationalUnit associated with Equipment */
+			readonly msdyn_OrganizationalUnitId: string;
+			/** Name of the facility/equipment. */
+			readonly Name: string;
+			/** Unique identifier of the parent business unit. */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Site where the facility/equipment is located. */
+			readonly SiteId: string;
+			/** Skills needed to operate the facility/equipment. */
+			readonly Skills: string;
+			/** Local time zone where the facility/equipment is located. */
+			readonly TimeZoneCode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Unique identifier of the currency associated with the equipment. */
+			readonly TransactionCurrencyId: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -194,4 +248,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

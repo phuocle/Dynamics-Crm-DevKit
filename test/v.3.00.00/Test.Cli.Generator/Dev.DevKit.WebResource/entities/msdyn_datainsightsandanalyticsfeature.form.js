@@ -52,6 +52,11 @@ var OptionSet;
 			Provision_in_Progress: 192350003,
 			Provisioned: 192350000
 		},
+		msdyn_reporttype : {
+			Default: 192350000,
+			Draft: 192350002,
+			Published: 192350001
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

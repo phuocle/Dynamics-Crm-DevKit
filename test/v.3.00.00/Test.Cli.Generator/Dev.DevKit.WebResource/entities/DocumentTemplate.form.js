@@ -49,6 +49,8 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.DocumentTemplate = {
+		AssociatedEntityTypeCode : {
+		},
 		DocumentType : {
 			Microsoft_Excel: 1,
 			Microsoft_Word: 2

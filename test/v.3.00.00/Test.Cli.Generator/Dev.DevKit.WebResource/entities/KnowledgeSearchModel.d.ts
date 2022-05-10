@@ -126,6 +126,54 @@ declare namespace DevKit {
 		StatusCode: OptionSet.KnowledgeSearchModel.StatusCode;
 		/** For internal use only. */
 		readonly SupportingSolutionId: string;
+		readonly FormattedValue: {
+			/** Unique identifier for AzureServiceConnection associated with KnowledgeSearchModel. */
+			readonly AzureServiceConnectionId: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier of the user who created the Knowledge Search Model. */
+			readonly CreatedBy: string;
+			/** Date and time when the Knowledge Search Model was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the knowledge search Model. */
+			readonly CreatedOnBehalfBy: string;
+			/** Enter a description for the search configuration */
+			readonly Description: string;
+			/** entity */
+			readonly Entity1: string;
+			/** FetchXml. */
+			readonly FetchXmlList: string;
+			/** Is Manageed */
+			readonly IsManaged: string;
+			/** Unique identifier for entity instances */
+			readonly KnowledgeSearchModelId: string;
+			/** Unique identifier of the Knowledge Search Model used when synchronizing customizations for the Microsoft Dynamics 365 client for Outlook */
+			readonly KnowledgeSearchModelIdUnique: string;
+			/** Enter the maximum number of keywords or key phrases to be determined using text analytics. */
+			readonly MaxKeyWords: string;
+			/** Unique identifier of the user who modified the Knowledge Search Model. */
+			readonly ModifiedBy: string;
+			/** Date and time when the Knowledge Search model was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the knowledge search model. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Type a logical name for the search configuration. */
+			readonly Name: string;
+			/** Enter the maximum number of key phrase words to use in a topic. */
+			readonly NgramSize: string;
+			/** Unique identifier of the organization associated with the Knowledge Search Model entity. */
+			readonly OrganizationId: string;
+			/** Date and time when the record was created. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** Status of the Knowledge Search Model */
+			readonly StateCode: string;
+			/** Reason for the status of the Knowledge Search Model */
+			readonly StatusCode: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -174,4 +222,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

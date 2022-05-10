@@ -136,6 +136,55 @@ declare namespace DevKit {
 		readonly VersionNumber: number;
 		/** Information about the Day */
 		ViewDate_UtcDateOnly: Date;
+		readonly FormattedValue: {
+			/** Shows who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
+			readonly ExchangeRate: string;
+			/** Unique identifier of the data import or data migration that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Choose the Knowledge Article. */
+			readonly KnowledgeArticleId: string;
+			/** Number of Knowledge Article Views visited per day */
+			readonly KnowledgeArticleView: string;
+			/** Unique identifier of the Knowledge Article Views */
+			readonly KnowledgeArticleViewsId: string;
+			/** Shows where the knowledge was used */
+			readonly Location: string;
+			/** Shows who last updated the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier of the business unit that owns the knowledge article views. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the user who owns the knowledge article views. */
+			readonly OwningUser: string;
+			/** Status of the Knowledge Article Views */
+			readonly statecode: string;
+			/** Reason for the status of the Knowledge Article Views */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			readonly TransactionCurrencyId: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			readonly VersionNumber: string;
+			/** Information about the Day */
+			readonly ViewDate_UtcDateOnly: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -145,6 +194,8 @@ declare namespace OptionSet {
 			Internal,
 			/** 2 */
 			Web
+		}
+		enum OwnerIdType {
 		}
 		enum statecode {
 			/** 0 */
@@ -176,4 +227,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

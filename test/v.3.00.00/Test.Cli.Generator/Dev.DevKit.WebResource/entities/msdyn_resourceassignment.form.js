@@ -44,6 +44,8 @@ var OptionSet;
 			Proposed: 192350003,
 			Soft_Book: 192350002
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

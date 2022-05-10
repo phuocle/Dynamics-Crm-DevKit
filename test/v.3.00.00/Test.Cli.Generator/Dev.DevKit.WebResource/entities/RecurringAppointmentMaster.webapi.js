@@ -268,7 +268,7 @@ var DevKit;
 		}
 		recurringappointmentmaster.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -283,29 +283,29 @@ var OptionSet;
 (function (OptionSet) {
 	OptionSet.RecurringAppointmentMaster = {
 		ActivityTypeCode : {
-			Activity_record_for_the_Teams_chat: 10086,
+			Activity_record_for_the_Teams_chat: 10088,
 			Appointment: 4201,
-			Booking_Alert: 10404,
+			Booking_Alert: 10473,
 			Campaign_Activity: 4402,
 			Campaign_Response: 4401,
 			Case_Resolution: 4206,
-			Conversation: 10707,
-			Customer_Voice_alert: 10313,
-			Customer_Voice_survey_invite: 10323,
-			Customer_Voice_survey_response: 10325,
+			Conversation: 10743,
+			Customer_Voice_alert: 10330,
+			Customer_Voice_survey_invite: 10340,
+			Customer_Voice_survey_response: 10342,
 			Email: 4202,
 			Fax: 4204,
 			Letter: 4207,
 			Opportunity_Close: 4208,
 			Order_Close: 4209,
-			Outbound_message: 10817,
+			Outbound_message: 10857,
 			Phone_Call: 4210,
-			Project_Service_Approval: 10434,
+			Project_Service_Approval: 10489,
 			Quick_Campaign: 4406,
 			Quote_Close: 4211,
 			Recurring_Appointment: 4251,
 			Service_Activity: 4214,
-			Session: 10721,
+			Session: 10760,
 			Task: 4212
 		},
 		ExpansionStateCode : {
@@ -345,6 +345,8 @@ var OptionSet;
 		OnlineMeetingType : {
 			Teams_Meeting: 1
 		},
+		OwnerIdType : {
+		},
 		PatternEndType : {
 			No_End_Date: 1,
 			Occurrences: 2,
@@ -360,6 +362,8 @@ var OptionSet;
 			Monthly: 2,
 			Weekly: 1,
 			Yearly: 3
+		},
+		RegardingObjectTypeCode : {
 		},
 		StateCode : {
 			Canceled: 2,

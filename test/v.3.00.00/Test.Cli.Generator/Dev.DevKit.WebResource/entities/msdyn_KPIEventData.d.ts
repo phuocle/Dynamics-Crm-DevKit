@@ -133,10 +133,90 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Additional data related to the kpi event */
+			readonly msdyn_AdditionalData: string;
+			/** Unique identifier for Channel Integration Framework session */
+			readonly msdyn_cifSessionId: string;
+			/** Client session identifier */
+			readonly msdyn_ClientSessionId: string;
+			/** Conversation Identifier */
+			readonly msdyn_ConversationId: string;
+			/** Custom Attribute 1 */
+			readonly msdyn_CustomAttribute1: string;
+			/** Custom Attribute 2 */
+			readonly msdyn_CustomAttribute2: string;
+			/** Custom Attribute 3 */
+			readonly msdyn_CustomAttribute3: string;
+			/** Custom Attribute 4 */
+			readonly msdyn_CustomAttribute4: string;
+			/** Custom Attribute 5 */
+			readonly msdyn_CustomAttribute5: string;
+			/** Timestamp at which the event occurred */
+			readonly msdyn_EventTimestamp_UtcDateAndTime: string;
+			/** External System Correlation Id */
+			readonly msdyn_ExternalCorrelationId: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_KPIEventDataId: string;
+			/** Unique identifier for the KPI Event */
+			readonly msdyn_KPIEventId: string;
+			/** Name of the  associated KPI event */
+			readonly msdyn_KPIEventName: string;
+			/** Reason due to which the KPI event was created */
+			readonly msdyn_KPIEventReason: string;
+			/** Required name field */
+			readonly msdyn_Name: string;
+			/** Identifier of the agent for whom the event was fired */
+			readonly msdyn_ParticipantId: string;
+			/** Unique identifier of the Provider that triggered this event */
+			readonly msdyn_ProviderId: string;
+			/** Unique identifier of the provider session */
+			readonly msdyn_ProviderSessionId: string;
+			/** Unique identifier for session */
+			readonly msdyn_sessionId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the KPI Event Data */
+			readonly statecode: string;
+			/** Reason for the status of the KPI Event Data */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace msdyn_KPIEventData {
+		enum OwnerIdType {
+		}
 		enum statecode {
 			/** 0 */
 			Active,
@@ -167,4 +247,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

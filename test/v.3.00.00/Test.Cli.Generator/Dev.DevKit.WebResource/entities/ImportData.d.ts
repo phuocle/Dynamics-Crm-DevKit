@@ -69,6 +69,48 @@ declare namespace DevKit {
 		readonly StateCode: OptionSet.ImportData.StateCode;
 		/** Reason for the status of the import data. */
 		StatusCode: OptionSet.ImportData.StatusCode;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the import data. */
+			readonly CreatedBy: string;
+			/** Date and time when the import data was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the importdata. */
+			readonly CreatedOnBehalfBy: string;
+			/** Data row of the import file. */
+			readonly Data: string;
+			/** Type of the import error. */
+			readonly ErrorType: string;
+			/** Information about whether this import data has an error. */
+			readonly HasError: string;
+			/** Unique identifier of the import data. */
+			readonly ImportDataId: string;
+			/** Unique identifier of the import file for this import data. */
+			readonly ImportFileId: string;
+			/** Original line number of the data present in the file. */
+			readonly LineNumber: string;
+			/** Unique identifier of the user who last modified the import data. */
+			readonly ModifiedBy: string;
+			/** Date and time when the import data was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the importdata. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Business unit that owns the import data. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the team who owns the import data. */
+			readonly OwningTeam: string;
+			/** Unique identifier of the user who owns the import data. */
+			readonly OwningUser: string;
+			/** Unique identifier of the record. */
+			readonly RecordId: string;
+			/** Status of the import data. */
+			readonly StateCode: string;
+			/** Reason for the status of the import data. */
+			readonly StatusCode: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -78,6 +120,8 @@ declare namespace OptionSet {
 			Create,
 			/** 1 */
 			Update
+		}
+		enum OwnerIdType {
 		}
 		enum StateCode {
 			/** 0 */
@@ -105,4 +149,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

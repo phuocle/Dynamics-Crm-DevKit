@@ -69,6 +69,48 @@ declare namespace DevKit {
 		TransformationParameterMappingId: string;
 		/** Unique identifier of the Transformation Parameter Mapping. */
 		readonly TransformationParameterMappingIdUnique: string;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier of the user who created the parameter mapping. */
+			readonly CreatedBy: string;
+			/** Date and time when the transformation parameter mapping was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the transformationparametermapping. */
+			readonly CreatedOnBehalfBy: string;
+			/** Transformation data for transformation parameter */
+			readonly Data: string;
+			/** Data type of the transformation parameter. */
+			readonly DataTypeCode: string;
+			/** Version in which the component is introduced. */
+			readonly IntroducedVersion: string;
+			/** Information that specifies whether this component is managed. */
+			readonly IsManaged: string;
+			/** Unique identifier of the user who last modified the transformation parameter mapping. */
+			readonly ModifiedBy: string;
+			/** Date and time when the transformation parameter mapping was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the transformationparametermapping. */
+			readonly ModifiedOnBehalfBy: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Index of the array if the input parameter is an array. */
+			readonly ParameterArrayIndex: string;
+			/** Parameter sequence number. */
+			readonly ParameterSequence: string;
+			/** Type of transformation parameter. */
+			readonly ParameterTypeCode: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** Unique identifier of the transformation with which the parameter is associated. */
+			readonly TransformationMappingId: string;
+			/** Unique identifier of the transformation parameter mapping. */
+			readonly TransformationParameterMappingId: string;
+			/** Unique identifier of the Transformation Parameter Mapping. */
+			readonly TransformationParameterMappingIdUnique: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -113,4 +155,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

@@ -143,6 +143,48 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Choose the base or primary unit on which the unit is based. */
+			readonly BaseUoM: string;
+			/** Unique identifier of the user who created the unit. */
+			readonly CreatedBy: string;
+			/** Shows the external party who created the record. */
+			readonly CreatedByExternalParty: string;
+			/** Date and time when the unit was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the uom. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Tells whether the unit is the base unit for the associated unit group. */
+			readonly IsScheduleBaseUoM: string;
+			/** Unique identifier of the user who last modified the unit. */
+			readonly ModifiedBy: string;
+			/** Shows the external party who modified the record. */
+			readonly ModifiedByExternalParty: string;
+			/** Date and time when the unit was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the uom. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Type a descriptive title or name for the unit of measure. */
+			readonly Name: string;
+			/** Unique identifier of the organization associated with the unit of measure. */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Unit quantity for the product. */
+			readonly Quantity: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Unique identifier of the unit. */
+			readonly UoMId: string;
+			/** Choose the ID of the unit group that the unit is associated with. */
+			readonly UoMScheduleId: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -165,4 +207,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

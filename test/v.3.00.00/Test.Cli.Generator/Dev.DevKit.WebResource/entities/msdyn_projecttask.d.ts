@@ -322,6 +322,178 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the project task was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Shows the exchange rate for the currency associated with the entity with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of user who last modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Enter the value of the actual cost consumed based on work reported to be completed on the task.  */
+			readonly msdyn_Actualcost: string;
+			/** Value of the Actual Cost in base currency. */
+			readonly msdyn_actualcost_Base: string;
+			/** Shows the actual duration of the project task in days */
+			readonly msdyn_actualdurationminutes: string;
+			/** Shows the hours submitted against the task. */
+			readonly msdyn_ActualEffort: string;
+			/** Enter the actual end time of the project task. */
+			readonly msdyn_actualend_UtcDateAndTime: string;
+			/** Actual Sales Amount */
+			readonly msdyn_ActualSales: string;
+			/** Shows the value of the actual sales in the base currency. */
+			readonly msdyn_actualsales_Base: string;
+			/** Enter the actual start time of the project task. */
+			readonly msdyn_actualstart_UtcDateAndTime: string;
+			/** Shows whether the aggregation is happening upstream or downstream. */
+			readonly msdyn_AggregationDirection: string;
+			/** Type the project team members that are assigned to task. */
+			readonly msdyn_AssignedResources: string;
+			/** Select the project team member that has been assigned to a task. */
+			readonly msdyn_AssignedTeamMembers: string;
+			/** Shows whether auto scheduling was used for this task. */
+			readonly msdyn_autoscheduling: string;
+			/** Enter the forecast of the total cost to complete the task. */
+			readonly msdyn_CostAtCompleteEstimate: string;
+			/** Value of the Cost estimate at complete (EAC) in base currency. */
+			readonly msdyn_costatcompleteestimate_Base: string;
+			/** Enter the consumption of the total cost in percentage. */
+			readonly msdyn_CostConsumptionPercentage: string;
+			/** The cost estimate contour for the task */
+			readonly msdyn_CostEstimateContour: string;
+			/** Enter a description of the project task. */
+			readonly msdyn_description: string;
+			/** Shows the duration in days for the task. */
+			readonly msdyn_duration: string;
+			/** Shows the effort hours required for the task. */
+			readonly msdyn_Effort: string;
+			/** The effort distribution */
+			readonly msdyn_EffortContour: string;
+			/** Shows the forecast of total effort to complete the task. */
+			readonly msdyn_EffortEstimateAtComplete: string;
+			/** Shows whether the task is a line task */
+			readonly msdyn_IsLineTask: string;
+			/** Show whether this task is a milestone. */
+			readonly msdyn_IsMilestone: string;
+			/** The id of the project task in MS Project Client. */
+			readonly msdyn_MSProjectClientId: string;
+			/** Shows the number of resources that are estimated for the task. This is not the number of resources assigned to the task. */
+			readonly msdyn_numberofresources: string;
+			/** Select the organizational unit of the resource who should perform the work. */
+			readonly msdyn_OrganizationalUnitPricingDimension: string;
+			/** Select the summary or parent task in the hierarchy that contains a child task. */
+			readonly msdyn_parenttask: string;
+			/** Enter the value of the cost the service provider will incur based on the estimated work and cost rates in the pricelist. */
+			readonly msdyn_plannedCost: string;
+			/** Enter the value of cost estimated in base currency. */
+			readonly msdyn_plannedcost_Base: string;
+			/** Planned Sales Amount */
+			readonly msdyn_PlannedSales: string;
+			/** Shows the value of the planned sales in the base currency. */
+			readonly msdyn_plannedsales_Base: string;
+			/** Processing data for the plugin pipeline */
+			readonly msdyn_PluginProcessingData: string;
+			/** Enter the percentage indicating work completed. */
+			readonly msdyn_Progress: string;
+			/** Select the project name. */
+			readonly msdyn_project: string;
+			/** Shows the entity instances. */
+			readonly msdyn_projecttaskId: string;
+			/** Enter the cost left over that can be consumed for future work. */
+			readonly msdyn_RemainingCost: string;
+			/** Shows the value of the remaining cost in the  base currency. */
+			readonly msdyn_remainingcost_Base: string;
+			/** Shows the hours remaining to complete the task. */
+			readonly msdyn_RemainingHours: string;
+			/** Remaining Sales Amount */
+			readonly msdyn_RemainingSales: string;
+			/** Shows the value of the remaining sales in the base currency. */
+			readonly msdyn_remainingsales_Base: string;
+			/** Shows the hours assigned by generic resource. */
+			readonly msdyn_RequestedHours: string;
+			/** Select the resource role for the task. */
+			readonly msdyn_resourcecategory: string;
+			/** Select the resource role for the task. */
+			readonly msdyn_ResourceCategoryPricingDimension: string;
+			/** Select the organizational unit of the resource who should perform the work. */
+			readonly msdyn_ResourceOrganizationalUnitId: string;
+			/** Shows the utilization units for a resource that is assigned to a project task */
+			readonly msdyn_ResourceUtilization: string;
+			/** Shows the sales consumption percentage for this task. */
+			readonly msdyn_SalesConsumptionPercentage: string;
+			/** Shows the sales estimate at the completion of this task. */
+			readonly msdyn_SalesEstimateAtComplete: string;
+			/** Value of the Sales Estimate At Complete (EAC) in base currency. */
+			readonly msdyn_salesestimateatcomplete_Base: string;
+			/** The sales estimate contour */
+			readonly msdyn_SalesEstimateContour: string;
+			/** Shows the sales variance for this task. */
+			readonly msdyn_SalesVariance: string;
+			/** Shows the value of the sales variance in the base currency. */
+			readonly msdyn_salesvariance_Base: string;
+			/** Shows the scheduled duration of the project task, specified in minutes. */
+			readonly msdyn_scheduleddurationminutes: string;
+			/** Enter the scheduled end time of the project. */
+			readonly msdyn_scheduledend_UtcDateOnly: string;
+			/** Shows the scheduled hours for the task. */
+			readonly msdyn_ScheduledHours: string;
+			/** Enter the scheduled start time of the project task. */
+			readonly msdyn_scheduledstart_UtcDateOnly: string;
+			/** Shows the variance between the estimated work and the forecasted work based on the estimate at completion (EAC). */
+			readonly msdyn_ScheduleVariance: string;
+			/** Internal flag to avoid the update process on the estimate lines of the project task (Deprecated in v3.0) */
+			readonly msdyn_skipupdateestimateline: string;
+			/** Type the name of the custom entity. */
+			readonly msdyn_subject: string;
+			/** Select the transaction category for the task. */
+			readonly msdyn_transactioncategory: string;
+			/** Enter the variance between the estimated cost and the forecasted cost based on the estimate at completion (EAC). */
+			readonly msdyn_VarianceOfCost: string;
+			/** Shows the value of the cost variance in the base currency. */
+			readonly msdyn_varianceofcost_Base: string;
+			/** Shows the ID of the task in the work breakdown structure (WBS). */
+			readonly msdyn_WBSID: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Contains the id of the process associated with the entity. */
+			readonly processid: string;
+			/** Unique identifier of the Stage. */
+			readonly StageId: string;
+			/** Status of the Project Task */
+			readonly statecode: string;
+			/** Reason for the status of the Project Task */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Shows the currency associated with the entity. */
+			readonly TransactionCurrencyId: string;
+			/** A comma separated list of string values representing the unique identifiers of stages in a Business Process Flow Instance in the order that they occur. */
+			readonly traversedpath: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -333,6 +505,8 @@ declare namespace OptionSet {
 			Downstream,
 			/** 0 */
 			Upstream
+		}
+		enum OwnerIdType {
 		}
 		enum statecode {
 			/** 0 */
@@ -364,4 +538,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

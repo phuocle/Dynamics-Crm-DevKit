@@ -54,10 +54,39 @@ declare namespace DevKit {
 		/** Any string option for a cardtype. */
 		StringCardOption: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier user entity */
+			readonly ActionCardUserSettingsId: string;
+			/** Bolean option for a cardtype. */
+			readonly BoolCardOption: string;
+			/** The CardType ENUM value. */
+			readonly CardType: string;
+			/** card type attribute */
+			readonly CardTypeId: string;
+			/** Any int option for a cardtype. */
+			readonly IntCardOption: string;
+			/** Select whether the card is enabled for user or not. */
+			readonly IsEnabled: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier of the business unit that owns this. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the team who owns this saved view. */
+			readonly OwningTeam: string;
+			/** Unique identifier of the user who owns this saved view. */
+			readonly OwningUser: string;
+			/** Any string option for a cardtype. */
+			readonly StringCardOption: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace ActionCardUserSettings {
+		enum OwnerIdType {
+		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
 			NotCalculated,
@@ -76,4 +105,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

@@ -136,6 +136,48 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version number of the goal metric. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Data type of the amount. */
+			readonly AmountDataType: string;
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Description of the goal metric. */
+			readonly Description: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Information that indicates whether the metric type is Count or Amount. */
+			readonly IsAmount: string;
+			/** Indicates whether the goal metric tracks stretch targets. */
+			readonly IsStretchTracked: string;
+			/** Unique identifier of the goal metric. */
+			readonly MetricId: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Name of the goal metric. */
+			readonly Name: string;
+			/** Unique identifier of the organization. */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Status of the goal metric. */
+			readonly StateCode: string;
+			/** Reason for the status of the goal metric. */
+			readonly StatusCode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version number of the goal metric. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -178,4 +220,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

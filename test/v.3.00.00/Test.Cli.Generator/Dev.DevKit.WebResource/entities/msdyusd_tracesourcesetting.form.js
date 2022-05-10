@@ -57,6 +57,8 @@ var OptionSet;
 			Verbose: 31,
 			Warning: 7
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

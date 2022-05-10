@@ -209,6 +209,8 @@ var OptionSet;
 			Estimated: 690970000,
 			Used: 690970001
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

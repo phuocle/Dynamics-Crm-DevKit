@@ -34,6 +34,13 @@ declare namespace DevKit {
 		KnowledgeArticleCategoryId: string;
 		readonly KnowledgeArticleId: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			readonly CategoryId: string;
+			/** Unique identifier of the Category for the knowledge article. */
+			readonly KnowledgeArticleCategoryId: string;
+			readonly KnowledgeArticleId: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -56,4 +63,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

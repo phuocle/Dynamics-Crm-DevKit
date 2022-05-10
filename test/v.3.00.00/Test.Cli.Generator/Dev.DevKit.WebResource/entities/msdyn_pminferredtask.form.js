@@ -59,6 +59,8 @@ var OptionSet;
 			DataLake: 1,
 			Recording: 0
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Done: 2,
 			Draft: 0,

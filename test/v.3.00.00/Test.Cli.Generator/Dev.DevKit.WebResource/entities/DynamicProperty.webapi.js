@@ -133,7 +133,7 @@ var DevKit;
 		}
 		dynamicproperty.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -153,6 +153,8 @@ var OptionSet;
 			Option_Set: 0,
 			Single_Line_Of_Text: 3,
 			Whole_Number: 4
+		},
+		RegardingObjectTypeCode : {
 		},
 		statecode : {
 			Active: 0,

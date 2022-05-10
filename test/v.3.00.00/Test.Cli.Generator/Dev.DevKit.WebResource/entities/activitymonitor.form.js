@@ -53,6 +53,10 @@ var OptionSet;
 			Ready_for_workflow: 0,
 			Skipped: 3
 		},
+		MonitoredActivityItemIdType : {
+		},
+		OwnerIdType : {
+		},
 		Reason : {
 			__0: 0,
 			__12: 12,

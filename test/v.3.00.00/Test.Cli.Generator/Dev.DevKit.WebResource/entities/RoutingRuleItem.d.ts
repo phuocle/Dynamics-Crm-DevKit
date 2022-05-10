@@ -155,10 +155,80 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version number of the Routing Rule Item. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Look for user/team records or create a new record. */
+			readonly assignobjectid_systemuser: string;
+			/** Look for user/team records or create a new record. */
+			readonly assignobjectid_team: string;
+			/** Shows the date and time when the item was last assigned to a user. */
+			readonly AssignObjectIdModifiedOn_UtcDateOnly: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Condition for Rule item */
+			readonly ConditionXml: string;
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Provide a description for the rule item. */
+			readonly Description: string;
+			/** Exchange rate for the currency associated with the routing rule item with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** For internal use only. */
+			readonly IsManaged: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Choose if you want to route the record to queue or user/team. */
+			readonly msdyn_routeto: string;
+			/** Provide a name for the rule item. */
+			readonly Name: string;
+			/** Unique identifier of the organization associated with the routing rule item. */
+			readonly OrganizationId: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Look for a queue or create a new queue. */
+			readonly RoutedQueueId: string;
+			/** Unique identifier for Routing Rule associated with Rule Item. */
+			readonly RoutingRuleId: string;
+			/** Unique identifier for entity instances */
+			readonly RoutingRuleItemId: string;
+			/** For internal use only. */
+			readonly RoutingRuleItemIdUnique: string;
+			/** Sequence number of the routing rule item */
+			readonly SequenceNumber: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Unique identifier of the currency associated with the Routing Rule. */
+			readonly TransactionCurrencyId: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version number of the Routing Rule Item. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace RoutingRuleItem {
+		enum AssignObjectIdType {
+		}
 		enum ComponentState {
 			/** 2 */
 			Deleted,
@@ -174,6 +244,8 @@ declare namespace OptionSet {
 			Queue,
 			/** 2 */
 			UserTeam
+		}
+		enum OwnerIdType {
 		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
@@ -193,4 +265,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

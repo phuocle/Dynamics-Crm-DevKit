@@ -125,10 +125,82 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** The name of the application where the knowledge search is performed. */
+			readonly msdyn_ApplicationName: string;
+			/** Designed for federation search. Used to correlate the search that triggered different search records from different search providers. */
+			readonly msdyn_CorrelationId: string;
+			/** The ID of control knowledge search where the search is performed. */
+			readonly msdyn_CustomControlId: string;
+			/** Entity Record ID of the Entity Type */
+			readonly msdyn_EntityRecordId: string;
+			/** Which kind of entity context the knowledge search performed */
+			readonly msdyn_EntityType: string;
+			/** The filters selected when performing the search. */
+			readonly msdyn_Filters: string;
+			/** Whether the search is initiated by the system automatically or manually initiated by the user. */
+			readonly msdyn_InitiatedBy: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_knowledgesearchinsightId: string;
+			/** The time to return search results. */
+			readonly msdyn_ResponseTime: string;
+			/** The total count of knowledge articles returned */
+			readonly msdyn_ResultCount: string;
+			/** Designed for federation search. The ID of the federated search provider. */
+			readonly msdyn_SearchProviderId: string;
+			/** Designed for federation search. The name of the federated search provider. */
+			readonly msdyn_SearchProviderName: string;
+			/** The string typed in the search field */
+			readonly msdyn_SearchTerm: string;
+			/** The type of search run, like full text search, relevance search, etc. */
+			readonly msdyn_SearchType: string;
+			/** The sort selected when performing the search. */
+			readonly msdyn_SortBy: string;
+			/** Date and time when the search is performed */
+			readonly msdyn_TimeStamp_TimezoneDateAndTime: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the Knowledge Search Insight */
+			readonly statecode: string;
+			/** Reason for the status of the Knowledge Search Insight */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace msdyn_knowledgesearchinsight {
+		enum OwnerIdType {
+		}
 		enum statecode {
 			/** 0 */
 			Active,
@@ -159,4 +231,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

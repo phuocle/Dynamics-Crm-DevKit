@@ -45,6 +45,8 @@ var OptionSet;
 			Create: 0,
 			Update: 1
 		},
+		OwnerIdType : {
+		},
 		StateCode : {
 			Active: 0
 		},

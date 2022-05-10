@@ -211,6 +211,124 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier for address 1. */
+			readonly Address1_AddressId: string;
+			/** Type of address for address 1, such as billing, shipping, or primary address. */
+			readonly Address1_AddressTypeCode: string;
+			/** City name for address 1. */
+			readonly Address1_City: string;
+			/** Country/region name for address 1. */
+			readonly Address1_Country: string;
+			/** County name for address 1. */
+			readonly Address1_County: string;
+			/** Fax number for address 1. */
+			readonly Address1_Fax: string;
+			/** Latitude for address 1. */
+			readonly Address1_Latitude: string;
+			/** First line for entering address 1 information. */
+			readonly Address1_Line1: string;
+			/** Second line for entering address 1 information. */
+			readonly Address1_Line2: string;
+			/** Third line for entering address 1 information. */
+			readonly Address1_Line3: string;
+			/** Longitude for address 1. */
+			readonly Address1_Longitude: string;
+			/** Name to enter for address 1. */
+			readonly Address1_Name: string;
+			/** ZIP Code or postal code for address 1. */
+			readonly Address1_PostalCode: string;
+			/** Post office box number for address 1. */
+			readonly Address1_PostOfficeBox: string;
+			/** Method of shipment for address 1. */
+			readonly Address1_ShippingMethodCode: string;
+			/** State or province for address 1. */
+			readonly Address1_StateOrProvince: string;
+			/** First telephone number associated with address 1. */
+			readonly Address1_Telephone1: string;
+			/** Second telephone number associated with address 1. */
+			readonly Address1_Telephone2: string;
+			/** Third telephone number associated with address 1. */
+			readonly Address1_Telephone3: string;
+			/** United Parcel Service (UPS) zone for address 1. */
+			readonly Address1_UPSZone: string;
+			/** UTC offset for address 1. This is the difference between local time and standard Coordinated Universal Time. */
+			readonly Address1_UTCOffset: string;
+			/** Unique identifier for address 2. */
+			readonly Address2_AddressId: string;
+			/** Type of address for address 2, such as billing, shipping, or primary address. */
+			readonly Address2_AddressTypeCode: string;
+			/** City name for address 2. */
+			readonly Address2_City: string;
+			/** Country/region name for address 2. */
+			readonly Address2_Country: string;
+			/** County name for address 2. */
+			readonly Address2_County: string;
+			/** Fax number for address 2. */
+			readonly Address2_Fax: string;
+			/** Latitude for address 2. */
+			readonly Address2_Latitude: string;
+			/** First line for entering address 2 information. */
+			readonly Address2_Line1: string;
+			/** Second line for entering address 2 information. */
+			readonly Address2_Line2: string;
+			/** Third line for entering address 2 information. */
+			readonly Address2_Line3: string;
+			/** Longitude for address 2. */
+			readonly Address2_Longitude: string;
+			/** Name to enter for address 2. */
+			readonly Address2_Name: string;
+			/** ZIP Code or postal code for address 2. */
+			readonly Address2_PostalCode: string;
+			/** Post office box number for address 2. */
+			readonly Address2_PostOfficeBox: string;
+			/** Method of shipment for address 2. */
+			readonly Address2_ShippingMethodCode: string;
+			/** State or province for address 2. */
+			readonly Address2_StateOrProvince: string;
+			/** First telephone number associated with address 2. */
+			readonly Address2_Telephone1: string;
+			/** Second telephone number associated with address 2. */
+			readonly Address2_Telephone2: string;
+			/** Third telephone number associated with address 2. */
+			readonly Address2_Telephone3: string;
+			/** United Parcel Service (UPS) zone for address 2. */
+			readonly Address2_UPSZone: string;
+			/** UTC offset for address 2. This is the difference between local time and standard Coordinated Universal Time. */
+			readonly Address2_UTCOffset: string;
+			/** Unique identifier of the user who created the site. */
+			readonly CreatedBy: string;
+			/** Date and time when the site was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the site. */
+			readonly CreatedOnBehalfBy: string;
+			/** Email address for the site. */
+			readonly EMailAddress: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who last modified the site. */
+			readonly ModifiedBy: string;
+			/** Date and time when the site was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the site. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Name of the site. */
+			readonly Name: string;
+			/** Unique identifier for the organization */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Unique identifier of the site. */
+			readonly SiteId: string;
+			/** Local time zone for the site. */
+			readonly TimeZoneCode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -249,4 +367,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

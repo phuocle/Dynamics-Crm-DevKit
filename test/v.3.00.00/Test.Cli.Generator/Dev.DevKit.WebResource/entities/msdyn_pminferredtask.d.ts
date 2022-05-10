@@ -79,6 +79,8 @@ declare namespace DevKit {
 		readonly ModifiedOn_UtcDateAndTime: Date;
 		/** Unique identifier of the delegate user who modified the record. */
 		readonly ModifiedOnBehalfBy: string;
+		/** Information about the analysis schedule. */
+		msdyn_analysisschedule: string;
 		/** Computed data to drive automation for this task. */
 		msdyn_automationdata: string;
 		/** The status of automation for this task. */
@@ -134,6 +136,87 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly ComponentIdUnique: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** For internal use only. */
+			readonly IsCustomizable: string;
+			/** Indicates whether the solution component is part of a managed solution. */
+			readonly IsManaged: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Information about the analysis schedule. */
+			readonly msdyn_analysisschedule: string;
+			/** Computed data to drive automation for this task. */
+			readonly msdyn_automationdata: string;
+			/** The status of automation for this task. */
+			readonly msdyn_automationstatus: string;
+			readonly msdyn_description: string;
+			/** Location of the data used as input for Task Analysis. */
+			readonly msdyn_inputdatabinding: string;
+			/** Surfaces whether the analysis report is currently available. */
+			readonly msdyn_isreportavailable: string;
+			/** Identifies uniquely the last successful processing of the task. */
+			readonly msdyn_iterationid: string;
+			readonly msdyn_lasterrors: string;
+			readonly msdyn_lasterrorsreport: string;
+			/** Date and time when the corresponding report was last refreshed. */
+			readonly msdyn_lastreportrefreshdate_TimezoneDateAndTime: string;
+			/** The name of the custom entity. */
+			readonly msdyn_name: string;
+			readonly msdyn_outputdata: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_pminferredtaskId: string;
+			/** Data related to the report for this task. */
+			readonly msdyn_reportdata: string;
+			/** The current status of the provisioning operation for the report associated to this task. */
+			readonly msdyn_reportprovisioningstatus: string;
+			readonly msdyn_sharedrecordingmetadata: string;
+			/** The data source of this Pm Inferred Task. */
+			readonly msdyn_source: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateAndTime: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** Status of the PM Inferred Task */
+			readonly statecode: string;
+			/** Reason for the status of the PM Inferred Task */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -173,6 +256,8 @@ declare namespace OptionSet {
 			DataLake,
 			/** 0 */
 			Recording
+		}
+		enum OwnerIdType {
 		}
 		enum statecode {
 			/** 2 */
@@ -218,4 +303,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

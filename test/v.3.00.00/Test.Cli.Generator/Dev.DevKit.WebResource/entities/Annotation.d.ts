@@ -667,10 +667,571 @@ declare namespace DevKit {
 		Subject: string;
 		/** Version number of the note. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the note. */
+			readonly AnnotationId: string;
+			/** Unique identifier of the user who created the note. */
+			readonly CreatedBy: string;
+			/** Date and time when the note was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the annotation. */
+			readonly CreatedOnBehalfBy: string;
+			/** Contents of the note's attachment. */
+			readonly DocumentBody: string;
+			/** Dummy attribute associated with the note attachment */
+			readonly DummyFileName: string;
+			/** Dummy attribute associated with the note regarding */
+			readonly DummyRegarding: string;
+			/** File name of the note. */
+			readonly FileName: string;
+			/** File pointer of the attachment. */
+			readonly FilePointer: string;
+			/** File size of the note. */
+			readonly FileSize: string;
+			/** Unique identifier of the data import or data migration that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Specifies whether the note is an attachment. */
+			readonly IsDocument: string;
+			readonly IsPrivate: string;
+			/** Language identifier for the note. */
+			readonly LangId: string;
+			/** MIME type of the note's attachment. */
+			readonly MimeType: string;
+			/** Unique identifier of the user who last modified the note. */
+			readonly ModifiedBy: string;
+			/** Date and time when the note was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the annotation. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Text of the note. */
+			readonly NoteText: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_account: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_appointment: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_bookableresource: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_bookableresourcebooking: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_bookableresourcebookingheader: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_bookableresourcecategoryassn: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_bookableresourcecharacteristic: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_bookableresourcegroup: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_bulkoperation: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_calendar: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_campaign: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_campaignactivity: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_campaignresponse: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly channelaccessprofile_annotations: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly channelaccessprofileruleid: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_profileruleitem: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_chat: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_commitment: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_competitor: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_contact: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_contract: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_contractdetail: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_convertrule: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_duplicaterule: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_email: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_emailserverprofile: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_entitlement: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_entitlementchannel: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_entitlementtemplate: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_equipment: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_fax: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_goal: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_incident: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_incidentresolution: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_invoice: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_kbarticle: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_knowledgearticle: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_knowledgebaserecord: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_lead: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_letter: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_list: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_mailbox: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_3dmodel: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_accountpricelist: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_actual: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_agreement: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_agreementbookingdate: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_agreementbookingincident: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_agreementbookingproduct: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_agreementbookingservice: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_agreementbookingservicetask: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_agreementbookingsetup: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_agreementinvoicedate: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_agreementinvoiceproduct: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_agreementinvoicesetup: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_agreementsubstatus: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_aifptrainingdocument: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_aimodel: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_aiodimage: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_approval: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_approvalset: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_bookingalert: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_bookingalertstatus: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_bookingjournal: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_bookingrule: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_bookingtimestamp: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_characteristicreqforteammember: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_contactpricelist: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_customerasset: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_dataexport: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_delegation: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_estimate: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_estimateline: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_expense: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_expensecategory: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_expensereceipt: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_fact: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_fieldservicesetting: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_findworkevent: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_incidenttype: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_incidenttypecharacteristic: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_incidenttypeproduct: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_incidenttypeservice: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_incidenttypessetup: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_inspectionattachment: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_inventoryadjustment: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_inventoryadjustmentproduct: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_inventoryjournal: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_inventorytransfer: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_invoicelinetransaction: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_iotalert: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_iotdevice: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_iotdevicecategory: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_iotdevicecommand: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_iotdeviceregistrationhistory: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_journal: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_journalline: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_liveconversation: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_ocflaggedspam: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_ocliveworkitem: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_ocoutboundmessage: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_ocsession: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_opportunitylineresourcecategory: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_opportunitylinetransaction: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_opportunitylinetransactioncategory: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_opportunitylinetransactionclassificatio: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_opportunitypricelist: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_orderlineresourcecategory: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_orderlinetransaction: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_orderlinetransactioncategory: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_orderlinetransactionclassification: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_orderpricelist: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_organizationalunit: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_overflowactionconfig: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_payment: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_paymentdetail: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_paymentmethod: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_paymentterm: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_personalsoundsetting: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_playbookinstance: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_playbooktemplate: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_postalbum: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_postalcode: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_priority: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_processnotes: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_productinventory: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_project: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_projectapproval: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_projectparameter: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_projectparameterpricelist: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_projectpricelist: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_projecttask: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_projecttaskdependency: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_projecttaskstatususer: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_projectteam: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_projectteammembersignup: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_projecttransactioncategory: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_purchaseorder: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_purchaseorderbill: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_purchaseorderproduct: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_purchaseorderreceipt: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_purchaseorderreceiptproduct: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_purchaseordersubstatus: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_quotebookingincident: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_quotebookingproduct: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_quotebookingservice: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_quotebookingservicetask: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_quotelineresourcecategory: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_quotelinetransaction: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_quotelinetransactioncategory: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_quotelinetransactionclassification: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_quotepricelist: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_requirementcharacteristic: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_requirementresourcecategory: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_requirementresourcepreference: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_requirementstatus: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_resourcecategorypricelevel: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_resourcepaytype: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_resourcerequest: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_resourcerequirement: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_resourcerequirementdetail: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_resourceterritory: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_rma: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_rmaproduct: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_rmareceipt: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_rmareceiptproduct: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_rmasubstatus: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_rolecompetencyrequirement: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_rtv: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_rtvproduct: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_rtvsubstatus: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_salessuggestion: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_servicetasktype: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_shipvia: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_soundfile: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_soundnotificationsetting: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_systemuserschedulersetting: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_taxcode: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_taxcodedetail: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_timeentry: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_timegroup: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_timegroupdetail: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_timeoffrequest: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_transactioncategory: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_transactioncategoryclassification: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_transactioncategoryhierarchyelement: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_transactioncategorypricelevel: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_transactionconnection: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_transactionorigin: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_transactiontype: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_transcript: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_warehouse: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_workhourtemplate: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_workorder: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_workordercharacteristic: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_workorderincident: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_workorderproduct: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_workorderresourcerestriction: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_workorderservice: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_workorderservicetask: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyn_workordersubstatus: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyusd_agentscriptaction: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyusd_answer: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyusd_configuration: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyusd_customizationfiles: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyusd_entityassignment: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyusd_entitysearch: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyusd_form: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyusd_languagemodule: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyusd_scriptlet: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyusd_scripttasktrigger: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyusd_search: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyusd_sessioninformation: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyusd_task: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyusd_toolbarbutton: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyusd_toolbarstrip: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyusd_tracesourcesetting: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyusd_uiievent: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msdyusd_windowroute: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msfp_alert: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msfp_question: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msfp_surveyinvite: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_msfp_surveyresponse: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_opportunity: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_opportunityclose: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_orderclose: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_phonecall: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_product: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_quote: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_quoteclose: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_recurringappointmentmaster: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_resourcespec: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_routingrule: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_routingruleitem: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_salesorder: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_service: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_serviceappointment: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_sharepointdocument: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_sla: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_socialactivity: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_task: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_uii_action: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_uii_hostedapplication: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_uii_nonhostedapplication: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_uii_option: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_uii_workflow: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_uii_workflowstep: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_uii_workflow_workflowstep_mapping: string;
+			/** Unique identifier of the object with which the note is associated. */
+			readonly objectid_workflow: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier of the business unit that owns the note. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the team who owns the note. */
+			readonly OwningTeam: string;
+			/** Unique identifier of the user who owns the note. */
+			readonly OwningUser: string;
+			/** Prefix of the file pointer in blob storage. */
+			readonly Prefix: string;
+			/** workflow step id associated with the note. */
+			readonly StepId: string;
+			/** Storage pointer. */
+			readonly StoragePointer: string;
+			/** Subject associated with the note. */
+			readonly Subject: string;
+			/** Version number of the note. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace Annotation {
+		enum ObjectIdTypeCode {
+		}
 		enum ObjectTypeCode {
 			/** 1 */
 			Account,
@@ -743,6 +1304,8 @@ declare namespace OptionSet {
 			/** 4212 */
 			Task
 		}
+		enum OwnerIdType {
+		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
 			NotCalculated,
@@ -761,4 +1324,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

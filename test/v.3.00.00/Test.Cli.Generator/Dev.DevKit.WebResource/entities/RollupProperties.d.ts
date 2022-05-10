@@ -87,6 +87,66 @@ declare namespace DevKit {
 		readonly StatusCode: OptionSet.RollupProperties.StatusCode;
 		/** Version number of rollup. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Logical name of target attribute */
+			readonly AggregateAttributeLogicalName: string;
+			/** Logical name of target entity */
+			readonly AggregateEntityLogicalName: string;
+			/** Type code of aggregate entity */
+			readonly AggregateEntityTypeCode: string;
+			/** Filter criteria for target */
+			readonly AggregateFilterAttributes: string;
+			/** Relationship name of the source-target relationship. */
+			readonly AggregateRelationshipName: string;
+			/** Type of aggregation to perform */
+			readonly AggregateType: string;
+			/** Allow source entity to be hierarchical */
+			readonly AllowHierarchyOnSource: string;
+			/** Depth used for bootstrap calculations */
+			readonly BootstrapCurrentDepth: string;
+			/** Retry count for bootstrap */
+			readonly BootstrapRetryCount: string;
+			/** Unique identifier representing the mass calculate async job id. */
+			readonly BootstrapRollupAsyncJobId: string;
+			/** Step number to start bootstrap execution */
+			readonly BootstrapStepNumber: string;
+			/** Target pointer used for bootstrap calculations */
+			readonly BootstrapTargetPointer: string;
+			/** Rollup field data type */
+			readonly DataType: string;
+			/** Unique identifier representing the calculate entity async job id. */
+			readonly IncrementalRollupAsyncJobId: string;
+			/** Status of initial value calculation. */
+			readonly InitialValueCalculationStatus: string;
+			/** Flag indicating whether Activity Party is included */
+			readonly IsActivityPartyIncluded: string;
+			/** Last time when calculations were performed for this rollup field. */
+			readonly LastCalculationTime_UtcDateAndTime: string;
+			/** Logical name of source attribute */
+			readonly RollupAttributeLogicalName: string;
+			/** Base Table Name Of Rollup Entity */
+			readonly RollupEntityBaseTableName: string;
+			/** Logical name of source entity */
+			readonly RollupEntityLogicalName: string;
+			/** Physical Name of Primary Key Of Rollup Entity */
+			readonly RollupEntityPrimaryKeyPhysicalName: string;
+			/** Type code of rollup entity */
+			readonly RollupEntityTypeCode: string;
+			/** Filter criteria for source */
+			readonly RollupFilterAttributes: string;
+			/** Unique identifier of the current record. */
+			readonly RollupPropertiesId: string;
+			/** Physical Name of Rollup State Attribute */
+			readonly RollupStateAttributePhysicalName: string;
+			/** Relationship name of the source hierarchical relationship */
+			readonly SourceHierarchicalRelationshipName: string;
+			/** Status of the Rollup. */
+			readonly StateCode: string;
+			/** Additional information about status of the rollup properties. */
+			readonly StatusCode: string;
+			/** Version number of rollup. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -145,4 +205,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

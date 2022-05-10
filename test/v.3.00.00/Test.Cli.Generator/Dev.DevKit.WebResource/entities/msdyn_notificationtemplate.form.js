@@ -72,6 +72,8 @@ var OptionSet;
 			Dark: 509180000,
 			Light: 509180001
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

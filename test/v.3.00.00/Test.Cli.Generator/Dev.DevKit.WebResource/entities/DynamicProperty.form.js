@@ -130,6 +130,8 @@ var OptionSet;
 			Single_Line_Of_Text: 3,
 			Whole_Number: 4
 		},
+		RegardingObjectTypeCode : {
+		},
 		statecode : {
 			Active: 0,
 			Draft: 1,

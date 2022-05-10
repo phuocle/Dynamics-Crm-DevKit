@@ -291,6 +291,8 @@ var OptionSet;
 			Organizational_Unit_Address: 690970001,
 			Resource_Address: 690970000
 		},
+		OwnerIdType : {
+		},
 		ResourceType : {
 			Account: 5,
 			Contact: 2,

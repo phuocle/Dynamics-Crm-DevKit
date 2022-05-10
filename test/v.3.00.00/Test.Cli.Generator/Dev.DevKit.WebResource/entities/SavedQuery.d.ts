@@ -157,6 +157,84 @@ declare namespace DevKit {
 		readonly SupportingSolutionId: string;
 		/** Version number of the view. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Type the column name that will be used to group the results from the data collected across multiple records from a system view. */
+			readonly AdvancedGroupBy: string;
+			/** Tells whether the view can be deleted. */
+			readonly CanBeDeleted: string;
+			/** Contains the columns and sorting criteria for the view, stored in XML format. */
+			readonly ColumnSetXml: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Type information about how the items in the system view are formatted. */
+			readonly ConditionalFormatting: string;
+			/** Shows who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Type additional information to describe the view, such as the filter criteria or intended results set. */
+			readonly Description: string;
+			/** String specifying the query in Fetch XML language. */
+			readonly FetchXml: string;
+			/** Version in which the form is introduced. */
+			readonly IntroducedVersion: string;
+			/** Tells whether a user created the view. */
+			readonly IsCustom: string;
+			/** Tells whether the component can be customized. */
+			readonly IsCustomizable: string;
+			/** Tells whether the view is the default view for the specified record type (entity). */
+			readonly IsDefault: string;
+			/** Tells whether the record is part of a managed solution. */
+			readonly IsManaged: string;
+			/** Indicates whether or not this is viewable by the entire organization. */
+			readonly IsPrivate: string;
+			/** Choose whether the view is compatible with Quick Find. When users search for specific items, you define the fields that are searched in. */
+			readonly IsQuickFindQuery: string;
+			/** Tells whether the view was created by a user. */
+			readonly IsUserDefined: string;
+			/** Layout data in JSON format. */
+			readonly LayoutJson: string;
+			/** For internal use only. */
+			readonly LayoutXml: string;
+			/** Shows who last updated the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who last updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Type a name for the view to describe what results the view will contain. This name is visible to users in the View list. */
+			readonly Name: string;
+			/** String specifying the corresponding sql query for the fetch xml specified for offline use. */
+			readonly OfflineSqlQuery: string;
+			/** Choose the ID of the organization that the record is associated with. */
+			readonly OrganizationId: string;
+			/** For the organization, type the tab order to determine how users navigate through the screen using only the Tab key. */
+			readonly OrganizationTabOrder: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** For internal use only. */
+			readonly QueryAPI: string;
+			/** For internal use only. */
+			readonly QueryAppUsage: string;
+			/** Shows the type of the query. */
+			readonly QueryType: string;
+			/** Unique identifier of the view. */
+			readonly SavedQueryId: string;
+			/** For internal use only. */
+			readonly SavedQueryIdUnique: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** Shows the status of the view. */
+			readonly StateCode: string;
+			/** Shows the reason code that explains the status of the record. */
+			readonly StatusCode: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** Version number of the view. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -170,6 +248,8 @@ declare namespace OptionSet {
 			Published,
 			/** 1 */
 			Unpublished
+		}
+		enum ReturnedTypeCode {
 		}
 		enum StateCode {
 			/** 0 */
@@ -201,4 +281,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

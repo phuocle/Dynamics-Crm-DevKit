@@ -131,10 +131,60 @@ declare namespace DevKit {
 		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
 		UTCConversionTimeZoneCode: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the system job that created this record */
+			readonly AsyncOperationId: string;
+			/** Unique identifier of the bulk deletion job. */
+			readonly BulkDeleteOperationId: string;
+			/** Unique identifier of the user who created the bulk deletion job. */
+			readonly CreatedBy: string;
+			/** Date and time when the bulk deletion job was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the bulkdeleteoperation. */
+			readonly CreatedOnBehalfBy: string;
+			/** Number of records that could not be deleted by the bulk deletion job. */
+			readonly FailureCount: string;
+			/** Information about if recurrence is defined for the bulk deletion job. */
+			readonly IsRecurring: string;
+			/** Unique identifier of the user who last modified the bulk deletion job. */
+			readonly ModifiedBy: string;
+			/** Date and time when the bulk deletion job record was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the bulkdeleteoperation. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Name of the bulk deletion job. */
+			readonly Name: string;
+			/** Next scheduled time for the bulk deletion job to run. */
+			readonly NextRun_UtcDateAndTime: string;
+			/** Fetch XML of the ordered query set. */
+			readonly OrderedQuerySetXml: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Business unit that owns the bulk deletion job. */
+			readonly OwningBusinessUnit: string;
+			/** Business user what owns the bulk delete operation. */
+			readonly OwningUser: string;
+			/** Index of the ordered query expression that defines the deletion set. */
+			readonly ProcessingQEIndex: string;
+			/** Status of the bulk deletion job. */
+			readonly StateCode: string;
+			/** Reason for the status of the bulk deletion job. */
+			readonly StatusCode: string;
+			/** Number of records deleted by the bulk deletion job. */
+			readonly SuccessCount: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace BulkDeleteOperation {
+		enum OwnerIdType {
+		}
 		enum StateCode {
 			/** 3 */
 			Completed,
@@ -185,4 +235,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

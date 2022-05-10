@@ -48,6 +48,8 @@ var OptionSet;
 			Case: 0,
 			Work_Order: 192350000
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

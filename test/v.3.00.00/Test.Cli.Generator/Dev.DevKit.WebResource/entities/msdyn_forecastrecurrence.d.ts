@@ -123,10 +123,80 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Stores the FetchXML for participating records for closed opportunities. For internal use. */
+			readonly msdyn_actualparticipatingrecordsfetchxml: string;
+			/** Stores information about why the recalculation of forecast hierarchy failed. */
+			readonly msdyn_failureinfo: string;
+			/** Unique identifier for the forecast definition that is associated with the forecast recurrence. */
+			readonly msdyn_forecastdefinitionid: string;
+			/** Unique identifier for the forecast recurrence. */
+			readonly msdyn_forecastrecurrenceId: string;
+			/** Stores the FetchXML for participating records for inprogress opportunities. For internal use. */
+			readonly msdyn_inprogressparticipatingrecordsfetchxml: string;
+			/** For internal use only */
+			readonly msdyn_ishierarchylocked: string;
+			/** The date and time when the forecast hierarchy was successfully recalculated. */
+			readonly msdyn_lastrecalculatedon_UtcDateAndTime: string;
+			/** Shows the name of the forecast recurrence. */
+			readonly msdyn_name: string;
+			/** For internal use only. */
+			readonly msdyn_recalculatestatuschangedon_UtcDateAndTime: string;
+			/** For internal use only. */
+			readonly msdyn_recalculationstarttime_UtcDateAndTime: string;
+			/** Shows the recalculation status for the forecast recurrence hierarchy. */
+			readonly msdyn_recalculationstatus: string;
+			/** Stores the description for the recalculation status of forecast hierarchy. */
+			readonly msdyn_recalculationstatusdescription: string;
+			/** Stores the recurrence index that is associated with the forecast recurrence hierarchy. */
+			readonly msdyn_recurrenceindex: string;
+			/** Shows the date from which the forecast is applicable. The date and time are displayed in the time zone selected in Dynamics 365 Customer Engagement apps options. */
+			readonly msdyn_validfrom_DateOnly: string;
+			/** Shows the date till which the forecast is applicable. The date and time are displayed in the time zone selected in Dynamics 365 Customer Engagement apps options. */
+			readonly msdyn_validto_DateOnly: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the Forecast Recurrence */
+			readonly statecode: string;
+			/** Reason for the status of the Forecast Recurrence */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace msdyn_forecastrecurrence {
+		enum OwnerIdType {
+		}
 		enum statecode {
 			/** 0 */
 			Active,
@@ -157,4 +227,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

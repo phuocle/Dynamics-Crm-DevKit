@@ -89,6 +89,8 @@ var OptionSet;
 			Amount_based: 192350000,
 			Markup_based: 192350001
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

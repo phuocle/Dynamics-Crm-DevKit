@@ -101,6 +101,30 @@ declare namespace DevKit {
 		/** Unique identifier for entity instances */
 		msdyn_suggestedcontactId: string;
 		msdyn_telephone: string;
+		readonly FormattedValue: {
+			/** Account Name */
+			readonly msdyn_accountidname: string;
+			readonly msdyn_accountname: string;
+			readonly msdyn_addresscity: string;
+			readonly msdyn_addressline1: string;
+			readonly msdyn_addressline2: string;
+			readonly msdyn_addresspostalcode: string;
+			readonly msdyn_companyname: string;
+			/** Date and time when the record was created. */
+			readonly msdyn_createdon_UtcDateAndTime: string;
+			readonly msdyn_description: string;
+			readonly msdyn_email: string;
+			/** first name */
+			readonly msdyn_firstname: string;
+			readonly msdyn_fullname: string;
+			readonly msdyn_jobtitle: string;
+			readonly msdyn_lastname: string;
+			readonly msdyn_mobilephone: string;
+			readonly msdyn_preferredcontactmethodcode: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_suggestedcontactId: string;
+			readonly msdyn_telephone: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -123,4 +147,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

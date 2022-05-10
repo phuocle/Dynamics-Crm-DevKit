@@ -48,6 +48,8 @@ var OptionSet;
 			Fetch_based: 160800000,
 			Related_entity_based: 160800002
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

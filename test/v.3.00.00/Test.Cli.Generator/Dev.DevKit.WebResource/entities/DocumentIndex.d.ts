@@ -102,6 +102,45 @@ declare namespace DevKit {
 		/** Type the title of the parent knowledge base article. This is updated in the search index every time the article is published. */
 		Title: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the indexed article. */
+			readonly CreatedBy: string;
+			/** Date and time when the indexed article was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the documentindex. */
+			readonly CreatedOnBehalfBy: string;
+			/** Choose the parent article for the document index item. The ID links the index to article information such as the article number, title, and keywords. */
+			readonly DocumentId: string;
+			/** Unique identifier of the indexed article. */
+			readonly DocumentIndexId: string;
+			/** For internal use only. */
+			readonly DocumentTypeCode: string;
+			/** Shows which version of the knowledge article is the latest version. */
+			readonly IsLatestVersion: string;
+			/** Tells whether the parent knowledge base article is published in Microsoft Dynamics 365, so that the keywords and article content are added to the search index. */
+			readonly IsPublished: string;
+			/** Type the keywords for the article. The keywords are updated in the search index every time the article is published. */
+			readonly KeyWords: string;
+			/** For system use only. */
+			readonly Location: string;
+			/** Unique identifier of the user who last modified the indexed article. */
+			readonly ModifiedBy: string;
+			/** Date and time when the indexed article was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the documentindex. */
+			readonly ModifiedOnBehalfBy: string;
+			/** For internal use only. */
+			readonly Number: string;
+			/** Choose the ID of the organization that the record is associated with. */
+			readonly OrganizationId: string;
+			/** For internal use only. */
+			readonly SearchText: string;
+			/** Shows the subject record selected on the parent knowledge base article. The ID is updated in the search index every time the article is published. */
+			readonly SubjectId: string;
+			/** Type the title of the parent knowledge base article. This is updated in the search index every time the article is published. */
+			readonly Title: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -128,4 +167,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

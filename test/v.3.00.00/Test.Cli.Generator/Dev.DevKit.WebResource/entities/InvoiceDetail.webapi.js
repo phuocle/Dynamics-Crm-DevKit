@@ -186,7 +186,7 @@ var DevKit;
 		}
 		invoicedetail.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -200,6 +200,8 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.InvoiceDetail = {
+		InvoiceStateCode : {
+		},
 		msdyn_BillingMethod : {
 			Fixed_Price: 192350001,
 			Time_and_Material: 192350000
@@ -207,6 +209,8 @@ var OptionSet;
 		msdyn_LineType : {
 			Field_Service_Line: 690970001,
 			Project_Service_Line: 690970000
+		},
+		OwnerIdType : {
 		},
 		PricingErrorCode : {
 			Base_Currency_Attribute_Overflow: 36,

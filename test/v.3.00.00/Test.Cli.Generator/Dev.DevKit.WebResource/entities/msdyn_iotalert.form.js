@@ -124,6 +124,8 @@ var OptionSet;
 			Low: 192350002,
 			No_Suggestions: 192350003
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Closed: 3,

@@ -218,6 +218,74 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Monetary amount for the price list. */
+			readonly Amount: string;
+			/** Value of the Amount in base currency. */
+			readonly Amount_Base: string;
+			/** Unique identifier of the user who created the price list. */
+			readonly CreatedBy: string;
+			/** Date and time when the price list was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Unique identifier of the discount list associated with the price list. */
+			readonly DiscountTypeId: string;
+			/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
+			readonly ExchangeRate: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who last modified the price list. */
+			readonly ModifiedBy: string;
+			/** Date and time when the price list was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who last updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Unique identifier of the organization associated with the price list. */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Percentage for the price list. */
+			readonly Percentage: string;
+			/** Unique identifier of the price level associated with this price list. */
+			readonly PriceLevelId: string;
+			/** Pricing method applied to the price list. */
+			readonly PricingMethodCode: string;
+			/** Contains the id of the process associated with the entity. */
+			readonly ProcessId: string;
+			/** Product associated with the price list. */
+			readonly ProductId: string;
+			/** User-defined product number. */
+			readonly ProductNumber: string;
+			/** Unique identifier of the price list. */
+			readonly ProductPriceLevelId: string;
+			/** Quantity of the product that must be sold for a given price level. */
+			readonly QuantitySellingCode: string;
+			/** Rounding option amount for the price list. */
+			readonly RoundingOptionAmount: string;
+			/** Value of the Rounding Amount in base currency. */
+			readonly RoundingOptionAmount_Base: string;
+			/** Option for rounding the price list. */
+			readonly RoundingOptionCode: string;
+			/** Policy for rounding the price list. */
+			readonly RoundingPolicyCode: string;
+			/** Contains the id of the stage where the entity is located. */
+			readonly StageId: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			readonly TransactionCurrencyId: string;
+			/** A comma separated list of string values representing the unique identifiers of stages in a Business Process Flow Instance in the order that they occur. */
+			readonly TraversedPath: string;
+			/** Unique identifier of the unit for the price list. */
+			readonly UoMId: string;
+			/** Unique identifier of the unit schedule for the price list. */
+			readonly UoMScheduleId: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -278,4 +346,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

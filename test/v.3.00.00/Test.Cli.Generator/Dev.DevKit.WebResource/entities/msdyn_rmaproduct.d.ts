@@ -200,6 +200,96 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Shows the exchange rate for the currency associated with the entity with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Shows the sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who last updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Account where ownership of associated asset should be transferred to (if Product Action is Change Asset Ownership) */
+			readonly msdyn_Changeownership: string;
+			/** Specify if credit invoice should be generated for this product when returned */
+			readonly msdyn_CredittoAccount: string;
+			/** Asset this line item relates to */
+			readonly msdyn_CustomerAsset: string;
+			/** Type a description of the product. */
+			readonly msdyn_Description: string;
+			readonly msdyn_InternalFlags: string;
+			/** Enter the current status of this product. */
+			readonly msdyn_ItemStatus: string;
+			/** Shows the order of this product within the RMA. */
+			readonly msdyn_LineOrder: string;
+			/** Enter the name of the custom entity. */
+			readonly msdyn_name: string;
+			/** Price List that determines the pricing for this product */
+			readonly msdyn_PriceList: string;
+			/** Shows the action to be performed by the system once the product is received (either create RTV, return to warehouse, or change asset ownership). */
+			readonly msdyn_ProcessingAction: string;
+			/** Product to return */
+			readonly msdyn_Product: string;
+			/** Shows the quantity processed as per the processing action. */
+			readonly msdyn_QtyProcessed: string;
+			/** Enter the quantity currently received. */
+			readonly msdyn_QtyReceived: string;
+			/** Enter the quantity to return. */
+			readonly msdyn_Quantitytoreturn: string;
+			/** Vendor to where this product should be returned (if Product Action is RTV) */
+			readonly msdyn_ReturntoVendor: string;
+			/** Warehouse to which this product should be returned to (if Product Action is Warehouse) */
+			readonly msdyn_ReturntoWarehouse: string;
+			/** RMA this line item relates to */
+			readonly msdyn_RMA: string;
+			/** Shows the entity instances. */
+			readonly msdyn_rmaproductId: string;
+			/** Specify if product is taxable */
+			readonly msdyn_Taxable: string;
+			readonly msdyn_TotalAmount: string;
+			/** Shows the value of the total amount in the base currency. */
+			readonly msdyn_totalamount_Base: string;
+			/** Unit for this product */
+			readonly msdyn_Unit: string;
+			/** Shows the unit amount to be credited to the customer */
+			readonly msdyn_UnitAmount: string;
+			/** Shows the value of the unit amount in the base currency. */
+			readonly msdyn_unitamount_Base: string;
+			/** Work Order Product to be returned */
+			readonly msdyn_WOProduct: string;
+			/** Shows the date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the RMA Product */
+			readonly statecode: string;
+			/** Reason for the status of the RMA Product */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Unique identifier of the currency associated with the entity. */
+			readonly TransactionCurrencyId: string;
+			/** Shows the time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -219,6 +309,8 @@ declare namespace OptionSet {
 			Create_RTV,
 			/** 690970001 */
 			Return_to_Warehouse
+		}
+		enum OwnerIdType {
 		}
 		enum statecode {
 			/** 0 */
@@ -250,4 +342,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

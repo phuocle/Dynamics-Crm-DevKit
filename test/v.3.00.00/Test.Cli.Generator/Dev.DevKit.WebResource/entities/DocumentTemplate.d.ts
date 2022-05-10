@@ -112,10 +112,45 @@ declare namespace DevKit {
 		/** Information about whether the document template is active. */
 		Status: boolean;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Client data regarding this document template. */
+			readonly ClientData: string;
+			/** Bytes of the document template. */
+			readonly Content: string;
+			/** Unique identifier of the user who created the document template. */
+			readonly CreatedBy: string;
+			/** Date and time when the document template was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the document template. */
+			readonly CreatedOnBehalfBy: string;
+			/** Additional information to describe the Document Template */
+			readonly Description: string;
+			/** Unique identifier of the document template. */
+			readonly DocumentTemplateId: string;
+			/** Option set for selecting the type of the document template */
+			readonly DocumentType: string;
+			/** Language of Document Template. */
+			readonly LanguageCode: string;
+			/** Unique identifier of the user who last modified the document template. */
+			readonly ModifiedBy: string;
+			/** Date and time when the document template was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the document template. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Name of the document template. */
+			readonly Name: string;
+			/** Unique identifier of the organization associated with the web resource. */
+			readonly OrganizationId: string;
+			/** Information about whether the document template is active. */
+			readonly Status: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace DocumentTemplate {
+		enum AssociatedEntityTypeCode {
+		}
 		enum DocumentType {
 			/** 1 */
 			Microsoft_Excel,
@@ -140,4 +175,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

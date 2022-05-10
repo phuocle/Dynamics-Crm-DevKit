@@ -72,6 +72,51 @@ declare namespace DevKit {
 		readonly SupportingSolutionId: string;
 		/** For internal use only. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier of the user who created the SDK message pair. */
+			readonly CreatedBy: string;
+			/** Date and time when the SDK message pair was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the sdkmessagepair. */
+			readonly CreatedOnBehalfBy: string;
+			/** Customization level of the SDK message filter. */
+			readonly CustomizationLevel: string;
+			/** Version in which the component is deprecated. */
+			readonly DeprecatedVersion: string;
+			/** Endpoint that the message pair is associated with. */
+			readonly Endpoint: string;
+			/** Version in which the component is introduced. */
+			readonly IntroducedVersion: string;
+			/** Information that specifies whether this component is managed. */
+			readonly IsManaged: string;
+			/** Unique identifier of the user who last modified the SDK message pair. */
+			readonly ModifiedBy: string;
+			/** Date and time when the SDK message pair was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the sdkmessagepair. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Namespace that the message pair is associated with. */
+			readonly Namespace: string;
+			/** Unique identifier of the organization with which the SDK message pair is associated. */
+			readonly OrganizationId: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			readonly SdkMessageBindingInformation: string;
+			/** Unique identifier of the message with which the SDK message pair is associated. */
+			readonly SdkMessageId: string;
+			/** Unique identifier of the SDK message pair entity. */
+			readonly SdkMessagePairId: string;
+			/** Unique identifier of the SDK message pair. */
+			readonly SdkMessagePairIdUnique: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** For internal use only. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -104,4 +149,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

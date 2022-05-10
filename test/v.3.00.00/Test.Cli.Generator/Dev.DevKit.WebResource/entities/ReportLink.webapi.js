@@ -111,7 +111,7 @@ var DevKit;
 		}
 		reportlink.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -129,6 +129,8 @@ var OptionSet;
 			Drill_through: 1,
 			Drill_through_and_sub_report: 3,
 			Sub_report: 2
+		},
+		OwnerIdType : {
 		},
 		RollupState : {
 			NotCalculated: 0,

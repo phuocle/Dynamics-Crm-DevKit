@@ -188,6 +188,70 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** This value will be used to specify the command name when sending device commands. Default property value is "CommandName" when this field is unspecified. */
+			readonly msdyn_CommandNameProperty: string;
+			/** This value will be used to specify the command parameters when sending device commands. Default property value is "Parameters" when this field is unspecified. */
+			readonly msdyn_CommandParametersProperty: string;
+			/** The IoT Provider Instance to which IoT Devices should belong by default. */
+			readonly msdyn_DefaultIoTProviderInstance: string;
+			/** This field is used to know the source of IoT for this organization. Example : IoT Suite or IoT Central or Others. */
+			readonly msdyn_defaultiotsource: string;
+			readonly msdyn_DeploymentAppURL: string;
+			/** To specify the interval of scheduled device data pulls */
+			readonly msdyn_devicedatapullfrequency: string;
+			/** IoT suggestions provide you insights on priority level and incident type associated with an alert. */
+			readonly msdyn_EnableIoTSuggestions: string;
+			/** When this option is enabled, all Connected Field Service background processes will be processed through flows instead of the historic Connected Field Service workflows. */
+			readonly msdyn_EnhancedBackgroundProcessing: string;
+			/** Select the columns that will be used to determine the aggregation of similar IoT alerts. */
+			readonly msdyn_IoTAlertAggregationRule: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_iotsettingsId: string;
+			/** The name of the custom entity. */
+			readonly msdyn_name: string;
+			/** The next scheduled running time for device data pull */
+			readonly msdyn_NextDeviceDataPullTime_UtcDateAndTime: string;
+			/** To turn on/off scheduled device data pulls, default is off */
+			readonly msdyn_ScheduledDeviceDataPull: string;
+			readonly msdyn_ShowWelcome: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the IoTSettings */
+			readonly statecode: string;
+			/** Reason for the status of the IoTSettings */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -199,6 +263,8 @@ declare namespace OptionSet {
 			Azure_IoT_Suite,
 			/** 192350000 */
 			Other
+		}
+		enum OwnerIdType {
 		}
 		enum statecode {
 			/** 0 */
@@ -230,4 +296,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

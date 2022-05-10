@@ -114,7 +114,7 @@ var DevKit;
 		}
 		msdyn_paymentmethod.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -133,6 +133,8 @@ var OptionSet;
 			Check: 690970001,
 			Credit_Card: 690970002,
 			Other: 690970003
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

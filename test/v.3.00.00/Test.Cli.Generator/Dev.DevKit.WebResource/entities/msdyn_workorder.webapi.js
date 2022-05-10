@@ -104,6 +104,7 @@ var DevKit;
 			msdyn_name: { a: 'msdyn_name' },
 			msdyn_OpportunityId: { b: 'msdyn_OpportunityId', a: '_msdyn_opportunityid_value', c: 'opportunities', d: 'opportunity' },
 			msdyn_ParentWorkOrder: { b: 'msdyn_ParentWorkOrder', a: '_msdyn_parentworkorder_value', c: 'msdyn_workorders', d: 'msdyn_workorder' },
+			msdyn_phoneNumber: { a: 'msdyn_phoneNumber' },
 			msdyn_PostalCode: { a: 'msdyn_postalcode' },
 			msdyn_PreferredResource: { b: 'msdyn_PreferredResource', a: '_msdyn_preferredresource_value', c: 'bookableresources', d: 'bookableresource' },
 			msdyn_PriceList: { b: 'msdyn_PriceList', a: '_msdyn_pricelist_value', c: 'pricelevels', d: 'pricelevel' },
@@ -188,7 +189,7 @@ var DevKit;
 		}
 		msdyn_workorder.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -214,6 +215,8 @@ var OptionSet;
 			Facility: 690970001,
 			Location_Agnostic: 690970002,
 			Onsite: 690970000
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

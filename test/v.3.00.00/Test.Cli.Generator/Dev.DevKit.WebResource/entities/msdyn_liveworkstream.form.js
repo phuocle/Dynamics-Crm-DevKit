@@ -219,6 +219,7 @@ var OptionSet;
 			Twilio: 192350001
 		},
 		msdyn_streamsource : {
+			Apple_Messages_for_Business: 192450000,
 			Co_browse: 192390000,
 			Custom: 192350002,
 			Entity_Records: 192350000,
@@ -237,6 +238,8 @@ var OptionSet;
 		msdyn_workdistributionmode : {
 			Pick: 192350001,
 			Push: 192350000
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

@@ -53,6 +53,8 @@ var OptionSet;
 			AssignmentRuleSelection: 192350001,
 			Prioritization: 192350000
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

@@ -82,6 +82,8 @@ var OptionSet;
 			Specific_people: 192350002,
 			System: 192350003
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

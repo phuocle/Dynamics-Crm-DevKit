@@ -59,6 +59,38 @@ declare namespace DevKit {
 		readonly ValidForReadAPI: boolean;
 		/** The version number of this attribute. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the attribute. */
+			readonly AttributeId: string;
+			/** Attribute Of */
+			readonly AttributeOf: string;
+			/** Attribute Type Id */
+			readonly AttributeTypeId: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** The external name of this attribute. */
+			readonly ExternalName: string;
+			/** The logical name of this attribute. */
+			readonly LogicalName: string;
+			/** The managed property logical name of this attribute. */
+			readonly ManagedPropertyLogicalName: string;
+			/** The managed property parent attribute name of this attribute. */
+			readonly ManagedPropertyParentAttributeName: string;
+			/** The name of this Attribute. */
+			readonly Name: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** The physical name of this attribute. */
+			readonly PhysicalName: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** The table column name of this attribute. */
+			readonly TableColumnName: string;
+			/** Valid For Read API */
+			readonly ValidForReadAPI: string;
+			/** The version number of this attribute. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -91,4 +123,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

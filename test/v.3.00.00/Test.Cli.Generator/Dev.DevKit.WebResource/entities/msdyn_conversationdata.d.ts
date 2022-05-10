@@ -139,10 +139,96 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Account unique identifier */
+			readonly msdyn_AccountId: string;
+			/** Additional data related to the conversation */
+			readonly msdyn_AdditionalData: string;
+			/** Conversation channel */
+			readonly msdyn_Channel: string;
+			/** Contact unique identifier */
+			readonly msdyn_ContactId: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_conversationdataId: string;
+			/** Conversation identifier */
+			readonly msdyn_ConversationId: string;
+			/** Conversation started time */
+			readonly msdyn_ConversationTimestamp_UtcDateAndTime: string;
+			/** Custom Attribute 1 */
+			readonly msdyn_CustomAttribute1: string;
+			/** Custom Attribute 2 */
+			readonly msdyn_CustomAttribute2: string;
+			/** Custom Attribute 3 */
+			readonly msdyn_CustomAttribute3: string;
+			/** Custom Attribute 4 */
+			readonly msdyn_CustomAttribute4: string;
+			/** Custom Attribute 5 */
+			readonly msdyn_CustomAttribute5: string;
+			/** City name for customer address */
+			readonly msdyn_customerCity: string;
+			/** Country name for customer address */
+			readonly msdyn_customerCountry: string;
+			/** State name for customer address */
+			readonly msdyn_customerState: string;
+			/** Zip for customer address */
+			readonly msdyn_customerZip: string;
+			/** External System Correlation Id */
+			readonly msdyn_ExternalCorrelationId: string;
+			/** The name of the custom entity. */
+			readonly msdyn_name: string;
+			/** Name of the primary entity to which this work item belongs to */
+			readonly msdyn_PrimaryRelatedEntityName: string;
+			/** Id of the primary entity to which this work item belongs to */
+			readonly msdyn_PrimaryRelatedEntityRecordId: string;
+			/** Channel Integration Framework Provider Id */
+			readonly msdyn_ProviderId: string;
+			/** Channel Integration Framework Provider Name */
+			readonly msdyn_ProviderName: string;
+			/** Conversation origin region information */
+			readonly msdyn_Region: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the ConversationData */
+			readonly statecode: string;
+			/** Reason for the status of the ConversationData */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace msdyn_conversationdata {
+		enum OwnerIdType {
+		}
 		enum statecode {
 			/** 0 */
 			Active,
@@ -173,4 +259,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

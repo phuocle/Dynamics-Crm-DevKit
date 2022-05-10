@@ -55,6 +55,8 @@ var OptionSet;
 			Geofence: 192350000,
 			Geotracked: 192350001
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

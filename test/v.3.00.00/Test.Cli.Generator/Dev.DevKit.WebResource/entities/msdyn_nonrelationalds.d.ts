@@ -59,6 +59,12 @@ declare namespace DevKit {
 		msdyn_name: string;
 		/** Unique identifier for entity instances */
 		msdyn_nonrelationaldsId: string;
+		readonly FormattedValue: {
+			/** The name of the custom entity. */
+			readonly msdyn_name: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_nonrelationaldsId: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -81,4 +87,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

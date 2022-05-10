@@ -63,6 +63,42 @@ declare namespace DevKit {
 		ParentComponentId: string;
 		/** For internal use only. */
 		State: number;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly AppModuleId: string;
+			/** For internal use only. */
+			readonly AppModuleMetadataId: string;
+			/** For internal use only. */
+			readonly ComponentId: string;
+			/** For internal use only. */
+			readonly ComponentIsDefault: string;
+			/** For internal use only. */
+			readonly ComponentIsQuickFindQuery: string;
+			/** For internal use only. */
+			readonly ComponentIsTabletEnabled: string;
+			/** For internal use only. */
+			readonly ComponentIsUserChart: string;
+			/** For internal use only. */
+			readonly ComponentIsUserForm: string;
+			/** For internal use only. */
+			readonly ComponentIsUserView: string;
+			/** For internal use only. */
+			readonly ComponentStateCode: string;
+			/** For internal use only. */
+			readonly ComponentSubType: string;
+			/** For internal use only. */
+			readonly ComponentType: string;
+			/** For internal use only. */
+			readonly ComponentVersion: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** For internal use only. */
+			readonly ParentComponentId: string;
+			/** For internal use only. */
+			readonly State: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -85,4 +121,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

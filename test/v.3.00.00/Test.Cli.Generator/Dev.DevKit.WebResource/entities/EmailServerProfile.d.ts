@@ -290,6 +290,153 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version number of the email server profile. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** AAD ResourceId used for OAuth athentication scheme */
+			readonly AadResourceId: string;
+			/** Shows who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Type the default location of the server. */
+			readonly DefaultServerLocation: string;
+			/** Type additional information that describes the email server profile. */
+			readonly Description: string;
+			/** Unique identifier of the email server profile. */
+			readonly EmailServerProfileId: string;
+			/** Email Server Type Name */
+			readonly EmailServerTypeName: string;
+			/** Indicates the code page to use when encoding email content. */
+			readonly EncodingCodePage: string;
+			/** The default image for the entity. */
+			readonly EntityImage: string;
+			readonly EntityImage_Timestamp: string;
+			readonly EntityImage_URL: string;
+			/** For internal use only. */
+			readonly EntityImageId: string;
+			/** Type the tenant ID of Exchange Online. */
+			readonly ExchangeOnlineTenantId: string;
+			/** Select the version of Exchange that is on the email server. */
+			readonly ExchangeVersion: string;
+			/** Select the incoming email authentication protocol that is used for connecting to the email server. */
+			readonly IncomingAuthenticationProtocol: string;
+			/** Select how credentials will be retrieved for incoming email. */
+			readonly IncomingCredentialRetrieval: string;
+			/** Indicates the incoming partner application. */
+			readonly IncomingPartnerApplication: string;
+			/** Type the password for incoming email. */
+			readonly IncomingPassword: string;
+			/** Type the Exchange port number for incoming mail. */
+			readonly IncomingPortNumber: string;
+			/** Type the location of the server for incoming email. */
+			readonly IncomingServerLocation: string;
+			/** Select whether to use impersonation to access the mailbox to process incoming emails. */
+			readonly IncomingUseImpersonation: string;
+			/** Type the user name for incoming email. */
+			readonly IncomingUserName: string;
+			/** Select whether to use the Secure Sockets Layer (SSL) protocol for incoming email. */
+			readonly IncomingUseSSL: string;
+			readonly IsIncomingPasswordSet: string;
+			readonly IsOauthClientSecretSet: string;
+			readonly IsOutgoingPasswordSet: string;
+			/** The Azure Key Vault reference id */
+			readonly keyvaultreferenceid: string;
+			/** Shows the last test authorization status of email server profile */
+			readonly LastAuthorizationStatus: string;
+			/** Shows the Dynamics 365 message obtained during the Last Test */
+			readonly LastCrmMessage: string;
+			/** Shows the last test Execution status of email server profile */
+			readonly LastTestExecutionStatus: string;
+			/** Shows the EWS Request created during the Last Test */
+			readonly LastTestRequest: string;
+			/** Shows the EWS Response obtained during the Last Test */
+			readonly LastTestResponse: string;
+			/** Shows the Last Test Start date and time */
+			readonly LastTestStartTime_UtcDateAndTime: string;
+			/** Shows the Time taken while running the last test */
+			readonly LastTestTotalExecutionTime: string;
+			/** Shows the last test Validation status of email server profile */
+			readonly LastTestValidationStatus: string;
+			/** The managed identity id */
+			readonly managedidentityid: string;
+			/** Maximum number of concurrent connections allowed to the email server per authenticated user. */
+			readonly MaxConcurrentConnections: string;
+			/** Minimum polling interval, in minutes, for mailboxes that are associated with this email server profile. */
+			readonly MinPollingIntervalInMinutes: string;
+			/** Shows who last updated the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who last updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Indicates whether to move undelivered incoming emails to the Undeliverable folder in Microsoft Exchange. */
+			readonly MoveUndeliveredEmails: string;
+			/** Type a meaningful name for the email server profile. This name is displayed when you need to select an email server profile. */
+			readonly Name: string;
+			/** ClientId used for OAuth athentication scheme */
+			readonly OauthClientId: string;
+			/** Client secret used for the OAuth authentication scheme */
+			readonly OauthClientSecret: string;
+			/** Unique identifier of the organization associated with the record. */
+			readonly OrganizationId: string;
+			/** Select the outgoing email authentication protocol that is used for connecting to the email server. */
+			readonly OutgoingAuthenticationProtocol: string;
+			/** Indicates whether the email connector will grant delegate access permissions to the accessing user when required while processing outgoing emails. */
+			readonly OutgoingAutoGrantDelegateAccess: string;
+			/** Select how credentials will be retrieved for outgoing email. */
+			readonly OutgoingCredentialRetrieval: string;
+			/** Indicates the outgoing partner application. */
+			readonly OutgoingPartnerApplication: string;
+			/** Type the password for outgoing email. */
+			readonly OutgoingPassword: string;
+			/** Type the Exchange port number for outgoing mail. */
+			readonly OutgoingPortNumber: string;
+			/** Type the location of the server for outgoing email. */
+			readonly OutgoingServerLocation: string;
+			/** Select whether to use impersonation for accessing the mailbox to process outgoing emails. */
+			readonly OutgoingUseImpersonation: string;
+			/** Type the user name for outgoing email. */
+			readonly OutgoingUsername: string;
+			/** Select whether to use the Secure Sockets Layer (SSL) protocol for outgoing email. */
+			readonly OutgoingUseSSL: string;
+			/** Email Server Profile Owner's email address */
+			readonly OwnerEmailAddress: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Select the business unit that owns the record. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Shows the date and time after which email messages that are received will be processed for mailboxes associated with the email server profile. */
+			readonly ProcessEmailsReceivedAfter_UtcDateAndTime: string;
+			/** Select whether to send an email alert if more than 50% of the mailboxes in this email server profile failed to synchronize in an hour period. */
+			readonly SendEmailAlert: string;
+			/** Select the profile's email server type. */
+			readonly ServerType: string;
+			/** Shows whether the email server profile is active or inactive. */
+			readonly StateCode: string;
+			/** Select the email server profile's status. */
+			readonly StatusCode: string;
+			/** Select whether to timeout a single mailbox. */
+			readonly TimeoutMailboxConnection: string;
+			/** Type the number of milliseconds to timeout a single mailbox. The upper limit is 100 seconds. */
+			readonly TimeoutMailboxConnectionAfterAmount: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Select whether to automatically discover the server location */
+			readonly UseAutoDiscover: string;
+			/** Select whether to use the Exchange Online Tenant ID obtained from running Microsoft Azure PowerShell cmdlets (highly recommended). If you select No, you can edit this field manually */
+			readonly UseDefaultTenantId: string;
+			/** Select whether to use the same settings for incoming and outgoing connections. */
+			readonly UseSameSettingsForOutgoingConnections: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version number of the email server profile. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -388,6 +535,8 @@ declare namespace OptionSet {
 			/** 4 */
 			Without_Credentials_Anonymous
 		}
+		enum OwnerIdType {
+		}
 		enum ServerType {
 			/** 3 */
 			Exchange_Online_Hybrid,
@@ -430,4 +579,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

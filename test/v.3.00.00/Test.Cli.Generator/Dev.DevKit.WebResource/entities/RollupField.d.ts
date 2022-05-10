@@ -121,10 +121,52 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version number of the rollup field. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Shows who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Select a date field for the selected record type, such as Actual Closed Date for the Opportunity record type. A record participates in the goal rollup, if the selected date falls between the start date and the end date for the goal. */
+			readonly DateAttribute: string;
+			/** Select a rollup field where the metric rollup data will be displayed in the goal. The options are an integer or money, depending on the Metric Type you chose for the goal metric. */
+			readonly GoalAttribute: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Tells whether the state or status belongs to the parent entity. */
+			readonly IsStateParentEntityAttribute: string;
+			/** Unique identifier of the goal metric associated with the rollup field. */
+			readonly MetricId: string;
+			/** Shows who last updated the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who last updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Unique identifier of the rollup field. */
+			readonly RollupFieldId: string;
+			/** Type the name of the field that the data for the goal rolls up from. */
+			readonly SourceAttribute: string;
+			/** Select the state of the records you want to use as the source of the rollup data for the metric. */
+			readonly SourceState: string;
+			/** Select the status of the records you want to use as the source of the rollup data for the metric. */
+			readonly SourceStatus: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version number of the rollup field. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace RollupField {
+		enum EntityForDateAttribute {
+		}
+		enum SourceEntity {
+		}
 		enum RollupState {
 			/** 0 - Attribute value is yet to be calculated */
 			NotCalculated,
@@ -143,4 +185,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

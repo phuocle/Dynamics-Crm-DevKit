@@ -127,7 +127,7 @@ var DevKit;
 		}
 		interactionforemail.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -146,6 +146,8 @@ var OptionSet;
 			EmailOpen: 0,
 			EmailReply: 3,
 			LinkOpen: 1
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,

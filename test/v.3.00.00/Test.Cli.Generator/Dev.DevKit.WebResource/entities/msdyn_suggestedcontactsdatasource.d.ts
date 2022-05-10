@@ -85,6 +85,12 @@ declare namespace DevKit {
 		msdyn_name: string;
 		/** Unique identifier for entity instances */
 		msdyn_suggestedcontactsdatasourceId: string;
+		readonly FormattedValue: {
+			/** Name */
+			readonly msdyn_name: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_suggestedcontactsdatasourceId: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -107,4 +113,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

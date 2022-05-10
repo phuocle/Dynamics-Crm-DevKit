@@ -95,6 +95,46 @@ declare namespace DevKit {
 		TimeZoneRuleVersionNumber: number;
 		/** Time zone code that was in use when the record was created. */
 		UTCConversionTimeZoneCode: number;
+		readonly FormattedValue: {
+			/** Date and time when the import job was completed. */
+			readonly CompletedOn_UtcDateAndTime: string;
+			/** Unique identifier of the user who created the importJob. */
+			readonly CreatedBy: string;
+			/** Date and time when the import job record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the import job record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Unstructured data associated with the import job. */
+			readonly Data: string;
+			/** The context of the import */
+			readonly ImportContext: string;
+			/** Unique identifier of the import job. */
+			readonly ImportJobId: string;
+			/** Unique identifier of the user who modified the importJob. */
+			readonly ModifiedBy: string;
+			/** Date and time when the import job was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the import job record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Name of the import job. */
+			readonly Name: string;
+			/** The context of the solution operation */
+			readonly OperationContext: string;
+			/** Unique identifier of the organization associated with the importjob. */
+			readonly OrganizationId: string;
+			/** Import Progress Percentage. */
+			readonly Progress: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** Unique identifier of the solution. */
+			readonly SolutionName: string;
+			/** Date and time when the import job was started. */
+			readonly StartedOn_UtcDateAndTime: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -117,4 +157,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

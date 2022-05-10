@@ -64,6 +64,43 @@ declare namespace DevKit {
 		TabId: string;
 		/** Represents a version of customizations to be synchronized with the Microsoft Dynamics 365 client for Outlook. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier of the context group for this tab. If this ribbon definition adds a new tab, then it is a contextual tab. */
+			readonly ContextGroupId: string;
+			/** The string ID of this ribbon definition. */
+			readonly DiffId: string;
+			/** Indicates the type of ribbon definition. */
+			readonly DiffType: string;
+			/** The entity this rule applies to, also the entity this rule was imported from, will be exported to. */
+			readonly Entity1: string;
+			/** Information about whether the ribbondiff is associated with app module. */
+			readonly IsAppAware: string;
+			readonly IsManaged: string;
+			/** Unique identifier of the organization. */
+			readonly OrganizationId: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Ribbon definition XML string that contains one change action. */
+			readonly RDX: string;
+			/** Unique identifier of the ribbon customization with which the ribbon command is associated. */
+			readonly RibbonCustomizationId: string;
+			/** Unique identifier. */
+			readonly RibbonDiffId: string;
+			/** Unique identifier of the form used when synchronizing customizations for the Microsoft Dynamics 365 client for Outlook. */
+			readonly RibbonDiffUniqueId: string;
+			/** Sequence in which the definition is to be applied. */
+			readonly Sequence: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** The ID of the tab this definition applies to. */
+			readonly TabId: string;
+			/** Represents a version of customizations to be synchronized with the Microsoft Dynamics 365 client for Outlook. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -106,4 +143,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

@@ -104,7 +104,7 @@ var DevKit;
 		}
 		mobileofflineprofileitemfilter.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -118,18 +118,23 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.mobileofflineprofileitemfilter = {
+		returnedtypecode : {
+		},
 		subtype : {
 			CUD_IN: 0,
 			CUD_OUT: 4,
 			FULL_SYNC: 5,
 			RELATED_CUD_IN: 1,
+			RELATED_ENTITIES: 6,
 			RELATED_SHARED_IN: 3,
 			SHARED_IN: 2
 		},
 		type : {
 			DELTA_IN: 0,
 			DELTA_OUT: 1,
-			FULL_SYNC: 2
+			FULL_SYNC: 2,
+			RELATED_ENTITIES: 4,
+			TOP_1: 3
 		},
 		RollupState : {
 			NotCalculated: 0,

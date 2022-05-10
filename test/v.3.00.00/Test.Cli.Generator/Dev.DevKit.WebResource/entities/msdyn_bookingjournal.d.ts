@@ -260,6 +260,78 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Shows the exchange rate for the currency associated with the entity with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Shows the sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who last updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Shows the additional cost associated with this journal, if any. (This amount is not multiplied by quantity) */
+			readonly msdyn_AdditionalCost: string;
+			/** Shows the value of the additional cost in the base currency. */
+			readonly msdyn_additionalcost_Base: string;
+			/** Shows if this journal is billable. */
+			readonly msdyn_Billable: string;
+			/** This Resource Booking this journal pertains to */
+			readonly msdyn_Booking: string;
+			/** Shows the entity instances. */
+			readonly msdyn_bookingjournalId: string;
+			/** Enter the total duration of this journal record. */
+			readonly msdyn_Duration: string;
+			/** Enter the end time of this journal record. */
+			readonly msdyn_EndTime_UtcDateAndTime: string;
+			/** Enter the type of journal. */
+			readonly msdyn_JournalType: string;
+			/** Enter the name of the custom entity. */
+			readonly msdyn_name: string;
+			/** Unique identifier for Resource Pay Type associated with Booking Journal. */
+			readonly msdyn_PayType: string;
+			/** Enter the start time of this journal record. */
+			readonly msdyn_StartTime_UtcDateAndTime: string;
+			/** Shows the total cost company pays to resource. */
+			readonly msdyn_TotalCost: string;
+			/** Shows the value of the total cost in the base currency. */
+			readonly msdyn_totalcost_Base: string;
+			/** Enter the hourly cost that company pays to the resource. */
+			readonly msdyn_UnitCost: string;
+			/** Shows the value of the unit cost in the base currency. */
+			readonly msdyn_unitcost_Base: string;
+			/** Shows the date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Status of the Booking Journal */
+			readonly statecode: string;
+			/** Reason for the status of the Booking Journal */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Unique identifier of the currency associated with the entity. */
+			readonly TransactionCurrencyId: string;
+			/** Shows the time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -275,6 +347,8 @@ declare namespace OptionSet {
 			Travel,
 			/** 690970000 */
 			Working_Hours
+		}
+		enum OwnerIdType {
 		}
 		enum statecode {
 			/** 0 */
@@ -306,4 +380,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

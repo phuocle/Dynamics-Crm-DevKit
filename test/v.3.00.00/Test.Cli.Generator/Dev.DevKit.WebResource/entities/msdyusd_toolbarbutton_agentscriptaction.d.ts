@@ -33,6 +33,12 @@ declare namespace DevKit {
 		readonly msdyusd_toolbarbutton_agentscriptactionId: string;
 		readonly msdyusd_toolbarbuttonid: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			readonly msdyusd_agentscriptactionid: string;
+			readonly msdyusd_toolbarbutton_agentscriptactionId: string;
+			readonly msdyusd_toolbarbuttonid: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -55,4 +61,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

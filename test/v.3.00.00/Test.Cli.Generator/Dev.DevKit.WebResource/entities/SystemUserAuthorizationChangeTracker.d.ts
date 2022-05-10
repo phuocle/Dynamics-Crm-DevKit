@@ -39,6 +39,18 @@ declare namespace DevKit {
 		readonly ComputedVersionNumber: number;
 		/** Unique identifier for the user */
 		SystemUserId: string;
+		readonly FormattedValue: {
+			/** Date and time when the column ChangedVersionNumber was changed. */
+			readonly ChangedOn_UtcDateAndTime: string;
+			/** Database time stamp when user authorization settings were changed */
+			readonly ChangedVersionNumber: string;
+			/** Date and time when the column ComputedVersionNumber was changed. */
+			readonly ComputedOn_UtcDateAndTime: string;
+			/** Database time stamp when user authorization data were started recompute */
+			readonly ComputedVersionNumber: string;
+			/** Unique identifier for the user */
+			readonly SystemUserId: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -61,4 +73,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

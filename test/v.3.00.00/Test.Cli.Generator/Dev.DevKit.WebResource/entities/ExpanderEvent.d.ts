@@ -55,6 +55,34 @@ declare namespace DevKit {
 		Registrations: string;
 		/** Version number of the event. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** The URI where the context is stored. */
+			readonly ContextUri: string;
+			/** Unique identifier used to correlate between expander events and SDK message invocations. */
+			readonly CorrelationId: string;
+			/** Unique identifier of the user who created the event. */
+			readonly CreatedBy: string;
+			/** Date and time when the event was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the event. */
+			readonly CreatedOnBehalfBy: string;
+			/** Unique identifier of the expander event. */
+			readonly ExpanderEventId: string;
+			/** Unique identifier of the user who last modified the event. */
+			readonly ModifiedBy: string;
+			/** Date and time when the event was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the event. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Name of the event. */
+			readonly Name: string;
+			/** Unique identifier of the organization with which the event is associated. */
+			readonly OrganizationId: string;
+			/** The workloads that have registered to send an event. */
+			readonly Registrations: string;
+			/** Version number of the event. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -77,4 +105,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

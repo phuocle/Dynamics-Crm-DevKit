@@ -69,6 +69,48 @@ declare namespace DevKit {
 		UserFiscalCalendarId: string;
 		/** Time zone code that was in use when the record was created. */
 		UTCConversionTimeZoneCode: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the business unit with which the calendar is associated. */
+			readonly BusinessUnitId: string;
+			/** Unique identifier of the user who created the semiannual fiscal calendar. */
+			readonly CreatedBy: string;
+			/** Date and time when the quota for the semiannual fiscal calendar was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the semiannualfiscalcalendar. */
+			readonly CreatedOnBehalfBy: string;
+			/** Date and time when the semiannual fiscal calendar sales quota takes effect. */
+			readonly EffectiveOn_UtcDateOnly: string;
+			/** Exchange rate for the currency associated with the semiannual fiscal calendar with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Type of fiscal period used in the sales quota. */
+			readonly FiscalPeriodType: string;
+			/** Unique identifier of the data import or data migration that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who last modified the semiannual fiscal calendar. */
+			readonly ModifiedBy: string;
+			/** Date and time when the semiannual fiscal calendar was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who last modified the semiannualfiscalcalendar. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Sales quota for the first half of the fiscal year. */
+			readonly Period1: string;
+			/** Base currency equivalent for the sales quota for the first half of the fiscal year. */
+			readonly Period1_Base: string;
+			/** Sales quota for the second half of the fiscal year. */
+			readonly Period7: string;
+			/** Base currency equivalent of the sales quota for the second half of the fiscal year. */
+			readonly Period7_Base: string;
+			/** Unique identifier of the associated salesperson. */
+			readonly SalesPersonId: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Unique identifier of the currency associated with the semiannual fiscal calendar. */
+			readonly TransactionCurrencyId: string;
+			/** Unique identifier for the user who created the semiannual fiscal calendar. */
+			readonly UserFiscalCalendarId: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -91,4 +133,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

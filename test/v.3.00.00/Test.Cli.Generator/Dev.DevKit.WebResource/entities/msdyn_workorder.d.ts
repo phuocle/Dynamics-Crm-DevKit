@@ -134,6 +134,7 @@ declare namespace DevKit {
 			msdyn_OpportunityId: DevKit.Controls.Lookup;
 			/** Unique identifier for Work Order associated with Work Order. */
 			msdyn_ParentWorkOrder: DevKit.Controls.Lookup;
+			msdyn_phoneNumber: DevKit.Controls.String;
 			msdyn_PostalCode: DevKit.Controls.String;
 			/** Price List that controls pricing for products / services added to this work order. By default the system will use the Price List specified on the account */
 			msdyn_PriceList: DevKit.Controls.Lookup;
@@ -353,6 +354,7 @@ declare namespace DevKit {
 			Tab: Tabs;
 			msdyn_Address1: DevKit.Controls.String;
 			msdyn_Address2: DevKit.Controls.String;
+			msdyn_Address3: DevKit.Controls.String;
 			/** Account to be billed. If a billing account has been set on service account it will be populated by default. Otherwise, the billing account will be the same as the service account. */
 			msdyn_BillingAccount: DevKit.Controls.Lookup;
 			msdyn_City: DevKit.Controls.String;
@@ -366,6 +368,7 @@ declare namespace DevKit {
 			msdyn_mapcontrol: DevKit.Controls.String;
 			/** Enter the name of the custom entity. */
 			msdyn_name: DevKit.Controls.String;
+			msdyn_phoneNumber: DevKit.Controls.String;
 			msdyn_PostalCode: DevKit.Controls.String;
 			/** Primary incident type reported */
 			msdyn_PrimaryIncidentType: DevKit.Controls.Lookup;
@@ -538,6 +541,7 @@ declare namespace DevKit {
 			msdyn_name: DevKit.Controls.String;
 			/** Unique identifier for Work Order associated with Work Order. */
 			msdyn_ParentWorkOrder: DevKit.Controls.Lookup;
+			msdyn_phoneNumber: DevKit.Controls.String;
 			msdyn_PostalCode: DevKit.Controls.String;
 			/** Price List that controls pricing for products / services added to this work order. By default the system will use the Price List specified on the account */
 			msdyn_PriceList: DevKit.Controls.Lookup;
@@ -1294,6 +1298,7 @@ declare namespace DevKit {
 		msdyn_OpportunityId: string;
 		/** Unique identifier for Work Order associated with Work Order. */
 		msdyn_ParentWorkOrder: string;
+		msdyn_phoneNumber: string;
 		msdyn_PostalCode: string;
 		/** The customer Preferred Resource to work on this job. Should be taken into consideration while scheduling resources */
 		msdyn_PreferredResource: string;
@@ -1394,6 +1399,177 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Shows the exchange rate for the currency associated with the entity with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** Shows the sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who last updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			readonly msdyn_Address1: string;
+			readonly msdyn_Address2: string;
+			readonly msdyn_Address3: string;
+			readonly msdyn_AddressName: string;
+			/** Shows the agreement linked to this work order. */
+			readonly msdyn_Agreement: string;
+			/** Internal field used to generate the next name upon entity creation. It is optionally copied to the msdyn_name field. */
+			readonly msdyn_AutoNumbering: string;
+			/** Account to be billed. If a billing account has been set on service account it will be populated by default. Otherwise, the billing account will be the same as the service account. */
+			readonly msdyn_BillingAccount: string;
+			/** For internal use only. */
+			readonly msdyn_BookingSummary: string;
+			readonly msdyn_ChildIndex: string;
+			readonly msdyn_City: string;
+			/** The user that last closed this work order */
+			readonly msdyn_ClosedBy: string;
+			/** When Bookings are used on a Work Order, this field is auto-populated based on the latest End Time from the related Bookings. Otherwise, this field is populated based on the change of System Status. */
+			readonly msdyn_completedon_UtcDateAndTime: string;
+			readonly msdyn_Country: string;
+			/** Customer Asset related to this incident reported */
+			readonly msdyn_CustomerAsset: string;
+			readonly msdyn_DateWindowEnd_UtcDateOnly: string;
+			readonly msdyn_DateWindowStart_UtcDateOnly: string;
+			/** Enter the summary of total estimated billing amount for this work order */
+			readonly msdyn_EstimateSubtotalAmount: string;
+			/** Shows the value of the estimate subtotal amount in the base currency. */
+			readonly msdyn_estimatesubtotalamount_Base: string;
+			/** When Bookings are used on a Work Order, this field is auto-populated based on the earliest Actual Arrival Time from the related Bookings. */
+			readonly msdyn_firstarrivedon_UtcDateAndTime: string;
+			/** Indicate the details of the follow up work */
+			readonly msdyn_FollowUpNote: string;
+			/** Allows indication if follow up work is required for a work order. */
+			readonly msdyn_FollowUpRequired: string;
+			/** Workorder's functional location */
+			readonly msdyn_FunctionalLocation: string;
+			/** Shows instructions for booked resources. By default, this information is taken from the work order instructions field on the service account. */
+			readonly msdyn_Instructions: string;
+			/** For internal use only. */
+			readonly msdyn_InternalFlags: string;
+			/** The iot alert which initiated this work order. */
+			readonly msdyn_IoTAlert: string;
+			readonly msdyn_IsFollowUp: string;
+			readonly msdyn_IsMobile: string;
+			readonly msdyn_Latitude: string;
+			readonly msdyn_Longitude: string;
+			readonly msdyn_mapcontrol: string;
+			/** Enter the name of the custom entity. */
+			readonly msdyn_name: string;
+			/** Unique identifier for Opportunity associated with Work Order. */
+			readonly msdyn_OpportunityId: string;
+			/** Unique identifier for Work Order associated with Work Order. */
+			readonly msdyn_ParentWorkOrder: string;
+			readonly msdyn_phoneNumber: string;
+			readonly msdyn_PostalCode: string;
+			/** The customer Preferred Resource to work on this job. Should be taken into consideration while scheduling resources */
+			readonly msdyn_PreferredResource: string;
+			/** Price List that controls pricing for products / services added to this work order. By default the system will use the Price List specified on the account */
+			readonly msdyn_PriceList: string;
+			/** Incident description */
+			readonly msdyn_PrimaryIncidentDescription: string;
+			/** Shows the time estimated to resolve this incident. */
+			readonly msdyn_PrimaryIncidentEstimatedDuration: string;
+			/** Primary incident type reported */
+			readonly msdyn_PrimaryIncidentType: string;
+			readonly msdyn_PrimaryResolution: string;
+			/** Priority of the Work Order. To be taken into consideration while scheduling resources */
+			readonly msdyn_Priority: string;
+			/** The contact that reported this Work Order */
+			readonly msdyn_ReportedByContact: string;
+			/** Account to be serviced */
+			readonly msdyn_ServiceAccount: string;
+			/** Case of which this work order originates from */
+			readonly msdyn_ServiceRequest: string;
+			/** The service territory this work order relates to. By default this will be set to the Service Territory defined on the service account */
+			readonly msdyn_ServiceTerritory: string;
+			readonly msdyn_StateOrProvince: string;
+			/** Work Order subsstatus */
+			readonly msdyn_SubStatus: string;
+			/** Enter the summary of subtotal billing amount excluding tax for this work order. */
+			readonly msdyn_SubtotalAmount: string;
+			/** Shows the value of the subtotal amount in the base currency. */
+			readonly msdyn_subtotalamount_Base: string;
+			/** A support contact can be specified so that the individual working on the work order has someone to contact for assistance. */
+			readonly msdyn_SupportContact: string;
+			/** Tracks the current system status. */
+			readonly msdyn_SystemStatus: string;
+			/** Shows whether sales tax is to be charged for this work order. */
+			readonly msdyn_Taxable: string;
+			/** Tax Code to be used to calculate tax when Work Order is taxable. By default the system will use the tax code specified on the service account */
+			readonly msdyn_TaxCode: string;
+			/** Enter the time this work order was last closed. */
+			readonly msdyn_TimeClosed_UtcDateAndTime: string;
+			/** Enter the starting range of the time promised to the account that incidents will be resolved. */
+			readonly msdyn_TimeFromPromised_UtcDateAndTime: string;
+			readonly msdyn_TimeGroup: string;
+			readonly msdyn_TimeGroupDetailSelected: string;
+			/** Enter the ending range of the time promised to the account that incidents will be resolved. */
+			readonly msdyn_TimeToPromised_UtcDateAndTime: string;
+			readonly msdyn_TimeWindowEnd_UtcDateAndTime: string;
+			readonly msdyn_TimeWindowStart_UtcDateAndTime: string;
+			/** Enter the summary of total billing amount for this work order. */
+			readonly msdyn_TotalAmount: string;
+			/** Shows the value of the total amount in the base currency. */
+			readonly msdyn_totalamount_Base: string;
+			/** Calculated from the estimated duration of Work Order Incidents and Work Order Service Tasks not related to a Work Order Incident on the Work Order. Intended to be read-only. */
+			readonly msdyn_totalestimatedduration: string;
+			/** Enter the summary of total sales tax charged for this work order. */
+			readonly msdyn_TotalSalesTax: string;
+			/** Shows the value of the total sales tax in the base currency. */
+			readonly msdyn_totalsalestax_Base: string;
+			/** The working hours for a requirement. */
+			readonly msdyn_workhourtemplate: string;
+			readonly msdyn_WorkLocation: string;
+			/** For internal use only. */
+			readonly msdyn_workorderarrivaltimekpiid: string;
+			/** Shows the entity instances. */
+			readonly msdyn_workorderId: string;
+			/** For internal use only. */
+			readonly msdyn_workorderresolutionkpiid: string;
+			/** Type a summary description of the job. */
+			readonly msdyn_WorkOrderSummary: string;
+			/** Work Order Type */
+			readonly msdyn_WorkOrderType: string;
+			/** Shows the date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Shows the ID of the process associated with the entity. */
+			readonly processid: string;
+			/** Shows the ID of the stage where the entity is located. */
+			readonly stageid: string;
+			/** Status of the Work Order */
+			readonly statecode: string;
+			/** Reason for the status of the Work Order */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Unique identifier of the currency associated with the entity. */
+			readonly TransactionCurrencyId: string;
+			/** Shows a comma-separated list of string values representing the unique identifiers of stages in a business process flow instance in the order that they occur. */
+			readonly traversedpath: string;
+			/** Shows the time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -1419,6 +1595,8 @@ declare namespace OptionSet {
 			Location_Agnostic,
 			/** 690970000 */
 			Onsite
+		}
+		enum OwnerIdType {
 		}
 		enum statecode {
 			/** 0 */
@@ -1450,4 +1628,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

@@ -49,6 +49,8 @@ var OptionSet;
 			Work_Order_Product: 192350000,
 			Work_Order_Service: 192350001
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

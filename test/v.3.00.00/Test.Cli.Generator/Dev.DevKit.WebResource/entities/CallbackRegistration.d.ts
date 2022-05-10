@@ -45,6 +45,8 @@ declare namespace DevKit {
 		FilteringAttributes: string;
 		/** For internal use only. Holds hard delete information. */
 		HardDelete: boolean;
+		/** For internal use only. Holds version of logic apps trigger. */
+		LogicAppsVersion: string;
 		/** Specifies the message type */
 		Message: OptionSet.CallbackRegistration.Message;
 		/** Shows who last updated the record. */
@@ -81,6 +83,62 @@ declare namespace DevKit {
 		Url: string;
 		/** Specifies the Callback registration version type */
 		Version: OptionSet.CallbackRegistration.Version;
+		readonly FormattedValue: {
+			/** Unique identifier of the callback registration. */
+			readonly CallbackRegistrationId: string;
+			/** Shows who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the callback registration was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalfÂ of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Entity Name. */
+			readonly EntityName1: string;
+			/** condition represented with OData $filter syntax */
+			readonly FilterExpression: string;
+			/** Comma-separated list of attributes. If at least one of these attributes is modified, the callback url should be called. */
+			readonly FilteringAttributes: string;
+			/** For internal use only. Holds hard delete information. */
+			readonly HardDelete: string;
+			/** For internal use only. Holds version of logic apps trigger. */
+			readonly LogicAppsVersion: string;
+			/** Specifies the message type */
+			readonly Message: string;
+			/** Shows who last updated the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the callback registration was last modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who last updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Name of callback registration. */
+			readonly Name: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier of the business unit that owns the callback registration. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the team who owns the callback registration. */
+			readonly OwningTeam: string;
+			/** Unique identifier of the user who owns the callback registration. */
+			readonly OwningUser: string;
+			/** delay represented with OData expression */
+			readonly PostponeUntil: string;
+			/** Specifies the user context under which the callback will run */
+			readonly RunAs: string;
+			/** For internal use only. Holds miscellaneous properties related to runtime integration. */
+			readonly RuntimeIntegrationProperties: string;
+			/** Specifies the Scope */
+			readonly Scope: string;
+			/** Name of the SDK message the subscriber is interested in */
+			readonly SdkMessageName: string;
+			/** For internal use only. Holds soft delete information. */
+			readonly SoftDeleteStatus: string;
+			/** Full callback registration Url. */
+			readonly Url: string;
+			/** Specifies the Callback registration version type */
+			readonly Version: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -100,6 +158,8 @@ declare namespace OptionSet {
 			Modified,
 			/** 6 */
 			Modified_or_Deleted
+		}
+		enum OwnerIdType {
 		}
 		enum RunAs {
 			/** 3 */
@@ -145,4 +205,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

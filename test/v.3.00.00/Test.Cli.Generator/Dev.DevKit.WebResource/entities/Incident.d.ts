@@ -290,6 +290,7 @@ declare namespace DevKit {
 			KnowledgeArticles: DevKit.Controls.Section;
 			MergedCases: DevKit.Controls.Section;
 			Solutions: DevKit.Controls.Section;
+			SwarmSection: DevKit.Controls.Section;
 		}
 		interface tab_Details_Sections {
 			Additional_Details: DevKit.Controls.Section;
@@ -486,6 +487,7 @@ declare namespace DevKit {
 			Devices: DevKit.Controls.Grid;
 			MergedCasesGrid: DevKit.Controls.Grid;
 			SLA_KPI_Instances_List: DevKit.Controls.Grid;
+			SwarmSubgrid: DevKit.Controls.Grid;
 		}
 	}
 	class FormCase_for_Interactive_experience extends DevKit.IForm {
@@ -528,6 +530,7 @@ declare namespace DevKit {
 			KnowledgeArticles: DevKit.Controls.Section;
 			MergedCases: DevKit.Controls.Section;
 			RelatedCases: DevKit.Controls.Section;
+			SwarmSection: DevKit.Controls.Section;
 		}
 		interface tab_Summary_Sections {
 			Case_Details_Summary: DevKit.Controls.Section;
@@ -634,6 +637,7 @@ declare namespace DevKit {
 			ChildCasesGrid: DevKit.Controls.Grid;
 			MergedCasesGrid: DevKit.Controls.Grid;
 			relatedCases: DevKit.Controls.Grid;
+			SwarmSubgrid: DevKit.Controls.Grid;
 		}
 	}
 	class FormCase_for_Multisession_experience extends DevKit.IForm {
@@ -1249,6 +1253,191 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the account with which the case is associated. */
+			readonly AccountId: string;
+			/** This attribute is used for Sample Service Business Processes. */
+			readonly ActivitiesComplete: string;
+			/** Type the number of service units that were actually required to resolve the case. */
+			readonly ActualServiceUnits: string;
+			/** Type the number of service units that were billed to the customer for the case. */
+			readonly BilledServiceUnits: string;
+			/** Details whether the profile is blocked or not. */
+			readonly BlockedProfile: string;
+			/** Select how contact about the case was originated, such as email, phone, or web, for use in reporting and analysis. */
+			readonly CaseOriginCode: string;
+			/** Select the type of case to identify the incident for use in case routing and analysis. */
+			readonly CaseTypeCode: string;
+			/** This attribute is used for Sample Service Business Processes. */
+			readonly CheckEmail: string;
+			/** Unique identifier of the contact associated with the case. */
+			readonly ContactId: string;
+			/** Choose the contract line that the case should be logged under to make sure the customer is charged correctly. */
+			readonly ContractDetailId: string;
+			/** Choose the service contract that the case should be logged under to make sure the customer is eligible for support services. */
+			readonly ContractId: string;
+			/** Select the service level for the case to make sure the case is handled correctly. */
+			readonly ContractServiceLevelCode: string;
+			/** Shows who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the external party who created the record. */
+			readonly CreatedByExternalParty: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Tells whether customer service representative has contacted the customer or not. */
+			readonly CustomerContacted: string;
+			/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
+			readonly customerid_account: string;
+			/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
+			readonly customerid_contact: string;
+			/** Select the customer's level of satisfaction with the handling and resolution of the case. */
+			readonly CustomerSatisfactionCode: string;
+			/** Shows whether terms of the associated entitlement should be decremented or not. */
+			readonly DecrementEntitlementTerm: string;
+			/** Type additional information to describe the case to assist the service team in reaching a resolution. */
+			readonly Description: string;
+			/** The primary email address for the entity. */
+			readonly EmailAddress: string;
+			/** Choose the entitlement that is applicable for the case. */
+			readonly EntitlementId: string;
+			/** The default image for the entity. */
+			readonly EntityImage: string;
+			readonly EntityImage_Timestamp: string;
+			readonly EntityImage_URL: string;
+			readonly EntityImageId: string;
+			/** Indicates the date and time when the case was escalated. */
+			readonly EscalatedOn_UtcDateAndTime: string;
+			/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
+			readonly ExchangeRate: string;
+			/** Select an existing case for the customer that has been populated. For internal use only. */
+			readonly ExistingCase: string;
+			/** For internal use only. */
+			readonly FirstResponseByKPIId: string;
+			/** Indicates if the first response has been sent. */
+			readonly FirstResponseSent: string;
+			/** Shows the status of the initial response time for the case according to the terms of the SLA. */
+			readonly FirstResponseSLAStatus: string;
+			/** Enter the date by which a customer service representative has to follow up with the customer on this case. */
+			readonly FollowupBy_UtcDateOnly: string;
+			/** This attribute is used for Sample Service Business Processes. */
+			readonly FollowUpTaskCreated: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the case. */
+			readonly IncidentId: string;
+			/** Select the current stage of the service process for the case to assist service team members when they review or transfer a case. */
+			readonly IncidentStageCode: string;
+			/** Will contain the Influencer score coming from NetBreeze. */
+			readonly InfluenceScore: string;
+			/** Shows customer satisfaction by tracking effort required by the customer. Low scores typically mean higher customer satisfaction as the customer had to travel through less channels to find a resolution */
+			readonly int_CustomerEffort: string;
+			/** Mark Yes if an opportunity exists to sell additional products or services to the customer. */
+			readonly int_UpSellReferral: string;
+			/** For system use only. */
+			readonly IsDecrementing: string;
+			/** Indicates if the case has been escalated. */
+			readonly IsEscalated: string;
+			/** Choose the article that contains additional information or a resolution for the case, for reference during research or follow up with the customer. */
+			readonly KbArticleId: string;
+			/** Contains the date time stamp of the last on hold time. */
+			readonly LastOnHoldTime_UtcDateAndTime: string;
+			/** Choose the primary case the current case was merged into. */
+			readonly MasterId: string;
+			/** Tells whether the incident has been merged with another incident. */
+			readonly Merged: string;
+			/** Shows whether the post originated as a public or private message. */
+			readonly MessageTypeCode: string;
+			/** Shows who last updated the record. */
+			readonly ModifiedBy: string;
+			/** Shows the external party who modified the record. */
+			readonly ModifiedByExternalParty: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who last updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Case's functional location */
+			readonly msdyn_FunctionalLocation: string;
+			/** Unique identifier for Incident Type associated with Case. */
+			readonly msdyn_IncidentType: string;
+			/** The iot alert that initiated this case */
+			readonly msdyn_iotalert: string;
+			/** Number of child incidents associated with the incident. */
+			readonly NumberOfChildIncidents: string;
+			/** Shows the duration in minutes for which the case was on hold. */
+			readonly OnHoldTime: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Choose the parent case for a case. */
+			readonly ParentCaseId: string;
+			/** Select a primary contact for this case. */
+			readonly PrimaryContactId: string;
+			/** Select the priority so that preferred customers or critical issues are handled quickly. */
+			readonly PriorityCode: string;
+			/** Contains the id of the process associated with the entity. */
+			readonly ProcessId: string;
+			/** Choose the product associated with the case to identify warranty, service, or other product issues and be able to report the number of incidents for each product. */
+			readonly ProductId: string;
+			/** Type the serial number of the product that is associated with this case, so that the number of cases per product can be reported. */
+			readonly ProductSerialNumber: string;
+			/** Enter the date by when the case must be resolved. */
+			readonly ResolveBy_UtcDateAndTime: string;
+			/** For internal use only. */
+			readonly ResolveByKPIId: string;
+			/** Shows the status of the resolution time for the case according to the terms of the SLA. */
+			readonly ResolveBySLAStatus: string;
+			/** For internal use only. */
+			readonly ResponseBy_UtcDateAndTime: string;
+			/** Choose an additional customer contact who can also help resolve the case. */
+			readonly ResponsibleContactId: string;
+			/** Tells whether the incident has been routed to queue or not. */
+			readonly RouteCase: string;
+			/** Value derived after assessing words commonly associated with a negative, neutral, or positive sentiment that occurs in a social post. Sentiment information can also be reported as numeric values. */
+			readonly SentimentValue: string;
+			/** Select the stage, in the case resolution process, that the case is in. */
+			readonly ServiceStage: string;
+			/** Select the severity of this case to indicate the incident's impact on the customer's business. */
+			readonly SeverityCode: string;
+			/** Choose the service level agreement (SLA) that you want to apply to the case record. */
+			readonly SLAId: string;
+			/** Last SLA that was applied to this case. This field is for internal use only. */
+			readonly SLAInvokedId: string;
+			/** Unique identifier of the social profile with which the case is associated. */
+			readonly SocialProfileId: string;
+			/** Contains the id of the stage where the entity is located. */
+			readonly StageId: string;
+			/** Shows whether the case is active, resolved, or canceled. Resolved and canceled cases are read-only and can't be edited unless they are reactivated. */
+			readonly StateCode: string;
+			/** Select the case's status. */
+			readonly StatusCode: string;
+			/** Choose the subject for the case, such as catalog request or product complaint, so customer service managers can identify frequent requests or problem areas. Administrators can configure subjects under Business Management in the Settings area. */
+			readonly SubjectId: string;
+			/** Shows the case number for customer reference and searching capabilities. This cannot be modified. */
+			readonly TicketNumber: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Type a subject or descriptive name, such as the request, issue, or company name, to identify the case in Microsoft Dynamics 365 views. */
+			readonly Title: string;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			readonly TransactionCurrencyId: string;
+			/** A comma separated list of string values representing the unique identifiers of stages in a Business Process Flow Instance in the order that they occur. */
+			readonly TraversedPath: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -1282,6 +1471,8 @@ declare namespace OptionSet {
 			Gold,
 			/** 2 */
 			Silver
+		}
+		enum CustomerIdType {
 		}
 		enum CustomerSatisfactionCode {
 			/** 2 */
@@ -1322,6 +1513,8 @@ declare namespace OptionSet {
 			Private_Message,
 			/** 0 */
 			Public_Message
+		}
+		enum OwnerIdType {
 		}
 		enum PriorityCode {
 			/** 1 */
@@ -1397,4 +1590,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

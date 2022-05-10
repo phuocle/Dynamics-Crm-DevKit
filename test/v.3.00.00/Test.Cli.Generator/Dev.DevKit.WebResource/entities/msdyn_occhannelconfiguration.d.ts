@@ -99,11 +99,59 @@ declare namespace DevKit {
 		UTCConversionTimeZoneCode: number;
 		/** Version Number */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Specifies whether the conversation should be closed when it is created out of operating hours */
+			readonly msdyn_closeconversationifoooh: string;
+			/** Specifies whether the conversation can be transferred to an out of operating hour queue */
+			readonly msdyn_enabletransfertoooohqueue: string;
+			/** Entity carrying the engagement context details of the channel. */
+			readonly msdyn_engagementcontext: string;
+			/** The name of the custom entity. */
+			readonly msdyn_name: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_occhannelconfigurationId: string;
+			/** Indicates whether the Privacy Terms has been accepted by the user or not. */
+			readonly msdyn_privacytermsaccepted: string;
+			/** The version of the privacy terms. */
+			readonly msdyn_privacytermsversion: string;
+			/** Stream source of the channel e.g. LiveChat, SMS, Facebook etc */
+			readonly msdyn_streamsource: string;
+			/** Unique identifier for the organization */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Status of the Channel Configuration */
+			readonly statecode: string;
+			/** Reason for the status of the Channel Configuration */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
 	namespace msdyn_occhannelconfiguration {
 		enum msdyn_streamsource {
+			/** 192450000 */
+			Apple_Messages_for_Business,
 			/** 192390000 */
 			Co_browse,
 			/** 192350002 */
@@ -163,4 +211,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

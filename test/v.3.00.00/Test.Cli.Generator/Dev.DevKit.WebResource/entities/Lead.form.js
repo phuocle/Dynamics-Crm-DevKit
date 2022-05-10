@@ -101,7 +101,6 @@ var DevKit;
 		var grid = {
 			Competitors: {},
 			DocumentsSubGrid: {},
-			Stakeholders: {},
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
@@ -301,6 +300,8 @@ var OptionSet;
 			No_Committed_Budget: 0,
 			Will_Buy: 3
 		},
+		CustomerIdType : {
+		},
 		IndustryCode : {
 			Accounting: 1,
 			Agriculture_and_Non_petrol_Natural_Resource_Extraction: 2,
@@ -383,6 +384,8 @@ var OptionSet;
 			Must_have: 0,
 			No_need: 3,
 			Should_have: 1
+		},
+		OwnerIdType : {
 		},
 		PreferredContactMethodCode : {
 			Any: 1,

@@ -48,6 +48,8 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 	OptionSet.msdyn_kmfederatedsearchconfig = {
+		OwnerIdType : {
+		},
 		SearchType : {
 			Cross_Organizational_Search: 100000000,
 			Microsoft_Graph_Connector: 100000002,

@@ -116,7 +116,7 @@ var DevKit;
 		}
 		msdyn_playbookactivityattribute.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -136,6 +136,8 @@ var OptionSet;
 			datetime: 3,
 			integer: 2,
 			optionset: 5
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Draft: 0,

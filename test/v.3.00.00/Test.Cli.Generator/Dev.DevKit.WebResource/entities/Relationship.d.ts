@@ -45,6 +45,24 @@ declare namespace DevKit {
 		readonly SolutionId: string;
 		/** The version number of this relationship. */
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Referenced Entity's Alternate Key */
+			readonly EntityKeyId: string;
+			/** Is the relationship attribute denormalized. */
+			readonly IsRelationshipAttributeDenormalized: string;
+			/** Name of the relationship. */
+			readonly Name: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateOnly: string;
+			/** Unique identifier of the entity relationship. */
+			readonly RelationshipId: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** The version number of this relationship. */
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -77,4 +95,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':false,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':false,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

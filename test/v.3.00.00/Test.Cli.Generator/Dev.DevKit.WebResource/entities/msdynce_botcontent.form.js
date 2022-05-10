@@ -42,6 +42,8 @@ var OptionSet;
 			Draft: 1,
 			Released: 0
 		},
+		OwnerIdType : {
+		},
 		statecode : {
 			Active: 0,
 			Inactive: 1

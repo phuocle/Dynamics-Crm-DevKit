@@ -99,6 +99,39 @@ declare namespace DevKit {
 		/** Shows the unique ID of the linked knowledge base (KB) article. */
 		UniqueId: string;
 		readonly VersionNumber: number;
+		readonly FormattedValue: {
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Exchange rate for the currency associated with the knowledge base record with respect to the base currency. */
+			readonly ExchangeRate: string;
+			/** This field will be used to store the Unique ID of the associated Knowledge Base records */
+			readonly KnowledgeBaseRecordId: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Unique identifier for the organization */
+			readonly OrganizationId: string;
+			/** Shows the internal Parature service desk URL of the knowledge base records. */
+			readonly PrivateUrl: string;
+			/** Shows the public Parature portal URL of the knowledge base records. */
+			readonly PublicUrl: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Shows the title of the knowledge base (KB) Record. */
+			readonly Title: string;
+			/** Exchange rate for the currency associated with the Knowledge Base Record with respect to the base currency. */
+			readonly TransactionCurrencyId: string;
+			/** Shows the unique ID of the linked knowledge base (KB) article. */
+			readonly UniqueId: string;
+			readonly VersionNumber: string;
+		}
 	}
 }
 declare namespace OptionSet {
@@ -121,4 +154,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'UseForm':true,'UseWebApi':true,'Version':'3.00.00','WebApiVersion':'2'}
+//{'UseForm':true,'UseWebApi':true,'Version':'3.11.11','WebApiVersion':'2'}

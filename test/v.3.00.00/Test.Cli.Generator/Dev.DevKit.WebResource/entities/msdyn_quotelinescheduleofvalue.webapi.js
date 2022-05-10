@@ -127,7 +127,7 @@ var DevKit;
 		}
 		msdyn_quotelinescheduleofvalue.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
-				return EMPTY_STRING;
+				return '';
 			}
 			if (isMultiOptionSet) {
 				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
@@ -146,6 +146,8 @@ var OptionSet;
 			Customer_invoice_posted: 192350003,
 			Not_Ready_for_invoicing: 192350000,
 			Ready_for_invoicing: 192350001
+		},
+		OwnerIdType : {
 		},
 		statecode : {
 			Active: 0,
