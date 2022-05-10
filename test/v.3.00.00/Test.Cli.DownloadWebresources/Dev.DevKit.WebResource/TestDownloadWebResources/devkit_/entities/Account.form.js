@@ -39,15 +39,15 @@ var DevKit;
 			mapcontrol: {},
 			ModifiedOn: {},
 			Name: {},
-			Name1: {},
-			Name2: {},
+			Name_1: {},
+			Name_2: {},
 			notescontrol: {},
 			OwnershipCode: {},
 			ParentAccountId: {},
 			PaymentTermsCode: {},
 			PreferredContactMethodCode: {},
 			PrimaryContactId: {},
-			PrimaryContactId1: {},
+			PrimaryContactId_1: {},
 			SIC: {},
 			Telephone1: {},
 			TickerSymbol: {},
@@ -87,8 +87,8 @@ var DevKit;
 		form.Body = body;
 		var header = {
 			Name: {},
-			Name1: {},
-			Name2: {},
+			Name_1: {},
+			Name_2: {},
 			OwnerId: {}
 		};
 		devKit.LoadFields(formContext, header, "header_");
@@ -103,7 +103,9 @@ var DevKit;
 		form.Footer = footer;
 		var process = devKit.LoadProcess(formContext);
 		var _BPF_Account = {
+			firstname: {},
 			IndustryCode: {},
+			lastname: {},
 			Name: {},
 			Name_1: {},
 			Name_2: {},
@@ -123,8 +125,8 @@ var DevKit;
 		devKit.LoadQuickForms(formContext, quickForm);
 		form.QuickForm = quickForm;
 		var grid = {
-			ChildAccounts: {},
 			Contacts: {},
+			ChildAccounts: {},
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
@@ -177,7 +179,7 @@ var DevKit;
 			PaymentTermsCode: {},
 			PreferredContactMethodCode: {},
 			PrimaryContactId: {},
-			PrimaryContactId1: {},
+			PrimaryContactId_1: {},
 			SIC: {},
 			Telephone1: {},
 			TransactionCurrencyId: {},
@@ -213,7 +215,9 @@ var DevKit;
 		form.Header = header;
 		var process = devKit.LoadProcess(formContext);
 		var _BPF_Account = {
+			firstname: {},
 			IndustryCode: {},
+			lastname: {},
 			Name: {},
 			Name_1: {},
 			Name_2: {},
@@ -358,7 +362,9 @@ var DevKit;
 		form.Header = header;
 		var process = devKit.LoadProcess(formContext);
 		var _BPF_Account = {
+			firstname: {},
 			IndustryCode: {},
+			lastname: {},
 			Name: {},
 			Name_1: {},
 			Name_2: {},
@@ -375,8 +381,8 @@ var DevKit;
 		devKit.LoadQuickForms(formContext, quickForm);
 		form.QuickForm = quickForm;
 		var grid = {
-			accountactivitiesgrid: {},
 			accountContactsGrid: {},
+			accountactivitiesgrid: {},
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
@@ -417,7 +423,7 @@ var DevKit;
 			PrimaryContactId: {},
 			Revenue: {},
 			Telephone1: {}
-		};
+		}
 		devKit.LoadFields(formContext, body);
 		var tab = {
 			tab_1: {
@@ -427,15 +433,13 @@ var DevKit;
 					tab_1_column_3_section_1: {}
 				}
 			}
-		};
+		}
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
-		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
-		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
-	};
+	}
 })(DevKit || (DevKit = {}));
 /** @namespace OptionSet */
 var OptionSet;
@@ -500,7 +504,7 @@ var OptionSet;
 			Vendor: 11
 		},
 		devkit_CategoryCode : {
-			Business: 1,
+			Bu_siness: 1,
 			Family: 2,
 			Other: 5,
 			Sales: 4,
@@ -591,14 +595,15 @@ var OptionSet;
 		TerritoryCode : {
 			Default_Value: 1
 		},
-		RollupState : {
-			NotCalculated: 0,
-			Calculated: 1,
-			OverflowError: 2,
-			OtherError: 3,
-			RetryLimitExceeded: 4,
-			HierarchicalRecursionLimitReached: 5,
-			LoopDetected: 6
-		}
+        RollupState : {
+            NotCalculated: 0,
+            Calculated: 1,
+            OverflowError: 2,
+            OtherError: 3,
+            RetryLimitExceeded: 4,
+            HierarchicalRecursionLimitReached: 5,
+            LoopDetected: 6
+        }
+
 	};
 })(OptionSet || (OptionSet = {}));

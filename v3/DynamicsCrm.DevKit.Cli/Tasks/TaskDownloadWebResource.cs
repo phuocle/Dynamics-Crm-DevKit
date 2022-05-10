@@ -4,13 +4,10 @@ using Microsoft.Xrm.Tooling.Connector;
 using System;
 using System.IO;
 using System.Linq;
-
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
     public class TaskDownloadWebResource : ITask
     {
-        private JsonDownloadWebResource json { get; set; }
-
         public TaskDownloadWebResource(CommandLineArgs arg, JsonDownloadWebResource json)
         {
             this.Arg = arg;
@@ -18,14 +15,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             CrmServiceClient = arg.CrmServiceClient;
             CurrentDirectory = arg.CurrentDirectory;
         }
-
         public string CurrentDirectory { get; set; }
-
         public string TaskType => $"[{nameof(CliType.downloadwebresources).ToUpper()}]";
-
         public CrmServiceClient CrmServiceClient { get; set; }
         public CommandLineArgs Arg { get; set; }
-
+        private JsonDownloadWebResource json { get; set; }
         public bool IsValid()
         {
             if (json == null)
@@ -57,7 +51,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             return true;
         }
-
         public void Run()
         {
             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "START ", ConsoleColor.Blue, TaskType);
@@ -83,7 +76,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         if (!Directory.Exists(directoryName)) Directory.CreateDirectory(directoryName ?? throw new InvalidOperationException());
                         byte[] decode = Convert.FromBase64String(webResourceFile.Content);
                         File.WriteAllBytes(fileName, decode);
-                        CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Downloaded, ConsoleColor.White, webResourceFile.FileName, ConsoleColor.Green, " to: ", ConsoleColor.White, fileName);
+                        CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Downloaded, ConsoleColor.White, webResourceFile.FileName, ConsoleColor.Green, " to: ", ConsoleColor.White, ".." + fileName.Substring(CurrentDirectory.Length));
                         i++;
                     }
                 }
