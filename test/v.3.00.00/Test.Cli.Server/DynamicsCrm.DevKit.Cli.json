@@ -75,10 +75,10 @@
   "datasources": [
     {
       "profile": "DEBUG",
-      "displayname": "???",
-      "pluralname": "???",
-      "solution": "???",
-      "name": "???"
+      "displayname": "Data Source 5",
+      "pluralname": "Data Sources 5",
+      "solution": "TestPluginWorkflowCustomActionCustomApi",
+      "name": "datasource5"
     }
   ],
   "solutionpackagers": [

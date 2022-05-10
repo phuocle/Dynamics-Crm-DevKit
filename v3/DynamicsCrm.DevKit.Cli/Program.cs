@@ -33,11 +33,11 @@ namespace DynamicsCrm.DevKit.Cli
         private static void ShowHelp()
         {
             CliLog.SetupCliLog();
-#if DEBUG
-            CliLog.WriteLineWarning(new string('█', CliLog.StarLength));
-            CliLog.WriteLine(ConsoleColor.Red, "!!! DEBUG !!!");
-            CliLog.WriteLineWarning(new string('█', CliLog.StarLength));
-#endif
+//#if DEBUG
+//            CliLog.WriteLineWarning(new string('█', CliLog.StarLength));
+//            CliLog.WriteLine(ConsoleColor.Red, "!!! DEBUG !!!");
+//            CliLog.WriteLineWarning(new string('█', CliLog.StarLength));
+//#endif
             CliLog.WriteLine(ConsoleColor.Green, "  ____                              _           ____                  ____             _  ___ _     ____ _ _ ");
             CliLog.WriteLine(ConsoleColor.Green, " |  _ \\ _   _ _ __   __ _ _ __ ___ (_) ___ ___ / ___|_ __ _ __ ___   |  _ \\  _____   _| |/ (_) |_  / ___| (_)");
             CliLog.WriteLine(ConsoleColor.Green, " | | | | | | | '_ \\ / _` | '_ ` _ \\| |/ __/ __| |   | '__| '_ ` _ \\  | | | |/ _ \\ \\ / / ' /| | __|| |   | | |");
@@ -59,12 +59,12 @@ namespace DynamicsCrm.DevKit.Cli
                 CliTask.Run(arguments);
             }
             CliLog.WriteLine(ConsoleColor.White, "|");
-#if DEBUG
-            CliLog.WriteLineWarning(new string('█', CliLog.StarLength));
-            CliLog.WriteLine(ConsoleColor.Red, "!!! FINISHED !!!");
-            CliLog.WriteLineWarning(new string('█', CliLog.StarLength));
+//#if DEBUG
+//            CliLog.WriteLineWarning(new string('█', CliLog.StarLength));
+//            CliLog.WriteLine(ConsoleColor.Red, "!!! FINISHED !!!");
+//            CliLog.WriteLineWarning(new string('█', CliLog.StarLength));
             Console.ReadKey();
-#endif
+//#endif
         }
 
         private static bool IsValid(CommandLineArgs arguments)
@@ -119,6 +119,7 @@ namespace DynamicsCrm.DevKit.Cli
                     {
                         if (!IsConnectedDynamics365BySdkLogin())
                         {
+                            CliLog.WriteLine(ConsoleColor.White, "|");
                             CliLog.WriteLineError(ConsoleColor.Yellow, $"SdkLogin failed !!!");
                             return false;
                         }

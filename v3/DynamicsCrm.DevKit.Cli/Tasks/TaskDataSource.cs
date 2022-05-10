@@ -130,19 +130,15 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "START ", ConsoleColor.Blue, TaskType);
             CliLog.WriteLine(ConsoleColor.White, "|");
-
             if (IsValid())
             {
-
-                var wait = new Thread(() => CliLog.Waiting($"Creating Data Source: ${DataSourceName} "));
+                var wait = new Thread(() => CliLog.Waiting($"Creating Data Source: {DataSourceName} "));
                 wait.Start();
-
                 RegisterDataSource();
-
                 wait.Abort();
-                CliLog.WriteLine(ConsoleColor.White, "| ", $"Created Data Source: ${DataSourceName} ");
+                CliLog.WriteLine("");
+                CliLog.WriteLine(ConsoleColor.White, "| ", $"Created Data Source: {DataSourceName} ");
             }
-
             CliLog.WriteLine(ConsoleColor.White, "|");
             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "END ", ConsoleColor.Blue, TaskType);
         }

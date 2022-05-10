@@ -11,8 +11,6 @@ namespace DynamicsCrm.DevKit.Cli
         {
             Console.BackgroundColor = ConsoleColor.Black;
             Console.Title = Const.WindowTitle;
-            //Console.CursorVisible = false;
-            //Console.Clear();
         }
 
         public static void WriteLine(params object[] values)
@@ -23,7 +21,7 @@ namespace DynamicsCrm.DevKit.Cli
                     Console.ForegroundColor = color;
                 else
                     Console.Write(value);
-            Console.WriteLine();
+            Console.WriteLine(" ");
             Console.ForegroundColor = oldConsoleColor;
         }
 
