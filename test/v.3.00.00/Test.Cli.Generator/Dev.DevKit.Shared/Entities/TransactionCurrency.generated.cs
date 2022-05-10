@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.TransactionCurrencyOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class TransactionCurrency : EntityBase
 	{
 		public struct Fields

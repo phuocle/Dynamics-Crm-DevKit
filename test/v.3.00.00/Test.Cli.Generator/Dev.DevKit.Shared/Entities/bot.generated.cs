@@ -97,6 +97,10 @@ namespace Dev.DevKit.Shared.Entities.botOptionSets
 		/// </summary>
 		Chinese_Traditional = 1028,
 		/// <summary>
+		/// Czech = 1029
+		/// </summary>
+		Czech = 1029,
+		/// <summary>
 		/// Danish = 1030
 		/// </summary>
 		Danish = 1030,
@@ -109,6 +113,10 @@ namespace Dev.DevKit.Shared.Entities.botOptionSets
 		/// </summary>
 		English = 1033,
 		/// <summary>
+		/// Finnish = 1035
+		/// </summary>
+		Finnish = 1035,
+		/// <summary>
 		/// French = 1036
 		/// </summary>
 		French = 1036,
@@ -116,6 +124,10 @@ namespace Dev.DevKit.Shared.Entities.botOptionSets
 		/// German = 1031
 		/// </summary>
 		German = 1031,
+		/// <summary>
+		/// Greek = 1032
+		/// </summary>
+		Greek = 1032,
 		/// <summary>
 		/// Hindi = 1081
 		/// </summary>
@@ -161,6 +173,10 @@ namespace Dev.DevKit.Shared.Entities.botOptionSets
 		/// </summary>
 		Swedish = 1053,
 		/// <summary>
+		/// Thai = 1054
+		/// </summary>
+		Thai = 1054,
+		/// <summary>
 		/// Turkish = 1055
 		/// </summary>
 		Turkish = 1055
@@ -205,6 +221,7 @@ namespace Dev.DevKit.Shared.Entities.botOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class bot : EntityBase
 	{
 		public struct Fields
@@ -242,6 +259,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string statecode = "statecode";
 			public const string statuscode = "statuscode";
 			public const string SupportingSolutionId = "supportingsolutionid";
+			public const string SynchronizationStatus = "synchronizationstatus";
 			public const string TimeZoneRuleVersionNumber = "timezoneruleversionnumber";
 			public const string UTCConversionTimeZoneCode = "utcconversiontimezonecode";
 			public const string VersionNumber = "versionnumber";
@@ -250,7 +268,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "bot";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10066;
+		public const int EntityTypeCode = 10078;
 
 		[DebuggerNonUserCode()]
 		public bot()
@@ -754,6 +772,18 @@ namespace Dev.DevKit.Shared.Entities
 		public Guid? SupportingSolutionId
 		{
 			get { return Entity.GetAttributeValue<Guid?>(Fields.SupportingSolutionId); }
+		}
+
+		/// <summary>
+		/// <para>Used to store information about the synchronization operations of the bot</para>
+		/// <para>Memo - MaxLength: 1048576</para>
+		/// <para>SynchronizationStatus</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string SynchronizationStatus
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.SynchronizationStatus); }
+			set { Entity.Attributes[Fields.SynchronizationStatus] = value; }
 		}
 
 		/// <summary>

@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_orderinvoicingproductOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_orderinvoicingproduct : EntityBase
 	{
 		public struct Fields
@@ -77,7 +78,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_orderinvoicingproduct";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10557;
+		public const int EntityTypeCode = 10613;
 
 		[DebuggerNonUserCode()]
 		public msdyn_orderinvoicingproduct()

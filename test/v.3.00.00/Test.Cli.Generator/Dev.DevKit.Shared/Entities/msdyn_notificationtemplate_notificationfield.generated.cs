@@ -33,6 +33,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_notificationtemplate_notificationfiel
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_notificationtemplate_notificationfield : EntityBase
 	{
 		public struct Fields
@@ -52,7 +53,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_notificationtemplate_notificationfield";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10163;
+		public const int EntityTypeCode = 10190;
 
 		[DebuggerNonUserCode()]
 		public msdyn_notificationtemplate_notificationfield()

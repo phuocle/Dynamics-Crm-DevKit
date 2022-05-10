@@ -69,6 +69,7 @@ namespace Dev.DevKit.Shared.Entities.WorkflowLogOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class WorkflowLog : EntityBase
 	{
 		public struct Fields

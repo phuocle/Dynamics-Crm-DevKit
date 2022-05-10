@@ -29,6 +29,7 @@ namespace Dev.DevKit.Shared.Entities.TraceLogOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class TraceLog : EntityBase
 	{
 		public struct Fields

@@ -29,6 +29,7 @@ namespace Dev.DevKit.Shared.Entities.CardTypeOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class CardType : EntityBase
 	{
 		public struct Fields

@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_incidenttypeOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_incidenttype : EntityBase
 	{
 		public struct Fields
@@ -72,7 +73,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_incidenttype";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10545;
+		public const int EntityTypeCode = 10601;
 
 		[DebuggerNonUserCode()]
 		public msdyn_incidenttype()

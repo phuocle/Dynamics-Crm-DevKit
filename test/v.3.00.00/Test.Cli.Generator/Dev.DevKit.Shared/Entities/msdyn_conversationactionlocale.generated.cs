@@ -221,6 +221,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_conversationactionlocaleOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_conversationactionlocale : EntityBase
 	{
 		public struct Fields
@@ -254,7 +255,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_conversationactionlocale";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10689;
+		public const int EntityTypeCode = 10730;
 
 		[DebuggerNonUserCode()]
 		public msdyn_conversationactionlocale()

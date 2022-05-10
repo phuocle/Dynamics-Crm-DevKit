@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.ServiceContractContactsOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class ServiceContractContacts : EntityBase
 	{
 		public struct Fields

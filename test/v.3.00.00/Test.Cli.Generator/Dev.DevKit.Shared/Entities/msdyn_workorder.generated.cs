@@ -81,6 +81,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_workorderOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_workorder : EntityBase
 	{
 		public struct Fields
@@ -126,6 +127,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_name = "msdyn_name";
 			public const string msdyn_OpportunityId = "msdyn_opportunityid";
 			public const string msdyn_ParentWorkOrder = "msdyn_parentworkorder";
+			public const string msdyn_phoneNumber = "msdyn_phoneNumber";
 			public const string msdyn_PostalCode = "msdyn_postalcode";
 			public const string msdyn_PreferredResource = "msdyn_preferredresource";
 			public const string msdyn_PriceList = "msdyn_pricelist";
@@ -184,7 +186,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_workorder";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10595;
+		public const int EntityTypeCode = 10651;
 
 		[DebuggerNonUserCode()]
 		public msdyn_workorder()
@@ -717,6 +719,17 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<EntityReference>(Fields.msdyn_ParentWorkOrder); }
 			set { Entity.Attributes[Fields.msdyn_ParentWorkOrder] = value; }
+		}
+
+		/// <summary>
+		/// <para>String - MaxLength: 250</para>
+		/// <para>Customer Phone Number</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_phoneNumber
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_phoneNumber); }
+			set { Entity.Attributes[Fields.msdyn_phoneNumber] = value; }
 		}
 
 		/// <summary>

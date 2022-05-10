@@ -45,6 +45,7 @@ namespace Dev.DevKit.Shared.Entities.SharePointDocumentOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class SharePointDocument : EntityBase
 	{
 		public struct Fields

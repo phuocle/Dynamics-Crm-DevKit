@@ -53,6 +53,7 @@ namespace Dev.DevKit.Shared.Entities.NavigationSettingOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class NavigationSetting : EntityBase
 	{
 		public struct Fields

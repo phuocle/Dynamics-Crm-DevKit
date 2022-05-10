@@ -57,6 +57,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_kbkeywordsdescsuggestionsettingOption
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_kbkeywordsdescsuggestionsetting : EntityBase
 	{
 		public struct Fields
@@ -91,7 +92,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_kbkeywordsdescsuggestionsetting";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10221;
+		public const int EntityTypeCode = 10240;
 
 		[DebuggerNonUserCode()]
 		public msdyn_kbkeywordsdescsuggestionsetting()

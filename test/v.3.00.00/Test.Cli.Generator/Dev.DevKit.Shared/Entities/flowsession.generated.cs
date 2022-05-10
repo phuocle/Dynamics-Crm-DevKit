@@ -89,6 +89,7 @@ namespace Dev.DevKit.Shared.Entities.flowsessionOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class flowsession : EntityBase
 	{
 		public struct Fields
@@ -101,6 +102,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string CreatedOn = "createdon";
 			public const string CreatedOnBehalfBy = "createdonbehalfby";
 			public const string ErrorCode = "errorcode";
+			public const string ErrorDetails = "errordetails";
 			public const string ErrorMessage = "errormessage";
 			public const string flowsessionId = "flowsessionid";
 			public const string Gateway = "gateway";
@@ -270,6 +272,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.ErrorCode); }
 			set { Entity.Attributes[Fields.ErrorCode] = value; }
+		}
+
+		/// <summary>
+		/// <para>Details of the failure in flow session execution.</para>
+		/// <para>Memo - MaxLength: 10000</para>
+		/// <para>ErrorDetails</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string ErrorDetails
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.ErrorDetails); }
+			set { Entity.Attributes[Fields.ErrorDetails] = value; }
 		}
 
 		/// <summary>

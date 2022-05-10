@@ -49,6 +49,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_entityconfigurationOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_entityconfiguration : EntityBase
 	{
 		public struct Fields
@@ -93,7 +94,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_entityconfiguration";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10637;
+		public const int EntityTypeCode = 10677;
 
 		[DebuggerNonUserCode()]
 		public msdyn_entityconfiguration()

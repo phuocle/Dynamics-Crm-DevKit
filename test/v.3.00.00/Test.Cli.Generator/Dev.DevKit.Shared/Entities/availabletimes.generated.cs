@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.availabletimesOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class availabletimes : EntityBase
 	{
 		public struct Fields
@@ -34,7 +35,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "availabletimes";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10121;
+		public const int EntityTypeCode = 10144;
 
 		[DebuggerNonUserCode()]
 		public availabletimes()

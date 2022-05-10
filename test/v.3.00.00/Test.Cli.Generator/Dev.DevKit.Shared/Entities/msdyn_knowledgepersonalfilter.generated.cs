@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_knowledgepersonalfilterOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_knowledgepersonalfilter : EntityBase
 	{
 		public struct Fields
@@ -69,7 +70,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_knowledgepersonalfilter";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10087;
+		public const int EntityTypeCode = 10102;
 
 		[DebuggerNonUserCode()]
 		public msdyn_knowledgepersonalfilter()

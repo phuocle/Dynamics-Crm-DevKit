@@ -33,6 +33,7 @@ namespace Dev.DevKit.Shared.Entities.SyncAttributeMappingProfileOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class SyncAttributeMappingProfile : EntityBase
 	{
 		public struct Fields

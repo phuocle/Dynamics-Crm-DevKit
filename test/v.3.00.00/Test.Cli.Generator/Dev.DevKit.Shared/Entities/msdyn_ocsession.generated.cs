@@ -13,13 +13,17 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocsessionOptionSets
 	public enum ActivityTypeCode
 	{
 		/// <summary>
+		/// Activity record for the Teams chat = 10088
+		/// </summary>
+		Activity_record_for_the_Teams_chat = 10088,
+		/// <summary>
 		/// Appointment = 4201
 		/// </summary>
 		Appointment = 4201,
 		/// <summary>
-		/// Booking Alert = 10400
+		/// Booking Alert = 10473
 		/// </summary>
-		Booking_Alert = 10400,
+		Booking_Alert = 10473,
 		/// <summary>
 		/// Campaign Activity = 4402
 		/// </summary>
@@ -33,21 +37,21 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocsessionOptionSets
 		/// </summary>
 		Case_Resolution = 4206,
 		/// <summary>
-		/// Conversation = 10702
+		/// Conversation = 10743
 		/// </summary>
-		Conversation = 10702,
+		Conversation = 10743,
 		/// <summary>
-		/// Customer Voice alert = 10294
+		/// Customer Voice alert = 10330
 		/// </summary>
-		Customer_Voice_alert = 10294,
+		Customer_Voice_alert = 10330,
 		/// <summary>
-		/// Customer Voice survey invite = 10304
+		/// Customer Voice survey invite = 10340
 		/// </summary>
-		Customer_Voice_survey_invite = 10304,
+		Customer_Voice_survey_invite = 10340,
 		/// <summary>
-		/// Customer Voice survey response = 10306
+		/// Customer Voice survey response = 10342
 		/// </summary>
-		Customer_Voice_survey_response = 10306,
+		Customer_Voice_survey_response = 10342,
 		/// <summary>
 		/// Email = 4202
 		/// </summary>
@@ -69,17 +73,17 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocsessionOptionSets
 		/// </summary>
 		Order_Close = 4209,
 		/// <summary>
-		/// Outbound message = 10813
+		/// Outbound message = 10857
 		/// </summary>
-		Outbound_message = 10813,
+		Outbound_message = 10857,
 		/// <summary>
 		/// Phone Call = 4210
 		/// </summary>
 		Phone_Call = 4210,
 		/// <summary>
-		/// Project Service Approval = 10430
+		/// Project Service Approval = 10489
 		/// </summary>
-		Project_Service_Approval = 10430,
+		Project_Service_Approval = 10489,
 		/// <summary>
 		/// Quick Campaign = 4406
 		/// </summary>
@@ -97,9 +101,9 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocsessionOptionSets
 		/// </summary>
 		Service_Activity = 4214,
 		/// <summary>
-		/// Session = 10717
+		/// Session = 10760
 		/// </summary>
-		Session = 10717,
+		Session = 10760,
 		/// <summary>
 		/// Task = 4212
 		/// </summary>
@@ -108,6 +112,10 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocsessionOptionSets
 
 	public enum Community
 	{
+		/// <summary>
+		/// Apple Messages For Business = 16
+		/// </summary>
+		Apple_Messages_For_Business = 16,
 		/// <summary>
 		/// Cortana = 5
 		/// </summary>
@@ -128,6 +136,10 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocsessionOptionSets
 		/// Facebook = 1
 		/// </summary>
 		Facebook = 1,
+		/// <summary>
+		/// Google's Business Messages = 17
+		/// </summary>
+		Googles_Business_Messages = 17,
 		/// <summary>
 		/// GroupMe = 10
 		/// </summary>
@@ -236,6 +248,10 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocsessionOptionSets
 
 	public enum msdyn_channel
 	{
+		/// <summary>
+		/// Apple Messages for Business = 192450000
+		/// </summary>
+		Apple_Messages_for_Business = 192450000,
 		/// <summary>
 		/// Co-browse = 192390000
 		/// </summary>
@@ -429,6 +445,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocsessionOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_ocsession : EntityBase
 	{
 		public struct Fields
@@ -519,7 +536,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_ocsession";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10717;
+		public const int EntityTypeCode = 10760;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocsession()
@@ -1242,7 +1259,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>List of optional attendees for the activity.</para>
-		/// <para>Lookup to account, contact, entitlement, equipment, knowledgearticle, lead, queue, systemuser, unresolvedaddress</para>
+		/// <para>Lookup to account, contact, entitlement, equipment, knowledgearticle, lead, msdyn_salessuggestion, queue, systemuser, unresolvedaddress</para>
 		/// <para>Optional Attendees</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -1417,7 +1434,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the object with which the activity is associated.</para>
-		/// <para>Lookup to account, bookableresourcebooking, bookableresourcebookingheader, bulkoperation, campaign, campaignactivity, contact, contract, entitlement, entitlementtemplate, incident, interactionforemail, invoice, knowledgearticle, knowledgebaserecord, lead, msdyn_agreement, msdyn_agreementbookingdate, msdyn_agreementbookingincident, msdyn_agreementbookingproduct, msdyn_agreementbookingservice, msdyn_agreementbookingservicetask, msdyn_agreementbookingsetup, msdyn_agreementinvoicedate, msdyn_agreementinvoiceproduct, msdyn_agreementinvoicesetup, msdyn_bookingalertstatus, msdyn_bookingrule, msdyn_bookingtimestamp, msdyn_customerasset, msdyn_fieldservicesetting, msdyn_incidenttypecharacteristic, msdyn_incidenttypeproduct, msdyn_incidenttypeservice, msdyn_inventoryadjustment, msdyn_inventoryadjustmentproduct, msdyn_inventoryjournal, msdyn_inventorytransfer, msdyn_payment, msdyn_paymentdetail, msdyn_paymentmethod, msdyn_paymentterm, msdyn_playbookinstance, msdyn_postalbum, msdyn_postalcode, msdyn_processnotes, msdyn_productinventory, msdyn_projectteam, msdyn_purchaseorder, msdyn_purchaseorderbill, msdyn_purchaseorderproduct, msdyn_purchaseorderreceipt, msdyn_purchaseorderreceiptproduct, msdyn_purchaseordersubstatus, msdyn_quotebookingincident, msdyn_quotebookingproduct, msdyn_quotebookingservice, msdyn_quotebookingservicetask, msdyn_resourceterritory, msdyn_rma, msdyn_rmaproduct, msdyn_rmareceipt, msdyn_rmareceiptproduct, msdyn_rmasubstatus, msdyn_rtv, msdyn_rtvproduct, msdyn_rtvsubstatus, msdyn_shipvia, msdyn_systemuserschedulersetting, msdyn_timegroup, msdyn_timegroupdetail, msdyn_timeoffrequest, msdyn_warehouse, msdyn_workorder, msdyn_workordercharacteristic, msdyn_workorderincident, msdyn_workorderproduct, msdyn_workorderresourcerestriction, msdyn_workorderservice, msdyn_workorderservicetask, opportunity, quote, salesorder, site, uii_action, uii_hostedapplication, uii_nonhostedapplication, uii_option, uii_savedsession, uii_workflow, uii_workflowstep, uii_workflow_workflowstep_mapping</para>
+		/// <para>Lookup to account, bookableresourcebooking, bookableresourcebookingheader, bulkoperation, campaign, campaignactivity, contact, contract, entitlement, entitlementtemplate, incident, interactionforemail, invoice, knowledgearticle, knowledgebaserecord, lead, msdyn_agreement, msdyn_agreementbookingdate, msdyn_agreementbookingincident, msdyn_agreementbookingproduct, msdyn_agreementbookingservice, msdyn_agreementbookingservicetask, msdyn_agreementbookingsetup, msdyn_agreementinvoicedate, msdyn_agreementinvoiceproduct, msdyn_agreementinvoicesetup, msdyn_bookingalertstatus, msdyn_bookingrule, msdyn_bookingtimestamp, msdyn_customerasset, msdyn_fieldservicesetting, msdyn_incidenttypecharacteristic, msdyn_incidenttypeproduct, msdyn_incidenttypeservice, msdyn_inventoryadjustment, msdyn_inventoryadjustmentproduct, msdyn_inventoryjournal, msdyn_inventorytransfer, msdyn_payment, msdyn_paymentdetail, msdyn_paymentmethod, msdyn_paymentterm, msdyn_playbookinstance, msdyn_postalbum, msdyn_postalcode, msdyn_processnotes, msdyn_productinventory, msdyn_projectteam, msdyn_purchaseorder, msdyn_purchaseorderbill, msdyn_purchaseorderproduct, msdyn_purchaseorderreceipt, msdyn_purchaseorderreceiptproduct, msdyn_purchaseordersubstatus, msdyn_quotebookingincident, msdyn_quotebookingproduct, msdyn_quotebookingservice, msdyn_quotebookingservicetask, msdyn_resourceterritory, msdyn_rma, msdyn_rmaproduct, msdyn_rmareceipt, msdyn_rmareceiptproduct, msdyn_rmasubstatus, msdyn_rtv, msdyn_rtvproduct, msdyn_rtvsubstatus, msdyn_salessuggestion, msdyn_shipvia, msdyn_systemuserschedulersetting, msdyn_timegroup, msdyn_timegroupdetail, msdyn_timeoffrequest, msdyn_warehouse, msdyn_workorder, msdyn_workordercharacteristic, msdyn_workorderincident, msdyn_workorderproduct, msdyn_workorderresourcerestriction, msdyn_workorderservice, msdyn_workorderservicetask, opportunity, quote, salesorder, site, uii_action, uii_hostedapplication, uii_nonhostedapplication, uii_option, uii_savedsession, uii_workflow, uii_workflowstep, uii_workflow_workflowstep_mapping</para>
 		/// <para>Regarding</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -1429,7 +1446,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>List of required attendees for the activity.</para>
-		/// <para>Lookup to account, contact, entitlement, equipment, knowledgearticle, lead, queue, systemuser, unresolvedaddress</para>
+		/// <para>Lookup to account, contact, entitlement, equipment, knowledgearticle, lead, msdyn_salessuggestion, queue, systemuser, unresolvedaddress</para>
 		/// <para>Required Attendees</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

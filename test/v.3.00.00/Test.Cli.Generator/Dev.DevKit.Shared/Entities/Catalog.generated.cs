@@ -57,6 +57,7 @@ namespace Dev.DevKit.Shared.Entities.CatalogOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class Catalog : EntityBase
 	{
 		public struct Fields
@@ -92,7 +93,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "catalog";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10017;
+		public const int EntityTypeCode = 10018;
 
 		[DebuggerNonUserCode()]
 		public Catalog()

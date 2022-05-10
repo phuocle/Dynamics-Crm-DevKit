@@ -13,6 +13,10 @@ namespace Dev.DevKit.Shared.Entities.SocialProfileOptionSets
 	public enum Community
 	{
 		/// <summary>
+		/// Apple Messages For Business = 16
+		/// </summary>
+		Apple_Messages_For_Business = 16,
+		/// <summary>
 		/// Cortana = 5
 		/// </summary>
 		Cortana = 5,
@@ -32,6 +36,10 @@ namespace Dev.DevKit.Shared.Entities.SocialProfileOptionSets
 		/// Facebook = 1
 		/// </summary>
 		Facebook = 1,
+		/// <summary>
+		/// Google's Business Messages = 17
+		/// </summary>
+		Googles_Business_Messages = 17,
 		/// <summary>
 		/// GroupMe = 10
 		/// </summary>
@@ -105,6 +113,7 @@ namespace Dev.DevKit.Shared.Entities.SocialProfileOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class SocialProfile : EntityBase
 	{
 		public struct Fields
@@ -128,6 +137,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_octwitterhandleid = "msdyn_octwitterhandleid";
 			public const string msdyn_phonenumber = "msdyn_phonenumber";
 			public const string msdyn_profileimagelink = "msdyn_profileimagelink";
+			public const string msdyn_sourceid = "msdyn_sourceid";
 			public const string OverriddenCreatedOn = "overriddencreatedon";
 			public const string OwnerId = "ownerid";
 			public const string OwningBusinessUnit = "owningbusinessunit";
@@ -429,6 +439,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.msdyn_profileimagelink); }
 			set { Entity.Attributes[Fields.msdyn_profileimagelink] = value; }
+		}
+
+		/// <summary>
+		/// <para>Source Id field of social profile entity for Apple Business Messages channel.</para>
+		/// <para>String - MaxLength: 200</para>
+		/// <para>Source Id</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_sourceid
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_sourceid); }
+			set { Entity.Attributes[Fields.msdyn_sourceid] = value; }
 		}
 
 		/// <summary>

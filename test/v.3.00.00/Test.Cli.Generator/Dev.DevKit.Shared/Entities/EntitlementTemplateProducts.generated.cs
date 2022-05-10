@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.EntitlementTemplateProductsOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class EntitlementTemplateProducts : EntityBase
 	{
 		public struct Fields

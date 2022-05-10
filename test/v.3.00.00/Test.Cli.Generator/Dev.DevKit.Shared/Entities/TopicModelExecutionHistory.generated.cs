@@ -65,6 +65,7 @@ namespace Dev.DevKit.Shared.Entities.TopicModelExecutionHistoryOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class TopicModelExecutionHistory : EntityBase
 	{
 		public struct Fields

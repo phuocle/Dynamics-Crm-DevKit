@@ -45,6 +45,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_fieldcomputationOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_fieldcomputation : EntityBase
 	{
 		public struct Fields
@@ -76,7 +77,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_fieldcomputation";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10448;
+		public const int EntityTypeCode = 10507;
 
 		[DebuggerNonUserCode()]
 		public msdyn_fieldcomputation()

@@ -57,6 +57,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_AITemplateOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_AITemplate : EntityBase
 	{
 		public struct Fields
@@ -76,6 +77,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_DataBinding = "msdyn_databinding";
 			public const string msdyn_defaultrunschedulingoptions = "msdyn_defaultrunschedulingoptions";
 			public const string msdyn_IsTrainable = "msdyn_istrainable";
+			public const string msdyn_ModelAction = "msdyn_modelaction";
 			public const string msdyn_ResourceInfo = "msdyn_resourceinfo";
 			public const string msdyn_RunConfigSchema = "msdyn_runconfigschema";
 			public const string msdyn_RunDataSpecification = "msdyn_rundataspecification";
@@ -328,6 +330,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_IsTrainable); }
 			set { Entity.Attributes[Fields.msdyn_IsTrainable] = value; }
+		}
+
+		/// <summary>
+		/// <para>Model Action</para>
+		/// <para>Memo - MaxLength: 5000</para>
+		/// <para>ModelAction</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_ModelAction
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_ModelAction); }
+			set { Entity.Attributes[Fields.msdyn_ModelAction] = value; }
 		}
 
 		/// <summary>

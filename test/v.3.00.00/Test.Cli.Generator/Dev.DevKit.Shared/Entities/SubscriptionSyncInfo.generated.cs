@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.SubscriptionSyncInfoOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class SubscriptionSyncInfo : EntityBase
 	{
 		public struct Fields

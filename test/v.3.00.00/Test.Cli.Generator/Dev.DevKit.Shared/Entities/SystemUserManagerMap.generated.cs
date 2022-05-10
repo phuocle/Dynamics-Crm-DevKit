@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.SystemUserManagerMapOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class SystemUserManagerMap : EntityBase
 	{
 		public struct Fields

@@ -57,6 +57,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_effortpredictionresultOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_effortpredictionresult : EntityBase
 	{
 		public struct Fields
@@ -95,7 +96,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_effortpredictionresult";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10764;
+		public const int EntityTypeCode = 10806;
 
 		[DebuggerNonUserCode()]
 		public msdyn_effortpredictionresult()

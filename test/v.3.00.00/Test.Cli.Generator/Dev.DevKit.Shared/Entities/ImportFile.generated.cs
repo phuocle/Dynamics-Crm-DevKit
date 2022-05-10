@@ -189,6 +189,7 @@ namespace Dev.DevKit.Shared.Entities.ImportFileOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class ImportFile : EntityBase
 	{
 		public struct Fields

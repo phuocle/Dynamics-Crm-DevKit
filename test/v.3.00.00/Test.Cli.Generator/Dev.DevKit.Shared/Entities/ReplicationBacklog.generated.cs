@@ -29,6 +29,7 @@ namespace Dev.DevKit.Shared.Entities.ReplicationBacklogOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class ReplicationBacklog : EntityBase
 	{
 		public struct Fields

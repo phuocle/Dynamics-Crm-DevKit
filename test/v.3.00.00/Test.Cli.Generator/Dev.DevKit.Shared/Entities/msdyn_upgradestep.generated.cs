@@ -53,6 +53,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_upgradestepOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_upgradestep : EntityBase
 	{
 		public struct Fields
@@ -85,7 +86,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_upgradestep";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10117;
+		public const int EntityTypeCode = 10140;
 
 		[DebuggerNonUserCode()]
 		public msdyn_upgradestep()

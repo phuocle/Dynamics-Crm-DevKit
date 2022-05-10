@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.ACIViewMapperOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class ACIViewMapper : EntityBase
 	{
 		public struct Fields

@@ -229,6 +229,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_forecastconfigurationOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_forecastconfiguration : EntityBase
 	{
 		public struct Fields
@@ -251,7 +252,9 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_forecastcategoryattribute = "msdyn_forecastcategoryattribute";
 			public const string msdyn_forecastconfigurationId = "msdyn_forecastconfigurationid";
 			public const string msdyn_hierarchyentity = "msdyn_hierarchyentity";
+			public const string msdyn_hierarchyfilter = "msdyn_hierarchyfilter";
 			public const string msdyn_hierarchyrelationship = "msdyn_hierarchyrelationship";
+			public const string msdyn_isdefault = "msdyn_isdefault";
 			public const string msdyn_issnapshotscheduled = "msdyn_issnapshotscheduled";
 			public const string msdyn_name = "msdyn_name";
 			public const string msdyn_numberofrecurrences = "msdyn_numberofrecurrences";
@@ -285,7 +288,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_forecastconfiguration";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10246;
+		public const int EntityTypeCode = 10265;
 
 		[DebuggerNonUserCode()]
 		public msdyn_forecastconfiguration()
@@ -552,6 +555,17 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>String - MaxLength: 1073741823</para>
+		/// <para>Hierarchy filters</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_hierarchyfilter
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_hierarchyfilter); }
+			set { Entity.Attributes[Fields.msdyn_hierarchyfilter] = value; }
+		}
+
+		/// <summary>
 		/// <para>Required - String - MaxLength: 4000</para>
 		/// <para>Relationship</para>
 		/// </summary>
@@ -560,6 +574,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.msdyn_hierarchyrelationship); }
 			set { Entity.Attributes[Fields.msdyn_hierarchyrelationship] = value; }
+		}
+
+		/// <summary>
+		/// <para>Determine if FC is default</para>
+		/// <para>Boolean</para>
+		/// <para>Is Default</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_isdefault
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_isdefault); }
+			set { Entity.Attributes[Fields.msdyn_isdefault] = value; }
 		}
 
 		/// <summary>

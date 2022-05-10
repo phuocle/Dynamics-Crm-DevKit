@@ -393,6 +393,7 @@ namespace Dev.DevKit.Shared.Entities.SolutionComponentOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class SolutionComponent : EntityBase
 	{
 		public struct Fields

@@ -49,6 +49,7 @@ namespace Dev.DevKit.Shared.Entities.AuthorizationServerOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class AuthorizationServer : EntityBase
 	{
 		public struct Fields

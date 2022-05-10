@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.workflowbinaryOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class workflowbinary : EntityBase
 	{
 		public struct Fields
@@ -72,7 +73,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "workflowbinary";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10048;
+		public const int EntityTypeCode = 10059;
 
 		[DebuggerNonUserCode()]
 		public workflowbinary()

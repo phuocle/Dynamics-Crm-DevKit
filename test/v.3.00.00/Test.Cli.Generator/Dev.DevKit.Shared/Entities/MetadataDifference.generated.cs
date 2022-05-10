@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.MetadataDifferenceOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class MetadataDifference : EntityBase
 	{
 		public struct Fields

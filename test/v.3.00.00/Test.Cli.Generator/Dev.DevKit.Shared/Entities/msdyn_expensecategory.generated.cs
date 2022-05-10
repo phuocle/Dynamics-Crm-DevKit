@@ -93,6 +93,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_expensecategoryOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_expensecategory : EntityBase
 	{
 		public struct Fields
@@ -121,7 +122,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_expensecategory";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10445;
+		public const int EntityTypeCode = 10504;
 
 		[DebuggerNonUserCode()]
 		public msdyn_expensecategory()

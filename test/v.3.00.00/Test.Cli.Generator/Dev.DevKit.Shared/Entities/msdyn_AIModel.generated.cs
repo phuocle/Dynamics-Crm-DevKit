@@ -57,6 +57,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_AIModelOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_AIModel : EntityBase
 	{
 		public struct Fields

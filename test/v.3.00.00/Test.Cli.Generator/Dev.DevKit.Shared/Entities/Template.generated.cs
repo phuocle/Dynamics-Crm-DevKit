@@ -93,6 +93,7 @@ namespace Dev.DevKit.Shared.Entities.TemplateOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class Template : EntityBase
 	{
 		public struct Fields
@@ -539,7 +540,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Subject associated with the email template.</para>
-		/// <para>Required - Memo - MaxLength: 5000</para>
+		/// <para>Memo - MaxLength: 5000</para>
 		/// <para>Subject</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

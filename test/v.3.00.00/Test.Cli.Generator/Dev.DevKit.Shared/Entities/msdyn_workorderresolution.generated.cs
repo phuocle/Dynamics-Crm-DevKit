@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_workorderresolutionOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_workorderresolution : EntityBase
 	{
 		public struct Fields
@@ -70,7 +71,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_workorderresolution";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10633;
+		public const int EntityTypeCode = 10673;
 
 		[DebuggerNonUserCode()]
 		public msdyn_workorderresolution()

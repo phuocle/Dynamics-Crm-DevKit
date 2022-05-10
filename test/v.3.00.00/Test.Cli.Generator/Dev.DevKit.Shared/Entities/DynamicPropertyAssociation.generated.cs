@@ -53,6 +53,7 @@ namespace Dev.DevKit.Shared.Entities.DynamicPropertyAssociationOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class DynamicPropertyAssociation : EntityBase
 	{
 		public struct Fields

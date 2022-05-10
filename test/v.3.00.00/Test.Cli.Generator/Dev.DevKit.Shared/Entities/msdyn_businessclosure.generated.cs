@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_businessclosureOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_businessclosure : EntityBase
 	{
 		public struct Fields
@@ -70,7 +71,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_businessclosure";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10405;
+		public const int EntityTypeCode = 10477;
 
 		[DebuggerNonUserCode()]
 		public msdyn_businessclosure()

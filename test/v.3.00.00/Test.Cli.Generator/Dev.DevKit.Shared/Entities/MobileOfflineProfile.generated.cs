@@ -33,6 +33,7 @@ namespace Dev.DevKit.Shared.Entities.MobileOfflineProfileOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class MobileOfflineProfile : EntityBase
 	{
 		public struct Fields

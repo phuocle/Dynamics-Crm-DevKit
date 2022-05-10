@@ -85,6 +85,7 @@ namespace Dev.DevKit.Shared.Entities.ActivityPartyOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class ActivityParty : EntityBase
 	{
 		public struct Fields
@@ -367,7 +368,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the party associated with the activity.</para>
-		/// <para>Lookup to account, bulkoperation, campaign, campaignactivity, contact, contract, entitlement, equipment, incident, invoice, knowledgearticle, lead, opportunity, queue, quote, salesorder, systemuser</para>
+		/// <para>Lookup to account, bulkoperation, campaign, campaignactivity, contact, contract, entitlement, equipment, incident, invoice, knowledgearticle, lead, msdyn_salessuggestion, opportunity, queue, quote, salesorder, systemuser</para>
 		/// <para>Party</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

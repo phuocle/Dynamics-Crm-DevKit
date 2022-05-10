@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.MultiEntitySearchOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class MultiEntitySearch : EntityBase
 	{
 		public struct Fields

@@ -33,6 +33,7 @@ namespace Dev.DevKit.Shared.Entities.botcomponent_botcomponentOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class botcomponent_botcomponent : EntityBase
 	{
 		public struct Fields
@@ -52,7 +53,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "botcomponent_botcomponent";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10070;
+		public const int EntityTypeCode = 10082;
 
 		[DebuggerNonUserCode()]
 		public botcomponent_botcomponent()

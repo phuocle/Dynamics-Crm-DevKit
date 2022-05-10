@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.flowmachineOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class flowmachine : EntityBase
 	{
 		public struct Fields
@@ -71,7 +72,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "flowmachine";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10045;
+		public const int EntityTypeCode = 10056;
 
 		[DebuggerNonUserCode()]
 		public flowmachine()

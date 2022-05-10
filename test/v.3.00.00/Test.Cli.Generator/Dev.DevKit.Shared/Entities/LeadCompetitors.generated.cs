@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.LeadCompetitorsOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class LeadCompetitors : EntityBase
 	{
 		public struct Fields

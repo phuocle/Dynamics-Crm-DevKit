@@ -29,6 +29,7 @@ namespace Dev.DevKit.Shared.Entities.BookableResourceBookingExchangeSyncIdMappin
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class BookableResourceBookingExchangeSyncIdMapping : EntityBase
 	{
 		public struct Fields

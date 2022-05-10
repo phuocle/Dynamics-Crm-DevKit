@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.RuntimeDependencyOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class RuntimeDependency : EntityBase
 	{
 		public struct Fields

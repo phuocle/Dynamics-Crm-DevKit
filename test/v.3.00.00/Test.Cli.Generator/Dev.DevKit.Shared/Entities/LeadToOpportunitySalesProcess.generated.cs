@@ -41,6 +41,7 @@ namespace Dev.DevKit.Shared.Entities.LeadToOpportunitySalesProcessOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class LeadToOpportunitySalesProcess : EntityBase
 	{
 		public struct Fields

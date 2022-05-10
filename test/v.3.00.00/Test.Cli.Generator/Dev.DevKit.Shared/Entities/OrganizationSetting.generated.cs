@@ -57,6 +57,7 @@ namespace Dev.DevKit.Shared.Entities.OrganizationSettingOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class OrganizationSetting : EntityBase
 	{
 		public struct Fields
@@ -91,7 +92,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "organizationsetting";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10036;
+		public const int EntityTypeCode = 10047;
 
 		[DebuggerNonUserCode()]
 		public OrganizationSetting()

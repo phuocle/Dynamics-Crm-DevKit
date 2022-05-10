@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msfp_alertruleOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msfp_alertrule : EntityBase
 	{
 		public struct Fields
@@ -68,7 +69,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msfp_alertrule";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10295;
+		public const int EntityTypeCode = 10331;
 
 		[DebuggerNonUserCode()]
 		public msfp_alertrule()

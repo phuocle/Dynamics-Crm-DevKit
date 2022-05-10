@@ -41,6 +41,7 @@ namespace Dev.DevKit.Shared.Entities.UserQueryOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class UserQuery : EntityBase
 	{
 		public struct Fields

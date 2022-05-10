@@ -105,6 +105,7 @@ namespace Dev.DevKit.Shared.Entities.ProductOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class Product : EntityBase
 	{
 		public struct Fields

@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.UserSearchFacetOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class UserSearchFacet : EntityBase
 	{
 		public struct Fields

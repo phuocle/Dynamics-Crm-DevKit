@@ -65,6 +65,7 @@ namespace Dev.DevKit.Shared.Entities.DelveActionHubOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class DelveActionHub : EntityBase
 	{
 		public struct Fields

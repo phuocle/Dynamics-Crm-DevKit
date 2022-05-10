@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.CategoryOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class Category : EntityBase
 	{
 		public struct Fields

@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.msdyusd_form_hostedapplicationOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyusd_form_hostedapplication : EntityBase
 	{
 		public struct Fields
@@ -28,7 +29,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyusd_form_hostedapplication";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10862;
+		public const int EntityTypeCode = 10970;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_form_hostedapplication()

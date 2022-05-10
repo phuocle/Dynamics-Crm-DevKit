@@ -57,6 +57,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_slakpiOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_slakpi : EntityBase
 	{
 		public struct Fields
@@ -100,7 +101,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_slakpi";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10076;
+		public const int EntityTypeCode = 10090;
 
 		[DebuggerNonUserCode()]
 		public msdyn_slakpi()

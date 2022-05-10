@@ -10,6 +10,30 @@ using System.Diagnostics;
 
 namespace Dev.DevKit.Shared.Entities.msdyn_unifiedroutingdiagnosticOptionSets
 {
+	public enum msdyn_diagnosticdatatype
+	{
+		/// <summary>
+		/// Assignment Diagnostic = 4
+		/// </summary>
+		Assignment_Diagnostic = 4,
+		/// <summary>
+		/// Demand Classification Diagnostic = 2
+		/// </summary>
+		Demand_Classification_Diagnostic = 2,
+		/// <summary>
+		/// Demand ML Diagnostic = 1
+		/// </summary>
+		Demand_ML_Diagnostic = 1,
+		/// <summary>
+		/// Demand RTQ Diagnostic = 3
+		/// </summary>
+		Demand_RTQ_Diagnostic = 3,
+		/// <summary>
+		/// Unknown = 0
+		/// </summary>
+		Unknown = 0
+	}
+
 	public enum msdyn_ruletype
 	{
 		/// <summary>
@@ -73,6 +97,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_unifiedroutingdiagnosticOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_unifiedroutingdiagnostic : EntityBase
 	{
 		public struct Fields
@@ -86,6 +111,8 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
 			public const string msdyn_completedon = "msdyn_completedon";
 			public const string msdyn_decisionrulesetid = "msdyn_decisionrulesetid";
+			public const string msdyn_diagnosticdata = "msdyn_diagnosticdata";
+			public const string msdyn_diagnosticdatatype = "msdyn_diagnosticdatatype";
 			public const string msdyn_evaluation = "msdyn_evaluation";
 			public const string msdyn_inputdata = "msdyn_inputdata";
 			public const string msdyn_name = "msdyn_name";
@@ -112,7 +139,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_unifiedroutingdiagnostic";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10672;
+		public const int EntityTypeCode = 10348;
 
 		[DebuggerNonUserCode()]
 		public msdyn_unifiedroutingdiagnostic()
@@ -262,6 +289,41 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<EntityReference>(Fields.msdyn_decisionrulesetid); }
 			set { Entity.Attributes[Fields.msdyn_decisionrulesetid] = value; }
+		}
+
+		/// <summary>
+		/// <para>Diagnostics data</para>
+		/// <para>Memo - MaxLength: 1048576</para>
+		/// <para>Diagnostics Data</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_diagnosticdata
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_diagnosticdata); }
+			set { Entity.Attributes[Fields.msdyn_diagnosticdata] = value; }
+		}
+
+		/// <summary>
+		/// <para>Diagnostic Data type</para>
+		/// <para>Picklist</para>
+		/// <para>Diagnostic Data Type</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public Dev.DevKit.Shared.Entities.msdyn_unifiedroutingdiagnosticOptionSets.msdyn_diagnosticdatatype? msdyn_diagnosticdatatype
+		{
+			get
+			{
+				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.msdyn_diagnosticdatatype);
+				if (value == null) return null;
+				return (Dev.DevKit.Shared.Entities.msdyn_unifiedroutingdiagnosticOptionSets.msdyn_diagnosticdatatype)value.Value;
+			}
+			set
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_diagnosticdatatype] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_diagnosticdatatype] = null;
+			}
 		}
 
 		/// <summary>

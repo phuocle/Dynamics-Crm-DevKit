@@ -57,6 +57,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_solutionhealthruleOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_solutionhealthrule : EntityBase
 	{
 		public struct Fields
@@ -94,7 +95,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_solutionhealthrule";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10109;
+		public const int EntityTypeCode = 10133;
 
 		[DebuggerNonUserCode()]
 		public msdyn_solutionhealthrule()

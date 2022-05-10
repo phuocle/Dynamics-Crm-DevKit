@@ -89,6 +89,7 @@ namespace Dev.DevKit.Shared.Entities.ContractTemplateOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class ContractTemplate : EntityBase
 	{
 		public struct Fields

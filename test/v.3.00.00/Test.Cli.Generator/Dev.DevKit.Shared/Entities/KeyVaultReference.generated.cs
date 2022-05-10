@@ -85,6 +85,7 @@ namespace Dev.DevKit.Shared.Entities.KeyVaultReferenceOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class KeyVaultReference : EntityBase
 	{
 		public struct Fields
@@ -124,7 +125,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "keyvaultreference";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10091;
+		public const int EntityTypeCode = 10106;
 
 		[DebuggerNonUserCode()]
 		public KeyVaultReference()

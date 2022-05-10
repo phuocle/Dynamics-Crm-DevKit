@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_casesuggestionsdatasourceOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_casesuggestionsdatasource : EntityBase
 	{
 		public struct Fields
@@ -26,7 +27,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_casesuggestionsdatasource";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10203;
+		public const int EntityTypeCode = 10219;
 
 		[DebuggerNonUserCode()]
 		public msdyn_casesuggestionsdatasource()

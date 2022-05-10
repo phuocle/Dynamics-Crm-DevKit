@@ -33,6 +33,7 @@ namespace Dev.DevKit.Shared.Entities.PluginTypeOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class PluginType : EntityBase
 	{
 		public struct Fields

@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.SocialInsightsConfigurationOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class SocialInsightsConfiguration : EntityBase
 	{
 		public struct Fields

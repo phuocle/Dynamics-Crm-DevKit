@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_inventorytransferOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_inventorytransfer : EntityBase
 	{
 		public struct Fields
@@ -71,7 +72,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_inventorytransfer";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10555;
+		public const int EntityTypeCode = 10611;
 
 		[DebuggerNonUserCode()]
 		public msdyn_inventorytransfer()

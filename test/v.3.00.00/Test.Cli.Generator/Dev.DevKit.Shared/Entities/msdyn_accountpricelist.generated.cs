@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_accountpricelistOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_accountpricelist : EntityBase
 	{
 		public struct Fields
@@ -67,7 +68,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_accountpricelist";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10429;
+		public const int EntityTypeCode = 10488;
 
 		[DebuggerNonUserCode()]
 		public msdyn_accountpricelist()

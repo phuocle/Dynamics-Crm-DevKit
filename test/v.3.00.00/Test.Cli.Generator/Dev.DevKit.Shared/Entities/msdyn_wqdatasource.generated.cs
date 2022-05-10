@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_wqdatasourceOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_wqdatasource : EntityBase
 	{
 		public struct Fields
@@ -26,7 +27,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_wqdatasource";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10286;
+		public const int EntityTypeCode = 10313;
 
 		[DebuggerNonUserCode()]
 		public msdyn_wqdatasource()

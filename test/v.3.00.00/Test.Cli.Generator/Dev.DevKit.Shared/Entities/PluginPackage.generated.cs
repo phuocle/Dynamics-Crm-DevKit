@@ -57,6 +57,7 @@ namespace Dev.DevKit.Shared.Entities.PluginPackageOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class PluginPackage : EntityBase
 	{
 		public struct Fields
@@ -92,7 +93,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "pluginpackage";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10090;
+		public const int EntityTypeCode = 10105;
 
 		[DebuggerNonUserCode()]
 		public PluginPackage()

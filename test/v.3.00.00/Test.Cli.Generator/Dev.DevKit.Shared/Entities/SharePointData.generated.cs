@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.SharePointDataOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class SharePointData : EntityBase
 	{
 		public struct Fields

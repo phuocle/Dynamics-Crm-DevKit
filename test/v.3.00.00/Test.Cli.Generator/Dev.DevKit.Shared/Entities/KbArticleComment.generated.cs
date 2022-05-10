@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.KbArticleCommentOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class KbArticleComment : EntityBase
 	{
 		public struct Fields

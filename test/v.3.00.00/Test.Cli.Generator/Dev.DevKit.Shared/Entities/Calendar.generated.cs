@@ -29,6 +29,7 @@ namespace Dev.DevKit.Shared.Entities.CalendarOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class Calendar : EntityBase
 	{
 		public struct Fields

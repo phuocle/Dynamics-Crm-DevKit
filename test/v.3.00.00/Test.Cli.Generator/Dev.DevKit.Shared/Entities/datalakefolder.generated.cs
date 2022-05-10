@@ -57,10 +57,12 @@ namespace Dev.DevKit.Shared.Entities.datalakefolderOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class datalakefolder : EntityBase
 	{
 		public struct Fields
 		{
+			public const string CDMPath = "cdmpath";
 			public const string ComponentIdUnique = "componentidunique";
 			public const string ComponentState = "componentstate";
 			public const string containerendpoint = "containerendpoint";
@@ -91,10 +93,15 @@ namespace Dev.DevKit.Shared.Entities
 			public const string OwningUser = "owninguser";
 			public const string path = "path";
 			public const string ReaderSecurityGroupId = "readersecuritygroupid";
+			public const string ResourceGroup = "resourcegroup";
 			public const string SolutionId = "solutionid";
 			public const string statecode = "statecode";
 			public const string statuscode = "statuscode";
+			public const string Subscription = "subscription";
 			public const string SupportingSolutionId = "supportingsolutionid";
+			public const string SynchronizeSchemaToDataverse = "synchronizeschematodataverse";
+			public const string SynchronizeSchemaToSynapseDb = "synchronizeschematosynapsedb";
+			public const string Tenant = "tenant";
 			public const string TimeZoneRuleVersionNumber = "timezoneruleversionnumber";
 			public const string UTCConversionTimeZoneCode = "utcconversiontimezonecode";
 			public const string VersionNumber = "versionnumber";
@@ -103,7 +110,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "datalakefolder";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10024;
+		public const int EntityTypeCode = 10025;
 
 		[DebuggerNonUserCode()]
 		public datalakefolder()
@@ -151,6 +158,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			Entity = new Entity(EntityLogicalName, keys);
 			PreEntity = CloneThisEntity(Entity);
+		}
+
+		/// <summary>
+		/// <para>Path to the CDM file.</para>
+		/// <para>String - MaxLength: 100</para>
+		/// <para>CDM Path</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string CDMPath
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.CDMPath); }
+			set { Entity.Attributes[Fields.CDMPath] = value; }
 		}
 
 		/// <summary>
@@ -510,6 +529,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Azure resource group of the storage account.</para>
+		/// <para>String - MaxLength: 100</para>
+		/// <para>ResourceGroup</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string ResourceGroup
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.ResourceGroup); }
+			set { Entity.Attributes[Fields.ResourceGroup] = value; }
+		}
+
+		/// <summary>
 		/// <para>Unique identifier of the associated solution.</para>
 		/// <para>ReadOnly - Uniqueidentifier</para>
 		/// <para>Solution</para>
@@ -567,6 +598,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Azure subscription of the storage account.</para>
+		/// <para>String - MaxLength: 100</para>
+		/// <para>Subscription</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string Subscription
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.Subscription); }
+			set { Entity.Attributes[Fields.Subscription] = value; }
+		}
+
+		/// <summary>
 		/// <para>For internal use only.</para>
 		/// <para>ReadOnly - Uniqueidentifier</para>
 		/// <para>Solution</para>
@@ -575,6 +618,42 @@ namespace Dev.DevKit.Shared.Entities
 		public Guid? SupportingSolutionId
 		{
 			get { return Entity.GetAttributeValue<Guid?>(Fields.SupportingSolutionId); }
+		}
+
+		/// <summary>
+		/// <para>Enable schema synchronization to Dataverse.</para>
+		/// <para>Boolean</para>
+		/// <para>Synchronize Schema To Dataverse</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? SynchronizeSchemaToDataverse
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.SynchronizeSchemaToDataverse); }
+			set { Entity.Attributes[Fields.SynchronizeSchemaToDataverse] = value; }
+		}
+
+		/// <summary>
+		/// <para>Enable schema synchronization to Synapse database.</para>
+		/// <para>Boolean</para>
+		/// <para>Synchronize Schema To Synapse Db</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? SynchronizeSchemaToSynapseDb
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.SynchronizeSchemaToSynapseDb); }
+			set { Entity.Attributes[Fields.SynchronizeSchemaToSynapseDb] = value; }
+		}
+
+		/// <summary>
+		/// <para>Azure tenant of the storage account.</para>
+		/// <para>String - MaxLength: 100</para>
+		/// <para>Tenant</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string Tenant
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.Tenant); }
+			set { Entity.Attributes[Fields.Tenant] = value; }
 		}
 
 		/// <summary>

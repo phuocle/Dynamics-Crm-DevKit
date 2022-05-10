@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.availabletimesdatasourceOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class availabletimesdatasource : EntityBase
 	{
 		public struct Fields
@@ -26,7 +27,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "availabletimesdatasource";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10122;
+		public const int EntityTypeCode = 10145;
 
 		[DebuggerNonUserCode()]
 		public availabletimesdatasource()

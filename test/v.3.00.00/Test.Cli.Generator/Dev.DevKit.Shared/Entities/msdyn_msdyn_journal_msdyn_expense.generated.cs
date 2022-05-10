@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_msdyn_journal_msdyn_expenseOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_msdyn_journal_msdyn_expense : EntityBase
 	{
 		public struct Fields
@@ -28,7 +29,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_msdyn_journal_msdyn_expense";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10504;
+		public const int EntityTypeCode = 10563;
 
 		[DebuggerNonUserCode()]
 		public msdyn_msdyn_journal_msdyn_expense()

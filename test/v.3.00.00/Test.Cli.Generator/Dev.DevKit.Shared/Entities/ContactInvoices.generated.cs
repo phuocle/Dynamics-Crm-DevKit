@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.ContactInvoicesOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class ContactInvoices : EntityBase
 	{
 		public struct Fields

@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.teammobileofflineprofilemembershipOptionSet
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class teammobileofflineprofilemembership : EntityBase
 	{
 		public struct Fields
@@ -64,7 +65,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "teammobileofflineprofilemembership";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10094;
+		public const int EntityTypeCode = 10110;
 
 		[DebuggerNonUserCode()]
 		public teammobileofflineprofilemembership()

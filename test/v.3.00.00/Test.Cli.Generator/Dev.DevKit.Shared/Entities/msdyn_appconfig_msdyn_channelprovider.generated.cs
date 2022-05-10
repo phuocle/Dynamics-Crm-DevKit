@@ -33,6 +33,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_appconfig_msdyn_channelproviderOption
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_appconfig_msdyn_channelprovider : EntityBase
 	{
 		public struct Fields
@@ -52,7 +53,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_appconfig_msdyn_channelprovider";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10169;
+		public const int EntityTypeCode = 10196;
 
 		[DebuggerNonUserCode()]
 		public msdyn_appconfig_msdyn_channelprovider()

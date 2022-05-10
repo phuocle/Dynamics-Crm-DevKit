@@ -53,6 +53,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_findworkeventOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_findworkevent : EntityBase
 	{
 		public struct Fields
@@ -86,7 +87,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_findworkevent";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10449;
+		public const int EntityTypeCode = 10508;
 
 		[DebuggerNonUserCode()]
 		public msdyn_findworkevent()

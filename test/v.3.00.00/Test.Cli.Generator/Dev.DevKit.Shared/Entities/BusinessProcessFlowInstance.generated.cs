@@ -41,6 +41,7 @@ namespace Dev.DevKit.Shared.Entities.BusinessProcessFlowInstanceOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class BusinessProcessFlowInstance : EntityBase
 	{
 		public struct Fields

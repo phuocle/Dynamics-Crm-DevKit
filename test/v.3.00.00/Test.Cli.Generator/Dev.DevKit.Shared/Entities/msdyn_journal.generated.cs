@@ -57,6 +57,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_journalOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_journal : EntityBase
 	{
 		public struct Fields
@@ -98,7 +99,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_journal";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10455;
+		public const int EntityTypeCode = 10514;
 
 		[DebuggerNonUserCode()]
 		public msdyn_journal()

@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msfp_questionresponseOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msfp_questionresponse : EntityBase
 	{
 		public struct Fields
@@ -74,7 +75,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msfp_questionresponse";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10301;
+		public const int EntityTypeCode = 10337;
 
 		[DebuggerNonUserCode()]
 		public msfp_questionresponse()

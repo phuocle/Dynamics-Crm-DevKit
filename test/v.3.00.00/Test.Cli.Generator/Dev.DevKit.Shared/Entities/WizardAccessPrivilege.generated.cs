@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.WizardAccessPrivilegeOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class WizardAccessPrivilege : EntityBase
 	{
 		public struct Fields

@@ -33,6 +33,7 @@ namespace Dev.DevKit.Shared.Entities.EntityKeyOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class EntityKey : EntityBase
 	{
 		public struct Fields

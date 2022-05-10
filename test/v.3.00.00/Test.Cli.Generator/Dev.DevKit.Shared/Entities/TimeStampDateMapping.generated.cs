@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.TimeStampDateMappingOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class TimeStampDateMapping : EntityBase
 	{
 		public struct Fields

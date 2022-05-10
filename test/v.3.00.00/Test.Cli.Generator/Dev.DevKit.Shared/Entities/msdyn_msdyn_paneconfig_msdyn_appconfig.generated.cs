@@ -33,6 +33,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_msdyn_paneconfig_msdyn_appconfigOptio
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_msdyn_paneconfig_msdyn_appconfig : EntityBase
 	{
 		public struct Fields
@@ -52,7 +53,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_msdyn_paneconfig_msdyn_appconfig";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10173;
+		public const int EntityTypeCode = 10200;
 
 		[DebuggerNonUserCode()]
 		public msdyn_msdyn_paneconfig_msdyn_appconfig()

@@ -73,6 +73,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_productivityagentscriptstepOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_productivityagentscriptstep : EntityBase
 	{
 		public struct Fields
@@ -115,7 +116,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_productivityagentscriptstep";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10175;
+		public const int EntityTypeCode = 10202;
 
 		[DebuggerNonUserCode()]
 		public msdyn_productivityagentscriptstep()

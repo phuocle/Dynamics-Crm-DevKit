@@ -269,6 +269,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_actualOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_actual : EntityBase
 	{
 		public struct Fields
@@ -357,7 +358,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_actual";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10398;
+		public const int EntityTypeCode = 10462;
 
 		[DebuggerNonUserCode()]
 		public msdyn_actual()

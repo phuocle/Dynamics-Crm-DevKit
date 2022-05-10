@@ -761,6 +761,7 @@ namespace Dev.DevKit.Shared.Entities.DependencyOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class Dependency : EntityBase
 	{
 		public struct Fields

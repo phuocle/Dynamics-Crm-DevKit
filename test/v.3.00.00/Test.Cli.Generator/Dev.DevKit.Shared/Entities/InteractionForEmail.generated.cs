@@ -57,6 +57,7 @@ namespace Dev.DevKit.Shared.Entities.InteractionForEmailOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class InteractionForEmail : EntityBase
 	{
 		public struct Fields

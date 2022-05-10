@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyusd_usersettingsOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyusd_usersettings : EntityBase
 	{
 		public struct Fields
@@ -67,7 +68,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyusd_usersettings";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10847;
+		public const int EntityTypeCode = 10955;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_usersettings()

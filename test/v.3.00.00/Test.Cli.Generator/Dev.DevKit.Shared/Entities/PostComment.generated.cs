@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.PostCommentOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class PostComment : EntityBase
 	{
 		public struct Fields

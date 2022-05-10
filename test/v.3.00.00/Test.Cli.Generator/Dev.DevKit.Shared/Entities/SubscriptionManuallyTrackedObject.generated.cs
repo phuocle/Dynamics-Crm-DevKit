@@ -25,6 +25,7 @@ namespace Dev.DevKit.Shared.Entities.SubscriptionManuallyTrackedObjectOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class SubscriptionManuallyTrackedObject : EntityBase
 	{
 		public struct Fields

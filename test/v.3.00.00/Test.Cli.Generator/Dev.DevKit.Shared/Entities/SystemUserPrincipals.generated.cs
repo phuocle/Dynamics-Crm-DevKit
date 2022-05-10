@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.SystemUserPrincipalsOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class SystemUserPrincipals : EntityBase
 	{
 		public struct Fields

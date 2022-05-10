@@ -129,6 +129,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_AIConfigurationOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_AIConfiguration : EntityBase
 	{
 		public struct Fields
@@ -155,6 +156,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_MajorIterationNumber = "msdyn_majoriterationnumber";
 			public const string msdyn_MinorIterationNumber = "msdyn_minoriterationnumber";
 			public const string msdyn_Model = "msdyn_model";
+			public const string msdyn_ModelAction = "msdyn_modelaction";
 			public const string msdyn_ModelData = "msdyn_modeldata";
 			public const string msdyn_modelglobalexplainability = "msdyn_modelglobalexplainability";
 			public const string msdyn_ModelPerformance = "msdyn_modelperformance";
@@ -490,6 +492,18 @@ namespace Dev.DevKit.Shared.Entities
 		public string msdyn_Model
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.msdyn_Model); }
+		}
+
+		/// <summary>
+		/// <para>Model Action</para>
+		/// <para>Memo - MaxLength: 5000</para>
+		/// <para>ModelAction</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_ModelAction
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_ModelAction); }
+			set { Entity.Attributes[Fields.msdyn_ModelAction] = value; }
 		}
 
 		/// <summary>

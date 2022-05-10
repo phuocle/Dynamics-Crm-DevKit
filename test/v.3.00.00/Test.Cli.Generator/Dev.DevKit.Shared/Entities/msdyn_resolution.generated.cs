@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_resolutionOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_resolution : EntityBase
 	{
 		public struct Fields
@@ -66,7 +67,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_resolution";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10630;
+		public const int EntityTypeCode = 10670;
 
 		[DebuggerNonUserCode()]
 		public msdyn_resolution()

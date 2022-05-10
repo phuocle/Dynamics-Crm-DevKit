@@ -45,6 +45,7 @@ namespace Dev.DevKit.Shared.Entities.KbArticleOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class KbArticle : EntityBase
 	{
 		public struct Fields

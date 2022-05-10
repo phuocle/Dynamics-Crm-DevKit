@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.ApplicationFileOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class ApplicationFile : EntityBase
 	{
 		public struct Fields

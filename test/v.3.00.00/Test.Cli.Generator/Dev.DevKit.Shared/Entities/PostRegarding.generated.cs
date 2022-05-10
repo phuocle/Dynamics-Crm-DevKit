@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.PostRegardingOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class PostRegarding : EntityBase
 	{
 		public struct Fields

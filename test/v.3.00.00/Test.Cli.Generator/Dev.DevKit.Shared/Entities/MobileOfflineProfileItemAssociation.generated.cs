@@ -33,6 +33,7 @@ namespace Dev.DevKit.Shared.Entities.MobileOfflineProfileItemAssociationOptionSe
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class MobileOfflineProfileItemAssociation : EntityBase
 	{
 		public struct Fields

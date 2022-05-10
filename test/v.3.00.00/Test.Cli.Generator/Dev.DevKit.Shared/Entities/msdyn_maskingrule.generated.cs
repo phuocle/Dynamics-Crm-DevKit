@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_maskingruleOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_maskingrule : EntityBase
 	{
 		public struct Fields
@@ -67,7 +68,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_maskingrule";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10695;
+		public const int EntityTypeCode = 10736;
 
 		[DebuggerNonUserCode()]
 		public msdyn_maskingrule()

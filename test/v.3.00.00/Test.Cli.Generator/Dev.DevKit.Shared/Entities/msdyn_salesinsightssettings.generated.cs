@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_salesinsightssettingsOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_salesinsightssettings : EntityBase
 	{
 		public struct Fields
@@ -68,7 +69,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_salesinsightssettings";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10258;
+		public const int EntityTypeCode = 10278;
 
 		[DebuggerNonUserCode()]
 		public msdyn_salesinsightssettings()

@@ -265,6 +265,7 @@ namespace Dev.DevKit.Shared.Entities.IncidentOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class Incident : EntityBase
 	{
 		public struct Fields

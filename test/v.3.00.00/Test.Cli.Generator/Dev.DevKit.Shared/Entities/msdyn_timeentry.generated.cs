@@ -141,6 +141,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_timeentryOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_timeentry : EntityBase
 	{
 		public struct Fields
@@ -195,7 +196,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_timeentry";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10495;
+		public const int EntityTypeCode = 10554;
 
 		[DebuggerNonUserCode()]
 		public msdyn_timeentry()

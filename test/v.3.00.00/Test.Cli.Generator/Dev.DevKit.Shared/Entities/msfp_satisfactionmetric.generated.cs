@@ -49,6 +49,7 @@ namespace Dev.DevKit.Shared.Entities.msfp_satisfactionmetricOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msfp_satisfactionmetric : EntityBase
 	{
 		public struct Fields
@@ -90,7 +91,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msfp_satisfactionmetric";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10302;
+		public const int EntityTypeCode = 10338;
 
 		[DebuggerNonUserCode()]
 		public msfp_satisfactionmetric()

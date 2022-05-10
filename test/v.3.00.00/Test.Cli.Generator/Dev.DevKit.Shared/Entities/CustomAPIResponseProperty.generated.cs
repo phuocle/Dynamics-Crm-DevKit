@@ -113,6 +113,7 @@ namespace Dev.DevKit.Shared.Entities.CustomAPIResponsePropertyOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class CustomAPIResponseProperty : EntityBase
 	{
 		public struct Fields
@@ -153,7 +154,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "customapiresponseproperty";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10022;
+		public const int EntityTypeCode = 10023;
 
 		[DebuggerNonUserCode()]
 		public CustomAPIResponseProperty()

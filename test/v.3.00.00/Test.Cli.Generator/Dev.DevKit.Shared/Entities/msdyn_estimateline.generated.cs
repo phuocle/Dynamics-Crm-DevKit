@@ -169,6 +169,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_estimatelineOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_estimateline : EntityBase
 	{
 		public struct Fields
@@ -239,7 +240,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_estimateline";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10443;
+		public const int EntityTypeCode = 10502;
 
 		[DebuggerNonUserCode()]
 		public msdyn_estimateline()

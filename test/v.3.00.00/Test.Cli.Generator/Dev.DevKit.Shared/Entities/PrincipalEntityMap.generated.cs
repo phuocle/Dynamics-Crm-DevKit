@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.PrincipalEntityMapOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class PrincipalEntityMap : EntityBase
 	{
 		public struct Fields

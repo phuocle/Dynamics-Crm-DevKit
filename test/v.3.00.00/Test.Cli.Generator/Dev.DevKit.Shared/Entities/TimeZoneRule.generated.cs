@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.TimeZoneRuleOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class TimeZoneRule : EntityBase
 	{
 		public struct Fields

@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.ImportJobOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class ImportJob : EntityBase
 	{
 		public struct Fields

@@ -49,6 +49,7 @@ namespace Dev.DevKit.Shared.Entities.msfp_surveyOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msfp_survey : EntityBase
 	{
 		public struct Fields
@@ -96,7 +97,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msfp_survey";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10303;
+		public const int EntityTypeCode = 10339;
 
 		[DebuggerNonUserCode()]
 		public msfp_survey()

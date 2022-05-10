@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.msdyusd_task_answerOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyusd_task_answer : EntityBase
 	{
 		public struct Fields
@@ -28,7 +29,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyusd_task_answer";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10865;
+		public const int EntityTypeCode = 10973;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_task_answer()

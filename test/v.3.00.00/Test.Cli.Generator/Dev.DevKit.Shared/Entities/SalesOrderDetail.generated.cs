@@ -297,6 +297,7 @@ namespace Dev.DevKit.Shared.Entities.SalesOrderDetailOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class SalesOrderDetail : EntityBase
 	{
 		public struct Fields

@@ -49,6 +49,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_inspectionresponseOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_inspectionresponse : EntityBase
 	{
 		public struct Fields
@@ -82,7 +83,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_inspectionresponse";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10522;
+		public const int EntityTypeCode = 10578;
 
 		[DebuggerNonUserCode()]
 		public msdyn_inspectionresponse()

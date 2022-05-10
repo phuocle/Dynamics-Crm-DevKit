@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.SystemUserRolesOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class SystemUserRoles : EntityBase
 	{
 		public struct Fields

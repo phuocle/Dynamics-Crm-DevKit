@@ -33,6 +33,7 @@ namespace Dev.DevKit.Shared.Entities.RolePrivilegesOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class RolePrivileges : EntityBase
 	{
 		public struct Fields

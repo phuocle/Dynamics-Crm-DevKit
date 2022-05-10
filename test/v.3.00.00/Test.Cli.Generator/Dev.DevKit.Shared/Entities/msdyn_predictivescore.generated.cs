@@ -77,6 +77,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_predictivescoreOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_predictivescore : EntityBase
 	{
 		public struct Fields
@@ -111,7 +112,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_predictivescore";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10888;
+		public const int EntityTypeCode = 10318;
 
 		[DebuggerNonUserCode()]
 		public msdyn_predictivescore()

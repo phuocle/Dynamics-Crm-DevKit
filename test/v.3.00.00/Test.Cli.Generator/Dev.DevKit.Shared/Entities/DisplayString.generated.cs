@@ -33,6 +33,7 @@ namespace Dev.DevKit.Shared.Entities.DisplayStringOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class DisplayString : EntityBase
 	{
 		public struct Fields

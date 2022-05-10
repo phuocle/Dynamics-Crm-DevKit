@@ -21,6 +21,7 @@ namespace Dev.DevKit.Shared.Entities.DocumentIndexOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class DocumentIndex : EntityBase
 	{
 		public struct Fields

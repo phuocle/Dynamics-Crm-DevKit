@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.package_solutionOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class package_solution : EntityBase
 	{
 		public struct Fields

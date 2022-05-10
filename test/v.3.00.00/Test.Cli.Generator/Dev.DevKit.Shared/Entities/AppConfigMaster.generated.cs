@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.AppConfigMasterOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class AppConfigMaster : EntityBase
 	{
 		public struct Fields

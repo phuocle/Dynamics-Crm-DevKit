@@ -53,6 +53,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_iotdevicedatahistoryOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_iotdevicedatahistory : EntityBase
 	{
 		public struct Fields
@@ -89,7 +90,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_iotdevicedatahistory";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10143;
+		public const int EntityTypeCode = 10170;
 
 		[DebuggerNonUserCode()]
 		public msdyn_iotdevicedatahistory()

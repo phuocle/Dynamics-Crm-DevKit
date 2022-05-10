@@ -369,6 +369,7 @@ namespace Dev.DevKit.Shared.Entities.ProcessStageOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class ProcessStage : EntityBase
 	{
 		public struct Fields

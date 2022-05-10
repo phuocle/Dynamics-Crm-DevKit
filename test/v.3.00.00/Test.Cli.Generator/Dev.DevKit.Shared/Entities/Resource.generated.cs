@@ -21,6 +21,7 @@ namespace Dev.DevKit.Shared.Entities.ResourceOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class Resource : EntityBase
 	{
 		public struct Fields

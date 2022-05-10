@@ -137,6 +137,10 @@ namespace Dev.DevKit.Shared.Entities.appactionOptionSets
 		/// </summary>
 		Dropdown_Button = 1,
 		/// <summary>
+		/// Group = 3
+		/// </summary>
+		Group = 3,
+		/// <summary>
 		/// Split Button = 2
 		/// </summary>
 		Split_Button = 2,
@@ -145,10 +149,27 @@ namespace Dev.DevKit.Shared.Entities.appactionOptionSets
 		/// </summary>
 		Standard_Button = 0
 	}
+
+	public enum VisibilityType
+	{
+		/// <summary>
+		/// Classic Rules = 2
+		/// </summary>
+		Classic_Rules = 2,
+		/// <summary>
+		/// Formula = 1
+		/// </summary>
+		Formula = 1,
+		/// <summary>
+		/// None = 0
+		/// </summary>
+		None = 0
+	}
 }
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class appaction : EntityBase
 	{
 		public struct Fields
@@ -170,9 +191,11 @@ namespace Dev.DevKit.Shared.Entities
 			public const string CreatedOn = "createdon";
 			public const string CreatedOnBehalfBy = "createdonbehalfby";
 			public const string FontIcon = "fonticon";
+			public const string GroupTitle = "grouptitle";
 			public const string Hidden = "hidden";
 			public const string IconWebResourceId = "iconwebresourceid";
 			public const string ImportSequenceNumber = "importsequencenumber";
+			public const string isGroupTitleHidden = "isgrouptitlehidden";
 			public const string IsManaged = "ismanaged";
 			public const string Location = "location";
 			public const string ModifiedBy = "modifiedby";
@@ -190,6 +213,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string OrganizationId = "organizationid";
 			public const string OverriddenCreatedOn = "overriddencreatedon";
 			public const string OverwriteTime = "overwritetime";
+			public const string ParentAppActionId = "parentappactionid";
 			public const string SolutionId = "solutionid";
 			public const string statecode = "statecode";
 			public const string statuscode = "statuscode";
@@ -203,12 +227,13 @@ namespace Dev.DevKit.Shared.Entities
 			public const string VisibilityFormulaComponentLibraryId = "visibilityformulacomponentlibraryid";
 			public const string VisibilityFormulaComponentName = "visibilityformulacomponentname";
 			public const string VisibilityFormulaFunctionName = "visibilityformulafunctionname";
+			public const string VisibilityType = "visibilitytype";
 		}
 
 		public const string EntityLogicalName = "appaction";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10100;
+		public const int EntityTypeCode = 10119;
 
 		[DebuggerNonUserCode()]
 		public appaction()
@@ -286,7 +311,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>String - MaxLength: 100</para>
+		/// <para>String - MaxLength: 256</para>
 		/// <para>Button Accessibility Text</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -297,7 +322,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>String - MaxLength: 100</para>
+		/// <para>String - MaxLength: 256</para>
 		/// <para>Button Label Text</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -330,7 +355,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>String - MaxLength: 100</para>
+		/// <para>String - MaxLength: 256</para>
 		/// <para>Button Tooltip Title</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -483,7 +508,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>String - MaxLength: 100</para>
+		/// <para>String - MaxLength: 256</para>
 		/// <para>Font Icon</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -491,6 +516,17 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.FontIcon); }
 			set { Entity.Attributes[Fields.FontIcon] = value; }
+		}
+
+		/// <summary>
+		/// <para>String - MaxLength: 256</para>
+		/// <para>Group Title</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string GroupTitle
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.GroupTitle); }
+			set { Entity.Attributes[Fields.GroupTitle] = value; }
 		}
 
 		/// <summary>
@@ -525,6 +561,17 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<int?>(Fields.ImportSequenceNumber); }
 			set { Entity.Attributes[Fields.ImportSequenceNumber] = value; }
+		}
+
+		/// <summary>
+		/// <para>Boolean</para>
+		/// <para>isGroupTitleHidden</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? isGroupTitleHidden
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.isGroupTitleHidden); }
+			set { Entity.Attributes[Fields.isGroupTitleHidden] = value; }
 		}
 
 		/// <summary>
@@ -595,7 +642,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>The name of the custom entity.</para>
-		/// <para>String - MaxLength: 100</para>
+		/// <para>String - MaxLength: 256</para>
 		/// <para>Name</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -628,7 +675,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>String - MaxLength: 100</para>
+		/// <para>String - MaxLength: 256</para>
 		/// <para>On Click Event Formula Component Name</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -639,7 +686,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>String - MaxLength: 100</para>
+		/// <para>String - MaxLength: 256</para>
 		/// <para>On Click Event Formula Function Name</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -736,6 +783,18 @@ namespace Dev.DevKit.Shared.Entities
 		public DateTime? OverwriteTimeUtc
 		{
 			get { return Entity.GetAttributeValue<DateTime?>(Fields.OverwriteTime); }
+		}
+
+		/// <summary>
+		/// <para>Unique identifier for App Action associated with App Action.</para>
+		/// <para>Lookup to appaction</para>
+		/// <para>Parent AppAction</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public EntityReference ParentAppActionId
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.ParentAppActionId); }
+			set { Entity.Attributes[Fields.ParentAppActionId] = value; }
 		}
 
 		/// <summary>
@@ -897,7 +956,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>String - MaxLength: 100</para>
+		/// <para>String - MaxLength: 256</para>
 		/// <para>Visibility Formula Component Name</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -908,7 +967,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>String - MaxLength: 100</para>
+		/// <para>String - MaxLength: 256</para>
 		/// <para>Visibility Formula Function Name</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -916,6 +975,28 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.VisibilityFormulaFunctionName); }
 			set { Entity.Attributes[Fields.VisibilityFormulaFunctionName] = value; }
+		}
+
+		/// <summary>
+		/// <para>Picklist</para>
+		/// <para>Visibility Type</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public Dev.DevKit.Shared.Entities.appactionOptionSets.VisibilityType? VisibilityType
+		{
+			get
+			{
+				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.VisibilityType);
+				if (value == null) return null;
+				return (Dev.DevKit.Shared.Entities.appactionOptionSets.VisibilityType)value.Value;
+			}
+			set
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.VisibilityType] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.VisibilityType] = null;
+			}
 		}
 	}
 }

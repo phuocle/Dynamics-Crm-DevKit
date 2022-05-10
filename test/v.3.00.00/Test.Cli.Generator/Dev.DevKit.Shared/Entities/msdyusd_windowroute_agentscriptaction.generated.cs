@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.msdyusd_windowroute_agentscriptactionOption
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyusd_windowroute_agentscriptaction : EntityBase
 	{
 		public struct Fields
@@ -28,7 +29,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyusd_windowroute_agentscriptaction";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10871;
+		public const int EntityTypeCode = 10979;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_windowroute_agentscriptaction()

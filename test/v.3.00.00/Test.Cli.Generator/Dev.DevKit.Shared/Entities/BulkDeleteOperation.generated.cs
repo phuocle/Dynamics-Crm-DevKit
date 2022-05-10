@@ -77,6 +77,7 @@ namespace Dev.DevKit.Shared.Entities.BulkDeleteOperationOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class BulkDeleteOperation : EntityBase
 	{
 		public struct Fields

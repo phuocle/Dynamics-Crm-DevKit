@@ -53,6 +53,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_contractlineinvoicescheduleOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_contractlineinvoiceschedule : EntityBase
 	{
 		public struct Fields
@@ -85,7 +86,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_contractlineinvoiceschedule";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10436;
+		public const int EntityTypeCode = 10495;
 
 		[DebuggerNonUserCode()]
 		public msdyn_contractlineinvoiceschedule()

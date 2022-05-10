@@ -41,6 +41,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_iottocaseprocessOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_iottocaseprocess : EntityBase
 	{
 		public struct Fields
@@ -74,7 +75,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_iottocaseprocess";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10154;
+		public const int EntityTypeCode = 10181;
 
 		[DebuggerNonUserCode()]
 		public msdyn_iottocaseprocess()

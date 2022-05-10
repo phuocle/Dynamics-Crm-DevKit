@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_PostAlbumOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_PostAlbum : EntityBase
 	{
 		public struct Fields
@@ -65,7 +66,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_postalbum";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10289;
+		public const int EntityTypeCode = 10325;
 
 		[DebuggerNonUserCode()]
 		public msdyn_PostAlbum()

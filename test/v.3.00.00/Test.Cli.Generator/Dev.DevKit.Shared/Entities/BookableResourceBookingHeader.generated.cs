@@ -49,6 +49,7 @@ namespace Dev.DevKit.Shared.Entities.BookableResourceBookingHeaderOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class BookableResourceBookingHeader : EntityBase
 	{
 		public struct Fields

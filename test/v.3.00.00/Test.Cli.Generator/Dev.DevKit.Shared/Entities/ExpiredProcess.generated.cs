@@ -41,6 +41,7 @@ namespace Dev.DevKit.Shared.Entities.ExpiredProcessOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class ExpiredProcess : EntityBase
 	{
 		public struct Fields

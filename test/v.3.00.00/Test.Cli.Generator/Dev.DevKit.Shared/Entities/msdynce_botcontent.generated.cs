@@ -49,6 +49,7 @@ namespace Dev.DevKit.Shared.Entities.msdynce_botcontentOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdynce_botcontent : EntityBase
 	{
 		public struct Fields
@@ -79,7 +80,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdynce_botcontent";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10064;
+		public const int EntityTypeCode = 10076;
 
 		[DebuggerNonUserCode()]
 		public msdynce_botcontent()

@@ -18,6 +18,18 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocphonenumberOptionSets
 		Service = 192350000
 	}
 
+	public enum msdyn_Objective
+	{
+		/// <summary>
+		/// Conversation = 192350000
+		/// </summary>
+		Conversation = 192350000,
+		/// <summary>
+		/// Lead = 192350001
+		/// </summary>
+		Lead = 192350001
+	}
+
 	public enum msdyn_ocphonenumbersource
 	{
 		/// <summary>
@@ -73,6 +85,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocphonenumberOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_ocphonenumber : EntityBase
 	{
 		public struct Fields
@@ -88,6 +101,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_carrierid = "msdyn_carrierid";
 			public const string msdyn_countryisocode = "msdyn_countryisocode";
 			public const string msdyn_name = "msdyn_name";
+			public const string msdyn_Objective = "msdyn_objective";
 			public const string msdyn_occommunicationprovidersettingId = "msdyn_occommunicationprovidersettingid";
 			public const string msdyn_ocphonenumberId = "msdyn_ocphonenumberid";
 			public const string msdyn_ocphonenumbersource = "msdyn_ocphonenumbersource";
@@ -112,7 +126,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_ocphonenumber";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10790;
+		public const int EntityTypeCode = 10830;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocphonenumber()
@@ -313,6 +327,29 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.msdyn_name); }
 			set { Entity.Attributes[Fields.msdyn_name] = value; }
+		}
+
+		/// <summary>
+		/// <para>Objective of the phone number</para>
+		/// <para>Picklist</para>
+		/// <para>Objective</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public Dev.DevKit.Shared.Entities.msdyn_ocphonenumberOptionSets.msdyn_Objective? msdyn_Objective
+		{
+			get
+			{
+				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.msdyn_Objective);
+				if (value == null) return null;
+				return (Dev.DevKit.Shared.Entities.msdyn_ocphonenumberOptionSets.msdyn_Objective)value.Value;
+			}
+			set
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_Objective] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_Objective] = null;
+			}
 		}
 
 		/// <summary>

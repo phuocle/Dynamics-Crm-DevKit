@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.DiscountTypeOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class DiscountType : EntityBase
 	{
 		public struct Fields

@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_uniquenumberOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_uniquenumber : EntityBase
 	{
 		public struct Fields
@@ -63,7 +64,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_uniquenumber";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10593;
+		public const int EntityTypeCode = 10649;
 
 		[DebuggerNonUserCode()]
 		public msdyn_uniquenumber()

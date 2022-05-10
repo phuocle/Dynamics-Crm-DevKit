@@ -57,6 +57,7 @@ namespace Dev.DevKit.Shared.Entities.featurecontrolsettingOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class featurecontrolsetting : EntityBase
 	{
 		public struct Fields

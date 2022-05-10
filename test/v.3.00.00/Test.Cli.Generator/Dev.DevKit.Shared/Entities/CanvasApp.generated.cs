@@ -53,6 +53,7 @@ namespace Dev.DevKit.Shared.Entities.CanvasAppOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class CanvasApp : EntityBase
 	{
 		public struct Fields

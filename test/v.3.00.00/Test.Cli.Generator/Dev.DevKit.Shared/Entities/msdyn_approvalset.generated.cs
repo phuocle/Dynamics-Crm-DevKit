@@ -125,6 +125,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_approvalsetOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_approvalset : EntityBase
 	{
 		public struct Fields
@@ -139,6 +140,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_ActionType = "msdyn_actiontype";
 			public const string msdyn_approvalsetId = "msdyn_approvalsetid";
 			public const string msdyn_Approver = "msdyn_approver";
+			public const string msdyn_Description = "msdyn_description";
 			public const string msdyn_EntryType = "msdyn_entrytype";
 			public const string msdyn_LifeTime = "msdyn_lifetime";
 			public const string msdyn_name = "msdyn_name";
@@ -160,7 +162,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_approvalset";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10514;
+		public const int EntityTypeCode = 10570;
 
 		[DebuggerNonUserCode()]
 		public msdyn_approvalset()
@@ -336,6 +338,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<EntityReference>(Fields.msdyn_Approver); }
 			set { Entity.Attributes[Fields.msdyn_Approver] = value; }
+		}
+
+		/// <summary>
+		/// <para>The description of the custom entity.</para>
+		/// <para>String - MaxLength: 1000</para>
+		/// <para>Description</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_Description
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_Description); }
+			set { Entity.Attributes[Fields.msdyn_Description] = value; }
 		}
 
 		/// <summary>

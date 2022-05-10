@@ -25,6 +25,7 @@ namespace Dev.DevKit.Shared.Entities.UserFormOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class UserForm : EntityBase
 	{
 		public struct Fields

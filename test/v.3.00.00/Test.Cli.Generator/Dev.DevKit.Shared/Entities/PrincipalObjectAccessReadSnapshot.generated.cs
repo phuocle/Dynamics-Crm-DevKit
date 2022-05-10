@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.PrincipalObjectAccessReadSnapshotOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class PrincipalObjectAccessReadSnapshot : EntityBase
 	{
 		public struct Fields

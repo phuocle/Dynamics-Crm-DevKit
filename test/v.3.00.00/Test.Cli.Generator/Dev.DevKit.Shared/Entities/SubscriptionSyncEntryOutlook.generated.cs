@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.SubscriptionSyncEntryOutlookOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class SubscriptionSyncEntryOutlook : EntityBase
 	{
 		public struct Fields

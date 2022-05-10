@@ -53,6 +53,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_requirementresourcepreferenceOptionSe
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_requirementresourcepreference : EntityBase
 	{
 		public struct Fields
@@ -88,7 +89,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_requirementresourcepreference";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10415;
+		public const int EntityTypeCode = 10467;
 
 		[DebuggerNonUserCode()]
 		public msdyn_requirementresourcepreference()

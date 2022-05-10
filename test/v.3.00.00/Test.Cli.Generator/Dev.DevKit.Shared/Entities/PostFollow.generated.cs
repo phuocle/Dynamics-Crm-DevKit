@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.PostFollowOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class PostFollow : EntityBase
 	{
 		public struct Fields

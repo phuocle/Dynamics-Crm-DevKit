@@ -65,6 +65,7 @@ namespace Dev.DevKit.Shared.Entities.OwnerMappingOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class OwnerMapping : EntityBase
 	{
 		public struct Fields

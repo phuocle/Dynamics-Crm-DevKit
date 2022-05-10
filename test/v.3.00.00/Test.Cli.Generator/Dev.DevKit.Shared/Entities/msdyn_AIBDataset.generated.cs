@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_AIBDatasetOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_AIBDataset : EntityBase
 	{
 		public struct Fields
@@ -67,7 +68,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_aibdataset";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10056;
+		public const int EntityTypeCode = 10068;
 
 		[DebuggerNonUserCode()]
 		public msdyn_AIBDataset()

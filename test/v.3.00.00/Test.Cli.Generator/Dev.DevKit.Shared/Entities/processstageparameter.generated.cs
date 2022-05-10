@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.processstageparameterOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class processstageparameter : EntityBase
 	{
 		public struct Fields
@@ -67,7 +68,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "processstageparameter";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10047;
+		public const int EntityTypeCode = 10058;
 
 		[DebuggerNonUserCode()]
 		public processstageparameter()

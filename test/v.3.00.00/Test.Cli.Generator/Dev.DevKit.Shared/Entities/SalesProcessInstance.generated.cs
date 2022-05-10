@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.SalesProcessInstanceOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class SalesProcessInstance : EntityBase
 	{
 		public struct Fields

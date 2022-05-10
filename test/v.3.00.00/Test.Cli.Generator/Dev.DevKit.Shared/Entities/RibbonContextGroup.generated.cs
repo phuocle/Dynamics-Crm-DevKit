@@ -33,6 +33,7 @@ namespace Dev.DevKit.Shared.Entities.RibbonContextGroupOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class RibbonContextGroup : EntityBase
 	{
 		public struct Fields

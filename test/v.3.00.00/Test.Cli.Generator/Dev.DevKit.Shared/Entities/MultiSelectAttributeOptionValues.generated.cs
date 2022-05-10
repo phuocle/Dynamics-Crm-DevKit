@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.MultiSelectAttributeOptionValuesOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class MultiSelectAttributeOptionValues : EntityBase
 	{
 		public struct Fields

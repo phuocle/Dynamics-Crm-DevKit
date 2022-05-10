@@ -49,6 +49,7 @@ namespace Dev.DevKit.Shared.Entities.msdyusd_sessioninformationOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyusd_sessioninformation : EntityBase
 	{
 		public struct Fields
@@ -82,7 +83,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyusd_sessioninformation";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10839;
+		public const int EntityTypeCode = 10949;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_sessioninformation()

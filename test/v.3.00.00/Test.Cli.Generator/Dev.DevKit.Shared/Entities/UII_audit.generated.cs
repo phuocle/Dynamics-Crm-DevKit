@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.UII_auditOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class UII_audit : EntityBase
 	{
 		public struct Fields
@@ -79,7 +80,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "uii_audit";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10815;
+		public const int EntityTypeCode = 10922;
 
 		[DebuggerNonUserCode()]
 		public UII_audit()

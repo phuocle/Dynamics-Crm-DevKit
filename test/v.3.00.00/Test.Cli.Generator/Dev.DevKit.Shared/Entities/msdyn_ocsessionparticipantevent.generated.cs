@@ -61,6 +61,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocsessionparticipanteventOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_ocsessionparticipantevent : EntityBase
 	{
 		public struct Fields
@@ -96,7 +97,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_ocsessionparticipantevent";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10718;
+		public const int EntityTypeCode = 10761;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocsessionparticipantevent()

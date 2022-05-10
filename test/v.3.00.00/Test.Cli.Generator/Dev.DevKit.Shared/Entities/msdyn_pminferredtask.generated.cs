@@ -137,6 +137,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_pminferredtaskOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_pminferredtask : EntityBase
 	{
 		public struct Fields
@@ -151,6 +152,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ModifiedBy = "modifiedby";
 			public const string ModifiedOn = "modifiedon";
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
+			public const string msdyn_analysisschedule = "msdyn_analysisschedule";
 			public const string msdyn_automationdata = "msdyn_automationdata";
 			public const string msdyn_automationstatus = "msdyn_automationstatus";
 			public const string msdyn_description = "msdyn_description";
@@ -185,7 +187,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_pminferredtask";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10103;
+		public const int EntityTypeCode = 10127;
 
 		[DebuggerNonUserCode()]
 		public msdyn_pminferredtask()
@@ -352,6 +354,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Information about the analysis schedule.</para>
+		/// <para>Memo - MaxLength: 10000</para>
+		/// <para>Analysis Schedule</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_analysisschedule
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_analysisschedule); }
+			set { Entity.Attributes[Fields.msdyn_analysisschedule] = value; }
+		}
+
+		/// <summary>
 		/// <para>Computed data to drive automation for this task.</para>
 		/// <para>Memo - MaxLength: 1048576</para>
 		/// <para>AutomationData</para>
@@ -365,7 +379,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>The status of automation for this task.</para>
-		/// <para>Required - Picklist</para>
+		/// <para>Picklist</para>
 		/// <para>AutomationStatus</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -519,7 +533,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>The current status of the provisioning operation for the report associated to this task.</para>
-		/// <para>Required - Picklist</para>
+		/// <para>Picklist</para>
 		/// <para>Report Provisioning Status</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

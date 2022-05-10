@@ -33,6 +33,7 @@ namespace Dev.DevKit.Shared.Entities.EntityAnalyticsConfigOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class EntityAnalyticsConfig : EntityBase
 	{
 		public struct Fields

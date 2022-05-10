@@ -65,6 +65,7 @@ namespace Dev.DevKit.Shared.Entities.ColumnMappingOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class ColumnMapping : EntityBase
 	{
 		public struct Fields

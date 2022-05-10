@@ -65,6 +65,7 @@ namespace Dev.DevKit.Shared.Entities.TransformationMappingOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class TransformationMapping : EntityBase
 	{
 		public struct Fields

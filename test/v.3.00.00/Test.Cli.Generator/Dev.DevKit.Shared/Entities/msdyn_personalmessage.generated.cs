@@ -17,6 +17,14 @@ namespace Dev.DevKit.Shared.Entities.msdyn_personalmessageOptionSets
 		/// </summary>
 		ar_SA = 1025,
 		/// <summary>
+		/// bg-BG = 1026
+		/// </summary>
+		bg_BG = 1026,
+		/// <summary>
+		/// ca-ES = 1027
+		/// </summary>
+		ca_ES = 1027,
+		/// <summary>
 		/// cs-CZ = 1029
 		/// </summary>
 		cs_CZ = 1029,
@@ -29,6 +37,10 @@ namespace Dev.DevKit.Shared.Entities.msdyn_personalmessageOptionSets
 		/// </summary>
 		de_DE = 1031,
 		/// <summary>
+		/// el-GR = 1032
+		/// </summary>
+		el_GR = 1032,
+		/// <summary>
 		/// en-US = 1033
 		/// </summary>
 		en_US = 1033,
@@ -36,6 +48,14 @@ namespace Dev.DevKit.Shared.Entities.msdyn_personalmessageOptionSets
 		/// es-ES = 3082
 		/// </summary>
 		es_ES = 3082,
+		/// <summary>
+		/// et-EE = 1061
+		/// </summary>
+		et_EE = 1061,
+		/// <summary>
+		/// eu-ES = 1069
+		/// </summary>
+		eu_ES = 1069,
 		/// <summary>
 		/// fi-FI = 1035
 		/// </summary>
@@ -45,9 +65,25 @@ namespace Dev.DevKit.Shared.Entities.msdyn_personalmessageOptionSets
 		/// </summary>
 		fr_FR = 1036,
 		/// <summary>
+		/// gl-ES = 1110
+		/// </summary>
+		gl_ES = 1110,
+		/// <summary>
 		/// he-IL = 1037
 		/// </summary>
 		he_IL = 1037,
+		/// <summary>
+		/// hi-IN = 1081
+		/// </summary>
+		hi_IN = 1081,
+		/// <summary>
+		/// hr-HR = 1050
+		/// </summary>
+		hr_HR = 1050,
+		/// <summary>
+		/// hu-HU = 1038
+		/// </summary>
+		hu_HU = 1038,
 		/// <summary>
 		/// id-ID = 1057
 		/// </summary>
@@ -61,9 +97,21 @@ namespace Dev.DevKit.Shared.Entities.msdyn_personalmessageOptionSets
 		/// </summary>
 		ja_JP = 1041,
 		/// <summary>
+		/// kk-KZ = 1087
+		/// </summary>
+		kk_KZ = 1087,
+		/// <summary>
 		/// ko-KR = 1042
 		/// </summary>
 		ko_KR = 1042,
+		/// <summary>
+		/// lt-LT = 1063
+		/// </summary>
+		lt_LT = 1063,
+		/// <summary>
+		/// lv-LV = 1062
+		/// </summary>
+		lv_LV = 1062,
 		/// <summary>
 		/// nb-NO = 1044
 		/// </summary>
@@ -93,6 +141,14 @@ namespace Dev.DevKit.Shared.Entities.msdyn_personalmessageOptionSets
 		/// </summary>
 		ru_RU = 1049,
 		/// <summary>
+		/// sk-SK = 1051
+		/// </summary>
+		sk_SK = 1051,
+		/// <summary>
+		/// sr-Latn-CS = 2074
+		/// </summary>
+		sr_Latn_CS = 2074,
+		/// <summary>
 		/// sv-SE = 1053
 		/// </summary>
 		sv_SE = 1053,
@@ -107,7 +163,15 @@ namespace Dev.DevKit.Shared.Entities.msdyn_personalmessageOptionSets
 		/// <summary>
 		/// zh-CN = 2052
 		/// </summary>
-		zh_CN = 2052
+		zh_CN = 2052,
+		/// <summary>
+		/// zh-HK = 3076
+		/// </summary>
+		zh_HK = 3076,
+		/// <summary>
+		/// zh-TW = 1028
+		/// </summary>
+		zh_TW = 1028
 	}
 
 	public enum statecode
@@ -137,6 +201,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_personalmessageOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_personalmessage : EntityBase
 	{
 		public struct Fields
@@ -168,7 +233,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_personalmessage";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10728;
+		public const int EntityTypeCode = 10771;
 
 		[DebuggerNonUserCode()]
 		public msdyn_personalmessage()

@@ -33,6 +33,7 @@ namespace Dev.DevKit.Shared.Entities.HierarchyRuleOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class HierarchyRule : EntityBase
 	{
 		public struct Fields

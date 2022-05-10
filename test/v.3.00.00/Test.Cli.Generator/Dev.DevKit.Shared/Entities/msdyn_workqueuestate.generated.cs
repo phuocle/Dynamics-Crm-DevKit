@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_workqueuestateOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_workqueuestate : EntityBase
 	{
 		public struct Fields
@@ -69,7 +70,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_workqueuestate";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10284;
+		public const int EntityTypeCode = 10311;
 
 		[DebuggerNonUserCode()]
 		public msdyn_workqueuestate()

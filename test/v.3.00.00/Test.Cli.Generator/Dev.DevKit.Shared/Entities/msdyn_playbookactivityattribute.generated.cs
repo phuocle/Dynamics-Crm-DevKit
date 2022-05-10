@@ -61,6 +61,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_playbookactivityattributeOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_playbookactivityattribute : EntityBase
 	{
 		public struct Fields
@@ -92,7 +93,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_playbookactivityattribute";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10224;
+		public const int EntityTypeCode = 10243;
 
 		[DebuggerNonUserCode()]
 		public msdyn_playbookactivityattribute()

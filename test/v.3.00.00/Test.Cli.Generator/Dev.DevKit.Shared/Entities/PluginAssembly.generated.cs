@@ -81,6 +81,7 @@ namespace Dev.DevKit.Shared.Entities.PluginAssemblyOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class PluginAssembly : EntityBase
 	{
 		public struct Fields

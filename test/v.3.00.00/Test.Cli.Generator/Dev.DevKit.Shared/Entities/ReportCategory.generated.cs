@@ -53,6 +53,7 @@ namespace Dev.DevKit.Shared.Entities.ReportCategoryOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class ReportCategory : EntityBase
 	{
 		public struct Fields

@@ -57,6 +57,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_paneconfigurationOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_paneconfiguration : EntityBase
 	{
 		public struct Fields
@@ -91,7 +92,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_paneconfiguration";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10170;
+		public const int EntityTypeCode = 10197;
 
 		[DebuggerNonUserCode()]
 		public msdyn_paneconfiguration()

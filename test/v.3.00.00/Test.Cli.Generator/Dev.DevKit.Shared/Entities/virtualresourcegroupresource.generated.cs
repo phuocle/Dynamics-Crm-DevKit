@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.virtualresourcegroupresourceOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class virtualresourcegroupresource : EntityBase
 	{
 		public struct Fields
@@ -31,7 +32,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "virtualresourcegroupresource";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10124;
+		public const int EntityTypeCode = 10147;
 
 		[DebuggerNonUserCode()]
 		public virtualresourcegroupresource()

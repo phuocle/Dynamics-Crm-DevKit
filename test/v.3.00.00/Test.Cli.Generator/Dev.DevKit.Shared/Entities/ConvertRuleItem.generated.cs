@@ -33,6 +33,7 @@ namespace Dev.DevKit.Shared.Entities.ConvertRuleItemOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class ConvertRuleItem : EntityBase
 	{
 		public struct Fields

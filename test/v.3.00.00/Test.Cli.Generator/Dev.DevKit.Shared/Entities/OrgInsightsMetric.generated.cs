@@ -25,6 +25,7 @@ namespace Dev.DevKit.Shared.Entities.OrgInsightsMetricOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class OrgInsightsMetric : EntityBase
 	{
 		public struct Fields

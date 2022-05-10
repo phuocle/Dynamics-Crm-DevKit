@@ -21,73 +21,73 @@ namespace Dev.DevKit.Shared.Entities.ConnectionOptionSets
 		/// </summary>
 		Activity = 4200,
 		/// <summary>
-		/// Agreement = 10523
+		/// Agreement = 10579
 		/// </summary>
-		Agreement = 10523,
+		Agreement = 10579,
 		/// <summary>
-		/// Agreement Booking Date = 10524
+		/// Agreement Booking Date = 10580
 		/// </summary>
-		Agreement_Booking_Date = 10524,
+		Agreement_Booking_Date = 10580,
 		/// <summary>
-		/// Agreement Booking Incident = 10525
+		/// Agreement Booking Incident = 10581
 		/// </summary>
-		Agreement_Booking_Incident = 10525,
+		Agreement_Booking_Incident = 10581,
 		/// <summary>
-		/// Agreement Booking Product = 10526
+		/// Agreement Booking Product = 10582
 		/// </summary>
-		Agreement_Booking_Product = 10526,
+		Agreement_Booking_Product = 10582,
 		/// <summary>
-		/// Agreement Booking Service = 10527
+		/// Agreement Booking Service = 10583
 		/// </summary>
-		Agreement_Booking_Service = 10527,
+		Agreement_Booking_Service = 10583,
 		/// <summary>
-		/// Agreement Booking Service Task = 10528
+		/// Agreement Booking Service Task = 10584
 		/// </summary>
-		Agreement_Booking_Service_Task = 10528,
+		Agreement_Booking_Service_Task = 10584,
 		/// <summary>
-		/// Agreement Booking Setup = 10529
+		/// Agreement Booking Setup = 10585
 		/// </summary>
-		Agreement_Booking_Setup = 10529,
+		Agreement_Booking_Setup = 10585,
 		/// <summary>
-		/// Agreement Invoice Date = 10530
+		/// Agreement Invoice Date = 10586
 		/// </summary>
-		Agreement_Invoice_Date = 10530,
+		Agreement_Invoice_Date = 10586,
 		/// <summary>
-		/// Agreement Invoice Product = 10531
+		/// Agreement Invoice Product = 10587
 		/// </summary>
-		Agreement_Invoice_Product = 10531,
+		Agreement_Invoice_Product = 10587,
 		/// <summary>
-		/// Agreement Invoice Setup = 10532
+		/// Agreement Invoice Setup = 10588
 		/// </summary>
-		Agreement_Invoice_Setup = 10532,
+		Agreement_Invoice_Setup = 10588,
 		/// <summary>
 		/// Appointment = 4201
 		/// </summary>
 		Appointment = 4201,
 		/// <summary>
-		/// Assignment Map = 10277
+		/// Assignment Map = 10300
 		/// </summary>
-		Assignment_Map = 10277,
+		Assignment_Map = 10300,
 		/// <summary>
-		/// Assignment Rule = 10274
+		/// Assignment Rule = 10297
 		/// </summary>
-		Assignment_Rule = 10274,
+		Assignment_Rule = 10297,
 		/// <summary>
-		/// Booking Alert = 10400
+		/// Booking Alert = 10473
 		/// </summary>
-		Booking_Alert = 10400,
+		Booking_Alert = 10473,
 		/// <summary>
-		/// Booking Alert Status = 10401
+		/// Booking Alert Status = 10474
 		/// </summary>
-		Booking_Alert_Status = 10401,
+		Booking_Alert_Status = 10474,
 		/// <summary>
-		/// Booking Rule = 10403
+		/// Booking Rule = 10476
 		/// </summary>
-		Booking_Rule = 10403,
+		Booking_Rule = 10476,
 		/// <summary>
-		/// Booking Timestamp = 10535
+		/// Booking Timestamp = 10591
 		/// </summary>
-		Booking_Timestamp = 10535,
+		Booking_Timestamp = 10591,
 		/// <summary>
 		/// Campaign = 4400
 		/// </summary>
@@ -117,25 +117,25 @@ namespace Dev.DevKit.Shared.Entities.ConnectionOptionSets
 		/// </summary>
 		Contract = 1010,
 		/// <summary>
-		/// Conversation = 10702
+		/// Conversation = 10743
 		/// </summary>
-		Conversation = 10702,
+		Conversation = 10743,
 		/// <summary>
-		/// Customer Asset = 10128
+		/// Customer Asset = 10151
 		/// </summary>
-		Customer_Asset = 10128,
+		Customer_Asset = 10151,
 		/// <summary>
-		/// Customer Voice alert = 10294
+		/// Customer Voice alert = 10330
 		/// </summary>
-		Customer_Voice_alert = 10294,
+		Customer_Voice_alert = 10330,
 		/// <summary>
-		/// Customer Voice survey invite = 10304
+		/// Customer Voice survey invite = 10340
 		/// </summary>
-		Customer_Voice_survey_invite = 10304,
+		Customer_Voice_survey_invite = 10340,
 		/// <summary>
-		/// Customer Voice survey response = 10306
+		/// Customer Voice survey response = 10342
 		/// </summary>
-		Customer_Voice_survey_response = 10306,
+		Customer_Voice_survey_response = 10342,
 		/// <summary>
 		/// Email = 4202
 		/// </summary>
@@ -161,65 +161,65 @@ namespace Dev.DevKit.Shared.Entities.ConnectionOptionSets
 		/// </summary>
 		Fax = 4204,
 		/// <summary>
-		/// Fulfillment Preference = 10423
+		/// Fulfillment Preference = 10484
 		/// </summary>
-		Fulfillment_Preference = 10423,
+		Fulfillment_Preference = 10484,
 		/// <summary>
 		/// Goal = 9600
 		/// </summary>
 		Goal = 9600,
 		/// <summary>
-		/// Incident Type Characteristic = 10546
+		/// Incident Type Characteristic = 10602
 		/// </summary>
-		Incident_Type_Characteristic = 10546,
+		Incident_Type_Characteristic = 10602,
 		/// <summary>
-		/// Incident Type Product = 10547
+		/// Incident Type Product = 10603
 		/// </summary>
-		Incident_Type_Product = 10547,
+		Incident_Type_Product = 10603,
 		/// <summary>
-		/// Incident Type Service = 10548
+		/// Incident Type Service = 10604
 		/// </summary>
-		Incident_Type_Service = 10548,
+		Incident_Type_Service = 10604,
 		/// <summary>
-		/// Inventory Adjustment = 10552
+		/// Inventory Adjustment = 10608
 		/// </summary>
-		Inventory_Adjustment = 10552,
+		Inventory_Adjustment = 10608,
 		/// <summary>
-		/// Inventory Adjustment Product = 10553
+		/// Inventory Adjustment Product = 10609
 		/// </summary>
-		Inventory_Adjustment_Product = 10553,
+		Inventory_Adjustment_Product = 10609,
 		/// <summary>
-		/// Inventory Journal = 10554
+		/// Inventory Journal = 10610
 		/// </summary>
-		Inventory_Journal = 10554,
+		Inventory_Journal = 10610,
 		/// <summary>
-		/// Inventory Transfer = 10555
+		/// Inventory Transfer = 10611
 		/// </summary>
-		Inventory_Transfer = 10555,
+		Inventory_Transfer = 10611,
 		/// <summary>
 		/// Invoice = 1090
 		/// </summary>
 		Invoice = 1090,
 		/// <summary>
-		/// IoT Alert = 10138
+		/// IoT Alert = 10165
 		/// </summary>
-		IoT_Alert = 10138,
+		IoT_Alert = 10165,
 		/// <summary>
-		/// IoT Device = 10139
+		/// IoT Device = 10166
 		/// </summary>
-		IoT_Device = 10139,
+		IoT_Device = 10166,
 		/// <summary>
-		/// IoT Device Category = 10140
+		/// IoT Device Category = 10167
 		/// </summary>
-		IoT_Device_Category = 10140,
+		IoT_Device_Category = 10167,
 		/// <summary>
-		/// IoT Device Command = 10141
+		/// IoT Device Command = 10168
 		/// </summary>
-		IoT_Device_Command = 10141,
+		IoT_Device_Command = 10168,
 		/// <summary>
-		/// IoT Device Registration History = 10145
+		/// IoT Device Registration History = 10172
 		/// </summary>
-		IoT_Device_Registration_History = 10145,
+		IoT_Device_Registration_History = 10172,
 		/// <summary>
 		/// Knowledge Article = 9953
 		/// </summary>
@@ -241,41 +241,41 @@ namespace Dev.DevKit.Shared.Entities.ConnectionOptionSets
 		/// </summary>
 		Marketing_List = 4300,
 		/// <summary>
-		/// Ongoing conversation (Deprecated) = 10692
+		/// Ongoing conversation (Deprecated) = 10733
 		/// </summary>
-		Ongoing_conversation_Deprecated = 10692,
+		Ongoing_conversation_Deprecated = 10733,
 		/// <summary>
 		/// Opportunity = 3
 		/// </summary>
 		Opportunity = 3,
 		/// <summary>
-		/// Option = 10819
+		/// Option = 10916
 		/// </summary>
-		Option = 10819,
+		Option = 10916,
 		/// <summary>
 		/// Order = 1088
 		/// </summary>
 		Order = 1088,
 		/// <summary>
-		/// Outbound message = 10813
+		/// Outbound message = 10857
 		/// </summary>
-		Outbound_message = 10813,
+		Outbound_message = 10857,
 		/// <summary>
-		/// Payment = 10560
+		/// Payment = 10616
 		/// </summary>
-		Payment = 10560,
+		Payment = 10616,
 		/// <summary>
-		/// Payment Detail = 10561
+		/// Payment Detail = 10617
 		/// </summary>
-		Payment_Detail = 10561,
+		Payment_Detail = 10617,
 		/// <summary>
-		/// Payment Method = 10562
+		/// Payment Method = 10618
 		/// </summary>
-		Payment_Method = 10562,
+		Payment_Method = 10618,
 		/// <summary>
-		/// Payment Term = 10563
+		/// Payment Term = 10619
 		/// </summary>
-		Payment_Term = 10563,
+		Payment_Term = 10619,
 		/// <summary>
 		/// Phone Call = 4210
 		/// </summary>
@@ -285,17 +285,17 @@ namespace Dev.DevKit.Shared.Entities.ConnectionOptionSets
 		/// </summary>
 		Position = 50,
 		/// <summary>
-		/// Postal Code = 10564
+		/// Postal Code = 10620
 		/// </summary>
-		Postal_Code = 10564,
+		Postal_Code = 10620,
 		/// <summary>
 		/// Price List = 1022
 		/// </summary>
 		Price_List = 1022,
 		/// <summary>
-		/// Process Notes = 10468
+		/// Process Notes = 10527
 		/// </summary>
-		Process_Notes = 10468,
+		Process_Notes = 10527,
 		/// <summary>
 		/// Process Session = 4710
 		/// </summary>
@@ -305,69 +305,69 @@ namespace Dev.DevKit.Shared.Entities.ConnectionOptionSets
 		/// </summary>
 		Product = 1024,
 		/// <summary>
-		/// Product Inventory = 10565
+		/// Product Inventory = 10621
 		/// </summary>
-		Product_Inventory = 10565,
+		Product_Inventory = 10621,
 		/// <summary>
-		/// Profile Album = 10289
+		/// Profile Album = 10325
 		/// </summary>
-		Profile_Album = 10289,
+		Profile_Album = 10325,
 		/// <summary>
-		/// Project = 10469
+		/// Project = 10528
 		/// </summary>
-		Project = 10469,
+		Project = 10528,
 		/// <summary>
-		/// Project Service Approval = 10430
+		/// Project Service Approval = 10489
 		/// </summary>
-		Project_Service_Approval = 10430,
+		Project_Service_Approval = 10489,
 		/// <summary>
-		/// Project Team Member = 10477
+		/// Project Team Member = 10536
 		/// </summary>
-		Project_Team_Member = 10477,
+		Project_Team_Member = 10536,
 		/// <summary>
-		/// Purchase Order = 10566
+		/// Purchase Order = 10622
 		/// </summary>
-		Purchase_Order = 10566,
+		Purchase_Order = 10622,
 		/// <summary>
-		/// Purchase Order Bill = 10567
+		/// Purchase Order Bill = 10623
 		/// </summary>
-		Purchase_Order_Bill = 10567,
+		Purchase_Order_Bill = 10623,
 		/// <summary>
-		/// Purchase Order Product = 10568
+		/// Purchase Order Product = 10624
 		/// </summary>
-		Purchase_Order_Product = 10568,
+		Purchase_Order_Product = 10624,
 		/// <summary>
-		/// Purchase Order Receipt = 10569
+		/// Purchase Order Receipt = 10625
 		/// </summary>
-		Purchase_Order_Receipt = 10569,
+		Purchase_Order_Receipt = 10625,
 		/// <summary>
-		/// Purchase Order Receipt Product = 10570
+		/// Purchase Order Receipt Product = 10626
 		/// </summary>
-		Purchase_Order_Receipt_Product = 10570,
+		Purchase_Order_Receipt_Product = 10626,
 		/// <summary>
-		/// Purchase Order SubStatus = 10571
+		/// Purchase Order SubStatus = 10627
 		/// </summary>
-		Purchase_Order_SubStatus = 10571,
+		Purchase_Order_SubStatus = 10627,
 		/// <summary>
 		/// Quote = 1084
 		/// </summary>
 		Quote = 1084,
 		/// <summary>
-		/// Quote Booking Incident = 10572
+		/// Quote Booking Incident = 10628
 		/// </summary>
-		Quote_Booking_Incident = 10572,
+		Quote_Booking_Incident = 10628,
 		/// <summary>
-		/// Quote Booking Product = 10573
+		/// Quote Booking Product = 10629
 		/// </summary>
-		Quote_Booking_Product = 10573,
+		Quote_Booking_Product = 10629,
 		/// <summary>
-		/// Quote Booking Service = 10574
+		/// Quote Booking Service = 10630
 		/// </summary>
-		Quote_Booking_Service = 10574,
+		Quote_Booking_Service = 10630,
 		/// <summary>
-		/// Quote Booking Service Task = 10575
+		/// Quote Booking Service Task = 10631
 		/// </summary>
-		Quote_Booking_Service_Task = 10575,
+		Quote_Booking_Service_Task = 10631,
 		/// <summary>
 		/// Recurring Appointment = 4251
 		/// </summary>
@@ -377,69 +377,69 @@ namespace Dev.DevKit.Shared.Entities.ConnectionOptionSets
 		/// </summary>
 		Resource_Group = 4007,
 		/// <summary>
-		/// Resource Restriction (Deprecated) = 10600
+		/// Resource Restriction (Deprecated) = 10656
 		/// </summary>
-		Resource_Restriction_Deprecated = 10600,
+		Resource_Restriction_Deprecated = 10656,
 		/// <summary>
-		/// Resource Territory = 10419
+		/// Resource Territory = 10480
 		/// </summary>
-		Resource_Territory = 10419,
+		Resource_Territory = 10480,
 		/// <summary>
-		/// RMA = 10580
+		/// RMA = 10636
 		/// </summary>
-		RMA = 10580,
+		RMA = 10636,
 		/// <summary>
-		/// RMA Product = 10581
+		/// RMA Product = 10637
 		/// </summary>
-		RMA_Product = 10581,
+		RMA_Product = 10637,
 		/// <summary>
-		/// RMA Receipt = 10582
+		/// RMA Receipt = 10638
 		/// </summary>
-		RMA_Receipt = 10582,
+		RMA_Receipt = 10638,
 		/// <summary>
-		/// RMA Receipt Product = 10583
+		/// RMA Receipt Product = 10639
 		/// </summary>
-		RMA_Receipt_Product = 10583,
+		RMA_Receipt_Product = 10639,
 		/// <summary>
-		/// RMA SubStatus = 10584
+		/// RMA SubStatus = 10640
 		/// </summary>
-		RMA_SubStatus = 10584,
+		RMA_SubStatus = 10640,
 		/// <summary>
-		/// RTV = 10585
+		/// RTV = 10641
 		/// </summary>
-		RTV = 10585,
+		RTV = 10641,
 		/// <summary>
-		/// RTV Product = 10586
+		/// RTV Product = 10642
 		/// </summary>
-		RTV_Product = 10586,
+		RTV_Product = 10642,
 		/// <summary>
-		/// RTV Substatus = 10587
+		/// RTV Substatus = 10643
 		/// </summary>
-		RTV_Substatus = 10587,
+		RTV_Substatus = 10643,
 		/// <summary>
 		/// Scheduling Group = 4005
 		/// </summary>
 		Scheduling_Group = 4005,
 		/// <summary>
-		/// Sequence = 10268
+		/// Sequence = 10289
 		/// </summary>
-		Sequence = 10268,
+		Sequence = 10289,
 		/// <summary>
-		/// Sequence Target = 10270
+		/// Sequence Target = 10291
 		/// </summary>
-		Sequence_Target = 10270,
+		Sequence_Target = 10291,
 		/// <summary>
 		/// Service Activity = 4214
 		/// </summary>
 		Service_Activity = 4214,
 		/// <summary>
-		/// Session = 10717
+		/// Session = 10760
 		/// </summary>
-		Session = 10717,
+		Session = 10760,
 		/// <summary>
-		/// Ship Via = 10589
+		/// Ship Via = 10645
 		/// </summary>
-		Ship_Via = 10589,
+		Ship_Via = 10645,
 		/// <summary>
 		/// Social Activity = 4216
 		/// </summary>
@@ -449,17 +449,21 @@ namespace Dev.DevKit.Shared.Entities.ConnectionOptionSets
 		/// </summary>
 		Social_Profile = 99,
 		/// <summary>
-		/// System User Scheduler Setting = 10422
+		/// Suggestion = 10306
 		/// </summary>
-		System_User_Scheduler_Setting = 10422,
+		Suggestion = 10306,
+		/// <summary>
+		/// System User Scheduler Setting = 10483
+		/// </summary>
+		System_User_Scheduler_Setting = 10483,
 		/// <summary>
 		/// Task = 4212
 		/// </summary>
 		Task = 4212,
 		/// <summary>
-		/// Tax Code = 10590
+		/// Tax Code = 10646
 		/// </summary>
-		Tax_Code = 10590,
+		Tax_Code = 10646,
 		/// <summary>
 		/// Team = 9
 		/// </summary>
@@ -469,49 +473,49 @@ namespace Dev.DevKit.Shared.Entities.ConnectionOptionSets
 		/// </summary>
 		Territory = 2013,
 		/// <summary>
-		/// Time Group Detail = 10424
+		/// Time Group Detail = 10485
 		/// </summary>
-		Time_Group_Detail = 10424,
+		Time_Group_Detail = 10485,
 		/// <summary>
-		/// Time Off Request = 10592
+		/// Time Off Request = 10648
 		/// </summary>
-		Time_Off_Request = 10592,
+		Time_Off_Request = 10648,
 		/// <summary>
-		/// Toolbar Button = 10842
+		/// Toolbar Button = 10952
 		/// </summary>
-		Toolbar_Button = 10842,
+		Toolbar_Button = 10952,
 		/// <summary>
 		/// User = 8
 		/// </summary>
 		User = 8,
 		/// <summary>
-		/// Warehouse = 10594
+		/// Warehouse = 10650
 		/// </summary>
-		Warehouse = 10594,
+		Warehouse = 10650,
 		/// <summary>
-		/// Work Order = 10595
+		/// Work Order = 10651
 		/// </summary>
-		Work_Order = 10595,
+		Work_Order = 10651,
 		/// <summary>
-		/// Work Order Characteristic (Deprecated) = 10596
+		/// Work Order Characteristic (Deprecated) = 10652
 		/// </summary>
-		Work_Order_Characteristic_Deprecated = 10596,
+		Work_Order_Characteristic_Deprecated = 10652,
 		/// <summary>
-		/// Work Order Incident = 10598
+		/// Work Order Incident = 10654
 		/// </summary>
-		Work_Order_Incident = 10598,
+		Work_Order_Incident = 10654,
 		/// <summary>
-		/// Work Order Product = 10599
+		/// Work Order Product = 10655
 		/// </summary>
-		Work_Order_Product = 10599,
+		Work_Order_Product = 10655,
 		/// <summary>
-		/// Work Order Service = 10601
+		/// Work Order Service = 10657
 		/// </summary>
-		Work_Order_Service = 10601,
+		Work_Order_Service = 10657,
 		/// <summary>
-		/// Work Order Service Task = 10602
+		/// Work Order Service Task = 10658
 		/// </summary>
-		Work_Order_Service_Task = 10602
+		Work_Order_Service_Task = 10658
 	}
 
 	public enum Record2ObjectTypeCode
@@ -525,73 +529,73 @@ namespace Dev.DevKit.Shared.Entities.ConnectionOptionSets
 		/// </summary>
 		Activity = 4200,
 		/// <summary>
-		/// Agreement = 10523
+		/// Agreement = 10579
 		/// </summary>
-		Agreement = 10523,
+		Agreement = 10579,
 		/// <summary>
-		/// Agreement Booking Date = 10524
+		/// Agreement Booking Date = 10580
 		/// </summary>
-		Agreement_Booking_Date = 10524,
+		Agreement_Booking_Date = 10580,
 		/// <summary>
-		/// Agreement Booking Incident = 10525
+		/// Agreement Booking Incident = 10581
 		/// </summary>
-		Agreement_Booking_Incident = 10525,
+		Agreement_Booking_Incident = 10581,
 		/// <summary>
-		/// Agreement Booking Product = 10526
+		/// Agreement Booking Product = 10582
 		/// </summary>
-		Agreement_Booking_Product = 10526,
+		Agreement_Booking_Product = 10582,
 		/// <summary>
-		/// Agreement Booking Service = 10527
+		/// Agreement Booking Service = 10583
 		/// </summary>
-		Agreement_Booking_Service = 10527,
+		Agreement_Booking_Service = 10583,
 		/// <summary>
-		/// Agreement Booking Service Task = 10528
+		/// Agreement Booking Service Task = 10584
 		/// </summary>
-		Agreement_Booking_Service_Task = 10528,
+		Agreement_Booking_Service_Task = 10584,
 		/// <summary>
-		/// Agreement Booking Setup = 10529
+		/// Agreement Booking Setup = 10585
 		/// </summary>
-		Agreement_Booking_Setup = 10529,
+		Agreement_Booking_Setup = 10585,
 		/// <summary>
-		/// Agreement Invoice Date = 10530
+		/// Agreement Invoice Date = 10586
 		/// </summary>
-		Agreement_Invoice_Date = 10530,
+		Agreement_Invoice_Date = 10586,
 		/// <summary>
-		/// Agreement Invoice Product = 10531
+		/// Agreement Invoice Product = 10587
 		/// </summary>
-		Agreement_Invoice_Product = 10531,
+		Agreement_Invoice_Product = 10587,
 		/// <summary>
-		/// Agreement Invoice Setup = 10532
+		/// Agreement Invoice Setup = 10588
 		/// </summary>
-		Agreement_Invoice_Setup = 10532,
+		Agreement_Invoice_Setup = 10588,
 		/// <summary>
 		/// Appointment = 4201
 		/// </summary>
 		Appointment = 4201,
 		/// <summary>
-		/// Assignment Map = 10277
+		/// Assignment Map = 10300
 		/// </summary>
-		Assignment_Map = 10277,
+		Assignment_Map = 10300,
 		/// <summary>
-		/// Assignment Rule = 10274
+		/// Assignment Rule = 10297
 		/// </summary>
-		Assignment_Rule = 10274,
+		Assignment_Rule = 10297,
 		/// <summary>
-		/// Booking Alert = 10400
+		/// Booking Alert = 10473
 		/// </summary>
-		Booking_Alert = 10400,
+		Booking_Alert = 10473,
 		/// <summary>
-		/// Booking Alert Status = 10401
+		/// Booking Alert Status = 10474
 		/// </summary>
-		Booking_Alert_Status = 10401,
+		Booking_Alert_Status = 10474,
 		/// <summary>
-		/// Booking Rule = 10403
+		/// Booking Rule = 10476
 		/// </summary>
-		Booking_Rule = 10403,
+		Booking_Rule = 10476,
 		/// <summary>
-		/// Booking Timestamp = 10535
+		/// Booking Timestamp = 10591
 		/// </summary>
-		Booking_Timestamp = 10535,
+		Booking_Timestamp = 10591,
 		/// <summary>
 		/// Campaign = 4400
 		/// </summary>
@@ -621,25 +625,25 @@ namespace Dev.DevKit.Shared.Entities.ConnectionOptionSets
 		/// </summary>
 		Contract = 1010,
 		/// <summary>
-		/// Conversation = 10702
+		/// Conversation = 10743
 		/// </summary>
-		Conversation = 10702,
+		Conversation = 10743,
 		/// <summary>
-		/// Customer Asset = 10128
+		/// Customer Asset = 10151
 		/// </summary>
-		Customer_Asset = 10128,
+		Customer_Asset = 10151,
 		/// <summary>
-		/// Customer Voice alert = 10294
+		/// Customer Voice alert = 10330
 		/// </summary>
-		Customer_Voice_alert = 10294,
+		Customer_Voice_alert = 10330,
 		/// <summary>
-		/// Customer Voice survey invite = 10304
+		/// Customer Voice survey invite = 10340
 		/// </summary>
-		Customer_Voice_survey_invite = 10304,
+		Customer_Voice_survey_invite = 10340,
 		/// <summary>
-		/// Customer Voice survey response = 10306
+		/// Customer Voice survey response = 10342
 		/// </summary>
-		Customer_Voice_survey_response = 10306,
+		Customer_Voice_survey_response = 10342,
 		/// <summary>
 		/// Email = 4202
 		/// </summary>
@@ -665,65 +669,65 @@ namespace Dev.DevKit.Shared.Entities.ConnectionOptionSets
 		/// </summary>
 		Fax = 4204,
 		/// <summary>
-		/// Fulfillment Preference = 10423
+		/// Fulfillment Preference = 10484
 		/// </summary>
-		Fulfillment_Preference = 10423,
+		Fulfillment_Preference = 10484,
 		/// <summary>
 		/// Goal = 9600
 		/// </summary>
 		Goal = 9600,
 		/// <summary>
-		/// Incident Type Characteristic = 10546
+		/// Incident Type Characteristic = 10602
 		/// </summary>
-		Incident_Type_Characteristic = 10546,
+		Incident_Type_Characteristic = 10602,
 		/// <summary>
-		/// Incident Type Product = 10547
+		/// Incident Type Product = 10603
 		/// </summary>
-		Incident_Type_Product = 10547,
+		Incident_Type_Product = 10603,
 		/// <summary>
-		/// Incident Type Service = 10548
+		/// Incident Type Service = 10604
 		/// </summary>
-		Incident_Type_Service = 10548,
+		Incident_Type_Service = 10604,
 		/// <summary>
-		/// Inventory Adjustment = 10552
+		/// Inventory Adjustment = 10608
 		/// </summary>
-		Inventory_Adjustment = 10552,
+		Inventory_Adjustment = 10608,
 		/// <summary>
-		/// Inventory Adjustment Product = 10553
+		/// Inventory Adjustment Product = 10609
 		/// </summary>
-		Inventory_Adjustment_Product = 10553,
+		Inventory_Adjustment_Product = 10609,
 		/// <summary>
-		/// Inventory Journal = 10554
+		/// Inventory Journal = 10610
 		/// </summary>
-		Inventory_Journal = 10554,
+		Inventory_Journal = 10610,
 		/// <summary>
-		/// Inventory Transfer = 10555
+		/// Inventory Transfer = 10611
 		/// </summary>
-		Inventory_Transfer = 10555,
+		Inventory_Transfer = 10611,
 		/// <summary>
 		/// Invoice = 1090
 		/// </summary>
 		Invoice = 1090,
 		/// <summary>
-		/// IoT Alert = 10138
+		/// IoT Alert = 10165
 		/// </summary>
-		IoT_Alert = 10138,
+		IoT_Alert = 10165,
 		/// <summary>
-		/// IoT Device = 10139
+		/// IoT Device = 10166
 		/// </summary>
-		IoT_Device = 10139,
+		IoT_Device = 10166,
 		/// <summary>
-		/// IoT Device Category = 10140
+		/// IoT Device Category = 10167
 		/// </summary>
-		IoT_Device_Category = 10140,
+		IoT_Device_Category = 10167,
 		/// <summary>
-		/// IoT Device Command = 10141
+		/// IoT Device Command = 10168
 		/// </summary>
-		IoT_Device_Command = 10141,
+		IoT_Device_Command = 10168,
 		/// <summary>
-		/// IoT Device Registration History = 10145
+		/// IoT Device Registration History = 10172
 		/// </summary>
-		IoT_Device_Registration_History = 10145,
+		IoT_Device_Registration_History = 10172,
 		/// <summary>
 		/// Knowledge Article = 9953
 		/// </summary>
@@ -745,41 +749,41 @@ namespace Dev.DevKit.Shared.Entities.ConnectionOptionSets
 		/// </summary>
 		Marketing_List = 4300,
 		/// <summary>
-		/// Ongoing conversation (Deprecated) = 10692
+		/// Ongoing conversation (Deprecated) = 10733
 		/// </summary>
-		Ongoing_conversation_Deprecated = 10692,
+		Ongoing_conversation_Deprecated = 10733,
 		/// <summary>
 		/// Opportunity = 3
 		/// </summary>
 		Opportunity = 3,
 		/// <summary>
-		/// Option = 10819
+		/// Option = 10916
 		/// </summary>
-		Option = 10819,
+		Option = 10916,
 		/// <summary>
 		/// Order = 1088
 		/// </summary>
 		Order = 1088,
 		/// <summary>
-		/// Outbound message = 10813
+		/// Outbound message = 10857
 		/// </summary>
-		Outbound_message = 10813,
+		Outbound_message = 10857,
 		/// <summary>
-		/// Payment = 10560
+		/// Payment = 10616
 		/// </summary>
-		Payment = 10560,
+		Payment = 10616,
 		/// <summary>
-		/// Payment Detail = 10561
+		/// Payment Detail = 10617
 		/// </summary>
-		Payment_Detail = 10561,
+		Payment_Detail = 10617,
 		/// <summary>
-		/// Payment Method = 10562
+		/// Payment Method = 10618
 		/// </summary>
-		Payment_Method = 10562,
+		Payment_Method = 10618,
 		/// <summary>
-		/// Payment Term = 10563
+		/// Payment Term = 10619
 		/// </summary>
-		Payment_Term = 10563,
+		Payment_Term = 10619,
 		/// <summary>
 		/// Phone Call = 4210
 		/// </summary>
@@ -789,17 +793,17 @@ namespace Dev.DevKit.Shared.Entities.ConnectionOptionSets
 		/// </summary>
 		Position = 50,
 		/// <summary>
-		/// Postal Code = 10564
+		/// Postal Code = 10620
 		/// </summary>
-		Postal_Code = 10564,
+		Postal_Code = 10620,
 		/// <summary>
 		/// Price List = 1022
 		/// </summary>
 		Price_List = 1022,
 		/// <summary>
-		/// Process Notes = 10468
+		/// Process Notes = 10527
 		/// </summary>
-		Process_Notes = 10468,
+		Process_Notes = 10527,
 		/// <summary>
 		/// Process Session = 4710
 		/// </summary>
@@ -809,69 +813,69 @@ namespace Dev.DevKit.Shared.Entities.ConnectionOptionSets
 		/// </summary>
 		Product = 1024,
 		/// <summary>
-		/// Product Inventory = 10565
+		/// Product Inventory = 10621
 		/// </summary>
-		Product_Inventory = 10565,
+		Product_Inventory = 10621,
 		/// <summary>
-		/// Profile Album = 10289
+		/// Profile Album = 10325
 		/// </summary>
-		Profile_Album = 10289,
+		Profile_Album = 10325,
 		/// <summary>
-		/// Project = 10469
+		/// Project = 10528
 		/// </summary>
-		Project = 10469,
+		Project = 10528,
 		/// <summary>
-		/// Project Service Approval = 10430
+		/// Project Service Approval = 10489
 		/// </summary>
-		Project_Service_Approval = 10430,
+		Project_Service_Approval = 10489,
 		/// <summary>
-		/// Project Team Member = 10477
+		/// Project Team Member = 10536
 		/// </summary>
-		Project_Team_Member = 10477,
+		Project_Team_Member = 10536,
 		/// <summary>
-		/// Purchase Order = 10566
+		/// Purchase Order = 10622
 		/// </summary>
-		Purchase_Order = 10566,
+		Purchase_Order = 10622,
 		/// <summary>
-		/// Purchase Order Bill = 10567
+		/// Purchase Order Bill = 10623
 		/// </summary>
-		Purchase_Order_Bill = 10567,
+		Purchase_Order_Bill = 10623,
 		/// <summary>
-		/// Purchase Order Product = 10568
+		/// Purchase Order Product = 10624
 		/// </summary>
-		Purchase_Order_Product = 10568,
+		Purchase_Order_Product = 10624,
 		/// <summary>
-		/// Purchase Order Receipt = 10569
+		/// Purchase Order Receipt = 10625
 		/// </summary>
-		Purchase_Order_Receipt = 10569,
+		Purchase_Order_Receipt = 10625,
 		/// <summary>
-		/// Purchase Order Receipt Product = 10570
+		/// Purchase Order Receipt Product = 10626
 		/// </summary>
-		Purchase_Order_Receipt_Product = 10570,
+		Purchase_Order_Receipt_Product = 10626,
 		/// <summary>
-		/// Purchase Order SubStatus = 10571
+		/// Purchase Order SubStatus = 10627
 		/// </summary>
-		Purchase_Order_SubStatus = 10571,
+		Purchase_Order_SubStatus = 10627,
 		/// <summary>
 		/// Quote = 1084
 		/// </summary>
 		Quote = 1084,
 		/// <summary>
-		/// Quote Booking Incident = 10572
+		/// Quote Booking Incident = 10628
 		/// </summary>
-		Quote_Booking_Incident = 10572,
+		Quote_Booking_Incident = 10628,
 		/// <summary>
-		/// Quote Booking Product = 10573
+		/// Quote Booking Product = 10629
 		/// </summary>
-		Quote_Booking_Product = 10573,
+		Quote_Booking_Product = 10629,
 		/// <summary>
-		/// Quote Booking Service = 10574
+		/// Quote Booking Service = 10630
 		/// </summary>
-		Quote_Booking_Service = 10574,
+		Quote_Booking_Service = 10630,
 		/// <summary>
-		/// Quote Booking Service Task = 10575
+		/// Quote Booking Service Task = 10631
 		/// </summary>
-		Quote_Booking_Service_Task = 10575,
+		Quote_Booking_Service_Task = 10631,
 		/// <summary>
 		/// Recurring Appointment = 4251
 		/// </summary>
@@ -881,69 +885,69 @@ namespace Dev.DevKit.Shared.Entities.ConnectionOptionSets
 		/// </summary>
 		Resource_Group = 4007,
 		/// <summary>
-		/// Resource Restriction (Deprecated) = 10600
+		/// Resource Restriction (Deprecated) = 10656
 		/// </summary>
-		Resource_Restriction_Deprecated = 10600,
+		Resource_Restriction_Deprecated = 10656,
 		/// <summary>
-		/// Resource Territory = 10419
+		/// Resource Territory = 10480
 		/// </summary>
-		Resource_Territory = 10419,
+		Resource_Territory = 10480,
 		/// <summary>
-		/// RMA = 10580
+		/// RMA = 10636
 		/// </summary>
-		RMA = 10580,
+		RMA = 10636,
 		/// <summary>
-		/// RMA Product = 10581
+		/// RMA Product = 10637
 		/// </summary>
-		RMA_Product = 10581,
+		RMA_Product = 10637,
 		/// <summary>
-		/// RMA Receipt = 10582
+		/// RMA Receipt = 10638
 		/// </summary>
-		RMA_Receipt = 10582,
+		RMA_Receipt = 10638,
 		/// <summary>
-		/// RMA Receipt Product = 10583
+		/// RMA Receipt Product = 10639
 		/// </summary>
-		RMA_Receipt_Product = 10583,
+		RMA_Receipt_Product = 10639,
 		/// <summary>
-		/// RMA SubStatus = 10584
+		/// RMA SubStatus = 10640
 		/// </summary>
-		RMA_SubStatus = 10584,
+		RMA_SubStatus = 10640,
 		/// <summary>
-		/// RTV = 10585
+		/// RTV = 10641
 		/// </summary>
-		RTV = 10585,
+		RTV = 10641,
 		/// <summary>
-		/// RTV Product = 10586
+		/// RTV Product = 10642
 		/// </summary>
-		RTV_Product = 10586,
+		RTV_Product = 10642,
 		/// <summary>
-		/// RTV Substatus = 10587
+		/// RTV Substatus = 10643
 		/// </summary>
-		RTV_Substatus = 10587,
+		RTV_Substatus = 10643,
 		/// <summary>
 		/// Scheduling Group = 4005
 		/// </summary>
 		Scheduling_Group = 4005,
 		/// <summary>
-		/// Sequence = 10268
+		/// Sequence = 10289
 		/// </summary>
-		Sequence = 10268,
+		Sequence = 10289,
 		/// <summary>
-		/// Sequence Target = 10270
+		/// Sequence Target = 10291
 		/// </summary>
-		Sequence_Target = 10270,
+		Sequence_Target = 10291,
 		/// <summary>
 		/// Service Activity = 4214
 		/// </summary>
 		Service_Activity = 4214,
 		/// <summary>
-		/// Session = 10717
+		/// Session = 10760
 		/// </summary>
-		Session = 10717,
+		Session = 10760,
 		/// <summary>
-		/// Ship Via = 10589
+		/// Ship Via = 10645
 		/// </summary>
-		Ship_Via = 10589,
+		Ship_Via = 10645,
 		/// <summary>
 		/// Social Activity = 4216
 		/// </summary>
@@ -953,17 +957,21 @@ namespace Dev.DevKit.Shared.Entities.ConnectionOptionSets
 		/// </summary>
 		Social_Profile = 99,
 		/// <summary>
-		/// System User Scheduler Setting = 10422
+		/// Suggestion = 10306
 		/// </summary>
-		System_User_Scheduler_Setting = 10422,
+		Suggestion = 10306,
+		/// <summary>
+		/// System User Scheduler Setting = 10483
+		/// </summary>
+		System_User_Scheduler_Setting = 10483,
 		/// <summary>
 		/// Task = 4212
 		/// </summary>
 		Task = 4212,
 		/// <summary>
-		/// Tax Code = 10590
+		/// Tax Code = 10646
 		/// </summary>
-		Tax_Code = 10590,
+		Tax_Code = 10646,
 		/// <summary>
 		/// Team = 9
 		/// </summary>
@@ -973,49 +981,49 @@ namespace Dev.DevKit.Shared.Entities.ConnectionOptionSets
 		/// </summary>
 		Territory = 2013,
 		/// <summary>
-		/// Time Group Detail = 10424
+		/// Time Group Detail = 10485
 		/// </summary>
-		Time_Group_Detail = 10424,
+		Time_Group_Detail = 10485,
 		/// <summary>
-		/// Time Off Request = 10592
+		/// Time Off Request = 10648
 		/// </summary>
-		Time_Off_Request = 10592,
+		Time_Off_Request = 10648,
 		/// <summary>
-		/// Toolbar Button = 10842
+		/// Toolbar Button = 10952
 		/// </summary>
-		Toolbar_Button = 10842,
+		Toolbar_Button = 10952,
 		/// <summary>
 		/// User = 8
 		/// </summary>
 		User = 8,
 		/// <summary>
-		/// Warehouse = 10594
+		/// Warehouse = 10650
 		/// </summary>
-		Warehouse = 10594,
+		Warehouse = 10650,
 		/// <summary>
-		/// Work Order = 10595
+		/// Work Order = 10651
 		/// </summary>
-		Work_Order = 10595,
+		Work_Order = 10651,
 		/// <summary>
-		/// Work Order Characteristic (Deprecated) = 10596
+		/// Work Order Characteristic (Deprecated) = 10652
 		/// </summary>
-		Work_Order_Characteristic_Deprecated = 10596,
+		Work_Order_Characteristic_Deprecated = 10652,
 		/// <summary>
-		/// Work Order Incident = 10598
+		/// Work Order Incident = 10654
 		/// </summary>
-		Work_Order_Incident = 10598,
+		Work_Order_Incident = 10654,
 		/// <summary>
-		/// Work Order Product = 10599
+		/// Work Order Product = 10655
 		/// </summary>
-		Work_Order_Product = 10599,
+		Work_Order_Product = 10655,
 		/// <summary>
-		/// Work Order Service = 10601
+		/// Work Order Service = 10657
 		/// </summary>
-		Work_Order_Service = 10601,
+		Work_Order_Service = 10657,
 		/// <summary>
-		/// Work Order Service Task = 10602
+		/// Work Order Service Task = 10658
 		/// </summary>
-		Work_Order_Service_Task = 10602
+		Work_Order_Service_Task = 10658
 	}
 
 	public enum StateCode
@@ -1045,6 +1053,7 @@ namespace Dev.DevKit.Shared.Entities.ConnectionOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class Connection : EntityBase
 	{
 		public struct Fields
@@ -1368,7 +1377,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the source record.</para>
-		/// <para>Lookup to account, activitypointer, appointment, campaign, campaignactivity, channelaccessprofilerule, competitor, constraintbasedgroup, contact, contract, email, entitlement, entitlementchannel, entitlementtemplatechannel, equipment, fax, goal, incident, invoice, knowledgearticle, knowledgebaserecord, lead, letter, list, msdyn_agreement, msdyn_agreementbookingdate, msdyn_agreementbookingincident, msdyn_agreementbookingproduct, msdyn_agreementbookingservice, msdyn_agreementbookingservicetask, msdyn_agreementbookingsetup, msdyn_agreementinvoicedate, msdyn_agreementinvoiceproduct, msdyn_agreementinvoicesetup, msdyn_approval, msdyn_assignmentmap, msdyn_assignmentrule, msdyn_bookingalert, msdyn_bookingalertstatus, msdyn_bookingrule, msdyn_bookingtimestamp, msdyn_customerasset, msdyn_incidenttypecharacteristic, msdyn_incidenttypeproduct, msdyn_incidenttypeservice, msdyn_inventoryadjustment, msdyn_inventoryadjustmentproduct, msdyn_inventoryjournal, msdyn_inventorytransfer, msdyn_iotalert, msdyn_iotdevice, msdyn_iotdevicecategory, msdyn_iotdevicecommand, msdyn_iotdeviceregistrationhistory, msdyn_liveconversation, msdyn_ocliveworkitem, msdyn_ocoutboundmessage, msdyn_ocsession, msdyn_payment, msdyn_paymentdetail, msdyn_paymentmethod, msdyn_paymentterm, msdyn_postalbum, msdyn_postalcode, msdyn_processnotes, msdyn_productinventory, msdyn_project, msdyn_projectteam, msdyn_purchaseorder, msdyn_purchaseorderbill, msdyn_purchaseorderproduct, msdyn_purchaseorderreceipt, msdyn_purchaseorderreceiptproduct, msdyn_purchaseordersubstatus, msdyn_quotebookingincident, msdyn_quotebookingproduct, msdyn_quotebookingservice, msdyn_quotebookingservicetask, msdyn_resourceterritory, msdyn_rma, msdyn_rmaproduct, msdyn_rmareceipt, msdyn_rmareceiptproduct, msdyn_rmasubstatus, msdyn_rtv, msdyn_rtvproduct, msdyn_rtvsubstatus, msdyn_sequence, msdyn_sequencetarget, msdyn_shipvia, msdyn_systemuserschedulersetting, msdyn_taxcode, msdyn_timegroup, msdyn_timegroupdetail, msdyn_timeoffrequest, msdyn_warehouse, msdyn_workorder, msdyn_workordercharacteristic, msdyn_workorderincident, msdyn_workorderproduct, msdyn_workorderresourcerestriction, msdyn_workorderservice, msdyn_workorderservicetask, msdyusd_toolbarbutton, msfp_alert, msfp_surveyinvite, msfp_surveyresponse, opportunity, phonecall, position, pricelevel, processsession, product, quote, recurringappointmentmaster, resourcegroup, salesorder, serviceappointment, socialactivity, socialprofile, systemuser, task, team, territory, uii_option</para>
+		/// <para>Lookup to account, activitypointer, appointment, campaign, campaignactivity, channelaccessprofilerule, competitor, constraintbasedgroup, contact, contract, email, entitlement, entitlementchannel, entitlementtemplatechannel, equipment, fax, goal, incident, invoice, knowledgearticle, knowledgebaserecord, lead, letter, list, msdyn_agreement, msdyn_agreementbookingdate, msdyn_agreementbookingincident, msdyn_agreementbookingproduct, msdyn_agreementbookingservice, msdyn_agreementbookingservicetask, msdyn_agreementbookingsetup, msdyn_agreementinvoicedate, msdyn_agreementinvoiceproduct, msdyn_agreementinvoicesetup, msdyn_approval, msdyn_assignmentmap, msdyn_assignmentrule, msdyn_bookingalert, msdyn_bookingalertstatus, msdyn_bookingrule, msdyn_bookingtimestamp, msdyn_customerasset, msdyn_incidenttypecharacteristic, msdyn_incidenttypeproduct, msdyn_incidenttypeservice, msdyn_inventoryadjustment, msdyn_inventoryadjustmentproduct, msdyn_inventoryjournal, msdyn_inventorytransfer, msdyn_iotalert, msdyn_iotdevice, msdyn_iotdevicecategory, msdyn_iotdevicecommand, msdyn_iotdeviceregistrationhistory, msdyn_liveconversation, msdyn_ocliveworkitem, msdyn_ocoutboundmessage, msdyn_ocsession, msdyn_payment, msdyn_paymentdetail, msdyn_paymentmethod, msdyn_paymentterm, msdyn_postalbum, msdyn_postalcode, msdyn_processnotes, msdyn_productinventory, msdyn_project, msdyn_projectteam, msdyn_purchaseorder, msdyn_purchaseorderbill, msdyn_purchaseorderproduct, msdyn_purchaseorderreceipt, msdyn_purchaseorderreceiptproduct, msdyn_purchaseordersubstatus, msdyn_quotebookingincident, msdyn_quotebookingproduct, msdyn_quotebookingservice, msdyn_quotebookingservicetask, msdyn_resourceterritory, msdyn_rma, msdyn_rmaproduct, msdyn_rmareceipt, msdyn_rmareceiptproduct, msdyn_rmasubstatus, msdyn_rtv, msdyn_rtvproduct, msdyn_rtvsubstatus, msdyn_salessuggestion, msdyn_sequence, msdyn_sequencetarget, msdyn_shipvia, msdyn_systemuserschedulersetting, msdyn_taxcode, msdyn_timegroup, msdyn_timegroupdetail, msdyn_timeoffrequest, msdyn_warehouse, msdyn_workorder, msdyn_workordercharacteristic, msdyn_workorderincident, msdyn_workorderproduct, msdyn_workorderresourcerestriction, msdyn_workorderservice, msdyn_workorderservicetask, msdyusd_toolbarbutton, msfp_alert, msfp_surveyinvite, msfp_surveyresponse, opportunity, phonecall, position, pricelevel, processsession, product, quote, recurringappointmentmaster, resourcegroup, salesorder, serviceappointment, socialactivity, socialprofile, systemuser, task, team, territory, uii_option</para>
 		/// <para>Connected From</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -1408,7 +1417,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the target record.</para>
-		/// <para>Lookup to account, activitypointer, appointment, campaign, campaignactivity, channelaccessprofilerule, competitor, constraintbasedgroup, contact, contract, email, entitlement, entitlementchannel, entitlementtemplatechannel, equipment, fax, goal, incident, invoice, knowledgearticle, knowledgebaserecord, lead, letter, list, msdyn_agreement, msdyn_agreementbookingdate, msdyn_agreementbookingincident, msdyn_agreementbookingproduct, msdyn_agreementbookingservice, msdyn_agreementbookingservicetask, msdyn_agreementbookingsetup, msdyn_agreementinvoicedate, msdyn_agreementinvoiceproduct, msdyn_agreementinvoicesetup, msdyn_approval, msdyn_assignmentmap, msdyn_assignmentrule, msdyn_bookingalert, msdyn_bookingalertstatus, msdyn_bookingrule, msdyn_bookingtimestamp, msdyn_customerasset, msdyn_incidenttypecharacteristic, msdyn_incidenttypeproduct, msdyn_incidenttypeservice, msdyn_inventoryadjustment, msdyn_inventoryadjustmentproduct, msdyn_inventoryjournal, msdyn_inventorytransfer, msdyn_iotalert, msdyn_iotdevice, msdyn_iotdevicecategory, msdyn_iotdevicecommand, msdyn_iotdeviceregistrationhistory, msdyn_liveconversation, msdyn_ocliveworkitem, msdyn_ocoutboundmessage, msdyn_ocsession, msdyn_payment, msdyn_paymentdetail, msdyn_paymentmethod, msdyn_paymentterm, msdyn_postalbum, msdyn_postalcode, msdyn_processnotes, msdyn_productinventory, msdyn_project, msdyn_projectteam, msdyn_purchaseorder, msdyn_purchaseorderbill, msdyn_purchaseorderproduct, msdyn_purchaseorderreceipt, msdyn_purchaseorderreceiptproduct, msdyn_purchaseordersubstatus, msdyn_quotebookingincident, msdyn_quotebookingproduct, msdyn_quotebookingservice, msdyn_quotebookingservicetask, msdyn_resourceterritory, msdyn_rma, msdyn_rmaproduct, msdyn_rmareceipt, msdyn_rmareceiptproduct, msdyn_rmasubstatus, msdyn_rtv, msdyn_rtvproduct, msdyn_rtvsubstatus, msdyn_sequence, msdyn_sequencetarget, msdyn_shipvia, msdyn_systemuserschedulersetting, msdyn_taxcode, msdyn_timegroup, msdyn_timegroupdetail, msdyn_timeoffrequest, msdyn_warehouse, msdyn_workorder, msdyn_workordercharacteristic, msdyn_workorderincident, msdyn_workorderproduct, msdyn_workorderresourcerestriction, msdyn_workorderservice, msdyn_workorderservicetask, msdyusd_toolbarbutton, msfp_alert, msfp_surveyinvite, msfp_surveyresponse, opportunity, phonecall, position, pricelevel, processsession, product, quote, recurringappointmentmaster, resourcegroup, salesorder, serviceappointment, socialactivity, socialprofile, systemuser, task, team, territory, uii_option</para>
+		/// <para>Lookup to account, activitypointer, appointment, campaign, campaignactivity, channelaccessprofilerule, competitor, constraintbasedgroup, contact, contract, email, entitlement, entitlementchannel, entitlementtemplatechannel, equipment, fax, goal, incident, invoice, knowledgearticle, knowledgebaserecord, lead, letter, list, msdyn_agreement, msdyn_agreementbookingdate, msdyn_agreementbookingincident, msdyn_agreementbookingproduct, msdyn_agreementbookingservice, msdyn_agreementbookingservicetask, msdyn_agreementbookingsetup, msdyn_agreementinvoicedate, msdyn_agreementinvoiceproduct, msdyn_agreementinvoicesetup, msdyn_approval, msdyn_assignmentmap, msdyn_assignmentrule, msdyn_bookingalert, msdyn_bookingalertstatus, msdyn_bookingrule, msdyn_bookingtimestamp, msdyn_customerasset, msdyn_incidenttypecharacteristic, msdyn_incidenttypeproduct, msdyn_incidenttypeservice, msdyn_inventoryadjustment, msdyn_inventoryadjustmentproduct, msdyn_inventoryjournal, msdyn_inventorytransfer, msdyn_iotalert, msdyn_iotdevice, msdyn_iotdevicecategory, msdyn_iotdevicecommand, msdyn_iotdeviceregistrationhistory, msdyn_liveconversation, msdyn_ocliveworkitem, msdyn_ocoutboundmessage, msdyn_ocsession, msdyn_payment, msdyn_paymentdetail, msdyn_paymentmethod, msdyn_paymentterm, msdyn_postalbum, msdyn_postalcode, msdyn_processnotes, msdyn_productinventory, msdyn_project, msdyn_projectteam, msdyn_purchaseorder, msdyn_purchaseorderbill, msdyn_purchaseorderproduct, msdyn_purchaseorderreceipt, msdyn_purchaseorderreceiptproduct, msdyn_purchaseordersubstatus, msdyn_quotebookingincident, msdyn_quotebookingproduct, msdyn_quotebookingservice, msdyn_quotebookingservicetask, msdyn_resourceterritory, msdyn_rma, msdyn_rmaproduct, msdyn_rmareceipt, msdyn_rmareceiptproduct, msdyn_rmasubstatus, msdyn_rtv, msdyn_rtvproduct, msdyn_rtvsubstatus, msdyn_salessuggestion, msdyn_sequence, msdyn_sequencetarget, msdyn_shipvia, msdyn_systemuserschedulersetting, msdyn_taxcode, msdyn_timegroup, msdyn_timegroupdetail, msdyn_timeoffrequest, msdyn_warehouse, msdyn_workorder, msdyn_workordercharacteristic, msdyn_workorderincident, msdyn_workorderproduct, msdyn_workorderresourcerestriction, msdyn_workorderservice, msdyn_workorderservicetask, msdyusd_toolbarbutton, msfp_alert, msfp_surveyinvite, msfp_surveyresponse, opportunity, phonecall, position, pricelevel, processsession, product, quote, recurringappointmentmaster, resourcegroup, salesorder, serviceappointment, socialactivity, socialprofile, systemuser, task, team, territory, uii_option</para>
 		/// <para>Connected To</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

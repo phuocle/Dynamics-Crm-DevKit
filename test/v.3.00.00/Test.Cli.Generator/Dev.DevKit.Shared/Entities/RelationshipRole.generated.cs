@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.RelationshipRoleOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class RelationshipRole : EntityBase
 	{
 		public struct Fields

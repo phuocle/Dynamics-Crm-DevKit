@@ -69,6 +69,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_operatinghourOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_operatinghour : EntityBase
 	{
 		public struct Fields
@@ -106,7 +107,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_operatinghour";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10727;
+		public const int EntityTypeCode = 10770;
 
 		[DebuggerNonUserCode()]
 		public msdyn_operatinghour()

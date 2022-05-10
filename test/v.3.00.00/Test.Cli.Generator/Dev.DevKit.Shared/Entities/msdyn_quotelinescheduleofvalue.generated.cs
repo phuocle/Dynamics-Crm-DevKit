@@ -57,6 +57,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_quotelinescheduleofvalueOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_quotelinescheduleofvalue : EntityBase
 	{
 		public struct Fields
@@ -99,7 +100,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_quotelinescheduleofvalue";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10483;
+		public const int EntityTypeCode = 10542;
 
 		[DebuggerNonUserCode()]
 		public msdyn_quotelinescheduleofvalue()

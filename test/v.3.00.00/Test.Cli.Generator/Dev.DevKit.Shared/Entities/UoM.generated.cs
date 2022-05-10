@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.UoMOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class UoM : EntityBase
 	{
 		public struct Fields

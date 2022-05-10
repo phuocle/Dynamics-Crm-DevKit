@@ -49,6 +49,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_livechatwidgetlocationOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_livechatwidgetlocation : EntityBase
 	{
 		public struct Fields
@@ -81,7 +82,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_livechatwidgetlocation";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10775;
+		public const int EntityTypeCode = 10816;
 
 		[DebuggerNonUserCode()]
 		public msdyn_livechatwidgetlocation()

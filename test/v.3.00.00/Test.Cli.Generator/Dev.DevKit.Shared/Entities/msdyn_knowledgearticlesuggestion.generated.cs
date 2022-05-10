@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_knowledgearticlesuggestionOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_knowledgearticlesuggestion : EntityBase
 	{
 		public struct Fields
@@ -33,7 +34,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_knowledgearticlesuggestion";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10205;
+		public const int EntityTypeCode = 10221;
 
 		[DebuggerNonUserCode()]
 		public msdyn_knowledgearticlesuggestion()

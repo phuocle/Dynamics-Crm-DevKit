@@ -49,6 +49,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_resourcerequestOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_resourcerequest : EntityBase
 	{
 		public struct Fields
@@ -82,7 +83,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_resourcerequest";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10492;
+		public const int EntityTypeCode = 10551;
 
 		[DebuggerNonUserCode()]
 		public msdyn_resourcerequest()

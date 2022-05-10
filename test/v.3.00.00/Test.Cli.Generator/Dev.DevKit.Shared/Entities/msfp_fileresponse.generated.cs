@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msfp_fileresponseOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msfp_fileresponse : EntityBase
 	{
 		public struct Fields
@@ -80,7 +81,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msfp_fileresponse";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10297;
+		public const int EntityTypeCode = 10333;
 
 		[DebuggerNonUserCode()]
 		public msfp_fileresponse()

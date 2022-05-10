@@ -49,6 +49,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_bookingalertstatusOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_bookingalertstatus : EntityBase
 	{
 		public struct Fields
@@ -81,7 +82,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_bookingalertstatus";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10401;
+		public const int EntityTypeCode = 10474;
 
 		[DebuggerNonUserCode()]
 		public msdyn_bookingalertstatus()

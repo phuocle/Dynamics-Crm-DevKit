@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.QueueMembershipOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class QueueMembership : EntityBase
 	{
 		public struct Fields

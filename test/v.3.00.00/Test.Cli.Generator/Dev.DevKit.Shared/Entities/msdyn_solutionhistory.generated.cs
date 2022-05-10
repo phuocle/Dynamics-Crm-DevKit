@@ -93,6 +93,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_solutionhistoryOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_solutionhistory : EntityBase
 	{
 		public struct Fields

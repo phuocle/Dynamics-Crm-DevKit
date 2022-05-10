@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.SuggestionCardTemplateOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class SuggestionCardTemplate : EntityBase
 	{
 		public struct Fields

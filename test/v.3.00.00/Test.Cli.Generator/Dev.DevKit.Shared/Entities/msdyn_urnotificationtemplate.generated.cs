@@ -33,6 +33,10 @@ namespace Dev.DevKit.Shared.Entities.msdyn_urnotificationtemplateOptionSets
 	public enum msdyn_channeltype
 	{
 		/// <summary>
+		/// Apple Messages for Business = 192450000
+		/// </summary>
+		Apple_Messages_for_Business = 192450000,
+		/// <summary>
 		/// Co-browse = 192390000
 		/// </summary>
 		Co_browse = 192390000,
@@ -117,6 +121,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_urnotificationtemplateOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_urnotificationtemplate : EntityBase
 	{
 		public struct Fields
@@ -154,7 +159,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_urnotificationtemplate";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10741;
+		public const int EntityTypeCode = 10784;
 
 		[DebuggerNonUserCode()]
 		public msdyn_urnotificationtemplate()

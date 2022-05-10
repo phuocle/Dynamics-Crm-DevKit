@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_systemuserschedulersettingOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_systemuserschedulersetting : EntityBase
 	{
 		public struct Fields
@@ -67,7 +68,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_systemuserschedulersetting";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10422;
+		public const int EntityTypeCode = 10483;
 
 		[DebuggerNonUserCode()]
 		public msdyn_systemuserschedulersetting()

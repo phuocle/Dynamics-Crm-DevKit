@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.QueueItemCountOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class QueueItemCount : EntityBase
 	{
 		public struct Fields

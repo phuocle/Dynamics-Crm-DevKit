@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_purchaseorderreceiptOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_purchaseorderreceipt : EntityBase
 	{
 		public struct Fields
@@ -73,7 +74,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_purchaseorderreceipt";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10569;
+		public const int EntityTypeCode = 10625;
 
 		[DebuggerNonUserCode()]
 		public msdyn_purchaseorderreceipt()

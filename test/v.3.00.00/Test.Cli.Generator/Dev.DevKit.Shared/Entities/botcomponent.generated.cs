@@ -57,6 +57,26 @@ namespace Dev.DevKit.Shared.Entities.botcomponentOptionSets
 		/// </summary>
 		Language_understanding = 6,
 		/// <summary>
+		/// Object Model custom entity = 11
+		/// </summary>
+		Object_Model_custom_entity = 11,
+		/// <summary>
+		/// Object Model Dialog = 9
+		/// </summary>
+		Object_Model_Dialog = 9,
+		/// <summary>
+		/// Object Model global variable = 12
+		/// </summary>
+		Object_Model_global_variable = 12,
+		/// <summary>
+		/// Object Model skill = 13
+		/// </summary>
+		Object_Model_skill = 13,
+		/// <summary>
+		/// Object Model Trigger = 10
+		/// </summary>
+		Object_Model_Trigger = 10,
+		/// <summary>
 		/// Skill = 1
 		/// </summary>
 		Skill = 1,
@@ -85,6 +105,10 @@ namespace Dev.DevKit.Shared.Entities.botcomponentOptionSets
 		/// </summary>
 		Chinese_Traditional = 1028,
 		/// <summary>
+		/// Czech = 1029
+		/// </summary>
+		Czech = 1029,
+		/// <summary>
 		/// Danish = 1030
 		/// </summary>
 		Danish = 1030,
@@ -97,6 +121,10 @@ namespace Dev.DevKit.Shared.Entities.botcomponentOptionSets
 		/// </summary>
 		English = 1033,
 		/// <summary>
+		/// Finnish = 1035
+		/// </summary>
+		Finnish = 1035,
+		/// <summary>
 		/// French = 1036
 		/// </summary>
 		French = 1036,
@@ -104,6 +132,10 @@ namespace Dev.DevKit.Shared.Entities.botcomponentOptionSets
 		/// German = 1031
 		/// </summary>
 		German = 1031,
+		/// <summary>
+		/// Greek = 1032
+		/// </summary>
+		Greek = 1032,
 		/// <summary>
 		/// Hindi = 1081
 		/// </summary>
@@ -148,6 +180,10 @@ namespace Dev.DevKit.Shared.Entities.botcomponentOptionSets
 		/// Swedish = 1053
 		/// </summary>
 		Swedish = 1053,
+		/// <summary>
+		/// Thai = 1054
+		/// </summary>
+		Thai = 1054,
 		/// <summary>
 		/// Turkish = 1055
 		/// </summary>
@@ -197,6 +233,7 @@ namespace Dev.DevKit.Shared.Entities.botcomponentOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class botcomponent : EntityBase
 	{
 		public struct Fields
@@ -243,7 +280,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "botcomponent";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10067;
+		public const int EntityTypeCode = 10079;
 
 		[DebuggerNonUserCode()]
 		public botcomponent()

@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_AIBFileAttachedDataOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_AIBFileAttachedData : EntityBase
 	{
 		public struct Fields
@@ -68,7 +69,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_aibfileattacheddata";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10061;
+		public const int EntityTypeCode = 10073;
 
 		[DebuggerNonUserCode()]
 		public msdyn_AIBFileAttachedData()

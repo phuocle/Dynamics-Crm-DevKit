@@ -10,6 +10,34 @@ using System.Diagnostics;
 
 namespace Dev.DevKit.Shared.Entities.connectorOptionSets
 {
+	public enum Capabilities
+	{
+		/// <summary>
+		/// actions = 118690005
+		/// </summary>
+		actions = 118690005,
+		/// <summary>
+		/// blob = 118690002
+		/// </summary>
+		blob = 118690002,
+		/// <summary>
+		/// cloud = 118690004
+		/// </summary>
+		cloud = 118690004,
+		/// <summary>
+		/// composite = 118690000
+		/// </summary>
+		composite = 118690000,
+		/// <summary>
+		/// gateway = 118690003
+		/// </summary>
+		gateway = 118690003,
+		/// <summary>
+		/// tabular = 118690001
+		/// </summary>
+		tabular = 118690001
+	}
+
 	public enum ComponentState
 	{
 		/// <summary>
@@ -69,10 +97,12 @@ namespace Dev.DevKit.Shared.Entities.connectorOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class connector : EntityBase
 	{
 		public struct Fields
 		{
+			public const string Capabilities = "capabilities";
 			public const string ComponentState = "componentstate";
 			public const string ConnectionParameters = "connectionparameters";
 			public const string connectorId = "connectorid";
@@ -161,6 +191,45 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			Entity = new Entity(EntityLogicalName, keys);
 			PreEntity = CloneThisEntity(Entity);
+		}
+
+		/// <summary>
+		/// <para>Capability of a connector, i.e. &quot;gateway&quot; means the connector can connect to on-prem gateway</para>
+		/// <para>MultiSelectPicklist</para>
+		/// <para>capabilities</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public System.Collections.Generic.List<Dev.DevKit.Shared.Entities.connectorOptionSets.Capabilities> Capabilities
+		{
+			get
+			{
+				var data = new System.Collections.Generic.List<Dev.DevKit.Shared.Entities.connectorOptionSets.Capabilities>();
+				var items = Entity.GetAttributeValue<OptionSetValueCollection>(Fields.Capabilities);
+				if (items != null)
+				{
+					foreach (OptionSetValue item in items)
+					{
+						data.Add((Dev.DevKit.Shared.Entities.connectorOptionSets.Capabilities)item.Value);
+					}
+				}
+				return data;
+			}
+			set
+			{
+				var data = new OptionSetValueCollection();
+				foreach (var item in value)
+				{
+					data.Add(new OptionSetValue((int)item));
+				}
+				if (data.Count == 0)
+				{
+					Entity.Attributes[Fields.Capabilities] = null;
+				}
+				else
+				{
+					Entity.Attributes[Fields.Capabilities] = data;
+				}
+			}
 		}
 
 		/// <summary>

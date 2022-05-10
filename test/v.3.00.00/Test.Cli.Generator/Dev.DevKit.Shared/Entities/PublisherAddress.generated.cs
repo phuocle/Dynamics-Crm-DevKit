@@ -53,6 +53,7 @@ namespace Dev.DevKit.Shared.Entities.PublisherAddressOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class PublisherAddress : EntityBase
 	{
 		public struct Fields

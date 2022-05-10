@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_propertyassetassociationOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_propertyassetassociation : EntityBase
 	{
 		public struct Fields
@@ -67,7 +68,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_propertyassetassociation";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10133;
+		public const int EntityTypeCode = 10158;
 
 		[DebuggerNonUserCode()]
 		public msdyn_propertyassetassociation()

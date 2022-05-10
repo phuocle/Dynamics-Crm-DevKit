@@ -73,6 +73,7 @@ namespace Dev.DevKit.Shared.Entities.solutioncomponentattributeconfigurationOpti
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class solutioncomponentattributeconfiguration : EntityBase
 	{
 		public struct Fields

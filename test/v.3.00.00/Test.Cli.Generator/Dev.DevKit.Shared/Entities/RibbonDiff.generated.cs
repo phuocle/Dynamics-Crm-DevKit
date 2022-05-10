@@ -53,6 +53,7 @@ namespace Dev.DevKit.Shared.Entities.RibbonDiffOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class RibbonDiff : EntityBase
 	{
 		public struct Fields

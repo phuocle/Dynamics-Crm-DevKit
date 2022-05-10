@@ -57,6 +57,7 @@ namespace Dev.DevKit.Shared.Entities.datalakefolderpermissionOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class datalakefolderpermission : EntityBase
 	{
 		public struct Fields
@@ -97,7 +98,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "datalakefolderpermission";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10025;
+		public const int EntityTypeCode = 10026;
 
 		[DebuggerNonUserCode()]
 		public datalakefolderpermission()

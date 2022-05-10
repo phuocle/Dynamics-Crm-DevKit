@@ -33,6 +33,7 @@ namespace Dev.DevKit.Shared.Entities.botcomponent_workflowOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class botcomponent_workflow : EntityBase
 	{
 		public struct Fields
@@ -52,7 +53,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "botcomponent_workflow";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10072;
+		public const int EntityTypeCode = 10084;
 
 		[DebuggerNonUserCode()]
 		public botcomponent_workflow()

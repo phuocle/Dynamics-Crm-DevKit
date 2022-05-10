@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_lineengagementctxOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_lineengagementctx : EntityBase
 	{
 		public struct Fields
@@ -70,7 +71,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_lineengagementctx";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10798;
+		public const int EntityTypeCode = 10839;
 
 		[DebuggerNonUserCode()]
 		public msdyn_lineengagementctx()

@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.AccountLeadsOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class AccountLeads : EntityBase
 	{
 		public struct Fields

@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_geolocationsettingsOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_geolocationsettings : EntityBase
 	{
 		public struct Fields
@@ -79,7 +80,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_geolocationsettings";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10635;
+		public const int EntityTypeCode = 10675;
 
 		[DebuggerNonUserCode()]
 		public msdyn_geolocationsettings()

@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.OwnerOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class Owner : EntityBase
 	{
 		public struct Fields

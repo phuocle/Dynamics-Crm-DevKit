@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.msdyusd_tracesourcesetting_hostedcontrolOpt
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyusd_tracesourcesetting_hostedcontrol : EntityBase
 	{
 		public struct Fields
@@ -28,7 +29,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyusd_tracesourcesetting_hostedcontrol";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10869;
+		public const int EntityTypeCode = 10977;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_tracesourcesetting_hostedcontrol()

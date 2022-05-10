@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocfbapplicationOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_ocfbapplication : EntityBase
 	{
 		public struct Fields
@@ -69,7 +70,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_ocfbapplication";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10795;
+		public const int EntityTypeCode = 10836;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocfbapplication()

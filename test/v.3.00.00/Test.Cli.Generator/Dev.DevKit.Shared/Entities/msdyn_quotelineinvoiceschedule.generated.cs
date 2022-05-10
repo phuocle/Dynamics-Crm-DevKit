@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_quotelineinvoicescheduleOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_quotelineinvoiceschedule : EntityBase
 	{
 		public struct Fields
@@ -67,7 +68,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_quotelineinvoiceschedule";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10481;
+		public const int EntityTypeCode = 10540;
 
 		[DebuggerNonUserCode()]
 		public msdyn_quotelineinvoiceschedule()

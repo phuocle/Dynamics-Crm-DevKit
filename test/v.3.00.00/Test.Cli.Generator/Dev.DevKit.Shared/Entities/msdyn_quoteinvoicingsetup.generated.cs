@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_quoteinvoicingsetupOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_quoteinvoicingsetup : EntityBase
 	{
 		public struct Fields
@@ -74,7 +75,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_quoteinvoicingsetup";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10578;
+		public const int EntityTypeCode = 10634;
 
 		[DebuggerNonUserCode()]
 		public msdyn_quoteinvoicingsetup()

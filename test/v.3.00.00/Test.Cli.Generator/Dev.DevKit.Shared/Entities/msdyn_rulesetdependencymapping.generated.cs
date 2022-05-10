@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_rulesetdependencymappingOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_rulesetdependencymapping : EntityBase
 	{
 		public struct Fields
@@ -70,7 +71,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_rulesetdependencymapping";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10671;
+		public const int EntityTypeCode = 10347;
 
 		[DebuggerNonUserCode()]
 		public msdyn_rulesetdependencymapping()

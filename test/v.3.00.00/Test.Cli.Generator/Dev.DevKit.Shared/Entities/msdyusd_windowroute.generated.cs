@@ -165,6 +165,7 @@ namespace Dev.DevKit.Shared.Entities.msdyusd_windowrouteOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyusd_windowroute : EntityBase
 	{
 		public struct Fields
@@ -220,7 +221,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyusd_windowroute";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10848;
+		public const int EntityTypeCode = 10956;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_windowroute()

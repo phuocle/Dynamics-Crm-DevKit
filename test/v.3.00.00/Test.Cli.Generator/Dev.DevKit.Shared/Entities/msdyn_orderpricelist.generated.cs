@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_orderpricelistOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_orderpricelist : EntityBase
 	{
 		public struct Fields
@@ -67,7 +68,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_orderpricelist";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10467;
+		public const int EntityTypeCode = 10526;
 
 		[DebuggerNonUserCode()]
 		public msdyn_orderpricelist()

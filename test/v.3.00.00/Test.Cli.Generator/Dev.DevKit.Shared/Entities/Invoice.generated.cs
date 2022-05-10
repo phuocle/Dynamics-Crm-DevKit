@@ -353,6 +353,7 @@ namespace Dev.DevKit.Shared.Entities.InvoiceOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class Invoice : EntityBase
 	{
 		public struct Fields

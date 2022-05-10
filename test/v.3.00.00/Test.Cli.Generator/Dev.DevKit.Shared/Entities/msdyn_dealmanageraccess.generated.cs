@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_dealmanageraccessOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_dealmanageraccess : EntityBase
 	{
 		public struct Fields
@@ -65,7 +66,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_dealmanageraccess";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10287;
+		public const int EntityTypeCode = 10314;
 
 		[DebuggerNonUserCode()]
 		public msdyn_dealmanageraccess()

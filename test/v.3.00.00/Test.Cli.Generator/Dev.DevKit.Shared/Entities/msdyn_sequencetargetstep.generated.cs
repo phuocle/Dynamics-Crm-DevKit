@@ -173,6 +173,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_sequencetargetstepOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_sequencetargetstep : EntityBase
 	{
 		public struct Fields
@@ -197,6 +198,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_sequencestepId = "msdyn_sequencestepid";
 			public const string msdyn_sequencetarget = "msdyn_sequencetarget";
 			public const string msdyn_sequencetargetstepId = "msdyn_sequencetargetstepid";
+			public const string msdyn_snoozecount = "msdyn_snoozecount";
 			public const string msdyn_subtype = "msdyn_subtype";
 			public const string msdyn_type = "msdyn_type";
 			public const string msdyn_waitstate = "msdyn_waitstate";
@@ -215,7 +217,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_sequencetargetstep";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10271;
+		public const int EntityTypeCode = 10292;
 
 		[DebuggerNonUserCode()]
 		public msdyn_sequencetargetstep()
@@ -381,7 +383,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Description for Sequence target step</para>
-		/// <para>String - MaxLength: 200</para>
+		/// <para>String - MaxLength: 2000</para>
 		/// <para>Description</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -512,6 +514,18 @@ namespace Dev.DevKit.Shared.Entities
 				Entity.Attributes[Fields.msdyn_sequencetargetstepId] = value;
 				Entity.Id = value;
 			}
+		}
+
+		/// <summary>
+		/// <para>Number of times sequence step is snoozed.</para>
+		/// <para>Integer - MinValue: 0 - MaxValue: 10,000</para>
+		/// <para>Snooze count</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public int? msdyn_snoozecount
+		{
+			get { return Entity.GetAttributeValue<int?>(Fields.msdyn_snoozecount); }
+			set { Entity.Attributes[Fields.msdyn_snoozecount] = value; }
 		}
 
 		/// <summary>

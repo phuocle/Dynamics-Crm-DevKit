@@ -49,6 +49,7 @@ namespace Dev.DevKit.Shared.Entities.ImportLogOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class ImportLog : EntityBase
 	{
 		public struct Fields

@@ -73,6 +73,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_segmentOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_segment : EntityBase
 	{
 		public struct Fields
@@ -108,7 +109,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_segment";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10272;
+		public const int EntityTypeCode = 10295;
 
 		[DebuggerNonUserCode()]
 		public msdyn_segment()
@@ -284,7 +285,7 @@ namespace Dev.DevKit.Shared.Entities
 		/// <summary>
 		/// <para>The name of entity on which Segment is created.</para>
 		/// <para>String - MaxLength: 1000</para>
-		/// <para>Record type name</para>
+		/// <para>Record type</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public string msdyn_objecttype

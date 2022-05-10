@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_AIOdLabelOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_AIOdLabel : EntityBase
 	{
 		public struct Fields
@@ -69,7 +70,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_aiodlabel";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10052;
+		public const int EntityTypeCode = 10064;
 
 		[DebuggerNonUserCode()]
 		public msdyn_AIOdLabel()

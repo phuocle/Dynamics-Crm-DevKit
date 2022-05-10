@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_macrosessionOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_macrosession : EntityBase
 	{
 		public struct Fields
@@ -68,7 +69,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_macrosession";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10182;
+		public const int EntityTypeCode = 10209;
 
 		[DebuggerNonUserCode()]
 		public msdyn_macrosession()

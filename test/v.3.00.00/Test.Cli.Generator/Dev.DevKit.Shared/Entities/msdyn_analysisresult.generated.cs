@@ -169,6 +169,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_analysisresultOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_analysisresult : EntityBase
 	{
 		public struct Fields
@@ -221,7 +222,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_analysisresult";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10107;
+		public const int EntityTypeCode = 10131;
 
 		[DebuggerNonUserCode()]
 		public msdyn_analysisresult()

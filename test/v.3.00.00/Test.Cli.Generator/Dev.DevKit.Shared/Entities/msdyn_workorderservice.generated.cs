@@ -49,6 +49,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_workorderserviceOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_workorderservice : EntityBase
 	{
 		public struct Fields
@@ -135,7 +136,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_workorderservice";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10601;
+		public const int EntityTypeCode = 10657;
 
 		[DebuggerNonUserCode()]
 		public msdyn_workorderservice()

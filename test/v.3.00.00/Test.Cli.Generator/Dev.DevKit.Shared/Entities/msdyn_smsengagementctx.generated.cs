@@ -49,6 +49,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_smsengagementctxOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_smsengagementctx : EntityBase
 	{
 		public struct Fields
@@ -83,7 +84,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_smsengagementctx";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10791;
+		public const int EntityTypeCode = 10833;
 
 		[DebuggerNonUserCode()]
 		public msdyn_smsengagementctx()

@@ -57,6 +57,7 @@ namespace Dev.DevKit.Shared.Entities.ServicePlanMappingOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class ServicePlanMapping : EntityBase
 	{
 		public struct Fields
@@ -91,7 +92,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "serviceplanmapping";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10039;
+		public const int EntityTypeCode = 10050;
 
 		[DebuggerNonUserCode()]
 		public ServicePlanMapping()

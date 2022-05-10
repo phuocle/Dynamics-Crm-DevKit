@@ -61,25 +61,25 @@ namespace Dev.DevKit.Shared.Entities.MobileOfflineProfileItemOptionSets
 		/// </summary>
 		AccountLeads = 16,
 		/// <summary>
-		/// Activity File Attachment = 10074
+		/// Activity File Attachment = 10087
 		/// </summary>
-		Activity_File_Attachment = 10074,
+		Activity_File_Attachment = 10087,
 		/// <summary>
-		/// Agreement Business Process = 10538
+		/// Agreement Business Process = 10594
 		/// </summary>
-		Agreement_Business_Process = 10538,
+		Agreement_Business_Process = 10594,
 		/// <summary>
 		/// Appointment = 4201
 		/// </summary>
 		Appointment = 4201,
 		/// <summary>
-		/// Asset Category Template Association = 10126
+		/// Asset Category Template Association = 10149
 		/// </summary>
-		Asset_Category_Template_Association = 10126,
+		Asset_Category_Template_Association = 10149,
 		/// <summary>
-		/// Asset Template Association = 10127
+		/// Asset Template Association = 10150
 		/// </summary>
-		Asset_Template_Association = 10127,
+		Asset_Template_Association = 10150,
 		/// <summary>
 		/// Attachment = 1001
 		/// </summary>
@@ -93,29 +93,29 @@ namespace Dev.DevKit.Shared.Entities.MobileOfflineProfileItemOptionSets
 		/// </summary>
 		Bookable_Resource_Booking = 1145,
 		/// <summary>
-		/// Bookable Resource Booking Quick Note = 10622
+		/// Bookable Resource Booking Quick Note = 10662
 		/// </summary>
-		Bookable_Resource_Booking_Quick_Note = 10622,
+		Bookable_Resource_Booking_Quick_Note = 10662,
 		/// <summary>
 		/// Booking Status = 1152
 		/// </summary>
 		Booking_Status = 1152,
 		/// <summary>
-		/// Booking Timestamp = 10535
+		/// Booking Timestamp = 10591
 		/// </summary>
-		Booking_Timestamp = 10535,
+		Booking_Timestamp = 10591,
 		/// <summary>
 		/// Case = 112
 		/// </summary>
 		Case = 112,
 		/// <summary>
-		/// Case to Work Order Business Process = 10537
+		/// Case to Work Order Business Process = 10593
 		/// </summary>
-		Case_to_Work_Order_Business_Process = 10537,
+		Case_to_Work_Order_Business_Process = 10593,
 		/// <summary>
-		/// CFS - IoT Alert Process Flow = 10634
+		/// CFS - IoT Alert Process Flow = 10674
 		/// </summary>
-		CFS_IoT_Alert_Process_Flow = 10634,
+		CFS_IoT_Alert_Process_Flow = 10674,
 		/// <summary>
 		/// Competitor = 123
 		/// </summary>
@@ -149,13 +149,13 @@ namespace Dev.DevKit.Shared.Entities.MobileOfflineProfileItemOptionSets
 		/// </summary>
 		Currency = 9105,
 		/// <summary>
-		/// Customer Asset = 10128
+		/// Customer Asset = 10151
 		/// </summary>
-		Customer_Asset = 10128,
+		Customer_Asset = 10151,
 		/// <summary>
-		/// Customer Asset Category = 10130
+		/// Customer Asset Category = 10155
 		/// </summary>
-		Customer_Asset_Category = 10130,
+		Customer_Asset_Category = 10155,
 		/// <summary>
 		/// Email = 4202
 		/// </summary>
@@ -177,21 +177,21 @@ namespace Dev.DevKit.Shared.Entities.MobileOfflineProfileItemOptionSets
 		/// </summary>
 		Entitlement_Template_Product = 4545,
 		/// <summary>
-		/// Field Service Price List Item = 10541
+		/// Field Service Price List Item = 10597
 		/// </summary>
-		Field_Service_Price_List_Item = 10541,
+		Field_Service_Price_List_Item = 10597,
 		/// <summary>
-		/// Field Service Setting = 10542
+		/// Field Service Setting = 10598
 		/// </summary>
-		Field_Service_Setting = 10542,
+		Field_Service_Setting = 10598,
 		/// <summary>
-		/// Functional Location = 10131
+		/// Functional Location = 10156
 		/// </summary>
-		Functional_Location = 10131,
+		Functional_Location = 10156,
 		/// <summary>
-		/// Geolocation Settings = 10635
+		/// Geolocation Settings = 10675
 		/// </summary>
-		Geolocation_Settings = 10635,
+		Geolocation_Settings = 10675,
 		/// <summary>
 		/// Image Descriptor = 1007
 		/// </summary>
@@ -201,45 +201,45 @@ namespace Dev.DevKit.Shared.Entities.MobileOfflineProfileItemOptionSets
 		/// </summary>
 		Incident_KnowledgeBaseRecord = 9931,
 		/// <summary>
-		/// Incident Type = 10545
+		/// Incident Type = 10601
 		/// </summary>
-		Incident_Type = 10545,
+		Incident_Type = 10601,
 		/// <summary>
-		/// Incident Type Product = 10547
+		/// Incident Type Product = 10603
 		/// </summary>
-		Incident_Type_Product = 10547,
+		Incident_Type_Product = 10603,
 		/// <summary>
-		/// Incident Type Resolution = 10627
+		/// Incident Type Resolution = 10667
 		/// </summary>
-		Incident_Type_Resolution = 10627,
+		Incident_Type_Resolution = 10667,
 		/// <summary>
-		/// Incident Type Service = 10548
+		/// Incident Type Service = 10604
 		/// </summary>
-		Incident_Type_Service = 10548,
+		Incident_Type_Service = 10604,
 		/// <summary>
-		/// Incident Type Service Task = 10549
+		/// Incident Type Service Task = 10605
 		/// </summary>
-		Incident_Type_Service_Task = 10549,
+		Incident_Type_Service_Task = 10605,
 		/// <summary>
-		/// Incident Types Setup = 10550
+		/// Incident Types Setup = 10606
 		/// </summary>
-		Incident_Types_Setup = 10550,
+		Incident_Types_Setup = 10606,
 		/// <summary>
-		/// Inspection Attachment = 10519
+		/// Inspection Attachment = 10575
 		/// </summary>
-		Inspection_Attachment = 10519,
+		Inspection_Attachment = 10575,
 		/// <summary>
-		/// Inspection Response = 10522
+		/// Inspection Response = 10578
 		/// </summary>
-		Inspection_Response = 10522,
+		Inspection_Response = 10578,
 		/// <summary>
-		/// Inspection Template = 10518
+		/// Inspection Template = 10574
 		/// </summary>
-		Inspection_Template = 10518,
+		Inspection_Template = 10574,
 		/// <summary>
-		/// Inspection Template Version = 10520
+		/// Inspection Template Version = 10576
 		/// </summary>
-		Inspection_Template_Version = 10520,
+		Inspection_Template_Version = 10576,
 		/// <summary>
 		/// Invoice = 1090
 		/// </summary>
@@ -249,73 +249,73 @@ namespace Dev.DevKit.Shared.Entities.MobileOfflineProfileItemOptionSets
 		/// </summary>
 		Invoice_Line = 1091,
 		/// <summary>
-		/// Invoice Process = 10433
+		/// Invoice Process = 10492
 		/// </summary>
-		Invoice_Process = 10433,
+		Invoice_Process = 10492,
 		/// <summary>
-		/// IoT Alert = 10138
+		/// IoT Alert = 10165
 		/// </summary>
-		IoT_Alert = 10138,
+		IoT_Alert = 10165,
 		/// <summary>
-		/// IoT Alert to Case Process = 10154
+		/// IoT Alert to Case Process = 10181
 		/// </summary>
-		IoT_Alert_to_Case_Process = 10154,
+		IoT_Alert_to_Case_Process = 10181,
 		/// <summary>
-		/// IoT Device = 10139
+		/// IoT Device = 10166
 		/// </summary>
-		IoT_Device = 10139,
+		IoT_Device = 10166,
 		/// <summary>
-		/// IoT Device Category = 10140
+		/// IoT Device Category = 10167
 		/// </summary>
-		IoT_Device_Category = 10140,
+		IoT_Device_Category = 10167,
 		/// <summary>
-		/// IoT Device Command = 10141
+		/// IoT Device Command = 10168
 		/// </summary>
-		IoT_Device_Command = 10141,
+		IoT_Device_Command = 10168,
 		/// <summary>
-		/// IoT Device Command Definition = 10142
+		/// IoT Device Command Definition = 10169
 		/// </summary>
-		IoT_Device_Command_Definition = 10142,
+		IoT_Device_Command_Definition = 10169,
 		/// <summary>
-		/// IoT Device Data History = 10143
+		/// IoT Device Data History = 10170
 		/// </summary>
-		IoT_Device_Data_History = 10143,
+		IoT_Device_Data_History = 10170,
 		/// <summary>
-		/// IoT Device Property = 10144
+		/// IoT Device Property = 10171
 		/// </summary>
-		IoT_Device_Property = 10144,
+		IoT_Device_Property = 10171,
 		/// <summary>
-		/// IoT Device Registration History = 10145
+		/// IoT Device Registration History = 10172
 		/// </summary>
-		IoT_Device_Registration_History = 10145,
+		IoT_Device_Registration_History = 10172,
 		/// <summary>
-		/// IoT Property Definition = 10148
+		/// IoT Property Definition = 10175
 		/// </summary>
-		IoT_Property_Definition = 10148,
+		IoT_Property_Definition = 10175,
 		/// <summary>
-		/// IoT Provider = 10149
+		/// IoT Provider = 10176
 		/// </summary>
-		IoT_Provider = 10149,
+		IoT_Provider = 10176,
 		/// <summary>
-		/// IoT Provider Instance = 10150
+		/// IoT Provider Instance = 10177
 		/// </summary>
-		IoT_Provider_Instance = 10150,
+		IoT_Provider_Instance = 10177,
 		/// <summary>
-		/// IoT Settings = 10151
+		/// IoT Settings = 10178
 		/// </summary>
-		IoT_Settings = 10151,
+		IoT_Settings = 10178,
 		/// <summary>
 		/// Knowledge Article = 9953
 		/// </summary>
 		Knowledge_Article = 9953,
 		/// <summary>
-		/// Knowledge Article Attachment = 10084
+		/// Knowledge Article Attachment = 10099
 		/// </summary>
-		Knowledge_Article_Attachment = 10084,
+		Knowledge_Article_Attachment = 10099,
 		/// <summary>
-		/// Knowledge Article Image = 10080
+		/// Knowledge Article Image = 10095
 		/// </summary>
-		Knowledge_Article_Image = 10080,
+		Knowledge_Article_Image = 10095,
 		/// <summary>
 		/// Knowledge Article Views = 9955
 		/// </summary>
@@ -365,6 +365,10 @@ namespace Dev.DevKit.Shared.Entities.MobileOfflineProfileItemOptionSets
 		/// </summary>
 		Order_Line = 1089,
 		/// <summary>
+		/// OrganizationDataSyncState = 10114
+		/// </summary>
+		OrganizationDataSyncState = 10114,
+		/// <summary>
 		/// Phone Call = 4210
 		/// </summary>
 		Phone_Call = 4210,
@@ -381,61 +385,61 @@ namespace Dev.DevKit.Shared.Entities.MobileOfflineProfileItemOptionSets
 		/// </summary>
 		Price_List_Item = 1026,
 		/// <summary>
-		/// Priority = 10409
+		/// Priority = 10479
 		/// </summary>
-		Priority = 10409,
+		Priority = 10479,
 		/// <summary>
 		/// Product = 1024
 		/// </summary>
 		Product = 1024,
 		/// <summary>
-		/// Product Inventory = 10565
+		/// Product Inventory = 10621
 		/// </summary>
-		Product_Inventory = 10565,
+		Product_Inventory = 10621,
 		/// <summary>
 		/// Product Relationship = 1028
 		/// </summary>
 		Product_Relationship = 1028,
 		/// <summary>
-		/// Project Stages = 10432
+		/// Project Stages = 10491
 		/// </summary>
-		Project_Stages = 10432,
+		Project_Stages = 10491,
 		/// <summary>
 		/// Property = 1048
 		/// </summary>
 		Property = 1048,
 		/// <summary>
-		/// Property Asset Association = 10133
+		/// Property Asset Association = 10158
 		/// </summary>
-		Property_Asset_Association = 10133,
+		Property_Asset_Association = 10158,
 		/// <summary>
 		/// Property Association = 1235
 		/// </summary>
 		Property_Association = 1235,
 		/// <summary>
-		/// Property Definition = 10132
+		/// Property Definition = 10157
 		/// </summary>
-		Property_Definition = 10132,
+		Property_Definition = 10157,
 		/// <summary>
 		/// Property Instance = 1333
 		/// </summary>
 		Property_Instance = 1333,
 		/// <summary>
-		/// Property Log = 10134
+		/// Property Log = 10159
 		/// </summary>
-		Property_Log = 10134,
+		Property_Log = 10159,
 		/// <summary>
 		/// Property Option Set Item = 1049
 		/// </summary>
 		Property_Option_Set_Item = 1049,
 		/// <summary>
-		/// Property Template Association = 10135
+		/// Property Template Association = 10160
 		/// </summary>
-		Property_Template_Association = 10135,
+		Property_Template_Association = 10160,
 		/// <summary>
-		/// Purchase Order Business Process = 10536
+		/// Purchase Order Business Process = 10592
 		/// </summary>
-		Purchase_Order_Business_Process = 10536,
+		Purchase_Order_Business_Process = 10592,
 		/// <summary>
 		/// Queue = 2020
 		/// </summary>
@@ -453,17 +457,17 @@ namespace Dev.DevKit.Shared.Entities.MobileOfflineProfileItemOptionSets
 		/// </summary>
 		Quote_Line = 1085,
 		/// <summary>
-		/// Resolution = 10630
+		/// Resolution = 10670
 		/// </summary>
-		Resolution = 10630,
+		Resolution = 10670,
 		/// <summary>
-		/// Scheduling Parameter = 10421
+		/// Scheduling Parameter = 10482
 		/// </summary>
-		Scheduling_Parameter = 10421,
+		Scheduling_Parameter = 10482,
 		/// <summary>
-		/// Service Task Type = 10588
+		/// Service Task Type = 10644
 		/// </summary>
-		Service_Task_Type = 10588,
+		Service_Task_Type = 10644,
 		/// <summary>
 		/// SLA KPI Instance = 9752
 		/// </summary>
@@ -473,33 +477,33 @@ namespace Dev.DevKit.Shared.Entities.MobileOfflineProfileItemOptionSets
 		/// </summary>
 		Task = 4212,
 		/// <summary>
-		/// Tax Code = 10590
+		/// Tax Code = 10646
 		/// </summary>
-		Tax_Code = 10590,
+		Tax_Code = 10646,
 		/// <summary>
 		/// Team = 9
 		/// </summary>
 		Team = 9,
 		/// <summary>
-		/// Template For Properties = 10136
+		/// Template For Properties = 10161
 		/// </summary>
-		Template_For_Properties = 10136,
+		Template_For_Properties = 10161,
 		/// <summary>
 		/// Territory = 2013
 		/// </summary>
 		Territory = 2013,
 		/// <summary>
-		/// Time Entry = 10495
+		/// Time Entry = 10554
 		/// </summary>
-		Time_Entry = 10495,
+		Time_Entry = 10554,
 		/// <summary>
-		/// Time Off Request = 10592
+		/// Time Off Request = 10648
 		/// </summary>
-		Time_Off_Request = 10592,
+		Time_Off_Request = 10648,
 		/// <summary>
-		/// Time Source = 10510
+		/// Time Source = 10569
 		/// </summary>
-		Time_Source = 10510,
+		Time_Source = 10569,
 		/// <summary>
 		/// Unit = 1055
 		/// </summary>
@@ -513,50 +517,51 @@ namespace Dev.DevKit.Shared.Entities.MobileOfflineProfileItemOptionSets
 		/// </summary>
 		User = 8,
 		/// <summary>
-		/// Warehouse = 10594
+		/// Warehouse = 10650
 		/// </summary>
-		Warehouse = 10594,
+		Warehouse = 10650,
 		/// <summary>
-		/// Work Order = 10595
+		/// Work Order = 10651
 		/// </summary>
-		Work_Order = 10595,
+		Work_Order = 10651,
 		/// <summary>
-		/// Work Order Business Process = 10539
+		/// Work Order Business Process = 10595
 		/// </summary>
-		Work_Order_Business_Process = 10539,
+		Work_Order_Business_Process = 10595,
 		/// <summary>
-		/// Work Order Incident = 10598
+		/// Work Order Incident = 10654
 		/// </summary>
-		Work_Order_Incident = 10598,
+		Work_Order_Incident = 10654,
 		/// <summary>
-		/// Work Order Product = 10599
+		/// Work Order Product = 10655
 		/// </summary>
-		Work_Order_Product = 10599,
+		Work_Order_Product = 10655,
 		/// <summary>
-		/// Work Order Resolution = 10633
+		/// Work Order Resolution = 10673
 		/// </summary>
-		Work_Order_Resolution = 10633,
+		Work_Order_Resolution = 10673,
 		/// <summary>
-		/// Work Order Service = 10601
+		/// Work Order Service = 10657
 		/// </summary>
-		Work_Order_Service = 10601,
+		Work_Order_Service = 10657,
 		/// <summary>
-		/// Work Order Service Task = 10602
+		/// Work Order Service Task = 10658
 		/// </summary>
-		Work_Order_Service_Task = 10602,
+		Work_Order_Service_Task = 10658,
 		/// <summary>
-		/// Work Order Substatus = 10603
+		/// Work Order Substatus = 10659
 		/// </summary>
-		Work_Order_Substatus = 10603,
+		Work_Order_Substatus = 10659,
 		/// <summary>
-		/// Work Order Type = 10604
+		/// Work Order Type = 10660
 		/// </summary>
-		Work_Order_Type = 10604
+		Work_Order_Type = 10660
 	}
 }
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class MobileOfflineProfileItem : EntityBase
 	{
 		public struct Fields

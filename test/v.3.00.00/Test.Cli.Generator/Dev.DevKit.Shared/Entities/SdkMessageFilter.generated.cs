@@ -33,6 +33,7 @@ namespace Dev.DevKit.Shared.Entities.SdkMessageFilterOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class SdkMessageFilter : EntityBase
 	{
 		public struct Fields

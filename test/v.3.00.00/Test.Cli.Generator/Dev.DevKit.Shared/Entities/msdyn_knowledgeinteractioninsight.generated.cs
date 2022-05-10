@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_knowledgeinteractioninsightOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_knowledgeinteractioninsight : EntityBase
 	{
 		public struct Fields
@@ -72,7 +73,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_knowledgeinteractioninsight";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10081;
+		public const int EntityTypeCode = 10096;
 
 		[DebuggerNonUserCode()]
 		public msdyn_knowledgeinteractioninsight()

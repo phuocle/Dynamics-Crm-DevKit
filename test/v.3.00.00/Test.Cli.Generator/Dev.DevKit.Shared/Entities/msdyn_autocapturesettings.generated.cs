@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_autocapturesettingsOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_autocapturesettings : EntityBase
 	{
 		public struct Fields
@@ -79,7 +80,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_autocapturesettings";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10260;
+		public const int EntityTypeCode = 10280;
 
 		[DebuggerNonUserCode()]
 		public msdyn_autocapturesettings()

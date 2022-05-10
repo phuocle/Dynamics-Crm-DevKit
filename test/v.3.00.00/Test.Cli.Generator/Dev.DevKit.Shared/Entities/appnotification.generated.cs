@@ -65,6 +65,7 @@ namespace Dev.DevKit.Shared.Entities.appnotificationOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class appnotification : EntityBase
 	{
 		public struct Fields
@@ -99,7 +100,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "appnotification";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10099;
+		public const int EntityTypeCode = 10116;
 
 		[DebuggerNonUserCode()]
 		public appnotification()

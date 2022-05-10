@@ -33,6 +33,7 @@ namespace Dev.DevKit.Shared.Entities.AppConfigInstanceOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class AppConfigInstance : EntityBase
 	{
 		public struct Fields

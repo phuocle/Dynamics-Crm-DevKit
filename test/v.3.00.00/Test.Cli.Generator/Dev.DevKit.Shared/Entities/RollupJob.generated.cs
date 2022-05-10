@@ -69,6 +69,7 @@ namespace Dev.DevKit.Shared.Entities.RollupJobOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class RollupJob : EntityBase
 	{
 		public struct Fields

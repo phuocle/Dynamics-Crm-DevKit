@@ -73,6 +73,7 @@ namespace Dev.DevKit.Shared.Entities.ProcessTriggerOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class ProcessTrigger : EntityBase
 	{
 		public struct Fields

@@ -49,6 +49,7 @@ namespace Dev.DevKit.Shared.Entities.SdkMessageProcessingStepImageOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class SdkMessageProcessingStepImage : EntityBase
 	{
 		public struct Fields

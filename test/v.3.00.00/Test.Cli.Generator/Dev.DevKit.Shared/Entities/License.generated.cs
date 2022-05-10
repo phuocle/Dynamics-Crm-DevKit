@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.LicenseOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class License : EntityBase
 	{
 		public struct Fields

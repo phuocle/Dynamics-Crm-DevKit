@@ -33,6 +33,7 @@ namespace Dev.DevKit.Shared.Entities.RelationshipAttributeOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class RelationshipAttribute : EntityBase
 	{
 		public struct Fields

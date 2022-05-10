@@ -325,6 +325,7 @@ namespace Dev.DevKit.Shared.Entities.SystemUserOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class SystemUser : EntityBase
 	{
 		public struct Fields

@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.ListMemberOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class ListMember : EntityBase
 	{
 		public struct Fields

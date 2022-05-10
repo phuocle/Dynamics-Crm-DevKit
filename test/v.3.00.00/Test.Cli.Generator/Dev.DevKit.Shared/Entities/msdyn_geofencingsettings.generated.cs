@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_geofencingsettingsOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_geofencingsettings : EntityBase
 	{
 		public struct Fields
@@ -68,7 +69,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_geofencingsettings";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10640;
+		public const int EntityTypeCode = 10680;
 
 		[DebuggerNonUserCode()]
 		public msdyn_geofencingsettings()

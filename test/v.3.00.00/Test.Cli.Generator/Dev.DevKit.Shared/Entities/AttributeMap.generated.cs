@@ -33,6 +33,7 @@ namespace Dev.DevKit.Shared.Entities.AttributeMapOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class AttributeMap : EntityBase
 	{
 		public struct Fields

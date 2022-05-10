@@ -129,6 +129,7 @@ namespace Dev.DevKit.Shared.Entities.SharePointSiteOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class SharePointSite : EntityBase
 	{
 		public struct Fields

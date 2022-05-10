@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_product_knowledgebaserecordOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_product_knowledgebaserecord : EntityBase
 	{
 		public struct Fields
@@ -28,7 +29,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_product_knowledgebaserecord";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10608;
+		public const int EntityTypeCode = 10162;
 
 		[DebuggerNonUserCode()]
 		public msdyn_product_knowledgebaserecord()

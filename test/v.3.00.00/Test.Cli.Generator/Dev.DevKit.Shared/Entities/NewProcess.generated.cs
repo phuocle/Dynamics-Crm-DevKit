@@ -41,6 +41,7 @@ namespace Dev.DevKit.Shared.Entities.NewProcessOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class NewProcess : EntityBase
 	{
 		public struct Fields

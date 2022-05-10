@@ -33,6 +33,7 @@ namespace Dev.DevKit.Shared.Entities.GlobalSearchConfigurationOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class GlobalSearchConfiguration : EntityBase
 	{
 		public struct Fields

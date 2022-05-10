@@ -57,6 +57,7 @@ namespace Dev.DevKit.Shared.Entities.AppElementOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class AppElement : EntityBase
 	{
 		public struct Fields
@@ -92,7 +93,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "appelement";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10031;
+		public const int EntityTypeCode = 10042;
 
 		[DebuggerNonUserCode()]
 		public AppElement()

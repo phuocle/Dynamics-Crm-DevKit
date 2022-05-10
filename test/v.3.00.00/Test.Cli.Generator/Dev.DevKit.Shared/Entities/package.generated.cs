@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.packageOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class package : EntityBase
 	{
 		public struct Fields

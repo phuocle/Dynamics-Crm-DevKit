@@ -65,6 +65,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_sequenceOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_sequence : EntityBase
 	{
 		public struct Fields
@@ -94,6 +95,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_SequenceStats2y = "msdyn_SequenceStats2y";
 			public const string msdyn_SequenceStats30d = "msdyn_SequenceStats30d";
 			public const string msdyn_SequenceStats90d = "msdyn_SequenceStats90d";
+			public const string msdyn_template = "msdyn_template";
 			public const string msdyn_totaltasks = "msdyn_totaltasks";
 			public const string msdyn_Type = "msdyn_type";
 			public const string msdyn_Version = "msdyn_version";
@@ -114,7 +116,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_sequence";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10268;
+		public const int EntityTypeCode = 10289;
 
 		[DebuggerNonUserCode()]
 		public msdyn_sequence()
@@ -466,6 +468,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.msdyn_SequenceStats90d); }
 			set { Entity.Attributes[Fields.msdyn_SequenceStats90d] = value; }
+		}
+
+		/// <summary>
+		/// <para>Sequence template id</para>
+		/// <para>String - MaxLength: 100</para>
+		/// <para>Sequence template id</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_template
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_template); }
+			set { Entity.Attributes[Fields.msdyn_template] = value; }
 		}
 
 		/// <summary>

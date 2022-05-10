@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.SqlEncryptionAuditOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class SqlEncryptionAudit : EntityBase
 	{
 		public struct Fields

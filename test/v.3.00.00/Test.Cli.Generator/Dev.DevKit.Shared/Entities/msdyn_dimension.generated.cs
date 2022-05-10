@@ -49,6 +49,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_dimensionOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_dimension : EntityBase
 	{
 		public struct Fields
@@ -84,7 +85,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_dimension";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10440;
+		public const int EntityTypeCode = 10499;
 
 		[DebuggerNonUserCode()]
 		public msdyn_dimension()

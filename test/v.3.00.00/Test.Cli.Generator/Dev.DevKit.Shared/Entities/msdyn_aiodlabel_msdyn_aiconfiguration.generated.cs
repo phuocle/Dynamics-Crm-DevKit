@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_aiodlabel_msdyn_aiconfigurationOption
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_aiodlabel_msdyn_aiconfiguration : EntityBase
 	{
 		public struct Fields
@@ -28,7 +29,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_aiodlabel_msdyn_aiconfiguration";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10055;
+		public const int EntityTypeCode = 10067;
 
 		[DebuggerNonUserCode()]
 		public msdyn_aiodlabel_msdyn_aiconfiguration()

@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.ExternalPartyItemOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class ExternalPartyItem : EntityBase
 	{
 		public struct Fields

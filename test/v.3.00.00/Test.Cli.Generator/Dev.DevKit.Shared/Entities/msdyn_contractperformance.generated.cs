@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_contractperformanceOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_contractperformance : EntityBase
 	{
 		public struct Fields
@@ -86,7 +87,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_contractperformance";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10516;
+		public const int EntityTypeCode = 10572;
 
 		[DebuggerNonUserCode()]
 		public msdyn_contractperformance()

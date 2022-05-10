@@ -49,6 +49,7 @@ namespace Dev.DevKit.Shared.Entities.SolutionComponentDefinitionOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class SolutionComponentDefinition : EntityBase
 	{
 		public struct Fields

@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_workorderincidentOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_workorderincident : EntityBase
 	{
 		public struct Fields
@@ -80,7 +81,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_workorderincident";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10598;
+		public const int EntityTypeCode = 10654;
 
 		[DebuggerNonUserCode()]
 		public msdyn_workorderincident()

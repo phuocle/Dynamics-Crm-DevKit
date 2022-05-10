@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.QueueMemberCountOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class QueueMemberCount : EntityBase
 	{
 		public struct Fields

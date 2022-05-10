@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.BusinessDataLocalizedLabelOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class BusinessDataLocalizedLabel : EntityBase
 	{
 		public struct Fields

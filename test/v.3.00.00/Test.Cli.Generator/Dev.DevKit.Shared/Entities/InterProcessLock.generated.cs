@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.InterProcessLockOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class InterProcessLock : EntityBase
 	{
 		public struct Fields

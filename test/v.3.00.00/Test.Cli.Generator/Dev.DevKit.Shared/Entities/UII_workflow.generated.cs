@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.UII_workflowOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class UII_workflow : EntityBase
 	{
 		public struct Fields
@@ -67,7 +68,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "uii_workflow";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10822;
+		public const int EntityTypeCode = 10912;
 
 		[DebuggerNonUserCode()]
 		public UII_workflow()

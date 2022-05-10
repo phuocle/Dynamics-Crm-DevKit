@@ -57,6 +57,7 @@ namespace Dev.DevKit.Shared.Entities.TextAnalyticsEntityMappingOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class TextAnalyticsEntityMapping : EntityBase
 	{
 		public struct Fields

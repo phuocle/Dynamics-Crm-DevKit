@@ -33,6 +33,7 @@ namespace Dev.DevKit.Shared.Entities.applicationuserprofileOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class applicationuserprofile : EntityBase
 	{
 		public struct Fields
@@ -52,7 +53,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "applicationuserprofile";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10043;
+		public const int EntityTypeCode = 10054;
 
 		[DebuggerNonUserCode()]
 		public applicationuserprofile()

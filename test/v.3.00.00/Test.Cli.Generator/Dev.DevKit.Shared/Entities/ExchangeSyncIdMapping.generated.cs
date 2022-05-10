@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.ExchangeSyncIdMappingOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class ExchangeSyncIdMapping : EntityBase
 	{
 		public struct Fields

@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyusd_sessiontransferOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyusd_sessiontransfer : EntityBase
 	{
 		public struct Fields
@@ -66,7 +67,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyusd_sessiontransfer";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10840;
+		public const int EntityTypeCode = 10950;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_sessiontransfer()

@@ -137,6 +137,7 @@ namespace Dev.DevKit.Shared.Entities.BookingStatusOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class BookingStatus : EntityBase
 	{
 		public struct Fields

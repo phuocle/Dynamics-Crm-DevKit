@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.TeamSyncAttributeMappingProfilesOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class TeamSyncAttributeMappingProfiles : EntityBase
 	{
 		public struct Fields

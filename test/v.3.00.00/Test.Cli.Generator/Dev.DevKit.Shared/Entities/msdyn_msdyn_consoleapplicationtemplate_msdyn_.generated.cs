@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_msdyn_consoleapplicationtemplate_msdy
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_msdyn_consoleapplicationtemplate_msdyn_ : EntityBase
 	{
 		public struct Fields
@@ -28,7 +29,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_msdyn_consoleapplicationtemplate_msdyn_";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10663;
+		public const int EntityTypeCode = 10703;
 
 		[DebuggerNonUserCode()]
 		public msdyn_msdyn_consoleapplicationtemplate_msdyn_()

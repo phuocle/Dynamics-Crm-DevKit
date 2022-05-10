@@ -157,6 +157,7 @@ namespace Dev.DevKit.Shared.Entities.QueueOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class Queue : EntityBase
 	{
 		public struct Fields

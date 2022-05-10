@@ -61,6 +61,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_customerassetOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_customerasset : EntityBase
 	{
 		public struct Fields
@@ -109,7 +110,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_customerasset";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10128;
+		public const int EntityTypeCode = 10151;
 
 		[DebuggerNonUserCode()]
 		public msdyn_customerasset()

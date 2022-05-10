@@ -25,6 +25,7 @@ namespace Dev.DevKit.Shared.Entities.PersonalDocumentTemplateOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class PersonalDocumentTemplate : EntityBase
 	{
 		public struct Fields

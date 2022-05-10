@@ -49,6 +49,7 @@ namespace Dev.DevKit.Shared.Entities.msfp_projectOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msfp_project : EntityBase
 	{
 		public struct Fields
@@ -85,7 +86,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msfp_project";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10299;
+		public const int EntityTypeCode = 10335;
 
 		[DebuggerNonUserCode()]
 		public msfp_project()

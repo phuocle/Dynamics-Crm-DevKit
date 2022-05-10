@@ -49,6 +49,7 @@ namespace Dev.DevKit.Shared.Entities.msdyusd_scripttasktriggerOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyusd_scripttasktrigger : EntityBase
 	{
 		public struct Fields
@@ -80,7 +81,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyusd_scripttasktrigger";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10837;
+		public const int EntityTypeCode = 10947;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_scripttasktrigger()

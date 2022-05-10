@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.LocalConfigStoreOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class LocalConfigStore : EntityBase
 	{
 		public struct Fields

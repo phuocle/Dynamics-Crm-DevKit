@@ -69,6 +69,7 @@ namespace Dev.DevKit.Shared.Entities.ProductSubstituteOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class ProductSubstitute : EntityBase
 	{
 		public struct Fields

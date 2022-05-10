@@ -69,6 +69,7 @@ namespace Dev.DevKit.Shared.Entities.SharePointDocumentLocationOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class SharePointDocumentLocation : EntityBase
 	{
 		public struct Fields

@@ -45,6 +45,7 @@ namespace Dev.DevKit.Shared.Entities.ActivityMimeAttachmentOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class ActivityMimeAttachment : EntityBase
 	{
 		public struct Fields

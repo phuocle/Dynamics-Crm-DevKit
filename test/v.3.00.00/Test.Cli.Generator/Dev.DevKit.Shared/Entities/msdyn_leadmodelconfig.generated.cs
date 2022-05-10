@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_leadmodelconfigOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_leadmodelconfig : EntityBase
 	{
 		public struct Fields
@@ -81,7 +82,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_leadmodelconfig";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10890;
+		public const int EntityTypeCode = 10320;
 
 		[DebuggerNonUserCode()]
 		public msdyn_leadmodelconfig()

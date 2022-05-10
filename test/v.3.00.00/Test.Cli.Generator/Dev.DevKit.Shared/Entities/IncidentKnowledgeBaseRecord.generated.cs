@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.IncidentKnowledgeBaseRecordOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class IncidentKnowledgeBaseRecord : EntityBase
 	{
 		public struct Fields

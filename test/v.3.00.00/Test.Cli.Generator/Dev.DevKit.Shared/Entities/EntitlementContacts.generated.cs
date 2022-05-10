@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.EntitlementContactsOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class EntitlementContacts : EntityBase
 	{
 		public struct Fields

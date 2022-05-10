@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_consoleapplicationtypeOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_consoleapplicationtype : EntityBase
 	{
 		public struct Fields
@@ -65,7 +66,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_consoleapplicationtype";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10658;
+		public const int EntityTypeCode = 10698;
 
 		[DebuggerNonUserCode()]
 		public msdyn_consoleapplicationtype()

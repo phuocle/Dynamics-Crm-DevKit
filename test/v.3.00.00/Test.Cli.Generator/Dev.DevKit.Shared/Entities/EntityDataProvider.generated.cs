@@ -33,6 +33,7 @@ namespace Dev.DevKit.Shared.Entities.EntityDataProviderOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class EntityDataProvider : EntityBase
 	{
 		public struct Fields

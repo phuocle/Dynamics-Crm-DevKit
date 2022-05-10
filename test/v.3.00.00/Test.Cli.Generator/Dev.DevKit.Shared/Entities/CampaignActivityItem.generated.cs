@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.CampaignActivityItemOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class CampaignActivityItem : EntityBase
 	{
 		public struct Fields

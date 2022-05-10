@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.LeadAddressOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class LeadAddress : EntityBase
 	{
 		public struct Fields

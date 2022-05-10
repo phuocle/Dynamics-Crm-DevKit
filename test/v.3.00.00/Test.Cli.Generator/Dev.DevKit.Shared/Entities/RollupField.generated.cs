@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.RollupFieldOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class RollupField : EntityBase
 	{
 		public struct Fields

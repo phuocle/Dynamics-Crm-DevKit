@@ -53,6 +53,7 @@ namespace Dev.DevKit.Shared.Entities.ResourceGroupExpansionOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class ResourceGroupExpansion : EntityBase
 	{
 		public struct Fields

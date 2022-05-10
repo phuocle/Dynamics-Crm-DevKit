@@ -41,6 +41,7 @@ namespace Dev.DevKit.Shared.Entities.ActionCardOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class ActionCard : EntityBase
 	{
 		public struct Fields
@@ -465,7 +466,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Choose the record that the card relates to.</para>
-		/// <para>Lookup to account, appointment, contact, email, fax, incident, lead, letter, msdyn_approval, msdyn_bookingalert, msdyn_ocliveworkitem, msdyn_ocoutboundmessage, msdyn_ocsession, msfp_alert, msfp_surveyinvite, msfp_surveyresponse, opportunity, phonecall, recurringappointmentmaster, serviceappointment, task</para>
+		/// <para>Lookup to account, appointment, chat, contact, email, fax, incident, lead, letter, msdyn_approval, msdyn_bookingalert, msdyn_ocliveworkitem, msdyn_ocoutboundmessage, msdyn_ocsession, msfp_alert, msfp_surveyinvite, msfp_surveyresponse, opportunity, phonecall, recurringappointmentmaster, serviceappointment, task</para>
 		/// <para>Regarding</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

@@ -113,6 +113,7 @@ namespace Dev.DevKit.Shared.Entities.UserSettingsOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class UserSettings : EntityBase
 	{
 		public struct Fields
@@ -164,6 +165,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string IsResourceBookingExchangeSyncEnabled = "isresourcebookingexchangesyncenabled";
 			public const string IsSendAsAllowed = "issendasallowed";
 			public const string LastAlertsViewedTime = "lastalertsviewedtime";
+			public const string LastModifiedTimeForViewPersonalizationSettings = "lastmodifiedtimeforviewpersonalizationsettings";
 			public const string LocaleId = "localeid";
 			public const string LongDateFormatCode = "longdateformatcode";
 			public const string ModifiedBy = "modifiedby";
@@ -833,6 +835,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<DateTime?>(Fields.LastAlertsViewedTime); }
 			set { Entity.Attributes[Fields.LastAlertsViewedTime] = value; }
+		}
+
+		/// <summary>
+		/// <para>Stores the timestamp for when the ViewPersonalizationSettings attribute was updated for this user in the UserEntityUISettings table.</para>
+		/// <para>DateTimeBehavior: UserLocal - DateTimeFormat: DateAndTime</para>
+		/// <para>Last modified timestamp for the view personalization settings in UserEntityUISettings table</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public DateTime? LastModifiedTimeForViewPersonalizationSettingsUtc
+		{
+			get { return Entity.GetAttributeValue<DateTime?>(Fields.LastModifiedTimeForViewPersonalizationSettings); }
+			set { Entity.Attributes[Fields.LastModifiedTimeForViewPersonalizationSettings] = value; }
 		}
 
 		/// <summary>

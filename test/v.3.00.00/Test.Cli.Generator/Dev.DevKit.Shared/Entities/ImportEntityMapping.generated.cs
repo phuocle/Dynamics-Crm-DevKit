@@ -77,6 +77,7 @@ namespace Dev.DevKit.Shared.Entities.ImportEntityMappingOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class ImportEntityMapping : EntityBase
 	{
 		public struct Fields

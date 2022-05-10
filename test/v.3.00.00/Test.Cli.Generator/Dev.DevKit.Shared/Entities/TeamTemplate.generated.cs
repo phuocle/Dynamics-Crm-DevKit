@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.TeamTemplateOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class TeamTemplate : EntityBase
 	{
 		public struct Fields

@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.AppModuleMetadataOperationLogOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class AppModuleMetadataOperationLog : EntityBase
 	{
 		public struct Fields

@@ -57,6 +57,7 @@ namespace Dev.DevKit.Shared.Entities.EnvironmentVariableValueOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class EnvironmentVariableValue : EntityBase
 	{
 		public struct Fields

@@ -133,6 +133,7 @@ namespace Dev.DevKit.Shared.Entities.EntitlementOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class Entitlement : EntityBase
 	{
 		public struct Fields

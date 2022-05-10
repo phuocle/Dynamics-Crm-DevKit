@@ -57,6 +57,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_dataanalyticsreport_ksinsightsOptionS
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_dataanalyticsreport_ksinsights : EntityBase
 	{
 		public struct Fields
@@ -92,7 +93,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_dataanalyticsreport_ksinsights";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10220;
+		public const int EntityTypeCode = 10238;
 
 		[DebuggerNonUserCode()]
 		public msdyn_dataanalyticsreport_ksinsights()

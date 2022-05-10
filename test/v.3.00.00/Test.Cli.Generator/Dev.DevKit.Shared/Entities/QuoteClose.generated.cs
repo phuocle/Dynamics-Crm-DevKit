@@ -13,13 +13,17 @@ namespace Dev.DevKit.Shared.Entities.QuoteCloseOptionSets
 	public enum ActivityTypeCode
 	{
 		/// <summary>
+		/// Activity record for the Teams chat = 10088
+		/// </summary>
+		Activity_record_for_the_Teams_chat = 10088,
+		/// <summary>
 		/// Appointment = 4201
 		/// </summary>
 		Appointment = 4201,
 		/// <summary>
-		/// Booking Alert = 10400
+		/// Booking Alert = 10473
 		/// </summary>
-		Booking_Alert = 10400,
+		Booking_Alert = 10473,
 		/// <summary>
 		/// Campaign Activity = 4402
 		/// </summary>
@@ -33,21 +37,21 @@ namespace Dev.DevKit.Shared.Entities.QuoteCloseOptionSets
 		/// </summary>
 		Case_Resolution = 4206,
 		/// <summary>
-		/// Conversation = 10702
+		/// Conversation = 10743
 		/// </summary>
-		Conversation = 10702,
+		Conversation = 10743,
 		/// <summary>
-		/// Customer Voice alert = 10294
+		/// Customer Voice alert = 10330
 		/// </summary>
-		Customer_Voice_alert = 10294,
+		Customer_Voice_alert = 10330,
 		/// <summary>
-		/// Customer Voice survey invite = 10304
+		/// Customer Voice survey invite = 10340
 		/// </summary>
-		Customer_Voice_survey_invite = 10304,
+		Customer_Voice_survey_invite = 10340,
 		/// <summary>
-		/// Customer Voice survey response = 10306
+		/// Customer Voice survey response = 10342
 		/// </summary>
-		Customer_Voice_survey_response = 10306,
+		Customer_Voice_survey_response = 10342,
 		/// <summary>
 		/// Email = 4202
 		/// </summary>
@@ -69,17 +73,17 @@ namespace Dev.DevKit.Shared.Entities.QuoteCloseOptionSets
 		/// </summary>
 		Order_Close = 4209,
 		/// <summary>
-		/// Outbound message = 10813
+		/// Outbound message = 10857
 		/// </summary>
-		Outbound_message = 10813,
+		Outbound_message = 10857,
 		/// <summary>
 		/// Phone Call = 4210
 		/// </summary>
 		Phone_Call = 4210,
 		/// <summary>
-		/// Project Service Approval = 10430
+		/// Project Service Approval = 10489
 		/// </summary>
-		Project_Service_Approval = 10430,
+		Project_Service_Approval = 10489,
 		/// <summary>
 		/// Quick Campaign = 4406
 		/// </summary>
@@ -97,9 +101,9 @@ namespace Dev.DevKit.Shared.Entities.QuoteCloseOptionSets
 		/// </summary>
 		Service_Activity = 4214,
 		/// <summary>
-		/// Session = 10717
+		/// Session = 10760
 		/// </summary>
-		Session = 10717,
+		Session = 10760,
 		/// <summary>
 		/// Task = 4212
 		/// </summary>
@@ -108,6 +112,10 @@ namespace Dev.DevKit.Shared.Entities.QuoteCloseOptionSets
 
 	public enum Community
 	{
+		/// <summary>
+		/// Apple Messages For Business = 16
+		/// </summary>
+		Apple_Messages_For_Business = 16,
 		/// <summary>
 		/// Cortana = 5
 		/// </summary>
@@ -128,6 +136,10 @@ namespace Dev.DevKit.Shared.Entities.QuoteCloseOptionSets
 		/// Facebook = 1
 		/// </summary>
 		Facebook = 1,
+		/// <summary>
+		/// Google's Business Messages = 17
+		/// </summary>
+		Googles_Business_Messages = 17,
 		/// <summary>
 		/// GroupMe = 10
 		/// </summary>
@@ -265,6 +277,7 @@ namespace Dev.DevKit.Shared.Entities.QuoteCloseOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class QuoteClose : EntityBase
 	{
 		public struct Fields

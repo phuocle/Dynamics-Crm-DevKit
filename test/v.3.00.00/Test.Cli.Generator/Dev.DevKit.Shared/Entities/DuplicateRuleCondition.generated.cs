@@ -45,6 +45,7 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleConditionOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class DuplicateRuleCondition : EntityBase
 	{
 		public struct Fields
@@ -65,6 +66,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string OwningBusinessUnit = "owningbusinessunit";
 			public const string OwningUser = "owninguser";
 			public const string RegardingObjectId = "regardingobjectid";
+			public const string UniqueRuleName = "uniquerulename";
 		}
 
 		public const string EntityLogicalName = "duplicaterulecondition";
@@ -316,6 +318,17 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<EntityReference>(Fields.RegardingObjectId); }
 			set { Entity.Attributes[Fields.RegardingObjectId] = value; }
+		}
+
+		/// <summary>
+		/// <para>String - MaxLength: 100</para>
+		/// <para>UniqueRuleName</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string UniqueRuleName
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.UniqueRuleName); }
+			set { Entity.Attributes[Fields.UniqueRuleName] = value; }
 		}
 	}
 }

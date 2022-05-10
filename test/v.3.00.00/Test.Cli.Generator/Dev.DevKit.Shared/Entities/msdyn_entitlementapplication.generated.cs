@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_entitlementapplicationOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_entitlementapplication : EntityBase
 	{
 		public struct Fields
@@ -70,7 +71,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_entitlementapplication";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10540;
+		public const int EntityTypeCode = 10596;
 
 		[DebuggerNonUserCode()]
 		public msdyn_entitlementapplication()

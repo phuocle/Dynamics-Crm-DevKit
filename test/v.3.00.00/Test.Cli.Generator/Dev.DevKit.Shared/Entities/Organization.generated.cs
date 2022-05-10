@@ -82,6 +82,22 @@ namespace Dev.DevKit.Shared.Entities.OrganizationOptionSets
 		Server_Side_Synchronization = 0
 	}
 
+	public enum EmailTemplateDefaultView
+	{
+		/// <summary>
+		/// Grid View = 2
+		/// </summary>
+		Grid_View = 2,
+		/// <summary>
+		/// List View = 3
+		/// </summary>
+		List_View = 3,
+		/// <summary>
+		/// Tiles View = 1
+		/// </summary>
+		Tiles_View = 1
+	}
+
 	public enum FiscalPeriodFormatPeriod
 	{
 		/// <summary>
@@ -357,12 +373,14 @@ namespace Dev.DevKit.Shared.Entities.OrganizationOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class Organization : EntityBase
 	{
 		public struct Fields
 		{
 			public const string ACIWebEndpointUrl = "aciwebendpointurl";
 			public const string AcknowledgementTemplateId = "acknowledgementtemplateid";
+			public const string ActivityTypeFilter = "activitytypefilter";
 			public const string AdvancedColumnEditorEnabled = "advancedcolumneditorenabled";
 			public const string AdvancedColumnFilteringEnabled = "advancedcolumnfilteringenabled";
 			public const string AdvancedFilteringEnabled = "advancedfilteringenabled";
@@ -387,6 +405,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string AMDesignator = "amdesignator";
 			public const string AppDesignerExperienceEnabled = "appdesignerexperienceenabled";
 			public const string AppointmentRichEditorExperience = "appointmentricheditorexperience";
+			public const string AppointmentWithTeamsMeeting = "appointmentwithteamsmeeting";
 			public const string AuditRetentionPeriod = "auditretentionperiod";
 			public const string AuditRetentionPeriodV2 = "auditretentionperiodv2";
 			public const string AutoApplyDefaultonCaseCreate = "autoapplydefaultoncasecreate";
@@ -411,6 +430,8 @@ namespace Dev.DevKit.Shared.Entities
 			public const string CategoryPrefix = "categoryprefix";
 			public const string ClientFeatureSet = "clientfeatureset";
 			public const string ContentSecurityPolicyConfiguration = "contentsecuritypolicyconfiguration";
+			public const string ContentSecurityPolicyConfigurationForCanvas = "contentsecuritypolicyconfigurationforcanvas";
+			public const string ContentSecurityPolicyReportUri = "contentsecuritypolicyreporturi";
 			public const string ContractPrefix = "contractprefix";
 			public const string CopresenceRefreshRate = "copresencerefreshrate";
 			public const string CortanaProactiveExperienceEnabled = "cortanaproactiveexperienceenabled";
@@ -464,8 +485,11 @@ namespace Dev.DevKit.Shared.Entities
 			public const string EmailConnectionChannel = "emailconnectionchannel";
 			public const string EmailCorrelationEnabled = "emailcorrelationenabled";
 			public const string EmailSendPollingPeriod = "emailsendpollingperiod";
+			public const string EmailTemplateDefaultView = "emailtemplatedefaultview";
 			public const string EnableAsyncMergeAPIForUCI = "enableasyncmergeapiforuci";
 			public const string EnableBingMapsIntegration = "enablebingmapsintegration";
+			public const string EnableCalendarImportExport = "enablecalendarimportexport";
+			public const string EnableCanvasAppsInSolutionsByDefault = "enablecanvasappsinsolutionsbydefault";
 			public const string EnableImmersiveSkypeIntegration = "enableimmersiveskypeintegration";
 			public const string EnableLivePersonaCardUCI = "enablelivepersonacarduci";
 			public const string EnableLivePersonCardIntegrationInOffice = "enablelivepersoncardintegrationinoffice";
@@ -475,6 +499,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string EnablePricingOnCreate = "enablepricingoncreate";
 			public const string EnableSensitivityLabelsForTeamsCollab = "enablesensitivitylabelsforteamscollab";
 			public const string EnableSmartMatching = "enablesmartmatching";
+			public const string EnableUnifiedClientCDN = "enableunifiedclientcdn";
 			public const string EnableUnifiedInterfaceShellRefresh = "enableunifiedinterfaceshellrefresh";
 			public const string EnforceReadOnlyPlugins = "enforcereadonlyplugins";
 			public const string EnhancedOQOIAddProductsSettings = "enhancedoqoiaddproductssettings";
@@ -539,6 +564,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string IsConflictDetectionEnabledForMobileClient = "isconflictdetectionenabledformobileclient";
 			public const string IsContactMailingAddressSyncEnabled = "iscontactmailingaddresssyncenabled";
 			public const string IsContentSecurityPolicyEnabled = "iscontentsecuritypolicyenabled";
+			public const string IsContentSecurityPolicyEnabledForCanvas = "iscontentsecuritypolicyenabledforcanvas";
 			public const string IsContextualEmailEnabled = "iscontextualemailenabled";
 			public const string IsContextualHelpEnabled = "iscontextualhelpenabled";
 			public const string IsCustomControlsInCanvasAppsEnabled = "iscustomcontrolsincanvasappsenabled";
@@ -703,6 +729,8 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ResolveSimilarUnresolvedEmailAddress = "resolvesimilarunresolvedemailaddress";
 			public const string RestrictStatusUpdate = "restrictstatusupdate";
 			public const string RiErrorStatus = "rierrorstatus";
+			public const string SalesMobileUseUCIFormsForCreate = "salesmobileuseuciformsforcreate";
+			public const string SalesMobileUseUCIFormsForView = "salesmobileuseuciformsforview";
 			public const string SampleDataImportId = "sampledataimportid";
 			public const string SchedulingEngine = "schedulingengine";
 			public const string SchemaNamePrefix = "schemanameprefix";
@@ -846,6 +874,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<EntityReference>(Fields.AcknowledgementTemplateId); }
 			set { Entity.Attributes[Fields.AcknowledgementTemplateId] = value; }
+		}
+
+		/// <summary>
+		/// <para>Information on whether filtering activity based on entity in app.</para>
+		/// <para>Boolean</para>
+		/// <para>Enable Rich Editing Experience for Appointment</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? ActivityTypeFilter
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.ActivityTypeFilter); }
+			set { Entity.Attributes[Fields.ActivityTypeFilter] = value; }
 		}
 
 		/// <summary>
@@ -1137,6 +1177,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Information on whether Teams meeting experience for Appointment is enabled.</para>
+		/// <para>Boolean</para>
+		/// <para>Enable teams Meeting experience for appointment</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? AppointmentWithTeamsMeeting
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.AppointmentWithTeamsMeeting); }
+			set { Entity.Attributes[Fields.AppointmentWithTeamsMeeting] = value; }
+		}
+
+		/// <summary>
 		/// <para>Audit Retention Period settings stored in Organization Database.</para>
 		/// <para>Integer - MinValue: 30 - MaxValue: 2,147,483,647</para>
 		/// <para>Audit Retention Period Settings</para>
@@ -1418,6 +1470,30 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.ContentSecurityPolicyConfiguration); }
 			set { Entity.Attributes[Fields.ContentSecurityPolicyConfiguration] = value; }
+		}
+
+		/// <summary>
+		/// <para>Content Security Policy configuration for Canvas apps.</para>
+		/// <para>String - MaxLength: 100</para>
+		/// <para>Content Security Policy Configuration for Canvas apps</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string ContentSecurityPolicyConfigurationForCanvas
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.ContentSecurityPolicyConfigurationForCanvas); }
+			set { Entity.Attributes[Fields.ContentSecurityPolicyConfigurationForCanvas] = value; }
+		}
+
+		/// <summary>
+		/// <para>Content Security Policy Report Uri.</para>
+		/// <para>String - MaxLength: 100</para>
+		/// <para>Content Security Policy Report Uri</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string ContentSecurityPolicyReportUri
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.ContentSecurityPolicyReportUri); }
+			set { Entity.Attributes[Fields.ContentSecurityPolicyReportUri] = value; }
 		}
 
 		/// <summary>
@@ -1995,6 +2071,29 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Indicates the selected default view in the enhanced insert e-mail template experience..</para>
+		/// <para>Picklist</para>
+		/// <para>Select the default view in the enhanced insert e-mail template experience.</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public Dev.DevKit.Shared.Entities.OrganizationOptionSets.EmailTemplateDefaultView? EmailTemplateDefaultView
+		{
+			get
+			{
+				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.EmailTemplateDefaultView);
+				if (value == null) return null;
+				return (Dev.DevKit.Shared.Entities.OrganizationOptionSets.EmailTemplateDefaultView)value.Value;
+			}
+			set
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.EmailTemplateDefaultView] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.EmailTemplateDefaultView] = null;
+			}
+		}
+
+		/// <summary>
 		/// <para>Determines whether records merged through the merge dialog in UCI are merged asynchronously</para>
 		/// <para>Boolean</para>
 		/// <para>Asynchronous merge enabled for UCI</para>
@@ -2016,6 +2115,30 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<bool?>(Fields.EnableBingMapsIntegration); }
 			set { Entity.Attributes[Fields.EnableBingMapsIntegration] = value; }
+		}
+
+		/// <summary>
+		/// <para>Indicates whether to Allow calendar export import with SLA.</para>
+		/// <para>Boolean</para>
+		/// <para>Allow calendar export import with SLA</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? EnableCalendarImportExport
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.EnableCalendarImportExport); }
+			set { Entity.Attributes[Fields.EnableCalendarImportExport] = value; }
+		}
+
+		/// <summary>
+		/// <para>Note: By enabling this feature, you will also enable the automatic creation of enviornment variables when adding data sources for your apps.</para>
+		/// <para>Boolean</para>
+		/// <para>Enable the creation of Canvas apps in Dataverse / Solution by default</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? EnableCanvasAppsInSolutionsByDefault
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.EnableCanvasAppsInSolutionsByDefault); }
+			set { Entity.Attributes[Fields.EnableCanvasAppsInSolutionsByDefault] = value; }
 		}
 
 		/// <summary>
@@ -2124,6 +2247,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<bool?>(Fields.EnableSmartMatching); }
 			set { Entity.Attributes[Fields.EnableSmartMatching] = value; }
+		}
+
+		/// <summary>
+		/// <para>Leave empty to use default setting. Set to on/off to enable/disable CDN for UCI.</para>
+		/// <para>Boolean</para>
+		/// <para>Enable UCI CDN for organization</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? EnableUnifiedClientCDN
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.EnableUnifiedClientCDN); }
+			set { Entity.Attributes[Fields.EnableUnifiedClientCDN] = value; }
 		}
 
 		/// <summary>
@@ -2932,6 +3067,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<bool?>(Fields.IsContentSecurityPolicyEnabled); }
 			set { Entity.Attributes[Fields.IsContentSecurityPolicyEnabled] = value; }
+		}
+
+		/// <summary>
+		/// <para>Indicates whether Content Security Policy has been enabled for this organization&apos;s Canvas apps.</para>
+		/// <para>Boolean</para>
+		/// <para>Enable Content Security Policy for this organization's Canvas apps</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? IsContentSecurityPolicyEnabledForCanvas
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.IsContentSecurityPolicyEnabledForCanvas); }
+			set { Entity.Attributes[Fields.IsContentSecurityPolicyEnabledForCanvas] = value; }
 		}
 
 		/// <summary>
@@ -4897,6 +5044,30 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<int?>(Fields.RiErrorStatus); }
 			set { Entity.Attributes[Fields.RiErrorStatus] = value; }
+		}
+
+		/// <summary>
+		/// <para>Indicates whether Sales Mobile should use UCI forms for create</para>
+		/// <para>Boolean</para>
+		/// <para>Indicates whether Sales Mobile should use UCI forms for create</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? SalesMobileUseUCIFormsForCreate
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.SalesMobileUseUCIFormsForCreate); }
+			set { Entity.Attributes[Fields.SalesMobileUseUCIFormsForCreate] = value; }
+		}
+
+		/// <summary>
+		/// <para>Indicates whether Sales Mobile should use UCI forms for view</para>
+		/// <para>Boolean</para>
+		/// <para>Indicates whether Sales Mobile should use UCI forms for view</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? SalesMobileUseUCIFormsForView
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.SalesMobileUseUCIFormsForView); }
+			set { Entity.Attributes[Fields.SalesMobileUseUCIFormsForView] = value; }
 		}
 
 		/// <summary>

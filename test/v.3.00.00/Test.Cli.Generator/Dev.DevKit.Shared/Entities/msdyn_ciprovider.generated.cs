@@ -49,6 +49,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ciproviderOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_ciprovider : EntityBase
 	{
 		public struct Fields
@@ -85,7 +86,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_ciprovider";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10650;
+		public const int EntityTypeCode = 10690;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ciprovider()

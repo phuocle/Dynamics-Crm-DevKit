@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_transactioncategoryhierarchyelementOp
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_transactioncategoryhierarchyelement : EntityBase
 	{
 		public struct Fields
@@ -64,7 +65,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_transactioncategoryhierarchyelement";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10499;
+		public const int EntityTypeCode = 10558;
 
 		[DebuggerNonUserCode()]
 		public msdyn_transactioncategoryhierarchyelement()

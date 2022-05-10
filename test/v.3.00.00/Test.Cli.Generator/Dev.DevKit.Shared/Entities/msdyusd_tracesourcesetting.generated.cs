@@ -65,6 +65,7 @@ namespace Dev.DevKit.Shared.Entities.msdyusd_tracesourcesettingOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyusd_tracesourcesetting : EntityBase
 	{
 		public struct Fields
@@ -94,7 +95,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyusd_tracesourcesetting";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10844;
+		public const int EntityTypeCode = 10901;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_tracesourcesetting()

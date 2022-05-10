@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.FilterTemplateOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class FilterTemplate : EntityBase
 	{
 		public struct Fields

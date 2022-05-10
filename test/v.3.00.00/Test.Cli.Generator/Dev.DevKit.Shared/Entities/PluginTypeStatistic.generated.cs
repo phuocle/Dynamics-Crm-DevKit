@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.PluginTypeStatisticOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class PluginTypeStatistic : EntityBase
 	{
 		public struct Fields

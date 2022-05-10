@@ -69,6 +69,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_workqueueusersettingOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_workqueueusersetting : EntityBase
 	{
 		public struct Fields
@@ -84,6 +85,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_actiononskip = "msdyn_actiononskip";
 			public const string msdyn_linkingconfiguration = "msdyn_linkingconfiguration";
 			public const string msdyn_name = "msdyn_name";
+			public const string msdyn_sellerfilterconfiguration = "msdyn_sellerfilterconfiguration";
 			public const string msdyn_workqueueusersettingId = "msdyn_workqueueusersettingid";
 			public const string OverriddenCreatedOn = "overriddencreatedon";
 			public const string OwnerId = "ownerid";
@@ -100,7 +102,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_workqueueusersetting";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10285;
+		public const int EntityTypeCode = 10312;
 
 		[DebuggerNonUserCode()]
 		public msdyn_workqueueusersetting()
@@ -296,6 +298,17 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.msdyn_name); }
 			set { Entity.Attributes[Fields.msdyn_name] = value; }
+		}
+
+		/// <summary>
+		/// <para>Required - Memo - MaxLength: 1000000</para>
+		/// <para>Seller Filter Configuration</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_sellerfilterconfiguration
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_sellerfilterconfiguration); }
+			set { Entity.Attributes[Fields.msdyn_sellerfilterconfiguration] = value; }
 		}
 
 		/// <summary>

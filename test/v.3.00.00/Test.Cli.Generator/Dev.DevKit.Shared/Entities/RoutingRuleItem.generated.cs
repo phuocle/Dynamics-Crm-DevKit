@@ -45,6 +45,7 @@ namespace Dev.DevKit.Shared.Entities.RoutingRuleItemOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class RoutingRuleItem : EntityBase
 	{
 		public struct Fields

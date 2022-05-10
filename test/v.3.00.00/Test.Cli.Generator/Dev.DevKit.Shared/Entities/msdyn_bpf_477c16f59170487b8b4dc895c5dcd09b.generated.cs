@@ -41,6 +41,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_bpf_477c16f59170487b8b4dc895c5dcd09bO
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_bpf_477c16f59170487b8b4dc895c5dcd09b : EntityBase
 	{
 		public struct Fields
@@ -75,7 +76,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_bpf_477c16f59170487b8b4dc895c5dcd09b";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10634;
+		public const int EntityTypeCode = 10674;
 
 		[DebuggerNonUserCode()]
 		public msdyn_bpf_477c16f59170487b8b4dc895c5dcd09b()

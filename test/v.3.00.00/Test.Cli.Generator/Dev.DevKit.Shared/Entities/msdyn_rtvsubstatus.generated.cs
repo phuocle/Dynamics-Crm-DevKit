@@ -61,6 +61,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_rtvsubstatusOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_rtvsubstatus : EntityBase
 	{
 		public struct Fields
@@ -91,7 +92,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_rtvsubstatus";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10587;
+		public const int EntityTypeCode = 10643;
 
 		[DebuggerNonUserCode()]
 		public msdyn_rtvsubstatus()

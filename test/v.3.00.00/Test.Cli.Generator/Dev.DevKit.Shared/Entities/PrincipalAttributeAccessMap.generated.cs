@@ -49,6 +49,7 @@ namespace Dev.DevKit.Shared.Entities.PrincipalAttributeAccessMapOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class PrincipalAttributeAccessMap : EntityBase
 	{
 		public struct Fields

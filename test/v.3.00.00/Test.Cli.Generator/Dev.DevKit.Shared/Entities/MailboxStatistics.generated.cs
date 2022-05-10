@@ -29,6 +29,7 @@ namespace Dev.DevKit.Shared.Entities.MailboxStatisticsOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class MailboxStatistics : EntityBase
 	{
 		public struct Fields

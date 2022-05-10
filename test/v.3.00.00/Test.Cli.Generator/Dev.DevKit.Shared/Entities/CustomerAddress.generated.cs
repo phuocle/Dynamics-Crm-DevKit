@@ -89,6 +89,7 @@ namespace Dev.DevKit.Shared.Entities.CustomerAddressOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class CustomerAddress : EntityBase
 	{
 		public struct Fields

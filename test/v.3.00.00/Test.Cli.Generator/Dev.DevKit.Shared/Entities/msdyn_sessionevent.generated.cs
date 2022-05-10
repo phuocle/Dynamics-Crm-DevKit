@@ -305,6 +305,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_sessioneventOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_sessionevent : EntityBase
 	{
 		public struct Fields
@@ -338,7 +339,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_sessionevent";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10736;
+		public const int EntityTypeCode = 10779;
 
 		[DebuggerNonUserCode()]
 		public msdyn_sessionevent()

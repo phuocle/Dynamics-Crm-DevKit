@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.UoMScheduleOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class UoMSchedule : EntityBase
 	{
 		public struct Fields

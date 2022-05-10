@@ -53,6 +53,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_attributeOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_attribute : EntityBase
 	{
 		public struct Fields
@@ -85,7 +86,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_attribute";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10275;
+		public const int EntityTypeCode = 10298;
 
 		[DebuggerNonUserCode()]
 		public msdyn_attribute()

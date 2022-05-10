@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.ActionCardUserSettingsOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class ActionCardUserSettings : EntityBase
 	{
 		public struct Fields

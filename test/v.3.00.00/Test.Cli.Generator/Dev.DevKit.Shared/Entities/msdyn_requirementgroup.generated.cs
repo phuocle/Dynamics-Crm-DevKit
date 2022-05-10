@@ -49,6 +49,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_requirementgroupOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_requirementgroup : EntityBase
 	{
 		public struct Fields
@@ -80,7 +81,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_requirementgroup";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10411;
+		public const int EntityTypeCode = 10466;
 
 		[DebuggerNonUserCode()]
 		public msdyn_requirementgroup()

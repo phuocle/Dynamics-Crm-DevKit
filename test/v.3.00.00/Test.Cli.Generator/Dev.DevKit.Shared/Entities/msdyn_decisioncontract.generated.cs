@@ -57,6 +57,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_decisioncontractOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_decisioncontract : EntityBase
 	{
 		public struct Fields
@@ -93,7 +94,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_decisioncontract";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10669;
+		public const int EntityTypeCode = 10345;
 
 		[DebuggerNonUserCode()]
 		public msdyn_decisioncontract()

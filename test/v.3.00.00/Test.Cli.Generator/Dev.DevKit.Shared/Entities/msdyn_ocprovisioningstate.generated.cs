@@ -53,6 +53,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocprovisioningstateOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_ocprovisioningstate : EntityBase
 	{
 		public struct Fields
@@ -91,7 +92,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_ocprovisioningstate";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10710;
+		public const int EntityTypeCode = 10720;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocprovisioningstate()

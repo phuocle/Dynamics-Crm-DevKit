@@ -33,6 +33,7 @@ namespace Dev.DevKit.Shared.Entities.DisplayStringMapOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class DisplayStringMap : EntityBase
 	{
 		public struct Fields

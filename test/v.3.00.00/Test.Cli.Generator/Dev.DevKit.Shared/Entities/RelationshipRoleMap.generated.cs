@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.RelationshipRoleMapOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class RelationshipRoleMap : EntityBase
 	{
 		public struct Fields

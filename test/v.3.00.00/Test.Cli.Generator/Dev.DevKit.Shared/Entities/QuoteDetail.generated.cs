@@ -269,6 +269,7 @@ namespace Dev.DevKit.Shared.Entities.QuoteDetailOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class QuoteDetail : EntityBase
 	{
 		public struct Fields

@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_SessionParticipantDataOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_SessionParticipantData : EntityBase
 	{
 		public struct Fields
@@ -78,7 +79,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_sessionparticipantdata";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10234;
+		public const int EntityTypeCode = 10253;
 
 		[DebuggerNonUserCode()]
 		public msdyn_SessionParticipantData()

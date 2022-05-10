@@ -157,6 +157,7 @@ namespace Dev.DevKit.Shared.Entities.BookableResourceBookingOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class BookableResourceBooking : EntityBase
 	{
 		public struct Fields

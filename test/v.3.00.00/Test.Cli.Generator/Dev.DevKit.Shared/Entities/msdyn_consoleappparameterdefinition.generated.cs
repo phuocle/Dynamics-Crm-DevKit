@@ -57,6 +57,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_consoleappparameterdefinitionOptionSe
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_consoleappparameterdefinition : EntityBase
 	{
 		public struct Fields
@@ -85,7 +86,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_consoleappparameterdefinition";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10653;
+		public const int EntityTypeCode = 10693;
 
 		[DebuggerNonUserCode()]
 		public msdyn_consoleappparameterdefinition()

@@ -13,13 +13,17 @@ namespace Dev.DevKit.Shared.Entities.AppointmentOptionSets
 	public enum ActivityTypeCode
 	{
 		/// <summary>
+		/// Activity record for the Teams chat = 10088
+		/// </summary>
+		Activity_record_for_the_Teams_chat = 10088,
+		/// <summary>
 		/// Appointment = 4201
 		/// </summary>
 		Appointment = 4201,
 		/// <summary>
-		/// Booking Alert = 10400
+		/// Booking Alert = 10473
 		/// </summary>
-		Booking_Alert = 10400,
+		Booking_Alert = 10473,
 		/// <summary>
 		/// Campaign Activity = 4402
 		/// </summary>
@@ -33,21 +37,21 @@ namespace Dev.DevKit.Shared.Entities.AppointmentOptionSets
 		/// </summary>
 		Case_Resolution = 4206,
 		/// <summary>
-		/// Conversation = 10702
+		/// Conversation = 10743
 		/// </summary>
-		Conversation = 10702,
+		Conversation = 10743,
 		/// <summary>
-		/// Customer Voice alert = 10294
+		/// Customer Voice alert = 10330
 		/// </summary>
-		Customer_Voice_alert = 10294,
+		Customer_Voice_alert = 10330,
 		/// <summary>
-		/// Customer Voice survey invite = 10304
+		/// Customer Voice survey invite = 10340
 		/// </summary>
-		Customer_Voice_survey_invite = 10304,
+		Customer_Voice_survey_invite = 10340,
 		/// <summary>
-		/// Customer Voice survey response = 10306
+		/// Customer Voice survey response = 10342
 		/// </summary>
-		Customer_Voice_survey_response = 10306,
+		Customer_Voice_survey_response = 10342,
 		/// <summary>
 		/// Email = 4202
 		/// </summary>
@@ -69,17 +73,17 @@ namespace Dev.DevKit.Shared.Entities.AppointmentOptionSets
 		/// </summary>
 		Order_Close = 4209,
 		/// <summary>
-		/// Outbound message = 10813
+		/// Outbound message = 10857
 		/// </summary>
-		Outbound_message = 10813,
+		Outbound_message = 10857,
 		/// <summary>
 		/// Phone Call = 4210
 		/// </summary>
 		Phone_Call = 4210,
 		/// <summary>
-		/// Project Service Approval = 10430
+		/// Project Service Approval = 10489
 		/// </summary>
-		Project_Service_Approval = 10430,
+		Project_Service_Approval = 10489,
 		/// <summary>
 		/// Quick Campaign = 4406
 		/// </summary>
@@ -97,9 +101,9 @@ namespace Dev.DevKit.Shared.Entities.AppointmentOptionSets
 		/// </summary>
 		Service_Activity = 4214,
 		/// <summary>
-		/// Session = 10717
+		/// Session = 10760
 		/// </summary>
-		Session = 10717,
+		Session = 10760,
 		/// <summary>
 		/// Task = 4212
 		/// </summary>
@@ -217,6 +221,7 @@ namespace Dev.DevKit.Shared.Entities.AppointmentOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class Appointment : EntityBase
 	{
 		public struct Fields
@@ -252,16 +257,6 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ModifiedFieldsMask = "modifiedfieldsmask";
 			public const string ModifiedOn = "modifiedon";
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
-			public const string msdyn_ci_call_summary_control_field = "msdyn_ci_call_summary_control_field";
-			public const string msdyn_ci_id = "msdyn_ci_id";
-			public const string msdyn_ci_insights_json = "msdyn_ci_insights_json";
-			public const string msdyn_ci_keywords = "msdyn_ci_keywords";
-			public const string msdyn_ci_media_reference_id = "msdyn_ci_media_reference_id";
-			public const string msdyn_ci_transcript = "msdyn_ci_transcript";
-			public const string msdyn_ci_transcript_json = "msdyn_ci_transcript_json";
-			public const string msdyn_ci_translated_transcript = "msdyn_ci_translated_transcript";
-			public const string msdyn_ci_translated_transcript_json = "msdyn_ci_translated_transcript_json";
-			public const string msdyn_ci_url = "msdyn_ci_url";
 			public const string OnHoldTime = "onholdtime";
 			public const string OnlineMeetingChatId = "onlinemeetingchatid";
 			public const string OnlineMeetingId = "onlinemeetingid";
@@ -730,116 +725,6 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Integer - MinValue: -2,147,483,648 - MaxValue: 2,147,483,647</para>
-		/// <para>ci_call_summary_control_field</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public int? msdyn_ci_call_summary_control_field
-		{
-			get { return Entity.GetAttributeValue<int?>(Fields.msdyn_ci_call_summary_control_field); }
-			set { Entity.Attributes[Fields.msdyn_ci_call_summary_control_field] = value; }
-		}
-
-		/// <summary>
-		/// <para>String - MaxLength: 100</para>
-		/// <para>Conversation Id</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string msdyn_ci_id
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.msdyn_ci_id); }
-			set { Entity.Attributes[Fields.msdyn_ci_id] = value; }
-		}
-
-		/// <summary>
-		/// <para>Memo - MaxLength: 1048576</para>
-		/// <para>Insights Json</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string msdyn_ci_insights_json
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.msdyn_ci_insights_json); }
-			set { Entity.Attributes[Fields.msdyn_ci_insights_json] = value; }
-		}
-
-		/// <summary>
-		/// <para>String - MaxLength: 4000</para>
-		/// <para>Conversation Keywords</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string msdyn_ci_keywords
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.msdyn_ci_keywords); }
-			set { Entity.Attributes[Fields.msdyn_ci_keywords] = value; }
-		}
-
-		/// <summary>
-		/// <para>String - MaxLength: 100</para>
-		/// <para>Media Reference Id</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string msdyn_ci_media_reference_id
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.msdyn_ci_media_reference_id); }
-			set { Entity.Attributes[Fields.msdyn_ci_media_reference_id] = value; }
-		}
-
-		/// <summary>
-		/// <para>Memo - MaxLength: 1048576</para>
-		/// <para>CI Transcript</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string msdyn_ci_transcript
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.msdyn_ci_transcript); }
-			set { Entity.Attributes[Fields.msdyn_ci_transcript] = value; }
-		}
-
-		/// <summary>
-		/// <para>Memo - MaxLength: 1048576</para>
-		/// <para>Transcript Json</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string msdyn_ci_transcript_json
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.msdyn_ci_transcript_json); }
-			set { Entity.Attributes[Fields.msdyn_ci_transcript_json] = value; }
-		}
-
-		/// <summary>
-		/// <para>Memo - MaxLength: 1048576</para>
-		/// <para>CI Translated Transcript</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string msdyn_ci_translated_transcript
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.msdyn_ci_translated_transcript); }
-			set { Entity.Attributes[Fields.msdyn_ci_translated_transcript] = value; }
-		}
-
-		/// <summary>
-		/// <para>Memo - MaxLength: 1048576</para>
-		/// <para>Translated Transcript Json</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string msdyn_ci_translated_transcript_json
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.msdyn_ci_translated_transcript_json); }
-			set { Entity.Attributes[Fields.msdyn_ci_translated_transcript_json] = value; }
-		}
-
-		/// <summary>
-		/// <para>String - MaxLength: 1024</para>
-		/// <para>Conversation Url</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string msdyn_ci_url
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.msdyn_ci_url); }
-			set { Entity.Attributes[Fields.msdyn_ci_url] = value; }
-		}
-
-		/// <summary>
 		/// <para>Shows how long, in minutes, that the record was on hold.</para>
 		/// <para>ReadOnly - Integer - MinValue: -2,147,483,648 - MaxValue: 2,147,483,647</para>
 		/// <para>On Hold Time (Minutes)</para>
@@ -911,7 +796,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Enter the account, contact, lead, user, or other equipment resources that are not needed at the appointment, but can optionally attend.</para>
-		/// <para>Lookup to account, contact, entitlement, equipment, knowledgearticle, lead, queue, systemuser, unresolvedaddress</para>
+		/// <para>Lookup to account, contact, entitlement, equipment, knowledgearticle, lead, msdyn_salessuggestion, queue, systemuser, unresolvedaddress</para>
 		/// <para>Optional Attendees</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -1074,7 +959,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the object with which the appointment is associated.</para>
-		/// <para>Lookup to account, bookableresourcebooking, bookableresourcebookingheader, bulkoperation, campaign, campaignactivity, contact, contract, entitlement, entitlementtemplate, incident, invoice, knowledgearticle, knowledgebaserecord, lead, msdyn_agreement, msdyn_agreementbookingdate, msdyn_agreementbookingincident, msdyn_agreementbookingproduct, msdyn_agreementbookingservice, msdyn_agreementbookingservicetask, msdyn_agreementbookingsetup, msdyn_agreementinvoicedate, msdyn_agreementinvoiceproduct, msdyn_agreementinvoicesetup, msdyn_bookingalertstatus, msdyn_bookingrule, msdyn_bookingtimestamp, msdyn_customerasset, msdyn_fieldservicesetting, msdyn_incidenttypecharacteristic, msdyn_incidenttypeproduct, msdyn_incidenttypeservice, msdyn_inventoryadjustment, msdyn_inventoryadjustmentproduct, msdyn_inventoryjournal, msdyn_inventorytransfer, msdyn_payment, msdyn_paymentdetail, msdyn_paymentmethod, msdyn_paymentterm, msdyn_playbookinstance, msdyn_postalbum, msdyn_postalcode, msdyn_processnotes, msdyn_productinventory, msdyn_projectteam, msdyn_purchaseorder, msdyn_purchaseorderbill, msdyn_purchaseorderproduct, msdyn_purchaseorderreceipt, msdyn_purchaseorderreceiptproduct, msdyn_purchaseordersubstatus, msdyn_quotebookingincident, msdyn_quotebookingproduct, msdyn_quotebookingservice, msdyn_quotebookingservicetask, msdyn_resourceterritory, msdyn_rma, msdyn_rmaproduct, msdyn_rmareceipt, msdyn_rmareceiptproduct, msdyn_rmasubstatus, msdyn_rtv, msdyn_rtvproduct, msdyn_rtvsubstatus, msdyn_shipvia, msdyn_systemuserschedulersetting, msdyn_timegroup, msdyn_timegroupdetail, msdyn_timeoffrequest, msdyn_warehouse, msdyn_workorder, msdyn_workordercharacteristic, msdyn_workorderincident, msdyn_workorderproduct, msdyn_workorderresourcerestriction, msdyn_workorderservice, msdyn_workorderservicetask, opportunity, quote, salesorder, site, uii_action, uii_hostedapplication, uii_nonhostedapplication, uii_option, uii_savedsession, uii_workflow, uii_workflowstep, uii_workflow_workflowstep_mapping</para>
+		/// <para>Lookup to account, bookableresourcebooking, bookableresourcebookingheader, bulkoperation, campaign, campaignactivity, contact, contract, entitlement, entitlementtemplate, incident, invoice, knowledgearticle, knowledgebaserecord, lead, msdyn_agreement, msdyn_agreementbookingdate, msdyn_agreementbookingincident, msdyn_agreementbookingproduct, msdyn_agreementbookingservice, msdyn_agreementbookingservicetask, msdyn_agreementbookingsetup, msdyn_agreementinvoicedate, msdyn_agreementinvoiceproduct, msdyn_agreementinvoicesetup, msdyn_bookingalertstatus, msdyn_bookingrule, msdyn_bookingtimestamp, msdyn_customerasset, msdyn_fieldservicesetting, msdyn_incidenttypecharacteristic, msdyn_incidenttypeproduct, msdyn_incidenttypeservice, msdyn_inventoryadjustment, msdyn_inventoryadjustmentproduct, msdyn_inventoryjournal, msdyn_inventorytransfer, msdyn_payment, msdyn_paymentdetail, msdyn_paymentmethod, msdyn_paymentterm, msdyn_playbookinstance, msdyn_postalbum, msdyn_postalcode, msdyn_processnotes, msdyn_productinventory, msdyn_projectteam, msdyn_purchaseorder, msdyn_purchaseorderbill, msdyn_purchaseorderproduct, msdyn_purchaseorderreceipt, msdyn_purchaseorderreceiptproduct, msdyn_purchaseordersubstatus, msdyn_quotebookingincident, msdyn_quotebookingproduct, msdyn_quotebookingservice, msdyn_quotebookingservicetask, msdyn_resourceterritory, msdyn_rma, msdyn_rmaproduct, msdyn_rmareceipt, msdyn_rmareceiptproduct, msdyn_rmasubstatus, msdyn_rtv, msdyn_rtvproduct, msdyn_rtvsubstatus, msdyn_salessuggestion, msdyn_shipvia, msdyn_systemuserschedulersetting, msdyn_timegroup, msdyn_timegroupdetail, msdyn_timeoffrequest, msdyn_warehouse, msdyn_workorder, msdyn_workordercharacteristic, msdyn_workorderincident, msdyn_workorderproduct, msdyn_workorderresourcerestriction, msdyn_workorderservice, msdyn_workorderservicetask, opportunity, quote, salesorder, site, uii_action, uii_hostedapplication, uii_nonhostedapplication, uii_option, uii_savedsession, uii_workflow, uii_workflowstep, uii_workflow_workflowstep_mapping</para>
 		/// <para>Regarding</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -1086,7 +971,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Enter the account, contact, lead, user, or other equipment resources that are required to attend the appointment.</para>
-		/// <para>Lookup to account, contact, entitlement, equipment, knowledgearticle, lead, queue, systemuser, unresolvedaddress</para>
+		/// <para>Lookup to account, contact, entitlement, equipment, knowledgearticle, lead, msdyn_salessuggestion, queue, systemuser, unresolvedaddress</para>
 		/// <para>Required Attendees</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

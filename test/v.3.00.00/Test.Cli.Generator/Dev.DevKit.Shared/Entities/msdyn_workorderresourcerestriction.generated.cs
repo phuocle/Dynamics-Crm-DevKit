@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_workorderresourcerestrictionOptionSet
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_workorderresourcerestriction : EntityBase
 	{
 		public struct Fields
@@ -70,7 +71,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_workorderresourcerestriction";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10600;
+		public const int EntityTypeCode = 10656;
 
 		[DebuggerNonUserCode()]
 		public msdyn_workorderresourcerestriction()

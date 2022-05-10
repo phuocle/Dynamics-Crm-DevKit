@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.IsvConfigOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class IsvConfig : EntityBase
 	{
 		public struct Fields

@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_kbattachmentOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_kbattachment : EntityBase
 	{
 		public struct Fields
@@ -70,7 +71,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_kbattachment";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10084;
+		public const int EntityTypeCode = 10099;
 
 		[DebuggerNonUserCode()]
 		public msdyn_kbattachment()

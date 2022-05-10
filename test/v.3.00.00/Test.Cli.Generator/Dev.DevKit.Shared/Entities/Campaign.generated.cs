@@ -81,6 +81,7 @@ namespace Dev.DevKit.Shared.Entities.CampaignOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class Campaign : EntityBase
 	{
 		public struct Fields

@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_taxcodeOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_taxcode : EntityBase
 	{
 		public struct Fields
@@ -70,7 +71,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_taxcode";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10590;
+		public const int EntityTypeCode = 10646;
 
 		[DebuggerNonUserCode()]
 		public msdyn_taxcode()

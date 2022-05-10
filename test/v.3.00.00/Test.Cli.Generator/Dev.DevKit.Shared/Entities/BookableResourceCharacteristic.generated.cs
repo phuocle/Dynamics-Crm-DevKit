@@ -61,6 +61,7 @@ namespace Dev.DevKit.Shared.Entities.BookableResourceCharacteristicOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class BookableResourceCharacteristic : EntityBase
 	{
 		public struct Fields

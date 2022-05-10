@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyusd_languagemoduleOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyusd_languagemodule : EntityBase
 	{
 		public struct Fields
@@ -69,7 +70,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyusd_languagemodule";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10835;
+		public const int EntityTypeCode = 10945;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_languagemodule()

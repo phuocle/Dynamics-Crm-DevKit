@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.SystemUserProfilesOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class SystemUserProfiles : EntityBase
 	{
 		public struct Fields

@@ -65,6 +65,7 @@ namespace Dev.DevKit.Shared.Entities.EntitlementEntityAllocationTypeMappingOptio
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class EntitlementEntityAllocationTypeMapping : EntityBase
 	{
 		public struct Fields

@@ -257,6 +257,7 @@ namespace Dev.DevKit.Shared.Entities.OpportunityProductOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class OpportunityProduct : EntityBase
 	{
 		public struct Fields

@@ -77,6 +77,7 @@ namespace Dev.DevKit.Shared.Entities.ProductAssociationOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class ProductAssociation : EntityBase
 	{
 		public struct Fields

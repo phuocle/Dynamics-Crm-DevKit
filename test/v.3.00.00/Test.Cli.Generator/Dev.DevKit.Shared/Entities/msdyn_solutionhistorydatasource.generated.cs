@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_solutionhistorydatasourceOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_solutionhistorydatasource : EntityBase
 	{
 		public struct Fields

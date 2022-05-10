@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.UII_sessiontransferOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class UII_sessiontransfer : EntityBase
 	{
 		public struct Fields
@@ -67,7 +68,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "uii_sessiontransfer";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10821;
+		public const int EntityTypeCode = 10897;
 
 		[DebuggerNonUserCode()]
 		public UII_sessiontransfer()

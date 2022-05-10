@@ -81,6 +81,7 @@ namespace Dev.DevKit.Shared.Entities.solutioncomponentrelationshipconfigurationO
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class solutioncomponentrelationshipconfiguration : EntityBase
 	{
 		public struct Fields

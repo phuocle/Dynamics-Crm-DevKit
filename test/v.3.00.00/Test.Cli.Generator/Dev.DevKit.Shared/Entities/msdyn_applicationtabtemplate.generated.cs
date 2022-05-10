@@ -93,6 +93,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_applicationtabtemplateOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_applicationtabtemplate : EntityBase
 	{
 		public struct Fields
@@ -133,7 +134,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_applicationtabtemplate";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10158;
+		public const int EntityTypeCode = 10185;
 
 		[DebuggerNonUserCode()]
 		public msdyn_applicationtabtemplate()

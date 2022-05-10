@@ -33,6 +33,7 @@ namespace Dev.DevKit.Shared.Entities.FieldSecurityProfileOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class FieldSecurityProfile : EntityBase
 	{
 		public struct Fields

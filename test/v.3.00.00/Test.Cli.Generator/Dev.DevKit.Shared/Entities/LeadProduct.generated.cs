@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.LeadProductOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class LeadProduct : EntityBase
 	{
 		public struct Fields

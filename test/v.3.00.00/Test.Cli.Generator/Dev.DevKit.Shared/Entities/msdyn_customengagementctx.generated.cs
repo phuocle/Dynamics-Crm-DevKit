@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_customengagementctxOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_customengagementctx : EntityBase
 	{
 		public struct Fields
@@ -73,7 +74,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_customengagementctx";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10797;
+		public const int EntityTypeCode = 10838;
 
 		[DebuggerNonUserCode()]
 		public msdyn_customengagementctx()

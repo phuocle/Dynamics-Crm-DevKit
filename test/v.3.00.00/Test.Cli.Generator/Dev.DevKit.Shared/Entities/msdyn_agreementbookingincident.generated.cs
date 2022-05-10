@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_agreementbookingincidentOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_agreementbookingincident : EntityBase
 	{
 		public struct Fields
@@ -74,7 +75,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_agreementbookingincident";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10525;
+		public const int EntityTypeCode = 10581;
 
 		[DebuggerNonUserCode()]
 		public msdyn_agreementbookingincident()

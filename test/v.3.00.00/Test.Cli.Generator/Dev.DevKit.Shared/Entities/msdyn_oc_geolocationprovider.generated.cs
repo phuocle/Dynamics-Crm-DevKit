@@ -53,6 +53,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_oc_geolocationproviderOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_oc_geolocationprovider : EntityBase
 	{
 		public struct Fields
@@ -84,7 +85,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_oc_geolocationprovider";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10722;
+		public const int EntityTypeCode = 10765;
 
 		[DebuggerNonUserCode()]
 		public msdyn_oc_geolocationprovider()

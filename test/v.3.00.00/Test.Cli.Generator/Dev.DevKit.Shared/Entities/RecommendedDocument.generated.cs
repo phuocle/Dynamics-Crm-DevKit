@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.RecommendedDocumentOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class RecommendedDocument : EntityBase
 	{
 		public struct Fields

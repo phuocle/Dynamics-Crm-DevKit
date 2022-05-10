@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_solutionhealthruleargumentOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_solutionhealthruleargument : EntityBase
 	{
 		public struct Fields
@@ -68,7 +69,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_solutionhealthruleargument";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10110;
+		public const int EntityTypeCode = 10134;
 
 		[DebuggerNonUserCode()]
 		public msdyn_solutionhealthruleargument()

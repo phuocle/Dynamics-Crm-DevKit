@@ -33,6 +33,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_appconfiguration_applicationextension
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_appconfiguration_applicationextension : EntityBase
 	{
 		public struct Fields
@@ -52,7 +53,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_appconfiguration_applicationextension";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10165;
+		public const int EntityTypeCode = 10192;
 
 		[DebuggerNonUserCode()]
 		public msdyn_appconfiguration_applicationextension()

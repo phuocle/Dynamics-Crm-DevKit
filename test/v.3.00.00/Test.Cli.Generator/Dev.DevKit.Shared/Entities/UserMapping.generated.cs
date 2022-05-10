@@ -25,6 +25,7 @@ namespace Dev.DevKit.Shared.Entities.UserMappingOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class UserMapping : EntityBase
 	{
 		public struct Fields

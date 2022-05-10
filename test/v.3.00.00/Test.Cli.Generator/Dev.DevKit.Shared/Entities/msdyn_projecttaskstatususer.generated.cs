@@ -57,6 +57,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_projecttaskstatususerOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_projecttaskstatususer : EntityBase
 	{
 		public struct Fields
@@ -93,7 +94,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_projecttaskstatususer";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10476;
+		public const int EntityTypeCode = 10535;
 
 		[DebuggerNonUserCode()]
 		public msdyn_projecttaskstatususer()

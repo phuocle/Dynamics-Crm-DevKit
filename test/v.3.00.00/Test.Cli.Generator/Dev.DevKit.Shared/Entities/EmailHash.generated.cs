@@ -15,11 +15,13 @@ namespace Dev.DevKit.Shared.Entities.EmailHashOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class EmailHash : EntityBase
 	{
 		public struct Fields
 		{
 			public const string ActivityId = "activityid";
+			public const string CreatedOn = "createdon";
 			public const string EmailHashId = "emailhashid";
 			public const string Hash = "hash";
 			public const string HashType = "hashtype";
@@ -92,6 +94,17 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<EntityReference>(Fields.ActivityId); }
 			set { Entity.Attributes[Fields.ActivityId] = value; }
+		}
+
+		/// <summary>
+		/// <para>Shows the date and time when the record was created.</para>
+		/// <para>ReadOnly - DateTimeBehavior: UserLocal - DateTimeFormat: DateAndTime</para>
+		/// <para>Created On</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public DateTime? CreatedOnUtc
+		{
+			get { return Entity.GetAttributeValue<DateTime?>(Fields.CreatedOn); }
 		}
 
 		/// <summary>

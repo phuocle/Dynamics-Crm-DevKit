@@ -33,6 +33,7 @@ namespace Dev.DevKit.Shared.Entities.SdkMessageRequestFieldOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class SdkMessageRequestField : EntityBase
 	{
 		public struct Fields

@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_AIOdTrainingBoundingBoxOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_AIOdTrainingBoundingBox : EntityBase
 	{
 		public struct Fields
@@ -71,7 +72,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_aiodtrainingboundingbox";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10053;
+		public const int EntityTypeCode = 10065;
 
 		[DebuggerNonUserCode()]
 		public msdyn_AIOdTrainingBoundingBox()

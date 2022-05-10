@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.ImageDescriptorOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class ImageDescriptor : EntityBase
 	{
 		public struct Fields

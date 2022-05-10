@@ -93,6 +93,7 @@ namespace Dev.DevKit.Shared.Entities.ConnectionRoleOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class ConnectionRole : EntityBase
 	{
 		public struct Fields

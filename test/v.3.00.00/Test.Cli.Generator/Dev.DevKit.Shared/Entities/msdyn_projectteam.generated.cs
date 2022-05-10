@@ -97,6 +97,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_projectteamOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_projectteam : EntityBase
 	{
 		public struct Fields
@@ -153,7 +154,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_projectteam";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10477;
+		public const int EntityTypeCode = 10536;
 
 		[DebuggerNonUserCode()]
 		public msdyn_projectteam()

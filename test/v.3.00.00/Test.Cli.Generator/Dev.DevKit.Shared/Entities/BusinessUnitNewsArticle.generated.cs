@@ -29,6 +29,7 @@ namespace Dev.DevKit.Shared.Entities.BusinessUnitNewsArticleOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class BusinessUnitNewsArticle : EntityBase
 	{
 		public struct Fields

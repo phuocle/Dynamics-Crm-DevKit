@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_msteamssettingsv2OptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_msteamssettingsv2 : EntityBase
 	{
 		public struct Fields
@@ -53,6 +54,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_EmbedCollabTeamsIntegrationEnabled = "msdyn_embedcollabteamsintegrationenabled";
 			public const string msdyn_MSTeamsSettingsName = "msdyn_msteamssettingsname";
 			public const string msdyn_msteamssettingsv2Id = "msdyn_msteamssettingsv2id";
+			public const string msdyn_SensitivityLabelSettingEnabled = "msdyn_sensitivitylabelsettingenabled";
 			public const string msdyn_TabServiceUrl = "msdyn_tabserviceurl";
 			public const string msdyn_TeamsMeetingIntegrationEnabled = "msdyn_teamsmeetingintegrationenabled";
 			public const string OverriddenCreatedOn = "overriddencreatedon";
@@ -67,7 +69,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_msteamssettingsv2";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10237;
+		public const int EntityTypeCode = 10256;
 
 		[DebuggerNonUserCode()]
 		public msdyn_msteamssettingsv2()
@@ -221,9 +223,9 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Indicates whether embed-collab Teams integration is enabled</para>
+		/// <para>Indicates whether embed-collab teams integration is enabled</para>
 		/// <para>Boolean</para>
-		/// <para>Embed-collab Teams integration</para>
+		/// <para>Embed-collab teams integration</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public bool? msdyn_EmbedCollabTeamsIntegrationEnabled
@@ -261,6 +263,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Indicates whether sensitivity label setting for new team creation has been enabled</para>
+		/// <para>Boolean</para>
+		/// <para>Enable sensitivity labels for Teams collaboration</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_SensitivityLabelSettingEnabled
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_SensitivityLabelSettingEnabled); }
+			set { Entity.Attributes[Fields.msdyn_SensitivityLabelSettingEnabled] = value; }
+		}
+
+		/// <summary>
 		/// <para>String - MaxLength: 300</para>
 		/// <para>msdyn_TabServiceUrl</para>
 		/// </summary>
@@ -272,9 +286,9 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Indicates whether Teams meeting integration is enabled</para>
+		/// <para>Indicates whether teams meeting integration is enabled</para>
 		/// <para>Boolean</para>
-		/// <para>Teams meeting integration</para>
+		/// <para>teams meeting integration</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public bool? msdyn_TeamsMeetingIntegrationEnabled

@@ -57,6 +57,7 @@ namespace Dev.DevKit.Shared.Entities.datalakeworkspacepermissionOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class datalakeworkspacepermission : EntityBase
 	{
 		public struct Fields
@@ -96,7 +97,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "datalakeworkspacepermission";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10027;
+		public const int EntityTypeCode = 10028;
 
 		[DebuggerNonUserCode()]
 		public datalakeworkspacepermission()

@@ -85,6 +85,7 @@ namespace Dev.DevKit.Shared.Entities.RollupPropertiesOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class RollupProperties : EntityBase
 	{
 		public struct Fields

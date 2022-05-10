@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdynsm_marketingsitemapOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdynsm_marketingsitemap : EntityBase
 	{
 		public struct Fields
@@ -62,7 +63,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdynsm_marketingsitemap";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10646;
+		public const int EntityTypeCode = 10686;
 
 		[DebuggerNonUserCode()]
 		public msdynsm_marketingsitemap()

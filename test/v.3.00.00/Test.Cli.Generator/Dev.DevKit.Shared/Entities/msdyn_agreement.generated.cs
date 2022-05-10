@@ -57,6 +57,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_agreementOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_agreement : EntityBase
 	{
 		public struct Fields
@@ -107,7 +108,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_agreement";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10523;
+		public const int EntityTypeCode = 10579;
 
 		[DebuggerNonUserCode()]
 		public msdyn_agreement()

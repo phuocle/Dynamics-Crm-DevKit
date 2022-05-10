@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.UII_nonhostedapplicationOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class UII_nonhostedapplication : EntityBase
 	{
 		public struct Fields
@@ -67,7 +68,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "uii_nonhostedapplication";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10818;
+		public const int EntityTypeCode = 10923;
 
 		[DebuggerNonUserCode()]
 		public UII_nonhostedapplication()

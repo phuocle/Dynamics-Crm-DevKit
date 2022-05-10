@@ -33,6 +33,7 @@ namespace Dev.DevKit.Shared.Entities.SLAItemOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class SLAItem : EntityBase
 	{
 		public struct Fields
@@ -56,6 +57,8 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ModifiedOn = "modifiedon";
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
 			public const string msdyn_AdvancedPauseConfiguration = "msdyn_advancedpauseconfiguration";
+			public const string msdyn_CustomTimeCalculation = "msdyn_customtimecalculation";
+			public const string msdyn_CustomTimeCalculationWorkflowId = "msdyn_customtimecalculationworkflowid";
 			public const string msdyn_PauseConfigurationXml = "msdyn_pauseconfigurationxml";
 			public const string msdyn_slakpiid = "msdyn_slakpiid";
 			public const string Name = "name";
@@ -348,6 +351,29 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_AdvancedPauseConfiguration); }
 			set { Entity.Attributes[Fields.msdyn_AdvancedPauseConfiguration] = value; }
+		}
+
+		/// <summary>
+		/// <para>Boolean</para>
+		/// <para>Custom Time Calculation Flag</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_CustomTimeCalculation
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_CustomTimeCalculation); }
+			set { Entity.Attributes[Fields.msdyn_CustomTimeCalculation] = value; }
+		}
+
+		/// <summary>
+		/// <para>Unique identifier for Custom Time Calculation Workflow associated with SLA Item.</para>
+		/// <para>Lookup to workflow</para>
+		/// <para>Custom Time Calculation Workflow</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public EntityReference msdyn_CustomTimeCalculationWorkflowId
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.msdyn_CustomTimeCalculationWorkflowId); }
+			set { Entity.Attributes[Fields.msdyn_CustomTimeCalculationWorkflowId] = value; }
 		}
 
 		/// <summary>

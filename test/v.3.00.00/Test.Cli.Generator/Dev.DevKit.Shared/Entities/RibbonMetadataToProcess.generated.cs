@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.RibbonMetadataToProcessOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class RibbonMetadataToProcess : EntityBase
 	{
 		public struct Fields

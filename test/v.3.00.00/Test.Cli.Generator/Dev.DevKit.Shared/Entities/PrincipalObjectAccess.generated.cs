@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.PrincipalObjectAccessOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class PrincipalObjectAccess : EntityBase
 	{
 		public struct Fields

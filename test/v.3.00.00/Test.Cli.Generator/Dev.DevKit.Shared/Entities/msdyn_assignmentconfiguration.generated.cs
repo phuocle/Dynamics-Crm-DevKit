@@ -57,6 +57,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_assignmentconfigurationOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_assignmentconfiguration : EntityBase
 	{
 		public struct Fields
@@ -95,7 +96,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_assignmentconfiguration";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10676;
+		public const int EntityTypeCode = 10711;
 
 		[DebuggerNonUserCode()]
 		public msdyn_assignmentconfiguration()

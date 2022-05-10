@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.msdyusd_configuration_actioncallsOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyusd_configuration_actioncalls : EntityBase
 	{
 		public struct Fields
@@ -28,7 +29,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyusd_configuration_actioncalls";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10850;
+		public const int EntityTypeCode = 10958;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_configuration_actioncalls()

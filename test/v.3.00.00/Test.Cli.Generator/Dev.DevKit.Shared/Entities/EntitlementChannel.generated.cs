@@ -41,6 +41,7 @@ namespace Dev.DevKit.Shared.Entities.EntitlementChannelOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class EntitlementChannel : EntityBase
 	{
 		public struct Fields

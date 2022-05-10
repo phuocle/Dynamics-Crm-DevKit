@@ -61,6 +61,7 @@ namespace Dev.DevKit.Shared.Entities.AzureServiceConnectionOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class AzureServiceConnection : EntityBase
 	{
 		public struct Fields

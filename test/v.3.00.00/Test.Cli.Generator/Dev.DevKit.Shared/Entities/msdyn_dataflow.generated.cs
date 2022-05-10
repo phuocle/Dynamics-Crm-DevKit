@@ -57,6 +57,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_dataflowOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_dataflow : EntityBase
 	{
 		public struct Fields

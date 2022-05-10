@@ -93,6 +93,7 @@ namespace Dev.DevKit.Shared.Entities.SavedOrgInsightsConfigurationOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class SavedOrgInsightsConfiguration : EntityBase
 	{
 		public struct Fields

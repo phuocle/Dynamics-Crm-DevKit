@@ -33,6 +33,7 @@ namespace Dev.DevKit.Shared.Entities.ManagedPropertyOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class ManagedProperty : EntityBase
 	{
 		public struct Fields

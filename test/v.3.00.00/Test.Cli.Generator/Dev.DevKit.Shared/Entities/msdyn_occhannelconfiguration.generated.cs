@@ -13,6 +13,10 @@ namespace Dev.DevKit.Shared.Entities.msdyn_occhannelconfigurationOptionSets
 	public enum msdyn_streamsource
 	{
 		/// <summary>
+		/// Apple Messages for Business = 192450000
+		/// </summary>
+		Apple_Messages_for_Business = 192450000,
+		/// <summary>
 		/// Co-browse = 192390000
 		/// </summary>
 		Co_browse = 192390000,
@@ -97,6 +101,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_occhannelconfigurationOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_occhannelconfiguration : EntityBase
 	{
 		public struct Fields
@@ -128,7 +133,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_occhannelconfiguration";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10698;
+		public const int EntityTypeCode = 10718;
 
 		[DebuggerNonUserCode()]
 		public msdyn_occhannelconfiguration()

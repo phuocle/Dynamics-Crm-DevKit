@@ -101,6 +101,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_projectapprovalOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_projectapproval : EntityBase
 	{
 		public struct Fields
@@ -165,7 +166,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_projectapproval";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10470;
+		public const int EntityTypeCode = 10529;
 
 		[DebuggerNonUserCode()]
 		public msdyn_projectapproval()

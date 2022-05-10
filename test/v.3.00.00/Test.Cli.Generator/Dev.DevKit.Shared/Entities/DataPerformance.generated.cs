@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.DataPerformanceOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class DataPerformance : EntityBase
 	{
 		public struct Fields

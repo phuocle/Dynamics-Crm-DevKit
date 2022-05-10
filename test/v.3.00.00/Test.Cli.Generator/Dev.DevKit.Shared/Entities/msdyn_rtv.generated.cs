@@ -61,6 +61,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_rtvOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_rtv : EntityBase
 	{
 		public struct Fields
@@ -119,7 +120,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_rtv";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10585;
+		public const int EntityTypeCode = 10641;
 
 		[DebuggerNonUserCode()]
 		public msdyn_rtv()

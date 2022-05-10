@@ -15,12 +15,14 @@ namespace Dev.DevKit.Shared.Entities.SubscriptionTrackingDeletedObjectOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class SubscriptionTrackingDeletedObject : EntityBase
 	{
 		public struct Fields
 		{
 			public const string CrmCreatedOn = "crmcreatedon";
 			public const string DeleteTime = "deletetime";
+			public const string IsArchivalDelete = "isarchivaldelete";
 			public const string IsLogicalDelete = "islogicaldelete";
 			public const string ObjectId = "objectid";
 			public const string TimeStamp = "timestamp";
@@ -101,6 +103,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<DateTime?>(Fields.DeleteTime); }
 			set { Entity.Attributes[Fields.DeleteTime] = value; }
+		}
+
+		/// <summary>
+		/// <para>Indicates that the record is deleted by Archival or not</para>
+		/// <para>Boolean</para>
+		/// <para>Is Archival Delete</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? IsArchivalDelete
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.IsArchivalDelete); }
+			set { Entity.Attributes[Fields.IsArchivalDelete] = value; }
 		}
 
 		/// <summary>

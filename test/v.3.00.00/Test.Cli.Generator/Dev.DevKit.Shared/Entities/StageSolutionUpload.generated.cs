@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.StageSolutionUploadOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class StageSolutionUpload : EntityBase
 	{
 		public struct Fields

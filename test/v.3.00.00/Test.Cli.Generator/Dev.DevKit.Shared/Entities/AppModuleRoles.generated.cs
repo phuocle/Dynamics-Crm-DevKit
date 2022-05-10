@@ -33,6 +33,7 @@ namespace Dev.DevKit.Shared.Entities.AppModuleRolesOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class AppModuleRoles : EntityBase
 	{
 		public struct Fields

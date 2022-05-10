@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_forecastrecurrenceOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_forecastrecurrence : EntityBase
 	{
 		public struct Fields
@@ -78,7 +79,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_forecastrecurrence";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10249;
+		public const int EntityTypeCode = 10268;
 
 		[DebuggerNonUserCode()]
 		public msdyn_forecastrecurrence()

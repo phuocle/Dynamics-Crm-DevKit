@@ -477,6 +477,7 @@ namespace Dev.DevKit.Shared.Entities.OpportunityOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class Opportunity : EntityBase
 	{
 		public struct Fields

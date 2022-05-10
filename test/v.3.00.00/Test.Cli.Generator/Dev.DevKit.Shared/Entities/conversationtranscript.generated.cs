@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.conversationtranscriptOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class conversationtranscript : EntityBase
 	{
 		public struct Fields
@@ -71,7 +72,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "conversationtranscript";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10065;
+		public const int EntityTypeCode = 10077;
 
 		[DebuggerNonUserCode()]
 		public conversationtranscript()

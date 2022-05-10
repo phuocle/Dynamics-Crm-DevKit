@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.ChildIncidentCountOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class ChildIncidentCount : EntityBase
 	{
 		public struct Fields

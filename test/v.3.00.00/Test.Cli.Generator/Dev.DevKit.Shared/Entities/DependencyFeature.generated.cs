@@ -33,6 +33,7 @@ namespace Dev.DevKit.Shared.Entities.DependencyFeatureOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class DependencyFeature : EntityBase
 	{
 		public struct Fields

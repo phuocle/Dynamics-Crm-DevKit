@@ -25,6 +25,7 @@ namespace Dev.DevKit.Shared.Entities.UserQueryVisualizationOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class UserQueryVisualization : EntityBase
 	{
 		public struct Fields

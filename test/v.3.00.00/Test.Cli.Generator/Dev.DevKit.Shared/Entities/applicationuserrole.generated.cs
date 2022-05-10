@@ -33,6 +33,7 @@ namespace Dev.DevKit.Shared.Entities.applicationuserroleOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class applicationuserrole : EntityBase
 	{
 		public struct Fields
@@ -52,7 +53,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "applicationuserrole";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10042;
+		public const int EntityTypeCode = 10053;
 
 		[DebuggerNonUserCode()]
 		public applicationuserrole()

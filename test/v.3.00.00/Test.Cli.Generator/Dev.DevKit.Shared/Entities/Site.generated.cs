@@ -45,6 +45,7 @@ namespace Dev.DevKit.Shared.Entities.SiteOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class Site : EntityBase
 	{
 		public struct Fields

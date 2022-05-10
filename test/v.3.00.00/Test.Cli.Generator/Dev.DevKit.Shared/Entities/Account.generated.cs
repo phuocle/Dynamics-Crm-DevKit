@@ -505,6 +505,7 @@ namespace Dev.DevKit.Shared.Entities.AccountOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class Account : EntityBase
 	{
 		public struct Fields
@@ -614,6 +615,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_gdproptout = "msdyn_gdproptout";
 			public const string msdyn_PreferredResource = "msdyn_preferredresource";
 			public const string msdyn_SalesTaxCode = "msdyn_salestaxcode";
+			public const string msdyn_segmentid = "msdyn_segmentid";
 			public const string msdyn_ServiceTerritory = "msdyn_serviceterritory";
 			public const string msdyn_TaxExempt = "msdyn_taxexempt";
 			public const string msdyn_TaxExemptNumber = "msdyn_taxexemptnumber";
@@ -2177,6 +2179,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<EntityReference>(Fields.msdyn_SalesTaxCode); }
 			set { Entity.Attributes[Fields.msdyn_SalesTaxCode] = value; }
+		}
+
+		/// <summary>
+		/// <para>Unique identifier for Segment associated with account.</para>
+		/// <para>Lookup to msdyn_segment</para>
+		/// <para>Segment Id</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public EntityReference msdyn_segmentid
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.msdyn_segmentid); }
+			set { Entity.Attributes[Fields.msdyn_segmentid] = value; }
 		}
 
 		/// <summary>

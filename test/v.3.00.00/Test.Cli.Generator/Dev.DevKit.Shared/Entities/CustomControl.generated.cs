@@ -33,6 +33,7 @@ namespace Dev.DevKit.Shared.Entities.CustomControlOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class CustomControl : EntityBase
 	{
 		public struct Fields

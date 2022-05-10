@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.TeamMembershipOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class TeamMembership : EntityBase
 	{
 		public struct Fields

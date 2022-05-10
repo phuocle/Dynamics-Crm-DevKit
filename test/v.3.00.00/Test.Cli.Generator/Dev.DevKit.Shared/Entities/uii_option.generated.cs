@@ -93,6 +93,7 @@ namespace Dev.DevKit.Shared.Entities.uii_optionOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class uii_option : EntityBase
 	{
 		public struct Fields
@@ -123,7 +124,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "uii_option";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10819;
+		public const int EntityTypeCode = 10916;
 
 		[DebuggerNonUserCode()]
 		public uii_option()

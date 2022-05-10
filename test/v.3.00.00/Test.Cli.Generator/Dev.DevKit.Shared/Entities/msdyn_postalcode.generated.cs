@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_postalcodeOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_postalcode : EntityBase
 	{
 		public struct Fields
@@ -66,7 +67,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_postalcode";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10564;
+		public const int EntityTypeCode = 10620;
 
 		[DebuggerNonUserCode()]
 		public msdyn_postalcode()

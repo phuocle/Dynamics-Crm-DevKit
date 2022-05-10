@@ -57,6 +57,7 @@ namespace Dev.DevKit.Shared.Entities.ChannelAccessProfileOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class ChannelAccessProfile : EntityBase
 	{
 		public struct Fields

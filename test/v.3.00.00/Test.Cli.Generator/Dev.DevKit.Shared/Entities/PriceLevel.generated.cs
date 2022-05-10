@@ -97,6 +97,7 @@ namespace Dev.DevKit.Shared.Entities.PriceLevelOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class PriceLevel : EntityBase
 	{
 		public struct Fields

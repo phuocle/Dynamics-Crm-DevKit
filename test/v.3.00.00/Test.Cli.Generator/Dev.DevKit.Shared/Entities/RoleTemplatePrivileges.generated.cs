@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.RoleTemplatePrivilegesOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class RoleTemplatePrivileges : EntityBase
 	{
 		public struct Fields

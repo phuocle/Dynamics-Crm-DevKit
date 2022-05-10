@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_msdyn_workorder_knowledgearticleOptio
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_msdyn_workorder_knowledgearticle : EntityBase
 	{
 		public struct Fields
@@ -28,7 +29,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_msdyn_workorder_knowledgearticle";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10632;
+		public const int EntityTypeCode = 10672;
 
 		[DebuggerNonUserCode()]
 		public msdyn_msdyn_workorder_knowledgearticle()

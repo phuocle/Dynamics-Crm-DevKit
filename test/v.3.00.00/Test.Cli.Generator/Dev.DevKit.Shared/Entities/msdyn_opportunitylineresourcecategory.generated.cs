@@ -57,6 +57,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_opportunitylineresourcecategoryOption
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_opportunitylineresourcecategory : EntityBase
 	{
 		public struct Fields
@@ -88,7 +89,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_opportunitylineresourcecategory";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10458;
+		public const int EntityTypeCode = 10517;
 
 		[DebuggerNonUserCode()]
 		public msdyn_opportunitylineresourcecategory()

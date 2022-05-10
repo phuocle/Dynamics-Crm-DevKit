@@ -57,6 +57,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_estimateOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_estimate : EntityBase
 	{
 		public struct Fields
@@ -87,7 +88,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_estimate";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10442;
+		public const int EntityTypeCode = 10501;
 
 		[DebuggerNonUserCode()]
 		public msdyn_estimate()

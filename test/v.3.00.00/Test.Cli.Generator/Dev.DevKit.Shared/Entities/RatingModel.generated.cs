@@ -49,6 +49,7 @@ namespace Dev.DevKit.Shared.Entities.RatingModelOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class RatingModel : EntityBase
 	{
 		public struct Fields

@@ -29,6 +29,7 @@ namespace Dev.DevKit.Shared.Entities.ClientUpdateOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class ClientUpdate : EntityBase
 	{
 		public struct Fields

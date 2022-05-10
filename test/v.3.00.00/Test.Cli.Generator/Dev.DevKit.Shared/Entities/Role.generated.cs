@@ -45,6 +45,7 @@ namespace Dev.DevKit.Shared.Entities.RoleOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class Role : EntityBase
 	{
 		public struct Fields

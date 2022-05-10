@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.UII_savedsessionOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class UII_savedsession : EntityBase
 	{
 		public struct Fields
@@ -66,7 +67,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "uii_savedsession";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10820;
+		public const int EntityTypeCode = 10883;
 
 		[DebuggerNonUserCode()]
 		public UII_savedsession()

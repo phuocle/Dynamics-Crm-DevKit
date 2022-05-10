@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.SystemUserAuthorizationChangeTrackerOptionS
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class SystemUserAuthorizationChangeTracker : EntityBase
 	{
 		public struct Fields

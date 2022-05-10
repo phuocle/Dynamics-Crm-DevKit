@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyusd_scriptletOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyusd_scriptlet : EntityBase
 	{
 		public struct Fields
@@ -66,7 +67,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyusd_scriptlet";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10836;
+		public const int EntityTypeCode = 10946;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_scriptlet()

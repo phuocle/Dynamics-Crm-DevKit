@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.SubscriptionStatisticsOfflineOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class SubscriptionStatisticsOffline : EntityBase
 	{
 		public struct Fields

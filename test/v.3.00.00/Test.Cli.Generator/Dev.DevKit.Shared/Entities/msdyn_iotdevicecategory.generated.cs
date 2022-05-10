@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_iotdevicecategoryOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_iotdevicecategory : EntityBase
 	{
 		public struct Fields
@@ -65,7 +66,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_iotdevicecategory";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10140;
+		public const int EntityTypeCode = 10167;
 
 		[DebuggerNonUserCode()]
 		public msdyn_iotdevicecategory()

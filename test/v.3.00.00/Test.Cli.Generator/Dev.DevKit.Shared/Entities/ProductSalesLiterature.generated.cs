@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.ProductSalesLiteratureOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class ProductSalesLiterature : EntityBase
 	{
 		public struct Fields

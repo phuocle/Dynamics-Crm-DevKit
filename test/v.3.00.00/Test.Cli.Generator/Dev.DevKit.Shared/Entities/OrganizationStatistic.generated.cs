@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.OrganizationStatisticOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class OrganizationStatistic : EntityBase
 	{
 		public struct Fields

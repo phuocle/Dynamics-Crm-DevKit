@@ -45,6 +45,7 @@ namespace Dev.DevKit.Shared.Entities.PublisherOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class Publisher : EntityBase
 	{
 		public struct Fields

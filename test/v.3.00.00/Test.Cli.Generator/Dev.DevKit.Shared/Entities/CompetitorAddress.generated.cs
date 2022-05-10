@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.CompetitorAddressOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class CompetitorAddress : EntityBase
 	{
 		public struct Fields

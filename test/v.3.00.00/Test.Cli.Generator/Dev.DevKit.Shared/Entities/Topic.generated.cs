@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.TopicOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class Topic : EntityBase
 	{
 		public struct Fields

@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_servicetasktypeOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_servicetasktype : EntityBase
 	{
 		public struct Fields
@@ -69,7 +70,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_servicetasktype";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10588;
+		public const int EntityTypeCode = 10644;
 
 		[DebuggerNonUserCode()]
 		public msdyn_servicetasktype()

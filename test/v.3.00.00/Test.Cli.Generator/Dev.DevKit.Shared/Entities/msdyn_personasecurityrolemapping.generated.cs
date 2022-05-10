@@ -41,6 +41,10 @@ namespace Dev.DevKit.Shared.Entities.msdyn_personasecurityrolemappingOptionSets
 		/// </summary>
 		Agent = 3,
 		/// <summary>
+		/// Application User = 4
+		/// </summary>
+		Application_User = 4,
+		/// <summary>
 		/// Supervisor = 2
 		/// </summary>
 		Supervisor = 2
@@ -73,6 +77,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_personasecurityrolemappingOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_personasecurityrolemapping : EntityBase
 	{
 		public struct Fields
@@ -107,7 +112,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_personasecurityrolemapping";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10730;
+		public const int EntityTypeCode = 10773;
 
 		[DebuggerNonUserCode()]
 		public msdyn_personasecurityrolemapping()

@@ -50,6 +50,22 @@ namespace Dev.DevKit.Shared.Entities.msdyn_datainsightsandanalyticsfeatureOption
 		Provisioned = 192350000
 	}
 
+	public enum msdyn_reporttype
+	{
+		/// <summary>
+		/// Default = 192350000
+		/// </summary>
+		Default = 192350000,
+		/// <summary>
+		/// Draft = 192350002
+		/// </summary>
+		Draft = 192350002,
+		/// <summary>
+		/// Published = 192350001
+		/// </summary>
+		Published = 192350001
+	}
+
 	public enum statecode
 	{
 		/// <summary>
@@ -77,6 +93,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_datainsightsandanalyticsfeatureOption
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_datainsightsandanalyticsfeature : EntityBase
 	{
 		public struct Fields
@@ -93,13 +110,17 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
 			public const string msdyn_analyticschecksum = "msdyn_analyticschecksum";
 			public const string msdyn_datainsightsandanalyticsfeatureId = "msdyn_datainsightsandanalyticsfeatureid";
+			public const string msdyn_iscustomizationsupported = "msdyn_iscustomizationsupported";
 			public const string msdyn_isdemoenabled = "msdyn_isdemoenabled";
 			public const string msdyn_isenabled = "msdyn_isenabled";
 			public const string msdyn_lastaccesstime = "msdyn_lastaccesstime";
 			public const string msdyn_lastreportrefreshtime = "msdyn_lastreportrefreshtime";
 			public const string msdyn_name = "msdyn_name";
 			public const string msdyn_provisionstatus = "msdyn_provisionstatus";
+			public const string msdyn_reporttype = "msdyn_reporttype";
+			public const string msdyn_schedule = "msdyn_schedule";
 			public const string msdyn_templateid = "msdyn_templateid";
+			public const string msdyn_timezonecode = "msdyn_timezonecode";
 			public const string OrganizationId = "organizationid";
 			public const string OverriddenCreatedOn = "overriddencreatedon";
 			public const string OverwriteTime = "overwritetime";
@@ -115,7 +136,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_datainsightsandanalyticsfeature";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10213;
+		public const int EntityTypeCode = 10230;
 
 		[DebuggerNonUserCode()]
 		public msdyn_datainsightsandanalyticsfeature()
@@ -310,6 +331,17 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Is Customization Supported</para>
+		/// <para>ReadOnly - Boolean</para>
+		/// <para>Is Customization Supported</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_iscustomizationsupported
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_iscustomizationsupported); }
+		}
+
+		/// <summary>
 		/// <para>Is Demo Enabled</para>
 		/// <para>Boolean</para>
 		/// <para>Is Demo Enabled</para>
@@ -393,6 +425,41 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Report Type</para>
+		/// <para>Picklist</para>
+		/// <para>Report Type</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public Dev.DevKit.Shared.Entities.msdyn_datainsightsandanalyticsfeatureOptionSets.msdyn_reporttype? msdyn_reporttype
+		{
+			get
+			{
+				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.msdyn_reporttype);
+				if (value == null) return null;
+				return (Dev.DevKit.Shared.Entities.msdyn_datainsightsandanalyticsfeatureOptionSets.msdyn_reporttype)value.Value;
+			}
+			set
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_reporttype] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_reporttype] = null;
+			}
+		}
+
+		/// <summary>
+		/// <para>Job Schedule for the feature</para>
+		/// <para>String - MaxLength: 100</para>
+		/// <para>Schedule</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_schedule
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_schedule); }
+			set { Entity.Attributes[Fields.msdyn_schedule] = value; }
+		}
+
+		/// <summary>
 		/// <para>Template Id for Reports</para>
 		/// <para>Required - String - MaxLength: 36</para>
 		/// <para>Template Id</para>
@@ -402,6 +469,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.msdyn_templateid); }
 			set { Entity.Attributes[Fields.msdyn_templateid] = value; }
+		}
+
+		/// <summary>
+		/// <para>timezonecode from TimeZoneDefinition Entity for the Job Schedule</para>
+		/// <para>Integer - MinValue: -2,147,483,648 - MaxValue: 2,147,483,647</para>
+		/// <para>Job Schedule Timezone Code</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public int? msdyn_timezonecode
+		{
+			get { return Entity.GetAttributeValue<int?>(Fields.msdyn_timezonecode); }
+			set { Entity.Attributes[Fields.msdyn_timezonecode] = value; }
 		}
 
 		/// <summary>

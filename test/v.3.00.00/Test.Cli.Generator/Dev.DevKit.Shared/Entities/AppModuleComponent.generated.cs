@@ -61,6 +61,7 @@ namespace Dev.DevKit.Shared.Entities.AppModuleComponentOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class AppModuleComponent : EntityBase
 	{
 		public struct Fields

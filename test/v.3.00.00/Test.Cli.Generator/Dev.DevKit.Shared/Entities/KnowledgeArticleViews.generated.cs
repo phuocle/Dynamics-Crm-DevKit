@@ -49,6 +49,7 @@ namespace Dev.DevKit.Shared.Entities.KnowledgeArticleViewsOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class KnowledgeArticleViews : EntityBase
 	{
 		public struct Fields

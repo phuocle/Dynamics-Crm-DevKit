@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.IndexAttributesOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class IndexAttributes : EntityBase
 	{
 		public struct Fields

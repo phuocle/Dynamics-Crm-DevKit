@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.RibbonClientMetadataOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class RibbonClientMetadata : EntityBase
 	{
 		public struct Fields

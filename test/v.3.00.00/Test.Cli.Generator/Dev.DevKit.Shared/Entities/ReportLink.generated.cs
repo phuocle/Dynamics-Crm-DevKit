@@ -29,6 +29,7 @@ namespace Dev.DevKit.Shared.Entities.ReportLinkOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class ReportLink : EntityBase
 	{
 		public struct Fields

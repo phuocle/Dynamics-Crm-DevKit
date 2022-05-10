@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_icebreakersconfigOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_icebreakersconfig : EntityBase
 	{
 		public struct Fields
@@ -71,7 +72,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_icebreakersconfig";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10267;
+		public const int EntityTypeCode = 10287;
 
 		[DebuggerNonUserCode()]
 		public msdyn_icebreakersconfig()

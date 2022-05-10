@@ -169,6 +169,10 @@ namespace Dev.DevKit.Shared.Entities.msdyn_liveworkstreamOptionSets
 	public enum msdyn_streamsource
 	{
 		/// <summary>
+		/// Apple Messages for Business = 192450000
+		/// </summary>
+		Apple_Messages_for_Business = 192450000,
+		/// <summary>
 		/// Co-browse = 192390000
 		/// </summary>
 		Co_browse = 192390000,
@@ -265,6 +269,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_liveworkstreamOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_liveworkstream : EntityBase
 	{
 		public struct Fields
@@ -290,6 +295,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_ConnectorsURL = "msdyn_connectorsurl";
 			public const string msdyn_conversationmode = "msdyn_conversationmode";
 			public const string msdyn_CustomerID = "msdyn_customerid";
+			public const string msdyn_defaultqueue = "msdyn_defaultqueue";
 			public const string msdyn_direction = "msdyn_direction";
 			public const string msdyn_enableagentaffinity = "msdyn_enableagentaffinity";
 			public const string msdyn_enableautomatedmessages = "msdyn_enableautomatedmessages";
@@ -346,7 +352,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_liveworkstream";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10694;
+		public const int EntityTypeCode = 10735;
 
 		[DebuggerNonUserCode()]
 		public msdyn_liveworkstream()
@@ -689,6 +695,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.msdyn_CustomerID); }
 			set { Entity.Attributes[Fields.msdyn_CustomerID] = value; }
+		}
+
+		/// <summary>
+		/// <para>Link the default queue to the workstream.</para>
+		/// <para>Lookup to queue</para>
+		/// <para>Default Queue</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public EntityReference msdyn_defaultqueue
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.msdyn_defaultqueue); }
+			set { Entity.Attributes[Fields.msdyn_defaultqueue] = value; }
 		}
 
 		/// <summary>

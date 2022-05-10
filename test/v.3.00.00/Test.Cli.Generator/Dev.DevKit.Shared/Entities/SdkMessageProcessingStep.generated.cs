@@ -153,6 +153,7 @@ namespace Dev.DevKit.Shared.Entities.SdkMessageProcessingStepOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class SdkMessageProcessingStep : EntityBase
 	{
 		public struct Fields

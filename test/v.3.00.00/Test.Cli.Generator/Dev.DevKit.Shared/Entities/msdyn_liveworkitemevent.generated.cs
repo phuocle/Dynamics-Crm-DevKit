@@ -61,6 +61,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_liveworkitemeventOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_liveworkitemevent : EntityBase
 	{
 		public struct Fields
@@ -93,7 +94,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_liveworkitemevent";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10693;
+		public const int EntityTypeCode = 10734;
 
 		[DebuggerNonUserCode()]
 		public msdyn_liveworkitemevent()

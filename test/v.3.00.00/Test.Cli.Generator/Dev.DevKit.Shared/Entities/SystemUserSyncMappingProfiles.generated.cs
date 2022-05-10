@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.SystemUserSyncMappingProfilesOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class SystemUserSyncMappingProfiles : EntityBase
 	{
 		public struct Fields

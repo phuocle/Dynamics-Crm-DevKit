@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_rmareceiptproductOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_rmareceiptproduct : EntityBase
 	{
 		public struct Fields
@@ -71,7 +72,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_rmareceiptproduct";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10583;
+		public const int EntityTypeCode = 10639;
 
 		[DebuggerNonUserCode()]
 		public msdyn_rmareceiptproduct()

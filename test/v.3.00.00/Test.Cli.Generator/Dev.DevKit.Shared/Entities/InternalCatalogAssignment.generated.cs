@@ -57,6 +57,7 @@ namespace Dev.DevKit.Shared.Entities.InternalCatalogAssignmentOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class InternalCatalogAssignment : EntityBase
 	{
 		public struct Fields
@@ -90,7 +91,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "internalcatalogassignment";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10019;
+		public const int EntityTypeCode = 10020;
 
 		[DebuggerNonUserCode()]
 		public InternalCatalogAssignment()

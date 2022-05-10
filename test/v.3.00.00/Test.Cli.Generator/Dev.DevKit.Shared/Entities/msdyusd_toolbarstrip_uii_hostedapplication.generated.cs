@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.msdyusd_toolbarstrip_uii_hostedapplicationO
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyusd_toolbarstrip_uii_hostedapplication : EntityBase
 	{
 		public struct Fields
@@ -28,7 +29,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyusd_toolbarstrip_uii_hostedapplication";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10868;
+		public const int EntityTypeCode = 10976;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_toolbarstrip_uii_hostedapplication()

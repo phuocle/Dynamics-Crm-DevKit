@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyusd_uiieventOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyusd_uiievent : EntityBase
 	{
 		public struct Fields
@@ -66,7 +67,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyusd_uiievent";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10846;
+		public const int EntityTypeCode = 10954;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_uiievent()

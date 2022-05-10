@@ -53,6 +53,7 @@ namespace Dev.DevKit.Shared.Entities.PrincipalSyncAttributeMapOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class PrincipalSyncAttributeMap : EntityBase
 	{
 		public struct Fields

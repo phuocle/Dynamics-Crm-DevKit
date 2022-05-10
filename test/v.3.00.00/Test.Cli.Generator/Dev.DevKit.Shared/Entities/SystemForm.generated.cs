@@ -137,6 +137,7 @@ namespace Dev.DevKit.Shared.Entities.SystemFormOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class SystemForm : EntityBase
 	{
 		public struct Fields

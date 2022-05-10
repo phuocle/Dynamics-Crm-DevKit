@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.KnowledgeArticlesCategoriesOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class KnowledgeArticlesCategories : EntityBase
 	{
 		public struct Fields

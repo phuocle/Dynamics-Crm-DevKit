@@ -109,6 +109,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_pmrecordingOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_pmrecording : EntityBase
 	{
 		public struct Fields
@@ -150,7 +151,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_pmrecording";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10104;
+		public const int EntityTypeCode = 10128;
 
 		[DebuggerNonUserCode()]
 		public msdyn_pmrecording()
@@ -390,7 +391,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Required - Picklist</para>
+		/// <para>Picklist</para>
 		/// <para>PublishingStatus</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -424,7 +425,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Required - Picklist</para>
+		/// <para>Picklist</para>
 		/// <para>Type</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

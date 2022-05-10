@@ -73,6 +73,7 @@ namespace Dev.DevKit.Shared.Entities.flowmachinegroupOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class flowmachinegroup : EntityBase
 	{
 		public struct Fields
@@ -107,6 +108,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string statuscode = "statuscode";
 			public const string SupportingSolutionId = "supportingsolutionid";
 			public const string TimeZoneRuleVersionNumber = "timezoneruleversionnumber";
+			public const string trytoreusewindowssession = "trytoreusewindowssession";
 			public const string UTCConversionTimeZoneCode = "utcconversiontimezonecode";
 			public const string VersionNumber = "versionnumber";
 		}
@@ -114,7 +116,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "flowmachinegroup";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10046;
+		public const int EntityTypeCode = 10057;
 
 		[DebuggerNonUserCode()]
 		public flowmachinegroup()
@@ -544,6 +546,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<int?>(Fields.TimeZoneRuleVersionNumber); }
 			set { Entity.Attributes[Fields.TimeZoneRuleVersionNumber] = value; }
+		}
+
+		/// <summary>
+		/// <para>Indicates whether we will try to reuse non unlocked Windows sessions. Default value is No.</para>
+		/// <para>Boolean</para>
+		/// <para>Try to reuse non unlocked Windows sessions.</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? trytoreusewindowssession
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.trytoreusewindowssession); }
+			set { Entity.Attributes[Fields.trytoreusewindowssession] = value; }
 		}
 
 		/// <summary>

@@ -109,6 +109,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_iermlmodelOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_iermlmodel : EntityBase
 	{
 		public struct Fields
@@ -149,7 +150,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_iermlmodel";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10765;
+		public const int EntityTypeCode = 10807;
 
 		[DebuggerNonUserCode()]
 		public msdyn_iermlmodel()

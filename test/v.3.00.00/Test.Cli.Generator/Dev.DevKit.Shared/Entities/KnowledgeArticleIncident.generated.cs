@@ -53,6 +53,7 @@ namespace Dev.DevKit.Shared.Entities.KnowledgeArticleIncidentOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class KnowledgeArticleIncident : EntityBase
 	{
 		public struct Fields

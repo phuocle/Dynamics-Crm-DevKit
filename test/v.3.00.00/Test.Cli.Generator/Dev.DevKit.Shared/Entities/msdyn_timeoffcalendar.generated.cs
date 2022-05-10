@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_timeoffcalendarOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_timeoffcalendar : EntityBase
 	{
 		public struct Fields
@@ -67,7 +68,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_timeoffcalendar";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10496;
+		public const int EntityTypeCode = 10555;
 
 		[DebuggerNonUserCode()]
 		public msdyn_timeoffcalendar()

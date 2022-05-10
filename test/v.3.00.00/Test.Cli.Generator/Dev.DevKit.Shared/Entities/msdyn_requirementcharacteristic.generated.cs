@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_requirementcharacteristicOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_requirementcharacteristic : EntityBase
 	{
 		public struct Fields
@@ -71,7 +72,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_requirementcharacteristic";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10410;
+		public const int EntityTypeCode = 10459;
 
 		[DebuggerNonUserCode()]
 		public msdyn_requirementcharacteristic()

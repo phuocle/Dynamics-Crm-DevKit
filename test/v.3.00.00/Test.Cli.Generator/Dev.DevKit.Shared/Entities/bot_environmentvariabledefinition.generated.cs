@@ -33,6 +33,7 @@ namespace Dev.DevKit.Shared.Entities.bot_environmentvariabledefinitionOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class bot_environmentvariabledefinition : EntityBase
 	{
 		public struct Fields
@@ -52,7 +53,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "bot_environmentvariabledefinition";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10069;
+		public const int EntityTypeCode = 10081;
 
 		[DebuggerNonUserCode()]
 		public bot_environmentvariabledefinition()

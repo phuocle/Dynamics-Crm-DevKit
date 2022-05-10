@@ -33,6 +33,7 @@ namespace Dev.DevKit.Shared.Entities.EntityDataSourceOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class EntityDataSource : EntityBase
 	{
 		public struct Fields
@@ -125,7 +126,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>JSON data representing values from a data source entity as individual fields.</para>
-		/// <para>String - MaxLength: 2000</para>
+		/// <para>String - MaxLength: 4000</para>
 		/// <para>Data Source Values</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

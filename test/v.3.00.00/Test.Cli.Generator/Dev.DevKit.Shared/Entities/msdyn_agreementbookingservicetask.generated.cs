@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_agreementbookingservicetaskOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_agreementbookingservicetask : EntityBase
 	{
 		public struct Fields
@@ -77,7 +78,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_agreementbookingservicetask";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10528;
+		public const int EntityTypeCode = 10584;
 
 		[DebuggerNonUserCode()]
 		public msdyn_agreementbookingservicetask()

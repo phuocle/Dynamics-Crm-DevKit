@@ -57,6 +57,7 @@ namespace Dev.DevKit.Shared.Entities.AppConfigOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class AppConfig : EntityBase
 	{
 		public struct Fields

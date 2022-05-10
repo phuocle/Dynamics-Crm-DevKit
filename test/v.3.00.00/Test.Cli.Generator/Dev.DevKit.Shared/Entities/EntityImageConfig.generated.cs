@@ -33,6 +33,7 @@ namespace Dev.DevKit.Shared.Entities.EntityImageConfigOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class EntityImageConfig : EntityBase
 	{
 		public struct Fields

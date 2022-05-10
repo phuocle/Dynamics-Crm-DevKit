@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.SubscriptionClientsOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class SubscriptionClients : EntityBase
 	{
 		public struct Fields

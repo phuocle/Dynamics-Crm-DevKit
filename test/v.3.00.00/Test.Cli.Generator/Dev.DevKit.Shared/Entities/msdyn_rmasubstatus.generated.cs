@@ -53,6 +53,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_rmasubstatusOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_rmasubstatus : EntityBase
 	{
 		public struct Fields
@@ -83,7 +84,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_rmasubstatus";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10584;
+		public const int EntityTypeCode = 10640;
 
 		[DebuggerNonUserCode()]
 		public msdyn_rmasubstatus()

@@ -93,6 +93,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_orderlinetransactioncategoryOptionSet
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_orderlinetransactioncategory : EntityBase
 	{
 		public struct Fields
@@ -127,7 +128,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_orderlinetransactioncategory";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10465;
+		public const int EntityTypeCode = 10524;
 
 		[DebuggerNonUserCode()]
 		public msdyn_orderlinetransactioncategory()

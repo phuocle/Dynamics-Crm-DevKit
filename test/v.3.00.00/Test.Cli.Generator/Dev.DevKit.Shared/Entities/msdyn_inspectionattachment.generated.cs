@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_inspectionattachmentOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_inspectionattachment : EntityBase
 	{
 		public struct Fields
@@ -67,7 +68,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_inspectionattachment";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10519;
+		public const int EntityTypeCode = 10575;
 
 		[DebuggerNonUserCode()]
 		public msdyn_inspectionattachment()

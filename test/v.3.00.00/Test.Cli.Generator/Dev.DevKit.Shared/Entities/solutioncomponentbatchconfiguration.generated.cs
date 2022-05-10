@@ -77,6 +77,7 @@ namespace Dev.DevKit.Shared.Entities.solutioncomponentbatchconfigurationOptionSe
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class solutioncomponentbatchconfiguration : EntityBase
 	{
 		public struct Fields

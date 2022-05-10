@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.TraceRegardingOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class TraceRegarding : EntityBase
 	{
 		public struct Fields

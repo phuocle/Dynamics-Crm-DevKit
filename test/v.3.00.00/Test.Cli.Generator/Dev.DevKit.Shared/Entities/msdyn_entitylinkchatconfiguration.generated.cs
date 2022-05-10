@@ -57,6 +57,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_entitylinkchatconfigurationOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_entitylinkchatconfiguration : EntityBase
 	{
 		public struct Fields
@@ -72,6 +73,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ModifiedOn = "modifiedon";
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
 			public const string msdyn_ContextViewId = "msdyn_contextviewid";
+			public const string msdyn_EnableAiIntroductionMessage = "msdyn_enableaiintroductionmessage";
 			public const string msdyn_EnableAiSuggestion = "msdyn_enableaisuggestion";
 			public const string msdyn_EnableAutoNameChats = "msdyn_enableautonamechats";
 			public const string msdyn_EnableKickoffMessage = "msdyn_enablekickoffmessage";
@@ -79,6 +81,8 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_entitylinkchatconfigurationId = "msdyn_entitylinkchatconfigurationid";
 			public const string msdyn_EntityType = "msdyn_entitytype";
 			public const string msdyn_Name = "msdyn_name";
+			public const string msdyn_RecentChatLinkerCanUnlink = "msdyn_recentchatlinkercanunlink";
+			public const string msdyn_RecordOwnerCanUnlink = "msdyn_recordownercanunlink";
 			public const string msdyn_UniqueName = "msdyn_uniquename";
 			public const string msdyn_UserCanJoinChat = "msdyn_usercanjoinchat";
 			public const string OverriddenCreatedOn = "overriddencreatedon";
@@ -99,7 +103,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_entitylinkchatconfiguration";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10243;
+		public const int EntityTypeCode = 10262;
 
 		[DebuggerNonUserCode()]
 		public msdyn_entitylinkchatconfiguration()
@@ -278,6 +282,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Value of Enable AI introduction message</para>
+		/// <para>Boolean</para>
+		/// <para>Enable AI introduction message</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_EnableAiIntroductionMessage
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_EnableAiIntroductionMessage); }
+			set { Entity.Attributes[Fields.msdyn_EnableAiIntroductionMessage] = value; }
+		}
+
+		/// <summary>
 		/// <para>Value of Enable AI suggestion</para>
 		/// <para>Boolean</para>
 		/// <para>Enable AI suggestion</para>
@@ -363,6 +379,30 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.msdyn_Name); }
 			set { Entity.Attributes[Fields.msdyn_Name] = value; }
+		}
+
+		/// <summary>
+		/// <para>Value of recent chat linker can unlink</para>
+		/// <para>Boolean</para>
+		/// <para>Recent chat linker can unlink</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_RecentChatLinkerCanUnlink
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_RecentChatLinkerCanUnlink); }
+			set { Entity.Attributes[Fields.msdyn_RecentChatLinkerCanUnlink] = value; }
+		}
+
+		/// <summary>
+		/// <para>Value of record owner can unlink</para>
+		/// <para>Boolean</para>
+		/// <para>Record owner can unlink</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_RecordOwnerCanUnlink
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_RecordOwnerCanUnlink); }
+			set { Entity.Attributes[Fields.msdyn_RecordOwnerCanUnlink] = value; }
 		}
 
 		/// <summary>

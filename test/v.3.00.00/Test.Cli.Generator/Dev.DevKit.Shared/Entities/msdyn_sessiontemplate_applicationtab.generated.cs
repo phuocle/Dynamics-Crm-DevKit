@@ -33,6 +33,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_sessiontemplate_applicationtabOptionS
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_sessiontemplate_applicationtab : EntityBase
 	{
 		public struct Fields
@@ -52,7 +53,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_sessiontemplate_applicationtab";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10164;
+		public const int EntityTypeCode = 10191;
 
 		[DebuggerNonUserCode()]
 		public msdyn_sessiontemplate_applicationtab()

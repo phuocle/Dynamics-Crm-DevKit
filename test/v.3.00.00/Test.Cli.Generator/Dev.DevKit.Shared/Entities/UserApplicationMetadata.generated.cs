@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.UserApplicationMetadataOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class UserApplicationMetadata : EntityBase
 	{
 		public struct Fields

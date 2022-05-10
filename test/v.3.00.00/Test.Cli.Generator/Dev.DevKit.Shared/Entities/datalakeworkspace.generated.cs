@@ -57,6 +57,7 @@ namespace Dev.DevKit.Shared.Entities.datalakeworkspaceOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class datalakeworkspace : EntityBase
 	{
 		public struct Fields
@@ -97,7 +98,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "datalakeworkspace";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10026;
+		public const int EntityTypeCode = 10027;
 
 		[DebuggerNonUserCode()]
 		public datalakeworkspace()

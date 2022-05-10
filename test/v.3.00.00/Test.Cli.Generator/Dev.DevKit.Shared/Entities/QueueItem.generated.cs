@@ -17,29 +17,29 @@ namespace Dev.DevKit.Shared.Entities.QueueItemOptionSets
 		/// </summary>
 		Activity = 4200,
 		/// <summary>
-		/// Agreement Booking Date = 10524
+		/// Agreement Booking Date = 10580
 		/// </summary>
-		Agreement_Booking_Date = 10524,
+		Agreement_Booking_Date = 10580,
 		/// <summary>
-		/// Agreement Booking Setup = 10529
+		/// Agreement Booking Setup = 10585
 		/// </summary>
-		Agreement_Booking_Setup = 10529,
+		Agreement_Booking_Setup = 10585,
 		/// <summary>
-		/// Agreement Invoice Date = 10530
+		/// Agreement Invoice Date = 10586
 		/// </summary>
-		Agreement_Invoice_Date = 10530,
+		Agreement_Invoice_Date = 10586,
 		/// <summary>
-		/// Agreement Invoice Setup = 10532
+		/// Agreement Invoice Setup = 10588
 		/// </summary>
-		Agreement_Invoice_Setup = 10532,
+		Agreement_Invoice_Setup = 10588,
 		/// <summary>
 		/// Appointment = 4201
 		/// </summary>
 		Appointment = 4201,
 		/// <summary>
-		/// Booking Alert = 10400
+		/// Booking Alert = 10473
 		/// </summary>
-		Booking_Alert = 10400,
+		Booking_Alert = 10473,
 		/// <summary>
 		/// Campaign Activity = 4402
 		/// </summary>
@@ -53,21 +53,21 @@ namespace Dev.DevKit.Shared.Entities.QueueItemOptionSets
 		/// </summary>
 		Case = 112,
 		/// <summary>
-		/// Conversation = 10702
+		/// Conversation = 10743
 		/// </summary>
-		Conversation = 10702,
+		Conversation = 10743,
 		/// <summary>
-		/// Customer Voice alert = 10294
+		/// Customer Voice alert = 10330
 		/// </summary>
-		Customer_Voice_alert = 10294,
+		Customer_Voice_alert = 10330,
 		/// <summary>
-		/// Customer Voice survey invite = 10304
+		/// Customer Voice survey invite = 10340
 		/// </summary>
-		Customer_Voice_survey_invite = 10304,
+		Customer_Voice_survey_invite = 10340,
 		/// <summary>
-		/// Customer Voice survey response = 10306
+		/// Customer Voice survey response = 10342
 		/// </summary>
-		Customer_Voice_survey_response = 10306,
+		Customer_Voice_survey_response = 10342,
 		/// <summary>
 		/// Email = 4202
 		/// </summary>
@@ -77,61 +77,61 @@ namespace Dev.DevKit.Shared.Entities.QueueItemOptionSets
 		/// </summary>
 		Fax = 4204,
 		/// <summary>
-		/// Fulfillment Preference = 10423
+		/// Fulfillment Preference = 10484
 		/// </summary>
-		Fulfillment_Preference = 10423,
+		Fulfillment_Preference = 10484,
 		/// <summary>
-		/// Inventory Adjustment = 10552
+		/// Inventory Adjustment = 10608
 		/// </summary>
-		Inventory_Adjustment = 10552,
+		Inventory_Adjustment = 10608,
 		/// <summary>
-		/// Inventory Transfer = 10555
+		/// Inventory Transfer = 10611
 		/// </summary>
-		Inventory_Transfer = 10555,
+		Inventory_Transfer = 10611,
 		/// <summary>
-		/// IoT Alert = 10138
+		/// IoT Alert = 10165
 		/// </summary>
-		IoT_Alert = 10138,
+		IoT_Alert = 10165,
 		/// <summary>
 		/// Knowledge Article = 9953
 		/// </summary>
 		Knowledge_Article = 9953,
 		/// <summary>
-		/// Knowledge Article Template = 10086
+		/// Knowledge Article Template = 10101
 		/// </summary>
-		Knowledge_Article_Template = 10086,
+		Knowledge_Article_Template = 10101,
 		/// <summary>
 		/// Letter = 4207
 		/// </summary>
 		Letter = 4207,
 		/// <summary>
-		/// Ongoing conversation (Deprecated) = 10692
+		/// Ongoing conversation (Deprecated) = 10733
 		/// </summary>
-		Ongoing_conversation_Deprecated = 10692,
+		Ongoing_conversation_Deprecated = 10733,
 		/// <summary>
-		/// Outbound message = 10813
+		/// Outbound message = 10857
 		/// </summary>
-		Outbound_message = 10813,
+		Outbound_message = 10857,
 		/// <summary>
-		/// Overflow Action Config = 10679
+		/// Overflow Action Config = 10714
 		/// </summary>
-		Overflow_Action_Config = 10679,
+		Overflow_Action_Config = 10714,
 		/// <summary>
 		/// Phone Call = 4210
 		/// </summary>
 		Phone_Call = 4210,
 		/// <summary>
-		/// Project = 10469
+		/// Project = 10528
 		/// </summary>
-		Project = 10469,
+		Project = 10528,
 		/// <summary>
-		/// Project Service Approval = 10430
+		/// Project Service Approval = 10489
 		/// </summary>
-		Project_Service_Approval = 10430,
+		Project_Service_Approval = 10489,
 		/// <summary>
-		/// Project Task = 10474
+		/// Project Task = 10533
 		/// </summary>
-		Project_Task = 10474,
+		Project_Task = 10533,
 		/// <summary>
 		/// Quick Campaign = 4406
 		/// </summary>
@@ -141,17 +141,17 @@ namespace Dev.DevKit.Shared.Entities.QueueItemOptionSets
 		/// </summary>
 		Recurring_Appointment = 4251,
 		/// <summary>
-		/// Resource Request = 10492
+		/// Resource Request = 10551
 		/// </summary>
-		Resource_Request = 10492,
+		Resource_Request = 10551,
 		/// <summary>
 		/// Service Activity = 4214
 		/// </summary>
 		Service_Activity = 4214,
 		/// <summary>
-		/// Session = 10717
+		/// Session = 10760
 		/// </summary>
-		Session = 10717,
+		Session = 10760,
 		/// <summary>
 		/// Social Activity = 4216
 		/// </summary>
@@ -161,25 +161,29 @@ namespace Dev.DevKit.Shared.Entities.QueueItemOptionSets
 		/// </summary>
 		Task = 4212,
 		/// <summary>
-		/// Time Group Detail = 10424
+		/// Teams chat = 10088
 		/// </summary>
-		Time_Group_Detail = 10424,
+		Teams_chat = 10088,
 		/// <summary>
-		/// Work Order = 10595
+		/// Time Group Detail = 10485
 		/// </summary>
-		Work_Order = 10595,
+		Time_Group_Detail = 10485,
 		/// <summary>
-		/// Work Order Incident = 10598
+		/// Work Order = 10651
 		/// </summary>
-		Work_Order_Incident = 10598,
+		Work_Order = 10651,
 		/// <summary>
-		/// Work Order Service = 10601
+		/// Work Order Incident = 10654
 		/// </summary>
-		Work_Order_Service = 10601,
+		Work_Order_Incident = 10654,
 		/// <summary>
-		/// Work Order Service Task = 10602
+		/// Work Order Service = 10657
 		/// </summary>
-		Work_Order_Service_Task = 10602
+		Work_Order_Service = 10657,
+		/// <summary>
+		/// Work Order Service Task = 10658
+		/// </summary>
+		Work_Order_Service_Task = 10658
 	}
 
 	public enum StateCode
@@ -209,6 +213,7 @@ namespace Dev.DevKit.Shared.Entities.QueueItemOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class QueueItem : EntityBase
 	{
 		public struct Fields
@@ -420,7 +425,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Choose the activity, case, or article assigned to the queue.</para>
-		/// <para>Required - Lookup to activitypointer, appointment, bulkoperation, campaignactivity, campaignresponse, email, fax, incident, knowledgearticle, letter, msdyn_agreementbookingdate, msdyn_agreementbookingsetup, msdyn_agreementinvoicedate, msdyn_agreementinvoicesetup, msdyn_approval, msdyn_bookingalert, msdyn_inventoryadjustment, msdyn_inventorytransfer, msdyn_iotalert, msdyn_knowledgearticletemplate, msdyn_liveconversation, msdyn_ocliveworkitem, msdyn_ocoutboundmessage, msdyn_ocsession, msdyn_overflowactionconfig, msdyn_project, msdyn_projecttask, msdyn_resourcerequest, msdyn_timegroup, msdyn_timegroupdetail, msdyn_workorder, msdyn_workorderincident, msdyn_workorderservice, msdyn_workorderservicetask, msfp_alert, msfp_surveyinvite, msfp_surveyresponse, phonecall, recurringappointmentmaster, serviceappointment, socialactivity, task</para>
+		/// <para>Required - Lookup to activitypointer, appointment, bulkoperation, campaignactivity, campaignresponse, chat, email, fax, incident, knowledgearticle, letter, msdyn_agreementbookingdate, msdyn_agreementbookingsetup, msdyn_agreementinvoicedate, msdyn_agreementinvoicesetup, msdyn_approval, msdyn_bookingalert, msdyn_inventoryadjustment, msdyn_inventorytransfer, msdyn_iotalert, msdyn_knowledgearticletemplate, msdyn_liveconversation, msdyn_ocliveworkitem, msdyn_ocoutboundmessage, msdyn_ocsession, msdyn_overflowactionconfig, msdyn_project, msdyn_projecttask, msdyn_resourcerequest, msdyn_timegroup, msdyn_timegroupdetail, msdyn_workorder, msdyn_workorderincident, msdyn_workorderservice, msdyn_workorderservicetask, msfp_alert, msfp_surveyinvite, msfp_surveyresponse, phonecall, recurringappointmentmaster, serviceappointment, socialactivity, task</para>
 		/// <para>Object</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

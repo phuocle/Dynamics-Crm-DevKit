@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyusd_actioncallworkflowOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyusd_actioncallworkflow : EntityBase
 	{
 		public struct Fields
@@ -66,7 +67,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyusd_actioncallworkflow";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10825;
+		public const int EntityTypeCode = 10937;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_actioncallworkflow()

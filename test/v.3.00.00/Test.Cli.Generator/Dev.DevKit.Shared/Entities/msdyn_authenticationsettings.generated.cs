@@ -13,9 +13,25 @@ namespace Dev.DevKit.Shared.Entities.msdyn_authenticationsettingsOptionSets
 	public enum msdyn_Authenticationtype
 	{
 		/// <summary>
+		/// OAuth 2.0 code flow = 192350001
+		/// </summary>
+		OAuth_20_code_flow = 192350001,
+		/// <summary>
 		/// OAuth 2.0 implicit flow = 192350000
 		/// </summary>
 		OAuth_20_implicit_flow = 192350000
+	}
+
+	public enum msdyn_ocauthchanneltype
+	{
+		/// <summary>
+		/// Apple Messages For Business = 192450000
+		/// </summary>
+		Apple_Messages_For_Business = 192450000,
+		/// <summary>
+		/// Live chat = 192360000
+		/// </summary>
+		Live_chat = 192360000
 	}
 
 	public enum statecode
@@ -45,6 +61,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_authenticationsettingsOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_authenticationsettings : EntityBase
 	{
 		public struct Fields
@@ -56,10 +73,15 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ModifiedBy = "modifiedby";
 			public const string ModifiedOn = "modifiedon";
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
+			public const string msdyn_authenticationclientid = "msdyn_authenticationclientid";
+			public const string msdyn_authenticationclientsecret = "msdyn_authenticationclientsecret";
+			public const string msdyn_authenticationscopes = "msdyn_authenticationscopes";
 			public const string msdyn_authenticationsettingsId = "msdyn_authenticationsettingsid";
 			public const string msdyn_Authenticationtype = "msdyn_authenticationtype";
+			public const string msdyn_decryptedtokenurl = "msdyn_decryptedtokenurl";
 			public const string msdyn_JavaScriptclientfunction = "msdyn_javascriptclientfunction";
 			public const string msdyn_name = "msdyn_name";
+			public const string msdyn_ocauthchanneltype = "msdyn_ocauthchanneltype";
 			public const string msdyn_PublickeyURL = "msdyn_publickeyurl";
 			public const string OverriddenCreatedOn = "overriddencreatedon";
 			public const string OwnerId = "ownerid";
@@ -76,7 +98,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_authenticationsettings";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10768;
+		public const int EntityTypeCode = 10724;
 
 		[DebuggerNonUserCode()]
 		public msdyn_authenticationsettings()
@@ -205,9 +227,45 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Auth service Client Id</para>
+		/// <para>Required - String - MaxLength: 100</para>
+		/// <para>Auth service Client ID</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_authenticationclientid
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_authenticationclientid); }
+			set { Entity.Attributes[Fields.msdyn_authenticationclientid] = value; }
+		}
+
+		/// <summary>
+		/// <para>Auth service client secret</para>
+		/// <para>Required - String - MaxLength: 100</para>
+		/// <para>Auth service client secret</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_authenticationclientsecret
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_authenticationclientsecret); }
+			set { Entity.Attributes[Fields.msdyn_authenticationclientsecret] = value; }
+		}
+
+		/// <summary>
+		/// <para>Auth service scopes</para>
+		/// <para>Required - String - MaxLength: 100</para>
+		/// <para>Auth service scopes</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_authenticationscopes
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_authenticationscopes); }
+			set { Entity.Attributes[Fields.msdyn_authenticationscopes] = value; }
+		}
+
+		/// <summary>
 		/// <para>Unique identifier for entity instances</para>
 		/// <para>Primary Key - Uniqueidentifier</para>
-		/// <para>Chat Authentication Settings</para>
+		/// <para>Authentication Settings</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public Guid msdyn_authenticationsettingsId
@@ -223,7 +281,7 @@ namespace Dev.DevKit.Shared.Entities
 		/// <summary>
 		/// <para>Authentication Type which will be applied to the chat</para>
 		/// <para>Required - Picklist</para>
-		/// <para>Authentication type</para>
+		/// <para>Authentication Type</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public Dev.DevKit.Shared.Entities.msdyn_authenticationsettingsOptionSets.msdyn_Authenticationtype? msdyn_Authenticationtype
@@ -241,6 +299,18 @@ namespace Dev.DevKit.Shared.Entities
 				else
 					Entity.Attributes[Fields.msdyn_Authenticationtype] = null;
 			}
+		}
+
+		/// <summary>
+		/// <para>Decrypted token url to hit with Access token</para>
+		/// <para>Required - String - MaxLength: 100</para>
+		/// <para>Decrypted Token URL</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_decryptedtokenurl
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_decryptedtokenurl); }
+			set { Entity.Attributes[Fields.msdyn_decryptedtokenurl] = value; }
 		}
 
 		/// <summary>
@@ -265,6 +335,28 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.msdyn_name); }
 			set { Entity.Attributes[Fields.msdyn_name] = value; }
+		}
+
+		/// <summary>
+		/// <para>Picklist</para>
+		/// <para>Channel Type</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public Dev.DevKit.Shared.Entities.msdyn_authenticationsettingsOptionSets.msdyn_ocauthchanneltype? msdyn_ocauthchanneltype
+		{
+			get
+			{
+				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.msdyn_ocauthchanneltype);
+				if (value == null) return null;
+				return (Dev.DevKit.Shared.Entities.msdyn_authenticationsettingsOptionSets.msdyn_ocauthchanneltype)value.Value;
+			}
+			set
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_ocauthchanneltype] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_ocauthchanneltype] = null;
+			}
 		}
 
 		/// <summary>

@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.ContactLeadsOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class ContactLeads : EntityBase
 	{
 		public struct Fields

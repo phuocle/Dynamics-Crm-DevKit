@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.msdyusd_toolbarbutton_agentscriptactionOpti
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyusd_toolbarbutton_agentscriptaction : EntityBase
 	{
 		public struct Fields
@@ -28,7 +29,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyusd_toolbarbutton_agentscriptaction";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10867;
+		public const int EntityTypeCode = 10975;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_toolbarbutton_agentscriptaction()

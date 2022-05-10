@@ -49,6 +49,7 @@ namespace Dev.DevKit.Shared.Entities.RibbonRuleOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class RibbonRule : EntityBase
 	{
 		public struct Fields

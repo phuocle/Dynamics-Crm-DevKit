@@ -61,6 +61,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_purchaseordersubstatusOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_purchaseordersubstatus : EntityBase
 	{
 		public struct Fields
@@ -91,7 +92,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_purchaseordersubstatus";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10571;
+		public const int EntityTypeCode = 10627;
 
 		[DebuggerNonUserCode()]
 		public msdyn_purchaseordersubstatus()

@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.msdyusd_configuration_eventOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyusd_configuration_event : EntityBase
 	{
 		public struct Fields
@@ -28,7 +29,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyusd_configuration_event";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10853;
+		public const int EntityTypeCode = 10961;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_configuration_event()

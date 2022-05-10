@@ -65,6 +65,7 @@ namespace Dev.DevKit.Shared.Entities.SolutionHistoryDataOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class SolutionHistoryData : EntityBase
 	{
 		public struct Fields

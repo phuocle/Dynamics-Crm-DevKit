@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_opportunitypricelistOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_opportunitypricelist : EntityBase
 	{
 		public struct Fields
@@ -67,7 +68,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_opportunitypricelist";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10462;
+		public const int EntityTypeCode = 10521;
 
 		[DebuggerNonUserCode()]
 		public msdyn_opportunitypricelist()

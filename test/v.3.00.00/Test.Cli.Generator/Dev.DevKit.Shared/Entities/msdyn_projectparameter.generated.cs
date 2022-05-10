@@ -49,6 +49,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_projectparameterOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_projectparameter : EntityBase
 	{
 		public struct Fields
@@ -85,7 +86,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_projectparameter";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10471;
+		public const int EntityTypeCode = 10530;
 
 		[DebuggerNonUserCode()]
 		public msdyn_projectparameter()

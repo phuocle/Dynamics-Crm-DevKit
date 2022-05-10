@@ -125,6 +125,7 @@ namespace Dev.DevKit.Shared.Entities.activitymonitorOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class activitymonitor : EntityBase
 	{
 		public struct Fields
@@ -161,7 +162,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "activitymonitor";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10119;
+		public const int EntityTypeCode = 10142;
 
 		[DebuggerNonUserCode()]
 		public activitymonitor()

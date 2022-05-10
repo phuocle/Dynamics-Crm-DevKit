@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_usersettingOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_usersetting : EntityBase
 	{
 		public struct Fields
@@ -64,7 +65,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_usersetting";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10743;
+		public const int EntityTypeCode = 10786;
 
 		[DebuggerNonUserCode()]
 		public msdyn_usersetting()

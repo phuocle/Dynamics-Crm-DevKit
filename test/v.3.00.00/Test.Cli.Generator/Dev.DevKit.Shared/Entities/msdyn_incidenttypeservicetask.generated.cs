@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_incidenttypeservicetaskOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_incidenttypeservicetask : EntityBase
 	{
 		public struct Fields
@@ -72,7 +73,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_incidenttypeservicetask";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10549;
+		public const int EntityTypeCode = 10605;
 
 		[DebuggerNonUserCode()]
 		public msdyn_incidenttypeservicetask()

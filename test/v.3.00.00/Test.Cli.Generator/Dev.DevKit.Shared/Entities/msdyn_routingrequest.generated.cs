@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_routingrequestOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_routingrequest : EntityBase
 	{
 		public struct Fields
@@ -71,7 +72,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_routingrequest";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10733;
+		public const int EntityTypeCode = 10776;
 
 		[DebuggerNonUserCode()]
 		public msdyn_routingrequest()

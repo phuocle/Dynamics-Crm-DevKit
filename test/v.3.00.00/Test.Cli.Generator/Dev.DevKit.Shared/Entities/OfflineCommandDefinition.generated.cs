@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.OfflineCommandDefinitionOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class OfflineCommandDefinition : EntityBase
 	{
 		public struct Fields

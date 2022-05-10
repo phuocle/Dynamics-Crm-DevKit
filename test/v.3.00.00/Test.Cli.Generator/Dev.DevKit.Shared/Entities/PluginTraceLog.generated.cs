@@ -41,6 +41,7 @@ namespace Dev.DevKit.Shared.Entities.PluginTraceLogOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class PluginTraceLog : EntityBase
 	{
 		public struct Fields

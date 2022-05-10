@@ -53,6 +53,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_salesaccelerationsettingsOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_salesaccelerationsettings : EntityBase
 	{
 		public struct Fields
@@ -71,9 +72,11 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_IsDefaultSetting = "msdyn_isdefaultsetting";
 			public const string msdyn_IsSignalRNotificationEnabled = "msdyn_issignalrnotificationenabled";
 			public const string msdyn_IsWorkScheduleEnabled = "msdyn_isworkscheduleenabled";
+			public const string msdyn_linkingconfiguration = "msdyn_linkingconfiguration";
 			public const string msdyn_LinkSequenceStepToActivity = "msdyn_linksequencesteptoactivity";
 			public const string msdyn_MigrationStatus = "msdyn_migrationstatus";
 			public const string msdyn_name = "msdyn_name";
+			public const string msdyn_RecommendationSecurityRoles = "msdyn_recommendationsecurityroles";
 			public const string msdyn_salesaccelerationsettingsId = "msdyn_salesaccelerationsettingsid";
 			public const string msdyn_SecurityRoles = "msdyn_securityroles";
 			public const string msdyn_SecurityRolesAssignmentRules = "msdyn_securityrolesassignmentrules";
@@ -90,7 +93,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_salesaccelerationsettings";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10282;
+		public const int EntityTypeCode = 10305;
 
 		[DebuggerNonUserCode()]
 		public msdyn_salesaccelerationsettings()
@@ -314,6 +317,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Admin configuration of linking between sequence step and activities</para>
+		/// <para>String - MaxLength: 4000</para>
+		/// <para>Linking configuration</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_linkingconfiguration
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_linkingconfiguration); }
+			set { Entity.Attributes[Fields.msdyn_linkingconfiguration] = value; }
+		}
+
+		/// <summary>
 		/// <para>Indicates whether sequence step should be linked to activity created from it.</para>
 		/// <para>Boolean</para>
 		/// <para>Should link sequence step to activity</para>
@@ -347,6 +362,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.msdyn_name); }
 			set { Entity.Attributes[Fields.msdyn_name] = value; }
+		}
+
+		/// <summary>
+		/// <para>Suggestion Security roles enabled for the settings instance</para>
+		/// <para>Memo - MaxLength: 1000000</para>
+		/// <para>Suggestion Security role list</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_RecommendationSecurityRoles
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_RecommendationSecurityRoles); }
+			set { Entity.Attributes[Fields.msdyn_RecommendationSecurityRoles] = value; }
 		}
 
 		/// <summary>

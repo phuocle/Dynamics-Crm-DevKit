@@ -53,6 +53,7 @@ namespace Dev.DevKit.Shared.Entities.MetricOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class Metric : EntityBase
 	{
 		public struct Fields

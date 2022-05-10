@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.TeamRolesOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class TeamRoles : EntityBase
 	{
 		public struct Fields

@@ -69,6 +69,7 @@ namespace Dev.DevKit.Shared.Entities.listoperationOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class listoperation : EntityBase
 	{
 		public struct Fields
@@ -107,7 +108,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "listoperation";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10113;
+		public const int EntityTypeCode = 10136;
 
 		[DebuggerNonUserCode()]
 		public listoperation()

@@ -49,6 +49,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_localizedsurveyquestionOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_localizedsurveyquestion : EntityBase
 	{
 		public struct Fields
@@ -78,7 +79,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_localizedsurveyquestion";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10776;
+		public const int EntityTypeCode = 10817;
 
 		[DebuggerNonUserCode()]
 		public msdyn_localizedsurveyquestion()

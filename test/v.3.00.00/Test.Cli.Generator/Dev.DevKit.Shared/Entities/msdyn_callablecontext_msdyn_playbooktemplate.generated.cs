@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_callablecontext_msdyn_playbooktemplat
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_callablecontext_msdyn_playbooktemplate : EntityBase
 	{
 		public struct Fields
@@ -28,7 +29,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_callablecontext_msdyn_playbooktemplate";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10228;
+		public const int EntityTypeCode = 10247;
 
 		[DebuggerNonUserCode()]
 		public msdyn_callablecontext_msdyn_playbooktemplate()

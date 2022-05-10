@@ -217,6 +217,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_omnichannelconfigurationOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_omnichannelconfiguration : EntityBase
 	{
 		public struct Fields
@@ -268,7 +269,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_omnichannelconfiguration";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10723;
+		public const int EntityTypeCode = 10766;
 
 		[DebuggerNonUserCode()]
 		public msdyn_omnichannelconfiguration()

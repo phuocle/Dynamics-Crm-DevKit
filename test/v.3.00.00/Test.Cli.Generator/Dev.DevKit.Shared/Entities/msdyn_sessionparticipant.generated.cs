@@ -29,6 +29,10 @@ namespace Dev.DevKit.Shared.Entities.msdyn_sessionparticipantOptionSets
 		/// </summary>
 		Monitor = 192350004,
 		/// <summary>
+		/// Preview = 192350005
+		/// </summary>
+		Preview = 192350005,
+		/// <summary>
 		/// Primary = 192350002
 		/// </summary>
 		Primary = 192350002
@@ -61,6 +65,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_sessionparticipantOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_sessionparticipant : EntityBase
 	{
 		public struct Fields
@@ -102,7 +107,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_sessionparticipant";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10737;
+		public const int EntityTypeCode = 10780;
 
 		[DebuggerNonUserCode()]
 		public msdyn_sessionparticipant()
@@ -361,7 +366,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Mode of Agent participation i.e. primary, consult, monitor etc.</para>
+		/// <para>Mode of Agent participation i.e. primary, consult, monitor, preview etc.</para>
 		/// <para>Picklist</para>
 		/// <para>Mode</para>
 		/// </summary>

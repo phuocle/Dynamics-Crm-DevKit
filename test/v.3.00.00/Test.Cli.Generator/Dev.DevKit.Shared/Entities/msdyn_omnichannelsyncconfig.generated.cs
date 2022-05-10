@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_omnichannelsyncconfigOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_omnichannelsyncconfig : EntityBase
 	{
 		public struct Fields
@@ -66,7 +67,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_omnichannelsyncconfig";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10726;
+		public const int EntityTypeCode = 10769;
 
 		[DebuggerNonUserCode()]
 		public msdyn_omnichannelsyncconfig()

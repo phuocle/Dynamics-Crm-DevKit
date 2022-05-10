@@ -61,6 +61,7 @@ namespace Dev.DevKit.Shared.Entities.ContractDetailOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class ContractDetail : EntityBase
 	{
 		public struct Fields

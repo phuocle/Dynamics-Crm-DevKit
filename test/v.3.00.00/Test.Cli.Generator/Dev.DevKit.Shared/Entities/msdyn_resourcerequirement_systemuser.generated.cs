@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_resourcerequirement_systemuserOptionS
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_resourcerequirement_systemuser : EntityBase
 	{
 		public struct Fields
@@ -28,7 +29,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_resourcerequirement_systemuser";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10509;
+		public const int EntityTypeCode = 10568;
 
 		[DebuggerNonUserCode()]
 		public msdyn_resourcerequirement_systemuser()

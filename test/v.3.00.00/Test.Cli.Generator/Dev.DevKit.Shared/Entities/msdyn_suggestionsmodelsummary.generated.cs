@@ -57,6 +57,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_suggestionsmodelsummaryOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_suggestionsmodelsummary : EntityBase
 	{
 		public struct Fields
@@ -97,7 +98,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_suggestionsmodelsummary";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10209;
+		public const int EntityTypeCode = 10225;
 
 		[DebuggerNonUserCode()]
 		public msdyn_suggestionsmodelsummary()

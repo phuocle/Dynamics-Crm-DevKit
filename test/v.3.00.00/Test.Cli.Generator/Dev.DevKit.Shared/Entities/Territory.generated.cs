@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.TerritoryOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class Territory : EntityBase
 	{
 		public struct Fields

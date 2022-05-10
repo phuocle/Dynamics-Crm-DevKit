@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.TopicHistoryOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class TopicHistory : EntityBase
 	{
 		public struct Fields

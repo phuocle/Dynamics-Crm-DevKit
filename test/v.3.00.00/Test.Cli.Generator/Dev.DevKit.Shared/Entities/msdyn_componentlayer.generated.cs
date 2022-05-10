@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_componentlayerOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_componentlayer : EntityBase
 	{
 		public struct Fields

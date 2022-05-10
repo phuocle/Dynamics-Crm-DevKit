@@ -53,6 +53,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_transactioncategorypricelevelOptionSe
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_transactioncategorypricelevel : EntityBase
 	{
 		public struct Fields
@@ -88,7 +89,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_transactioncategorypricelevel";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10500;
+		public const int EntityTypeCode = 10559;
 
 		[DebuggerNonUserCode()]
 		public msdyn_transactioncategorypricelevel()

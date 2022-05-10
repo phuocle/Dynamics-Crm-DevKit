@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_segmentcatalogueOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_segmentcatalogue : EntityBase
 	{
 		public struct Fields
@@ -63,7 +64,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_segmentcatalogue";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10273;
+		public const int EntityTypeCode = 10296;
 
 		[DebuggerNonUserCode()]
 		public msdyn_segmentcatalogue()

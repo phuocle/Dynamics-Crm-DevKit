@@ -105,6 +105,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_iotalertOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_iotalert : EntityBase
 	{
 		public struct Fields
@@ -153,7 +154,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_iotalert";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10138;
+		public const int EntityTypeCode = 10165;
 
 		[DebuggerNonUserCode()]
 		public msdyn_iotalert()

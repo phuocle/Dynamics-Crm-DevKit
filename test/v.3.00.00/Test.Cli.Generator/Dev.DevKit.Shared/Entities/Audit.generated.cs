@@ -333,6 +333,7 @@ namespace Dev.DevKit.Shared.Entities.AuditOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class Audit : EntityBase
 	{
 		public struct Fields

@@ -53,6 +53,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_analysisjobOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_analysisjob : EntityBase
 	{
 		public struct Fields
@@ -100,7 +101,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_analysisjob";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10106;
+		public const int EntityTypeCode = 10130;
 
 		[DebuggerNonUserCode()]
 		public msdyn_analysisjob()

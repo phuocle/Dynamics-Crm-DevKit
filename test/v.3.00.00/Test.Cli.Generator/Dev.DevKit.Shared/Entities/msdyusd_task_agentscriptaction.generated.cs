@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.msdyusd_task_agentscriptactionOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyusd_task_agentscriptaction : EntityBase
 	{
 		public struct Fields
@@ -28,7 +29,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyusd_task_agentscriptaction";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10864;
+		public const int EntityTypeCode = 10972;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_task_agentscriptaction()

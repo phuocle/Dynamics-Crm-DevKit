@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.ContactOrdersOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class ContactOrders : EntityBase
 	{
 		public struct Fields

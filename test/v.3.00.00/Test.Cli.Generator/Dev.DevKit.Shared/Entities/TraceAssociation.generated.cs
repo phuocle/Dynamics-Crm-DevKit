@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.TraceAssociationOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class TraceAssociation : EntityBase
 	{
 		public struct Fields

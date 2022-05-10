@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_iotproviderinstanceOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_iotproviderinstance : EntityBase
 	{
 		public struct Fields
@@ -69,7 +70,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_iotproviderinstance";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10150;
+		public const int EntityTypeCode = 10177;
 
 		[DebuggerNonUserCode()]
 		public msdyn_iotproviderinstance()

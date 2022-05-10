@@ -469,6 +469,7 @@ namespace Dev.DevKit.Shared.Entities.GoalOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class Goal : EntityBase
 	{
 		public struct Fields

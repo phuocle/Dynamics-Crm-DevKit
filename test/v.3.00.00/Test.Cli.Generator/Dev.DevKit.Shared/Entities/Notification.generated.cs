@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.NotificationOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class Notification : EntityBase
 	{
 		public struct Fields

@@ -33,6 +33,7 @@ namespace Dev.DevKit.Shared.Entities.OptionSetOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class OptionSet : EntityBase
 	{
 		public struct Fields

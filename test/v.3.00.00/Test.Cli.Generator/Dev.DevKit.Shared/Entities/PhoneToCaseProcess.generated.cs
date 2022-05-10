@@ -41,6 +41,7 @@ namespace Dev.DevKit.Shared.Entities.PhoneToCaseProcessOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class PhoneToCaseProcess : EntityBase
 	{
 		public struct Fields

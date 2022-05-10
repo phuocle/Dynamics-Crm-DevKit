@@ -25,6 +25,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_odatav4dsOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_odatav4ds : EntityBase
 	{
 		public struct Fields
@@ -72,7 +73,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_odatav4ds";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10044;
+		public const int EntityTypeCode = 10055;
 
 		[DebuggerNonUserCode()]
 		public msdyn_odatav4ds()

@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.StatusMapOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class StatusMap : EntityBase
 	{
 		public struct Fields

@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_knowledgearticleimageOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_knowledgearticleimage : EntityBase
 	{
 		public struct Fields
@@ -68,7 +69,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_knowledgearticleimage";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10080;
+		public const int EntityTypeCode = 10095;
 
 		[DebuggerNonUserCode()]
 		public msdyn_knowledgearticleimage()

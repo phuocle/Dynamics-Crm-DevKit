@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.ContactQuotesOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class ContactQuotes : EntityBase
 	{
 		public struct Fields

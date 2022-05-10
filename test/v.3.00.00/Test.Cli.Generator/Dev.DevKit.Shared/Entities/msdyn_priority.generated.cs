@@ -81,6 +81,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_priorityOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_priority : EntityBase
 	{
 		public struct Fields
@@ -111,7 +112,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_priority";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10409;
+		public const int EntityTypeCode = 10479;
 
 		[DebuggerNonUserCode()]
 		public msdyn_priority()

@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_chatquestionnaireresponseOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_chatquestionnaireresponse : EntityBase
 	{
 		public struct Fields
@@ -68,7 +69,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_chatquestionnaireresponse";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10770;
+		public const int EntityTypeCode = 10811;
 
 		[DebuggerNonUserCode()]
 		public msdyn_chatquestionnaireresponse()

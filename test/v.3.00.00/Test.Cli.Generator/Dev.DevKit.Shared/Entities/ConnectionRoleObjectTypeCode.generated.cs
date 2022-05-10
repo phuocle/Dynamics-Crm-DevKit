@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.ConnectionRoleObjectTypeCodeOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class ConnectionRoleObjectTypeCode : EntityBase
 	{
 		public struct Fields

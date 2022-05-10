@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.msdyusd_configuration_entitysearchOptionSet
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyusd_configuration_entitysearch : EntityBase
 	{
 		public struct Fields
@@ -28,7 +29,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyusd_configuration_entitysearch";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10852;
+		public const int EntityTypeCode = 10960;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_configuration_entitysearch()

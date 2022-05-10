@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.OpportunityCompetitorsOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class OpportunityCompetitors : EntityBase
 	{
 		public struct Fields

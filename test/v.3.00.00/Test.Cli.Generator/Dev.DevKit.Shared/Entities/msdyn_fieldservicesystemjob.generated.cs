@@ -89,6 +89,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_fieldservicesystemjobOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_fieldservicesystemjob : EntityBase
 	{
 		public struct Fields
@@ -124,7 +125,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_fieldservicesystemjob";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10544;
+		public const int EntityTypeCode = 10600;
 
 		[DebuggerNonUserCode()]
 		public msdyn_fieldservicesystemjob()

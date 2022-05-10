@@ -45,6 +45,7 @@ namespace Dev.DevKit.Shared.Entities.ComplexControlOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class ComplexControl : EntityBase
 	{
 		public struct Fields

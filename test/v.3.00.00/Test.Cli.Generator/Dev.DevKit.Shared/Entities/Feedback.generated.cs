@@ -57,6 +57,7 @@ namespace Dev.DevKit.Shared.Entities.FeedbackOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class Feedback : EntityBase
 	{
 		public struct Fields

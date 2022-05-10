@@ -57,6 +57,7 @@ namespace Dev.DevKit.Shared.Entities.ServicePlanOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class ServicePlan : EntityBase
 	{
 		public struct Fields

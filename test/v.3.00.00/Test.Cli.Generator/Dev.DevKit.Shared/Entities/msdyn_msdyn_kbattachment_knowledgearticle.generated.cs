@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_msdyn_kbattachment_knowledgearticleOp
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_msdyn_kbattachment_knowledgearticle : EntityBase
 	{
 		public struct Fields
@@ -28,7 +29,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_msdyn_kbattachment_knowledgearticle";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10089;
+		public const int EntityTypeCode = 10104;
 
 		[DebuggerNonUserCode()]
 		public msdyn_msdyn_kbattachment_knowledgearticle()

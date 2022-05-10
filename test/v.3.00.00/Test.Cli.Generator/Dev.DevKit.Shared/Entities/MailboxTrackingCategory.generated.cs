@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.MailboxTrackingCategoryOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class MailboxTrackingCategory : EntityBase
 	{
 		public struct Fields

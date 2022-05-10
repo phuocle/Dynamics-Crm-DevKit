@@ -29,6 +29,7 @@ namespace Dev.DevKit.Shared.Entities.ActionCardUserStateOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class ActionCardUserState : EntityBase
 	{
 		public struct Fields

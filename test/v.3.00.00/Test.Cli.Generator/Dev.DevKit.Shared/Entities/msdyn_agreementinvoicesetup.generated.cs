@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_agreementinvoicesetupOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_agreementinvoicesetup : EntityBase
 	{
 		public struct Fields
@@ -75,7 +76,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_agreementinvoicesetup";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10532;
+		public const int EntityTypeCode = 10588;
 
 		[DebuggerNonUserCode()]
 		public msdyn_agreementinvoicesetup()

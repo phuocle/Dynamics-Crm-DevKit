@@ -497,6 +497,7 @@ namespace Dev.DevKit.Shared.Entities.LeadOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class Lead : EntityBase
 	{
 		public struct Fields

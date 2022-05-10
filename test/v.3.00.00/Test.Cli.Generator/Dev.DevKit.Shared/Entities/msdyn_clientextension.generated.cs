@@ -53,6 +53,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_clientextensionOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_clientextension : EntityBase
 	{
 		public struct Fields
@@ -85,7 +86,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_clientextension";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10406;
+		public const int EntityTypeCode = 10461;
 
 		[DebuggerNonUserCode()]
 		public msdyn_clientextension()

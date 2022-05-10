@@ -105,6 +105,7 @@ namespace Dev.DevKit.Shared.Entities.MailMergeTemplateOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class MailMergeTemplate : EntityBase
 	{
 		public struct Fields

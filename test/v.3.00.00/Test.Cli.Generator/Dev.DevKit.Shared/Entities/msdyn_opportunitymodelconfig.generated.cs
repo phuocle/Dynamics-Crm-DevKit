@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_opportunitymodelconfigOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_opportunitymodelconfig : EntityBase
 	{
 		public struct Fields
@@ -81,7 +82,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_opportunitymodelconfig";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10889;
+		public const int EntityTypeCode = 10319;
 
 		[DebuggerNonUserCode()]
 		public msdyn_opportunitymodelconfig()

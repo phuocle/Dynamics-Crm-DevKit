@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.BulkOperationLogOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class BulkOperationLog : EntityBase
 	{
 		public struct Fields

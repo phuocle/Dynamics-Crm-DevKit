@@ -45,6 +45,7 @@ namespace Dev.DevKit.Shared.Entities.CompetitorOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class Competitor : EntityBase
 	{
 		public struct Fields

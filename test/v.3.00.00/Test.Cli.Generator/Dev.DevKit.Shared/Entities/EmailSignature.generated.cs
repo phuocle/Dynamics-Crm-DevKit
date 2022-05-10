@@ -33,6 +33,7 @@ namespace Dev.DevKit.Shared.Entities.EmailSignatureOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class EmailSignature : EntityBase
 	{
 		public struct Fields

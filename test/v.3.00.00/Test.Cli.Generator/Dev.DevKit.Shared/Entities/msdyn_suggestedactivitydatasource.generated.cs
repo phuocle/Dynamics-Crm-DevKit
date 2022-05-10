@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_suggestedactivitydatasourceOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_suggestedactivitydatasource : EntityBase
 	{
 		public struct Fields
@@ -26,7 +27,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_suggestedactivitydatasource";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10263;
+		public const int EntityTypeCode = 10283;
 
 		[DebuggerNonUserCode()]
 		public msdyn_suggestedactivitydatasource()

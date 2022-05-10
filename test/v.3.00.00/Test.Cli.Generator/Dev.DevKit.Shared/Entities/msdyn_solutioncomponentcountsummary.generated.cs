@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_solutioncomponentcountsummaryOptionSe
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_solutioncomponentcountsummary : EntityBase
 	{
 		public struct Fields

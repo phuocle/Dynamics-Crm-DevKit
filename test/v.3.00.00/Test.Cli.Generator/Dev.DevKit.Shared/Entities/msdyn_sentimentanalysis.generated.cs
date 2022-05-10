@@ -77,6 +77,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_sentimentanalysisOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_sentimentanalysis : EntityBase
 	{
 		public struct Fields
@@ -110,7 +111,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_sentimentanalysis";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10735;
+		public const int EntityTypeCode = 10778;
 
 		[DebuggerNonUserCode()]
 		public msdyn_sentimentanalysis()

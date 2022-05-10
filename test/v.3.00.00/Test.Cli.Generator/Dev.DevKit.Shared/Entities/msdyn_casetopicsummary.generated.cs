@@ -57,6 +57,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_casetopicsummaryOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_casetopicsummary : EntityBase
 	{
 		public struct Fields
@@ -92,7 +93,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_casetopicsummary";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10217;
+		public const int EntityTypeCode = 10234;
 
 		[DebuggerNonUserCode()]
 		public msdyn_casetopicsummary()

@@ -57,6 +57,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_productivitymacroactiontemplateOption
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_productivitymacroactiontemplate : EntityBase
 	{
 		public struct Fields
@@ -105,7 +106,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_productivitymacroactiontemplate";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10179;
+		public const int EntityTypeCode = 10206;
 
 		[DebuggerNonUserCode()]
 		public msdyn_productivitymacroactiontemplate()

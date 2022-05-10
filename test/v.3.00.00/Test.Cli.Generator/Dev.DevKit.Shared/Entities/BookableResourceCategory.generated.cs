@@ -57,6 +57,7 @@ namespace Dev.DevKit.Shared.Entities.BookableResourceCategoryOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class BookableResourceCategory : EntityBase
 	{
 		public struct Fields

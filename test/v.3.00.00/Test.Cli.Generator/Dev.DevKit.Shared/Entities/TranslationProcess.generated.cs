@@ -41,6 +41,7 @@ namespace Dev.DevKit.Shared.Entities.TranslationProcessOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class TranslationProcess : EntityBase
 	{
 		public struct Fields

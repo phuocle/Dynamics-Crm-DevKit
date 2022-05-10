@@ -61,6 +61,7 @@ namespace Dev.DevKit.Shared.Entities.PostOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class Post : EntityBase
 	{
 		public struct Fields

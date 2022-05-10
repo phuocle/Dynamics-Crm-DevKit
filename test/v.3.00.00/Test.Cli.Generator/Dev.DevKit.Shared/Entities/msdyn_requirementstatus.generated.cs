@@ -53,6 +53,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_requirementstatusOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_requirementstatus : EntityBase
 	{
 		public struct Fields
@@ -82,7 +83,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_requirementstatus";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10416;
+		public const int EntityTypeCode = 10464;
 
 		[DebuggerNonUserCode()]
 		public msdyn_requirementstatus()

@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.PostLikeOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class PostLike : EntityBase
 	{
 		public struct Fields

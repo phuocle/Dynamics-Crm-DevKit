@@ -33,6 +33,7 @@ namespace Dev.DevKit.Shared.Entities.EntityIndexOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class EntityIndex : EntityBase
 	{
 		public struct Fields

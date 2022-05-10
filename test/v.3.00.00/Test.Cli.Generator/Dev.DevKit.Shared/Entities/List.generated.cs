@@ -53,6 +53,7 @@ namespace Dev.DevKit.Shared.Entities.ListOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class List : EntityBase
 	{
 		public struct Fields

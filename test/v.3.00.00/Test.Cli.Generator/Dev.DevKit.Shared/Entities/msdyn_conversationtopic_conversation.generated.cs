@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_conversationtopic_conversationOptionS
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_conversationtopic_conversation : EntityBase
 	{
 		public struct Fields
@@ -64,7 +65,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_conversationtopic_conversation";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10784;
+		public const int EntityTypeCode = 10825;
 
 		[DebuggerNonUserCode()]
 		public msdyn_conversationtopic_conversation()

@@ -113,6 +113,7 @@ namespace Dev.DevKit.Shared.Entities.CustomAPIRequestParameterOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class CustomAPIRequestParameter : EntityBase
 	{
 		public struct Fields
@@ -154,7 +155,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "customapirequestparameter";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10021;
+		public const int EntityTypeCode = 10022;
 
 		[DebuggerNonUserCode()]
 		public CustomAPIRequestParameter()

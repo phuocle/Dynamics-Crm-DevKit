@@ -69,6 +69,7 @@ namespace Dev.DevKit.Shared.Entities.activityfileattachmentOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class activityfileattachment : EntityBase
 	{
 		public struct Fields
@@ -106,7 +107,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "activityfileattachment";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10074;
+		public const int EntityTypeCode = 10087;
 
 		[DebuggerNonUserCode()]
 		public activityfileattachment()

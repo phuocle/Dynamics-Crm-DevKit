@@ -45,6 +45,10 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocsystemmessageOptionSets
 	public enum msdyn_streamsource
 	{
 		/// <summary>
+		/// Apple Messages for Business = 192450000
+		/// </summary>
+		Apple_Messages_for_Business = 192450000,
+		/// <summary>
 		/// Co-browse = 192390000
 		/// </summary>
 		Co_browse = 192390000,
@@ -153,6 +157,14 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocsystemmessageOptionSets
 		/// </summary>
 		Agents_message_couldnt_be_sent = 192350022,
 		/// <summary>
+		/// Apple Pay request payment failed = 192350069
+		/// </summary>
+		Apple_Pay_request_payment_failed = 192350069,
+		/// <summary>
+		/// Apple Pay request payment succeeded = 192350068
+		/// </summary>
+		Apple_Pay_request_payment_succeeded = 192350068,
+		/// <summary>
 		/// Average wait time for customers: Hours = 192350031
 		/// </summary>
 		Average_wait_time_for_customers_Hours = 192350031,
@@ -213,6 +225,14 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocsystemmessageOptionSets
 		/// </summary>
 		Customer_no_longer_on_hold = 192350043,
 		/// <summary>
+		/// Customer OAuth Sign-in response failed = 192350066
+		/// </summary>
+		Customer_OAuth_Sign_in_response_failed = 192350066,
+		/// <summary>
+		/// Customer OAuth Sign-in response successful = 192350065
+		/// </summary>
+		Customer_OAuth_Sign_in_response_successful = 192350065,
+		/// <summary>
 		/// Customer put on hold. = 192350042
 		/// </summary>
 		Customer_put_on_hold = 192350042,
@@ -241,6 +261,10 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocsystemmessageOptionSets
 		/// </summary>
 		Holiday_message_to_customer = 192350035,
 		/// <summary>
+		/// Invalid Apple OAuth response = 192350071
+		/// </summary>
+		Invalid_Apple_OAuth_response = 192350071,
+		/// <summary>
 		/// Leave as many messages as you’d like and we’ll get back to you as soon as possible. We’ll save your chat history, so you can leave and come back anytime. = 192350041
 		/// </summary>
 		Leave_as_many_messages_as_youd_like_and_well_get_back_to_you_as_soon_as_possible_Well_save_your_chat_history_so_you_can_leave_and_come_back_anytime = 192350041,
@@ -264,6 +288,10 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocsystemmessageOptionSets
 		/// Message or attachment failed to send. Providing error details including error code, reason for failure, message id, timestamp, and transaction id = 192350044
 		/// </summary>
 		Message_or_attachment_failed_to_send_Providing_error_details_including_error_code_reason_for_failure_message_id_timestamp_and_transaction_id = 192350044,
+		/// <summary>
+		/// Not enough data for average wait time = 192350064
+		/// </summary>
+		Not_enough_data_for_average_wait_time = 192350064,
 		/// <summary>
 		/// Out of operating hour message to customer = 192350036
 		/// </summary>
@@ -359,7 +387,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocsystemmessageOptionSets
 		/// <summary>
 		/// Voice call requested = 192350026
 		/// </summary>
-		Voice_call_requested = 192350026
+		Voice_call_requested = 192350026,
+		/// <summary>
+		/// Waiting time for agent when customer is disconnected = 192350070
+		/// </summary>
+		Waiting_time_for_agent_when_customer_is_disconnected = 192350070
 	}
 
 	public enum statecode
@@ -389,6 +421,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocsystemmessageOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_ocsystemmessage : EntityBase
 	{
 		public struct Fields
@@ -424,7 +457,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_ocsystemmessage";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10720;
+		public const int EntityTypeCode = 10763;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocsystemmessage()

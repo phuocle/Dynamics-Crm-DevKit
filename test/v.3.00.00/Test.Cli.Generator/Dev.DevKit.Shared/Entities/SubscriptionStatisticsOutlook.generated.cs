@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.SubscriptionStatisticsOutlookOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class SubscriptionStatisticsOutlook : EntityBase
 	{
 		public struct Fields

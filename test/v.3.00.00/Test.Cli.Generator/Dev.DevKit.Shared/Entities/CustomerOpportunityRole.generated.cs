@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.CustomerOpportunityRoleOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class CustomerOpportunityRole : EntityBase
 	{
 		public struct Fields

@@ -57,6 +57,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_dataanalyticsreport_fsOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_dataanalyticsreport_fs : EntityBase
 	{
 		public struct Fields
@@ -92,7 +93,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_dataanalyticsreport_fs";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10642;
+		public const int EntityTypeCode = 10682;
 
 		[DebuggerNonUserCode()]
 		public msdyn_dataanalyticsreport_fs()

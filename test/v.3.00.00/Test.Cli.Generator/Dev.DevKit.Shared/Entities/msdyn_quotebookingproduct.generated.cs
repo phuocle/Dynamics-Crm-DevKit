@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_quotebookingproductOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_quotebookingproduct : EntityBase
 	{
 		public struct Fields
@@ -89,7 +90,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_quotebookingproduct";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10573;
+		public const int EntityTypeCode = 10629;
 
 		[DebuggerNonUserCode()]
 		public msdyn_quotebookingproduct()

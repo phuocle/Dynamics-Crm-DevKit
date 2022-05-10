@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.marketingformdisplayattributesOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class marketingformdisplayattributes : EntityBase
 	{
 		public struct Fields
@@ -64,7 +65,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "marketingformdisplayattributes";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10114;
+		public const int EntityTypeCode = 10137;
 
 		[DebuggerNonUserCode()]
 		public marketingformdisplayattributes()

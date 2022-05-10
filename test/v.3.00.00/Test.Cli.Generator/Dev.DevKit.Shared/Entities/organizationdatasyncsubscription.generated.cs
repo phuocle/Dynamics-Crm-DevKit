@@ -117,6 +117,7 @@ namespace Dev.DevKit.Shared.Entities.organizationdatasyncsubscriptionOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class organizationdatasyncsubscription : EntityBase
 	{
 		public struct Fields
@@ -160,7 +161,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "organizationdatasyncsubscription";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10096;
+		public const int EntityTypeCode = 10112;
 
 		[DebuggerNonUserCode()]
 		public organizationdatasyncsubscription()
@@ -354,7 +355,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Memo - MaxLength: 5000</para>
+		/// <para>Memo - MaxLength: 50000</para>
 		/// <para>EntitySettings</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

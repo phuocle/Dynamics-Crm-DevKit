@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.OfficeGraphDocumentOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class OfficeGraphDocument : EntityBase
 	{
 		public struct Fields

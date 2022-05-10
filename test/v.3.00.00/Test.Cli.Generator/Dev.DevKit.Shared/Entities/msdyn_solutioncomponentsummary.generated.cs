@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_solutioncomponentsummaryOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_solutioncomponentsummary : EntityBase
 	{
 		public struct Fields

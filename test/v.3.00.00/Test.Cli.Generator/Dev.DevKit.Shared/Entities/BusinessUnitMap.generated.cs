@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.BusinessUnitMapOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class BusinessUnitMap : EntityBase
 	{
 		public struct Fields

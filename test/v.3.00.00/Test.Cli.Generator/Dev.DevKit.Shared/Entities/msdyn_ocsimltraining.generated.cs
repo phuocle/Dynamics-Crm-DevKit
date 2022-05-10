@@ -101,6 +101,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocsimltrainingOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_ocsimltraining : EntityBase
 	{
 		public struct Fields
@@ -144,7 +145,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_ocsimltraining";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10759;
+		public const int EntityTypeCode = 10801;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocsimltraining()

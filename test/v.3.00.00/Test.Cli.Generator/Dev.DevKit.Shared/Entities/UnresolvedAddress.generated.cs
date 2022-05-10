@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.UnresolvedAddressOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class UnresolvedAddress : EntityBase
 	{
 		public struct Fields

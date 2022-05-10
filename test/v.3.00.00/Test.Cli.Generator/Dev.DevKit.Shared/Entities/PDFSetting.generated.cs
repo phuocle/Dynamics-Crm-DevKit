@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.PDFSettingOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class PDFSetting : EntityBase
 	{
 		public struct Fields
@@ -67,7 +68,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "pdfsetting";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10073;
+		public const int EntityTypeCode = 10086;
 
 		[DebuggerNonUserCode()]
 		public PDFSetting()

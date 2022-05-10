@@ -45,6 +45,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_fieldserviceslaconfigurationOptionSet
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_fieldserviceslaconfiguration : EntityBase
 	{
 		public struct Fields
@@ -74,7 +75,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_fieldserviceslaconfiguration";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10543;
+		public const int EntityTypeCode = 10599;
 
 		[DebuggerNonUserCode()]
 		public msdyn_fieldserviceslaconfiguration()

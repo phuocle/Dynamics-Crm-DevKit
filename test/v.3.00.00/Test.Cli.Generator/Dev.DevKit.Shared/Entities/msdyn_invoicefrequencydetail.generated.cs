@@ -221,6 +221,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_invoicefrequencydetailOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_invoicefrequencydetail : EntityBase
 	{
 		public struct Fields
@@ -250,7 +251,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_invoicefrequencydetail";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10453;
+		public const int EntityTypeCode = 10512;
 
 		[DebuggerNonUserCode()]
 		public msdyn_invoicefrequencydetail()

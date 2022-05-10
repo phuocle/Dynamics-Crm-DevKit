@@ -57,6 +57,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_knowledgesearchfilterOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_knowledgesearchfilter : EntityBase
 	{
 		public struct Fields
@@ -99,7 +100,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_knowledgesearchfilter";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10088;
+		public const int EntityTypeCode = 10103;
 
 		[DebuggerNonUserCode()]
 		public msdyn_knowledgesearchfilter()

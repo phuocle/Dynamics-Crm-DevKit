@@ -25,6 +25,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_CollabGraphResourceOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_CollabGraphResource : EntityBase
 	{
 		public struct Fields
@@ -49,7 +50,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_collabgraphresource";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10235;
+		public const int EntityTypeCode = 10254;
 
 		[DebuggerNonUserCode()]
 		public msdyn_CollabGraphResource()

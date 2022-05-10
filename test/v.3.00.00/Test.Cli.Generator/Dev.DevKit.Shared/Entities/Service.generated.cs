@@ -65,6 +65,7 @@ namespace Dev.DevKit.Shared.Entities.ServiceOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class Service : EntityBase
 	{
 		public struct Fields

@@ -69,6 +69,7 @@ namespace Dev.DevKit.Shared.Entities.SLAKPIInstanceOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class SLAKPIInstance : EntityBase
 	{
 		public struct Fields

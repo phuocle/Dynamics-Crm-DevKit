@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_AIBFileOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_AIBFile : EntityBase
 	{
 		public struct Fields
@@ -72,7 +73,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_aibfile";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10060;
+		public const int EntityTypeCode = 10072;
 
 		[DebuggerNonUserCode()]
 		public msdyn_AIBFile()

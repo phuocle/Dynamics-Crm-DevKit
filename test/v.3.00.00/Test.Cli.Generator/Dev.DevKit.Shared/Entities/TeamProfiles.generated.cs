@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.TeamProfilesOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class TeamProfiles : EntityBase
 	{
 		public struct Fields

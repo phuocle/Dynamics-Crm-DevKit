@@ -33,6 +33,7 @@ namespace Dev.DevKit.Shared.Entities.RibbonCommandOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class RibbonCommand : EntityBase
 	{
 		public struct Fields

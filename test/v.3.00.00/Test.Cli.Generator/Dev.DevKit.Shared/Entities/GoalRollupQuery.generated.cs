@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.GoalRollupQueryOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class GoalRollupQuery : EntityBase
 	{
 		public struct Fields

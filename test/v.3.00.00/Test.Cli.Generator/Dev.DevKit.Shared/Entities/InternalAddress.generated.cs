@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.InternalAddressOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class InternalAddress : EntityBase
 	{
 		public struct Fields

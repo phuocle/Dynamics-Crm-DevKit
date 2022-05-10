@@ -49,6 +49,7 @@ namespace Dev.DevKit.Shared.Entities.ReportVisibilityOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class ReportVisibility : EntityBase
 	{
 		public struct Fields

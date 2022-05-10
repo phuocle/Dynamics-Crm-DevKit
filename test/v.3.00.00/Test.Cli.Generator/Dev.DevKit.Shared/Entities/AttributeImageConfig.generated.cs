@@ -33,6 +33,7 @@ namespace Dev.DevKit.Shared.Entities.AttributeImageConfigOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class AttributeImageConfig : EntityBase
 	{
 		public struct Fields

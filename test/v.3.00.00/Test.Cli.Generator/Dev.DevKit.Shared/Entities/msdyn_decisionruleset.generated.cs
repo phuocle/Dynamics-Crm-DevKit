@@ -93,6 +93,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_decisionrulesetOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_decisionruleset : EntityBase
 	{
 		public struct Fields
@@ -137,7 +138,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_decisionruleset";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10670;
+		public const int EntityTypeCode = 10346;
 
 		[DebuggerNonUserCode()]
 		public msdyn_decisionruleset()

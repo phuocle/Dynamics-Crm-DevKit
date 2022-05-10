@@ -53,6 +53,7 @@ namespace Dev.DevKit.Shared.Entities.msdyusd_toolbarbuttonOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyusd_toolbarbutton : EntityBase
 	{
 		public struct Fields
@@ -94,7 +95,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyusd_toolbarbutton";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10842;
+		public const int EntityTypeCode = 10952;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_toolbarbutton()

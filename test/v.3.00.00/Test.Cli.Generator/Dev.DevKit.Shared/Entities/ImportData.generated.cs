@@ -41,6 +41,7 @@ namespace Dev.DevKit.Shared.Entities.ImportDataOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class ImportData : EntityBase
 	{
 		public struct Fields

@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_workqueuerecordOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_workqueuerecord : EntityBase
 	{
 		public struct Fields
@@ -26,12 +27,15 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ModifiedBy = "modifiedby";
 			public const string ModifiedOn = "modifiedon";
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
+			public const string msdyn_displayattributes = "msdyn_displayattributes";
 			public const string msdyn_duetime = "msdyn_duetime";
 			public const string msdyn_endtime = "msdyn_endtime";
 			public const string msdyn_entitysetname = "msdyn_entitysetname";
 			public const string msdyn_entitytypecode = "msdyn_entitytypecode";
 			public const string msdyn_entitytypedisplayname = "msdyn_entitytypedisplayname";
 			public const string msdyn_entitytypelogicalname = "msdyn_entitytypelogicalname";
+			public const string msdyn_filterattributes = "msdyn_filterattributes";
+			public const string msdyn_linkedactivityid = "msdyn_linkedactivityid";
 			public const string msdyn_nextactionerrorstate = "msdyn_nextactionerrorstate";
 			public const string msdyn_nextactionid = "msdyn_nextactionid";
 			public const string msdyn_nextactionname = "msdyn_nextactionname";
@@ -54,7 +58,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_workqueuerecord";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10283;
+		public const int EntityTypeCode = 10310;
 
 		[DebuggerNonUserCode()]
 		public msdyn_workqueuerecord()
@@ -183,6 +187,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Display Attributes</para>
+		/// <para>Memo - MaxLength: 10000</para>
+		/// <para>Display Attributes</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_displayattributes
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_displayattributes); }
+			set { Entity.Attributes[Fields.msdyn_displayattributes] = value; }
+		}
+
+		/// <summary>
 		/// <para>Next activity or Sequence step due time</para>
 		/// <para>DateTimeBehavior: UserLocal - DateTimeFormat: DateAndTime</para>
 		/// <para>Next Action Due time</para>
@@ -252,6 +268,30 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.msdyn_entitytypelogicalname); }
 			set { Entity.Attributes[Fields.msdyn_entitytypelogicalname] = value; }
+		}
+
+		/// <summary>
+		/// <para>Fields added for performing client side custom filtering.</para>
+		/// <para>Memo - MaxLength: 1000000</para>
+		/// <para>Filter Attributes</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_filterattributes
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_filterattributes); }
+			set { Entity.Attributes[Fields.msdyn_filterattributes] = value; }
+		}
+
+		/// <summary>
+		/// <para>Unique identifier of the activity linked to the sequence step</para>
+		/// <para>Uniqueidentifier</para>
+		/// <para>Linked activity id</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public Guid? msdyn_linkedactivityid
+		{
+			get { return Entity.GetAttributeValue<Guid?>(Fields.msdyn_linkedactivityid); }
+			set { Entity.Attributes[Fields.msdyn_linkedactivityid] = value; }
 		}
 
 		/// <summary>

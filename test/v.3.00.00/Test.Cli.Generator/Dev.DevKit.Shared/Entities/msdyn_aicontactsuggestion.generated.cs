@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_aicontactsuggestionOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_aicontactsuggestion : EntityBase
 	{
 		public struct Fields
@@ -67,7 +68,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_aicontactsuggestion";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10240;
+		public const int EntityTypeCode = 10259;
 
 		[DebuggerNonUserCode()]
 		public msdyn_aicontactsuggestion()

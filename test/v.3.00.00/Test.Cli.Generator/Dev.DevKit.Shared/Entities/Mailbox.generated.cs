@@ -213,6 +213,7 @@ namespace Dev.DevKit.Shared.Entities.MailboxOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class Mailbox : EntityBase
 	{
 		public struct Fields

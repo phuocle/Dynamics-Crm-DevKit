@@ -61,6 +61,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_occommunicationprovidersettingOptionS
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_occommunicationprovidersetting : EntityBase
 	{
 		public struct Fields
@@ -94,7 +95,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_occommunicationprovidersetting";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10788;
+		public const int EntityTypeCode = 10828;
 
 		[DebuggerNonUserCode()]
 		public msdyn_occommunicationprovidersetting()

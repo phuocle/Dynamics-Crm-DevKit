@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_FunctionalLocationOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_FunctionalLocation : EntityBase
 	{
 		public struct Fields
@@ -77,7 +78,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_functionallocation";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10131;
+		public const int EntityTypeCode = 10156;
 
 		[DebuggerNonUserCode()]
 		public msdyn_FunctionalLocation()

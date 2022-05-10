@@ -25,6 +25,7 @@ namespace Dev.DevKit.Shared.Entities.OfficeDocumentOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class OfficeDocument : EntityBase
 	{
 		public struct Fields

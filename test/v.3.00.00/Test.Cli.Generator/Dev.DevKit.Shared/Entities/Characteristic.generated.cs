@@ -49,6 +49,7 @@ namespace Dev.DevKit.Shared.Entities.CharacteristicOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class Characteristic : EntityBase
 	{
 		public struct Fields

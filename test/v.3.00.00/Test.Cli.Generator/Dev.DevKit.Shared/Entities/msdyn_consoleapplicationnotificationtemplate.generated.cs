@@ -73,6 +73,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_consoleapplicationnotificationtemplat
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_consoleapplicationnotificationtemplate : EntityBase
 	{
 		public struct Fields
@@ -114,7 +115,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_consoleapplicationnotificationtemplate";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10652;
+		public const int EntityTypeCode = 10692;
 
 		[DebuggerNonUserCode()]
 		public msdyn_consoleapplicationnotificationtemplate()

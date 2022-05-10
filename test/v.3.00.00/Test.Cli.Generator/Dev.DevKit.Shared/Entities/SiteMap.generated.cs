@@ -33,6 +33,7 @@ namespace Dev.DevKit.Shared.Entities.SiteMapOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class SiteMap : EntityBase
 	{
 		public struct Fields

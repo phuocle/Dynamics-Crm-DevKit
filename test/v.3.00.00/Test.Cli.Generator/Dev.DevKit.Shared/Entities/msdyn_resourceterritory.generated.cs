@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_resourceterritoryOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_resourceterritory : EntityBase
 	{
 		public struct Fields
@@ -67,7 +68,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_resourceterritory";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10419;
+		public const int EntityTypeCode = 10480;
 
 		[DebuggerNonUserCode()]
 		public msdyn_resourceterritory()

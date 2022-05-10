@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.holidaywrapperOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class holidaywrapper : EntityBase
 	{
 		public struct Fields

@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.CanvasAppExtendedMetadataOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class CanvasAppExtendedMetadata : EntityBase
 	{
 		public struct Fields
@@ -67,7 +68,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "canvasappextendedmetadata";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10038;
+		public const int EntityTypeCode = 10049;
 
 		[DebuggerNonUserCode()]
 		public CanvasAppExtendedMetadata()

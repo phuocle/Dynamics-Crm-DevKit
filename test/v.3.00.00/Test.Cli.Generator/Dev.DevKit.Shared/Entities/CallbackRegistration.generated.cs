@@ -97,6 +97,7 @@ namespace Dev.DevKit.Shared.Entities.CallbackRegistrationOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class CallbackRegistration : EntityBase
 	{
 		public struct Fields
@@ -109,6 +110,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string FilterExpression = "filterexpression";
 			public const string FilteringAttributes = "filteringattributes";
 			public const string HardDelete = "harddelete";
+			public const string LogicAppsVersion = "logicappsversion";
 			public const string Message = "message";
 			public const string ModifiedBy = "modifiedby";
 			public const string ModifiedOn = "modifiedon";
@@ -276,6 +278,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<bool?>(Fields.HardDelete); }
 			set { Entity.Attributes[Fields.HardDelete] = value; }
+		}
+
+		/// <summary>
+		/// <para>For internal use only. Holds version of logic apps trigger.</para>
+		/// <para>String - MaxLength: 100</para>
+		/// <para>Logic Apps Version</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string LogicAppsVersion
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.LogicAppsVersion); }
+			set { Entity.Attributes[Fields.LogicAppsVersion] = value; }
 		}
 
 		/// <summary>

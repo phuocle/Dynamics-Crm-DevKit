@@ -49,6 +49,7 @@ namespace Dev.DevKit.Shared.Entities.PartnerApplicationOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class PartnerApplication : EntityBase
 	{
 		public struct Fields

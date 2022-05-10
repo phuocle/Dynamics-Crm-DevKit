@@ -361,6 +361,7 @@ namespace Dev.DevKit.Shared.Entities.ContactOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class Contact : EntityBase
 	{
 		public struct Fields
@@ -517,6 +518,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
 			public const string msdyn_gdproptout = "msdyn_gdproptout";
 			public const string msdyn_orgchangestatus = "msdyn_orgchangestatus";
+			public const string msdyn_segmentid = "msdyn_segmentid";
 			public const string msdyusd_CurrentProfile = "msdyusd_currentprofile";
 			public const string msdyusd_Facebook = "msdyusd_facebook";
 			public const string msdyusd_Twitter = "msdyusd_twitter";
@@ -2708,6 +2710,18 @@ namespace Dev.DevKit.Shared.Entities
 				else
 					Entity.Attributes[Fields.msdyn_orgchangestatus] = null;
 			}
+		}
+
+		/// <summary>
+		/// <para>Unique identifier for Segment associated with contact.</para>
+		/// <para>Lookup to msdyn_segment</para>
+		/// <para>Segment Id</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public EntityReference msdyn_segmentid
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.msdyn_segmentid); }
+			set { Entity.Attributes[Fields.msdyn_segmentid] = value; }
 		}
 
 		/// <summary>

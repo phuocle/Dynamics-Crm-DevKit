@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.SharedObjectsForReadOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class SharedObjectsForRead : EntityBase
 	{
 		public struct Fields

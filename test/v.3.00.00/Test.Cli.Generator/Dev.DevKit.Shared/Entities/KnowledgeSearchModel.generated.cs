@@ -65,6 +65,7 @@ namespace Dev.DevKit.Shared.Entities.KnowledgeSearchModelOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class KnowledgeSearchModel : EntityBase
 	{
 		public struct Fields

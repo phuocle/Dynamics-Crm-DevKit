@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.CalendarRuleOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class CalendarRule : EntityBase
 	{
 		public struct Fields

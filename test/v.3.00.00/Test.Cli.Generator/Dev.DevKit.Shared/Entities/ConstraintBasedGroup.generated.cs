@@ -29,6 +29,7 @@ namespace Dev.DevKit.Shared.Entities.ConstraintBasedGroupOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class ConstraintBasedGroup : EntityBase
 	{
 		public struct Fields

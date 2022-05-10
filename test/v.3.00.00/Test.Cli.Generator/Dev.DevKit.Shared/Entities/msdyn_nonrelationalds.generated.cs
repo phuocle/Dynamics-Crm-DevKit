@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_nonrelationaldsOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_nonrelationalds : EntityBase
 	{
 		public struct Fields
@@ -26,7 +27,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_nonrelationalds";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10098;
+		public const int EntityTypeCode = 10115;
 
 		[DebuggerNonUserCode()]
 		public msdyn_nonrelationalds()

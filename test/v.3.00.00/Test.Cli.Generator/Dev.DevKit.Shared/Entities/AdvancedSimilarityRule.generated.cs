@@ -77,6 +77,7 @@ namespace Dev.DevKit.Shared.Entities.AdvancedSimilarityRuleOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class AdvancedSimilarityRule : EntityBase
 	{
 		public struct Fields

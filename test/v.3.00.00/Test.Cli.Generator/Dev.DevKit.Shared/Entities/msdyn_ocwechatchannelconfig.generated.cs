@@ -10,6 +10,18 @@ using System.Diagnostics;
 
 namespace Dev.DevKit.Shared.Entities.msdyn_ocwechatchannelconfigOptionSets
 {
+	public enum msdyn_PostConversationSurveyBotSurveyMode
+	{
+		/// <summary>
+		/// Insert survey in conversation = 192350000
+		/// </summary>
+		Insert_survey_in_conversation = 192350000,
+		/// <summary>
+		/// Send survey link to conversation = 192350001
+		/// </summary>
+		Send_survey_link_to_conversation = 192350001
+	}
+
 	public enum msdyn_PostConversationSurveyMode
 	{
 		/// <summary>
@@ -49,6 +61,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocwechatchannelconfigOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_ocwechatchannelconfig : EntityBase
 	{
 		public struct Fields
@@ -72,9 +85,13 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_ocwechatchannelconfigId = "msdyn_ocwechatchannelconfigid";
 			public const string msdyn_ocwidgetlanguage = "msdyn_ocwidgetlanguage";
 			public const string msdyn_PostConversationSurvey = "msdyn_postconversationsurvey";
+			public const string msdyn_PostConversationSurveyBotSurvey = "msdyn_postconversationsurveybotsurvey";
+			public const string msdyn_PostConversationSurveyBotSurveyMessageText = "msdyn_postconversationsurveybotsurveymessagetext";
+			public const string msdyn_PostConversationSurveyBotSurveyMode = "msdyn_postconversationsurveybotsurveymode";
 			public const string msdyn_PostConversationSurveyEnable = "msdyn_postconversationsurveyenable";
 			public const string msdyn_PostConversationSurveyMessageText = "msdyn_postconversationsurveymessagetext";
 			public const string msdyn_PostConversationSurveyMode = "msdyn_postconversationsurveymode";
+			public const string msdyn_PostConversationSurveySeparateBotSurvey = "msdyn_postconversationsurveyseparatebotsurvey";
 			public const string msdyn_serviceaccount = "msdyn_serviceaccount";
 			public const string msdyn_token = "msdyn_token";
 			public const string OverriddenCreatedOn = "overriddencreatedon";
@@ -92,7 +109,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_ocwechatchannelconfig";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10803;
+		public const int EntityTypeCode = 10844;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocwechatchannelconfig()
@@ -369,6 +386,53 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Enable or disable bot survey</para>
+		/// <para>Boolean</para>
+		/// <para>Bot Survey</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_PostConversationSurveyBotSurvey
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_PostConversationSurveyBotSurvey); }
+			set { Entity.Attributes[Fields.msdyn_PostConversationSurveyBotSurvey] = value; }
+		}
+
+		/// <summary>
+		/// <para>Prefix text for survey link message that will be sent to the user.</para>
+		/// <para>String - MaxLength: 200</para>
+		/// <para>Message</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_PostConversationSurveyBotSurveyMessageText
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_PostConversationSurveyBotSurveyMessageText); }
+			set { Entity.Attributes[Fields.msdyn_PostConversationSurveyBotSurveyMessageText] = value; }
+		}
+
+		/// <summary>
+		/// <para>Mode of the survey to be sent</para>
+		/// <para>Picklist</para>
+		/// <para>Survey Mode</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public Dev.DevKit.Shared.Entities.msdyn_ocwechatchannelconfigOptionSets.msdyn_PostConversationSurveyBotSurveyMode? msdyn_PostConversationSurveyBotSurveyMode
+		{
+			get
+			{
+				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.msdyn_PostConversationSurveyBotSurveyMode);
+				if (value == null) return null;
+				return (Dev.DevKit.Shared.Entities.msdyn_ocwechatchannelconfigOptionSets.msdyn_PostConversationSurveyBotSurveyMode)value.Value;
+			}
+			set
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_PostConversationSurveyBotSurveyMode] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_PostConversationSurveyBotSurveyMode] = null;
+			}
+		}
+
+		/// <summary>
 		/// <para>To enable or disable post conversation survey</para>
 		/// <para>Boolean</para>
 		/// <para>Enable</para>
@@ -413,6 +477,18 @@ namespace Dev.DevKit.Shared.Entities
 				else
 					Entity.Attributes[Fields.msdyn_PostConversationSurveyMode] = null;
 			}
+		}
+
+		/// <summary>
+		/// <para>Lookup to Dynamics 365 Customer Voice survey field</para>
+		/// <para>Lookup to msfp_survey</para>
+		/// <para>Survey</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public EntityReference msdyn_PostConversationSurveySeparateBotSurvey
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.msdyn_PostConversationSurveySeparateBotSurvey); }
+			set { Entity.Attributes[Fields.msdyn_PostConversationSurveySeparateBotSurvey] = value; }
 		}
 
 		/// <summary>

@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_conversationsuggestionrequestpayloadO
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_conversationsuggestionrequestpayload : EntityBase
 	{
 		public struct Fields
@@ -65,7 +66,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_conversationsuggestionrequestpayload";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10779;
+		public const int EntityTypeCode = 10820;
 
 		[DebuggerNonUserCode()]
 		public msdyn_conversationsuggestionrequestpayload()

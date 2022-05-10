@@ -53,6 +53,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_agreementbookingsetupOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_agreementbookingsetup : EntityBase
 	{
 		public struct Fields
@@ -107,7 +108,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_agreementbookingsetup";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10529;
+		public const int EntityTypeCode = 10585;
 
 		[DebuggerNonUserCode()]
 		public msdyn_agreementbookingsetup()
@@ -277,7 +278,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Enable if the system should automatically generate Work Orders for the Booking Dates of this Booking Setup</para>
-		/// <para>Required - Boolean</para>
+		/// <para>Boolean</para>
 		/// <para>Auto Generate Work Order</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

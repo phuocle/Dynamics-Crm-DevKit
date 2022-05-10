@@ -65,6 +65,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocflaggedspamOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_ocflaggedspam : EntityBase
 	{
 		public struct Fields
@@ -98,7 +99,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_ocflaggedspam";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10700;
+		public const int EntityTypeCode = 10741;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocflaggedspam()

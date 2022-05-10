@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.EquipmentOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class Equipment : EntityBase
 	{
 		public struct Fields

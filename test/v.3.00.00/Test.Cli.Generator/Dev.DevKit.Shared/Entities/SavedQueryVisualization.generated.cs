@@ -57,6 +57,7 @@ namespace Dev.DevKit.Shared.Entities.SavedQueryVisualizationOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class SavedQueryVisualization : EntityBase
 	{
 		public struct Fields

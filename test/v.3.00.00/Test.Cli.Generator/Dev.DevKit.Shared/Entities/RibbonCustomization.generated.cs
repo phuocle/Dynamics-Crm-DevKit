@@ -33,6 +33,7 @@ namespace Dev.DevKit.Shared.Entities.RibbonCustomizationOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class RibbonCustomization : EntityBase
 	{
 		public struct Fields

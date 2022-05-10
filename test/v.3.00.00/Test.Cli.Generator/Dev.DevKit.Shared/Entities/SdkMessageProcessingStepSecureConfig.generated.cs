@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.SdkMessageProcessingStepSecureConfigOptionS
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class SdkMessageProcessingStepSecureConfig : EntityBase
 	{
 		public struct Fields

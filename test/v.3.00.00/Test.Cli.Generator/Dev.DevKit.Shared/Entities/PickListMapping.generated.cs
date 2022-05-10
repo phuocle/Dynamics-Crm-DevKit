@@ -69,6 +69,7 @@ namespace Dev.DevKit.Shared.Entities.PickListMappingOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class PickListMapping : EntityBase
 	{
 		public struct Fields

@@ -133,6 +133,7 @@ namespace Dev.DevKit.Shared.Entities.KnowledgeArticleOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class KnowledgeArticle : EntityBase
 	{
 		public struct Fields
@@ -164,9 +165,12 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ModifiedBy = "modifiedby";
 			public const string ModifiedOn = "modifiedon";
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
+			public const string msdyn_contentstore = "msdyn_contentstore";
 			public const string msdyn_ingestedarticleurl = "msdyn_ingestedarticleurl";
+			public const string msdyn_iscontentsyncedtostore = "msdyn_iscontentsyncedtostore";
 			public const string msdyn_isingestedarticle = "msdyn_isingestedarticle";
 			public const string msdyn_keywordsdescsuggestioncontrol = "msdyn_keywordsdescsuggestioncontrol";
+			public const string msdyn_retrycountformigrationtocontentstore = "msdyn_retrycountformigrationtocontentstore";
 			public const string OverriddenCreatedOn = "overriddencreatedon";
 			public const string OwnerId = "ownerid";
 			public const string OwningBusinessUnit = "owningbusinessunit";
@@ -585,6 +589,17 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Stores the reference to content field in the knowledge article</para>
+		/// <para>ReadOnly - Virtual</para>
+		/// <para>File storage content reference</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_contentstore
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_contentstore); }
+		}
+
+		/// <summary>
 		/// <para>Ingested article URL</para>
 		/// <para>String - MaxLength: 2048</para>
 		/// <para>Ingested Article URL</para>
@@ -594,6 +609,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.msdyn_ingestedarticleurl); }
 			set { Entity.Attributes[Fields.msdyn_ingestedarticleurl] = value; }
+		}
+
+		/// <summary>
+		/// <para>Sets whether the article content is synced to file storage</para>
+		/// <para>Boolean</para>
+		/// <para>Is content synced to file storage</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_iscontentsyncedtostore
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_iscontentsyncedtostore); }
+			set { Entity.Attributes[Fields.msdyn_iscontentsyncedtostore] = value; }
 		}
 
 		/// <summary>
@@ -617,6 +644,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_keywordsdescsuggestioncontrol); }
 			set { Entity.Attributes[Fields.msdyn_keywordsdescsuggestioncontrol] = value; }
+		}
+
+		/// <summary>
+		/// <para>Displays the number of times migration to file storage retry is attempted for an article</para>
+		/// <para>Integer - MinValue: 0 - MaxValue: 2,147,483,647</para>
+		/// <para>File storage migration retry count</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public int? msdyn_retrycountformigrationtocontentstore
+		{
+			get { return Entity.GetAttributeValue<int?>(Fields.msdyn_retrycountformigrationtocontentstore); }
+			set { Entity.Attributes[Fields.msdyn_retrycountformigrationtocontentstore] = value; }
 		}
 
 		/// <summary>

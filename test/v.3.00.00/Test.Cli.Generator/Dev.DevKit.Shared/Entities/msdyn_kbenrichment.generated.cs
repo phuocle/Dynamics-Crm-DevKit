@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_kbenrichmentOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_kbenrichment : EntityBase
 	{
 		public struct Fields
@@ -65,7 +66,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_kbenrichment";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10204;
+		public const int EntityTypeCode = 10220;
 
 		[DebuggerNonUserCode()]
 		public msdyn_kbenrichment()

@@ -29,6 +29,7 @@ namespace Dev.DevKit.Shared.Entities.ResourceGroupOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class ResourceGroup : EntityBase
 	{
 		public struct Fields

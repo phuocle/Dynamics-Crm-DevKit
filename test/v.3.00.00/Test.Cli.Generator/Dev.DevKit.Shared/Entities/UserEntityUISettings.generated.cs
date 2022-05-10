@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.UserEntityUISettingsOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class UserEntityUISettings : EntityBase
 	{
 		public struct Fields
@@ -34,6 +35,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string TabOrderXml = "taborderxml";
 			public const string UserEntityUISettingsId = "userentityuisettingsid";
 			public const string VersionNumber = "versionnumber";
+			public const string ViewPersonalizationSettings = "viewpersonalizationsettings";
 		}
 
 		public const string EntityLogicalName = "userentityuisettings";
@@ -266,6 +268,18 @@ namespace Dev.DevKit.Shared.Entities
 		public long? VersionNumber
 		{
 			get { return Entity.GetAttributeValue<long?>(Fields.VersionNumber); }
+		}
+
+		/// <summary>
+		/// <para>Data representing the view personalization settings</para>
+		/// <para>Memo - MaxLength: 1073741823</para>
+		/// <para>View personalization settings</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string ViewPersonalizationSettings
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.ViewPersonalizationSettings); }
+			set { Entity.Attributes[Fields.ViewPersonalizationSettings] = value; }
 		}
 	}
 }

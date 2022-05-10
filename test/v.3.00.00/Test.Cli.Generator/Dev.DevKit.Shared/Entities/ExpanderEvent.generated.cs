@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.ExpanderEventOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class ExpanderEvent : EntityBase
 	{
 		public struct Fields

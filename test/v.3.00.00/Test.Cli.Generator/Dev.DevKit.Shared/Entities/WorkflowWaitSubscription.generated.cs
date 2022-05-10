@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.WorkflowWaitSubscriptionOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class WorkflowWaitSubscription : EntityBase
 	{
 		public struct Fields

@@ -33,6 +33,7 @@ namespace Dev.DevKit.Shared.Entities.PrivilegeObjectTypeCodesOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class PrivilegeObjectTypeCodes : EntityBase
 	{
 		public struct Fields

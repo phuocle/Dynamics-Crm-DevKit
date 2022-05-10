@@ -33,6 +33,7 @@ namespace Dev.DevKit.Shared.Entities.RibbonTabToCommandMapOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class RibbonTabToCommandMap : EntityBase
 	{
 		public struct Fields

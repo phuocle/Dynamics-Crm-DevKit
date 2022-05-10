@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.DynamicPropertyInstanceOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class DynamicPropertyInstance : EntityBase
 	{
 		public struct Fields

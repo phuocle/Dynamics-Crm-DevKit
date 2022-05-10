@@ -77,6 +77,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_casetopicsettingOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_casetopicsetting : EntityBase
 	{
 		public struct Fields
@@ -114,7 +115,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_casetopicsetting";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10216;
+		public const int EntityTypeCode = 10233;
 
 		[DebuggerNonUserCode()]
 		public msdyn_casetopicsetting()

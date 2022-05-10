@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_twitterengagementctxOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_twitterengagementctx : EntityBase
 	{
 		public struct Fields
@@ -74,7 +75,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_twitterengagementctx";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10806;
+		public const int EntityTypeCode = 10847;
 
 		[DebuggerNonUserCode()]
 		public msdyn_twitterengagementctx()

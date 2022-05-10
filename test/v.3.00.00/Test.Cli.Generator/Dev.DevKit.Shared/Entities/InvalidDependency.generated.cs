@@ -761,6 +761,7 @@ namespace Dev.DevKit.Shared.Entities.InvalidDependencyOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class InvalidDependency : EntityBase
 	{
 		public struct Fields

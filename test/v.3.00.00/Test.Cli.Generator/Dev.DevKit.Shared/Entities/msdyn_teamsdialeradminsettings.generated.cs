@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_teamsdialeradminsettingsOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_teamsdialeradminsettings : EntityBase
 	{
 		public struct Fields
@@ -49,10 +50,12 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ModifiedOn = "modifiedon";
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
 			public const string msdyn_AppModules = "msdyn_appmodules";
+			public const string msdyn_CICallPaneEntryPoints = "msdyn_cicallpaneentrypoints";
 			public const string msdyn_LayoutSchema = "msdyn_layoutschema";
 			public const string msdyn_name = "msdyn_name";
 			public const string msdyn_RecordingSecurityRoles = "msdyn_recordingsecurityroles";
 			public const string msdyn_SecurityRoles = "msdyn_securityroles";
+			public const string msdyn_SecurityRolesAllSelected = "msdyn_securityrolesallselected";
 			public const string msdyn_teamsdialeradminsettingsId = "msdyn_teamsdialeradminsettingsid";
 			public const string OrganizationId = "organizationid";
 			public const string OverriddenCreatedOn = "overriddencreatedon";
@@ -66,7 +69,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_teamsdialeradminsettings";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10239;
+		public const int EntityTypeCode = 10258;
 
 		[DebuggerNonUserCode()]
 		public msdyn_teamsdialeradminsettings()
@@ -212,6 +215,18 @@ namespace Dev.DevKit.Shared.Entities
 		/// <para>Layout configuration schema</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
+		public string msdyn_CICallPaneEntryPoints
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_CICallPaneEntryPoints); }
+			set { Entity.Attributes[Fields.msdyn_CICallPaneEntryPoints] = value; }
+		}
+
+		/// <summary>
+		/// <para>Layout configuration for custom controls to be loaded</para>
+		/// <para>Memo - MaxLength: 1000000</para>
+		/// <para>Layout configuration schema</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
 		public string msdyn_LayoutSchema
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.msdyn_LayoutSchema); }
@@ -252,6 +267,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.msdyn_SecurityRoles); }
 			set { Entity.Attributes[Fields.msdyn_SecurityRoles] = value; }
+		}
+
+		/// <summary>
+		/// <para>In Teams dialer settings page, were all security roles selected or not</para>
+		/// <para>Memo - MaxLength: 1000000</para>
+		/// <para>msdyn_SecurityRolesAllSelected</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_SecurityRolesAllSelected
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_SecurityRolesAllSelected); }
+			set { Entity.Attributes[Fields.msdyn_SecurityRolesAllSelected] = value; }
 		}
 
 		/// <summary>

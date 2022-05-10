@@ -45,6 +45,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_bookableresourceassociationOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_bookableresourceassociation : EntityBase
 	{
 		public struct Fields
@@ -78,7 +79,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_bookableresourceassociation";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10399;
+		public const int EntityTypeCode = 10463;
 
 		[DebuggerNonUserCode()]
 		public msdyn_bookableresourceassociation()

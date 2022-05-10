@@ -57,6 +57,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_projecttransactioncategoryOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_projecttransactioncategory : EntityBase
 	{
 		public struct Fields
@@ -88,7 +89,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_projecttransactioncategory";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10479;
+		public const int EntityTypeCode = 10538;
 
 		[DebuggerNonUserCode()]
 		public msdyn_projecttransactioncategory()

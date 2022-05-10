@@ -93,6 +93,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_orderlineresourcecategoryOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_orderlineresourcecategory : EntityBase
 	{
 		public struct Fields
@@ -127,7 +128,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_orderlineresourcecategory";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10463;
+		public const int EntityTypeCode = 10522;
 
 		[DebuggerNonUserCode()]
 		public msdyn_orderlineresourcecategory()

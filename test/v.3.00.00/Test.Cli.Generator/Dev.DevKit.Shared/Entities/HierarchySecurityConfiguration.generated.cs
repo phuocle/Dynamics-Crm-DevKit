@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.HierarchySecurityConfigurationOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class HierarchySecurityConfiguration : EntityBase
 	{
 		public struct Fields

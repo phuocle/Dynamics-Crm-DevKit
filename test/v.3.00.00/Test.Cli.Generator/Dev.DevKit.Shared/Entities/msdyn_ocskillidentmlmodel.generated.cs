@@ -109,6 +109,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocskillidentmlmodelOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_ocskillidentmlmodel : EntityBase
 	{
 		public struct Fields
@@ -149,7 +150,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_ocskillidentmlmodel";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10763;
+		public const int EntityTypeCode = 10805;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocskillidentmlmodel()

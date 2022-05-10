@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_actioncardregardingOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_actioncardregarding : EntityBase
 	{
 		public struct Fields
@@ -66,7 +67,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_actioncardregarding";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10254;
+		public const int EntityTypeCode = 10274;
 
 		[DebuggerNonUserCode()]
 		public msdyn_actioncardregarding()

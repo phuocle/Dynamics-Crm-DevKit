@@ -33,6 +33,7 @@ namespace Dev.DevKit.Shared.Entities.PostRoleOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class PostRole : EntityBase
 	{
 		public struct Fields

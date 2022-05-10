@@ -77,6 +77,7 @@ namespace Dev.DevKit.Shared.Entities.LookUpMappingOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class LookUpMapping : EntityBase
 	{
 		public struct Fields

@@ -85,6 +85,7 @@ namespace Dev.DevKit.Shared.Entities.WebResourceOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class WebResource : EntityBase
 	{
 		public struct Fields

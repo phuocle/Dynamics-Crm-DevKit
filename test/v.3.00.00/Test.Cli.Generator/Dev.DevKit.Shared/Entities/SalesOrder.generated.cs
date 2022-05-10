@@ -393,6 +393,7 @@ namespace Dev.DevKit.Shared.Entities.SalesOrderOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class SalesOrder : EntityBase
 	{
 		public struct Fields

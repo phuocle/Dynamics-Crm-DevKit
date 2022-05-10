@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.AppModuleMetadataDependencyOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class AppModuleMetadataDependency : EntityBase
 	{
 		public struct Fields

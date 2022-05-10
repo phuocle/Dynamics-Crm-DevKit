@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.QuarterlyFiscalCalendarOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class QuarterlyFiscalCalendar : EntityBase
 	{
 		public struct Fields

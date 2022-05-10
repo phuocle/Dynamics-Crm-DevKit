@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_organizationalunit_pricelevelOptionSe
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_organizationalunit_pricelevel : EntityBase
 	{
 		public struct Fields
@@ -28,7 +29,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_organizationalunit_pricelevel";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10506;
+		public const int EntityTypeCode = 10565;
 
 		[DebuggerNonUserCode()]
 		public msdyn_organizationalunit_pricelevel()

@@ -53,6 +53,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_overflowactionconfigOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_overflowactionconfig : EntityBase
 	{
 		public struct Fields
@@ -83,7 +84,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_overflowactionconfig";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10679;
+		public const int EntityTypeCode = 10714;
 
 		[DebuggerNonUserCode()]
 		public msdyn_overflowactionconfig()

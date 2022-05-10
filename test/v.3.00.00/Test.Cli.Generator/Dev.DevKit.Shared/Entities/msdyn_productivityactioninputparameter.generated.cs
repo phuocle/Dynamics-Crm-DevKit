@@ -57,6 +57,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_productivityactioninputparameterOptio
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_productivityactioninputparameter : EntityBase
 	{
 		public struct Fields
@@ -95,7 +96,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_productivityactioninputparameter";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10177;
+		public const int EntityTypeCode = 10204;
 
 		[DebuggerNonUserCode()]
 		public msdyn_productivityactioninputparameter()

@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_bookableresourcecapacityprofileOption
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_bookableresourcecapacityprofile : EntityBase
 	{
 		public struct Fields
@@ -68,7 +69,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_bookableresourcecapacityprofile";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10752;
+		public const int EntityTypeCode = 10794;
 
 		[DebuggerNonUserCode()]
 		public msdyn_bookableresourcecapacityprofile()

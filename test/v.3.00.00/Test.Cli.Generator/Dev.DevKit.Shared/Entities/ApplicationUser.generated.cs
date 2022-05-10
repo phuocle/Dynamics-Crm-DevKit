@@ -73,6 +73,7 @@ namespace Dev.DevKit.Shared.Entities.ApplicationUserOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class ApplicationUser : EntityBase
 	{
 		public struct Fields
@@ -107,7 +108,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "applicationuser";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10041;
+		public const int EntityTypeCode = 10052;
 
 		[DebuggerNonUserCode()]
 		public ApplicationUser()

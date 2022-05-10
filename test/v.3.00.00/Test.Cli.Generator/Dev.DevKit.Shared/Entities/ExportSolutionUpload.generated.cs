@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.ExportSolutionUploadOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class ExportSolutionUpload : EntityBase
 	{
 		public struct Fields

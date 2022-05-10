@@ -65,6 +65,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_questionsequenceOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_questionsequence : EntityBase
 	{
 		public struct Fields
@@ -98,7 +99,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_questionsequence";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10777;
+		public const int EntityTypeCode = 10818;
 
 		[DebuggerNonUserCode()]
 		public msdyn_questionsequence()

@@ -33,6 +33,7 @@ namespace Dev.DevKit.Shared.Entities.AttributeOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class Attribute : EntityBase
 	{
 		public struct Fields

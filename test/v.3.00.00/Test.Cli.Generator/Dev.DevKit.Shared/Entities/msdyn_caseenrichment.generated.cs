@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_caseenrichmentOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_caseenrichment : EntityBase
 	{
 		public struct Fields
@@ -65,7 +66,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_caseenrichment";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10200;
+		public const int EntityTypeCode = 10216;
 
 		[DebuggerNonUserCode()]
 		public msdyn_caseenrichment()

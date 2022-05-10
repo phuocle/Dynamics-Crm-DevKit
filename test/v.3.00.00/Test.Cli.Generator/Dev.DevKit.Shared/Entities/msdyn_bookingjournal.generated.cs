@@ -61,6 +61,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_bookingjournalOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_bookingjournal : EntityBase
 	{
 		public struct Fields
@@ -104,7 +105,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_bookingjournal";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10534;
+		public const int EntityTypeCode = 10590;
 
 		[DebuggerNonUserCode()]
 		public msdyn_bookingjournal()

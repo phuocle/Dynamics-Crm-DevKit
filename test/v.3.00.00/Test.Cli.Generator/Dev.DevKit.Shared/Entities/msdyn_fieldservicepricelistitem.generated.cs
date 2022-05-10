@@ -57,6 +57,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_fieldservicepricelistitemOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_fieldservicepricelistitem : EntityBase
 	{
 		public struct Fields
@@ -92,7 +93,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_fieldservicepricelistitem";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10541;
+		public const int EntityTypeCode = 10597;
 
 		[DebuggerNonUserCode()]
 		public msdyn_fieldservicepricelistitem()

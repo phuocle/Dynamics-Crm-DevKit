@@ -53,6 +53,7 @@ namespace Dev.DevKit.Shared.Entities.msfp_surveyreminderOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msfp_surveyreminder : EntityBase
 	{
 		public struct Fields
@@ -88,7 +89,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msfp_surveyreminder";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10305;
+		public const int EntityTypeCode = 10341;
 
 		[DebuggerNonUserCode()]
 		public msfp_surveyreminder()

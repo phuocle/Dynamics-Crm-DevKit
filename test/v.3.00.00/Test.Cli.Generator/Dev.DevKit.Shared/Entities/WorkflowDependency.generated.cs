@@ -53,6 +53,7 @@ namespace Dev.DevKit.Shared.Entities.WorkflowDependencyOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class WorkflowDependency : EntityBase
 	{
 		public struct Fields

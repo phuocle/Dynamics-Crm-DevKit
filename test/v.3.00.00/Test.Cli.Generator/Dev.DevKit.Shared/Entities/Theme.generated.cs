@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.ThemeOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class Theme : EntityBase
 	{
 		public struct Fields

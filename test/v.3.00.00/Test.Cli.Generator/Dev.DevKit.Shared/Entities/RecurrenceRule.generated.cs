@@ -129,6 +129,7 @@ namespace Dev.DevKit.Shared.Entities.RecurrenceRuleOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class RecurrenceRule : EntityBase
 	{
 		public struct Fields

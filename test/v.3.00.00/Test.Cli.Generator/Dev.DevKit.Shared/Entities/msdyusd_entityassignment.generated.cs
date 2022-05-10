@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyusd_entityassignmentOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyusd_entityassignment : EntityBase
 	{
 		public struct Fields
@@ -66,7 +67,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyusd_entityassignment";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10832;
+		public const int EntityTypeCode = 10942;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_entityassignment()

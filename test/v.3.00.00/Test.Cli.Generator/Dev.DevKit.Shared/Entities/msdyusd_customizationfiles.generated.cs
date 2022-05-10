@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyusd_customizationfilesOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyusd_customizationfiles : EntityBase
 	{
 		public struct Fields
@@ -68,7 +69,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyusd_customizationfiles";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10831;
+		public const int EntityTypeCode = 10920;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_customizationfiles()

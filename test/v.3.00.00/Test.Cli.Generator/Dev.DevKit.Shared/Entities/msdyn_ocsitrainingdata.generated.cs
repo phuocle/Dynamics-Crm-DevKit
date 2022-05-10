@@ -53,6 +53,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocsitrainingdataOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_ocsitrainingdata : EntityBase
 	{
 		public struct Fields
@@ -89,7 +90,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_ocsitrainingdata";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10762;
+		public const int EntityTypeCode = 10804;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocsitrainingdata()

@@ -49,6 +49,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_inspectiondefinitionOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_inspectiondefinition : EntityBase
 	{
 		public struct Fields
@@ -86,7 +87,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_inspectiondefinition";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10520;
+		public const int EntityTypeCode = 10576;
 
 		[DebuggerNonUserCode()]
 		public msdyn_inspectiondefinition()

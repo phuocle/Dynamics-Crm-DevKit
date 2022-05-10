@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.LanguageLocaleOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class LanguageLocale : EntityBase
 	{
 		public struct Fields

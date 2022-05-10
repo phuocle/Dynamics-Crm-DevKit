@@ -57,6 +57,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_occarrierOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_occarrier : EntityBase
 	{
 		public struct Fields
@@ -91,7 +92,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_occarrier";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10787;
+		public const int EntityTypeCode = 10831;
 
 		[DebuggerNonUserCode()]
 		public msdyn_occarrier()

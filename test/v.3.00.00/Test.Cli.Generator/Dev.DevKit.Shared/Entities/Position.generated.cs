@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.PositionOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class Position : EntityBase
 	{
 		public struct Fields

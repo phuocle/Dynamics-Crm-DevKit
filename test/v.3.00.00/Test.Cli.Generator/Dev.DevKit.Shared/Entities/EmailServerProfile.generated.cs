@@ -249,6 +249,7 @@ namespace Dev.DevKit.Shared.Entities.EmailServerProfileOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class EmailServerProfile : EntityBase
 	{
 		public struct Fields

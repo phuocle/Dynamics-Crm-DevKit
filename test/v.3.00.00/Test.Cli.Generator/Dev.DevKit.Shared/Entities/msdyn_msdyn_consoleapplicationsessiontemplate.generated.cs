@@ -15,6 +15,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_msdyn_consoleapplicationsessiontempla
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_msdyn_consoleapplicationsessiontemplate : EntityBase
 	{
 		public struct Fields
@@ -28,7 +29,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_msdyn_consoleapplicationsessiontemplate";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10661;
+		public const int EntityTypeCode = 10701;
 
 		[DebuggerNonUserCode()]
 		public msdyn_msdyn_consoleapplicationsessiontemplate()

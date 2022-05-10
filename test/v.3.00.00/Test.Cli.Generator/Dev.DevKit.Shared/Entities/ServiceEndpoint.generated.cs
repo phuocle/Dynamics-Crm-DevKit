@@ -189,6 +189,7 @@ namespace Dev.DevKit.Shared.Entities.ServiceEndpointOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class ServiceEndpoint : EntityBase
 	{
 		public struct Fields

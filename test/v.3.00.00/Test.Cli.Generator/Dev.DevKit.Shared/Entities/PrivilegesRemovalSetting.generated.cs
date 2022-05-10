@@ -33,6 +33,7 @@ namespace Dev.DevKit.Shared.Entities.PrivilegesRemovalSettingOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class PrivilegesRemovalSetting : EntityBase
 	{
 		public struct Fields

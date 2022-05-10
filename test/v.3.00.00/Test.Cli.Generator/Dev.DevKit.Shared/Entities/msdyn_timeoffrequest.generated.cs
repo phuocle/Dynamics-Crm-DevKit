@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_timeoffrequestOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_timeoffrequest : EntityBase
 	{
 		public struct Fields
@@ -71,7 +72,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_timeoffrequest";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10592;
+		public const int EntityTypeCode = 10648;
 
 		[DebuggerNonUserCode()]
 		public msdyn_timeoffrequest()

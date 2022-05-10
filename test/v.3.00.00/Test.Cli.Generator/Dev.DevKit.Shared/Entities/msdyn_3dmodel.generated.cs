@@ -65,6 +65,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_3dmodelOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_3dmodel : EntityBase
 	{
 		public struct Fields
@@ -94,7 +95,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_3dmodel";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10517;
+		public const int EntityTypeCode = 10573;
 
 		[DebuggerNonUserCode()]
 		public msdyn_3dmodel()

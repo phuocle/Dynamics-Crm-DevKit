@@ -37,6 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_octwitterapplicationOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
+	[DebuggerNonUserCode()]
 	public partial class msdyn_octwitterapplication : EntityBase
 	{
 		public struct Fields
@@ -70,7 +71,7 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityLogicalName = "msdyn_octwitterapplication";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10801;
+		public const int EntityTypeCode = 10842;
 
 		[DebuggerNonUserCode()]
 		public msdyn_octwitterapplication()
