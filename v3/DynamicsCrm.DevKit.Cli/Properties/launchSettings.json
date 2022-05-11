@@ -60,95 +60,13 @@
       "commandLineArgs": "/sdklogin:\"yes\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"uploadreports\" /profile:\"DEBUG\"",
       "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.00.00\\Test.Cli.UploadReports\\Dev.DevKit.Report"
     },
-
-
+    "TaskWebResource.sdk.dev2-devkit": {
+      "commandName": "Project",
+      "commandLineArgs": "/sdklogin:\"yes\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"webresources\" /profile:\"DEBUG\"",
+      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.00.00\\Test.Cli.WebResource\\Dev.DevKit.WebResource"
+    },
     "NO ARGS": {
       "commandName": "Project"
-    },
-
-
-
-    "generator-form-debug": {
-      "commandName": "Project",
-      "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://vus-dev.crm5.dynamics.com;ClientId=690a3a0a-556c-431e-8182-b887295627d5;ClientSecret=A2d7Q~LvCjbsM1Upa1jOtxPh.9Rwf9NapdFPO;\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"JS-FORM\"",
-      "workingDirectory": "C:\\src\\VUS\\SourceCode\\Hs.Vus.WebResource\\entities"
-    },
-    "generator-form-DSMS": {
-      "commandName": "Project",
-      "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://pmm-dev.crm5.dynamics.com;ClientId=a871ae25-6786-424b-b167-56eb598b8c76;ClientSecret=T2W7Q~JIzIvhWrIt~5MaUTBTamAqKGV1NhMvm;\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"JS-FORM-DEBUG-YES\"",
-      "workingDirectory": "C:\\src\\azure\\abiz\\git\\ABIZ_DSM\\Abiz.DSM.WebResource\\entities"
-    },
-
-
-
-    "ALL-DEMO-proxy-user-pass": {
-      "commandName": "Project",
-      "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://vus-dev.crm5.dynamics.com;ClientId=690a3a0a-556c-431e-8182-b887295627d5;ClientSecret=A2d7Q~LvCjbsM1Upa1jOtxPh.9Rwf9NapdFPO;\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"proxytypes\" /profile:\"ALL\" /version:\"9.1.0.110\"",
-      "workingDirectory": "C:\\src\\VUS\\SourceCode\\Hs.Vus.ProxyTypes"
-    },
-    "ALL-DEMO-proxy-clientsecret": {
-      "commandName": "Project",
-      "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://pmm-dev.crm5.dynamics.com;ClientId=a871ae25-6786-424b-b167-56eb598b8c76;ClientSecret=T2W7Q~JIzIvhWrIt~5MaUTBTamAqKGV1NhMvm;\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"proxytypes\" /profile:\"ALL\" /version:\"9.1.0.92\"",
-      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.00.00\\TestAllEntities\\All-DEMO-2\\Dev.DevKit.ProxyTypes"
-    },
-
-
-
-    "plugin.Workflow": {
-      "commandName": "Project",
-      "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://vus-dev.crm5.dynamics.com;ClientId=690a3a0a-556c-431e-8182-b887295627d5;ClientSecret=A2d7Q~LvCjbsM1Upa1jOtxPh.9Rwf9NapdFPO;\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"servers\" /profile:\"DEBUG\"",
-      "workingDirectory": "C:\\src\\VUS\\SourceCode\\Hs.Vus.Workflows"
-    },
-    "generator-webapi2": {
-      "commandName": "Project",
-      "commandLineArgs": "/sdklogin:\"yes\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"JS-WEBAPI\"",
-      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.00.00\\Test..WebResource.WebApi\\Dev.DevKit.WebResource\\entities"
-    },
-    "plugin.Account": {
-      "commandName": "Project",
-      "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://vus-dev.crm5.dynamics.com;ClientId=690a3a0a-556c-431e-8182-b887295627d5;ClientSecret=A2d7Q~LvCjbsM1Upa1jOtxPh.9Rwf9NapdFPO;\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"servers\" /profile:\"DEBUG\"",
-      "workingDirectory": "C:\\src\\VUS\\SourceCode\\Hs.Vus.Plugins"
-    },
-    "DynamicsCrm.DevKit.Shared.Entities": {
-      "commandName": "Project",
-      "commandLineArgs": "/sdklogin:\"yes\" /json:\"DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"LATEBOUND\"",
-      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\v3\\DynamicsCrm.DevKit.Shared\\Entities"
-    },
-    "CustomApi": {
-      "commandName": "Project",
-      "commandLineArgs": "/sdklogin:\"yes\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"servers\" /profile:\"DEBUG\"",
-      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.00.00\\Test.Cli.Server\\Dev.DevKit.CustomApi"
-    },
-    "DataProvider": {
-      "commandName": "Project",
-      "commandLineArgs": "/sdklogin:\"yes\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"servers\" /profile:\"DEBUG\"",
-      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.00.00\\Test.Cli.Server\\Dev.DevKit.DataProvider"
-    },
-    "SERVER.RELEASE.ALL": {
-      "commandName": "Project",
-      "commandLineArgs": "/sdklogin:\"yes\" /json:\"DynamicsCrm.DevKit.Cli.json\" /type:\"servers\" /profile:\"RELEASE\"",
-      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.00.00\\Test.Cli.Server"
-    },
-    "SERVER.RELEASE.ALL-DLL-ONLY": {
-      "commandName": "Project",
-      "commandLineArgs": "/sdklogin:\"yes\" /json:\"DynamicsCrm.DevKit.Cli.json\" /type:\"servers\" /profile:\"RELEASE\" /OnlyUpdateAssembly:\"true\"",
-      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.00.00\\Test.Cli.Server"
-    },
-
-    "deploy.webresources": {
-      "commandName": "Project",
-      "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://dev2-devkit.crm5.dynamics.com;ClientId=e31fc7d6-4dce-46e3-8677-04ab0a2968e3;ClientSecret=?-iwRSB0te8o]pHX_yVQLJnUqziB1E0h;\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"webresources\" /profile:\"DEBUG\"",
-      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.00.00\\TestWebResource2\\Dev.DevKit.WebResource"
-    },
-    "generator-webapi-VUS": {
-      "commandName": "Project",
-      "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://vus-dev.crm5.dynamics.com;ClientId=690a3a0a-556c-431e-8182-b887295627d5;ClientSecret=A2d7Q~LvCjbsM1Upa1jOtxPh.9Rwf9NapdFPO;\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"JS-WEBAPI\"",
-      "workingDirectory": "C:\\src\\VUS\\SourceCode\\Hs.Vus.WebResource\\entities"
-    },
-    "plugin.server.VUS": {
-      "commandName": "Project",
-      "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://vus-dev.crm5.dynamics.com;ClientId=690a3a0a-556c-431e-8182-b887295627d5;ClientSecret=A2d7Q~LvCjbsM1Upa1jOtxPh.9Rwf9NapdFPO;\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"servers\" /profile:\"DEBUG\"",
-      "workingDirectory": "C:\\src\\VUS\\SourceCode\\Hs.Vus.Plugins"
     }
   }
 }
