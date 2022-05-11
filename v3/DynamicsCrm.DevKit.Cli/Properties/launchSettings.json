@@ -30,6 +30,13 @@
       "commandLineArgs": "/sdklogin:\"yes\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"JS-WEBAPI\"",
       "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.00.00\\Test.Cli.Generator\\Dev.DevKit.WebResource\\entities"
     },
+    "TaskProxyType.sdk.DEMO.CRM890649": {
+      "commandName": "Project",
+      "commandLineArgs": "/sdklogin:\"yes\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"proxytypes\" /profile:\"ALL\" /version:\"9.1.0.110\"",
+      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.00.00\\Test.Cli.ProxyType\\Dev.DevKit.ProxyTypes"
+    },
+
+
     "uploadreports": {
       "commandName": "Project",
       "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://hslg2ewodev.crm7.dynamics.com;ClientId=881c7316-fcf9-4ba9-900e-3bf62b73b981;ClientSecret=7y[87[H5p_FJAw[ROTlm6]c3vWbn33UP;\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"uploadreports\" /profile:\"DEBUG\"",

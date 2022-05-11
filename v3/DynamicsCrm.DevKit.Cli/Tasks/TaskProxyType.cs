@@ -74,15 +74,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
         }
 
-        //private string GetParentFolder(string currentDirectory)
-        //{
-        //    var directory = new DirectoryInfo(CurrentDirectory);
-        //    if (directory.Parent == null) return null;
-        //    if (Directory.Exists($"{directory.Parent.FullName}\\packages")) return directory.Parent.FullName;
-        //    return GetParentFolder(directory.Parent.FullName);
-        //}
-
-
         public void Run()
         {
             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "START ", ConsoleColor.Blue, TaskType);
