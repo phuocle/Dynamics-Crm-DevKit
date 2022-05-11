@@ -5,11 +5,23 @@
   <IntroducedVersion>1.0.0.0</IntroducedVersion>
   <FileName>/PluginAssemblies/DevDevKitWorkflow-FEA750DD-BDC6-EB11-BACC-000D3A807100/DevDevKitWorkflow.dll</FileName>
   <PluginTypes>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Workflow.GetTeamMembers, Dev.DevKit.Workflow, Version=1.0.0.0, Culture=en, PublicKeyToken=8a5bbbd16342aba1" PluginTypeId="a21f727c-f0af-ec11-983f-00224816b39e" Name="GetTeamMembers">
+      <Description>ABCDEF</Description>
+      <FriendlyName>GetTeamMembers</FriendlyName>
+      <WorkflowActivityGroupName>Dev.DevKit.Workflow</WorkflowActivityGroupName>
+    </PluginType>
     <PluginType AssemblyQualifiedName="Dev.DevKit.Workflow.SendEmailTemplate, Dev.DevKit.Workflow, Version=1.0.0.0, Culture=en, PublicKeyToken=8a5bbbd16342aba1" PluginTypeId="01a850dd-bdc6-eb11-bacc-000d3a807100" Name="SendEmailTemplate">
+      <Description>Dev.DevKit.Workflow.SendEmailTemplate</Description>
       <FriendlyName>SendEmailTemplate</FriendlyName>
       <WorkflowActivityGroupName>Dev.DevKit.Workflow</WorkflowActivityGroupName>
     </PluginType>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Workflow.SetOwner, Dev.DevKit.Workflow, Version=1.0.0.0, Culture=en, PublicKeyToken=8a5bbbd16342aba1" PluginTypeId="7fa6b91f-2aaf-ec11-983f-00224816b39e" Name="SetOwner">
+      <Description>Dev.DevKit.Workflow.SetOwner</Description>
+      <FriendlyName>SetOwner</FriendlyName>
+      <WorkflowActivityGroupName>Dev.DevKit.Workflow</WorkflowActivityGroupName>
+    </PluginType>
     <PluginType AssemblyQualifiedName="Dev.DevKit.Workflow.ShareAccountWithTeamMembers, Dev.DevKit.Workflow, Version=1.0.0.0, Culture=en, PublicKeyToken=8a5bbbd16342aba1" PluginTypeId="02a850dd-bdc6-eb11-bacc-000d3a807100" Name="ShareAccountWithTeamMembers">
+      <Description>Dev.DevKit.Workflow.ShareAccountWithTeamMembers</Description>
       <FriendlyName>ShareAccountWithTeamMembers</FriendlyName>
       <WorkflowActivityGroupName>Dev.DevKit.Workflow</WorkflowActivityGroupName>
     </PluginType>

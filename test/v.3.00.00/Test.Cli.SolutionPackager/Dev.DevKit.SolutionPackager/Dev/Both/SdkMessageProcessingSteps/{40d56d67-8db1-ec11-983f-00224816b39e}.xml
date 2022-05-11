@@ -1,10 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<SdkMessageProcessingStep Name="Dev.DevKit.PluginAccount.PreAccountCreateSynchronous" SdkMessageProcessingStepId="{4a4e5aa5-f1d6-eb11-bacb-002248168d13}" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SdkMessageProcessingStep Name="Dev.DevKit.PluginAccount.PreAccountCreateSynchronous" SdkMessageProcessingStepId="{40d56d67-8db1-ec11-983f-00224816b39e}" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <SdkMessageId>9ebdbb1b-ea3e-db11-86a7-000a3a5473e8</SdkMessageId>
-  <PluginTypeName>Dev.DevKit.PluginAccount.PreAccountCreateSynchronous, Dev.DevKit.Plugin.Account, Version=1.0.0.0, Culture=en, PublicKeyToken=9dcd893647daec04</PluginTypeName>
-  <PluginTypeId>494e5aa5-f1d6-eb11-bacb-002248168d13</PluginTypeId>
+  <PluginTypeName>Dev.DevKit.PluginAccount.PostAccountCreateAsynchronous, Dev.DevKit.Plugin.Account, Version=1.0.0.0, Culture=en, PublicKeyToken=9dcd893647daec04</PluginTypeName>
+  <PluginTypeId>f8a0801b-c0b0-ec11-983f-00224816b39e</PluginTypeId>
   <PrimaryEntity>account</PrimaryEntity>
   <AsyncAutoDelete>0</AsyncAutoDelete>
+  <Description>ABCD</Description>
   <FilteringAttributes></FilteringAttributes>
   <InvocationSource>1</InvocationSource>
   <Mode>0</Mode>

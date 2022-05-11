@@ -5,7 +5,7 @@
   <PluginTypeId>2d74fb8b-ecc8-eb11-bacc-000d3a807100</PluginTypeId>
   <PrimaryEntity>account</PrimaryEntity>
   <AsyncAutoDelete>1</AsyncAutoDelete>
-  <FilteringAttributes>name</FilteringAttributes>
+  <FilteringAttributes></FilteringAttributes>
   <InvocationSource>1</InvocationSource>
   <Mode>1</Mode>
   <Rank>1</Rank>
@@ -17,18 +17,10 @@
   <IntroducedVersion>1.0.0.0</IntroducedVersion>
   <SdkMessageProcessingStepImages>
     <SdkMessageProcessingStepImage Name="PostImage">
-      <SdkMessageProcessingStepImageId>{17f5a3e6-a812-ec11-b6e6-000d3a803987}</SdkMessageProcessingStepImageId>
-      <Attributes>name,modifiedon,ownerid,accountnumber,telephone1</Attributes>
+      <SdkMessageProcessingStepImageId>{2b1a84ed-93b5-ec11-983f-002248193b98}</SdkMessageProcessingStepImageId>
+      <Attributes>name</Attributes>
       <EntityAlias>PostImage</EntityAlias>
       <ImageType>1</ImageType>
-      <MessagePropertyName>Target</MessagePropertyName>
-      <IsCustomizable>1</IsCustomizable>
-    </SdkMessageProcessingStepImage>
-    <SdkMessageProcessingStepImage Name="PreImage">
-      <SdkMessageProcessingStepImageId>{16f5a3e6-a812-ec11-b6e6-000d3a803987}</SdkMessageProcessingStepImageId>
-      <Attributes>name,modifiedon,ownerid</Attributes>
-      <EntityAlias>PreImage</EntityAlias>
-      <ImageType>0</ImageType>
       <MessagePropertyName>Target</MessagePropertyName>
       <IsCustomizable>1</IsCustomizable>
     </SdkMessageProcessingStepImage>

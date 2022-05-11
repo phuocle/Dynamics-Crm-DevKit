@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ImportExportXml version="9.2.22022.130" SolutionPackageVersion="9.2" languagecode="1033" generatedBy="CrmLive" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<ImportExportXml version="9.2.22041.152" SolutionPackageVersion="9.2" languagecode="1033" generatedBy="CrmLive" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <SolutionManifest>
     <UniqueName>TestPluginWorkflowCustomActionCustomApi</UniqueName>
     <LocalizedNames>
@@ -81,6 +81,9 @@
       <RootComponent type="1" schemaName="devkit_datasource" behavior="0" />
       <RootComponent type="1" schemaName="devkit_datasource2" behavior="0" />
       <RootComponent type="1" schemaName="devkit_datasource3" behavior="0" />
+      <RootComponent type="1" schemaName="devkit_datasource4" behavior="0" />
+      <RootComponent type="1" schemaName="devkit_datasource5" behavior="0" />
+      <RootComponent type="29" id="{3e6ca9b9-edb0-4731-94d6-26b96e2df4cf}" behavior="0" />
       <RootComponent type="29" id="{c249171f-afbe-4c9c-a129-c4b8e78785c6}" behavior="0" />
       <RootComponent type="29" id="{d0364d44-7d05-49c0-bca6-576791ea9603}" behavior="0" />
       <RootComponent type="29" id="{dc2b7307-4683-4eda-89ba-fdee89dfaf0b}" behavior="0" />
@@ -88,14 +91,15 @@
       <RootComponent type="91" id="{87d4e37f-bec6-eb11-bacc-000d3a807100}" schemaName="Dev.DevKit.CustomAction, Version=1.0.0.0, Culture=en, PublicKeyToken=a3ae1a774b8980c3" behavior="0" />
       <RootComponent type="91" id="{c2028ddf-30c7-eb11-bacc-000d3a807100}" schemaName="Dev.DevKit.CustomAction.Entities, Version=1.0.0.0, Culture=en, PublicKeyToken=eb423a0f05629ed8" behavior="0" />
       <RootComponent type="91" id="{705b2b7e-31c7-eb11-bacc-000d3a807100}" schemaName="Dev.DevKit.CustomApi, Version=1.0.0.0, Culture=en, PublicKeyToken=4d20ad2e98c0d95d" behavior="0" />
-      <RootComponent type="91" id="{fc588487-e6c8-eb11-bacc-000d3a807100}" schemaName="Dev.DevKit.DataProvider, Version=1.0.0.0, Culture=en, PublicKeyToken=d48a366fde1b673e" behavior="0" />
-      <RootComponent type="91" id="{8980219f-f1d6-eb11-bacb-002248168d13}" schemaName="Dev.DevKit.Plugin.Account, Version=1.0.0.0, Culture=en, PublicKeyToken=9dcd893647daec04" behavior="0" />
+      <RootComponent type="91" id="{899e5ff5-71b5-ec11-983f-002248193b98}" schemaName="Dev.DevKit.DataProvider, Version=1.0.0.0, Culture=en, PublicKeyToken=d48a366fde1b673e" behavior="0" />
+      <RootComponent type="91" id="{f5a0801b-c0b0-ec11-983f-00224816b39e}" schemaName="Dev.DevKit.Plugin.Account, Version=1.0.0.0, Culture=en, PublicKeyToken=9dcd893647daec04" behavior="0" />
       <RootComponent type="91" id="{e019ad23-c2c6-eb11-bacc-000d3a807100}" schemaName="Dev.DevKit.Plugin.Activities, Version=1.0.0.0, Culture=en, PublicKeyToken=4b609534ceaa701a" behavior="0" />
       <RootComponent type="91" id="{fd1ef018-c2c6-eb11-bacc-000d3a807100}" schemaName="Dev.DevKit.Plugin.Contact, Version=1.0.0.0, Culture=en, PublicKeyToken=70a78f26ca2483c5" behavior="0" />
       <RootComponent type="91" id="{c305267f-ecc8-eb11-bacc-000d3a807100}" schemaName="Dev.DevKit.Server, Version=1.0.0.0, Culture=en, PublicKeyToken=f16987165f9b56ef" behavior="0" />
       <RootComponent type="91" id="{fea750dd-bdc6-eb11-bacc-000d3a807100}" schemaName="Dev.DevKit.Workflow, Version=1.0.0.0, Culture=en, PublicKeyToken=8a5bbbd16342aba1" behavior="0" />
       <RootComponent type="92" id="{0108b1da-a812-ec11-b6e6-000d3a803987}" behavior="0" />
       <RootComponent type="92" id="{011ff018-c2c6-eb11-bacc-000d3a807100}" behavior="0" />
+      <RootComponent type="92" id="{03a1801b-c0b0-ec11-983f-00224816b39e}" behavior="0" />
       <RootComponent type="92" id="{08f5a3e6-a812-ec11-b6e6-000d3a803987}" behavior="0" />
       <RootComponent type="92" id="{0bf5a3e6-a812-ec11-b6e6-000d3a803987}" behavior="0" />
       <RootComponent type="92" id="{0ff5a3e6-a812-ec11-b6e6-000d3a803987}" behavior="0" />
@@ -104,15 +108,12 @@
       <RootComponent type="92" id="{18f5a3e6-a812-ec11-b6e6-000d3a803987}" behavior="0" />
       <RootComponent type="92" id="{1cf5a3e6-a812-ec11-b6e6-000d3a803987}" behavior="0" />
       <RootComponent type="92" id="{21f5a3e6-a812-ec11-b6e6-000d3a803987}" behavior="0" />
-      <RootComponent type="92" id="{3c4e5aa5-f1d6-eb11-bacb-002248168d13}" behavior="0" />
       <RootComponent type="92" id="{3e705e98-ecc8-eb11-bacc-000d3a807100}" behavior="0" />
-      <RootComponent type="92" id="{404e5aa5-f1d6-eb11-bacb-002248168d13}" behavior="0" />
-      <RootComponent type="92" id="{444e5aa5-f1d6-eb11-bacb-002248168d13}" behavior="0" />
-      <RootComponent type="92" id="{4a4e5aa5-f1d6-eb11-bacb-002248168d13}" behavior="0" />
-      <RootComponent type="92" id="{4e4e5aa5-f1d6-eb11-bacb-002248168d13}" behavior="0" />
+      <RootComponent type="92" id="{40d56d67-8db1-ec11-983f-00224816b39e}" behavior="0" />
       <RootComponent type="92" id="{52e022e6-30c7-eb11-bacc-000d3a807100}" behavior="0" />
       <RootComponent type="92" id="{55984b85-ecc8-eb11-bacc-000d3a807100}" behavior="0" />
-      <RootComponent type="92" id="{5a8fb7cb-7814-ec11-b6e6-000d3a821f4b}" behavior="0" />
+      <RootComponent type="92" id="{5986a121-c0b0-ec11-983f-00224816b39e}" behavior="0" />
+      <RootComponent type="92" id="{5d86a121-c0b0-ec11-983f-00224816b39e}" behavior="0" />
       <RootComponent type="92" id="{62984b85-ecc8-eb11-bacc-000d3a807100}" behavior="0" />
       <RootComponent type="92" id="{66984b85-ecc8-eb11-bacc-000d3a807100}" behavior="0" />
       <RootComponent type="92" id="{6c2c51a8-ccd3-eb11-bacc-000d3a80041c}" behavior="0" />
@@ -126,7 +127,9 @@
       <RootComponent type="92" id="{e819ad23-c2c6-eb11-bacc-000d3a807100}" behavior="0" />
       <RootComponent type="92" id="{ec19ad23-c2c6-eb11-bacc-000d3a807100}" behavior="0" />
       <RootComponent type="92" id="{f019ad23-c2c6-eb11-bacc-000d3a807100}" behavior="0" />
-      <RootComponent type="181" id="{04598487-e6c8-eb11-bacc-000d3a807100}" schemaName="devkit_datasource" behavior="0" />
+      <RootComponent type="92" id="{fba0801b-c0b0-ec11-983f-00224816b39e}" behavior="0" />
+      <RootComponent type="92" id="{ffa0801b-c0b0-ec11-983f-00224816b39e}" behavior="0" />
+      <RootComponent type="181" id="{73fab4fb-71b5-ec11-983f-002248193b98}" schemaName="devkit_datasource" behavior="0" />
       <RootComponent type="181" id="{4b705e98-ecc8-eb11-bacc-000d3a807100}" schemaName="devkit_datasource2" behavior="0" />
       <RootComponent type="181" id="{072b6c9e-ecc8-eb11-bacc-000d3a807100}" schemaName="devkit_datasource3" behavior="0" />
     </RootComponents>
