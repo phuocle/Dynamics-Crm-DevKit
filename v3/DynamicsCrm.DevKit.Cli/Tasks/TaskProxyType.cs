@@ -15,7 +15,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         public TaskProxyType(CommandLineArgs arg, JsonProxyType json)
         {
             this.Arg = arg;
-            this.json = json;
+            this.Json = json;
             CrmServiceClient = arg.CrmServiceClient;
             CurrentDirectory = arg.CurrentDirectory;
             Version = arg.Version;
@@ -23,7 +23,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             Connection = arg.Connection;
         }
         public CommandLineArgs Arg { get; set; }
-        public JsonProxyType json { get; set; }
+        public JsonProxyType Json { get; set; }
 
         public string CurrentDirectory { get; set; }
         public string TaskType => $"[{nameof(CliType.proxytypes).ToUpper()}]";
@@ -35,17 +35,17 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         public bool IsValid()
         {
-            if (json == null)
+            if (Json == null)
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'profile' not found: '{json.profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'profile' not found: '{Json.profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
-            if (json.@namespace == "???" || (json.@namespace != null && json?.@namespace?.Trim().Length == 0))
+            if (Json.@namespace == "???" || (Json.@namespace != null && Json?.@namespace?.Trim().Length == 0))
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'namespace' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
-            if (json.output == "???" || (json.output != null && json?.output?.Trim().Length == 0))
+            if (Json.output == "???" || (Json.output != null && Json?.output?.Trim().Length == 0))
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'output' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
@@ -104,13 +104,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             var path = "\"" + CrmSvcUtil + "\"";
             CliLog.Write(ConsoleColor.White, "|", ConsoleColor.Green, "Executing", ConsoleColor.White, " CrmSvcUtil");
-            if (json.entities == "*" || json.entities.ToLower() == "all")
+            if (Json.entities == "*" || Json.entities.ToLower() == "all")
             {
                 CliLog.WriteLine(ConsoleColor.Green, " with ", ConsoleColor.White, "all entities");
             }
             else
             {
-                CliLog.WriteLine(ConsoleColor.Green, " with entities filter: ", ConsoleColor.White, json.entities);
+                CliLog.WriteLine(ConsoleColor.Green, " with entities filter: ", ConsoleColor.White, Json.entities);
             }
             CliLog.WriteLine();
             CliLog.WriteLine(ConsoleColor.White, " " + path + " " + CreateCommandArgsLog());
@@ -126,11 +126,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     CreateNoWindow = true
                 }
             };
-            if (json.entities != null && json.entities.Length > 0)
+            if (Json.entities != null && Json.entities.Length > 0)
             {
-                if (json.entities != "*" && json.entities.ToLower() != "all")
+                if (Json.entities != "*" && Json.entities.ToLower() != "all")
                 {
-                    process.StartInfo.EnvironmentVariables.Add(ENVIRONMENT_ENTITIES, string.Join(",", json.entities));
+                    process.StartInfo.EnvironmentVariables.Add(ENVIRONMENT_ENTITIES, string.Join(",", Json.entities));
                 }
             }
 
@@ -161,15 +161,15 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             command.Append($"/emitfieldsclasses ");
             //command.Append($"/legacyMode ");
             command.Append($"/generateGlobalOptionSets ");
-            command.Append($"/namespace:\"{json.@namespace}\" ");
-            if (json.entities != null && json.entities.Length > 0)
+            command.Append($"/namespace:\"{Json.@namespace}\" ");
+            if (Json.entities != null && Json.entities.Length > 0)
             {
-                if (json.entities != "*" && json.entities.ToLower() != "all")
+                if (Json.entities != "*" && Json.entities.ToLower() != "all")
                 {
                     command.Append($"/codewriterfilter:\"DynamicsCrm.DevKit.CrmSvcUtilExtensions.CodeWriterFilter,DynamicsCrm.DevKit.CrmSvcUtilExtensions\" ");
                 }
             }
-            command.Append($"/out:\"{json.output}\"");
+            command.Append($"/out:\"{Json.output}\"");
             return command.ToString();
         }
 
@@ -184,9 +184,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 command.Append($"/connectionstring:\"{XrmHelper.BuildConnectionStringLog(Connection)}\" ");
             }
-            if (json.entities != null && json.entities.Length > 0)
+            if (Json.entities != null && Json.entities.Length > 0)
             {
-                if (json.entities != "*" && json.entities.ToLower() != "all")
+                if (Json.entities != "*" && Json.entities.ToLower() != "all")
                 {
                     command.Append($"/codewriterfilter:\"DynamicsCrm.DevKit.CrmSvcUtilExtensions.CodeWriterFilter,DynamicsCrm.DevKit.CrmSvcUtilExtensions\" ");
                 }
@@ -197,8 +197,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             command.Append($"/emitfieldsclasses ");
             //command.Append($"/legacyMode ");
             command.Append($"/generateGlobalOptionSets ");
-            command.Append($"/namespace:\"{json.@namespace}\" ");
-            command.Append($"/out:\"{json.output}\"");
+            command.Append($"/namespace:\"{Json.@namespace}\" ");
+            command.Append($"/out:\"{Json.output}\"");
             return command.ToString();
         }
 

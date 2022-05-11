@@ -12,7 +12,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         public TaskDownloadReport(CommandLineArgs arg, JsonDownloadReport json)
         {
             this.Arg = arg;
-            this.json = json;
+            this.Json = json;
             CrmServiceClient = arg.CrmServiceClient;
             CurrentDirectory = arg.CurrentDirectory;
         }
@@ -20,25 +20,25 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         public string CurrentDirectory { get; set; }
         public CrmServiceClient CrmServiceClient { get; set; }
         public string TaskType => $"[{nameof(CliType.downloadreports).ToUpper()}]";
-        private JsonDownloadReport json { get; set; }
+        private JsonDownloadReport Json { get; set; }
         public bool IsValid()
         {
-            if (json == null)
+            if (Json == null)
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'profile' not found: '{json.profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'profile' not found: '{Json.profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
-            if (json.solution == "???" || (json.solution != null && json?.solution?.Trim().Length == 0))
+            if (Json.solution == "???" || (Json.solution != null && Json?.solution?.Trim().Length == 0))
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'solution' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
-            if (!XrmHelper.IsExistSolution(CrmServiceClient, json.solution).IsOk)
+            if (!XrmHelper.IsExistSolution(CrmServiceClient, Json.solution).IsOk)
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} solution '{json.solution}' not exist");
+                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} solution '{Json.solution}' not exist");
                 return false;
             }
-            var folder = Path.Combine(CurrentDirectory, json.solution);
+            var folder = Path.Combine(CurrentDirectory, Json.solution);
             if (!Directory.Exists(folder))
                 Directory.CreateDirectory(folder);
             else
@@ -59,7 +59,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             CliLog.WriteLine(ConsoleColor.White, "|");
             if (IsValid())
             {
-                var reportFiles = XrmHelper.GetReportsBySolution(CrmServiceClient, json.solution);
+                var reportFiles = XrmHelper.GetReportsBySolution(CrmServiceClient, Json.solution);
                 if (reportFiles.Count == 0)
                 {
                     CliLog.WriteLineWarning(ConsoleColor.Green, "Not found any reports to download");
@@ -74,7 +74,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     reportFiles = reportFiles.OrderBy(x => x.Language).ToList();
                     foreach (var reportFile in reportFiles)
                     {
-                        var fileName = Path.Combine(CurrentDirectory, json.solution, reportFile.Language, reportFile.FileName);
+                        var fileName = Path.Combine(CurrentDirectory, Json.solution, reportFile.Language, reportFile.FileName);
                         if (!File.Exists(fileName))
                         {
                             Utility.ForceWriteAllText(fileName, reportFile.Content);

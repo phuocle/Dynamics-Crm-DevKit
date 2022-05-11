@@ -15,44 +15,44 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         public TaskGenerator(CommandLineArgs arg, JsonGenerator json)
         {
             this.Arg = arg;
-            this.json = json;
+            this.Json = json;
             CrmServiceClient = arg.CrmServiceClient;
             CurrentDirectory = arg.CurrentDirectory;
 
             TaskType = $"[{nameof(CliType.generators).ToUpper()} - {json.type.ToUpper()}]";
         }
         public CommandLineArgs Arg { get; set; }
-        private JsonGenerator json { get; set; }
+        private JsonGenerator Json { get; set; }
 
         public string CurrentDirectory { get; set; }
         public CrmServiceClient CrmServiceClient { get; set; }
         public string TaskType { get; set; }
-        private string CurrentFolder => $"{CurrentDirectory}\\{json.rootfolder}";
+        private string CurrentFolder => $"{CurrentDirectory}\\{Json.rootfolder}";
         private static bool IsAll { get; set; } = false;
 
         public bool IsValid()
         {
-            if (json == null)
+            if (Json == null)
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'profile' not found: '{json.profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'profile' not found: '{Json.profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
-            if (json.rootnamespace == "???" || (json.rootnamespace != null && json?.rootnamespace?.Trim().Length == 0))
+            if (Json.rootnamespace == "???" || (Json.rootnamespace != null && Json?.rootnamespace?.Trim().Length == 0))
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'rootnamespace' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
-            if (json.rootfolder == "???")
+            if (Json.rootfolder == "???")
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'rootfolder' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
-            if (json.type == "???" || (json.type != null && json?.type?.Trim().Length == 0))
+            if (Json.type == "???" || (Json.type != null && Json?.type?.Trim().Length == 0))
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'type' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
-            if (json.type.ToLower() != nameof(GeneratorType.jsform) && json.type.ToLower() != nameof(GeneratorType.jswebapi) && json.type.ToLower() != nameof(GeneratorType.csharp))
+            if (Json.type.ToLower() != nameof(GeneratorType.jsform) && Json.type.ToLower() != nameof(GeneratorType.jswebapi) && Json.type.ToLower() != nameof(GeneratorType.csharp))
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'type' should be: 'JsForm' or 'JsWebApi' or 'CSharp'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
@@ -72,11 +72,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     ReadEntitiesMetadata(CrmServiceClient);
                 else
                     XrmHelper.EntitiesMetadata = XrmHelper.GetEntitiesMetadata(CrmServiceClient, schemaNames);
-                if (json.type.ToLower() == nameof(GeneratorType.csharp))
+                if (Json.type.ToLower() == nameof(GeneratorType.csharp))
                     GeneratorLateBound(schemaNames);
-                else if (json.type.ToLower() == nameof(GeneratorType.jsform))
+                else if (Json.type.ToLower() == nameof(GeneratorType.jsform))
                     GeneratorJsForm(schemaNames);
-                else if (json.type.ToLower() == nameof(GeneratorType.jswebapi))
+                else if (Json.type.ToLower() == nameof(GeneratorType.jswebapi))
                     GeneratorWebApi(schemaNames);
             }
 
@@ -87,22 +87,22 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private List<string> GetSchemaNames()
         {
             var endsWith = string.Empty;
-            if (json.type.ToLower() == nameof(GeneratorType.csharp))
+            if (Json.type.ToLower() == nameof(GeneratorType.csharp))
                 endsWith = ".generated.cs";
-            else if (json.type.ToLower() == nameof(GeneratorType.jsform))
+            else if (Json.type.ToLower() == nameof(GeneratorType.jsform))
                 endsWith = ".form.js";
-            else if (json.type.ToLower() == nameof(GeneratorType.jswebapi))
+            else if (Json.type.ToLower() == nameof(GeneratorType.jswebapi))
                 endsWith = ".webapi.js";
-            if (json.entities != null && (json.entities.Trim().ToLower() == "*" || json.entities.Trim().ToLower() == "all"))
+            if (Json.entities != null && (Json.entities.Trim().ToLower() == "*" || Json.entities.Trim().ToLower() == "all"))
             {
-                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Filter by: ", ConsoleColor.White, "json.entities", ConsoleColor.Green, " with values: ", ConsoleColor.White, json.entities.Trim());
+                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Filter by: ", ConsoleColor.White, "json.entities", ConsoleColor.Green, " with values: ", ConsoleColor.White, Json.entities.Trim());
                 CliLog.WriteLine(ConsoleColor.White, "|");
                 ReadEntitiesMetadata(CrmServiceClient);
                 return XrmHelper.EntitiesMetadata
                     .Select(x => x.SchemaName)
                     .ToList();
             }
-            else if (json.entities == null || json.entities.Trim().Length == 0 || json.entities.Trim().ToLower() == "folder")
+            else if (Json.entities == null || Json.entities.Trim().Length == 0 || Json.entities.Trim().ToLower() == "folder")
             {
                 CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Filter by: ", ConsoleColor.White, "current folder", ConsoleColor.Green, " with pattern values: ", ConsoleColor.White, $"*{endsWith}");
                 CliLog.WriteLine(ConsoleColor.White, "|");
@@ -114,9 +114,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             else
             {
-                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Filter by: ", ConsoleColor.White, "json.entities", ConsoleColor.Green, " with values: ", ConsoleColor.White, json.entities.Trim());
+                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Filter by: ", ConsoleColor.White, "json.entities", ConsoleColor.Green, " with values: ", ConsoleColor.White, Json.entities.Trim());
                 CliLog.WriteLine(ConsoleColor.White, "|");
-                return json.entities.Split(",".ToCharArray()).ToList();
+                return Json.entities.Split(",".ToCharArray()).ToList();
             }
         }
 
@@ -152,12 +152,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     }
                     var newCode = string.Empty;
                     var newDTS = string.Empty;
-                    if (json.version == null) comment.WebApiVersion = null;
-                    if (json.version == "2") comment.WebApiVersion = "2";
+                    if (Json.version == null) comment.WebApiVersion = null;
+                    if (Json.version == "2") comment.WebApiVersion = "2";
                     if (comment.WebApiVersion == "2")
-                        newCode = JsWebApi2.GetCode(CrmServiceClient, entityMetadata, json.rootnamespace, comment, out newDTS);
+                        newCode = JsWebApi2.GetCode(CrmServiceClient, entityMetadata, Json.rootnamespace, comment, out newDTS);
                     else
-                        newCode = JsWebApi.GetCode(CrmServiceClient, entityMetadata, json.rootnamespace, comment, out newDTS);
+                        newCode = JsWebApi.GetCode(CrmServiceClient, entityMetadata, Json.rootnamespace, comment, out newDTS);
                     if (Utility.IsTheSame(oldCode, newCode))
                     {
                         if (oldCode?.Length > 0 && newCode?.Length > 0 && !Utility.IsTheSame(oldDTS, newDTS))
@@ -262,7 +262,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         i++;
                         continue;
                     }
-                    var newCode = JsForm.GetCode(CrmServiceClient, entityMetadata, json.rootnamespace, comment, out var newDTS);
+                    var newCode = JsForm.GetCode(CrmServiceClient, entityMetadata, Json.rootnamespace, comment, out var newDTS);
                     if (Utility.IsTheSame(oldCode, newCode))
                     {
                         if (oldCode?.Length > 0 && newCode?.Length > 0 && !Utility.IsTheSame(oldDTS, newDTS))
@@ -307,7 +307,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             var forms = XrmHelper.GetEntityForms(CrmServiceClient, entityMetadata.LogicalName);
             if (!forms.Any()) return GetDefaultFileWithApi(entityMetadata.SchemaName);
-            var @namespace = Utility.GetNameSpace(json.rootnamespace);
+            var @namespace = Utility.GetNameSpace(Json.rootnamespace);
             var code = string.Empty;
             code += $"//@ts-check\r\n";
             code += $"///<reference path=\"{entityMetadata.SchemaName}.d.ts\" />\r\n";
@@ -366,7 +366,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var file = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.cs");
                     var fileEndsWith = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}{endsWith}");
                     var oldCode = Utility.ReadAllText(fileEndsWith);
-                    var newCode = CSharpLateBound.GetCode(CrmServiceClient, entityMetadata, json.rootnamespace);
+                    var newCode = CSharpLateBound.GetCode(CrmServiceClient, entityMetadata, Json.rootnamespace);
                     if (newCode == String.Empty || Utility.IsTheSame(oldCode, newCode))
                     {
                         CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DoNothing, ConsoleColor.White, $"{schemaName}{endsWith}");
@@ -383,7 +383,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                             Utility.ForceWriteAllText(fileEndsWith, newCode);
                             if (!File.Exists(file))
                             {
-                                Utility.ForceWriteAllText(file, GetDefaultFileWithCs(entityMetadata, json.rootnamespace));
+                                Utility.ForceWriteAllText(file, GetDefaultFileWithCs(entityMetadata, Json.rootnamespace));
                             }
                             CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Created, ConsoleColor.White, $"{schemaName}{endsWith}");
                         }
@@ -408,7 +408,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 XrmHelper.ReadEntitiesMetadata(crmServiceClient);
                 wait.Abort();
                 CliLog.WriteLine();
-                if (json.type.ToLower() != nameof(GeneratorType.csharp))
+                if (Json.type.ToLower() != nameof(GeneratorType.csharp))
                 {
                     IsAll = true;
                     wait = new Thread(() => CliLog.Waiting("Reading entities FormXml "));

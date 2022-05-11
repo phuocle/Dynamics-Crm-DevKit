@@ -34,19 +34,19 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             switch (arg.Type)
             {
                 case nameof(CliType.servers):
-                    JsonServer = json.servers.FirstOrDefault(x => x.profile == arg.Profile);
+                    Json = json.servers.FirstOrDefault(x => x.profile == arg.Profile);
                     TaskType = $"[{nameof(CliType.servers).ToUpper()}]";
                     break;
                 case nameof(CliType.workflows):
-                    JsonServer = json.workflows.FirstOrDefault(x => x.profile == arg.Profile);
+                    Json = json.workflows.FirstOrDefault(x => x.profile == arg.Profile);
                     TaskType = $"[{nameof(CliType.workflows).ToUpper()}]";
                     break;
                 case nameof(CliType.plugins):
-                    JsonServer = json.plugins.FirstOrDefault(x => x.profile == arg.Profile);
+                    Json = json.plugins.FirstOrDefault(x => x.profile == arg.Profile);
                     TaskType = $"[{nameof(CliType.plugins).ToUpper()}]";
                     break;
                 case nameof(CliType.dataproviders):
-                    JsonServer = json.dataproviders.FirstOrDefault(x => x.profile == arg.Profile);
+                    Json = json.dataproviders.FirstOrDefault(x => x.profile == arg.Profile);
                     TaskType = $"[{nameof(CliType.dataproviders).ToUpper()}]";
                     break;
             }
@@ -55,32 +55,32 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         public string TaskType { get; set; }
         public CrmServiceClient CrmServiceClient { get; set; }
         public CommandLineArgs Arg { get; set; }
-        private JsonServer JsonServer { get; }
+        private JsonServer Json { get; }
         private bool IsOk { get; set; }
         private Guid SolutionId { get; set; }
         private string Prefix { get; set; }
-        private string CurrentFolder => $"{CurrentDirectory}\\{JsonServer.folder}";
+        private string CurrentFolder => $"{CurrentDirectory}\\{Json.folder}";
         public bool IsValid()
         {
-            if (JsonServer == null)
+            if (Json == null)
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'profile' not found: '{Arg.Profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
-            if (JsonServer.folder == "???" || (JsonServer.folder != null && JsonServer?.folder?.Trim().Length == 0))
+            if (Json.folder == "???" || (Json.folder != null && Json?.folder?.Trim().Length == 0))
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'folder' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
-            if (JsonServer.solution == "???" || (JsonServer.solution != null && JsonServer?.solution?.Trim().Length == 0))
+            if (Json.solution == "???" || (Json.solution != null && Json?.solution?.Trim().Length == 0))
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'solution' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
-            (IsOk, SolutionId, Prefix) = XrmHelper.IsExistSolution(CrmServiceClient, JsonServer.solution);
+            (IsOk, SolutionId, Prefix) = XrmHelper.IsExistSolution(CrmServiceClient, Json.solution);
             if (!IsOk)
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} solution '{JsonServer.solution}' not exist");
+                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} solution '{Json.solution}' not exist");
                 return false;
             }
             return true;
@@ -92,7 +92,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
             if (IsValid())
             {
-                var files = GetFiles(CurrentFolder, JsonServer.includefiles, JsonServer.excludefiles);
+                var files = GetFiles(CurrentFolder, Json.includefiles, Json.excludefiles);
                 if (files.Count == 0)
                 {
                     CliLog.WriteLineWarning(ConsoleColor.Green, "Not found any files to deploy");
@@ -285,7 +285,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     request.Parameters = new ParameterCollection();
                 request.Target = entity;
                 request.Parameters.Add("SuppressDuplicateDetection", true);
-                request.Parameters.Add("SolutionUniqueName", JsonServer.solution);
+                request.Parameters.Add("SolutionUniqueName", Json.solution);
                 CliLog.WriteLineWarning(SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.Register, ConsoleColor.White, $"DataSource ", ConsoleColor.Cyan, $"{logicalNameDataSource}", ConsoleColor.White, " linked with events ", ConsoleColor.Cyan, events);
                 CrmServiceClient.Execute(request);
             }
@@ -494,7 +494,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         Target = pluginImage
                     };
-                    request.Parameters.Add("SolutionUniqueName", JsonServer.solution);
+                    request.Parameters.Add("SolutionUniqueName", Json.solution);
                     CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.Register, ConsoleColor.White, $"{imageType.ToString()}: ", ConsoleColor.Cyan, imageName);
                     try
                     {
@@ -670,7 +670,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     Target = pluginStep
                 };
-                request.Parameters.Add("SolutionUniqueName", JsonServer.solution);
+                request.Parameters.Add("SolutionUniqueName", Json.solution);
                 CliLog.WriteLineWarning(SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.Register, ConsoleColor.White, $"{attribute.Message} Step: ", ConsoleColor.Cyan, attribute.Name);
                 try
                 {
@@ -742,7 +742,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         Target = pluginStep
                     };
-                    request.Parameters.Add("SolutionUniqueName", JsonServer.solution);
+                    request.Parameters.Add("SolutionUniqueName", Json.solution);
                     if (attribute.Action == PluginStepOperationEnum.Activate)
                         CliLog.WriteLineWarning(SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.Updated, ConsoleColor.White, $"{attribute.Message} Step: ", ConsoleColor.Cyan, attribute.Name);
                     else
@@ -908,7 +908,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     Target = pluginType
                 };
-                request.Parameters.Add("SolutionUniqueName", JsonServer.solution);
+                request.Parameters.Add("SolutionUniqueName", Json.solution);
                 CliLog.WriteLineWarning(SPACE, SPACE, ConsoleColor.Green, CliAction.Register, ConsoleColor.White, $"{attribute.PluginType.ToString()} Type: ", ConsoleColor.Cyan, type.FullName);
                 var response = (CreateResponse)CrmServiceClient.Execute(request);
                 return response.id;
@@ -920,7 +920,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     Target = pluginType
                 };
-                request.Parameters.Add("SolutionUniqueName", JsonServer.solution);
+                request.Parameters.Add("SolutionUniqueName", Json.solution);
                 try
                 {
                     CrmServiceClient.Execute(request);
@@ -999,7 +999,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     Target = plugin
                 };
-                request.Parameters.Add("SolutionUniqueName", JsonServer.solution);
+                request.Parameters.Add("SolutionUniqueName", Json.solution);
                 CliLog.WriteLineWarning(SPACE, ConsoleColor.Green, CliAction.Register, ConsoleColor.White, "Assembly ", ConsoleColor.Cyan, assemblyName);
                 var response = (CreateResponse)CrmServiceClient.Execute(request);
                 return response.id;
@@ -1019,7 +1019,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         Target = plugin
                     };
-                    request.Parameters.Add("SolutionUniqueName", JsonServer.solution);
+                    request.Parameters.Add("SolutionUniqueName", Json.solution);
                     CliLog.WriteLineWarning(SPACE, ConsoleColor.Green, CliAction.Updated, ConsoleColor.White, "Assembly ", ConsoleColor.Cyan, assemblyName);
                     try
                     {

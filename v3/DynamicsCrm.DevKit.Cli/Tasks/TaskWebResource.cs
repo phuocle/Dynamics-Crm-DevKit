@@ -17,7 +17,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         public TaskWebResource(CommandLineArgs arg, JsonWebResource json)
         {
             this.Arg = arg;
-            this.json = json;
+            this.Json = json;
             CrmServiceClient = arg.CrmServiceClient;
             CurrentDirectory = arg.CurrentDirectory;
         }
@@ -25,27 +25,27 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         public string TaskType => $"[{nameof(CliType.webresources).ToUpper()}]";
         public CrmServiceClient CrmServiceClient { get; set; }
         public CommandLineArgs Arg { get; set; }
-        private JsonWebResource json { get; set; }
+        private JsonWebResource Json { get; set; }
         private bool IsOk { get; set; }
         private Guid SolutionId { get; set; }
         private string Prefix { get; set; }
         private List<Guid> WebResourcesToPublish { get; } = new List<Guid>();
         public bool IsValid()
         {
-            if (json == null)
+            if (Json == null)
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'profile' not found: '{Arg.Profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
-            if (json.solution == "???" || (json.solution != null && json?.solution?.Trim().Length == 0))
+            if (Json.solution == "???" || (Json.solution != null && Json?.solution?.Trim().Length == 0))
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'solution' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
-            (IsOk, SolutionId, Prefix) = XrmHelper.IsExistSolution(CrmServiceClient, json.solution);
+            (IsOk, SolutionId, Prefix) = XrmHelper.IsExistSolution(CrmServiceClient, Json.solution);
             if (!IsOk)
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} solution '{json.solution}' not exist");
+                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} solution '{Json.solution}' not exist");
                 return false;
             }
             if (IsSupportWebResourceDependency)
@@ -442,7 +442,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 objectid = Guid.Parse(webResource["webresourceid"].ToString()),
                 componenttype = 61,
-                uniquename = json.solution
+                uniquename = Json.solution
             };
             var fetchXml = $@"
 <fetch>
@@ -466,9 +466,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 AddRequiredComponents = true,
                 ComponentType = 61,
                 ComponentId = Guid.Parse(webResource["webresourceid"].ToString()),
-                SolutionUniqueName = json.solution
+                SolutionUniqueName = Json.solution
             };
-            CliLog.WriteLineWarning("\t", ConsoleColor.Green, CliAction.Added, ConsoleColor.White, $"{webResource["name"]} ", ConsoleColor.Green, "to solution: ", ConsoleColor.White, $"{json.solution}");
+            CliLog.WriteLineWarning("\t", ConsoleColor.Green, CliAction.Added, ConsoleColor.White, $"{webResource["name"]} ", ConsoleColor.Green, "to solution: ", ConsoleColor.White, $"{Json.solution}");
             CrmServiceClient.Execute(request);
         }
 
@@ -493,7 +493,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 if (_dependencies != null) return _dependencies;
                 _dependencies = new List<Dependency>();
-                var dependencies = TransformPattern(json.dependencies, WebResourceFiles);
+                var dependencies = TransformPattern(Json.dependencies, WebResourceFiles);
                 foreach (var dependency in dependencies)
                 {
                     foreach (var webResource in dependency.webresources)
@@ -527,17 +527,17 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 if (_webResourceFiles != null) return _webResourceFiles;
                 _webResourceFiles = new List<WebResourceFile>();
                 var includeFiles = new List<string>();
-                foreach (var pattern in json.includefiles)
+                foreach (var pattern in Json.includefiles)
                 {
-                    var filePattern = $"{CurrentDirectory}\\{json.rootfolder}\\{pattern}";
+                    var filePattern = $"{CurrentDirectory}\\{Json.rootfolder}\\{pattern}";
                     filePattern = filePattern.Replace(@"\\", @"\");
                     includeFiles.AddRange(GetFiles(filePattern));
                 }
                 includeFiles = includeFiles.Distinct().ToList();
                 var excludeFiles = new List<string>();
-                foreach (var pattern in json.excludefiles)
+                foreach (var pattern in Json.excludefiles)
                 {
-                    var filePattern = $"{CurrentDirectory}\\{json.rootfolder}\\{pattern}";
+                    var filePattern = $"{CurrentDirectory}\\{Json.rootfolder}\\{pattern}";
                     filePattern = filePattern.Replace(@"\\", @"\");
                     excludeFiles.AddRange(GetFiles(filePattern));
                 }
@@ -545,7 +545,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 foreach (var file in files)
                 {
                     var name = file
-                        .Substring($"{CurrentDirectory}\\{json.rootfolder}\\".Replace(@"\\", @"\").Length)
+                        .Substring($"{CurrentDirectory}\\{Json.rootfolder}\\".Replace(@"\\", @"\").Length)
                         .Replace("\\", "/");
                     if (!name.StartsWith(Prefix))
                         name = Prefix + "/" + name;

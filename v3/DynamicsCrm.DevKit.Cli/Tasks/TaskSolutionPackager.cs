@@ -17,7 +17,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         public TaskSolutionPackager(CommandLineArgs arg, JsonSolutionPackager json)
         {
             this.Arg = arg;
-            this.json = json;
+            this.Json = json;
             CrmServiceClient = arg.CrmServiceClient;
             CurrentDirectory = arg.CurrentDirectory;
             Version = arg.Version;
@@ -25,7 +25,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             Connection = arg.Connection;
         }
         public CommandLineArgs Arg { get; set; }
-        private JsonSolutionPackager json { get; set; }
+        private JsonSolutionPackager Json { get; set; }
         public string CurrentDirectory { get; set; }
         public string TaskType => $"[{nameof(CliType.solutionpackagers).ToUpper()}]";
         public CrmServiceClient CrmServiceClient { get; set; }
@@ -33,48 +33,48 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private string SolutionPackagerExe { get; set; }
         private bool IsSdkLogin { get; set; }
         private string Connection { get; set; }
-        private string SolutionXmlFile => $"{CurrentDirectory}\\{json.folder}\\{json.solutiontype}\\Other\\Solution.xml";
+        private string SolutionXmlFile => $"{CurrentDirectory}\\{Json.folder}\\{Json.solutiontype}\\Other\\Solution.xml";
         public bool IsValid()
         {
-            if (json == null)
+            if (Json == null)
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'profile' not found: '{json.profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'profile' not found: '{Json.profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
-            if (json.solution == "???" || (json.solution != null && json?.solution?.Trim().Length == 0))
+            if (Json.solution == "???" || (Json.solution != null && Json?.solution?.Trim().Length == 0))
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'solution' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
-            if (json.solutiontype == "???" || (json.solutiontype != null && json?.solutiontype?.Trim().Length == 0))
+            if (Json.solutiontype == "???" || (Json.solutiontype != null && Json?.solutiontype?.Trim().Length == 0))
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'solutiontype' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
-            if (json.solutiontype.ToLower() != "Managed".ToLower() &&
-                json.solutiontype.ToLower() != "Unmanaged".ToLower() &&
-                json.solutiontype.ToLower() != "Both".ToLower())
+            if (Json.solutiontype.ToLower() != "Managed".ToLower() &&
+                Json.solutiontype.ToLower() != "Unmanaged".ToLower() &&
+                Json.solutiontype.ToLower() != "Both".ToLower())
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'solutiontype' should be: 'Managed' or 'Unmanaged' or 'Both'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
-            if (json.folder == "???" || (json.folder != null && json?.folder?.Trim().Length == 0))
+            if (Json.folder == "???" || (Json.folder != null && Json?.folder?.Trim().Length == 0))
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'folder' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
-            if (json.type == "???" || (json.folder != null && json?.type?.Trim().Length == 0))
+            if (Json.type == "???" || (Json.folder != null && Json?.type?.Trim().Length == 0))
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'type' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
-            if (json.type.ToLower() != "Extract".ToLower() &&
-                json.type.ToLower() != "Pack".ToLower())
+            if (Json.type.ToLower() != "Extract".ToLower() &&
+                Json.type.ToLower() != "Pack".ToLower())
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'type' should be: 'Extract' or 'Pack'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
-            if (json.type.ToLower() == "Pack".ToLower())
+            if (Json.type.ToLower() == "Pack".ToLower())
             {
                 if (!File.Exists(SolutionXmlFile))
                 {
@@ -82,9 +82,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     return false;
                 }
             }
-            if (json.mapfile != null && json.mapfile.Length != 0)
+            if (Json.mapfile != null && Json.mapfile.Length != 0)
             {
-                var mapfile = Path.Combine(CurrentDirectory, json.mapfile);
+                var mapfile = Path.Combine(CurrentDirectory, Json.mapfile);
                 if (!File.Exists(mapfile))
                 {
                     CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} mapfile '{mapfile}' not exist");
@@ -96,11 +96,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} Not found CrmSvcUtil.exe file.");
                 return false;
             }
-            if (json.type.ToLower() == "Extract".ToLower())
+            if (Json.type.ToLower() == "Extract".ToLower())
             {
-                if (!XrmHelper.IsExistSolution(CrmServiceClient, json.solution).IsOk)
+                if (!XrmHelper.IsExistSolution(CrmServiceClient, Json.solution).IsOk)
                 {
-                    CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} solution '{json.solution}' not exist");
+                    CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} solution '{Json.solution}' not exist");
                     return false;
                 }
             }
@@ -115,11 +115,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             if (IsValid())
             {
                 var solutionZipFile = GetSolutionZipFile();
-                if (json.type.ToLower().Trim() == "Pack".ToLower())
+                if (Json.type.ToLower().Trim() == "Pack".ToLower())
                 {
-                    if (json.solutiontype.ToLower().Trim() == "Both".ToLower())
+                    if (Json.solutiontype.ToLower().Trim() == "Both".ToLower())
                     {
-                        CliLog.Write(ConsoleColor.White, "| ", ConsoleColor.Green, $"{json.type}ing", ConsoleColor.White, " solution: ", ConsoleColor.Green, json.solution, ConsoleColor.White, " to: ");
+                        CliLog.Write(ConsoleColor.White, "| ", ConsoleColor.Green, $"{Json.type}ing", ConsoleColor.White, " solution: ", ConsoleColor.Green, Json.solution, ConsoleColor.White, " to: ");
                         CliLog.WriteSuccess(ConsoleColor.White, ".." + solutionZipFile.Substring(CurrentDirectory.Length));
                         CliLog.Write(ConsoleColor.White, " and ");
                         var solutionZipFileManaged = $"{Path.GetDirectoryName(solutionZipFile)}\\{ Path.GetFileNameWithoutExtension(solutionZipFile)}_managed.zip";
@@ -128,7 +128,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     }
                     else
                     {
-                        CliLog.Write(ConsoleColor.White, "| ", ConsoleColor.Green, $"{json.type}ing", ConsoleColor.White, " solution: ", ConsoleColor.Green, json.solution, ConsoleColor.White, " to: ");
+                        CliLog.Write(ConsoleColor.White, "| ", ConsoleColor.Green, $"{Json.type}ing", ConsoleColor.White, " solution: ", ConsoleColor.Green, Json.solution, ConsoleColor.White, " to: ");
                         CliLog.WriteSuccess(ConsoleColor.White, solutionZipFile);
                         CliLog.WriteLine(ConsoleColor.Black, "█");
                     }
@@ -136,8 +136,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 else
                 {
                     CliLog.WriteLine(ConsoleColor.White, "|");
-                    CliLog.Write(ConsoleColor.White, "| ", ConsoleColor.Green, $"{json.type}ing", ConsoleColor.White, " solution: ", ConsoleColor.Green, json.solution, ConsoleColor.White, " to: ");
-                    CliLog.WriteSuccess(ConsoleColor.White, $"..\\{json.folder}\\{json.solutiontype}");
+                    CliLog.Write(ConsoleColor.White, "| ", ConsoleColor.Green, $"{Json.type}ing", ConsoleColor.White, " solution: ", ConsoleColor.Green, Json.solution, ConsoleColor.White, " to: ");
+                    CliLog.WriteSuccess(ConsoleColor.White, $"..\\{Json.folder}\\{Json.solutiontype}");
                     CliLog.WriteLine(ConsoleColor.Black, "█");
                 }
 
@@ -181,22 +181,22 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         private string GetSolutionZipFile()
         {
-            if (json.type.ToLower().Trim() == "Extract".ToLower())
+            if (Json.type.ToLower().Trim() == "Extract".ToLower())
             {
-                if (json.solutiontype.ToLower().Trim() == "Both".ToLower())
+                if (Json.solutiontype.ToLower().Trim() == "Both".ToLower())
                 {
                     ExportSolution("Managed");
                     return ExportSolution("Unmanaged");
                 }
                 else {
-                    return ExportSolution(json.solutiontype);
+                    return ExportSolution(Json.solutiontype);
                 }
             }
             else
             {
                 var crmVersion = GetCrmVersionFromSolutionFolder();
-                var fileName = FormatSolutionVersionString(json.solution, System.Version.Parse(crmVersion), json.solutiontype);
-                var solutionFile = Path.Combine(CurrentDirectory, json.folder, "Solutions-Pack", fileName);
+                var fileName = FormatSolutionVersionString(Json.solution, System.Version.Parse(crmVersion), Json.solutiontype);
+                var solutionFile = Path.Combine(CurrentDirectory, Json.folder, "Solutions-Pack", fileName);
                 return solutionFile;
             }
         }
@@ -207,17 +207,17 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var request = new ExportSolutionRequest
             {
                 Managed = solutionType.ToLower() == "Managed".ToLower(),
-                SolutionName = json.solution
+                SolutionName = Json.solution
             };
-            var wait = new Thread(() => CliLog.Waiting($"Export {solutionType} solution: {json.solution} "));
+            var wait = new Thread(() => CliLog.Waiting($"Export {solutionType} solution: {Json.solution} "));
             wait.Start();
 
             var crmVersion = GetCrmVersionFromInstance();
             var response = (ExportSolutionResponse)CrmServiceClient.Execute(request);
 
             wait.Abort();
-            var fileName = FormatSolutionVersionString(json.solution, System.Version.Parse(crmVersion), json.solutiontype);
-            var solutionFile = Path.Combine(CurrentDirectory, json.folder, "Solutions-Extract", fileName);
+            var fileName = FormatSolutionVersionString(Json.solution, System.Version.Parse(crmVersion), Json.solutiontype);
+            var solutionFile = Path.Combine(CurrentDirectory, Json.folder, "Solutions-Extract", fileName);
             if (solutionType.ToLower() == "Managed".ToLower())
                 solutionFile = $"{Path.GetDirectoryName(solutionFile)}\\{Path.GetFileNameWithoutExtension(solutionFile)}_managed.zip";
             var tempFile = Utility.WriteTempFile(fileName, response.ExportSolutionFile);
@@ -236,7 +236,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             var fetchData = new
             {
-                uniquename = json.solution
+                uniquename = Json.solution
             };
             var fetchXml = $@"
 <fetch>
@@ -284,20 +284,20 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private string CreateCommandArgs(string solutionFile)
         {
             var command = new StringBuilder();
-            command.Append($"/action:{json.type}");
+            command.Append($"/action:{Json.type}");
             command.Append($" /zipfile:\"{solutionFile}\"");
-            command.Append($" /folder:\"{CurrentDirectory}\\{json.folder}\\{json.solutiontype}\"");
+            command.Append($" /folder:\"{CurrentDirectory}\\{Json.folder}\\{Json.solutiontype}\"");
             command.Append(" /clobber /nologo /localize /allowdelete:Yes /allowwrite:Yes");
-            if (json.mapfile != null)
+            if (Json.mapfile != null)
             {
-                var map = $"{CurrentDirectory}\\{json.mapfile}";
+                var map = $"{CurrentDirectory}\\{Json.mapfile}";
                 if (File.Exists(map))
                 {
                     command.Append($" /map:\"{map}\"");
                 }
             }
-            command.Append($" /log:\"{CurrentDirectory}\\{json.folder}\\log\\{DateTime.Now.ToString("yyyy-MM-dd hh-mm") + "." + json.solutiontype + ".txt"}\"");
-            command.Append($" /packagetype:{json.solutiontype}");
+            command.Append($" /log:\"{CurrentDirectory}\\{Json.folder}\\log\\{DateTime.Now.ToString("yyyy-MM-dd hh-mm") + "." + Json.solutiontype + ".txt"}\"");
+            command.Append($" /packagetype:{Json.solutiontype}");
             return command.ToString();
         }
 

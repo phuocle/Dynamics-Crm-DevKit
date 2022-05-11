@@ -20,7 +20,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         public TaskDataSource(CommandLineArgs arg, JsonDataSource json)
         {
             this.Arg = arg;
-            this.json = json;
+            this.Json = json;
             CrmServiceClient = arg.CrmServiceClient;
             CurrentDirectory = arg.CurrentDirectory;
         }
@@ -28,66 +28,66 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         public CrmServiceClient CrmServiceClient { get; set; }
         public string TaskType => $"[{nameof(CliType.datasources).ToUpper()}]";
         public CommandLineArgs Arg { get; set; }
-        private JsonDataSource json { get; set; }
+        private JsonDataSource Json { get; set; }
         private bool IsOk { get; set; }
         private Guid SolutionId { get; set; }
         private string Prefix { get; set; }
         private string DataSourceName { get; set; }
         public bool IsValid()
         {
-            if (json == null)
+            if (Json == null)
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'profile' not found: '{json.profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'profile' not found: '{Json.profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
-            if (json.solution.Length == 0 || json.solution == "???")
+            if (Json.solution.Length == 0 || Json.solution == "???")
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'solution' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
-            if (json.displayname.Length == 0 || json.displayname == "???")
+            if (Json.displayname.Length == 0 || Json.displayname == "???")
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'displayname' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
-            if (json.pluralname.Length == 0 || json.pluralname == "???")
+            if (Json.pluralname.Length == 0 || Json.pluralname == "???")
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'pluralname' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
-            if (json.name.Length == 0 || json.name == "???")
+            if (Json.name.Length == 0 || Json.name == "???")
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'name' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
             var regex = new Regex("^[a-zA-Z][_a-zA-Z0-9\\s,]*$");
-            if (!regex.IsMatch(json.displayname))
+            if (!regex.IsMatch(Json.displayname))
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'displayname' can only contain alpha-numeric and underscore characters.");
                 return false;
             }
-            if (!regex.IsMatch(json.pluralname))
+            if (!regex.IsMatch(Json.pluralname))
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'pluralname' can only contain alpha-numeric and underscore characters.");
                 return false;
             }
-            if (!regex.IsMatch(json.name))
+            if (!regex.IsMatch(Json.name))
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'name' can only contain alpha-numeric and underscore characters.");
                 return false;
             }
-            if (json.name.Contains(" "))
+            if (Json.name.Contains(" "))
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'name' can cannot contain space character.");
                 return false;
             }
-            (IsOk, SolutionId, Prefix) = XrmHelper.IsExistSolution(CrmServiceClient, json.solution);
+            (IsOk, SolutionId, Prefix) = XrmHelper.IsExistSolution(CrmServiceClient, Json.solution);
             if (!IsOk)
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} solution '{json.solution}' not exist");
+                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} solution '{Json.solution}' not exist");
                 return false;
             }
-            DataSourceName = json.name.ToLower().StartsWith(Prefix.ToLower()) ? json.name : $"{Prefix}{json.name}";
+            DataSourceName = Json.name.ToLower().StartsWith(Prefix.ToLower()) ? Json.name : $"{Prefix}{Json.name}";
             if (IsExistDataSource(DataSourceName))
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} name '{DataSourceName}' exist");
@@ -171,18 +171,18 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     SchemaName = $"{DataSourceName}Name",
                     RequiredLevel = new AttributeRequiredLevelManagedProperty(AttributeRequiredLevel.None),
                     MaxLength = 100,
-                    DisplayName = new Label(json.displayname, languageCode),
-                    ExternalName = json.displayname
+                    DisplayName = new Label(Json.displayname, languageCode),
+                    ExternalName = Json.displayname
                 },
                 Entity = new EntityMetadata
                 {
                     DataProviderId = new Guid?(new Guid("B2112A7E-B26C-42F7-9B63-9A809A9D716F")),
                     IsActivity = new bool?(false),
                     SchemaName = DataSourceName,
-                    DisplayName = new Label(json.displayname, languageCode),
-                    DisplayCollectionName = new Label(json.pluralname, languageCode),
-                    ExternalCollectionName = json.pluralname.Replace(" ", string.Empty),
-                    ExternalName = json.displayname.Replace(" ", string.Empty),
+                    DisplayName = new Label(Json.displayname, languageCode),
+                    DisplayCollectionName = new Label(Json.pluralname, languageCode),
+                    ExternalCollectionName = Json.pluralname.Replace(" ", string.Empty),
+                    ExternalName = Json.displayname.Replace(" ", string.Empty),
                     OwnershipType = new OwnershipTypes?(OwnershipTypes.OrganizationOwned),
                     IsAvailableOffline = new bool?(false),
                     Description = new Label(string.Empty, languageCode),
@@ -218,9 +218,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             if (request.Parameters == null)
                 request.Parameters = new ParameterCollection();
             if (request.Parameters.ContainsKey("SolutionUniqueName"))
-                request.Parameters["SolutionUniqueName"] = json.solution;
+                request.Parameters["SolutionUniqueName"] = Json.solution;
             else
-                request.Parameters.Add("SolutionUniqueName", json.solution);
+                request.Parameters.Add("SolutionUniqueName", Json.solution);
             var response = (CreateEntityResponse)CrmServiceClient.Execute(request);
             var entityId = response.EntityId;
             var retrieveEntityRequest = new RetrieveEntityRequest()

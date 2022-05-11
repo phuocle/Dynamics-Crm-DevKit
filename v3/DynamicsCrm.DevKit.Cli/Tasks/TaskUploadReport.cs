@@ -12,12 +12,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         public TaskUploadReport(CommandLineArgs arg, JsonUploadReport json)
         {
             this.Arg = arg;
-            this.json = json;
+            this.Json = json;
             CrmServiceClient = arg.CrmServiceClient;
             CurrentDirectory = arg.CurrentDirectory;
         }
         public CommandLineArgs Arg { get; set; }
-        private JsonUploadReport json { get; set; }
+        private JsonUploadReport Json { get; set; }
 
         public string CurrentDirectory { get; set; }
         public CrmServiceClient CrmServiceClient { get; set; }
@@ -25,29 +25,29 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         public bool IsValid()
         {
-            if (json == null)
+            if (Json == null)
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'profile' not found: '{json.profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'profile' not found: '{Json.profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
-            if (json.solution == "???" || (json.solution != null && json?.solution?.Trim().Length == 0))
+            if (Json.solution == "???" || (Json.solution != null && Json?.solution?.Trim().Length == 0))
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'solution' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
-            if (!XrmHelper.IsExistSolution(CrmServiceClient, json.solution).IsOk)
+            if (!XrmHelper.IsExistSolution(CrmServiceClient, Json.solution).IsOk)
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} solution '{json.solution}' not exist");
+                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} solution '{Json.solution}' not exist");
                 return false;
             }
-            if (json.languages.Count == 0 || json.languages.Count(x => x != "???") == 0)
+            if (Json.languages.Count == 0 || Json.languages.Count(x => x != "???") == 0)
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'languages' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
-            foreach (var language in json.languages)
+            foreach (var language in Json.languages)
             {
-                var folder = Path.Combine(CurrentDirectory, json.solution, language);
+                var folder = Path.Combine(CurrentDirectory, Json.solution, language);
                 if (!Directory.Exists(folder))
                 {
                     CliLog.WriteLineError(ConsoleColor.Yellow, $"Folder does not exist: {folder}");
@@ -63,9 +63,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
             if (IsValid())
             {
-                foreach (var language in json.languages)
+                foreach (var language in Json.languages)
                 {
-                    var folder = Path.Combine(CurrentDirectory, json.solution, language);
+                    var folder = Path.Combine(CurrentDirectory, Json.solution, language);
                     var files = Directory.GetFiles(folder, "*.rdl", SearchOption.AllDirectories);
                     if (files.Length == 0)
                     {
@@ -78,7 +78,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         CliLog.WriteLine(ConsoleColor.White, "|");
                         CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Found: ", ConsoleColor.Blue, totalUploadFiles, " ", ConsoleColor.White, language,  ConsoleColor.Green, " .rdl files");
                         CliLog.WriteLine(ConsoleColor.White, "|");
-                        var reportFiles = XrmHelper.GetReportsBySolution(CrmServiceClient, json.solution);
+                        var reportFiles = XrmHelper.GetReportsBySolution(CrmServiceClient, Json.solution);
                         var i = 1;
                         foreach (var file in files)
                         {
