@@ -55,14 +55,19 @@
       "commandLineArgs": "/sdklogin:\"yes\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"solutionpackagers\" /profile:\"Pack-Both\" /version:\"9.1.0.108\"",
       "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.00.00\\Test.Cli.SolutionPackager\\Dev.DevKit.SolutionPackager"
     },
-
-
-
-    "uploadreports": {
+    "TaskUploadReport.sdk.dev2-devkit": {
       "commandName": "Project",
-      "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://hslg2ewodev.crm7.dynamics.com;ClientId=881c7316-fcf9-4ba9-900e-3bf62b73b981;ClientSecret=7y[87[H5p_FJAw[ROTlm6]c3vWbn33UP;\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"uploadreports\" /profile:\"DEBUG\"",
-      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.00.00\\TestExistingReports\\2.after\\Dev.DevKit.Report"
+      "commandLineArgs": "/sdklogin:\"yes\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"uploadreports\" /profile:\"DEBUG\"",
+      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.00.00\\Test.Cli.UploadReports\\Dev.DevKit.Report"
     },
+
+
+    "NO ARGS": {
+      "commandName": "Project"
+    },
+
+
+
     "generator-form-debug": {
       "commandName": "Project",
       "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://vus-dev.crm5.dynamics.com;ClientId=690a3a0a-556c-431e-8182-b887295627d5;ClientSecret=A2d7Q~LvCjbsM1Upa1jOtxPh.9Rwf9NapdFPO;\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"JS-FORM\"",
@@ -129,9 +134,7 @@
       "commandLineArgs": "/sdklogin:\"yes\" /json:\"DynamicsCrm.DevKit.Cli.json\" /type:\"servers\" /profile:\"RELEASE\" /OnlyUpdateAssembly:\"true\"",
       "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.00.00\\Test.Cli.Server"
     },
-    "NO ARGS": {
-      "commandName": "Project"
-    },
+
     "deploy.webresources": {
       "commandName": "Project",
       "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://dev2-devkit.crm5.dynamics.com;ClientId=e31fc7d6-4dce-46e3-8677-04ab0a2968e3;ClientSecret=?-iwRSB0te8o]pHX_yVQLJnUqziB1E0h;\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"webresources\" /profile:\"DEBUG\"",

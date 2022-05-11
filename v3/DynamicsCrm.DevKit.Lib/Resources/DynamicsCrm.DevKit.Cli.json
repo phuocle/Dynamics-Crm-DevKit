@@ -125,5 +125,12 @@
       "output": "GeneratedCode.cs",
       "entities": "*"
     }
+  ],
+  "uploadreports": [
+    {
+      "profile": "DEBUG",
+      "solution": "???",
+      "language": [ "???" ]
+    }
   ]
 }

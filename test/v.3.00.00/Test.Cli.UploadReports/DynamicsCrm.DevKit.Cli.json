@@ -1,0 +1,15 @@
+﻿{
+  "downloadreports": [
+    {
+      "profile": "DEBUG",
+      "solution": "TestReport"
+    }
+  ],
+  "uploadreports": [
+    {
+      "profile": "DEBUG",
+      "solution": "TestReport",
+      "languages": [ "English", "Vietnamese" ]
+    }
+  ]
+}
