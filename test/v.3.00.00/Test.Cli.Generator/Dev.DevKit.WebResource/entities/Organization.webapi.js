@@ -522,10 +522,10 @@ var OptionSet;
 			Currency_symbol: 0
 		},
 		CurrencyFormatCode : {
-			_123_: 3,
 			_123_0: 0,
 			_123_1: 1,
-			_123_2: 2
+			_123_2: 2,
+			_123_3: 3
 		},
 		DateFormatCode : {
 		},
@@ -613,8 +613,8 @@ var OptionSet;
 			No_preference_for_sending_an_error_report_to_Microsoft_about_Microsoft_Dynamics_365: 0
 		},
 		SchedulingEngine : {
-			_Default_Scheduling_Engine: 0,
-			_Deprecated_Universal_Resource_Scheduling: 192350000
+			Default_Scheduling_Engine: 0,
+			Deprecated_Universal_Resource_Scheduling: 192350000
 		},
 		SharePointDeploymentType : {
 			On_Premises: 1,

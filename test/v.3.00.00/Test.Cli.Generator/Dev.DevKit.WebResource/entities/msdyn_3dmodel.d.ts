@@ -157,11 +157,11 @@ declare namespace OptionSet {
 	namespace msdyn_3dmodel {
 		enum msdyn_FileType {
 			/** 100000001 */
-			_glb,
+			glb,
 			/** 100000000 */
-			_gltf,
+			gltf,
 			/** 100000002 */
-			_obj
+			obj
 		}
 		enum msdyn_StorageType {
 			/** 100000000 */

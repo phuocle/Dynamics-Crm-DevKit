@@ -64,7 +64,7 @@ declare namespace DevKit {
 		}
 		interface tab_general_Sections {
 			administration: DevKit.Controls.Section;
-			email_configuration: DevKit.Controls.Section;
+			e_mail_configuration: DevKit.Controls.Section;
 			online_account_information: DevKit.Controls.Section;
 			onpremise_account_information: DevKit.Controls.Section;
 			organization_information: DevKit.Controls.Section;
@@ -452,7 +452,7 @@ declare namespace DevKit {
 	namespace FormUser_form_Business {
 		interface tab_ADMINISTRATION_TAB_Sections {
 			administration: DevKit.Controls.Section;
-			email_configuration: DevKit.Controls.Section;
+			e_mail_configuration: DevKit.Controls.Section;
 		}
 		interface tab_SUMMARY_TAB_Sections {
 			DirectReports: DevKit.Controls.Section;

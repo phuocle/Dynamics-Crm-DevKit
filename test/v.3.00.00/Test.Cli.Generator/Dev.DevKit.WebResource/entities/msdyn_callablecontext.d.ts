@@ -150,10 +150,6 @@ declare namespace DevKit {
 declare namespace OptionSet {
 	namespace msdyn_callablecontext {
 		enum msdyn_EntityOTC {
-			/** 10231 */
-			_Deprecated_Dynamics_Customer_Service_Analytics,
-			/** 10854 */
-			_DeprecatedTeams_Engagement_Context,
 			/** 10017 */
 			AAD_User,
 			/** 1 */
@@ -760,8 +756,12 @@ declare namespace OptionSet {
 			Dependency_Feature,
 			/** 7106 */
 			Dependency_Node,
+			/** 10231 */
+			Deprecated_Dynamics_Customer_Service_Analytics,
 			/** 10731 */
 			Deprecated_Workstream_Entity_Configuration,
+			/** 10854 */
+			DeprecatedTeams_Engagement_Context,
 			/** 1013 */
 			Discount,
 			/** 1080 */

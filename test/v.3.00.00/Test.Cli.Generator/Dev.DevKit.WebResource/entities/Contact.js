@@ -1,6 +1,21 @@
 ﻿//@ts-check
 ///<reference path="Contact.d.ts" />
 "use strict";
+var formContact_AI_for_Sales = (function () {
+	"use strict";
+	/** @type DevKit.FormContact_AI_for_Sales */
+	var form = null;
+	async function onLoad(executionContext) {
+		form = new DevKit.FormContact_AI_for_Sales(executionContext);
+
+	}
+	async function onSave(executionContext) {
+	}
+	return {
+		OnLoad: onLoad,
+		OnSave: onSave
+	};
+})();
 var formContact = (function () {
 	"use strict";
 	/** @type DevKit.FormContact */
@@ -97,21 +112,6 @@ var formContact_Information = (function () {
 	var form = null;
 	async function onLoad(executionContext) {
 		form = new DevKit.FormContact_Information(executionContext);
-
-	}
-	async function onSave(executionContext) {
-	}
-	return {
-		OnLoad: onLoad,
-		OnSave: onSave
-	};
-})();
-var formContact_Sales_Insights = (function () {
-	"use strict";
-	/** @type DevKit.FormContact_Sales_Insights */
-	var form = null;
-	async function onLoad(executionContext) {
-		form = new DevKit.FormContact_Sales_Insights(executionContext);
 
 	}
 	async function onSave(executionContext) {

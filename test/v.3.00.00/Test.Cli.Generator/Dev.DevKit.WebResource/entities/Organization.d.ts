@@ -1668,14 +1668,14 @@ declare namespace OptionSet {
 			Currency_symbol
 		}
 		enum CurrencyFormatCode {
-			/** 3 */
-			_123_,
 			/** 0 */
 			_123_0,
 			/** 1 */
 			_123_1,
 			/** 2 */
-			_123_2
+			_123_2,
+			/** 3 */
+			_123_3
 		}
 		enum DateFormatCode {
 		}
@@ -1819,9 +1819,9 @@ declare namespace OptionSet {
 		}
 		enum SchedulingEngine {
 			/** 0 */
-			_Default_Scheduling_Engine,
+			Default_Scheduling_Engine,
 			/** 192350000 */
-			_Deprecated_Universal_Resource_Scheduling
+			Deprecated_Universal_Resource_Scheduling
 		}
 		enum SharePointDeploymentType {
 			/** 1 */

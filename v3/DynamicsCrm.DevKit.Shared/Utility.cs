@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.CSharp;
+﻿//using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CSharp;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Globalization;
@@ -96,6 +97,17 @@ namespace DynamicsCrm.DevKit.Shared
             return fileName;
         }
 
+        private static string GetIdentifier(string name)
+        {
+            var value = string.Empty;
+            for (int i = 0; i < name.Length; ++i)
+            {
+                if (char.IsLetterOrDigit(name[i]) || name[i] == ' ' || name[i] == '-' || name[i] == '_')
+                    value += name[i];
+            }
+            return value;
+        }
+
         public static string SafeIdentifier(string name)
         {
             if (name == null) return string.Empty;
@@ -108,33 +120,81 @@ namespace DynamicsCrm.DevKit.Shared
                     .Replace("}", string.Empty);
                 return "_" + name;
             }
+            name = GetIdentifier(name);
             name = name.Trim();
+            //name = name.Replace("~", string.Empty);
+            //name = name.Replace("`", string.Empty);
+            //name = name.Replace("!", string.Empty);
+            //name = name.Replace("@", string.Empty);
+            //name = name.Replace("#", string.Empty);
+            //name = name.Replace("$", string.Empty);
+            //name = name.Replace("%", string.Empty);
+            //name = name.Replace("^", string.Empty);
+            //name = name.Replace("&", string.Empty);
+            //name = name.Replace("＆", string.Empty);
+            //name = name.Replace("|", string.Empty);
+            //name = name.Replace("*", string.Empty);
+            //name = name.Replace("(", string.Empty);
+            //name = name.Replace(")", string.Empty);
+            name = name.Replace("-", "_");
+            //name = name.Replace("{", string.Empty);
+            //name = name.Replace("}", string.Empty);
+            //name = name.Replace("[", string.Empty);
+            //name = name.Replace("]", string.Empty);
+            //name = name.Replace("\"", string.Empty);
+            //name = name.Replace("'", string.Empty);
+            //name = name.Replace("’", string.Empty);
+            //name = name.Replace(":", string.Empty);
+            //name = name.Replace(";", string.Empty);
+            //name = name.Replace("<", string.Empty);
+            //name = name.Replace(",", string.Empty);
+            //name = name.Replace(">", string.Empty);
+            //name = name.Replace(".", string.Empty);
+            //name = name.Replace("?", string.Empty);
+            //name = name.Replace("/", string.Empty);
+            //name = name.Replace("+", string.Empty);
+            //name = name.Replace("=", string.Empty);
+            //name = name.Replace("–", string.Empty);
+            //name = name.Replace("＆", string.Empty);
+            //name = name.Replace("％", string.Empty);
+            //name = name.Replace("\t", string.Empty);
+            //name = name.Replace("…", string.Empty);
             name = name.Replace(" ", "_");
             name = name.Replace("____", "_");
             name = name.Replace("___", "_");
             name = name.Replace("__", "_");
+            //…
             if (name.Length == 0) return "_";
-            var sb = new StringBuilder();
-            if (!SyntaxFacts.IsIdentifierStartCharacter(name[0]))
-            {
-                if (name.Length == 1) sb.Append("_");
-                else if (name[0] != '_') sb.Append("_");
-            }
-            foreach (var ch in name)
-            {
-                if (SyntaxFacts.IsIdentifierPartCharacter(ch))
-                {
-                    sb.Append(ch);
-                }
-            }
-            var result = sb.ToString();
-            if (SyntaxFacts.GetKeywordKind(result) != SyntaxKind.None)
-            {
-                result = $"_{result}";
-            }
-            result = result.Replace("__", "_");
-            if (IsJsKeywords(name)) return "_" + name;
-            return result;
+            //var sb = new StringBuilder();
+            //if (!SyntaxFacts.IsIdentifierStartCharacter(name[0]))
+            //{
+            //    if (name.Length == 1) sb.Append("_");
+            //    else if (name[0] != '_') sb.Append("_");
+            //}
+            //foreach (var ch in name)
+            //{
+            //    if (SyntaxFacts.IsIdentifierPartCharacter(ch))
+            //    {
+            //        sb.Append(ch);
+            //    }
+            //}
+            //var result = sb.ToString();
+            //if (SyntaxFacts.GetKeywordKind(result) != SyntaxKind.None)
+            //{
+            //    result = $"_{result}";
+            //}
+            var cs = new CSharpCodeProvider();
+            name = cs.CreateValidIdentifier(name);
+            name = name.Replace("__", "_");
+            if (IsJsKeywords(name) || !IsFirstCharValid(name)) return "_" + name;
+            return name;
+        }
+
+        private static bool IsFirstCharValid(string name)
+        {
+            var firstchar = name[0];
+            if (firstchar >= '0' && firstchar <= '9') return false;
+            return true;
         }
 
         private static bool IsJsKeywords(string name)

@@ -34,7 +34,7 @@ var DevKit;
 				Section: {
 					article_information: {},
 					Article_Keywords: {},
-					kbarticle_description: {}
+					kb_article_description: {}
 				}
 			},
 			notes: {

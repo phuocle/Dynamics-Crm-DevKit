@@ -75,8 +75,6 @@ var OptionSet;
 			Inactive: 2
 		},
 		TargetEntity : {
-			_Deprecated_Dynamics_Customer_Service_Analytics: 10231,
-			_DeprecatedTeams_Engagement_Context: 10854,
 			AAD_User: 10017,
 			Account: 1,
 			Account_Project_Price_List: 10488,
@@ -380,7 +378,9 @@ var OptionSet;
 			Dependency: 7105,
 			Dependency_Feature: 7108,
 			Dependency_Node: 7106,
+			Deprecated_Dynamics_Customer_Service_Analytics: 10231,
 			Deprecated_Workstream_Entity_Configuration: 10731,
+			DeprecatedTeams_Engagement_Context: 10854,
 			Discount: 1013,
 			Discount_List: 1080,
 			Display_String: 4102,

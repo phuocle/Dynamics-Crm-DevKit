@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>net48</TargetFramework>
     <IsPublishable>True</IsPublishable>
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>..\DynamicsCrm.DevKit.pfx</AssemblyOriginatorKeyFile>
@@ -67,11 +67,10 @@
 
   <ItemGroup>
     <PackageReference Include="CmdLine" Version="1.0.7.509" />
-    <PackageReference Include="Community.VisualStudio.Toolkit" Version="17.0.76.268-pre" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.1.0" />
+    <PackageReference Include="Community.VisualStudio.Toolkit.17" Version="17.0.445" />
     <PackageReference Include="Microsoft.CrmSdk.XrmTooling.CoreAssembly" Version="9.1.0.110" />
     <PackageReference Include="Microsoft.CrmSdk.XrmTooling.WpfControls" Version="9.1.0.110" />
-    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.1.32210.191" />
+    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.2.32505.173" />
   </ItemGroup>
 
   <ItemGroup>

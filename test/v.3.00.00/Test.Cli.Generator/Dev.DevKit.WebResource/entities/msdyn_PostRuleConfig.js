@@ -1,12 +1,12 @@
 ﻿//@ts-check
 ///<reference path="msdyn_PostRuleConfig.d.ts" />
 "use strict";
-var formAutopost_rule = (function () {
+var formAuto_post_rule = (function () {
 	"use strict";
-	/** @type DevKit.FormAutopost_rule */
+	/** @type DevKit.FormAuto_post_rule */
 	var form = null;
 	async function onLoad(executionContext) {
-		form = new DevKit.FormAutopost_rule(executionContext);
+		form = new DevKit.FormAuto_post_rule(executionContext);
 
 	}
 	async function onSave(executionContext) {

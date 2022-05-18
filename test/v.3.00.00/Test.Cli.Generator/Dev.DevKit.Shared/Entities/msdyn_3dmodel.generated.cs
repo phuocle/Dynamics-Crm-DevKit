@@ -15,15 +15,15 @@ namespace Dev.DevKit.Shared.Entities.msdyn_3dmodelOptionSets
 		/// <summary>
 		/// .glb = 100000001
 		/// </summary>
-		_glb = 100000001,
+		glb = 100000001,
 		/// <summary>
 		/// .gltf = 100000000
 		/// </summary>
-		_gltf = 100000000,
+		gltf = 100000000,
 		/// <summary>
 		/// .obj = 100000002
 		/// </summary>
-		_obj = 100000002
+		obj = 100000002
 	}
 
 	public enum msdyn_StorageType

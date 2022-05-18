@@ -12,7 +12,7 @@
       "rootnamespace": "DevKit",
       "rootfolder": "",
       "type": "JsForm",
-      "entities": "msdyn_dataanalyticsreport_forecast"
+      "entities": "*"
     },
     {
       "profile": "JS-WEBAPI",

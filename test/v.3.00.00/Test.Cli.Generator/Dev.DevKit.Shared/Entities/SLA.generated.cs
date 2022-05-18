@@ -45,14 +45,6 @@ namespace Dev.DevKit.Shared.Entities.SLAOptionSets
 	public enum ObjectTypeCode
 	{
 		/// <summary>
-		/// [Deprecated] Dynamics Customer Service Analytics = 10231
-		/// </summary>
-		_Deprecated_Dynamics_Customer_Service_Analytics = 10231,
-		/// <summary>
-		/// (Deprecated)Teams Engagement Context = 10854
-		/// </summary>
-		_DeprecatedTeams_Engagement_Context = 10854,
-		/// <summary>
 		/// AAD User = 10017
 		/// </summary>
 		AAD_User = 10017,
@@ -1265,9 +1257,17 @@ namespace Dev.DevKit.Shared.Entities.SLAOptionSets
 		/// </summary>
 		Dependency_Node = 7106,
 		/// <summary>
+		/// [Deprecated] Dynamics Customer Service Analytics = 10231
+		/// </summary>
+		Deprecated_Dynamics_Customer_Service_Analytics = 10231,
+		/// <summary>
 		/// Deprecated Workstream Entity Configuration = 10731
 		/// </summary>
 		Deprecated_Workstream_Entity_Configuration = 10731,
+		/// <summary>
+		/// (Deprecated)Teams Engagement Context = 10854
+		/// </summary>
+		DeprecatedTeams_Engagement_Context = 10854,
 		/// <summary>
 		/// Discount = 1013
 		/// </summary>

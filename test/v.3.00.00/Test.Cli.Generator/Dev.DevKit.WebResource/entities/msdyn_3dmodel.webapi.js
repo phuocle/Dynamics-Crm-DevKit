@@ -131,9 +131,9 @@ var OptionSet;
 (function (OptionSet) {
 	OptionSet.msdyn_3dmodel = {
 		msdyn_FileType : {
-			_glb: 100000001,
-			_gltf: 100000000,
-			_obj: 100000002
+			glb: 100000001,
+			gltf: 100000000,
+			obj: 100000002
 		},
 		msdyn_StorageType : {
 			Note_Attachment: 100000000,

@@ -8,7 +8,7 @@ declare namespace DevKit {
 		interface tab_general_Sections {
 			article_information: DevKit.Controls.Section;
 			Article_Keywords: DevKit.Controls.Section;
-			kbarticle_description: DevKit.Controls.Section;
+			kb_article_description: DevKit.Controls.Section;
 		}
 		interface tab_notes_Sections {
 			notes: DevKit.Controls.Section;

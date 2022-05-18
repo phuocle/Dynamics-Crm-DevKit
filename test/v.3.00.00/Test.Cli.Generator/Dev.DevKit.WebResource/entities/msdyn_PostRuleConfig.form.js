@@ -3,7 +3,7 @@
 var DevKit;
 (function (DevKit) {
 	'use strict';
-	DevKit.FormAutopost_rule = function(executionContext, defaultWebResourceName) {
+	DevKit.FormAuto_post_rule = function(executionContext, defaultWebResourceName) {
 		var formContext = null;
 		if (executionContext !== undefined) {
 			if (executionContext.getFormContext === undefined) {

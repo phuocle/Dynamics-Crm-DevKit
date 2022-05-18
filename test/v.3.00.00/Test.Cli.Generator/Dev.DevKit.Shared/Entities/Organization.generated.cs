@@ -25,10 +25,6 @@ namespace Dev.DevKit.Shared.Entities.OrganizationOptionSets
 	public enum CurrencyFormatCode
 	{
 		/// <summary>
-		/// 123 $ = 3
-		/// </summary>
-		_123_ = 3,
-		/// <summary>
 		/// $123 = 0
 		/// </summary>
 		_123_0 = 0,
@@ -39,7 +35,11 @@ namespace Dev.DevKit.Shared.Entities.OrganizationOptionSets
 		/// <summary>
 		/// $ 123 = 2
 		/// </summary>
-		_123_2 = 2
+		_123_2 = 2,
+		/// <summary>
+		/// 123 $ = 3
+		/// </summary>
+		_123_3 = 3
 	}
 
 	public enum DefaultRecurrenceEndRangeType
@@ -323,11 +323,11 @@ namespace Dev.DevKit.Shared.Entities.OrganizationOptionSets
 		/// <summary>
 		/// (Default) Scheduling Engine = 0
 		/// </summary>
-		_Default_Scheduling_Engine = 0,
+		Default_Scheduling_Engine = 0,
 		/// <summary>
 		/// (Deprecated) Universal Resource Scheduling = 192350000
 		/// </summary>
-		_Deprecated_Universal_Resource_Scheduling = 192350000
+		Deprecated_Universal_Resource_Scheduling = 192350000
 	}
 
 	public enum SharePointDeploymentType

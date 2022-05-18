@@ -353,6 +353,7 @@ namespace DynamicsCrm.DevKit.Shared
                 name = name.Replace("＆", string.Empty);
                 name = name.Replace("％", string.Empty);
                 name = name.Replace("\t", string.Empty);
+                //
                 name = name.Replace("___", "_");
                 name = name.Replace("__", "_");
                 var firstchar = name[0];
@@ -360,6 +361,8 @@ namespace DynamicsCrm.DevKit.Shared
                 name = string.Concat(name.Normalize(NormalizationForm.FormD).Where(ch => CharUnicodeInfo.GetUnicodeCategory(ch) != UnicodeCategory.NonSpacingMark)).Normalize(NormalizationForm.FormC);
                 var cs = new CSharpCodeProvider();
                 name = cs.CreateValidIdentifier(name);
+                if (!cs.IsValidIdentifier(name))
+                    throw new Exception("bookableresource");
                 return name;
             }
             catch

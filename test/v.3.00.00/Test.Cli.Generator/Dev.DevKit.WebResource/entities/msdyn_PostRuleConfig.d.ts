@@ -1,7 +1,7 @@
 ﻿//@ts-check
 ///<reference path="devkit.d.ts" />
 declare namespace DevKit {
-	namespace FormAutopost_rule {
+	namespace FormAuto_post_rule {
 		interface Tabs {
 		}
 		interface Body {
@@ -30,7 +30,7 @@ declare namespace DevKit {
 		interface Process extends DevKit.Controls.IProcess {
 		}
 	}
-	class FormAutopost_rule extends DevKit.IForm {
+	class FormAuto_post_rule extends DevKit.IForm {
 		/**
 		* Auto-post rule [Main Form]
 		* @param executionContext the execution context
@@ -39,15 +39,15 @@ declare namespace DevKit {
 		constructor(executionContext: any, defaultWebResourceName?: string);
 		/** Utility functions/methods/objects for Dynamics 365 form */
 		Utility: DevKit.Utility;
-		/** The Body section of form Autopost_rule */
-		Body: DevKit.FormAutopost_rule.Body;
-		/** The Footer section of form Autopost_rule */
-		Footer: DevKit.FormAutopost_rule.Footer;
-		/** The Navigation of form Autopost_rule */
-		Navigation: DevKit.FormAutopost_rule.Navigation;
-		/** The Process of form Autopost_rule */
-		Process: DevKit.FormAutopost_rule.Process;
-		/** The SidePanes of form Autopost_rule */
+		/** The Body section of form Auto_post_rule */
+		Body: DevKit.FormAuto_post_rule.Body;
+		/** The Footer section of form Auto_post_rule */
+		Footer: DevKit.FormAuto_post_rule.Footer;
+		/** The Navigation of form Auto_post_rule */
+		Navigation: DevKit.FormAuto_post_rule.Navigation;
+		/** The Process of form Auto_post_rule */
+		Process: DevKit.FormAuto_post_rule.Process;
+		/** The SidePanes of form Auto_post_rule */
 		SidePanes: DevKit.SidePanes;
 	}
 	namespace Formmsdyn_PostRuleConfig_Information {

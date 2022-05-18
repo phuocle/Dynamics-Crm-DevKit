@@ -116,7 +116,7 @@ var DevKit;
 			general: {
 				Section: {
 					administration: {},
-					email_configuration: {},
+					e_mail_configuration: {},
 					online_account_information: {},
 					onpremise_account_information: {},
 					organization_information: {},
@@ -375,7 +375,7 @@ var DevKit;
 			ADMINISTRATION_TAB: {
 				Section: {
 					administration: {},
-					email_configuration: {}
+					e_mail_configuration: {}
 				}
 			},
 			SUMMARY_TAB: {
