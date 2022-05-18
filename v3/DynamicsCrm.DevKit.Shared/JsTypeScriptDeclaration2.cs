@@ -51,6 +51,7 @@ namespace DynamicsCrm.DevKit.Shared
             {
                 if (XrmHelper.IsOptionSet(attribute))
                 {
+                    if (attribute.SchemaName == "OwnerIdType") continue;
                     var attributeSchemaName = Utility.SafeDeclareName(attribute.SchemaName, GeneratorType.jsform, EntityMetadata.SchemaName);
                     var values = attribute.OptionSetValues();
                     if (values.Count == 0)

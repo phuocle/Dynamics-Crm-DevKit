@@ -51,18 +51,28 @@ namespace DynamicsCrm.DevKit.Shared
             {
                 if (XrmHelper.IsOptionSet(attribute))
                 {
+                    if (attribute.SchemaName == "OwnerIdType") continue;
                     var attributeSchemaName = Utility.SafeDeclareName(attribute.SchemaName, GeneratorType.jsform, EntityMetadata.SchemaName);
                     var values = attribute.OptionSetValues();
-                    if (values.Count == 0) continue;
-                    _d_ts += $"{TAB}{TAB}enum {attributeSchemaName} {{{NEW_LINE}";
-                    foreach (var value in values)
+                    if (values.Count == 0)
                     {
-                        _d_ts += $"{TAB}{TAB}{TAB}/** {value.Value} */{NEW_LINE}";
-                        _d_ts += $"{TAB}{TAB}{TAB}{value.Name},{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}enum {attributeSchemaName} {{{NEW_LINE}";
+                        _d_ts = _d_ts.TrimEnd($",{NEW_LINE}".ToCharArray());
+                        _d_ts += $"{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}}}{NEW_LINE}";
                     }
-                    _d_ts = _d_ts.TrimEnd($",{NEW_LINE}".ToCharArray());
-                    _d_ts += $"{NEW_LINE}";
-                    _d_ts += $"{TAB}{TAB}}}{NEW_LINE}";
+                    else
+                    {
+                        _d_ts += $"{TAB}{TAB}enum {attributeSchemaName} {{{NEW_LINE}";
+                        foreach (var value in values)
+                        {
+                            _d_ts += $"{TAB}{TAB}{TAB}/** {value.Value} */{NEW_LINE}";
+                            _d_ts += $"{TAB}{TAB}{TAB}{value.Name},{NEW_LINE}";
+                        }
+                        _d_ts = _d_ts.TrimEnd($",{NEW_LINE}".ToCharArray());
+                        _d_ts += $"{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}}}{NEW_LINE}";
+                    }
                 }
             }
             _d_ts += $"{TAB}{TAB}enum RollupState {{{NEW_LINE}";
