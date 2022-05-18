@@ -161,7 +161,6 @@ namespace DynamicsCrm.DevKit.Shared
                 {
                     var tmp = string.Empty;
                     var values = attribute.OptionSetValues();
-                    if (values.Count == 0) continue;
                     foreach (var value in values)
                     {
                         tmp += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
