@@ -32,5 +32,7 @@
 		<file src="..\bin\Release\net48\Microsoft.Xrm.Tooling.Ui.Styles.dll" target="tools\Microsoft.Xrm.Tooling.Ui.Styles.dll" />
 		<file src="..\bin\Release\net48\Microsoft.Xrm.Tooling.WebResourceUtility.dll" target="tools\Microsoft.Xrm.Tooling.WebResourceUtility.dll" />
 		<file src="..\bin\Release\net48\Newtonsoft.Json.dll" target="tools\Newtonsoft.Json.dll" />
+		<file src="..\bin\Release\net48\Microsoft.VisualStudio.Shell.15.0.dll" target="tools\Microsoft.VisualStudio.Shell.15.0.dll" />
+		<file src="..\bin\Release\net48\Microsoft.VisualStudio.Shell.Framework.dll" target="tools\Microsoft.VisualStudio.Shell.Framework.dll" />
     </files>
 </package>
