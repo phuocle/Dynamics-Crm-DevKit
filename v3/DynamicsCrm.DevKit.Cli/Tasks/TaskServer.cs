@@ -145,7 +145,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                                 }
                                 else
                                 {
-                                    CliLog.WriteLineError(ConsoleColor.Yellow, $"The message {attribute.Message} of {attribute.Name} not support Image. Deploy assembly stopped.");
+                                    CliLog.WriteLineError(ConsoleColor.Yellow, $"The message {attribute.Message} of {attribute.Name} not support Image. Assemply deployed, but the deployment of this assembly stopped.");
                                     return;
                                 }
                             }
@@ -186,19 +186,19 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var checkDataSource = dataSource.ToLower().StartsWith(Prefix.ToLower()) ? dataSource : $"{Prefix?.ToLower()}{dataSource}";
             if (!IsExistDataSource($"{checkDataSource}"))
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"DataSource {dataSource} with prefix {Prefix.ToLower()} not exist ({checkDataSource}). Deploy assembly stopped.");
+                CliLog.WriteLineError(ConsoleColor.Yellow, $"DataSource {dataSource} with prefix {Prefix.ToLower()} not exist ({checkDataSource}). Assemply deployed, but the deployment of this assembly stopped.");
                 return false;
             }
             var countRetrieve = dataProviderEvents.Count(x => x.Message == "Retrieve" && x.DataSource == dataSource);
             if (countRetrieve != 0 && countRetrieve != 1)
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"Multiple message Retrieve found with data source {dataSource} ({checkDataSource}). Deploy assembly stopped.");
+                CliLog.WriteLineError(ConsoleColor.Yellow, $"Multiple message Retrieve found with data source {dataSource} ({checkDataSource}). Assemply deployed, but the deployment of this assembly stopped.");
                 return false;
             }
             var countRetrieveMultiple = dataProviderEvents.Count(x => x.Message == "RetrieveMultiple" && x.DataSource == dataSource);
             if (countRetrieveMultiple != 0 && countRetrieveMultiple != 1)
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"Multiple message RetrieveMultiple found with data source {dataSource} ({checkDataSource}). Deploy assembly stopped.");
+                CliLog.WriteLineError(ConsoleColor.Yellow, $"Multiple message RetrieveMultiple found with data source {dataSource} ({checkDataSource}). Assemply deployed, but the deployment of this assembly stopped.");
                 return false;
             }
             if (IsVirtualTableSupportCRUD())
@@ -206,19 +206,19 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 var countCreate = dataProviderEvents.Count(x => x.Message == "Create" && x.DataSource == dataSource);
                 if (countCreate != 0 && countCreate != 1)
                 {
-                    CliLog.WriteLineError(ConsoleColor.Yellow, $"Multiple message Create found with data source {dataSource} ({checkDataSource}). Deploy assembly stopped.");
+                    CliLog.WriteLineError(ConsoleColor.Yellow, $"Multiple message Create found with data source {dataSource} ({checkDataSource}). Assemply deployed, but the deployment of this assembly stopped.");
                     return false;
                 }
                 var countUpdate = dataProviderEvents.Count(x => x.Message == "Update" && x.DataSource == dataSource);
                 if (countUpdate != 0 && countUpdate != 1)
                 {
-                    CliLog.WriteLineError(ConsoleColor.Yellow, $"Multiple message Update found with data source {dataSource} ({checkDataSource}). Deploy assembly stopped.");
+                    CliLog.WriteLineError(ConsoleColor.Yellow, $"Multiple message Update found with data source {dataSource} ({checkDataSource}). Assemply deployed, but the deployment of this assembly stopped.");
                     return false;
                 }
                 var countDelete = dataProviderEvents.Count(x => x.Message == "Delete" && x.DataSource == dataSource);
                 if (countDelete != 0 && countDelete != 1)
                 {
-                    CliLog.WriteLineError(ConsoleColor.Yellow, $"Multiple message Delete found with data source {dataSource} ({checkDataSource}). Deploy assembly stopped.");
+                    CliLog.WriteLineError(ConsoleColor.Yellow, $"Multiple message Delete found with data source {dataSource} ({checkDataSource}). Assemply deployed, but the deployment of this assembly stopped.");
                     return false;
                 }
             }
@@ -395,7 +395,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var rows = CrmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
             if (rows.Entities.Count != 1)
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"Custom Api with message {attribute.Message} not found. Deploy assembly stopped.");
+                CliLog.WriteLineError(ConsoleColor.Yellow, $"Custom Api with message {attribute.Message} not found. Assemply deployed, but the deployment of this assembly stopped.");
                 return;
             }
             if (rows.Entities[0].GetAttributeValue<EntityReference>("plugintypeid")?.Id.ToString("D") == pluginTypeId.ToString("D"))
@@ -469,7 +469,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 if (rows.Entities.Count > 0 && rows.Entities.Count != 1)
                 {
-                    CliLog.WriteLineError(ConsoleColor.Yellow, $"Found more than 1 plugin image name {imageName}. Deploy assembly stopped.");
+                    CliLog.WriteLineError(ConsoleColor.Yellow, $"Found more than 1 plugin image name {imageName}. Assemply deployed, but the deployment of this assembly stopped.");
                     return null;
                 }
             }
@@ -505,13 +505,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         if (fe.Message.Contains("entity doesn't contain attribute with"))
                         {
-                            CliLog.WriteLineError(ConsoleColor.Yellow, $"Plugin Step {pluginStepName} have invalid {imageType.ToString()} Attribute {imageAttributes}. Deploy assembly stopped.");
+                            CliLog.WriteLineError(ConsoleColor.Yellow, $"Plugin Step {pluginStepName} have invalid {imageType.ToString()} Attribute {imageAttributes}. Assemply deployed, but the deployment of this assembly stopped.");
                         }
                         return null;
                     }
                     catch (Exception e)
                     {
-                        CliLog.WriteLineError(ConsoleColor.Yellow, $"{e.Message}. Deploy assembly stopped.");
+                        CliLog.WriteLineError(ConsoleColor.Yellow, $"{e.Message}. Assemply deployed, but the deployment of this assembly stopped.");
                         return null;
                     }
                 }
@@ -551,13 +551,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         if (fe.Message.Contains("entity doesn't contain attribute with"))
                         {
-                            CliLog.WriteLineError(ConsoleColor.Yellow, $"Plugin Step {pluginStepName} have invalid {imageType.ToString()} Attribute {imageAttributes}. Deploy assembly stopped.");
+                            CliLog.WriteLineError(ConsoleColor.Yellow, $"Plugin Step {pluginStepName} have invalid {imageType.ToString()} Attribute {imageAttributes}. Assemply deployed, but the deployment of this assembly stopped.");
                         }
                         return null;
                     }
                     catch (Exception e)
                     {
-                        CliLog.WriteLineError(ConsoleColor.Yellow, $"{e.Message}. Deploy assembly stopped.");
+                        CliLog.WriteLineError(ConsoleColor.Yellow, $"{e.Message}. Assemply deployed, but the deployment of this assembly stopped.");
                         return null;
                     }
                 }
@@ -603,7 +603,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 if (attribute?.FilteringAttributes?.Trim().Length == 0)
                 {
-                    CliLog.WriteLineError(ConsoleColor.Yellow, $"{type.FullName} Update message need provide FilteringAttributes value. Deploy assembly stopped.");
+                    CliLog.WriteLineError(ConsoleColor.Yellow, $"{type.FullName} Update message need provide FilteringAttributes value. Assemply deployed, but the deployment of this assembly stopped.");
                     return null;
                 }
                 if (attribute?.FilteringAttributes.Trim() == "*")
@@ -633,7 +633,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 if (rows.Entities.Count > 0 && rows.Entities.Count != 1)
                 {
-                    CliLog.WriteLineError(ConsoleColor.Yellow, $"Found more than 1 step name {type.FullName}. Deploy assembly stopped.");
+                    CliLog.WriteLineError(ConsoleColor.Yellow, $"Found more than 1 step name {type.FullName}. Assemply deployed, but the deployment of this assembly stopped.");
                     return null;
                 }
             }
@@ -681,13 +681,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     if (fe.Message.Contains("The dependent component Attribute "))
                     {
-                        CliLog.WriteLineError(ConsoleColor.Yellow, $"Plugin Step {attribute.Name} have invalid Image Attribute {attribute.FilteringAttributes}. Deploy assembly stopped.");
+                        CliLog.WriteLineError(ConsoleColor.Yellow, $"Plugin Step {attribute.Name} have invalid Image Attribute {attribute.FilteringAttributes}. Assemply deployed, but the deployment of this assembly stopped.");
                     }
                     return null;
                 }
                 catch (Exception e)
                 {
-                    CliLog.WriteLineError(ConsoleColor.Yellow, $"{e.Message}. Deploy assembly stopped.");
+                    CliLog.WriteLineError(ConsoleColor.Yellow, $"{e.Message}. Assemply deployed, but the deployment of this assembly stopped.");
                     return null;
                 }
             }
@@ -755,13 +755,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         if (fe.Message.Contains("The dependent component Attribute "))
                         {
-                            CliLog.WriteLineError(ConsoleColor.Yellow, $"Plugin Step {attribute.Name} have invalid Image Attribute {attribute.FilteringAttributes}. Deploy assembly stopped.");
+                            CliLog.WriteLineError(ConsoleColor.Yellow, $"Plugin Step {attribute.Name} have invalid Image Attribute {attribute.FilteringAttributes}. Assemply deployed, but the deployment of this assembly stopped.");
                         }
                         return null;
                     }
                     catch (Exception e)
                     {
-                        CliLog.WriteLineError(ConsoleColor.Yellow, $"{e.Message}. Deploy assembly stopped.");
+                        CliLog.WriteLineError(ConsoleColor.Yellow, $"{e.Message}. Assemply deployed, but the deployment of this assembly stopped.");
                         return null;
                     }
                 }
@@ -872,7 +872,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 if (rows.Entities.Count > 0 && rows.Entities.Count != 1)
                 {
-                    CliLog.WriteLineError(ConsoleColor.Yellow, $"Found more than 1 type name {type.FullName}. Deploy assembly stopped.");
+                    CliLog.WriteLineError(ConsoleColor.Yellow, $"Found more than 1 type name {type.FullName}. Assemply deployed, but the deployment of this assembly stopped.");
                     return null;
                 }
             }
@@ -927,7 +927,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 catch (FaultException fe)
                 {
-                    CliLog.WriteLineError(ConsoleColor.Yellow, $"{fe.Message}. Deploy assembly stopped.");
+                    CliLog.WriteLineError(ConsoleColor.Yellow, $"{fe.Message}. Assemply deployed, but the deployment of this assembly stopped.");
                     return null;
                 }
                 if (IsWorkflowType(type))
@@ -978,7 +978,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 if (rows.Entities.Count > 0 && rows.Entities.Count != 1)
                 {
-                    CliLog.WriteLineError(ConsoleColor.Yellow, $"Found more than 1 plugin assembly name {assemblyName}. Deploy assembly stopped.");
+                    CliLog.WriteLineError(ConsoleColor.Yellow, $"Found more than 1 plugin assembly name {assemblyName}. Assemply deployed, but the deployment of this assembly stopped.");
                     return null;
                 }
             }
@@ -1027,7 +1027,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     }
                     catch (FaultException fe)
                     {
-                        CliLog.WriteLineError(ConsoleColor.Yellow, $"{fe.Message}. Deploy assembly stopped.");
+                        CliLog.WriteLineError(ConsoleColor.Yellow, $"{fe.Message}. Assemply deployed, but the deployment of this assembly stopped.");
                         return null;
                     }
                 }
@@ -1079,7 +1079,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 var typeName = entity.GetAttributeValue<string>("typename");
                 if (types.Count(x => x.FullName == typeName) == 0)
                 {
-                    CliLog.WriteLineError(ConsoleColor.Yellow, $"Type: '{typeName}' not found in the assembly file. This type: '{typeName}' already registered to CRM/CDS. Deploy assembly stopped.");
+                    CliLog.WriteLineError(ConsoleColor.Yellow, $"Type: '{typeName}' not found in the assembly file. This type: '{typeName}' already registered to CRM/CDS. Assemply deployed, but the deployment of this assembly stopped.");
                     CliLog.WriteLineWarning(ConsoleColor.Yellow, $"If you need to deploy this assembly. Please manually remove this type from Plugin Registration Tool and try it again.");
                     return false;
                 }
