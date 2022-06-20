@@ -86,6 +86,7 @@
     <Content Include="..\version.txt">
       <Link>Nuget\version.txt</Link>
     </Content>
+    <Content Include="images\icon.png" />
     <Content Include="license\LICENSE.txt" />
     <None Include="..\DynamicsCrm.DevKit.pfx">
       <Link>DynamicsCrm.DevKit.pfx</Link>
@@ -234,6 +235,7 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="..\DynamicsCrm.DevKit.Shared\DynamicsCrm.DevKit.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

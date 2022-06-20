@@ -21,7 +21,7 @@
     <ProjectItem ReplaceParameters="true" TargetFileName="$class$Test.cs">CustomApi.cs</ProjectItem>
   </TemplateContent>
   <WizardExtension>
-    <Assembly>DynamicsCrm.DevKit.Wizard, Version=2.13.33.0, Culture=en, PublicKeyToken=98cbb7bd3db31604</Assembly>
+    <Assembly>DynamicsCrm.DevKit.Wizard, Version=2.15.15.0, Culture=en, PublicKeyToken=98cbb7bd3db31604</Assembly>
     <FullClassName>DynamicsCrm.DevKit.Wizard.ItemTemplates.Test</FullClassName>
   </WizardExtension>
 </VSTemplate>

@@ -7,13 +7,14 @@
     <authors>PhuocLe</authors>
     <license type="file">license\LICENSE.txt</license>
     <projectUrl>https://github.com/phuocle/Dynamics-Crm-DevKit</projectUrl>
-    <iconUrl>https://raw.githubusercontent.com/phuocle/Dynamics-Crm-DevKit/master/icon.png</iconUrl>
+    <icon>images\icon.png</icon>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Tool for DynamicsCrm.DevKit tool</description>
     <language>en-US</language>
     <tags>Dynamics, Dynamics365, CRM, Tool, DevKit, Analyzers</tags>
   </metadata>
   <files>
+    <file src="..\images\icon.png" target="images\icon.png" />
     <file src="..\Release\DynamicsCrm.DevKit.Tool.exe" target="tools\DynamicsCrm.DevKit.Tool.exe" />
     <file src="..\Release\DynamicsCrm.DevKit.Tool.exe.config" target="tools\DynamicsCrm.DevKit.Tool.exe.config" />
     <file src="..\Release\CmdLine.dll" target="tools\CmdLine.dll" />
