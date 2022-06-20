@@ -1212,9 +1212,14 @@ var devKit = (function () {
                 }
                 return (type + field).toLowerCase();
             })();
-            var control = formContext.getControl(logicalName);
+            var control = null;
+            if (formContext.getControl) {
+                control = formContext.getControl(logicalName);
+            }
             if (isNullOrUndefined(control)) {
+                if (formContext.getControl) {
                 control = formContext.getControl(field);
+            }
             }
             var attribute = (function () {
                 if (formContext) {
