@@ -6,9 +6,10 @@ namespace DynamicsCrm.DevKit.Tool
     {
         public static void ForceWriteAllText(string file, string content)
         {
+            var utf8WithoutBom = new System.Text.UTF8Encoding(false);
             if (!File.Exists(file))
             {
-                File.WriteAllText(file, content, System.Text.Encoding.UTF8);
+                File.WriteAllText(file, content, utf8WithoutBom);
             }
             else
             {
@@ -17,7 +18,7 @@ namespace DynamicsCrm.DevKit.Tool
                 {
                     File.SetAttributes(file, attributes & ~FileAttributes.ReadOnly);
                 }
-                File.WriteAllText(file, content, System.Text.Encoding.UTF8);
+                File.WriteAllText(file, content, utf8WithoutBom);
             }
         }
     }
