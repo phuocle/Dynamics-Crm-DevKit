@@ -45,14 +45,14 @@
 
 	<ItemGroup>
 	  <PackageReference Include="CmdLine" Version="1.0.7.509" />
-	  <PackageReference Include="Community.VisualStudio.Toolkit.17" Version="17.0.445" />
-	  <PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="9.0.2.42" />
+	  <PackageReference Include="Community.VisualStudio.Toolkit.17" Version="17.0.451" />
+	  <PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="9.0.2.45" />
 	  <PackageReference Include="Microsoft.CrmSdk.Deployment" Version="9.0.2.34" />
-	  <PackageReference Include="Microsoft.CrmSdk.Workflow" Version="9.0.2.42" />
-	  <PackageReference Include="Microsoft.CrmSdk.XrmTooling.CoreAssembly" Version="9.1.0.110" />
+	  <PackageReference Include="Microsoft.CrmSdk.Workflow" Version="9.0.2.45" />
+	  <PackageReference Include="Microsoft.CrmSdk.XrmTooling.CoreAssembly" Version="9.1.1.1" />
 	  <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-	  <PackageReference Include="NuGet.Packaging" Version="6.1.0" />
-	  <PackageReference Include="NuGet.Protocol" Version="6.1.0" />
+	  <PackageReference Include="NuGet.Packaging" Version="6.2.1" />
+	  <PackageReference Include="NuGet.Protocol" Version="6.2.1" />
 	</ItemGroup>
 
 	<ItemGroup>

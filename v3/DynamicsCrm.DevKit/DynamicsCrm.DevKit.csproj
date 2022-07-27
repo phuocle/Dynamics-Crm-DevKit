@@ -85,7 +85,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Community.VisualStudio.Toolkit.17">
-      <Version>17.0.445</Version>
+      <Version>17.0.451</Version>
     </PackageReference>
     <PackageReference Include="Community.VisualStudio.VSCT">
       <Version>16.0.29.6</Version>
@@ -93,24 +93,24 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.CrmSdk.CoreAssemblies">
-      <Version>9.0.2.42</Version>
+      <Version>9.0.2.45</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.CrmSdk.Deployment">
       <Version>9.0.2.34</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.CrmSdk.Workflow">
-      <Version>9.0.2.42</Version>
+      <Version>9.0.2.45</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.CrmSdk.XrmTooling.CoreAssembly">
-      <Version>9.1.0.110</Version>
+      <Version>9.1.1.1</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.CrmSdk.XrmTooling.WpfControls">
-      <Version>9.1.0.110</Version>
+      <Version>9.1.1.1</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.2.32505.173" ExcludeAssets="runtime">
       <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.1.4057">
+    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.2.2190">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
