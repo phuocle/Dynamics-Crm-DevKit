@@ -193,7 +193,7 @@ ClientBin/
 *.dbmdl
 *.dbproj.schemaview
 *.jfm
-*.pfx
+!*.pfx
 !PL.DynamicsCrm.DevKit.pfx
 *.publishsettings
 node_modules/
