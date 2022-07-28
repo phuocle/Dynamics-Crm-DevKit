@@ -33,8 +33,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Server", "Dev.De
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.SolutionPackager", "Dev.DevKit.SolutionPackager\Dev.DevKit.SolutionPackager.csproj", "{1DD89E73-5314-4A94-AF3B-60FD5D2C572E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Plugin.PhoneCall", "Dev.DevKit.Plugin.PhoneCall\Dev.DevKit.Plugin.PhoneCall.csproj", "{1D7ADF6F-F511-44D5-9953-B92889EB60E1}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{1d7adf6f-f511-44d5-9953-b92889eb60e1}*SharedItemsImports = 4
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{35bf489f-69a2-4661-ad26-5d1d2f79083b}*SharedItemsImports = 4
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{3ad64e44-6747-4a10-9aed-7e7ba32d7aac}*SharedItemsImports = 4
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{3d20ae0a-ddba-4bb6-87cf-aaa2c8d6d73d}*SharedItemsImports = 4
@@ -91,6 +94,10 @@ Global
 		{1DD89E73-5314-4A94-AF3B-60FD5D2C572E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1DD89E73-5314-4A94-AF3B-60FD5D2C572E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1DD89E73-5314-4A94-AF3B-60FD5D2C572E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D7ADF6F-F511-44D5-9953-B92889EB60E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D7ADF6F-F511-44D5-9953-B92889EB60E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D7ADF6F-F511-44D5-9953-B92889EB60E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D7ADF6F-F511-44D5-9953-B92889EB60E1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
