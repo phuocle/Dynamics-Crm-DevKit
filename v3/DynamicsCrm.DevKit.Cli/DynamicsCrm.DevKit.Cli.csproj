@@ -17,6 +17,7 @@
 		<OutputType>Exe</OutputType>
 		<StartupObject>DynamicsCrm.DevKit.Cli.Program</StartupObject>
 		<BaseOutputPath>bin</BaseOutputPath>
+		<DelaySign>False</DelaySign>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

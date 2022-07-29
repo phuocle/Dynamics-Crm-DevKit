@@ -15,6 +15,7 @@
 				<Parent guid="DynamicsCrmDevKit" id="MenuGroup"/>
 				<Icon guid="guidImages" id="bmpPicPL" />
 				<CommandFlag>DynamicVisibility</CommandFlag>
+				<CommandFlag>DefaultInvisible</CommandFlag>
 				<Strings>
 					<ButtonText>Deploy WebResource ...</ButtonText>
 				</Strings>

@@ -138,5 +138,10 @@ namespace DynamicsCrm.DevKit.Shared
             }
             return update;
         }
+
+        public EntityReference ToEntityReference()
+        {
+            return Entity.ToEntityReference();
+        }
     }
 }
