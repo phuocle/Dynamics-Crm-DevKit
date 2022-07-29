@@ -3,16 +3,10 @@ using System.Diagnostics;
 
 namespace Dev.DevKit.Shared
 {
-    public enum ImageType
-    {
-        Pre,
-        Post
-    }
-
     public enum ExecutionModeEnum
     {
-        Synchronous = 0,
-        Asynchronous = 1
+        Synchronous,
+        Asynchronous
     }
 
     public enum ImageTypeEnum
@@ -30,6 +24,7 @@ namespace Dev.DevKit.Shared
 
     public enum PluginStepOperationEnum
     {
+        Delete = 0,
         Activate = 0,
         Deactivate = 1
     }
@@ -50,10 +45,108 @@ namespace Dev.DevKit.Shared
         CustomApi = 4
     }
 
+    public enum MessageNameEnum
+    {
+        AddItem,
+        AddListMembers,
+        AddMember,
+        AddMembers,
+        AddPrincipalToQueue,
+        AddPrivileges,
+        AddProductToKit,
+        AddRecurrence,
+        AddToQueue,
+        AddUserToRecordTeam,
+        ApplyRecordCreationAndUpdateRule,
+        Assign,
+        Associate,
+        BackgroundSend,
+        Book,
+        CalculatePrice,
+        Cancel,
+        CheckIncoming,
+        CheckPromote,
+        Clone,
+        CloneMobileOfflineProfile,
+        CloneProduct,
+        Close,
+        CopyDynamicListToStatic,
+        CopySystemForm,
+        Create,
+        CreateException,
+        CreateInstance,
+        CreateKnowledgeArticleTranslation,
+        CreateKnowledgeArticleVersion,
+        Delete,
+        DeleteOpenInstances,
+        DeliverIncoming,
+        DeliverPromote,
+        Disassociate,
+        Execute,
+        ExecuteById,
+        Export,
+        GenerateSocialProfile,
+        GetDefaultPriceLevel,
+        GrantAccess,
+        Import,
+        LockInvoicePricing,
+        LockSalesOrderPricing,
+        Lose,
+        Merge,
+        ModifyAccess,
+        PickFromQueue,
+        Publish,
+        PublishAll,
+        PublishTheme,
+        QualifyLead,
+        Recalculate,
+        ReleaseToQueue,
+        RemoveFromQueue,
+        RemoveItem,
+        RemoveMember,
+        RemoveMembers,
+        RemovePrivilege,
+        RemoveProductFromKit,
+        RemoveRelated,
+        RemoveUserFromRecordTeam,
+        ReplacePrivileges,
+        Reschedule,
+        Retrieve,
+        RetrieveExchangeRate,
+        RetrieveFilteredForms,
+        RetrieveMultiple,
+        RetrievePersonalWall,
+        RetrievePrincipalAccess,
+        RetrieveRecordWall,
+        RetrieveSharedPrincipalsAndAccess,
+        RetrieveUnpublished,
+        RetrieveUnpublishedMultiple,
+        RetrieveUserQueues,
+        RevokeAccess,
+        RouteTo,
+        Send,
+        SendFromTemplate,
+        SetLocLabels,
+        SetRelated,
+        SetState,
+        TriggerServiceEndpointCheck,
+        UnlockInvoicePricing,
+        UnlockSalesOrderPricing,
+        Update,
+        ValidateRecurrenceRule,
+        Win
+    }
+
     [DebuggerNonUserCode()]
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = true)]
     public class CrmPluginRegistrationAttribute : Attribute
     {
+        public CrmPluginRegistrationAttribute(string message)
+        {
+            Message = message;
+            IsolationMode = IsolationModeEnum.Sandbox;
+        }
+
         public CrmPluginRegistrationAttribute(string message, string entityLogicalName, StageEnum stage, ExecutionModeEnum executionMode, string filteringAttributes, string stepName, int executionOrder, IsolationModeEnum isolationModel)
         {
             Message = message;
@@ -64,6 +157,14 @@ namespace Dev.DevKit.Shared
             Name = stepName;
             ExecutionOrder = executionOrder;
             IsolationMode = isolationModel;
+            Offline = false;
+            Server = true;
+        }
+
+        public CrmPluginRegistrationAttribute(MessageNameEnum message, string entityLogicalName, StageEnum stage, ExecutionModeEnum executionMode, string filteringAttributes, string stepName, int executionOrder, IsolationModeEnum isolationModel) 
+            : this(message.ToString(), entityLogicalName, stage, executionMode, filteringAttributes, stepName, executionOrder, isolationModel)
+        {
+
         }
 
         public CrmPluginRegistrationAttribute(string name, string friendlyName, string description, string groupName, IsolationModeEnum isolationModel)

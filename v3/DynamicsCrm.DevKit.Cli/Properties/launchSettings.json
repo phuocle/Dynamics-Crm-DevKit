@@ -67,6 +67,11 @@
     },
     "NO ARGS": {
       "commandName": "Project"
+    },
+    "TaskServer.sdk.dev2-devkit.debug.spkl": {
+      "commandName": "Project",
+      "commandLineArgs": "/sdklogin:\"yes\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"servers\" /profile:\"DEBUG\"",
+      "workingDirectory": "C:\\src\\github\\Dynamics-Crm-DevKit\\test\\v.3.11.11\\Test.Cli.Server\\Dev.DevKit.Plugin.PhoneCall"
     }
   }
 }

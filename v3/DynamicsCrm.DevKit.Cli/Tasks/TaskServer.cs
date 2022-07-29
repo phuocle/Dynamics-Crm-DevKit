@@ -1125,9 +1125,20 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var hasNamedArgumentPluginType = false;
             var isCodeActivity = false;
             var isPlugin = false;
-            if (arguments.Length == 8)
+            if (arguments.Length == 8 && data.ConstructorArguments[0].ArgumentType.Name == "String")
             {
                 attribute.Message = (string)arguments[0].Value;
+                attribute.EntityLogicalName = (string)arguments[1].Value;
+                attribute.Stage = (StageEnum)Enum.ToObject(typeof(StageEnum), (int)arguments[2].Value);
+                attribute.ExecutionMode = (ExecutionModeEnum)Enum.ToObject(typeof(ExecutionModeEnum), (int)arguments[3].Value);
+                attribute.FilteringAttributes = (string)arguments[4].Value;
+                attribute.Name = (string)arguments[5].Value;
+                attribute.ExecutionOrder = (int)arguments[6].Value;
+                attribute.IsolationMode = (IsolationModeEnum)Enum.ToObject(typeof(IsolationModeEnum), (int)arguments[7].Value);
+                isPlugin = true;
+            }
+            else if (arguments.Length == 8 && data.ConstructorArguments[0].ArgumentType.Name == "MessageNameEnum") {
+                attribute.Message = Enum.ToObject(typeof(MessageNameEnum), (int)arguments[0].Value).ToString();
                 attribute.EntityLogicalName = (string)arguments[1].Value;
                 attribute.Stage = (StageEnum)Enum.ToObject(typeof(StageEnum), (int)arguments[2].Value);
                 attribute.ExecutionMode = (ExecutionModeEnum)Enum.ToObject(typeof(ExecutionModeEnum), (int)arguments[3].Value);

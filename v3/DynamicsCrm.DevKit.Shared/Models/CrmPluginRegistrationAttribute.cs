@@ -2,12 +2,6 @@
 
 namespace DynamicsCrm.DevKit.Shared.Models
 {
-    public enum ImageType
-    {
-        Pre,
-        Post
-    }
-
     public enum ExecutionModeEnum
     {
         Synchronous = 0,
@@ -29,6 +23,7 @@ namespace DynamicsCrm.DevKit.Shared.Models
 
     public enum PluginStepOperationEnum
     {
+        Delete = 0,
         Activate = 0,
         Deactivate = 1
     }
@@ -39,6 +34,99 @@ namespace DynamicsCrm.DevKit.Shared.Models
         PreOperation = 20,
         PostOperation = 40
     }
+
+    public enum MessageNameEnum
+    {
+        AddItem,
+        AddListMembers,
+        AddMember,
+        AddMembers,
+        AddPrincipalToQueue,
+        AddPrivileges,
+        AddProductToKit,
+        AddRecurrence,
+        AddToQueue,
+        AddUserToRecordTeam,
+        ApplyRecordCreationAndUpdateRule,
+        Assign,
+        Associate,
+        BackgroundSend,
+        Book,
+        CalculatePrice,
+        Cancel,
+        CheckIncoming,
+        CheckPromote,
+        Clone,
+        CloneMobileOfflineProfile,
+        CloneProduct,
+        Close,
+        CopyDynamicListToStatic,
+        CopySystemForm,
+        Create,
+        CreateException,
+        CreateInstance,
+        CreateKnowledgeArticleTranslation,
+        CreateKnowledgeArticleVersion,
+        Delete,
+        DeleteOpenInstances,
+        DeliverIncoming,
+        DeliverPromote,
+        Disassociate,
+        Execute,
+        ExecuteById,
+        Export,
+        GenerateSocialProfile,
+        GetDefaultPriceLevel,
+        GrantAccess,
+        Import,
+        LockInvoicePricing,
+        LockSalesOrderPricing,
+        Lose,
+        Merge,
+        ModifyAccess,
+        PickFromQueue,
+        Publish,
+        PublishAll,
+        PublishTheme,
+        QualifyLead,
+        Recalculate,
+        ReleaseToQueue,
+        RemoveFromQueue,
+        RemoveItem,
+        RemoveMember,
+        RemoveMembers,
+        RemovePrivilege,
+        RemoveProductFromKit,
+        RemoveRelated,
+        RemoveUserFromRecordTeam,
+        ReplacePrivileges,
+        Reschedule,
+        Retrieve,
+        RetrieveExchangeRate,
+        RetrieveFilteredForms,
+        RetrieveMultiple,
+        RetrievePersonalWall,
+        RetrievePrincipalAccess,
+        RetrieveRecordWall,
+        RetrieveSharedPrincipalsAndAccess,
+        RetrieveUnpublished,
+        RetrieveUnpublishedMultiple,
+        RetrieveUserQueues,
+        RevokeAccess,
+        RouteTo,
+        Send,
+        SendFromTemplate,
+        SetLocLabels,
+        SetRelated,
+        SetState,
+        TriggerServiceEndpointCheck,
+        UnlockInvoicePricing,
+        UnlockSalesOrderPricing,
+        Update,
+        ValidateRecurrenceRule,
+        Win
+    }
+
     public enum PluginType
     {
         Plugin = 0,

@@ -54,9 +54,10 @@
     <None Include="bin\coretools\LicenseTerms.docx" />
     <None Include="bin\coretools\pacTelemetryUpload.exe.config" />
     <None Include="bin\coretools\SolutionPackager.exe.config" />
+    <None Include="deploy.debug.bat" />
     <None Include="packages.config" />
     <None Include="Dev.DevKit.Plugin.PhoneCall.snk" />
-    <Compile Include="CrmPluginRegistrationAttribute.cs" />
+    <None Include="CrmPluginRegistrationAttribute.cs" />
     <Compile Include="PostPhoneCallCreateAsynchronous.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="spkl.json" />
