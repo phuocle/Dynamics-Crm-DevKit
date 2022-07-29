@@ -106,7 +106,7 @@ namespace DynamicsCrm.DevKit.Shared
             return url;
         }
 
-        public static List<DeployWebResource> GetWebResouces(CrmServiceClient service, string fullFileName)
+        public static List<DeployWebResource> GetWebResources(CrmServiceClient service, string fullFileName)
         {
             var parts = fullFileName.Split(@"\".ToCharArray());
             var condition = string.Empty;

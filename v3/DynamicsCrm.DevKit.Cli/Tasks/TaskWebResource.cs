@@ -273,7 +273,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             return dependencyXml;
         }
 
-
         private void DeployWebResourceFile(WebResourceFile webResourceFile, int current)
         {
             var len = WebResourceFiles.Count.ToString().Length;

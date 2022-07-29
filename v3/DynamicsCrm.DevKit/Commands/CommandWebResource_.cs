@@ -2,22 +2,33 @@
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.CliTasks;
 using DynamicsCrm.DevKit.Shared.Models;
-using Microsoft.Crm.Sdk.Messages;
 using Microsoft.VisualStudio.Shell;
-using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Tooling.Connector;
 using System;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Commands
 {
-    [Command(PackageIds.CommandDeployWebResource)]
-    public class CommandWebResource : BaseCommand<CommandWebResource>
+    public class CommandWebResource
     {
-        protected override async Task ExecuteAsync(OleMenuCmdEventArgs e)
+        public const int CommandDeployWebResourceId = 0x0100;
+        public static readonly Guid CommandSetDeployWebResource = new Guid("0c1acc31-15ac-417c-86b2-eefdc669e8bf");
+
+        //public const int CommandDeployWebResource2Id = 0x0400;
+        //public static readonly Guid CommandSetDeployWebResource2 = new Guid("0c1acc31-15ac-417c-86b2-eefdc669e8be");
+
+        //public const int CommandDeployWebResource3Id = 0x0500;
+        //public static readonly Guid CommandSetDeployWebResource3 = new Guid("0c1acc31-15ac-417c-86b2-eefdc669e8bf");
+
+        internal static void BeforeQueryStatus(object sender)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            var menuCommand = sender as OleMenuCommand;
+            menuCommand.Visible = Utility.IsWebResourceExtension(VsixHelper.SelectedItem.Extension);
+        }
+
+        internal static async Task ClickDeployWebResourceAsync()
         {
             await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
             var vsixSessionCache = new VsixSessionCache();
@@ -31,7 +42,7 @@ namespace DynamicsCrm.DevKit.Commands
                     await DeployWebResourceAsync(serviceCache, deployWebResourceCache);
                 else
                 {
-                    var webResources = XrmHelper.GetWebResources(serviceCache, fullFileName);
+                    var webResources = XrmHelper.GetWebResouces(serviceCache, fullFileName);
                     if (webResources.Count == 0)
                     {
                         var deployNewWebResource = vsixSessionCache.GetNewWebResource(fullFileName);
@@ -49,14 +60,15 @@ namespace DynamicsCrm.DevKit.Commands
 
         private static async Task DeployWebResourceAsync(CrmServiceClient service, DeployWebResource deployWebResource)
         {
+            var task = new CliWebResource(service);
             var fileName = Path.GetFileName(deployWebResource.FullFileName);
             await VS.StatusBar.ShowMessageAsync($"Deploying ...");
-            var ok = await DeployWebResourceAsync(service, deployWebResource.FullFileName, deployWebResource.WebResourceId);
+            var ok = await task.DeployWebResourceAsync(deployWebResource.FullFileName, deployWebResource.WebResourceId);
             if (ok)
             {
                 await VS.StatusBar.ShowMessageAsync($"Deployed !!!");
                 await VS.StatusBar.ShowMessageAsync($"Publishing ...");
-                var ok2 = await PublishWebResourceAsync(service, deployWebResource.WebResourceId);
+                var ok2 = await task.PublishWebResourceAsync(deployWebResource.WebResourceId);
                 if (ok2)
                     await VS.StatusBar.ShowMessageAsync($"[{XrmHelper.ConnectedUrl(service)}]: Deployed/Published [{fileName}] to [{deployWebResource.WebResourceName}]");
                 else
@@ -83,52 +95,6 @@ namespace DynamicsCrm.DevKit.Commands
             {
                 await VS.StatusBar.ShowMessageAsync($"Connected: {XrmHelper.ConnectedUrl(service)}");
             }
-        }
-
-        private static async Task<bool> DeployWebResourceAsync(CrmServiceClient service, string fullFileName, Guid webResourceId)
-        {
-            return await Task.Run(() =>
-            {
-                try
-                {
-                    var webResource = new Entity("webresource") { Id = webResourceId };
-                    webResource["content"] = Convert.ToBase64String(File.ReadAllBytes(fullFileName));
-                    var request = new UpdateRequest { Target = webResource };
-                    var response = (UpdateResponse)service.Execute(request);
-                    return true;
-                }
-                catch
-                {
-                    return false;
-                }
-            });
-        }
-
-        private static async Task<bool> PublishWebResourceAsync(CrmServiceClient service, Guid webResourceId)
-        {
-            return await Task.Run(() => {
-                try
-                {
-                    var publishXml = $"<importexportxml><webresources><webresource>{webResourceId}</webresource></webresources></importexportxml>";
-                    var request = new PublishXmlRequest { ParameterXml = publishXml };
-                    var response = (PublishXmlResponse)service.Execute(request);
-                    return true;
-                }
-                catch
-                {
-                    return false;
-                }
-            });
-        }
-
-        protected override void BeforeQueryStatus(EventArgs e)
-        {
-            ThreadHelper.JoinableTaskFactory.Run(async () =>
-            {
-                var solutionItem = await VS.Solutions.GetActiveItemAsync();
-                var fileInfo = new FileInfo(solutionItem.FullPath);
-                this.Command.Visible = Const.WEB_RESOURCE_EXTENSIONS.Contains(fileInfo.Extension);
-            });
         }
     }
 }
