@@ -102,24 +102,32 @@ namespace DynamicsCrm.DevKit.Shared
             {
                 var selectedWebResource = form.SelectedWebResource;
                 var cachedWebResources = AddWebResourcesToCached(selectedWebResource);
-                SavedTo_DynamicsCrmDevKitCachedJsonFileName(cachedWebResources);
+                SavedTo_DynamicsCrmDevKitCachedJsonFileName(selectedWebResource);
                 return selectedWebResource;
             }
             return null;
         }
-        private void SavedTo_DynamicsCrmDevKitCachedJsonFileName(List<DeployWebResource> cachedWebResources)
+        private void SavedTo_DynamicsCrmDevKitCachedJsonFileName(DeployWebResource deployWebResource)
         {
             var json = string.Empty;
-            var savedJson = new CachedJson();
+            var cachedJson = new CachedJson();
             var fileName = VsixHelper.GetDynamicsCrmDevKitCachedJsonFileName();
             if (File.Exists(fileName))
             {
                 json = File.ReadAllText(VsixHelper.GetDynamicsCrmDevKitCachedJsonFileName());
-                savedJson = SimpleJson.DeserializeObject<CachedJson>(json);
+                cachedJson = SimpleJson.DeserializeObject<CachedJson>(json);
             }
-            cachedWebResources = cachedWebResources.OrderBy(x => x.WebResourceName).ToList();
-            savedJson.DeployWebResources = cachedWebResources;
-            json = JsonHelper.FormatJson(SimpleJson.SerializeObject(savedJson));
+            var found = cachedJson.DeployWebResources.Where(x => x.FullFileName == deployWebResource.FullFileName).FirstOrDefault();
+            if (found != null)
+            {
+                found.WebResourceName = deployWebResource.WebResourceName;
+            }
+            else
+            {
+                cachedJson.DeployWebResources.Add(deployWebResource);
+            }
+            cachedJson.DeployWebResources.OrderBy(x => x.FullFileName).ToList();
+            json = JsonHelper.FormatJson(SimpleJson.SerializeObject(cachedJson));
             Utility.ForceWriteAllText(fileName, json);
         }
 

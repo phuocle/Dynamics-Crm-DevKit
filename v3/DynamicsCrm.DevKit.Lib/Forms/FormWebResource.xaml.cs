@@ -46,8 +46,22 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             FullFileName = fullFileName;
             comboWebResources.DisplayMemberPath = "DisplayWebResourceName";
             comboWebResources.ItemsSource = WebResources;
+            checkButtonOk();
+        }
+
+        private void checkButtonOk()
+        {
             buttonOK.IsEnabled = comboWebResources.Items.Count > 0;
-            comboWebResources.Text = GetDefaultText();
+            if (buttonOK.IsEnabled)
+            {
+                comboWebResources.Text = GetDefaultText();
+            }
+            else
+            {
+                labelError.Visibility = System.Windows.Visibility.Visible;
+                var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(FullFileName);
+                labelError.Content = $"WebResource contains name: [{fileNameWithoutExtension}] not found !!!";
+            }
         }
 
         private string GetDefaultText()
