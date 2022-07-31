@@ -11,13 +11,12 @@
 			<Group guid="GuidSetDeployWebResource" id="GroupCommandDeployWebResource" />
 		</Groups>
 		<Buttons>
-			<Button guid="GuidSetDeployWebResource" id="CommandDeployWebResource" type="Button">
+			<Button guid="GuidSetDeployWebResource" id="CommandDeployWebResource" type="Button" priority="0x0000">
 				<Icon guid="guidImages" id="bmpPicPL" />
 				<CommandFlag>DynamicVisibility</CommandFlag>
-				<CommandFlag>TextChanges</CommandFlag>
 				<CommandFlag>DefaultInvisible</CommandFlag>
 				<Strings>
-					<ButtonText>Deploy WebResource ...</ButtonText>
+					<ButtonText>Deploy 3 WebResource ...</ButtonText>
 				</Strings>
 			</Button>
 		</Buttons>
@@ -42,7 +41,7 @@
 		<CommandPlacement guid="GuidSetDeployWebResource" id="GroupCommandDeployWebResource" priority="0xFFFF">
 			<Parent guid="HtmlEditorWindows2" id="IDMX_HTM_SOURCE_HTML"/>
 		</CommandPlacement>
-		<CommandPlacement guid="GuidSetDeployWebResource" id="CommandDeployWebResource" priority="0x0001" >
+		<CommandPlacement guid="GuidSetDeployWebResource" id="CommandDeployWebResource" priority="0x0000" >
 			<Parent guid="GuidSetDeployWebResource" id="GroupCommandDeployWebResource"/>
 		</CommandPlacement>
 	</CommandPlacements>
@@ -62,7 +61,7 @@
 			<IDSymbol name="IDMX_HTM_SOURCE_HTML" value="1"/>
 		</GuidSymbol>
 		<GuidSymbol name="GuidSetDeployWebResource" value="{525190A4-9C61-4AA5-8319-7C5FB75DAE58}">
-			<IDSymbol name="GroupCommandDeployWebResource" value="0x0001" />
+			<IDSymbol name="GroupCommandDeployWebResource" value="0x0000" />
 			<IDSymbol name="CommandDeployWebResource" value="0x0100" />
 		</GuidSymbol>
 	</Symbols>
