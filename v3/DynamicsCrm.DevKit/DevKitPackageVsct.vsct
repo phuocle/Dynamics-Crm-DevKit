@@ -8,13 +8,13 @@
 
 	<Commands package="DynamicsCrmDevKit">
 		<Groups>
-			<Group guid="DynamicsCrmDevKit" id="MenuGroupCommandDeployWebResource" />
+			<Group guid="GuidSetDeployWebResource" id="GroupCommandDeployWebResource" />
 		</Groups>
 		<Buttons>
-			<Button guid="DynamicsCrmDevKit" id="CommandDeployWebResource" type="Button" priority="0x0001">
-				<Parent guid="DynamicsCrmDevKit" id="MenuGroupCommandDeployWebResource"/>
+			<Button guid="GuidSetDeployWebResource" id="CommandDeployWebResource" type="Button">
 				<Icon guid="guidImages" id="bmpPicPL" />
 				<CommandFlag>DynamicVisibility</CommandFlag>
+				<CommandFlag>TextChanges</CommandFlag>
 				<CommandFlag>DefaultInvisible</CommandFlag>
 				<Strings>
 					<ButtonText>Deploy WebResource ...</ButtonText>
@@ -27,21 +27,28 @@
 	</Commands>
 
 	<CommandPlacements>
-		<CommandPlacement guid="DynamicsCrmDevKit" id="MenuGroupCommandDeployWebResource" priority="0xFFFF">
+		<CommandPlacement guid="GuidSetDeployWebResource" id="GroupCommandDeployWebResource" priority="0xFFFF">
 			<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_CODEWIN"/>
 		</CommandPlacement>
-		<CommandPlacement guid="DynamicsCrmDevKit" id="MenuGroupCommandDeployWebResource" priority="0xFFFF">
+		<CommandPlacement guid="GuidSetDeployWebResource" id="GroupCommandDeployWebResource" priority="0xFFFF">
 			<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_ITEMNODE"/>
 		</CommandPlacement>
-		<CommandPlacement guid="DynamicsCrmDevKit" id="MenuGroupCommandDeployWebResource" priority="0xFFFF">
+		<CommandPlacement guid="GuidSetDeployWebResource" id="GroupCommandDeployWebResource" priority="0xFFFF">
 			<Parent guid="CssEditorWindows" id="IDMX_HTM_SOURCE_CSS" />
 		</CommandPlacement>
-		<CommandPlacement guid="DynamicsCrmDevKit" id="MenuGroupCommandDeployWebResource" priority="0xFFFF">
+		<CommandPlacement guid="GuidSetDeployWebResource" id="GroupCommandDeployWebResource" priority="0xFFFF">
 			<Parent guid="HtmlEditorWindows" id="IDMX_HTM_SOURCE_HTML"/>
+		</CommandPlacement>
+		<CommandPlacement guid="GuidSetDeployWebResource" id="GroupCommandDeployWebResource" priority="0xFFFF">
+			<Parent guid="HtmlEditorWindows2" id="IDMX_HTM_SOURCE_HTML"/>
+		</CommandPlacement>
+		<CommandPlacement guid="GuidSetDeployWebResource" id="CommandDeployWebResource" priority="0x0001" >
+			<Parent guid="GuidSetDeployWebResource" id="GroupCommandDeployWebResource"/>
 		</CommandPlacement>
 	</CommandPlacements>
 
 	<Symbols>
+		<GuidSymbol name="DynamicsCrmDevKit" value="{525190A4-9C61-4AA5-8319-7C5FB75DAE58}" />
 		<GuidSymbol name="guidImages" value="{68759F95-6F1D-4A77-87EA-192FC8D811F1}" >
 			<IDSymbol name="bmpPicPL" value="1" />
 		</GuidSymbol>
@@ -51,8 +58,11 @@
 		<GuidSymbol name="HtmlEditorWindows" value="{78F03954-2FB8-4087-8CE7-59D71710B3BB}">
 			<IDSymbol name="IDMX_HTM_SOURCE_HTML" value="1"/>
 		</GuidSymbol>
-		<GuidSymbol name="DynamicsCrmDevKit" value="{525190a4-9c61-4aa5-8319-7c5fb75dae58}">
-			<IDSymbol name="MenuGroupCommandDeployWebResource" value="0x0001" />
+		<GuidSymbol name="HtmlEditorWindows2" value="{78F03954-2FB8-4087-8CE7-59D71710B3BB}">
+			<IDSymbol name="IDMX_HTM_SOURCE_HTML" value="1"/>
+		</GuidSymbol>
+		<GuidSymbol name="GuidSetDeployWebResource" value="{525190A4-9C61-4AA5-8319-7C5FB75DAE58}">
+			<IDSymbol name="GroupCommandDeployWebResource" value="0x0001" />
 			<IDSymbol name="CommandDeployWebResource" value="0x0100" />
 		</GuidSymbol>
 	</Symbols>
