@@ -11,5 +11,7 @@ namespace DynamicsCrm.DevKit.Shared.Models
         [DataMember(Order = 2)]
         public string WebResourceName { get; set; }
         public Guid WebResourceId { get; set; }
+        public bool IsManaged { get; set; } = false;
+        public string DisplayWebResourceName => WebResourceName + (IsManaged ? " [managed]" : "");
     }
 }

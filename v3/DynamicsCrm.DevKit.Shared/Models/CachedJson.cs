@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace DynamicsCrm.DevKit.Shared.Models
 {
 
-    public class SavedJson
+    public class CachedJson
     {
         public List<DeployWebResource> DeployWebResources { get; set; }
     }

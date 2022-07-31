@@ -65,7 +65,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"></RowDefinition>
                 </Grid.RowDefinitions>
-                <Button Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" x:Name="buttonNewWebResource" Content="New Web Resource" Margin="5,0,5,0" Width="200" Height="30" Click="ButtonNewWebResource_Click"/>
+                <Button Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" x:Name="buttonNewWebResource" Content="New Web Resource" Margin="5,0,5,0" Width="200" Height="30" Click="ButtonNewWebResource_Click" Visibility="Hidden"/>
                 <Button Grid.Row="0" Grid.Column="2" x:Name="buttonOK" Content="OK" Margin="5,0,5,0" Width="100" Height="30" Click="ButtonOK_Click"/>
                 <Button Grid.Row="0" Grid.Column="3" x:Name="buttonCancel" Content="Cancel" Margin="5,0,5,0" Width="100" Height="30" IsCancel="True" Click="ButtonCancel_Click"/>
             </Grid>

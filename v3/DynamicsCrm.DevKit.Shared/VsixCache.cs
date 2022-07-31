@@ -97,22 +97,25 @@ namespace DynamicsCrm.DevKit.Shared
         public DeployWebResource GetExistingWebResource(CrmServiceClient service, List<DeployWebResource> webResources, string fullFileName)
         {
             var form = new FormWebResource(webResources, fullFileName);
-            form.ShowDialog();
-            var selectedWebResource = form.SelectedWebResource;
-            var cachedWebResources = AddWebResourcesToCached(selectedWebResource);
-            SavedTo_DynamicsCrmDevKitCachedJsonFileName(cachedWebResources);
-            return selectedWebResource;
+            var result = form.ShowModal() ?? false;
+            if (result)
+            {
+                var selectedWebResource = form.SelectedWebResource;
+                var cachedWebResources = AddWebResourcesToCached(selectedWebResource);
+                SavedTo_DynamicsCrmDevKitCachedJsonFileName(cachedWebResources);
+                return selectedWebResource;
+            }
+            return null;
         }
-
         private void SavedTo_DynamicsCrmDevKitCachedJsonFileName(List<DeployWebResource> cachedWebResources)
         {
             var json = string.Empty;
-            var savedJson = new SavedJson();
+            var savedJson = new CachedJson();
             var fileName = VsixHelper.GetDynamicsCrmDevKitCachedJsonFileName();
             if (File.Exists(fileName))
             {
                 json = File.ReadAllText(VsixHelper.GetDynamicsCrmDevKitCachedJsonFileName());
-                savedJson = SimpleJson.DeserializeObject<SavedJson>(json);
+                savedJson = SimpleJson.DeserializeObject<CachedJson>(json);
             }
             cachedWebResources = cachedWebResources.OrderBy(x => x.WebResourceName).ToList();
             savedJson.DeployWebResources = cachedWebResources;

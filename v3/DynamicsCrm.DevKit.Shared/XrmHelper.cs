@@ -127,6 +127,7 @@ namespace DynamicsCrm.DevKit.Shared
   <entity name='webresource'>
     <attribute name='webresourceid' />
     <attribute name='name' />
+    <attribute name='ismanaged' />
     <filter type='or'>
       {condition}
     </filter>
@@ -139,12 +140,12 @@ namespace DynamicsCrm.DevKit.Shared
                 webResources.Add(new DeployWebResource
                 {
                     WebResourceName = entity.GetAttributeValue<string>("name") ?? string.Empty,
-                    WebResourceId = entity.Id
+                    WebResourceId = entity.Id,
+                    IsManaged = entity.GetAttributeValue<bool?>("ismanaged") ?? false
                 });
             }
             return webResources;
         }
-
 
         public static string BuildConnectionStringLog(string connectionString)
         {
