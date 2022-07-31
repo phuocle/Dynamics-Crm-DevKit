@@ -42,7 +42,6 @@
 	</CommandPlacements>
 
 	<Symbols>
-		<GuidSymbol name="CommandVisisiblityDeployWebResource" value="{525190a4-9c61-4aa5-8319-7c5fb75dae59}" />
 		<GuidSymbol name="guidImages" value="{68759F95-6F1D-4A77-87EA-192FC8D811F1}" >
 			<IDSymbol name="bmpPicPL" value="1" />
 		</GuidSymbol>

@@ -12,19 +12,16 @@ namespace DynamicsCrm.DevKit
     /// </summary>
     internal sealed partial class PackageGuids
     {
-        public const string CommandVisisiblityDeployWebResourceString = "525190a4-9c61-4aa5-8319-7c5fb75dae59";
-        public static Guid CommandVisisiblityDeployWebResource = new Guid(CommandVisisiblityDeployWebResourceString);
-
-        public const string guidImagesString = "68759f95-6f1d-4a77-87ea-192fc8d811f1";
+        public const string guidImagesString = "68759F95-6F1D-4A77-87EA-192FC8D811F1";
         public static Guid guidImages = new Guid(guidImagesString);
 
-        public const string CssEditorWindowsString = "64da400e-b4ad-4d67-aa92-4b7acb01ecd5";
+        public const string CssEditorWindowsString = "64DA400E-B4AD-4D67-AA92-4B7ACB01ECD5";
         public static Guid CssEditorWindows = new Guid(CssEditorWindowsString);
 
-        public const string HtmlEditorWindowsString = "78f03954-2fb8-4087-8ce7-59d71710b3bb";
+        public const string HtmlEditorWindowsString = "78F03954-2FB8-4087-8CE7-59D71710B3BB";
         public static Guid HtmlEditorWindows = new Guid(HtmlEditorWindowsString);
 
-        public const string DynamicsCrmDevKitString = "525190a4-9c61-4aa5-8319-7c5fb75dae58";
+        public const string DynamicsCrmDevKitString = "525190A4-9C61-4AA5-8319-7C5FB75DAE58";
         public static Guid DynamicsCrmDevKit = new Guid(DynamicsCrmDevKitString);
     }
     /// <summary>
