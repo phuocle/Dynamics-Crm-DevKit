@@ -9,8 +9,6 @@
     <Import_RootNamespace>DynamicsCrm.DevKit.Shared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)CliTasks\CliTask.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)CliTasks\CliWebResource.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Const.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CSharpLateBound.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EncryptDecrypt.cs" />

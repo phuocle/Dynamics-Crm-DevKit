@@ -1,6 +1,5 @@
 ﻿using Community.VisualStudio.Toolkit;
 using DynamicsCrm.DevKit.Shared;
-using DynamicsCrm.DevKit.Shared.CliTasks;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.VisualStudio.Shell;
@@ -72,22 +71,22 @@ namespace DynamicsCrm.DevKit.Commands
             }
         }
 
-        private static async Task DeployNewWebResourceAsync(CrmServiceClient service, DeployWebResource deployWebResource)
-        {
-            var task = new CliWebResource(service);
-            var fileName = Path.GetFileName(deployWebResource.FullFileName);
-            var ok = await task.DeployWebResourceAsync(deployWebResource.FullFileName, deployWebResource.WebResourceId);
-            if (ok)
-            {
-                await VS.StatusBar.ShowMessageAsync($"Connected: {XrmHelper.ConnectedUrl(service)}");
-                await task.PublishWebResourceAsync(deployWebResource.WebResourceId);
-                await VS.StatusBar.ShowMessageAsync($"Deployed: [{fileName}] to [{deployWebResource.WebResourceName}]");
-            }
-            else
-            {
-                await VS.StatusBar.ShowMessageAsync($"Connected: {XrmHelper.ConnectedUrl(service)}");
-            }
-        }
+        //private static async Task DeployNewWebResourceAsync(CrmServiceClient service, DeployWebResource deployWebResource)
+        //{
+        //    var task = new CliWebResource(service);
+        //    var fileName = Path.GetFileName(deployWebResource.FullFileName);
+        //    var ok = await task.DeployWebResourceAsync(deployWebResource.FullFileName, deployWebResource.WebResourceId);
+        //    if (ok)
+        //    {
+        //        await VS.StatusBar.ShowMessageAsync($"Connected: {XrmHelper.ConnectedUrl(service)}");
+        //        await task.PublishWebResourceAsync(deployWebResource.WebResourceId);
+        //        await VS.StatusBar.ShowMessageAsync($"Deployed: [{fileName}] to [{deployWebResource.WebResourceName}]");
+        //    }
+        //    else
+        //    {
+        //        await VS.StatusBar.ShowMessageAsync($"Connected: {XrmHelper.ConnectedUrl(service)}");
+        //    }
+        //}
 
         private static async Task<bool> DeployWebResourceAsync(CrmServiceClient service, string fullFileName, Guid webResourceId)
         {

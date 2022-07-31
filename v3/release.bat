@@ -43,8 +43,8 @@ if %MsBuild%=="" (
 	rem cd DynamicsCrm.DevKit.Tool\Nuget
 	rem call pack.bat
 
-	rem cd ..\..
-	rem copy DynamicsCrm.DevKit\bin\Release\DynamicsCrm.DevKit.vsix Published\%VERSION%\DynamicsCrm.DevKit.%VERSION%.vsix
+	cd ..\..
+	copy DynamicsCrm.DevKit\bin\Release\DynamicsCrm.DevKit.vsix Published\%VERSION%\DynamicsCrm.DevKit.%VERSION%.vsix
 
     rem call DynamicsCrm.DevKit.Console\bin\Debug\DynamicsCrm.DevKit.Console.exe 1
 )

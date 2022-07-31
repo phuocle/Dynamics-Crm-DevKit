@@ -48,7 +48,6 @@
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="Commands\CommandWebResource_.cs" />
     <Compile Include="Commands\CommandWebResource.cs" />
     <Compile Include="DevKitPackageVsct.cs">
       <AutoGen>True</AutoGen>
@@ -57,12 +56,6 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DevKitPackage.cs" />
-    <None Include="DevKitPackage.Solution.cs">
-      <DependentUpon>DevKitPackage.cs</DependentUpon>
-    </None>
-    <None Include="DevKitPackage.Commands.cs">
-      <DependentUpon>DevKitPackage.cs</DependentUpon>
-    </None>
     <Compile Include="source.extension.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
