@@ -25,7 +25,7 @@ namespace DynamicsCrm.DevKit.Commands
             if (serviceCache != null)
             {
                 await VS.StatusBar.ShowMessageAsync($"[{XrmHelper.ConnectedUrl(serviceCache)}]: Connected");
-                var fullFileName = VsixHelper.SelectedItem.FullFileName;
+                var fullFileName = VsixHelper.SelectedItem.FullFileName.Substring((await VsixHelper.GetSolutionFolderAsync()).Length);
                 var deployWebResourceCache = vsixSessionCache.GetWebResource(fullFileName);
                 if (deployWebResourceCache != null)
                     await DeployWebResourceAsync(serviceCache, deployWebResourceCache);
@@ -39,7 +39,7 @@ namespace DynamicsCrm.DevKit.Commands
                     }
                     else
                     {
-                        var deployWebResource = vsixSessionCache.GetExistingWebResource(webResources, fullFileName);
+                        var deployWebResource = vsixSessionCache.GetExistingWebResource(serviceCache, webResources, fullFileName);
                         await DeployWebResourceAsync(serviceCache, deployWebResource);
                     }
                 }
@@ -49,7 +49,6 @@ namespace DynamicsCrm.DevKit.Commands
 
         private static async Task DeployWebResourceAsync(CrmServiceClient service, DeployWebResource deployWebResource)
         {
-            var fileName = Path.GetFileName(deployWebResource.FullFileName);
             await VS.StatusBar.ShowMessageAsync($"Deploying ...");
             var ok = await DeployWebResourceAsync(service, deployWebResource.FullFileName, deployWebResource.WebResourceId);
             if (ok)
@@ -58,7 +57,7 @@ namespace DynamicsCrm.DevKit.Commands
                 await VS.StatusBar.ShowMessageAsync($"Publishing ...");
                 var ok2 = await PublishWebResourceAsync(service, deployWebResource.WebResourceId);
                 if (ok2)
-                    await VS.StatusBar.ShowMessageAsync($"[{XrmHelper.ConnectedUrl(service)}]: Deployed/Published [{fileName}] to [{deployWebResource.WebResourceName}]");
+                    await VS.StatusBar.ShowMessageAsync($"[{XrmHelper.ConnectedUrl(service)}]: Deployed/Published [{VsixHelper.SelectedItem.FileName}] to [{deployWebResource.WebResourceName}]");
                 else
                     await VS.StatusBar.ShowMessageAsync($"Publishing failed !!!");
             }
@@ -87,10 +86,12 @@ namespace DynamicsCrm.DevKit.Commands
 
         private static async Task<bool> DeployWebResourceAsync(CrmServiceClient service, string fullFileName, Guid webResourceId)
         {
-            return await Task.Run(() =>
+            return await Task.Run(async () =>
             {
                 try
                 {
+                    var solutionFolder = await VsixHelper.GetSolutionFolderAsync();
+                    fullFileName = $"{solutionFolder}\\{fullFileName}";
                     var webResource = new Entity("webresource") { Id = webResourceId };
                     webResource["content"] = Convert.ToBase64String(File.ReadAllBytes(fullFileName));
                     var request = new UpdateRequest { Target = webResource };
@@ -123,12 +124,7 @@ namespace DynamicsCrm.DevKit.Commands
 
         protected override void BeforeQueryStatus(EventArgs e)
         {
-            ThreadHelper.JoinableTaskFactory.Run(async () =>
-            {
-                var solutionItem = await VS.Solutions.GetActiveItemAsync();
-                var fileInfo = new FileInfo(solutionItem.FullPath);
-                this.Command.Visible = Const.WEB_RESOURCE_EXTENSIONS.Contains(fileInfo.Extension);
-            });
+            this.Command.Visible = Utility.IsWebResourceExtension(VsixHelper.SelectedItem.Extension);
         }
     }
 }

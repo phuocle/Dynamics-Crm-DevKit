@@ -1,0 +1,8 @@
+﻿{
+    "DeployWebResources": [
+        {
+            "FullFileName": "\\Dev.DevKit.WebResource\\entities\\Contact.js",
+            "WebResourceName": "devkit_/entities/Contact.js"
+        }
+    ]
+}

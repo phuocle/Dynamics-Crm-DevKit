@@ -52,10 +52,32 @@ namespace DynamicsCrm.DevKit.Shared
                 return await GetDynamicsCrmDevKitJsonFileNameAsync();
             });
         }
+        public static string GetSolutionFolder()
+        {
+            return ThreadHelper.JoinableTaskFactory.Run(async () => {
+                return await GetSolutionFolderAsync();
+            });
+        }
+        public static async Task<string> GetSolutionFolderAsync()
+        {
+            var solution = await VS.Solutions.GetCurrentSolutionAsync();
+            return $"{Path.GetDirectoryName(solution.FullPath)}";
+        }
+        public static string GetDynamicsCrmDevKitCachedJsonFileName()
+        {
+            return ThreadHelper.JoinableTaskFactory.Run(async () => {
+                return await GetDynamicsCrmDevKitCachedJsonFileNameAsync();
+            });
+        }
         public static async Task<string> GetDynamicsCrmDevKitJsonFileNameAsync()
         {
             var solution = await VS.Solutions.GetCurrentSolutionAsync();
             return $"{Path.GetDirectoryName(solution.FullPath)}\\{Const.DynamicsCrmDevKitJson}";
+        }
+        public static async Task<string> GetDynamicsCrmDevKitCachedJsonFileNameAsync()
+        {
+            var solution = await VS.Solutions.GetCurrentSolutionAsync();
+            return $"{Path.GetDirectoryName(solution.FullPath)}\\{Const.DynamicsCrmDevKitCachedJson}";
         }
         public static DevKitConnections GetDevKitConnections()
         {

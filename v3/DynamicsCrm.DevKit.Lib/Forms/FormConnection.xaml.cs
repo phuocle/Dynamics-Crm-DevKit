@@ -132,6 +132,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
             var devKitConnections = VsixHelper.GetDevKitConnections();
+            comboBoxSavedConnection.DisplayMemberPath = "Name";
             comboBoxSavedConnection.ItemsSource = devKitConnections.CrmConnections;
             if (devKitConnections.DefaultCrmConnection != null)
                 comboBoxSavedConnection.SelectedItem = devKitConnections.CrmConnections.FirstOrDefault(x => x.Name == devKitConnections.DefaultCrmConnection);

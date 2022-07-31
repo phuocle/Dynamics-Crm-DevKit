@@ -4,7 +4,6 @@ namespace DynamicsCrm.DevKit.Shared.Models
 {
     public class CrmConnection
     {
-        [DataMember]
         public string Name { get; set; }
         public string Url { get; set; }
         public string UserName { get; set; }
