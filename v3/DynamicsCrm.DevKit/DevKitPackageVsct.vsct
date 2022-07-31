@@ -8,11 +8,11 @@
 
 	<Commands package="DynamicsCrmDevKit">
 		<Groups>
-			<Group guid="DynamicsCrmDevKit" id="MenuGroup" />
+			<Group guid="DynamicsCrmDevKit" id="MenuGroupCommandDeployWebResource" />
 		</Groups>
 		<Buttons>
 			<Button guid="DynamicsCrmDevKit" id="CommandDeployWebResource" type="Button" priority="0x0001">
-				<Parent guid="DynamicsCrmDevKit" id="MenuGroup"/>
+				<Parent guid="DynamicsCrmDevKit" id="MenuGroupCommandDeployWebResource"/>
 				<Icon guid="guidImages" id="bmpPicPL" />
 				<CommandFlag>DynamicVisibility</CommandFlag>
 				<CommandFlag>DefaultInvisible</CommandFlag>
@@ -26,21 +26,17 @@
 		</Bitmaps>
 	</Commands>
 
-	<VisibilityConstraints>
-		<VisibilityItem guid="DynamicsCrmDevKit" id="CommandDeployWebResource" context="CommandVisisiblityDeployWebResource" />
-	</VisibilityConstraints>
-
 	<CommandPlacements>
-		<CommandPlacement guid="DynamicsCrmDevKit" id="MenuGroup" priority="0xFFFF">
+		<CommandPlacement guid="DynamicsCrmDevKit" id="MenuGroupCommandDeployWebResource" priority="0xFFFF">
 			<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_CODEWIN"/>
 		</CommandPlacement>
-		<CommandPlacement guid="DynamicsCrmDevKit" id="MenuGroup" priority="0xFFFF">
+		<CommandPlacement guid="DynamicsCrmDevKit" id="MenuGroupCommandDeployWebResource" priority="0xFFFF">
 			<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_ITEMNODE"/>
 		</CommandPlacement>
-		<CommandPlacement guid="DynamicsCrmDevKit" id="MenuGroup" priority="0xFFFF">
+		<CommandPlacement guid="DynamicsCrmDevKit" id="MenuGroupCommandDeployWebResource" priority="0xFFFF">
 			<Parent guid="CssEditorWindows" id="IDMX_HTM_SOURCE_CSS" />
 		</CommandPlacement>
-		<CommandPlacement guid="DynamicsCrmDevKit" id="MenuGroup" priority="0xFFFF">
+		<CommandPlacement guid="DynamicsCrmDevKit" id="MenuGroupCommandDeployWebResource" priority="0xFFFF">
 			<Parent guid="HtmlEditorWindows" id="IDMX_HTM_SOURCE_HTML"/>
 		</CommandPlacement>
 	</CommandPlacements>
@@ -57,7 +53,7 @@
 			<IDSymbol name="IDMX_HTM_SOURCE_HTML" value="1"/>
 		</GuidSymbol>
 		<GuidSymbol name="DynamicsCrmDevKit" value="{525190a4-9c61-4aa5-8319-7c5fb75dae58}">
-			<IDSymbol name="MenuGroup" value="0x0001" />
+			<IDSymbol name="MenuGroupCommandDeployWebResource" value="0x0001" />
 			<IDSymbol name="CommandDeployWebResource" value="0x0100" />
 		</GuidSymbol>
 	</Symbols>

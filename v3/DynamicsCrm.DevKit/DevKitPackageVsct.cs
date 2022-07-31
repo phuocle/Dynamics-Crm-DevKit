@@ -35,7 +35,7 @@ namespace DynamicsCrm.DevKit
         public const int bmpPicPL = 0x0001;
         public const int IDMX_HTM_SOURCE_CSS = 0x0002;
         public const int IDMX_HTM_SOURCE_HTML = 0x0001;
-        public const int MenuGroup = 0x0001;
+        public const int MenuGroupCommandDeployWebResource = 0x0001;
         public const int CommandDeployWebResource = 0x0100;
     }
 }
