@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace DynamicsCrm.DevKit.Commands
 {
     [Command(PackageIds.CommandDeployNewWebResource)]
-    public class CommandNewWebResource : BaseCommand<CommandWebResource>
+    public class CommandNewWebResource : BaseCommand<CommandNewWebResource>
     {
         protected override async Task ExecuteAsync(OleMenuCmdEventArgs e)
         {
@@ -59,7 +59,7 @@ namespace DynamicsCrm.DevKit.Commands
 
         protected override void BeforeQueryStatus(EventArgs e)
         {
-            this.Command.Visible = Utility.IsWebResourceExtension(VsixHelper.SelectedItem.Extension);
+            //this.Command.Visible = Utility.IsWebResourceExtension(VsixHelper.SelectedItem.Extension);
         }
     }
 }

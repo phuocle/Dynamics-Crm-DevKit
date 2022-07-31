@@ -9,16 +9,29 @@
 	<Commands package="DynamicsCrmDevKit">
 		<Groups>
 			<Group guid="GuidSetDeployWebResource" id="GroupCommandDeployWebResource" />
+			<Group guid="GuidSetDeployWebResource" id="GroupCommandDeployNewWebResource" />
 		</Groups>
 		<Buttons>
-			<Button guid="GuidSetDeployWebResource" id="CommandDeployWebResource" type="Button" priority="0x0000">
+			<Button guid="GuidSetDeployWebResource" id="CommandDeployWebResource" type="Button" priority="0x0001">
 				<Icon guid="guidImages" id="bmpPicPL" />
 				<CommandFlag>DynamicVisibility</CommandFlag>
+				<CommandFlag>TextChanges</CommandFlag>
 				<CommandFlag>DefaultInvisible</CommandFlag>
 				<Strings>
-					<ButtonText>Deploy 3 WebResource ...</ButtonText>
+					<ButtonText>Deploy A WebResource ...</ButtonText>
 				</Strings>
 			</Button>
+
+			<Button guid="GuidSetDeployWebResource" id="CommandDeployNewWebResource" type="Button" priority="0x0002">
+				<Icon guid="guidImages" id="bmpPicPL" />
+				<CommandFlag>DynamicVisibility</CommandFlag>
+				<CommandFlag>TextChanges</CommandFlag>
+				<CommandFlag>DefaultInvisible</CommandFlag>
+				<Strings>
+					<ButtonText>Deploy B WebResource ...</ButtonText>
+				</Strings>
+			</Button>
+
 		</Buttons>
 		<Bitmaps>
 			<Bitmap guid="guidImages" href="icon16.png" usedList="bmpPicPL"/>
@@ -41,8 +54,16 @@
 		<CommandPlacement guid="GuidSetDeployWebResource" id="GroupCommandDeployWebResource" priority="0xFFFF">
 			<Parent guid="HtmlEditorWindows2" id="IDMX_HTM_SOURCE_HTML"/>
 		</CommandPlacement>
-		<CommandPlacement guid="GuidSetDeployWebResource" id="CommandDeployWebResource" priority="0x0000" >
+		<CommandPlacement guid="GuidSetDeployWebResource" id="CommandDeployWebResource" priority="0x0001" >
 			<Parent guid="GuidSetDeployWebResource" id="GroupCommandDeployWebResource"/>
+		</CommandPlacement>
+
+
+		<CommandPlacement guid="GuidSetDeployWebResource" id="GroupCommandDeployNewWebResource" priority="0xFFFF">
+			<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_ITEMNODE"/>
+		</CommandPlacement>
+		<CommandPlacement guid="GuidSetDeployWebResource" id="CommandDeployNewWebResource" priority="0x0002" >
+			<Parent guid="GuidSetDeployWebResource" id="GroupCommandDeployNewWebResource"/>
 		</CommandPlacement>
 	</CommandPlacements>
 
@@ -61,8 +82,10 @@
 			<IDSymbol name="IDMX_HTM_SOURCE_HTML" value="1"/>
 		</GuidSymbol>
 		<GuidSymbol name="GuidSetDeployWebResource" value="{525190A4-9C61-4AA5-8319-7C5FB75DAE58}">
-			<IDSymbol name="GroupCommandDeployWebResource" value="0x0000" />
-			<IDSymbol name="CommandDeployWebResource" value="0x0100" />
+			<IDSymbol name="GroupCommandDeployWebResource" value="0x0001" />
+			<IDSymbol name="GroupCommandDeployNewWebResource" value="0x0002" />
+			<IDSymbol name="CommandDeployWebResource" value="0x1001" />
+			<IDSymbol name="CommandDeployNewWebResource" value="0x1002" />
 		</GuidSymbol>
 	</Symbols>
 </CommandTable>
