@@ -31,21 +31,11 @@ namespace DynamicsCrm.DevKit.Commands
                 else
                 {
                     var webResources = XrmHelper.GetWebResources(serviceCache, fullFileName);
-                    //if (webResources.Count == 0)
-                    //{
-                    //    var deployNewWebResource = vsixSessionCache.GetNewWebResource(fullFileName);
-                    //    if (deployNewWebResource != null) {
-                    //        await DeployNewWebResourceAsync(serviceCache, deployNewWebResource);
-                    //    }
-                    //}
-                    //else
-                    //{
-                        var deployWebResource = vsixSessionCache.GetExistingWebResource(serviceCache, webResources, fullFileName);
-                        if (deployWebResource != null)
-                        {
-                            await DeployWebResourceAsync(serviceCache, deployWebResource);
-                        }
-                    //}
+                    var deployWebResource = vsixSessionCache.GetExistingWebResource(serviceCache, webResources, fullFileName);
+                    if (deployWebResource != null)
+                    {
+                        await DeployWebResourceAsync(serviceCache, deployWebResource);
+                    }
                 }
             }
             await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);

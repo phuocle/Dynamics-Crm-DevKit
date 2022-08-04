@@ -20,7 +20,7 @@
             <TextBlock.Background>
                 <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ActiveBorderColorKey}}"/>
             </TextBlock.Background>
-            <wpfcontrols:ExternalBrowserHyperlink NavigateUri="https://google.com">WIKI: Connections </wpfcontrols:ExternalBrowserHyperlink>
+            <wpfcontrols:ExternalBrowserHyperlink NavigateUri="https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Connection">WIKI: Connection</wpfcontrols:ExternalBrowserHyperlink>
         </TextBlock>
         <StackPanel x:Name="stackPanelForm">
             <RadioButton x:Name="radioButtonConnection" Content="Connection String" Margin="10,10,10,0" IsChecked="True" Checked="RadioButtonConnection_Checked"/>

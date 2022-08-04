@@ -20,6 +20,35 @@ namespace DynamicsCrm.DevKit.Commands
         {
             await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
 
+            var vsixSessionCache = new VsixSessionCache();
+            var serviceCache = vsixSessionCache.GetCrmServiceClient();
+            if (serviceCache != null)
+            {
+                await VS.StatusBar.ShowMessageAsync($"[{XrmHelper.ConnectedUrl(serviceCache)}]: Connected");
+                var fullFileName = VsixHelper.SelectedItem.FullFileName.Substring((await VsixHelper.GetActiveProjectFolderAsync()).Length);
+                //var deployWebResourceCache = vsixSessionCache.GetWebResource(fullFileName);
+                //if (deployWebResourceCache != null)
+                //    await DeployWebResourceAsync(serviceCache, deployWebResourceCache);
+                //else
+                //{
+                //    var webResources = XrmHelper.GetWebResources(serviceCache, fullFileName);
+                //    //if (webResources.Count == 0)
+                //    //{
+                var deployNewWebResource = vsixSessionCache.GetNewWebResource(serviceCache, fullFileName);
+                //    //    if (deployNewWebResource != null) {
+                //    //        await DeployNewWebResourceAsync(serviceCache, deployNewWebResource);
+                //    //    }
+                //    //}
+                //    //else
+                //    //{
+                //    var deployWebResource = vsixSessionCache.GetExistingWebResource(serviceCache, webResources, fullFileName);
+                //    if (deployWebResource != null)
+                //    {
+                //        await DeployWebResourceAsync(serviceCache, deployWebResource);
+                //    }
+                //    //}
+                //}
+            }
             await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
         }
 
@@ -40,26 +69,26 @@ namespace DynamicsCrm.DevKit.Commands
         //    }
         //}
 
-        private static async Task<bool> PublishWebResourceAsync(CrmServiceClient service, Guid webResourceId)
-        {
-            return await Task.Run(() => {
-                try
-                {
-                    var publishXml = $"<importexportxml><webresources><webresource>{webResourceId}</webresource></webresources></importexportxml>";
-                    var request = new PublishXmlRequest { ParameterXml = publishXml };
-                    var response = (PublishXmlResponse)service.Execute(request);
-                    return true;
-                }
-                catch
-                {
-                    return false;
-                }
-            });
-        }
+        //private static async Task<bool> PublishWebResourceAsync(CrmServiceClient service, Guid webResourceId)
+        //{
+        //    return await Task.Run(() => {
+        //        try
+        //        {
+        //            var publishXml = $"<importexportxml><webresources><webresource>{webResourceId}</webresource></webresources></importexportxml>";
+        //            var request = new PublishXmlRequest { ParameterXml = publishXml };
+        //            var response = (PublishXmlResponse)service.Execute(request);
+        //            return true;
+        //        }
+        //        catch
+        //        {
+        //            return false;
+        //        }
+        //    });
+        //}
 
         protected override void BeforeQueryStatus(EventArgs e)
         {
-            //this.Command.Visible = Utility.IsWebResourceExtension(VsixHelper.SelectedItem.Extension);
+            this.Command.Visible = Utility.IsWebResourceExtension(VsixHelper.SelectedItem.Extension);
         }
     }
 }

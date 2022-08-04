@@ -63,6 +63,17 @@ namespace DynamicsCrm.DevKit.Shared
             var solution = await VS.Solutions.GetCurrentSolutionAsync();
             return $"{Path.GetDirectoryName(solution.FullPath)}";
         }
+        public static string GetActiveProjectFolder()
+        {
+            return ThreadHelper.JoinableTaskFactory.Run(async () => {
+                return await GetActiveProjectFolderAsync();
+            });
+        }
+        public static async Task<string> GetActiveProjectFolderAsync()
+        {
+            var project = await VS.Solutions.GetActiveProjectAsync();
+            return $"{Path.GetDirectoryName(project.FullPath)}";
+        }
         public static string GetDynamicsCrmDevKitCachedJsonFileName()
         {
             return ThreadHelper.JoinableTaskFactory.Run(async () => {

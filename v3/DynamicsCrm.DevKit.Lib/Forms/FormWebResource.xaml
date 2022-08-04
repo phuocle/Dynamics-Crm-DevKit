@@ -16,11 +16,17 @@
         </ResourceDictionary>
     </forms:BaseDialogWindow.Resources>
     <StackPanel>
-        <TextBlock Padding="10,5,10,5">
+        <TextBlock x:Name="wikiMapping" Padding="10,5,10,5" Visibility="Visible">
             <TextBlock.Background>
                 <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ActiveBorderColorKey}}"/>
             </TextBlock.Background>
-            <wpfcontrols:ExternalBrowserHyperlink NavigateUri="https://google.com">WIKI: Select WebResource </wpfcontrols:ExternalBrowserHyperlink>
+            <wpfcontrols:ExternalBrowserHyperlink NavigateUri="https://google.com">WIKI: Mapping WebResource</wpfcontrols:ExternalBrowserHyperlink>
+        </TextBlock>
+        <TextBlock x:Name="wikiNewWebResource" Padding="10,5,10,5" Visibility="Collapsed">
+            <TextBlock.Background>
+                <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ActiveBorderColorKey}}"/>
+            </TextBlock.Background>
+            <wpfcontrols:ExternalBrowserHyperlink NavigateUri="https://google.com">WIKI: New WebResource</wpfcontrols:ExternalBrowserHyperlink>
         </TextBlock>
         <StackPanel>
             <Border x:Name="ExistingWebResource" Grid.Row="1" Grid.ColumnSpan="2" BorderBrush="Gray" BorderThickness="1" Padding="10,15,10,10" Margin="5,10,5,10">

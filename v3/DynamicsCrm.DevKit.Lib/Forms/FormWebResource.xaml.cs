@@ -13,7 +13,14 @@ namespace DynamicsCrm.DevKit.Lib.Forms
     public partial class FormWebResource : BaseDialogWindow
     {
         public List<DeployWebResource> WebResources { get; }
-        public string FullFileName { get; }
+        private string _FullFileName = string.Empty;
+        public string FullFileName {
+            get { return _FullFileName; }
+            set {
+                _FullFileName = value;
+                textboxNewWebResource.Text = _FullFileName.Replace(@"\", "/");
+            }
+        }
         public DeployWebResource SelectedWebResource
         {
             get
@@ -33,10 +40,15 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         public bool IsNew { get; set; } = false;
 
-        public FormWebResource(bool isNew)
+        public FormWebResource(bool isNew, string fullFileName)
         {
             InitializeComponent();
             IsNew = isNew;
+            FullFileName = fullFileName;
+            ExistingWebResource.Visibility = System.Windows.Visibility.Collapsed;
+            wikiMapping.Visibility = System.Windows.Visibility.Collapsed;
+            NewWebResource.Visibility = System.Windows.Visibility.Visible;
+            wikiNewWebResource.Visibility = System.Windows.Visibility.Visible;
         }
 
         public FormWebResource(List<DeployWebResource> webResources, string fullFileName)
@@ -51,16 +63,22 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private void checkButtonOk()
         {
-            buttonOK.IsEnabled = comboWebResources.Items.Count > 0;
-            if (buttonOK.IsEnabled)
+            if (IsNew)
             {
-                comboWebResources.Text = GetDefaultText();
             }
             else
             {
-                labelError.Visibility = System.Windows.Visibility.Visible;
-                var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(FullFileName);
-                labelError.Content = $"WebResource contains name: [{fileNameWithoutExtension}] not found !!!";
+                buttonOK.IsEnabled = comboWebResources.Items.Count > 0;
+                if (buttonOK.IsEnabled)
+                {
+                    comboWebResources.Text = GetDefaultText();
+                }
+                else
+                {
+                    labelError.Visibility = System.Windows.Visibility.Visible;
+                    var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(FullFileName);
+                    labelError.Content = $"WebResource contains name: [{fileNameWithoutExtension}] not found !!!";
+                }
             }
         }
 
