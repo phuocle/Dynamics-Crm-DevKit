@@ -45,9 +45,9 @@ namespace DynamicsCrm.DevKit.Commands
         {
             await VS.StatusBar.ShowMessageAsync($"Deploying ...");
             var ok = await DeployWebResourceAsync(service, deployWebResource.FullFileName, deployWebResource.WebResourceId);
+            await VS.StatusBar.ShowMessageAsync($"Deployed !!!");
             if (ok)
             {
-                await VS.StatusBar.ShowMessageAsync($"Deployed !!!");
                 await VS.StatusBar.ShowMessageAsync($"Publishing ...");
                 var ok2 = await PublishWebResourceAsync(service, deployWebResource.WebResourceId);
                 if (ok2)

@@ -11,6 +11,10 @@
         {
             "FullFileName": "\\Dev.DevKit.WebResource\\entities\\PhoneCall.js",
             "WebResourceName": "devkit_/entities/PhoneCall.js"
+        },
+        {
+            "FullFileName": "\\Dev.DevKit.WebResource\\css\\StyleSheet2.css",
+            "WebResourceName": "paz_/css/StyleSheet2.css"
         }
     ]
 }

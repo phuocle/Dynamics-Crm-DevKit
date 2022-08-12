@@ -28,16 +28,23 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             get
             {
-                if (IsNew)
+                var value = (DeployWebResource)comboWebResources.SelectedItem;
+                value.FullFileName = FullFileName;
+                return value;
+            }
+        }
+
+        public DeployWebResource SelectedNewWebResource
+        {
+            get
+            {
+                var solution = (NameValueGuidExtend)comboBoxSolutions.SelectedItem;
+                return new DeployWebResource
                 {
-                    return null;
-                }
-                else
-                {
-                    var value = (DeployWebResource)comboWebResources.SelectedItem;
-                    value.FullFileName = FullFileName;
-                    return value;
-                }
+                    FullFileName = FullFileName,
+                    SolutionUniqueName = solution.SolutionUniqueName,
+                    WebResourceName = textboxPrefix.Text + textboxNewWebResource.Text
+                };
             }
         }
 

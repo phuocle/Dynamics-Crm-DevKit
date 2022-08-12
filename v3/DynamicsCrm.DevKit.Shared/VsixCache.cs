@@ -101,24 +101,24 @@ namespace DynamicsCrm.DevKit.Shared
             if (result)
             {
                 var selectedWebResource = form.SelectedWebResource;
-                var cachedWebResources = AddWebResourcesToCached(selectedWebResource);
+                AddWebResourcesToCached(selectedWebResource);
                 SavedTo_DynamicsCrmDevKitCachedJsonFileName(selectedWebResource);
                 return selectedWebResource;
             }
             return null;
         }
 
-        public DeployWebResource GetNewWebResource(CrmServiceClient service, string fullFileName, List<NameValueGuidExtend> solutions)
+        public DeployWebResource GetNewWebResource(CrmServiceClient service, string fullFileName, string fullFileName2, List<NameValueGuidExtend> solutions)
         {
             var form = new FormWebResource(true, fullFileName, solutions);
             var result = form.ShowModal() ?? false;
             if (result)
             {
-                //var selectedWebResource = form.SelectedWebResource;
-                //var cachedWebResources = AddWebResourcesToCached(selectedWebResource);
-                //SavedTo_DynamicsCrmDevKitCachedJsonFileName(selectedWebResource);
-                //return selectedWebResource;
-                return null;
+                var selectedNewWebResource = form.SelectedNewWebResource;
+                selectedNewWebResource.FullFileName = fullFileName2;
+                AddWebResourcesToCached(selectedNewWebResource);
+                SavedTo_DynamicsCrmDevKitCachedJsonFileName(selectedNewWebResource);
+                return selectedNewWebResource;
             }
             return null;
         }
@@ -154,14 +154,15 @@ namespace DynamicsCrm.DevKit.Shared
             if (fileName != null) Utility.ForceWriteAllText(fileName, json);
         }
 
-        private List<DeployWebResource> AddWebResourcesToCached(DeployWebResource selectedWebResource)
+        public void AddWebResourcesToCached(DeployWebResource selectedWebResource)
         {
             var cachedWebResources = new List<DeployWebResource>();
             var cached = GetCached(nameof(VsixCache.WebResources));
             if (cached != null) cachedWebResources = (List<DeployWebResource>)cached;
-            cachedWebResources.Add(selectedWebResource); ;
+            var found = cachedWebResources.Where(x => x.WebResourceName == selectedWebResource.WebResourceName).FirstOrDefault();
+            if (found != null) cachedWebResources.Remove(found);
+            cachedWebResources.Add(selectedWebResource);
             SetCached(nameof(VsixCache.WebResources), cachedWebResources);
-            return cachedWebResources;
         }
 
         private void LoginForm_ConnectionToCrmCompleted(object sender, EventArgs e)
