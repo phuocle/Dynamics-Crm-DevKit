@@ -52,6 +52,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\JsonWorkflow.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\DeployWebResource.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\NameValue.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\NameValueGuid.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\NameValueGuidExtend.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\OldCommentTypeScriptDeclaration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\ProcessForm.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\CachedJson.cs" />

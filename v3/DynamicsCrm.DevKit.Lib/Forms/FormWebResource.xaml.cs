@@ -1,9 +1,12 @@
 ﻿using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
+using Microsoft.VisualStudio.Shell;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace DynamicsCrm.DevKit.Lib.Forms
 {
@@ -40,7 +43,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         public bool IsNew { get; set; } = false;
 
-        public FormWebResource(bool isNew, string fullFileName)
+        public FormWebResource(bool isNew, string fullFileName, List<NameValueGuidExtend> solutions)
         {
             InitializeComponent();
             IsNew = isNew;
@@ -49,6 +52,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             wikiMapping.Visibility = System.Windows.Visibility.Collapsed;
             NewWebResource.Visibility = System.Windows.Visibility.Visible;
             wikiNewWebResource.Visibility = System.Windows.Visibility.Visible;
+            comboBoxSolutions.DisplayMemberPath = "SolutionUniqueName";
+            comboBoxSolutions.ItemsSource = solutions;
+            if (solutions.Count > 0) comboBoxSolutions.SelectedIndex = 0;
         }
 
         public FormWebResource(List<DeployWebResource> webResources, string fullFileName)
@@ -117,6 +123,14 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             ExistingWebResource.Visibility = System.Windows.Visibility.Collapsed;
             NewWebResource.Visibility = System.Windows.Visibility.Visible;
             buttonNewWebResource.Visibility = System.Windows.Visibility.Hidden;
+        }
+
+        private void comboBoxSolutions_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            var comboBox = (ComboBox)sender;
+            if (comboBox?.SelectedItem == null) return;
+            var selected = (NameValueGuidExtend)comboBox.SelectedItem;
+            textboxPrefix.Text = selected.SolutionPrefix + "_";
         }
     }
 }

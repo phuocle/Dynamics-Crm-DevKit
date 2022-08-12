@@ -108,9 +108,9 @@ namespace DynamicsCrm.DevKit.Shared
             return null;
         }
 
-        public DeployWebResource GetNewWebResource(CrmServiceClient service, string fullFileName)
+        public DeployWebResource GetNewWebResource(CrmServiceClient service, string fullFileName, List<NameValueGuidExtend> solutions)
         {
-            var form = new FormWebResource(true, fullFileName);
+            var form = new FormWebResource(true, fullFileName, solutions);
             var result = form.ShowModal() ?? false;
             if (result)
             {

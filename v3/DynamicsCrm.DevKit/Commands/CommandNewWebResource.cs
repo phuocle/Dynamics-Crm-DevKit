@@ -34,7 +34,7 @@ namespace DynamicsCrm.DevKit.Commands
                 //    var webResources = XrmHelper.GetWebResources(serviceCache, fullFileName);
                 //    //if (webResources.Count == 0)
                 //    //{
-                var deployNewWebResource = vsixSessionCache.GetNewWebResource(serviceCache, fullFileName);
+                var deployNewWebResource = vsixSessionCache.GetNewWebResource(serviceCache, fullFileName, XrmHelper.GetAllSolutions(serviceCache));
                 //    //    if (deployNewWebResource != null) {
                 //    //        await DeployNewWebResourceAsync(serviceCache, deployNewWebResource);
                 //    //    }

@@ -54,8 +54,8 @@
                         <RowDefinition Height="*"></RowDefinition>
                         <RowDefinition Height="*"></RowDefinition>
                     </Grid.RowDefinitions>
-                    <Label Grid.Row="0" Grid.Column="0" Margin="0,0,0,5" Content="Profile" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                    <ComboBox x:Name="comboBoxProfile" Grid.Row="0" Grid.Column="1" Margin="0,0,0,5" Grid.ColumnSpan="2"  />
+                    <Label Grid.Row="0" Grid.Column="0" Margin="0,0,0,5" Content="Solution" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                    <ComboBox x:Name="comboBoxSolutions" Grid.Row="0" Grid.Column="1" Margin="0,0,0,5" Grid.ColumnSpan="2" SelectionChanged="comboBoxSolutions_SelectionChanged"  />
                     <Label Grid.Row="1" Grid.Column="0" Margin="0,0,0,5" Content="New Web Resource" HorizontalAlignment="Left" VerticalAlignment="Center" />
                     <TextBox Grid.Column="1" Grid.Row="1" x:Name="textboxPrefix" Margin="0,0,0,5"  HorizontalContentAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Stretch" Padding="0,5,0,5" IsEnabled="False" />
                     <TextBox Grid.Column="2" Grid.Row="1" x:Name="textboxNewWebResource" Margin="1,0,0,5"  HorizontalContentAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Stretch" Padding="0,5,0,5" />

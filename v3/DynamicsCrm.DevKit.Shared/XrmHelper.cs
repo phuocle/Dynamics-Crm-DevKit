@@ -592,5 +592,49 @@ namespace DynamicsCrm.DevKit.Shared
             }
             return ".html";
         }
+
+        public static List<NameValueGuidExtend> GetAllSolutions(CrmServiceClient crmServiceClient)
+        {
+            var fetchData = new
+            {
+                ismanaged = "0",
+                uniquename = "Default",
+                uniquename2 = "Active",
+                uniquename3 = "Basic"
+            };
+            var fetchXml = $@"
+<fetch>
+  <entity name='solution'>
+    <attribute name='solutionid' />
+    <attribute name='uniquename' />
+    <filter>
+      <condition attribute='ismanaged' operator='eq' value='{fetchData.ismanaged/*0*/}'/>
+      <condition attribute='uniquename' operator='neq' value='{fetchData.uniquename/*Default*/}'/>
+      <condition attribute='uniquename' operator='neq' value='{fetchData.uniquename2/*Active*/}'/>
+      <condition attribute='uniquename' operator='neq' value='{fetchData.uniquename3/*Basic*/}'/>
+    </filter>
+    <order attribute='uniquename' />
+    <link-entity name='publisher' from='publisherid' to='publisherid' alias='p'>
+      <attribute name='customizationprefix' />
+      <filter>
+        <condition attribute='customizationprefix' operator='not-null' />
+      </filter>
+    </link-entity>
+  </entity>
+</fetch>";
+            var rows = crmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var list = new List<NameValueGuidExtend>();
+            foreach (var entity in rows.Entities)
+            {
+                list.Add(new NameValueGuidExtend
+                {
+                    Name = entity.GetAttributeValue<string>("uniquename") ?? string.Empty,
+                    Value = entity.Id,
+                    SolutionPrefix = entity.GetAttributeValue<AliasedValue>("p.customizationprefix")?.Value.ToString() ?? string.Empty,
+                    SolutionUniqueName = entity.GetAttributeValue<string>("uniquename") ?? string.Empty
+                });
+            }
+            return list;
+        }
     }
 }

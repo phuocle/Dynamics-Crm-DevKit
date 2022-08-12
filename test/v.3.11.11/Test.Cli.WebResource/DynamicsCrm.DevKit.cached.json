@@ -6,7 +6,7 @@
         },
         {
             "FullFileName": "\\Dev.DevKit.WebResource\\entities\\Contact.js",
-            "WebResourceName": "AppCommon/Contact/Contact_main_system_library.js"
+            "WebResourceName": "devkit_/entities/Contact.js"
         },
         {
             "FullFileName": "\\Dev.DevKit.WebResource\\entities\\PhoneCall.js",
