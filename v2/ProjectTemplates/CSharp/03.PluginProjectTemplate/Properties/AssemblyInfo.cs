@@ -12,7 +12,6 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyProduct("DynamicsCrm.DevKit")]
 [assembly: AssemblyCopyright("Copyright © PhuocLe 2016 - 2020")]
 [assembly: AssemblyTrademark("PhuocLe")]
-[assembly: AssemblyCulture("en")]
 [assembly: ComVisible(false)]
 [assembly: Guid("0b6d03ef-0d6a-4ddd-93f4-f68be1410996")]
 [assembly: AssemblyVersion("2.13.33.0")]
