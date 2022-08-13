@@ -57,6 +57,7 @@
     <None Include="$ProjectName$.snk" />
     <None Include="packages.config" />
     <None Include="deploy.debug.bat" />
+    <None Include="deploy.debug.only.bat" />
 	</ItemGroup>
   <Import Project="..\$SharedProject$\$SharedProject$.projitems" Label="Shared" Condition="Exists('..\$SharedProject$\$SharedProject$.projitems')" />
   <PropertyGroup>

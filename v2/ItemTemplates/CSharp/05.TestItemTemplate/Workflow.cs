@@ -25,11 +25,9 @@ namespace $NameSpace$
         {
             //setup
             //var json = "";
-            //var debugContext = Debug.JsonToDebugContext(json);
-            //Plugin.InputParameters["???"] = (???)debugContext.InputParameters["???"];
-            //var inputs = new Dictionary<string, object>() {};
+            //Plugin.SetDebugContext(json);
             //run
-            //var outputs = Context.ExecuteCodeActivity<$class$>(inputs);
+            //Context.ExecutePluginWith<$class$>(Plugin);
             //result
             Assert.IsTrue(true);
         }

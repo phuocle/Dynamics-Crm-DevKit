@@ -11,7 +11,7 @@ namespace Microsoft.Xrm.Sdk
     [System.Diagnostics.DebuggerNonUserCode()]
     public static class Extension
     {
-        public static T RetrieveByGuid<T>(this IOrganizationService service, string entityName, Guid id, ColumnSet columns)
+        public static T Retrieve<T>(this IOrganizationService service, string entityName, Guid id, ColumnSet columns)
         {
             try
             {
@@ -25,7 +25,7 @@ namespace Microsoft.Xrm.Sdk
             }
         }
 
-        public static List<T> RetrieveAll<T>(this IOrganizationService service, string fetchXml) where T : EntityBase
+        public static List<T> RetrieveMultiple<T>(this IOrganizationService service, string fetchXml) where T : EntityBase
         {
             var lists = new List<T>();
             string pagingCookie = null;
@@ -51,7 +51,28 @@ namespace Microsoft.Xrm.Sdk
             return lists;
         }
 
-        private static string CreateXml(string xml, string cookie, int page, int count)
+        public static EntityCollection RetrieveMultiple(this IOrganizationService service, string fetchXml)
+        {
+            var entityCollection = new EntityCollection();
+            string pagingCookie = null;
+            var pageNumber = 1;
+            var fetchCount = 5000;
+            while (true)
+            {
+                fetchXml = CreateXml(fetchXml, pagingCookie, pageNumber, fetchCount);
+                var rows = service.RetrieveMultiple(new FetchExpression(fetchXml));
+                entityCollection.Entities.AddRange(rows.Entities);
+                if (rows.MoreRecords)
+                {
+                    pageNumber++;
+                    pagingCookie = rows.PagingCookie;
+                }
+                else break;
+            }
+            return entityCollection;
+        }
+
+        public static string CreateXml(string xml, string cookie, int page, int count)
         {
             StringReader stringReader = new StringReader(xml);
             XmlTextReader reader = new XmlTextReader(stringReader);
@@ -85,7 +106,7 @@ namespace Microsoft.Xrm.Sdk
 
         public static void LogMessage(this ITracingService tracingService, string message)
         {
-            tracingService.Trace(message);
+            tracingService?.Trace(message);
         }
 
         public static void DebugContext(this ITracingService tracingService, IExecutionContext context)

@@ -25,6 +25,7 @@
       <ProjectItem ReplaceParameters="true" TargetFileName="Properties\AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="packages.config">_packages.config</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="deploy.debug.bat">deploy.debug.bat</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="deploy.debug.only.bat">deploy.debug.only.bat</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="deploy.datasource.bat">deploy.datasource.bat</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="$ProjectName$.snk">key.snk</ProjectItem>
     </Project>

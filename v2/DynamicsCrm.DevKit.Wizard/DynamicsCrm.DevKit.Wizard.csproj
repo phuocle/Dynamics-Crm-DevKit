@@ -84,7 +84,6 @@
     <Compile Include="ItemTemplates\CustomApi.cs" />
     <Compile Include="ItemTemplates\CustomAction.cs" />
     <Compile Include="ItemTemplates\DownloadWebResource.cs" />
-    <None Include="ItemTemplates\JsForm.cs" />
     <Compile Include="ItemTemplates\JsForm2.cs" />
     <Compile Include="ItemTemplates\JsTest.cs" />
     <Compile Include="ItemTemplates\JsDevkit.cs" />

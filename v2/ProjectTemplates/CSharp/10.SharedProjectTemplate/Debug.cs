@@ -5,6 +5,7 @@ using System.Linq;
 
 namespace $SharedNameSpace$
 {
+    [System.Diagnostics.DebuggerNonUserCode()]
     public class DebugContext
     {
         public Guid? BusinessUnitId { get; set; }
@@ -26,13 +27,15 @@ namespace $SharedNameSpace$
         public string PrimaryEntityName { get; set; }
         public Guid? RequestId { get; set; }
         public string SecondaryEntityName { get; set; }
-        public ParameterCollection SharedVariables { get; set; }
+        public Dictionary<string, object> SharedVariables { get; set; }
+        public int? Stage { get; set; }
         public Guid? UserId { get; set; }
         public Dictionary<string, object> InputParameters { get; set; }
         public Dictionary<string, object> OutputParameters { get; set; }
         public Dictionary<string, object> PostEntityImages { get; set; }
         public Dictionary<string, object> PreEntityImages { get; set; }
     }
+    [System.Diagnostics.DebuggerNonUserCode()]
     public class DebugEntity
     {
         public List<DebugAttributeValue> Attributes { get; set; }
@@ -42,11 +45,13 @@ namespace $SharedNameSpace$
         public string LogicalName { get; set; }
         public string RowVersion { get; set; }
     }
+    [System.Diagnostics.DebuggerNonUserCode()]
     public class DebugEntityReference
     {
         public Guid? EntityReferenceId { get; set; }
         public string LogicalName { get; set; }
     }
+    [System.Diagnostics.DebuggerNonUserCode()]
     public class DebugAttributeValue
     {
         public string LogicalName { get; set; }
@@ -96,7 +101,7 @@ namespace $SharedNameSpace$
             {
                 Attributes = x?.Attributes.Select(a => AttributeValue(a.Key, a.Value)).Where(b => b != null).ToList(),
                 FormattedValues = x?.FormattedValues.ToDictionary(a => a.Key, a => a.Value),
-                KeyAttributes = x?.KeyAttributes.Select(a =>AttributeValue(a.Key, a.Value)).Where(b => b != null).ToList(),
+                KeyAttributes = x?.KeyAttributes.Select(a => AttributeValue(a.Key, a.Value)).Where(b => b != null).ToList(),
                 EntityId = x?.Id,
                 LogicalName = x?.LogicalName,
                 RowVersion = x?.RowVersion
@@ -134,6 +139,14 @@ namespace $SharedNameSpace$
                     outputParameters.Add(key, EntityReferenceToObject(er));
                 else
                     outputParameters.Add(key, context?.OutputParameters?[key]);
+            var sharedVariables = new Dictionary<string, object>();
+            foreach (var key in context?.SharedVariables?.Keys)
+                if (context?.SharedVariables?[key] is Entity x)
+                    sharedVariables.Add(key, EntityToObject(x));
+                else if (context?.SharedVariables?[key] is EntityReference er)
+                    sharedVariables.Add(key, EntityReferenceToObject(er));
+                else
+                    sharedVariables.Add(key, context?.SharedVariables?[key]);
             var debug = new DebugContext
             {
                 BusinessUnitId = context?.BusinessUnitId,
@@ -155,13 +168,14 @@ namespace $SharedNameSpace$
                 PrimaryEntityName = context?.PrimaryEntityName,
                 RequestId = context?.RequestId,
                 SecondaryEntityName = context?.SecondaryEntityName,
-                SharedVariables = context?.SharedVariables,
+                SharedVariables = sharedVariables,
                 UserId = context?.UserId,
                 InputParameters = inputParameters,
                 OutputParameters = outputParameters,
                 PostEntityImages = postEntityImages,
                 PreEntityImages = preEntityImages,
             };
+            if (context is IPluginExecutionContext plugin) debug.Stage = plugin.Stage;
             var json = SimpleJson.SerializeObject(debug);
             json = json
                 .Replace("\"", "'")
@@ -184,7 +198,7 @@ namespace $SharedNameSpace$
         {
             var values = new Dictionary<string, object>();
             if (items == null) return values;
-            foreach(var key in items.Keys)
+            foreach (var key in items.Keys)
             {
                 try
                 {
@@ -208,7 +222,7 @@ namespace $SharedNameSpace$
         private static Entity ConvertDebugEntityToEntity(DebugEntity e)
         {
             var entity = new Entity(e.LogicalName, e.EntityId.Value);
-            foreach(var attribute in e.Attributes)
+            foreach (var attribute in e.Attributes)
             {
                 if (attribute.Value == null) continue;
                 if (attribute.Type == nameof(EntityReference))

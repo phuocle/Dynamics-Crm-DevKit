@@ -41,8 +41,7 @@ namespace $NameSpace$
         {
             //setup
             //var json = "";
-            //var debugContext = Debug.JsonToDebugContext(json);
-            //Plugin.InputParameters["???"] = (???)debugContext.InputParameters["???"];
+            //Plugin.SetDebugContext(json);
             //run
             //Context.ExecutePluginWith<$class$>(Plugin);
             //result

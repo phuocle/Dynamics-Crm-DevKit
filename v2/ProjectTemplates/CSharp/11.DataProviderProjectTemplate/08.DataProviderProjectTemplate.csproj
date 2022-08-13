@@ -54,6 +54,7 @@
     <None Include="deploy.datasource.bat" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="deploy.debug.bat" />
+    <None Include="deploy.debug.only.bat" />
     <None Include="key.snk" />
   </ItemGroup>
   <ItemGroup>

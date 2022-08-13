@@ -52,6 +52,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="XrmFakedPluginExecutionContextExtension.cs" />
     <None Include="run.bat" />
     <None Include="GeneratedCode.cs" />
   </ItemGroup>

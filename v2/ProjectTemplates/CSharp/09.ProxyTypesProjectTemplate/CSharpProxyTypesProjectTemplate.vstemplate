@@ -27,6 +27,7 @@
       <ProjectItem ReplaceParameters="true" TargetFileName="run.bat">run.bat</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="GeneratedCode.cs">GeneratedCode.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="ProxyTypesAssembly.cs">ProxyTypesAssembly.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="XrmFakedPluginExecutionContextExtension.cs">XrmFakedPluginExecutionContextExtension.cs</ProjectItem>
     </Project>
   </TemplateContent>
   <WizardExtension>

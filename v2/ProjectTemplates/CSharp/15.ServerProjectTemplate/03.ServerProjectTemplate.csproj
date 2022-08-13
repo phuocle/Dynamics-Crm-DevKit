@@ -75,6 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="AssemblyInfo.cs" />
+    <None Include="deploy.debug.only.bat" />
     <None Include="deploy.debug.bat" />
     <None Include="key.snk" />
     <None Include="ProjectTemplate.csproj" />

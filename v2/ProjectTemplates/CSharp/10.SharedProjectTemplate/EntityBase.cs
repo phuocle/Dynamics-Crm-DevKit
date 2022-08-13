@@ -40,12 +40,12 @@ namespace $NameSpace$
             if (optionSetValue != null)
             {
                 return new OptionSetValue(optionSetValue.Value);
-            }$if$($ShortCrmName$==365)
+            }
             var optionSetValueCollection = value as OptionSetValueCollection;
             if (optionSetValueCollection != null)
             {
                 return new OptionSetValueCollection(optionSetValueCollection);
-            }$endif$
+            }
             var entityReferenceValue = value as EntityReference;
             if (entityReferenceValue != null)
             {
@@ -112,9 +112,9 @@ namespace $NameSpace$
         }
 
         public Entity GetUpdateEntity()
-        {   $if$($CrmName$!=2013)
-            var update = Entity.KeyAttributes.Count > 0 ? new Entity(Entity.LogicalName, Entity.KeyAttributes) :  new Entity { Id = Entity.Id, LogicalName = Entity.LogicalName };$else$            var update = new Entity(Entity.LogicalName);
-            update.Id = Entity.Id;$endif$
+        {
+            var update = new Entity(Entity.LogicalName);
+            update.Id = Entity.Id;
             foreach (var property in Entity.Attributes)
             {
                 var key = property.Key;
@@ -137,6 +137,11 @@ namespace $NameSpace$
                 }; ;
             }
             return update;
+        }
+
+        public EntityReference ToEntityReference()
+        {
+            return Entity.ToEntityReference();
         }
     }
 }
