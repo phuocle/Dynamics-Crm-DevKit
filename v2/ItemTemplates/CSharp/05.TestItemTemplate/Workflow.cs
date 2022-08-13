@@ -27,9 +27,9 @@ namespace $NameSpace$
             //var json = "";
             //var debugContext = Debug.JsonToDebugContext(json);
             //Plugin.InputParameters["???"] = (???)debugContext.InputParameters["???"];
-            var inputs = new Dictionary<string, object>() {};
+            //var inputs = new Dictionary<string, object>() {};
             //run
-            var outputs = Context.ExecuteCodeActivity<$class$>(inputs);
+            //var outputs = Context.ExecuteCodeActivity<$class$>(inputs);
             //result
             Assert.IsTrue(true);
         }

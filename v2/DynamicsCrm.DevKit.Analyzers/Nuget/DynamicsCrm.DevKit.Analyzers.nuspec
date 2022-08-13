@@ -7,7 +7,7 @@
     <authors>PhuocLe</authors>
     <license type="file">license\LICENSE.txt</license>
     <projectUrl>https://github.com/phuocle/Dynamics-Crm-DevKit</projectUrl>
-    <iconUrl>https://raw.githubusercontent.com/phuocle/Dynamics-Crm-DevKit/master/icon.png</iconUrl>
+    <icon>images\icon.png</icon>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A collection of Dynamics 365 Roslyn Analyzers</description>
     <language>en-US</language>
@@ -17,5 +17,6 @@
     <file src="..\Release\DynamicsCrm.DevKit.Analyzers.dll" target="analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
     <file src="..\tools\*.ps1" target="tools\" />
     <file src="..\license\LICENSE.txt" target="license\LICENSE.txt" />
+    <file src="..\images\icon.png" target="images\icon.png" />
   </files>
 </package>

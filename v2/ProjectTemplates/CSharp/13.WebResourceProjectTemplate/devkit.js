@@ -1212,21 +1212,34 @@ var devKit = (function () {
                 }
                 return (type + field).toLowerCase();
             })();
-            var control = formContext.getControl(logicalName);
+            var control = null;
+            if (formContext.getControl) {
+                control = formContext.getControl(logicalName);
+            }
             if (isNullOrUndefined(control)) {
+                if (formContext.getControl) {
                 control = formContext.getControl(field);
             }
+            }
             var attribute = (function () {
+                var attr = null;
                 if (formContext) {
                     if (formContext.getAttribute) {
-                        var attr = formContext.getAttribute(logicalName);
+                        attr = formContext.getAttribute(logicalName);
                         if (attr) {
                             return attr;
                         }
                     }
                     if (control) {
                         if (control.getAttribute) {
-                            var attr = control.getAttribute();
+                            try {
+                                attr = control.getAttribute();
+                            }
+                            catch {
+                                try {
+                                    attr = formContext.getAttribute(control.controlDescriptor.Id);
+                                } catch { }
+                            }
                             if (attr) {
                                 return attr;
                             }

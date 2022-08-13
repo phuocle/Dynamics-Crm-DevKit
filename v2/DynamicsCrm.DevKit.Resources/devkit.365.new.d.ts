@@ -1276,17 +1276,6 @@ declare namespace DevKit {
              */
             message: string;
         }
-
-        /**
-         * Object passed to QuickCreateSuccessCallbackDelegate.
-         */
-        interface OpenQuickCreateSuccessCallbackObject {
-            /**
-             * A lookup value which identifies the record which has been created.
-             */
-            savedEntityReference: LookupValue;
-        }
-
         /**
          * Object passed to OfflineOperationSuccessCallbackDelegate;
          */
@@ -1744,7 +1733,7 @@ declare namespace DevKit {
          * Cancels the save operation if the event handler has a script error, returns a rejected promise for an async event handler or the operation times out.
          * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/save-event-arguments/preventdefaultonerror
          */
-        SetPreventDefaultOnError
+        SetPreventDefaultOnError(): void;
         /**
          * Returns a value that indicates the order in which this handler is executed.
          * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/executioncontext/getdepth
@@ -1754,7 +1743,7 @@ declare namespace DevKit {
          * Returns an object with methods to manage the events.
          * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/executioncontext/geteventargs
          */
-        readonly EventArgs: any;
+        readonly EventArgs: DevKit.ExecutionContextEventArgs;
         /**
          * Returns a reference to the object that the event occurred on.
          * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/executioncontext/geteventsource
@@ -1785,6 +1774,42 @@ declare namespace DevKit {
         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/save-event-arguments/getsaveerrorinfo
         */
         readonly SaveErrorInfo: string;
+    }
+    interface ExecutionContextEventArgs {
+        /**
+        *  When the form OnDataLoad/OnLoad event occurs. You can gets the state of the data load. It returns an enum with the following values:
+        * - InitialLoad = 1
+        * - Save = 2
+        * - Refresh = 3
+        */
+        getDataLoadState(): 1 | 2 | 3;
+        /**
+         * When the form OnLookupTagClick event occurs. Gets the selected tag value. The value returned for the getTagValue method is a LookupValue.
+         * */
+        getTagValue(): EntityReference;
+        /**
+         * When the form OnLookupTagClick/OnSave event occurs. Cancels the save operation, but all remaining handlers for the event will still be executed.
+         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/save-event-arguments/preventdefault
+         * */
+        preventDefault(): void;
+        /**
+         * When the form OnLookupTagClick/OnSave event occurs. Returns a value indicating whether the save event has been canceled because the preventDefault method was used in this event hander or a previous event handler.
+         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/save-event-arguments/isdefaultprevented
+         * */
+        isDefaultPrevented(): boolean;
+        /**
+         * When the form OnProcessStatusChange/OnStageSelected event occurs. Gets the stage object corresponding to the event triggered. Returns the selected stage in for the OnStageSelected event and next or previous stage objects for the OnStageChange event depending on direction moved.
+         * */
+        getStage(): DevKit.ProcessStage;
+        /**
+         * When the form OnProcessStatusChange/OnStageSelected event occurs. Gets the direction of the stage advance action. It returns a string value Next or Previous.
+         * */
+        getDirection(): "Next" | "Previous";
+        /**
+         * When the form OnSave event occurs,. Returns a value indicating how the save event was initiated by the user.
+         *  @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/save-event-arguments/getsavemode
+         * */
+        getSaveMode(): OptionSet.SaveMode;
     }
     interface Utility {
         /**
@@ -1962,7 +1987,7 @@ declare namespace DevKit {
          * @param errorCallback A function to execute when the operation fails.
          * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openform
          */
-        OpenForm(formOption: DevKit.FormOption, formParameters?: any, successCallback?: (result: DevKit.EntityReference) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        OpenForm(formOption: DevKit.FormOption, formParameters?: any, successCallback?: (result: DevKit.OpenQuickCreateSuccessCallbackObject) => void, errorCallback?: (error: DevKit.Error) => void): void;
         /**
          * Opens a URL, including file URLs.
          * @param url URL to open.
@@ -2499,6 +2524,12 @@ declare namespace DevKit {
         /** Name of the record */
         name?: string;
     }
+    interface OpenQuickCreateSuccessCallbackObject {
+        /**
+         * A lookup value which identifies the record which has been created.
+         */
+        savedEntityReference: Array<DevKit.EntityReference>;
+    }
     interface Window {
         /** Height of the window to display the resultant page in pixels */
         height?: number;
@@ -2596,7 +2627,7 @@ declare namespace DevKit {
         /** A dictionary object that passes extra parameters to the form. */
         data?: any,
         /** ID of the form instance to be displayed. */
-        formId: DevKit.Guid,
+        formId?: DevKit.Guid,
         /** Indicates whether the form is navigated to from a different entity using cross-entity business process flow. */
         isCrossEntityNavigate?: boolean,
         /** Indicates whether there are any offline sync errors. */
@@ -2608,7 +2639,9 @@ declare namespace DevKit {
         /** Define a relationship object to display the related records on the form. */
         relationship?: DevKit.PageInputEntityRecordRelationship,
         /** ID of the selected stage in business process instance. */
-        selectedStageId?: string
+        selectedStageId?: string,
+        /** Sets the focus on the tab of the form. */
+        tabName?: string
     }
     interface PageInputDashboard {
         /** Specify "dashboard" */
@@ -2671,6 +2704,8 @@ declare namespace DevKit {
         useQuickCreateForm?: boolean;
         /**  Width of the form window to be displayed in pixels */
         width?: number;
+        /**  Indicates whether the form is navigated to from a different table using cross-table business process flow. */
+        isCrossEntityNavigate?: boolean;
     }
     interface FormRelationship {
         /** Name of the attribute used for relationship */
@@ -2706,7 +2741,7 @@ declare namespace DevKit {
         /** Specify a value indicating how the save event was initiated */
         saveMode?: OptionSet.SaveMode;
         /** Indicate whether to use the Book or Reschedule messages rather than the Create or Update messages. This option is only applicable when used with appointment, recurring appointment, or service activity records */
-        useSchedulingEngine: boolean;
+        useSchedulingEngine?: boolean;
     }
     interface FieldNotification {
         /** A collection of objects */

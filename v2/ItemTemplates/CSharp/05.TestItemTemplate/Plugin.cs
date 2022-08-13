@@ -116,9 +116,9 @@ namespace $NameSpace$
             //setup
             //var json = "";
             //var debugContext = Debug.JsonToDebugContext(json);
-            //Plugin.InputParameters["???"] = (???)debugContext.InputParameters["???"];
+            //Plugin.SetDebugContext(debugContext);
             //run
-            Context.ExecutePluginWith<$class$>(Plugin);
+            //Context.ExecutePluginWith<$class$>(Plugin);
             //result
             Assert.IsTrue(true);
         }

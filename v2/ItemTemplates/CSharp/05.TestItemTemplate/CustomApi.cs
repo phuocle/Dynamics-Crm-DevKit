@@ -46,7 +46,7 @@ namespace $NameSpace$
             //var debugContext = Debug.JsonToDebugContext(json);
             //Plugin.InputParameters["???"] = (???)debugContext.InputParameters["???"];
             //run
-            Context.ExecutePluginWith<$class$>(Plugin);
+            //Context.ExecutePluginWith<$class$>(Plugin);
             //result
             Assert.IsTrue(true);
         }

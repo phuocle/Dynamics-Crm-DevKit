@@ -27,25 +27,25 @@ if %MsBuild%=="" (
 	)
 
 	call %MsBuild% /nologo /noautorsp /verbosity:minimal -p:Configuration=Release -target:Clean;Build DynamicsCrm.DevKit.sln
-    rem call %MsBuild% /nologo /noautorsp /verbosity:minimal -p:Configuration=Release -target:Clean;Build DynamicsCrm.DevKit.Cli.sln
-	rem call %MsBuild% /nologo /noautorsp /verbosity:minimal -p:Configuration=Release -target:Clean;Build DynamicsCrm.DevKit.Analyzers.sln
+    call %MsBuild% /nologo /noautorsp /verbosity:minimal -p:Configuration=Release -target:Clean;Build DynamicsCrm.DevKit.Cli.sln
+	call %MsBuild% /nologo /noautorsp /verbosity:minimal -p:Configuration=Release -target:Clean;Build DynamicsCrm.DevKit.Analyzers.sln
 
     echo ************************************************************
     echo NuGet pack ...
     echo ************************************************************
 
-	rem cd DynamicsCrm.DevKit.Analyzers\Nuget
-	rem call pack.bat
+	cd DynamicsCrm.DevKit.Analyzers\Nuget
+	call pack.bat
 
-	rem cd ..\..
-	rem cd DynamicsCrm.DevKit.Cli\Nuget
-	rem call pack.bat
+	cd ..\..
+	cd DynamicsCrm.DevKit.Cli\Nuget
+	call pack.bat
 
-	rem cd ..\..
-	rem cd DynamicsCrm.DevKit.Tool\Nuget
-	rem call pack.bat
+	cd ..\..
+	cd DynamicsCrm.DevKit.Tool\Nuget
+	call pack.bat
 
-	rem cd ..\..
+	cd ..\..
 	copy DynamicsCrm.DevKit\Release\DynamicsCrm.DevKit.vsix Published\%VERSION%\DynamicsCrm.DevKit.%VERSION%.vsix
 
     call DynamicsCrm.DevKit.Console\bin\Debug\DynamicsCrm.DevKit.Console.exe 1

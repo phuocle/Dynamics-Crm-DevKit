@@ -195,6 +195,7 @@ ClientBin/
 *.jfm
 !*.pfx
 !PL.DynamicsCrm.DevKit.pfx
+!DynamicsCrm.DevKit.pfx
 *.publishsettings
 node_modules/
 orleans.codegen.cs
