@@ -30,9 +30,9 @@ if %MsBuild%=="" (
     rem call %MsBuild% /nologo /noautorsp /verbosity:minimal -p:Configuration=Release -target:Clean;Build DynamicsCrm.DevKit.Cli.sln
 	rem call %MsBuild% /nologo /noautorsp /verbosity:minimal -p:Configuration=Release -target:Clean;Build DynamicsCrm.DevKit.Analyzers.sln
 
-    echo ************************************************************
-    echo NuGet pack ...
-    echo ************************************************************
+    rem echo ************************************************************
+    rem echo NuGet pack ...
+    rem echo ************************************************************
 
 	rem cd DynamicsCrm.DevKit.Analyzers\Nuget
 	rem call pack.bat

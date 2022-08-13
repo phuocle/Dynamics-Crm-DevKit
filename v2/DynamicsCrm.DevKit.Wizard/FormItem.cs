@@ -237,7 +237,7 @@ namespace DynamicsCrm.DevKit.Wizard
                 var entityName = ComboBoxEntityName;
                 var isDebug = checkBoxDebug.Checked;
                 var file = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{entityName}.d.ts";
-                var isDebugForm = false;
+                //var isDebugForm = false;
                 var jsForm = new List<string>();
                 var jsFormVersion = string.Empty;
                 //if (File.Exists(file))
@@ -275,7 +275,7 @@ namespace DynamicsCrm.DevKit.Wizard
                 var entityName = ComboBoxEntityName;
                 var isDebug = checkBoxDebug.Checked;
                 var file = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{entityName}.d.ts";
-                var isDebugForm = false;
+                //var isDebugForm = false;
                 var jsForm = new List<string>();
                 var jsFormVersion = string.Empty;
                 //if (File.Exists(file))
