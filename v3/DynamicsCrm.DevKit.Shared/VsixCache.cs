@@ -87,13 +87,6 @@ namespace DynamicsCrm.DevKit.Shared
             }
         }
 
-        //public DeployWebResource GetNewWebResource(CrmServiceClient service, string fullFileName)
-        //{
-        //    var form = new FormWebResource(true);
-        //    form.ShowDialog();
-        //    return form.SelectedWebResource;
-        //}
-
         public DeployWebResource GetExistingWebResource(CrmServiceClient service, List<DeployWebResource> webResources, string fullFileName)
         {
             var form = new FormWebResource(webResources, fullFileName);
@@ -122,7 +115,6 @@ namespace DynamicsCrm.DevKit.Shared
             }
             return null;
         }
-
 
         private void SavedTo_DynamicsCrmDevKitCachedJsonFileName(DeployWebResource deployWebResource)
         {

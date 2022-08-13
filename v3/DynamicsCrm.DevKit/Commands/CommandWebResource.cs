@@ -61,23 +61,6 @@ namespace DynamicsCrm.DevKit.Commands
             }
         }
 
-        //private static async Task DeployNewWebResourceAsync(CrmServiceClient service, DeployWebResource deployWebResource)
-        //{
-        //    var task = new CliWebResource(service);
-        //    var fileName = Path.GetFileName(deployWebResource.FullFileName);
-        //    var ok = await task.DeployWebResourceAsync(deployWebResource.FullFileName, deployWebResource.WebResourceId);
-        //    if (ok)
-        //    {
-        //        await VS.StatusBar.ShowMessageAsync($"Connected: {XrmHelper.ConnectedUrl(service)}");
-        //        await task.PublishWebResourceAsync(deployWebResource.WebResourceId);
-        //        await VS.StatusBar.ShowMessageAsync($"Deployed: [{fileName}] to [{deployWebResource.WebResourceName}]");
-        //    }
-        //    else
-        //    {
-        //        await VS.StatusBar.ShowMessageAsync($"Connected: {XrmHelper.ConnectedUrl(service)}");
-        //    }
-        //}
-
         private static async Task<bool> DeployWebResourceAsync(CrmServiceClient service, string fullFileName, Guid webResourceId)
         {
             return await Task.Run(async () =>

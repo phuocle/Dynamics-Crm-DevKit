@@ -1,8 +1,8 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("DynamicsCrm.DevKit.CrmSvcUtilExtensions")]
-[assembly: AssemblyDescription("DynamicsCrm.DevKit.CrmSvcUtilExtensions")]
+[assembly: AssemblyTitle("CSharpLateBoundItemTemplate")]
+[assembly: AssemblyDescription("CSharpLateBoundItemTemplate")]
 #if DEBUG
 [assembly: AssemblyConfiguration("Debug")]
 #else
@@ -13,6 +13,6 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCopyright("Copyright © PhuocLe 2016 - 2022")]
 [assembly: AssemblyTrademark("PhuocLe")]
 [assembly: ComVisible(false)]
-[assembly: Guid("af511858-3072-45d7-932d-c0d98470914e")]
+[assembly: Guid("921403be-b301-40d8-b023-083c4747b50d")]
 [assembly: AssemblyVersion("3.11.11.0")]
 [assembly: AssemblyFileVersion("3.11.11.0")]

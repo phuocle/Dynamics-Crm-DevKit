@@ -13,7 +13,6 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyProduct("DynamicsCrm.DevKit")]
 [assembly: AssemblyCopyright("Copyright © PhuocLe 2016 - 2022")]
 [assembly: AssemblyTrademark("PhuocLe")]
-[assembly: AssemblyCulture("en")]
 [assembly: ComVisible(false)]
 [assembly: AssemblyVersion("3.11.11.0")]
 [assembly: AssemblyFileVersion("3.11.11.0")]

@@ -20,6 +20,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicsCrm.DevKit.Cli", "D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicsCrm.DevKit.CrmSvcUtilExtensions", "DynamicsCrm.DevKit.CrmSvcUtilExtensions\DynamicsCrm.DevKit.CrmSvcUtilExtensions.csproj", "{AF511858-3072-45D7-932D-C0D98470914E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProjectTemplates", "ProjectTemplates", "{5D0AF999-DE0D-474C-B432-F97864CC61FD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CSharp", "CSharp", "{A1A8CC99-F6A4-4BEA-B432-2941471110B4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ItemTemplates", "ItemTemplates", "{642DBB21-1F87-498E-96C6-BF2D029D33E1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CSharp", "CSharp", "{015E59DC-C1FC-486D-B960-614DA7C32C28}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "01.LateBoundItemTemplate", "ItemTemplates\CSharp\01.LateBoundItemTemplate\01.LateBoundItemTemplate.csproj", "{921403BE-B301-40D8-B023-083C4747B50D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -60,9 +70,22 @@ Global
 		{AF511858-3072-45D7-932D-C0D98470914E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AF511858-3072-45D7-932D-C0D98470914E}.Release|x86.ActiveCfg = Release|Any CPU
 		{AF511858-3072-45D7-932D-C0D98470914E}.Release|x86.Build.0 = Release|Any CPU
+		{921403BE-B301-40D8-B023-083C4747B50D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{921403BE-B301-40D8-B023-083C4747B50D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{921403BE-B301-40D8-B023-083C4747B50D}.Debug|x86.ActiveCfg = Debug|x86
+		{921403BE-B301-40D8-B023-083C4747B50D}.Debug|x86.Build.0 = Debug|x86
+		{921403BE-B301-40D8-B023-083C4747B50D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{921403BE-B301-40D8-B023-083C4747B50D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{921403BE-B301-40D8-B023-083C4747B50D}.Release|x86.ActiveCfg = Release|x86
+		{921403BE-B301-40D8-B023-083C4747B50D}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A1A8CC99-F6A4-4BEA-B432-2941471110B4} = {5D0AF999-DE0D-474C-B432-F97864CC61FD}
+		{015E59DC-C1FC-486D-B960-614DA7C32C28} = {642DBB21-1F87-498E-96C6-BF2D029D33E1}
+		{921403BE-B301-40D8-B023-083C4747B50D} = {015E59DC-C1FC-486D-B960-614DA7C32C28}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {04C975FA-0E86-4259-8245-7DFA47D873BB}
