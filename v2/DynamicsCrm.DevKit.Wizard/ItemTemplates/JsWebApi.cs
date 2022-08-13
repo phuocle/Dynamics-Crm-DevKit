@@ -97,7 +97,7 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                 GeneratedJsCode = $"//@ts-check\r\n";
                 GeneratedJsCode += $"///<reference path='{Class}.d.ts' />\r\n";
                 GeneratedJsWebApiCode = form.GeneratedJsWebApiCode;
-                GeneratedJsWebApiCodeTypeScriptDeclaration = form.GeneratedJsWebApiCodeTypeScriptDeclaration;
+                GeneratedJsWebApiCodeTypeScriptDeclaration = form.GeneratedJsTypeScriptDeclaration;
             }
             catch
             {

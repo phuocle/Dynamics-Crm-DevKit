@@ -57,12 +57,6 @@
     <Compile Include="FormItem.Designer.cs">
       <DependentUpon>FormItem.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormItemForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormItemForm.Designer.cs">
-      <DependentUpon>FormItemForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="FormItems.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -90,7 +84,7 @@
     <Compile Include="ItemTemplates\CustomApi.cs" />
     <Compile Include="ItemTemplates\CustomAction.cs" />
     <Compile Include="ItemTemplates\DownloadWebResource.cs" />
-    <Compile Include="ItemTemplates\JsForm.cs" />
+    <None Include="ItemTemplates\JsForm.cs" />
     <Compile Include="ItemTemplates\JsForm2.cs" />
     <Compile Include="ItemTemplates\JsTest.cs" />
     <Compile Include="ItemTemplates\JsDevkit.cs" />
@@ -130,9 +124,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormItem.resx">
       <DependentUpon>FormItem.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FormItemForm.resx">
-      <DependentUpon>FormItemForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormItems.resx">
       <DependentUpon>FormItems.cs</DependentUpon>

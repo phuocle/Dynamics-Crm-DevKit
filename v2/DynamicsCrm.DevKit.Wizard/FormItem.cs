@@ -18,7 +18,10 @@ namespace DynamicsCrm.DevKit.Wizard
     {
         public string GeneratedLateBoundClass { get; set; }
         public string GeneratedJsWebApiCode { get; set; }
-        public string GeneratedJsWebApiCodeTypeScriptDeclaration { get; set; }
+        public string GeneratedJsForm { get; set; }
+        public string GeneratedJsFormCode { get; set; }
+        public string GeneratedJsTypeScriptDeclaration { get; set; }
+
         public CrmServiceClient CrmServiceClient { get; set; }
         public CrmConnection CrmConnection { get; set; }
         public string ComboBoxCrmName => Const.Dynamics365;
@@ -96,6 +99,15 @@ namespace DynamicsCrm.DevKit.Wizard
                 {
                     link.Text = @"Add New Js WebApi Class";
                     link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/JavaScript-WebApi-Item-Template";
+                    textItemName.Visible = false;
+                    comboBoxEntity.Visible = true;
+                    comboBoxEntity.DropDownStyle = ComboBoxStyle.DropDownList;
+                    //checkBoxDebug.Visible = true;
+                }
+                else if (_itemType == ItemType.JsForm2)
+                {
+                    link.Text = @"Add New Js Form Class";
+                    link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/JavaScript-Form-Item-Template";
                     textItemName.Visible = false;
                     comboBoxEntity.Visible = true;
                     comboBoxEntity.DropDownStyle = ComboBoxStyle.DropDownList;
@@ -228,15 +240,15 @@ namespace DynamicsCrm.DevKit.Wizard
                 var isDebugForm = false;
                 var jsForm = new List<string>();
                 var jsFormVersion = string.Empty;
-                if (File.Exists(file))
-                {
-                    var lines = File.ReadAllLines(file);
-                    var json = lines[lines.Length - 1];
-                    var comment = SimpleJson.DeserializeObject<CommentTypeScriptDeclaration>(json.Substring("//".Length).Replace("'", "\""));
-                    isDebugForm = comment.IsDebugForm;
-                    jsForm = comment.JsForm;
-                    jsFormVersion = comment.JsFormVersion;
-                }
+                //if (File.Exists(file))
+                //{
+                //    var lines = File.ReadAllLines(file);
+                //    var json = lines[lines.Length - 1];
+                //    var comment = SimpleJson.DeserializeObject<CommentTypeScriptDeclaration>(json.Substring("//".Length).Replace("'", "\""));
+                //    isDebugForm = comment.IsDebugForm;
+                //    jsForm = comment.JsForm;
+                //    jsFormVersion = comment.JsFormVersion;
+                //}
                 var jsGlobalNameSpace = Utility.GetJsGlobalNameSpace(DTE);
                 Task task2 = Task.Factory.StartNew(() =>
                 {
@@ -249,7 +261,55 @@ namespace DynamicsCrm.DevKit.Wizard
                     var comment = XrmHelper.GetComment(CrmServiceClient, entityMetadata.LogicalName, dtsFile);
                     newCode = JsWebApi2.GetCode(CrmServiceClient, entityMetadata, jsGlobalNameSpace, comment, out newDTS);
                     GeneratedJsWebApiCode = newCode;
-                    GeneratedJsWebApiCodeTypeScriptDeclaration = newDTS;
+                    GeneratedJsTypeScriptDeclaration = newDTS;
+                });
+                while (!task2.IsCompleted)
+                {
+                    Application.DoEvents();
+                }
+            }
+            else if (ItemType == ItemType.JsForm2)
+            {
+                EnabledAll(false);
+                progressBar.Style = ProgressBarStyle.Marquee;
+                var entityName = ComboBoxEntityName;
+                var isDebug = checkBoxDebug.Checked;
+                var file = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{entityName}.d.ts";
+                var isDebugForm = false;
+                var jsForm = new List<string>();
+                var jsFormVersion = string.Empty;
+                //if (File.Exists(file))
+                //{
+                //    var lines = File.ReadAllLines(file);
+                //    var json = lines[lines.Length - 1];
+                //    var comment = SimpleJson.DeserializeObject<CommentTypeScriptDeclaration>(json.Substring("//".Length).Replace("'", "\""));
+                //    isDebugForm = comment.IsDebugForm;
+                //    jsForm = comment.JsForm;
+                //    jsFormVersion = comment.JsFormVersion;
+                //}
+                var jsGlobalNameSpace = Utility.GetJsGlobalNameSpace(DTE);
+                Task task2 = Task.Factory.StartNew(() =>
+                {
+                    ////var jsWebApi = new JsWebApi(CrmServiceClient, jsGlobalNameSpace, entityName, isDebug, jsForm, isDebugForm, jsFormVersion);
+                    ////jsWebApi.GeneratorCode();
+                    //var dtsFile = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{entityName}.d.ts";
+                    //var newCode = string.Empty;
+                    //var newDTS = string.Empty;
+                    //var entityMetadata = XrmHelper.GetEntityMetadata(CrmServiceClient, entityName.ToLower());
+                    //var comment = XrmHelper.GetComment(CrmServiceClient, entityMetadata.LogicalName, dtsFile);
+                    //newCode = JsWebApi2.GetCode(CrmServiceClient, entityMetadata, jsGlobalNameSpace, comment, out newDTS);
+                    //GeneratedJsWebApiCode = newCode;
+                    //GeneratedJsWebApiCodeTypeScriptDeclaration = newDTS;
+
+                    var dtsFile = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{entityName}.d.ts";
+                    var entityMetadata = XrmHelper.GetEntityMetadata(CrmServiceClient, entityName.ToLower());
+                    var comment = XrmHelper.GetComment(CrmServiceClient, entityMetadata.LogicalName, dtsFile);
+                    var newCode = JsForm3.GetCode(CrmServiceClient, entityMetadata, jsGlobalNameSpace, comment, out var newDTS);
+
+                    GeneratedJsForm = string.Empty;
+                    GeneratedJsFormCode = newCode;
+                    GeneratedJsTypeScriptDeclaration = newDTS;
+
                 });
                 while (!task2.IsCompleted)
                 {
@@ -338,6 +398,27 @@ namespace DynamicsCrm.DevKit.Wizard
                         Application.DoEvents();
                     }
                     LoadComboBoxEntity(entities2);
+                    comboBoxEntity.Enabled = comboBoxEntity.Items.Count > 0;
+                    buttonOk.Enabled = comboBoxEntity.Enabled;
+                    checkBoxDebug.Enabled = comboBoxEntity.Enabled;
+                    buttonConnection.Enabled = true;
+                    buttonCancel.Enabled = true;
+                    progressBar.Style = ProgressBarStyle.Blocks;
+                    progressBar.Value = 100;
+                    break;
+                case ItemType.JsForm2:
+                    EnabledAll(false);
+                    List<XrmEntity> entities22 = null;
+                    progressBar.Style = ProgressBarStyle.Marquee;
+                    Task task22 = Task.Factory.StartNew(() =>
+                    {
+                        entities22 = XrmHelper.GetAllEntities(CrmServiceClient);
+                    });
+                    while (!task22.IsCompleted)
+                    {
+                        Application.DoEvents();
+                    }
+                    LoadComboBoxEntity(entities22);
                     comboBoxEntity.Enabled = comboBoxEntity.Items.Count > 0;
                     buttonOk.Enabled = comboBoxEntity.Enabled;
                     checkBoxDebug.Enabled = comboBoxEntity.Enabled;
@@ -452,7 +533,11 @@ namespace DynamicsCrm.DevKit.Wizard
             {
                 case ItemType.JsWebApi:
                     labelItemName.Text = $"{Utility.SafeName(text)}.webapi.js";
-                    LoadDebugCheckBox();
+                    //LoadDebugCheckBox();
+                    break;
+                case ItemType.JsForm2:
+                    labelItemName.Text = $"{Utility.SafeName(text)}.form.js";
+                    //LoadDebugCheckBox();
                     break;
                 case ItemType.JsTest:
                     labelItemName.Text = $"{Utility.SafeName(text)}.test.js";
@@ -473,23 +558,23 @@ namespace DynamicsCrm.DevKit.Wizard
 
         private void LoadDebugCheckBox()
         {
-            var entity = comboBoxEntity.SelectedItem as XrmEntity;
-            var file1 = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{entity.Name}.intellisense.js";
-            var file2 = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{entity.Name}.d.ts";
-            var file = File.Exists(file2) ? file2 : file1;
-            if (File.Exists(file))
-            {
-                try
-                {
-                    var lines = File.ReadAllLines(file);
-                    var json = lines[lines.Length - 1];
-                    var comment = SimpleJson.DeserializeObject<CommentTypeScriptDeclaration>(json.Substring("//".Length).Replace("'", "\""));
-                    checkBoxDebug.Checked = comment.IsDebugWebApi;
-                }
-                catch
-                {
-                }
-            }
+            //var entity = comboBoxEntity.SelectedItem as XrmEntity;
+            //var file1 = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{entity.Name}.intellisense.js";
+            //var file2 = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{entity.Name}.d.ts";
+            //var file = File.Exists(file2) ? file2 : file1;
+            //if (File.Exists(file))
+            //{
+            //    try
+            //    {
+            //        var lines = File.ReadAllLines(file);
+            //        var json = lines[lines.Length - 1];
+            //        var comment = SimpleJson.DeserializeObject<CommentTypeScriptDeclaration>(json.Substring("//".Length).Replace("'", "\""));
+            //        checkBoxDebug.Checked = comment.IsDebugWebApi;
+            //    }
+            //    catch
+            //    {
+            //    }
+            //}
         }
 
         private void ComboBoxWebResource_SelectedIndexChanged(object sender, EventArgs e)
