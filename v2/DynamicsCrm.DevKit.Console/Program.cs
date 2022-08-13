@@ -212,24 +212,17 @@ namespace DynamicsCrm.DevKit.Console
 
         static void Main(string[] args)
         {
-            //if (args.Length == 0)
-            //{
-            //    DevKitJsMinOld();
-            //    DevKitJsMinNew();
-            //    GeneratorXrmEnum();
-            //    UpdateBuildDate();
-            //}
-            //else
-            //{
-            //    UpdateBuildDateBack();
-            //}
-
-            var temp = string.Empty;
-            foreach (var language in GetLanguages())
+            if (args.Length == 0)
             {
-                temp += $"        <Title description=\"D365 ICONS\" languagecode=\"{language.Value}\" />\r\n";
+                DevKitJsMinOld();
+                DevKitJsMinNew();
+                GeneratorXrmEnum();
+                UpdateBuildDate();
             }
-            var a = string.Empty;
+            else
+            {
+                UpdateBuildDateBack();
+            }
         }
 
         private static void UpdateBuildDateBack()

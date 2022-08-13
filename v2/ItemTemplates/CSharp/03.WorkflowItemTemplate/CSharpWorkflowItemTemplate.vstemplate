@@ -17,7 +17,7 @@
     <ProjectItem ReplaceParameters="true" TargetFileName="$class$.cs">Class.cs</ProjectItem>
   </TemplateContent>
   <WizardExtension>
-    <Assembly>DynamicsCrm.DevKit.Wizard, Version=2.13.33.0, Culture=en, PublicKeyToken=98cbb7bd3db31604</Assembly>
+    <Assembly>DynamicsCrm.DevKit.Wizard, Version=3.11.11.0, Culture=en, PublicKeyToken=98cbb7bd3db31604</Assembly>
     <FullClassName>DynamicsCrm.DevKit.Wizard.ItemTemplates.Workflow</FullClassName>
   </WizardExtension>
 </VSTemplate>
