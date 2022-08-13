@@ -99,7 +99,7 @@ namespace DynamicsCrm.DevKit.Wizard
                     textItemName.Visible = false;
                     comboBoxEntity.Visible = true;
                     comboBoxEntity.DropDownStyle = ComboBoxStyle.DropDownList;
-                    checkBoxDebug.Visible = true;
+                    //checkBoxDebug.Visible = true;
                 }
                 else if (_itemType == ItemType.ResourceString)
                 {
@@ -240,10 +240,16 @@ namespace DynamicsCrm.DevKit.Wizard
                 var jsGlobalNameSpace = Utility.GetJsGlobalNameSpace(DTE);
                 Task task2 = Task.Factory.StartNew(() =>
                 {
-                    var jsWebApi = new JsWebApi(CrmServiceClient, jsGlobalNameSpace, entityName, isDebug, jsForm, isDebugForm, jsFormVersion);
-                    jsWebApi.GeneratorCode();
-                    GeneratedJsWebApiCode = jsWebApi.WebApiCode;
-                    GeneratedJsWebApiCodeTypeScriptDeclaration = jsWebApi.WebApiCodeTypeScriptDeclaration;
+                    //var jsWebApi = new JsWebApi(CrmServiceClient, jsGlobalNameSpace, entityName, isDebug, jsForm, isDebugForm, jsFormVersion);
+                    //jsWebApi.GeneratorCode();
+                    var dtsFile = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{entityName}.d.ts";
+                    var newCode = string.Empty;
+                    var newDTS = string.Empty;
+                    var entityMetadata = XrmHelper.GetEntityMetadata(CrmServiceClient, entityName.ToLower());
+                    var comment = XrmHelper.GetComment(CrmServiceClient, entityMetadata.LogicalName, dtsFile);
+                    newCode = JsWebApi2.GetCode(CrmServiceClient, entityMetadata, jsGlobalNameSpace, comment, out newDTS);
+                    GeneratedJsWebApiCode = newCode;
+                    GeneratedJsWebApiCodeTypeScriptDeclaration = newDTS;
                 });
                 while (!task2.IsCompleted)
                 {

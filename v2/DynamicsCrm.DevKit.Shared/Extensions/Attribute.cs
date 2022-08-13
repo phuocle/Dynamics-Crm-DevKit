@@ -6,6 +6,7 @@ using System.Reflection;
 using DynamicsCrm.DevKit.Shared.Helper;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.Xrm.Sdk.Metadata;
+using Microsoft.Xrm.Tooling.Connector;
 
 namespace DynamicsCrm.DevKit.Shared.Extensions
 {
@@ -247,6 +248,43 @@ namespace DynamicsCrm.DevKit.Shared.Extensions
         {
             if (value == null) return null;
             return value.Trim().Replace("\r\n", "").Replace("\r", "").Replace("\n", "");
+        }
+
+        public static bool IsReadOnly(this AttributeMetadata attribute)
+        {
+            return attribute.SourceType == 1 || attribute.SourceType == 2;
+        }
+        public static void AddIfNotExist(this List<EntityMetadata> entitiesMetadata, CrmServiceClient crmServiceClient, string entityLogicalName)
+        {
+            if (!XrmHelper.EntitiesMetadata.Any(x => x.LogicalName == entityLogicalName))
+            {
+                XrmHelper.EntitiesMetadata.Add(XrmHelper.GetEntityMetadata(crmServiceClient, entityLogicalName));
+            }
+        }
+
+        public static void AddIfNotExist(this List<SystemForm> entitiesFormXml, CrmServiceClient crmServiceClient, string entityLogicalName)
+        {
+            if (!XrmHelper.EntitiesFormXml.Any(x => x.EntityLogicalName == entityLogicalName))
+            {
+                XrmHelper.EntitiesMetadata.AddIfNotExist(crmServiceClient, entityLogicalName);
+                var entityMetadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.LogicalName == entityLogicalName);
+                if (entityMetadata != null)
+                {
+                    var forms = XrmHelper.GetEntityFormXml(crmServiceClient, entityMetadata.ObjectTypeCode);
+                    if (forms.Count > 0) XrmHelper.EntitiesFormXml.AddRange(forms);
+                }
+            }
+        }
+
+        public static void AddIfNotExist(this List<ProcessForm> entitiesProcessForm, CrmServiceClient crmServiceClient, string entityLogicalName)
+        {
+            if (!XrmHelper.EntitiesProcessForm.Any(x => x.EntityLogicalName == entityLogicalName))
+            {
+                XrmHelper.EntitiesMetadata.AddIfNotExist(crmServiceClient, entityLogicalName);
+                var entityMetadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.LogicalName == entityLogicalName);
+                var processes = XrmHelper.GetEntityProcessForm(crmServiceClient, entityMetadata.ObjectTypeCode, entityLogicalName);
+                if (processes.Count > 0) XrmHelper.EntitiesProcessForm.AddRange(processes);
+            }
         }
     }
 }

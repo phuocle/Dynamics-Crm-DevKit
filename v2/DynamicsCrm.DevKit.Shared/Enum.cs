@@ -93,3 +93,10 @@ public enum GeneratorType
     jswebapi,
     csharp
 }
+
+public enum FormType
+{
+    Main = 2,
+    QuickCreate = 7,
+    QuickView = 6
+}

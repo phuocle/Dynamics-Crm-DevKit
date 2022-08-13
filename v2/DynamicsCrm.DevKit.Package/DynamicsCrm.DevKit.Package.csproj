@@ -144,6 +144,9 @@
     <Compile Include="..\DynamicsCrm.DevKit.Shared\Models\Cli\JsonWorkflow.cs">
       <Link>Links\JsonWorkflow.cs</Link>
     </Compile>
+    <Compile Include="..\DynamicsCrm.DevKit.Shared\Models\CommentTypeScriptDeclaration.cs">
+      <Link>Links\CommentTypeScriptDeclaration.cs</Link>
+    </Compile>
     <Compile Include="..\DynamicsCrm.DevKit.Shared\Models\CrmAttribute.cs">
       <Link>Links\CrmAttribute.cs</Link>
     </Compile>
@@ -165,8 +168,17 @@
     <Compile Include="..\DynamicsCrm.DevKit.Shared\Models\NameValueGuid.cs">
       <Link>Links\NameValueGuid.cs</Link>
     </Compile>
+    <Compile Include="..\DynamicsCrm.DevKit.Shared\Models\OldCommentTypeScriptDeclaration.cs">
+      <Link>Links\OldCommentTypeScriptDeclaration.cs</Link>
+    </Compile>
     <Compile Include="..\DynamicsCrm.DevKit.Shared\Models\PluginInputOutputParameter.cs">
       <Link>Links\PluginInputOutputParameter.cs</Link>
+    </Compile>
+    <Compile Include="..\DynamicsCrm.DevKit.Shared\Models\ProcessForm.cs">
+      <Link>Links\ProcessForm.cs</Link>
+    </Compile>
+    <Compile Include="..\DynamicsCrm.DevKit.Shared\Models\SystemForm.cs">
+      <Link>Links\SystemForm.cs</Link>
     </Compile>
     <Compile Include="..\DynamicsCrm.DevKit.Shared\Models\VisualStudioConfig.cs">
       <Link>Links\VisualStudioConfig.cs</Link>

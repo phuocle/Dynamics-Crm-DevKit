@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace DynamicsCrm.DevKit.Shared.Models
 {
-    public class CommentTypeScriptDeclaration
+    public class OldCommentTypeScriptDeclaration
     {
         public List<string> JsForm { get; set; }
         public bool JsWebApi { get; set; }
@@ -10,7 +12,5 @@ namespace DynamicsCrm.DevKit.Shared.Models
         public bool IsDebugWebApi { get; set; }
         public string Version { get; set; }
         public string JsFormVersion { get; set; }
-        public bool UseForm { get; set; }
-        public bool UseWebApi { get; set; }
     }
 }

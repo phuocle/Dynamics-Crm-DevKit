@@ -10,6 +10,8 @@ using Microsoft.Xrm.Sdk;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Tooling.Connector;
 using Microsoft.Xrm.Sdk.Metadata.Query;
+using DynamicsCrm.DevKit.Shared.Extensions;
+using System.IO;
 
 namespace DynamicsCrm.DevKit.Shared.Helper
 {
@@ -695,6 +697,142 @@ namespace DynamicsCrm.DevKit.Shared.Helper
         public static EntityMetadata GetEntityMetadata(CrmServiceClient crmServiceClient, string entityLogicalName)
         {
             return GetEntitiesMetadata(crmServiceClient, new List<string> { entityLogicalName }).FirstOrDefault(); ;
+        }
+
+        public static List<EntityMetadata> EntitiesMetadata { get; set; } = new List<EntityMetadata>();
+        public static List<SystemForm> GetEntityForms(CrmServiceClient crmServiceClient, string entityLogicalName)
+        {
+            XrmHelper.EntitiesFormXml.AddIfNotExist(crmServiceClient, entityLogicalName);
+            var forms = XrmHelper.EntitiesFormXml
+                .Where(x => x.EntityLogicalName == entityLogicalName && (x.FormType == FormType.Main || x.FormType == FormType.QuickCreate))
+                .OrderBy(x => x.Name)
+                .ToList();
+            return forms;
+        }
+        public static List<SystemForm> EntitiesFormXml { get; set; } = new List<SystemForm>();
+
+        public static List<SystemForm> GetEntityFormXml(CrmServiceClient crmServiceClient, int? objectTypeCode)
+        {
+            var fetchData = new
+            {
+                formactivationstate = "1",
+                type = (int)FormType.Main,
+                type2 = (int)FormType.QuickCreate,
+                type3 = (int)FormType.QuickView,
+                objecttypecode = objectTypeCode ?? -1
+            };
+            var fetchXml = $@"
+<fetch>
+  <entity name='systemform'>
+    <attribute name='description' />
+    <attribute name='name' />
+    <attribute name='formxml' />
+    <attribute name='type' />
+    <attribute name='objecttypecode' />
+    <attribute name='formid' />
+    <order attribute='name' descending='false'/>
+    <filter type='and'>
+      <condition attribute='formactivationstate' operator='eq' value='{fetchData.formactivationstate}'/>
+      <condition attribute='objecttypecode' operator='eq' value='{fetchData.objecttypecode}'/>
+      <filter type='or'>
+        <condition attribute='type' operator='eq' value='{fetchData.type}'/>
+        <condition attribute='type' operator='eq' value='{fetchData.type2}'/>
+        <condition attribute='type' operator='eq' value='{fetchData.type3}'/>
+      </filter>
+    </filter>
+  </entity>
+</fetch>";
+            var rows = crmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            if (rows.Entities.Count == 0) return new List<SystemForm>();
+            var forms = rows.Entities.Select(x => new SystemForm
+            {
+                Name = x.GetAttributeValue<string>("name"),
+                Description = x.GetAttributeValue<string>("description"),
+                FormXml = x.GetAttributeValue<string>("formxml"),
+                IsQuickCreate = x.GetAttributeValue<OptionSetValue>("type")?.Value == 7,
+                EntityLogicalName = x.GetAttributeValue<string>("objecttypecode"),
+                FormType = (FormType)x.GetAttributeValue<OptionSetValue>("type")?.Value,
+                FormId = x.GetAttributeValue<Guid?>("formid")
+            });
+            return forms.OrderBy(x => x.EntityLogicalName).ThenBy(x => x.Name).ToList();
+        }
+
+        public static List<ProcessForm> EntitiesProcessForm { get; set; } = new List<ProcessForm>();
+        public static List<ProcessForm> GetEntityProcessForm(CrmServiceClient crmServiceClient, int? objectTypeCode, string logicalName)
+        {
+            var fetchData = new
+            {
+                category = "4",
+                statecode = "1",
+                businessprocesstype = "0",
+                xaml = $"%: {logicalName}%",
+                primaryentity = objectTypeCode ?? -1,
+            };
+            var fetchXml = $@"
+<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+  <entity name='workflow'>
+    <attribute name='name' />
+    <attribute name='uniquename' />
+    <attribute name='xaml' />
+    <attribute name='primaryentity' />
+    <filter type='and'>
+      <condition attribute='category' operator='eq' value='{fetchData.category/*4*/}'/>
+      <condition attribute='statecode' operator='eq' value='{fetchData.statecode/*1*/}'/>
+      <condition attribute='businessprocesstype' operator='eq' value='{fetchData.businessprocesstype/*0*/}'/>
+      <filter type='or'>
+        <condition attribute='xaml' operator='like' value='{fetchData.xaml/*%: contact%*/}'/>
+        <condition attribute='primaryentity' operator='eq' value='{fetchData.primaryentity/*2*/}'/>
+      </filter>
+    </filter>
+  </entity>
+</fetch>";
+            var rows = crmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            return rows.Entities.Select(x => new ProcessForm
+            {
+                EntityLogicalName = logicalName,
+                Name = x.GetAttributeValue<string>("name"),
+                xaml = x.GetAttributeValue<string>("xaml")
+            }).ToList();
+        }
+        public static CommentTypeScriptDeclaration GetComment(CrmServiceClient crmServiceClient, string entityLogicalName, string dtsFile)
+        {
+            if (File.Exists(dtsFile))
+            {
+                var lines = File.ReadAllLines(dtsFile);
+                try
+                {
+                    var json = lines[lines.Length - 1];
+                    var oldComment = SimpleJson.DeserializeObject<OldCommentTypeScriptDeclaration>(json.Substring("//".Length).Replace("'", "\""));
+                    var comment = SimpleJson.DeserializeObject<CommentTypeScriptDeclaration>(json.Substring("//".Length).Replace("'", "\""));
+                    if (oldComment?.JsForm?.Count >= 0)
+                    {
+                        comment.UseForm = oldComment?.JsForm?.Count > 0;
+                        comment.UseWebApi = oldComment.JsWebApi;
+                    }
+
+                    comment.Version = Const.Version;
+                    return comment;
+                }
+                catch
+                {
+                    return new CommentTypeScriptDeclaration
+                    {
+                        UseForm = false,
+                        UseWebApi = false,
+                        Version = Const.Version
+                    };
+                }
+            }
+            else
+            {
+                XrmHelper.EntitiesFormXml.AddIfNotExist(crmServiceClient, entityLogicalName);
+                return new CommentTypeScriptDeclaration
+                {
+                    UseForm = XrmHelper.EntitiesFormXml.Any(x => x.EntityLogicalName == entityLogicalName),
+                    UseWebApi = true,
+                    Version = Const.Version
+                };
+            }
         }
     }
 }

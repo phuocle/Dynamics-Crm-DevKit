@@ -9,6 +9,8 @@ using System.Text;
 using Microsoft.CSharp;
 using System.Globalization;
 using Microsoft.Xrm.Sdk.Metadata;
+using DynamicsCrm.DevKit.Shared.Helper;
+using DynamicsCrm.DevKit.Shared.Extensions;
 
 namespace DynamicsCrm.DevKit.Shared
 {
@@ -960,6 +962,83 @@ namespace DynamicsCrm.DevKit.Shared
                     value += name[i];
             }
             return value;
+        }
+
+        public static string GetNameSpace(string rootNamespace)
+        {
+            var parts = rootNamespace.Split(".".ToCharArray());
+            var @namespace = parts.Length > 1 ? parts[1] : parts[0];
+            return Utility.SafeIdentifier(@namespace);
+        }
+
+        public static string GeneratorOptionSet(EntityMetadata EntityMetadata)
+        {
+            const string NEW_LINE = "\r\n";
+            const string TAB = "\t";
+            var code = string.Empty;
+            code += $"/** @namespace OptionSet */{NEW_LINE}";
+            code += $"var OptionSet;{NEW_LINE}";
+            code += $"(function (OptionSet) {{{NEW_LINE}";
+            code += $"{TAB}OptionSet.{EntityMetadata.SchemaName} = {{{NEW_LINE}";
+            foreach (var attribute in EntityMetadata.Attributes.OrderBy(x => x.SchemaName))
+            {
+                if (XrmHelper.IsOptionSet(attribute))
+                {
+                    if (attribute.SchemaName == "OwnerIdType") continue;
+                    var values = attribute.OptionSetValues();
+                    if (values.Count == 0)
+                    {
+                        code += $"{TAB}{TAB}{attribute.SchemaName} : {{{NEW_LINE}";
+                        code = code.TrimEnd($",{NEW_LINE}".ToCharArray());
+                        code += $"{NEW_LINE}";
+                        code += $"{TAB}{TAB}}},{NEW_LINE}";
+                    }
+                    else
+                    {
+                        code += $"{TAB}{TAB}{attribute.SchemaName} : {{{NEW_LINE}";
+                        foreach (var value in values)
+                        {
+                            code += $"{TAB}{TAB}{TAB}{value.Name}: {value.Value},{NEW_LINE}";
+                        }
+                        code = code.TrimEnd($",{NEW_LINE}".ToCharArray());
+                        code += $"{NEW_LINE}";
+                        code += $"{TAB}{TAB}}},{NEW_LINE}";
+                    }
+                }
+            }
+            code += $"{TAB}{TAB}RollupState : {{{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}NotCalculated: 0,{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}Calculated: 1,{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}OverflowError: 2,{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}OtherError: 3,{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}RetryLimitExceeded: 4,{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}HierarchicalRecursionLimitReached: 5,{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}LoopDetected: 6{NEW_LINE}";
+            code += $"{TAB}{TAB}}}{NEW_LINE}";
+            code += $"{TAB}}};{NEW_LINE}";
+            code += $"}})(OptionSet || (OptionSet = {{}}));";
+            return code;
+        }
+
+        public static string GetFormName(string formName, string @class)
+        {
+            if (formName.ToLower() == "information") return $"{@class} Information";
+            else if (formName.ToLower() == "wizard") return $"{@class} Wizard";
+            else if (formName.ToLower() == "ai for sales") return $"{@class} AI for Sales";
+            else if (formName.ToLower() == "quick create") return $"{@class} Quick Create";
+            else if (formName.ToLower() == "quickcreate") return $"{@class} QuickCreate";
+            else if (formName.ToLower() == "new form") return $"{@class} New_Form";
+            else if (formName.ToLower() == "adobe sign") return $"{@class} Adobe_Sign";
+            else if (formName.ToLower() == "sales insights") return $"{@class} Sales_Insights";
+            else if (formName.ToLower() == "agreement") return $"{@class} Agreement";
+            else if (formName.ToLower() == "project information") return $"{@class} Project Information";
+            else if (formName.ToLower() == "project quick create") return $"{@class} Project Quick Create";
+            else if (formName.ToLower() == "omnichannel information") return $"{@class} Omnichannel Information";
+            else if (formName.ToLower() == "field service information") return $"{@class} Field Service Information";
+            else if (formName.ToLower() == "main form") return $"{@class} Main Form";
+            else if (formName.ToLower() == "quick create form") return $"{@class} Quick Create Form";
+            else if (formName.ToLower() == "quick create from requirement") return $"{@class} Quick Create from Requirement";
+            return formName;
         }
     }
 }

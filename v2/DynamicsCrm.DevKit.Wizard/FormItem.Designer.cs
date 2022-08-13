@@ -116,6 +116,8 @@
             // checkBoxDebug
             // 
             this.checkBoxDebug.AutoSize = true;
+            this.checkBoxDebug.Checked = true;
+            this.checkBoxDebug.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxDebug.Enabled = false;
             this.checkBoxDebug.Location = new System.Drawing.Point(309, 65);
             this.checkBoxDebug.Margin = new System.Windows.Forms.Padding(2);

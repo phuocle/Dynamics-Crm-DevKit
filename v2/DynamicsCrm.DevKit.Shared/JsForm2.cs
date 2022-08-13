@@ -836,18 +836,19 @@ namespace DynamicsCrm.DevKit.Shared
                     }
                 }
             }
-            var jsIntellisense = new JsTypeScriptDeclaration2(CrmService)
-            {
-                ProcessForms = processForms,
-                IsDebugForm = isDebugForm,
-                IsDebugWebApi = isDebugWebApi,
-                IsJsWebApi = isJsWebApi,
-                ProjectName = ProjectName,
-                EntityName = EntityName,
-                Fields = Fields,
-                Processes = Processes
-            };
-            return jsIntellisense.Intellisense;
+            //var jsIntellisense = new JsTypeScriptDeclaration2(CrmService)
+            //{
+            //    ProcessForms = processForms,
+            //    IsDebugForm = isDebugForm,
+            //    IsDebugWebApi = isDebugWebApi,
+            //    IsJsWebApi = isJsWebApi,
+            //    ProjectName = ProjectName,
+            //    EntityName = EntityName,
+            //    Fields = Fields,
+            //    Processes = Processes
+            //};
+            //return jsIntellisense.Intellisense;
+            return string.Empty;
         }
 
         public IEnumerable<string> GetForms()

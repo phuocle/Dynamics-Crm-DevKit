@@ -59,6 +59,19 @@
         public const string UNKNOWN_3 = "B089AF64-3C1C-4DA7-BC90-C4B6164F6B73";
         public const string UNKNOWN_4 = "C6D09D3E-168E-4CC0-882E-10045EC08DD7";
         public const string UNKNOWN_5 = "2F342F33-C405-4602-B1AE-CB02C6BFF160";
+        public const string UNKNOWN_6 = "EA342A25-092E-41AC-B395-74C39E91E9D1";
+        public const string UNKNOWN_7 = "83029327-1963-41F3-A9CB-568B358B9CA4";
+        public const string UNKNOWN_8 = "D05BFEC5-5FEF-4AC9-9AD5-890986B1AA90";
+        public const string UNKNOWN_9 = "007A7591-132E-42CD-B8A0-5BDAF8CB650F";
+        public const string UNKNOWN_10 = "13EC4A4A-7E70-443E-9190-D314B4D12CDA";
+        public const string UNKNOWN_11 = "80E966D2-67F1-4ADA-B4D7-A19FBD5ACE2B";
+        public const string UNKNOWN_12 = "B725CFA1-44F7-4C09-88C1-5A74E61143B8";
+        public const string UNKNOWN_13 = "76EEA8AC-5E11-4FB7-AA0F-FB7F711F4212";
+        public const string UNKNOWN_14 = "F7DEE5EB-B457-4C91-BDC8-C0B7D2B81F77";
+        public const string UNKNOWN_15 = "4273EDBD-AC1D-40D3-9FB2-095C621B5511";
+        public const string UNKNOWN_16 = "3DE87A16-47A2-48C6-8939-EE111C83B9AD";
+        public const string UNKNOWN_17 = "83ACFF84-DCE0-4E32-9DB9-99624A721DD0";
+        public const string UNKNOWN_18 = "75ECD29C-0FBA-4C4B-83AE-5888A0437640";
 
         public const string CASERESEARCH_LINKCONTROL = "DFDF1CDE-837B-4AC9-98CF-AC74361FD89D";
         public const string KBVIEWER = "A62B6FA9-169E-406C-B1AA-EAB828CB6026";
