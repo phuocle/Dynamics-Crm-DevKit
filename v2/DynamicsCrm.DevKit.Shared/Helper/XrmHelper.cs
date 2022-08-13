@@ -233,8 +233,9 @@ namespace DynamicsCrm.DevKit.Shared.Helper
 
         public static string GeneratedLateBoundClass(CrmServiceClient service, string crmName, string entitySchemaName, string nameSpace, string sharedNameSpace)
         {
-            var lateBound = new CSharpLateBound();
-            return lateBound.Go(service, Utility.ConvertCrmNameToCrmVersionName(crmName), entitySchemaName, nameSpace, sharedNameSpace);
+            //var lateBound = new CSharpLateBound();
+            //return lateBound.Go(service, Utility.ConvertCrmNameToCrmVersionName(crmName), entitySchemaName, nameSpace, sharedNameSpace);
+            return CSharpLateBound.GetCode(service, GetEntityMetadata(service, entitySchemaName.ToLower()), nameSpace);
         }
 
         public static List<PluginInputOutputParameter> GetPluginInputOutputParameters(CrmServiceClient service, string entityName, string requestName)
@@ -651,6 +652,49 @@ namespace DynamicsCrm.DevKit.Shared.Helper
             foreach (EntityMetadata entityMetadata in response.EntityMetadata)
                 list.Add(entityMetadata.LogicalName);
             return list;
+        }
+
+        public static bool IsOptionSet(AttributeMetadata attribute)
+        {
+            return attribute is EnumAttributeMetadata;
+        }
+
+        public static List<EntityMetadata> GetEntitiesMetadata(CrmServiceClient crmServiceClient, List<string> schemaNames)
+        {
+            var request = new ExecuteMultipleRequest()
+            {
+                Settings = new ExecuteMultipleSettings()
+                {
+                    ContinueOnError = true,
+                    ReturnResponses = true
+                },
+                Requests = new OrganizationRequestCollection()
+            };
+            foreach (var schemaName in schemaNames)
+                request.Requests.Add(new RetrieveEntityRequest { EntityFilters = EntityFilters.All, LogicalName = schemaName.ToLower() });
+            var list = new List<EntityMetadata>();
+            ExecuteMultipleResponse response = (ExecuteMultipleResponse)crmServiceClient.Execute(request);
+            foreach (var result in response.Responses)
+            {
+                if (result.Fault == null)
+                    list.Add(((RetrieveEntityResponse)result.Response).EntityMetadata);
+                else
+                {
+                    var errorRequest = request.Requests[result.RequestIndex] as RetrieveEntityRequest;
+                    var entityMetadataError = new EntityMetadata
+                    {
+                        LogicalName = errorRequest.LogicalName,
+                        SchemaName = errorRequest.LogicalName
+                    };
+                    list.Add(entityMetadataError);
+                }
+            }
+            return list;
+        }
+
+        public static EntityMetadata GetEntityMetadata(CrmServiceClient crmServiceClient, string entityLogicalName)
+        {
+            return GetEntitiesMetadata(crmServiceClient, new List<string> { entityLogicalName }).FirstOrDefault(); ;
         }
     }
 }

@@ -86,3 +86,10 @@ public enum TaskType
     DownloadPortalWebResources,
     ProxyTypes
 }
+
+public enum GeneratorType
+{
+    jsform,
+    jswebapi,
+    csharp
+}

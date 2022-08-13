@@ -8,6 +8,7 @@ using DynamicsCrm.DevKit.Shared.Models;
 using System.Text;
 using Microsoft.CSharp;
 using System.Globalization;
+using Microsoft.Xrm.Sdk.Metadata;
 
 namespace DynamicsCrm.DevKit.Shared
 {
@@ -829,6 +830,135 @@ namespace DynamicsCrm.DevKit.Shared
             value = value.Substring(argument.Length);
             if (value.StartsWith("\""))
                 value = value.Substring(1, value.Length - 2);
+            return value;
+        }
+
+        public static string SafeDeclareName(string declareName, GeneratorType generatorType, string schemaName = null, AttributeMetadata attribute = null)
+        {
+            declareName = SafeIdentifier(declareName);
+            if (declareName.ToLower() == schemaName?.ToLower()) return declareName + "1";
+            if (declareName.ToLower() == schemaName?.ToLower() + "id")
+                if (attribute != null && attribute.AttributeType == AttributeTypeCode.Uniqueidentifier)
+                    return declareName;
+                else
+                    return declareName + "1";
+            if (declareName.ToLower() == "EntityLogicalName".ToLower()) return declareName + "1";
+            if (declareName.ToLower() == "EntityTypeCode".ToLower()) return declareName + "1";
+            if (generatorType != GeneratorType.csharp)
+            {
+                if (declareName.ToLower() == "EntityName".ToLower()) return declareName + "1";
+            }
+            if (declareName.ToLower() == "Entity".ToLower()) return declareName + "1";
+            if (declareName.ToLower() == "Id".ToLower()) return declareName + "1";
+            return declareName;
+        }
+
+        public static string SafeIdentifier(string name)
+        {
+            if (name == null) return string.Empty;
+            name = string.Concat(name.Normalize(NormalizationForm.FormD).Where(ch => CharUnicodeInfo.GetUnicodeCategory(ch) != UnicodeCategory.NonSpacingMark)).Normalize(NormalizationForm.FormC);
+            if (Guid.TryParse(name, out var outputGuid) || (name.Length > 38 && Guid.TryParse(name.Substring(0, 38), out var outputGuid2)))
+            {
+                name = name.ToUpper()
+                    .Replace("-", "_")
+                    .Replace("{", string.Empty)
+                    .Replace("}", string.Empty);
+                return "_" + name;
+            }
+            name = GetIdentifier(name);
+            name = name.Trim();
+            //name = name.Replace("~", string.Empty);
+            //name = name.Replace("`", string.Empty);
+            //name = name.Replace("!", string.Empty);
+            //name = name.Replace("@", string.Empty);
+            //name = name.Replace("#", string.Empty);
+            //name = name.Replace("$", string.Empty);
+            //name = name.Replace("%", string.Empty);
+            //name = name.Replace("^", string.Empty);
+            //name = name.Replace("&", string.Empty);
+            //name = name.Replace("＆", string.Empty);
+            //name = name.Replace("|", string.Empty);
+            //name = name.Replace("*", string.Empty);
+            //name = name.Replace("(", string.Empty);
+            //name = name.Replace(")", string.Empty);
+            name = name.Replace("-", "_");
+            //name = name.Replace("{", string.Empty);
+            //name = name.Replace("}", string.Empty);
+            //name = name.Replace("[", string.Empty);
+            //name = name.Replace("]", string.Empty);
+            //name = name.Replace("\"", string.Empty);
+            //name = name.Replace("'", string.Empty);
+            //name = name.Replace("’", string.Empty);
+            //name = name.Replace(":", string.Empty);
+            //name = name.Replace(";", string.Empty);
+            //name = name.Replace("<", string.Empty);
+            //name = name.Replace(",", string.Empty);
+            //name = name.Replace(">", string.Empty);
+            //name = name.Replace(".", string.Empty);
+            //name = name.Replace("?", string.Empty);
+            //name = name.Replace("/", string.Empty);
+            //name = name.Replace("+", string.Empty);
+            //name = name.Replace("=", string.Empty);
+            //name = name.Replace("–", string.Empty);
+            //name = name.Replace("＆", string.Empty);
+            //name = name.Replace("％", string.Empty);
+            //name = name.Replace("\t", string.Empty);
+            //name = name.Replace("…", string.Empty);
+            name = name.Replace(" ", "_");
+            name = name.Replace("____", "_");
+            name = name.Replace("___", "_");
+            name = name.Replace("__", "_");
+            //…
+            if (name.Length == 0) return "_";
+            //var sb = new StringBuilder();
+            //if (!SyntaxFacts.IsIdentifierStartCharacter(name[0]))
+            //{
+            //    if (name.Length == 1) sb.Append("_");
+            //    else if (name[0] != '_') sb.Append("_");
+            //}
+            //foreach (var ch in name)
+            //{
+            //    if (SyntaxFacts.IsIdentifierPartCharacter(ch))
+            //    {
+            //        sb.Append(ch);
+            //    }
+            //}
+            //var result = sb.ToString();
+            //if (SyntaxFacts.GetKeywordKind(result) != SyntaxKind.None)
+            //{
+            //    result = $"_{result}";
+            //}
+            var cs = new CSharpCodeProvider();
+            name = cs.CreateValidIdentifier(name);
+            name = name.Replace("__", "_");
+            if (IsJsKeywords(name) || !IsFirstCharValid(name)) return "_" + name;
+            return name;
+        }
+        private static bool IsJsKeywords(string name)
+        {
+            switch (name)
+            {
+                case "import":
+                    return true;
+                default:
+                    return false;
+            }
+        }
+        private static bool IsFirstCharValid(string name)
+        {
+            var firstchar = name[0];
+            if (firstchar >= '0' && firstchar <= '9') return false;
+            return true;
+        }
+
+        private static string GetIdentifier(string name)
+        {
+            var value = string.Empty;
+            for (int i = 0; i < name.Length; ++i)
+            {
+                if (char.IsLetterOrDigit(name[i]) || name[i] == ' ' || name[i] == '-' || name[i] == '_')
+                    value += name[i];
+            }
             return value;
         }
     }
