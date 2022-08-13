@@ -152,12 +152,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     }
                     var newCode = string.Empty;
                     var newDTS = string.Empty;
-                    if (Json.version == null) comment.WebApiVersion = null;
-                    if (Json.version == "2") comment.WebApiVersion = "2";
-                    if (comment.WebApiVersion == "2")
+                    //if (Json.version == null) comment.WebApiVersion = null;
+                    //if (Json.version == "2") comment.WebApiVersion = "2";
+                    //if (comment.WebApiVersion == "2")
                         newCode = JsWebApi2.GetCode(CrmServiceClient, entityMetadata, Json.rootnamespace, comment, out newDTS);
-                    else
-                        newCode = JsWebApi.GetCode(CrmServiceClient, entityMetadata, Json.rootnamespace, comment, out newDTS);
+                    //else
+                    //    newCode = JsWebApi.GetCode(CrmServiceClient, entityMetadata, Json.rootnamespace, comment, out newDTS);
                     if (Utility.IsTheSame(oldCode, newCode))
                     {
                         if (oldCode?.Length > 0 && newCode?.Length > 0 && !Utility.IsTheSame(oldDTS, newDTS))

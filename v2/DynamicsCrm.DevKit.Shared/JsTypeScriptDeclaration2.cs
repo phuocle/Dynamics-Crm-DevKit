@@ -615,7 +615,7 @@ namespace DynamicsCrm.DevKit.Shared
 
         private static string GetUnquieFormName(string formName)
         {
-            if (!FormNames.Contains(formName))
+            if (!FormNames.Any(x => x == formName))
             {
                 FormNames.Add(formName);
                 return formName;

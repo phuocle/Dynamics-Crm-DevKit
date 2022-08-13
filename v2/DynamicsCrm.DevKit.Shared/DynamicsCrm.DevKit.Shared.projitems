@@ -31,7 +31,7 @@
     <None Include="$(MSBuildThisFileDirectory)JsForm.cs" />
     <None Include="$(MSBuildThisFileDirectory)JsForm2.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)JsForm3.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)JsTypeScriptDeclaration.cs" />
+    <None Include="$(MSBuildThisFileDirectory)JsTypeScriptDeclaration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)JsTypeScriptDeclaration2.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\OldCommentTypeScriptDeclaration.cs" />
     <None Include="$(MSBuildThisFileDirectory)JsWebApi.cs" />

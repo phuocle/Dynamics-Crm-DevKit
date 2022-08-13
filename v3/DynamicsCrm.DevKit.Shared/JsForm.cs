@@ -27,12 +27,12 @@ namespace DynamicsCrm.DevKit.Shared
             RootNamespace = rootNamespace;
             Comment = comment;
             var forms = XrmHelper.GetEntityForms(crmServiceClient, entityMetadata.LogicalName);
-            if (!forms.Any())
-            {
-                comment.UseForm = false;
-                dts = JsTypeScriptDeclaration.GetCode(crmServiceClient, entityMetadata, rootNamespace, comment);
-                return String.Empty;
-            }
+            //if (!forms.Any())
+            //{
+            //    comment.UseForm = false;
+            //    dts = JsTypeScriptDeclaration.GetCode(crmServiceClient, entityMetadata, rootNamespace, comment);
+            //    return String.Empty;
+            //}
             var code = string.Empty;
             var @namespace = Utility.GetNameSpace(RootNamespace);
             var logicalName = entityMetadata.LogicalName;
@@ -48,10 +48,10 @@ namespace DynamicsCrm.DevKit.Shared
                 code += GetQuickCreateFormCode(form, @namespace);
             code += $"}})({@namespace} || ({@namespace} = {{}}));{NEW_LINE}";
             code += $"{Utility.GeneratorOptionSet(EntityMetadata)}";
-            if (comment.WebApiVersion == "2")
+            //if (comment.WebApiVersion == "2")
                 dts = JsTypeScriptDeclaration2.GetCode(crmServiceClient, entityMetadata, rootNamespace, comment);
-            else
-                dts = JsTypeScriptDeclaration.GetCode(crmServiceClient, entityMetadata, rootNamespace, comment);
+            //else
+            //    dts = JsTypeScriptDeclaration.GetCode(crmServiceClient, entityMetadata, rootNamespace, comment);
             return code;
         }
 

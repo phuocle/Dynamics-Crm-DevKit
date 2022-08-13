@@ -11,6 +11,8 @@ using System.Linq;
 using DynamicsCrm.DevKit.SdkLogin;
 using Microsoft.VisualStudio.TemplateWizard;
 using Microsoft.Xrm.Tooling.Connector;
+using Microsoft.Xrm.Sdk.Metadata;
+using DynamicsCrm.DevKit.Shared.Models.Cli;
 
 namespace DynamicsCrm.DevKit.Wizard
 {
@@ -306,7 +308,7 @@ namespace DynamicsCrm.DevKit.Wizard
                     var comment = XrmHelper.GetComment(CrmServiceClient, entityMetadata.LogicalName, dtsFile);
                     var newCode = JsForm3.GetCode(CrmServiceClient, entityMetadata, jsGlobalNameSpace, comment, out var newDTS);
 
-                    GeneratedJsForm = string.Empty;
+                    GeneratedJsForm = GetDefaultFileWithForm(entityMetadata, jsGlobalNameSpace);
                     GeneratedJsFormCode = newCode;
                     GeneratedJsTypeScriptDeclaration = newDTS;
 
@@ -318,6 +320,62 @@ namespace DynamicsCrm.DevKit.Wizard
             }
             progressBar.Visible = false;
             DialogResult = DialogResult.OK;
+        }
+
+        private string GetDefaultFileWithForm(EntityMetadata entityMetadata, string jsGlobalNameSpace)
+        {
+            var forms = XrmHelper.GetEntityForms(CrmServiceClient, entityMetadata.LogicalName);
+            if (!forms.Any()) return GetDefaultFileWithApi(entityMetadata.SchemaName);
+            var @namespace = Utility.GetNameSpace(jsGlobalNameSpace);
+            var code = string.Empty;
+            code += $"//@ts-check\r\n";
+            code += $"///<reference path=\"{entityMetadata.SchemaName}.d.ts\" />\r\n";
+            code += "\"use strict\";\r\n";
+            var formNames = new List<string>();
+            foreach (var form in forms)
+            {
+                var formName = Utility.GetFormName(form.Name, entityMetadata.SchemaName);
+                formName = GetUnquieFormName(formNames, formName);
+                var type = $"{@namespace}.Form{Utility.SafeIdentifier(formName)}";
+                code += $"var form{Utility.SafeIdentifier(formName)} = (function () {{\r\n";
+                code += $"\t\"use strict\";\r\n";
+                code += $"\t/** @type {type} */\r\n";
+                code += $"\tvar form = null;\r\n";
+                code += $"\tasync function onLoad(executionContext) {{\r\n";
+                code += $"\t\tform = new {type}(executionContext);\r\n";
+                code += $"\r\n";
+                code += $"\t}}\r\n";
+                code += $"\tasync function onSave(executionContext) {{\r\n";
+                code += $"\t}}\r\n";
+                code += $"\treturn {{\r\n\t\tOnLoad: onLoad,\r\n\t\tOnSave: onSave\r\n\t}};\r\n";
+                code += $"}})();\r\n";
+            }
+            code = code.TrimEnd("\r\n".ToCharArray());
+            return code;
+        }
+
+        private static string GetUnquieFormName(List<string> FormNames, string formName)
+        {
+            if (!FormNames.Contains(formName))
+            {
+                FormNames.Add(formName);
+                return formName;
+            }
+            else
+            {
+                var count = FormNames.Count(x => x == formName) + 1;
+                FormNames.Add(formName);
+                return $"{formName}{count}";
+            }
+        }
+
+        private string GetDefaultFileWithApi(string schemaName)
+        {
+            const string NEW_LINE = "\r\n";
+            var code = string.Empty;
+            code += $"//@ts-check{NEW_LINE}";
+            code += $"///<reference path=\"{schemaName}.d.ts\" />{NEW_LINE}";
+            return code;
         }
 
         private void buttonancel_Click(object sender, EventArgs e)
