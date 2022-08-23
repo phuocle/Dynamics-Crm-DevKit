@@ -93,7 +93,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         private void DeployWebResourceFiles()
         {
-            CliLog.WriteLineWarning(ConsoleColor.Green, "DEPLOYING WEBRESOURCES");
+            CliLog.WriteLineWarning(ConsoleColor.Yellow, "DEPLOYING WEBRESOURCES");
             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Found: ", ConsoleColor.Yellow, WebResourceFiles.Count, ConsoleColor.Green, " webresources");
             CliLog.WriteLine(ConsoleColor.White, "|");
             var i = 1;
@@ -106,7 +106,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             if (IsSupportWebResourceDependency && Dependencies.Count > 0)
             {
                 CliLog.WriteLine(ConsoleColor.White, "|");
-                CliLog.WriteLineWarning(ConsoleColor.Green, "DEPLOYING WEBRESOURCES DEPENDENCIES");
+                CliLog.WriteLineWarning(ConsoleColor.Yellow, "DEPLOYING WEBRESOURCES DEPENDENCIES");
                 CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Found: ", ConsoleColor.Yellow, Dependencies.Count, ConsoleColor.Green, " dependencies");
                 CliLog.WriteLine(ConsoleColor.White, "|");
                 var j = 1;
@@ -610,6 +610,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         entities.Add(entity);
                     }
                 }
+                CliLog.WriteLine();
+                CliLog.WriteLine(ConsoleColor.White, "|");
             }
             foreach (var dependency in dependencies)
             {
