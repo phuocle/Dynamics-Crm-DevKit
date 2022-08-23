@@ -1,5 +1,5 @@
 1. Open Visual Studio Developer Command
-2. sn -i DynamicsCrm.DevKit.pfx VS_KEY_500FCB5490AB840C
-3. Pass !Zz3^2
+2. sn –d VS_KEY_500FCB5490AB840C
+3. sn -i DynamicsCrm.DevKit.pfx VS_KEY_500FCB5490AB840C
+4. Pass !Zz3^2
 
-sn –d VS_KEY_500FCB5490AB840C

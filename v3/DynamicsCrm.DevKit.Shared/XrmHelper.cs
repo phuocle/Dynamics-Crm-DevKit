@@ -256,6 +256,17 @@ namespace DynamicsCrm.DevKit.Shared
             return respone.EntityMetadata.ToList();
         }
 
+        public static List<string> GetAllEntitiesSchema(CrmServiceClient crmServiceClient)
+        {
+            var request = new RetrieveAllEntitiesRequest
+            {
+                EntityFilters = EntityFilters.All,
+                RetrieveAsIfPublished = true
+            };
+            var respone = (RetrieveAllEntitiesResponse)crmServiceClient.Execute(request);
+            return respone.EntityMetadata.ToList().Select(x => x.SchemaName).ToList();
+        }
+
         public static List<EntityMetadata> GetEntitiesMetadata(CrmServiceClient crmServiceClient, List<string> schemaNames)
         {
             var request = new ExecuteMultipleRequest()

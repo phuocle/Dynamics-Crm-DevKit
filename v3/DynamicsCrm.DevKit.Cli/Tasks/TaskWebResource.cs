@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Xml.Linq;
 
 namespace DynamicsCrm.DevKit.Cli.Tasks
@@ -593,9 +594,23 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 .Select(s => Path.GetFileName(s.file))
                 .Select(s => s.Substring(0, s.Length - ".webapi.js".Length))
                 .ToList();
-
             var entities = forms.Concat(webApis).Distinct().ToList();
-
+            if (entities.Count == 0)
+            {
+                var wait = new Thread(() => CliLog.Waiting("Reading entities Metadata "));
+                wait.Start();
+                var allEntities = XrmHelper.GetAllEntitiesSchema(CrmServiceClient);
+                wait.Abort();
+                foreach (var webResourceFile in webResourceFiles)
+                {
+                    var fInfo = new FileInfo(webResourceFile.file);
+                    var entity = allEntities.FirstOrDefault(x => x == fInfo.Name.Substring(0, fInfo.Name.Length - fInfo.Extension.Length));
+                    if (entity != null)
+                    {
+                        entities.Add(entity);
+                    }
+                }
+            }
             foreach (var dependency in dependencies)
             {
                 if (!dependency.webresources.Any(w => w.Contains("[entity]")) &&
