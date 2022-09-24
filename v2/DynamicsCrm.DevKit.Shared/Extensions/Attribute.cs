@@ -198,13 +198,16 @@ namespace DynamicsCrm.DevKit.Shared.Extensions
                     var count = values.Count(x => x.Name2 == name);
                     suffix = $"_{value}";
                 }
-                values.Add(new NameValue
+                var addValue = new NameValue
                 {
                     Name = $"{name}{suffix}",
                     Name2 = $"{name}",
                     Value = $"{value}",
-                    Label = option?.Label?.UserLocalizedLabel?.Label ?? String.Empty
-                });
+                    Label = option?.Label?.UserLocalizedLabel?.Label ?? String.Empty,
+                    Name3 = string.Empty
+                };
+                if (option is StatusOptionMetadata statusOption) addValue.Name3 = statusOption?.State.ToString() ?? string.Empty;
+                values.Add(addValue);
             }
             return values.OrderBy(x => x.Name).ToList();
         }

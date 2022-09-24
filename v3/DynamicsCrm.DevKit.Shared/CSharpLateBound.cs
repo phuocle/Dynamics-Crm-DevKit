@@ -1,5 +1,8 @@
-﻿using Microsoft.Xrm.Sdk.Metadata;
+﻿using DynamicsCrm.DevKit.Shared.Models;
+using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Tooling.Connector;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security;
 
@@ -155,7 +158,11 @@ namespace DynamicsCrm.DevKit.Shared
             @enum += $"[[Declare]]";
             @enum += $"{TAB}}}{NEW_LINE}{NEW_LINE}";
             var code = string.Empty;
-            foreach(var attribute in EntityMetadata.Attributes.OrderBy(x => x.SchemaName))
+            var attributes = EntityMetadata.Attributes.OrderBy(x => x.SchemaName);
+            var stateCodeAttribute = attributes.Where(x => x.LogicalName == "statecode").FirstOrDefault();
+            var stateCodeOptions = new List<NameValue>();
+            if (stateCodeAttribute != null) stateCodeOptions = GetStateCodeOptions(stateCodeAttribute);
+            foreach (var attribute in attributes)
             {
                 if (XrmHelper.IsOptionSet(attribute))
                 {
@@ -164,8 +171,11 @@ namespace DynamicsCrm.DevKit.Shared
                     var values = attribute.OptionSetValues();
                     foreach (var value in values)
                     {
+                        var statusCodeComment = string.Empty;
+                        if (value.Name3.Length > 0)
+                            statusCodeComment = $" with StateCode.{stateCodeOptions.Where(x => x.Value == value.Name3).FirstOrDefault().Name}";
                         tmp += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
-                        tmp += $"{TAB}{TAB}/// {value.Label} = {value.Value}{NEW_LINE}";
+                        tmp += $"{TAB}{TAB}/// {value.Label} = {value.Value}{statusCodeComment}{NEW_LINE}";
                         tmp += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
                         tmp += $"{TAB}{TAB}{value.Name} = {value.Value},{NEW_LINE}";
                     }
@@ -177,6 +187,27 @@ namespace DynamicsCrm.DevKit.Shared
             code = code.TrimEnd($",{NEW_LINE}".ToCharArray());
             code += $"{NEW_LINE}";
             return code;
+        }
+
+        private static List<NameValue> GetStateCodeOptions(AttributeMetadata stateCodeAttribute)
+        {
+            var values = new List<NameValue>();
+            var options = ((EnumAttributeMetadata)stateCodeAttribute)?.OptionSet?.Options;
+            if (options == null) return values;
+            foreach (StateOptionMetadata option in options)
+            {
+                var value = option?.Value ?? -1;
+                var name = option?.Label?.UserLocalizedLabel?.Label ?? String.Empty;
+                name = name.Replace("-", "_");
+                if (name.Length == 0) continue;
+                name = Utility.SafeIdentifier(name);
+                values.Add(new NameValue
+                {
+                    Name = $"{name}",
+                    Value = $"{value}"
+                });
+            }
+            return values;
         }
 
         private static bool IsFieldOk(AttributeMetadata attribute)
