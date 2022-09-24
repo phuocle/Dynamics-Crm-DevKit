@@ -19,6 +19,7 @@ namespace DynamicsCrm.DevKit.Wizard
     public partial class FormItem : Form
     {
         public string GeneratedLateBoundClass { get; set; }
+        public string key { get; set; }
         public string GeneratedJsWebApiCode { get; set; }
         public string GeneratedJsForm { get; set; }
         public string GeneratedJsFormCode { get; set; }
@@ -225,7 +226,8 @@ namespace DynamicsCrm.DevKit.Wizard
                 var sharedNameSpace = SharedNameSpace;
                 Task task1 = Task.Factory.StartNew(() =>
                 {
-                    GeneratedLateBoundClass = XrmHelper.GeneratedLateBoundClass(CrmServiceClient, crmName, entityName, nameSpace, sharedNameSpace);
+                    GeneratedLateBoundClass = XrmHelper.GeneratedLateBoundClass(CrmServiceClient, crmName, entityName, nameSpace, out var key);
+                    this.key = key;
                 });
                 while (!task1.IsCompleted)
                 {

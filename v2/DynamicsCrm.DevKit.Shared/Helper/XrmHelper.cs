@@ -233,11 +233,13 @@ namespace DynamicsCrm.DevKit.Shared.Helper
             return messages;
         }
 
-        public static string GeneratedLateBoundClass(CrmServiceClient service, string crmName, string entitySchemaName, string nameSpace, string sharedNameSpace)
+        public static string GeneratedLateBoundClass(CrmServiceClient service, string crmName, string entitySchemaName, string nameSpace, out string key)
         {
             //var lateBound = new CSharpLateBound();
             //return lateBound.Go(service, Utility.ConvertCrmNameToCrmVersionName(crmName), entitySchemaName, nameSpace, sharedNameSpace);
-            return CSharpLateBound.GetCode(service, GetEntityMetadata(service, entitySchemaName.ToLower()), nameSpace);
+            var entityMetadata = GetEntityMetadata(service, entitySchemaName.ToLower());
+            key = (entityMetadata.IsActivity ?? false) ? "activityid" : $"{entitySchemaName.ToLower()}id";
+            return CSharpLateBound.GetCode(service, entityMetadata, nameSpace);
         }
 
         public static List<PluginInputOutputParameter> GetPluginInputOutputParameters(CrmServiceClient service, string entityName, string requestName)

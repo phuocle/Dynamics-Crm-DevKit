@@ -117,6 +117,7 @@ namespace DynamicsCrm.DevKit.Wizard
         public static void ProcessItemReplacementsDictionary(Dictionary<string, string> replacementsDictionary, FormItem form)
         {
             replacementsDictionary.Add("$class$", form.Class);
+            replacementsDictionary.Add("$classLogical$", form.Class.ToLower());
             replacementsDictionary.Add("$NameSpace$", replacementsDictionary["$rootnamespace$"]);
             var nameSpace = replacementsDictionary["$rootnamespace$"];
             if (nameSpace.Contains($".{ProjectType.Plugin.ToString()}."))
@@ -129,6 +130,7 @@ namespace DynamicsCrm.DevKit.Wizard
             if (form.ItemType == ItemType.LateBound)
             {
                 replacementsDictionary.Add("$GeneratedLateBoundClass$", form.GeneratedLateBoundClass);
+                replacementsDictionary.Add("$key$", form.key);
             }
             else if (form.ItemType == ItemType.Test)
             {

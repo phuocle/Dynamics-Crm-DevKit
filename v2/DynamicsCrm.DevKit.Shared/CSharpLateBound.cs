@@ -112,7 +112,7 @@ namespace DynamicsCrm.DevKit.Shared
             code = code.TrimEnd($"{NEW_LINE}".ToCharArray());
             code += $"{NEW_LINE}";
             code += $"{TAB}}}{NEW_LINE}";
-            code += $"}}{NEW_LINE}";
+            code += $"}}";
             return code;
         }
 

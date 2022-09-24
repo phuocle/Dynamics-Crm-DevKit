@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xrm.Sdk;
+using System;
 
 namespace $NameSpace$
 {
@@ -10,7 +11,7 @@ namespace $NameSpace$
         //public int? IntField { get { return GetAliasedValue<int?>("aliased.field"); } }
         //public DateTime? DateTimeField { get { return GetAliasedValue<DateTime?>("aliased.field"); } }
         //public EntityReference LookupField { get { return GetAliasedValue<EntityReference>("aliased.field"); } }
-        //public xxxxxxxOptionSets.xxxxxxxx_code? OptionSetField { get { return (xxxxxxxOptionSets.xxxxxxxx_code?)GetAliasedValue<OptionSetValue>("aliased.field")?.Value; } }
+        //public xxxOptionSets.xxx? OptionSetField { get { return (xxxOptionSets.xxx?)GetAliasedValue<OptionSetValue>("aliased.field")?.Value; } }
         //public decimal? MoneyField { get { return GetAliasedValue<Money>("aliased.field")?.Value; } }
 
         #endregion
@@ -19,7 +20,23 @@ namespace $NameSpace$
 
         public static $class$ Read_Record(IOrganizationService serviceAdmin, IOrganizationService service, ITracingService tracing, Guid? recordId)
         {
-            throw new InvalidPluginExecutionException("Not Implemented");
+            var fetchData = new
+            {
+                $key$ = recordId ?? Guid.Empty
+            };
+            var fetchXml = $@"
+<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+  <entity name='$classLogical$'>
+    <all-attributes/>
+    <filter type='and'>
+      <condition attribute='$key$' operator='eq' value='{fetchData.$key$}'/>
+    </filter>
+  </entity>
+</fetch>
+";
+            var rows = serviceAdmin.RetrieveMultiple<$class$>(fetchXml);
+            if (rows.Count == 1) return rows[0];
+            return new $class$();
         }
 
         #endregion

@@ -27,6 +27,7 @@ namespace DynamicsCrm.DevKit.Shared
             EntityMetadata = entityMetadata;
             RootNamespace = rootNamespace;
             Comment = comment;
+            FormNames = new List<string>();
             var @namespace = Utility.GetNameSpace(RootNamespace);
             var _d_ts = string.Empty;
             _d_ts += $"//@ts-check{NEW_LINE}";
