@@ -175,7 +175,7 @@ namespace DynamicsCrm.DevKit.Shared
                         if (value.Name3.Length > 0)
                             statusCodeComment = $" with StateCode.{stateCodeOptions.Where(x => x.Value == value.Name3).FirstOrDefault().Name}";
                         tmp += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
-                        tmp += $"{TAB}{TAB}/// {value.Label} = {value.Value}{statusCodeComment}{NEW_LINE}";
+                        tmp += $"{TAB}{TAB}/// {value.Label?.TrimEnd("\r\n".ToCharArray())} = {value.Value}{statusCodeComment}{NEW_LINE}";
                         tmp += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
                         tmp += $"{TAB}{TAB}{value.Name} = {value.Value},{NEW_LINE}";
                     }
