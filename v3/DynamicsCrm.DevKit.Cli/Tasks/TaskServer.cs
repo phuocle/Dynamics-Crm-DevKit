@@ -442,7 +442,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             if (imageAliasName.Length == 0) imageAliasName = imageName;
             imageAttributes = imageAttributes?.Replace(" ", string.Empty);
-            //if (imageAttributes?.Trim() == "*") imageAttributes = null;
             var fetchData = new
             {
                 name = imageName,
@@ -507,6 +506,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         {
                             CliLog.WriteLineError(ConsoleColor.Yellow, $"Plugin Step {pluginStepName} have invalid {imageType.ToString()} Attribute {imageAttributes}. Assemply deployed, but the deployment of this assembly stopped.");
                         }
+                        if (fe.Message.Contains("does not support this image type"))
+                        {
+                            CliLog.WriteLineError(ConsoleColor.Yellow, $"Plugin Step {pluginStepName} does not support this image type {imageType.ToString()}. Assemply deployed, but the deployment of this assembly stopped.");
+                        }
                         return null;
                     }
                     catch (Exception e)
@@ -552,6 +555,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         if (fe.Message.Contains("entity doesn't contain attribute with"))
                         {
                             CliLog.WriteLineError(ConsoleColor.Yellow, $"Plugin Step {pluginStepName} have invalid {imageType.ToString()} Attribute {imageAttributes}. Assemply deployed, but the deployment of this assembly stopped.");
+                        }
+                        if (fe.Message.Contains("does not support this image type"))
+                        {
+                            CliLog.WriteLineError(ConsoleColor.Yellow, $"Plugin Step {pluginStepName} does not support this image type {imageType.ToString()}. Assemply deployed, but the deployment of this assembly stopped.");
                         }
                         return null;
                     }
