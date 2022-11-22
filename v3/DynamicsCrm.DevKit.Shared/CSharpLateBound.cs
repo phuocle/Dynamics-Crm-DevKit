@@ -3,6 +3,7 @@ using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Tooling.Connector;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Security;
 
@@ -82,6 +83,7 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
             code += $"{TAB}{TAB}public {@class}(Entity entity, Entity merge){NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}if (entity == null) entity = new Entity(merge.LogicalName, merge.Id);{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}Entity = entity;{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}foreach (var property in merge?.Attributes){NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}{{{NEW_LINE}";
@@ -587,9 +589,9 @@ namespace DynamicsCrm.DevKit.Shared
                 dataType += $"{AttributeTypeCode.Lookup} to { string.Join(", ", lookup.Targets) }";
             else
                 dataType += attribute.AttributeType.ToString();
-            if (attribute.GetMaxLength().HasValue) dataType += " - MaxLength: " + attribute.GetMaxLength().Value;
-            if (attribute.GetMinValue().HasValue) dataType += " - MinValue: " + attribute.GetMinValue().Value.ToString("#,##0");
-            if (attribute.GetMaxValue().HasValue) dataType += " - MaxValue: " + attribute.GetMaxValue().Value.ToString("#,##0");
+            if (attribute.GetMaxLength().HasValue) dataType += " - MaxLength: " + attribute.GetMaxLength().Value.ToString("#,#", CultureInfo.InvariantCulture);
+            if (attribute.GetMinValue().HasValue) dataType += " - MinValue: " + attribute.GetMinValue().Value.ToString("#,#", CultureInfo.InvariantCulture);
+            if (attribute.GetMaxValue().HasValue) dataType += " - MaxValue: " + attribute.GetMaxValue().Value.ToString("#,#", CultureInfo.InvariantCulture);
             var xml = $"{TAB}{TAB}/// <summary>{NEW_LINE}";
             var description = attribute?.Description?.UserLocalizedLabel?.Label;
             if (!string.IsNullOrWhiteSpace(description))
