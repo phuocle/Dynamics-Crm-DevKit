@@ -249,10 +249,9 @@ namespace DynamicsCrm.DevKit.Shared
                 if (!IsFieldOk(attribute)) continue;
                 if (!string.IsNullOrWhiteSpace(attribute.DeprecatedVersion))
                     code += $"{TAB}{TAB}{TAB}[System.Obsolete(\"Deprecated from version: {attribute.DeprecatedVersion}\")]{NEW_LINE}";
+                code += $"{TAB}{TAB}{TAB}public const string {attribute.SchemaName} = \"{attribute.LogicalName}\";{NEW_LINE}";
                 if (attribute is FileAttributeMetadata)
                     code += $"{TAB}{TAB}{TAB}public const string {attribute.SchemaName}_name = \"{attribute.LogicalName}_name\";{NEW_LINE}";
-                else
-                    code += $"{TAB}{TAB}{TAB}public const string {attribute.SchemaName} = \"{attribute.LogicalName}\";{NEW_LINE}";
             }
             return code;
         }
@@ -593,7 +592,7 @@ namespace DynamicsCrm.DevKit.Shared
             else if (attribute is MultiSelectPicklistAttributeMetadata)
                 dataType += "MultiSelectPicklist";
             else if (attribute is LookupAttributeMetadata lookup)
-                dataType += $"{AttributeTypeCode.Lookup} to { string.Join(", ", lookup.Targets) }";
+                dataType += $"{AttributeTypeCode.Lookup} to {string.Join(", ", lookup.Targets)}";
             else
                 dataType += attribute.AttributeType.ToString();
             if (attribute.GetMaxLength().HasValue) dataType += " - MaxLength: " + attribute.GetMaxLength().Value.ToString("#,#", CultureInfo.InvariantCulture);
