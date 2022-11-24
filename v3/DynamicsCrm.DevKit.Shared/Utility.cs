@@ -211,6 +211,7 @@ namespace DynamicsCrm.DevKit.Shared
         public static string SafeDeclareName(string declareName, GeneratorType generatorType, string schemaName = null, AttributeMetadata attribute = null)
         {
             declareName = SafeIdentifier(declareName);
+            if (attribute is FileAttributeMetadata) declareName += "_name";
             if (declareName.ToLower() == schemaName?.ToLower()) return declareName + "1";
             if (declareName.ToLower() == schemaName?.ToLower() + "id")
                 if (attribute != null && attribute.AttributeType == AttributeTypeCode.Uniqueidentifier)

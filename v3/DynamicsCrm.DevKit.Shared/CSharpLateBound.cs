@@ -249,7 +249,10 @@ namespace DynamicsCrm.DevKit.Shared
                 if (!IsFieldOk(attribute)) continue;
                 if (!string.IsNullOrWhiteSpace(attribute.DeprecatedVersion))
                     code += $"{TAB}{TAB}{TAB}[System.Obsolete(\"Deprecated from version: {attribute.DeprecatedVersion}\")]{NEW_LINE}";
-                code += $"{TAB}{TAB}{TAB}public const string {attribute.SchemaName} = \"{attribute.LogicalName}\";{NEW_LINE}";
+                if (attribute is FileAttributeMetadata)
+                    code += $"{TAB}{TAB}{TAB}public const string {attribute.SchemaName}_name = \"{attribute.LogicalName}_name\";{NEW_LINE}";
+                else
+                    code += $"{TAB}{TAB}{TAB}public const string {attribute.SchemaName} = \"{attribute.LogicalName}\";{NEW_LINE}";
             }
             return code;
         }
@@ -436,6 +439,8 @@ namespace DynamicsCrm.DevKit.Shared
                         code += $"{TAB}{TAB}{TAB}}}{NEW_LINE}";
                         return code;
                     }
+                    else if (attribute is FileAttributeMetadata)
+                        return $"{TAB}{TAB}{TAB}set {{ Entity.Attributes[Fields.{attribute.SchemaName}_name] = value; }}{NEW_LINE}";
                     else
                         return $"{TAB}{TAB}{TAB}set {{ Entity.Attributes[Fields.{attribute.SchemaName}] = value; }}{NEW_LINE}";
                 case AttributeTypeCode.PartyList:
@@ -535,6 +540,8 @@ namespace DynamicsCrm.DevKit.Shared
                         code += $"{TAB}{TAB}{TAB}}}{NEW_LINE}";
                         return code;
                     }
+                    else if (attribute is FileAttributeMetadata)
+                        return $"{TAB}{TAB}{TAB}get {{ return Entity.GetAttributeValue<string>(Fields.{attribute.SchemaName}_name); }}{NEW_LINE}";
                     else
                         return $"{TAB}{TAB}{TAB}get {{ return Entity.GetAttributeValue<string>(Fields.{attribute.SchemaName}); }}{NEW_LINE}";
                 case AttributeTypeCode.PartyList:
