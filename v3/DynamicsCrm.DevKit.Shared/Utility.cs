@@ -163,6 +163,8 @@ namespace DynamicsCrm.DevKit.Shared
             name = name.Replace("____", "_");
             name = name.Replace("___", "_");
             name = name.Replace("__", "_");
+            name = name.Replace("Đ", "D");
+            name = name.Replace("đ", "d");
             //…
             if (name.Length == 0) return "_";
             //var sb = new StringBuilder();
