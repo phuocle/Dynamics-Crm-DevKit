@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Globalization;
 using System.Linq;
 using System.Security;
 using System.Xml;
@@ -89,6 +90,7 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
             code += $"{TAB}{TAB}public {@class}(Entity entity, Entity merge){NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}if (entity == null) entity = new Entity(merge.LogicalName, merge.Id);{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}Entity = entity;{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}foreach (var property in merge?.Attributes){NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}{{{NEW_LINE}";
@@ -182,7 +184,7 @@ namespace DynamicsCrm.DevKit.Shared
                         if (value.Name3.Length > 0)
                             statusCodeComment = $" with StateCode.{stateCodeOptions.Where(x => x.Value == value.Name3).FirstOrDefault().Name}";
                         tmp += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
-                        tmp += $"{TAB}{TAB}/// {value.Label} = {value.Value}{statusCodeComment}{NEW_LINE}";
+                        tmp += $"{TAB}{TAB}/// {value.Label?.TrimEnd("\r\n".ToCharArray())} = {value.Value}{statusCodeComment}{NEW_LINE}";
                         tmp += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
                         tmp += $"{TAB}{TAB}{value.Name} = {value.Value},{NEW_LINE}";
                     }
@@ -255,6 +257,8 @@ namespace DynamicsCrm.DevKit.Shared
                 if (!string.IsNullOrWhiteSpace(attribute.DeprecatedVersion))
                     code += $"{TAB}{TAB}{TAB}[System.Obsolete(\"Deprecated from version: {attribute.DeprecatedVersion}\")]{NEW_LINE}";
                 code += $"{TAB}{TAB}{TAB}public const string {attribute.SchemaName} = \"{attribute.LogicalName}\";{NEW_LINE}";
+                if (attribute is FileAttributeMetadata)
+                    code += $"{TAB}{TAB}{TAB}public const string {attribute.SchemaName}_name = \"{attribute.LogicalName}_name\";{NEW_LINE}";
             }
             return code;
         }
@@ -441,6 +445,8 @@ namespace DynamicsCrm.DevKit.Shared
                         code += $"{TAB}{TAB}{TAB}}}{NEW_LINE}";
                         return code;
                     }
+                    else if (attribute is FileAttributeMetadata)
+                        return $"{TAB}{TAB}{TAB}set {{ Entity.Attributes[Fields.{attribute.SchemaName}_name] = value; }}{NEW_LINE}";
                     else
                         return $"{TAB}{TAB}{TAB}set {{ Entity.Attributes[Fields.{attribute.SchemaName}] = value; }}{NEW_LINE}";
                 case AttributeTypeCode.PartyList:
@@ -540,6 +546,8 @@ namespace DynamicsCrm.DevKit.Shared
                         code += $"{TAB}{TAB}{TAB}}}{NEW_LINE}";
                         return code;
                     }
+                    else if (attribute is FileAttributeMetadata)
+                        return $"{TAB}{TAB}{TAB}get {{ return Entity.GetAttributeValue<string>(Fields.{attribute.SchemaName}_name); }}{NEW_LINE}";
                     else
                         return $"{TAB}{TAB}{TAB}get {{ return Entity.GetAttributeValue<string>(Fields.{attribute.SchemaName}); }}{NEW_LINE}";
                 case AttributeTypeCode.PartyList:
@@ -591,12 +599,12 @@ namespace DynamicsCrm.DevKit.Shared
             else if (attribute is MultiSelectPicklistAttributeMetadata)
                 dataType += "MultiSelectPicklist";
             else if (attribute is LookupAttributeMetadata lookup)
-                dataType += $"{AttributeTypeCode.Lookup} to { string.Join(", ", lookup.Targets) }";
+                dataType += $"{AttributeTypeCode.Lookup} to {string.Join(", ", lookup.Targets)}";
             else
                 dataType += attribute.AttributeType.ToString();
-            if (attribute.GetMaxLength().HasValue) dataType += " - MaxLength: " + attribute.GetMaxLength().Value;
-            if (attribute.GetMinValue().HasValue) dataType += " - MinValue: " + attribute.GetMinValue().Value.ToString("#,##0");
-            if (attribute.GetMaxValue().HasValue) dataType += " - MaxValue: " + attribute.GetMaxValue().Value.ToString("#,##0");
+            if (attribute.GetMaxLength().HasValue) dataType += " - MaxLength: " + attribute.GetMaxLength().Value.ToString("#,#", CultureInfo.InvariantCulture);
+            if (attribute.GetMinValue().HasValue) dataType += " - MinValue: " + attribute.GetMinValue().Value.ToString("#,#", CultureInfo.InvariantCulture);
+            if (attribute.GetMaxValue().HasValue) dataType += " - MaxValue: " + attribute.GetMaxValue().Value.ToString("#,#", CultureInfo.InvariantCulture);
             var xml = $"{TAB}{TAB}/// <summary>{NEW_LINE}";
             var description = attribute?.Description?.UserLocalizedLabel?.Label;
             if (!string.IsNullOrWhiteSpace(description))

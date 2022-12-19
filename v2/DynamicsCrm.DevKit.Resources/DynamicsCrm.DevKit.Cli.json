@@ -89,24 +89,21 @@
       "type": "CSharp",
       "rootnamespace": "???",
       "rootfolder": "???",
-      "entities": "folder",
-      "debug": "?"
+      "entities": "folder"
     },
     {
       "profile": "JS-FORM",
       "type": "JsForm",
       "rootnamespace": "???",
       "rootfolder": "???",
-      "entities": "folder",
-      "debug": "?"
+      "entities": "folder"
     },
     {
       "profile": "JS-WEBAPI",
       "type": "JsWebApi",
       "rootnamespace": "???",
       "rootfolder": "???",
-      "entities": "folder",
-      "debug": "?"
+      "entities": "folder"
     }
   ],
   "downloadwebresources": [
