@@ -20,6 +20,9 @@ namespace Dev.DevKit.UiTest
             using (var xrmApp = new XrmApp(client))
             {
                 xrmApp.OnlineLogin.Login(_xrmUri, _username, _password);
+                xrmApp.Navigation.OpenApp("CORE EDU");
+                xrmApp.Navigation.OpenSubArea("General", "Setting Masters");
+                xrmApp.Grid.OpenRecord(0);
                 Assert.IsTrue(true);
             }
         }
