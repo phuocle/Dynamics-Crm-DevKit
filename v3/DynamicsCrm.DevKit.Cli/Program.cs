@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Windows.Forms;
 
 namespace DynamicsCrm.DevKit.Cli
 {
@@ -32,13 +33,15 @@ namespace DynamicsCrm.DevKit.Cli
 
         private static void ShowHelp()
         {
+            var helpColor = ConsoleColor.Green;
+
             CliLog.SetupCliLog();
-            CliLog.WriteLine(ConsoleColor.Red, "  ____                              _           ____                  ____             _  ___ _     ____ _ _ ");
-            CliLog.WriteLine(ConsoleColor.Red, " |  _ \\ _   _ _ __   __ _ _ __ ___ (_) ___ ___ / ___|_ __ _ __ ___   |  _ \\  _____   _| |/ (_) |_  / ___| (_)");
-            CliLog.WriteLine(ConsoleColor.Red, " | | | | | | | '_ \\ / _` | '_ ` _ \\| |/ __/ __| |   | '__| '_ ` _ \\  | | | |/ _ \\ \\ / / ' /| | __|| |   | | |");
-            CliLog.WriteLine(ConsoleColor.Red, " | |_| | |_| | | | | (_| | | | | | | | (__\\__ \\ |___| |  | | | | | |_| |_| |  __/\\ V /| . \\| | |_ | |___| | |");
-            CliLog.WriteLine(ConsoleColor.Red, " |____/ \\__, |_| |_|\\__,_|_| |_| |_|_|\\___|___/\\____|_|  |_| |_| |_(_)____/ \\___| \\_/ |_|\\_\\_|\\__(_)____|_|_|");
-            CliLog.Write(ConsoleColor.Red, "        |___/               ", ConsoleColor.White, "https://github.com/phuocle/Dynamics-Crm-DevKit ");
+            CliLog.WriteLine(helpColor, "  ____                              _           ____                  ____             _  ___ _     ____ _ _ ");
+            CliLog.WriteLine(helpColor, " |  _ \\ _   _ _ __   __ _ _ __ ___ (_) ___ ___ / ___|_ __ _ __ ___   |  _ \\  _____   _| |/ (_) |_  / ___| (_)");
+            CliLog.WriteLine(helpColor, " | | | | | | | '_ \\ / _` | '_ ` _ \\| |/ __/ __| |   | '__| '_ ` _ \\  | | | |/ _ \\ \\ / / ' /| | __|| |   | | |");
+            CliLog.WriteLine(helpColor, " | |_| | |_| | | | | (_| | | | | | | | (__\\__ \\ |___| |  | | | | | |_| |_| |  __/\\ V /| . \\| | |_ | |___| | |");
+            CliLog.WriteLine(helpColor, " |____/ \\__, |_| |_|\\__,_|_| |_| |_|_|\\___|___/\\____|_|  |_| |_| |_(_)____/ \\___| \\_/ |_|\\_\\_|\\__(_)____|_|_|");
+            CliLog.Write(helpColor, "        |___/               ", ConsoleColor.White, "https://github.com/phuocle/Dynamics-Crm-DevKit ");
             CliLog.WriteSuccess(ConsoleColor.White, Const.Version);
             CliLog.Write(ConsoleColor.White, " Build: ");
             CliLog.WriteSuccess(ConsoleColor.White, Const.Build);
