@@ -150,7 +150,7 @@ namespace DynamicsCrm.DevKit.Wizard
                         execution = "Asynchronous";
                         temp = temp.Replace("Asynchronous", string.Empty);
                     }
-                    else if (form.Class.ToLower().Contains("Synchronous"))
+                    else if (form.Class.Contains("Synchronous"))
                     {
                         execution = "Synchronous";
                         temp = temp.Replace("Synchronous", string.Empty);

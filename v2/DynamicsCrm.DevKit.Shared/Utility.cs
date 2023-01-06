@@ -63,6 +63,8 @@ namespace DynamicsCrm.DevKit.Shared
         public static string GetSolutionName(DTE dte)
         {
             var solutionFullName = dte?.Solution?.FullName;
+            if (solutionFullName.EndsWith(".Test.sln")) solutionFullName = solutionFullName.Substring(0, solutionFullName.Length - ".Test.sln".Length) + ".sln";
+            if (!File.Exists(solutionFullName)) solutionFullName = dte?.Solution?.FullName;
             return Path.GetFileNameWithoutExtension(solutionFullName);
         }
 
@@ -161,6 +163,8 @@ namespace DynamicsCrm.DevKit.Shared
         public static string GetSharedProject(DTE dte)
         {
             var solutionFullName = dte?.Solution?.FullName;
+            if (solutionFullName.EndsWith(".Test.sln")) solutionFullName = solutionFullName.Substring(0, solutionFullName.Length - ".Test.sln".Length) + ".sln";
+            if (!File.Exists(solutionFullName)) solutionFullName = dte?.Solution?.FullName;
             var fInfo = new FileInfo(solutionFullName);
             var parts = fInfo.Name.Split(".".ToCharArray());
             var value = string.Empty;
@@ -172,6 +176,8 @@ namespace DynamicsCrm.DevKit.Shared
         public static string GetProxyTypesProject(DTE dte)
         {
             var solutionFullName = dte?.Solution?.FullName;
+            if (solutionFullName.EndsWith(".Test.sln")) solutionFullName = solutionFullName.Substring(0, solutionFullName.Length - ".Test.sln".Length) + ".sln";
+            if (!File.Exists(solutionFullName)) solutionFullName = dte?.Solution?.FullName;
             var fInfo = new FileInfo(solutionFullName);
             var parts = fInfo.Name.Split(".".ToCharArray());
             var value = string.Empty;
@@ -797,6 +803,8 @@ namespace DynamicsCrm.DevKit.Shared
         public static string GetProjectName(DTE dte, ProjectType projectType)
         {
             var solutionFullName = dte?.Solution?.FullName;
+            if (solutionFullName.EndsWith(".Test.sln")) solutionFullName = solutionFullName.Substring(0, solutionFullName.Length - ".Test.sln".Length) + ".sln";
+            if (!File.Exists(solutionFullName)) solutionFullName = dte?.Solution?.FullName;
             var fInfo = new FileInfo(solutionFullName);
             var parts = fInfo?.Name?.Split(".".ToCharArray());
             var data = string.Empty;
