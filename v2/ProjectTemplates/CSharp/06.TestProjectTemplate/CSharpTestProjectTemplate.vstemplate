@@ -24,6 +24,7 @@
     <Project File="ProjectTemplate.csproj" ReplaceParameters="true">
       <ProjectItem ReplaceParameters="true" TargetFileName="Properties\AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="packages.config">_packages.config</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="app.config">app.config</ProjectItem>
     </Project>
   </TemplateContent>
   <WizardExtension>

@@ -36,19 +36,23 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
 
         internal static void BeforeQueryStatus(object sender, DTE dte)
         {
-            var menuCommand = sender as OleMenuCommand;
-            menuCommand.Visible = false;
-            if (!(dte?.ActiveDocument?.Language?.Equals("CSharp", StringComparison.OrdinalIgnoreCase)) ?? false) return;
-            var textDocument = (TextDocument)dte.ActiveDocument.Object();
-            var activePoint = textDocument.Selection.ActivePoint;
-            var currentClass = dte?.ActiveDocument?.ProjectItem?.FileCodeModel?.CodeElementFromPoint(activePoint, vsCMElement.vsCMElementClass);
-            if (currentClass == null) return;
-            if (!(currentClass is CodeClass @class)) return;
-            if (@class.IsAbstract) return;
-            if (!@class.IsCodeType) return;
-            if (!Utility.HasImplementedPlugin(@class) && !Utility.HasImplementedWorkflow(@class)) return;
-            if (Utility.HasAttributeCrmPluginRegistration(@class)) return;
-            menuCommand.Visible = true;
+            try
+            {
+                var menuCommand = sender as OleMenuCommand;
+                menuCommand.Visible = false;
+                if (!(dte?.ActiveDocument?.Language?.Equals("CSharp", StringComparison.OrdinalIgnoreCase)) ?? false) return;
+                var textDocument = (TextDocument)dte.ActiveDocument.Object();
+                var activePoint = textDocument.Selection.ActivePoint;
+                var currentClass = dte?.ActiveDocument?.ProjectItem?.FileCodeModel?.CodeElementFromPoint(activePoint, vsCMElement.vsCMElementClass);
+                if (currentClass == null) return;
+                if (!(currentClass is CodeClass @class)) return;
+                if (@class.IsAbstract) return;
+                if (!@class.IsCodeType) return;
+                if (!Utility.HasImplementedPlugin(@class) && !Utility.HasImplementedWorkflow(@class)) return;
+                if (Utility.HasAttributeCrmPluginRegistration(@class)) return;
+                menuCommand.Visible = true;
+            }
+            catch { }
         }
 
         internal static void Click(DTE dte)

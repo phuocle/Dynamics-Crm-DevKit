@@ -120,6 +120,8 @@ namespace DynamicsCrm.DevKit.Wizard
             replacementsDictionary.Add("$classLogical$", form.Class.ToLower());
             replacementsDictionary.Add("$NameSpace$", replacementsDictionary["$rootnamespace$"]);
             var nameSpace = replacementsDictionary["$rootnamespace$"];
+            if (nameSpace.EndsWith(".Test"))
+                replacementsDictionary.Add("$NameSpaceWithoutTest$", nameSpace.Substring(0, nameSpace.Length - ".Test".Length));
             if (nameSpace.Contains($".{ProjectType.Plugin.ToString()}."))
                 replacementsDictionary.Add("$NameSpacePlugin$", nameSpace.Replace($".{ItemType.Plugin.ToString()}.", $".{ItemType.Plugin.ToString()}"));
             else
@@ -139,14 +141,63 @@ namespace DynamicsCrm.DevKit.Wizard
                     var projects = (object[])form.DTE.ActiveSolutionProjects;
                     var project = (Project)projects[0];
                     var logicalname = project.Name.Split(".".ToCharArray())[project.Name.Split(".".ToCharArray()).Length - 2].ToLower();
-                    var execution = form.Class.EndsWith("Asynchronous") ? "Asynchronous" : (form.Class.EndsWith("Synchronous") ? "Synchronous" : "");
-                    var stage = form.Class.StartsWith("PreValidation") ? "PreValidation" : (form.Class.StartsWith("Pre") ? "PreOperation" : (form.Class.StartsWith("Post") ? "PostOperation" : ""));
-                    var stage2 = form.Class.StartsWith("PreValidation") ? "PreValidation" : (form.Class.StartsWith("Pre") ? "Pre" : (form.Class.StartsWith("Post") ? "Post" : ""));
-                    var message = form.Class.Substring(stage2.Length + logicalname.Length);
-                    if (message.Length - execution.Length > 0)
-                        message = message.Substring(0, message.Length - execution.Length);
-                    if (stage == "") stage = "PostOperation";
-                    if (execution == "") execution = "Asynchronous";
+
+                    var temp = form.Class;
+
+                    var execution = string.Empty;
+                    if (temp.Contains("Asynchronous"))
+                    {
+                        execution = "Asynchronous";
+                        temp = temp.Replace("Asynchronous", string.Empty);
+                    }
+                    else if (form.Class.ToLower().Contains("Synchronous"))
+                    {
+                        execution = "Synchronous";
+                        temp = temp.Replace("Synchronous", string.Empty);
+                    }
+                    var message = string.Empty;
+                    if (temp.Contains("Create"))
+                    {
+                        message = "Create";
+                        temp = temp.Replace("Create", string.Empty);
+                    }
+                    else if (temp.Contains("Update"))
+                    {
+                        message = "Update";
+                        temp = temp.Replace("Update", string.Empty);
+                    }
+                    else if (temp.Contains("Delete"))
+                    {
+                        message = "Delete";
+                        temp = temp.Replace("Delete", string.Empty);
+                    }
+
+                    var stage = string.Empty;
+                    if (temp.StartsWith("PreValidation"))
+                    {
+                        stage = "PreValidation";
+                        temp = temp.Replace("PreValidation", string.Empty);
+                    }
+                    else if (temp.StartsWith("Post"))
+                    {
+                        stage = "PostOperation";
+                        temp = temp.Replace("Post", string.Empty);
+                    }
+                    else if (temp.StartsWith("Pre"))
+                    {
+                        stage = "PreOperation";
+                        temp = temp.Replace("Pre", string.Empty);
+                    }
+
+
+
+                    //var stage  = form.Class.StartsWith("PreValidation") ? "PreValidation" : (form.Class.StartsWith("Pre") ? "PreOperation" : (form.Class.StartsWith("Post") ? "PostOperation" : ""));
+                    //var stage2 = form.Class.StartsWith("PreValidation") ? "PreValidation" : (form.Class.StartsWith("Pre") ? "Pre" : (form.Class.StartsWith("Post") ? "Post" : ""));
+                    //var message = form.Class.Substring(stage2.Length + logicalname.Length);
+                    //if (message.Length - execution.Length > 0)
+                    //    message = message.Substring(0, message.Length - execution.Length);
+                    //if (stage == "") stage = "PostOperation";
+                    //if (execution == "") execution = "Asynchronous";
                     replacementsDictionary.Add("$logicalname$", logicalname);
                     replacementsDictionary.Add("$execution$", execution);
                     replacementsDictionary.Add("$stage_string$", stage);
