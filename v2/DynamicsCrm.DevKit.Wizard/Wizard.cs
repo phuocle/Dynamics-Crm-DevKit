@@ -220,7 +220,7 @@ namespace DynamicsCrm.DevKit.Wizard
             replacementsDictionary.Add("$PluginExecution$", form.PluginExecution);
             replacementsDictionary.Add("$PluginExecutionInt$", form.PluginExecution == "Synchronous" ? "0" : "1");
             replacementsDictionary.Add("$PluginOrder$", form.PluginOrder);
-            replacementsDictionary.Add("$PluginOrder2$", form.PluginOrder);
+            replacementsDictionary.Add("$PluginOrder2$", form.PluginOrder == "1" ? string.Empty : form.PluginOrder);
             replacementsDictionary.Add("$NameSpace$", replacementsDictionary["$rootnamespace$"]);
             replacementsDictionary.Add("$SharedNameSpace$", Utility.GetSharedNameSpace(form.DTE));
             var nameSpace = replacementsDictionary["$rootnamespace$"];
