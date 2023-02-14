@@ -3,10 +3,10 @@
   <PropertyGroup>
     <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
     <HasSharedItems>true</HasSharedItems>
-    <SharedGUID>$guid1$</SharedGUID>
+    <SharedGUID>95482912-726f-451b-9a9d-24c886838076</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>$NameSpace$</Import_RootNamespace>
+    <Import_RootNamespace>Dev.DevKit.Shared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Entities\" />

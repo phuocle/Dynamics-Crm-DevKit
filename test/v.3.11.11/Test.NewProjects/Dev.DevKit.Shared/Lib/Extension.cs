@@ -1,4 +1,4 @@
-﻿using $SharedNameSpace$;
+﻿using Dev.DevKit.Shared;
 using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Collections.Generic;

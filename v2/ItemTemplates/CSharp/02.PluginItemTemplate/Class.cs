@@ -5,7 +5,7 @@ using $SharedNameSpace$;
 
 namespace $NameSpacePlugin$
 {
-    [CrmPluginRegistration("$PluginMessage$", "$PluginLogicalName$", StageEnum.$PluginStage$, ExecutionModeEnum.$PluginExecution$, "", "$NameSpacePlugin$.$PluginClass$$PluginOrder2$", $PluginOrder$/*ExecutionOrder*/, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, $if$($PluginExecutionInt$==1)DeleteAsyncOperation = true,$endif$ Image1Name = "", Image1Alias = "", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "")]
+    [CrmPluginRegistration("$PluginMessage$", "$PluginLogicalName$", StageEnum.$PluginStage$, ExecutionModeEnum.$PluginExecution$, "", "$NameSpacePlugin$.$PluginClass$$PluginOrder2$", $PluginOrder$, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, $if$($PluginExecutionInt$==1)DeleteAsyncOperation = true,$endif$ Image1Name = "", Image1Alias = "", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "")]
     public class $PluginClass$$PluginOrder2$ : IPlugin
     {
 $PluginComment$

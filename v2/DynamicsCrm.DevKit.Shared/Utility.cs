@@ -106,7 +106,7 @@ namespace DynamicsCrm.DevKit.Shared
             list.AddRange(sln.Projects.Cast<Project>());
 
             for (int i = 0; i < list.Count; i++)
-                list.AddRange(list[i].ProjectItems.Cast<ProjectItem>().Select(x => x.SubProject).OfType<Project>());
+                list.AddRange(list[i]?.ProjectItems?.Cast<ProjectItem>().Select(x => x?.SubProject)?.OfType<Project>());
 
             return list;
         }
