@@ -9,7 +9,6 @@
     <Import_RootNamespace>Dev.DevKit.Shared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Entities\" />
     <Folder Include="$(MSBuildThisFileDirectory)Lib\" />
   </ItemGroup>
   <ItemGroup>
@@ -18,6 +17,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Extension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\EntityBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\SimpleJson.cs" />
-     <None Include="$(MSBuildThisFileDirectory)Entities\generator.bat" />
+    <None Include="$(MSBuildThisFileDirectory)Entities\generator.bat" />
   </ItemGroup>
 </Project>

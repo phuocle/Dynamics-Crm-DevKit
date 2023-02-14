@@ -9,6 +9,7 @@ namespace $NameSpace$
 
         //public string StringField { get { return GetAliasedValue<string>("aliased.field"); } }
         //public int? IntField { get { return GetAliasedValue<int?>("aliased.field"); } }
+        //public bool? BooleanField { get { return GetAliasedValue<bool?>("aliased.field"); } }
         //public DateTime? DateTimeField { get { return GetAliasedValue<DateTime?>("aliased.field"); } }
         //public EntityReference LookupField { get { return GetAliasedValue<EntityReference>("aliased.field"); } }
         //public xxxOptionSets.xxx? OptionSetField { get { return (xxxOptionSets.xxx?)GetAliasedValue<OptionSetValue>("aliased.field")?.Value; } }

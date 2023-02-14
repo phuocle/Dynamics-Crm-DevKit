@@ -41,7 +41,7 @@ namespace Dev.DevKit.PluginAccount
             if (context.MessageName.ToLower() != "Create".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals Create");
             if (context.Mode != (int)ExecutionModeEnum.Asynchronous) throw new InvalidPluginExecutionException("Execution does not equals Asynchronous");
 
-            //tracing.DebugContext(context);
+            tracing.DebugContext(context);
 
             ExecutePlugin(context, serviceFactory, serviceAdmin, service, tracing);
         }
