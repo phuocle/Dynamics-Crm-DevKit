@@ -1,12 +1,10 @@
-﻿using Microsoft.Crm.Sdk.Messages;$if$($Check$== 1)
-using System;$endif$
-using $NameSpace$.Debug;
+﻿using Microsoft.Crm.Sdk.Messages;
+using Dev.DevKit.Console.Debug;
 
-namespace $NameSpace$
+namespace Dev.DevKit.Console
 {
     public class Program
-    {$if$($Check$==1)
-        [STAThread]$endif$
+    {
         static void Main()
         {
             //CheckWhoAmI();

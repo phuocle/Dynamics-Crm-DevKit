@@ -8,31 +8,24 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		DynamicsCrm.DevKit.json = DynamicsCrm.DevKit.json
 	EndProjectSection
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Dev.DevKit.Shared", "Dev.DevKit.Shared\Dev.DevKit.Shared.shproj", "{95482912-726F-451B-9A9D-24C886838076}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Dev.DevKit.Shared", "Dev.DevKit.Shared\Dev.DevKit.Shared.shproj", "{ECCC241B-8D40-4B0E-B0D0-F506AB11DFE4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Console", "Dev.DevKit.Console\Dev.DevKit.Console.csproj", "{F842226B-26FB-40D1-A5E8-646AB5548663}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Plugin.Account", "Dev.DevKit.Plugin.Account\Dev.DevKit.Plugin.Account.csproj", "{D4434423-B81A-49FE-AD65-2709E8DF3CBF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Console", "Dev.DevKit.Console\Dev.DevKit.Console.csproj", "{4319F0F4-128B-44EC-98E1-DF35FBD7E86A}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{95482912-726f-451b-9a9d-24c886838076}*SharedItemsImports = 13
-		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{d4434423-b81a-49fe-ad65-2709e8df3cbf}*SharedItemsImports = 4
-		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{f842226b-26fb-40d1-a5e8-646ab5548663}*SharedItemsImports = 4
+		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{4319f0f4-128b-44ec-98e1-df35fbd7e86a}*SharedItemsImports = 4
+		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{eccc241b-8d40-4b0e-b0d0-f506ab11dfe4}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F842226B-26FB-40D1-A5E8-646AB5548663}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F842226B-26FB-40D1-A5E8-646AB5548663}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F842226B-26FB-40D1-A5E8-646AB5548663}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F842226B-26FB-40D1-A5E8-646AB5548663}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D4434423-B81A-49FE-AD65-2709E8DF3CBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D4434423-B81A-49FE-AD65-2709E8DF3CBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D4434423-B81A-49FE-AD65-2709E8DF3CBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D4434423-B81A-49FE-AD65-2709E8DF3CBF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4319F0F4-128B-44EC-98E1-DF35FBD7E86A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4319F0F4-128B-44EC-98E1-DF35FBD7E86A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4319F0F4-128B-44EC-98E1-DF35FBD7E86A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4319F0F4-128B-44EC-98E1-DF35FBD7E86A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
