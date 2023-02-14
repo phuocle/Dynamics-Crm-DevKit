@@ -71,10 +71,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="TracingServiceFake.cs" />
     <None Include="AppSettings.cs" />
     <None Include="Program.cs" />
     <None Include="LoginForm.xaml.cs" />
     <None Include="LoginForm.xaml" />
+    <None Include="Helper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

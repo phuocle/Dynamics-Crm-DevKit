@@ -29,6 +29,8 @@
       <ProjectItem ReplaceParameters="true" TargetFileName="App.config">App.config</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Login\LoginForm.xaml">LoginForm.xaml</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Login\LoginForm.xaml.cs">LoginForm.xaml.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Debug\Helper.cs">Helper.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Debug\TracingServiceFake.cs">TracingServiceFake.cs</ProjectItem>
     </Project>
   </TemplateContent>
   <WizardExtension>
