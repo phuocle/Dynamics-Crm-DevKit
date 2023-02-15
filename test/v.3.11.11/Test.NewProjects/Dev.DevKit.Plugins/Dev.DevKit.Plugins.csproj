@@ -4,11 +4,11 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{97697585-17A0-4664-BD5F-D5D9FF1B8B8D}</ProjectGuid>
+    <ProjectGuid>{6D91E7A1-37EF-4B29-915A-CE1F4E3816EA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Dev.DevKit.PluginAccount</RootNamespace>
-    <AssemblyName>Dev.DevKit.Plugin.Account</AssemblyName>
+    <RootNamespace>Dev.DevKit.Plugins</RootNamespace>
+    <AssemblyName>Dev.DevKit.Plugins</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -36,13 +36,17 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Crm.Sdk.Proxy">
-      <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.9.0.2.46\lib\net462\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
+      <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.9.0.2.48\lib\net462\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xrm.Sdk">
-      <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.9.0.2.46\lib\net462\Microsoft.Xrm.Sdk.dll</HintPath>
+      <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.9.0.2.48\lib\net462\Microsoft.Xrm.Sdk.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xrm.Sdk.Workflow">
+      <HintPath>..\packages\Microsoft.CrmSdk.Workflow.9.0.2.48\lib\net462\Microsoft.Xrm.Sdk.Workflow.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
+    <Reference Include="System.Activities" />
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Runtime.Serialization" />
@@ -51,15 +55,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Dev.DevKit.Plugins.snk" />
     <None Include="deploy.debug.bat" />
     <None Include="deploy.debug.only.bat" />
-    <None Include="Dev.DevKit.Plugin.Account.snk" />
-    <Compile Include="PostAccountCreateAsynchronous.cs" />
-    <Compile Include="PostAccountCreateAsynchronous2.cs" />
-    <Compile Include="PostAccountDeleteAsynchronous.cs" />
-    <Compile Include="PostAccountMergeAsynchronous.cs" />
-    <Compile Include="PreValidationAccountAssignSynchronous.cs" />
-    <Compile Include="PreValidationAccountRetrieveMultipleSynchronous.cs" />
+    <Compile Include="PostAccountAssignAsynchronous.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="..\Dev.DevKit.Shared\Dev.DevKit.Shared.projitems" Label="Shared" Condition="Exists('..\Dev.DevKit.Shared\Dev.DevKit.Shared.projitems')" />
@@ -67,7 +66,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>Dev.DevKit.Plugin.Account.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>Dev.DevKit.Plugins.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
