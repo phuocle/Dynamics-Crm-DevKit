@@ -46,6 +46,7 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"{TAB}'use strict';{NEW_LINE}";
             foreach (var form in forms.Where(x => !x.IsQuickCreate))
                 code += GetMainFormCode(form, @namespace);
+            //code += GetMainFormCode(@namespace);
             foreach (var form in forms.Where(x => x.IsQuickCreate))
                 code += GetQuickCreateFormCode(form, @namespace);
             code += $"}})({@namespace} || ({@namespace} = {{}}));{NEW_LINE}";
@@ -56,6 +57,8 @@ namespace DynamicsCrm.DevKit.Shared
             //    dts = JsTypeScriptDeclaration.GetCode(crmServiceClient, entityMetadata, rootNamespace, comment);
             return code;
         }
+
+
 
         private static string GetQuickCreateFormCode(SystemForm form, string @namespace)
         {
@@ -92,6 +95,15 @@ namespace DynamicsCrm.DevKit.Shared
             return code;
         }
 
+        private static string GetMainFormCode(string @namespace)
+        {
+            var code = string.Empty;
+            var formName = $"Form{EntityMetadata.LogicalName}___All";
+            code += $"{TAB}{@namespace}.{formName} = function(executionContext, defaultWebResourceName) {{{NEW_LINE}";
+
+            code += $"{TAB}}};{NEW_LINE}";
+            return code;
+        }
         private static string GetMainFormCode(SystemForm form, string @namespace)
         {
             var code = string.Empty;

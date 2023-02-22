@@ -75,8 +75,8 @@
     },
     "DEBUG.ABC": {
       "commandName": "Project",
-      "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://huutoan-dev.crm5.dynamics.com;ClientId=345941ef-63d4-4161-b304-a374981acec3;ClientSecret=Zks8Q~x4xmAhkbvh1hKrz6DOe5AsGGfAvPlgYbeC;\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"LATEBOUND\"",
-      "workingDirectory": "C:\\src\\azure\\huutoangroup\\CRM-HTG_ABIZ\\Abiz.Ht.Shared\\Entities"
+      "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://huutoan-dev.crm5.dynamics.com;ClientId=345941ef-63d4-4161-b304-a374981acec3;ClientSecret=Zks8Q~x4xmAhkbvh1hKrz6DOe5AsGGfAvPlgYbeC;\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"JS-FORM\"",
+      "workingDirectory": "C:\\src\\azure\\huutoangroup\\CRM-HTG_ABIZ\\Abiz.Ht.WebResource\\entities"
     }
   }
 }

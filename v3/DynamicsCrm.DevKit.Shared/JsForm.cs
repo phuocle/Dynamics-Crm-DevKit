@@ -5,12 +5,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 using System.Xml.Linq;
 
 namespace DynamicsCrm.DevKit.Shared
 {
     public static class JsForm
     {
+        private class TabSection
+        {
+            public string Tab { get; set; }
+            public string Section { get; set; }
+        }
+
         private const string NEW_LINE = "\r\n";
         private const string TAB = "\t";
         private static CrmServiceClient CrmServiceClient { get; set; }
@@ -42,10 +49,11 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"var {@namespace};{NEW_LINE}";
             code += $"(function ({@namespace}) {{{NEW_LINE}";
             code += $"{TAB}'use strict';{NEW_LINE}";
-            foreach(var form in forms.Where(x => !x.IsQuickCreate))
+            foreach (var form in forms.Where(x => !x.IsQuickCreate))
                 code += GetMainFormCode(form, @namespace);
             foreach (var form in forms.Where(x => x.IsQuickCreate))
                 code += GetQuickCreateFormCode(form, @namespace);
+            code += GetMainFormCode(@namespace);
             code += $"}})({@namespace} || ({@namespace} = {{}}));{NEW_LINE}";
             code += $"{Utility.GeneratorOptionSet(EntityMetadata)}";
             //if (comment.WebApiVersion == "2")
@@ -90,6 +98,91 @@ namespace DynamicsCrm.DevKit.Shared
             return code;
         }
 
+        private static string GetMainFormCode(string @namespace)
+        {
+            var code = string.Empty;
+            var formName = $"Form___{EntityMetadata.LogicalName}___All";
+            code += $"{TAB}{@namespace}.{formName} = function(executionContext, defaultWebResourceName) {{{NEW_LINE}";
+            code += $"{TAB}{TAB}var formContext = null;{NEW_LINE}";
+            code += $"{TAB}{TAB}if (executionContext !== undefined) {{{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}if (executionContext.getFormContext === undefined) {{{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}formContext = executionContext;{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}}}{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}else {{{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}formContext = executionContext.getFormContext();{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}}}{NEW_LINE}";
+            code += $"{TAB}{TAB}}}{NEW_LINE}";
+            code += $"{TAB}{TAB}var form = devKit.LoadForm(formContext);{NEW_LINE}";
+            code += $"{TAB}{TAB}var body = {{{NEW_LINE}";
+            code += GetJsCodeBody();
+            code += $"{TAB}{TAB}}};{NEW_LINE}";
+            code += $"{TAB}{TAB}devKit.LoadFields(formContext, body);{NEW_LINE}";
+            code += $"{TAB}{TAB}var tab = {{{NEW_LINE}";
+            code += GetJsCodeTabs();
+            code += $"{TAB}{TAB}}};{NEW_LINE}";
+            code += $"{TAB}{TAB}devKit.LoadTabs(formContext, tab);{NEW_LINE}";
+            code += $"{TAB}{TAB}body.Tab = tab;{NEW_LINE}";
+            code += $"{TAB}{TAB}form.Body = body;{NEW_LINE}";
+            //var codeHeader = GetJsCodeHeader(form.FormXml);
+            //if (codeHeader.Length > 0)
+            //{
+            //    code += $"\t\tvar header = {{\r\n";
+            //    code += codeHeader;
+            //    code += $"\t\t}};\r\n";
+            //    code += $"\t\tdevKit.LoadFields(formContext, header, \"header_\");\r\n";
+            //    code += $"\t\tform.Header = header;\r\n";
+            //}
+            //var codeFooter = GetJsCodeFooter(form.FormXml);
+            //if (codeFooter.Length > 0)
+            //{
+            //    code += $"\t\tvar footer = {{\r\n";
+            //    code += codeFooter;
+            //    code += $"\t\t}};\r\n";
+            //    code += $"\t\tdevKit.LoadFields(formContext, footer, \"footer_\");\r\n";
+            //    code += $"\t\tform.Footer = footer;\r\n";
+            //}
+            //var codeProcess = GetJsProcessCode();
+            //code += $"\t\tvar process = devKit.LoadProcess(formContext);\r\n";
+            //if (codeProcess.Length > 0)
+            //{
+            //    code += codeProcess;
+            //}
+            //code += $"\t\tform.Process = process;\r\n";
+            //var codeQuickForm = GetJsQuickFormCode(form.FormXml);
+            //if (codeQuickForm.Length > 0)
+            //{
+            //    code += $"\t\tvar quickForm = {{\r\n";
+            //    code += codeQuickForm;
+            //    code += $"\t\t}};\r\n";
+            //    code += $"\t\tdevKit.LoadQuickForms(formContext, quickForm);\r\n";
+            //    code += $"\t\tform.QuickForm = quickForm;\r\n";
+            //}
+            //var codeGrid = GetJsGridCode(form.FormXml);
+            //if (codeGrid.Length > 0)
+            //{
+            //    code += $"\t\tvar grid = {{\r\n";
+            //    code += codeGrid;
+            //    code += $"\t\t}};\r\n";
+            //    code += $"\t\tdevKit.LoadGrids(formContext, grid);\r\n";
+            //    code += $"\t\tform.Grid = grid;\r\n";
+            //}
+            //var codeNavigation = GetJsNavigationCode(form.FormXml);
+            //if (codeNavigation.Length > 0)
+            //{
+            //    code += $"\t\tvar navigation = {{\r\n";
+            //    code += codeNavigation;
+            //    code += $"\t\t}};\r\n";
+            //    code += $"\t\tdevKit.LoadNavigations(formContext, navigation);\r\n";
+            //    code += $"\t\tform.Navigation = navigation;\r\n";
+            //}
+            code += $"\t\tform.Utility = devKit.LoadUtility(defaultWebResourceName);\r\n";
+            code += $"\t\tform.ExecutionContext = devKit.LoadExecutionContext(executionContext);\r\n";
+            code += $"\t\tdevKit.LoadOthers(formContext, form, defaultWebResourceName);\r\n";
+            code += $"\t\treturn form;\r\n";
+            code += $"\t}};\r\n";
+            return code;
+
+        }
         private static string GetMainFormCode(SystemForm form, string @namespace)
         {
             var code = string.Empty;
@@ -464,6 +557,27 @@ namespace DynamicsCrm.DevKit.Shared
             return code;
         }
 
+        private static string GetJsCodeTabs()
+        {
+            var code = string.Empty;
+            var tabs = FormAll_TabSections.Select(x => x.Tab).Distinct().ToList();
+            tabs.Sort();
+            foreach (var tab in tabs)
+            {
+                var sections = FormAll_TabSections.Where(x => x.Tab == tab).ToList();
+                sections = sections.OrderBy(x => x.Section).ToList();
+                code += $"{TAB}{TAB}{TAB}{tab}: {{{NEW_LINE}";
+                code += $"{TAB}{TAB}{TAB}{TAB}Section: {{{NEW_LINE}";
+                foreach (var secion in sections)
+                    code += $"{TAB}{TAB}{TAB}{TAB}{TAB}{secion.Section}: {{}},{NEW_LINE}";
+                code = code.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
+                code += $"{TAB}{TAB}{TAB}{TAB}}}{NEW_LINE}";
+                code += $"{TAB}{TAB}{TAB}}},{NEW_LINE}";
+            }
+            code = code.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
+            return code;
+        }
+
         private static string GetJsCodeTabs(string formXml)
         {
             var code = string.Empty;
@@ -481,7 +595,8 @@ namespace DynamicsCrm.DevKit.Shared
             {
                 if (Utility.SafeIdentifier(tab.Name).Length == 0) continue;
                 if (existTabs.Contains(Utility.SafeIdentifier(tab.Name))) continue; else existTabs.Add(Utility.SafeIdentifier(tab.Name));
-                code += $"\t\t\t{Utility.SafeIdentifier(tab.Name)}: {{\r\n";
+                var tabName = Utility.SafeIdentifier(tab.Name);
+                code += $"\t\t\t{tabName}: {{\r\n";
                 code += $"\t\t\t\tSection: {{\r\n";
                 var xdoc2 = XDocument.Parse(tab.InnerText);
                 var sections = from x2 in xdoc2
@@ -502,7 +617,15 @@ namespace DynamicsCrm.DevKit.Shared
                     if (section.Name.StartsWith("ref_pan")) continue;
                     if (Utility.SafeIdentifier(section.Name).Length == 0) continue;
                     if (existSections.Contains(Utility.SafeIdentifier(section.Name))) continue; else existSections.Add(Utility.SafeIdentifier(section.Name));
-                    code += $"\t\t\t\t\t{Utility.SafeIdentifier(section.Name)}: {{}},\r\n";
+                    var sectionName = Utility.SafeIdentifier(section.Name);
+                    code += $"\t\t\t\t\t{sectionName}: {{}},\r\n";
+                    if (!FormAll_TabSections.Any(x => x.Tab == tabName && x.Section == sectionName))
+                    {
+                        FormAll_TabSections.Add(new TabSection {
+                            Tab = tabName,
+                            Section = sectionName
+                        });
+                    }
                 }
                 code = code.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
                 code += $"\t\t\t\t}}\r\n";
@@ -524,8 +647,19 @@ namespace DynamicsCrm.DevKit.Shared
                           }).Distinct();
             var list = (from field in fields where field.FieldName != null select (string)field.FieldName).ToList<string>();
             list.Sort();
+            FormAll_Fields = FormAll_Fields.Concat(list).ToList();
             return GetJsForListFields(list, false);
         }
+
+        private static string GetJsCodeBody()
+        {
+            FormAll_Fields = FormAll_Fields.Distinct().ToList();
+            FormAll_Fields.Sort();
+            return GetJsForListFields(FormAll_Fields, false);
+        }
+
+        private static List<string> FormAll_Fields = new List<string>();
+        private static List<TabSection> FormAll_TabSections = new List<TabSection>();
 
         private static string GetJsQuickViewCodeBody(string formXml)
         {
@@ -536,6 +670,7 @@ namespace DynamicsCrm.DevKit.Shared
                           select (string)x.Attribute("datafieldname")).ToList();
             fields.Sort();
             if (fields.Count == 0) return string.Empty;
+            FormAll_Fields = FormAll_Fields.Concat(fields).ToList();
             return GetJsForListFields(fields, false);
         }
 
