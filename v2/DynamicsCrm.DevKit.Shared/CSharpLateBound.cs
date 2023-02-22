@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
 using System.Security;
-using System.Xml;
 using DynamicsCrm.DevKit.Shared.Extensions;
 using DynamicsCrm.DevKit.Shared.Helper;
 using DynamicsCrm.DevKit.Shared.Models;
-using Microsoft.CSharp;
-using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Tooling.Connector;
 
@@ -38,6 +33,7 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"using Microsoft.Xrm.Sdk;{NEW_LINE}";
             code += $"using System;{NEW_LINE}";
             code += $"using System.Diagnostics;{NEW_LINE}";
+            code += $"using System.Linq;{NEW_LINE}";
             code += $"{NEW_LINE}";
             code += $"namespace {rootNameSpace}.{@class}OptionSets{NEW_LINE}";
             code += $"{{{NEW_LINE}";
@@ -58,6 +54,24 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"{NEW_LINE}";
             code += $"{TAB}{TAB}[System.Obsolete(\"This value is different for each instance. Please don't use it.\")]{NEW_LINE}";
             code += $"{TAB}{TAB}public const int EntityTypeCode = {EntityMetadata.ObjectTypeCode};{NEW_LINE}";
+            code += $"{NEW_LINE}";
+            code += $"{TAB}{TAB}public const string EntityCollectionSchemaName = \"{EntityMetadata.CollectionSchemaName}\";{NEW_LINE}";
+            code += $"{NEW_LINE}";
+            code += $"{TAB}{TAB}public const string EntityDisplayCollectionName = \"{EntityMetadata.DisplayCollectionName?.UserLocalizedLabel?.Label}\";{NEW_LINE}";
+            code += $"{NEW_LINE}";
+            code += $"{TAB}{TAB}public const string DisplayName = \"{EntityMetadata.DisplayName?.UserLocalizedLabel?.Label}\";{NEW_LINE}";
+            code += $"{NEW_LINE}";
+            code += $"{TAB}{TAB}public const string EntitySetName = \"{EntityMetadata.EntitySetName}\";{NEW_LINE}";
+            code += $"{NEW_LINE}";
+            code += $"{TAB}{TAB}public const string EntityLogicalCollectionName = \"{EntityMetadata.LogicalCollectionName}\";{NEW_LINE}";
+            code += $"{NEW_LINE}";
+            code += $"{TAB}{TAB}public const string EntityPrimaryIdAttribute = \"{EntityMetadata.PrimaryIdAttribute}\";{NEW_LINE}";
+            code += $"{NEW_LINE}";
+            code += $"{TAB}{TAB}public const string EntityPrimaryImageAttribute = \"{EntityMetadata.PrimaryImageAttribute}\";{NEW_LINE}";
+            code += $"{NEW_LINE}";
+            code += $"{TAB}{TAB}public const string EntityPrimaryNameAttribute = \"{EntityMetadata.PrimaryNameAttribute}\";{NEW_LINE}";
+            code += $"{NEW_LINE}";
+            code += $"{TAB}{TAB}public const string EntitySchemaName = \"{EntityMetadata.SchemaName}\";{NEW_LINE}";
             code += $"{NEW_LINE}";
             code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
             code += $"{TAB}{TAB}public {@class}(){NEW_LINE}";
@@ -81,18 +95,42 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"{TAB}{TAB}}}{NEW_LINE}";
             code += $"{NEW_LINE}";
             code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
-            code += $"{TAB}{TAB}public {@class}(Entity entity){NEW_LINE}";
+            code += $"{TAB}{TAB}public {@class}(Entity targetEntity){NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}Entity = entity;{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}if (targetEntity == null) throw new InvalidPluginExecutionException($\"new {@class}(targetEntity) with targetEntity = null\");{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}Entity = targetEntity;{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}PreEntity = CloneThisEntity(Entity);{NEW_LINE}";
             code += $"{TAB}{TAB}}}{NEW_LINE}";
             code += $"{NEW_LINE}";
             code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
-            code += $"{TAB}{TAB}public {@class}(Entity entity, Entity merge){NEW_LINE}";
+            code += $"{TAB}{TAB}public {@class}(Entity preEntity, Entity targetEntity){NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}if (entity == null) entity = new Entity(merge.LogicalName, merge.Id);{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}Entity = entity;{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}foreach (var property in merge?.Attributes){NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}if (targetEntity == null) throw new InvalidPluginExecutionException($\"new {@class}(preEntity, targetEntity) with targetEntity = null\");{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}if (preEntity == null) preEntity = new Entity(targetEntity.LogicalName, targetEntity.Id);{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}Entity = preEntity;{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}foreach (var property in targetEntity?.Attributes?.ToList()){NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{{{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}var key = property.Key;{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}var value = property.Value;{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}Entity[key] = value;{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}}}{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}PreEntity = CloneThisEntity(Entity);{NEW_LINE}";
+            code += $"{TAB}{TAB}}}{NEW_LINE}";
+            code += $"{NEW_LINE}";
+            code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
+            code += $"{TAB}{TAB}public {@class}(Entity preEntity, Entity targetEntity, Entity postEntity){NEW_LINE}";
+            code += $"{TAB}{TAB}{{{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}if (targetEntity == null) throw new InvalidPluginExecutionException($\"new {@class}(preEntity, targetEntity, postEntity) with targetEntity = null\");{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}if (preEntity == null) preEntity = new Entity(targetEntity.LogicalName, targetEntity.Id);{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}if (postEntity == null) postEntity = new Entity(targetEntity.LogicalName, targetEntity.Id);{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}Entity = preEntity;{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}foreach (var property in targetEntity?.Attributes?.ToList()){NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{{{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}var key = property.Key;{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}var value = property.Value;{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}Entity[key] = value;{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}}}{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}foreach (var property in postEntity?.Attributes?.ToList()){NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}{{{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}{TAB}var key = property.Key;{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}{TAB}var value = property.Value;{NEW_LINE}";
@@ -149,10 +187,14 @@ namespace DynamicsCrm.DevKit.Shared
             {
                 if (attribute is ImageAttributeMetadata image)
                 {
-                    if ((image.IsPrimaryImage ?? false) && image.LogicalName != "entityimage")
+                    if (image.IsPrimaryImage ?? false)
                         code += GetGeneratorImageCode("EntityImage", image.LogicalName);
+                    else
+                    {
+                        if (image.LogicalName == "entityimage") continue;
                     code += GetGeneratorImageCode(attribute.SchemaName, attribute.LogicalName);
                 }
+            }
             }
             code = code.TrimEnd($",{NEW_LINE}".ToCharArray());
             code += $"{NEW_LINE}";
@@ -182,7 +224,7 @@ namespace DynamicsCrm.DevKit.Shared
                     {
                         var statusCodeComment = string.Empty;
                         if (value.Name3.Length > 0)
-                            statusCodeComment = $" with StateCode.{stateCodeOptions.Where(x => x.Value == value.Name3).FirstOrDefault().Name}";
+                            statusCodeComment = $" with StateCode.{stateCodeOptions.Where(x => x.Value == value.Name3).FirstOrDefault()?.Name}";
                         tmp += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
                         tmp += $"{TAB}{TAB}/// {value.Label?.TrimEnd("\r\n".ToCharArray())} = {value.Value}{statusCodeComment}{NEW_LINE}";
                         tmp += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
@@ -221,6 +263,7 @@ namespace DynamicsCrm.DevKit.Shared
 
         private static bool IsFieldOk(AttributeMetadata attribute)
         {
+            if (attribute is ImageAttributeMetadata) return false;
             if (attribute.AttributeOf != null) return false;
             if (attribute.AttributeTypeName == AttributeTypeDisplayName.ImageType) return false;
             if (XrmHelper.IsOptionSet(attribute) && attribute.OptionSetValues().Count == 0) return false;
