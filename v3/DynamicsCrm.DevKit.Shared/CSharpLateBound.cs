@@ -185,9 +185,13 @@ namespace DynamicsCrm.DevKit.Shared
             {
                 if (attribute is ImageAttributeMetadata image)
                 {
-                    if ((image.IsPrimaryImage ?? false) && image.LogicalName != "entityimage")
+                    if (image.IsPrimaryImage ?? false)
                         code += GetGeneratorImageCode("EntityImage", image.LogicalName);
-                    code += GetGeneratorImageCode(attribute.SchemaName, attribute.LogicalName);
+                    else
+                    {
+                        if (image.LogicalName == "entityimage") continue;
+                        code += GetGeneratorImageCode(attribute.SchemaName, attribute.LogicalName);
+                    }
                 }
             }
             code = code.TrimEnd($",{NEW_LINE}".ToCharArray());
@@ -257,6 +261,7 @@ namespace DynamicsCrm.DevKit.Shared
 
         private static bool IsFieldOk(AttributeMetadata attribute)
         {
+            if (attribute is ImageAttributeMetadata) return false;
             if (attribute.AttributeOf != null) return false;
             if (attribute.AttributeTypeName == AttributeTypeDisplayName.ImageType) return false;
             if (XrmHelper.IsOptionSet(attribute) && attribute.OptionSetValues().Count == 0) return false;
