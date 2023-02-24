@@ -552,10 +552,10 @@ namespace DynamicsCrm.DevKit.Shared
                 _d_ts += form_d_ts_QuickForm;
             }
             var form_d_ts_Process = GetForm_d_ts_Process(form.FormXml);
-            //if (form_d_ts_Process.Length > 0)
-            //{
+            if (form_d_ts_Process.Length > 0)
+            {
                 _d_ts += form_d_ts_Process;
-            //}
+            }
             var form_d_ts_Grid = GetForm_d_ts_Grid(form.FormXml);
             if (form_d_ts_Grid.Length > 0)
             {
@@ -596,11 +596,11 @@ namespace DynamicsCrm.DevKit.Shared
                 _d_ts += $"\t\t/** The QuickForm of form {formName} */\r\n";
                 _d_ts += $"\t\tQuickForm: {@namespace}.Form{formName}.QuickForm;\r\n";
             }
-            //if (form_d_ts_Process.Length > 0)
-            //{
+            if (form_d_ts_Process.Length > 0)
+            {
                 _d_ts += $"\t\t/** The Process of form {formName} */\r\n";
                 _d_ts += $"\t\tProcess: {@namespace}.Form{formName}.Process;\r\n";
-            //}
+            }
             if (form_d_ts_Grid.Length > 0)
             {
                 _d_ts += $"\t\t/** The Grid of form {formName} */\r\n";
@@ -712,9 +712,12 @@ namespace DynamicsCrm.DevKit.Shared
                 _d_ts += $"\t\t}}\r\n";
                 part1 += $"\t\t\t{name}: Process{name};\r\n";
             }
-            _d_ts += $"\t\tinterface Process extends DevKit.Controls.IProcess {{\r\n";
-            _d_ts += part1;
-            _d_ts += $"\t\t}}\r\n";
+            if (part1.Length > 0)
+            {
+                _d_ts += $"\t\tinterface Process extends DevKit.Controls.IProcess {{\r\n";
+                _d_ts += part1;
+                _d_ts += $"\t\t}}\r\n";
+            }
             return _d_ts;
         }
 

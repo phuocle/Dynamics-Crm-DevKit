@@ -3,19 +3,33 @@ using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Tooling.Connector;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Windows.Documents;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using static DynamicsCrm.DevKit.Shared.Entities.SdkMessageProcessingStep;
 
 namespace DynamicsCrm.DevKit.Shared
 {
     public static class JsForm
     {
+
+        private static List<string> FormAll_Fields = new List<string>();
+        private static List<string> FormAll_Header_Fields = new List<string>();
+        private static List<TabSection> FormAll_TabSections = new List<TabSection>();
+        private static List<ProcessFields> FormAll_Processes = new List<ProcessFields>();
         private class TabSection
         {
             public string Tab { get; set; }
             public string Section { get; set; }
+        }
+
+        private class ProcessFields
+        {
+            public string ProcessName { get; set; }
+            public List<string> Fields { get; set; }
         }
 
         private const string NEW_LINE = "\r\n";
@@ -53,7 +67,7 @@ namespace DynamicsCrm.DevKit.Shared
                 code += GetMainFormCode(form, @namespace);
             foreach (var form in forms.Where(x => x.IsQuickCreate))
                 code += GetQuickCreateFormCode(form, @namespace);
-            code += GetMainFormCode(@namespace);
+            code += GetMainFormCode_AllFields(@namespace);
             code += $"}})({@namespace} || ({@namespace} = {{}}));{NEW_LINE}";
             code += $"{Utility.GeneratorOptionSet(EntityMetadata)}";
             //if (comment.WebApiVersion == "2")
@@ -98,7 +112,7 @@ namespace DynamicsCrm.DevKit.Shared
             return code;
         }
 
-        private static string GetMainFormCode(string @namespace)
+        private static string GetMainFormCode_AllFields(string @namespace)
         {
             var code = string.Empty;
             var formName = $"Form___{EntityMetadata.LogicalName}___All";
@@ -114,24 +128,24 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"{TAB}{TAB}}}{NEW_LINE}";
             code += $"{TAB}{TAB}var form = devKit.LoadForm(formContext);{NEW_LINE}";
             code += $"{TAB}{TAB}var body = {{{NEW_LINE}";
-            code += GetJsCodeBody();
+            code += GetJsCodeBody_AllFields();
             code += $"{TAB}{TAB}}};{NEW_LINE}";
             code += $"{TAB}{TAB}devKit.LoadFields(formContext, body);{NEW_LINE}";
             code += $"{TAB}{TAB}var tab = {{{NEW_LINE}";
-            code += GetJsCodeTabs();
+            code += GetJsCodeTabs_AllFields();
             code += $"{TAB}{TAB}}};{NEW_LINE}";
             code += $"{TAB}{TAB}devKit.LoadTabs(formContext, tab);{NEW_LINE}";
             code += $"{TAB}{TAB}body.Tab = tab;{NEW_LINE}";
             code += $"{TAB}{TAB}form.Body = body;{NEW_LINE}";
-            //var codeHeader = GetJsCodeHeader(form.FormXml);
-            //if (codeHeader.Length > 0)
-            //{
-            //    code += $"\t\tvar header = {{\r\n";
-            //    code += codeHeader;
-            //    code += $"\t\t}};\r\n";
-            //    code += $"\t\tdevKit.LoadFields(formContext, header, \"header_\");\r\n";
-            //    code += $"\t\tform.Header = header;\r\n";
-            //}
+            var codeHeader = GetJsCodeHeader_AllFields();
+            if (codeHeader.Length > 0)
+            {
+                code += $"{TAB}{TAB}var header = {{{NEW_LINE}";
+                code += codeHeader;
+                code += $"{TAB}{TAB}}};{NEW_LINE}";
+                code += $"{TAB}{TAB}devKit.LoadFields(formContext, header, \"header_\");{NEW_LINE}";
+                code += $"{TAB}{TAB}form.Header = header;{NEW_LINE}";
+            }
             //var codeFooter = GetJsCodeFooter(form.FormXml);
             //if (codeFooter.Length > 0)
             //{
@@ -141,13 +155,14 @@ namespace DynamicsCrm.DevKit.Shared
             //    code += $"\t\tdevKit.LoadFields(formContext, footer, \"footer_\");\r\n";
             //    code += $"\t\tform.Footer = footer;\r\n";
             //}
-            //var codeProcess = GetJsProcessCode();
-            //code += $"\t\tvar process = devKit.LoadProcess(formContext);\r\n";
-            //if (codeProcess.Length > 0)
-            //{
-            //    code += codeProcess;
-            //}
-            //code += $"\t\tform.Process = process;\r\n";
+            var codeProcess = GetJsProcessCode_AllFields();
+            if (codeProcess.Length > 0)
+            {
+                code += $"{TAB}{TAB}var process = devKit.LoadProcess(formContext);{NEW_LINE}";
+                code += codeProcess;
+                code += $"{TAB}{TAB}form.Process = process;{NEW_LINE}";
+            }
+
             //var codeQuickForm = GetJsQuickFormCode(form.FormXml);
             //if (codeQuickForm.Length > 0)
             //{
@@ -218,22 +233,22 @@ namespace DynamicsCrm.DevKit.Shared
                 code += $"\t\tdevKit.LoadFields(formContext, header, \"header_\");\r\n";
                 code += $"\t\tform.Header = header;\r\n";
             }
-            var codeFooter = GetJsCodeFooter(form.FormXml);
-            if (codeFooter.Length > 0)
-            {
-                code += $"\t\tvar footer = {{\r\n";
-                code += codeFooter;
-                code += $"\t\t}};\r\n";
-                code += $"\t\tdevKit.LoadFields(formContext, footer, \"footer_\");\r\n";
-                code += $"\t\tform.Footer = footer;\r\n";
-            }
+            //var codeFooter = GetJsCodeFooter(form.FormXml);
+            //if (codeFooter.Length > 0)
+            //{
+            //    code += $"\t\tvar footer = {{\r\n";
+            //    code += codeFooter;
+            //    code += $"\t\t}};\r\n";
+            //    code += $"\t\tdevKit.LoadFields(formContext, footer, \"footer_\");\r\n";
+            //    code += $"\t\tform.Footer = footer;\r\n";
+            //}
             var codeProcess = GetJsProcessCode();
-            code += $"\t\tvar process = devKit.LoadProcess(formContext);\r\n";
             if (codeProcess.Length > 0)
             {
+                code += $"\t\tvar process = devKit.LoadProcess(formContext);\r\n";
                 code += codeProcess;
+                code += $"\t\tform.Process = process;\r\n";
             }
-            code += $"\t\tform.Process = process;\r\n";
             var codeQuickForm = GetJsQuickFormCode(form.FormXml);
             if (codeQuickForm.Length > 0)
             {
@@ -487,6 +502,23 @@ namespace DynamicsCrm.DevKit.Shared
                 code += $"\t\t}}\r\n";
                 code += $"\t\tdevKit.LoadFields(formContext, _{name}, \"header_process_\");\r\n";
                 code += $"\t\tprocess.{name} = _{name};\r\n";
+
+                FormAll_Processes.Add(new ProcessFields { ProcessName = name, Fields = fields });
+            }
+            return code;
+        }
+
+        private static string GetJsProcessCode_AllFields()
+        {
+            var code = string.Empty;
+            foreach (var process in FormAll_Processes)
+            {
+                var name = process.ProcessName;
+                code += $"\t\tvar _{name} = {{\r\n";
+                code += GetJsForListFields(process.Fields, true);
+                code += $"\t\t}}\r\n";
+                code += $"\t\tdevKit.LoadFields(formContext, _{name}, \"header_process_\");\r\n";
+                code += $"\t\tprocess.{name} = _{name};\r\n";
             }
             return code;
         }
@@ -537,7 +569,18 @@ namespace DynamicsCrm.DevKit.Shared
                            select x.Attribute("datafieldname")?.Value).ToList();
             headers.Sort();
             if (headers.Count == 0) return string.Empty;
+            FormAll_Header_Fields = FormAll_Header_Fields.Concat(headers).ToList();
             var code = GetJsForListFields(headers, false);
+            code = $"{code.TrimEnd($",{NEW_LINE}".ToCharArray())}{NEW_LINE}";
+            if (code == NEW_LINE) return string.Empty;
+            return code;
+        }
+
+        private static string GetJsCodeHeader_AllFields()
+        {
+            FormAll_Header_Fields = FormAll_Header_Fields.Distinct().ToList();
+            FormAll_Header_Fields.Sort();
+            var code = GetJsForListFields(FormAll_Header_Fields, false);
             code = $"{code.TrimEnd($",{NEW_LINE}".ToCharArray())}{NEW_LINE}";
             if (code == NEW_LINE) return string.Empty;
             return code;
@@ -557,7 +600,7 @@ namespace DynamicsCrm.DevKit.Shared
             return code;
         }
 
-        private static string GetJsCodeTabs()
+        private static string GetJsCodeTabs_AllFields()
         {
             var code = string.Empty;
             var tabs = FormAll_TabSections.Select(x => x.Tab).Distinct().ToList();
@@ -651,15 +694,12 @@ namespace DynamicsCrm.DevKit.Shared
             return GetJsForListFields(list, false);
         }
 
-        private static string GetJsCodeBody()
+        private static string GetJsCodeBody_AllFields()
         {
             FormAll_Fields = FormAll_Fields.Distinct().ToList();
             FormAll_Fields.Sort();
             return GetJsForListFields(FormAll_Fields, false);
         }
-
-        private static List<string> FormAll_Fields = new List<string>();
-        private static List<TabSection> FormAll_TabSections = new List<TabSection>();
 
         private static string GetJsQuickViewCodeBody(string formXml)
         {
