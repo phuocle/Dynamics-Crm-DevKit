@@ -2,12 +2,14 @@
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Tooling.Connector;
 using System;
+using System.Activities.Expressions;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Documents;
 using System.Windows.Forms;
+using System.Windows.Navigation;
 using System.Xml.Linq;
 using static DynamicsCrm.DevKit.Shared.Entities.SdkMessageProcessingStep;
 
@@ -20,6 +22,9 @@ namespace DynamicsCrm.DevKit.Shared
         private static List<string> FormAll_Header_Fields = new List<string>();
         private static List<TabSection> FormAll_TabSections = new List<TabSection>();
         private static List<ProcessFields> FormAll_Processes = new List<ProcessFields>();
+        private static List<string> FormAll_QuickForms = new List<string>();
+        private static List<string> FormAll_Grids = new List<string>();
+        private static List<string> FormAll_Navigations = new List<string>();
         private class TabSection
         {
             public string Tab { get; set; }
@@ -163,33 +168,33 @@ namespace DynamicsCrm.DevKit.Shared
                 code += $"{TAB}{TAB}form.Process = process;{NEW_LINE}";
             }
 
-            //var codeQuickForm = GetJsQuickFormCode(form.FormXml);
-            //if (codeQuickForm.Length > 0)
-            //{
-            //    code += $"\t\tvar quickForm = {{\r\n";
-            //    code += codeQuickForm;
-            //    code += $"\t\t}};\r\n";
-            //    code += $"\t\tdevKit.LoadQuickForms(formContext, quickForm);\r\n";
-            //    code += $"\t\tform.QuickForm = quickForm;\r\n";
-            //}
-            //var codeGrid = GetJsGridCode(form.FormXml);
-            //if (codeGrid.Length > 0)
-            //{
-            //    code += $"\t\tvar grid = {{\r\n";
-            //    code += codeGrid;
-            //    code += $"\t\t}};\r\n";
-            //    code += $"\t\tdevKit.LoadGrids(formContext, grid);\r\n";
-            //    code += $"\t\tform.Grid = grid;\r\n";
-            //}
-            //var codeNavigation = GetJsNavigationCode(form.FormXml);
-            //if (codeNavigation.Length > 0)
-            //{
-            //    code += $"\t\tvar navigation = {{\r\n";
-            //    code += codeNavigation;
-            //    code += $"\t\t}};\r\n";
-            //    code += $"\t\tdevKit.LoadNavigations(formContext, navigation);\r\n";
-            //    code += $"\t\tform.Navigation = navigation;\r\n";
-            //}
+            var codeQuickForm = GetJsQuickFormCode_AllFields();
+            if (codeQuickForm.Length > 0)
+            {
+                code += $"\t\tvar quickForm = {{\r\n";
+                code += codeQuickForm;
+                code += $"\t\t}};\r\n";
+                code += $"\t\tdevKit.LoadQuickForms(formContext, quickForm);\r\n";
+                code += $"\t\tform.QuickForm = quickForm;\r\n";
+            }
+            var codeGrid = GetJsGridCode_AllFields();
+            if (codeGrid.Length > 0)
+            {
+                code += $"\t\tvar grid = {{\r\n";
+                code += codeGrid;
+                code += $"\t\t}};\r\n";
+                code += $"\t\tdevKit.LoadGrids(formContext, grid);\r\n";
+                code += $"\t\tform.Grid = grid;\r\n";
+            }
+            var codeNavigation = GetJsNavigationCode_AllFields();
+            if (codeNavigation.Length > 0)
+            {
+                code += $"\t\tvar navigation = {{\r\n";
+                code += codeNavigation;
+                code += $"\t\t}};\r\n";
+                code += $"\t\tdevKit.LoadNavigations(formContext, navigation);\r\n";
+                code += $"\t\tform.Navigation = navigation;\r\n";
+            }
             code += $"\t\tform.Utility = devKit.LoadUtility(defaultWebResourceName);\r\n";
             code += $"\t\tform.ExecutionContext = devKit.LoadExecutionContext(executionContext);\r\n";
             code += $"\t\tdevKit.LoadOthers(formContext, form, defaultWebResourceName);\r\n";
@@ -309,8 +314,25 @@ namespace DynamicsCrm.DevKit.Shared
                 code += $"\t\t\t}},\r\n";
             }
             code = code.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
+            if (!FormAll_QuickForms.Any(x => x == code))
+            {
+                FormAll_QuickForms.Add(code);
+            }
             return code;
         }
+
+        private static string GetJsQuickFormCode_AllFields()
+        {
+            var code = string.Empty;
+            foreach (var item in FormAll_QuickForms)
+            {
+                var temp = item.TrimEnd(",\r\n".ToCharArray());
+                code += $"{temp},{NEW_LINE}";
+            }
+            code = code.TrimEnd($",{NEW_LINE}".ToCharArray()) + "\r\n";
+            return code;
+        }
+
         private static string GetBodyOfQuickView(string formXml, string id)
         {
             var code = string.Empty;
@@ -445,6 +467,20 @@ namespace DynamicsCrm.DevKit.Shared
                 var classId = GetARealClassId(formXml, field.ClassId, field.ControlId);
                 if (classId != ControlClassId.SUB_GRID && classId != ControlClassId.SUB_GRID_PANEL) continue;
                 code += $"\t\t\t{field.Id}: {{}},\r\n";
+                if (!FormAll_Grids.Any(x => x == field.Id))
+                {
+                    FormAll_Grids.Add(field.Id);
+                }
+            }
+            return code;
+        }
+
+        private static string GetJsGridCode_AllFields()
+        {
+            var code = string.Empty;
+            foreach (var item in FormAll_Grids)
+            {
+                code += $"\t\t\t{item}: {{}},\r\n";
             }
             return code;
         }
@@ -459,8 +495,24 @@ namespace DynamicsCrm.DevKit.Shared
             navigations.Sort();
             if (navigations.Count == 0) return string.Empty;
             foreach (var navigation in navigations)
+            {
                 code += $"\t\t\t{navigation}: {{}},\r\n";
+                if (!FormAll_Navigations.Any(x => x == navigation))
+                {
+                    FormAll_Navigations.Add(navigation);
+                }
+            }
             code = code.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
+            return code;
+        }
+
+        private static string GetJsNavigationCode_AllFields()
+        {
+            var code = string.Empty;
+            foreach (var item in FormAll_Navigations)
+            {
+                code += $"\t\t\t{item}: {{}},\r\n";
+            }
             return code;
         }
 
@@ -502,8 +554,10 @@ namespace DynamicsCrm.DevKit.Shared
                 code += $"\t\t}}\r\n";
                 code += $"\t\tdevKit.LoadFields(formContext, _{name}, \"header_process_\");\r\n";
                 code += $"\t\tprocess.{name} = _{name};\r\n";
-
-                FormAll_Processes.Add(new ProcessFields { ProcessName = name, Fields = fields });
+                if (!FormAll_Processes.Any(x => x.ProcessName == name))
+                {
+                    FormAll_Processes.Add(new ProcessFields { ProcessName = name, Fields = fields });
+                }
             }
             return code;
         }
