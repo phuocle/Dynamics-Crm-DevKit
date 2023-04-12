@@ -7,12 +7,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 using System.Xml.Linq;
 
 namespace DynamicsCrm.DevKit.Shared
 {
     public class JsTypeScriptDeclaration2
     {
+        private static List<string> FormAll_HeaderFields = new List<string>();
+        private static List<string> FormAll_BodyFields = new List<string>();
+        private static List<string> FormAll_ProcessFields = new List<string>();
+
+
         private const string NEW_LINE = "\r\n";
         private const string TAB = "\t";
         private static CrmServiceClient CrmServiceClient { get; set; }
@@ -479,7 +485,8 @@ namespace DynamicsCrm.DevKit.Shared
             var _d_ts = string.Empty;
             foreach(var form in forms.Where(x => x.FormType == XrmHelper.FormType.Main).ToList())
                 _d_ts += GetFormMain_d_ts(form, @namespace);
-            foreach(var form in forms.Where(x => x.FormType == XrmHelper.FormType.QuickCreate).ToList())
+            _d_ts += GetFormMain_d_ts__AllFields(@namespace);
+            foreach (var form in forms.Where(x => x.FormType == XrmHelper.FormType.QuickCreate).ToList())
                 _d_ts += GetFormQuickCreate_d_ts(form, @namespace);
             return _d_ts;
         }
@@ -532,13 +539,13 @@ namespace DynamicsCrm.DevKit.Shared
             {
                 _d_ts += form_d_ts_Body;
             }
-            var form_d_ts_Footer = GetForm_d_ts_Footer(form.FormXml);
-            if (form_d_ts_Footer.Length > 0)
-            {
-                _d_ts += $"\t\tinterface Footer extends DevKit.Controls.IFooter {{\r\n";
-                _d_ts += form_d_ts_Footer;
-                _d_ts += $"\t\t}}\r\n";
-            }
+            //var form_d_ts_Footer = GetForm_d_ts_Footer(form.FormXml);
+            //if (form_d_ts_Footer.Length > 0)
+            //{
+            //    _d_ts += $"\t\tinterface Footer extends DevKit.Controls.IFooter {{\r\n";
+            //    _d_ts += form_d_ts_Footer;
+            //    _d_ts += $"\t\t}}\r\n";
+            //}
             var form_d_ts_Navigation = GetForm_d_ts_Navigation(form.FormXml);
             if (form_d_ts_Navigation.Length > 0)
             {
@@ -576,11 +583,11 @@ namespace DynamicsCrm.DevKit.Shared
                 _d_ts += $"\t\t/** The Body section of form {formName} */\r\n";
                 _d_ts += $"\t\tBody: {@namespace}.Form{formName}.Body;\r\n";
             }
-            if (form_d_ts_Footer.Length > 0)
-            {
-                _d_ts += $"\t\t/** The Footer section of form {formName} */\r\n";
-                _d_ts += $"\t\tFooter: {@namespace}.Form{formName}.Footer;\r\n";
-            }
+            //if (form_d_ts_Footer.Length > 0)
+            //{
+            //    _d_ts += $"\t\t/** The Footer section of form {formName} */\r\n";
+            //    _d_ts += $"\t\tFooter: {@namespace}.Form{formName}.Footer;\r\n";
+            //}
             if (form_d_ts_Header.Length > 0)
             {
                 _d_ts += $"\t\t/** The Header section of form {formName} */\r\n";
@@ -610,6 +617,103 @@ namespace DynamicsCrm.DevKit.Shared
             _d_ts += $"\t\tSidePanes: DevKit.SidePanes;\r\n";
             _d_ts += $"\t}}\r\n";
             return  _d_ts;
+        }
+
+        private static string GetFormMain_d_ts__AllFields(string @namespace)
+        {
+            var _d_ts = string.Empty;
+            var formName = $"Form___{EntityMetadata.LogicalName}___All";
+            _d_ts += $"{TAB}namespace Form{formName} {{{NEW_LINE}";
+            var form_d_ts_Header = GetForm_d_ts_Header_AllFields();
+            if (form_d_ts_Header.Length > 0)
+            {
+                _d_ts += $"\t\tinterface Header extends DevKit.Controls.IHeader {{\r\n";
+                _d_ts += form_d_ts_Header;
+                _d_ts += $"\t\t}}\r\n";
+            }
+            var form_d_ts_Body = GetForm_d_ts_Body_AllFields();
+            if (form_d_ts_Body.Length > 0)
+            {
+                _d_ts += form_d_ts_Body;
+            }
+            //var form_d_ts_Footer = GetForm_d_ts_Footer(form.FormXml);
+            //if (form_d_ts_Footer.Length > 0)
+            //{
+            //    _d_ts += $"\t\tinterface Footer extends DevKit.Controls.IFooter {{\r\n";
+            //    _d_ts += form_d_ts_Footer;
+            //    _d_ts += $"\t\t}}\r\n";
+            //}
+            //var form_d_ts_Navigation = GetForm_d_ts_Navigation(form.FormXml);
+            //if (form_d_ts_Navigation.Length > 0)
+            //{
+            //    _d_ts += $"\t\tinterface Navigation {{\r\n";
+            //    _d_ts += form_d_ts_Navigation;
+            //    _d_ts += $"\t\t}}\r\n";
+            //}
+            //var form_d_ts_QuickForm = GetForm_d_ts_QuickForm(form.FormXml);
+            //if (form_d_ts_QuickForm.Length > 0)
+            //{
+            //    _d_ts += form_d_ts_QuickForm;
+            //}
+            //var form_d_ts_Process = GetForm_d_ts_Process(form.FormXml);
+            //if (form_d_ts_Process.Length > 0)
+            //{
+            //    _d_ts += form_d_ts_Process;
+            //}
+            //var form_d_ts_Grid = GetForm_d_ts_Grid(form.FormXml);
+            //if (form_d_ts_Grid.Length > 0)
+            //{
+            //    _d_ts += form_d_ts_Grid;
+            //}
+            //_d_ts += $"{TAB}}}{NEW_LINE}";
+            //_d_ts += $"\tclass Form{formName} extends DevKit.IForm {{\r\n";
+            //_d_ts += $"\t\t/**\r\n";
+            //_d_ts += $"\t\t* {form.Name} [Main Form]\r\n";
+            //_d_ts += $"\t\t* @param executionContext the execution context\r\n";
+            //_d_ts += $"\t\t* @param defaultWebResourceName default resource name. E.g.: \"devkit_/resources/Resource\"\r\n";
+            //_d_ts += $"\t\t*/\r\n";
+            //_d_ts += $"\t\tconstructor(executionContext: any, defaultWebResourceName?: string);\r\n";
+            //_d_ts += $"\t\t/** Utility functions/methods/objects for Dynamics 365 form */\r\n";
+            //_d_ts += $"\t\tUtility: DevKit.Utility;\r\n";
+            //if (form_d_ts_Body.Length > 0)
+            //{
+            //    _d_ts += $"\t\t/** The Body section of form {formName} */\r\n";
+            //    _d_ts += $"\t\tBody: {@namespace}.Form{formName}.Body;\r\n";
+            //}
+            //if (form_d_ts_Footer.Length > 0)
+            //{
+            //    _d_ts += $"\t\t/** The Footer section of form {formName} */\r\n";
+            //    _d_ts += $"\t\tFooter: {@namespace}.Form{formName}.Footer;\r\n";
+            //}
+            //if (form_d_ts_Header.Length > 0)
+            //{
+            //    _d_ts += $"\t\t/** The Header section of form {formName} */\r\n";
+            //    _d_ts += $"\t\tHeader: {@namespace}.Form{formName}.Header;\r\n";
+            //}
+            //if (form_d_ts_Navigation.Length > 0)
+            //{
+            //    _d_ts += $"\t\t/** The Navigation of form {formName} */\r\n";
+            //    _d_ts += $"\t\tNavigation: {@namespace}.Form{formName}.Navigation;\r\n";
+            //}
+            //if (form_d_ts_QuickForm.Length > 0)
+            //{
+            //    _d_ts += $"\t\t/** The QuickForm of form {formName} */\r\n";
+            //    _d_ts += $"\t\tQuickForm: {@namespace}.Form{formName}.QuickForm;\r\n";
+            //}
+            //if (form_d_ts_Process.Length > 0)
+            //{
+            //    _d_ts += $"\t\t/** The Process of form {formName} */\r\n";
+            //    _d_ts += $"\t\tProcess: {@namespace}.Form{formName}.Process;\r\n";
+            //}
+            //if (form_d_ts_Grid.Length > 0)
+            //{
+            //    _d_ts += $"\t\t/** The Grid of form {formName} */\r\n";
+            //    _d_ts += $"\t\tGrid: {@namespace}.Form{formName}.Grid;\r\n";
+            //}
+            _d_ts += $"\t\t/** The SidePanes of form {formName} */\r\n";
+            _d_ts += $"\t\tSidePanes: DevKit.SidePanes;\r\n";
+            _d_ts += $"\t}}\r\n";
+            return _d_ts;
         }
 
         private static string GetUnquieFormName(string formName)
@@ -708,7 +812,7 @@ namespace DynamicsCrm.DevKit.Shared
                     }
                 }
                 fields = fields.OrderBy(f => f.Name).ToList();
-                _d_ts += Get_d_ts_ForListFields(formXml, fields, true);
+                _d_ts += Get_d_ts_ForListFields(formXml, fields, true, ref FormAll_ProcessFields);
                 _d_ts += $"\t\t}}\r\n";
                 part1 += $"\t\t\t{name}: Process{name};\r\n";
             }
@@ -865,27 +969,27 @@ namespace DynamicsCrm.DevKit.Shared
             return _d_ts;
         }
 
-        private static string GetForm_d_ts_Footer(string formXml)
-        {
-            var xdoc = XDocument.Parse(formXml);
-            var footers = (from x in xdoc.Descendants("footer")
-                           .Descendants("rows")
-                           .Descendants("row")
-                           .Descendants("cell")
-                           .Descendants("control")
-                           select new IdName
-                           {
-                               Name = x?.Attribute("datafieldname")?.Value,
-                               Id = x?.Attribute("id").Value,
-                               ClassId = Utility.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
-                               ControlId = x?.Attribute("uniqueid")?.Value
-                           }).ToList();
-            footers = footers.OrderBy(x => x.Name).ToList();
-            if (footers.Count() == 0) return string.Empty;
-            var _d_ts = Get_d_ts_ForListFields(formXml, footers, false);
-            if (_d_ts.EndsWith(",\r\n")) _d_ts = _d_ts.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
-            return _d_ts;
-        }
+        //private static string GetForm_d_ts_Footer(string formXml)
+        //{
+        //    var xdoc = XDocument.Parse(formXml);
+        //    var footers = (from x in xdoc.Descendants("footer")
+        //                   .Descendants("rows")
+        //                   .Descendants("row")
+        //                   .Descendants("cell")
+        //                   .Descendants("control")
+        //                   select new IdName
+        //                   {
+        //                       Name = x?.Attribute("datafieldname")?.Value,
+        //                       Id = x?.Attribute("id").Value,
+        //                       ClassId = Utility.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
+        //                       ControlId = x?.Attribute("uniqueid")?.Value
+        //                   }).ToList();
+        //    footers = footers.OrderBy(x => x.Name).ToList();
+        //    if (footers.Count() == 0) return string.Empty;
+        //    var _d_ts = Get_d_ts_ForListFields(formXml, footers, false);
+        //    if (_d_ts.EndsWith(",\r\n")) _d_ts = _d_ts.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
+        //    return _d_ts;
+        //}
 
         private static string GetForm_d_ts_Body(string formXml)
         {
@@ -959,10 +1063,16 @@ namespace DynamicsCrm.DevKit.Shared
                             ControlId = x?.Attribute("uniqueid")?.Value
                         }).Distinct().ToList();
             body = body.OrderBy(x => x.Name).ToList();
-            _d_ts += Get_d_ts_ForListFields(formXml, body, false);
+            _d_ts += Get_d_ts_ForListFields(formXml, body, false, ref FormAll_BodyFields);
             if (_d_ts.EndsWith(",\r\n")) _d_ts = _d_ts.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
             _d_ts += $"\t\t}}\r\n";
             return _d_ts;
+        }
+
+        private static string GetForm_d_ts_Body_AllFields()
+        {
+            var code = string.Empty;
+            return string.Join(NEW_LINE, FormAll_BodyFields);
         }
 
         private static string GetForm_d_ts_Header(string formXml)
@@ -982,14 +1092,19 @@ namespace DynamicsCrm.DevKit.Shared
                            }).ToList();
             headers = headers.OrderBy(x => x.Name).ToList();
             if (headers.Count() == 0) return string.Empty;
-            var _d_ts = Get_d_ts_ForListFields(formXml, headers, false);
+            var _d_ts = Get_d_ts_ForListFields(formXml, headers, false, ref FormAll_HeaderFields);
             if (_d_ts.EndsWith(",\r\n")) _d_ts = _d_ts.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
             return _d_ts;
         }
 
-        private static string Get_d_ts_ForListFields(string formXml, List<IdName> list, bool isBPF)
+        private static string GetForm_d_ts_Header_AllFields()
         {
-            var _d_ts = string.Empty;
+            return string.Join(NEW_LINE, FormAll_HeaderFields);
+        }
+
+        private static string Get_d_ts_ForListFields(string formXml, List<IdName> list, bool isBPF, ref List<string> allFields)
+        {
+            var code = string.Empty;
             var previousName = string.Empty;
             var previousCount = 0;
 
@@ -997,6 +1112,7 @@ namespace DynamicsCrm.DevKit.Shared
 
             foreach (var item in list)
             {
+                var _d_ts = string.Empty;
                 item.ClassId = GetARealClassId(formXml, item.ClassId, item.ControlId);
                 if (item.Name != null && ControlClassId.CONTROLS.Contains(item.ClassId))
                 {
@@ -1192,9 +1308,11 @@ namespace DynamicsCrm.DevKit.Shared
                     if (item.Name != null)
                         _d_ts += $"\t\t\t{item.Name}: DevKit.Controls.ELSE3???;//{item.Id} - {item.ClassId} -- FOR DEBUG \r\n";
                 }
+                code += _d_ts;
+                if (!allFields.Any(x => x == _d_ts)) allFields.Add(_d_ts);
             }
-            _d_ts = _d_ts.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
-            return _d_ts;
+            code = code.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
+            return code;
         }
 
         private static string GetARealClassId(string formXml, string classId, string controlId)
