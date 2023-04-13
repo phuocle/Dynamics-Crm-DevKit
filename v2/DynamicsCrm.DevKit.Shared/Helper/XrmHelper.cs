@@ -128,7 +128,9 @@ namespace DynamicsCrm.DevKit.Shared.Helper
         {
             var request = new RetrieveProvisionedLanguagesRequest();
             var response = (RetrieveProvisionedLanguagesResponse)service.Execute(request);
-            return response.RetrieveProvisionedLanguages.ToList();
+            var list = response.RetrieveProvisionedLanguages.ToList();
+            list.Add(-1); //add all languages
+            return list;
         }
 
 
