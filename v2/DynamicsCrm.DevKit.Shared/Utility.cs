@@ -737,7 +737,7 @@ namespace DynamicsCrm.DevKit.Shared
                 new NameValue { Name = "Uzbek (Latin)-Uzbekistan", Value = "1091" },
                 new NameValue { Name = "Vietnamese-Viet Nam", Value = "1066" },
                 new NameValue { Name = "Welsh-United Kingdom", Value = "1106" },
-                new NameValue { Name = "Welsh-United Kingdom", Value = "-1" }
+                new NameValue { Name = "All Languages", Value = "-1" }
 
             };
             return languages;
