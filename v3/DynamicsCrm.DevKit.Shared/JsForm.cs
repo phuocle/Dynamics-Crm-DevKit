@@ -72,7 +72,7 @@ namespace DynamicsCrm.DevKit.Shared
                 code += GetMainFormCode(form, @namespace);
             foreach (var form in forms.Where(x => x.IsQuickCreate))
                 code += GetQuickCreateFormCode(form, @namespace);
-            code += GetMainFormCode_AllFields(@namespace);
+            //code += GetMainFormCode_AllFields(@namespace);
             code += $"}})({@namespace} || ({@namespace} = {{}}));{NEW_LINE}";
             code += $"{Utility.GeneratorOptionSet(EntityMetadata)}";
             //if (comment.WebApiVersion == "2")

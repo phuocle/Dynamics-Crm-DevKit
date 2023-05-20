@@ -485,7 +485,7 @@ namespace DynamicsCrm.DevKit.Shared
             var _d_ts = string.Empty;
             foreach(var form in forms.Where(x => x.FormType == XrmHelper.FormType.Main).ToList())
                 _d_ts += GetFormMain_d_ts(form, @namespace);
-            _d_ts += GetFormMain_d_ts__AllFields(@namespace);
+            //_d_ts += GetFormMain_d_ts__AllFields(@namespace);
             foreach (var form in forms.Where(x => x.FormType == XrmHelper.FormType.QuickCreate).ToList())
                 _d_ts += GetFormQuickCreate_d_ts(form, @namespace);
             return _d_ts;
@@ -623,7 +623,7 @@ namespace DynamicsCrm.DevKit.Shared
         {
             var _d_ts = string.Empty;
             var formName = $"Form___{EntityMetadata.LogicalName}___All";
-            _d_ts += $"{TAB}namespace Form{formName} {{{NEW_LINE}";
+            _d_ts += $"{TAB}namespace {formName} {{{NEW_LINE}";
             var form_d_ts_Header = GetForm_d_ts_Header_AllFields();
             if (form_d_ts_Header.Length > 0)
             {
