@@ -46,7 +46,7 @@
 
 	<ItemGroup>
 	  <PackageReference Include="CmdLine" Version="1.0.7.509" />
-	  <PackageReference Include="Community.VisualStudio.Toolkit.17" Version="17.0.475" />
+	  <PackageReference Include="Community.VisualStudio.Toolkit.17" Version="17.0.492" />
 	  <PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="9.0.2.49" />
 	  <PackageReference Include="Microsoft.CrmSdk.Deployment" Version="9.0.2.34" />
 	  <PackageReference Include="Microsoft.CrmSdk.Workflow" Version="9.0.2.49" />
