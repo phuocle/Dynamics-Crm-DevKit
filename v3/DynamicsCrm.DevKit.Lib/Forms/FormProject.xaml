@@ -20,7 +20,7 @@
             <TextBlock.Background>
                 <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ActiveBorderColorKey}}"/>
             </TextBlock.Background>
-            <wpfcontrols:ExternalBrowserHyperlink NavigateUri="https://google.com">WIKI: Connections </wpfcontrols:ExternalBrowserHyperlink>
+            <wpfcontrols:ExternalBrowserHyperlink x:Name="HELP" NavigateUri="https://google.com">WIKI: Connections </wpfcontrols:ExternalBrowserHyperlink>
         </TextBlock>
         <wpfcontrols:UserControlConnection x:Name="connection" Connected="Connection_Connected" />
         <StackPanel IsEnabled="{Binding IsConnected, ElementName=connection}">
@@ -35,8 +35,8 @@
                         <RowDefinition Height="*"></RowDefinition>
                     </Grid.RowDefinitions>
                     <Label Grid.Row="0" Grid.Column="0" Margin="0,0,0,5" Content="Project Name" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                    <ComboBox x:Name="comboBoxType" Grid.Row="0" Grid.Column="1" Margin="0,0,0,5"  />
-                    <Label Grid.Row="1" Grid.Column="1" Margin="0,0,0,0" Content="Name" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                    <ComboBox x:Name="ComboBoxProject" Grid.Row="0" Grid.Column="1" Margin="0,0,0,5"  />
+                    <Label x:Name="LabelProjectName" Grid.Row="1" Grid.Column="1" Margin="0,0,0,0" Content="Name" HorizontalAlignment="Left" VerticalAlignment="Center" />
                 </Grid>
             </Border>
             <WrapPanel HorizontalAlignment="Right" Margin="10,0,10,10">

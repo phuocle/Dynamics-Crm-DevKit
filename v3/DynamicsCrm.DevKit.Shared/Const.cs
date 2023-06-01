@@ -4,9 +4,9 @@ namespace DynamicsCrm.DevKit.Shared
 {
     public class Const
     {
-        public const string Version = "3.33.33";
+        public const string Version = "3.33.33.33";
 #if DEBUG
-        public const string Build = "2022.05.16 15.52.28";
+        public const string Build = "xxxx.yy.zz HH.mm.ss";
 #else
         public const string Build = "xxxx-yy-zz";
 #endif

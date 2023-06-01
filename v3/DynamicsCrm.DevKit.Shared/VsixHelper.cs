@@ -1,8 +1,10 @@
 ﻿using Community.VisualStudio.Toolkit;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.VisualStudio.Shell;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Shared
@@ -63,6 +65,19 @@ namespace DynamicsCrm.DevKit.Shared
             var solution = await VS.Solutions.GetCurrentSolutionAsync();
             return $"{Path.GetDirectoryName(solution.FullPath)}";
         }
+
+        public static string GetSolutionName()
+        {
+            return ThreadHelper.JoinableTaskFactory.Run(async () => {
+                return await GetSolutionNameAsync();
+            });
+        }
+        public static async Task<string> GetSolutionNameAsync()
+        {
+            var solution = await VS.Solutions.GetCurrentSolutionAsync();
+            return $"{Path.GetFileNameWithoutExtension(solution.FullPath)}";
+        }
+
         public static string GetActiveProjectFolder()
         {
             return ThreadHelper.JoinableTaskFactory.Run(async () => {
@@ -120,6 +135,19 @@ namespace DynamicsCrm.DevKit.Shared
                 devKitConnections.DefaultCrmConnection = defaultCrmConnection;
                 SaveDevKitConnections(devKitConnections);
             }
+        }
+
+        public static bool IsExistProject(string projectName)
+        {
+            return ThreadHelper.JoinableTaskFactory.Run(async () => {
+                return await IsExistProjectAsync(projectName);
+            });
+        }
+
+        public static async Task<bool> IsExistProjectAsync(string projectName)
+        {
+            var projects = await VS.Solutions.GetAllProjectsAsync(ProjectStateFilter.All);
+            return projects.Any(x => x.Name == projectName);
         }
     }
 }

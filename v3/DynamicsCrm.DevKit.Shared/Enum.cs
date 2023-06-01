@@ -37,4 +37,9 @@
         SvgFormat = 11,
         StringResx = 12
     }
+
+    public enum ProjectType
+    {
+        Shared
+    }
 }
