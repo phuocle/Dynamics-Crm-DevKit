@@ -7,7 +7,7 @@ namespace Dev.DevKit.Console
     {
         static void Main()
         {
-            CheckWhoAmI();
+            //CheckWhoAmI();
             //DebugPlugin();
         }
 
@@ -15,15 +15,15 @@ namespace Dev.DevKit.Console
         {
             //var json = "";
             //var serviceProvider = Helper.GetServiceProvider(json, AppSettings.Service);
-            //var plugin = new Ab.Xyz.PluginAccount.PostCreateAccountSynchronous();
+            //var plugin = new Abc.Xyz.PluginXXX.PostCreateAccountSynchronous();
             //plugin.Execute(serviceProvider);
         }
 
         private static void CheckWhoAmI()
         {
-            var UserId = ((WhoAmIResponse)AppSettings.Service.Execute(new WhoAmIRequest())).UserId;
-            System.Console.WriteLine(UserId);
-            System.Console.ReadKey();
+            //var UserId = ((WhoAmIResponse)AppSettings.Service.Execute(new WhoAmIRequest())).UserId;
+            //System.Console.WriteLine(UserId);
+            //System.Console.ReadKey();
         }
     }
 }

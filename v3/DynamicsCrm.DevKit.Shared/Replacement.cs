@@ -3,6 +3,7 @@ using DynamicsCrm.DevKit.Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
@@ -17,6 +18,7 @@ namespace DynamicsCrm.DevKit.Shared
         {
             replacements = replacementsDictionary;
             AddCommonReplacements();
+            AddNuGetReplacements();
 
             replacements["$destinationdirectory$"] = $"{Directory.GetParent(DestinationDirectory).FullName}\\{form.ProjectName}";
             replacements["$projectname$"] = form.ProjectName;
@@ -31,6 +33,32 @@ namespace DynamicsCrm.DevKit.Shared
             replacementsDictionary.Add("$UrlValue$", form?.CrmConnection?.Url ?? string.Empty);
             replacementsDictionary.Add("$ClientIdValue$", form?.CrmConnection?.UserName ?? string.Empty);
             replacementsDictionary.Add("$ClientSecretValue$", form?.CrmConnection?.Type == "ClientSecret" ? form?.CrmConnection?.Password : (form?.CrmConnection?.Password != string.Empty ? EncryptDecrypt.DecryptString(form?.CrmConnection?.Password) : string.Empty) ?? string.Empty);
+        }
+
+        private static void AddNuGetReplacements()
+        {
+            var versionDynamicsCrmDevKitCli = NuGetHelper.ListPackageVersions("DynamicsCrm.DevKit.Cli").Last();
+            replacements.Add("$DynamicsCrm.DevKit.Cli.version$", versionDynamicsCrmDevKitCli.OriginalVersion);
+
+            var versionMicrosoftCrmSdkCoreAssemblies = NuGetHelper.ListPackageVersions("Microsoft.CrmSdk.CoreAssemblies").Last();
+            replacements.Add("$Microsoft.CrmSdk.CoreAssemblies.version$", versionMicrosoftCrmSdkCoreAssemblies.OriginalVersion);
+            replacements.Add("$Microsoft.CrmSdk.CoreAssemblies.targetFramework$", NuGetHelper.GetTargetFramework("Microsoft.CrmSdk.CoreAssemblies", versionMicrosoftCrmSdkCoreAssemblies));
+
+            var versionMicrosoftCrmSdkDeployment = NuGetHelper.ListPackageVersions("Microsoft.CrmSdk.Deployment").Last();
+            replacements.Add("$Microsoft.CrmSdk.Deployment.version$", versionMicrosoftCrmSdkDeployment.OriginalVersion);
+            replacements.Add("$Microsoft.CrmSdk.Deployment.targetFramework$", NuGetHelper.GetTargetFramework("Microsoft.CrmSdk.Deployment", versionMicrosoftCrmSdkDeployment));
+
+            var versionMicrosoftCrmSdkWorkflow = NuGetHelper.ListPackageVersions("Microsoft.CrmSdk.Workflow").Last();
+            replacements.Add("$Microsoft.CrmSdk.Workflow.version$", versionMicrosoftCrmSdkWorkflow.OriginalVersion);
+            replacements.Add("$Microsoft.CrmSdk.Workflow.targetFramework$", NuGetHelper.GetTargetFramework("Microsoft.CrmSdk.Workflow", versionMicrosoftCrmSdkWorkflow));
+
+            var versionMicrosoftCrmSdkXrmToolingCoreAssembly = NuGetHelper.ListPackageVersions("Microsoft.CrmSdk.XrmTooling.CoreAssembly").Last();
+            replacements.Add("$Microsoft.CrmSdk.XrmTooling.CoreAssembly.version$", versionMicrosoftCrmSdkXrmToolingCoreAssembly.OriginalVersion);
+            replacements.Add("$Microsoft.CrmSdk.XrmTooling.CoreAssembly.targetFramework$", NuGetHelper.GetTargetFramework("Microsoft.CrmSdk.XrmTooling.CoreAssembly", versionMicrosoftCrmSdkXrmToolingCoreAssembly));
+
+            var versionMicrosoftCrmSdkXrmToolingWpfControls = NuGetHelper.ListPackageVersions("Microsoft.CrmSdk.XrmTooling.WpfControls").Last();
+            replacements.Add("$Microsoft.CrmSdk.XrmTooling.WpfControls.version$", versionMicrosoftCrmSdkXrmToolingWpfControls.OriginalVersion);
+            replacements.Add("$Microsoft.CrmSdk.XrmTooling.WpfControls.targetFramework$", NuGetHelper.GetTargetFramework("Microsoft.CrmSdk.XrmTooling.WpfControls", versionMicrosoftCrmSdkXrmToolingWpfControls));
         }
 
         private static void AddCommonReplacements()

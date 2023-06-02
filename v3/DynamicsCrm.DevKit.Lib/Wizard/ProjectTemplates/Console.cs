@@ -34,6 +34,7 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ProjectTemplates
 
         public void RunFinished()
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             VsixHelper.FixProjectFolder(DTE, Project, ProjectName);
         }
 
