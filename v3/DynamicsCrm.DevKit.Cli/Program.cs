@@ -115,7 +115,7 @@ namespace DynamicsCrm.DevKit.Cli
                         if (!IsConnectedDynamics365BySdkLogin())
                         {
                             CliLog.WriteLine(ConsoleColor.White, "|");
-                            CliLog.WriteLineError(ConsoleColor.Yellow, $"SdkLogin failed !!!");
+                            CliLog.WriteLineError(ConsoleColor.Yellow, $" OOB Login failed !!!");
                             return false;
                         }
                     }
