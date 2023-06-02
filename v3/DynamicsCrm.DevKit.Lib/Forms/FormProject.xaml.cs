@@ -1,6 +1,6 @@
 ﻿using Community.VisualStudio.Toolkit;
 using DynamicsCrm.DevKit.Shared;
-using Microsoft.VisualStudio.Shell;
+using Microsoft.Xrm.Tooling.Connector;
 
 namespace DynamicsCrm.DevKit.Lib.Forms
 {
@@ -9,6 +9,11 @@ namespace DynamicsCrm.DevKit.Lib.Forms
     /// </summary>
     public partial class FormProject : BaseDialogWindow
     {
+        public string ProjectName => ComboBoxProject.Text;
+        public bool IsOOBConnection => CONNECTION.IsOOBConnection;
+        public CrmServiceClient CrmServiceClient => CONNECTION.CrmServiceClient;
+        public string DataverseConnectionString => CONNECTION.DataverseConnectionString;
+
         private ProjectType _ProjectType;
         private ProjectType ProjectType  {
             get => _ProjectType;

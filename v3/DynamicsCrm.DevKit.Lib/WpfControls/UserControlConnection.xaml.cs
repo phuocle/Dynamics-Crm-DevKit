@@ -34,6 +34,7 @@ namespace DynamicsCrm.DevKit.Lib.WpfControls
 
         public bool IsOOBConnection { get; set; }
         public CrmServiceClient CrmServiceClient { get; set; }
+        public string DataverseConnectionString { get; set; }
 
         public event EventHandler Connected;
 
@@ -57,6 +58,7 @@ namespace DynamicsCrm.DevKit.Lib.WpfControls
                     {
                         CrmServiceClient = loginForm.CrmConnectionMgr.CrmSvc;
                         IsOOBConnection = true;
+                        DataverseConnectionString = string.Empty;
                         IsConnected = true;
                     }
                 }
@@ -64,6 +66,7 @@ namespace DynamicsCrm.DevKit.Lib.WpfControls
                 {
                     IsOOBConnection = false;
                     CrmServiceClient = formConnection.CrmServiceClient;
+                    DataverseConnectionString = formConnection.DataverseConnectionString;
                     IsConnected = CrmServiceClient != null;
                 }
             }

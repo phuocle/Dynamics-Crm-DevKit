@@ -1,6 +1,7 @@
 ﻿using Community.VisualStudio.Toolkit;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -48,12 +49,7 @@ namespace DynamicsCrm.DevKit.Shared
                 }
             }
         }
-        public static string GetDynamicsCrmDevKitJsonFileName()
-        {
-            return ThreadHelper.JoinableTaskFactory.Run(async () => {
-                return await GetDynamicsCrmDevKitJsonFileNameAsync();
-            });
-        }
+
         public static string GetSolutionFolder()
         {
             return ThreadHelper.JoinableTaskFactory.Run(async () => {
@@ -95,11 +91,33 @@ namespace DynamicsCrm.DevKit.Shared
                 return await GetDynamicsCrmDevKitCachedJsonFileNameAsync();
             });
         }
+
+        public static string GetDynamicsCrmDevKitJsonFileName()
+        {
+            return ThreadHelper.JoinableTaskFactory.Run(async () => {
+                return await GetDynamicsCrmDevKitJsonFileNameAsync();
+            });
+        }
+
         public static async Task<string> GetDynamicsCrmDevKitJsonFileNameAsync()
         {
             var solution = await VS.Solutions.GetCurrentSolutionAsync();
             return $"{Path.GetDirectoryName(solution.FullPath)}\\{Const.DynamicsCrmDevKitJson}";
         }
+
+        public static string GetDynamicsCrmDevKitCliJsonFileName()
+        {
+            return ThreadHelper.JoinableTaskFactory.Run(async () => {
+                return await GetDynamicsCrmDevKitCliJsonFileNameAsync();
+            });
+        }
+
+        public static async Task<string> GetDynamicsCrmDevKitCliJsonFileNameAsync()
+        {
+            var solution = await VS.Solutions.GetCurrentSolutionAsync();
+            return $"{Path.GetDirectoryName(solution.FullPath)}\\{Const.DynamicsCrmDevKitCliJson}";
+        }
+
         public static async Task<string> GetDynamicsCrmDevKitCachedJsonFileNameAsync()
         {
             var solution = await VS.Solutions.GetCurrentSolutionAsync();
@@ -148,6 +166,18 @@ namespace DynamicsCrm.DevKit.Shared
         {
             var projects = await VS.Solutions.GetAllProjectsAsync(ProjectStateFilter.All);
             return projects.Any(x => x.Name == projectName);
+        }
+
+        internal static void FixProjectFolder(object dte, EnvDTE.Project project, string projectName)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            var DTE = (EnvDTE.DTE)dte;
+            DTE.Solution.Remove(project);
+            var oldProjectFolder = Path.GetDirectoryName(project.FullName);
+            var newProjectFolder = Directory.GetParent(oldProjectFolder).FullName + "\\" + projectName;
+            Directory.Move(oldProjectFolder, newProjectFolder);
+            DTE.Solution.AddFromFile(newProjectFolder + "\\" + Path.GetFileName(project.FullName));
+            DTE.Solution.SaveAs(DTE.Solution.FullName);
         }
     }
 }

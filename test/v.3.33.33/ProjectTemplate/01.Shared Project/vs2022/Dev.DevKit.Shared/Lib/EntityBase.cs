@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
-namespace $NameSpace$
+namespace Dev.DevKit.Shared
 {
     [DebuggerNonUserCode()]
     public abstract class EntityBase

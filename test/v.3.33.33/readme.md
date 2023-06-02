@@ -9,9 +9,9 @@
 
 # TEST EXTENSION
 ## PROJECT TEMPLATE
-### 01.Shared Project
+### 01. Shared Project
 * Create VS blank solution
-* Add 01. Shared Project
-* Passed VS2019, 2022
+* Add 01. Shared Project to solution
+* Passed VS2019, VS2022
 
 ## ITEM TEMPLATE

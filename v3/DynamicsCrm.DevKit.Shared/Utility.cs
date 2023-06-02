@@ -346,5 +346,22 @@ namespace DynamicsCrm.DevKit.Shared
                 }
             }
         }
+
+        public static string SafeNamespace(string @namespace)
+        {
+            var items = @namespace.Split('.');
+            for (var i = 0; i < items.Length; i++)
+            {
+                if (int.TryParse(items[i], out _))
+                {
+                    items[i] = $"_{items[i]}";
+                }
+                else if (int.TryParse(items[i].Substring(0, 1), out _))
+                {
+                    items[i] = $"_{items[i]}";
+                }
+            }
+            return string.Join(".", items);
+        }
     }
 }

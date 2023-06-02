@@ -31,6 +31,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         public bool IsOOBConnection => radioButtonOOBConnection.IsChecked ?? false;
         public CrmServiceClient CrmServiceClient { get; set; }
+        public string DataverseConnectionString { get; set; } = string.Empty;
 
         private void ButtonCancel_Click(object sender, System.Windows.RoutedEventArgs e)
         {
@@ -56,6 +57,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     CrmServiceClient = XrmHelper.IsConnected(selectedCrmConnection);
                     ThreadHelper.JoinableTaskFactory.Run(async delegate
                     {
+                        DataverseConnectionString = XrmHelper.BuildConnectionString(selectedCrmConnection);
                         await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                         DialogResult = true;
                         Close();
