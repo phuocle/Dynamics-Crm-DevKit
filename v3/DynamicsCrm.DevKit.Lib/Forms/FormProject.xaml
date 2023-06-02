@@ -16,11 +16,8 @@
         </ResourceDictionary>
     </forms:BaseDialogWindow.Resources>
     <StackPanel>
-        <TextBlock Padding="10,5,10,5">
-            <TextBlock.Background>
-                <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ActiveBorderColorKey}}"/>
-            </TextBlock.Background>
-            <wpfcontrols:ExternalBrowserHyperlink x:Name="HELP" NavigateUri="https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Connection">WIKI: Connection</wpfcontrols:ExternalBrowserHyperlink>
+        <TextBlock Padding="10,5,10,5" Background="Green">
+            <wpfcontrols:ExternalBrowserHyperlink x:Name="HELP" NavigateUri="https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Connection" Foreground="White" >WIKI: Connection</wpfcontrols:ExternalBrowserHyperlink>
         </TextBlock>
         <wpfcontrols:UserControlConnection x:Name="CONNECTION" Connected="Connection_Connected" />
         <StackPanel IsEnabled="{Binding IsConnected, ElementName=CONNECTION}">

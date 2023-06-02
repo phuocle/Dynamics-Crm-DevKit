@@ -16,5 +16,9 @@
 ### 02. Console Project
 * Copy all folder/files from 01. Shared Project
 * Add 02. Console Project to solution
-* Passed VS2019
+* Passed VS2019, VS2022
+### 03. Server Project
+* Copy all folder/files from 01. Shared Project
+* Add 03. Server Project to solution
+* Passed VS2019, VS2022
 ## ITEM TEMPLATE

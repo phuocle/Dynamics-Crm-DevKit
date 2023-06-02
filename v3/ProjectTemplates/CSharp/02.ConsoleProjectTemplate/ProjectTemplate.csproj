@@ -39,31 +39,31 @@
   </PropertyGroup>
 	<ItemGroup>
 		<Reference Include="Microsoft.Crm.Sdk.Proxy">
-			<HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.9.0.2.49\lib\net462\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
+			<HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.$Microsoft.CrmSdk.CoreAssemblies.version$\lib\net$Microsoft.CrmSdk.CoreAssemblies.targetFramework$\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
+		</Reference>
+		<Reference Include="Microsoft.Xrm.Sdk">
+			<HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.$Microsoft.CrmSdk.CoreAssemblies.version$\lib\net$Microsoft.CrmSdk.CoreAssemblies.targetFramework$\Microsoft.Xrm.Sdk.dll</HintPath>
+		</Reference>
+		<Reference Include="Microsoft.Xrm.Sdk.Workflow">
+			<HintPath>..\packages\Microsoft.CrmSdk.Workflow.$Microsoft.CrmSdk.Workflow.version$\lib\net$Microsoft.CrmSdk.Workflow.targetFramework$\Microsoft.Xrm.Sdk.Workflow.dll</HintPath>
+		</Reference>
+		<Reference Include="Microsoft.Xrm.Sdk.Deployment">
+			<HintPath>..\packages\Microsoft.CrmSdk.Deployment.$Microsoft.CrmSdk.Deployment.version$\lib\net$Microsoft.CrmSdk.Deployment.targetFramework$\Microsoft.Xrm.Sdk.Deployment.dll</HintPath>
+		</Reference>
+		<Reference Include="Microsoft.Xrm.Tooling.Connector">
+			<HintPath>..\packages\Microsoft.CrmSdk.XrmTooling.CoreAssembly.$Microsoft.CrmSdk.XrmTooling.CoreAssembly.version$\lib\net$Microsoft.CrmSdk.XrmTooling.CoreAssembly.targetFramework$\Microsoft.Xrm.Tooling.Connector.dll</HintPath>
+		</Reference>
+		<Reference Include="Microsoft.Xrm.Tooling.CrmConnectControl, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+			<HintPath>..\packages\Microsoft.CrmSdk.XrmTooling.WpfControls.$Microsoft.CrmSdk.XrmTooling.WpfControls.version$\lib\net$Microsoft.CrmSdk.XrmTooling.WpfControls.targetFramework$\Microsoft.Xrm.Tooling.CrmConnectControl.dll</HintPath>
+		</Reference>
+		<Reference Include="Microsoft.Xrm.Tooling.Ui.Styles, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+			<HintPath>..\packages\Microsoft.CrmSdk.XrmTooling.WpfControls.$Microsoft.CrmSdk.XrmTooling.WpfControls.version$\lib\net$Microsoft.CrmSdk.XrmTooling.WpfControls.targetFramework$\Microsoft.Xrm.Tooling.Ui.Styles.dll</HintPath>
+		</Reference>
+		<Reference Include="Microsoft.Xrm.Tooling.WebResourceUtility, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+			<HintPath>..\packages\Microsoft.CrmSdk.XrmTooling.WpfControls.$Microsoft.CrmSdk.XrmTooling.WpfControls.version$\lib\net$Microsoft.CrmSdk.XrmTooling.WpfControls.targetFramework$\Microsoft.Xrm.Tooling.WebResourceUtility.dll</HintPath>
 		</Reference>
 		<Reference Include="Microsoft.Rest.ClientRuntime, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
 			<HintPath>..\packages\Microsoft.Rest.ClientRuntime.2.3.24\lib\net461\Microsoft.Rest.ClientRuntime.dll</HintPath>
-		</Reference>
-		<Reference Include="Microsoft.Xrm.Sdk">
-			<HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.9.0.2.49\lib\net462\Microsoft.Xrm.Sdk.dll</HintPath>
-		</Reference>
-		<Reference Include="Microsoft.Xrm.Sdk.Workflow">
-			<HintPath>..\packages\Microsoft.CrmSdk.Workflow.9.0.2.49\lib\net462\Microsoft.Xrm.Sdk.Workflow.dll</HintPath>
-		</Reference>
-		<Reference Include="Microsoft.Xrm.Sdk.Deployment">
-			<HintPath>..\packages\Microsoft.CrmSdk.Deployment.9.0.2.34\lib\net462\Microsoft.Xrm.Sdk.Deployment.dll</HintPath>
-		</Reference>
-		<Reference Include="Microsoft.Xrm.Tooling.Connector">
-			<HintPath>..\packages\Microsoft.CrmSdk.XrmTooling.CoreAssembly.9.1.1.32\lib\net462\Microsoft.Xrm.Tooling.Connector.dll</HintPath>
-		</Reference>
-		<Reference Include="Microsoft.Xrm.Tooling.CrmConnectControl, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-			<HintPath>..\packages\Microsoft.CrmSdk.XrmTooling.WpfControls.9.1.1.32\lib\net462\Microsoft.Xrm.Tooling.CrmConnectControl.dll</HintPath>
-		</Reference>
-		<Reference Include="Microsoft.Xrm.Tooling.Ui.Styles, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-			<HintPath>..\packages\Microsoft.CrmSdk.XrmTooling.WpfControls.9.1.1.32\lib\net462\Microsoft.Xrm.Tooling.Ui.Styles.dll</HintPath>
-		</Reference>
-		<Reference Include="Microsoft.Xrm.Tooling.WebResourceUtility, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-			<HintPath>..\packages\Microsoft.CrmSdk.XrmTooling.WpfControls.9.1.1.32\lib\net462\Microsoft.Xrm.Tooling.WebResourceUtility.dll</HintPath>
 		</Reference>
 		<Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory, Version=5.2.8.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
 			<HintPath>..\packages\Microsoft.IdentityModel.Clients.ActiveDirectory.5.2.8\lib\net45\Microsoft.IdentityModel.Clients.ActiveDirectory.dll</HintPath>

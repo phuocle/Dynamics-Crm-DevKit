@@ -19,6 +19,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     case ProjectType.Shared:
                         return ComboBoxProject.Text;
                     case ProjectType.Console:
+                    case ProjectType.Server:
                         return LabelProjectName.Content.ToString();
                 }
                 return string.Empty;
@@ -55,6 +56,16 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}.Console";
                     LabelProjectName.Tag = LabelProjectName.Content;
                 }
+                void ServerProject()
+                {
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Server-Project-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("Server Project Template");
+                    ComboBoxProject.Visibility = System.Windows.Visibility.Hidden;
+                    TextboxProject.Visibility = System.Windows.Visibility.Visible;
+                    LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}.Server";
+                    LabelProjectName.Tag = LabelProjectName.Content;
+                }
                 _ProjectType = value;
                 switch (_ProjectType)
                 {
@@ -63,6 +74,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         break;
                     case ProjectType.Console:
                         ConsoleProject();
+                        break;
+                    case ProjectType.Server:
+                        ServerProject();
                         break;
                 }
             }

@@ -40,6 +40,9 @@ namespace DynamicsCrm.DevKit.Shared
             var versionDynamicsCrmDevKitCli = NuGetHelper.ListPackageVersions("DynamicsCrm.DevKit.Cli").Last();
             replacements.Add("$DynamicsCrm.DevKit.Cli.version$", versionDynamicsCrmDevKitCli.OriginalVersion);
 
+            var versionDynamicsCrmDevKitAnalyzers = NuGetHelper.ListPackageVersions("DynamicsCrm.DevKit.Analyzers").Last();
+            replacements.Add("$DynamicsCrm.DevKit.Analyzers.version$", versionDynamicsCrmDevKitAnalyzers.OriginalVersion);
+
             var versionMicrosoftCrmSdkCoreAssemblies = NuGetHelper.ListPackageVersions("Microsoft.CrmSdk.CoreAssemblies").Last();
             replacements.Add("$Microsoft.CrmSdk.CoreAssemblies.version$", versionMicrosoftCrmSdkCoreAssemblies.OriginalVersion);
             replacements.Add("$Microsoft.CrmSdk.CoreAssemblies.targetFramework$", NuGetHelper.GetTargetFramework("Microsoft.CrmSdk.CoreAssemblies", versionMicrosoftCrmSdkCoreAssemblies));

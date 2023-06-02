@@ -41,6 +41,7 @@
     public enum ProjectType
     {
         Shared,
-        Console
+        Console,
+        Server
     }
 }

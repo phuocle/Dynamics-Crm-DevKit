@@ -138,8 +138,15 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             comboBoxSavedConnection.DisplayMemberPath = "Name";
             comboBoxSavedConnection.ItemsSource = devKitConnections.CrmConnections;
             if (devKitConnections.DefaultCrmConnection != null)
+            {
                 comboBoxSavedConnection.SelectedItem = devKitConnections.CrmConnections.FirstOrDefault(x => x.Name == devKitConnections.DefaultCrmConnection);
-            buttonOK.IsEnabled = comboBoxSavedConnection.Items.Count > 0;
+                buttonOK.IsEnabled = comboBoxSavedConnection.Items.Count > 0;
+            }
+            else
+            {
+                radioButtonOOBConnection.IsChecked = true;
+                buttonOK.IsEnabled = true;
+            }
         }
         private bool IsValid()
         {

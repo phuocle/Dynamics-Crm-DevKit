@@ -2,6 +2,7 @@
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio.TemplateWizard;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -179,6 +180,17 @@ namespace DynamicsCrm.DevKit.Shared
             Directory.Move(oldProjectFolder, newProjectFolder);
             DTE.Solution.AddFromFile(newProjectFolder + "\\" + projectFileName);
             DTE.Solution.SaveAs(DTE.Solution.FullName);
+        }
+
+        internal static bool IsSharedProjectExist()
+        {
+            var sharedProjectName = $"{VsixHelper.GetSolutionName()}.Shared";
+            if (!VsixHelper.IsExistProject(sharedProjectName))
+            {
+                VS.MessageBox.ShowError($"Please add DynamicsCrm.DevKit 01. Shared Project and try it again");
+                return false;
+            }
+            return true;
         }
     }
 }
