@@ -13,5 +13,8 @@
 * Create VS blank solution
 * Add 01. Shared Project to solution
 * Passed VS2019, VS2022
-
+### 02. Console Project
+* Copy all folder/files from 01. Shared Project
+* Add 02. Console Project to solution
+* Passed VS2019
 ## ITEM TEMPLATE
