@@ -32,6 +32,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         public bool IsOOBConnection => radioButtonOOBConnection.IsChecked ?? false;
         public CrmServiceClient CrmServiceClient { get; set; }
         public string DataverseConnectionString { get; set; } = string.Empty;
+        public CrmConnection CrmConnection { get; set; }
 
         private void ButtonCancel_Click(object sender, System.Windows.RoutedEventArgs e)
         {
@@ -51,13 +52,13 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             {
                 stackPanelForm.IsEnabled = false;
                 progressBar.Visibility = System.Windows.Visibility.Visible;
-                var selectedCrmConnection = comboBoxSavedConnection.SelectedItem as CrmConnection;
-                VsixHelper.SaveDefaultCrmConnection(selectedCrmConnection.Name);
+                CrmConnection = comboBoxSavedConnection.SelectedItem as CrmConnection;
+                VsixHelper.SaveDefaultCrmConnection(CrmConnection.Name);
                 _ = Task.Factory.StartNew(() => {
-                    CrmServiceClient = XrmHelper.IsConnected(selectedCrmConnection);
+                    CrmServiceClient = XrmHelper.IsConnected(CrmConnection);
                     ThreadHelper.JoinableTaskFactory.Run(async delegate
                     {
-                        DataverseConnectionString = XrmHelper.BuildConnectionString(selectedCrmConnection);
+                        DataverseConnectionString = XrmHelper.BuildConnectionString(CrmConnection);
                         await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                         DialogResult = true;
                         Close();

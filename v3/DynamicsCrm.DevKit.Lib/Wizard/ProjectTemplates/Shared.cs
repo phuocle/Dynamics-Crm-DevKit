@@ -12,8 +12,7 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ProjectTemplates
     {
         private object DTE { get; set; }
         private Project Project { get; set; }
-        private string ProjectName {get;set; }
-
+        private string ProjectName { get; set; }
         public void BeforeOpeningFile(ProjectItem projectItem)
         {
         }
@@ -36,12 +35,13 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ProjectTemplates
 
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
         {
+            var OOBDestinationDirectory = replacementsDictionary["$destinationdirectory$"];
             var form = new FormProject(DevKit.Shared.ProjectType.Shared);
             var ok = form.ShowModal() ?? false;
+            Replacement.Set(replacementsDictionary, form);
             if (ok)
             {
                 DTE = automationObject;
-                Replacement.Set(replacementsDictionary, form);
                 ProjectName = form.ProjectName;
                 if (!File.Exists(VsixHelper.GetDynamicsCrmDevKitCliJsonFileName())) {
                     var solutionName = VsixHelper.GetSolutionName();
@@ -59,7 +59,7 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ProjectTemplates
             }
             else
             {
-                Utility.TryDeleteDirectory(Replacement.DestinationDirectory);
+                Utility.TryDeleteDirectory(OOBDestinationDirectory);
                 throw new WizardCancelledException();
             }
         }

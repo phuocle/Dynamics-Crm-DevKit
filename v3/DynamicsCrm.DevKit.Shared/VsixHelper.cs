@@ -172,11 +172,12 @@ namespace DynamicsCrm.DevKit.Shared
         {
             ThreadHelper.ThrowIfNotOnUIThread();
             var DTE = (EnvDTE.DTE)dte;
-            DTE.Solution.Remove(project);
             var oldProjectFolder = Path.GetDirectoryName(project.FullName);
             var newProjectFolder = Directory.GetParent(oldProjectFolder).FullName + "\\" + projectName;
+            var projectFileName = Path.GetFileName(project.FullName);
+            DTE.Solution.Remove(project);
             Directory.Move(oldProjectFolder, newProjectFolder);
-            DTE.Solution.AddFromFile(newProjectFolder + "\\" + Path.GetFileName(project.FullName));
+            DTE.Solution.AddFromFile(newProjectFolder + "\\" + projectFileName);
             DTE.Solution.SaveAs(DTE.Solution.FullName);
         }
     }

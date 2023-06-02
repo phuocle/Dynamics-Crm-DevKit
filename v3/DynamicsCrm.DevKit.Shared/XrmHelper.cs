@@ -47,6 +47,7 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static string BuildConnectionString(string connectionString)
         {
+            if (connectionString == null) return string.Empty;
             if (!connectionString.ToLower().Contains("Password=".ToLower())) return connectionString;
             var value = string.Empty;
             var arr = connectionString.Split(";".ToCharArray());

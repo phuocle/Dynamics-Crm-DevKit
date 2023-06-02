@@ -349,6 +349,7 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static string SafeNamespace(string @namespace)
         {
+            if (@namespace == null || @namespace.Length == 0) return string.Empty;
             var items = @namespace.Split('.');
             for (var i = 0; i < items.Length; i++)
             {

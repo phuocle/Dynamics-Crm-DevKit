@@ -23,7 +23,7 @@ namespace DynamicsCrm.DevKit.Lib.WpfControls
             set
             {
                 _isConnected = value;
-                labelInformation.Content = _isConnected ? $"Connected: {XrmHelper.ConnectedUrl(CrmServiceClient)}" : $"Please connect to your Dataverse/CDS";
+                labelInformation.Content = _isConnected ? $"Connected: {XrmHelper.ConnectedUrl(CrmServiceClient)}" : $"Please connect to your Dataverse";
                 if (_isConnected) {
                     var sender = new object();
                     Connected(sender, EventArgs.Empty);
@@ -35,6 +35,7 @@ namespace DynamicsCrm.DevKit.Lib.WpfControls
         public bool IsOOBConnection { get; set; }
         public CrmServiceClient CrmServiceClient { get; set; }
         public string DataverseConnectionString { get; set; }
+        public DynamicsCrm.DevKit.Shared.Models.CrmConnection CrmConnection {get;set; }
 
         public event EventHandler Connected;
 
@@ -60,14 +61,16 @@ namespace DynamicsCrm.DevKit.Lib.WpfControls
                         IsOOBConnection = true;
                         DataverseConnectionString = string.Empty;
                         IsConnected = true;
+                        CrmConnection = null;
                     }
                 }
                 else
                 {
-                    IsOOBConnection = false;
                     CrmServiceClient = formConnection.CrmServiceClient;
+                    IsOOBConnection = false;
                     DataverseConnectionString = formConnection.DataverseConnectionString;
                     IsConnected = CrmServiceClient != null;
+                    CrmConnection = formConnection.CrmConnection;
                 }
             }
             else

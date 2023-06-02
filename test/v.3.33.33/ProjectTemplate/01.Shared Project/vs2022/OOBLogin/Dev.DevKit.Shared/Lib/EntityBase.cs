@@ -113,7 +113,7 @@ namespace Dev.DevKit.Shared
 
         public Entity GetUpdateEntity()
         {
-            void MethodUpdate()
+            string MethodUpdate()
             {
                 var stackTrace = new System.Diagnostics.StackTrace();
                 System.Reflection.MethodBase method = stackTrace.GetFrame(2).GetMethod();

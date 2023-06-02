@@ -1,5 +1,6 @@
 ﻿using Community.VisualStudio.Toolkit;
 using DynamicsCrm.DevKit.Shared;
+using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.Xrm.Tooling.Connector;
 
 namespace DynamicsCrm.DevKit.Lib.Forms
@@ -9,10 +10,24 @@ namespace DynamicsCrm.DevKit.Lib.Forms
     /// </summary>
     public partial class FormProject : BaseDialogWindow
     {
-        public string ProjectName => ComboBoxProject.Text;
+        public string ProjectName
+        {
+            get
+            {
+                switch (ProjectType)
+                {
+                    case ProjectType.Shared:
+                        return ComboBoxProject.Text;
+                    case ProjectType.Console:
+                        return LabelProjectName.Content.ToString();
+                }
+                return string.Empty;
+            }
+        }
         public bool IsOOBConnection => CONNECTION.IsOOBConnection;
         public CrmServiceClient CrmServiceClient => CONNECTION.CrmServiceClient;
         public string DataverseConnectionString => CONNECTION.DataverseConnectionString;
+        public CrmConnection CrmConnection => CONNECTION.CrmConnection;
 
         private ProjectType _ProjectType;
         private ProjectType ProjectType  {
@@ -30,11 +45,24 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     ComboBoxProject.SelectedIndex = 0;
                     ComboBoxProject.IsEnabled = false;
                 }
+                void ConsoleProject()
+                {
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Console-Project-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("Console Project Template");
+                    ComboBoxProject.Visibility = System.Windows.Visibility.Hidden;
+                    TextboxProject.Visibility = System.Windows.Visibility.Visible;
+                    LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}.Console";
+                    LabelProjectName.Tag = LabelProjectName.Content;
+                }
                 _ProjectType = value;
                 switch (_ProjectType)
                 {
                     case ProjectType.Shared:
                         SharedProject();
+                        break;
+                    case ProjectType.Console:
+                        ConsoleProject();
                         break;
                 }
             }
@@ -55,10 +83,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             bool IsValid()
             {
-                var projectName = ComboBoxProject.SelectedItem.ToString();
-                if (VsixHelper.IsExistProject(projectName))
+                if (VsixHelper.IsExistProject(ProjectName))
                 {
-                    VS.MessageBox.ShowError($"Project: {projectName} exist.");
+                    VS.MessageBox.ShowError($"Project: {ProjectName} exist.");
                     return false;
                 }
                 return true;
@@ -71,6 +98,14 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private void Connection_Connected(object sender, System.EventArgs e)
         {
+        }
+
+        private void TextboxProject_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            if (TextboxProject.Text.Length == 0)
+                LabelProjectName.Content = $"{LabelProjectName?.Tag}";
+            else
+                LabelProjectName.Content = $"{LabelProjectName?.Tag}.{TextboxProject?.Text}";
         }
     }
 }

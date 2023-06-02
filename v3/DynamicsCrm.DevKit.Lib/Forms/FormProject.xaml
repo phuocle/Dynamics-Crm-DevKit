@@ -23,7 +23,7 @@
             <wpfcontrols:ExternalBrowserHyperlink x:Name="HELP" NavigateUri="https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Connection">WIKI: Connection</wpfcontrols:ExternalBrowserHyperlink>
         </TextBlock>
         <wpfcontrols:UserControlConnection x:Name="CONNECTION" Connected="Connection_Connected" />
-        <StackPanel IsEnabled="{Binding IsConnected, ElementName=connection}">
+        <StackPanel IsEnabled="{Binding IsConnected, ElementName=CONNECTION}">
             <Border Grid.Row="1" Grid.ColumnSpan="2" BorderBrush="Gray" BorderThickness="1" Padding="10,15,10,15" Margin="5,10,5,10">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -35,7 +35,8 @@
                         <RowDefinition Height="*"></RowDefinition>
                     </Grid.RowDefinitions>
                     <Label Grid.Row="0" Grid.Column="0" Margin="0,0,0,5" Content="Project Name" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                    <ComboBox x:Name="ComboBoxProject" Grid.Row="0" Grid.Column="1" Margin="0,0,0,5"  />
+                    <ComboBox x:Name="ComboBoxProject" Grid.Row="0" Grid.Column="1" Margin="0,0,0,5" />
+                    <TextBox x:Name="TextboxProject" Grid.Row="0" Grid.Column="1" Margin="0,0,0,5" Visibility="Hidden" TextChanged="TextboxProject_TextChanged" VerticalContentAlignment="Center" />
                     <Label x:Name="LabelProjectName" Grid.Row="1" Grid.Column="1" Margin="0,0,0,0" Content="Name" HorizontalAlignment="Left" VerticalAlignment="Center" />
                 </Grid>
             </Border>
