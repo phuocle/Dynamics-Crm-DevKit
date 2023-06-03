@@ -25,14 +25,15 @@ namespace DynamicsCrm.DevKit.Shared
             replacements["$safeprojectname$"] = form.ProjectName;
 
             replacements.Add("$NameSpace$", Utility.SafeNamespace(form.ProjectName));
+            replacements.Add("$NameSpacePlugin$", replacements["$NameSpace$"].Replace(".Plugin.", ".Plugin"));
             replacements.Add("$IsOOBConnection$", form.IsOOBConnection ? "1" : "0");
             replacements.Add("$CrmConnectionString$", XrmHelper.BuildConnectionString(form.DataverseConnectionString));
-            replacementsDictionary.Add("$ClientId$", form?.CrmConnection?.Type == "ClientSecret" ? "ClientId" : "Username");
-            replacementsDictionary.Add("$ClientSecret$", form?.CrmConnection?.Type == "ClientSecret" ? "ClientSecret" : "Password");
-            replacementsDictionary.Add("$AuthTypeValue$", form?.CrmConnection?.Type ?? string.Empty);
-            replacementsDictionary.Add("$UrlValue$", form?.CrmConnection?.Url ?? string.Empty);
-            replacementsDictionary.Add("$ClientIdValue$", form?.CrmConnection?.UserName ?? string.Empty);
-            replacementsDictionary.Add("$ClientSecretValue$", form?.CrmConnection?.Type == "ClientSecret" ? form?.CrmConnection?.Password : (form?.CrmConnection?.Password != string.Empty ? EncryptDecrypt.DecryptString(form?.CrmConnection?.Password) : string.Empty) ?? string.Empty);
+            replacements.Add("$ClientId$", form?.CrmConnection?.Type == "ClientSecret" ? "ClientId" : "Username");
+            replacements.Add("$ClientSecret$", form?.CrmConnection?.Type == "ClientSecret" ? "ClientSecret" : "Password");
+            replacements.Add("$AuthTypeValue$", form?.CrmConnection?.Type ?? string.Empty);
+            replacements.Add("$UrlValue$", form?.CrmConnection?.Url ?? string.Empty);
+            replacements.Add("$ClientIdValue$", form?.CrmConnection?.UserName ?? string.Empty);
+            replacements.Add("$ClientSecretValue$", form?.CrmConnection?.Type == "ClientSecret" ? form?.CrmConnection?.Password : (form?.CrmConnection?.Password != string.Empty ? EncryptDecrypt.DecryptString(form?.CrmConnection?.Password) : string.Empty) ?? string.Empty);
         }
 
         private static void AddNuGetReplacements()

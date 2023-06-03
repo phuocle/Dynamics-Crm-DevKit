@@ -42,6 +42,7 @@
     {
         Shared,
         Console,
-        Server
+        Server,
+        Plugin
     }
 }

@@ -20,6 +20,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         return ComboBoxProject.Text;
                     case ProjectType.Console:
                     case ProjectType.Server:
+                    case ProjectType.Plugin:
                         return LabelProjectName.Content.ToString();
                 }
                 return string.Empty;
@@ -66,6 +67,16 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}";
                     LabelProjectName.Tag = LabelProjectName.Content;
                 }
+                void PluginProject()
+                {
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Plugin-Project-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("Plugin Project Template");
+                    ComboBoxProject.Visibility = System.Windows.Visibility.Hidden;
+                    TextboxProject.Visibility = System.Windows.Visibility.Visible;
+                    LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}.Plugin";
+                    LabelProjectName.Tag = LabelProjectName.Content;
+                }
                 _ProjectType = value;
                 switch (_ProjectType)
                 {
@@ -77,6 +88,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         break;
                     case ProjectType.Server:
                         ServerProject();
+                        break;
+                    case ProjectType.Plugin:
+                        PluginProject();
                         break;
                 }
             }
