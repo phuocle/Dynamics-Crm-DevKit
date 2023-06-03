@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Xml;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
@@ -326,45 +327,6 @@ namespace DynamicsCrm.DevKit.Shared
             }
         }
 
-        //public static void ReadEntitiesProcessForm(CrmServiceClient crmServiceClient)
-        //{
-        //    if (XrmHelper.EntitiesProcessForm.Count == 0)
-        //    {
-        //        XrmHelper.EntitiesProcessForm = XrmHelper.GetEntitiesProcessForm(crmServiceClient);
-        //    }
-        //}
-
-        //private static List<ProcessForm> GetEntitiesProcessForm(CrmServiceClient crmServiceClient)
-        //{
-        //    var fetchData = new
-        //    {
-        //        category = "4",
-        //        statecode = "1",
-        //        businessprocesstype = "0"
-        //    };
-        //    var fetchXml = $@"
-        //    <fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
-        //      <entity name='workflow'>
-        //        <attribute name='name' />
-        //        <attribute name='uniquename' />
-        //        <attribute name='xaml' />
-        //        <attribute name='primaryentity' />
-        //        <filter type='and'>
-        //          <condition attribute='category' operator='eq' value='{fetchData.category /*4*/}'/>
-        //          <condition attribute='statecode' operator='eq' value='{fetchData.statecode /*1*/}'/>
-        //          <condition attribute='businessprocesstype' operator='eq' value='{fetchData.businessprocesstype /*4*/}'/>
-        //        </filter>
-        //      </entity>
-        //    </fetch>";
-        //    var rows = crmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
-        //    return rows.Entities.Select(x => new ProcessForm
-        //    {
-        //        EntityLogicalName = x.GetAttributeValue<string>("primaryentity"),
-        //        Name = x.GetAttributeValue<string>("name"),
-        //        xaml = x.GetAttributeValue<string>("xaml")
-        //    }).ToList();
-        //}
-
         public static List<ProcessForm> GetEntityProcessForm(CrmServiceClient crmServiceClient, int? objectTypeCode, string logicalName)
         {
             var fetchData = new
@@ -647,6 +609,28 @@ namespace DynamicsCrm.DevKit.Shared
                 });
             }
             return list;
+        }
+
+        public static List<XrmEntity> GetAllEntities(CrmServiceClient service)
+        {
+            var request = new RetrieveAllEntitiesRequest
+            {
+                EntityFilters = EntityFilters.Entity,
+                RetrieveAsIfPublished = true
+            };
+            var response = (RetrieveAllEntitiesResponse)service.Execute(request);
+            var entities = new List<XrmEntity>();
+            foreach (var entity in response.EntityMetadata)
+                entities.Add(new XrmEntity
+                {
+                    Name = entity.SchemaName,
+                    LogicalName = entity.LogicalName,
+                    HasImage = !string.IsNullOrEmpty(entity.PrimaryImageAttribute),
+                    EntityTypeCode = entity.ObjectTypeCode ?? -1,
+                    IsCustomEntity = entity.IsCustomEntity ?? false
+                });
+            entities = entities.OrderBy(entity => entity.Name).ToList();
+            return entities;
         }
     }
 }

@@ -2,6 +2,9 @@
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.Xrm.Tooling.Connector;
+using System.Threading.Tasks;
+using System.Threading;
+using Microsoft.VisualStudio.Shell;
 
 namespace DynamicsCrm.DevKit.Lib.Forms
 {
@@ -72,8 +75,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Plugin-Project-Template");
                     HELP.Inlines.Clear();
                     HELP.Inlines.Add("Plugin Project Template");
-                    ComboBoxProject.Visibility = System.Windows.Visibility.Hidden;
-                    TextboxProject.Visibility = System.Windows.Visibility.Visible;
+                    ComboBoxProject.Visibility = System.Windows.Visibility.Visible;
+                    TextboxProject.Visibility = System.Windows.Visibility.Hidden;
                     LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}.Plugin";
                     LabelProjectName.Tag = LabelProjectName.Content;
                 }
@@ -131,6 +134,17 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private void Connection_Connected(object sender, System.EventArgs e)
         {
+            progressBar.Visibility = System.Windows.Visibility.Visible;
+            _ = Task.Factory.StartNew(() =>
+            {
+                ThreadHelper.JoinableTaskFactory.Run(async delegate
+                {
+                    await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                    ComboBoxProject.DisplayMemberPath = "Name";
+                    ComboBoxProject.ItemsSource = XrmHelper.GetAllEntities(CrmServiceClient);
+                    progressBar.Visibility = System.Windows.Visibility.Hidden;
+                });
+            }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
         }
 
         private void TextboxProject_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
@@ -139,6 +153,19 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 LabelProjectName.Content = $"{LabelProjectName?.Tag}";
             else
                 LabelProjectName.Content = $"{LabelProjectName?.Tag}.{TextboxProject?.Text}";
+        }
+
+        private void ComboBoxProject_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            if (ComboBoxProject.SelectedItem == null)
+            {
+                if (ComboBoxProject.Text.Length == 0)
+                    LabelProjectName.Content = $"{LabelProjectName?.Tag}";
+                else
+                    LabelProjectName.Content = $"{LabelProjectName?.Tag}.{ComboBoxProject?.Text}";
+            }
+            else
+                LabelProjectName.Content = $"{LabelProjectName?.Tag}.{((XrmEntity)ComboBoxProject.SelectedItem)?.Name}";
         }
     }
 }

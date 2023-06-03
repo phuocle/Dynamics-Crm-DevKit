@@ -11,9 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Dev.DevKit.Shared", "Dev.DevKit.Shared\Dev.DevKit.Shared.shproj", "{FE3E159C-4457-4635-86D0-DCF01670FE0D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Plugin", "Dev.DevKit.Plugin\Dev.DevKit.Plugin.csproj", "{37894D1B-D56E-4DAE-A42B-E3BC562F230D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Plugin.Account", "Dev.DevKit.Plugin.Account\Dev.DevKit.Plugin.Account.csproj", "{4507D187-D1D8-4C70-9BAB-92FDF55D6392}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Plugin.Account", "Dev.DevKit.Plugin.Account\Dev.DevKit.Plugin.Account.csproj", "{F1CCED34-3962-4007-848B-2C604C0DE9F7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,14 +19,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{37894D1B-D56E-4DAE-A42B-E3BC562F230D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{37894D1B-D56E-4DAE-A42B-E3BC562F230D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{37894D1B-D56E-4DAE-A42B-E3BC562F230D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{37894D1B-D56E-4DAE-A42B-E3BC562F230D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4507D187-D1D8-4C70-9BAB-92FDF55D6392}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4507D187-D1D8-4C70-9BAB-92FDF55D6392}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4507D187-D1D8-4C70-9BAB-92FDF55D6392}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4507D187-D1D8-4C70-9BAB-92FDF55D6392}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1CCED34-3962-4007-848B-2C604C0DE9F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1CCED34-3962-4007-848B-2C604C0DE9F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1CCED34-3962-4007-848B-2C604C0DE9F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1CCED34-3962-4007-848B-2C604C0DE9F7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -37,8 +31,7 @@ Global
 		SolutionGuid = {478EE8F5-54E1-431D-BEC8-72AC05F5AF8C}
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{37894d1b-d56e-4dae-a42b-e3bc562f230d}*SharedItemsImports = 4
-		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{4507d187-d1d8-4c70-9bab-92fdf55d6392}*SharedItemsImports = 4
+		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{f1cced34-3962-4007-848b-2c604c0de9f7}*SharedItemsImports = 4
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{fe3e159c-4457-4635-86d0-dcf01670fe0d}*SharedItemsImports = 13
 	EndGlobalSection
 EndGlobal

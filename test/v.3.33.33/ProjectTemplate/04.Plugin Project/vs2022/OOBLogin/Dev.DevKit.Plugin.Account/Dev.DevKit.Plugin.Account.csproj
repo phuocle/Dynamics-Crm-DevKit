@@ -4,7 +4,7 @@
 		<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
 		<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 		<SchemaVersion>2.0</SchemaVersion>
-		<ProjectGuid>f1cced34-3962-4007-848b-2c604c0de9f7</ProjectGuid>
+		<ProjectGuid>92c8fdfc-16b8-4e62-8279-583b2269ece8</ProjectGuid>
 		<OutputType>Library</OutputType>
 		<AppDesignerFolder>Properties</AppDesignerFolder>
 		<RootNamespace>Dev.DevKit.PluginAccount</RootNamespace>
