@@ -63,7 +63,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     HELP.Inlines.Add("Server Project Template");
                     ComboBoxProject.Visibility = System.Windows.Visibility.Hidden;
                     TextboxProject.Visibility = System.Windows.Visibility.Visible;
-                    LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}.Server";
+                    LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}";
                     LabelProjectName.Tag = LabelProjectName.Content;
                 }
                 _ProjectType = value;
@@ -100,6 +100,11 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 if (VsixHelper.IsExistProject(ProjectName))
                 {
                     VS.MessageBox.ShowError($"Project: {ProjectName} exist.");
+                    return false;
+                }
+                if (!VsixHelper.IsValidProjectName(ProjectName))
+                {
+                    VS.MessageBox.ShowError("Invalid enter project name");
                     return false;
                 }
                 return true;

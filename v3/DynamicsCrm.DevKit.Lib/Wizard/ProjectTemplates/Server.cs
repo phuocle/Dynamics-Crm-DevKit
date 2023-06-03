@@ -39,12 +39,8 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ProjectTemplates
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
         {
             var OOBDestinationDirectory = replacementsDictionary["$destinationdirectory$"];
-            if (!VsixHelper.IsSharedProjectExist())
-            {
-                Utility.TryDeleteDirectory(OOBDestinationDirectory);
-                throw new WizardCancelledException();
-            }
-            var form = new FormProject(DevKit.Shared.ProjectType.Server);
+            if (!VsixHelper.IsSharedProjectExist()) VsixHelper.ThrowWizardCancelledException(OOBDestinationDirectory);
+            var form = new FormProject(ProjectType.Server);
             var ok = form.ShowModal() ?? false;
             Replacement.Set(replacementsDictionary, form);
             if (ok)
@@ -54,8 +50,7 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ProjectTemplates
             }
             else
             {
-                Utility.TryDeleteDirectory(OOBDestinationDirectory);
-                throw new WizardCancelledException();
+                VsixHelper.ThrowWizardCancelledException(OOBDestinationDirectory);
             }
         }
 

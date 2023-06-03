@@ -192,5 +192,18 @@ namespace DynamicsCrm.DevKit.Shared
             }
             return true;
         }
+
+        internal static void ThrowWizardCancelledException(string OOBDestinationDirectory)
+        {
+            //        / ? : & \ * " < > | # %'
+            Utility.TryDeleteDirectory(OOBDestinationDirectory);
+            throw new WizardCancelledException();
+        }
+
+        internal static bool IsValidProjectName(string projectName)
+        {
+            var list = new List<string>() { "/", "?", ":",  "&",  @"\",  "*",  "\"",  "<",  ">", "|", "#" , "%", "'" };
+            return list.Count(x => projectName.Contains(x)) == 0;
+        }
     }
 }
