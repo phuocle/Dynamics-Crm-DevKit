@@ -73,9 +73,18 @@ namespace DynamicsCrm.DevKit.Shared
             var versionMicrosoftCrmSdkCoreTools = NuGetHelper.ListPackageVersions("Microsoft.CrmSdk.CoreTools").Last();
             replacements.Add("$Microsoft.CrmSdk.CoreTools.version$", versionMicrosoftCrmSdkCoreTools.OriginalVersion);
 
-            //var versionFakeXrmEasyv9 = NuGetHelper.ListPackageVersions("FakeXrmEasy.v9").Last();
-            //replacements.Add("$FakeXrmEasy.v9.version$", versionFakeXrmEasyv9.OriginalVersion);
-            //replacements.Add("$FakeXrmEasy.v9.targetFramework$", NuGetHelper.GetTargetFramework("FakeXrmEasy.v9", versionFakeXrmEasyv9));
+            //var versionDynamics365UIAutomationApi = NuGetHelper.ListPackageVersions("Dynamics365.UIAutomation.Api").Last();
+            //replacements.Add("$Dynamics365.UIAutomation.Api.version$", versionDynamics365UIAutomationApi.OriginalVersion);
+            //replacements.Add("$Dynamics365.UIAutomation.Api.targetFramework$", NuGetHelper.GetTargetFramework("Dynamics365.UIAutomation.Api", versionDynamics365UIAutomationApi));
+            //var versionSeleniumWebDriver = NuGetHelper.ListPackageVersions("Selenium.WebDriver").Last();
+            //replacements.Add("$Selenium.WebDriver.version$", versionSeleniumWebDriver.OriginalVersion);
+            //replacements.Add("$Selenium.WebDriver.targetFramework$", NuGetHelper.GetTargetFramework("Selenium.WebDriver", versionSeleniumWebDriver));
+            //var versionSeleniumWebDriverChromeDriver = NuGetHelper.ListPackageVersions("Selenium.WebDriver.ChromeDriver").Last();
+            //replacements.Add("$Selenium.WebDriver.ChromeDriver.version$", versionSeleniumWebDriverChromeDriver.OriginalVersion);
+            //replacements.Add("$Selenium.WebDriver.ChromeDriver.targetFramework$", NuGetHelper.GetTargetFramework("Selenium.WebDriver.ChromeDriver", versionSeleniumWebDriverChromeDriver));
+            //var versionSeleniumSupport = NuGetHelper.ListPackageVersions("Selenium.Support").Last();
+            //replacements.Add("$Selenium.Support.version$", versionSeleniumSupport.OriginalVersion);
+            //replacements.Add("$Selenium.Support.targetFramework$", NuGetHelper.GetTargetFramework("Selenium.Support", versionSeleniumSupport));
         }
 
         private static void AddCommonReplacements()

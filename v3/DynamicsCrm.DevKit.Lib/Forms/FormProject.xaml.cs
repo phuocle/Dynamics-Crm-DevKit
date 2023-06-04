@@ -19,23 +19,6 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             get
             {
-                //switch (ProjectType)
-                //{
-                //    case ProjectType.Shared:
-                //    case ProjectType.ProxyTypes:
-                //        return ComboBoxProject.Text;
-                //    case ProjectType.Console:
-                //    case ProjectType.Server:
-                //    case ProjectType.Plugin:
-                //    case ProjectType.Workflow:
-                //    case ProjectType.CustomAction:
-                //    case ProjectType.CustomApi:
-                //    case ProjectType.DataProvider:
-                //    case ProjectType.WebResource:
-                //    case ProjectType.SolutionPackager:
-                //        return LabelProjectName.Content.ToString();
-                //}
-                //return string.Empty;
                 return LabelProjectName.Content.ToString();
             }
         }
@@ -169,8 +152,18 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     ComboBoxProject.Visibility = System.Windows.Visibility.Visible;
                     ComboBoxProject.IsEditable = false;
                     TextboxProject.Visibility = System.Windows.Visibility.Hidden;
-                    LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}";
-                    LabelProjectName.Tag = LabelProjectName.Content;
+                    LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}.Test";
+                    LabelProjectName.Tag = $"{VsixHelper.GetSolutionName()}";
+                }
+                void UiTest()
+                {
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Ui-Test-Project-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("Ui Test Project Template");
+                    ComboBoxProject.Visibility = System.Windows.Visibility.Hidden;
+                    TextboxProject.Visibility = System.Windows.Visibility.Visible;
+                    LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}.UiTest";
+                    LabelProjectName.Tag = $"{VsixHelper.GetSolutionName()}";
                 }
                 _ProjectType = value;
                 switch (_ProjectType)
@@ -210,6 +203,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         break;
                     case ProjectType.Test:
                         TestProject();
+                        break;
+                    case ProjectType.UiTest:
+                        UiTest();
                         break;
                 }
             }
@@ -272,8 +268,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
             }
             else if (
-                ProjectType == ProjectType.Test ||
-                ProjectType == ProjectType.UiTest
+                ProjectType == ProjectType.Test
                 )
             {
                 var items = VsixHelper.GetAllProjects();
@@ -286,9 +281,23 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         private void TextboxProject_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
             if (TextboxProject.Text.Length == 0)
-                LabelProjectName.Content = $"{LabelProjectName?.Tag}";
+            {
+                if (ProjectType == ProjectType.UiTest)
+                    LabelProjectName.Content = $"{LabelProjectName?.Tag}.UiTest";
+                else
+                    LabelProjectName.Content = $"{LabelProjectName?.Tag}";
+            }
             else
-                LabelProjectName.Content = $"{LabelProjectName?.Tag}.{TextboxProject?.Text}";
+            {
+                if (ProjectType == ProjectType.UiTest)
+                {
+                    LabelProjectName.Content = $"{LabelProjectName?.Tag}.{TextboxProject?.Text}.UiTest";
+                }
+                else
+                {
+                    LabelProjectName.Content = $"{LabelProjectName?.Tag}.{TextboxProject?.Text}";
+                }
+            }
         }
 
         private void ComboBoxProject_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
