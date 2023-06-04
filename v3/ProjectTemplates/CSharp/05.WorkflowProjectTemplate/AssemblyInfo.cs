@@ -10,7 +10,7 @@ using System.Security;
 [assembly: AssemblyConfiguration("Release")]
 #endif
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("$projectname$")]
+[assembly: AssemblyProduct("$ProjectName$")]
 [assembly: AssemblyCopyright("Copyright © $year$")]
 [assembly: AssemblyTrademark("")]
 [assembly: SecurityRules(SecurityRuleSet.Level2)]

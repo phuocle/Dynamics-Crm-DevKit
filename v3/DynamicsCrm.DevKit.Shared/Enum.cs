@@ -43,6 +43,7 @@
         Shared,
         Console,
         Server,
-        Plugin
+        Plugin,
+        Workflow
     }
 }

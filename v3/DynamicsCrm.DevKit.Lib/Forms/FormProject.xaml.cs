@@ -24,6 +24,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     case ProjectType.Console:
                     case ProjectType.Server:
                     case ProjectType.Plugin:
+                    case ProjectType.Workflow:
                         return LabelProjectName.Content.ToString();
                 }
                 return string.Empty;
@@ -80,6 +81,16 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}.Plugin";
                     LabelProjectName.Tag = LabelProjectName.Content;
                 }
+                void WorkflowProject()
+                {
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Workflow-Project-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("Workflow Project Template");
+                    ComboBoxProject.Visibility = System.Windows.Visibility.Visible;
+                    TextboxProject.Visibility = System.Windows.Visibility.Hidden;
+                    LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}.Workflow";
+                    LabelProjectName.Tag = LabelProjectName.Content;
+                }
                 _ProjectType = value;
                 switch (_ProjectType)
                 {
@@ -94,6 +105,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         break;
                     case ProjectType.Plugin:
                         PluginProject();
+                        break;
+                    case ProjectType.Workflow:
+                        WorkflowProject();
                         break;
                 }
             }
@@ -134,17 +148,21 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private void Connection_Connected(object sender, System.EventArgs e)
         {
-            progressBar.Visibility = System.Windows.Visibility.Visible;
-            _ = Task.Factory.StartNew(() =>
+            if (ProjectType == ProjectType.Plugin ||
+                ProjectType == ProjectType.Workflow)
             {
-                ThreadHelper.JoinableTaskFactory.Run(async delegate
+                progressBar.Visibility = System.Windows.Visibility.Visible;
+                _ = Task.Factory.StartNew(() =>
                 {
-                    await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                    ComboBoxProject.DisplayMemberPath = "Name";
-                    ComboBoxProject.ItemsSource = XrmHelper.GetAllEntities(CrmServiceClient);
-                    progressBar.Visibility = System.Windows.Visibility.Hidden;
-                });
-            }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
+                    ThreadHelper.JoinableTaskFactory.Run(async delegate
+                    {
+                        await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                        ComboBoxProject.DisplayMemberPath = "Name";
+                        ComboBoxProject.ItemsSource = XrmHelper.GetAllEntities(CrmServiceClient);
+                        progressBar.Visibility = System.Windows.Visibility.Hidden;
+                    });
+                }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
+            }
         }
 
         private void TextboxProject_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)

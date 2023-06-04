@@ -9,8 +9,8 @@
 		<Icon>icon.png</Icon>
 		<ProjectType>CSharp</ProjectType>
 		<RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
-		<CreateNewFolder>true</CreateNewFolder>
-		<ProvideDefaultName>true</ProvideDefaultName>
+		<CreateNewFolder>false</CreateNewFolder>
+		<ProvideDefaultName>false</ProvideDefaultName>
 		<LocationField>Disabled</LocationField>
 		<EnableLocationBrowseButton>false</EnableLocationBrowseButton>
 		<EnableEditOfLocationField>false</EnableEditOfLocationField>

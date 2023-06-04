@@ -10,7 +10,7 @@
 		<ProjectType>CSharp</ProjectType>
 		<RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
 		<CreateNewFolder>false</CreateNewFolder>
-		<ProvideDefaultName>true</ProvideDefaultName>
+		<ProvideDefaultName>false</ProvideDefaultName>
 		<LocationField>Disabled</LocationField>
 		<EnableLocationBrowseButton>false</EnableLocationBrowseButton>
 		<EnableEditOfLocationField>false</EnableEditOfLocationField>
