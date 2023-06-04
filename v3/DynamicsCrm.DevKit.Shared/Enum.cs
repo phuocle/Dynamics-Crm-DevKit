@@ -49,6 +49,7 @@
         CustomApi,
         DataProvider,
         WebResource,
-        SolutionPackager
+        SolutionPackager,
+        ProxyTypes
     }
 }

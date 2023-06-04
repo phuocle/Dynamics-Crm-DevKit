@@ -71,6 +71,10 @@ namespace DynamicsCrm.DevKit.Shared
 
             var versionMicrosoftCrmSdkCoreTools = NuGetHelper.ListPackageVersions("Microsoft.CrmSdk.CoreTools").Last();
             replacements.Add("$Microsoft.CrmSdk.CoreTools.version$", versionMicrosoftCrmSdkCoreTools.OriginalVersion);
+
+            //var versionFakeXrmEasyv9 = NuGetHelper.ListPackageVersions("FakeXrmEasy.v9").Last();
+            //replacements.Add("$FakeXrmEasy.v9.version$", versionFakeXrmEasyv9.OriginalVersion);
+            //replacements.Add("$FakeXrmEasy.v9.targetFramework$", NuGetHelper.GetTargetFramework("FakeXrmEasy.v9", versionFakeXrmEasyv9));
         }
 
         private static void AddCommonReplacements()

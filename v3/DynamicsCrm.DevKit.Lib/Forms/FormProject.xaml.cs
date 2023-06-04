@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using Microsoft.VisualStudio.Shell;
 using DynamicsCrm.DevKit.Lib.Wizard.ProjectTemplates;
+using System.CodeDom;
 
 namespace DynamicsCrm.DevKit.Lib.Forms
 {
@@ -18,22 +19,24 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             get
             {
-                switch (ProjectType)
-                {
-                    case ProjectType.Shared:
-                        return ComboBoxProject.Text;
-                    case ProjectType.Console:
-                    case ProjectType.Server:
-                    case ProjectType.Plugin:
-                    case ProjectType.Workflow:
-                    case ProjectType.CustomAction:
-                    case ProjectType.CustomApi:
-                    case ProjectType.DataProvider:
-                    case ProjectType.WebResource:
-                    case ProjectType.SolutionPackager:
-                        return LabelProjectName.Content.ToString();
-                }
-                return string.Empty;
+                //switch (ProjectType)
+                //{
+                //    case ProjectType.Shared:
+                //    case ProjectType.ProxyTypes:
+                //        return ComboBoxProject.Text;
+                //    case ProjectType.Console:
+                //    case ProjectType.Server:
+                //    case ProjectType.Plugin:
+                //    case ProjectType.Workflow:
+                //    case ProjectType.CustomAction:
+                //    case ProjectType.CustomApi:
+                //    case ProjectType.DataProvider:
+                //    case ProjectType.WebResource:
+                //    case ProjectType.SolutionPackager:
+                //        return LabelProjectName.Content.ToString();
+                //}
+                //return string.Empty;
+                return LabelProjectName.Content.ToString();
             }
         }
         public bool IsOOBConnection => CONNECTION.IsOOBConnection;
@@ -147,6 +150,17 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}.SolutionPackager";
                     LabelProjectName.Tag = LabelProjectName.Content;
                 }
+                void ProxyTypesProject()
+                {
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/ProxyTypes-Project-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("ProxyTypes Project Template");
+                    TextboxProject.IsEnabled = false;
+                    ComboBoxProject.Visibility = System.Windows.Visibility.Hidden;
+                    TextboxProject.Visibility = System.Windows.Visibility.Visible;
+                    LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}.ProxyTypes";
+                    LabelProjectName.Tag = LabelProjectName.Content;
+                }
                 _ProjectType = value;
                 switch (_ProjectType)
                 {
@@ -179,6 +193,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         break;
                     case ProjectType.SolutionPackager:
                         SolutionPackagerProject();
+                        break;
+                    case ProjectType.ProxyTypes:
+                        ProxyTypesProject();
                         break;
                 }
             }
