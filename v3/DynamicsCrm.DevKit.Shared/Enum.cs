@@ -47,6 +47,7 @@
         Workflow,
         CustomAction,
         CustomApi,
-        DataProvider
+        DataProvider,
+        WebResource
     }
 }

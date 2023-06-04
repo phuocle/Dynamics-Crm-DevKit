@@ -1,0 +1,16 @@
+{
+  "private": true,
+  "name": "$LogicalProjectName$",
+  "version": "1.0.0",
+  "description": "$LogicalProjectName$",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {},
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/xrm": "^9.0.73"
+  }
+}

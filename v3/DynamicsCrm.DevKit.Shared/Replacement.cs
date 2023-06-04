@@ -24,6 +24,7 @@ namespace DynamicsCrm.DevKit.Shared
             replacements["$projectname$"] = form.ProjectName;
             replacements["$safeprojectname$"] = form.ProjectName;
 
+            replacements.Add("$LogicalProjectName$", form.ProjectName.ToLower());
             replacements.Add("$NameSpace$", Utility.SafeNamespace(form.ProjectName));
             replacements.Add("$NameSpacePlugin$", replacements["$NameSpace$"].Replace(".Plugin.", ".Plugin"));
             replacements.Add("$IsOOBConnection$", form.IsOOBConnection ? "1" : "0");

@@ -28,6 +28,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     case ProjectType.CustomAction:
                     case ProjectType.CustomApi:
                     case ProjectType.DataProvider:
+                    case ProjectType.WebResource:
                         return LabelProjectName.Content.ToString();
                 }
                 return string.Empty;
@@ -124,6 +125,16 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}.DataProvider";
                     LabelProjectName.Tag = LabelProjectName.Content;
                 }
+                void WebResourceProject()
+                {
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/WebResource-Project-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("WebResource Project Template");
+                    ComboBoxProject.Visibility = System.Windows.Visibility.Hidden;
+                    TextboxProject.Visibility = System.Windows.Visibility.Visible;
+                    LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}.WebResource";
+                    LabelProjectName.Tag = LabelProjectName.Content;
+                }
                 _ProjectType = value;
                 switch (_ProjectType)
                 {
@@ -150,6 +161,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         break;
                     case ProjectType.DataProvider:
                         DataProviderProject();
+                        break;
+                    case ProjectType.WebResource:
+                        WebResourceProject();
                         break;
                 }
             }
