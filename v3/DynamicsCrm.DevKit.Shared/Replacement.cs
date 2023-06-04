@@ -63,6 +63,10 @@ namespace DynamicsCrm.DevKit.Shared
             var versionMicrosoftCrmSdkXrmToolingWpfControls = NuGetHelper.ListPackageVersions("Microsoft.CrmSdk.XrmTooling.WpfControls").Last();
             replacements.Add("$Microsoft.CrmSdk.XrmTooling.WpfControls.version$", versionMicrosoftCrmSdkXrmToolingWpfControls.OriginalVersion);
             replacements.Add("$Microsoft.CrmSdk.XrmTooling.WpfControls.targetFramework$", NuGetHelper.GetTargetFramework("Microsoft.CrmSdk.XrmTooling.WpfControls", versionMicrosoftCrmSdkXrmToolingWpfControls));
+
+            var versionMicrosoftCrmSdkData = NuGetHelper.ListPackageVersions("Microsoft.CrmSdk.Data").Last();
+            replacements.Add("$Microsoft.CrmSdk.Data.version$", versionMicrosoftCrmSdkData.OriginalVersion);
+            replacements.Add("$Microsoft.CrmSdk.Data.targetFramework$", NuGetHelper.GetTargetFramework("Microsoft.CrmSdk.Data", versionMicrosoftCrmSdkData));
         }
 
         private static void AddCommonReplacements()

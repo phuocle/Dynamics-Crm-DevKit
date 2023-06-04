@@ -46,6 +46,7 @@
         Plugin,
         Workflow,
         CustomAction,
-        CustomApi
+        CustomApi,
+        DataProvider
     }
 }

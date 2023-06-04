@@ -27,6 +27,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     case ProjectType.Workflow:
                     case ProjectType.CustomAction:
                     case ProjectType.CustomApi:
+                    case ProjectType.DataProvider:
                         return LabelProjectName.Content.ToString();
                 }
                 return string.Empty;
@@ -113,6 +114,16 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}.CustomApi";
                     LabelProjectName.Tag = LabelProjectName.Content;
                 }
+                void DataProviderProject()
+                {
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Data-Provider-Project-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("Data Provider Project Template");
+                    ComboBoxProject.Visibility = System.Windows.Visibility.Hidden;
+                    TextboxProject.Visibility = System.Windows.Visibility.Visible;
+                    LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}.DataProvider";
+                    LabelProjectName.Tag = LabelProjectName.Content;
+                }
                 _ProjectType = value;
                 switch (_ProjectType)
                 {
@@ -136,6 +147,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         break;
                     case ProjectType.CustomApi:
                         CustomApiProject();
+                        break;
+                    case ProjectType.DataProvider:
+                        DataProviderProject();
                         break;
                 }
             }
