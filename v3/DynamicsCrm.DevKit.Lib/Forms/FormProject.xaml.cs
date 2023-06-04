@@ -26,6 +26,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     case ProjectType.Plugin:
                     case ProjectType.Workflow:
                     case ProjectType.CustomAction:
+                    case ProjectType.CustomApi:
                         return LabelProjectName.Content.ToString();
                 }
                 return string.Empty;
@@ -102,6 +103,16 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}.CustomAction";
                     LabelProjectName.Tag = LabelProjectName.Content;
                 }
+                void CustomApiProject()
+                {
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Custom-Api-Project-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("Custom Api Project Template");
+                    ComboBoxProject.Visibility = System.Windows.Visibility.Visible;
+                    TextboxProject.Visibility = System.Windows.Visibility.Hidden;
+                    LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}.CustomApi";
+                    LabelProjectName.Tag = LabelProjectName.Content;
+                }
                 _ProjectType = value;
                 switch (_ProjectType)
                 {
@@ -122,6 +133,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         break;
                     case ProjectType.CustomAction:
                         CustomActionProject();
+                        break;
+                    case ProjectType.CustomApi:
+                        CustomApiProject();
                         break;
                 }
             }
@@ -165,7 +179,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             if (
                 ProjectType == ProjectType.Plugin ||
                 ProjectType == ProjectType.Workflow ||
-                ProjectType == ProjectType.CustomAction
+                ProjectType == ProjectType.CustomAction ||
+                ProjectType == ProjectType.CustomApi
                 )
             {
                 progressBar.Visibility = System.Windows.Visibility.Visible;

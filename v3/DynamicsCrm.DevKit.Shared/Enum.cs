@@ -45,6 +45,7 @@
         Server,
         Plugin,
         Workflow,
-        CustomAction
+        CustomAction,
+        CustomApi
     }
 }
