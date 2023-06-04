@@ -50,6 +50,8 @@
         DataProvider,
         WebResource,
         SolutionPackager,
-        ProxyTypes
+        ProxyTypes,
+        Test,
+        UiTest
     }
 }

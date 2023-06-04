@@ -161,6 +161,17 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}.ProxyTypes";
                     LabelProjectName.Tag = LabelProjectName.Content;
                 }
+                void TestProject()
+                {
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Test-Project-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("Test Project Template");
+                    ComboBoxProject.Visibility = System.Windows.Visibility.Visible;
+                    ComboBoxProject.IsEditable = false;
+                    TextboxProject.Visibility = System.Windows.Visibility.Hidden;
+                    LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}";
+                    LabelProjectName.Tag = LabelProjectName.Content;
+                }
                 _ProjectType = value;
                 switch (_ProjectType)
                 {
@@ -196,6 +207,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         break;
                     case ProjectType.ProxyTypes:
                         ProxyTypesProject();
+                        break;
+                    case ProjectType.Test:
+                        TestProject();
                         break;
                 }
             }
@@ -248,12 +262,24 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 {
                     ThreadHelper.JoinableTaskFactory.Run(async delegate
                     {
+                        var items = XrmHelper.GetAllEntities(CrmServiceClient);
                         await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                         ComboBoxProject.DisplayMemberPath = "Name";
-                        ComboBoxProject.ItemsSource = XrmHelper.GetAllEntities(CrmServiceClient);
+                        ComboBoxProject.ItemsSource = items;
+                        buttonOK.IsEnabled = items.Count > 0;
                         progressBar.Visibility = System.Windows.Visibility.Hidden;
                     });
                 }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
+            }
+            else if (
+                ProjectType == ProjectType.Test ||
+                ProjectType == ProjectType.UiTest
+                )
+            {
+                var items = VsixHelper.GetAllProjects();
+                ComboBoxProject.DisplayMemberPath = "Name";
+                ComboBoxProject.ItemsSource = items;
+                buttonOK.IsEnabled = items.Count > 0;
             }
         }
 
@@ -276,6 +302,16 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             }
             else
                 LabelProjectName.Content = $"{LabelProjectName?.Tag}.{((XrmEntity)ComboBoxProject.SelectedItem)?.Name}";
+        }
+
+        private void ComboBoxProject_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (ComboBoxProject.SelectedItem == null)
+            {
+                LabelProjectName.Content = $"{LabelProjectName?.Tag}.{ProjectType.ToString()}";
+            }
+            else
+                LabelProjectName.Content = $"{((XrmEntity)ComboBoxProject.SelectedItem)?.Name}.{ProjectType.ToString()}";
         }
     }
 }

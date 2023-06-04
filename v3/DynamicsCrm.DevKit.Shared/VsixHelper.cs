@@ -4,6 +4,7 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.TemplateWizard;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -193,9 +194,19 @@ namespace DynamicsCrm.DevKit.Shared
             return true;
         }
 
+        internal static bool IsProxyTypesProjectExist()
+        {
+            var proxyTypesProjectName = $"{VsixHelper.GetSolutionName()}.ProxyTypes";
+            if (!VsixHelper.IsExistProject(proxyTypesProjectName))
+            {
+                VS.MessageBox.ShowError($"Please add DynamicsCrm.DevKit 12. Proxy Types Project and try it again");
+                return false;
+            }
+            return true;
+        }
+
         internal static void ThrowWizardCancelledException(string OOBDestinationDirectory)
         {
-            //        / ? : & \ * " < > | # %'
             Utility.TryDeleteDirectory(OOBDestinationDirectory);
             throw new WizardCancelledException();
         }
@@ -204,6 +215,36 @@ namespace DynamicsCrm.DevKit.Shared
         {
             var list = new List<string>() { "/", "?", ":",  "&",  @"\",  "*",  "\"",  "<",  ">", "|", "#" , "%", "'" };
             return list.Count(x => projectName.Contains(x)) == 0;
+        }
+
+        internal static List<XrmEntity> GetAllProjects()
+        {
+            return ThreadHelper.JoinableTaskFactory.Run(async () => {
+                return await GetAllProjectsAsync();
+            });
+        }
+
+        private static async  Task<List<XrmEntity>> GetAllProjectsAsync()
+        {
+            var list = new List<XrmEntity>();
+            var projects = await VS.Solutions.GetAllProjectsAsync();
+            foreach (var project in projects)
+            {
+                if (
+                    project.Name.EndsWith(".Test") ||
+                    project.Name.EndsWith(".UiTest") ||
+                    project.Name.EndsWith(".Shared") ||
+                    project.Name.EndsWith(".ProxyTypes")
+                    ) continue;
+                if (
+                    await IsExistProjectAsync($"{project.Name}.Test") ||
+                    await IsExistProjectAsync($"{project.Name}.UiTest")
+                    ) continue;
+                list.Add(new XrmEntity {
+                    Name = project.Name
+                });
+            }
+            return list;
         }
     }
 }

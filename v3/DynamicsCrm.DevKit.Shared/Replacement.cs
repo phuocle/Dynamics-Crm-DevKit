@@ -25,6 +25,7 @@ namespace DynamicsCrm.DevKit.Shared
             replacements["$safeprojectname$"] = form.ProjectName;
 
             replacements.Add("$LogicalProjectName$", form.ProjectName.ToLower());
+            replacements.Add("$ProjectNameTested$", form.ProjectName.Substring(0, form.ProjectName.Length - ".Test".Length));
             replacements.Add("$NameSpace$", Utility.SafeNamespace(form.ProjectName));
             replacements.Add("$NameSpacePlugin$", replacements["$NameSpace$"].Replace(".Plugin.", ".Plugin"));
             replacements.Add("$IsOOBConnection$", form.IsOOBConnection ? "1" : "0");
@@ -82,6 +83,7 @@ namespace DynamicsCrm.DevKit.Shared
             replacements.Add("$DevKitVersion$", Const.Version);
             replacements.Add("$SharedNameSpace$", $"{VsixHelper.GetSolutionName()}.Shared");
             replacements.Add("$SharedProject$", $"{VsixHelper.GetSolutionName()}.Shared");
+            replacements.Add("$ProjectProxyTypes$", $"{VsixHelper.GetSolutionName()}.ProxyTypes");
         }
     }
 }
