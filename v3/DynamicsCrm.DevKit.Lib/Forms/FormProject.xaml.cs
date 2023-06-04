@@ -5,6 +5,7 @@ using Microsoft.Xrm.Tooling.Connector;
 using System.Threading.Tasks;
 using System.Threading;
 using Microsoft.VisualStudio.Shell;
+using DynamicsCrm.DevKit.Lib.Wizard.ProjectTemplates;
 
 namespace DynamicsCrm.DevKit.Lib.Forms
 {
@@ -29,6 +30,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     case ProjectType.CustomApi:
                     case ProjectType.DataProvider:
                     case ProjectType.WebResource:
+                    case ProjectType.SolutionPackager:
                         return LabelProjectName.Content.ToString();
                 }
                 return string.Empty;
@@ -135,6 +137,16 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}.WebResource";
                     LabelProjectName.Tag = LabelProjectName.Content;
                 }
+                void SolutionPackagerProject()
+                {
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Solution-Packager-Project-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("Solution Packager Project Template");
+                    ComboBoxProject.Visibility = System.Windows.Visibility.Hidden;
+                    TextboxProject.Visibility = System.Windows.Visibility.Visible;
+                    LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}.SolutionPackager";
+                    LabelProjectName.Tag = LabelProjectName.Content;
+                }
                 _ProjectType = value;
                 switch (_ProjectType)
                 {
@@ -164,6 +176,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         break;
                     case ProjectType.WebResource:
                         WebResourceProject();
+                        break;
+                    case ProjectType.SolutionPackager:
+                        SolutionPackagerProject();
                         break;
                 }
             }

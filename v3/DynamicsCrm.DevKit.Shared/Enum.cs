@@ -48,6 +48,7 @@
         CustomAction,
         CustomApi,
         DataProvider,
-        WebResource
+        WebResource,
+        SolutionPackager
     }
 }

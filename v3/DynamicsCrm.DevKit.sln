@@ -49,6 +49,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "08.DataProviderProjectTempl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "09.WebResourceProjectTemplate", "ProjectTemplates\CSharp\09.WebResourceProjectTemplate\09.WebResourceProjectTemplate.csproj", "{67F16EA3-09BD-41BD-8CF7-48248C5D7B34}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "10.SolutionPackagerProjectTemplate", "ProjectTemplates\CSharp\10.SolutionPackagerProjectTemplate\10.SolutionPackagerProjectTemplate.csproj", "{C555420B-02D8-4388-AADF-375A9809ACDA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -227,6 +229,18 @@ Global
 		{67F16EA3-09BD-41BD-8CF7-48248C5D7B34}.Release|arm64.Build.0 = Release|arm64
 		{67F16EA3-09BD-41BD-8CF7-48248C5D7B34}.Release|x86.ActiveCfg = Release|x86
 		{67F16EA3-09BD-41BD-8CF7-48248C5D7B34}.Release|x86.Build.0 = Release|x86
+		{C555420B-02D8-4388-AADF-375A9809ACDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C555420B-02D8-4388-AADF-375A9809ACDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C555420B-02D8-4388-AADF-375A9809ACDA}.Debug|arm64.ActiveCfg = Debug|arm64
+		{C555420B-02D8-4388-AADF-375A9809ACDA}.Debug|arm64.Build.0 = Debug|arm64
+		{C555420B-02D8-4388-AADF-375A9809ACDA}.Debug|x86.ActiveCfg = Debug|x86
+		{C555420B-02D8-4388-AADF-375A9809ACDA}.Debug|x86.Build.0 = Debug|x86
+		{C555420B-02D8-4388-AADF-375A9809ACDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C555420B-02D8-4388-AADF-375A9809ACDA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C555420B-02D8-4388-AADF-375A9809ACDA}.Release|arm64.ActiveCfg = Release|arm64
+		{C555420B-02D8-4388-AADF-375A9809ACDA}.Release|arm64.Build.0 = Release|arm64
+		{C555420B-02D8-4388-AADF-375A9809ACDA}.Release|x86.ActiveCfg = Release|x86
+		{C555420B-02D8-4388-AADF-375A9809ACDA}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -244,6 +258,7 @@ Global
 		{DBBAE77C-9754-4019-91B5-B16920F709C4} = {2BEBBAA2-4230-4372-A25D-7AB871C561BC}
 		{7FCFE909-E28F-40A2-A7C3-0BD6F9A431E8} = {2BEBBAA2-4230-4372-A25D-7AB871C561BC}
 		{67F16EA3-09BD-41BD-8CF7-48248C5D7B34} = {2BEBBAA2-4230-4372-A25D-7AB871C561BC}
+		{C555420B-02D8-4388-AADF-375A9809ACDA} = {2BEBBAA2-4230-4372-A25D-7AB871C561BC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {04C975FA-0E86-4259-8245-7DFA47D873BB}

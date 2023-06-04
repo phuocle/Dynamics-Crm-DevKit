@@ -195,6 +195,13 @@
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>
+    <ProjectReference Include="..\ProjectTemplates\CSharp\10.SolutionPackagerProjectTemplate\10.SolutionPackagerProjectTemplate.csproj">
+      <Project>{C555420B-02D8-4388-AADF-375A9809ACDA}</Project>
+      <Name>10.SolutionPackagerProjectTemplate</Name>
+      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="VSPackage.resx">
