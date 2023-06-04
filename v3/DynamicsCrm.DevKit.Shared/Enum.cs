@@ -44,6 +44,7 @@
         Console,
         Server,
         Plugin,
-        Workflow
+        Workflow,
+        CustomAction
     }
 }

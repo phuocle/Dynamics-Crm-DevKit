@@ -25,6 +25,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     case ProjectType.Server:
                     case ProjectType.Plugin:
                     case ProjectType.Workflow:
+                    case ProjectType.CustomAction:
                         return LabelProjectName.Content.ToString();
                 }
                 return string.Empty;
@@ -91,6 +92,16 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}.Workflow";
                     LabelProjectName.Tag = LabelProjectName.Content;
                 }
+                void CustomActionProject()
+                {
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Custom-Action-Project-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("Custom Action Project Template");
+                    ComboBoxProject.Visibility = System.Windows.Visibility.Visible;
+                    TextboxProject.Visibility = System.Windows.Visibility.Hidden;
+                    LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}.CustomAction";
+                    LabelProjectName.Tag = LabelProjectName.Content;
+                }
                 _ProjectType = value;
                 switch (_ProjectType)
                 {
@@ -108,6 +119,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         break;
                     case ProjectType.Workflow:
                         WorkflowProject();
+                        break;
+                    case ProjectType.CustomAction:
+                        CustomActionProject();
                         break;
                 }
             }
@@ -148,8 +162,11 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private void Connection_Connected(object sender, System.EventArgs e)
         {
-            if (ProjectType == ProjectType.Plugin ||
-                ProjectType == ProjectType.Workflow)
+            if (
+                ProjectType == ProjectType.Plugin ||
+                ProjectType == ProjectType.Workflow ||
+                ProjectType == ProjectType.CustomAction
+                )
             {
                 progressBar.Visibility = System.Windows.Visibility.Visible;
                 _ = Task.Factory.StartNew(() =>
