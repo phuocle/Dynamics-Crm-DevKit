@@ -5,8 +5,8 @@ using Microsoft.Xrm.Tooling.Connector;
 using System.Threading.Tasks;
 using System.Threading;
 using Microsoft.VisualStudio.Shell;
-using DynamicsCrm.DevKit.Lib.Wizard.ProjectTemplates;
-using System.CodeDom;
+using Microsoft.Build.Framework.XamlTypes;
+using ItemType = DynamicsCrm.DevKit.Shared.ItemType;
 
 namespace DynamicsCrm.DevKit.Lib.Forms
 {
@@ -22,10 +22,45 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 return LabelProjectName.Content.ToString();
             }
         }
+
+        public string ItemName
+        {
+            get
+            {
+                return ((XrmEntity)ComboBoxProject.SelectedItem)?.Name;
+        }
+        }
         public bool IsOOBConnection => CONNECTION.IsOOBConnection;
         public CrmServiceClient CrmServiceClient => CONNECTION.CrmServiceClient;
         public string DataverseConnectionString => CONNECTION.DataverseConnectionString;
         public CrmConnection CrmConnection => CONNECTION.CrmConnection;
+
+        private ItemType _ItemType;
+        private ItemType ItemType
+        {
+            get => _ItemType;
+            set
+            {
+                void LateBoundItem()
+                {
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Late-Bound-Class-Item-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("Late Bound Class Item Template");
+                    ComboBoxProject.Visibility = System.Windows.Visibility.Visible;
+                    ComboBoxProject.IsEditable = false;
+                    TextboxProject.Visibility = System.Windows.Visibility.Hidden;
+                    LabelProjectName.Visibility = System.Windows.Visibility.Collapsed;
+                    LabelProjectItemName.Content = "Item Name";
+                }
+                _ItemType = value;
+                switch (_ItemType)
+                {
+                    case ItemType.LateBound:
+                        LateBoundItem();
+                        break;
+                }
+            }
+        }
 
         private ProjectType _ProjectType;
         private ProjectType ProjectType  {
@@ -217,6 +252,12 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             ProjectType = projectType;
         }
 
+        public FormProject(ItemType itemType)
+        {
+            InitializeComponent();
+            ItemType = itemType;
+        }
+
         private void ButtonCancel_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             DialogResult = false;
@@ -250,7 +291,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 ProjectType == ProjectType.Plugin ||
                 ProjectType == ProjectType.Workflow ||
                 ProjectType == ProjectType.CustomAction ||
-                ProjectType == ProjectType.CustomApi
+                ProjectType == ProjectType.CustomApi ||
+                ItemType == ItemType.LateBound
                 )
             {
                 progressBar.Visibility = System.Windows.Visibility.Visible;

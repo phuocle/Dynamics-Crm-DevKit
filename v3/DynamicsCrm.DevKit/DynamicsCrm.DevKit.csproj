@@ -132,6 +132,13 @@
       <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
       <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
     </ProjectReference>
+    <ProjectReference Include="..\ItemTemplates\CSharp\01.LateBoundItemTemplate\01.LateBoundItemTemplate.csproj">
+      <Project>{921403BE-B301-40D8-B023-083C4747B50D}</Project>
+      <Name>01.LateBoundItemTemplate</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
     <ProjectReference Include="..\ProjectTemplates\CSharp\01.SharedProjectTemplate\01.SharedProjectTemplate.csproj">
       <Project>{4170CD81-A77B-4C9A-BBAE-29DE390A4F9C}</Project>
       <Name>01.SharedProjectTemplate</Name>

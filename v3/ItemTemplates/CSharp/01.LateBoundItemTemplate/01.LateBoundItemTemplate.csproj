@@ -72,7 +72,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="Class.cs" />
-    <None Include="Class1.cs" />
+    <None Include="GeneratedClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

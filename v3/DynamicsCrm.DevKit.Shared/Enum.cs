@@ -54,4 +54,9 @@
         Test,
         UiTest
     }
+
+    public enum ItemType
+    {
+        LateBound
+    }
 }

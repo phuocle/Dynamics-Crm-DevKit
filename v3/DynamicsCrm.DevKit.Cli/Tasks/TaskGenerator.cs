@@ -207,59 +207,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             return code;
         }
 
-        private string GetDefaultFileWithCs(EntityMetadata entityMetadata, string @namespace)
-        {
-            const string NEW_LINE = "\r\n";
-            const string TAB = "\t";
-            var code = string.Empty;
-            var @class = Utility.SafeDeclareName(entityMetadata.SchemaName, GeneratorType.csharp);
-            var key = (entityMetadata.IsActivity ?? false) ? "activityid" : $"{@class.ToLower()}id";
-            code += $"using Microsoft.Xrm.Sdk;{NEW_LINE}";
-            code += $"using System;{NEW_LINE}";
-            code += NEW_LINE;
-            code += $"namespace {@namespace}{NEW_LINE}";
-            code += $"{{{NEW_LINE}";
-            code += $"{TAB}public partial class {@class}{NEW_LINE}";
-            code += $"{TAB}{{{NEW_LINE}";
-            code += $"{TAB}{TAB}#region --- PROPERTIES ---{NEW_LINE}";
-            code += NEW_LINE;
-            code += $"{TAB}{TAB}//public string StringField {{ get {{ return GetAliasedValue<string>(\"aliased.field\"); }} }}{NEW_LINE}";
-            code += $"{TAB}{TAB}//public int? IntField {{ get {{ return GetAliasedValue<int?>(\"aliased.field\"); }} }}{NEW_LINE}";
-            code += $"{TAB}{TAB}//public DateTime? DateTimeField {{ get {{ return GetAliasedValue<DateTime?>(\"aliased.field\"); }} }}{NEW_LINE}";
-            code += $"{TAB}{TAB}//public EntityReference LookupField {{ get {{ return GetAliasedValue<EntityReference>(\"aliased.field\"); }} }}{NEW_LINE}";
-            code += $"{TAB}{TAB}//public xxxOptionSets.xxx? OptionSetField {{ get {{ return (xxxOptionSets.xxx?)GetAliasedValue<OptionSetValue>(\"aliased.field\")?.Value; }} }}{NEW_LINE}";
-            code += $"{TAB}{TAB}//public decimal? MoneyField {{ get {{ return GetAliasedValue<Money>(\"aliased.field\")?.Value; }} }}{NEW_LINE}";
-            code += NEW_LINE;
-            code += $"{TAB}{TAB}#endregion{NEW_LINE}";
-            code += NEW_LINE;
-            code += $"{TAB}{TAB}#region --- STATIC METHODS ---{NEW_LINE}";
-            code += NEW_LINE;
-            code += $"{TAB}{TAB}public static {@class} Read_Record(IOrganizationService serviceAdmin, IOrganizationService service, ITracingService tracing, Guid? recordId){NEW_LINE}";
-            code += $"{TAB}{TAB}{{{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}var fetchData = new{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}{{{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}{TAB}{key} = recordId ?? Guid.Empty{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}}};{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}var fetchXml = $@\"{NEW_LINE}";
-            code += $"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>{NEW_LINE}";
-            code += $"  <entity name='{@class.ToLower()}'>{NEW_LINE}";
-            code += $"    <all-attributes/>{NEW_LINE}";
-            code += $"    <filter type='and'>{NEW_LINE}";
-            code += $"      <condition attribute='{key}' operator='eq' value='{{fetchData.{key}}}'/>{NEW_LINE}";
-            code += $"    </filter>{NEW_LINE}";
-            code += $"  </entity>{NEW_LINE}";
-            code += $"</fetch>{NEW_LINE}";
-            code += $"\";{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}var rows = serviceAdmin.RetrieveMultiple<{entityMetadata.SchemaName}>(fetchXml);{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}if (rows.Count == 1) return rows[0];{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}return new {entityMetadata.SchemaName}();{NEW_LINE}";
-            code += $"{TAB}{TAB}}}{NEW_LINE}";
-            code += NEW_LINE;
-            code += $"{TAB}{TAB}#endregion{NEW_LINE}";
-            code += $"{TAB}}}{NEW_LINE}";
-            code += $"}}{NEW_LINE}";
-            return code;
-        }
+
 
         private void GeneratorJsForm(List<string> schemaNames)
         {
@@ -412,7 +360,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                             Utility.ForceWriteAllText(fileEndsWith, newCode);
                             if (!File.Exists(file))
                             {
-                                Utility.ForceWriteAllText(file, GetDefaultFileWithCs(entityMetadata, Json.rootnamespace));
+                                Utility.ForceWriteAllText(file, VsixHelper.GetDefaultFileWithCs(entityMetadata, Json.rootnamespace));
                             }
                             CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Created, ConsoleColor.White, $"{schemaName}{endsWith}");
                         }

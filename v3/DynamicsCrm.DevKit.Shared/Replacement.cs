@@ -14,6 +14,15 @@ namespace DynamicsCrm.DevKit.Shared
         private static Dictionary<string, string> replacements = new Dictionary<string, string>();
         public static string DestinationDirectory => replacements["$destinationdirectory$"];
 
+        internal static void SetItem(Dictionary<string, string> replacementsDictionary, FormProject form)
+        {
+            replacements = replacementsDictionary;
+            AddCommonReplacements();
+
+            replacements.Add("$class$", form.ItemName);
+
+        }
+
         internal static void Set(Dictionary<string, string> replacementsDictionary, FormProject form)
         {
             replacements = replacementsDictionary;

@@ -1,8 +1,11 @@
 ﻿<UserControl x:Class="DynamicsCrm.DevKit.Lib.WpfControls.UserControlConnection"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             Height="Auto" Width="Auto" Background="Gray" Padding="0,5,0,5"
+             Height="Auto" Width="Auto" Padding="0,5,0,5"
              >
+    <UserControl.Background>
+        <SolidColorBrush Color="#FF99B4D1"/>
+    </UserControl.Background>
     <WrapPanel>
         <Button x:Name="buttonConnection" Content="Connection ..." Margin="10,0,0,0" Padding="5,0,5,0" Click="ButtonConnection_Click" ></Button>
         <Label x:Name="labelInformation" Content="Connected: https://......" Foreground="White"></Label>
