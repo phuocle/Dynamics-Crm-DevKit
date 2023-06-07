@@ -54,10 +54,6 @@
     <None Include="deploy.debug.bat" />
     <None Include="deploy.debug.only.bat" />
     <None Include="Dev.DevKit.Plugin.Account.snk" />
-    <Compile Include="Lib\Account.cs" />
-    <Compile Include="Lib\Account.generated.cs">
-      <DependentUpon>Account.cs</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="..\Dev.DevKit.Shared\Dev.DevKit.Shared.projitems" Label="Shared" Condition="Exists('..\Dev.DevKit.Shared\Dev.DevKit.Shared.projitems')" />

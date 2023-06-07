@@ -1,6 +1,7 @@
 ﻿using DynamicsCrm.DevKit.Lib.Forms;
 using DynamicsCrm.DevKit.Shared;
 using EnvDTE;
+using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.TemplateWizard;
 using System.Collections.Generic;
@@ -18,6 +19,7 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
         private ProjectItem ItemNameGeneratedProjectItem { get; set; }
         public string ClassFile { get; set; }
         public string GeneratedClassFile { get; set; }
+        public bool IsNew { get; set; } = false;
 
         public void BeforeOpeningFile(ProjectItem projectItem)
         {
@@ -39,16 +41,22 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
             ThreadHelper.ThrowIfNotOnUIThread();
             if (!File.Exists(ClassFile) || "$Class$" == File.ReadAllText(ClassFile)) Utility.ForceWriteAllText(ClassFile, ClassCode);
             Utility.ForceWriteAllText(GeneratedClassFile, GeneratedClassCode);
-            try
+            if (!IsNew)
             {
-                ItemNameGeneratedProjectItem.Properties.Item("DependentUpon").Value = $"{ItemName}.cs";
-            }
-            catch
-            {
-                ItemNameGeneratedProjectItem.Remove();
-                ItemNameProjectItem.ProjectItems.AddFromFile(GeneratedClassFile);
+                try
+                {
+                    ItemNameGeneratedProjectItem.Properties.Item("DependentUpon").Value = $"{ItemName}.cs";
+                }
+                catch
+                {
+                    ItemNameGeneratedProjectItem.Remove();
+                    ItemNameProjectItem.ProjectItems.AddFromFile(GeneratedClassFile);
+                }
             }
             VsixHelper.SetStatusMessage($"{ItemName} generated");
+
+            //var folder = NuGetHelper.GetMicrosoftPowerAppsCLIFolder();
+            //var t = string.Empty;
         }
 
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
@@ -95,14 +103,14 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
             if (filePath == "Class.cs")
             {
                 ClassFile = GetFullFileName($"{ItemName}.cs");
-                return !File.Exists(ClassFile);
+                IsNew = !File.Exists(ClassFile);
             }
             else if (filePath == "GeneratedClass.cs")
             {
                 GeneratedClassFile = GetFullFileName ($"{ItemName}.generated.cs");
-                return !File.Exists(GeneratedClassFile);
+                IsNew = !File.Exists(GeneratedClassFile);
             }
-            return false;
+            return IsNew;
         }
     }
 }
