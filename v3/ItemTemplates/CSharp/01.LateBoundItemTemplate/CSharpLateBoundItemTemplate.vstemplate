@@ -14,8 +14,8 @@
 		<SortOrder>110</SortOrder>
 	</TemplateData>
 	<TemplateContent>
-		<ProjectItem ReplaceParameters="false" OpenInEditor="false" TargetFileName="$class$.generated.cs">GeneratedClass.cs</ProjectItem>
 		<ProjectItem ReplaceParameters="false" OpenInEditor="false" TargetFileName="$class$.cs">Class.cs</ProjectItem>
+		<ProjectItem ReplaceParameters="false" OpenInEditor="false" TargetFileName="$class$.generated.cs">GeneratedClass.cs</ProjectItem>
 	</TemplateContent>
 	<WizardExtension>
 		<Assembly>DynamicsCrm.DevKit.Lib, Version=3.33.33.33, Culture=Neutral, PublicKeyToken=98cbb7bd3db31604</Assembly>

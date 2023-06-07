@@ -14,6 +14,8 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
         public string ClassCode { get; set; }
         public string GeneratedClassCode { get; set; }
         public string ItemName { get; set; }
+        private ProjectItem ItemNameProjectItem { get; set; }
+        private ProjectItem ItemNameGeneratedProjectItem { get; set; }
         public string ClassFile { get; set; }
         public string GeneratedClassFile { get; set; }
 
@@ -28,13 +30,24 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
         public void ProjectItemFinishedGenerating(ProjectItem projectItem)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            if (projectItem.Name == $"{ItemName}.generated.cs") projectItem.Properties.Item("DependentUpon").Value = $"{ItemName}.cs";
+            if (projectItem.Name == $"{ItemName}.cs") ItemNameProjectItem = projectItem;
+            if (projectItem.Name == $"{ItemName}.generated.cs") ItemNameGeneratedProjectItem = projectItem;
         }
 
         public void RunFinished()
         {
-            if ("$Class$" == File.ReadAllText(ClassFile)) Utility.ForceWriteAllText(ClassFile, ClassCode);
+            ThreadHelper.ThrowIfNotOnUIThread();
+            if (!File.Exists(ClassFile) || "$Class$" == File.ReadAllText(ClassFile)) Utility.ForceWriteAllText(ClassFile, ClassCode);
             Utility.ForceWriteAllText(GeneratedClassFile, GeneratedClassCode);
+            try
+            {
+                ItemNameGeneratedProjectItem.Properties.Item("DependentUpon").Value = $"{ItemName}.cs";
+            }
+            catch
+            {
+                ItemNameGeneratedProjectItem.Remove();
+                ItemNameProjectItem.ProjectItems.AddFromFile(GeneratedClassFile);
+            }
             VsixHelper.SetStatusMessage($"{ItemName} generated");
         }
 
@@ -58,19 +71,26 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
             ThreadHelper.ThrowIfNotOnUIThread();
             string GetFullFileName(string projectItemName)
             {
+                var selectDirectoryName = string.Empty;
                 var selectItem = ((EnvDTE.DTE)dte).SelectedItems.Item(1);
                 ProjectItems projectItems = null;
                 if (selectItem.Project != null)
+                {
                     projectItems = selectItem.Project.ProjectItems;
+                    selectDirectoryName = Path.GetDirectoryName(selectItem.Project.FullName);
+                }
                 else if (selectItem.ProjectItem != null)
+                {
                     projectItems = selectItem.ProjectItem.ProjectItems;
+                    selectDirectoryName = Path.GetDirectoryName(selectItem.ProjectItem.FileNames[0]);
+                }
                 if (projectItems == null) throw new WizardCancelledException("Cancel Click");
                 foreach (ProjectItem projectItem in projectItems)
                 {
                     if (projectItem.Name == projectItemName)
                         return Path.Combine(Path.GetDirectoryName(projectItem.FileNames[0]), projectItemName);
                 }
-                return Path.Combine(Path.GetDirectoryName(projectItems.Item(1).FileNames[0]), projectItemName);
+                return Path.Combine(selectDirectoryName, projectItemName);
             }
             if (filePath == "Class.cs")
             {
