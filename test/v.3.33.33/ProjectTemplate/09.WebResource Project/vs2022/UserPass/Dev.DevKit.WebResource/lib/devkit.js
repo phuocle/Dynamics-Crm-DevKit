@@ -1956,6 +1956,19 @@ var devKit = (function () {
                     return EMPTY_NUMBER;
                 }
             });
+            Object.defineProperty(grids[grid], 'Visible', {
+                get: function () {
+                    if (has(gridControl, 'getVisible')) {
+                        return gridControl.getVisible();
+                    }
+                    return EMPTY_BOOL;
+                },
+                set: function (value) {
+                    if (has(gridControl, 'setVisible')) {
+                        gridControl.setVisible(value);
+                    }
+                }
+            });
         }
         for (var grid in grids) {
             loadGrid(formContext, grids, grid);
@@ -2104,6 +2117,14 @@ var devKit = (function () {
                     get: function () {
                         if (has(client, 'isOffline')) {
                             return client.isOffline();
+                        }
+                        return EMPTY_BOOL;
+                    }
+                });
+                Object.defineProperty(obj, 'IsNetworkAvailable', {
+                    get: function () {
+                        if (has(client, 'isNetworkAvailable')) {
+                            return client.isNetworkAvailable();
                         }
                         return EMPTY_BOOL;
                     }
@@ -2511,6 +2532,12 @@ var devKit = (function () {
     }
     function loadExecutionContext(executionContext) {
         var obj = {};
+        obj.IsInitialLoad = function () {
+            if (has(executionContext, 'getEventArgs')) {
+                return executionContext.getEventArgs().getDataLoadState() === 1;
+            }
+            return EMPTY_BOOL;
+        }
         obj.GetSharedVariable = function (key) {
             if (has(executionContext, 'getSharedVariable')) {
                 return executionContext.getSharedVariable(key);
@@ -2632,19 +2659,37 @@ var devKit = (function () {
     function loadOthers(formContext, form, defaultWebResourceName) {
         form.SidePanes = loadSidePanes();
     }
+    function loadFormDialog(executionContext, fields) { }
     return {
         LoadForm: loadForm,
         LoadProcess: loadProcess,
         LoadFields: loadFields,
+        LoadField: loadField,
         LoadTabs: loadTabs,
         LoadNavigations: loadNavigations,
         LoadQuickForms: loadQuickForms,
         LoadGrids: loadGrids,
         LoadUtility: loadUtility,
         LoadExecutionContext: loadExecutionContext,
-        LoadOthers: loadOthers
+        LoadOthers: loadOthers,
+        LoadFormDialog: loadFormDialog
     }
 })();
+(function (devKit) {
+    devKit.LoadFormDialog = function (executionContext, fields) {
+        var formContext = executionContext.getFormContext();
+        var form = {};
+        for (var i = 0; i < fields.length; i++) {
+            var field = fields[i];
+            var attribute = formContext.data.attributes.get(field);
+            var control = formContext.getControl(field);
+            form[field] = {};
+            devKit.LoadField(form[field], attribute, control);
+        }
+        form.Close = function () { formContext.ui.close(); };
+        return form;
+    }
+})(devKit || (devKit = {}));
 /** @namespace OptionSet */
 var OptionSet;
 (function (OptionSet) {

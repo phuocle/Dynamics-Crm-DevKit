@@ -530,22 +530,16 @@ declare namespace DevKit {
             TabNavigatorVisible: boolean;
         }
         interface Integer extends IControlNumber {
-
         }
         interface Decimal extends IControlNumber {
-
         }
         interface Double extends IControlNumber {
-
         }
         interface Money extends IControlNumber {
-
         }
         interface String extends IControlText {
-
         }
         interface Memo extends IControlText {
-
         }
         interface DateTime extends IControl {
             /**
@@ -635,7 +629,6 @@ declare namespace DevKit {
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/controls/setentitytypes
              */
             EntityTypes: Array<string>;
-
         }
         interface Knowledge extends IControl {
             /**
@@ -723,7 +716,6 @@ declare namespace DevKit {
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/controls/setsrc
              */
             Src: string;
-
         }
         interface IFrame extends IControl {
             /**
@@ -749,7 +741,6 @@ declare namespace DevKit {
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/controls/setsrc
              */
             Src: string;
-
         }
         interface Timer extends IControl {
             /**
@@ -927,6 +918,12 @@ declare namespace DevKit {
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/grid/gettotalrecordcount
              */
             readonly TotalRecordCount: number;
+            /**
+             * [Read-only and editable grids] Get/Set a value that indicates whether the control is currently visible
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/controls/getvisible
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/controls/setvisible
+             */
+            Visible: boolean;
         }
         interface GridRow {
             /**
@@ -999,29 +996,20 @@ declare namespace DevKit {
             Refresh(): void;
         }
         interface EmailEngagement {
-
         }
         interface EmailRecipient {
-
         }
         interface Map {
-
         }
         interface ActionCards {
-
         }
-
         interface AciWidget {
-
         }
         interface PowerBi {
-
         }
-        interface File {
-
+        interface File extends IControl {
         }
         interface Image {
-
         }
         interface QuickView {
             readonly Value: any;
@@ -1214,10 +1202,10 @@ declare namespace DevKit {
             /** The guid value. E.g.: f55a0d1e-286b-e911-a997-000d3a802135 */
             Value: DevKit.Guid;
         }
-        interface ManagedPropertyValue{
+        interface ManagedPropertyValue {
             Value: string;
         }
-        interface ManagedPropertyValueReadonly{
+        interface ManagedPropertyValueReadonly {
             Value: string;
         }
         interface RetrieveMultipleResponse {
@@ -1260,7 +1248,6 @@ declare namespace DevKit {
             url: string;
         }
         interface ChangeSetRequest {
-
         }
         /**
          * Object passed to ErrorCallbackDelegate.
@@ -1706,6 +1693,11 @@ declare namespace DevKit {
         getLength(): number;
     }
     interface ExecutionContext {
+        /**
+         * Gets the state of the data load.
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/executioncontext/geteventargs
+         */
+        IsInitialLoad(): boolean;
         /**
          * Retrieves a variable set using the SetSharedVariable method.
          * @param key The name of the variable.
@@ -2170,6 +2162,11 @@ declare namespace DevKit {
         *  @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/client#isoffline
         */
        readonly IsOffline: boolean;
+        /**
+        *  Returns information whether the network is available or not.
+        *  @link https://docs.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/client#isnetworkavailable
+        */
+        readonly IsNetworkAvailable: boolean;
     }
     interface OrganizationSettings {
         /**
@@ -2723,13 +2720,13 @@ declare namespace DevKit {
         /**  Indicates whether to edit the image before saving */
         allowEdit: boolean;
         /** Height of the image to capture */
-        height: number;
+        height?: number;
         /** Indicates whether to capture image using the front camera of the device */
         preferFrontCamera: boolean;
         /** Quality of the image file in percentage */
         quality: number;
         /** Width of the image to capture */
-        width: number;
+        width?: number;
     }
     interface PositionData {
         /** Contains a set of geographic coordinates along with associated accuracy as well as a set of other optional attributes such as altitude and speed */
@@ -3200,7 +3197,7 @@ declare namespace OptionSet {
         /** collapsed */
         Collapsed
     }
-    /** the full name conventionCode setting of the current organization */
+    /** The full name conventionCode setting of the current organization */
     enum FullNameConventionCode {
         LastName_Comma_FirstName,
         FirstName_LastName,
