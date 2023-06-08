@@ -11,7 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Dev.DevKit.Shared", "Dev.DevKit.Shared\Dev.DevKit.Shared.shproj", "{FE3E159C-4457-4635-86D0-DCF01670FE0D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.WebResource", "Dev.DevKit.WebResource\Dev.DevKit.WebResource.csproj", "{76B38DAB-33CA-4191-A81D-507D9AB2F8CD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.WebResource", "Dev.DevKit.WebResource\Dev.DevKit.WebResource.csproj", "{4F088A0E-EA1B-4006-B7CB-96A9A8E76D3E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,10 +19,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{76B38DAB-33CA-4191-A81D-507D9AB2F8CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{76B38DAB-33CA-4191-A81D-507D9AB2F8CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{76B38DAB-33CA-4191-A81D-507D9AB2F8CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{76B38DAB-33CA-4191-A81D-507D9AB2F8CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F088A0E-EA1B-4006-B7CB-96A9A8E76D3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F088A0E-EA1B-4006-B7CB-96A9A8E76D3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F088A0E-EA1B-4006-B7CB-96A9A8E76D3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F088A0E-EA1B-4006-B7CB-96A9A8E76D3E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -59,8 +59,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "14.TestUiProjectTemplate", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "07.JsFormItemTemplate", "ItemTemplates\CSharp\07.JsFormItemTemplate\07.JsFormItemTemplate.csproj", "{F3432EFE-5FE3-46F4-9335-703E658C022E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicsCrm.DevKit.Console", "DynamicsCrm.DevKit.Console\DynamicsCrm.DevKit.Console.csproj", "{26067BC0-588B-4079-BBF6-6E0964BFDEBD}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -299,18 +297,6 @@ Global
 		{F3432EFE-5FE3-46F4-9335-703E658C022E}.Release|arm64.Build.0 = Release|arm64
 		{F3432EFE-5FE3-46F4-9335-703E658C022E}.Release|x86.ActiveCfg = Release|x86
 		{F3432EFE-5FE3-46F4-9335-703E658C022E}.Release|x86.Build.0 = Release|x86
-		{26067BC0-588B-4079-BBF6-6E0964BFDEBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{26067BC0-588B-4079-BBF6-6E0964BFDEBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{26067BC0-588B-4079-BBF6-6E0964BFDEBD}.Debug|arm64.ActiveCfg = Debug|Any CPU
-		{26067BC0-588B-4079-BBF6-6E0964BFDEBD}.Debug|arm64.Build.0 = Debug|Any CPU
-		{26067BC0-588B-4079-BBF6-6E0964BFDEBD}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{26067BC0-588B-4079-BBF6-6E0964BFDEBD}.Debug|x86.Build.0 = Debug|Any CPU
-		{26067BC0-588B-4079-BBF6-6E0964BFDEBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{26067BC0-588B-4079-BBF6-6E0964BFDEBD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{26067BC0-588B-4079-BBF6-6E0964BFDEBD}.Release|arm64.ActiveCfg = Release|Any CPU
-		{26067BC0-588B-4079-BBF6-6E0964BFDEBD}.Release|arm64.Build.0 = Release|Any CPU
-		{26067BC0-588B-4079-BBF6-6E0964BFDEBD}.Release|x86.ActiveCfg = Release|Any CPU
-		{26067BC0-588B-4079-BBF6-6E0964BFDEBD}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
