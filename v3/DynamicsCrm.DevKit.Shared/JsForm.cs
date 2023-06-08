@@ -44,10 +44,11 @@ namespace DynamicsCrm.DevKit.Shared
         private static string RootNamespace { get; set; }
         private static CommentTypeScriptDeclaration Comment { get; set; }
 
-        private static List<string> FormNames = new List<string>();
+        private static List<string> FormNames;
 
         public static string GetCode(CrmServiceClient crmServiceClient, EntityMetadata entityMetadata, string rootNamespace, CommentTypeScriptDeclaration comment, out string dts)
         {
+            FormNames = new List<string>();
             CrmServiceClient = crmServiceClient;
             EntityMetadata = entityMetadata;
             RootNamespace = rootNamespace;

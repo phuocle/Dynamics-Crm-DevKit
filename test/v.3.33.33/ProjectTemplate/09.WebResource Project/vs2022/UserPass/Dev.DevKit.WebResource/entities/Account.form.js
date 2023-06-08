@@ -3,7 +3,7 @@
 var DevKit;
 (function (DevKit) {
 	'use strict';
-	DevKit.FormAccount3 = function(executionContext, defaultWebResourceName) {
+	DevKit.FormAccount = function(executionContext, defaultWebResourceName) {
 		var formContext = null;
 		if (executionContext !== undefined) {
 			if (executionContext.getFormContext === undefined) {
@@ -135,7 +135,7 @@ var DevKit;
 		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
-	DevKit.FormAccount_for_Interactive_experience3 = function(executionContext, defaultWebResourceName) {
+	DevKit.FormAccount_for_Interactive_experience = function(executionContext, defaultWebResourceName) {
 		var formContext = null;
 		if (executionContext !== undefined) {
 			if (executionContext.getFormContext === undefined) {
@@ -243,7 +243,7 @@ var DevKit;
 		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
-	DevKit.FormAccount_Information3 = function(executionContext, defaultWebResourceName) {
+	DevKit.FormAccount_Information = function(executionContext, defaultWebResourceName) {
 		var formContext = null;
 		if (executionContext !== undefined) {
 			if (executionContext.getFormContext === undefined) {
@@ -381,7 +381,7 @@ var DevKit;
 		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
-	DevKit.FormAccount_Quick_Create3 = function(executionContext, defaultWebResourceName) {
+	DevKit.FormAccount_Quick_Create = function(executionContext, defaultWebResourceName) {
 		var formContext = null;
 		if (executionContext !== undefined)
 		{
