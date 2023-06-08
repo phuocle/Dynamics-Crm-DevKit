@@ -57,6 +57,7 @@
 
     public enum ItemType
     {
-        LateBound
+        LateBound,
+        JsForm
     }
 }

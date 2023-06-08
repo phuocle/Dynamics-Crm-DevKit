@@ -57,6 +57,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "13.TestProjectTemplate", "P
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "14.TestUiProjectTemplate", "ProjectTemplates\CSharp\14.TestUiProjectTemplate\14.TestUiProjectTemplate.csproj", "{5259082A-3733-4FBE-B50B-C9BBA22D95AA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "07.JsFormItemTemplate", "ItemTemplates\CSharp\07.JsFormItemTemplate\07.JsFormItemTemplate.csproj", "{F3432EFE-5FE3-46F4-9335-703E658C022E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicsCrm.DevKit.Console", "DynamicsCrm.DevKit.Console\DynamicsCrm.DevKit.Console.csproj", "{26067BC0-588B-4079-BBF6-6E0964BFDEBD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -283,6 +287,30 @@ Global
 		{5259082A-3733-4FBE-B50B-C9BBA22D95AA}.Release|arm64.Build.0 = Release|arm64
 		{5259082A-3733-4FBE-B50B-C9BBA22D95AA}.Release|x86.ActiveCfg = Release|x86
 		{5259082A-3733-4FBE-B50B-C9BBA22D95AA}.Release|x86.Build.0 = Release|x86
+		{F3432EFE-5FE3-46F4-9335-703E658C022E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3432EFE-5FE3-46F4-9335-703E658C022E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3432EFE-5FE3-46F4-9335-703E658C022E}.Debug|arm64.ActiveCfg = Debug|arm64
+		{F3432EFE-5FE3-46F4-9335-703E658C022E}.Debug|arm64.Build.0 = Debug|arm64
+		{F3432EFE-5FE3-46F4-9335-703E658C022E}.Debug|x86.ActiveCfg = Debug|x86
+		{F3432EFE-5FE3-46F4-9335-703E658C022E}.Debug|x86.Build.0 = Debug|x86
+		{F3432EFE-5FE3-46F4-9335-703E658C022E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3432EFE-5FE3-46F4-9335-703E658C022E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3432EFE-5FE3-46F4-9335-703E658C022E}.Release|arm64.ActiveCfg = Release|arm64
+		{F3432EFE-5FE3-46F4-9335-703E658C022E}.Release|arm64.Build.0 = Release|arm64
+		{F3432EFE-5FE3-46F4-9335-703E658C022E}.Release|x86.ActiveCfg = Release|x86
+		{F3432EFE-5FE3-46F4-9335-703E658C022E}.Release|x86.Build.0 = Release|x86
+		{26067BC0-588B-4079-BBF6-6E0964BFDEBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26067BC0-588B-4079-BBF6-6E0964BFDEBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26067BC0-588B-4079-BBF6-6E0964BFDEBD}.Debug|arm64.ActiveCfg = Debug|Any CPU
+		{26067BC0-588B-4079-BBF6-6E0964BFDEBD}.Debug|arm64.Build.0 = Debug|Any CPU
+		{26067BC0-588B-4079-BBF6-6E0964BFDEBD}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{26067BC0-588B-4079-BBF6-6E0964BFDEBD}.Debug|x86.Build.0 = Debug|Any CPU
+		{26067BC0-588B-4079-BBF6-6E0964BFDEBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26067BC0-588B-4079-BBF6-6E0964BFDEBD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26067BC0-588B-4079-BBF6-6E0964BFDEBD}.Release|arm64.ActiveCfg = Release|Any CPU
+		{26067BC0-588B-4079-BBF6-6E0964BFDEBD}.Release|arm64.Build.0 = Release|Any CPU
+		{26067BC0-588B-4079-BBF6-6E0964BFDEBD}.Release|x86.ActiveCfg = Release|Any CPU
+		{26067BC0-588B-4079-BBF6-6E0964BFDEBD}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -304,6 +332,7 @@ Global
 		{9172E6AA-6AD5-409E-81AF-37C7D03D4A3D} = {2BEBBAA2-4230-4372-A25D-7AB871C561BC}
 		{547D1385-E9AA-47E5-A94B-D0B50719BBAB} = {2BEBBAA2-4230-4372-A25D-7AB871C561BC}
 		{5259082A-3733-4FBE-B50B-C9BBA22D95AA} = {2BEBBAA2-4230-4372-A25D-7AB871C561BC}
+		{F3432EFE-5FE3-46F4-9335-703E658C022E} = {BCAAE925-A30A-462F-A6CA-E8CF375EBF56}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {04C975FA-0E86-4259-8245-7DFA47D873BB}

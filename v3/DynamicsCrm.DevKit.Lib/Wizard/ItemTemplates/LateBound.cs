@@ -41,7 +41,7 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
             ThreadHelper.ThrowIfNotOnUIThread();
             if (!File.Exists(ClassFile) || "$Class$" == File.ReadAllText(ClassFile)) Utility.ForceWriteAllText(ClassFile, ClassCode);
             Utility.ForceWriteAllText(GeneratedClassFile, GeneratedClassCode);
-            if (!IsNew)
+            if (IsNew)
             {
                 try
                 {
@@ -54,9 +54,6 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
                 }
             }
             VsixHelper.SetStatusMessage($"{ItemName} generated");
-
-            //var folder = NuGetHelper.GetMicrosoftPowerAppsCLIFolder();
-            //var t = string.Empty;
         }
 
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)

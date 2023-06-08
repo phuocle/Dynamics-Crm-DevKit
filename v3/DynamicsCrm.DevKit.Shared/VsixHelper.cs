@@ -4,6 +4,7 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.TemplateWizard;
 using Microsoft.Xrm.Sdk.Metadata;
+using Microsoft.Xrm.Tooling.Connector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -300,6 +301,80 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"{TAB}{TAB}#endregion{NEW_LINE}";
             code += $"{TAB}}}{NEW_LINE}";
             code += $"}}{NEW_LINE}";
+            return code;
+        }
+
+        public static string GetDefaultFileWithForm(CrmServiceClient CrmServiceClient, EntityMetadata entityMetadata, string rootnamespace)
+        {
+            string GetUnquieFormName(List<string> FormNames, string formName)
+            {
+                if (!FormNames.Contains(formName))
+                {
+                    FormNames.Add(formName);
+                    return formName;
+                }
+                else
+                {
+                    var count = FormNames.Count(x => x == formName) + 1;
+                    FormNames.Add(formName);
+                    return $"{formName}{count}";
+                }
+            }
+            var forms = XrmHelper.GetEntityForms(CrmServiceClient, entityMetadata.LogicalName);
+            if (!forms.Any()) return GetDefaultFileWithApi(entityMetadata.SchemaName);
+            var @namespace = Utility.GetNameSpace(rootnamespace);
+            var code = string.Empty;
+            code += $"//@ts-check\r\n";
+            code += $"///<reference path=\"{entityMetadata.SchemaName}.d.ts\" />\r\n";
+            code += "\"use strict\";\r\n";
+            var formNames = new List<string>();
+            foreach (var form in forms)
+            {
+                var formName = Utility.GetFormName(form.Name, entityMetadata.SchemaName);
+                formName = GetUnquieFormName(formNames, formName);
+                var type = $"{@namespace}.Form{Utility.SafeIdentifier(formName)}";
+                code += $"var form{Utility.SafeIdentifier(formName)} = (function () {{\r\n";
+                code += $"\t\"use strict\";\r\n";
+                code += $"\t/** @type {type} */\r\n";
+                code += $"\tvar form = null;\r\n";
+                code += $"\tasync function onLoad(executionContext) {{\r\n";
+                code += $"\t\tform = new {type}(executionContext);\r\n";
+                code += $"\t\tregisterEvents();\r\n";
+                code += $"\t\tawait onLoadData();\r\n";
+                code += $"\t}}\r\n";
+                code += $"\tfunction registerEvents() {{\r\n";
+                code += $"\t\tif (form.ExecutionContext.IsInitialLoad()) {{\r\n";
+                code += $"\t\t}}\r\n";
+                code += $"\t}}\r\n";
+                code += $"\t//BEGIN ON LOAD =========================================================================================\r\n";
+                code += $"\rasync function onLoadData() {{\r\n";
+                code += $"\t}}\r\n";
+                code += $"\t//END ON LOAD ===========================================================================================\r\n";
+                code += $"\r\n";
+                code += $"\t//BEGIN ON CHANGE =======================================================================================\r\n";
+                code += $"\r\n";
+                code += $"\t//END ON CHANGE =========================================================================================\r\n";
+                code += $"\r\n";
+                code += $"\t//BEGIN PRE SEARCH ======================================================================================\r\n";
+                code += $"\r\n";
+                code += $"\t//END PRE SEARCH ========================================================================================\r\n";
+                code += $"\r\n";
+                code += $"\t//BEGIN OTHERS ==========================================================================================\r\n";
+                code += $"\r\n";
+                code += $"\t//END OTHERS ============================================================================================\r\n";
+                code += $"\treturn {{\r\n\t\tOnLoad: onLoad\r\n\t}};\r\n";
+                code += $"}})();\r\n";
+            }
+            code = code.TrimEnd("\r\n".ToCharArray());
+            return code;
+        }
+
+        public static string GetDefaultFileWithApi(string schemaName)
+        {
+            const string NEW_LINE = "\r\n";
+            var code = string.Empty;
+            code += $"//@ts-check{NEW_LINE}";
+            code += $"///<reference path=\"{schemaName}.d.ts\" />{NEW_LINE}";
             return code;
         }
 

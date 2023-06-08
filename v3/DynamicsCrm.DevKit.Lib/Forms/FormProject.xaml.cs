@@ -52,11 +52,25 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     LabelProjectName.Visibility = System.Windows.Visibility.Collapsed;
                     LabelProjectItemName.Content = "Item Name";
                 }
+                void JsFormItem()
+                {
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/JavaScript-Form-Item-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("JavaScript Form Item Template");
+                    ComboBoxProject.Visibility = System.Windows.Visibility.Visible;
+                    ComboBoxProject.IsEditable = false;
+                    TextboxProject.Visibility = System.Windows.Visibility.Hidden;
+                    LabelProjectName.Visibility = System.Windows.Visibility.Collapsed;
+                    LabelProjectItemName.Content = "Item Name";
+                }
                 _ItemType = value;
                 switch (_ItemType)
                 {
                     case ItemType.LateBound:
                         LateBoundItem();
+                        break;
+                    case ItemType.JsForm:
+                        JsFormItem();
                         break;
                 }
             }
@@ -292,7 +306,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 ProjectType == ProjectType.Workflow ||
                 ProjectType == ProjectType.CustomAction ||
                 ProjectType == ProjectType.CustomApi ||
-                ItemType == ItemType.LateBound
+                ItemType == ItemType.LateBound ||
+                ItemType == ItemType.JsForm
                 )
             {
                 progressBar.Visibility = System.Windows.Visibility.Visible;
