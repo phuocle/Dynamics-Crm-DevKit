@@ -1,6 +1,6 @@
 ﻿//@ts-check
 ///<reference path="devkit.d.ts" />
-declare namespace Dev.DevKit.WebResource.entities {
+declare namespace DevKit {
 	namespace FormAccount {
 		interface Header extends DevKit.Controls.IHeader {
 			/** Type the company or business name. */

@@ -38,7 +38,7 @@ namespace DynamicsCrm.DevKit.Shared
             var _d_ts = string.Empty;
             _d_ts += $"//@ts-check{NEW_LINE}";
             _d_ts += $"///<reference path=\"devkit.d.ts\" />{NEW_LINE}";
-            _d_ts += $"declare namespace {rootNamespace} {{{NEW_LINE}";
+            _d_ts += $"declare namespace {@namespace} {{{NEW_LINE}";
             if (comment.UseForm)
                 _d_ts += GetForm_d_ts(@namespace);
             if (comment.UseWebApi)
