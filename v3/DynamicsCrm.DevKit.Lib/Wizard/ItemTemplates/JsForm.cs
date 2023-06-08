@@ -84,16 +84,27 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
                 {
                     UseForm = true,
                     UseWebApi = IsWebApi,
-                    Version = IsNew ? Const.Version : ReadVersion(GetFullFileName($"{ItemName}.dt.ts"))
+                    Version = !File.Exists(GetFullFileName($"{ItemName}.dt.ts")) ? Const.Version : ReadVersion(GetFullFileName($"{ItemName}.dt.ts"))
                 };
                 Javascript_form_js_Code = DynamicsCrm.DevKit.Shared.JsForm.GetCode(form.CrmServiceClient, entitiesMetadatas[0], replacementsDictionary["$rootnamespace$"], comment, out var dts);
                 Javascript_dts_Code = dts;
             }
         }
 
-        private string ReadVersion(string file)
+        private string ReadVersion(string dtsFile)
         {
-            return "1.0.0.0";
+            var lines = File.ReadAllLines(dtsFile);
+            try
+            {
+                var json = lines[lines.Length - 1];
+                var oldComment = SimpleJson.DeserializeObject<OldCommentTypeScriptDeclaration>(json.Substring("//".Length).Replace("'", "\""));
+                var comment = SimpleJson.DeserializeObject<CommentTypeScriptDeclaration>(json.Substring("//".Length).Replace("'", "\""));
+                return oldComment?.Version ?? comment?.Version ?? Const.Version;
+            }
+            catch
+            {
+                return Const.Version;
+            }
         }
 
         string GetFullFileName(string projectItemName)

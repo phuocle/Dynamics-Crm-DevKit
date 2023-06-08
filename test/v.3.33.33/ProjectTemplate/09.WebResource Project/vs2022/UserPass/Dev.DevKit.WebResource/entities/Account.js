@@ -8,7 +8,7 @@ var formAccount = (function () {
 	async function onLoad(executionContext) {
 		form = new DevKit.FormAccount(executionContext);
 		registerEvents();
-		await onLoadData();		
+		await onLoadData();
 	}
 	function registerEvents() {
 		if (form.ExecutionContext.IsInitialLoad()) {
