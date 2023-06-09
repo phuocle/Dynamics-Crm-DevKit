@@ -4,9 +4,6 @@ using DynamicsCrm.DevKit.Shared.Models;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.TemplateWizard;
-using Microsoft.Xrm.Sdk.Metadata;
-using Microsoft.Xrm.Tooling.Connector;
-using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -19,13 +16,15 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
         public string Javascript_dts_Code { get; set; }
         public string Javascript_form_js_Code { get; set; }
         public string ItemName { get; set; }
-        private ProjectItem JavascriptProjectItem { get; set; }
-        private ProjectItem Javascript_dts_ProjectItem { get; set; }
-        private ProjectItem Javascript_form_js_ProjectItem { get; set; }
+        private ProjectItem JavascriptProjectItem { get; set; } = null;
+        private ProjectItem Javascript_dts_ProjectItem { get; set; } = null;
+        private ProjectItem Javascript_form_js_ProjectItem { get; set; } = null;
         public string JavascriptFile { get; set; }
         public string Javascript_dts_File { get; set; }
         public string Javascript_form_js_File { get; set; }
-        public bool IsNew { get; set; } = false;
+        public bool IsNewJavascript { get; set; } = false;
+        public bool IsNewJavascript_form_js { get; set; } = false;
+        public bool IsNewJavascript_dts { get; set; } = false;
         public bool IsWebApi { get; set; } = false;
 
         public void BeforeOpeningFile(ProjectItem projectItem)
@@ -39,9 +38,9 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
         public void ProjectItemFinishedGenerating(ProjectItem projectItem)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            if (projectItem.Name == $"{ItemName}.js") JavascriptProjectItem = projectItem;
-            if (projectItem.Name == $"{ItemName}.d.ts") Javascript_dts_ProjectItem = projectItem;
-            if (projectItem.Name == $"{ItemName}.form.js") Javascript_form_js_ProjectItem = projectItem;
+            if (IsNewJavascript && projectItem.Name == $"{ItemName}.js") JavascriptProjectItem = projectItem;
+            if (IsNewJavascript_dts && projectItem.Name == $"{ItemName}.d.ts") Javascript_dts_ProjectItem = projectItem;
+            if (IsNewJavascript_form_js && projectItem.Name == $"{ItemName}.form.js") Javascript_form_js_ProjectItem = projectItem;
         }
 
         public void RunFinished()
@@ -50,8 +49,12 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
             if (!File.Exists(JavascriptFile) || "$Javascript$" == File.ReadAllText(JavascriptFile)) Utility.ForceWriteAllText(JavascriptFile, JavascriptCode);
             Utility.ForceWriteAllText(Javascript_dts_File, Javascript_dts_Code);
             Utility.ForceWriteAllText(Javascript_form_js_File, Javascript_form_js_Code);
-            if (IsNew)
+
+            if (IsNewJavascript_form_js)
             {
+                if (JavascriptProjectItem == null) JavascriptProjectItem = GetProjectItem($"{ItemName}.js");
+                if (Javascript_dts_ProjectItem == null) Javascript_dts_ProjectItem = GetProjectItem($"{ItemName}.d.ts");
+                if (Javascript_form_js_ProjectItem == null) Javascript_form_js_ProjectItem = GetProjectItem($"{ItemName}.form.js");
                 try
                 {
                     Javascript_dts_ProjectItem.Properties.Item("DependentUpon").Value = $"{ItemName}.js";
@@ -111,6 +114,30 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
             return Const.Version;
         }
 
+        ProjectItem GetProjectItem(string projectItemName)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            var selectDirectoryName = string.Empty;
+            var selectItem = ((EnvDTE.DTE)dte).SelectedItems.Item(1);
+            ProjectItems projectItems = null;
+            if (selectItem.Project != null)
+            {
+                projectItems = selectItem.Project.ProjectItems;
+                selectDirectoryName = Path.GetDirectoryName(selectItem.Project.FullName);
+            }
+            else if (selectItem.ProjectItem != null)
+            {
+                projectItems = selectItem.ProjectItem.ProjectItems;
+                selectDirectoryName = Path.GetDirectoryName(selectItem.ProjectItem.FileNames[0]);
+            }
+            foreach (ProjectItem projectItem in projectItems)
+            {
+                if (projectItem.Name == projectItemName)
+                    return projectItem;
+            }
+            return null;
+        }
+
         string GetFullFileName(string projectItemName)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
@@ -127,7 +154,6 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
                 projectItems = selectItem.ProjectItem.ProjectItems;
                 selectDirectoryName = Path.GetDirectoryName(selectItem.ProjectItem.FileNames[0]);
             }
-            if (projectItems == null) throw new WizardCancelledException("Cancel Click");
             foreach (ProjectItem projectItem in projectItems)
             {
                 if (projectItem.Name == projectItemName)
@@ -141,17 +167,19 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
             if (filePath == "Javascript.js")
             {
                 JavascriptFile = GetFullFileName($"{ItemName}.js");
-                IsNew = !File.Exists(JavascriptFile);
+                IsNewJavascript = !File.Exists(JavascriptFile);
             }
             else if (filePath == "Javascript.d.ts")
             {
                 Javascript_dts_File = GetFullFileName($"{ItemName}.d.ts");
+                IsNewJavascript_dts = !File.Exists(Javascript_dts_File);
             }
             else if (filePath == "Javascript.form.js")
             {
                 Javascript_form_js_File = GetFullFileName($"{ItemName}.form.js");
+                IsNewJavascript_form_js = !File.Exists(Javascript_form_js_File);
             }
-            return IsNew;
+            return IsNewJavascript;
         }
     }
 }
