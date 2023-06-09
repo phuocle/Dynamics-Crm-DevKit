@@ -63,6 +63,9 @@
       <DependentUpon>Account.js</DependentUpon>
     </Content>
     <Content Include="entities\Account.js" />
+    <Content Include="entities\Account.webapi.js">
+      <DependentUpon>Account.js</DependentUpon>
+    </Content>
     <Content Include="lib\devkit.js" />
     <Content Include="entities\devkit.d.ts" />
     <Content Include="test\requirejsConfig.js" />
