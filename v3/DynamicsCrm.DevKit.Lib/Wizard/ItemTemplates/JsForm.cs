@@ -80,6 +80,7 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
 
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             var form = new FormProject(ItemType.JsForm);
             var ok = form.ShowModal() ?? false;
             Replacement.SetItem(replacementsDictionary, form);
@@ -168,6 +169,7 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
 
         public bool ShouldAddProjectItem(string filePath)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             if (filePath == "Javascript.js")
             {
                 JavascriptFile = GetFullFileName($"{ItemName}.js");

@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
 	<TemplateData>
-		<Name>08. JavaScript WebApi</Name>
-		<Description>JavaScript WebApi Template</Description>
+		<Name>08. Javascript WebApi</Name>
+		<Description>Javascript WebApi Template</Description>
 		<DefaultName>Javascript.js</DefaultName>
 		<TemplateID>AAAAAAAA-AAAA-AAAA-BBBB-000000000008</TemplateID>
 		<Icon>icon.png</Icon>
