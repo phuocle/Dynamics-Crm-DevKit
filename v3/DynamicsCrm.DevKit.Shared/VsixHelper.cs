@@ -384,5 +384,15 @@ namespace DynamicsCrm.DevKit.Shared
                 });
             }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
         }
+
+        internal static void ExecuteCommand(string command)
+        {
+            _ = Task.Factory.StartNew(() => {
+                ThreadHelper.JoinableTaskFactory.Run(async delegate
+                {
+                    await VS.Commands.ExecuteAsync(command);
+                });
+            }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
+        }
     }
 }

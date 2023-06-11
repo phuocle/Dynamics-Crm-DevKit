@@ -58,6 +58,7 @@
     public enum ItemType
     {
         LateBound,
-        JsForm
+        JsForm,
+        JsWebApi
     }
 }

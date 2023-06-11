@@ -1,4 +1,5 @@
-﻿using DynamicsCrm.DevKit.Lib.Forms;
+﻿using Community.VisualStudio.Toolkit;
+using DynamicsCrm.DevKit.Lib.Forms;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
 using EnvDTE;
@@ -9,23 +10,23 @@ using System.IO;
 
 namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
 {
-    internal class JsForm : IWizard
+    internal class JsWebApi : IWizard
     {
         private object dte { get; set; }
         public string JavascriptCode { get; set; }
         public string Javascript_dts_Code { get; set; }
-        public string Javascript_form_js_Code { get; set; }
+        public string Javascript_webapi_js_Code { get; set; }
         public string ItemName { get; set; }
         private ProjectItem JavascriptProjectItem { get; set; } = null;
         private ProjectItem Javascript_dts_ProjectItem { get; set; } = null;
-        private ProjectItem Javascript_form_js_ProjectItem { get; set; } = null;
+        private ProjectItem Javascript_webapi_js_ProjectItem { get; set; } = null;
         public string JavascriptFile { get; set; }
         public string Javascript_dts_File { get; set; }
-        public string Javascript_form_js_File { get; set; }
+        public string Javascript_webapi_js_File { get; set; }
         public bool IsNewJavascript { get; set; } = false;
-        public bool IsNewJavascript_form_js { get; set; } = false;
+        public bool IsNewJavascript_webapi_js { get; set; } = false;
         public bool IsNewJavascript_dts { get; set; } = false;
-        public bool IsWebApi { get; set; } = false;
+        public bool IsForm { get; set; } = false;
 
         public void BeforeOpeningFile(ProjectItem projectItem)
         {
@@ -40,7 +41,7 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
             ThreadHelper.ThrowIfNotOnUIThread();
             if (IsNewJavascript && projectItem.Name == $"{ItemName}.js") JavascriptProjectItem = projectItem;
             if (IsNewJavascript_dts && projectItem.Name == $"{ItemName}.d.ts") Javascript_dts_ProjectItem = projectItem;
-            if (IsNewJavascript_form_js && projectItem.Name == $"{ItemName}.form.js") Javascript_form_js_ProjectItem = projectItem;
+            if (IsNewJavascript_webapi_js && projectItem.Name == $"{ItemName}.webapi.js") Javascript_webapi_js_ProjectItem = projectItem;
         }
 
         public void RunFinished()
@@ -48,20 +49,18 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
             ThreadHelper.ThrowIfNotOnUIThread();
             if (!File.Exists(JavascriptFile) || "$Javascript$" == File.ReadAllText(JavascriptFile)) Utility.ForceWriteAllText(JavascriptFile, JavascriptCode);
             Utility.ForceWriteAllText(Javascript_dts_File, Javascript_dts_Code);
-            Utility.ForceWriteAllText(Javascript_form_js_File, Javascript_form_js_Code);
-
-            if (IsNewJavascript_form_js)
+            Utility.ForceWriteAllText(Javascript_webapi_js_File, Javascript_webapi_js_Code);
+            if (IsNewJavascript_webapi_js)
             {
                 if (JavascriptProjectItem == null) JavascriptProjectItem = GetProjectItem($"{ItemName}.js");
-                if (Javascript_dts_ProjectItem == null) Javascript_dts_ProjectItem = GetProjectItem($"{ItemName}.d.ts");
-                if (Javascript_form_js_ProjectItem == null) Javascript_form_js_ProjectItem = GetProjectItem($"{ItemName}.form.js");
+                if (Javascript_webapi_js_ProjectItem == null) Javascript_webapi_js_ProjectItem = GetProjectItem($"{ItemName}.webapi.js");
                 try
                 {
                     if (Javascript_dts_ProjectItem != null)
                     {
                         Javascript_dts_ProjectItem.Properties.Item("DependentUpon").Value = $"{ItemName}.js";
                     }
-                    Javascript_form_js_ProjectItem.Properties.Item("DependentUpon").Value = $"{ItemName}.js";
+                    Javascript_webapi_js_ProjectItem.Properties.Item("DependentUpon").Value = $"{ItemName}.js";
                 }
                 catch
                 {
@@ -70,8 +69,8 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
                         Javascript_dts_ProjectItem.Remove();
                         JavascriptProjectItem.ProjectItems.AddFromFile(Javascript_dts_File);
                     }
-                    Javascript_form_js_ProjectItem.Remove();
-                    JavascriptProjectItem.ProjectItems.AddFromFile(Javascript_form_js_File);
+                    Javascript_webapi_js_ProjectItem.Remove();
+                    JavascriptProjectItem.ProjectItems.AddFromFile(Javascript_webapi_js_File);
                 }
             }
             VsixHelper.ExecuteCommand("File.SaveAll");
@@ -80,23 +79,23 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
 
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
         {
-            var form = new FormProject(ItemType.JsForm);
+            var form = new FormProject(ItemType.JsWebApi);
             var ok = form.ShowModal() ?? false;
             Replacement.SetItem(replacementsDictionary, form);
             if (ok)
             {
                 dte = automationObject;
                 ItemName = form.ItemName;
-                IsWebApi = File.Exists(GetFullFileName($"{ItemName}.webapi.js"));
+                IsForm = File.Exists(GetFullFileName($"{ItemName}.form.js"));
                 var entitiesMetadatas = XrmHelper.GetEntitiesMetadata(form.CrmServiceClient, new List<string> { form.ItemName });
                 JavascriptCode = VsixHelper.GetDefaultFileWithForm(form.CrmServiceClient, entitiesMetadatas[0], replacementsDictionary["$rootnamespace$"]);
                 var comment = new CommentTypeScriptDeclaration
                 {
-                    UseForm = true,
-                    UseWebApi = IsWebApi,
+                    UseForm = IsForm,
+                    UseWebApi = true,
                     Version = ReadVersion(GetFullFileName($"{ItemName}.dt.ts"))
                 };
-                Javascript_form_js_Code = DynamicsCrm.DevKit.Shared.JsForm.GetCode(form.CrmServiceClient, entitiesMetadatas[0], replacementsDictionary["$rootnamespace$"], comment, out var dts);
+                Javascript_webapi_js_Code = DynamicsCrm.DevKit.Shared.JsForm.GetCode(form.CrmServiceClient, entitiesMetadatas[0], replacementsDictionary["$rootnamespace$"], comment, out var dts);
                 Javascript_dts_Code = dts;
             }
         }
@@ -180,11 +179,11 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
                 IsNewJavascript_dts = !File.Exists(Javascript_dts_File);
                 return IsNewJavascript_dts;
             }
-            else if (filePath == "Javascript.form.js")
+            else if (filePath == "Javascript.webapi.js")
             {
-                Javascript_form_js_File = GetFullFileName($"{ItemName}.form.js");
-                IsNewJavascript_form_js = !File.Exists(Javascript_form_js_File);
-                return IsNewJavascript_form_js;
+                Javascript_webapi_js_File = GetFullFileName($"{ItemName}.webapi.js");
+                IsNewJavascript_webapi_js = !File.Exists(Javascript_webapi_js_File);
+                return IsNewJavascript_webapi_js;
             }
             return false;
         }

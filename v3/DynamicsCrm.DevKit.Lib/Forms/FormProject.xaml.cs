@@ -63,6 +63,17 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     LabelProjectName.Visibility = System.Windows.Visibility.Collapsed;
                     LabelProjectItemName.Content = "Item Name";
                 }
+                void JsWebApiItem()
+                {
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/JavaScript-WebApi-Item-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("JavaScript WebApi Item Template");
+                    ComboBoxProject.Visibility = System.Windows.Visibility.Visible;
+                    ComboBoxProject.IsEditable = false;
+                    TextboxProject.Visibility = System.Windows.Visibility.Hidden;
+                    LabelProjectName.Visibility = System.Windows.Visibility.Collapsed;
+                    LabelProjectItemName.Content = "Item Name";
+                }
                 _ItemType = value;
                 switch (_ItemType)
                 {
@@ -71,6 +82,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         break;
                     case ItemType.JsForm:
                         JsFormItem();
+                        break;
+                    case ItemType.JsWebApi:
+                        JsWebApiItem();
                         break;
                 }
             }
@@ -307,7 +321,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 ProjectType == ProjectType.CustomAction ||
                 ProjectType == ProjectType.CustomApi ||
                 ItemType == ItemType.LateBound ||
-                ItemType == ItemType.JsForm
+                ItemType == ItemType.JsForm ||
+                ItemType == ItemType.JsWebApi
                 )
             {
                 progressBar.Visibility = System.Windows.Visibility.Visible;
