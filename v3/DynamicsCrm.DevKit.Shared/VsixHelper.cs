@@ -214,6 +214,11 @@ namespace DynamicsCrm.DevKit.Shared
             throw new WizardCancelledException();
         }
 
+        internal static void ThrowWizardCancelledException()
+        {
+            throw new WizardCancelledException();
+        }
+
         internal static bool IsValidProjectName(string projectName)
         {
             var list = new List<string>() { "/", "?", ":",  "&",  @"\",  "*",  "\"",  "<",  ">", "|", "#" , "%", "'" };

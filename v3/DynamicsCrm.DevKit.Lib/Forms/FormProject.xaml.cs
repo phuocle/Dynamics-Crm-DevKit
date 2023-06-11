@@ -19,7 +19,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             get
             {
-                return LabelProjectName.Content.ToString();
+                return LabelProjectName.Content?.ToString();
             }
         }
 
@@ -27,7 +27,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             get
             {
-                return ((XrmEntity)ComboBoxProject.SelectedItem)?.Name;
+                return ((XrmEntity)ComboBoxProject.SelectedItem)?.Name ?? LabelProjectName.Content?.ToString();
         }
         }
         public bool IsOOBConnection => CONNECTION.IsOOBConnection;
@@ -74,6 +74,16 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     LabelProjectName.Visibility = System.Windows.Visibility.Collapsed;
                     LabelProjectItemName.Content = "Item Name";
                 }
+                void WorkflowItem()
+                {
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Workflow-Item-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("Workflow Item Template");
+                    ComboBoxProject.Visibility = System.Windows.Visibility.Hidden;
+                    TextboxProject.Visibility = System.Windows.Visibility.Visible;
+                    LabelProjectItemName.Content = "Class";
+                    LabelProjectName.Content = "_";
+                }
                 _ItemType = value;
                 switch (_ItemType)
                 {
@@ -85,6 +95,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         break;
                     case ItemType.JsWebApi:
                         JsWebApiItem();
+                        break;
+                    case ItemType.Workflow:
+                        WorkflowItem();
                         break;
                 }
             }
@@ -356,19 +369,19 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             {
                 if (ProjectType == ProjectType.UiTest)
                     LabelProjectName.Content = $"{LabelProjectName?.Tag}.UiTest";
+                else if (ItemType == ItemType.Workflow)
+                    LabelProjectName.Content = $"_";
                 else
                     LabelProjectName.Content = $"{LabelProjectName?.Tag}";
             }
             else
             {
                 if (ProjectType == ProjectType.UiTest)
-                {
                     LabelProjectName.Content = $"{LabelProjectName?.Tag}.{TextboxProject?.Text}.UiTest";
-                }
+                else if (ItemType == ItemType.Workflow)
+                    LabelProjectName.Content = $"{TextboxProject?.Text}";
                 else
-                {
                     LabelProjectName.Content = $"{LabelProjectName?.Tag}.{TextboxProject?.Text}";
-                }
             }
         }
 

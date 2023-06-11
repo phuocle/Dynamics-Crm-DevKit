@@ -60,15 +60,17 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
         {
             var form = new FormProject(ItemType.LateBound);
             var ok = form.ShowModal() ?? false;
-            Replacement.SetItem(replacementsDictionary, form);
             if (ok)
             {
+                Replacement.SetItem(replacementsDictionary, form);
                 dte = automationObject;
                 ItemName = form.ItemName;
                 var entitiesMetadatas = XrmHelper.GetEntitiesMetadata(form.CrmServiceClient, new List<string> { form.ItemName });
                 ClassCode = VsixHelper.GetDefaultFileWithCs(entitiesMetadatas[0], replacementsDictionary["$rootnamespace$"]);
                 GeneratedClassCode = CSharpLateBound.GetCode(form.CrmServiceClient, entitiesMetadatas[0], replacementsDictionary["$rootnamespace$"]);
             }
+            else
+                VsixHelper.ThrowWizardCancelledException();
         }
 
         public bool ShouldAddProjectItem(string filePath)

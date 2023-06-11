@@ -59,6 +59,7 @@
     {
         LateBound,
         JsForm,
-        JsWebApi
+        JsWebApi,
+        Workflow
     }
 }

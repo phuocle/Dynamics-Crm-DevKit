@@ -20,7 +20,7 @@ namespace DynamicsCrm.DevKit.Shared
             AddCommonReplacements();
 
             replacements.Add("$class$", form.ItemName);
-
+            replacements.Add("$NameSpace$", replacementsDictionary["$rootnamespace$"]);
         }
 
         internal static void Set(Dictionary<string, string> replacementsDictionary, FormProject form)

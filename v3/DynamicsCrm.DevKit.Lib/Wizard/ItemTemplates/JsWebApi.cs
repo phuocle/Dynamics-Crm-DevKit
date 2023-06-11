@@ -84,9 +84,9 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
             ThreadHelper.ThrowIfNotOnUIThread();
             var form = new FormProject(ItemType.JsWebApi);
             var ok = form.ShowModal() ?? false;
-            Replacement.SetItem(replacementsDictionary, form);
             if (ok)
             {
+                Replacement.SetItem(replacementsDictionary, form);
                 dte = automationObject;
                 ItemName = form.ItemName;
                 IsForm = File.Exists(GetFullFileName($"{ItemName}.form.js"));
@@ -101,6 +101,8 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
                 Javascript_webapi_js_Code = DynamicsCrm.DevKit.Shared.JsWebApi2.GetCode(form.CrmServiceClient, entitiesMetadatas[0], replacementsDictionary["$rootnamespace$"], comment, out var dts);
                 Javascript_dts_Code = dts;
             }
+            else
+                VsixHelper.ThrowWizardCancelledException();
         }
 
         private string ReadVersion(string dtsFile)

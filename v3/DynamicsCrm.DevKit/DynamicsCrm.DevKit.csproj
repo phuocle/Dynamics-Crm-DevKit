@@ -139,6 +139,13 @@
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>
+    <ProjectReference Include="..\ItemTemplates\CSharp\03.WorkflowItemTemplate\03.WorkflowItemTemplate.csproj">
+      <Project>{6373A171-F07C-4153-BDA2-C3730497889D}</Project>
+      <Name>03.WorkflowItemTemplate</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
     <ProjectReference Include="..\ItemTemplates\CSharp\07.JsFormItemTemplate\07.JsFormItemTemplate.csproj">
       <Project>{F3432EFE-5FE3-46F4-9335-703E658C022E}</Project>
       <Name>07.JsFormItemTemplate</Name>
