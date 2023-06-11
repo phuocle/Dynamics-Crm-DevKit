@@ -28,6 +28,7 @@ namespace DynamicsCrm.DevKit.Shared
             replacements = replacementsDictionary;
             AddCommonReplacements();
             AddNuGetReplacements();
+            AddDevkit(replacementsDictionary);
 
             replacements["$destinationdirectory$"] = $"{Directory.GetParent(DestinationDirectory).FullName}\\{form.ProjectName}";
             replacements["$projectname$"] = form.ProjectName;
@@ -45,8 +46,12 @@ namespace DynamicsCrm.DevKit.Shared
             replacements.Add("$UrlValue$", form?.CrmConnection?.Url ?? string.Empty);
             replacements.Add("$ClientIdValue$", form?.CrmConnection?.UserName ?? string.Empty);
             replacements.Add("$ClientSecretValue$", form?.CrmConnection?.Type == "ClientSecret" ? form?.CrmConnection?.Password : (form?.CrmConnection?.Password != string.Empty ? EncryptDecrypt.DecryptString(form?.CrmConnection?.Password) : string.Empty) ?? string.Empty);
-            replacements.Add("$devkit.js$", Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.devkit.js"));
-            replacements.Add("$devkit.d.ts$", Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.devkit.d.ts"));
+        }
+
+        public static void AddDevkit(Dictionary<string, string> replacementsDictionary)
+        {
+            replacementsDictionary.Add("$devkit.js$", Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.devkit.js"));
+            replacementsDictionary.Add("$devkit.d.ts$", Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.devkit.d.ts"));
         }
 
         private static void AddNuGetReplacements()
