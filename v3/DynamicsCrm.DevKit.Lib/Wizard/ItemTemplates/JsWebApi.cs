@@ -5,6 +5,8 @@ using DynamicsCrm.DevKit.Shared.Models;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.TemplateWizard;
+using Microsoft.Xrm.Sdk.Metadata;
+using Microsoft.Xrm.Tooling.Connector;
 using System.Collections.Generic;
 using System.IO;
 
@@ -74,7 +76,7 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
                 }
             }
             VsixHelper.ExecuteCommand("File.SaveAll");
-            VsixHelper.SetStatusMessage($"{ItemName} generated");
+            VsixHelper.SetStatusMessage($"{ItemName}.webapi.js generated");
         }
 
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
@@ -88,14 +90,14 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
                 ItemName = form.ItemName;
                 IsForm = File.Exists(GetFullFileName($"{ItemName}.form.js"));
                 var entitiesMetadatas = XrmHelper.GetEntitiesMetadata(form.CrmServiceClient, new List<string> { form.ItemName });
-                JavascriptCode = VsixHelper.GetDefaultFileWithForm(form.CrmServiceClient, entitiesMetadatas[0], replacementsDictionary["$rootnamespace$"]);
+                JavascriptCode = VsixHelper.GetDefaultFileWithWebApi(ItemName);
                 var comment = new CommentTypeScriptDeclaration
                 {
                     UseForm = IsForm,
                     UseWebApi = true,
                     Version = ReadVersion(GetFullFileName($"{ItemName}.dt.ts"))
                 };
-                Javascript_webapi_js_Code = DynamicsCrm.DevKit.Shared.JsForm.GetCode(form.CrmServiceClient, entitiesMetadatas[0], replacementsDictionary["$rootnamespace$"], comment, out var dts);
+                Javascript_webapi_js_Code = DynamicsCrm.DevKit.Shared.JsWebApi2.GetCode(form.CrmServiceClient, entitiesMetadatas[0], replacementsDictionary["$rootnamespace$"], comment, out var dts);
                 Javascript_dts_Code = dts;
             }
         }

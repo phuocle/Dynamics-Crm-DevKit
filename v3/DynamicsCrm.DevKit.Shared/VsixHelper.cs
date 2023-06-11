@@ -321,7 +321,7 @@ namespace DynamicsCrm.DevKit.Shared
                 }
             }
             var forms = XrmHelper.GetEntityForms(CrmServiceClient, entityMetadata.LogicalName);
-            if (!forms.Any()) return GetDefaultFileWithApi(entityMetadata.SchemaName);
+            if (!forms.Any()) return GetDefaultFileWithWebApi(entityMetadata.SchemaName);
             var @namespace = Utility.GetNameSpace(rootnamespace);
             var code = string.Empty;
             code += $"//@ts-check\r\n";
@@ -366,7 +366,7 @@ namespace DynamicsCrm.DevKit.Shared
             return code;
         }
 
-        public static string GetDefaultFileWithApi(string schemaName)
+        public static string GetDefaultFileWithWebApi(string schemaName)
         {
             const string NEW_LINE = "\r\n";
             var code = string.Empty;

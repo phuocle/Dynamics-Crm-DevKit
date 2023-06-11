@@ -75,7 +75,7 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
                 }
             }
             VsixHelper.ExecuteCommand("File.SaveAll");
-            VsixHelper.SetStatusMessage($"{ItemName} generated");
+            VsixHelper.SetStatusMessage($"{ItemName}.form.js generated");
         }
 
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)

@@ -184,7 +184,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                             Utility.ForceWriteAllText(dtsFile, newDTS);
                             if (!File.Exists(file))
                             {
-                                Utility.ForceWriteAllText(file, VsixHelper.GetDefaultFileWithApi(entityMetadata.SchemaName));
+                                Utility.ForceWriteAllText(file, VsixHelper.GetDefaultFileWithWebApi(entityMetadata.SchemaName));
                             }
                             CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Created, ConsoleColor.White, $"{schemaName}{endsWith}");
                         }
