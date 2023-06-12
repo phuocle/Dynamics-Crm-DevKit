@@ -60,6 +60,7 @@
         LateBound,
         JsForm,
         JsWebApi,
-        Workflow
+        Workflow,
+        UiTest
     }
 }

@@ -7,6 +7,7 @@ using System.Threading;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.Build.Framework.XamlTypes;
 using ItemType = DynamicsCrm.DevKit.Shared.ItemType;
+using Microsoft.VisualStudio.Text.Editor;
 
 namespace DynamicsCrm.DevKit.Lib.Forms
 {
@@ -84,6 +85,16 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     LabelProjectItemName.Content = "Class";
                     LabelProjectName.Content = "_";
                 }
+                void UiTestItem()
+                {
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Ui-Test-Item-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("Ui Test Item Template");
+                    ComboBoxProject.Visibility = System.Windows.Visibility.Hidden;
+                    TextboxProject.Visibility = System.Windows.Visibility.Visible;
+                    LabelProjectItemName.Content = "Class";
+                    LabelProjectName.Content = "UiTest";
+                }
                 _ItemType = value;
                 switch (_ItemType)
                 {
@@ -98,6 +109,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         break;
                     case ItemType.Workflow:
                         WorkflowItem();
+                        break;
+                    case ItemType.UiTest:
+                        UiTestItem();
                         break;
                 }
             }
@@ -371,6 +385,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     LabelProjectName.Content = $"{LabelProjectName?.Tag}.UiTest";
                 else if (ItemType == ItemType.Workflow)
                     LabelProjectName.Content = $"_";
+                else if (ItemType == ItemType.UiTest)
+                    LabelProjectName.Content = $"_UiTest";
                 else
                     LabelProjectName.Content = $"{LabelProjectName?.Tag}";
             }
@@ -380,6 +396,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     LabelProjectName.Content = $"{LabelProjectName?.Tag}.{TextboxProject?.Text}.UiTest";
                 else if (ItemType == ItemType.Workflow)
                     LabelProjectName.Content = $"{TextboxProject?.Text}";
+                else if (ItemType == ItemType.UiTest)
+                    LabelProjectName.Content = $"{TextboxProject?.Text}UiTest";
                 else
                     LabelProjectName.Content = $"{LabelProjectName?.Tag}.{TextboxProject?.Text}";
             }

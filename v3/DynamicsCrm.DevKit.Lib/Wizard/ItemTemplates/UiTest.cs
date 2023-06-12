@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
 {
-    internal class Workflow : IWizard
+    internal class UiTest : IWizard
     {
         public void BeforeOpeningFile(ProjectItem projectItem)
         {
@@ -26,7 +26,7 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
 
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
         {
-            var form = new FormProject(ItemType.Workflow);
+            var form = new FormProject(ItemType.UiTest);
             var ok = form.ShowModal() ?? false;
             if (ok)
             {
@@ -37,7 +37,7 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
         }
         public bool ShouldAddProjectItem(string filePath)
         {
-                return true;
+            return true;
         }
     }
 }
