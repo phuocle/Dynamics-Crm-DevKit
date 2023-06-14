@@ -39,9 +39,9 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ProjectTemplates
             var OOBDestinationDirectory = replacementsDictionary["$destinationdirectory$"];
             var form = new FormProject(ProjectType.Shared);
             var ok = form.ShowModal() ?? false;
-            Replacement.Set(replacementsDictionary, form);
             if (ok)
             {
+                Replacement.Set(replacementsDictionary, form);
                 DTE = automationObject;
                 ProjectName = form.ProjectName;
                 if (!File.Exists(VsixHelper.GetDynamicsCrmDevKitCliJsonFileName())) {

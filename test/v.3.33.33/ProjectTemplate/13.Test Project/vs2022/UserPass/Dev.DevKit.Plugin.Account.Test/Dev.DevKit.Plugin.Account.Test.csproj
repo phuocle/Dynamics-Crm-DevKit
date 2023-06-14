@@ -1,11 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <Import Project="..\packages\MSTest.TestAdapter.3.0.2\build\net462\MSTest.TestAdapter.props" Condition="Exists('..\packages\MSTest.TestAdapter.3.0.2\build\net462\MSTest.TestAdapter.props')" />
     <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
     <PropertyGroup>
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
         <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-        <ProjectGuid>{98cd267e-03d0-44a4-a1c4-1611c3e4a4f8}</ProjectGuid>
+        <ProjectGuid>{bac08a8c-4c08-42fb-9a6b-20698fffed6c}</ProjectGuid>
         <OutputType>Library</OutputType>
         <AppDesignerFolder>Properties</AppDesignerFolder>
         <RootNamespace>Dev.DevKit.Plugin.Account.Test</RootNamespace>
@@ -187,6 +186,7 @@
             <Name>Dev.DevKit.ProxyTypes</Name>
         </ProjectReference>
     </ItemGroup>
+	<Import Project="..\Dev.DevKit.Shared.Test\Dev.DevKit.Shared.Test.projitems" Label="Shared" Condition="Exists('..\Dev.DevKit.Shared.Test\Dev.DevKit.Shared.Test.projitems')" />
 	<Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
 		<PropertyGroup>
 			<ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>

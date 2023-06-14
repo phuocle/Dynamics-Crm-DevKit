@@ -40,6 +40,7 @@
 
     public enum ProjectType
     {
+        None,
         Shared,
         Console,
         Server,
@@ -52,11 +53,13 @@
         SolutionPackager,
         ProxyTypes,
         Test,
-        UiTest
+        UiTest,
+        SharedTest
     }
 
     public enum ItemType
     {
+        None,
         LateBound,
         JsForm,
         JsWebApi,

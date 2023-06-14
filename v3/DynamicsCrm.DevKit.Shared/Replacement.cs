@@ -105,10 +105,12 @@ namespace DynamicsCrm.DevKit.Shared
 
         private static void AddCommonReplacements()
         {
+            var solutionName = VsixHelper.GetSolutionName();
             replacements.Add("$DevKitVersion$", Const.Version);
-            replacements.Add("$SharedNameSpace$", $"{VsixHelper.GetSolutionName()}.Shared");
-            replacements.Add("$SharedProject$", $"{VsixHelper.GetSolutionName()}.Shared");
-            replacements.Add("$ProjectProxyTypes$", $"{VsixHelper.GetSolutionName()}.ProxyTypes");
+            replacements.Add("$SharedNameSpace$", $"{solutionName}.Shared");
+            replacements.Add("$SharedProject$", $"{solutionName}.Shared");
+            replacements.Add("$SharedTestProject$", $"{solutionName}.Shared.Test");
+            replacements.Add("$ProjectProxyTypes$", $"{solutionName}.ProxyTypes");
         }
     }
 }

@@ -208,6 +208,17 @@ namespace DynamicsCrm.DevKit.Shared
             return true;
         }
 
+        internal static bool IsSharedTestProjectExist()
+        {
+            var proxyTypesProjectName = $"{VsixHelper.GetSolutionName()}.Shared.Test";
+            if (!VsixHelper.IsExistProject(proxyTypesProjectName))
+            {
+                VS.MessageBox.ShowError($"Please add DynamicsCrm.DevKit 15. Shared Test Project and try it again");
+                return false;
+            }
+            return true;
+        }
+
         internal static void ThrowWizardCancelledException(string OOBDestinationDirectory)
         {
             Utility.TryDeleteDirectory(OOBDestinationDirectory);

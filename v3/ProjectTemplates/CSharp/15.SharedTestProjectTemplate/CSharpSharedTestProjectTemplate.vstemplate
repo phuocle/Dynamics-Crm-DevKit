@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+	<TemplateData>
+		<Name>15. Shared Test Project</Name>
+		<Description>Shared Test Project Template</Description>
+		<DefaultName>SharedTestProject</DefaultName>
+		<TemplateID>DynamicsCrm.DevKit.CSharpSharedTestProject</TemplateID>
+		<TemplateGroupID>DynamicsCrm.DevKit</TemplateGroupID>
+		<Icon>icon.png</Icon>
+		<ProjectType>CSharp</ProjectType>
+		<RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
+		<CreateNewFolder>true</CreateNewFolder>
+		<ProvideDefaultName>true</ProvideDefaultName>
+		<LocationField>Disabled</LocationField>
+		<EnableLocationBrowseButton>false</EnableLocationBrowseButton>
+		<EnableEditOfLocationField>false</EnableEditOfLocationField>
+		<CreateInPlace>true</CreateInPlace>
+		<ProjectTypeTag>DynamicsCrm.DevKit</ProjectTypeTag>
+		<LanguageTag>CSharp</LanguageTag>
+		<PlatformTag>Windows</PlatformTag>
+		<SortOrder>110</SortOrder>
+	</TemplateData>
+	<TemplateContent>
+		<Project TargetFileName="Shared.shproj" File="Shared.shproj" ReplaceParameters="true">
+			<Folder Name="Lib" TargetFolderName="Lib" />
+			<Folder Name="Executor" TargetFolderName="Executor" />
+			<ProjectItem TargetFileName="$NameSpace$.projitems" ReplaceParameters="true">Shared.projitems</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="Lib\Guids.cs">Guids.cs</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="Lib\Extension.cs">Extension.cs</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="Lib\TestHelper.cs">TestHelper.cs</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="FakeXrmEasyTestBase.cs">FakeXrmEasyTestBase.cs</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="Executor\CalculateRollupFieldRequestExecutor.cs">CalculateRollupFieldRequestExecutor.cs</ProjectItem>
+		</Project>
+	</TemplateContent>
+	<WizardExtension>
+		<Assembly>DynamicsCrm.DevKit.Lib, Version=3.33.33.33, Culture=Neutral, PublicKeyToken=98cbb7bd3db31604</Assembly>
+		<FullClassName>DynamicsCrm.DevKit.Lib.Wizard.ProjectTemplates.SharedTest</FullClassName>
+	</WizardExtension>
+</VSTemplate>

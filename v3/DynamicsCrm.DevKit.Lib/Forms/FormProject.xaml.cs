@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 using System.Threading;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.Build.Framework.XamlTypes;
-using ItemType = DynamicsCrm.DevKit.Shared.ItemType;
 using Microsoft.VisualStudio.Text.Editor;
+using System.Windows.Documents;
+using System.Collections.Generic;
+using ItemType = DynamicsCrm.DevKit.Shared.ItemType;
 
 namespace DynamicsCrm.DevKit.Lib.Forms
 {
@@ -36,7 +38,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         public string DataverseConnectionString => CONNECTION.DataverseConnectionString;
         public CrmConnection CrmConnection => CONNECTION.CrmConnection;
 
-        private ItemType _ItemType;
+        private ItemType _ItemType = DynamicsCrm.DevKit.Shared.ItemType.None;
         private ItemType ItemType
         {
             get => _ItemType;
@@ -117,7 +119,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             }
         }
 
-        private ProjectType _ProjectType;
+        private ProjectType _ProjectType = ProjectType.None;
         private ProjectType ProjectType  {
             get => _ProjectType;
             set
@@ -128,10 +130,12 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     HELP.Inlines.Clear();
                     HELP.Inlines.Add("Shared Project Template");
                     LabelProjectName.Visibility = System.Windows.Visibility.Collapsed;
-                    ComboBoxProject.Items.Clear();
-                    ComboBoxProject.Items.Add($"{VsixHelper.GetSolutionName()}.Shared");
+                    var items = new List<XrmEntity> { new XrmEntity { Name = $"{VsixHelper.GetSolutionName()}.Shared" } };
+                    ComboBoxProject.DisplayMemberPath = "Name";
+                    ComboBoxProject.ItemsSource = items;
                     ComboBoxProject.SelectedIndex = 0;
                     ComboBoxProject.IsEnabled = false;
+                    LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}.Shared";
                 }
                 void ConsoleProject()
                 {
@@ -255,6 +259,19 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}.UiTest";
                     LabelProjectName.Tag = $"{VsixHelper.GetSolutionName()}";
                 }
+                void SharedTestProject()
+                {
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Shared-Test-Project-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("Shared Test Project Template");
+                    LabelProjectName.Visibility = System.Windows.Visibility.Collapsed;
+                    var items = new List<XrmEntity> { new XrmEntity { Name = $"{VsixHelper.GetSolutionName()}.Shared.Test" } };
+                    ComboBoxProject.DisplayMemberPath = "Name";
+                    ComboBoxProject.ItemsSource = items;
+                    ComboBoxProject.SelectedIndex = 0;
+                    ComboBoxProject.IsEnabled = false;
+                    LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}.Shared.Test";
+                }
                 _ProjectType = value;
                 switch (_ProjectType)
                 {
@@ -296,6 +313,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         break;
                     case ProjectType.UiTest:
                         UiTest();
+                        break;
+                    case ProjectType.SharedTest:
+                        SharedTestProject();
                         break;
                 }
             }
@@ -405,25 +425,33 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private void ComboBoxProject_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
-            if (ComboBoxProject.SelectedItem == null)
+            if (ComboBoxProject.IsEnabled)
             {
-                if (ComboBoxProject.Text.Length == 0)
-                    LabelProjectName.Content = $"{LabelProjectName?.Tag}";
+                if (ComboBoxProject.SelectedItem == null)
+                {
+                    if (ComboBoxProject.Text.Length == 0)
+                        LabelProjectName.Content = $"{LabelProjectName?.Tag}";
+                    else
+                        LabelProjectName.Content = $"{LabelProjectName?.Tag}.{ComboBoxProject?.Text}";
+                }
                 else
-                    LabelProjectName.Content = $"{LabelProjectName?.Tag}.{ComboBoxProject?.Text}";
+                {
+                    LabelProjectName.Content = $"{LabelProjectName?.Tag}.{((XrmEntity)ComboBoxProject.SelectedItem)?.Name}";
+                }
             }
-            else
-                LabelProjectName.Content = $"{LabelProjectName?.Tag}.{((XrmEntity)ComboBoxProject.SelectedItem)?.Name}";
         }
 
         private void ComboBoxProject_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            if (ComboBoxProject.SelectedItem == null)
+            if (ComboBoxProject.IsEnabled)
             {
-                LabelProjectName.Content = $"{LabelProjectName?.Tag}.{ProjectType.ToString()}";
+                if (ComboBoxProject.SelectedItem == null)
+                    LabelProjectName.Content = $"{LabelProjectName?.Tag}.{ProjectType.ToString()}";
+                else
+                {
+                    LabelProjectName.Content = $"{((XrmEntity)ComboBoxProject.SelectedItem)?.Name}.{ProjectType.ToString()}";
+                }
             }
-            else
-                LabelProjectName.Content = $"{((XrmEntity)ComboBoxProject.SelectedItem)?.Name}.{ProjectType.ToString()}";
         }
     }
 }
