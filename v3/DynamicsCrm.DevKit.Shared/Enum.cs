@@ -66,6 +66,14 @@
         Workflow,
         UiTest,
         Test,
-        Plugin
+        Plugin,
+        CustomApi,
+        CustomAction
+    }
+
+    public enum ParameterType
+    {
+        Input,
+        Output
     }
 }

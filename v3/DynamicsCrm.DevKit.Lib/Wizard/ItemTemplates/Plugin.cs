@@ -26,7 +26,7 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
 
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
         {
-            var form = new FormProject(ItemType.Workflow);
+            var form = new FormPlugin(ItemType.Plugin);
             var ok = form.ShowModal() ?? false;
             if (ok)
             {

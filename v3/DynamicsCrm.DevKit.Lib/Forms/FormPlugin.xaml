@@ -1,0 +1,56 @@
+﻿<forms:BaseDialogWindow  xmlns:forms="clr-namespace:DynamicsCrm.DevKit.Lib.Forms"
+        x:Class="DynamicsCrm.DevKit.Lib.Forms.FormPlugin"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:wpfcontrols="clr-namespace:DynamicsCrm.DevKit.Lib.WpfControls"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Width="500" Height="auto" SizeToContent="Height"
+    >
+    <forms:BaseDialogWindow.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="StyleResourceDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </forms:BaseDialogWindow.Resources>
+    <StackPanel>
+        <TextBlock Padding="10,5,10,5" Background="Green">
+            <wpfcontrols:ExternalBrowserHyperlink x:Name="HELP" NavigateUri="https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Connection" Foreground="White" >WIKI: Connection</wpfcontrols:ExternalBrowserHyperlink>
+        </TextBlock>
+        <wpfcontrols:UserControlConnection x:Name="CONNECTION" Connected="Connection_Connected" />
+        <StackPanel IsEnabled="{Binding IsConnected, ElementName=CONNECTION}">
+            <Border Grid.Row="1" Grid.ColumnSpan="2" BorderBrush="Gray" BorderThickness="1" Padding="10,15,10,15" Margin="5,10,5,10">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Label x:Name="LabelEntity" Grid.Row="0" Grid.Column="0" Margin="0,0,0,5" Content="Entity" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                    <ComboBox x:Name="ComboBoxEntity" Grid.Row="0" Grid.Column="1" Margin="0,0,0,5" VerticalContentAlignment="Center" IsEditable="False" SelectionChanged="ComboBoxEntity_SelectionChanged" />
+                    <Label x:Name="LabelMessage" Grid.Row="1" Grid.Column="0" Margin="0,0,0,5" Content="Message" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                    <ComboBox x:Name="ComboBoxMessage" Grid.Row="1" Grid.Column="1" Margin="0,0,0,5" VerticalContentAlignment="Center" IsEditable="False" SelectionChanged="ComboBoxMessage_SelectionChanged" />
+                    <Label x:Name="LabelStage" Grid.Row="2" Grid.Column="0" Margin="0,0,0,5" Content="Stage" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                    <ComboBox x:Name="ComboBoxStage" Grid.Row="2" Grid.Column="1" Margin="0,0,0,5" VerticalContentAlignment="Center" IsEditable="False" SelectionChanged="ComboBoxStage_SelectionChanged" />
+                    <Label x:Name="LabelExecution" Grid.Row="3" Grid.Column="0" Margin="0,0,0,5" Content="Execution" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                    <ComboBox x:Name="ComboBoxExecution" Grid.Row="3" Grid.Column="1" Margin="0,0,0,5" VerticalContentAlignment="Center" IsEditable="False" SelectionChanged="ComboBoxExecution_SelectionChanged" />
+                    <Label x:Name="LabelClass" Grid.Row="4" Grid.Column="0" Margin="0,0,0,5" Content="Class" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                    <TextBox x:Name="TextboxClass" Grid.Row="4" Grid.Column="1" Margin="0,0,0,5" VerticalContentAlignment="Center" />
+                </Grid>
+            </Border>
+            <WrapPanel HorizontalAlignment="Right" Margin="10,0,10,10">
+                <Button x:Name="buttonOK" Content="OK" Margin="5,0,5,0" Width="100" Height="30" Click="ButtonOK_Click"/>
+                <Button x:Name="buttonCancel" Content="Cancel" Margin="5,0,5,0" Width="100" Height="30" IsCancel="True" Click="ButtonCancel_Click"/>
+            </WrapPanel>
+            <ProgressBar x:Name="progressBar" Height="5" IsIndeterminate="True" Visibility="Hidden" />
+        </StackPanel>
+    </StackPanel>
+</forms:BaseDialogWindow>

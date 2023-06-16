@@ -53,6 +53,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\NameValueGuid.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\NameValueGuidExtend.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\OldCommentTypeScriptDeclaration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\PluginInputOutputParameter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\ProcessForm.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\CachedJson.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\SystemForm.cs" />

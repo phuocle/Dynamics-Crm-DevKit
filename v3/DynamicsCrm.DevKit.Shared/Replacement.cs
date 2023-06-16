@@ -18,15 +18,38 @@ namespace DynamicsCrm.DevKit.Shared
         {
             replacements = replacementsDictionary;
             AddCommonReplacements();
-
             replacements.Add("$class$", form.ItemName);
-            replacements.Add("$NameSpace$", replacementsDictionary["$rootnamespace$"]);
             if (replacementsDictionary["$rootnamespace$"].EndsWith(".Test"))
             {
                 var NameSpaceWithoutTest = replacementsDictionary["$rootnamespace$"].Substring(0, replacementsDictionary["$rootnamespace$"].Length - ".Test".Length);
                 NameSpaceWithoutTest = NameSpaceWithoutTest.Replace(".Plugin.", ".Plugin");
                 replacementsDictionary.Add("$NameSpaceWithoutTest$", NameSpaceWithoutTest);
             }
+        }
+
+        internal static void SetItem(Dictionary<string, string> replacementsDictionary, FormPlugin form)
+        {
+            replacements = replacementsDictionary;
+            AddCommonReplacements();
+
+
+            replacementsDictionary.Add("$PluginClass$", form.PluginClass);
+            replacementsDictionary.Add("$PluginMessage$", form.PluginMessage);
+            replacementsDictionary.Add("$PluginComment$", form.PluginComment);
+            replacementsDictionary.Add("$PluginLogicalName$", form.PluginLogicalName);
+            replacementsDictionary.Add("$PluginLogicalNameInt$", form.PluginLogicalName == "none" ? "0" : "1");
+            replacementsDictionary.Add("$PluginStage$", form.PluginStage);
+            replacementsDictionary.Add("$PluginExecution$", form.PluginExecution);
+            replacementsDictionary.Add("$PluginExecutionInt$", form.PluginExecution == "Synchronous" ? "0" : "1");
+            replacementsDictionary.Add("$PluginOrder$", form.PluginOrder);
+            replacementsDictionary.Add("$PluginOrder2$", form.PluginOrder == "1" ? string.Empty : form.PluginOrder);
+            var nameSpace = replacementsDictionary["$rootnamespace$"];
+            if (nameSpace.Contains($".{ItemType.Plugin.ToString()}."))
+                replacementsDictionary.Add("$NameSpacePlugin$", nameSpace.Replace($".{ItemType.Plugin.ToString()}.", $".{ItemType.Plugin.ToString()}"));
+            else
+                replacementsDictionary.Add("$NameSpacePlugin$", nameSpace);
+
+
         }
 
         internal static void Set(Dictionary<string, string> replacementsDictionary, FormProject form)
@@ -112,6 +135,7 @@ namespace DynamicsCrm.DevKit.Shared
         private static void AddCommonReplacements()
         {
             var solutionName = VsixHelper.GetSolutionName();
+            replacements.Add("$NameSpace$", replacements["$rootnamespace$"]);
             replacements.Add("$DevKitVersion$", Const.Version);
             replacements.Add("$SharedNameSpace$", $"{solutionName}.Shared");
             replacements.Add("$SharedProject$", $"{solutionName}.Shared");
