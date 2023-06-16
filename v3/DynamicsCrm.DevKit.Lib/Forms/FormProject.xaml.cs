@@ -5,11 +5,9 @@ using Microsoft.Xrm.Tooling.Connector;
 using System.Threading.Tasks;
 using System.Threading;
 using Microsoft.VisualStudio.Shell;
-using Microsoft.Build.Framework.XamlTypes;
-using Microsoft.VisualStudio.Text.Editor;
-using System.Windows.Documents;
 using System.Collections.Generic;
 using ItemType = DynamicsCrm.DevKit.Shared.ItemType;
+using EnvDTE;
 
 namespace DynamicsCrm.DevKit.Lib.Forms
 {
@@ -25,7 +23,6 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 return LabelProjectName.Content?.ToString();
             }
         }
-
         public string ItemName
         {
             get
@@ -37,6 +34,14 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         public CrmServiceClient CrmServiceClient => CONNECTION.CrmServiceClient;
         public string DataverseConnectionString => CONNECTION.DataverseConnectionString;
         public CrmConnection CrmConnection => CONNECTION.CrmConnection;
+        public DTE DTE { get; }
+        public XrmEntity SelectedClassType
+        {
+            get
+            {
+                return ((XrmEntity)ComboBoxProject.SelectedItem);
+            }
+        }
 
         private ItemType _ItemType = DynamicsCrm.DevKit.Shared.ItemType.None;
         private ItemType ItemType
@@ -97,6 +102,17 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     LabelProjectItemName.Content = "Class";
                     LabelProjectName.Content = "UiTest";
                 }
+                void TestItem()
+                {
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Test-Item-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("Test Item Template");
+                    LabelProjectItemName.Content = "Class";
+                    LabelProjectName.Content = "";
+                    ComboBoxProject.Visibility = System.Windows.Visibility.Visible;
+                    ComboBoxProject.IsEditable = false;
+                    TextboxProject.Visibility = System.Windows.Visibility.Hidden;
+                }
                 _ItemType = value;
                 switch (_ItemType)
                 {
@@ -115,10 +131,12 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     case ItemType.UiTest:
                         UiTestItem();
                         break;
+                    case ItemType.Test:
+                        TestItem();
+                        break;
                 }
             }
         }
-
         private ProjectType _ProjectType = ProjectType.None;
         private ProjectType ProjectType  {
             get => _ProjectType;
@@ -327,10 +345,11 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             ProjectType = projectType;
         }
 
-        public FormProject(ItemType itemType)
+        public FormProject(ItemType itemType, DTE dte = null)
         {
             InitializeComponent();
             ItemType = itemType;
+            DTE = dte;
         }
 
         private void ButtonCancel_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -395,6 +414,15 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 ComboBoxProject.ItemsSource = items;
                 buttonOK.IsEnabled = items.Count > 0;
             }
+            else if (
+                ItemType == ItemType.Test
+                )
+            {
+                var items = VsixHelper.GetTestClasses(DTE);
+                ComboBoxProject.DisplayMemberPath = "Name";
+                ComboBoxProject.ItemsSource = items;
+                buttonOK.IsEnabled = items.Count > 0;
+            }
         }
 
         private void TextboxProject_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
@@ -449,7 +477,10 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     LabelProjectName.Content = $"{LabelProjectName?.Tag}.{ProjectType.ToString()}";
                 else
                 {
-                    LabelProjectName.Content = $"{((XrmEntity)ComboBoxProject.SelectedItem)?.Name}.{ProjectType.ToString()}";
+                    if (ItemType == ItemType.Test)
+                        LabelProjectName.Content = $"{((XrmEntity)ComboBoxProject.SelectedItem)?.Name}Test";
+                    else
+                        LabelProjectName.Content = $"{((XrmEntity)ComboBoxProject.SelectedItem)?.Name}.{ProjectType.ToString()}";
                 }
             }
         }

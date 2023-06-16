@@ -1,11 +1,12 @@
 ﻿using Dev.DevKit.ProxyTypes;
 using Dev.DevKit.Shared;
+using Dev.DevKit.Shared.Test;
 using FakeXrmEasy.Plugins;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
 using System.Linq;
 
-namespace Dev.DevKit.PluginAccount.Test
+namespace Dev.DevKit.Plugin.Account.Test
 {
     [TestClass]
     public class PostAccountCreateAsynchronousTest : FakeXrmEasyTestBase
@@ -43,21 +44,21 @@ namespace Dev.DevKit.PluginAccount.Test
             }, $"Execution does not equals  {PLUGIN_EXECUTION_MODE.ToString()}");
             pluginContext.Mode = (int)PLUGIN_EXECUTION_MODE;
             var @class = new Dev.DevKit.PluginAccount.PostAccountCreateAsynchronous();
-            var registeredPlugins = Helper.GetRegisteredPlugins(@class);
+            var registeredPlugins = TestHelper.GetRegisteredPlugins(@class);
             Assert.IsTrue(registeredPlugins.Any(x => x.EntityLogicalName == PLUGIN_ENTITY_LOGICAL_NAME && x.Message == PLUGIN_MESSAGE && x.ExecutionMode == PLUGIN_EXECUTION_MODE && x.Stage == PLUGIN_STAGE));
         }
 
         [TestMethod]
         public void PostAccountCreateAsynchronousTest_01()
         {
-            //setup
+            ///setup
             //var json = @"";
-            //var remote = Helper.DeserializeRemoteExecutionContext(json);
+            //var remote = TestHelper.DeserializeRemoteExecutionContext(json);
             //var pluginContext = _context.GetDefaultPluginContext();
             //pluginContext.SetXrmFakedContextPlugin(remote);
-            //run
+            ///run
             //_context.ExecutePluginWith<Dev.DevKit.PluginAccount.PostAccountCreateAsynchronous> (pluginContext);
-            //result
+            ///result
             Assert.IsTrue(true);
         }
     }

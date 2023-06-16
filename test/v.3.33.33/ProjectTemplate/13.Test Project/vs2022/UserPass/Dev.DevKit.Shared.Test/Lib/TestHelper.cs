@@ -92,6 +92,20 @@ namespace Dev.DevKit.Shared.Test
             }
         }
 
+        internal static List<CrmPluginRegistrationAttribute> GetRegisteredPlugins(object obj)
+        {
+            var registeredPlugins = new List<CrmPluginRegistrationAttribute>();
+            foreach (var attribute in System.Attribute.GetCustomAttributes(obj.GetType()))
+            {
+                if (attribute.GetType().Equals(typeof(CrmPluginRegistrationAttribute)))
+                {
+                    var registeredPlugin = attribute as CrmPluginRegistrationAttribute;
+                    registeredPlugins.Add(registeredPlugin);
+                }
+            }
+            return registeredPlugins;
+        }
+
         public static string GetRandomString(int minLen, int maxLen)
         {
             char[] Alphabet = ("ABCDEFGHIJKLMNOPQRSTUVWXYZabcefghijklmnopqrstuvwxyz0123456789").ToCharArray();

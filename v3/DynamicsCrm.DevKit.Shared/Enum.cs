@@ -64,6 +64,7 @@
         JsForm,
         JsWebApi,
         Workflow,
-        UiTest
+        UiTest,
+        Test
     }
 }

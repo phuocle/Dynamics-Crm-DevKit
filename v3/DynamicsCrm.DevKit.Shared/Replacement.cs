@@ -21,6 +21,12 @@ namespace DynamicsCrm.DevKit.Shared
 
             replacements.Add("$class$", form.ItemName);
             replacements.Add("$NameSpace$", replacementsDictionary["$rootnamespace$"]);
+            if (replacementsDictionary["$rootnamespace$"].EndsWith(".Test"))
+            {
+                var NameSpaceWithoutTest = replacementsDictionary["$rootnamespace$"].Substring(0, replacementsDictionary["$rootnamespace$"].Length - ".Test".Length);
+                NameSpaceWithoutTest = NameSpaceWithoutTest.Replace(".Plugin.", ".Plugin");
+                replacementsDictionary.Add("$NameSpaceWithoutTest$", NameSpaceWithoutTest);
+            }
         }
 
         internal static void Set(Dictionary<string, string> replacementsDictionary, FormProject form)

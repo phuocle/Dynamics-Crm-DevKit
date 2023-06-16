@@ -146,6 +146,13 @@
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>
+    <ProjectReference Include="..\ItemTemplates\CSharp\05.TestItemTemplate\05.TestItemTemplate.csproj">
+      <Project>{B7281E07-25A1-4F0F-9595-A1394211DCD4}</Project>
+      <Name>05.TestItemTemplate</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
     <ProjectReference Include="..\ItemTemplates\CSharp\06.UiTestItemTemplate\06.UiTesttemTemplate.csproj">
       <Project>{53392F2B-21C1-41BF-9073-2994B94E101E}</Project>
       <Name>06.UiTesttemTemplate</Name>

@@ -1,17 +1,18 @@
 ﻿using Community.VisualStudio.Toolkit;
 using DynamicsCrm.DevKit.Shared.Models;
+using EnvDTE;
 using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.TemplateWizard;
+using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Tooling.Connector;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Project = EnvDTE.Project;
 
 namespace DynamicsCrm.DevKit.Shared
 {
@@ -264,6 +265,231 @@ namespace DynamicsCrm.DevKit.Shared
                 });
             }
             return list;
+        }
+
+        internal static List<XrmEntity> GetTestClasses(DTE dte)
+        {
+            var list1 = GetAllClassesOfPluginAndWorkflow(dte);
+            var list2 = GetAllTestClasses(dte);
+            return list1.Where(x => !list2.Contains(x.Name)).ToList();
+        }
+
+        public static List<string> GetAllTestClasses(DTE dte)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            var list = new List<string>();
+            var projectItems = GetAllProjectItems(dte);
+            foreach (var projectItem in projectItems)
+            {
+                if (projectItem.FileCodeModel == null) continue;
+                foreach (CodeElement codeElement in projectItem.FileCodeModel?.CodeElements)
+                {
+                    if (codeElement == null) continue;
+                    if (codeElement.Kind != vsCMElement.vsCMElementNamespace) continue;
+                    foreach (CodeElement codeClass in codeElement.Children)
+                    {
+                        if (codeClass.Kind != vsCMElement.vsCMElementClass) continue;
+                        var @class = codeClass as CodeClass;
+                        if (!HasAttributeTestClass(@class)) continue;
+                        var className = codeClass.Name;
+                        className = className.ToLower().EndsWith("test") ? className.Substring(0, className.Length - "Test".Length) : className;
+                        list.Add(className);
+                    }
+                }
+            }
+            return list;
+        }
+
+        public static bool HasAttributeTestClass(CodeClass @class)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            foreach (CodeAttribute attribute in @class.Attributes)
+            {
+                if (attribute.Name == "TestClass") return true;
+            }
+            return false;
+        }
+
+        public static List<ProjectItem> GetAllProjectItems(DTE dte)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            var Projects = (object[])dte.ActiveSolutionProjects;
+            var project = (Project)Projects[0];
+            var projectItems = new List<ProjectItem>();
+            foreach (ProjectItem item in project.ProjectItems)
+            {
+                projectItems.Add(item);
+                GetAllProjectItems(projectItems, item);
+            }
+            return projectItems;
+        }
+
+        internal static List<XrmEntity> GetAllClassesOfPluginAndWorkflow(DTE dte)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            var list = new List<XrmEntity>();
+            var projectItems = GetAllTestProjectItems(dte);
+            foreach (var projectItem in projectItems)
+            {
+                if (projectItem.FileCodeModel == null) continue;
+                foreach (CodeElement codeElement in projectItem.FileCodeModel?.CodeElements)
+                {
+                    if (codeElement == null) continue;
+                    if (codeElement.Kind != vsCMElement.vsCMElementNamespace) continue;
+                    foreach (CodeElement codeClass in codeElement.Children)
+                    {
+                        if (codeClass.Kind != vsCMElement.vsCMElementClass) continue;
+                        var @class = codeClass as CodeClass;
+                        if (@class.IsAbstract) continue;
+                        if (!@class.IsCodeType) continue;
+                        if (!HasImplementedPlugin(@class) && !HasImplementedWorkflow(@class)) continue;
+                        if (!HasAttributeCrmPluginRegistration(@class, out var pluginAttribute)) continue;
+                        var className = codeClass.Name;
+                        list.Add(new XrmEntity
+                        {
+                            Name = className,
+                            ServerType = GetPluginType(@class),
+                            ServerLogicalName = pluginAttribute.EntityLogicalName,
+                            ServerMessage = pluginAttribute.Message,
+                            ServerMode = pluginAttribute.ExecutionMode.ToString(),
+                            ServerStage = pluginAttribute.Stage.ToString()
+                        });
+                    }
+                }
+            }
+            return list;
+        }
+
+        public static bool HasImplementedWorkflow(CodeClass @class)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            foreach (var @base in @class.Bases)
+            {
+                if (!(@base is CodeClass baseClass)) continue;
+                if (baseClass.FullName == "System.Activities.CodeActivity")
+                    return true;
+                if (HasImplementedWorkflow(baseClass))
+                    return true;
+            }
+            return false;
+        }
+
+        private static string GetPluginType(CodeClass @class)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            foreach (CodeAttribute attribute in @class.Attributes)
+            {
+                if (attribute.Name == "CrmPluginRegistration")
+                {
+                    if (attribute.Value.Contains("PluginType.Workflow")) return "Workflow";
+                    if (attribute.Value.Contains("PluginType.CustomAction")) return "CustomAction";
+                    if (attribute.Value.Contains("PluginType.CustomApi")) return "CustomApi";
+                    if (attribute.Value.Contains("PluginType.DataProvider")) return "DataProvider";
+                    if (attribute.Value.Contains("PluginType.Plugin")) return "Plugin";
+                    return "Plugin";
+                }
+            }
+            return "Plugin";
+        }
+
+        public static bool HasAttributeCrmPluginRegistration(CodeClass @class, out CrmPluginRegistrationAttribute pluginAttribute)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            pluginAttribute = new CrmPluginRegistrationAttribute();
+            foreach (CodeAttribute attribute in @class.Attributes)
+            {
+                if (attribute.Name == "CrmPluginRegistration")
+                {
+                    var array = attribute.Value.Split(',');
+                    pluginAttribute.Message = array[0].Trim();
+                    pluginAttribute.EntityLogicalName = array[1].Trim();
+                    Enum.TryParse(array[2].Split('.')[1], out StageEnum stage);
+                    pluginAttribute.Stage = stage;
+                    Enum.TryParse(array[3].Split('.')[1], out ExecutionModeEnum mode);
+                    pluginAttribute.ExecutionMode = mode;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public static bool HasImplementedPlugin(CodeClass @class)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            foreach (CodeInterface @interface in @class.ImplementedInterfaces)
+            {
+                if (@interface.FullName == "Microsoft.Xrm.Sdk.IPlugin")
+                    return true;
+            }
+            foreach (var @base in @class.Bases)
+            {
+                if (!(@base is CodeClass baseClass)) continue;
+                if (HasImplementedPlugin(baseClass))
+                    return true;
+            }
+            return false;
+        }
+
+        public static List<ProjectItem> GetAllTestProjectItems(DTE dte)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            var Projects = (object[])dte.ActiveSolutionProjects;
+            var project = (Project)Projects[0];
+            Project projectWithoutTest = null;
+            foreach (Project p in GetProjects(dte.Solution))
+            {
+                if ($"{p.Name}.Test" == project.Name)
+                {
+                    projectWithoutTest = p;
+                    break;
+                }
+            }
+            if (projectWithoutTest == null) return new List<ProjectItem>();
+            var projectItems = new List<ProjectItem>();
+            foreach (ProjectItem item in projectWithoutTest.ProjectItems)
+            {
+                projectItems.Add(item);
+                GetAllProjectItems(projectItems, item);
+            }
+            return projectItems;
+        }
+
+        private static void GetAllProjectItems(List<ProjectItem> projectItems, ProjectItem item)
+        {
+            foreach (ProjectItem item2 in item.ProjectItems)
+            {
+                projectItems.Add(item2);
+                GetAllProjectItems(projectItems, item2);
+            }
+        }
+
+        private static List<Project> GetProjects(EnvDTE.Solution sln)
+        {
+            List<Project> list = new List<Project>();
+            if (sln == null) return list;
+            list.AddRange(sln.Projects.Cast<Project>());
+
+            for (int i = 0; i < list.Count; i++)
+                list.AddRange(list[i]?.ProjectItems?.Cast<ProjectItem>().Select(x => x?.SubProject)?.OfType<Project>());
+
+            return list;
+        }
+
+        internal static Community.VisualStudio.Toolkit.Project GetProject(string projectName)
+        {
+            return ThreadHelper.JoinableTaskFactory.Run(async () => {
+                return await GetProjectAsync(projectName);
+            });
+        }
+
+        private static async Task<Community.VisualStudio.Toolkit.Project> GetProjectAsync(string projectName)
+        {
+            var projects = await VS.Solutions.GetAllProjectsAsync();
+            foreach (var project in projects)
+            {
+                if (project.Name == projectName) return project;
+            }
+            return null;
         }
 
         public static string GetDefaultFileWithCs(EntityMetadata entityMetadata, string @namespace)
