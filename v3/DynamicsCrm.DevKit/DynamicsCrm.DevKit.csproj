@@ -139,6 +139,13 @@
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>
+    <ProjectReference Include="..\ItemTemplates\CSharp\02.PluginItemTemplate\02.PluginItemTemplate.csproj">
+      <Project>{6A978468-339C-4BD8-8AFF-481DE2038525}</Project>
+      <Name>02.PluginItemTemplate</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
     <ProjectReference Include="..\ItemTemplates\CSharp\03.WorkflowItemTemplate\03.WorkflowItemTemplate.csproj">
       <Project>{6373A171-F07C-4153-BDA2-C3730497889D}</Project>
       <Name>03.WorkflowItemTemplate</Name>

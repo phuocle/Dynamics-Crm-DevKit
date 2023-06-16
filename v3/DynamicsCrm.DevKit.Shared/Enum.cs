@@ -65,6 +65,7 @@
         JsWebApi,
         Workflow,
         UiTest,
-        Test
+        Test,
+        Plugin
     }
 }
