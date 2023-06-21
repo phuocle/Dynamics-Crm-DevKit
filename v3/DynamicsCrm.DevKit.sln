@@ -73,6 +73,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "05.TestItemTemplate", "Item
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "02.PluginItemTemplate", "ItemTemplates\CSharp\02.PluginItemTemplate\02.PluginItemTemplate.csproj", "{6A978468-339C-4BD8-8AFF-481DE2038525}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "04.CustomActionItemTemplate", "ItemTemplates\CSharp\04.CustomActionItemTemplate\04.CustomActionItemTemplate.csproj", "{CA29675D-B211-46EC-9B16-2B9A4C2CC869}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -395,6 +397,18 @@ Global
 		{6A978468-339C-4BD8-8AFF-481DE2038525}.Release|arm64.Build.0 = Release|arm64
 		{6A978468-339C-4BD8-8AFF-481DE2038525}.Release|x86.ActiveCfg = Release|x86
 		{6A978468-339C-4BD8-8AFF-481DE2038525}.Release|x86.Build.0 = Release|x86
+		{CA29675D-B211-46EC-9B16-2B9A4C2CC869}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA29675D-B211-46EC-9B16-2B9A4C2CC869}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA29675D-B211-46EC-9B16-2B9A4C2CC869}.Debug|arm64.ActiveCfg = Debug|arm64
+		{CA29675D-B211-46EC-9B16-2B9A4C2CC869}.Debug|arm64.Build.0 = Debug|arm64
+		{CA29675D-B211-46EC-9B16-2B9A4C2CC869}.Debug|x86.ActiveCfg = Debug|x86
+		{CA29675D-B211-46EC-9B16-2B9A4C2CC869}.Debug|x86.Build.0 = Debug|x86
+		{CA29675D-B211-46EC-9B16-2B9A4C2CC869}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA29675D-B211-46EC-9B16-2B9A4C2CC869}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA29675D-B211-46EC-9B16-2B9A4C2CC869}.Release|arm64.ActiveCfg = Release|arm64
+		{CA29675D-B211-46EC-9B16-2B9A4C2CC869}.Release|arm64.Build.0 = Release|arm64
+		{CA29675D-B211-46EC-9B16-2B9A4C2CC869}.Release|x86.ActiveCfg = Release|x86
+		{CA29675D-B211-46EC-9B16-2B9A4C2CC869}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -424,6 +438,7 @@ Global
 		{60C9F3C9-29DB-4714-A5C0-16E3732FCE30} = {2BEBBAA2-4230-4372-A25D-7AB871C561BC}
 		{B7281E07-25A1-4F0F-9595-A1394211DCD4} = {BCAAE925-A30A-462F-A6CA-E8CF375EBF56}
 		{6A978468-339C-4BD8-8AFF-481DE2038525} = {BCAAE925-A30A-462F-A6CA-E8CF375EBF56}
+		{CA29675D-B211-46EC-9B16-2B9A4C2CC869} = {BCAAE925-A30A-462F-A6CA-E8CF375EBF56}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {04C975FA-0E86-4259-8245-7DFA47D873BB}

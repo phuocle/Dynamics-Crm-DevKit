@@ -153,6 +153,13 @@
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>
+    <ProjectReference Include="..\ItemTemplates\CSharp\04.CustomActionItemTemplate\04.CustomActionItemTemplate.csproj">
+      <Project>{CA29675D-B211-46EC-9B16-2B9A4C2CC869}</Project>
+      <Name>04.CustomActionItemTemplate</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
     <ProjectReference Include="..\ItemTemplates\CSharp\05.TestItemTemplate\05.TestItemTemplate.csproj">
       <Project>{B7281E07-25A1-4F0F-9595-A1394211DCD4}</Project>
       <Name>05.TestItemTemplate</Name>

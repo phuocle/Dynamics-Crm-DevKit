@@ -468,6 +468,7 @@ namespace DynamicsCrm.DevKit.Shared
 
         private static void GetAllProjectItems(List<ProjectItem> projectItems, ProjectItem item)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             foreach (ProjectItem item2 in item.ProjectItems)
             {
                 projectItems.Add(item2);
@@ -477,6 +478,7 @@ namespace DynamicsCrm.DevKit.Shared
 
         private static List<Project> GetProjects(EnvDTE.Solution sln)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             List<Project> list = new List<Project>();
             if (sln == null) return list;
             list.AddRange(sln.Projects.Cast<Project>());

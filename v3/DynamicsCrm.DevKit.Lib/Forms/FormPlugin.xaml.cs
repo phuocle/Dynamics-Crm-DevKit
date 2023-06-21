@@ -21,7 +21,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         public CrmConnection CrmConnection => CONNECTION.CrmConnection;
 
         public string PluginClass => TextboxClass.Text;
-        public string PluginMessage => ComboBoxStage.Text;
+        public string PluginMessage => ComboBoxMessage.Text;
         public string PluginStage => ComboBoxStage.Text;
         public string PluginExecution => ComboBoxExecution.Text;
         public string PluginLogicalName
@@ -80,11 +80,20 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     HELP.Inlines.Clear();
                     HELP.Inlines.Add("Plugin Item Template");
                 }
+                void CustomActionItem()
+                {
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Custom-Action-Item-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("Custom Action Item Template");
+                }
                 _ItemType = value;
                 switch (_ItemType)
                 {
                     case ItemType.Plugin:
                         PluginItem();
+                        break;
+                    case ItemType.CustomAction:
+                        CustomActionItem();
                         break;
                 }
             }
@@ -145,7 +154,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         private void Connection_Connected(object sender, System.EventArgs e)
         {
             if (
-                ItemType == ItemType.Plugin
+                ItemType == ItemType.Plugin ||
+                ItemType == ItemType.CustomAction
                 )
             {
                 progressBar.Visibility = System.Windows.Visibility.Visible;
@@ -156,6 +166,10 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         var items = XrmHelper.GetAllEntities(CrmServiceClient);
                         await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                         ComboBoxEntity.DisplayMemberPath = "Name";
+                        if (ItemType == ItemType.CustomAction)
+                        {
+                            items.Insert(0, new XrmEntity { Name = "None", LogicalName = "none", EntityTypeCode = -1, HasImage = false, IsCustomEntity = false });
+                        }
                         ComboBoxEntity.ItemsSource = items;
                         buttonOK.IsEnabled = items.Count > 0;
                         var activeProject = await VsixHelper.GetActiveProjectAsync();
@@ -179,8 +193,23 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             if (ItemType == ItemType.Plugin)
             {
-                var selectedEnitty = (XrmEntity)ComboBoxEntity.SelectedItem;
-                var items = XrmHelper.GetSdkMessages(CrmServiceClient, selectedEnitty.LogicalName);
+                var selectedEntity = (XrmEntity)ComboBoxEntity.SelectedItem;
+                var items = XrmHelper.GetSdkMessages(CrmServiceClient, selectedEntity.LogicalName);
+                ComboBoxMessage.DisplayMemberPath = "Name";
+                ComboBoxMessage.ItemsSource = items;
+                ComboBoxMessage.SelectedItem = null;
+                ComboBoxStage.SelectedItem = null;
+                ComboBoxExecution.SelectedItem = null;
+                TextboxClass.Text = null;
+            }
+            else if (ItemType == ItemType.CustomAction)
+            {
+                var selectedEntity = (XrmEntity)ComboBoxEntity.SelectedItem;
+                var items = new List<NameValue>();
+                if (selectedEntity.LogicalName == "none")
+                    items = XrmHelper.GetAllCustomActions(CrmServiceClient);
+                else
+                    items = XrmHelper.GetSdkCustomActionMessages(CrmServiceClient, selectedEntity.LogicalName);
                 ComboBoxMessage.DisplayMemberPath = "Name";
                 ComboBoxMessage.ItemsSource = items;
                 ComboBoxMessage.SelectedItem = null;
