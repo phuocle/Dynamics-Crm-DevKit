@@ -17,8 +17,8 @@ namespace DynamicsCrm.DevKit.Wizard
             replacementsDictionary.Add("$NameSpace$", Utility.SafeNamespace(form.WizardNameSpace));
             replacementsDictionary.Add("$SharedNameSpace$", Utility.GetSharedNameSpace(form.DTE));
             var nameSpace = Utility.SafeNamespace(form.WizardNameSpace);
-            if (nameSpace.Contains($".{ProjectType.Plugin.ToString()}."))
-                replacementsDictionary.Add("$NameSpacePlugin$", nameSpace.Replace($".{ItemType.Plugin.ToString()}.", $".{ItemType.Plugin.ToString()}"));
+            if (nameSpace.Contains($".{ProjectType.Plugin}."))
+                replacementsDictionary.Add("$NameSpacePlugin$", nameSpace.Replace($".{ItemType.Plugin}.", $".{ItemType.Plugin}"));
             else
                 replacementsDictionary.Add("$NameSpacePlugin$", nameSpace);
             replacementsDictionary.Add("$DevKitVersion$", Const.Version);
@@ -122,8 +122,8 @@ namespace DynamicsCrm.DevKit.Wizard
             var nameSpace = replacementsDictionary["$rootnamespace$"];
             if (nameSpace.EndsWith(".Test"))
                 replacementsDictionary.Add("$NameSpaceWithoutTest$", nameSpace.Substring(0, nameSpace.Length - ".Test".Length));
-            if (nameSpace.Contains($".{ProjectType.Plugin.ToString()}."))
-                replacementsDictionary.Add("$NameSpacePlugin$", nameSpace.Replace($".{ItemType.Plugin.ToString()}.", $".{ItemType.Plugin.ToString()}"));
+            if (nameSpace.Contains($".{ProjectType.Plugin}."))
+                replacementsDictionary.Add("$NameSpacePlugin$", nameSpace.Replace($".{ItemType.Plugin}.", $".{ItemType.Plugin}"));
             else
                 replacementsDictionary.Add("$NameSpacePlugin$", nameSpace);
             replacementsDictionary.Add("$SharedNameSpace$", Utility.GetSharedNameSpace(form.DTE));
@@ -224,8 +224,8 @@ namespace DynamicsCrm.DevKit.Wizard
             replacementsDictionary.Add("$NameSpace$", replacementsDictionary["$rootnamespace$"]);
             replacementsDictionary.Add("$SharedNameSpace$", Utility.GetSharedNameSpace(form.DTE));
             var nameSpace = replacementsDictionary["$rootnamespace$"];
-            if (nameSpace.Contains($".{ItemType.Plugin.ToString()}."))
-                replacementsDictionary.Add("$NameSpacePlugin$", nameSpace.Replace($".{ItemType.Plugin.ToString()}.", $".{ItemType.Plugin.ToString()}"));
+            if (nameSpace.Contains($".{ItemType.Plugin}."))
+                replacementsDictionary.Add("$NameSpacePlugin$", nameSpace.Replace($".{ItemType.Plugin}.", $".{ItemType.Plugin}"));
             else
                 replacementsDictionary.Add("$NameSpacePlugin$", nameSpace);
         }

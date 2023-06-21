@@ -531,8 +531,10 @@ namespace DynamicsCrm.DevKit.Shared.Helper
                 "ExternalName",
                 "DisplayCollectionName"
             });
-            var entityQueryExpression = new EntityQueryExpression();
-            entityQueryExpression.Criteria = new MetadataFilterExpression();
+            var entityQueryExpression = new EntityQueryExpression
+            {
+                Criteria = new MetadataFilterExpression()
+            };
             entityQueryExpression.Criteria = filterExpression;
             entityQueryExpression.Properties = propertiesExpression;
             var request = new RetrieveMetadataChangesRequest

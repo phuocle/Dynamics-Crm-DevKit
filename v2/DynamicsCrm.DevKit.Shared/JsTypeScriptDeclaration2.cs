@@ -1004,11 +1004,11 @@ namespace DynamicsCrm.DevKit.Shared
                     var name = crmAttribute.SchemaName;
                     if (name == previousName)
                     {
-                        previousCount = previousCount + 1;
+                        previousCount++;
                         if (isBPF)
                             name = name + "_" + previousCount.ToString();
                         else
-                            name = name + previousCount.ToString();
+                            name += previousCount.ToString();
                     }
                     else
                     {
@@ -1225,8 +1225,7 @@ namespace DynamicsCrm.DevKit.Shared
 
         private static string GetSavedComment()
         {
-            var _d_ts = string.Empty;
-            _d_ts = $"//{SimpleJson.SerializeObject(Comment)}";
+            var _d_ts = $"//{SimpleJson.SerializeObject(Comment)}";
             _d_ts = _d_ts.Replace("\"", "'");
             return _d_ts;
         }

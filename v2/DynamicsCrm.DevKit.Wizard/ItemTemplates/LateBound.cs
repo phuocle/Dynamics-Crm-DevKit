@@ -45,7 +45,7 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                     projectItem.ProjectItems.AddFromFile(ClassFileGenerated);
                     projectItem.ContainingProject.Save();
                 }
-                if (IsNew && ActiveProject.Name.EndsWith($"{ProjectType.Shared.ToString()}"))
+                if (IsNew && ActiveProject.Name.EndsWith($"{ProjectType.Shared}"))
                 {
                     DTE.ExecuteCommand("File.SaveAll");
                 }
@@ -64,7 +64,7 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                 }
                 else
                 {
-                    if (!ActiveProject.Name.EndsWith($"{ProjectType.Shared.ToString()}")) return;
+                    if (!ActiveProject.Name.EndsWith($"{ProjectType.Shared}")) return;
                     var projectItemsFile = ActiveProject.FullName.Replace(".shproj", ".projitems");
                     var lines = File.ReadAllLines(projectItemsFile);
                     var text = string.Empty;

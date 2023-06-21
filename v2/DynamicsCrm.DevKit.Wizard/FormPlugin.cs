@@ -200,13 +200,6 @@ namespace DynamicsCrm.DevKit.Wizard
             comboBoxEntity.DisplayMember = "Name";
         }
 
-        private void LoadComboBoxMessage(List<XrmEntity> entities)
-        {
-            comboBoxMessage.DataSource = entities;
-            comboBoxMessage.ValueMember = "LogicalName";
-            comboBoxMessage.DisplayMember = "Name";
-        }
-
         private void EnabledAll(bool value)
         {
             buttonConnection.Enabled = value;
