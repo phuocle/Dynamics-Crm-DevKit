@@ -249,14 +249,15 @@ namespace DynamicsCrm.DevKit.Shared
             return list.Count(x => projectName.Contains(x)) == 0;
         }
 
-        internal static List<XrmEntity> GetAllProjects()
+        public static List<XrmEntity> GetAllProjects()
         {
-            return ThreadHelper.JoinableTaskFactory.Run(async () => {
+            return ThreadHelper.JoinableTaskFactory.Run(async () =>
+            {
                 return await GetAllProjectsAsync();
             });
         }
 
-        private static async  Task<List<XrmEntity>> GetAllProjectsAsync()
+        public static async  Task<List<XrmEntity>> GetAllProjectsAsync()
         {
             var list = new List<XrmEntity>();
             var projects = await VS.Solutions.GetAllProjectsAsync();
@@ -489,14 +490,14 @@ namespace DynamicsCrm.DevKit.Shared
             return list;
         }
 
-        internal static Community.VisualStudio.Toolkit.Project GetProject(string projectName)
+        public static Community.VisualStudio.Toolkit.Project GetProject(string projectName)
         {
             return ThreadHelper.JoinableTaskFactory.Run(async () => {
                 return await GetProjectAsync(projectName);
             });
         }
 
-        private static async Task<Community.VisualStudio.Toolkit.Project> GetProjectAsync(string projectName)
+        public static async Task<Community.VisualStudio.Toolkit.Project> GetProjectAsync(string projectName)
         {
             var projects = await VS.Solutions.GetAllProjectsAsync();
             foreach (var project in projects)

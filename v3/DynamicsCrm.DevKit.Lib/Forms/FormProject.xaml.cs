@@ -474,13 +474,13 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             if (ComboBoxProject.IsEnabled)
             {
                 if (ComboBoxProject.SelectedItem == null)
-                    LabelProjectName.Content = $"{LabelProjectName?.Tag}.{ProjectType.ToString()}";
+                    LabelProjectName.Content = $"{LabelProjectName?.Tag}.{ProjectType}";
                 else
                 {
                     if (ItemType == ItemType.Test)
                         LabelProjectName.Content = $"{((XrmEntity)ComboBoxProject.SelectedItem)?.Name}Test";
                     else
-                        LabelProjectName.Content = $"{((XrmEntity)ComboBoxProject.SelectedItem)?.Name}.{ProjectType.ToString()}";
+                        LabelProjectName.Content = $"{((XrmEntity)ComboBoxProject.SelectedItem)?.Name}.{ProjectType}";
                 }
             }
         }
