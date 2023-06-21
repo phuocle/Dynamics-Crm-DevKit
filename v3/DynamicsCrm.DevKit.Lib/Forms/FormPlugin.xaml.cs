@@ -86,6 +86,16 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     HELP.Inlines.Clear();
                     HELP.Inlines.Add("Custom Action Item Template");
                 }
+                void CustomApiItem()
+                {
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Custom-Api-Item-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("Custom Action Api Template");
+                    LabelExecution.Visibility = System.Windows.Visibility.Collapsed;
+                    ComboBoxExecution.Visibility = System.Windows.Visibility.Collapsed;
+                    LabelStage.Visibility = System.Windows.Visibility.Collapsed;
+                    ComboBoxStage.Visibility = System.Windows.Visibility.Collapsed;
+                }
                 _ItemType = value;
                 switch (_ItemType)
                 {
@@ -94,6 +104,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         break;
                     case ItemType.CustomAction:
                         CustomActionItem();
+                        break;
+                    case ItemType.CustomApi:
+                        CustomApiItem();
                         break;
                 }
             }
@@ -155,7 +168,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             if (
                 ItemType == ItemType.Plugin ||
-                ItemType == ItemType.CustomAction
+                ItemType == ItemType.CustomAction ||
+                ItemType == ItemType.CustomApi
                 )
             {
                 progressBar.Visibility = System.Windows.Visibility.Visible;
@@ -166,7 +180,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         var items = XrmHelper.GetAllEntities(CrmServiceClient);
                         await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                         ComboBoxEntity.DisplayMemberPath = "Name";
-                        if (ItemType == ItemType.CustomAction)
+                        if (ItemType == ItemType.CustomAction || ItemType == ItemType.CustomApi)
                         {
                             items.Insert(0, new XrmEntity { Name = "None", LogicalName = "none", EntityTypeCode = -1, HasImage = false, IsCustomEntity = false });
                         }
@@ -209,7 +223,18 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 if (selectedEntity.LogicalName == "none")
                     items = XrmHelper.GetAllCustomActions(CrmServiceClient);
                 else
-                    items = XrmHelper.GetSdkCustomActionMessages(CrmServiceClient, selectedEntity.LogicalName);
+                    items = XrmHelper.GetCustomActionMessages(CrmServiceClient, selectedEntity.LogicalName);
+                ComboBoxMessage.DisplayMemberPath = "Name";
+                ComboBoxMessage.ItemsSource = items;
+                ComboBoxMessage.SelectedItem = null;
+                ComboBoxStage.SelectedItem = null;
+                ComboBoxExecution.SelectedItem = null;
+                TextboxClass.Text = null;
+            }
+            else if (ItemType == ItemType.CustomApi)
+            {
+                var selectedEntity = (XrmEntity)ComboBoxEntity.SelectedItem;
+                var items = XrmHelper.GetCustomApiMessages(CrmServiceClient, selectedEntity.LogicalName);
                 ComboBoxMessage.DisplayMemberPath = "Name";
                 ComboBoxMessage.ItemsSource = items;
                 ComboBoxMessage.SelectedItem = null;
@@ -229,13 +254,10 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             var message = selectedMessage?.Name;
             var selectedExecution = (NameValue)ComboBoxExecution.SelectedItem;
             var execution = selectedExecution?.Name;
-            if (entity != null && message != null && stage != null && execution != null)
-            {
-                if (ItemType == ItemType.CustomApi)
-                    TextboxClass.Text = $"{message}Request";
-                else
-                    TextboxClass.Text = $"{stage}{entity}{message}{execution}";
-            }
+            if (ItemType == ItemType.CustomApi)
+                TextboxClass.Text = $"{message}Request";
+            else
+                TextboxClass.Text = $"{stage}{entity}{message}{execution}";
         }
 
 

@@ -1,8 +1,8 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("CSharpResourceStringItemTemplate")]
-[assembly: AssemblyDescription("CSharpResourceStringItemTemplate")]
+[assembly: AssemblyTitle("CSharpCustomApiItemTemplate")]
+[assembly: AssemblyDescription("CSharpCustomApiItemTemplate")]
 #if DEBUG
 [assembly: AssemblyConfiguration("Debug")]
 #else
@@ -14,6 +14,6 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTrademark("PhuocLe")]
 [assembly: AssemblyCulture("en")]
 [assembly: ComVisible(false)]
-[assembly: Guid("921403be-b301-40d8-b023-083c4747b50d")]
+[assembly: Guid("ca29675d-b211-46ec-9b16-2b9a4c2cc870")]
 [assembly: AssemblyVersion("3.33.33.33")]
 [assembly: AssemblyFileVersion("3.33.33.33")]

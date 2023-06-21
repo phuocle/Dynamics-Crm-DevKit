@@ -769,7 +769,7 @@ namespace DynamicsCrm.DevKit.Shared
             return list;
         }
 
-        public static List<NameValue> GetSdkCustomActionMessages(CrmServiceClient service, string logicalName)
+        public static List<NameValue> GetCustomActionMessages(CrmServiceClient service, string logicalName)
         {
             var request = new RetrieveEntityRequest
             {
@@ -811,6 +811,33 @@ namespace DynamicsCrm.DevKit.Shared
                 list.Add(new NameValue { Name = message });
             }
             return list;
+        }
+
+        public static List<NameValue> GetCustomApiMessages(CrmServiceClient service, string entity)
+        {
+            var conditionEntity = string.Empty;
+            if (entity != "none")
+                conditionEntity = $"<condition attribute='boundentitylogicalname' operator='eq' value='{entity}'/>";
+            else
+                conditionEntity = $"<condition attribute='boundentitylogicalname' operator='null' />";
+            var fetchData = new
+            {
+                statecode = "0"
+            };
+            var fetchXml = $@"
+<fetch>
+  <entity name='customapi'>
+    <attribute name='name' />
+    <attribute name='sdkmessageid' />
+    <attribute name='boundentitylogicalname' />
+    <filter>
+      <condition attribute='statecode' operator='eq' value='{fetchData.statecode}'/>
+      {conditionEntity}
+    </filter>
+  </entity>
+</fetch>";
+            var rows = service.RetrieveMultiple(new FetchExpression(fetchXml));
+            return rows.Entities.Select(x => x.GetAttributeValue<EntityReference>("sdkmessageid")?.Name).Select(y => new NameValue { Name = y }).OrderBy(z => z.Name).ToList();
         }
 
         public static List<NameValue> GetAllCustomActions(CrmServiceClient service)
