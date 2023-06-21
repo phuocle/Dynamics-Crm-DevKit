@@ -68,7 +68,8 @@
         Test,
         Plugin,
         CustomApi,
-        CustomAction
+        CustomAction,
+        DownloadWebResource
     }
 
     public enum ParameterType

@@ -92,6 +92,19 @@ namespace DynamicsCrm.DevKit.Shared
             return $"{Path.GetDirectoryName(project.FullPath)}";
         }
 
+        public static void AddExistingFileToActiveProject(string file)
+        {
+            ThreadHelper.JoinableTaskFactory.Run(async () => {
+                await AddExistingFileToActiveProjectAsync(file);
+            });
+        }
+
+        private static async Task AddExistingFileToActiveProjectAsync(string file)
+        {
+            var project = await VS.Solutions.GetActiveProjectAsync();
+            _ = project.AddExistingFilesAsync(file);
+        }
+
         public static Community.VisualStudio.Toolkit.Project GetActiveProject()
         {
             return ThreadHelper.JoinableTaskFactory.Run(async () => {

@@ -187,6 +187,13 @@
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>
+    <ProjectReference Include="..\ItemTemplates\CSharp\11.DownloadWebResourcesItemTemplate\11.DownloadWebResourcesItemTemplate.csproj">
+      <Project>{99DD3CAE-6D04-4BDA-BB2D-C4D7B28CA1E0}</Project>
+      <Name>11.DownloadWebResourcesItemTemplate</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
     <ProjectReference Include="..\ItemTemplates\CSharp\12.JsDevkitItemTemplate\12.JsDevkitItemTemplate.csproj">
       <Project>{CCBD1381-E6A6-4A57-9853-E93A27A33F12}</Project>
       <Name>12.JsDevkitItemTemplate</Name>

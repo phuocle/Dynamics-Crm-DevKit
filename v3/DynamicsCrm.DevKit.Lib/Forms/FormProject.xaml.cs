@@ -113,6 +113,20 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     ComboBoxProject.IsEditable = false;
                     TextboxProject.Visibility = System.Windows.Visibility.Hidden;
                 }
+                void DownloadWebResourceItem()
+                {
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Download-WebResources-Item-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("Download WebResources Item Template");
+                    LabelProjectName.Visibility = System.Windows.Visibility.Collapsed;
+                    var items = new List<XrmEntity> { new XrmEntity { Name = $"download.webresources.bat" } };
+                    ComboBoxProject.DisplayMemberPath = "Name";
+                    ComboBoxProject.ItemsSource = items;
+                    ComboBoxProject.SelectedIndex = 0;
+                    ComboBoxProject.IsEnabled = false;
+                    LabelProjectName.Content = $"download.webresources.bat";
+                    LabelProjectItemName.Content = ".bat file";
+                }
                 _ItemType = value;
                 switch (_ItemType)
                 {
@@ -134,6 +148,10 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     case ItemType.Test:
                         TestItem();
                         break;
+                    case ItemType.DownloadWebResource:
+                        DownloadWebResourceItem();
+                        break;
+
                 }
             }
         }

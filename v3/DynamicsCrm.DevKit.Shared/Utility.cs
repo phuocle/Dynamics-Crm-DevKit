@@ -535,5 +535,22 @@ namespace DynamicsCrm.DevKit.Shared
             }
             return attribute;
         }
+
+        public static void ForceWriteAllTextWithoutUTF8(string file, string content)
+        {
+            if (!File.Exists(file))
+            {
+                File.WriteAllText(file, content);
+            }
+            else
+            {
+                var attributes = File.GetAttributes(file);
+                if ((attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
+                {
+                    File.SetAttributes(file, attributes & ~FileAttributes.ReadOnly);
+                }
+                File.WriteAllText(file, content);
+            }
+        }
     }
 }
