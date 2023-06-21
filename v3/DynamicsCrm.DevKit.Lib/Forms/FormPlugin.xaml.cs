@@ -141,7 +141,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private void ButtonOK_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            bool IsValid()
+            static bool IsValid()
             {
                 return true;
             }

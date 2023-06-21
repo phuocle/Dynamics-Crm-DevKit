@@ -549,22 +549,22 @@ namespace DynamicsCrm.DevKit.Shared
 
         private static string GetExtension(WebResourceWebResourceType webresourcetype)
         {
-            switch (webresourcetype)
+            return webresourcetype switch
             {
-                case WebResourceWebResourceType.WebpageHtml: return ".html";
-                case WebResourceWebResourceType.ScriptJScript: return ".js";
-                case WebResourceWebResourceType.PngFormat: return ".png";
-                case WebResourceWebResourceType.GifFormat: return ".gif";
-                case WebResourceWebResourceType.JpgFormat: return ".jpg";
-                case WebResourceWebResourceType.StyleSheetCss: return ".css";
-                case WebResourceWebResourceType.IcoFormat: return ".ico";
-                case WebResourceWebResourceType.DataXml: return ".xml";
-                case WebResourceWebResourceType.StyleSheetXsl: return ".xsl";
-                case WebResourceWebResourceType.SilverlightXap: return ".xap";
-                case WebResourceWebResourceType.StringResx: return ".resx";
-                case WebResourceWebResourceType.SvgFormat: return ".svg";
-            }
-            return ".html";
+                WebResourceWebResourceType.WebpageHtml => ".html",
+                WebResourceWebResourceType.ScriptJScript => ".js",
+                WebResourceWebResourceType.PngFormat => ".png",
+                WebResourceWebResourceType.GifFormat => ".gif",
+                WebResourceWebResourceType.JpgFormat => ".jpg",
+                WebResourceWebResourceType.StyleSheetCss => ".css",
+                WebResourceWebResourceType.IcoFormat => ".ico",
+                WebResourceWebResourceType.DataXml => ".xml",
+                WebResourceWebResourceType.StyleSheetXsl => ".xsl",
+                WebResourceWebResourceType.SilverlightXap => ".xap",
+                WebResourceWebResourceType.StringResx => ".resx",
+                WebResourceWebResourceType.SvgFormat => ".svg",
+                _ => ".html",
+            };
         }
 
         public static List<NameValueGuidExtend> GetAllSolutions(CrmServiceClient crmServiceClient)

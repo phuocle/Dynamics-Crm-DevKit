@@ -11,7 +11,7 @@ namespace DynamicsCrm.DevKit.Shared
 {
     public class Replacement
     {
-        private static Dictionary<string, string> replacements = new Dictionary<string, string>();
+        private static Dictionary<string, string> replacements = new();
         public static string DestinationDirectory => replacements["$destinationdirectory$"];
 
         internal static void SetItem(Dictionary<string, string> replacementsDictionary, FormProject form)
@@ -44,8 +44,8 @@ namespace DynamicsCrm.DevKit.Shared
             replacementsDictionary.Add("$PluginOrder$", form.PluginOrder);
             replacementsDictionary.Add("$PluginOrder2$", form.PluginOrder == "1" ? string.Empty : form.PluginOrder);
             var nameSpace = replacementsDictionary["$rootnamespace$"];
-            if (nameSpace.Contains($".{ItemType.Plugin.ToString()}."))
-                replacementsDictionary.Add("$NameSpacePlugin$", nameSpace.Replace($".{ItemType.Plugin.ToString()}.", $".{ItemType.Plugin.ToString()}"));
+            if (nameSpace.Contains($".{ItemType.Plugin}."))
+                replacementsDictionary.Add("$NameSpacePlugin$", nameSpace.Replace($".{ItemType.Plugin}.", $".{ItemType.Plugin}"));
             else
                 replacementsDictionary.Add("$NameSpacePlugin$", nameSpace);
 

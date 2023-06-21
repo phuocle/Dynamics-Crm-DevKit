@@ -153,7 +153,7 @@ namespace DynamicsCrm.DevKit.Shared
             }
             var json = File.ReadAllText(fileName);
             var devKitConnections = SimpleJson.DeserializeObject<DevKitConnections>(json);
-            if (devKitConnections.CrmConnections == null) devKitConnections.CrmConnections = new List<CrmConnection>();
+            devKitConnections.CrmConnections ??= new List<CrmConnection>();
             return devKitConnections;
         }
         public static void SaveDevKitConnections(DevKitConnections connections)
@@ -377,7 +377,7 @@ namespace DynamicsCrm.DevKit.Shared
             ThreadHelper.ThrowIfNotOnUIThread();
             foreach (var @base in @class.Bases)
             {
-                if (!(@base is CodeClass baseClass)) continue;
+                if (@base is not CodeClass baseClass) continue;
                 if (baseClass.FullName == "System.Activities.CodeActivity")
                     return true;
                 if (HasImplementedWorkflow(baseClass))
@@ -435,7 +435,7 @@ namespace DynamicsCrm.DevKit.Shared
             }
             foreach (var @base in @class.Bases)
             {
-                if (!(@base is CodeClass baseClass)) continue;
+                if (@base is not CodeClass baseClass) continue;
                 if (HasImplementedPlugin(baseClass))
                     return true;
             }
@@ -479,7 +479,7 @@ namespace DynamicsCrm.DevKit.Shared
         private static List<Project> GetProjects(EnvDTE.Solution sln)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            List<Project> list = new List<Project>();
+            List<Project> list = new();
             if (sln == null) return list;
             list.AddRange(sln.Projects.Cast<Project>());
 
