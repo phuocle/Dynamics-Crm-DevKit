@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>433c26f2-61ee-46d5-a67d-7647f54c2480</ProjectGuid>
+    <ProjectGuid>{433C26F2-61EE-46D5-A67D-7647F54C2480}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Dev.DevKit.DataProvider</RootNamespace>
@@ -26,7 +26,8 @@
     <OutputPath>..\Release\dll\</OutputPath>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <DefineConstants></DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x64</PlatformTarget>
@@ -52,7 +53,12 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Create.cs" />
+    <Compile Include="Delete.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Retrieve.cs" />
+    <Compile Include="RetrieveMultiple.cs" />
+    <Compile Include="Update.cs" />
     <None Include="packages.config" />
     <None Include="deploy.debug.bat" />
     <None Include="deploy.datasource.bat" />

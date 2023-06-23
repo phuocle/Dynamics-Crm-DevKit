@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
 {
-    internal class Plugin : IWizard
+    internal class DataProvider : IWizard
     {
         public void BeforeOpeningFile(ProjectItem projectItem)
         {
@@ -26,7 +26,7 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
 
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
         {
-            var form = new FormPlugin(ItemType.Plugin);
+            var form = new FormProject(ItemType.DataProvider);
             var ok = form.ShowModal() ?? false;
             if (ok)
             {

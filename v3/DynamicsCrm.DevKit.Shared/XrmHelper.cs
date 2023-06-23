@@ -7,6 +7,7 @@ using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
+using Microsoft.Xrm.Sdk.Metadata.Query;
 using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Tooling.Connector;
 
@@ -631,6 +632,37 @@ namespace DynamicsCrm.DevKit.Shared
                 });
             entities = entities.OrderBy(entity => entity.Name).ToList();
             return entities;
+        }
+
+        public static List<XrmEntity> GetAllDataSource(CrmServiceClient crmServiceClient)
+        {
+            var list = new List<string>();
+            var filterExpression = new MetadataFilterExpression();
+            filterExpression.Conditions.Add(new MetadataConditionExpression("DataProviderId", MetadataConditionOperator.Equals, Guid.Parse("B2112A7E-B26C-42F7-9B63-9A809A9D716F")));
+            var propertiesExpression = new MetadataPropertiesExpression(new string[7]
+            {
+                "DataProviderId",
+                "LogicalName",
+                "SchemaName",
+                "MetadataId",
+                "DisplayName",
+                "ExternalName",
+                "DisplayCollectionName"
+            });
+            var entityQueryExpression = new EntityQueryExpression
+            {
+                Criteria = new MetadataFilterExpression()
+            };
+            entityQueryExpression.Criteria = filterExpression;
+            entityQueryExpression.Properties = propertiesExpression;
+            var request = new RetrieveMetadataChangesRequest
+            {
+                Query = entityQueryExpression
+            };
+            var response = (RetrieveMetadataChangesResponse)crmServiceClient.Execute(request);
+            foreach (EntityMetadata entityMetadata in response.EntityMetadata)
+                list.Add(entityMetadata.LogicalName);
+            return list.Select(x => new XrmEntity { Name = x }).ToList();
         }
 
         public static List<NameValue> GetSdkMessages(CrmServiceClient service, string logicalName)

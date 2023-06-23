@@ -208,6 +208,13 @@
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>
+    <ProjectReference Include="..\ItemTemplates\CSharp\14.DataProviderItemTemplate\14.DataProviderItemTemplate.csproj">
+      <Project>{DBC500F9-934B-4A10-9F79-5658731FE77C}</Project>
+      <Name>14.DataProviderItemTemplate</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
     <ProjectReference Include="..\ProjectTemplates\CSharp\01.SharedProjectTemplate\01.SharedProjectTemplate.csproj">
       <Project>{4170CD81-A77B-4C9A-BBAE-29DE390A4F9C}</Project>
       <Name>01.SharedProjectTemplate</Name>

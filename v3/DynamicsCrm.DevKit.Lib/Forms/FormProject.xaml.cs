@@ -127,6 +127,15 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     LabelProjectName.Content = $"download.webresources.bat";
                     LabelProjectItemName.Content = ".bat file";
                 }
+                void DataProviderItem()
+                {
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Data-Provider-Item-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("Data Provider Item Template");
+                    LabelProjectItemName.Content = "Data Source";
+                    ComboBoxProject.IsEditable = false;
+                    LabelProjectName.Visibility = System.Windows.Visibility.Collapsed;
+                }
                 _ItemType = value;
                 switch (_ItemType)
                 {
@@ -151,7 +160,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     case ItemType.DownloadWebResource:
                         DownloadWebResourceItem();
                         break;
-
+                    case ItemType.DataProvider:
+                        DataProviderItem();
+                        break;
                 }
             }
         }
@@ -440,6 +451,22 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 ComboBoxProject.DisplayMemberPath = "Name";
                 ComboBoxProject.ItemsSource = items;
                 buttonOK.IsEnabled = items.Count > 0;
+            }
+            else if (ItemType == ItemType.DataProvider)
+            {
+                progressBar.Visibility = System.Windows.Visibility.Visible;
+                _ = Task.Factory.StartNew(() =>
+                {
+                    ThreadHelper.JoinableTaskFactory.Run(async delegate
+                    {
+                        var items = XrmHelper.GetAllDataSource(CrmServiceClient);
+                        await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                        ComboBoxProject.DisplayMemberPath = "Name";
+                        ComboBoxProject.ItemsSource = items;
+                        buttonOK.IsEnabled = items.Count > 0;
+                        progressBar.Visibility = System.Windows.Visibility.Hidden;
+                    });
+                }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
             }
         }
 

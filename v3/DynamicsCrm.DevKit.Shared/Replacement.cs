@@ -19,6 +19,7 @@ namespace DynamicsCrm.DevKit.Shared
             replacements = replacementsDictionary;
             AddCommonReplacements();
             replacements.Add("$class$", form.ItemName);
+            replacements.Add("$DataSource$", form.ItemName);
             if (replacementsDictionary["$rootnamespace$"].EndsWith(".Test"))
             {
                 var NameSpaceWithoutTest = replacementsDictionary["$rootnamespace$"].Substring(0, replacementsDictionary["$rootnamespace$"].Length - ".Test".Length);
