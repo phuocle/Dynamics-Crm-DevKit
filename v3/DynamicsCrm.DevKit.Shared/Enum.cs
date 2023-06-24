@@ -70,7 +70,8 @@
         CustomApi,
         CustomAction,
         DownloadWebResource,
-        DataProvider
+        DataProvider,
+        ResourceString
     }
 
     public enum ParameterType

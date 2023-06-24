@@ -1,6 +1,7 @@
 ﻿using Community.VisualStudio.Toolkit;
 using DynamicsCrm.DevKit.Shared.Models;
 using EnvDTE;
+using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.TemplateWizard;
 using Microsoft.VisualStudio.Text.Editor;
@@ -645,7 +646,7 @@ namespace DynamicsCrm.DevKit.Shared
             return code;
         }
 
-        internal static void SetStatusMessage(string message)
+        public static void SetStatusMessage(string message)
         {
             _ = Task.Factory.StartNew(() => {
                 ThreadHelper.JoinableTaskFactory.Run(async delegate
@@ -655,7 +656,7 @@ namespace DynamicsCrm.DevKit.Shared
             }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
         }
 
-        internal static void ExecuteCommand(string command)
+        public static void ExecuteCommand(string command)
         {
             _ = Task.Factory.StartNew(() => {
                 ThreadHelper.JoinableTaskFactory.Run(async delegate
@@ -663,6 +664,32 @@ namespace DynamicsCrm.DevKit.Shared
                     await VS.Commands.ExecuteAsync(command);
                 });
             }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
+        }
+
+        public static List<XrmEntity> GetAllExistingResource()
+        {
+            return ThreadHelper.JoinableTaskFactory.Run(GetAllExistingResourceAsync);
+        }
+
+        public static async Task<List<XrmEntity>> GetAllExistingResourceAsync()
+        {
+            var selectedItem = await VS.Solutions.GetActiveItemAsync();
+            var list = selectedItem.Children.Select(x => x.Text).Where(y => y.EndsWith(".resx")).ToList();
+            list = list.Select(x => x.Split('.')[0]).Distinct().ToList();
+            return list.Select(x => new XrmEntity { Name = x }).ToList();
+        }
+
+        public static bool IsExistItem(string itemText)
+        {
+            return ThreadHelper.JoinableTaskFactory.Run(async () => {
+                return await IsExistItemAsync(itemText);
+            });
+        }
+
+        public static async Task<bool> IsExistItemAsync(string itemText)
+        {
+            var selectedItem = await VS.Solutions.GetActiveItemAsync();
+            return selectedItem.Children.Count(x => x.Text == itemText) > 0;
         }
     }
 }

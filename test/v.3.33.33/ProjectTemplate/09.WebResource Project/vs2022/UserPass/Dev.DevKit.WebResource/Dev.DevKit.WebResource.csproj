@@ -84,7 +84,6 @@
     <Folder Include="html\" />
     <Folder Include="images\" />
     <Folder Include="js\" />
-    <Folder Include="resources\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
@@ -96,6 +95,11 @@
     <TypeScriptCompile Include="entities\Contact.d.ts">
       <DependentUpon>Contact.js</DependentUpon>
     </TypeScriptCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resources\resource.1033.resx" />
+    <EmbeddedResource Include="resources\resource.1066.resx" />
+    <EmbeddedResource Include="resources\resource1.1033.resx" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v15.0\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <ProjectExtensions>

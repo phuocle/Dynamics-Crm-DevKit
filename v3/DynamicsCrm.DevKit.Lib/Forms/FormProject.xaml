@@ -28,13 +28,16 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="*"></RowDefinition>
-                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition x:Name="Row0" Height="*"></RowDefinition>
+                        <RowDefinition x:Name="Row1" Height="*"></RowDefinition>
+                        <RowDefinition x:Name="Row2" Height="*"></RowDefinition>
                     </Grid.RowDefinitions>
-                    <Label x:Name="LabelProjectItemName" Grid.Row="0" Grid.Column="0" Margin="0,0,0,5" Content="Project Name" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                    <ComboBox x:Name="ComboBoxProject" Grid.Row="0" Grid.Column="1" Margin="0,0,0,5" VerticalContentAlignment="Center" IsEditable="True" TextBoxBase.TextChanged="ComboBoxProject_TextChanged" SelectionChanged="ComboBoxProject_SelectionChanged" />
-                    <TextBox x:Name="TextboxProject" Grid.Row="0" Grid.Column="1" Margin="0,0,0,5" Visibility="Hidden" TextChanged="TextboxProject_TextChanged" VerticalContentAlignment="Center" />
-                    <Label x:Name="LabelProjectName" Grid.Row="1" Grid.Column="1" Margin="0,0,0,0" Content="Name" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                    <Label x:Name="LabelLanguage" Visibility="Collapsed" Grid.Row="0" Grid.Column="0" Margin="0,0,0,5" Content="Language" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                    <ComboBox x:Name="ComboBoxLanguage" Visibility="Collapsed" Grid.Row="0" Grid.Column="1" Margin="0,0,0,5" VerticalContentAlignment="Center" IsEditable="False" SelectionChanged="ComboBoxLanguage_SelectionChanged" />
+                    <Label x:Name="LabelProjectItemName" Grid.Row="1" Grid.Column="0" Margin="0,0,0,5" Content="Project Name" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                    <ComboBox x:Name="ComboBoxProject" Grid.Row="1" Grid.Column="1" Margin="0,0,0,5" VerticalContentAlignment="Center" IsEditable="True" TextBoxBase.TextChanged="ComboBoxProject_TextChanged" SelectionChanged="ComboBoxProject_SelectionChanged" />
+                    <TextBox x:Name="TextboxProject" Grid.Row="1" Grid.Column="1" Margin="0,0,0,5" Visibility="Hidden" TextChanged="TextboxProject_TextChanged" VerticalContentAlignment="Center" />
+                    <Label x:Name="LabelProjectName" Grid.Row="2" Grid.Column="1" Margin="0,0,0,0" Content="Name" HorizontalAlignment="Left" VerticalAlignment="Center" />
                 </Grid>
             </Border>
             <WrapPanel HorizontalAlignment="Right" Margin="10,0,10,10">

@@ -1,23 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
-  <TemplateData>
-    <Name>10. Resource String</Name>
-    <Description>Resource String Template</Description>
-    <Icon>icon.png</Icon>
-    <TemplateID>AAAAAAAA-AAAA-AAAA-BBBB-000000000010</TemplateID>
-    <ProjectType>CSharp</ProjectType>
-    <ProjectSubType>Visual C#</ProjectSubType>
-    <AppliesTo>CSharp</AppliesTo>
-    <RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
-    <NumberOfParentCategoriesToRollUp>0</NumberOfParentCategoriesToRollUp>
-    <DefaultName>ResourceString.resx</DefaultName>
-    <SortOrder>200</SortOrder>
-  </TemplateData>
-  <TemplateContent>
-    <ProjectItem ReplaceParameters="true" TargetFileName="$class$.resx">ResourceString.resx</ProjectItem>
-  </TemplateContent>
-  <WizardExtension>
-    <Assembly>DynamicsCrm.DevKit.Wizard, Version=3.11.11.0, Culture=en, PublicKeyToken=98cbb7bd3db31604</Assembly>
-    <FullClassName>DynamicsCrm.DevKit.Wizard.ItemTemplates.ResourceString</FullClassName>
-  </WizardExtension>
+	<TemplateData>
+		<Name>10. Resource String</Name>
+		<Description>Resource String Template</Description>
+		<Icon>icon.png</Icon>
+		<TemplateID>AAAAAAAA-AAAA-AAAA-BBBB-000000000010</TemplateID>
+		<ProjectType>CSharp</ProjectType>
+		<ProjectSubType>Visual C#</ProjectSubType>
+		<AppliesTo>CSharp</AppliesTo>
+		<RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
+		<NumberOfParentCategoriesToRollUp>0</NumberOfParentCategoriesToRollUp>
+		<DefaultName>ResourceString.resx</DefaultName>
+		<SortOrder>200</SortOrder>
+	</TemplateData>
+	<TemplateContent>
+		<ProjectItem ReplaceParameters="true" TargetFileName="$class$">ResourceString.resx</ProjectItem>
+	</TemplateContent>
+	<WizardExtension>
+		<Assembly>DynamicsCrm.DevKit.Lib, Version=3.33.33.33, Culture=Neutral, PublicKeyToken=98cbb7bd3db31604</Assembly>
+		<FullClassName>DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates.ResourceString</FullClassName>
+	</WizardExtension>
 </VSTemplate>

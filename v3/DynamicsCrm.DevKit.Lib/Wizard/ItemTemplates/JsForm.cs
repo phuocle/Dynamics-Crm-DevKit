@@ -11,7 +11,7 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
 {
     internal class JsForm : IWizard
     {
-        private object dte { get; set; }
+        private object Dte { get; set; }
         public string JavascriptCode { get; set; }
         public string Javascript_dts_Code { get; set; }
         public string Javascript_form_js_Code { get; set; }
@@ -52,9 +52,9 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
 
             if (IsNewJavascript_form_js)
             {
-                if (JavascriptProjectItem == null) JavascriptProjectItem = GetProjectItem($"{ItemName}.js");
-                if (Javascript_dts_ProjectItem == null) Javascript_dts_ProjectItem = GetProjectItem($"{ItemName}.d.ts");
-                if (Javascript_form_js_ProjectItem == null) Javascript_form_js_ProjectItem = GetProjectItem($"{ItemName}.form.js");
+                JavascriptProjectItem ??= GetProjectItem($"{ItemName}.js");
+                Javascript_dts_ProjectItem ??= GetProjectItem($"{ItemName}.d.ts");
+                Javascript_form_js_ProjectItem ??= GetProjectItem($"{ItemName}.form.js");
                 try
                 {
                     if (Javascript_dts_ProjectItem != null)
@@ -86,7 +86,7 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
             if (ok)
             {
                 Replacement.SetItem(replacementsDictionary, form);
-                dte = automationObject;
+                Dte = automationObject;
                 ItemName = form.ItemName;
                 IsWebApi = File.Exists(GetFullFileName($"{ItemName}.webapi.js"));
                 var entitiesMetadatas = XrmHelper.GetEntitiesMetadata(form.CrmServiceClient, new List<string> { form.ItemName });
@@ -127,7 +127,7 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
         ProjectItem GetProjectItem(string projectItemName)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            var selectItem = ((EnvDTE.DTE)dte).SelectedItems.Item(1);
+            var selectItem = ((EnvDTE.DTE)Dte).SelectedItems.Item(1);
             ProjectItems projectItems = null;
             if (selectItem.Project != null)
             {
@@ -149,7 +149,7 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
         {
             ThreadHelper.ThrowIfNotOnUIThread();
             var selectDirectoryName = string.Empty;
-            var selectItem = ((EnvDTE.DTE)dte).SelectedItems.Item(1);
+            var selectItem = ((EnvDTE.DTE)Dte).SelectedItems.Item(1);
             ProjectItems projectItems = null;
             if (selectItem.Project != null)
             {

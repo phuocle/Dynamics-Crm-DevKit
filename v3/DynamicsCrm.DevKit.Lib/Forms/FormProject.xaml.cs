@@ -27,6 +27,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             get
             {
+                if (ItemType == ItemType.ResourceString) return ProjectName;
                 return ((XrmEntity)ComboBoxProject.SelectedItem)?.Name ?? LabelProjectName.Content?.ToString();
         }
         }
@@ -136,6 +137,17 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     ComboBoxProject.IsEditable = false;
                     LabelProjectName.Visibility = System.Windows.Visibility.Collapsed;
                 }
+                void ResourceStringItem()
+                {
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Resource-String-Item-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("Resource String Item Template");
+                    LabelLanguage.Visibility = System.Windows.Visibility.Visible;
+                    ComboBoxLanguage.Visibility = System.Windows.Visibility.Visible;
+                    LabelProjectItemName.Content = "Resource";
+                    ComboBoxProject.DisplayMemberPath = "Name";
+                    ComboBoxProject.ItemsSource = VsixHelper.GetAllExistingResource();
+                }
                 _ItemType = value;
                 switch (_ItemType)
                 {
@@ -162,6 +174,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         break;
                     case ItemType.DataProvider:
                         DataProviderItem();
+                        break;
+                    case ItemType.ResourceString:
+                        ResourceStringItem();
                         break;
                 }
             }
@@ -400,6 +415,11 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     VS.MessageBox.ShowError("Invalid enter project name");
                     return false;
                 }
+                if (VsixHelper.IsExistItem(ProjectName))
+                {
+                    VS.MessageBox.ShowError($"Item: {ProjectName} exist.");
+                    return false;
+                }
                 return true;
             }
             if (IsValid())
@@ -468,6 +488,22 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     });
                 }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
             }
+            else if (ItemType == ItemType.ResourceString)
+            {
+                progressBar.Visibility = System.Windows.Visibility.Visible;
+                _ = Task.Factory.StartNew(() =>
+                {
+                    ThreadHelper.JoinableTaskFactory.Run(async delegate
+                    {
+                        var items = XrmHelper.GetProvisionedLanguages(CrmServiceClient);
+                        await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                        ComboBoxLanguage.DisplayMemberPath = "Name";
+                        ComboBoxLanguage.ItemsSource = items;
+                        buttonOK.IsEnabled = items.Count > 0;
+                        progressBar.Visibility = System.Windows.Visibility.Hidden;
+                    });
+                }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
+            }
         }
 
         private void TextboxProject_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
@@ -500,16 +536,23 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             if (ComboBoxProject.IsEnabled)
             {
-                if (ComboBoxProject.SelectedItem == null)
+                if (ItemType == ItemType.ResourceString)
                 {
-                    if (ComboBoxProject.Text.Length == 0)
-                        LabelProjectName.Content = $"{LabelProjectName?.Tag}";
-                    else
-                        LabelProjectName.Content = $"{LabelProjectName?.Tag}.{ComboBoxProject?.Text}";
+                    UpdateResouceString();
                 }
                 else
                 {
-                    LabelProjectName.Content = $"{LabelProjectName?.Tag}.{((XrmEntity)ComboBoxProject.SelectedItem)?.Name}";
+                    if (ComboBoxProject.SelectedItem == null)
+                    {
+                        if (ComboBoxProject.Text.Length == 0)
+                            LabelProjectName.Content = $"{LabelProjectName?.Tag}";
+                        else
+                            LabelProjectName.Content = $"{LabelProjectName?.Tag}.{ComboBoxProject?.Text}";
+                    }
+                    else
+                    {
+                        LabelProjectName.Content = $"{LabelProjectName?.Tag}.{((XrmEntity)ComboBoxProject.SelectedItem)?.Name}";
+                    }
                 }
             }
         }
@@ -518,16 +561,34 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             if (ComboBoxProject.IsEnabled)
             {
-                if (ComboBoxProject.SelectedItem == null)
-                    LabelProjectName.Content = $"{LabelProjectName?.Tag}.{ProjectType}";
+                if (ItemType == ItemType.ResourceString)
+                {
+                    UpdateResouceString();
+                }
                 else
                 {
-                    if (ItemType == ItemType.Test)
-                        LabelProjectName.Content = $"{((XrmEntity)ComboBoxProject.SelectedItem)?.Name}Test";
+                    if (ComboBoxProject.SelectedItem == null)
+                        LabelProjectName.Content = $"{LabelProjectName?.Tag}.{ProjectType}";
                     else
-                        LabelProjectName.Content = $"{((XrmEntity)ComboBoxProject.SelectedItem)?.Name}.{ProjectType}";
+                    {
+                        if (ItemType == ItemType.Test)
+                            LabelProjectName.Content = $"{((XrmEntity)ComboBoxProject.SelectedItem)?.Name}Test";
+                        else
+                            LabelProjectName.Content = $"{((XrmEntity)ComboBoxProject.SelectedItem)?.Name}.{ProjectType}";
+                    }
                 }
             }
+        }
+
+        private void UpdateResouceString()
+        {
+            var selectedLanguage = (NameValue)ComboBoxLanguage.SelectedItem;
+            LabelProjectName.Content = $"{ComboBoxProject.Text}.{selectedLanguage.Value}.resx";
+        }
+
+        private void ComboBoxLanguage_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            UpdateResouceString();
         }
     }
 }
