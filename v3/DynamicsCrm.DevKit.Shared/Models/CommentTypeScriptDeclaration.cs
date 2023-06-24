@@ -7,6 +7,5 @@ namespace DynamicsCrm.DevKit.Shared.Models
         public bool UseForm { get; set; }
         public bool UseWebApi { get; set; }
         public string Version { get; set; }
-        //public string WebApiVersion { get; set; }
     }
 }

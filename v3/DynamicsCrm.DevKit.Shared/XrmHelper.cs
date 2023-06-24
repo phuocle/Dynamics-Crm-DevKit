@@ -5,6 +5,7 @@ using System.Linq;
 using System.Xml;
 using DynamicsCrm.DevKit.Shared.Models;
 using EnvDTE;
+using MessagePack.Internal;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
@@ -471,8 +472,7 @@ namespace DynamicsCrm.DevKit.Shared
                         comment.UseForm = oldComment?.JsForm?.Count > 0;
                         comment.UseWebApi = oldComment.JsWebApi;
                     }
-
-                    comment.Version = Const.Version;
+                    if (string.IsNullOrEmpty(comment.Version)) comment.Version = Const.Version;
                     return comment;
                 }
                 catch

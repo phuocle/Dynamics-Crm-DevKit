@@ -18,7 +18,7 @@
 		<ProjectTypeTag>DynamicsCrm.DevKit</ProjectTypeTag>
 		<LanguageTag>CSharp</LanguageTag>
 		<PlatformTag>Windows</PlatformTag>
-		<SortOrder>110</SortOrder>
+		<SortOrder>250</SortOrder>
 	</TemplateData>
 	<TemplateContent>
 		<Project TargetFileName="Shared.shproj" File="Shared.shproj" ReplaceParameters="true">
