@@ -3,6 +3,7 @@ set /p VERSION=<version.txt
 
 powershell -Command "(Get-Date).ToString('yyyy.MM.dd HH.mm.ss') | Out-File -encoding UTF8 build.txt"
 powershell -Command "(gc DynamicsCrm.DevKit.Shared\Const.cs) -replace 'xxxx-yy-zz', (gc build.txt) | Out-File -encoding UTF8 DynamicsCrm.DevKit.Shared\Const.cs"
+powershell -Command "(gc DynamicsCrm.DevKit\source.extension.cs) -replace 'xxxx-yy-zz', (gc build.txt) | Out-File -encoding UTF8 DynamicsCrm.DevKit\source.extension.cs"
 
 echo ************************************************************
 echo Building solution: DEPLOY RELEASE MODE - version: %VERSION%
@@ -23,6 +24,7 @@ if %MsBuild%=="" (
 	call %MsBuild% /nologo /noautorsp /verbosity:minimal -p:Configuration=Release -target:Clean;Build DynamicsCrm.DevKit.sln
 
 	powershell -Command "(gc DynamicsCrm.DevKit.Shared\Const.cs) -replace (gc build.txt), 'xxxx-yy-zz' | Out-File -encoding UTF8 DynamicsCrm.DevKit.Shared\Const.cs"
+	rem powershell -Command "(gc DynamicsCrm.DevKit\source.extension.cs) -replace (gc build.txt), 'xxxx-yy-zz' | Out-File -encoding UTF8 DynamicsCrm.DevKit\source.extension.cs"
 
     echo ************************************************************
     echo NuGet pack ...
