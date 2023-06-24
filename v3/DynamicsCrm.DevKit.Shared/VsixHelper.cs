@@ -296,6 +296,7 @@ namespace DynamicsCrm.DevKit.Shared
 
         internal static List<XrmEntity> GetTestClasses(DTE dte)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             var list1 = GetAllClassesOfPluginAndWorkflow(dte);
             var list2 = GetAllTestClasses(dte);
             return list1.Where(x => !list2.Contains(x.Name)).ToList();
