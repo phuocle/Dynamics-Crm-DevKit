@@ -25,8 +25,8 @@ if %MsBuild%=="" (
 	call %MsBuild% /nologo /noautorsp /verbosity:minimal -p:Configuration=Release -target:Clean;Build DynamicsCrm.DevKit.sln
 
 	powershell -Command "(gc DynamicsCrm.DevKit.Shared\Const.cs) -replace (gc build.txt), 'xxxx-yy-zz' | Out-File -encoding UTF8 DynamicsCrm.DevKit.Shared\Const.cs"
-	rem powershell -Command "(gc DynamicsCrm.DevKit\source.extension.cs) -replace (gc build.txt), 'xxxx-yy-zz' | Out-File -encoding UTF8 DynamicsCrm.DevKit\source.extension.cs"
-	rem powershell -Command "(gc DynamicsCrm.DevKit\source.extension.vsixmanifest) -replace (gc build.txt), 'xxxx-yy-zz' | Out-File -encoding UTF8 DynamicsCrm.DevKit\source.extension.vsixmanifest"
+	powershell -Command "(gc DynamicsCrm.DevKit\source.extension.cs) -replace (gc build.txt), 'xxxx-yy-zz' | Out-File -encoding UTF8 DynamicsCrm.DevKit\source.extension.cs"
+	powershell -Command "(gc DynamicsCrm.DevKit\source.extension.vsixmanifest) -replace (gc build.txt), 'xxxx-yy-zz' | Out-File DynamicsCrm.DevKit\source.extension.vsixmanifest"
 
     echo ************************************************************
     echo NuGet pack ...
