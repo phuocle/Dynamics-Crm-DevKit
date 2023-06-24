@@ -117,10 +117,10 @@ namespace DynamicsCrm.DevKit.Shared
             return await VS.Solutions.GetActiveProjectAsync();
         }
 
-        public static string GetDynamicsCrmDevKitCachedJsonFileName()
+        public static string GetDynamicsCrmDevKitConfigJsonFileName()
         {
             return ThreadHelper.JoinableTaskFactory.Run(async () => {
-                return await GetDynamicsCrmDevKitCachedJsonFileNameAsync();
+                return await GetDynamicsCrmDevKitConfigJsonFileNameAsync();
             });
         }
 
@@ -150,10 +150,10 @@ namespace DynamicsCrm.DevKit.Shared
             return $"{Path.GetDirectoryName(solution.FullPath)}\\{Const.DynamicsCrmDevKitCliJson}";
         }
 
-        public static async Task<string> GetDynamicsCrmDevKitCachedJsonFileNameAsync()
+        public static async Task<string> GetDynamicsCrmDevKitConfigJsonFileNameAsync()
         {
             var solution = await VS.Solutions.GetCurrentSolutionAsync();
-            return $"{Path.GetDirectoryName(solution.FullPath)}\\{Const.DynamicsCrmDevKitCachedJson}";
+            return $"{Path.GetDirectoryName(solution.FullPath)}\\{Const.DynamicsCrmDevKitConfigJson}";
         }
         public static DevKitConnections GetDevKitConnections()
         {

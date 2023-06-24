@@ -1,11 +1,9 @@
 ﻿using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
-using Microsoft.VisualStudio.Shell;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 
 namespace DynamicsCrm.DevKit.Lib.Forms
@@ -29,7 +27,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             get
             {
                 var value = (DeployWebResource)comboWebResources.SelectedItem;
-                value.FullFileName = FullFileName;
+                value.File = FullFileName;
                 return value;
             }
         }
@@ -41,9 +39,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 var solution = (NameValueGuidExtend)comboBoxSolutions.SelectedItem;
                 return new DeployWebResource
                 {
-                    FullFileName = FullFileName,
+                    File = FullFileName,
                     SolutionUniqueName = solution.SolutionUniqueName,
-                    WebResourceName = textboxPrefix.Text + textboxNewWebResource.Text
+                    WebResource = textboxPrefix.Text + textboxNewWebResource.Text
                 };
             }
         }
@@ -97,15 +95,15 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private string GetDefaultText()
         {
-            var fileName = VsixHelper.GetDynamicsCrmDevKitCachedJsonFileName();
+            var fileName = VsixHelper.GetDynamicsCrmDevKitConfigJsonFileName();
             if (File.Exists(fileName))
             {
                 var json = File.ReadAllText(fileName);
                 var cachedJson = SimpleJson.DeserializeObject<CachedJson>(json);
-                var deployWebResource = cachedJson.DeployWebResources.Where(x => x.FullFileName == FullFileName).FirstOrDefault();
+                var deployWebResource = cachedJson.WebResources.Where(x => x.File == FullFileName).FirstOrDefault();
                 if (deployWebResource != null)
                 {
-                    var webResource = WebResources.Where(x => x.WebResourceName == deployWebResource.WebResourceName).FirstOrDefault();
+                    var webResource = WebResources.Where(x => x.WebResource == deployWebResource.WebResource).FirstOrDefault();
                     if (webResource != null)
                     {
                         return webResource.DisplayWebResourceName;

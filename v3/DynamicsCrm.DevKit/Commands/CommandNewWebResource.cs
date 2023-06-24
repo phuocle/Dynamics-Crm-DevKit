@@ -44,7 +44,7 @@ namespace DynamicsCrm.DevKit.Commands
                 await VS.StatusBar.ShowMessageAsync($"Publishing ...");
                 var ok2 = await PublishWebResourceAsync(service, deployWebResource.WebResourceId);
                 if (ok2)
-                    await VS.StatusBar.ShowMessageAsync($"[{XrmHelper.ConnectedUrl(service)}]: Deployed/Published [{VsixHelper.SelectedItem.FileName}] to [{deployWebResource.WebResourceName}]");
+                    await VS.StatusBar.ShowMessageAsync($"[{XrmHelper.ConnectedUrl(service)}]: Deployed/Published [{VsixHelper.SelectedItem.FileName}] to [{deployWebResource.WebResource}]");
                 else
                     await VS.StatusBar.ShowMessageAsync($"Publishing failed !!!");
             }
@@ -56,8 +56,8 @@ namespace DynamicsCrm.DevKit.Commands
 
         private static async Task<bool> DeployNewWebResourceAsync(CrmServiceClient service, DeployWebResource deployWebResource)
         {
-            deployWebResource.WebResourceId = await GetNewWebResourceAsync(service, VsixHelper.SelectedItem.FullFileName, deployWebResource.WebResourceName);
-            await AddWebResourceToSolutionAsync(service, deployWebResource.WebResourceId, deployWebResource.SolutionUniqueName, deployWebResource.WebResourceName);
+            deployWebResource.WebResourceId = await GetNewWebResourceAsync(service, VsixHelper.SelectedItem.FullFileName, deployWebResource.WebResource);
+            await AddWebResourceToSolutionAsync(service, deployWebResource.WebResourceId, deployWebResource.SolutionUniqueName, deployWebResource.WebResource);
             return true;
         }
 

@@ -145,7 +145,7 @@ namespace DynamicsCrm.DevKit.Shared
             {
                 webResources.Add(new DeployWebResource
                 {
-                    WebResourceName = entity.GetAttributeValue<string>("name") ?? string.Empty,
+                    WebResource = entity.GetAttributeValue<string>("name") ?? string.Empty,
                     WebResourceId = entity.Id,
                     IsManaged = entity.GetAttributeValue<bool?>("ismanaged") ?? false
                 });

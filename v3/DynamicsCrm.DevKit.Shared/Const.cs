@@ -13,7 +13,7 @@ namespace DynamicsCrm.DevKit.Shared
         public const string CrmString = "Dataverse/CDS";
         public const string DynamicsCrmDevKitJson = "DynamicsCrm.DevKit.json";
         public const string DynamicsCrmDevKitCliJson = "DynamicsCrm.DevKit.Cli.json";
-        public const string DynamicsCrmDevKitCachedJson = "DynamicsCrm.DevKit.cached.json";
+        public const string DynamicsCrmDevKitConfigJson = "DynamicsCrm.DevKit.Config.json";
         public const string DynamicsCrmDevKitLibDll = "DynamicsCrm.DevKit.Lib.dll";
         public static readonly string VersionBuild = $"v.{Version} - Build: {Build}";
         public static readonly string WindowTitle = $"DynamicsCrm.DevKit { Const.VersionBuild }";

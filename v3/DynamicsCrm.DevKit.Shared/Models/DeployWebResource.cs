@@ -7,12 +7,12 @@ namespace DynamicsCrm.DevKit.Shared.Models
     public class DeployWebResource
     {
         [DataMember(Order = 1)]
-        public string FullFileName { get; set; }
+        public string File { get; set; }
         [DataMember(Order = 2)]
-        public string WebResourceName { get; set; }
+        public string WebResource { get; set; }
         public Guid WebResourceId { get; set; }
         public bool IsManaged { get; set; } = false;
-        public string DisplayWebResourceName => WebResourceName + (IsManaged ? " [managed]" : "");
+        public string DisplayWebResourceName => WebResource + (IsManaged ? " [managed]" : "");
         public string SolutionUniqueName { get; set; }
     }
 }

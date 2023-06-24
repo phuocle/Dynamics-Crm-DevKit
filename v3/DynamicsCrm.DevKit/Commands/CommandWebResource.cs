@@ -8,7 +8,6 @@ using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Tooling.Connector;
 using System;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Commands
@@ -44,14 +43,14 @@ namespace DynamicsCrm.DevKit.Commands
         private static async Task DeployWebResourceAsync(CrmServiceClient service, DeployWebResource deployWebResource)
         {
             await VS.StatusBar.ShowMessageAsync($"Deploying ...");
-            var ok = await DeployWebResourceAsync(service, deployWebResource.FullFileName, deployWebResource.WebResourceId);
+            var ok = await DeployWebResourceAsync(service, deployWebResource.File, deployWebResource.WebResourceId);
             await VS.StatusBar.ShowMessageAsync($"Deployed !!!");
             if (ok)
             {
                 await VS.StatusBar.ShowMessageAsync($"Publishing ...");
                 var ok2 = await PublishWebResourceAsync(service, deployWebResource.WebResourceId);
                 if (ok2)
-                    await VS.StatusBar.ShowMessageAsync($"[{XrmHelper.ConnectedUrl(service)}]: Deployed/Published [{VsixHelper.SelectedItem.FileName}] to [{deployWebResource.WebResourceName}]");
+                    await VS.StatusBar.ShowMessageAsync($"[{XrmHelper.ConnectedUrl(service)}]: Deployed/Published [{VsixHelper.SelectedItem.FileName}] to [{deployWebResource.WebResource}]");
                 else
                     await VS.StatusBar.ShowMessageAsync($"Publishing failed !!!");
             }

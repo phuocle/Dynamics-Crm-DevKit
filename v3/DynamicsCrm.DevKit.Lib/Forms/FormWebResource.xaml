@@ -17,7 +17,7 @@
     </forms:BaseDialogWindow.Resources>
     <StackPanel>
         <TextBlock x:Name="wikiMapping" Padding="10,5,10,5" Visibility="Visible" Background="Green">
-            <wpfcontrols:ExternalBrowserHyperlink NavigateUri="https://google.com" Foreground="White" >WIKI: Mapping WebResource</wpfcontrols:ExternalBrowserHyperlink>
+            <wpfcontrols:ExternalBrowserHyperlink NavigateUri="https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Mapping-WebResource" Foreground="White" >WIKI: Mapping WebResource</wpfcontrols:ExternalBrowserHyperlink>
         </TextBlock>
         <TextBlock x:Name="wikiNewWebResource" Padding="10,5,10,5" Visibility="Collapsed">
             <TextBlock.Background>
