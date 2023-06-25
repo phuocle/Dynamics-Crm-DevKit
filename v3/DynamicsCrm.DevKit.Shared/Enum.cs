@@ -70,9 +70,10 @@
         Plugin,
         CustomApi,
         CustomAction,
-        DownloadWebResource,
+        DownloadWebResources,
         DataProvider,
-        ResourceString
+        ResourceString,
+        DownloadReports
     }
 
     public enum ParameterType

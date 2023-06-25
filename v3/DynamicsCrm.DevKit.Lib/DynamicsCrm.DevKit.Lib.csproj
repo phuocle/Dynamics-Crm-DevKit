@@ -33,17 +33,19 @@
   <ItemGroup>
     <None Remove="Forms\FormPlugin.xaml" />
     <None Remove="Forms\FormWebResource.xaml" />
+    <None Remove="Resources\download.reports.bat" />
+    <None Remove="Resources\download.webresources.bat" />
     <None Remove="Resources\WebApi.js" />
     <None Remove="Resources\WebApi2.js" />
-    <None Remove="Resources\webresource.download.webresources.bat" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\devkit.d.ts" />
     <EmbeddedResource Include="Resources\devkit.js" />
+    <EmbeddedResource Include="Resources\download.reports.bat" />
     <EmbeddedResource Include="Resources\DynamicsCrm.DevKit.Cli.json" />
     <EmbeddedResource Include="Resources\WebApi.js" />
     <EmbeddedResource Include="Resources\WebApi2.js" />
-    <EmbeddedResource Include="Resources\webresource.download.webresources.bat" />
+    <EmbeddedResource Include="Resources\download.webresources.bat" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\ReportProjectTemplate.rptproj" />

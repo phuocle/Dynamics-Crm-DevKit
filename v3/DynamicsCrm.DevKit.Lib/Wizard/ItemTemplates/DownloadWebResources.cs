@@ -7,7 +7,7 @@ using System.IO;
 
 namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
 {
-    internal class DownloadWebResource : IWizard
+    internal class DownloadWebResources : IWizard
     {
         public void BeforeOpeningFile(ProjectItem projectItem)
         {
@@ -33,7 +33,7 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
                 Community.VisualStudio.Toolkit.VS.MessageBox.ShowError("You added this file: download.webresources.bat to your active project");
             else
             {
-                var form = new FormProject(ItemType.DownloadWebResource);
+                var form = new FormProject(ItemType.DownloadWebResources);
                 var ok = form.ShowModal() ?? false;
                 if (ok)
                 {
@@ -51,7 +51,7 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
                             ;
                         Utility.ForceWriteAllText(VsixHelper.GetDynamicsCrmDevKitCliJsonFileName(), json);
                     }
-                    var downloadContent = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.webresource.download.webresources.bat");
+                    var downloadContent = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.download.webresources.bat");
                     if (form.IsOOBConnection)
                     {
                         downloadContent = downloadContent.Replace("set CrmConnection=\"$CrmConnectionString$\"\r\n", string.Empty);

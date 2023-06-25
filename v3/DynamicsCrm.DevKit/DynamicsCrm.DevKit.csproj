@@ -187,6 +187,13 @@
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>
+    <ProjectReference Include="..\ItemTemplates\CSharp\09.DownloadReportsItemTemplate\09.DownloadReportsItemTemplate.csproj">
+      <Project>{4B8313E3-5E55-4326-B181-076BD9F62231}</Project>
+      <Name>09.DownloadReportsItemTemplate</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
     <ProjectReference Include="..\ItemTemplates\CSharp\10.ResourceStringItemTemplate\10.ResourceStringItemTemplate.csproj">
       <Project>{AEC3BFCD-934B-48C6-8132-0ACAA0AB42D0}</Project>
       <Name>10.ResourceStringItemTemplate</Name>
