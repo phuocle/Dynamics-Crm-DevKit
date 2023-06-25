@@ -512,6 +512,18 @@ namespace DynamicsCrm.DevKit.Shared
             });
         }
 
+        public static Project GetProject(DTE dte, string projectName)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            var projects = GetProjects(dte.Solution);
+            foreach (Project project in projects)
+            {
+                if (project.ProjectItems == null || project.FileName.Length == 0) continue;
+                if (project.Name == projectName) return project;
+            }
+            return null;
+        }
+
         public static async Task<Community.VisualStudio.Toolkit.Project> GetProjectAsync(string projectName)
         {
             var projects = await VS.Solutions.GetAllProjectsAsync();

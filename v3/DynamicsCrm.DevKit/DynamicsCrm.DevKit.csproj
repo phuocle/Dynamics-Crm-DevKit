@@ -292,6 +292,13 @@
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>
+    <ProjectReference Include="..\ProjectTemplates\CSharp\11.ReportProjectTemplate\11.ReportProjectTemplate.csproj">
+      <Project>{ACFB5F3D-6156-47F4-A879-C9552E7C334C}</Project>
+      <Name>11.ReportProjectTemplate</Name>
+      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
     <ProjectReference Include="..\ProjectTemplates\CSharp\12.ProxyTypesProjectTemplate\12.ProxyTypesProjectTemplate.csproj">
       <Project>{9172E6AA-6AD5-409E-81AF-37C7D03D4A3D}</Project>
       <Name>12.ProxyTypesProjectTemplate</Name>

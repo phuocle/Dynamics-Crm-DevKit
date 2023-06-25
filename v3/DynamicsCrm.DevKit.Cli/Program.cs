@@ -41,7 +41,7 @@ namespace DynamicsCrm.DevKit.Cli
             CliLog.WriteLine(helpColor, " | | | | | | | '_ \\ / _` | '_ ` _ \\| |/ __/ __| |   | '__| '_ ` _ \\  | | | |/ _ \\ \\ / / ' /| | __|| |   | | |");
             CliLog.WriteLine(helpColor, " | |_| | |_| | | | | (_| | | | | | | | (__\\__ \\ |___| |  | | | | | |_| |_| |  __/\\ V /| . \\| | |_ | |___| | |");
             CliLog.WriteLine(helpColor, " |____/ \\__, |_| |_|\\__,_|_| |_| |_|_|\\___|___/\\____|_|  |_| |_| |_(_)____/ \\___| \\_/ |_|\\_\\_|\\__(_)____|_|_|");
-            CliLog.Write(helpColor, "        |___/               ", ConsoleColor.White, "https://github.com/phuocle/Dynamics-Crm-DevKit ");
+            CliLog.Write(helpColor, "        |___/            ", ConsoleColor.White, "https://github.com/phuocle/Dynamics-Crm-DevKit ");
             CliLog.WriteSuccess(ConsoleColor.White, Const.Version);
             CliLog.Write(ConsoleColor.White, " Build: ");
             CliLog.WriteSuccess(ConsoleColor.White, Const.Build);

@@ -54,7 +54,8 @@
         ProxyTypes,
         Test,
         UiTest,
-        SharedTest
+        SharedTest,
+        Report
     }
 
     public enum ItemType

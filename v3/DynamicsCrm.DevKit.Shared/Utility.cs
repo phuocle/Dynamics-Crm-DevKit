@@ -348,6 +348,20 @@ namespace DynamicsCrm.DevKit.Shared
             }
         }
 
+        public static void TryDeleteFile(string file)
+        {
+            if (File.Exists(file))
+            {
+                try
+                {
+                    File.Delete(file);
+                }
+                catch
+                {
+                }
+            }
+        }
+
         public static string SafeNamespace(string @namespace)
         {
             if (@namespace == null || @namespace.Length == 0) return string.Empty;

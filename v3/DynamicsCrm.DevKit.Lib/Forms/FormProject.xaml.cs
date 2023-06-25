@@ -334,6 +334,16 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     ComboBoxProject.IsEnabled = false;
                     LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}.Shared.Test";
                 }
+                void ReportProject()
+                {
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Report-Project-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("Report Project Template");
+                    ComboBoxProject.Visibility = System.Windows.Visibility.Hidden;
+                    TextboxProject.Visibility = System.Windows.Visibility.Visible;
+                    LabelProjectName.Content = $"{VsixHelper.GetSolutionName()}.Report";
+                    LabelProjectName.Tag = LabelProjectName.Content;
+                }
                 _ProjectType = value;
                 switch (_ProjectType)
                 {
@@ -378,6 +388,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         break;
                     case ProjectType.SharedTest:
                         SharedTestProject();
+                        break;
+                    case ProjectType.Report:
+                        ReportProject();
                         break;
                 }
             }

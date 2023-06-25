@@ -45,6 +45,9 @@
     <EmbeddedResource Include="Resources\WebApi2.js" />
     <EmbeddedResource Include="Resources\webresource.download.webresources.bat" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\ReportProjectTemplate.rptproj" />
+  </ItemGroup>
 
   <ItemGroup>
     <Page Include="Forms\FormConnection.xaml">

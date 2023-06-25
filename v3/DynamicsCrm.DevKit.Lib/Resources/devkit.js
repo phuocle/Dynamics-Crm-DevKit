@@ -690,7 +690,7 @@ var devKit = (function () {
         });
         return process;
     }
-    function loadField(field, attribute, control) {
+    function loadField(formContext, field, attribute, control) {
         field.ContentWindow = function (successCallback, errorCallback) {
             if (has(control, 'getContentWindow')) {
                 control.getContentWindow().then(successCallback, errorCallback);
@@ -1081,6 +1081,7 @@ var devKit = (function () {
                 return NULL;
             },
             set: function (value) {
+                if (formContext.ui.getFormType() === 3 || formContext.ui.getFormType() === 4) return;
                 if (has(attribute, 'setValue')) {
                     attribute.setValue(value);
                 }
@@ -1120,6 +1121,7 @@ var devKit = (function () {
                 return EMPTY_BOOL;
             },
             set: function (value) {
+                if (formContext.ui.getFormType() === 3 || formContext.ui.getFormType() === 4) return;
                 if (has(control, 'setDisabled')) {
                     control.setDisabled(value);
                 }
@@ -1247,7 +1249,7 @@ var devKit = (function () {
                     }
                 }
             })();
-            loadField(body[field], attribute, control);
+            loadField(formContext, body[field], attribute, control);
         }
         if (type === "footer_") {
             Object.defineProperty(body, 'Visible', {
@@ -1530,7 +1532,7 @@ var devKit = (function () {
                             var control = quickViewControl.getControl(field.toLowerCase());
                             var attribute = control.getAttribute();
                             var objField = {};
-                            loadField(objField, attribute, control);
+                            loadField(formContext, objField, attribute, control);
                             obj[field] = objField;
                         }
                     }

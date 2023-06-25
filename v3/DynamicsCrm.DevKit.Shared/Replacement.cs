@@ -136,7 +136,6 @@ namespace DynamicsCrm.DevKit.Shared
         private static void AddCommonReplacements()
         {
             var solutionName = VsixHelper.GetSolutionName();
-            replacements.Add("$NameSpace$", replacements["$rootnamespace$"]);
             replacements.Add("$DevKitVersion$", Const.Version);
             replacements.Add("$SharedNameSpace$", $"{solutionName}.Shared");
             replacements.Add("$SharedProject$", $"{solutionName}.Shared");
