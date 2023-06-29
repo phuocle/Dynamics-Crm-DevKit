@@ -33,6 +33,15 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             }
         }
 
+        public string PluginSchemaName
+        {
+            get
+            {
+                var selected = (XrmEntity)ComboBoxEntity.SelectedItem;
+                return selected.SchemaName;
+            }
+        }
+
         public string PluginOrder => "1";
         public string PluginOrder2 => "";
         public string PluginComment
@@ -44,6 +53,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 var list = XrmHelper.GetPluginInputOutputParameters(CrmServiceClient, selected.LogicalName, message);
                 if (list.Count == 0) return string.Empty;
                 var max = list.OrderByDescending(s => s.Name.Length).First().Name.Length + 4;
+                var code = string.Empty;
+                code += $"InputParameters:\r\n";
                 var inputParameters = string.Empty;
                 foreach (var item in list.Where(where => where.ParameterType == ParameterType.Input))
                 {
@@ -51,7 +62,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     inputParameters +=
                         $"\t\t\t{item.Name}{@string}{item.Type}{(!item.Require ? " - require" : string.Empty)}\r\n";
                 }
-
+                code += inputParameters;
+                code += $"\t\tOutputParameters:\r\n";
                 var outputParameters = string.Empty;
                 foreach (var item in list.Where(where => where.ParameterType == ParameterType.Output))
                 {
@@ -59,11 +71,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     outputParameters +=
                         $"\t\t\t{item.Name}{@string}{item.Type}{(!item.Require ? " - require" : string.Empty)}\r\n";
                 }
-                var code = $@"      /*
-        InputParameters:
-{inputParameters}         OutputParameters:
-{outputParameters}      */";
-                return code;
+                code += outputParameters;
+                return code.TrimEnd("\r\n".ToCharArray());
             }
         }
 

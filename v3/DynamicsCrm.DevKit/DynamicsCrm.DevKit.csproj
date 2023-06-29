@@ -114,7 +114,6 @@
       <Generator>VsctGenerator</Generator>
       <LastGenOutput>DevKitPackageVsct.cs</LastGenOutput>
     </VSCTCompile>
-    <Content Include="icon.ico" />
     <Content Include="icon16.png" />
     <Content Include="icon32.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

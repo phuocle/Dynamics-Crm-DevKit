@@ -628,6 +628,7 @@ namespace DynamicsCrm.DevKit.Shared
                 {
                     Name = entity.SchemaName,
                     LogicalName = entity.LogicalName,
+                    SchemaName = entity.SchemaName,
                     HasImage = !string.IsNullOrEmpty(entity.PrimaryImageAttribute),
                     EntityTypeCode = entity.ObjectTypeCode ?? -1,
                     IsCustomEntity = entity.IsCustomEntity ?? false

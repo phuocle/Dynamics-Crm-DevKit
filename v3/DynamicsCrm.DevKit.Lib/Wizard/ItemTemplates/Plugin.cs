@@ -31,6 +31,8 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
             if (ok)
             {
                 Replacement.SetItem(replacementsDictionary, form);
+                var replacement = new ReplacementServer(replacementsDictionary, form);
+                replacementsDictionary.Add("$plugin$", replacement.Code);
             }
             else
                 VsixHelper.ThrowWizardCancelledException();

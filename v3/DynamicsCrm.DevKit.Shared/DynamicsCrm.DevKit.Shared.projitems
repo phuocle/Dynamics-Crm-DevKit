@@ -61,6 +61,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\XrmEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NuGetHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Replacement.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ReplacementServer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Signing.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SimpleJson.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)XrmSingleton.cs" />
