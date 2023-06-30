@@ -5,19 +5,20 @@ using System;
 
 namespace Dev.DevKit.PluginAccount
 {
-    [CrmPluginRegistration("Assign", "account", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "", "Dev.DevKit.PluginAccount.PostAccountAssignAsynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = true)]
-    public class PostAccountAssignAsynchronous : IPlugin
+    [CrmPluginRegistration("Retain", "account", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "", "Dev.DevKit.PluginAccount.PostAccountRetainSynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin)]
+    public class PostAccountRetainSynchronous : IPlugin
     {
         /*
         InputParameters:
-            Target      Microsoft.Xrm.Sdk.EntityReference - require
-            Assignee    Microsoft.Xrm.Sdk.EntityReference - require
+            Target                   Microsoft.Xrm.Sdk.EntityReference - require
+            OperationId              System.Guid
         OutputParameters:
+            EntityCountCollection    Microsoft.Xrm.Sdk.EntityRecordCountCollection - require
         */
 
         //private readonly string unSecureConfiguration = null;
         //private readonly string secureConfiguration = null;
-        //public PostAccountAssignAsynchronous(string unSecureConfiguration, string secureConfiguration)
+        //public PostAccountRetainSynchronous(string unSecureConfiguration, string secureConfiguration)
         //{
         //    this.unSecureConfiguration = unSecureConfiguration;
         //    this.secureConfiguration = secureConfiguration;
@@ -32,8 +33,8 @@ namespace Dev.DevKit.PluginAccount
             var tracing = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
             if (context.Stage != (int)StageEnum.PostOperation) throw new InvalidPluginExecutionException("Stage does not equals PostOperation");
             if (context.PrimaryEntityName.ToLower() != "account") throw new InvalidPluginExecutionException("PrimaryEntityName does not equals account");
-            if (context.MessageName.ToLower() != "Assign".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals Assign");
-            if (context.Mode != (int)ExecutionModeEnum.Asynchronous) throw new InvalidPluginExecutionException("Execution does not equals Asynchronous");
+            if (context.MessageName.ToLower() != "Retain".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals Retain");
+            if (context.Mode != (int)ExecutionModeEnum.Synchronous) throw new InvalidPluginExecutionException("Execution does not equals Synchronous");
 
             //tracing.DebugContext(context);
 

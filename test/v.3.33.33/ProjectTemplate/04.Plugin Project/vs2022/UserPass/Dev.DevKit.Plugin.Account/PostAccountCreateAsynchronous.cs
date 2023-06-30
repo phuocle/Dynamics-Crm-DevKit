@@ -5,19 +5,24 @@ using System;
 
 namespace Dev.DevKit.PluginAccount
 {
-    [CrmPluginRegistration("Assign", "account", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "", "Dev.DevKit.PluginAccount.PostAccountAssignAsynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = true)]
-    public class PostAccountAssignAsynchronous : IPlugin
+    [CrmPluginRegistration("Create", "account", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "", "Dev.DevKit.PluginAccount.PostAccountCreateAsynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = true)]
+    public class PostAccountCreateAsynchronous : IPlugin
     {
         /*
         InputParameters:
-            Target      Microsoft.Xrm.Sdk.EntityReference - require
-            Assignee    Microsoft.Xrm.Sdk.EntityReference - require
+            Target                             Microsoft.Xrm.Sdk.Entity - require
+            SuppressDuplicateDetection         System.Boolean
+            CalculateMatchCodeSynchronously    System.Boolean
+            SolutionUniqueName                 System.String
+            MaintainLegacyAppServerBehavior    System.Boolean
+            ReturnRowVersion                   System.Boolean
         OutputParameters:
+            id                                 System.Guid - require
         */
 
         //private readonly string unSecureConfiguration = null;
         //private readonly string secureConfiguration = null;
-        //public PostAccountAssignAsynchronous(string unSecureConfiguration, string secureConfiguration)
+        //public PostAccountCreateAsynchronous(string unSecureConfiguration, string secureConfiguration)
         //{
         //    this.unSecureConfiguration = unSecureConfiguration;
         //    this.secureConfiguration = secureConfiguration;
@@ -32,7 +37,7 @@ namespace Dev.DevKit.PluginAccount
             var tracing = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
             if (context.Stage != (int)StageEnum.PostOperation) throw new InvalidPluginExecutionException("Stage does not equals PostOperation");
             if (context.PrimaryEntityName.ToLower() != "account") throw new InvalidPluginExecutionException("PrimaryEntityName does not equals account");
-            if (context.MessageName.ToLower() != "Assign".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals Assign");
+            if (context.MessageName.ToLower() != "Create".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals Create");
             if (context.Mode != (int)ExecutionModeEnum.Asynchronous) throw new InvalidPluginExecutionException("Execution does not equals Asynchronous");
 
             //tracing.DebugContext(context);
@@ -42,7 +47,7 @@ namespace Dev.DevKit.PluginAccount
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService serviceAdmin, IOrganizationService service, ITracingService tracing)
         {
-            //var target = context.InputParameterOrDefault<???>("???");
+            var targetEntity = context.InputParameterOrDefault<Entity>("Target");
             //var preEntity = (Entity)context?.PreEntityImages?["???"];
             //var postEntity = (Entity)context?.PostEntityImages?["???"];
             //YOUR PLUGIN-CODE GO HERE
