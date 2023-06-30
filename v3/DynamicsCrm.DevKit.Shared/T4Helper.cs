@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Text;
 using System.Linq;
+using System.IO;
 
 namespace DynamicsCrm.DevKit.Shared
 {
@@ -17,6 +18,13 @@ namespace DynamicsCrm.DevKit.Shared
             string T4CodePlugin()
             {
                 var code = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.Plugin.tt");
+                var fileName = VsixHelper.GetDynamicsCrmDevKitConfigJsonFileName();
+                if (File.Exists(fileName))
+                {
+                    var json = File.ReadAllText(fileName);
+                    var cachedJson = SimpleJson.DeserializeObject<CachedJson>(json);
+                    code = Utility.Decompress(cachedJson.Plugin);
+                }
                 return code;
             }
             if (itemType == ItemType.Plugin)

@@ -58,6 +58,7 @@
     <Compile Include="PostAccountCreateAsynchronous.cs" />
     <Compile Include="PostAccountRetainSynchronous.cs" />
     <Compile Include="PostAccountRetrieveMultipleAsynchronous.cs" />
+    <Compile Include="PostAccountRetrieveSharedPrincipalsAndAccessAsynchronous.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="..\Dev.DevKit.Shared\Dev.DevKit.Shared.projitems" Label="Shared" Condition="Exists('..\Dev.DevKit.Shared\Dev.DevKit.Shared.projitems')" />

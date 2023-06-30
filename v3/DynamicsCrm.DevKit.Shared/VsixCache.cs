@@ -140,6 +140,30 @@ namespace DynamicsCrm.DevKit.Shared
             Utility.ForceWriteAllText(fileName, json);
         }
 
+        //private void SavedTo_DynamicsCrmDevKitCachedJsonFileName(ItemType itemType, string data)
+        //{
+        //    var json = string.Empty;
+        //    var cachedJson = new CachedJson() { WebResources = new List<DeployWebResource>() };
+        //    var fileName = VsixHelper.GetDynamicsCrmDevKitConfigJsonFileName();
+        //    if (File.Exists(fileName))
+        //    {
+        //        json = File.ReadAllText(VsixHelper.GetDynamicsCrmDevKitConfigJsonFileName());
+        //        cachedJson = SimpleJson.DeserializeObject<CachedJson>(json);
+        //    }
+        //    var found = cachedJson.WebResources.Where(x => x.File == deployWebResource.File).FirstOrDefault();
+        //    if (found != null)
+        //    {
+        //        found.WebResource = deployWebResource.WebResource;
+        //    }
+        //    else
+        //    {
+        //        cachedJson.WebResources.Add(deployWebResource);
+        //    }
+        //    cachedJson.WebResources.OrderBy(x => x.File).ToList();
+        //    json = JsonHelper.FormatJson(SimpleJson.SerializeObject(cachedJson));
+        //    Utility.ForceWriteAllText(fileName, json);
+        //}
+
         public static void SavedJson(string json)
         {
             var fileName = VsixHelper.GetDynamicsCrmDevKitConfigJsonFileName();
