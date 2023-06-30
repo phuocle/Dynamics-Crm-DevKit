@@ -1,0 +1,1 @@
+﻿line: 41, column: 11, message: Compiling transformation: 'T4Context' does not contain a definition for 'PluginMessages' and no accessible extension method 'PluginMessages' accepting a first argument of type 'T4Context' could be found (are you missing a using directive or an assembly reference?)

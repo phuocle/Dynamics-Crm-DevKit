@@ -55,7 +55,9 @@
     <None Include="deploy.debug.only.bat" />
     <None Include="Dev.DevKit.Plugin.Account.snk" />
     <Compile Include="PostAccountCreateAsynchronous.cs" />
-    <Compile Include="PostAccountCreateSynchronous.cs" />
+    <Compile Include="PostAccountDeleteAsynchronous.cs" />
+    <Compile Include="PostAccountMergeAsynchronous.cs" />
+    <Compile Include="PostAccountUpdateSynchronous.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="..\Dev.DevKit.Shared\Dev.DevKit.Shared.projitems" Label="Shared" Condition="Exists('..\Dev.DevKit.Shared\Dev.DevKit.Shared.projitems')" />

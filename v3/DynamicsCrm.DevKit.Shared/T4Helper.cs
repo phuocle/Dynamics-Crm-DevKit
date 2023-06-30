@@ -5,6 +5,8 @@ using Microsoft.VisualStudio.TextTemplating.VSHost;
 using Microsoft.VisualStudio.TextTemplating;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Text;
+using System.Linq;
 
 namespace DynamicsCrm.DevKit.Shared
 {
@@ -61,17 +63,14 @@ namespace DynamicsCrm.DevKit.Shared
 
         private static async Task<string> ProcessTemplateAsync(string t4code, T4Context context)
         {
+            T4Callback cb = new T4Callback();
             var t4 = await VS.GetServiceAsync<STextTemplating, ITextTemplating>();
             ITextTemplatingSessionHost sessionHost = t4 as ITextTemplatingSessionHost;
             sessionHost.Session = sessionHost.CreateSession();
             sessionHost.Session["Context"] = context;
             t4code = "<#@ parameter type=\"DynamicsCrm.DevKit.Shared.Models.T4Context\" name=\"Context\"#>" + t4code;
-            var code = t4.ProcessTemplate("", t4code);
-
-             //  "<#@parameter type=\"System.String\" name=\"parameter1\"#>"
-             //+ "<#@parameter type=\"System.DateTime\" name=\"parameter2\"#>"
-             //+ "<#@parameter type=\"System.Int32\" name=\"parameter3\"#>"
-             //+ "Test: <#=parameter1#>    <#=parameter2#>    <#=parameter3#>");
+            var code = t4.ProcessTemplate("", t4code, cb);
+            if (cb.errorMessages.Count > 0) return string.Join("\r\n", cb.errorMessages);
             return code;
         }
     }
