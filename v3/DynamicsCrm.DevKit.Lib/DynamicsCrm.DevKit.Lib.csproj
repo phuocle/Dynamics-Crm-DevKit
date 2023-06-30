@@ -38,6 +38,7 @@
     <None Remove="Resources\Plugin.tt" />
     <None Remove="Resources\WebApi.js" />
     <None Remove="Resources\WebApi2.js" />
+    <None Remove="Resources\Workflow.tt" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\devkit.d.ts" />
@@ -53,6 +54,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\ReportProjectTemplate.rptproj" />
+    <EmbeddedResource Include="Resources\Workflow.tt">
+      <Generator></Generator>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>

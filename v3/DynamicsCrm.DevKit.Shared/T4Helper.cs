@@ -5,9 +5,8 @@ using Microsoft.VisualStudio.TextTemplating.VSHost;
 using Microsoft.VisualStudio.TextTemplating;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Text;
-using System.Linq;
 using System.IO;
+using DynamicsCrm.DevKit.Lib.Forms;
 
 namespace DynamicsCrm.DevKit.Shared
 {
@@ -27,8 +26,22 @@ namespace DynamicsCrm.DevKit.Shared
                 }
                 return code;
             }
+            string T4CodeWorkflow()
+            {
+                var code = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.Workflow.tt");
+                var fileName = VsixHelper.GetDynamicsCrmDevKitConfigJsonFileName();
+                if (File.Exists(fileName))
+                {
+                    var json = File.ReadAllText(fileName);
+                    var cachedJson = SimpleJson.DeserializeObject<CachedJson>(json);
+                    code = Utility.Decompress(cachedJson.Workflow);
+                }
+                return code;
+            }
             if (itemType == ItemType.Plugin)
                 return T4CodePlugin();
+            else if (itemType == ItemType.Workflow)
+                return T4CodeWorkflow();
             return string.Empty;
         }
 
@@ -55,11 +68,31 @@ namespace DynamicsCrm.DevKit.Shared
                 PluginSchemaName = pluginSchemaName,
                 PluginStage = pluginStage,
                 PluginExecution = pluginExecution,
-                PluginClass = pluginClass,
+                Class = pluginClass,
                 PluginComment = pluginComment,
                 PluginSharedNameSpace = pluginSharedNameSpace
             };
             return t4Context;
+        }
+
+        internal static T4Context BuildContext(ItemType itemType, Dictionary<string, string> replacementsDictionary, FormProject form)
+        {
+            var nameSpace = replacementsDictionary["$rootnamespace$"];
+            var solutionName = VsixHelper.GetSolutionName();
+            var pluginSharedNameSpace = $"{solutionName}.Shared";
+            var pluginNameSpace = nameSpace.Contains($".{ItemType.Plugin}.") ? nameSpace.Replace($".{ItemType.Plugin}.", $".{ItemType.Plugin}") : nameSpace;
+
+            if (itemType == ItemType.Workflow)
+            {
+                var t4Context = new T4Context
+                {
+                    PluginSharedNameSpace = pluginSharedNameSpace,
+                    PluginNameSpace = pluginNameSpace,
+                    Class = form.ItemName
+                };
+                return t4Context;
+            }
+            return new T4Context();
         }
 
         internal static string ProcessTemplate(string t4code, T4Context context)

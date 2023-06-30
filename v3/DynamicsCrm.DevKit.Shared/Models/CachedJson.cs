@@ -8,5 +8,6 @@ namespace DynamicsCrm.DevKit.Shared.Models
     {
         public List<DeployWebResource> WebResources { get; set; }
         public string Plugin { get; set; }
+        public string Workflow { get; set; }
     }
 }
