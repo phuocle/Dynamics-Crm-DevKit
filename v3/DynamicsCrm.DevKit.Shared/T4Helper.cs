@@ -22,7 +22,7 @@ namespace DynamicsCrm.DevKit.Shared
                 {
                     var json = File.ReadAllText(fileName);
                     var cachedJson = SimpleJson.DeserializeObject<CachedJson>(json);
-                    code = Utility.Decompress(cachedJson.Plugin);
+                    if (cachedJson.Plugin != null) code = Utility.Decompress(cachedJson.Plugin);
                 }
                 return code;
             }
@@ -34,7 +34,19 @@ namespace DynamicsCrm.DevKit.Shared
                 {
                     var json = File.ReadAllText(fileName);
                     var cachedJson = SimpleJson.DeserializeObject<CachedJson>(json);
-                    code = Utility.Decompress(cachedJson.Workflow);
+                    if (cachedJson.Workflow != null) code = Utility.Decompress(cachedJson.Workflow);
+                }
+                return code;
+            }
+            string T4CodeCustomAction()
+            {
+                var code = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.CustomAction.tt");
+                var fileName = VsixHelper.GetDynamicsCrmDevKitConfigJsonFileName();
+                if (File.Exists(fileName))
+                {
+                    var json = File.ReadAllText(fileName);
+                    var cachedJson = SimpleJson.DeserializeObject<CachedJson>(json);
+                    if (cachedJson.CustomAction != null) code = Utility.Decompress(cachedJson.CustomAction);
                 }
                 return code;
             }
@@ -42,6 +54,8 @@ namespace DynamicsCrm.DevKit.Shared
                 return T4CodePlugin();
             else if (itemType == ItemType.Workflow)
                 return T4CodeWorkflow();
+            else if (itemType == ItemType.CustomAction)
+                return T4CodeCustomAction();
             return string.Empty;
         }
 

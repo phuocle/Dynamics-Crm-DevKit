@@ -33,6 +33,7 @@
   <ItemGroup>
     <None Remove="Forms\FormPlugin.xaml" />
     <None Remove="Forms\FormWebResource.xaml" />
+    <None Remove="Resources\CustomAction.tt" />
     <None Remove="Resources\download.reports.bat" />
     <None Remove="Resources\download.webresources.bat" />
     <None Remove="Resources\Plugin.tt" />
@@ -41,6 +42,9 @@
     <None Remove="Resources\Workflow.tt" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\CustomAction.tt">
+      <Generator></Generator>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\devkit.d.ts" />
     <EmbeddedResource Include="Resources\devkit.js" />
     <EmbeddedResource Include="Resources\download.reports.bat" />

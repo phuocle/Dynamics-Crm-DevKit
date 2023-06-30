@@ -15,6 +15,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Plugin.Account",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Workflow.Account", "Dev.DevKit.Workflow.Account\Dev.DevKit.Workflow.Account.csproj", "{28A38032-72E1-41A7-B314-A3980DDC2901}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.CustomAction.Account", "Dev.DevKit.CustomAction.Account\Dev.DevKit.CustomAction.Account.csproj", "{98B01229-7F0A-469B-A72C-F9B27B44F5C4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.CustomAction", "Dev.DevKit.CustomAction\Dev.DevKit.CustomAction.csproj", "{39D30AB8-86A1-4E88-AB52-9983D09D7B0A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +33,14 @@ Global
 		{28A38032-72E1-41A7-B314-A3980DDC2901}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{28A38032-72E1-41A7-B314-A3980DDC2901}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{28A38032-72E1-41A7-B314-A3980DDC2901}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98B01229-7F0A-469B-A72C-F9B27B44F5C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98B01229-7F0A-469B-A72C-F9B27B44F5C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98B01229-7F0A-469B-A72C-F9B27B44F5C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98B01229-7F0A-469B-A72C-F9B27B44F5C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39D30AB8-86A1-4E88-AB52-9983D09D7B0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39D30AB8-86A1-4E88-AB52-9983D09D7B0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39D30AB8-86A1-4E88-AB52-9983D09D7B0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39D30AB8-86A1-4E88-AB52-9983D09D7B0A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -38,6 +50,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{28a38032-72e1-41a7-b314-a3980ddc2901}*SharedItemsImports = 4
+		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{39d30ab8-86a1-4e88-ab52-9983d09d7b0a}*SharedItemsImports = 4
+		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{98b01229-7f0a-469b-a72c-f9b27b44f5c4}*SharedItemsImports = 4
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{f1cced34-3962-4007-848b-2c604c0de9f7}*SharedItemsImports = 4
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{fe3e159c-4457-4635-86d0-dcf01670fe0d}*SharedItemsImports = 13
 	EndGlobalSection
