@@ -28,7 +28,6 @@
 
   <ItemGroup>
     <Compile Remove="C:\Users\ple\.nuget\packages\community.visualstudio.toolkit\17.0.76.268-pre\build\AssemblyInfo.cs" />
-    <Compile Remove="Resources\Plugin.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,6 +35,7 @@
     <None Remove="Forms\FormWebResource.xaml" />
     <None Remove="Resources\download.reports.bat" />
     <None Remove="Resources\download.webresources.bat" />
+    <None Remove="Resources\Plugin.tt" />
     <None Remove="Resources\WebApi.js" />
     <None Remove="Resources\WebApi2.js" />
   </ItemGroup>
@@ -44,7 +44,9 @@
     <EmbeddedResource Include="Resources\devkit.js" />
     <EmbeddedResource Include="Resources\download.reports.bat" />
     <EmbeddedResource Include="Resources\DynamicsCrm.DevKit.Cli.json" />
-    <EmbeddedResource Include="Resources\Plugin.cs" />
+    <EmbeddedResource Include="Resources\Plugin.tt">
+      <Generator></Generator>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\WebApi.js" />
     <EmbeddedResource Include="Resources\WebApi2.js" />
     <EmbeddedResource Include="Resources\download.webresources.bat" />

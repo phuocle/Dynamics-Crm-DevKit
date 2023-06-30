@@ -1,35 +1,24 @@
-﻿using Dev.DevKit.Shared;
+﻿using System;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Extensions;
-using System;
+using <#=Context.PluginSharedNameSpace#>;
 
-namespace Dev.DevKit.PluginAccount
+namespace <#=Context.PluginNameSpace#>
 {
-    [CrmPluginRegistration("Delete", "account", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "", "Dev.DevKit.PluginAccount.PostAccountDeleteSynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = false)]
-    public class PostAccountDeleteSynchronous : IPlugin
+    [CrmPluginRegistration("<#=Context.PluginMessage#>", "<#=Context.PluginLogicalName#>", StageEnum.<#=Context.PluginStage#>, ExecutionModeEnum.<#=Context.PluginExecution#>, "", "<#=Context.PluginNameSpace#>.<#=Context.PluginClass#>", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin<#if(Context.IsNeedDeleteAsyncOperation){#>, DeleteAsyncOperation = true<#}#>)]
+    public class <#=Context.PluginClass#> : IPlugin
     {
         /*
-        InputParameters:
-			Target                 Microsoft.Xrm.Sdk.EntityReference - require
-			SolutionUniqueName     System.String
-			ConcurrencyBehavior    Microsoft.Xrm.Sdk.ConcurrencyBehavior
-		OutputParameters:
+        <#=Context.PluginComment#>
         */
 
         //private readonly string unSecureConfiguration = null;
         //private readonly string secureConfiguration = null;
-
-        //public PostAccountDeleteSynchronous(string unSecureConfiguration, string secureConfiguration)
+        //public <#=Context.PluginClass#>(string unSecureConfiguration, string secureConfiguration)
         //{
         //    this.unSecureConfiguration = unSecureConfiguration;
         //    this.secureConfiguration = secureConfiguration;
         //}
-
-        /*
-
-        PluginSharedNameSpace = Dev.DevKit.Shared;
-
-        */
 
         public void Execute(IServiceProvider serviceProvider)
         {
@@ -38,10 +27,10 @@ namespace Dev.DevKit.PluginAccount
             var serviceAdmin = serviceFactory.CreateOrganizationService(null);
             var service = serviceFactory.CreateOrganizationService(context.UserId);
             var tracing = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
-            if (context.Stage != (int)StageEnum.PostOperation) throw new InvalidPluginExecutionException("Stage does not equals PostOperation");
-            if (context.PrimaryEntityName.ToLower() != "account".ToLower()) throw new InvalidPluginExecutionException("PrimaryEntityName does not equals account");
-            if (context.MessageName.ToLower() != "Delete".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals Delete");
-            if (context.Mode != (int)ExecutionModeEnum.Synchronous) throw new InvalidPluginExecutionException("Execution does not equals Synchronous");
+            if (context.Stage != (int)StageEnum.<#=Context.PluginStage#>) throw new InvalidPluginExecutionException("Stage does not equals <#=Context.PluginStage#>");
+            if (context.PrimaryEntityName.ToLower() != "<#=Context.PluginLogicalName#>") throw new InvalidPluginExecutionException("PrimaryEntityName does not equals <#=Context.PluginLogicalName#>");
+            if (context.MessageName.ToLower() != "<#=Context.PluginMessage#>".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals <#=Context.PluginMessage#>");
+            if (context.Mode != (int)ExecutionModeEnum.<#=Context.PluginExecution#>) throw new InvalidPluginExecutionException("Execution does not equals <#=Context.PluginExecution#>");
 
             //tracing.DebugContext(context);
 

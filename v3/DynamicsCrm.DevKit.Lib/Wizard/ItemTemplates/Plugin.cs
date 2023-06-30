@@ -1,8 +1,8 @@
 ﻿using DynamicsCrm.DevKit.Lib.Forms;
 using DynamicsCrm.DevKit.Shared;
-using EnvDTE;
 using Microsoft.VisualStudio.TemplateWizard;
 using System.Collections.Generic;
+using EnvDTE;
 
 namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
 {
@@ -12,7 +12,7 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
         {
         }
 
-        public void ProjectFinishedGenerating(Project project)
+        public void ProjectFinishedGenerating(EnvDTE.Project project)
         {
         }
 
@@ -31,12 +31,15 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
             if (ok)
             {
                 Replacement.SetItem(replacementsDictionary, form);
-                var replacement = new ReplacementServer(replacementsDictionary, form);
-                replacementsDictionary.Add("$plugin$", replacement.Code);
+                var t4Code = T4Helper.GetT4Code(ItemType.Plugin);
+                var t4Context = T4Helper.BuildContext(replacementsDictionary, form);
+                var code = T4Helper.ProcessTemplate(t4Code, t4Context);
+                replacementsDictionary.Add("$plugin$", code);
             }
             else
                 VsixHelper.ThrowWizardCancelledException();
         }
+
         public bool ShouldAddProjectItem(string filePath)
         {
             return true;

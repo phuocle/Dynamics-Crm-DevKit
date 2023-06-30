@@ -1,4 +1,5 @@
-﻿using DynamicsCrm.DevKit.Lib.Forms;
+﻿using Community.VisualStudio.Toolkit;
+using DynamicsCrm.DevKit.Lib.Forms;
 using DynamicsCrm.DevKit.Shared.Models;
 using System.Collections.Generic;
 
@@ -13,6 +14,15 @@ namespace DynamicsCrm.DevKit.Shared
         {
             replacementsDictionary = _replacementsDictionary;
             form = _form;
+        }
+
+        public string Code2
+        {
+            get
+            {
+
+                return string.Empty;
+            }
         }
 
         public string Code

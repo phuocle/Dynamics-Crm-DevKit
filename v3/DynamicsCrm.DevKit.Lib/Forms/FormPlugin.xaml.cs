@@ -72,7 +72,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         $"\t\t\t{item.Name}{@string}{item.Type}{(!item.Require ? " - require" : string.Empty)}\r\n";
                 }
                 code += outputParameters;
-                return code.TrimEnd("\r\n".ToCharArray());
+                code = code.TrimEnd("\r\n".ToCharArray());
+                code = code.Replace("\t", "    ");
+                return code;
             }
         }
 

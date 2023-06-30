@@ -57,6 +57,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\ProcessForm.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\CachedJson.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\SystemForm.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\T4Context.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\WebResourceFile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\XrmEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NuGetHelper.cs" />
@@ -64,6 +65,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ReplacementServer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Signing.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SimpleJson.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)T4Helper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)XrmSingleton.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utility.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)VsixCache.cs" />
