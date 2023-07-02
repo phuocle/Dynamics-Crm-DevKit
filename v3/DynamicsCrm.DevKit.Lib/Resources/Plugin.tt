@@ -39,7 +39,7 @@ namespace <#=Context.PluginNameSpace#>
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService serviceAdmin, IOrganizationService service, ITracingService tracing)
         {
- <#if(Context.PluginMessage=="Create"||Context.PluginMessage=="Update"){#>
+<#if(Context.PluginMessage=="Create"||Context.PluginMessage=="Update"){#>
             var targetEntity = context.InputParameterOrDefault<Entity>("Target");
 <#}else if(Context.PluginMessage=="Delete"){#>
             var targetEntityReference = context.InputParameterOrDefault<EntityReference>("Target");
