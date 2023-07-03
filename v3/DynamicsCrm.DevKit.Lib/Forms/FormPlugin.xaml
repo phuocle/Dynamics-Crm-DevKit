@@ -46,10 +46,20 @@
                     <TextBox x:Name="TextboxClass" Grid.Row="4" Grid.Column="1" Margin="0,0,0,5" VerticalContentAlignment="Center" />
                 </Grid>
             </Border>
-            <WrapPanel HorizontalAlignment="Right" Margin="10,0,10,10">
-                <Button x:Name="buttonOK" Content="OK" Margin="5,0,5,0" Width="100" Height="30" Click="ButtonOK_Click"/>
-                <Button x:Name="buttonCancel" Content="Cancel" Margin="5,0,5,0" Width="100" Height="30" IsCancel="True" Click="ButtonCancel_Click"/>
-            </WrapPanel>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="130"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <WrapPanel Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right" Margin="10,0,10,10">
+                    <Button x:Name="buttonOK" Content="OK" Margin="5,0,5,0" Width="100" Height="30" Click="ButtonOK_Click"/>
+                    <Button x:Name="buttonCancel" Content="Cancel" Margin="5,0,5,0" Width="100" Height="30" IsCancel="True" Click="ButtonCancel_Click"/>
+                </WrapPanel>
+                <Button Grid.Row="0" Grid.Column="0" x:Name="buttonCustom" Content="Custom" Margin="5,0,5,0" Width="100" Height="30" Click="ButtonCustom_Click"/>
+            </Grid>
             <ProgressBar x:Name="progressBar" Height="5" IsIndeterminate="True" Visibility="Hidden" />
         </StackPanel>
     </StackPanel>

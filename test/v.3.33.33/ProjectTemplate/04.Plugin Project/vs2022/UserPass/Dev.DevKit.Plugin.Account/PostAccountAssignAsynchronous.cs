@@ -3,6 +3,7 @@ using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Extensions;
 using System;
 
+///
 namespace Dev.DevKit.PluginAccount
 {
     [CrmPluginRegistration("Assign", "account", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "", "Dev.DevKit.PluginAccount.PostAccountAssignAsynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = true)]
@@ -42,10 +43,11 @@ namespace Dev.DevKit.PluginAccount
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService serviceAdmin, IOrganizationService service, ITracingService tracing)
         {
-            //var target = context.InputParameterOrDefault<???>("???");
+            //var ??? = context.InputParameterOrDefault<???>("???");
             //var preEntity = (Entity)context?.PreEntityImages?["???"];
             //var postEntity = (Entity)context?.PostEntityImages?["???"];
             //YOUR PLUGIN-CODE GO HERE
         }
     }
 }
+///

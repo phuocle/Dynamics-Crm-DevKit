@@ -413,6 +413,16 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             }
         }
 
+        private void ButtonCustom_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            if (ItemType != ItemType.None)
+            {
+                var form = new FormCustom(ItemType);
+                form.ShowDialog();
+            }
+        }
+
+
         public FormProject(ProjectType projectType)
         {
             InitializeComponent();

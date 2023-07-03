@@ -19,11 +19,11 @@
         <TextBlock Padding="10,5,10,5" Background="Green">
             <wpfcontrols:ExternalBrowserHyperlink x:Name="HELP" NavigateUri="https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Connection" Foreground="White" >WIKI: Connection</wpfcontrols:ExternalBrowserHyperlink>
         </TextBlock>
-        <TextBox Padding="5,5,5,5" Margin="5,5,5,0" Height="113"  x:Name="Textbox" TextWrapping="Wrap" AcceptsReturn="true" AcceptsTab="True" FontFamily="Courier New" />
+        <TextBox Padding="5,5,5,5" Margin="5,5,5,0" Height="113"  x:Name="Textbox" TextWrapping="Wrap" AcceptsReturn="true" AcceptsTab="True" FontFamily="Courier New" FontSize="14" />
         <WrapPanel DockPanel.Dock="Bottom" Margin="0,5,5,5">
             <Button x:Name="buttonReset" Content="Reset" Margin="5,0,5,0" Width="100" Click="ButtonReset_Click"/>
             <Button x:Name="buttonSave" Content="Save" Margin="5,0,5,0" Width="100" Height="30" Click="ButtonSave_Click"/>
-            <Button x:Name="buttonCancel" Content="Cancel" Margin="5,0,5,0" Width="100" Height="30" IsCancel="True" Click="ButtonCancel_Click"/>
+            <Button x:Name="buttonCancel" Content="Close" Margin="5,0,5,0" Width="100" Height="30" IsCancel="True" Click="ButtonClose_Click"/>
         </WrapPanel>
     </StackPanel>
 </forms:BaseDialogWindow>

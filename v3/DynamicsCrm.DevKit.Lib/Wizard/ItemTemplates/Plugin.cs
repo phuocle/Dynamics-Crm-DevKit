@@ -26,21 +26,18 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
 
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
         {
-            var form = new FormCustom();
-            form.ShowDialog();
-
-            //var form = new FormPlugin(ItemType.Plugin);
-            //var ok = form.ShowModal() ?? false;
-            //if (ok)
-            //{
-            //    Replacement.SetItem(replacementsDictionary, form);
-            //    var t4Code = T4Helper.GetT4Code(ItemType.Plugin);
-            //    var t4Context = T4Helper.BuildContext(replacementsDictionary, form);
-            //    var code = T4Helper.ProcessTemplate(t4Code, t4Context);
-            //    replacementsDictionary.Add("$plugin$", code);
-            //}
-            //else
-            //    VsixHelper.ThrowWizardCancelledException();
+            var form = new FormPlugin(ItemType.Plugin);
+            var ok = form.ShowModal() ?? false;
+            if (ok)
+            {
+                Replacement.SetItem(replacementsDictionary, form);
+                var t4Code = T4Helper.GetT4Code(ItemType.Plugin);
+                var t4Context = T4Helper.BuildContext(replacementsDictionary, form);
+                var code = T4Helper.ProcessTemplate(t4Code, t4Context);
+                replacementsDictionary.Add("$plugin$", code);
+            }
+            else
+                VsixHelper.ThrowWizardCancelledException();
         }
 
         public bool ShouldAddProjectItem(string filePath)

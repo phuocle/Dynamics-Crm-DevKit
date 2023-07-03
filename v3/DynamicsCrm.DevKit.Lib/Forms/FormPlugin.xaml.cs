@@ -163,6 +163,12 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             DialogResult = false;
         }
 
+        private void ButtonCustom_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            var form = new FormCustom(ItemType);
+            form.ShowDialog();
+        }
+
         private void ButtonOK_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             static bool IsValid()

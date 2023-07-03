@@ -1,24 +1,21 @@
 ﻿using Dev.DevKit.Shared;
 using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Extensions;
 using System;
 
-namespace Dev.DevKit.PluginAccount
+namespace Dev.DevKit.CustomAction
 {
-    [CrmPluginRegistration("Retain", "account", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "", "Dev.DevKit.PluginAccount.PostAccountRetainSynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin)]
-    public class PostAccountRetainSynchronous : IPlugin
+    [CrmPluginRegistration("devkit_DeleteAllData", "account", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "", "Dev.DevKit.CustomAction.PostAccountdevkit_DeleteAllDataSynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.CustomAction)]
+    public class PostAccountdevkit_DeleteAllDataSynchronous : IPlugin
     {
         /*
         InputParameters:
-            Target                   Microsoft.Xrm.Sdk.EntityReference - require
-            OperationId              System.Guid
+            Target    Microsoft.Xrm.Sdk.EntityReference - require
         OutputParameters:
-            EntityCountCollection    Microsoft.Xrm.Sdk.EntityRecordCountCollection - require
         */
 
         //private readonly string unSecureConfiguration = null;
         //private readonly string secureConfiguration = null;
-        //public PostAccountRetainSynchronous(string unSecureConfiguration, string secureConfiguration)
+        //public PostAccountdevkit_DeleteAllDataSynchronous(string unSecureConfiguration, string secureConfiguration)
         //{
         //    this.unSecureConfiguration = unSecureConfiguration;
         //    this.secureConfiguration = secureConfiguration;
@@ -33,20 +30,28 @@ namespace Dev.DevKit.PluginAccount
             var tracing = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
             if (context.Stage != (int)StageEnum.PostOperation) throw new InvalidPluginExecutionException("Stage does not equals PostOperation");
             if (context.PrimaryEntityName.ToLower() != "account") throw new InvalidPluginExecutionException("PrimaryEntityName does not equals account");
-            if (context.MessageName.ToLower() != "Retain".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals Retain");
+            if (context.MessageName.ToLower() != "devkit_DeleteAllData".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals devkit_DeleteAllData");
             if (context.Mode != (int)ExecutionModeEnum.Synchronous) throw new InvalidPluginExecutionException("Execution does not equals Synchronous");
 
             //tracing.DebugContext(context);
 
-            ExecutePlugin(context, serviceFactory, serviceAdmin, service, tracing);
+            var outputs = ExecuteCustomAction(context, serviceFactory, serviceAdmin, service, tracing);
+            foreach (var output in outputs)
+            {
+                if (context.OutputParameters.Contains(output.Key))
+                {
+                    context.OutputParameters[output.Key] = output.Value;
+                }
+            }
         }
 
-        private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService serviceAdmin, IOrganizationService service, ITracingService tracing)
+        private ParameterCollection ExecuteCustomAction(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService serviceAdmin, IOrganizationService service, ITracingService tracing)
         {
-            //var target = context.InputParameterOrDefault<???>("???");
-            //var preEntity = (Entity)context?.PreEntityImages?["???"];
-            //var postEntity = (Entity)context?.PostEntityImages?["???"];
-            //YOUR PLUGIN-CODE GO HERE
+            var outputs = new ParameterCollection();
+            //YOUR CUSTOM ACTION BEGIN HERE
+            //HERE AN UPDATE
+
+            return outputs;
         }
     }
 }
