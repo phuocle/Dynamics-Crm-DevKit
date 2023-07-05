@@ -50,12 +50,26 @@ namespace DynamicsCrm.DevKit.Shared
                 }
                 return code;
             }
+            string T4CodeCustomApi()
+            {
+                var code = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.CustomApi.tt");
+                var fileName = VsixHelper.GetDynamicsCrmDevKitConfigJsonFileName();
+                if (File.Exists(fileName))
+                {
+                    var json = File.ReadAllText(fileName);
+                    var cachedJson = SimpleJson.DeserializeObject<CachedJson>(json);
+                    if (cachedJson.CustomApi != null) code = Utility.Decompress(cachedJson.CustomApi);
+                }
+                return code;
+            }
             if (itemType == ItemType.Plugin)
                 return T4CodePlugin();
             else if (itemType == ItemType.Workflow)
                 return T4CodeWorkflow();
             else if (itemType == ItemType.CustomAction)
                 return T4CodeCustomAction();
+            else if (itemType == ItemType.CustomApi)
+                return T4CodeCustomApi();
             return string.Empty;
         }
 

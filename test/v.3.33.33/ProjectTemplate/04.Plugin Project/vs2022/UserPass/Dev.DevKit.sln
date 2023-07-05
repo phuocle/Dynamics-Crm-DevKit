@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.CustomAction.Acc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.CustomAction", "Dev.DevKit.CustomAction\Dev.DevKit.CustomAction.csproj", "{39D30AB8-86A1-4E88-AB52-9983D09D7B0A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.CustomApi", "Dev.DevKit.CustomApi\Dev.DevKit.CustomApi.csproj", "{1302F507-81EC-4760-B0E1-BF6244488D6E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,6 +44,10 @@ Global
 		{39D30AB8-86A1-4E88-AB52-9983D09D7B0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{39D30AB8-86A1-4E88-AB52-9983D09D7B0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{39D30AB8-86A1-4E88-AB52-9983D09D7B0A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1302F507-81EC-4760-B0E1-BF6244488D6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1302F507-81EC-4760-B0E1-BF6244488D6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1302F507-81EC-4760-B0E1-BF6244488D6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1302F507-81EC-4760-B0E1-BF6244488D6E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -50,6 +56,7 @@ Global
 		SolutionGuid = {478EE8F5-54E1-431D-BEC8-72AC05F5AF8C}
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{1302f507-81ec-4760-b0e1-bf6244488d6e}*SharedItemsImports = 4
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{28a38032-72e1-41a7-b314-a3980ddc2901}*SharedItemsImports = 4
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{39d30ab8-86a1-4e88-ab52-9983d09d7b0a}*SharedItemsImports = 4
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{98b01229-7f0a-469b-a72c-f9b27b44f5c4}*SharedItemsImports = 4

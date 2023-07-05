@@ -10,5 +10,6 @@ namespace DynamicsCrm.DevKit.Shared.Models
         public string Plugin { get; set; }
         public string Workflow { get; set; }
         public string CustomAction { get; set; }
+        public string CustomApi { get; set; }
     }
 }

@@ -1,10 +1,7 @@
 ﻿using Community.VisualStudio.Toolkit;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
-using EnvDTE90;
-using Microsoft.VisualStudio.OLE.Interop;
 using System.IO;
-using System.Web.UI;
 
 namespace DynamicsCrm.DevKit.Lib.Forms
 {
@@ -54,7 +51,16 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     else
                         Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.CustomAction.tt");
                 }
-
+                void CustomApiItem()
+                {
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Custom-Api-Item-Template-Customize");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("Custom Api Item Template Customize");
+                    if (cachedJson.CustomApi != null)
+                        Textbox.Text = Utility.Decompress(cachedJson.CustomApi);
+                    else
+                        Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.CustomApi.tt");
+                }
                 switch (_ItemType)
                 {
                     case ItemType.Plugin:
@@ -65,6 +71,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         break;
                     case ItemType.CustomAction:
                         CustomActionItem();
+                        break;
+                    case ItemType.CustomApi:
+                        CustomApiItem();
                         break;
                 }
             }
@@ -94,6 +103,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 cachedJson.Workflow = Utility.Compress(Textbox.Text);
             else if (ItemType == ItemType.CustomAction)
                 cachedJson.CustomAction = Utility.Compress(Textbox.Text);
+            else if (ItemType == ItemType.CustomApi)
+                cachedJson.CustomApi = Utility.Compress(Textbox.Text);
             Utility.ForceWriteAllText(fileName, SimpleJson.SerializeObject(cachedJson));
             VS.MessageBox.Show("Saved !!!");
         }
@@ -109,6 +120,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     template = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.Workflow.tt");
                 else if(ItemType == ItemType.CustomAction)
                     template = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.CustomAction.tt");
+                else if (ItemType == ItemType.CustomApi)
+                    template = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.CustomApi.tt");
                 Textbox.Text = template;
             }
         }

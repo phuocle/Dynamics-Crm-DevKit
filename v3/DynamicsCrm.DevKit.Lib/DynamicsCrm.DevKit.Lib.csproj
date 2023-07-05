@@ -35,6 +35,7 @@
     <None Remove="Forms\FormPlugin.xaml" />
     <None Remove="Forms\FormWebResource.xaml" />
     <None Remove="Resources\CustomAction.tt" />
+    <None Remove="Resources\CustomApi.tt" />
     <None Remove="Resources\download.reports.bat" />
     <None Remove="Resources\download.webresources.bat" />
     <None Remove="Resources\Plugin.tt" />
@@ -43,6 +44,9 @@
     <None Remove="Resources\Workflow.tt" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\CustomApi.tt">
+      <Generator></Generator>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\CustomAction.tt">
       <Generator></Generator>
     </EmbeddedResource>
