@@ -62,6 +62,18 @@ namespace DynamicsCrm.DevKit.Shared
                 }
                 return code;
             }
+            string T4CodeUiTest()
+            {
+                var code = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.UiTest.tt");
+                var fileName = VsixHelper.GetDynamicsCrmDevKitConfigJsonFileName();
+                if (File.Exists(fileName))
+                {
+                    var json = File.ReadAllText(fileName);
+                    var cachedJson = SimpleJson.DeserializeObject<CachedJson>(json);
+                    if (cachedJson.UiTest != null) code = Utility.Decompress(cachedJson.UiTest);
+                }
+                return code;
+            }
             if (itemType == ItemType.Plugin)
                 return T4CodePlugin();
             else if (itemType == ItemType.Workflow)
@@ -70,6 +82,8 @@ namespace DynamicsCrm.DevKit.Shared
                 return T4CodeCustomAction();
             else if (itemType == ItemType.CustomApi)
                 return T4CodeCustomApi();
+            else if (itemType == ItemType.UiTest)
+                return T4CodeUiTest();
             return string.Empty;
         }
 

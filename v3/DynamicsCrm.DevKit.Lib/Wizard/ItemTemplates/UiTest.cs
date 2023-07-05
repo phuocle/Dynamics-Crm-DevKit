@@ -31,6 +31,10 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
             if (ok)
             {
                 Replacement.SetItem(replacementsDictionary, form);
+                var t4Code = T4Helper.GetT4Code(ItemType.UiTest);
+                var t4Context = T4Helper.BuildContext(ItemType.Workflow, replacementsDictionary, form);
+                var code = T4Helper.ProcessTemplate(t4Code, t4Context);
+                replacementsDictionary.Add("$uitest$", code);
             }
             else
                 VsixHelper.ThrowWizardCancelledException();

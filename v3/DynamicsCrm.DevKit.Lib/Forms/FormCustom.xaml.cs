@@ -61,6 +61,16 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     else
                         Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.CustomApi.tt");
                 }
+                void UiTestItem()
+                {
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Ui-Test-Item-Template-Customize");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("UI Test Item Template Customize");
+                    if (cachedJson.CustomApi != null)
+                        Textbox.Text = Utility.Decompress(cachedJson.UiTest);
+                    else
+                        Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.UiTest.tt");
+                }
                 switch (_ItemType)
                 {
                     case ItemType.Plugin:
@@ -74,6 +84,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         break;
                     case ItemType.CustomApi:
                         CustomApiItem();
+                        break;
+                    case ItemType.UiTest:
+                        UiTestItem();
                         break;
                 }
             }
