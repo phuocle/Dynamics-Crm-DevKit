@@ -92,6 +92,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     TextboxProject.Visibility = System.Windows.Visibility.Visible;
                     LabelProjectItemName.Content = "Class";
                     LabelProjectName.Content = "_";
+                    buttonCustom.Visibility = System.Windows.Visibility.Visible;
                 }
                 void UiTestItem()
                 {
@@ -102,6 +103,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     TextboxProject.Visibility = System.Windows.Visibility.Visible;
                     LabelProjectItemName.Content = "Class";
                     LabelProjectName.Content = "UiTest";
+                    buttonCustom.Visibility = System.Windows.Visibility.Visible;
                 }
                 void TestItem()
                 {
@@ -113,6 +115,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     ComboBoxProject.Visibility = System.Windows.Visibility.Visible;
                     ComboBoxProject.IsEditable = false;
                     TextboxProject.Visibility = System.Windows.Visibility.Hidden;
+                    buttonCustom.Visibility = System.Windows.Visibility.Visible;
                 }
                 void DownloadWebResourcesItem()
                 {
@@ -136,6 +139,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     LabelProjectItemName.Content = "Data Source";
                     ComboBoxProject.IsEditable = false;
                     LabelProjectName.Visibility = System.Windows.Visibility.Collapsed;
+                    buttonCustom.Visibility = System.Windows.Visibility.Visible;
                 }
                 void ResourceStringItem()
                 {
