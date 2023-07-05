@@ -31,6 +31,22 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
             if (ok)
             {
                 Replacement.SetItem(replacementsDictionary, form);
+                var t4Context = T4Helper.BuildContext(ItemType.DataProvider, replacementsDictionary, form);
+                var t4Code = T4Helper.GetT4Code(ItemType.DataProvider, "Create");
+                var code = T4Helper.ProcessTemplate(t4Code, t4Context);
+                replacementsDictionary.Add("$DataProviderCreate$", code);
+                t4Code = T4Helper.GetT4Code(ItemType.DataProvider, "Update");
+                code = T4Helper.ProcessTemplate(t4Code, t4Context);
+                replacementsDictionary.Add("$DataProviderUpdate$", code);
+                t4Code = T4Helper.GetT4Code(ItemType.DataProvider, "Delete");
+                code = T4Helper.ProcessTemplate(t4Code, t4Context);
+                replacementsDictionary.Add("$DataProviderDelete$", code);
+                t4Code = T4Helper.GetT4Code(ItemType.DataProvider, "Retrieve");
+                code = T4Helper.ProcessTemplate(t4Code, t4Context);
+                replacementsDictionary.Add("$DataProviderRetrieve$", code);
+                t4Code = T4Helper.GetT4Code(ItemType.DataProvider, "RetrieveMultiple");
+                code = T4Helper.ProcessTemplate(t4Code, t4Context);
+                replacementsDictionary.Add("$DataProviderRetrieveMultiple$", code);
             }
             else
                 VsixHelper.ThrowWizardCancelledException();

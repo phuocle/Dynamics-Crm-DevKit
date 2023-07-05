@@ -1,6 +1,7 @@
 ﻿using Community.VisualStudio.Toolkit;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
+using System.Collections.Generic;
 using System.IO;
 
 namespace DynamicsCrm.DevKit.Lib.Forms
@@ -20,7 +21,6 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 var fileName = VsixHelper.GetDynamicsCrmDevKitConfigJsonFileName();
                 CachedJson cachedJson = new CachedJson();
                 if (File.Exists(fileName)) cachedJson = SimpleJson.DeserializeObject<CachedJson>(File.ReadAllText(fileName));
-
                 void PluginItem()
                 {
                     HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Plugin-Item-Template-Customize");
@@ -71,6 +71,17 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     else
                         Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.UiTest.tt");
                 }
+                void DataProviderItem()
+                {
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Data-Provider-Item-Template-Customize");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("Data Provider Item Template Customize");
+                    var items = new List<string> { "Create", "Update", "Delete", "Retrieve", "RetrieveMultiple" };
+                    ComboBoxSelect.Visibility = System.Windows.Visibility.Visible;
+                    ComboBoxSelect.ItemsSource = items;
+                    ComboBoxSelect.SelectedIndex = 0;
+                    ComboBoxSelect_SelectionChanged(null, null);
+                }
                 switch (_ItemType)
                 {
                     case ItemType.Plugin:
@@ -87,6 +98,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         break;
                     case ItemType.UiTest:
                         UiTestItem();
+                        break;
+                    case ItemType.DataProvider:
+                        DataProviderItem();
                         break;
                 }
             }
@@ -118,6 +132,29 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 cachedJson.CustomAction = Utility.Compress(Textbox.Text);
             else if (ItemType == ItemType.CustomApi)
                 cachedJson.CustomApi = Utility.Compress(Textbox.Text);
+            else if (ItemType == ItemType.DataProvider)
+            {
+                if ((string)ComboBoxSelect.SelectedItem == "Create")
+                {
+                    cachedJson.DataProviderCreate = Utility.Compress(Textbox.Text);
+                }
+                else if ((string)ComboBoxSelect.SelectedItem == "Update")
+                {
+                    cachedJson.DataProviderUpdate = Utility.Compress(Textbox.Text);
+                }
+                else if ((string)ComboBoxSelect.SelectedItem == "Delete")
+                {
+                    cachedJson.DataProviderDelete = Utility.Compress(Textbox.Text);
+                }
+                else if ((string)ComboBoxSelect.SelectedItem == "Retrieve")
+                {
+                    cachedJson.DataProviderRetrieve = Utility.Compress(Textbox.Text);
+                }
+                else if ((string)ComboBoxSelect.SelectedItem == "RetrieveMultiple")
+                {
+                    cachedJson.DataProviderRetrieveMultiple = Utility.Compress(Textbox.Text);
+                }
+            }
             Utility.ForceWriteAllText(fileName, SimpleJson.SerializeObject(cachedJson));
             VS.MessageBox.Show("Saved !!!");
         }
@@ -131,10 +168,33 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     template = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.Plugin.tt");
                 else if (ItemType == ItemType.Workflow)
                     template = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.Workflow.tt");
-                else if(ItemType == ItemType.CustomAction)
+                else if (ItemType == ItemType.CustomAction)
                     template = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.CustomAction.tt");
                 else if (ItemType == ItemType.CustomApi)
                     template = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.CustomApi.tt");
+                else if (ItemType == ItemType.DataProvider)
+                {
+                    if ((string)ComboBoxSelect.SelectedItem == "Create")
+                    {
+                        Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.DataProviderCreate.tt");
+                    }
+                    else if ((string)ComboBoxSelect.SelectedItem == "Update")
+                    {
+                        Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.DataProviderUpdate.tt");
+                    }
+                    else if ((string)ComboBoxSelect.SelectedItem == "Delete")
+                    {
+                        Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.DataProviderDelete.tt");
+                    }
+                    else if ((string)ComboBoxSelect.SelectedItem == "Retrieve")
+                    {
+                        Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.DataProviderRetrieve.tt");
+                    }
+                    else if ((string)ComboBoxSelect.SelectedItem == "RetrieveMultiple")
+                    {
+                        Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.DataProviderRetrieveMultiple.tt");
+                    }
+                }
                 Textbox.Text = template;
             }
         }
@@ -142,6 +202,51 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         private void BaseDialogWindow_SizeChanged(object sender, System.Windows.SizeChangedEventArgs e)
         {
             Textbox.Height = e.NewSize.Height - 110;
+        }
+
+        private void ComboBoxSelect_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            var fileName = VsixHelper.GetDynamicsCrmDevKitConfigJsonFileName();
+            CachedJson cachedJson = new CachedJson();
+            if (File.Exists(fileName)) cachedJson = SimpleJson.DeserializeObject<CachedJson>(File.ReadAllText(fileName));
+            if (ItemType == ItemType.DataProvider)
+            {
+                if ((string)ComboBoxSelect.SelectedItem == "Create")
+                {
+                    if (cachedJson.DataProviderCreate != null)
+                        Textbox.Text = Utility.Decompress(cachedJson.DataProviderCreate);
+                    else
+                        Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.DataProviderCreate.tt");
+                }
+                else if ((string)ComboBoxSelect.SelectedItem == "Update")
+                {
+                    if (cachedJson.DataProviderUpdate != null)
+                        Textbox.Text = Utility.Decompress(cachedJson.DataProviderUpdate);
+                    else
+                        Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.DataProviderUpdate.tt");
+                }
+                else if ((string)ComboBoxSelect.SelectedItem == "Delete")
+                {
+                    if (cachedJson.DataProviderDelete != null)
+                        Textbox.Text = Utility.Decompress(cachedJson.DataProviderDelete);
+                    else
+                        Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.DataProviderDelete.tt");
+                }
+                else if ((string)ComboBoxSelect.SelectedItem == "Retrieve")
+                {
+                    if (cachedJson.DataProviderRetrieve != null)
+                        Textbox.Text = Utility.Decompress(cachedJson.DataProviderRetrieve);
+                    else
+                        Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.DataProviderRetrieve.tt");
+                }
+                else if ((string)ComboBoxSelect.SelectedItem == "RetrieveMultiple")
+                {
+                    if (cachedJson.DataProviderRetrieveMultiple != null)
+                        Textbox.Text = Utility.Decompress(cachedJson.DataProviderRetrieveMultiple);
+                    else
+                        Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.DataProviderRetrieveMultiple.tt");
+                }
+            }
         }
     }
 }

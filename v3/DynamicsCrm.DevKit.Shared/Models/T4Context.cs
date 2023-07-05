@@ -15,7 +15,7 @@ namespace DynamicsCrm.DevKit.Shared.Models
         public string PluginComment { get; set; }
         public string Class { get; set; }
         public string PluginSharedNameSpace { get; set; }
-        public bool IsNeedDeleteAsyncOperation => PluginExecution == "Asynchronous";
+        public string DataSource { get; set; }
 
     }
 }

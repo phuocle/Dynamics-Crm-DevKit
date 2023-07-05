@@ -1,11 +1,11 @@
-﻿using Dev.DevKit.Shared;
-using Microsoft.Xrm.Sdk;
+﻿using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Extensions;
 using System;
+using <#=Context.PluginSharedNameSpace#>;
 
-namespace Dev.DevKit.DataProvider
+namespace <#=Context.PluginNameSpace#>
 {
-    [CrmPluginRegistration("Dev.DevKit.DataProvider.Create", "Create", PluginType.DataProvider, DataSource = "devkit_datasource")]
+    [CrmPluginRegistration("<#=Context.PluginNameSpace#>.Create", "Create", PluginType.DataProvider, DataSource = "<#=Context.DataSource#>")]
     public class Create : IPlugin
     {
         /*

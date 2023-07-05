@@ -12,7 +12,7 @@ namespace DynamicsCrm.DevKit.Shared
 {
     internal class T4Helper
     {
-        public static string GetT4Code(ItemType itemType)
+        public static string GetT4Code(ItemType itemType, string subName = null)
         {
             string T4CodePlugin()
             {
@@ -74,6 +74,70 @@ namespace DynamicsCrm.DevKit.Shared
                 }
                 return code;
             }
+            string T4CodeDataProvider()
+            {
+                if (subName == "Create")
+                {
+                    var code = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.DataProviderCreate.tt");
+                    var fileName = VsixHelper.GetDynamicsCrmDevKitConfigJsonFileName();
+                    if (File.Exists(fileName))
+                    {
+                        var json = File.ReadAllText(fileName);
+                        var cachedJson = SimpleJson.DeserializeObject<CachedJson>(json);
+                        if (cachedJson.DataProviderCreate != null) code = Utility.Decompress(cachedJson.DataProviderCreate);
+                    }
+                    return code;
+                }
+                else if (subName == "Update")
+                {
+                    var code = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.DataProviderUpdate.tt");
+                    var fileName = VsixHelper.GetDynamicsCrmDevKitConfigJsonFileName();
+                    if (File.Exists(fileName))
+                    {
+                        var json = File.ReadAllText(fileName);
+                        var cachedJson = SimpleJson.DeserializeObject<CachedJson>(json);
+                        if (cachedJson.DataProviderUpdate != null) code = Utility.Decompress(cachedJson.DataProviderUpdate);
+                    }
+                    return code;
+                }
+                else if (subName == "Delete")
+                {
+                    var code = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.DataProviderDelete.tt");
+                    var fileName = VsixHelper.GetDynamicsCrmDevKitConfigJsonFileName();
+                    if (File.Exists(fileName))
+                    {
+                        var json = File.ReadAllText(fileName);
+                        var cachedJson = SimpleJson.DeserializeObject<CachedJson>(json);
+                        if (cachedJson.DataProviderDelete != null) code = Utility.Decompress(cachedJson.DataProviderDelete);
+                    }
+                    return code;
+                }
+                else if(subName == "Retrieve")
+                {
+                    var code = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.DataProviderRetrieve.tt");
+                    var fileName = VsixHelper.GetDynamicsCrmDevKitConfigJsonFileName();
+                    if (File.Exists(fileName))
+                    {
+                        var json = File.ReadAllText(fileName);
+                        var cachedJson = SimpleJson.DeserializeObject<CachedJson>(json);
+                        if (cachedJson.DataProviderRetrieve != null) code = Utility.Decompress(cachedJson.DataProviderRetrieve);
+                    }
+                    return code;
+                }
+                else if (subName == "RetrieveMultiple")
+                {
+                    var code = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.DataProviderRetrieveMultiple.tt");
+                    var fileName = VsixHelper.GetDynamicsCrmDevKitConfigJsonFileName();
+                    if (File.Exists(fileName))
+                    {
+                        var json = File.ReadAllText(fileName);
+                        var cachedJson = SimpleJson.DeserializeObject<CachedJson>(json);
+                        if (cachedJson.DataProviderRetrieveMultiple != null) code = Utility.Decompress(cachedJson.DataProviderRetrieveMultiple);
+                    }
+                    return code;
+                }
+                return string.Empty;
+            }
             if (itemType == ItemType.Plugin)
                 return T4CodePlugin();
             else if (itemType == ItemType.Workflow)
@@ -84,6 +148,8 @@ namespace DynamicsCrm.DevKit.Shared
                 return T4CodeCustomApi();
             else if (itemType == ItemType.UiTest)
                 return T4CodeUiTest();
+            else if (itemType == ItemType.DataProvider)
+                return T4CodeDataProvider();
             return string.Empty;
         }
 
@@ -131,6 +197,17 @@ namespace DynamicsCrm.DevKit.Shared
                     PluginSharedNameSpace = pluginSharedNameSpace,
                     PluginNameSpace = pluginNameSpace,
                     Class = form.ItemName
+                };
+                return t4Context;
+            }
+            else if (itemType == ItemType.DataProvider)
+            {
+                var t4Context = new T4Context
+                {
+                    PluginSharedNameSpace = pluginSharedNameSpace,
+                    PluginNameSpace = pluginNameSpace,
+                    Class = form.ItemName,
+                    DataSource = form.ItemName
                 };
                 return t4Context;
             }

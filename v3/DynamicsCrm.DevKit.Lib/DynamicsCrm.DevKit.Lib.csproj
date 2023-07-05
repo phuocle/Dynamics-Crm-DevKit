@@ -36,6 +36,11 @@
     <None Remove="Forms\FormWebResource.xaml" />
     <None Remove="Resources\CustomAction.tt" />
     <None Remove="Resources\CustomApi.tt" />
+    <None Remove="Resources\DataProviderCreate.tt" />
+    <None Remove="Resources\DataProviderDelete.tt" />
+    <None Remove="Resources\DataProviderRetrieve.tt" />
+    <None Remove="Resources\DataProviderRetrieveMultiple.tt" />
+    <None Remove="Resources\DataProviderUpdate.tt" />
     <None Remove="Resources\download.reports.bat" />
     <None Remove="Resources\download.webresources.bat" />
     <None Remove="Resources\Plugin.tt" />
@@ -45,6 +50,21 @@
     <None Remove="Resources\Workflow.tt" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\DataProviderDelete.tt">
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\DataProviderRetrieve.tt">
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\DataProviderRetrieveMultiple.tt">
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\DataProviderUpdate.tt">
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\DataProviderCreate.tt">
+      <Generator></Generator>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\UiTest.tt">
       <Generator></Generator>
     </EmbeddedResource>

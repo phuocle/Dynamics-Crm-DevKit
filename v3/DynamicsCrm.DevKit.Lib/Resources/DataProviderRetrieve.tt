@@ -1,29 +1,28 @@
-﻿using Dev.DevKit.Shared;
-using Microsoft.Xrm.Sdk;
+﻿using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Extensions;
 using System;
+using <#=Context.PluginSharedNameSpace#>;
 
-namespace Dev.DevKit.DataProvider
+namespace <#=Context.PluginNameSpace#>
 {
-    [CrmPluginRegistration("Dev.DevKit.DataProvider.Create", "Create", PluginType.DataProvider, DataSource = "devkit_datasource")]
-    public class Create : IPlugin
+    [CrmPluginRegistration("<#=Context.PluginNameSpace#>.Retrieve", "Retrieve", PluginType.DataProvider, DataSource = "<#=Context.DataSource#>")]
+    public class Retrieve : IPlugin
     {
         /*
           InputParameters:
-              Target                             Microsoft.Xrm.Sdk.Entity - require
-              SuppressDuplicateDetection         System.Boolean
-              CalculateMatchCodeSynchronously    System.Boolean
-              SolutionUniqueName                 System.String
-              MaintainLegacyAppServerBehavior    System.Boolean
-              ReturnRowVersion                   System.Boolean
+              Target                  Microsoft.Xrm.Sdk.EntityReference - require
+              ColumnSet               Microsoft.Xrm.Sdk.Query.ColumnSet - require
+              RelatedEntitiesQuery    Microsoft.Xrm.Sdk.RelationshipQueryCollection
+              ReturnNotifications     System.Boolean
            OutputParameters:
-              id                                 System.Guid - require
+              Entity                  Microsoft.Xrm.Sdk.Entity - require
+              Notifications            - require
         */
 
         //private readonly string unSecureConfiguration = null;
         //private readonly string secureConfiguration = null;
 
-        //public Create(string unSecureConfiguration, string secureConfiguration)
+        //public Retrieve(string unSecureConfiguration, string secureConfiguration)
         //{
         //    this.unSecureConfiguration = unSecureConfiguration;
         //    this.secureConfiguration = secureConfiguration;
@@ -49,11 +48,11 @@ namespace Dev.DevKit.DataProvider
             //Get Parameter from DataSource
             //var ??? = dataSource.GetAttributeValue<string>("???");
             //var ??? = dataSource.GetAttributeValue<int>("???");
-            var target = context.InputParameterOrDefault<Entity>("Target");
-            var id = Guid.NewGuid();
+            var target = context.InputParameterOrDefault<EntityReference>("Target");
+            var entity = new Entity("???", target.Id);
             //YOUR CODE ...
 
-            context.OutputParameters["id"] = id;
+            context.OutputParameters["BusinessEntity"] = entity;
         }
     }
 }
