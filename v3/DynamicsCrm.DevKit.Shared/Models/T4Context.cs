@@ -16,6 +16,7 @@ namespace DynamicsCrm.DevKit.Shared.Models
         public string Class { get; set; }
         public string PluginSharedNameSpace { get; set; }
         public string DataSource { get; set; }
-
+        public string ProxyTypes {get;set; }
+        public bool IsNeedDeleteAsyncOperation => PluginExecution == "Asynchronous";
     }
 }

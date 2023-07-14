@@ -34,11 +34,17 @@ namespace DynamicsCrm.DevKit.Lib.Wizard.ItemTemplates
             if (ok)
             {
                 ServerType = form.SelectedClassType.ServerType;
+                //Replacement.SetItem(replacementsDictionary, form);
+                //replacementsDictionary.Add("$message$", form.SelectedClassType.ServerMessage);
+                //replacementsDictionary.Add("$logicalname$", form.SelectedClassType.ServerLogicalName);
+                //replacementsDictionary.Add("$execution$", form.SelectedClassType.ServerMode);
+                //replacementsDictionary.Add("$stage_string$", form.SelectedClassType.ServerStage);
+
                 Replacement.SetItem(replacementsDictionary, form);
-                replacementsDictionary.Add("$message$", form.SelectedClassType.ServerMessage);
-                replacementsDictionary.Add("$logicalname$", form.SelectedClassType.ServerLogicalName);
-                replacementsDictionary.Add("$execution$", form.SelectedClassType.ServerMode);
-                replacementsDictionary.Add("$stage_string$", form.SelectedClassType.ServerStage);
+                var t4Code = T4Helper.GetT4Code(ItemType.Test, ServerType);
+                var t4Context = T4Helper.BuildContext(ItemType.Test, replacementsDictionary, form, ServerType);
+                var code = T4Helper.ProcessTemplate(t4Code, t4Context);
+                replacementsDictionary.Add("$test-plugin$", code);
             }
             else
                 VsixHelper.ThrowWizardCancelledException();

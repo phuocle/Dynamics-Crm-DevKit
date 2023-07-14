@@ -17,5 +17,10 @@ namespace DynamicsCrm.DevKit.Shared.Models
         public string DataProviderDelete { get; set; }
         public string DataProviderRetrieve { get; set; }
         public string DataProviderRetrieveMultiple { get; set; }
+        public string TestPlugin { get; set; }
+        public string TestWorkflow { get; set; }
+        public string TestCustomAction { get; set; }
+        public string TestCustomApi { get; set; }
+        public string TestDataProvider { get; set; }
     }
 }

@@ -376,9 +376,10 @@ namespace DynamicsCrm.DevKit.Shared
                         list.Add(new XrmEntity
                         {
                             Name = className,
+                            LogicalName = pluginAttribute.EntityLogicalName.Replace("\"", string.Empty),
                             ServerType = GetPluginType(@class),
-                            ServerLogicalName = pluginAttribute.EntityLogicalName,
-                            ServerMessage = pluginAttribute.Message,
+                            ServerLogicalName = pluginAttribute.EntityLogicalName.Replace("\"", string.Empty),
+                            ServerMessage = pluginAttribute.Message.Replace("\"", string.Empty),
                             ServerMode = pluginAttribute.ExecutionMode.ToString(),
                             ServerStage = pluginAttribute.Stage.ToString()
                         });

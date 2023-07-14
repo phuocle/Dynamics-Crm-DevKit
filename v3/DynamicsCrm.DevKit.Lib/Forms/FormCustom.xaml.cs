@@ -82,6 +82,17 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     ComboBoxSelect.SelectedIndex = 0;
                     ComboBoxSelect_SelectionChanged(null, null);
                 }
+                void TestItem()
+                {
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Test-Item-Template-Customize");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("Test Item Template Customize");
+                    var items = new List<string> { "Plugin", "Workflow", "CustomAction", "CustomApi", "DataProvider" };
+                    ComboBoxSelect.Visibility = System.Windows.Visibility.Visible;
+                    ComboBoxSelect.ItemsSource = items;
+                    ComboBoxSelect.SelectedIndex = 0;
+                    ComboBoxSelect_SelectionChanged(null, null);
+                }
                 switch (_ItemType)
                 {
                     case ItemType.Plugin:
@@ -101,6 +112,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         break;
                     case ItemType.DataProvider:
                         DataProviderItem();
+                        break;
+                    case ItemType.Test:
+                        TestItem();
                         break;
                 }
             }
@@ -155,6 +169,29 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     cachedJson.DataProviderRetrieveMultiple = Utility.Compress(Textbox.Text);
                 }
             }
+            else if (ItemType == ItemType.Test)
+            {
+                if ((string)ComboBoxSelect.SelectedItem == "Plugin")
+                {
+                    cachedJson.TestPlugin = Utility.Compress(Textbox.Text);
+                }
+                else if ((string)ComboBoxSelect.SelectedItem == "Workflow")
+                {
+                    cachedJson.TestWorkflow = Utility.Compress(Textbox.Text);
+                }
+                else if ((string)ComboBoxSelect.SelectedItem == "CustomAcion")
+                {
+                    cachedJson.TestCustomAction = Utility.Compress(Textbox.Text);
+                }
+                else if ((string)ComboBoxSelect.SelectedItem == "CustomApi")
+                {
+                    cachedJson.TestCustomApi = Utility.Compress(Textbox.Text);
+                }
+                else if ((string)ComboBoxSelect.SelectedItem == "DataProvider")
+                {
+                    cachedJson.TestDataProvider = Utility.Compress(Textbox.Text);
+                }
+            }
             Utility.ForceWriteAllText(fileName, SimpleJson.SerializeObject(cachedJson));
             VS.MessageBox.Show("Saved !!!");
         }
@@ -195,7 +232,29 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.DataProviderRetrieveMultiple.tt");
                     }
                 }
-                Textbox.Text = template;
+                else if (ItemType == ItemType.Test)
+                {
+                    if ((string)ComboBoxSelect.SelectedItem == "Plugin")
+                    {
+                        Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.TestPlugin.tt");
+                    }
+                    else if ((string)ComboBoxSelect.SelectedItem == "Workflow")
+                    {
+                        Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.TestWorkflow.tt");
+                    }
+                    else if ((string)ComboBoxSelect.SelectedItem == "CustomAction")
+                    {
+                        Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.TestCustomAction.tt");
+                    }
+                    else if ((string)ComboBoxSelect.SelectedItem == "CustomApi")
+                    {
+                        Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.TestCustomApi.tt");
+                    }
+                    else if ((string)ComboBoxSelect.SelectedItem == "DataProvider")
+                    {
+                        Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.TestDataProvider.tt");
+                    }
+                }
             }
         }
 
@@ -245,6 +304,44 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         Textbox.Text = Utility.Decompress(cachedJson.DataProviderRetrieveMultiple);
                     else
                         Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.DataProviderRetrieveMultiple.tt");
+                }
+            }
+            else if (ItemType == ItemType.Test)
+            {
+                if ((string)ComboBoxSelect.SelectedItem == "Plugin")
+                {
+                    if (cachedJson.TestPlugin != null)
+                        Textbox.Text = Utility.Decompress(cachedJson.TestPlugin);
+                    else
+                        Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.TestPlugin.tt");
+                }
+                else if ((string)ComboBoxSelect.SelectedItem == "Workflow")
+                {
+                    if (cachedJson.TestWorkflow != null)
+                        Textbox.Text = Utility.Decompress(cachedJson.TestWorkflow);
+                    else
+                        Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.TestWorkflow.tt");
+                }
+                else if ((string)ComboBoxSelect.SelectedItem == "CustomAction")
+                {
+                    if (cachedJson.TestCustomAction != null)
+                        Textbox.Text = Utility.Decompress(cachedJson.TestCustomAction);
+                    else
+                        Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources. .tt");
+                }
+                else if ((string)ComboBoxSelect.SelectedItem == "CustomApi")
+                {
+                    if (cachedJson.TestCustomApi != null)
+                        Textbox.Text = Utility.Decompress(cachedJson.TestCustomApi);
+                    else
+                        Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.TestCustomApi.tt");
+                }
+                else if ((string)ComboBoxSelect.SelectedItem == "DataProvider")
+                {
+                    if (cachedJson.TestDataProvider != null)
+                        Textbox.Text = Utility.Decompress(cachedJson.TestDataProvider);
+                    else
+                        Textbox.Text = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.TestDataProvider.tt");
                 }
             }
         }

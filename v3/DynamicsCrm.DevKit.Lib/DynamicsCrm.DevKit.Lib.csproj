@@ -44,12 +44,16 @@
     <None Remove="Resources\download.reports.bat" />
     <None Remove="Resources\download.webresources.bat" />
     <None Remove="Resources\Plugin.tt" />
+    <None Remove="Resources\TestPlugin.tt" />
     <None Remove="Resources\UiTest.tt" />
     <None Remove="Resources\WebApi.js" />
     <None Remove="Resources\WebApi2.js" />
     <None Remove="Resources\Workflow.tt" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\TestPlugin.tt">
+      <Generator></Generator>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\DataProviderDelete.tt">
       <Generator></Generator>
     </EmbeddedResource>

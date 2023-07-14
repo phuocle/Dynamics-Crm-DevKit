@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.IO;
 using DynamicsCrm.DevKit.Lib.Forms;
+using NuGet.Protocol.Plugins;
 
 namespace DynamicsCrm.DevKit.Shared
 {
@@ -138,6 +139,22 @@ namespace DynamicsCrm.DevKit.Shared
                 }
                 return string.Empty;
             }
+            string T4CodeTest()
+            {
+                if (subName == "Plugin")
+                {
+                    var code = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.TestPlugin.tt");
+                    var fileName = VsixHelper.GetDynamicsCrmDevKitConfigJsonFileName();
+                    if (File.Exists(fileName))
+                    {
+                        var json = File.ReadAllText(fileName);
+                        var cachedJson = SimpleJson.DeserializeObject<CachedJson>(json);
+                        if (cachedJson.TestPlugin != null) code = Utility.Decompress(cachedJson.TestPlugin);
+                    }
+                    return code;
+                }
+                return string.Empty;
+            }
             if (itemType == ItemType.Plugin)
                 return T4CodePlugin();
             else if (itemType == ItemType.Workflow)
@@ -150,6 +167,8 @@ namespace DynamicsCrm.DevKit.Shared
                 return T4CodeUiTest();
             else if (itemType == ItemType.DataProvider)
                 return T4CodeDataProvider();
+            else if (itemType == ItemType.Test)
+                return T4CodeTest();
             return string.Empty;
         }
 
@@ -183,13 +202,16 @@ namespace DynamicsCrm.DevKit.Shared
             return t4Context;
         }
 
-        internal static T4Context BuildContext(ItemType itemType, Dictionary<string, string> replacementsDictionary, FormProject form)
+        internal static T4Context BuildContext(ItemType itemType, Dictionary<string, string> replacementsDictionary, FormProject form, string serverType = null)
         {
             var nameSpace = replacementsDictionary["$rootnamespace$"];
             var solutionName = VsixHelper.GetSolutionName();
             var pluginSharedNameSpace = $"{solutionName}.Shared";
-            var pluginNameSpace = nameSpace.Contains($".{ItemType.Plugin}.") ? nameSpace.Replace($".{ItemType.Plugin}.", $".{ItemType.Plugin}") : nameSpace;
-
+            var pluginNameSpace = string.Empty;
+            if (serverType == "Plugin" || serverType == "Workflow" || serverType == "CustomAction" || serverType == "CustomApi" || serverType == "DataProvider")
+                pluginNameSpace = nameSpace.Contains($".{serverType}.") ? nameSpace.Replace($".{serverType}.", $".{serverType}") : nameSpace;
+            else
+                pluginNameSpace = nameSpace.Contains($".{ItemType.Plugin}.") ? nameSpace.Replace($".{ItemType.Plugin}.", $".{ItemType.Plugin}") : nameSpace;
             if (itemType == ItemType.Workflow)
             {
                 var t4Context = new T4Context
@@ -208,6 +230,22 @@ namespace DynamicsCrm.DevKit.Shared
                     PluginNameSpace = pluginNameSpace,
                     Class = form.ItemName,
                     DataSource = form.ItemName
+                };
+                return t4Context;
+            }
+            else if (itemType == ItemType.Test)
+            {
+                var t4Context = new T4Context
+                {
+                    PluginSharedNameSpace = pluginSharedNameSpace,
+                    PluginNameSpace = pluginNameSpace,
+                    Class = form.ItemName,
+                    DataSource = form.ItemName,
+                    ProxyTypes = $"{solutionName}.ProxyTypes",
+                    PluginStage = form.PluginStage,
+                    PluginMessage = form.PluginMessage,
+                    PluginExecution = form.PluginExecution,
+                    PluginLogicalName = form.PluginLogicalName,
                 };
                 return t4Context;
             }

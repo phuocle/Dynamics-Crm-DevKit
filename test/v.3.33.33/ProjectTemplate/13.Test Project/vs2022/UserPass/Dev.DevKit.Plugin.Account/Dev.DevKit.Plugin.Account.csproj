@@ -57,6 +57,7 @@
     <Compile Include="PostAccountArchiveAsynchronous.cs" />
     <Compile Include="PostAccountBulkRetainAsynchronous.cs" />
     <Compile Include="PostAccountCreateAsynchronous.cs" />
+    <Compile Include="PostAccountDeleteAsynchronous.cs" />
     <Compile Include="PostAccountMergeAsynchronous.cs" />
     <Compile Include="PostAccountRetainAsynchronous.cs" />
     <Compile Include="PreValidationAccountCreateSynchronous.cs" />

@@ -171,8 +171,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="PostAccountArchiveAsynchronousTest.cs" />
-    <Compile Include="PostAccountCreateAsynchronousTest.cs" />
-    <Compile Include="PreValidationAccountCreateSynchronousTest.cs" />
+    <Compile Include="PostAccountDeleteAsynchronousTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

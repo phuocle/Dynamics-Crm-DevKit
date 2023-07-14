@@ -44,6 +44,11 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             }
         }
 
+        public string PluginMessage => SelectedClassType.ServerMessage;
+        public string PluginStage => SelectedClassType.ServerStage;
+        public string PluginExecution => SelectedClassType.ServerMode;
+        public string PluginLogicalName => SelectedClassType.LogicalName;
+
         private ItemType _ItemType = DynamicsCrm.DevKit.Shared.ItemType.None;
         private ItemType ItemType
         {
