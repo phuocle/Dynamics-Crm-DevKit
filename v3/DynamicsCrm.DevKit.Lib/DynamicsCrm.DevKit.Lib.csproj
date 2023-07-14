@@ -122,13 +122,13 @@
 
   <ItemGroup>
     <PackageReference Include="CmdLine" Version="1.0.7.509" />
-    <PackageReference Include="Community.VisualStudio.Toolkit.17" Version="17.0.492" />
+    <PackageReference Include="Community.VisualStudio.Toolkit.17" Version="17.0.507" />
     <PackageReference Include="Microsoft.CrmSdk.XrmTooling.CoreAssembly" Version="9.1.1.32" />
     <PackageReference Include="Microsoft.CrmSdk.XrmTooling.WpfControls" Version="9.1.1.32" />
     <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.3.32804.24" />
     <PackageReference Include="Microsoft.VisualStudio.TemplateWizardInterface" Version="17.3.32804.24" />
-    <PackageReference Include="NuGet.Protocol" Version="6.6.0" />
-    <PackageReference Include="NuGet.Versioning" Version="6.6.0" />
+    <PackageReference Include="NuGet.Protocol" Version="6.6.1" />
+    <PackageReference Include="NuGet.Versioning" Version="6.6.1" />
   </ItemGroup>
 
   <ItemGroup>

@@ -170,6 +170,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PostAccountArchiveAsynchronousTest.cs" />
     <Compile Include="PostAccountCreateAsynchronousTest.cs" />
     <Compile Include="PreValidationAccountCreateSynchronousTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
