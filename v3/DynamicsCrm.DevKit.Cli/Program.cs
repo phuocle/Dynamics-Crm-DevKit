@@ -34,19 +34,27 @@ namespace DynamicsCrm.DevKit.Cli
         private static void ShowHelp()
         {
             var helpColor = ConsoleColor.Green;
+            var colorBox = ConsoleColor.Blue;
 
             CliLog.SetupCliLog();
-            CliLog.WriteLine(helpColor, "  ____                              _           ____                  ____             _  ___ _     ____ _ _ ");
-            CliLog.WriteLine(helpColor, " |  _ \\ _   _ _ __   __ _ _ __ ___ (_) ___ ___ / ___|_ __ _ __ ___   |  _ \\  _____   _| |/ (_) |_  / ___| (_)");
-            CliLog.WriteLine(helpColor, " | | | | | | | '_ \\ / _` | '_ ` _ \\| |/ __/ __| |   | '__| '_ ` _ \\  | | | |/ _ \\ \\ / / ' /| | __|| |   | | |");
-            CliLog.WriteLine(helpColor, " | |_| | |_| | | | | (_| | | | | | | | (__\\__ \\ |___| |  | | | | | |_| |_| |  __/\\ V /| . \\| | |_ | |___| | |");
-            CliLog.WriteLine(helpColor, " |____/ \\__, |_| |_|\\__,_|_| |_| |_|_|\\___|___/\\____|_|  |_| |_| |_(_)____/ \\___| \\_/ |_|\\_\\_|\\__(_)____|_|_|");
-            CliLog.Write(helpColor, "        |___/            ", ConsoleColor.White, "https://github.com/phuocle/Dynamics-Crm-DevKit ");
+            CliLog.Write(colorBox, "╔");
+            CliLog.Write(colorBox, new string('═', 114));
+            CliLog.WriteLine(colorBox, "╗");
+            CliLog.WriteLine(colorBox, "║  ", helpColor, "  ____                              _           ____                  ____             _  ___ _     ____ _ _ ", colorBox, "   ║");
+            CliLog.WriteLine(colorBox, "║  ", helpColor, " |  _ \\ _   _ _ __   __ _ _ __ ___ (_) ___ ___ / ___|_ __ _ __ ___   |  _ \\  _____   _| |/ (_) |_  / ___| (_)", colorBox, "   ║");
+            CliLog.WriteLine(colorBox, "║  ", helpColor, " | | | | | | | '_ \\ / _` | '_ ` _ \\| |/ __/ __| |   | '__| '_ ` _ \\  | | | |/ _ \\ \\ / / ' /| | __|| |   | | |", colorBox, "   ║");
+            CliLog.WriteLine(colorBox, "║  ", helpColor, " | |_| | |_| | | | | (_| | | | | | | | (__\\__ \\ |___| |  | | | | | |_| |_| |  __/\\ V /| . \\| | |_ | |___| | |", colorBox, "   ║");
+            CliLog.WriteLine(colorBox, "║  ", helpColor, " |____/ \\__, |_| |_|\\__,_|_| |_| |_|_|\\___|___/\\____|_|  |_| |_| |_(_)____/ \\___| \\_/ |_|\\_\\_|\\__(_)____|_|_|", colorBox, "   ║");
+            CliLog.Write(colorBox, "║  ", helpColor, "        |___/            ", ConsoleColor.White, "https://github.com/phuocle/Dynamics-Crm-DevKit ");
             CliLog.WriteSuccess(ConsoleColor.White, Const.Version);
             CliLog.Write(ConsoleColor.White, " Build: ");
             CliLog.WriteSuccess(ConsoleColor.White, Const.Build);
-            CliLog.WriteLine(ConsoleColor.Black, "█");
-            CliLog.WriteLine(ConsoleColor.White, "|");
+            CliLog.WriteLine(colorBox, "   ║");
+            CliLog.Write(colorBox, "╚");
+            CliLog.Write(colorBox, new string('═', 114));
+            CliLog.WriteLine(colorBox, "╝");
+            //CliLog.WriteLine(ConsoleColor.Black, "█");
+            //CliLog.WriteLine(ConsoleColor.White, "|");
         }
 
         static void RunCli(CommandLineArgs arguments)
@@ -65,8 +73,8 @@ namespace DynamicsCrm.DevKit.Cli
         private static bool IsValid(CommandLineArgs arguments)
         {
             CrmServiceClient = null;
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Current Directory ", ConsoleColor.Blue, "Path=", ConsoleColor.White, arguments.CurrentDirectory);
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "DynamicsCrm.DevKit.Cli.exe ", ConsoleColor.Blue, "Path=", ConsoleColor.White, Assembly.GetExecutingAssembly().Location);
+            CliLog.WriteLine(ConsoleColor.White, "│", ConsoleColor.Green, "Current Directory ", ConsoleColor.Blue, "Path=", ConsoleColor.White, arguments.CurrentDirectory);
+            CliLog.WriteLine(ConsoleColor.White, "│", ConsoleColor.Green, "DynamicsCrm.DevKit.Cli.exe ", ConsoleColor.Blue, "Path=", ConsoleColor.White, Assembly.GetExecutingAssembly().Location);
             if (!File.Exists(arguments.JsonFile)) {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"/json:{arguments.Json} [{arguments.JsonFile}] not found !!!");
                 return false;
