@@ -8,14 +8,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Windows.Forms;
 
 namespace DynamicsCrm.DevKit.Cli
 {
     public class Program
     {
         private static CrmServiceClient CrmServiceClient { get; set; }
-
         [STAThread]
         public static void Main(string[] args)
         {
@@ -73,8 +71,8 @@ namespace DynamicsCrm.DevKit.Cli
         private static bool IsValid(CommandLineArgs arguments)
         {
             CrmServiceClient = null;
-            CliLog.WriteLine(ConsoleColor.White, "│", ConsoleColor.Green, "Current Directory ", ConsoleColor.Blue, "Path=", ConsoleColor.White, arguments.CurrentDirectory);
-            CliLog.WriteLine(ConsoleColor.White, "│", ConsoleColor.Green, "DynamicsCrm.DevKit.Cli.exe ", ConsoleColor.Blue, "Path=", ConsoleColor.White, Assembly.GetExecutingAssembly().Location);
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Current Directory ", ConsoleColor.Blue, "Path=", ConsoleColor.White, arguments.CurrentDirectory);
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "DynamicsCrm.DevKit.Cli.exe ", ConsoleColor.Blue, "Path=", ConsoleColor.White, Assembly.GetExecutingAssembly().Location);
             if (!File.Exists(arguments.JsonFile)) {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"/json:{arguments.Json} [{arguments.JsonFile}] not found !!!");
                 return false;
@@ -82,12 +80,10 @@ namespace DynamicsCrm.DevKit.Cli
             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "DynamicsCrm.DevKit.Cli.json ", ConsoleColor.Blue, "Path=", ConsoleColor.White, arguments.JsonFile);
             if (arguments.IsSdkLogin)
             {
-                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Arguments: ",
-                    ConsoleColor.Blue, "/sdklogin:", ConsoleColor.White, "\"yes\"", " ",
-                    ConsoleColor.Blue, "/json:", ConsoleColor.White, "\"" + arguments.Json, "\" ",
-                    ConsoleColor.Blue, "/type:", ConsoleColor.White, "\"" + arguments.Type, "\" ",
-                    ConsoleColor.Blue, "/profile:", ConsoleColor.White, "\"" + arguments.Profile + "\""
-                );
+                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Arguments: ", ConsoleColor.Blue, "/sdklogin:", ConsoleColor.White, "\"yes\"" + "\"");
+                CliLog.WriteLine(ConsoleColor.White, "|           ", ConsoleColor.Blue, "/json:", ConsoleColor.White, "\"" + arguments.Json + "\"");
+                CliLog.WriteLine(ConsoleColor.White, "|           ", ConsoleColor.Blue, "/type:", ConsoleColor.White, "\"" + arguments.Type + "\"");
+                CliLog.WriteLine(ConsoleColor.White, "|           ", ConsoleColor.Blue, "/profile:", ConsoleColor.White, "\"" + arguments.Profile + "\"");
             }
             else
             {
@@ -96,12 +92,10 @@ namespace DynamicsCrm.DevKit.Cli
                     CliLog.WriteLineError(ConsoleColor.Yellow, $"/conn: required !!!");
                     return false;
                 }
-                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Arguments: ",
-                    ConsoleColor.Blue, "/conn:", ConsoleColor.White, "\"" + XrmHelper.BuildConnectionStringLog(arguments.Connection), "\" ",
-                    ConsoleColor.Blue, "/json:", ConsoleColor.White, "\"" + arguments.Json, "\" ",
-                    ConsoleColor.Blue, "/type:", ConsoleColor.White, "\"" + arguments.Type, "\" ",
-                    ConsoleColor.Blue, "/profile:", ConsoleColor.White, "\"" + arguments.Profile + "\""
-                );
+                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Arguments: ", ConsoleColor.Blue, "/conn:", ConsoleColor.White, "\"" + XrmHelper.BuildConnectionStringLog(arguments.Connection) + "\"");
+                CliLog.WriteLine(ConsoleColor.White, "|           ", ConsoleColor.Blue, "/json:", ConsoleColor.White, "\"" + arguments.Json + "\"");
+                CliLog.WriteLine(ConsoleColor.White, "|           ", ConsoleColor.Blue, "/type:", ConsoleColor.White, "\"" + arguments.Type + "\"");
+                CliLog.WriteLine(ConsoleColor.White, "|           ", ConsoleColor.Blue, "/profile:", ConsoleColor.White, "\"" + arguments.Profile + "\"");
             }
             if (arguments.Type.Length == 0)
             {
@@ -149,7 +143,7 @@ namespace DynamicsCrm.DevKit.Cli
                 CliLog.Write(ConsoleColor.White, "|", ConsoleColor.Green, "Connected: ");
                 CliLog.WriteSuccess(ConsoleColor.White, XrmHelper.ConnectedUrl(CrmServiceClient));
                 CliLog.Write(ConsoleColor.Green, " with connection timeout: ");
-                CliLog.WriteSuccess(ConsoleColor.White, CrmServiceClient.MaxConnectionTimeout.TotalSeconds.ToString("#,###"));
+                CliLog.Write(ConsoleColor.White, CrmServiceClient.MaxConnectionTimeout.TotalSeconds.ToString("#,###"));
                 CliLog.WriteLine(ConsoleColor.Green, " (seconds)");
             }
             CliLog.WriteLine(ConsoleColor.White, "|");
