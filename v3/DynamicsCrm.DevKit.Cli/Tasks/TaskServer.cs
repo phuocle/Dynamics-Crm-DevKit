@@ -414,7 +414,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 if (attribute.Action == PluginStepOperationEnum.Deactivate)
                 {
-                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DoNothing, CliAction.Deactivated, ConsoleColor.White, $"{attribute.PluginType.ToString()} Message: ", ConsoleColor.Cyan, attribute.Message, ConsoleColor.White, " with type: ", ConsoleColor.Cyan, pluginTypeName);
+                    CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DoNothing);
+                    CliLog.WriteWarning(CliAction.Deactivated.Trim());
+                    CliLog.Write(ConsoleColor.White, $" {attribute.PluginType.ToString()} Message: ", ConsoleColor.Cyan, attribute.Message, ConsoleColor.White, " with type: ", ConsoleColor.Cyan, pluginTypeName);
+                    CliLog.WriteLine();
                 }
                 else
                 {
@@ -531,18 +534,21 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     attributes == (imageAttributes.Trim() == "*" ? null : imageAttributes) &&
                     imagetype == (int)imageType)
                 {
-                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DoNothing, ConsoleColor.White, $"{imageType.ToString()}: ", ConsoleColor.Cyan, imageName);
+                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DoNothing, ConsoleColor.White, $"{imageType.ToString()}Name: ", ConsoleColor.Cyan, imageName, ConsoleColor.White, $" {imageType.ToString()}Alias: ", ConsoleColor.Cyan, imageAliasName);
+                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, "Fields: ", ConsoleColor.Blue, "[", ConsoleColor.Green, attributes ?? "*", ConsoleColor.Blue, "]");
                 }
                 else
                 {
                     if (attributes != (imageAttributes.Trim() == "*" ? null : imageAttributes) && imageAttributes.Length != 0)
                     {
                         pluginImage["sdkmessageprocessingstepimageid"] = rows.Entities[0].Id;
-                        CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.Updated, ConsoleColor.White, $"{imageType.ToString()}: ", ConsoleColor.Cyan, imageName);
+                        CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.Updated, ConsoleColor.White, $"{imageType.ToString()}Name: ", ConsoleColor.Cyan, imageName, ConsoleColor.White, $" {imageType.ToString()}Alias: ", ConsoleColor.Cyan, imageAliasName);
+                        CliLog.WriteLineWarning(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, "Fields: ", ConsoleColor.Blue, "[", ConsoleColor.Green, attributes ?? "*", ConsoleColor.Blue, "]");
                     }
                     else if (imageAttributes.Length == 0)
                     {
-                        CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.Deleted, ConsoleColor.White, $"{imageType.ToString()}: ", ConsoleColor.Cyan, imageName);
+                        CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.Deleted, ConsoleColor.White, $"{imageType.ToString()}Name: ", ConsoleColor.Cyan, imageName, ConsoleColor.White, $" {imageType.ToString()}Alias: ", ConsoleColor.Cyan, imageAliasName);
+                        CliLog.WriteLineWarning(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, "Fields: ", ConsoleColor.Blue, "[", ConsoleColor.Green, attributes ?? "*", ConsoleColor.Blue, "]");
                         CrmServiceClient.Delete("sdkmessageprocessingstepimage", rows.Entities[0].Id);
                         return Guid.NewGuid();
                     }
@@ -741,7 +747,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     if (attribute.Action == PluginStepOperationEnum.Activate)
                         CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DoNothing, ConsoleColor.White, $"{attribute.Message} Step: ", ConsoleColor.Cyan, attribute.Name);
                     else
-                        CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DoNothing, CliAction.Deactivated, ConsoleColor.White, $"{attribute.Message} Step: ", ConsoleColor.Cyan, attribute.Name);
+                    {
+                        CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, ConsoleColor.Green);
+                        CliLog.WriteWarning(CliAction.Deactivated.Trim());
+                        CliLog.Write(ConsoleColor.White, $" {attribute.Message} Step: ", ConsoleColor.Cyan, attribute.Name);
+                        CliLog.WriteLine();
+                    }
                 }
                 else
                 {
