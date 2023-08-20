@@ -21,13 +21,19 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
             TaskType = $"[{nameof(CliType.generators).ToUpper()} - {json.type.ToUpper()}]";
         }
+
         public CommandLineArgs Arg { get; set; }
+
         private JsonGenerator Json { get; set; }
 
         public string CurrentDirectory { get; set; }
+
         public CrmServiceClient CrmServiceClient { get; set; }
+
         public string TaskType { get; set; }
+
         private string CurrentFolder => $"{CurrentDirectory}\\{Json.rootfolder}";
+
         private static bool IsAll { get; set; } = false;
 
         public bool IsValid()
@@ -155,7 +161,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     //if (Json.version == null) comment.WebApiVersion = null;
                     //if (Json.version == "2") comment.WebApiVersion = "2";
                     //if (comment.WebApiVersion == "2")
-                        newCode = JsWebApi2.GetCode(CrmServiceClient, entityMetadata, Json.rootnamespace, comment, out newDTS);
+                    newCode = JsWebApi2.GetCode(CrmServiceClient, entityMetadata, Json.rootnamespace, comment, out newDTS);
                     //else
                     //    newCode = JsWebApi.GetCode(CrmServiceClient, entityMetadata, Json.rootnamespace, comment, out newDTS);
                     if (Utility.IsTheSame(oldCode, newCode))
@@ -220,7 +226,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     if (IsAll)
                     {
                         comment.UseForm = true;
-                        if(!File.Exists(dtsFile)) comment.UseWebApi = false;
+                        if (!File.Exists(dtsFile)) comment.UseWebApi = false;
                     }
                     if (!comment.UseForm)
                     {
