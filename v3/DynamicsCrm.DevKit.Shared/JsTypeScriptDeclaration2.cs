@@ -5,6 +5,7 @@ using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Tooling.Connector;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Metadata;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -15,16 +16,23 @@ namespace DynamicsCrm.DevKit.Shared
     public class JsTypeScriptDeclaration2
     {
         private static List<string> FormAll_HeaderFields = new List<string>();
+
         private static List<string> FormAll_BodyFields = new List<string>();
+
         private static List<string> FormAll_ProcessFields = new List<string>();
 
-
         private const string NEW_LINE = "\r\n";
+
         private const string TAB = "\t";
+
         private static CrmServiceClient CrmServiceClient { get; set; }
+
         private static EntityMetadata EntityMetadata { get; set; }
+
         private static string RootNamespace { get; set; }
+
         private static CommentTypeScriptDeclaration Comment { get; set; }
+
         private static List<string> FormNames = new List<string>();
 
         public static string GetCode(CrmServiceClient crmServiceClient, EntityMetadata entityMetadata, string rootNamespace, CommentTypeScriptDeclaration comment)
@@ -483,7 +491,7 @@ namespace DynamicsCrm.DevKit.Shared
             var forms = XrmHelper.GetEntityForms(CrmServiceClient, EntityMetadata.LogicalName);
             if (!forms.Any()) return string.Empty;
             var _d_ts = string.Empty;
-            foreach(var form in forms.Where(x => x.FormType == XrmHelper.FormType.Main).ToList())
+            foreach (var form in forms.Where(x => x.FormType == XrmHelper.FormType.Main).ToList())
                 _d_ts += GetFormMain_d_ts(form, @namespace);
             //_d_ts += GetFormMain_d_ts__AllFields(@namespace);
             foreach (var form in forms.Where(x => x.FormType == XrmHelper.FormType.QuickCreate).ToList())
@@ -616,7 +624,7 @@ namespace DynamicsCrm.DevKit.Shared
             _d_ts += $"\t\t/** The SidePanes of form {formName} */\r\n";
             _d_ts += $"\t\tSidePanes: DevKit.SidePanes;\r\n";
             _d_ts += $"\t}}\r\n";
-            return  _d_ts;
+            return _d_ts;
         }
 
         private static string GetFormMain_d_ts__AllFields(string @namespace)
@@ -954,17 +962,38 @@ namespace DynamicsCrm.DevKit.Shared
         private static string GetForm_d_ts_Navigation(string formXml)
         {
             var _d_ts = string.Empty;
-            var xdoc = XDocument.Parse(formXml);
-            var navigations = (from x in xdoc.Descendants("Navigation").Descendants("NavBar")
-                    .Descendants("NavBarByRelationshipItem")
-                               select (string)x?.Attribute("Id")).ToList();
-            navigations.Sort();
-            if (navigations.Count == 0) return string.Empty;
-            navigations.Sort();
-            foreach (var navigation in navigations)
+            //var xdoc = XDocument.Parse(formXml);
+            //var navigations = (from x in xdoc.Descendants("Navigation").Descendants("NavBar")
+            //        .Descendants("NavBarByRelationshipItem")
+            //                   select (string)x?.Attribute("Id")).ToList();
+            //navigations.Sort();
+            //if (navigations.Count == 0) return string.Empty;
+            //navigations.Sort();
+            //foreach (var navigation in navigations)
+            //{
+            //    _d_ts += $"\t\t\t{navigation}: DevKit.Controls.NavigationItem,\r\n";
+            //}
+
+            List<string> BlackList = new List<string> { "asyncoperation", "bulkdeletefailure", "mailboxtrackingfolder", "principalobjectattributeaccess", "processsession", "syncerror", "userentityinstancedata", "duplicaterecord",
+        "sharepointdocumentlocation", "sharepointdocument", "chat", "fax", "letter", "recurringappointmentmaster", "socialactivity", "activitypointer", "annotation", "slakpiinstance", "socialprofile", "postrole", "postregarding", "postfollow",
+        "customeraddress", "customerrelationship", "activityparty", "actioncard", "connection", "fileattachment", "owner", "createdby", "createdonbehalfby", "modifiedby", "modifiedonbehalfby"
+        };
+
+            foreach (var relationship in EntityMetadata.OneToManyRelationships.OrderBy(x => x.SchemaName))
             {
-                _d_ts += $"\t\t\t{navigation}: DevKit.Controls.NavigationItem,\r\n";
+                if (BlackList.Contains(relationship.ReferencingEntity)) continue;
+                if (BlackList.Contains(relationship.ReferencedEntity)) continue;
+                if (BlackList.Contains(relationship.ReferencedAttribute)) continue;
+                if (BlackList.Contains(relationship.ReferencingAttribute)) continue;
+                if (
+                    relationship.RelationshipType == RelationshipType.OneToManyRelationship &&
+                    (relationship.IsValidForAdvancedFind ?? false)
+                    )
+                {
+                    _d_ts += $"\t\t\t{relationship.SchemaName}: DevKit.Controls.NavigationItem,\r\n";
+                }
             }
+
             _d_ts = _d_ts.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
             return _d_ts;
         }
@@ -1036,7 +1065,6 @@ namespace DynamicsCrm.DevKit.Shared
                 part2 += $"\t\t}}\r\n";
 
                 part3 += $"\t\t\t{Utility.SafeIdentifier(tabName)}: tab_{Utility.SafeIdentifier(tabName)};\r\n";
-
             }
             part3 += $"\t\t}}\r\n";
             var _d_ts = string.Empty;

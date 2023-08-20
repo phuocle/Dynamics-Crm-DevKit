@@ -1,4 +1,5 @@
 ﻿using DynamicsCrm.DevKit.Shared.Models;
+using EnvDTE;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Tooling.Connector;
 using System;
@@ -17,31 +18,44 @@ namespace DynamicsCrm.DevKit.Shared
 {
     public static class JsForm
     {
-
         private static List<string> FormAll_Fields = new List<string>();
+
         private static List<string> FormAll_Header_Fields = new List<string>();
+
         private static List<TabSection> FormAll_TabSections = new List<TabSection>();
+
         private static List<ProcessFields> FormAll_Processes = new List<ProcessFields>();
+
         private static List<string> FormAll_QuickForms = new List<string>();
+
         private static List<string> FormAll_Grids = new List<string>();
+
         private static List<string> FormAll_Navigations = new List<string>();
+
         private class TabSection
         {
             public string Tab { get; set; }
+
             public string Section { get; set; }
         }
 
         private class ProcessFields
         {
             public string ProcessName { get; set; }
+
             public List<string> Fields { get; set; }
         }
 
         private const string NEW_LINE = "\r\n";
+
         private const string TAB = "\t";
+
         private static CrmServiceClient CrmServiceClient { get; set; }
+
         private static EntityMetadata EntityMetadata { get; set; }
+
         private static string RootNamespace { get; set; }
+
         private static CommentTypeScriptDeclaration Comment { get; set; }
 
         private static List<string> FormNames;
@@ -77,7 +91,7 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"}})({@namespace} || ({@namespace} = {{}}));{NEW_LINE}";
             code += $"{Utility.GeneratorOptionSet(EntityMetadata)}";
             //if (comment.WebApiVersion == "2")
-                dts = JsTypeScriptDeclaration2.GetCode(crmServiceClient, entityMetadata, rootNamespace, comment);
+            dts = JsTypeScriptDeclaration2.GetCode(crmServiceClient, entityMetadata, rootNamespace, comment);
             //else
             //    dts = JsTypeScriptDeclaration.GetCode(crmServiceClient, entityMetadata, rootNamespace, comment);
             return code;
@@ -202,8 +216,8 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"\t\treturn form;\r\n";
             code += $"\t}};\r\n";
             return code;
-
         }
+
         private static string GetMainFormCode(SystemForm form, string @namespace)
         {
             var code = string.Empty;
@@ -488,21 +502,43 @@ namespace DynamicsCrm.DevKit.Shared
 
         private static string GetJsNavigationCode(string formXml)
         {
+            List<string> BlackList = new List<string> { "asyncoperation", "bulkdeletefailure", "mailboxtrackingfolder", "principalobjectattributeaccess", "processsession", "syncerror", "userentityinstancedata", "duplicaterecord",
+        "sharepointdocumentlocation", "sharepointdocument", "chat", "fax", "letter", "recurringappointmentmaster", "socialactivity", "activitypointer", "annotation", "slakpiinstance", "socialprofile", "postrole", "postregarding", "postfollow",
+        "customeraddress", "customerrelationship", "activityparty", "actioncard", "connection", "fileattachment", "owner", "createdby", "createdonbehalfby", "modifiedby", "modifiedonbehalfby"
+        };
+
             var code = string.Empty;
-            var xdoc = XDocument.Parse(formXml);
-            var navigations = (from x in xdoc.Descendants("Navigation").Descendants("NavBar")
-                    .Descendants("NavBarByRelationshipItem")
-                               select (string)x?.Attribute("Id")).ToList();
-            navigations.Sort();
-            if (navigations.Count == 0) return string.Empty;
-            foreach (var navigation in navigations)
+            //var xdoc = XDocument.Parse(formXml);
+            //var navigations = (from x in xdoc.Descendants("Navigation").Descendants("NavBar")
+            //        .Descendants("NavBarByRelationshipItem")
+            //                   select (string)x?.Attribute("Id")).ToList();
+            //navigations.Sort();
+            //if (navigations.Count == 0) return string.Empty;
+            //foreach (var navigation in navigations)
+            //{
+            //    code += $"\t\t\t{navigation}: {{}},\r\n";
+            //    if (!FormAll_Navigations.Any(x => x == navigation))
+            //    {
+            //        FormAll_Navigations.Add(navigation);
+            //    }
+            //}
+
+            foreach (var relationship in EntityMetadata.OneToManyRelationships.OrderBy(x => x.SchemaName))
             {
-                code += $"\t\t\t{navigation}: {{}},\r\n";
-                if (!FormAll_Navigations.Any(x => x == navigation))
+                if (BlackList.Contains(relationship.ReferencingEntity)) continue;
+                if (BlackList.Contains(relationship.ReferencedEntity)) continue;
+                if (BlackList.Contains(relationship.ReferencedAttribute)) continue;
+                if (BlackList.Contains(relationship.ReferencingAttribute)) continue;
+                if (
+                    relationship.RelationshipType == RelationshipType.OneToManyRelationship &&
+                    (relationship.IsValidForAdvancedFind ?? false)
+                    )
                 {
-                    FormAll_Navigations.Add(navigation);
+                    //_d_ts += $"\t\t\t{relationship.SchemaName}: DevKit.Controls.NavigationItem,\r\n";
+                    code += $"\t\t\t{relationship.SchemaName}: {{}},\r\n";
                 }
             }
+
             code = code.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
             return code;
         }
@@ -616,6 +652,7 @@ namespace DynamicsCrm.DevKit.Shared
             code = $"{code.TrimEnd($",{NEW_LINE}".ToCharArray())}{NEW_LINE}";
             return code;
         }
+
         private static string GetJsCodeHeader(string formXml)
         {
             var xdoc = XDocument.Parse(formXml);
@@ -719,7 +756,8 @@ namespace DynamicsCrm.DevKit.Shared
                     code += $"\t\t\t\t\t{sectionName}: {{}},\r\n";
                     if (!FormAll_TabSections.Any(x => x.Tab == tabName && x.Section == sectionName))
                     {
-                        FormAll_TabSections.Add(new TabSection {
+                        FormAll_TabSections.Add(new TabSection
+                        {
                             Tab = tabName,
                             Section = sectionName
                         });
