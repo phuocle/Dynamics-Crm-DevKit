@@ -74,6 +74,5 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="$(MSBuildThisFileDirectory)Entities\DynamicsCrm.DevKit.Cli.json" />
-    <Content Include="$(MSBuildThisFileDirectory)Form.xml" />
   </ItemGroup>
 </Project>

@@ -22,10 +22,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private class DataProviderEvent
         {
             public Guid PluginTypeId { get; set; }
+
             public string Message { get; set; }
+
             public string DataSource { get; set; }
         }
+
         private const string SPACE = "  ";
+
         public TaskServer(CommandLineArgs arg, Json json)
         {
             this.Arg = arg;
@@ -51,15 +55,25 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     break;
             }
         }
+
         public string CurrentDirectory { get; set; }
+
         public string TaskType { get; set; }
+
         public CrmServiceClient CrmServiceClient { get; set; }
+
         public CommandLineArgs Arg { get; set; }
+
         private JsonServer Json { get; }
+
         private bool IsOk { get; set; }
+
         private Guid SolutionId { get; set; }
+
         private string Prefix { get; set; }
+
         private string CurrentFolder => $"{CurrentDirectory}\\{Json.folder}";
+
         public bool IsValid()
         {
             if (Json == null)
@@ -85,6 +99,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             return true;
         }
+
         public void Run()
         {
             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "START ", ConsoleColor.Blue, TaskType);
@@ -106,6 +121,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             CliLog.WriteLine(ConsoleColor.White, "|");
             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "END ", ConsoleColor.Blue, TaskType);
         }
+
         private void DeployFiles(List<string> files)
         {
             foreach (var file in files)
@@ -116,6 +132,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 DeployFile(file, types);
             }
         }
+
         private void DeployFile(string file, List<TypeInfo> types)
         {
             var dataProviderEvents = new List<DataProviderEvent>();
@@ -181,6 +198,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
             }
         }
+
         private bool IsValidDataProvider(List<DataProviderEvent> dataProviderEvents, string dataSource)
         {
             var checkDataSource = dataSource.ToLower().StartsWith(Prefix.ToLower()) ? dataSource : $"{Prefix?.ToLower()}{dataSource}";
@@ -224,6 +242,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             return true;
         }
+
         private void RegisterDataProvider(List<DataProviderEvent> dataProviderEvents, string dataSource)
         {
             var events = string.Empty;
@@ -314,10 +333,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 else
                 {
-                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DoNothing, ConsoleColor.White, $"DataSource ",  ConsoleColor.Cyan, $"{logicalNameDataSource}", ConsoleColor.White, " linked with events ", ConsoleColor.Cyan, events);
+                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DoNothing, ConsoleColor.White, $"DataSource ", ConsoleColor.Cyan, $"{logicalNameDataSource}", ConsoleColor.White, " linked with events ", ConsoleColor.Cyan, events);
                 }
             }
         }
+
         private Entity GetEntityDataProviderId(string dataSource)
         {
             var fetchData = new
@@ -342,10 +362,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             if (rows.Entities.Count != 1) return null;
             return rows.Entities[0];
         }
+
         private bool IsVirtualTableSupportCRUD()
         {
             return CrmServiceClient.ConnectedOrgVersion >= new Version("9.1.0.18950");
         }
+
         private bool IsExistDataSource(string logicalname)
         {
             var filterExpression = new MetadataFilterExpression();
@@ -375,6 +397,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     return true;
             return false;
         }
+
         private void DeployCustomApiStep(Guid pluginTypeId, string pluginTypeName, CrmPluginRegistrationAttribute attribute)
         {
             var fetchData = new
@@ -428,6 +451,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
             }
         }
+
         private Guid? DeployPluginImage(Guid pluginStepId, TypeInfo type, CrmPluginRegistrationAttribute attribute)
         {
             Guid? check = null;
@@ -441,6 +465,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 check = DeployPluginImage(attribute.Message, attribute.Image4Name, attribute.Image4Alias, attribute.Image4Type, attribute.Image4Attributes, pluginStepId, attribute.Name);
             return check;
         }
+
         private Guid? DeployPluginImage(string message, string imageName, string imageAliasName, ImageTypeEnum imageType, string imageAttributes, Guid pluginStepId, string pluginStepName)
         {
             if (imageAliasName.Length == 0) imageAliasName = imageName;
@@ -497,7 +522,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         Target = pluginImage
                     };
                     request.Parameters.Add("SolutionUniqueName", Json.solution);
-                    CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.Register, ConsoleColor.White, $"{imageType.ToString()}: ", ConsoleColor.Cyan, imageName);
+                    CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.Register, ConsoleColor.White, $"{imageType.ToString()}Name: ", ConsoleColor.Cyan, imageName, ConsoleColor.White, $" {imageType.ToString()}Alias: ", ConsoleColor.Cyan, imageAliasName);
+                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, "Image Fields: ", ConsoleColor.Blue, "[", ConsoleColor.Green, imageAttributes ?? "*", ConsoleColor.Blue, "]");
                     try
                     {
                         var response = (CreateResponse)CrmServiceClient.Execute(request);
@@ -577,6 +603,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 return rows.Entities[0].Id;
             }
         }
+
         private bool IsSupportPluginImage(CrmPluginRegistrationAttribute attribute)
         {
             switch (attribute?.Message?.ToLower())
@@ -597,6 +624,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     return false;
             }
         }
+
         private bool HasPluginImage(CrmPluginRegistrationAttribute attribute)
         {
             if (attribute?.Image1Name?.Length > 0)
@@ -609,6 +637,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 return true;
             return false;
         }
+
         private Guid? DeployPluginStep(Guid pluginTypeId, TypeInfo type, CrmPluginRegistrationAttribute attribute)
         {
             Guid? pluginStepId = null;
@@ -846,6 +875,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             return pluginStepId.Value;
         }
+
         private bool IsChangedPluginStep(bool alreadyChanged, Entity _old, Entity _new)
         {
             if (alreadyChanged) return true;
@@ -869,6 +899,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             return false;
             ;
         }
+
         private Entity GetSecureEntity(Guid pluginStepId)
         {
             var fetchData = new
@@ -894,6 +925,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             if (rows.Entities.Count != 1) return null;
             return rows.Entities[0];
         }
+
         private Guid? DeployPluginType(Guid pluginAssemblyId, TypeInfo type, CrmPluginRegistrationAttribute attribute)
         {
             var fetchData = new
@@ -940,7 +972,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 pluginType["typename"] = type.FullName;
                 pluginType["friendlyname"] = type.FullName;
             };
-            if (string.IsNullOrWhiteSpace(attribute.Description)) {
+            if (string.IsNullOrWhiteSpace(attribute.Description))
+            {
                 if (rows.Entities.Count == 0 || (rows.Entities.Count > 0 && string.IsNullOrWhiteSpace(rows.Entities[0].GetAttributeValue<string>("description"))))
                 {
                     pluginType["description"] = Const.WindowTitle;
@@ -998,10 +1031,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             return rows.Entities[0].Id;
         }
+
         private bool IsEqualsWorkflowType(string old, string @new)
         {
             return old == @new;
         }
+
         private Guid? DeployAssembly(string file)
         {
             var assembly = Assembly.ReflectionOnlyLoadFrom(file);
@@ -1082,10 +1117,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             return rows.Entities[0].Id;
         }
+
         private bool IsEqualsAssembly(string oldContent, string newContent)
         {
             return oldContent == newContent;
         }
+
         private bool IsValidTypes(string file, List<TypeInfo> types)
         {
             if (types.Count == 0)
@@ -1103,6 +1140,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             return true;
         }
+
         private bool IsValidTypesWithCDS(List<TypeInfo> types, string fileNameWithoutExtension)
         {
             var fetchData = new
@@ -1134,6 +1172,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             return true;
         }
+
         private bool IsValidTypes(List<TypeInfo> types)
         {
             foreach (var type in types)
@@ -1158,6 +1197,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             return true;
         }
+
         private List<CrmPluginRegistrationAttribute> GetCrmPluginRegistrationAttributes(TypeInfo type)
         {
             var list = new List<CrmPluginRegistrationAttribute>();
@@ -1201,10 +1241,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     excludefiles.AddRange(Directory.GetFiles(folder, other).ToList());
                 }
             }
-            var files =  includefiles.Where(file => !excludefiles.Contains(file)).Distinct().ToList();
+            var files = includefiles.Where(file => !excludefiles.Contains(file)).Distinct().ToList();
             files.Sort();
             return files;
         }
+
         private List<TypeInfo> GetTypes(string file)
         {
             var assemblyFilePath = new FileInfo(file);
@@ -1230,6 +1271,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             types = types.OrderBy(x => x.FullName).ToList();
             return types;
         }
+
         private Assembly CurrentDomain_ReflectionOnlyAssemblyResolve(object sender, ResolveEventArgs args)
         {
             Assembly assembly;
@@ -1245,12 +1287,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             return assembly;
         }
+
         private bool IsWorkflowType(Type type)
         {
             if (type?.Name == typeof(CodeActivity)?.Name) return true;
             if (type?.BaseType != null) return IsWorkflowType(type?.BaseType);
             return false;
         }
+
         private OptionSetValue GetIsolationMode(string file)
         {
             var types = GetTypes(file);
@@ -1265,6 +1309,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             return new OptionSetValue(2);
         }
+
         private EntityReference GetSdkMessageFilterId(string entityLogicalName, string message)
         {
             if (entityLogicalName?.Length == 0 || entityLogicalName?.ToLower() == "none") return null;
@@ -1290,6 +1335,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var rows = CrmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
             return rows.Entities.Count == 0 ? null : new EntityReference("sdkmessagefilter", rows.Entities[0].Id);
         }
+
         private int? GetPrimaryObjectTypeCode(string entityName)
         {
             if (entityName?.Length == 0) return null;
@@ -1301,6 +1347,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var response = (RetrieveEntityResponse)CrmServiceClient.Execute(request);
             return response.EntityMetadata.ObjectTypeCode ?? 0;
         }
+
         private EntityReference GetSdkMessageId(string entityLogicalName, string message)
         {
             if (entityLogicalName?.Length == 0) return null;
@@ -1346,6 +1393,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var rows = CrmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
             return rows.Entities.Count == 0 ? null : new EntityReference("sdkmessage", rows.Entities[0].Id);
         }
+
         private Guid? GetImpersonatingUserId(string runAs)
         {
             if (runAs.Length == 0) return (Guid?)null;
