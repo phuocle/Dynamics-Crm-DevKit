@@ -53,7 +53,6 @@ namespace DynamicsCrm.DevKit.Cli
             CliLog.Write(colorBox, new string('═', 114));
             CliLog.WriteLine(colorBox, "╝");
             //CliLog.WriteLine(ConsoleColor.Black, "█");
-            //CliLog.WriteLine(ConsoleColor.White, "|");
         }
 
         private static void ShowHelp()
@@ -69,6 +68,8 @@ namespace DynamicsCrm.DevKit.Cli
             CliLog.WriteSuccess(ConsoleColor.White, Const.Version);
             CliLog.Write(ConsoleColor.White, " Build: ");
             CliLog.WriteSuccess(ConsoleColor.White, Const.Build);
+            CliLog.WriteLine(ConsoleColor.Black, "█");
+            CliLog.WriteLine(ConsoleColor.White, "|");
         }
 
         static void RunCli(CommandLineArgs arguments)
