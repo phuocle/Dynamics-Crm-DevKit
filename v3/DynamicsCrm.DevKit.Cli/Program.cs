@@ -14,6 +14,7 @@ namespace DynamicsCrm.DevKit.Cli
     public class Program
     {
         private static CrmServiceClient CrmServiceClient { get; set; }
+
         [STAThread]
         public static void Main(string[] args)
         {
@@ -29,7 +30,7 @@ namespace DynamicsCrm.DevKit.Cli
             }
         }
 
-        private static void ShowHelp()
+        private static void ShowHelp2()
         {
             var helpColor = ConsoleColor.Green;
             var colorBox = ConsoleColor.Blue;
@@ -55,6 +56,21 @@ namespace DynamicsCrm.DevKit.Cli
             //CliLog.WriteLine(ConsoleColor.White, "|");
         }
 
+        private static void ShowHelp()
+        {
+            var helpColor = ConsoleColor.Blue;
+            CliLog.SetupCliLog();
+            CliLog.WriteLine(helpColor, "  ____                              _           ____                  ____             _  ___ _     ____ _ _ ");
+            CliLog.WriteLine(helpColor, " |  _ \\ _   _ _ __   __ _ _ __ ___ (_) ___ ___ / ___|_ __ _ __ ___   |  _ \\  _____   _| |/ (_) |_  / ___| (_)");
+            CliLog.WriteLine(helpColor, " | | | | | | | '_ \\ / _` | '_ ` _ \\| |/ __/ __| |   | '__| '_ ` _ \\  | | | |/ _ \\ \\ / / ' /| | __|| |   | | |");
+            CliLog.WriteLine(helpColor, " | |_| | |_| | | | | (_| | | | | | | | (__\\__ \\ |___| |  | | | | | |_| |_| |  __/\\ V /| . \\| | |_ | |___| | |");
+            CliLog.WriteLine(helpColor, " |____/ \\__, |_| |_|\\__,_|_| |_| |_|_|\\___|___/\\____|_|  |_| |_| |_(_)____/ \\___| \\_/ |_|\\_\\_|\\__(_)____|_|_|");
+            CliLog.Write(helpColor, "        |___/            ", ConsoleColor.White, "https://github.com/phuocle/Dynamics-Crm-DevKit ");
+            CliLog.WriteSuccess(ConsoleColor.White, Const.Version);
+            CliLog.Write(ConsoleColor.White, " Build: ");
+            CliLog.WriteSuccess(ConsoleColor.White, Const.Build);
+        }
+
         static void RunCli(CommandLineArgs arguments)
         {
             ShowHelp();
@@ -73,7 +89,8 @@ namespace DynamicsCrm.DevKit.Cli
             CrmServiceClient = null;
             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Current Directory ", ConsoleColor.Blue, "Path=", ConsoleColor.White, arguments.CurrentDirectory);
             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "DynamicsCrm.DevKit.Cli.exe ", ConsoleColor.Blue, "Path=", ConsoleColor.White, Assembly.GetExecutingAssembly().Location);
-            if (!File.Exists(arguments.JsonFile)) {
+            if (!File.Exists(arguments.JsonFile))
+            {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"/json:{arguments.Json} [{arguments.JsonFile}] not found !!!");
                 return false;
             }

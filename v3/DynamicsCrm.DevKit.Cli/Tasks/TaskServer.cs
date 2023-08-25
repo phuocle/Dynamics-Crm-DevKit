@@ -523,7 +523,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     };
                     request.Parameters.Add("SolutionUniqueName", Json.solution);
                     CliLog.WriteLineWarning(SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.Register, ConsoleColor.White, $"{imageType.ToString()}Name: ", ConsoleColor.Cyan, imageName, ConsoleColor.White, $" {imageType.ToString()}Alias: ", ConsoleColor.Cyan, imageAliasName);
-                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, "Image Fields: ", ConsoleColor.Blue, "[", ConsoleColor.Green, imageAttributes ?? "*", ConsoleColor.Blue, "]");
+                    CliLog.WriteLineWarning(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, SPACE, "Image Fields: ", ConsoleColor.Blue, "[", ConsoleColor.Green, imageAttributes ?? "*", ConsoleColor.Blue, "]");
                     try
                     {
                         var response = (CreateResponse)CrmServiceClient.Execute(request);
