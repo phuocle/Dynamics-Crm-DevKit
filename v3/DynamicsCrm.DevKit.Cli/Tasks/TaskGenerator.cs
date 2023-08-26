@@ -68,7 +68,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         public void Run()
         {
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "START ", ConsoleColor.Blue, TaskType);
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "START ");
             CliLog.WriteLine(ConsoleColor.White, "|");
 
             if (IsValid())
@@ -87,7 +87,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
 
             CliLog.WriteLine(ConsoleColor.White, "|");
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "END ", ConsoleColor.Blue, TaskType);
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "END ");
         }
 
         private List<string> GetSchemaNames()

@@ -7,6 +7,7 @@ namespace DynamicsCrm.DevKit.Cli
     internal static class CliLog
     {
         public const int StarLength = 110;
+
         public static void SetupCliLog()
         {
             Console.BackgroundColor = ConsoleColor.Black;
@@ -47,6 +48,28 @@ namespace DynamicsCrm.DevKit.Cli
             Console.BackgroundColor = oldConsoleBackgroundColor;
             WriteLine(ConsoleColor.Black, "█");
             WriteLine(ConsoleColor.White, "|");
+        }
+
+        public static void WriteError(params object[] values)
+        {
+            WriteLine(ConsoleColor.White, "|");
+            var oldConsoleBackgroundColor = Console.BackgroundColor;
+            var oldConsoleForegroundColor = Console.ForegroundColor;
+            var countLength = 0;
+            Console.BackgroundColor = ConsoleColor.Red;
+            Write(ConsoleColor.White, "|");
+            foreach (var value in values)
+            {
+                if (value is ConsoleColor color)
+                    Console.ForegroundColor = color;
+                else
+                {
+                    Console.Write(value);
+                    countLength += value.ToString().Length;
+                }
+            }
+            Console.ForegroundColor = oldConsoleForegroundColor;
+            Console.BackgroundColor = oldConsoleBackgroundColor;
         }
 
         public static void WriteLineWarning(params object[] values)
@@ -121,6 +144,7 @@ namespace DynamicsCrm.DevKit.Cli
                     Console.Write(value);
             Console.ForegroundColor = oldConsoleColor;
         }
+
         public static void Waiting()
         {
             Waiting("");
