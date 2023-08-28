@@ -643,7 +643,7 @@ namespace DynamicsCrm.DevKit.Shared
                 dataType += $"{AttributeTypeCode.Lookup} to {string.Join(", ", lookup.Targets)}";
             else if (attribute is BooleanAttributeMetadata boolean)
             {
-                dataType += $"{attribute.AttributeType.ToString()} - [{boolean.OptionSet.TrueOption.Label?.UserLocalizedLabel?.Label}]=true - [{boolean.OptionSet.FalseOption.Label?.UserLocalizedLabel?.Label}]=false";
+                dataType += $"{attribute.AttributeType.ToString()} - [{boolean?.OptionSet?.TrueOption?.Label?.UserLocalizedLabel?.Label}]=true - [{boolean?.OptionSet?.FalseOption?.Label?.UserLocalizedLabel?.Label}]=false";
             }
             else
                 dataType += attribute.AttributeType.ToString();
