@@ -105,7 +105,7 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"{TAB}{TAB}}}{NEW_LINE}";
             code += $"{NEW_LINE}";
             code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
-            code += $"{TAB}{TAB}/// Instance new late bound class <see cref=\"{@class}\"/> with <paramref name=\"preEntity\"/>. Then copy all attributes from <paramref name=\"targetEntity\"/> to  <paramref name=\"preEntity\"/>, if existing attribute overwrite it.{NEW_LINE}";
+            code += $"{TAB}{TAB}/// Instance new late bound class <see cref=\"{@class}\"/> with <paramref name=\"preEntity\"/>. Then copy all attributes from <paramref name=\"targetEntity\"/> to <paramref name=\"preEntity\"/>. Existing attribute will be overwritten.{NEW_LINE}";
             code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
             code += $"{TAB}{TAB}/// <exception cref=\"InvalidPluginExecutionException\">when <paramref name=\"targetEntity\"/> is null.</exception>{NEW_LINE}";
             code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
@@ -123,6 +123,10 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"{TAB}{TAB}{TAB}PreEntity = CloneThisEntity(Entity);{NEW_LINE}";
             code += $"{TAB}{TAB}}}{NEW_LINE}";
             code += $"{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// Instance new late bound class <see cref=\"{@class}\"/> with <paramref name=\"preEntity\"/>. Then copy all attributes from <paramref name=\"targetEntity\"/> to <paramref name=\"preEntity\"/>. After that copy all attributes from <paramref name=\"postEntity\"/> to the last result. Existing attribute will be overwritten.{NEW_LINE}";
+            code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <exception cref=\"InvalidPluginExecutionException\">when <paramref name=\"targetEntity\"/> is null.</exception>{NEW_LINE}";
             code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
             code += $"{TAB}{TAB}public {@class}(Entity preEntity, Entity targetEntity, Entity postEntity){NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
@@ -223,7 +227,7 @@ namespace DynamicsCrm.DevKit.Shared
             {
                 if (XrmHelper.IsOptionSet(attribute))
                 {
-                    if (attribute.SchemaName == "OwnerIdType") continue;
+                    if (attribute.SchemaName.EndsWith("IdType")) continue;
                     var tmp = string.Empty;
                     var values = attribute.OptionSetValues();
                     foreach (var value in values)
