@@ -92,6 +92,10 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"{TAB}{TAB}{TAB}PreEntity = CloneThisEntity(Entity);{NEW_LINE}";
             code += $"{TAB}{TAB}}}{NEW_LINE}";
             code += $"{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// Instance new late bound class <see cref=\"{@class}\"/> with <paramref name=\"targetEntity\"/>.{NEW_LINE}";
+            code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <exception cref=\"InvalidPluginExecutionException\">when <paramref name=\"targetEntity\"/> is null.</exception>{NEW_LINE}";
             code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
             code += $"{TAB}{TAB}public {@class}(Entity targetEntity){NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
@@ -100,6 +104,10 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"{TAB}{TAB}{TAB}PreEntity = CloneThisEntity(Entity);{NEW_LINE}";
             code += $"{TAB}{TAB}}}{NEW_LINE}";
             code += $"{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// Instance new late bound class <see cref=\"{@class}\"/> with <paramref name=\"preEntity\"/>. Then copy all attributes from <paramref name=\"targetEntity\"/> to  <paramref name=\"preEntity\"/>, if existing attribute overwrite it.{NEW_LINE}";
+            code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <exception cref=\"InvalidPluginExecutionException\">when <paramref name=\"targetEntity\"/> is null.</exception>{NEW_LINE}";
             code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
             code += $"{TAB}{TAB}public {@class}(Entity preEntity, Entity targetEntity){NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
@@ -221,7 +229,7 @@ namespace DynamicsCrm.DevKit.Shared
                     foreach (var value in values)
                     {
                         tmp += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
-                        tmp += $"{TAB}{TAB}/// <para>DisplayName = {value.Label?.TrimEnd("\r\n".ToCharArray())}</para>{NEW_LINE}";
+                        tmp += $"{TAB}{TAB}/// <para>Display Name = {value.Label?.TrimEnd("\r\n".ToCharArray())}</para>{NEW_LINE}";
                         tmp += $"{TAB}{TAB}/// <para>Value = {value.Value}</para>{NEW_LINE}";
                         if (value.Name3.Length > 0)
                         {
@@ -610,55 +618,82 @@ namespace DynamicsCrm.DevKit.Shared
 
         private static string GetXml(AttributeMetadata attribute)
         {
-            var dataType = string.Empty;
+            var para1 = string.Empty;
+            var para2 = string.Empty;
+            var para3 = string.Empty;
+            var para4 = string.Empty;
             var readOnly = string.Empty;
             if (!(attribute.IsValidForCreate ?? false) && !(attribute.IsValidForUpdate ?? false))
                 readOnly = "ReadOnly";
-            if (readOnly.Length > 0) dataType += readOnly + " - ";
+            if (readOnly.Length > 0) para2 += readOnly + " - ";
             if (attribute.IsPrimaryId ?? false)
                 if ($"{EntityMetadata.LogicalName}id" == attribute.LogicalName)
-                    dataType += "Primary Key - ";
-            if (attribute.RequiredLevel?.Value == AttributeRequiredLevel.ApplicationRequired) dataType += "Required - ";
+                    para2 += "Primary Key - ";
+
+            if (attribute.IsPrimaryName ?? false)
+                    para2 += "Primary Name - ";
+
+            if (attribute.RequiredLevel?.Value == AttributeRequiredLevel.ApplicationRequired) para2 += "Required - ";
             if (attribute is DateTimeAttributeMetadata datetime)
             {
                 if (datetime.DateTimeBehavior == null)
-                    dataType += "DateTime";
+                    para2 += "DateTime";
                 else if (datetime.DateTimeBehavior == DateTimeBehavior.DateOnly)
-                    dataType += "DateTimeBehavior: DateOnly - DateTimeFormat: DateOnly";
+                    para2 += "DateTimeBehavior: DateOnly - DateTimeFormat: DateOnly";
                 else if (datetime.DateTimeBehavior == DateTimeBehavior.UserLocal)
                 {
                     if (datetime.Format == DateTimeFormat.DateOnly)
-                        dataType += "DateTimeBehavior: UserLocal - DateTimeFormat: DateOnly";
+                        para2 += "DateTimeBehavior: UserLocal - DateTimeFormat: DateOnly";
                     else if (datetime.Format == DateTimeFormat.DateAndTime)
-                        dataType += "DateTimeBehavior: UserLocal - DateTimeFormat: DateAndTime";
+                        para2 += "DateTimeBehavior: UserLocal - DateTimeFormat: DateAndTime";
                 }
                 else if (datetime.DateTimeBehavior == DateTimeBehavior.TimeZoneIndependent)
                 {
                     if (datetime.Format == DateTimeFormat.DateOnly)
-                        dataType += "DateTimeBehavior: TimeZoneIndependent - DateTimeFormat: DateOnly";
+                        para2 += "DateTimeBehavior: TimeZoneIndependent - DateTimeFormat: DateOnly";
                     else if (datetime.Format == DateTimeFormat.DateAndTime)
-                        dataType += "DateTimeBehavior: TimeZoneIndependent - DateTimeFormat: DateAndTime";
+                        para2 += "DateTimeBehavior: TimeZoneIndependent - DateTimeFormat: DateAndTime";
                 }
             }
             else if (attribute is MultiSelectPicklistAttributeMetadata)
-                dataType += "MultiSelectPicklist";
+                para2 += "MultiSelectPicklist";
             else if (attribute is LookupAttributeMetadata lookup)
-                dataType += $"{AttributeTypeCode.Lookup} to {string.Join(", ", lookup.Targets)}";
+            {
+                para2 += $"{AttributeTypeCode.Lookup} to ";// {string.Join(", ", lookup.Targets)}";
+                foreach (var target in lookup.Targets)
+                {
+                    para2 += $"<see cref=\"{target}\"/>, ";
+                }
+                para2 = para2.TrimEnd(", ".ToCharArray());
+            }
             else if (attribute is BooleanAttributeMetadata boolean)
             {
-                dataType += $"{attribute.AttributeType.ToString()} - [{boolean?.OptionSet?.TrueOption?.Label?.UserLocalizedLabel?.Label}]=true - [{boolean?.OptionSet?.FalseOption?.Label?.UserLocalizedLabel?.Label}]=false";
+                para2 += $"{attribute.AttributeType.ToString()}";
+                para4 = $"[{boolean?.OptionSet?.TrueOption?.Label?.UserLocalizedLabel?.Label}]=true - [{boolean?.OptionSet?.FalseOption?.Label?.UserLocalizedLabel?.Label}]=false";
             }
             else
-                dataType += attribute.AttributeType.ToString();
-            if (attribute.GetMaxLength().HasValue) dataType += " - MaxLength: " + attribute.GetMaxLength().Value.ToString("#,#", CultureInfo.InvariantCulture);
-            if (attribute.GetMinValue().HasValue) dataType += " - MinValue: " + attribute.GetMinValue().Value.ToString("#,#", CultureInfo.InvariantCulture);
-            if (attribute.GetMaxValue().HasValue) dataType += " - MaxValue: " + attribute.GetMaxValue().Value.ToString("#,#", CultureInfo.InvariantCulture);
+                para2 += attribute.AttributeType.ToString();
+            if (attribute.GetMaxLength().HasValue) para2 += " - MaxLength: " + attribute.GetMaxLength().Value.ToString("#,#", CultureInfo.InvariantCulture);
+            if (attribute.GetMinValue().HasValue) para2 += " - MinValue: " + attribute.GetMinValue().Value.ToString("#,#", CultureInfo.InvariantCulture);
+            if (attribute.GetMaxValue().HasValue) para2 += " - MaxValue: " + attribute.GetMaxValue().Value.ToString("#,#", CultureInfo.InvariantCulture);
             var xml = $"{TAB}{TAB}/// <summary>{NEW_LINE}";
             var description = attribute?.Description?.UserLocalizedLabel?.Label;
             if (!string.IsNullOrWhiteSpace(description))
-                xml += $"{TAB}{TAB}/// <para>{SecurityElement.Escape(description.TrimNewLine())}</para>{NEW_LINE}";
-            xml += $"{TAB}{TAB}/// <para>{dataType}</para>{NEW_LINE}";
-            xml += $"{TAB}{TAB}/// <para>{attribute?.DisplayName?.UserLocalizedLabel?.Label.TrimNewLine()}</para>{NEW_LINE}";
+            {
+                para1 = SecurityElement.Escape(description.TrimNewLine());
+                xml += $"{TAB}{TAB}/// <para>{para1}</para>{NEW_LINE}";
+            }
+            xml += $"{TAB}{TAB}/// <para>{para2}</para>{NEW_LINE}";
+            para3 = attribute?.DisplayName?.UserLocalizedLabel?.Label.TrimNewLine();
+            if (para3 != null && para3.Length > 0)
+            {
+                xml += $"{TAB}{TAB}/// <para>{para3}</para>{NEW_LINE}";
+            }
+            //if (attribute.IsPrimaryName ?? false) para4 = $"Primary Name: {attribute.LogicalName}";
+            if (para4.Length > 0)
+            {
+                xml += $"{TAB}{TAB}/// <para>{para4}</para>{NEW_LINE}";
+            }
             xml += $"{TAB}{TAB}/// </summary>\r\n";
             xml += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
             return xml;
